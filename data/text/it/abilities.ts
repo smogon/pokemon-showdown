@@ -569,7 +569,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] perquisisce [TARGET] e trova [ITEM]!",
+		activate: "  [POKEMON] perquisisce [TARGET] e trova [ITEM:indefinite:classified]!",
 		activateNoTarget: "", // NOT CONVERTED: not in Champions
 	},
 	fullmetalbody: {
@@ -1955,7 +1955,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] dà [ITEM] [TARGET]!",
+		activate: "  [POKEMON] dà [ITEM:definite] [TARGET:a]!",
 	},
 	synchronize: {
 		name: "Sincronismo",

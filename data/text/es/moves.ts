@@ -272,7 +272,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		start: "  ¡[POKEMON] se ha enamorado!",
 		startFromItem: "", // NOT CONVERTED: not in Champions
 		end: "  ¡[POKEMON] ya no está enamorado!",
-		endFromItem: "  ¡[POKEMON] ya no está enamorado gracias [ITEM]!",
+		endFromItem: "  ¡[POKEMON] ya no está enamorado gracias [ITEM:a:definite:classified]!",
 		activate: "  ¡[POKEMON] está enamorado de [TARGET]!",
 		cant: "¡El enamoramiento impide que [POKEMON] reaccione!",
 	},
@@ -765,7 +765,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  ¡[SOURCE] ha robado [ITEM] del objetivo y se ha comido!",
+		removeItem: "  ¡[SOURCE] ha robado [ITEM:definite:classified] del objetivo y se [INFLECT:ITEM:ms=lo:fs=la:mp=los:fp=las] ha comido!",
 	},
 	bugbuzz: {
 		name: "Zumbido",
@@ -1135,7 +1135,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  ¡[SOURCE] ha derretido [ITEM] de [POKEMON]!",
+		removeItem: "  ¡[SOURCE] ha derretido [ITEM:definite:classified] de [POKEMON]!",
 	},
 	cosmicpower: {
 		name: "Masa Cósmica",
@@ -2202,7 +2202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  ¡[POKEMON] ha tirado su [ITEM]!",
+		removeItem: "  ¡[POKEMON] ha tirado su[INFLECT:ITEM:s=:p=s] [ITEM:classified]!",
 	},
 	flipturn: {
 		name: "Viraje",
@@ -2277,7 +2277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  ¡[POKEMON] se está preparando para luchar!",
-		startFromItem: "  ¡La probabilidad de asestar golpes críticos de [POKEMON] ha aumentado gracias [ITEM]!",
+		startFromItem: "  ¡La probabilidad de asestar golpes críticos de [POKEMON] ha aumentado gracias [ITEM:a:definite:classified]!",
 		startFromZEffect: "", // NOT CONVERTED: not in Champions
 	},
 	focuspunch: {
@@ -3548,7 +3548,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  ¡[SOURCE] ha tirado al suelo [ITEM] de [POKEMON]!",
+		removeItem: "  ¡[SOURCE] ha tirado al suelo [ITEM:definite:classified] de [POKEMON]!",
 	},
 	kowtowcleave: {
 		name: "Genufendiente",
@@ -4825,7 +4825,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Poltergeist",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "  ¡[POKEMON] es atacado por [ITEM]!",
+		activate: "  ¡[POKEMON] es atacado por [ITEM:definite:classified]!",
 	},
 	populationbomb: {
 		name: "Proliferación",
@@ -7335,7 +7335,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		switchOut: "¡[POKEMON] ha vuelto con [TRAINER]!",
+		switchOut: "¡[POKEMON] ha vuelto con [TRAINER:definite]!",
 	},
 	vacuumwave: {
 		name: "Onda Vacío",

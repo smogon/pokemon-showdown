@@ -372,7 +372,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		block: "  Le déguisement absorbe l’attaque !",
-		transform: "Le déguisement [POKEMON] tombe !",
+		transform: "Le déguisement [POKEMON:de] tombe !",
 	},
 	download: {
 		name: "Télécharge",
@@ -569,7 +569,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] fouille [TARGET] et trouve [ITEM] !",
+		activate: "  [POKEMON] fouille [TARGET] et trouve [ITEM:indefinite:classified] !",
 		activateNoTarget: "", // NOT CONVERTED: not in Champions
 	},
 	fullmetalbody: {
@@ -751,7 +751,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "Le Pokémon prend l’apparence du dernier membre de l’équipe pour tromper l’adversaire.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		end: "  L’illusion [POKEMON] se brise !",
+		end: "  L’illusion [POKEMON:de] se brise !",
 	},
 	immunity: {
 		name: "Vaccin",
@@ -1115,7 +1115,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "  Le talent [TARGET] devient Momie !",
+		changeAbility: "  Le talent [TARGET:de] devient Momie !",
 	},
 	myceliummight: {
 		name: "Force Fongique",
@@ -1474,7 +1474,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "  Le Pokémon reçoit le talent [ABILITY] [SOURCE] !",
+		changeAbility: "  Le Pokémon reçoit le talent [ABILITY] [SOURCE:de] !",
 	},
 	reckless: {
 		name: "Téméraire",
@@ -1858,7 +1858,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "  L’objet [POKEMON] ne peut pas être volé !",
+		block: "  L’objet [POKEMON:de] ne peut pas être volé !",
 	},
 	stormdrain: {
 		name: "Lavabo",
@@ -1901,7 +1901,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Nectar Mielleux",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "  Le nectar [POKEMON] dégage un parfum sucré !",
+		start: "  Le nectar [POKEMON:de] dégage un parfum sucré !",
 	},
 	supremeoverlord: {
 		name: "Général Suprême",
@@ -1955,7 +1955,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] donne [ITEM] à [TARGET] !",
+		activate: "  [POKEMON] donne [ITEM:definite:classified] à [TARGET] !",
 	},
 	synchronize: {
 		name: "Synchro",

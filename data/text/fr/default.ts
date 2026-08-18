@@ -12,9 +12,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		opposingParty: "l’équipe ennemie",
 
 		turn: "", // NOT CONVERTED: not in Champions
-		switchIn: "[TRAINER] envoie [FULLNAME] !",
+		switchIn: "[TRAINER:definite:capitalize] envoie [FULLNAME] !",
 		switchInOwn: "[FULLNAME] ! Go !",
-		switchOut: "[TRAINER] retire [NICKNAME] !",
+		switchOut: "[TRAINER:definite:capitalize] retire [NICKNAME] !",
 		switchOutOwn: "Reviens, [NICKNAME] !",
 		drag: "[FULLNAME] est traîné de force au combat !",
 		faint: "[POKEMON] est K.O. !",
@@ -27,7 +27,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 
 		zEffect: "  [POKEMON] déploie toute la puissance de sa Force Z !",
 		move: "[POKEMON] utilise **[MOVE]** !",
-		abilityActivation: "[[ABILITY] [POKEMON]]",
+		abilityActivation: "[[ABILITY] [POKEMON:de]]",
 
 		mega: "", // NOT CONVERTED: not in Champions
 		megaNoItem: "", // NOT CONVERTED: not in Champions
@@ -60,15 +60,15 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		startFieldEffect: "", // NOT CONVERTED: not in Champions
 		endFieldEffect: "", // NOT CONVERTED: not in Champions
 
-		changeAbility: "  Le talent [POKEMON] devient [ABILITY] !",
-		addItem: "  [POKEMON] obtient [ITEM] !",
-		takeItem: "  [POKEMON] vole [ITEM] [SOURCE] !",
+		changeAbility: "  Le talent [POKEMON:de] devient [ABILITY] !",
+		addItem: "  [POKEMON] obtient [ITEM:indefinite:classified] !",
+		takeItem: "  [POKEMON] vole [ITEM:definite:classified] [SOURCE:de] !",
 		eatItem: "", // NOT CONVERTED: not in Champions
-		useGem: "  [ITEM] renforce la capacité [MOVE] !",
-		eatItemWeaken: "  [ITEM] réduit les dégâts infligés à [POKEMON] !",
+		useGem: "  [ITEM:definite:capitalize:classified] renforce[INFLECT:ITEM:s=:p=nt] la capacité [MOVE] !",
+		eatItemWeaken: "  [ITEM:definite:capitalize:classified] rédui[INFLECT:ITEM:s=:p=sen]t les dégâts infligés à [POKEMON] !",
 		removeItem: "", // NOT CONVERTED: not in Champions
 		activateItem: "", // NOT CONVERTED: not in Champions
-		activateWeaken: "  [ITEM] réduit les dégâts infligés à [POKEMON] !",
+		activateWeaken: "  [ITEM:definite:capitalize:classified] rédui[INFLECT:ITEM:s=:p=sen]t les dégâts infligés à [POKEMON] !",
 
 		damage: "  ([POKEMON] est blessé !)",
 		damagePercentage: "", // NOT CONVERTED: not in Champions
@@ -79,10 +79,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		healFromZEffect: "  [POKEMON] utilise la Force Z pour se soigner !",
 		healFromEffect: "", // NOT CONVERTED: not in Champions
 
-		boost: "  [STAT] [POKEMON] augmente !",
-		boost2: "  [STAT] [POKEMON] augmente beaucoup !",
-		boost3: "  [STAT] [POKEMON] augmente énormément !",
-		boost0: "  [STAT] [POKEMON] ne peut plus augmenter !",
+		boost: "  [STAT:definite:capitalize] [POKEMON:de] augmente !",
+		boost2: "  [STAT:definite:capitalize] [POKEMON:de] augmente beaucoup !",
+		boost3: "  [STAT:definite:capitalize] [POKEMON:de] augmente énormément !",
+		boost0: "  [STAT:definite:capitalize] [POKEMON:de] ne peut plus augmenter !",
 		boostFromItem: "", // NOT CONVERTED: not in Champions
 		boost2FromItem: "", // NOT CONVERTED: not in Champions
 		boost3FromItem: "", // NOT CONVERTED: not in Champions
@@ -91,10 +91,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
 		boostMultipleFromZEffect: "  [POKEMON] utilise la Force Z pour augmenter ses stats !",
 
-		unboost: "  [STAT] [POKEMON] baisse !",
-		unboost2: "  [STAT] [POKEMON] baisse beaucoup !",
-		unboost3: "  [STAT] [POKEMON] baisse énormément !",
-		unboost0: "  [STAT] [POKEMON] ne peut plus baisser !",
+		unboost: "  [STAT:definite:capitalize] [POKEMON:de] baisse !",
+		unboost2: "  [STAT:definite:capitalize] [POKEMON:de] baisse beaucoup !",
+		unboost3: "  [STAT:definite:capitalize] [POKEMON:de] baisse énormément !",
+		unboost0: "  [STAT:definite:capitalize] [POKEMON:de] ne peut plus baisser !",
 		unboostFromItem: "", // NOT CONVERTED: not in Champions
 		unboost2FromItem: "", // NOT CONVERTED: not in Champions
 		unboost3FromItem: "", // NOT CONVERTED: not in Champions
@@ -102,10 +102,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		swapBoost: "  [POKEMON] permute ses changements de stats avec ceux de sa cible !",
 		swapOffensiveBoost: "  [POKEMON] permute les changements d’Attaque et d’Attaque Spéciale avec ceux de sa cible !",
 		swapDefensiveBoost: "  [POKEMON] permute les changements de Défense et de Défense Spéciale avec ceux de sa cible !",
-		copyBoost: "  [POKEMON] copie les changements de stats [TARGET] !",
-		clearBoost: "  Les stats [POKEMON] sont revenues à la normale !",
+		copyBoost: "  [POKEMON] copie les changements de stats [TARGET:de] !",
+		clearBoost: "  Les stats [POKEMON:de] sont revenues à la normale !",
 		clearBoostFromZEffect: "  [POKEMON] utilise la Force Z pour annuler ses baisses de stats !",
-		invertBoost: "  Les changements de stats [POKEMON] sont inversés !",
+		invertBoost: "  Les changements de stats [POKEMON:de] sont inversés !",
 		clearAllBoost: "  Les changements de stats ont tous été annulés !",
 
 		superEffective: "  C’est super efficace !",
@@ -174,7 +174,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	// statuses
 	brn: {
 		start: "  [POKEMON] est brûlé !",
-		startFromItem: "  [POKEMON] est brûlé par [ITEM] !",
+		startFromItem: "  [POKEMON] est brûlé par [ITEM:definite:classified] !",
 		alreadyStarted: "  [POKEMON] est déjà brûlé.",
 		end: "", // NOT CONVERTED: not in Champions
 		endFromItem: "", // NOT CONVERTED: not in Champions
@@ -184,15 +184,15 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON] est gelé !",
 		alreadyStarted: "  [POKEMON] est déjà gelé.",
 		end: "  [POKEMON] n’est plus gelé !",
-		endFromItem: "  [ITEM] [POKEMON] le dégèle !",
-		endFromMove: "  La glace a fondu grâce à la capacité [MOVE] [POKEMON] !",
+		endFromItem: "  [ITEM:definite:capitalize:classified] [POKEMON:de] le dégèle[INFLECT:ITEM:s=:p=nt] !",
+		endFromMove: "  La glace a fondu grâce à la capacité [MOVE] [POKEMON:de] !",
 		cant: "[POKEMON] est gelé ! Il ne peut plus agir !",
 	},
 	par: {
 		start: "  [POKEMON] est paralysé ! Il aura du mal à utiliser des capacités !",
 		alreadyStarted: "  [POKEMON] est déjà paralysé.",
 		end: "  [POKEMON] n’est plus paralysé !",
-		endFromItem: "  [ITEM] [POKEMON] le sort de sa paralysie !",
+		endFromItem: "  [ITEM:definite:capitalize:classified] [POKEMON:de] le sort[INFLECT:ITEM:s=:p=ent] de sa paralysie !",
 		cant: "", // NOT CONVERTED: not in Champions
 	},
 	psn: {
@@ -204,7 +204,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	tox: {
 		start: "  [POKEMON] est gravement empoisonné !",
-		startFromItem: "  [POKEMON] est gravement empoisonné par [ITEM] !",
+		startFromItem: "  [POKEMON] est gravement empoisonné par [ITEM:definite:classified] !",
 		end: "#psn",
 		endFromItem: "#psn",
 		alreadyStarted: "#psn",
@@ -215,7 +215,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		startFromRest: "", // NOT CONVERTED: not in Champions
 		alreadyStarted: "  [POKEMON] dort déjà.",
 		end: "  [POKEMON] se réveille !",
-		endFromItem: "  [ITEM] [POKEMON] le réveille !",
+		endFromItem: "  [ITEM:definite:capitalize:classified] [POKEMON:de] le réveille[INFLECT:ITEM:s=:p=nt] !",
 		cant: "[POKEMON] dort profondément.",
 	},
 
@@ -224,19 +224,19 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  Ça rend [POKEMON] confus !",
 		startFromFatigue: "  La fatigue rend [POKEMON] confus !",
 		end: "  [POKEMON] n’est plus confus !",
-		endFromItem: "  [ITEM] [POKEMON] le tire de sa confusion !",
+		endFromItem: "  [ITEM:definite:capitalize:classified] [POKEMON:de] le tire[INFLECT:ITEM:s=:p=nt] de sa confusion !",
 		alreadyStarted: "  [POKEMON] est déjà confus !",
 		activate: "  [POKEMON] est confus !",
 		damage: "Il se blesse dans sa confusion.",
 	},
 	drain: {
-		heal: "  L’énergie [SOURCE] est drainée !",
+		heal: "  L’énergie [SOURCE:de] est drainée !",
 	},
 	flinch: {
 		cant: "[POKEMON] a la trouille ! Il ne peut pas utiliser sa capacité !",
 	},
 	heal: {
-		fail: "  Les PV [POKEMON] sont au maximum !",
+		fail: "  Les PV [POKEMON:de] sont au maximum !",
 	},
 	healreplacement: {
 		activate: "", // NOT CONVERTED: not in Champions
@@ -251,7 +251,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  [POKEMON] est blessé par le contrecoup !",
 	},
 	unboost: {
-		fail: "  Les stats [POKEMON] ne baissent pas !",
+		fail: "  Les stats [POKEMON:de] ne baissent pas !",
 		failSingular: "", // NOT CONVERTED: not in Champions
 	},
 	struggle: {

@@ -569,7 +569,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  ¡[POKEMON] ha cacheado a [TARGET] y ha hallado [ITEM]!",
+		activate: "  ¡[POKEMON] ha cacheado a [TARGET] y ha hallado [ITEM:indefinite:classified]!",
 		activateNoTarget: "", // NOT CONVERTED: not in Champions
 	},
 	fullmetalbody: {
@@ -1955,7 +1955,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  ¡[POKEMON] le ha dado [ITEM] a [TARGET]!",
+		activate: "  ¡[POKEMON] le ha dado [ITEM:definite:classified] a [TARGET]!",
 	},
 	synchronize: {
 		name: "Sincronía",

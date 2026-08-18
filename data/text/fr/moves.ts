@@ -164,7 +164,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "  [POKEMON] s’entoure d’un voile d’eau !",
-		heal: "  Le voile d’eau restaure les PV [POKEMON] !",
+		heal: "  Le voile d’eau restaure les PV [POKEMON:de] !",
 	},
 	aquastep: {
 		name: "Danse Aquatique",
@@ -272,7 +272,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		start: "  [POKEMON] entre dans l’état « Attraction » !",
 		startFromItem: "", // NOT CONVERTED: not in Champions
 		end: "  [POKEMON] sort de l’état « Attraction » !",
-		endFromItem: "  [ITEM] [POKEMON] le de l’état « Attraction » !",
+		endFromItem: "  [ITEM:definite:capitalize:classified] [POKEMON:de] le [INFLECT:ITEM:s=sort:p=sortent] de l’état « Attraction » !",
 		activate: "  [POKEMON] subit l’état « Attraction » infligé par [TARGET] !",
 		cant: "L’état « Attraction » empêche [POKEMON] d’utiliser sa capacité !",
 	},
@@ -512,7 +512,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "  [POKEMON] est pris dans l’étreinte [SOURCE] !",
+		start: "  [POKEMON] est pris dans l’étreinte [SOURCE:de] !",
 		move: "#wrap",
 	},
 	bite: {
@@ -765,7 +765,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE] vole et mange [ITEM] de la cible !",
+		removeItem: "  [SOURCE] vole et mange [ITEM:definite:classified] de la cible !",
 	},
 	bugbuzz: {
 		name: "Bourdon",
@@ -819,7 +819,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		typeChange: "  Le feu intérieur [POKEMON] s’est entièrement consumé !",
+		typeChange: "  Le feu intérieur [POKEMON:de] s’est entièrement consumé !",
 	},
 	buzzybuzz: {
 		name: "Évo-Dynamo",
@@ -1135,7 +1135,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  [SOURCE] fait fondre [ITEM] [POKEMON] !",
+		removeItem: "  [SOURCE] fait fondre [ITEM:definite:classified] [POKEMON:de] !",
 	},
 	cosmicpower: {
 		name: "Force Cosmique",
@@ -1441,9 +1441,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "  La capacité [MOVE] [POKEMON] est mise sous entrave !",
-		end: "  La capacité [POKEMON] n’est plus sous entrave !",
-		cant: "Il y a une entrave sur la capacité [MOVE] [POKEMON] !",
+		start: "  La capacité [MOVE] [POKEMON:de] est mise sous entrave !",
+		end: "  La capacité [POKEMON:de] n’est plus sous entrave !",
+		cant: "Il y a une entrave sur la capacité [MOVE] [POKEMON:de] !",
 	},
 	disarmingvoice: {
 		name: "Voix Enjôleuse",
@@ -1748,7 +1748,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Si le lanceur attaque avant la cible, les capacités de celle-ci seront de type Électrik jusqu’à la fin du tour.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "  Électrisation donne le type Électrik à la prochaine capacité [POKEMON] !",
+		start: "  Électrisation donne le type Électrik à la prochaine capacité [POKEMON:de] !",
 	},
 	electroball: {
 		name: "Boule Élek",
@@ -2202,7 +2202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON] lance [ITEM] !",
+		removeItem: "  [POKEMON] lance [ITEM:indefinite:classified] !",
 	},
 	flipturn: {
 		name: "Eau Revoir",
@@ -2277,7 +2277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  [POKEMON] est prêt à tout donner !",
-		startFromItem: "  [POKEMON] est plein d’énergie grâce [ITEM] !",
+		startFromItem: "  [POKEMON] est plein d’énergie grâce [ITEM:a:definite:classified] !",
 		startFromZEffect: "", // NOT CONVERTED: not in Champions
 	},
 	focuspunch: {
@@ -2457,7 +2457,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "  Le talent [POKEMON] a été rendu inactif !",
+		start: "  Le talent [POKEMON:de] a été rendu inactif !",
 	},
 	geargrind: {
 		name: "Lancécrou",
@@ -2571,7 +2571,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "  Les PP [TARGET] baissent !",
+		activate: "  Les PP [TARGET:de] baissent !",
 	},
 	gmaxdrumsolo: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -3419,7 +3419,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [TARGET] obéit à la sommation [POKEMON] !",
+		activate: "  [TARGET] obéit à la sommation [POKEMON:de] !",
 	},
 	iondeluge: {
 		name: "Déluge Plasmique",
@@ -3548,7 +3548,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE] fait tomber [ITEM] [POKEMON] !",
+		removeItem: "  [SOURCE] fait tomber [ITEM:definite:classified] [POKEMON:de] !",
 	},
 	kowtowcleave: {
 		name: "Génusection",
@@ -3633,7 +3633,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "  [POKEMON] est infecté !",
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "  Vampigraine draine l’énergie [POKEMON] !",
+		damage: "  Vampigraine draine l’énergie [POKEMON:de] !",
 	},
 	leer: {
 		name: "Groz’Yeux",
@@ -3857,7 +3857,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  [POKEMON] lévite sur un champ magnétique !",
-		end: "  Le magnétisme [POKEMON] se dissipe !",
+		end: "  Le magnétisme [POKEMON:de] se dissipe !",
 	},
 	magnitude: {
 		name: "Ampleur",
@@ -4114,7 +4114,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Le lanceur concentre l’énergie cosmique au premier tour, ce qui augmente son Attaque Spéciale, et frappe au second.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		prepare: "La puissance du cosmos afflue dans le corps [POKEMON] !",
+		prepare: "La puissance du cosmos afflue dans le corps [POKEMON:de] !",
 	},
 	meteormash: {
 		name: "Poing Météore",
@@ -4825,7 +4825,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Esprit Frappeur",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "  [POKEMON] est attaqué par [ITEM] !",
+		activate: "  [POKEMON] est attaqué par [INFLECT:ITEM:ms=son propre:fs=sa propre:mp=ses propres:fp=ses propres] [ITEM:classified] !",
 	},
 	populationbomb: {
 		name: "Prolifération",
@@ -5464,7 +5464,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "  [POKEMON] copie le talent [ABILITY] [SOURCE] !",
+		changeAbility: "  [POKEMON] copie le talent [ABILITY] [SOURCE:de] !",
 	},
 	rollingkick: {
 		name: "Mawashi Geri",
@@ -5730,7 +5730,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  Ça transperce la protection [TARGET] !",
+		activate: "  Ça transperce la protection [TARGET:de] !",
 		prepare: "[POKEMON] disparaît instantanément !",
 	},
 	shadowpunch: {
@@ -6580,9 +6580,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "  [POKEMON] crée un clone !",
 		alreadyStarted: "  [POKEMON] a déjà un clone !",
-		end: "  Le clone [POKEMON] disparaît...",
+		end: "  Le clone [POKEMON:de] disparaît...",
 		fail: "  Mais il est trop faible pour créer un clone !",
-		activate: "  Le clone subit l’attaque à la place [POKEMON] !",
+		activate: "  Le clone subit l’attaque à la place [POKEMON:de] !",
 	},
 	subzeroslammer: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -7106,7 +7106,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "  [POKEMON] est tourmenté !",
-		end: "  Les tourments [POKEMON] sont apaisés !",
+		end: "  Les tourments [POKEMON:de] sont apaisés !",
 	},
 	toxic: {
 		name: "Toxik",
@@ -7163,7 +7163,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		transform: "[POKEMON] prend l’apparence [SPECIES] !",
+		transform: "[POKEMON] prend l’apparence [SPECIES:de] !",
 	},
 	triattack: {
 		name: "Triplattaque",
@@ -7335,7 +7335,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		switchOut: "[POKEMON] revient vers [TRAINER] !",
+		switchOut: "[POKEMON] revient vers [TRAINER:definite] !",
 	},
 	vacuumwave: {
 		name: "Onde Vide",
@@ -7586,7 +7586,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		heal: "  Le vœu [NICKNAME] se réalise !",
+		heal: "  Le vœu [NICKNAME:de] se réalise !",
 	},
 	withdraw: {
 		name: "Repli",

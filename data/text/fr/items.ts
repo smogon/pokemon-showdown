@@ -56,7 +56,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "  [POKEMON] flotte grâce à son Ballon !",
-		end: "  Le Ballon [POKEMON] a éclaté !",
+		end: "  Le Ballon [POKEMON:de] a éclaté !",
 	},
 	alakazite: {
 		name: "Alakazamite",

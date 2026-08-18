@@ -517,13 +517,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "탈출버튼",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		end: "  [POKEMON] 탈출버튼 때문에 돌아간다!",
+		end: "  [POKEMON:topic] 탈출버튼 때문에 돌아간다!",
 	},
 	ejectpack: {
 		name: "탈출팩",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		end: "  [POKEMON] 탈출팩 때문에 돌아간다!",
+		end: "  [POKEMON:topic] 탈출팩 때문에 돌아간다!",
 	},
 	electirizer: {
 		name: "에레키부스터",
@@ -1316,7 +1316,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "  [POKEMON] 흉내허브를 써서 상대의 능력 변화를 흉내 냈다!",
+		activate: "  [POKEMON:topic] 흉내허브를 써서 상대의 능력 변화를 흉내 냈다!",
 	},
 	mistyseed: {
 		name: "미스트시드",

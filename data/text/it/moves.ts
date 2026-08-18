@@ -164,7 +164,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
 		start: "  Un velo d’acqua avvolge [POKEMON]!",
-		heal: "  Un velo d’acqua fa recuperare PS [POKEMON]!",
+		heal: "  Un velo d’acqua fa recuperare PS [POKEMON:a]!",
 	},
 	aquastep: {
 		name: "Idroballetto",
@@ -272,9 +272,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		start: "  [POKEMON] si innamora!",
 		startFromItem: "", // NOT CONVERTED: not in Champions
 		end: "  [POKEMON] non è più innamorato!",
-		endFromItem: "  [POKEMON] guarisce dall’innamoramento grazie [ITEM]!",
+		endFromItem: "  [POKEMON] guarisce dall’innamoramento grazie [ITEM:a:definite:classified]!",
 		activate: "  [POKEMON] è innamorato di [TARGET]!",
-		cant: "L’innamoramento impedisce [POKEMON] di agire!",
+		cant: "L’innamoramento impedisce [POKEMON:a] di agire!",
 	},
 	aurasphere: {
 		name: "Forzasfera",
@@ -765,7 +765,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE] ruba e mangia [ITEM] del bersaglio!",
+		removeItem: "  [SOURCE] ruba e mangia [ITEM:definite:classified] del bersaglio!",
 	},
 	bugbuzz: {
 		name: "Ronzio",
@@ -1135,7 +1135,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  [SOURCE] scioglie [ITEM] di [POKEMON]!",
+		removeItem: "  [SOURCE] scioglie [ITEM:definite] di [POKEMON]!",
 	},
 	cosmicpower: {
 		name: "Cosmoforza",
@@ -2202,7 +2202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON] lancia [ITEM]!",
+		removeItem: "  [POKEMON] lancia [ITEM:definite:classified]!",
 	},
 	flipturn: {
 		name: "Virata",
@@ -2277,7 +2277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  [POKEMON] si prepara alla lotta!",
-		startFromItem: "  La probabilità di sferrare brutti colpi di [POKEMON] aumenta grazie [ITEM]!",
+		startFromItem: "  La probabilità di sferrare brutti colpi di [POKEMON] aumenta grazie [ITEM:a:definite:classified]!",
 		startFromZEffect: "", // NOT CONVERTED: not in Champions
 	},
 	focuspunch: {
@@ -3548,7 +3548,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE] fa cadere [ITEM] di [POKEMON]!",
+		removeItem: "  [SOURCE] fa cadere [ITEM:definite:classified] di [POKEMON]!",
 	},
 	kowtowcleave: {
 		name: "Genufendente",
@@ -3633,7 +3633,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 
 		start: "  [POKEMON] è pieno di semi!",
 		end: "", // NOT CONVERTED: not in Champions
-		damage: "  Parassiseme sottrae energia [POKEMON]!",
+		damage: "  Parassiseme sottrae energia [POKEMON:a]!",
 	},
 	leer: {
 		name: "Fulmisguardo",
@@ -4529,7 +4529,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Chi la usa aumenta tutte le sue statistiche ma non può più fuggire o essere sostituito.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "  Spalle al Muro impedisce [POKEMON] di fuggire!",
+		start: "  Spalle al Muro impedisce [POKEMON:a] di fuggire!",
 	},
 	noxioustorque: {
 		name: "Turbotossina",
@@ -4825,7 +4825,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Poltergeist",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "  [ITEM] attacca [POKEMON]!",
+		activate: "  [ITEM:definite:capitalize] attacca[INFLECT:ITEM:s=:p=no] [POKEMON]!",
 	},
 	populationbomb: {
 		name: "Infestazione",
@@ -7010,7 +7010,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		cant: "Colpo Infernale impedisce [POKEMON] di usare la mossa!",
+		cant: "Colpo Infernale impedisce [POKEMON:a] di usare la mossa!",
 	},
 	thunder: {
 		name: "Tuono",
@@ -7335,7 +7335,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		switchOut: "[POKEMON] torna d[TRAINER]!",
+		switchOut: "[POKEMON] torna d[TRAINER:a:definite]!",
 	},
 	vacuumwave: {
 		name: "Vuotonda",

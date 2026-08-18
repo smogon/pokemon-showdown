@@ -12,13 +12,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		opposingParty: "상대의 포켓몬",
 
 		turn: "", // NOT CONVERTED: not in Champions
-		switchIn: "[TRAINER] [FULLNAME] 내보냈다!",
+		switchIn: "[TRAINER:topic] [FULLNAME:object] 내보냈다!",
 		switchInOwn: "가랏! [FULLNAME]!",
-		switchOut: "[TRAINER] [NICKNAME] 넣어 버렸다!",
+		switchOut: "[TRAINER:topic] [NICKNAME:object] 넣어 버렸다!",
 		switchOutOwn: "[NICKNAME] 돌아와!",
-		drag: "[FULLNAME] 배틀에 끌려 나왔다!",
-		faint: "[POKEMON] 쓰러졌다!",
-		swap: "[POKEMON] [TARGET] 자리를 바꿨다!",
+		drag: "[FULLNAME:topic] 배틀에 끌려 나왔다!",
+		faint: "[POKEMON:topic] 쓰러졌다!",
+		swap: "[POKEMON:conjunctive] [TARGET:topic] 자리를 바꿨다!",
 		swapCenter: "", // NOT CONVERTED: runtime grammar
 
 		// Multi Battles only
@@ -32,57 +32,57 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		mega: "", // NOT CONVERTED: not in Champions
 		megaNoItem: "", // NOT CONVERTED: not in Champions
 		megaGen6: "", // NOT CONVERTED: not in Champions
-		transformMega: "[POKEMON] 메가[SPECIES]로 메가진화했다!",
+		transformMega: "[POKEMON:topic] 메가[SPECIES:directional]로 메가진화했다!",
 		primal: "[POKEMON]의 원시회귀! 원시의 모습으로 돌아갔다!",
 		zPower: "", // NOT CONVERTED: runtime grammar
-		zBroken: "  [POKEMON] 공격을 막아 내지 못하고 데미지를 입었다!",
+		zBroken: "  [POKEMON:topic] 공격을 막아 내지 못하고 데미지를 입었다!",
 		terastallize: "", // NOT CONVERTED: not in Champions
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
-		cant: "[POKEMON] [MOVE] 쓸 수 없다!",
+		cant: "[POKEMON:topic] [MOVE:object] 쓸 수 없다!",
 		cantNoMove: "", // NOT CONVERTED: not in Champions
 		fail: "  그러나 실패하고 말았다!!",
 
 		// n.b. this is the default message for in-battle forme changes
 		// for the move Transform and ability Imposter, see the entry for the move Transform
 		transform: "[POKEMON]의 모습이 변화했다!",
-		typeChange: "  [POKEMON] [TYPE]타입이 됐다!",
+		typeChange: "  [POKEMON:topic] [TYPE]타입이 됐다!",
 		typeChangeFromEffect: "", // NOT CONVERTED: not in Champions
 		typeAdd: "  [POKEMON]에게 [TYPE]타입이 추가되었다!",
 
 		start: "", // NOT CONVERTED: not in Champions
-		end: "  [POKEMON] [EFFECT]로부터 풀려났다!",
+		end: "  [POKEMON:topic] [EFFECT:directional]로부터 풀려났다!",
 		activate: "", // NOT CONVERTED: not in Champions
 		startTeamEffect: "", // NOT CONVERTED: not in Champions
 		endTeamEffect: "", // NOT CONVERTED: not in Champions
 		startFieldEffect: "", // NOT CONVERTED: not in Champions
 		endFieldEffect: "", // NOT CONVERTED: not in Champions
 
-		changeAbility: "  [POKEMON] [ABILITY] 되었다!",
-		addItem: "  [POKEMON] [ITEM] 손에 넣었다!",
-		takeItem: "  [POKEMON] [SOURCE]로부터 [ITEM] 빼앗았다!",
+		changeAbility: "  [POKEMON:topic] [ABILITY:subject] 되었다!",
+		addItem: "  [POKEMON:topic] [ITEM:object] 손에 넣었다!",
+		takeItem: "  [POKEMON:topic] [SOURCE:directional]로부터 [ITEM:object] 빼앗았다!",
 		eatItem: "", // NOT CONVERTED: not in Champions
-		useGem: "  [ITEM] [MOVE]의 위력을 강하게 했다!",
-		eatItemWeaken: "  [POKEMON] 입는 데미지를 [ITEM] 약하게 했다!",
+		useGem: "  [ITEM:topic] [MOVE]의 위력을 강하게 했다!",
+		eatItemWeaken: "  [POKEMON:subject] 입는 데미지를 [ITEM:subject] 약하게 했다!",
 		removeItem: "", // NOT CONVERTED: not in Champions
 		activateItem: "", // NOT CONVERTED: not in Champions
-		activateWeaken: "  [POKEMON] 입는 데미지를 [ITEM] 약하게 했다!",
+		activateWeaken: "  [POKEMON:subject] 입는 데미지를 [ITEM:subject] 약하게 했다!",
 
 		damage: "  ([POKEMON] 데미지를 입었다!)",
 		damagePercentage: "", // NOT CONVERTED: not in Champions
 		damageFromPokemon: "", // NOT CONVERTED: not in Champions
 		damageFromItem: "", // NOT CONVERTED: runtime grammar
-		damageFromPartialTrapping: "  [POKEMON] [MOVE]의 데미지를 입고 있다.",
+		damageFromPartialTrapping: "  [POKEMON:topic] [MOVE]의 데미지를 입고 있다.",
 		heal: "  [POKEMON]의 체력이 회복되었다!",
 		healFromZEffect: "", // NOT CONVERTED: runtime grammar
 		healFromEffect: "", // NOT CONVERTED: not in Champions
 
-		boost: "  [POKEMON]의 [STAT] 올라갔다!",
-		boost2: "  [POKEMON]의 [STAT] 크게 올라갔다!",
-		boost3: "  [POKEMON]의 [STAT] 매우 크게 올라갔다!",
-		boost0: "  [POKEMON]의 [STAT] 더 올라가지 않는다!",
+		boost: "  [POKEMON]의 [STAT:subject] 올라갔다!",
+		boost2: "  [POKEMON]의 [STAT:subject] 크게 올라갔다!",
+		boost3: "  [POKEMON]의 [STAT:subject] 매우 크게 올라갔다!",
+		boost0: "  [POKEMON]의 [STAT:topic] 더 올라가지 않는다!",
 		boostFromItem: "", // NOT CONVERTED: not in Champions
 		boost2FromItem: "", // NOT CONVERTED: not in Champions
 		boost3FromItem: "", // NOT CONVERTED: not in Champions
@@ -91,21 +91,21 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
 		boostMultipleFromZEffect: "", // NOT CONVERTED: runtime grammar
 
-		unboost: "  [POKEMON]의 [STAT] 떨어졌다!",
-		unboost2: "  [POKEMON]의 [STAT] 크게 떨어졌다!",
-		unboost3: "  [POKEMON]의 [STAT] 매우 크게 떨어졌다!",
-		unboost0: "  [POKEMON]의 [STAT] 더 떨어지지 않는다!",
+		unboost: "  [POKEMON]의 [STAT:subject] 떨어졌다!",
+		unboost2: "  [POKEMON]의 [STAT:subject] 크게 떨어졌다!",
+		unboost3: "  [POKEMON]의 [STAT:subject] 매우 크게 떨어졌다!",
+		unboost0: "  [POKEMON]의 [STAT:topic] 더 떨어지지 않는다!",
 		unboostFromItem: "", // NOT CONVERTED: not in Champions
 		unboost2FromItem: "", // NOT CONVERTED: not in Champions
 		unboost3FromItem: "", // NOT CONVERTED: not in Champions
 
 		swapBoost: "", // NOT CONVERTED: runtime grammar
-		swapOffensiveBoost: "  [POKEMON] 상대와 자신의 공격과 특수공격의 능력 변화를 바꿨다!",
-		swapDefensiveBoost: "  [POKEMON] 상대와 자신의 방어와 특수방어의 능력 변화를 바꿨다!",
-		copyBoost: "  [POKEMON] [TARGET]의 능력 변화를 복사했다!",
+		swapOffensiveBoost: "  [POKEMON:topic] 상대와 자신의 공격과 특수공격의 능력 변화를 바꿨다!",
+		swapDefensiveBoost: "  [POKEMON:topic] 상대와 자신의 방어와 특수방어의 능력 변화를 바꿨다!",
+		copyBoost: "  [POKEMON:topic] [TARGET]의 능력 변화를 복사했다!",
 		clearBoost: "  [POKEMON]의 능력 변화가 원래대로 되돌아왔다!",
 		clearBoostFromZEffect: "", // NOT CONVERTED: runtime grammar
-		invertBoost: "  [POKEMON] 능력 변화가 뒤집혔다!",
+		invertBoost: "  [POKEMON:topic] 능력 변화가 뒤집혔다!",
 		clearAllBoost: "  모든 상태가 원래대로 되돌아왔다!",
 
 		superEffective: "  효과가 굉장했다!",
@@ -173,70 +173,70 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 
 	// statuses
 	brn: {
-		start: "  [POKEMON] 화상을 입었다!",
-		startFromItem: "  [POKEMON] [ITEM] 때문에 화상을 입었다!",
-		alreadyStarted: "  [POKEMON] 이미 화상을 입은 상태다.",
+		start: "  [POKEMON:topic] 화상을 입었다!",
+		startFromItem: "  [POKEMON:topic] [ITEM] 때문에 화상을 입었다!",
+		alreadyStarted: "  [POKEMON:topic] 이미 화상을 입은 상태다.",
 		end: "", // NOT CONVERTED: not in Champions
 		endFromItem: "", // NOT CONVERTED: not in Champions
-		damage: "  [POKEMON] 화상 데미지를 입었다!",
+		damage: "  [POKEMON:topic] 화상 데미지를 입었다!",
 	},
 	frz: {
-		start: "  [POKEMON] 얼어붙었다!",
+		start: "  [POKEMON:topic] 얼어붙었다!",
 		alreadyStarted: "", // NOT CONVERTED: runtime grammar
 		end: "  [POKEMON]의 얼음이 녹았다!",
-		endFromItem: "  [POKEMON] [ITEM]로 얼음 상태가 나았다!",
+		endFromItem: "  [POKEMON:topic] [ITEM:directional]로 얼음 상태가 나았다!",
 		endFromMove: "  [POKEMON]의 [MOVE] 때문에 얼음이 녹았다!",
-		cant: "[POKEMON] 얼어 버려서 움직일 수 없다!",
+		cant: "[POKEMON:topic] 얼어 버려서 움직일 수 없다!",
 	},
 	par: {
-		start: "  [POKEMON] 마비되어 기술이 나오기 어려워졌다!",
-		alreadyStarted: "  [POKEMON] 이미 마비되어 있다.",
+		start: "  [POKEMON:topic] 마비되어 기술이 나오기 어려워졌다!",
+		alreadyStarted: "  [POKEMON:topic] 이미 마비되어 있다.",
 		end: "  [POKEMON]의 몸저림이 풀렸다!",
-		endFromItem: "  [POKEMON] [ITEM]로 마비가 풀렸다!",
+		endFromItem: "  [POKEMON:topic] [ITEM:directional]로 마비가 풀렸다!",
 		cant: "", // NOT CONVERTED: not in Champions
 	},
 	psn: {
 		start: "  [POKEMON]의 몸에 독이 퍼졌다!",
-		alreadyStarted: "  [POKEMON] 이미 몸에 독이 퍼진 상태다.",
+		alreadyStarted: "  [POKEMON:topic] 이미 몸에 독이 퍼진 상태다.",
 		end: "  [POKEMON]의 독은 말끔하게 해독됐다!",
 		endFromItem: "", // NOT CONVERTED: runtime grammar
 		damage: "", // NOT CONVERTED: not in Champions
 	},
 	tox: {
 		start: "  [POKEMON]의 몸에 맹독이 퍼졌다!",
-		startFromItem: "  [POKEMON] [ITEM] 때문에 맹독에 중독됐다!",
+		startFromItem: "  [POKEMON:topic] [ITEM] 때문에 맹독에 중독됐다!",
 		end: "#psn",
 		endFromItem: "#psn",
 		alreadyStarted: "#psn",
 		damage: "#psn",
 	},
 	slp: {
-		start: "  [POKEMON] 잠들어 버렸다!",
+		start: "  [POKEMON:topic] 잠들어 버렸다!",
 		startFromRest: "", // NOT CONVERTED: not in Champions
-		alreadyStarted: "  [POKEMON] 이미 잠들어 있다.",
-		end: "  [POKEMON] 눈을 떴다!",
-		endFromItem: "  [POKEMON] [ITEM]로 눈을 떴다!",
-		cant: "[POKEMON] 쿨쿨 잠들어 있다.",
+		alreadyStarted: "  [POKEMON:topic] 이미 잠들어 있다.",
+		end: "  [POKEMON:topic] 눈을 떴다!",
+		endFromItem: "  [POKEMON:topic] [ITEM:directional]로 눈을 떴다!",
+		cant: "[POKEMON:topic] 쿨쿨 잠들어 있다.",
 	},
 
 	// misc effects
 	confusion: {
-		start: "  [POKEMON] 혼란에 빠졌다!",
-		startFromFatigue: "  [POKEMON] 몹시 지쳐서 혼란에 빠졌다!",
+		start: "  [POKEMON:topic] 혼란에 빠졌다!",
+		startFromFatigue: "  [POKEMON:topic] 몹시 지쳐서 혼란에 빠졌다!",
 		end: "  [POKEMON]의 혼란이 풀렸다!",
-		endFromItem: "  [POKEMON] [ITEM]로 혼란이 풀렸다!",
-		alreadyStarted: "  [POKEMON] 이미 혼란에 빠져 있다.",
-		activate: "  [POKEMON] 혼란에 빠져 있다!",
+		endFromItem: "  [POKEMON:topic] [ITEM:directional]로 혼란이 풀렸다!",
+		alreadyStarted: "  [POKEMON:topic] 이미 혼란에 빠져 있다.",
+		activate: "  [POKEMON:topic] 혼란에 빠져 있다!",
 		damage: "영문도 모른 채 자신을 공격했다!",
 	},
 	drain: {
-		heal: "  [SOURCE]로부터 체력을 흡수했다!",
+		heal: "  [SOURCE:directional]로부터 체력을 흡수했다!",
 	},
 	flinch: {
-		cant: "[POKEMON] 풀이 죽어 기술을 쓸 수 없다!",
+		cant: "[POKEMON:topic] 풀이 죽어 기술을 쓸 수 없다!",
 	},
 	heal: {
-		fail: "  그러나 [POKEMON] 체력이 가득 찬 상태다!",
+		fail: "  그러나 [POKEMON:topic] 체력이 가득 찬 상태다!",
 	},
 	healreplacement: {
 		activate: "", // NOT CONVERTED: not in Champions
@@ -245,10 +245,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		cant: "", // NOT CONVERTED: not in Champions
 	},
 	recharge: {
-		cant: "[POKEMON] 공격의 반동으로 움직일 수 없다!",
+		cant: "[POKEMON:topic] 공격의 반동으로 움직일 수 없다!",
 	},
 	recoil: {
-		damage: "  [POKEMON] 반동으로 데미지를 입었다!",
+		damage: "  [POKEMON:topic] 반동으로 데미지를 입었다!",
 	},
 	unboost: {
 		fail: "  [POKEMON]의 능력은 떨어지지 않는다!",
@@ -258,7 +258,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		activate: "", // NOT CONVERTED: not in Champions
 	},
 	trapped: {
-		start: "  [POKEMON] 이제 도망칠 수 없다!",
+		start: "  [POKEMON:topic] 이제 도망칠 수 없다!",
 	},
 	dynamax: {
 		start: "", // NOT CONVERTED: not in Champions
@@ -273,7 +273,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  모래바람이 불기 시작했다!",
 		end: "  모래바람이 가라앉았다!",
 		upkeep: "  (모래바람이 세차게 분다!)",
-		damage: "  모래바람이 [POKEMON] 덮쳤다!",
+		damage: "  모래바람이 [POKEMON:object] 덮쳤다!",
 	},
 	sunnyday: {
 		weatherName: "", // NOT CONVERTED: not in Champions
@@ -326,7 +326,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	electricterrain: {
 		start: "  발밑에 전기가 흐르기 시작했다!",
 		end: "  발밑의 전기가 사라졌다!",
-		block: "  [POKEMON] 일렉트릭필드가 지켜 주고 있다!",
+		block: "  [POKEMON:object] 일렉트릭필드가 지켜 주고 있다!",
 	},
 	grassyterrain: {
 		start: "  발밑에 풀이 무성해졌다!",
@@ -336,20 +336,20 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	mistyterrain: {
 		start: "  발밑이 안개로 자욱해졌다!",
 		end: "  발밑의 안개가 사라졌다!",
-		block: "  [POKEMON] 미스트필드가 지켜 주고 있다!",
+		block: "  [POKEMON:object] 미스트필드가 지켜 주고 있다!",
 	},
 	psychicterrain: {
 		start: "  발밑에서 이상한 느낌이 든다!",
 		end: "  발밑의 이상한 느낌이 사라졌다!",
-		block: "  [POKEMON] 사이코필드가 지켜 주고 있다!",
+		block: "  [POKEMON:topic] 사이코필드가 지켜 주고 있다!",
 	},
 
 	// field effects
 	gravity: {
 		start: "  중력이 강해졌다!",
 		end: "  중력이 원래대로 되돌아왔다!",
-		cant: "[POKEMON] 중력이 강해서 [MOVE] 쓸 수 없다!",
-		activate: "[POKEMON] 중력의 영향으로 공중에 있을 수 없게 되었다!",
+		cant: "[POKEMON:topic] 중력이 강해서 [MOVE:object] 쓸 수 없다!",
+		activate: "[POKEMON:topic] 중력의 영향으로 공중에 있을 수 없게 되었다!",
 	},
 	magicroom: {
 		start: "  지니게 한 도구의 효과가 없어지는 공간을 만들어 냈다!",
@@ -360,7 +360,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  흙놀이의 효과가 없어졌다!",
 	},
 	trickroom: {
-		start: "  [POKEMON] 시공을 뒤틀었다!",
+		start: "  [POKEMON:topic] 시공을 뒤틀었다!",
 		end: "  뒤틀린 시공이 원래대로 되돌아왔다!",
 	},
 	watersport: {
@@ -374,6 +374,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 
 	// misc
 	crash: {
-		damage: "  [POKEMON] 의욕이 넘쳐서 땅에 부딪쳤다!",
+		damage: "  [POKEMON:topic] 의욕이 넘쳐서 땅에 부딪쳤다!",
 	},
 };

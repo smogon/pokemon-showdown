@@ -12,9 +12,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		opposingParty: "Gegner",
 
 		turn: "", // NOT CONVERTED: not in Champions
-		switchIn: "[TRAINER] schickt [FULLNAME] in den Kampf!",
+		switchIn: "[TRAINER:definite:nominative:capitalize] schickt [FULLNAME] in den Kampf!",
 		switchInOwn: "Los, [FULLNAME]!",
-		switchOut: "[TRAINER] hat [NICKNAME] zurückgerufen!",
+		switchOut: "[TRAINER:definite:nominative:capitalize] hat [NICKNAME] zurückgerufen!",
 		switchOutOwn: "[NICKNAME], komm zurück!",
 		drag: "[FULLNAME] wurde ausgewählt!",
 		faint: "[POKEMON] wurde besiegt!",

@@ -44,7 +44,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		boost: "  [POKEMON] 공격이 최고치까지 올라갔다!",
+		boost: "  [POKEMON:topic] 공격이 최고치까지 올라갔다!",
 	},
 	angershell: {
 		name: "분노의껍질",
@@ -62,7 +62,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] 몸을 떨었다!",
+		activate: "  [POKEMON:topic] 몸을 떨었다!",
 	},
 	arenatrap: {
 		name: "개미지옥",
@@ -93,7 +93,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "자신과 같은 편으로 향하는 멘탈 공격을 막을 수 있다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "  [POKEMON] 아로마베일이 지켜 주고 있다!",
+		block: "  [POKEMON:object] 아로마베일이 지켜 주고 있다!",
 	},
 	asone: {
 		name: "", // NOT CONVERTED: not in PokeAPI
@@ -314,7 +314,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		block: "  [SOURCE] [MOVE] 쓸 수 없다!",
+		block: "  [SOURCE:topic] [MOVE:object] 쓸 수 없다!",
 	},
 	dancer: {
 		name: "무희",
@@ -476,7 +476,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "전원의 페어리타입 기술이 강해진다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		start: "  [POKEMON] 페어리오라를 발산하고 있다!",
+		start: "  [POKEMON:topic] 페어리오라를 발산하고 있다!",
 	},
 	filter: {
 		name: "필터",
@@ -513,7 +513,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "  [POKEMON] 불꽃의 위력이 올라갔다!",
+		start: "  [POKEMON:topic] 불꽃의 위력이 올라갔다!",
 	},
 	flowergift: {
 		name: "플라워기프트",
@@ -532,7 +532,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "같은 편의 풀타입 포켓몬은 능력이 떨어지지 않고 상태 이상도 되지 않는다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "  [POKEMON] 플라워베일이 지켜 주고 있다!",
+		block: "  [POKEMON:object] 플라워베일이 지켜 주고 있다!",
 	},
 	fluffy: {
 		name: "복슬복슬",
@@ -569,7 +569,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] [TARGET]의 [ITEM] 통찰했다!",
+		activate: "  [POKEMON:topic] [TARGET]의 [ITEM:object] 통찰했다!",
 		activateNoTarget: "", // NOT CONVERTED: not in Champions
 	},
 	fullmetalbody: {
@@ -687,7 +687,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "대접",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		heal: "  [SOURCE] 내온 차를 [POKEMON] 모두 비웠다!",
+		heal: "  [SOURCE:subject] 내온 차를 [POKEMON:subject] 모두 비웠다!",
 	},
 	hugepower: {
 		name: "천하장사",
@@ -906,7 +906,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] 공격을 끌어들였다!",
+		activate: "  [POKEMON:topic] 공격을 끌어들였다!",
 	},
 	limber: {
 		name: "유연",
@@ -1115,7 +1115,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "  [TARGET] 특성이 미라가 되어 버렸다!",
+		changeAbility: "  [TARGET:topic] 특성이 미라가 되어 버렸다!",
 	},
 	myceliummight: {
 		name: "균사의힘",
@@ -1363,7 +1363,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		start: "  [POKEMON] 프레셔를 발산하고 있다!",
+		start: "  [POKEMON:topic] 프레셔를 발산하고 있다!",
 	},
 	primordialsea: {
 		name: "시작의바다",
@@ -1474,7 +1474,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		changeAbility: "  [SOURCE]의 [ABILITY] 이어받았다!",
+		changeAbility: "  [SOURCE]의 [ABILITY:object] 이어받았다!",
 	},
 	reckless: {
 		name: "이판사판",
@@ -1885,13 +1885,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] 공격을 버텼다!",
+		activate: "  [POKEMON:topic] 공격을 버텼다!",
 	},
 	suctioncups: {
 		name: "흡반",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "  [POKEMON] 흡반 때문에 들러붙어 있다!",
+		block: "  [POKEMON:topic] 흡반 때문에 들러붙어 있다!",
 	},
 	superluck: {
 		name: "대운",
@@ -1908,7 +1908,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "", // NOT CONVERTED: not in PokeAPI
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "  [POKEMON] 쓰러진 동료에게서 힘을 받았다!",
+		activate: "  [POKEMON:topic] 쓰러진 동료에게서 힘을 받았다!",
 	},
 	surgesurfer: {
 		name: "서핑테일",
@@ -1928,7 +1928,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "같은 편의 포켓몬이 잠들지 않게 된다.",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "  [POKEMON] 스위트베일 때문에 잠들지 않는다!",
+		block: "  [POKEMON:topic] 스위트베일 때문에 잠들지 않는다!",
 	},
 	swiftswim: {
 		name: "쓱쓱",
@@ -1955,7 +1955,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "", // NOT CONVERTED: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] [ITEM] [TARGET]에게 지니게 했다!",
+		activate: "  [POKEMON:topic] [ITEM:object] [TARGET]에게 지니게 했다!",
 	},
 	synchronize: {
 		name: "싱크로",
@@ -1992,7 +1992,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "텔레파시",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		block: "  [POKEMON] 같은 편의 공격을 받지 않는다!",
+		block: "  [POKEMON:topic] 같은 편의 공격을 받지 않는다!",
 	},
 	teraformzero: {
 		name: "제로포밍",
@@ -2292,7 +2292,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "마이티체인지",
 		shortDesc: "", // NOT CONVERTED: not in PokeAPI
 
-		activate: "  [POKEMON] 변신하고 돌아왔다!",
+		activate: "  [POKEMON:topic] 변신하고 돌아왔다!",
 	},
 
 	// CAP
