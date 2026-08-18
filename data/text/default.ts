@@ -36,7 +36,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "[POKEMON]'s Primal Reversion! It reverted to its primal state!",
 		zPower: "  [POKEMON] surrounded itself with its Z-Power!",
 		zBroken: "  [POKEMON] couldn't fully protect itself and got hurt!",
-		terastallize: "  [POKEMON] has Terastallized into the [TYPE]-type!", // filler
+		terastallize: "  ([POKEMON] has Terastallized into the [TYPE]-type!)",
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
@@ -119,7 +119,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		crit: "  A critical hit!",
 		critSpread: "  A critical hit on [POKEMON]!",
 		immune: "  It doesn't affect [POKEMON]...",
-		immuneNoPokemon: "  It had no effect!", // old gens
+		immuneNoPokemon: "  But it had no effect!", // old gens
 		immuneOHKO: "  [POKEMON] is unaffected!",
 		miss: "  [POKEMON] avoided the attack!",
 		missNoPokemon: "  [SOURCE]'s attack missed!", // old gens
@@ -128,8 +128,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		noTarget: "  But there was no target...", // gen 5 and earlier
 		ohko: "  It's a one-hit KO!",
 		combine: "  The two moves have become one! It's a combined move!",
-		hitCount: "  The Pok\u00E9mon was hit [NUMBER] times!",
-		hitCountSingular: "  The Pok\u00E9mon was hit 1 time!",
+		hitCount: "  The Pok\u00E9mon was hit [NUMBER] [INFLECT:NUMBER:s=time:p=times]!",
 	},
 
 	// stats
@@ -251,8 +250,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  [POKEMON] was damaged by the recoil!",
 	},
 	unboost: {
-		fail: "  [POKEMON]'s stats were not lowered!",
-		failSingular: "  [POKEMON]'s [STAT] was not lowered!",
+		fail: "  [POKEMON]'s [STAT] [INFLECT:STAT:s=was:p=were] not lowered!",
 	},
 	struggle: {
 		activate: "  [POKEMON] has no moves left!",
@@ -298,7 +296,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "Snow",
 		start: "  It started to snow!",
 		end: "  The snow stopped.",
-		upkeep: "  (The snow is falling down.)",
+		upkeep: "  (The snow is blowing about!)",
 	},
 	desolateland: {
 		weatherName: "Intense Sun",

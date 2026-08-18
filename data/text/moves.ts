@@ -1541,7 +1541,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Fails unless the user is an Electric type. If this move is successful and the user is not Terastallized, the user's Electric type becomes typeless as long as it remains active.",
 		shortDesc: "User's Electric type: typeless; must be Electric.",
 
-		typeChange: "  [POKEMON] used up all of its electricity!",
+		typeChange: "  [POKEMON] used up all its electricity!",
 	},
 	doubleslap: {
 		name: "Double Slap",
@@ -4303,7 +4303,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen1: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon, unless caused by the secondary effect of a move. Fails if the user already has the effect. If any Pokemon uses Haze, this effect ends.",
 			start: "  [POKEMON]'s shrouded in mist!",
-			block: "  But, it failed!",
+			block: "  But it failed!",
 		},
 
 		start: "  [TEAM] became shrouded in mist!",
@@ -4679,7 +4679,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "All active Pokemon will faint in 3 turns.",
 
 		start: "  All Pok\u00E9mon that heard the song will faint in three turns!",
-		activate: "  [POKEMON]'s perish count fell to [NUMBER].",
+		activate: "  [POKEMON]'s perish count fell to [NUMBER]!",
 	},
 	petalblizzard: {
 		name: "Petal Blizzard",
@@ -7322,7 +7322,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		end: "  [POKEMON] calmed down.",
 		upkeep: "  [POKEMON] is making an uproar!",
 		block: "  But the uproar kept [POKEMON] awake!",
-		blockSelf: "  [POKEMON] can't sleep in an uproar!",
+		blockSelf: "  But [POKEMON] can't sleep in an uproar!",
 	},
 	uturn: {
 		name: "U-turn",

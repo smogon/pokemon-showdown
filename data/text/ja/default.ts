@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "味方の ポケモン",
 		opposingParty: "相手の ポケモン",
 
-		turn: "", // NOT CONVERTED: not in Champions
+		turn: "", // NEEDS TRANSLATION: Showdown custom text
 		switchIn: "[TRAINER]は [FULLNAME]を 繰り出した！",
 		switchInOwn: "ゆけっ！ [FULLNAME]！",
 		switchOut: "[TRAINER]は [NICKNAME]を 引っこめた！",
@@ -29,75 +29,75 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		move: "[POKEMON]の **[MOVE]**！",
 		abilityActivation: "[[POKEMON]の [ABILITY]]",
 
-		mega: "", // NOT CONVERTED: not in Champions
-		megaNoItem: "", // NOT CONVERTED: not in Champions
-		megaGen6: "", // NOT CONVERTED: not in Champions
+		mega: "  [POKEMON]の [ITEM]と [TRAINER]の キーストーンが 反応した！",
+		megaNoItem: "  [TRAINER]の キーストーンと [POKEMON]が 反応した！",
+		megaGen6: "  [POKEMON]の [ITEM]と [TRAINER]の メガバングルが 反応した！",
 		transformMega: "[POKEMON]は メガ[SPECIES]に メガシンカした！",
 		primal: "[POKEMON]の ゲンシカイキ！ 原始の姿を 取り戻した！",
 		zPower: "  [POKEMON]は Ｚパワーを 身体に まとった！",
 		zBroken: "  [POKEMON]は 攻撃を 守りきれずに ダメージを 受けた！",
-		terastallize: "", // NOT CONVERTED: not in Champions
+		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "[POKEMON]は [MOVE]を 使えない！",
-		cantNoMove: "", // NOT CONVERTED: not in Champions
+		cantNoMove: "[POKEMON]は みうごきが とれない！",
 		fail: "  しかし うまく 決まらなかった！！",
 
 		// n.b. this is the default message for in-battle forme changes
 		// for the move Transform and ability Imposter, see the entry for the move Transform
 		transform: "[POKEMON]の 姿が 変化した！",
 		typeChange: "  [POKEMON]は [TYPE]タイプに なった！",
-		typeChangeFromEffect: "", // NOT CONVERTED: not in Champions
+		typeChangeFromEffect: "  [POKEMON]は [EFFECT]で [TYPE]タイプに なった！",
 		typeAdd: "  [POKEMON]に [TYPE]タイプが 追加された！",
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NEEDS TRANSLATION: Showdown custom text
 		end: "  [POKEMON]は [EFFECT]から 解放された！",
-		activate: "", // NOT CONVERTED: not in Champions
-		startTeamEffect: "", // NOT CONVERTED: not in Champions
-		endTeamEffect: "", // NOT CONVERTED: not in Champions
-		startFieldEffect: "", // NOT CONVERTED: not in Champions
-		endFieldEffect: "", // NOT CONVERTED: not in Champions
+		activate: "", // NEEDS TRANSLATION: Showdown custom text
+		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
 
 		changeAbility: "  [POKEMON]は [ABILITY]に なった！",
 		addItem: "  [POKEMON]は [ITEM]を 手に入れた！",
 		takeItem: "  [POKEMON]は [SOURCE]から [ITEM]を 奪い取った！",
-		eatItem: "", // NOT CONVERTED: not in Champions
+		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
 		useGem: "  [ITEM]は [MOVE]の 威力を 強めた！",
 		eatItemWeaken: "  [POKEMON]への ダメージを [ITEM]が 弱めた！",
-		removeItem: "", // NOT CONVERTED: not in Champions
-		activateItem: "", // NOT CONVERTED: not in Champions
+		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
+		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
 		activateWeaken: "  [POKEMON]への ダメージを [ITEM]が 弱めた！",
 
 		damage: "  ([POKEMON]は ダメージを 受けた！)",
-		damagePercentage: "", // NOT CONVERTED: not in Champions
-		damageFromPokemon: "", // NOT CONVERTED: not in Champions
+		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damageFromPokemon: "  [POKEMON]は [SOURCE]の [ITEM]で ダメージを 受けた！",
 		damageFromItem: "  [POKEMON]は [ITEM]で ダメージを 受けた！",
 		damageFromPartialTrapping: "  [POKEMON]は [MOVE]の ダメージを 受けている",
 		heal: "  [POKEMON]の 体力が 回復した！",
 		healFromZEffect: "  [POKEMON]は Ｚパワーで 体力を 回復した！",
-		healFromEffect: "", // NOT CONVERTED: not in Champions
+		healFromEffect: "  [POKEMON]は [EFFECT]で かいふくした！",
 
 		boost: "  [POKEMON]の [STAT]が 上がった！",
 		boost2: "  [POKEMON]の [STAT]が ぐーんと上がった！",
 		boost3: "  [POKEMON]の [STAT]が ぐぐーんと上がった！",
 		boost0: "  [POKEMON]の [STAT]は もう 上がらない！",
-		boostFromItem: "", // NOT CONVERTED: not in Champions
-		boost2FromItem: "", // NOT CONVERTED: not in Champions
-		boost3FromItem: "", // NOT CONVERTED: not in Champions
-		boostFromZEffect: "", // NOT CONVERTED: not in Champions
-		boost2FromZEffect: "", // NOT CONVERTED: not in Champions
-		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
+		boostFromItem: "  [POKEMON]は [ITEM]で [STAT]が あがった！",
+		boost2FromItem: "  [POKEMON]は [ITEM]で [STAT]が ぐーんと あがった！",
+		boost3FromItem: "  [POKEMON]は [ITEM]で [STAT]が ぐぐーんと 上がった！",
+		boostFromZEffect: "  [POKEMON]は Ｚパワーで [STAT]が 上がった！",
+		boost2FromZEffect: "  [POKEMON]は Ｚパワーで [STAT]が ぐーんと 上がった！",
+		boost3FromZEffect: "  [POKEMON]は Ｚパワーで [STAT]が ぐぐーんと 上がった！",
 		boostMultipleFromZEffect: "  [POKEMON]は Ｚパワーで 能力が 上がった！",
 
 		unboost: "  [POKEMON]の [STAT]が 下がった！",
 		unboost2: "  [POKEMON]の [STAT]が がくっと下がった！",
 		unboost3: "  [POKEMON]の [STAT]が がくーんと下がった！",
 		unboost0: "  [POKEMON]の [STAT]は もう 下がらない！",
-		unboostFromItem: "", // NOT CONVERTED: not in Champions
-		unboost2FromItem: "", // NOT CONVERTED: not in Champions
-		unboost3FromItem: "", // NOT CONVERTED: not in Champions
+		unboostFromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboost2FromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboost3FromItem: "", // NEEDS TRANSLATION: Showdown custom text
 
 		swapBoost: "  [POKEMON]は 相手と自分の 能力変化を 入れ替えた！",
 		swapOffensiveBoost: "  [POKEMON]は 相手と自分の 攻撃と 特攻の 能力変化を 入れ替えた！",
@@ -119,17 +119,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		crit: "  急所に 当たった！",
 		critSpread: "  [POKEMON]の 急所に 当たった！",
 		immune: "  [POKEMON]には 効果が ないようだ…",
-		immuneNoPokemon: "", // NOT CONVERTED: not in Champions
+		immuneNoPokemon: "  しかし効果がなかった！",
 		immuneOHKO: "  [POKEMON]には 全然 効いてない！",
 		miss: "  [POKEMON]には 当たらなかった！",
-		missNoPokemon: "", // NOT CONVERTED: not in Champions
+		missNoPokemon: "  しかし [SOURCE]の こうげきは はずれた！",
 
 		center: "  リセットムーブ！！",
-		noTarget: "", // NOT CONVERTED: not in Champions
+		noTarget: "  しかし あいてが いないので うまく きまらなかった！",
 		ohko: "  一撃必殺！",
 		combine: "  2つの技が 1つになった！ コンビネーション技だ！",
 		hitCount: "  [NUMBER]回 当たった！",
-		hitCountSingular: "  1回 当たった！",
 	},
 
 	// stats
@@ -139,23 +138,23 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	atk: {
 		statName: "攻撃",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	def: {
 		statName: "防御",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spa: {
 		statName: "特攻",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spd: {
 		statName: "特防",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spe: {
 		statName: "素早さ",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	accuracy: {
 		statName: "命中率",
@@ -164,8 +163,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		statName: "回避率",
 	},
 	spc: {
-		statName: "", // NOT CONVERTED: not in Champions
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statName: "特殊",
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	stats: {
 		statName: "ステータス",
@@ -176,8 +175,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON]は やけどを 負った！",
 		startFromItem: "  [POKEMON]は [ITEM]で やけどを 負った！",
 		alreadyStarted: "  [POKEMON]は すでに やけどを 負っている",
-		end: "", // NOT CONVERTED: not in Champions
-		endFromItem: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON]の やけどが治った！",
+		endFromItem: "  [POKEMON]は [ITEM]で やけどが 治った！",
 		damage: "  [POKEMON]は やけどの ダメージを 受けた！",
 	},
 	frz: {
@@ -193,14 +192,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		alreadyStarted: "  [POKEMON]は すでに まひしている",
 		end: "  [POKEMON]の しびれが とれた！",
 		endFromItem: "  [POKEMON]は [ITEM]で まひが 治った！",
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON]は 体がしびれて 動けない！",
 	},
 	psn: {
 		start: "  [POKEMON]は 毒を あびた！",
 		alreadyStarted: "  [POKEMON]は すでに 毒を あびている",
 		end: "  [POKEMON]の 毒は きれいさっぱり なくなった！",
 		endFromItem: "  [POKEMON]は [ITEM]で 毒が 治った！",
-		damage: "", // NOT CONVERTED: not in Champions
+		damage: "  [POKEMON]は 毒の ダメージを受けた！",
 	},
 	tox: {
 		start: "  [POKEMON]は 猛毒を あびた！",
@@ -212,7 +211,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	slp: {
 		start: "  [POKEMON]は 眠ってしまった！",
-		startFromRest: "", // NOT CONVERTED: not in Champions
+		startFromRest: "  [POKEMON]は 眠って 元気に なった！",
 		alreadyStarted: "  [POKEMON]は すでに 眠っている",
 		end: "  [POKEMON]は 目を 覚ました！",
 		endFromItem: "  [POKEMON]は [ITEM]で 目を 覚ました！",
@@ -239,10 +238,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		fail: "  しかし [POKEMON]は 体力が 満タンだ！",
 	},
 	healreplacement: {
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]は Ｚパワーで 入れ替え先の 味方を回復する！",
 	},
 	nopp: {
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON]の **[MOVE]**！\n  しかし　{技|わざ}の {残|のこ}りポイントが　なかった！",
 	},
 	recharge: {
 		cant: "[POKEMON]は 攻撃の 反動で 動けない！",
@@ -252,17 +251,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	unboost: {
 		fail: "  [POKEMON]の 能力は 下がらない！",
-		failSingular: "", // NOT CONVERTED: not in Champions
 	},
 	struggle: {
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON]は だすことの できる技が ない！",
 	},
 	trapped: {
 		start: "  [POKEMON]は もう 逃げられない！",
 	},
 	dynamax: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "", // NEEDS TRANSLATION: Showdown custom text
+		end: "", // NEEDS TRANSLATION: Showdown custom text
 		block: "  ダイマックスの ちからで はじかれた！",
 		fail: "  [POKEMON]は 首を 横に振った この技を しかけることが できないようだ……",
 	},
@@ -276,36 +274,36 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  砂あらしが [POKEMON]を 襲う！",
 	},
 	sunnyday: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "にほんばれ状態",
 		start: "  日差しが 強くなった！",
 		end: "  日差しが 元に戻った！",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (ひざしが つよい)",
 	},
 	raindance: {
 		weatherName: "あめ状態",
 		start: "  雨が 降り始めた！",
 		end: "  雨が 上がった！",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (あめが ふりつづいている)",
 	},
 	hail: {
 		weatherName: "あられ",
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		upkeep: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		start: "  あられが 降り始めた！",
+		end: "  あられが 止んだ！",
+		upkeep: "  (あられが 吹きすさぶ！)",
+		damage: "  あられが [POKEMON]を 襲う！",
 	},
 	snowscape: {
 		weatherName: "ゆき状態",
 		start: "  雪が 降り始めた！",
 		end: "  雪が 止んだ！",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (雪が 吹きすさぶ！)",
 	},
 	desolateland: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "おおひでり",
 		start: "  日差しが とても強くなった！",
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  日差しが 元に戻った！",
 		block: "  強い日差しの 勢いは 止まらない！",
-		blockMove: "", // NOT CONVERTED: not in Champions
+		blockMove: "  強い日差しの 影響で みずタイプの 攻撃が 蒸発した！",
 	},
 	primordialsea: {
 		weatherName: "おおあめ",
@@ -331,7 +329,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	grassyterrain: {
 		start: "  足下に 草がおいしげった！",
 		end: "  足下の 草が消え去った！",
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  [POKEMON]の 体力が 回復した！",
 	},
 	mistyterrain: {
 		start: "  足下に 霧が立ち込めた！",

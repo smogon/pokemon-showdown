@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "", // NOT CONVERTED: not in Champions
-		winBattle: "", // NOT CONVERTED: not in Champions
-		tieBattle: "", // NOT CONVERTED: not in Champions
+		startBattle: "", // NEEDS TRANSLATION: Showdown custom text
+		winBattle: "", // NEEDS TRANSLATION: Showdown custom text
+		tieBattle: "", // NEEDS TRANSLATION: Showdown custom text
 
 		pokemon: "[NICKNAME]",
 		opposingPokemon: "[NICKNAME] avversario",
@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "i Pokémon alleati",
 		opposingParty: "i Pokémon nemici",
 
-		turn: "", // NOT CONVERTED: not in Champions
+		turn: "", // NEEDS TRANSLATION: Showdown custom text
 		switchIn: "[TRAINER:definite:capitalize] manda in campo [FULLNAME]!",
 		switchInOwn: "Avanti, [FULLNAME]!",
 		switchOut: "[TRAINER:definite:capitalize] ritira [NICKNAME] dalla lotta!",
@@ -29,75 +29,75 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		move: "[POKEMON] usa **[MOVE]**!",
 		abilityActivation: "[[ABILITY] di [POKEMON]]",
 
-		mega: "", // NOT CONVERTED: not in Champions
-		megaNoItem: "", // NOT CONVERTED: not in Champions
-		megaGen6: "", // NOT CONVERTED: not in Champions
+		mega: "  [ITEM:definite:capitalize] di [POKEMON] reagisce alla Pietrachiave di [TRAINER]!",
+		megaNoItem: "  [POKEMON] reagisce alla Pietrachiave di [TRAINER]!",
+		megaGen6: "  [ITEM:definite:capitalize] di [POKEMON] reagisce al Megabracciale di [TRAINER]!",
 		transformMega: "[POKEMON] si evolve in Mega[SPECIES]!",
 		primal: "[POKEMON] si è archeorisvegliato! È tornato alla sua forma originaria!",
 		zPower: "  Il Potere Z circonda [POKEMON] come un’aura!",
 		zBroken: "  La protezione fallisce! [POKEMON] subisce dei danni!",
-		terastallize: "", // NOT CONVERTED: not in Champions
+		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "[POKEMON] non può usare [MOVE]!",
-		cantNoMove: "", // NOT CONVERTED: not in Champions
+		cantNoMove: "[POKEMON] è immobilizzato!",
 		fail: "  Ma fallisce!",
 
 		// n.b. this is the default message for in-battle forme changes
 		// for the move Transform and ability Imposter, see the entry for the move Transform
 		transform: "[POKEMON] si è trasformato!",
 		typeChange: "  [POKEMON] è diventato di tipo [TYPE]!",
-		typeChangeFromEffect: "", // NOT CONVERTED: not in Champions
+		typeChangeFromEffect: "  [EFFECT] di [POKEMON] lo ha reso di tipo [TYPE]!",
 		typeAdd: "  Adesso [POKEMON] è anche di tipo [TYPE]!",
 
-		start: "", // NOT CONVERTED: not in Champions
+		start: "", // NEEDS TRANSLATION: Showdown custom text
 		end: "  [POKEMON] si è liberato da [EFFECT]!",
-		activate: "", // NOT CONVERTED: not in Champions
-		startTeamEffect: "", // NOT CONVERTED: not in Champions
-		endTeamEffect: "", // NOT CONVERTED: not in Champions
-		startFieldEffect: "", // NOT CONVERTED: not in Champions
-		endFieldEffect: "", // NOT CONVERTED: not in Champions
+		activate: "", // NEEDS TRANSLATION: Showdown custom text
+		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
 
 		changeAbility: "  L’abilità di [POKEMON] è ora [ABILITY]!",
 		addItem: "  [POKEMON] ottiene [ITEM:indefinite:classified]!",
 		takeItem: "  [POKEMON] ruba [ITEM:definite:classified] di [SOURCE]!",
-		eatItem: "", // NOT CONVERTED: not in Champions
+		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
 		useGem: "  [ITEM:definite:capitalize:classified] incrementa la potenza di [MOVE]!",
 		eatItemWeaken: "  I danni inflitti [POKEMON:a] vengono ridotti d[ITEM:a:definite:classified]!",
-		removeItem: "", // NOT CONVERTED: not in Champions
-		activateItem: "", // NOT CONVERTED: not in Champions
+		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
+		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
 		activateWeaken: "  I danni inflitti [POKEMON:a] vengono ridotti d[ITEM:a:definite:classified]!",
 
 		damage: "  ([POKEMON] è ferito!)",
-		damagePercentage: "", // NOT CONVERTED: not in Champions
-		damageFromPokemon: "", // NOT CONVERTED: not in Champions
-		damageFromItem: "", // NOT CONVERTED: runtime grammar
+		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damageFromPokemon: "  [ITEM:definite:capitalize] di [SOURCE] ferisc[INFLECT:ITEM:s=e:p=ono] [POKEMON]!",
+		damageFromItem: "  [POKEMON] subisce dei danni a causa [ITEM:di:definite]!",
 		damageFromPartialTrapping: "  [POKEMON] subisce i danni della mossa [MOVE]!",
 		heal: "  [POKEMON] ha recuperato dei PS!",
-		healFromZEffect: "", // NOT CONVERTED: runtime grammar
-		healFromEffect: "", // NOT CONVERTED: not in Champions
+		healFromZEffect: "  Il Potere Z fa recuperare PS [POKEMON:a]!",
+		healFromEffect: "  [POKEMON] ricarica PS usando [EFFECT]!",
 
 		boost: "  [STAT:definite:capitalize] di [POKEMON] aumenta!",
 		boost2: "  [STAT:definite:capitalize] di [POKEMON] aumenta di molto!",
 		boost3: "  [STAT:definite:capitalize] di [POKEMON] aumenta di moltissimo!",
 		boost0: "  [STAT:definite:capitalize] di [POKEMON] non può aumentare di più!",
-		boostFromItem: "", // NOT CONVERTED: not in Champions
-		boost2FromItem: "", // NOT CONVERTED: not in Champions
-		boost3FromItem: "", // NOT CONVERTED: not in Champions
-		boostFromZEffect: "", // NOT CONVERTED: not in Champions
-		boost2FromZEffect: "", // NOT CONVERTED: not in Champions
-		boost3FromZEffect: "", // NOT CONVERTED: not in Champions
+		boostFromItem: "  Con [ITEM], [STAT] di [POKEMON] sale!",
+		boost2FromItem: "  Con [ITEM], [STAT] di [POKEMON] sale di molto!",
+		boost3FromItem: "  [STAT:definite:capitalize] di [POKEMON] aumenta moltissimo grazie [ITEM:a:definite]!",
+		boostFromZEffect: "  [STAT:definite:capitalize] di [POKEMON] aumenta grazie al Potere Z!",
+		boost2FromZEffect: "  [STAT:definite:capitalize] di [POKEMON] aumenta di molto grazie al Potere Z!",
+		boost3FromZEffect: "  [STAT:definite:capitalize] di [POKEMON] aumenta moltissimo grazie al Potere Z!",
 		boostMultipleFromZEffect: "  Le statistiche di [POKEMON] aumentano grazie al Potere Z!",
 
 		unboost: "  [STAT:definite:capitalize] di [POKEMON] diminuisce!",
 		unboost2: "  [STAT:definite:capitalize] di [POKEMON] diminuisce di molto!",
 		unboost3: "  [STAT:definite:capitalize] di [POKEMON] cala drasticamente!",
 		unboost0: "  [STAT:definite:capitalize] di [POKEMON] non può diminuire di più!",
-		unboostFromItem: "", // NOT CONVERTED: not in Champions
-		unboost2FromItem: "", // NOT CONVERTED: not in Champions
-		unboost3FromItem: "", // NOT CONVERTED: not in Champions
+		unboostFromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboost2FromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboost3FromItem: "", // NEEDS TRANSLATION: Showdown custom text
 
 		swapBoost: "  [POKEMON] scambia con il bersaglio le modifiche alle statistiche!",
 		swapOffensiveBoost: "  [POKEMON] scambia con il bersaglio le modifiche ad Attacco e Attacco Speciale!",
@@ -119,17 +119,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		crit: "  Brutto colpo!",
 		critSpread: "  [POKEMON] subisce un brutto colpo!",
 		immune: "  Non ha effetto su [POKEMON]...",
-		immuneNoPokemon: "", // NOT CONVERTED: not in Champions
+		immuneNoPokemon: "  Ma è inefficace!",
 		immuneOHKO: "  [POKEMON] è incolume!",
 		miss: "  [POKEMON] evita l’attacco!",
-		missNoPokemon: "", // NOT CONVERTED: not in Champions
+		missNoPokemon: "  L'attacco di [SOURCE] fallisce!",
 
 		center: "  Centramento!",
-		noTarget: "", // NOT CONVERTED: not in Champions
+		noTarget: "  Ma il Pokémon non c'è...",
 		ohko: "  È un colpo da KO!",
 		combine: "  Formidabile! Due mosse che diventano una! È una mossa combinata!",
 		hitCount: "  Colpi inflitti: [NUMBER]!",
-		hitCountSingular: "  Colpi inflitti: 1!",
 	},
 
 	// stats
@@ -139,23 +138,23 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	atk: {
 		statName: "Attacco",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	def: {
 		statName: "Difesa",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spa: {
 		statName: "Attacco Speciale",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spd: {
 		statName: "Difesa Speciale",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spe: {
 		statName: "Velocità",
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	accuracy: {
 		statName: "precisione",
@@ -164,8 +163,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		statName: "elusione",
 	},
 	spc: {
-		statName: "", // NOT CONVERTED: not in Champions
-		statShortName: "", // NOT CONVERTED: not in Champions
+		statName: "Speciale",
+		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	stats: {
 		statName: "Statistiche",
@@ -176,8 +175,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON] è stato scottato!",
 		startFromItem: "  [POKEMON] è stato scottato d[ITEM:a:definite:classified]!",
 		alreadyStarted: "  [POKEMON] è già scottato.",
-		end: "", // NOT CONVERTED: not in Champions
-		endFromItem: "", // NOT CONVERTED: not in Champions
+		end: "  [POKEMON] guarisce dalla scottatura!",
+		endFromItem: "  [POKEMON] guarisce dalla scottatura grazie [ITEM:a:definite]!",
 		damage: "  [POKEMON] soffre per la scottatura!",
 	},
 	frz: {
@@ -193,14 +192,14 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		alreadyStarted: "  [POKEMON] è già paralizzato!",
 		end: "  [POKEMON] guarisce dalla paralisi!",
 		endFromItem: "  [POKEMON] guarisce dalla paralisi grazie [ITEM:a:definite:classified]!",
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON] è paralizzato! Non può agire!",
 	},
 	psn: {
 		start: "  [POKEMON] è stato avvelenato!",
 		alreadyStarted: "  [POKEMON] è già avvelenato.",
 		end: "  [POKEMON] guarisce dall’avvelenamento!",
-		endFromItem: "", // NOT CONVERTED: runtime grammar
-		damage: "", // NOT CONVERTED: not in Champions
+		endFromItem: "  [POKEMON] guarisce dall’avvelenamento grazie [ITEM:a:definite]!",
+		damage: "  Il veleno ha effetto su [POKEMON]!",
 	},
 	tox: {
 		start: "  [POKEMON] è stato iperavvelenato!",
@@ -212,7 +211,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	slp: {
 		start: "  [POKEMON] si è addormentato!",
-		startFromRest: "", // NOT CONVERTED: not in Champions
+		startFromRest: "  [POKEMON] ha recuperato le energie durante il sonno!",
 		alreadyStarted: "  [POKEMON] sta già dormendo!",
 		end: "  [POKEMON] si è svegliato!",
 		endFromItem: "  [POKEMON] si è svegliato grazie [ITEM:a:definite:classified]!",
@@ -239,10 +238,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		fail: "  [POKEMON] ha già tutti i PS!",
 	},
 	healreplacement: {
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] fa recuperare PS al Pokémon che entra in campo grazie al Potere Z!",
 	},
 	nopp: {
-		cant: "", // NOT CONVERTED: not in Champions
+		cant: "[POKEMON] usa **[MOVE]**!\n  Ma non ha PP per sferrare la mossa!",
 	},
 	recharge: {
 		cant: "[POKEMON] deve ricaricarsi!",
@@ -252,17 +251,16 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	unboost: {
 		fail: "  La diminuzione delle statistiche di [POKEMON] è stata evitata!",
-		failSingular: "", // NOT CONVERTED: not in Champions
 	},
 	struggle: {
-		activate: "", // NOT CONVERTED: not in Champions
+		activate: "  [POKEMON] non ha più mosse da sferrare!",
 	},
 	trapped: {
 		start: "  [POKEMON] non può più scappare!",
 	},
 	dynamax: {
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
+		start: "", // NEEDS TRANSLATION: Showdown custom text
+		end: "", // NEEDS TRANSLATION: Showdown custom text
 		block: "  La mossa è stata vanificata dalla potenza del fenomeno Dynamax!",
 		fail: "  [POKEMON] scuote il capo. Sembra che non riesca a usare questa mossa...",
 	},
@@ -276,36 +274,36 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  La tempesta di sabbia infligge danni [POKEMON:a]!",
 	},
 	sunnyday: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "Sole intenso",
 		start: "  La luce solare diventa intensa!",
 		end: "  La luce solare torna normale!",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (La luce solare è fortissima!)",
 	},
 	raindance: {
 		weatherName: "Pioggia",
 		start: "  Inizia a piovere!",
 		end: "  Smette di piovere!",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (Continua a piovere.)",
 	},
 	hail: {
 		weatherName: "Grandine",
-		start: "", // NOT CONVERTED: not in Champions
-		end: "", // NOT CONVERTED: not in Champions
-		upkeep: "", // NOT CONVERTED: not in Champions
-		damage: "", // NOT CONVERTED: not in Champions
+		start: "  Inizia a grandinare!",
+		end: "  Smette di grandinare!",
+		upkeep: "  (La grandine imperversa!)",
+		damage: "  La grandine infligge danni a [POKEMON]!",
 	},
 	snowscape: {
 		weatherName: "Neve",
 		start: "  Inizia a nevicare!",
 		end: "  Smette di nevicare!",
-		upkeep: "", // NOT CONVERTED: not in Champions
+		upkeep: "  (La neve imperversa!)",
 	},
 	desolateland: {
-		weatherName: "", // NOT CONVERTED: not in Champions
+		weatherName: "Sole accecante",
 		start: "  La luce solare diventa accecante!",
-		end: "", // NOT CONVERTED: not in Champions
+		end: "  La luce solare torna normale!",
 		block: "  La luce accecante non si attenua!",
-		blockMove: "", // NOT CONVERTED: not in Champions
+		blockMove: "  La luce solare accecante neutralizza le mosse di tipo Acqua!",
 	},
 	primordialsea: {
 		weatherName: "Acquazzone",
@@ -331,7 +329,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	grassyterrain: {
 		start: "  Ai piedi dei Pokémon cresce rigogliosa l’erba.",
 		end: "  L’erba sparisce.",
-		heal: "", // NOT CONVERTED: not in Champions
+		heal: "  [POKEMON] ha recuperato dei PS!",
 	},
 	mistyterrain: {
 		start: "  Ai piedi dei Pokémon si addensa la nebbia.",
