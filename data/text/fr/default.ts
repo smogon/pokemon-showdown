@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "les alliés",
 		opposingParty: "l’équipe ennemie",
 
-		turn: "", // NEEDS TRANSLATION: Showdown custom text
+		turn: "== [NUMBER] [INFLECT:NUMBER:s=tour:p=tours] ==",
 		switchIn: "[TRAINER:definite:capitalize] envoie [FULLNAME] !",
 		switchInOwn: "[FULLNAME] ! Go !",
 		switchOut: "[TRAINER:definite:capitalize] retire [NICKNAME] !",

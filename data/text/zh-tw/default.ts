@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "我方的寶可夢",
 		opposingParty: "對手的寶可夢",
 
-		turn: "", // NEEDS TRANSLATION: Showdown custom text
+		turn: "== [NUMBER]回合 ==",
 		switchIn: "[TRAINER]派出了[FULLNAME]！",
 		switchInOwn: "上吧！[FULLNAME]！",
 		switchOut: "[TRAINER]換下了[NICKNAME]！",

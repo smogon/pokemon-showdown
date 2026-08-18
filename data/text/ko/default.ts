@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "같은 편 포켓몬",
 		opposingParty: "상대의 포켓몬",
 
-		turn: "", // NEEDS TRANSLATION: Showdown custom text
+		turn: "== [NUMBER]턴 ==",
 		switchIn: "[TRAINER:topic] [FULLNAME:object] 내보냈다!",
 		switchInOwn: "가랏! [FULLNAME]!",
 		switchOut: "[TRAINER:topic] [NICKNAME:object] 넣어 버렸다!",

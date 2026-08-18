@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "i Pokémon alleati",
 		opposingParty: "i Pokémon nemici",
 
-		turn: "", // NEEDS TRANSLATION: Showdown custom text
+		turn: "== [NUMBER] turn[INFLECT:NUMBER:s=o:p=i] ==",
 		switchIn: "[TRAINER:definite:capitalize] manda in campo [FULLNAME]!",
 		switchInOwn: "Avanti, [FULLNAME]!",
 		switchOut: "[TRAINER:definite:capitalize] ritira [NICKNAME] dalla lotta!",

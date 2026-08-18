@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "die Mitstreiterseite",
 		opposingParty: "Gegner",
 
-		turn: "", // NEEDS TRANSLATION: Showdown custom text
+		turn: "== Zug Nr. [NUMBER] ==",
 		switchIn: "[TRAINER:definite:nominative:capitalize] schickt [FULLNAME] in den Kampf!",
 		switchInOwn: "Los, [FULLNAME]!",
 		switchOut: "[TRAINER:definite:nominative:capitalize] hat [NICKNAME] zurückgerufen!",
