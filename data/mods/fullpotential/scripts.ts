@@ -6,7 +6,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (typeof move === 'number') {
 				const basePower = move;
-				move = new Dex.Move({
+				move = new this.dex.Move({
 					basePower,
 					type: '???',
 					category: 'Physical',
@@ -15,10 +15,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.hit = 0;
 			}
 
-			if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-				if (!target.runImmunity(move.type, !suppressMessages)) {
-					return false;
-				}
+			if (!target.runImmunity(move, !suppressMessages)) {
+				return false;
 			}
 
 			if (move.ohko) return target.maxhp;
@@ -80,7 +78,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const isPhysical = move.category === 'Physical';
 			const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
-			const statTable: {[k in StatIDExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			const statTable: { [k in StatIDExceptHP]: string } = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
 
 			let maxAttack = 0;
 

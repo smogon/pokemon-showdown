@@ -5,47 +5,47 @@ const common = require('../../common');
 
 let battle;
 
-describe('Punching Glove', function () {
-	afterEach(function () {
+describe('Punching Glove', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should prevent item effects triggered by contact from acting`, function () {
+	it(`should prevent item effects triggered by contact from acting`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'punchingglove', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'punchingglove', moves: ['bulletpunch'] },
 		], [
-			{species: 'miltank', item: 'rockyhelmet', moves: ['sleeptalk']},
+			{ species: 'miltank', item: 'rockyhelmet', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0], `Attacker should not be hurt`);
 	});
 
-	it(`should not prevent item effects triggered by contact from acting if using non-punching contact move`, function () {
+	it(`should not prevent item effects triggered by contact from acting if using non-punching contact move`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'punchingglove', moves: ['tackle']},
+			{ species: 'wynaut', item: 'punchingglove', moves: ['tackle'] },
 		], [
-			{species: 'miltank', item: 'rockyhelmet', moves: ['sleeptalk']},
+			{ species: 'miltank', item: 'rockyhelmet', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p1.active[0], `Attacker should be hurt`);
 	});
 
-	it(`should not activate on the opponent's moves`, function () {
+	it(`should not activate on the opponent's moves`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'punchingglove', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'punchingglove', moves: ['sleeptalk'] },
 		], [
-			{species: 'happiny', moves: ['lunge']},
+			{ species: 'happiny', moves: ['lunge'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1, `Attack should be lowered`);
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9406865
-	it(`should stop Pickpocket`, function () {
+	it(`should stop Pickpocket`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'punchingglove', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'punchingglove', moves: ['bulletpunch'] },
 		], [
-			{species: 'weavile', ability: 'pickpocket', moves: ['sleeptalk']},
+			{ species: 'weavile', ability: 'pickpocket', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, 'punchingglove', `Attacker should not lose their item`);
@@ -53,11 +53,11 @@ describe('Punching Glove', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9406865
-	it(`should block against Protecting effects with a contact side effect`, function () {
+	it(`should block against Protecting effects with a contact side effect`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'punchingglove', moves: ['sleeptalk', 'bulletpunch']},
+			{ species: 'wynaut', item: 'punchingglove', moves: ['sleeptalk', 'bulletpunch'] },
 		], [
-			{species: 'aggron', moves: ['sleeptalk', 'banefulbunker', 'obstruct', 'spikyshield']},
+			{ species: 'aggron', moves: ['sleeptalk', 'banefulbunker', 'obstruct', 'spikyshield'] },
 		]]);
 		battle.makeChoices('move bulletpunch', 'move banefulbunker');
 		battle.makeChoices();

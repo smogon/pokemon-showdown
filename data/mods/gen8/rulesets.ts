@@ -1,20 +1,23 @@
-export const Rulesets: {[k: string]: ModdedFormatData} = {
+export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
 	standard: {
 		inherit: true,
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
 	},
 	standarddoubles: {
 		inherit: true,
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause',
 		],
 	},
 	standardoms: {
 		inherit: true,
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Dynamax Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'Overflow Stat Mod',
 		],
 	},
 	teampreview: {
@@ -35,7 +38,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
-			const boosts: {[tier: string]: number} = {
+			const boosts: { [tier: string]: number } = {
 				uu: 10,
 				rubl: 10,
 				ru: 20,
@@ -79,11 +82,12 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			const typesSet = new Set(species.types);
 			const bonusType = this.dex.types.get(target.set.name);
 			if (bonusType.exists) typesSet.add(bonusType.name);
-			return {...species, types: [...typesSet]};
+			return { ...species, types: [...typesSet] };
 		},
 	},
 	godlygiftmod: {
 		inherit: true,
+		desc: "Each Pok&eacute;mon receives one base stat from a God (Uber Pok&eacute;mon) depending on its position in the team. If there is no Uber Pok&eacute;mon, it uses the Pok&eacute;mon in the first slot.",
 		onValidateTeam(team) {
 			const gods = new Set<string>();
 			for (const set of team) {
@@ -92,14 +96,14 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				if (["Zacian", "Zamazenta"].includes(species.baseSpecies) && this.toID(set.item).startsWith('rusted')) {
 					species = this.dex.species.get(set.species + "-Crowned");
 				}
-				if (set.item && this.dex.items.get(set.item).megaStone) {
+				if (set.item) {
 					const item = this.dex.items.get(set.item);
-					if (item.megaEvolves === species.baseSpecies) {
-						species = this.dex.species.get(item.megaStone);
+					if (item.megaStone?.[species.baseSpecies]) {
+						species = this.dex.species.get(item.megaStone[species.baseSpecies]);
 					}
 				}
 				if (
-					['ag', 'uber'].includes(this.toID(this.ruleTable.has('standardnatdex') ? species.natDexTier : species.tier)) ||
+					['ag', 'uber'].includes(this.toID(this.ruleTable.has('natdexmod') ? species.natDexTier : species.tier)) ||
 					this.toID(set.ability) === 'powerconstruct'
 				) {
 					gods.add(species.name);
@@ -114,7 +118,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				const isNatDex = this.format.ruleTable?.has('standardnatdex');
+				const isNatDex = this.format.ruleTable?.has('natdexmod');
 				const validator = this.dex.formats.getRuleTable(
 					this.dex.formats.get(`gen${this.gen}${isNatDex && this.gen >= 8 ? 'nationaldex' : 'ou'}`)
 				);
@@ -123,7 +127,9 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				}
 				if (set.item) {
 					const item = this.dex.items.get(set.item);
-					if (item.megaEvolves === set.species) godSpecies = this.dex.species.get(item.megaStone);
+					if (item.megaStone?.[set.species]) {
+						godSpecies = this.dex.species.get(item.megaStone[set.species]);
+					}
 					if (["Zacian", "Zamazenta"].includes(godSpecies.baseSpecies) && item.id.startsWith('rusted')) {
 						godSpecies = this.dex.species.get(set.species + "-Crowned");
 					}
@@ -131,7 +137,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				const isBanned = validator.isBannedSpecies(godSpecies);
 				return isBanned;
 			}) || target.side.team[0];
-			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
+			const stat = this.dex.stats.ids()[target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
 			let godSpecies = this.dex.species.get(god.species);
 			if (typeof godSpecies.battleOnly === 'string') {

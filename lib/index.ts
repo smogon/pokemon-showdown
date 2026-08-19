@@ -1,10 +1,9 @@
 export * as Dashycode from './dashycode';
-export {Repl} from './repl';
-export {Net} from './net';
+export { Repl } from './repl';
+export { Net } from './net';
 export * as Streams from './streams';
-export {FS} from './fs';
+export { FS } from './fs';
 export * as Utils from './utils';
-export {crashlogger} from './crashlogger';
+export { crashlogger } from './crashlogger';
 export * as ProcessManager from './process-manager';
-export {SQL} from './sql';
-export {PostgresDatabase} from './postgres';
+export { SQL } from './sql';

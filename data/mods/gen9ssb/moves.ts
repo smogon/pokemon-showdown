@@ -1,8 +1,8 @@
-import {ssbSets} from "./random-teams";
-import {PSEUDO_WEATHERS, changeSet, getName} from "./scripts";
-import {Teams} from '../../../sim/teams';
+import { ssbSets } from "./random-teams";
+import { PSEUDO_WEATHERS, changeSet, getName } from "./scripts";
+import { Teams } from '../../../sim/teams';
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	/*
 	// Example
 	moveid: {
@@ -52,7 +52,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -84,7 +84,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.eatItem(true);
 			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Steel",
 	},
@@ -107,9 +106,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			pokemon.trySetStatus('brn');
 			this.add('-anim', pokemon, 'Shift Gear', pokemon);
-			this.boost({spe: 2, atk: 1});
+			this.boost({ spe: 2, atk: 1 });
 		},
-		secondary: null,
 		target: "self",
 		type: "Steel",
 	},
@@ -125,7 +123,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Trick Room', target);
 			this.add('-anim', source, 'Clangerous Soul', source);
@@ -141,7 +139,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				spa: -2,
 			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Ghost",
 	},
@@ -168,7 +165,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			const foe = source.foes()[0];
 			if (!foe) return;
-			const success = this.boost({atk: -1, spa: -1}, foe, source);
+			const success = this.boost({ atk: -1, spa: -1 }, foe, source);
 			if (!success && !foe.hasAbility('mirrorarmor')) {
 				delete move.selfSwitch;
 			}
@@ -180,7 +177,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		slotCondition: 'freeswitchbutton',
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (!target.fainted && (target.hp < target.maxhp)) {
 					target.heal(target.maxhp / 3);
 					this.add('-heal', target, target.getHealth, '[from] move: Free Switch Button');
@@ -188,7 +185,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
-		secondary: null,
 		target: "self",
 		type: "Water",
 	},
@@ -203,7 +199,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Spicier Extract",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, powder: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, powder: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -218,7 +214,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (target.addVolatile('healblock', source)) success = true;
 			return success;
 		},
-		secondary: null,
 		target: "normal",
 		type: "Grass",
 	},
@@ -233,7 +228,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Scumhunt",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -272,12 +267,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "???",
 	},
 
+	// Apple
+	woppleorflopple: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Confuse; +2 SpA/D. Fail=Confuse self; -1 SpA/D.",
+		desc: "Usually moves first. This move has a 50% chance of confusing the target and raising the user's Special Attack and Special Defense by 2 stages. Otherwise, it will confuse the user and lower the user's Special Attack and Special Defense by 1 stage.",
+		name: "Wopple or Flopple",
+		gen: 9,
+		pp: 10,
+		priority: 1,
+		flags: { protect: 1, reflectable: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Moonlight', source);
+		},
+		onHit(target, source, move) {
+			if (this.randomChance(1, 2)) {
+				target.addVolatile('confusion');
+				this.boost({ spa: 2, spd: 2 }, source);
+			} else {
+				source.addVolatile('confusion');
+				this.boost({ spa: -1, spd: -1 }, source);
+			}
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Appletun a la Mode
 	extracourse: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Recycles berry, +1 to 2 random stats (-acc/eva).",
+		shortDesc: "Recycles berry, +1 to 3 random stats (-acc/eva).",
 		desc: "The user regains the item it last used, and then boosts two random stats by 1 stage each, except Accuracy and Evasion. If the user is currently holding an item or has had their item forcibly removed, the stat boosts occur without the Recycle effect.",
 		name: "Extra Course",
 		gen: 9,
@@ -289,7 +315,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Recycle', target);
 		},
-		flags: {snatch: 1},
+		flags: { snatch: 1 },
 		onHit(pokemon) {
 			if (!pokemon.item && pokemon.lastItem) {
 				const item = pokemon.lastItem;
@@ -297,30 +323,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Extra Course');
 				pokemon.setItem(item);
 			}
-			let stats: BoostID[] = [];
 			const boost: SparseBoostsTable = {};
-			let statPlus: BoostID;
-			for (statPlus in pokemon.boosts) {
-				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-				if (pokemon.boosts[statPlus] < 6) {
-					stats.push(statPlus);
+			const boostedStats: BoostID[] = [];
+			for (let i = 0; i < 3; i++) {
+				const stats: BoostID[] = [];
+				let statPlus: BoostID;
+				for (statPlus in pokemon.boosts) {
+					if (statPlus === 'accuracy' || statPlus === 'evasion' || boostedStats.includes(statPlus)) continue;
+					if (pokemon.boosts[statPlus] < 6) {
+						stats.push(statPlus);
+					}
+				}
+				const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) {
+					boost[randomStat] = 1;
+					boostedStats.push(randomStat);
 				}
 			}
-			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1;
-			stats = [];
-			for (statPlus in pokemon.boosts) {
-				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-				if (pokemon.boosts[statPlus] < 6 && statPlus !== randomStat) {
-					stats.push(statPlus);
-				}
-			}
-			randomStat = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1;
 			this.boost(boost, pokemon, pokemon);
 		},
 		target: "self",
 		type: "Normal",
+	},
+
+	// April
+	herbaldagger: {
+		accuracy: 95,
+		basePower: 95,
+		category: "Physical",
+		shortDesc: "No additional effect.",
+		name: "Herbal Dagger",
+		gen: 9,
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, slicing: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Flower Trick', target);
+			this.add('-anim', source, 'Flower Trick', target);
+		},
+		target: "normal",
+		type: "Grass",
 	},
 
 	// aQrator
@@ -334,7 +379,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -379,12 +424,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 20,
 		priority: 4,
+		onTry(source) {
+			if (['Quagsire', 'Clodsire'].includes(source.species.name)) {
+				return;
+			}
+			this.hint("Only Clodsire and Quagsire can use this move.");
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Sire Switch');
+			return null;
+		},
 		onModifyPriority(relayVar, source, target, move) {
 			if (source.species.name === 'Clodsire') {
 				return -6;
 			}
 		},
-		flags: {failcopycat: 1},
+		flags: { failcopycat: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -413,7 +467,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				changeSet(this, pokemon, ssbSets['A Quag To The Past'], true);
 			}
 		},
-		secondary: null,
 		target: "self",
 		type: "Ground",
 	},
@@ -423,8 +476,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Heals 50% HP + cures status + Focus Energy.",
-		desc: "Z-Move that requires Lilligantium Z. The user heals 50% of its maximum HP, cures its status, and gains the Focus Energy effect.",
+		shortDesc: "Cures team status, all heal 75% max HP.",
+		desc: "Z-Move that requires Lilligantium Z. Every Pokemon in the user's party is cured of its non-volatile status condition. With the exception of the user, every Pokemon in the user's party heals for 1/2 of their maximum HP. This effect cannot revive fainted Pokemon.",
 		name: "Aura Rain",
 		pp: 1,
 		priority: 0,
@@ -439,15 +492,70 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			this.add('-message', 'An alleviating aura rains down on the field!');
-			pokemon.heal(pokemon.maxhp / 2, pokemon, this.effect);
-			this.add('-heal', pokemon, pokemon.getHealth);
-			pokemon.cureStatus();
-			pokemon.addVolatile('focusenergy', pokemon, this.effect);
+			let success = false;
+			const allies = [...pokemon.side.pokemon, ...pokemon.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally.heal(this.modify(ally.maxhp, 0.75))) {
+					this.add('-heal', ally, ally.getHealth);
+					success = true;
+				}
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
 		},
 		isZ: "lilligantiumz",
-		secondary: null,
 		target: "self",
 		type: "Grass",
+	},
+
+	// Archfaewild
+	breathoftiamat: {
+		accuracy: 95,
+		basePower: 20,
+		category: "Special",
+		shortDesc: "5 hits: Fire, Ice, Poison, Elec, Poison. Is STAB.",
+		desc: "This move hits 5 times. The first hit is Fire-type, the second is Ice-type, the third is Poison-type, the fourth is Electric-type, and the fifth is Poison-type. Each move checks accuracy individually, and if one hit misses, the attack stops. If the target is immune to one or more of the hits, the rest will still execute as normal. This move will always have Same-Type Attack Bonus.",
+		name: "Breath of Tiamat",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			if (target.runImmunity('Fire')) {
+				this.add('-anim', source, 'Flamethrower', target);
+			}
+		},
+		onHit(target, source, move) {
+			const moveTypes = ['Fire', 'Ice', 'Poison', 'Electric', 'Poison'];
+			const hitTypes = moveTypes.filter(x => target.runImmunity(x));
+			if (move.hit >= hitTypes.length) {
+				move.basePower = 0;
+				move.category = 'Status';
+				/* Problem here - we can't retroactively change the multihit parameter.
+				With this specific code, the move functions as intended, but will display the incorrect
+				number of hits if a target is immune to any of them. Even if you try to return false, null, etc
+				during this step, it will not interrupt the move. Nor will a this.add(-fail) do so either.
+				This seems to be the only way to get it to work and is a decent enough compromise for now. */
+			} else {
+				move.type = hitTypes[move.hit];
+				const moveAnims = ['Flamethrower', 'Ice Beam', 'Gunk Shot', 'Charge Beam', 'Sludge Bomb'];
+				const hitAnims = [];
+				for (const [i, anim] of moveAnims.entries()) {
+					const index2 = Math.min(i, hitTypes.length - 1);
+					if (moveTypes[i] === hitTypes[index2]) {
+						hitAnims.push(anim);
+					}
+				}
+				this.add('-anim', source, hitAnims[move.hit], target);
+			}
+		},
+		multihit: 5,
+		multiaccuracy: true,
+		forceSTAB: true,
+		target: 'normal',
+		type: "Fire",
 	},
 
 	// Arcueid
@@ -461,7 +569,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, failcopycat: 1},
+		flags: { protect: 1, mirror: 1, failcopycat: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -496,7 +604,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.heal(source.baseMaxhp / 2, source);
 			}
 		},
-		secondary: null,
 		target: "self",
 		type: "Psychic",
 	},
@@ -504,14 +611,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Arsenal
 	megidolaon: {
 		accuracy: 100,
-		basePower: 255,
+		basePower: 210,
 		category: "Special",
 		shortDesc: "Flinches if resulting in a critical hit.",
 		name: "Megidolaon",
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -520,7 +627,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Earthquake', target);
 		},
 		volatileStatus: 'flinch',
-		secondary: null,
 		target: "normal",
 		type: "???",
 	},
@@ -528,14 +634,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Artemis
 	automatedresponse: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 80,
 		category: "Special",
 		shortDesc: "Change move/user's type to SE. 25% NVE instead.",
 		desc: "Randomly changes the move's and user's type to deal super effective damage. There is a 25% chance that this move has a false positive and changes the move's and user's type to deal not very effective damage instead.",
 		name: "Automated Response",
-		pp: 20,
+		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -579,6 +685,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.type = pokemon.m.artemisMoveType;
 			}
 		},
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
 		target: "normal",
 		type: "Electric",
 	},
@@ -593,7 +704,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Anyone can be killed",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, sound: 1, bypasssub: 1, mirror: 1},
+		flags: { protect: 1, sound: 1, bypasssub: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -604,10 +715,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 3,
 			onResidualOrder: 3,
 			onStart(target, source, sourceEffect) {
-				this.boost({spa: 2}, source);
+				this.boost({ spa: 2 }, source);
 			},
 			onEnd(target) {
-				this.boost({spa: -2}, target);
+				this.boost({ spa: -2 }, target);
 			},
 		},
 		onPrepareHit(target, source) {
@@ -623,12 +734,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Cure status, +1 Def/SpA/SpD.",
+		shortDesc: "Cure status, +1 Def/SpD, +2 SpA.",
 		name: "Thinking In Progress",
 		gen: 9,
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -640,10 +751,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		boosts: {
 			def: 1,
-			spa: 1,
+			spa: 2,
 			spd: 1,
 		},
-		secondary: null,
 		target: "self",
 		type: "Psychic",
 	},
@@ -659,7 +769,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -670,7 +780,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			onHit(target, source, move) {
 				if (source.volatiles['protosynthesis']) {
-					this.boost({def: 1}, source, source, move);
+					this.boost({ def: 1 }, source, source, move);
 				}
 			},
 		},
@@ -691,7 +801,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyPriority(priority, source, target, move) {
 			if (source.species.id === 'mismagius') return priority + 6;
 		},
-		flags: {snatch: 1, metronome: 1, protect: 1, failcopycat: 1},
+		flags: { snatch: 1, metronome: 1, protect: 1, failcopycat: 1 },
 		priorityChargeCallback(pokemon) {
 			if (pokemon.species.id === 'mismagius') return;
 			pokemon.addVolatile('sigilsstorm');
@@ -782,7 +892,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else if (chance <= 70) {
 					for (const condition of sideConditions) {
 						if (source.side.removeSideCondition(condition)) {
-							this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: Sigil\'s Storm', '[of] ' + source);
+							this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: Sigil\'s Storm', `[of] ${source}`);
 						}
 					}
 				} else if (chance <= 80) {
@@ -804,14 +914,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Raises the user's Sp. Atk by 2 and Speed by 1.",
-		desc: "The user's Special Attack is boosted by 2 stages and its Speed is boosted by 1 stage.",
+		shortDesc: "+2 SpA, +1 Def/SpD/Spe.",
+		desc: "The user's Special Attack is boosted by 2 stages, and its Defense, Special Defense, and Speed are boosted by 1 stage.",
 		name: "Prep Time",
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
 		boosts: {
+			def: 1,
 			spa: 2,
+			spd: 1,
 			spe: 1,
 		},
 		onTryMove() {
@@ -827,14 +939,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// avarice
 	yugiohreference: {
 		accuracy: 90,
-		basePower: 105,
+		basePower: 110,
 		category: "Special",
-		shortDesc: "40% chance to force the foe out.",
-		desc: "Nearly always moves last. If this attack is successful, there is a 40% chance that the target is forced to switch out and be replaced with a random unfainted ally.",
+		shortDesc: "50% chance to force the foe out.",
+		desc: "Nearly always moves last. If this attack is successful, there is a 50% chance that the target is forced to switch out and be replaced with a random unfainted ally.",
 		name: "yu-gi-oh reference",
 		pp: 5,
 		priority: -6,
-		flags: {protect: 1, bullet: 1},
+		flags: { protect: 1, bullet: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -842,7 +954,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Never-Ending Nightmare', target);
 		},
 		secondary: {
-			chance: 40,
+			chance: 50,
 			onHit(target, source, move) {
 				move.forceSwitch = true;
 			},
@@ -856,13 +968,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
-		shortDesc: "+3 prio if foe uses custom move. +3 Atk on KO.",
-		desc: "This move will nearly always move first (+3 priority) if the target would use a custom move from Super Staff Bros Ultimate this turn. Raises the user's Attack by 3 stages if this move knocks out the target.",
+		shortDesc: "+3 prio if foe uses custom move. +2 Atk on KO.",
+		desc: "This move will nearly always move first (+3 priority) if the target would use a custom move from Super Staff Bros Ultimate this turn. Raises the user's Attack by 2 stages if this move knocks out the target.",
 		name: "Buzzer Stinger Counter",
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onModifyPriority(priority, pokemon, target) {
 			if (!target) return;
 			const move = this.queue.willMove(target)?.moveid;
@@ -872,9 +984,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.boost({atk: 3}, pokemon, pokemon, move);
+			if (!target || target.fainted || target.hp <= 0) this.boost({ atk: 2 }, pokemon, pokemon, move);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Bug",
 	},
@@ -905,7 +1016,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-item', pokemon, item, '[from] move: what kind');
 			this.heal(pokemon.baseMaxhp / 4, pokemon);
 		},
-		secondary: null,
 		target: "self",
 		type: "Water",
 	},
@@ -915,12 +1025,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Protect, hit=-2 Atk/SpA/or Spe, user swap.",
-		desc: "Nearly always moves first. This move can only be used by Mega Sableye. The user is protected from most attacks made by other Pokemon during this turn. If a targeted move is blocked during this effect, the attacker's stats are lowered depending on the move used. If the attacker used a physical attack, their Attack is lowered by 2 stages. If the attacker used a special attack, their Special Attack is lowere dby 2 stages. If the attacker used a status move, their Speed is lowered by 2 stages. If this move successfully decreases a Pokemon's stat stages, this Pokemon's Mega Evolution is removed, and it immediately switches out and is replaced by a selected party member. This move fails if the user moves last, and has an increasing chance to fail when used consecutively.",
+		shortDesc: "Protect, hit=-1 Atk/SpA/or Spe, user swap.",
+		desc: "Nearly always moves first. This move can only be used by Mega Sableye. The user is protected from most attacks made by other Pokemon during this turn. If a targeted move is blocked during this effect, the attacker's stats are lowered depending on the move used. If the attacker used a physical attack, their Attack is lowered by 1 stage. If the attacker used a special attack, their Special Attack is lowered by 1 stage. If the attacker used a status move, their Speed is lowered by 1 stage. If this move successfully decreases a Pokemon's stat stages, this Pokemon's Mega Evolution is removed, and it immediately switches out and is replaced by a selected party member. This move fails if the user moves last, and has an increasing chance to fail when used consecutively.",
 		name: "Shatter and Scatter",
 		pp: 10,
 		priority: 4,
-		flags: {failinstruct: 1, failcopycat: 1},
+		flags: { failinstruct: 1, failcopycat: 1 },
 		stallingMove: true,
 		volatileStatus: 'shatterandscatter',
 		onTry(source) {
@@ -950,11 +1060,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
-					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -970,7 +1076,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				let statDebuff = 'spe';
 				if (move.category === 'Special') statDebuff = 'spa';
 				if (move.category === 'Physical') statDebuff = 'atk';
-				const success = this.boost({[statDebuff]: -2}, source, target, this.dex.getActiveMove("Shatter and Scatter"));
+				const success = this.boost({ [statDebuff]: -1 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
 				if (success) {
 					target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
 					target.canMegaEvo = 'Sableye-Mega';
@@ -983,7 +1089,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					let statDebuff = 'spe';
 					if (move.category === 'Special') statDebuff = 'spa';
 					if (move.category === 'Physical') statDebuff = 'atk';
-					const success = this.boost({[statDebuff]: -2}, source, target, this.dex.getActiveMove("Shatter and Scatter"));
+					const success = this.boost({ [statDebuff]: -2 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
 					if (success) {
 						target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
 						target.canMegaEvo = 'Sableye-Mega';
@@ -992,7 +1098,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
-		secondary: null,
 		target: "self",
 		type: "Dark",
 	},
@@ -1002,13 +1107,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "80%: Change into Lunala, else Solgaleo.",
-		desc: "This move has an 80% chance of transforming the user into Lunala. It has a 20% chance of instead transforming the user into Solgaleo, boosting its Attack by 1 stage, preventing it from switching out,  and causing it to faint after three turns, akin to Perish Song.",
+		shortDesc: "Cosmog: 80%: Change into Lunala, else Solgaleo.",
+		desc: "This move has an 80% chance of transforming the user into Lunala. It has a 20% chance of instead transforming the user into Solgaleo, boosting its Attack by 1 stage, preventing it from switching out,  and causing it to faint after three turns, akin to Perish Song. This move cannot be used successfully unless the user's current form, while considering Transform, is Cosmog.",
 		name: "Hack Check",
 		gen: 9,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, failcopycat: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, failcopycat: 1 },
+		onTry(source) {
+			if (source.species.name === 'Cosmog') {
+				return;
+			}
+			this.hint("Only Cosmog can use this move.");
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Hack Check');
+			return null;
+		},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1018,7 +1132,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.addVolatile('trapped', source, move, 'trapper');
 				source.addVolatile('perishsong');
 				this.add('-start', source, 'perish3', '[silent]');
-				this.boost({atk: 1}, source, source, move);
+				this.boost({ atk: 1 }, source, source, move);
 				this.add(`c:|${getName('Billo')}|This is a streamer mon, you're banned from the room.`);
 			} else {
 				changeSet(this, source, ssbSets['Billo-Lunala'], true);
@@ -1040,7 +1154,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 3,
-		flags: {noassist: 1, failcopycat: 1},
+		flags: { noassist: 1, failcopycat: 1 },
 		stallingMove: true,
 		volatileStatus: 'veto',
 		onPrepareHit(pokemon) {
@@ -1056,11 +1170,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
-					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
+				if (this.checkMoveBypassesProtect(move, source, target)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
@@ -1084,7 +1194,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
-		secondary: null,
 		target: "self",
 		type: "Normal",
 	},
@@ -1100,19 +1209,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit() {
 			this.attrLastMove('[anim] Steam Eruption');
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Fire', type);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Water",
 	},
 
-	// Breadstycks
+	// Breadey
 	bakersdouzeoff: {
 		accuracy: true,
 		basePower: 0,
@@ -1146,7 +1254,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.skipBeforeSwitchOutEventFlag = false;
 			}
 		},
-		secondary: null,
 		target: "self",
 		type: "Normal",
 	},
@@ -1163,7 +1270,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 40,
 		priority: 6,
-		flags: {protect: 1, mirror: 1, cantusetwice: 1, failcopycat: 1},
+		flags: { protect: 1, mirror: 1, cantusetwice: 1, failcopycat: 1 },
 		onTry(source) {
 			if (source.species.baseSpecies === 'Dunsparce') {
 				return;
@@ -1186,19 +1293,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.clearBoosts();
 				this.add('-clearboost', target);
 				target.addVolatile('protect');
-				const set = Math.floor(Math.random() * 4);
+				const set = this.random(4);
 				const newMoves = [];
 				let role = '';
 				switch (set) {
 				case 0:
 					newMoves.push('hyperdrill', 'combattorque', 'extremespeed');
 					role = 'Fast Attacker';
-					this.boost({atk: 2, spe: 4});
+					this.boost({ atk: 2, spe: 4 });
 					break;
 				case 1:
 					newMoves.push('coil', 'bodyslam', 'healorder');
 					role = 'Bulky Setup';
-					this.boost({atk: 1, def: 1, spd: 2});
+					this.boost({ atk: 1, def: 1, spd: 2 });
 					break;
 				case 2:
 					const varMoves = ['Ceaseless Edge', 'Stone Axe', 'Mortal Spin', 'G-Max Steelsurge'];
@@ -1206,12 +1313,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const move2 = this.sample(varMoves.filter(i => i !== move1));
 					newMoves.push('healorder', move1, move2);
 					role = 'Bulky Support';
-					this.boost({def: 2, spd: 2});
+					this.boost({ def: 2, spd: 2 });
 					break;
 				case 3:
 					newMoves.push('bloodmoon', 'bloodmoon', 'bloodmoon');
 					role = 'Wallbreaker';
-					this.boost({spa: 6});
+					this.boost({ spa: 6 });
 					break;
 					// removing moveslots becomes very messy so this was the next best thing
 				}
@@ -1232,1088 +1339,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			}
 		},
-		secondary: null,
 		target: "self",
 		type: "Normal",
 		// bird type crashes during testing (runStatusImmunity for Bird at sim\pokemon.ts:2101:10). no-go.
 	},
 
-	// chaos
-	outage: {
-		accuracy: 95,
-		basePower: 110,
-		category: "Special",
-		shortDesc: "Clear Smog + Taunt + Embargo.",
-		desc: "If this move is successful, the target has all stat stages reset to 0, cannot use status moves for the next 3 turns, and cannot gain any effect from held items for 5 turns. Z-Crystals and forme-changing items are unaffected.",
-		name: "Outage",
-		gen: 9,
-		pp: 5,
-		priority: 0,
-		flags: {contact: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dark Pulse', target);
-		},
-		secondaries: [
-			{
-				chance: 100,
-				volatileStatus: 'taunt',
-			}, {
-				chance: 100,
-				volatileStatus: 'embargo',
-			},
-			{
-				chance: 100,
-				onHit(target) {
-					target.clearBoosts();
-					this.add('-clearboost', target);
-				},
-			},
-		],
-		target: "normal",
-		type: "Dark",
-	},
-
-	// Chloe
-	detodaslasflores: {
-		accuracy: 90,
+	// calmvibes
+	goodvibesonly: {
+		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		shortDesc: "Sets Grassy Terrain before. -50% HP on miss.",
-		desc: "Before attacking, this move will set Grassy Terrain for 5 turns. If the attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage.",
-		name: "De Todas las Flores",
+		shortDesc: "Raises the user's Speed by 1 stage.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		name: "Good Vibes Only",
 		gen: 9,
-		pp: 15,
+		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
-		hasCrashDamage: true,
+		flags: { protect: 1, mirror: 1, contact: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.field.setTerrain('grassyterrain');
-			this.add('-anim', source, 'High Jump Kick', target);
+			this.add('-anim', source, 'Aqua Step', target);
 		},
-		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
-		},
-		secondary: null,
-		target: "normal",
-		type: "Grass",
-	},
-
-	// ciran
-	summonmonsterviiifiendishmonstrouspiplupedecolossal: {
-		accuracy: 90,
-		basePower: 60,
-		basePowerCallback(pokemon, target, move) {
-			if (move.hit === 1) return 60;
-			if (move.hit === 2) return 0;
-			return 20;
-		},
-		category: "Physical",
-		shortDesc: "60 BP Bite->Toxic->2-5 multihit w/ 20 BP each.",
-		desc: "The user calls the following effects in order: a 100% accurate 60 Base Power Poison-type attack with a 20% chance to cause the target to flinch; 100% accurate Toxic; and 2-5 90% accurate 20 Base Power Poison-type attacks.",
-		name: "Summon Monster VIII: Fiendish monstrous Piplupede, Colossal",
-		gen: 9,
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1, contact: 1, mirror: 1},
-		multihit: [3, 7],
-		self: {
-			volatileStatus: 'summonmonsterviiifiendishmonstrouspiplupedecolossal',
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Crunch', target);
-			this.add('-anim', source, 'Fury Swipes', target);
-		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onAccuracy(accuracy, target, source, move) {
-				if (move.hit <= 2) return 100;
-				return 90;
-			},
-		},
-		secondaries: [
-			{
-				chance: 20,
-				onHit(target, source, move) {
-					if (move.hit !== 1) return;
-					target.addVolatile('flinch', source, move);
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
 				},
 			},
-			{
-				chance: 100,
-				onHit(target, source, move) {
-					if (move.hit !== 2) return;
-					target.trySetStatus('tox', source, move);
-				},
-			},
-		],
-		onAfterMove(source, target, move) {
-			this.add(`c:|${getName((source.illusion || source).name)}|There's no way this'll faint in one punch!`);
-		},
-		target: "allAdjacentFoes",
-		type: "Poison",
-	},
-
-	// Clefable
-	giveaway: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "User switches, passing stat changes and more.",
-		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes, confusion, and certain move effects transferred to it.",
-		name: "Giveaway!",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: {metronome: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Teleport', target);
-			this.add('-anim', source, 'Baton Pass', target);
-		},
-		// Baton Pass clones are stupid client side so we're doing this
-		onHit(target) {
-			this.actions.useMove('batonpass', target);
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
-
-	// Clementine
-	o: {
-		accuracy: 100,
-		basePower: 100,
-		category: "Special",
-		shortDesc: "Phys if Atk > SpA. Flips user.",
-		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. If this move is successful and the user is an Avalugg, it either gains or loses the Flipped condition, changing its moveset and base stats. When under the Flipped condition, Avalugg's Base Stats are 95/46/44/184/116/95 and its moveset changes to Earth Power, Volt Switch, and Heal Pulse. This move is super effective against Kennedy.",
-		name: "(╯°o°）╯︵ ┻━┻",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, failcopycat: 1},
-		noSketch: true,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Malicious Moonsault', target);
-			this.add('-anim', source, 'Blizzard', target);
-		},
-		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
-		},
-		onModifyType(move, pokemon) {
-			let type = pokemon.getTypes()[0];
-			if (type === "Bird") type = "???";
-			if (type === "Stellar") type = pokemon.getTypes(false, true)[0];
-			move.type = type;
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (target?.name === 'Kennedy') return 1;
-		},
-		onHit(target, source, move) {
-			if (source.illusion || source.baseSpecies.baseSpecies !== 'Avalugg') return;
-			if (source.volatiles['flipped']) {
-				source.removeVolatile('flipped');
-				changeSet(this, source, ssbSets['Clementine']);
-			} else {
-				source.addVolatile('flipped', source, move);
-				changeSet(this, source, ssbSets['Clementine-Flipped']);
-			}
 		},
 		target: "normal",
-		type: "Normal",
+		type: "Fairy",
 	},
 
-	// clerica
-	stockholmsyndrome: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Curses and traps foe. User loses 1/2 HP.",
-		desc: "The user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active and becoming unable to switch out.",
-		name: "Stockholm Syndrome",
-		pp: 5,
-		priority: 0,
-		flags: {bypasssub: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Curse', target);
-			this.add('-anim', source, 'Block', target);
-		},
-		onHit(target, source, move) {
-			let success = false;
-			if (!target.volatiles['curse']) {
-				this.directDamage(source.maxhp / 2, source, source);
-				target.addVolatile('curse');
-				success = true;
-			}
-			return target.addVolatile('trapped', source, move, 'trapper') || success;
-		},
-		zMove: {effect: 'heal'},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
-
-	// Clouds
-	windsofchange: {
-		accuracy: 100,
-		basePower: 70,
-		category: "Physical",
-		shortDesc: "User sets Tailwind and switches out.",
-		desc: "If this attack is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member, and its party members have their Speed doubled for 4 turns.",
-		name: "Winds of Change",
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1},
-		self: {
-			sideCondition: 'tailwind',
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Tailwind', target);
-			this.add('-anim', source, 'U-turn', target);
-		},
-		selfSwitch: true,
-		secondary: null,
-		target: "normal",
-		type: "Flying",
-	},
-
-	// Coolcodename
-	haxerswill: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "70% +1 SpA/Spe & Focus Energy, else lose boosts.",
-		desc: "This move has a 70% chance to boost the user's Special Attack and Speed by 1 stage and grant the user an increased chance of dealing critical hits. If it does not do this, the user's positive stat stage changes will instead be removed.",
-		name: "Haxer's Will",
-		gen: 9,
-		pp: 15,
-		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Clangorous Soul', source);
-			this.add('-anim', source, 'Focus Energy', source);
-		},
-		onHit(pokemon) {
-			if (this.randomChance(7, 10)) {
-				this.boost({spa: 1, spe: 1});
-				pokemon.addVolatile('focusenergy');
-			} else {
-				pokemon.clearBoosts();
-				this.add('-clearboost', pokemon);
-			}
-		},
-		target: "self",
-		type: "Normal",
-	},
-
-	// Corthius
-	monkeybeatup: {
-		accuracy: 100,
-		basePower: 20,
-		category: "Physical",
-		shortDesc: "Hits 4-5 times. +1 priority under Grassy Terrain.",
-		desc: "Usually moves first when Grassy Terrain is in effect. This move has a 50% chance to hit 4 times and a 50% chance to hit 5 times.",
-		name: "Monkey Beat Up",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		multihit: [4, 5],
-		flags: {protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Beat Up', target);
-			this.add('-anim', source, 'Wood Hammer', target);
-		},
-		onModifyPriority(priority, source, target, move) {
-			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
-				return priority + 1;
-			}
-		},
-		target: "normal",
-		type: "Grass",
-	},
-
-	// Daki
-	antidote: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Antidote",
-		shortDesc: "Recover + Magnet Rise for 3 turns.",
-		pp: 10,
-		priority: 0,
-		flags: {snatch: 1, heal: 1, gravity: 1, metronome: 1},
-		heal: [1, 2],
-		onTry(source, target, move) {
-			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
-
-			// Additional Gravity check for Z-move variant
-			if (this.field.getPseudoWeather('Gravity')) {
-				this.add('cant', source, 'move: Gravity', move);
-				return null;
-			}
-		},
-		onHit(target, source, move) {
-			if (!source.volatiles['magnetrise']) {
-				source.addVolatile('magnetrise', source, move);
-			}
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
-
-	// Dawn of Artemis
-	magicalfocus: {
-		accuracy: 100,
-		basePower: 80,
-		category: "Special",
-		name: "Magical Focus",
-		shortDesc: "Move type cycles. Sets Reflect. Fail if Ultra.",
-		desc: "This move's type cycles between Fire, Electric, and Ice depending on the current turn number, starting at Fire on turn 1, Electric on turn 2, Ice on turn 3, and repeating this pattern on future turns. For 5 turns, all Pokemon on the user's side of the field take 0.5x damage from physical attacks. This move fails if the user is Necrozma-Ultra.",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove(target, source, move) {
-			switch (move.type) {
-			case 'Fire':
-				this.attrLastMove('[anim] Flamethrower');
-				break;
-			case 'Electric':
-				this.attrLastMove('[anim] Thunderbolt');
-				break;
-			case 'Ice':
-				this.attrLastMove('[anim] Ice Beam');
-				break;
-			default:
-				this.attrLastMove('[anim] Hyper Beam');
-				break;
-			}
-		},
-		onModifyType(move) {
-			if (this.turn % 3 === 1) {
-				move.type = 'Fire';
-			} else if (this.turn % 3 === 2) {
-				move.type = 'Electric';
-			} else {
-				move.type = 'Ice';
-			}
-		},
-		onDisableMove(pokemon) {
-			if (pokemon.species.id === 'necrozmaultra') pokemon.disableMove('magicalfocus');
-		},
-		self: {
-			sideCondition: 'reflect',
-		},
-		target: "normal",
-		type: "Normal",
-	},
-
-	// DaWoblefet
-	superegoinflation: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "User heals 25% HP; Target: +2 Atk/SpA + Taunt.",
-		desc: "The user heals 1/4 of its maximum HP. The target's Attack and Special Attack are raised by 2 stages each, and the target cannot use status moves for 3 turns.",
-		name: "Super Ego Inflation",
-		gen: 9,
-		pp: 5,
-		priority: -7,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, reflectable: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Follow Me', source);
-			this.add('-anim', target, 'Swords Dance', target);
-			this.add('-anim', target, 'Nasty Plot', target);
-		},
-		onHit(target, source) {
-			this.heal(source.maxhp / 4, source);
-			this.boost({atk: 2, spa: 2});
-			target.addVolatile('taunt');
-		},
-		target: "normal",
-		type: "Normal",
-	},
-
-	// deftinwolf
-	trivialpursuit: {
-		accuracy: 100,
-		basePower: 70,
-		basePowerCallback(pokemon, target, move) {
-			// You can't get here unless the pursuit succeeds
-			if (target.beingCalledBack || target.switchFlag) {
-				this.debug('Trivial Pursuit damage boost');
-				return move.basePower * 2;
-			}
-			return move.basePower;
-		},
-		category: "Physical",
-		shortDesc: "If foe is switching out, 2x power. Doesn't KO.",
-		desc: "If an opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over. Leaves the target with at least 1 HP.",
-		name: "Trivial Pursuit",
-		pp: 5,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Pursuit');
-		},
-		beforeTurnCallback(pokemon) {
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('trivialpursuit', pokemon);
-				const data = side.getSideConditionData('trivialpursuit');
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
-		},
-		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
-		},
-		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('trivialpursuit');
-		},
-		condition: {
-			duration: 1,
-			onBeforeSwitchOut(pokemon) {
-				this.debug('Trivial Pursuit start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
-								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
-							}
-						}
-					}
-					this.actions.runMove('trivialpursuit', source, source.getLocOf(pokemon));
-				}
-			},
-		},
-		onDamagePriority: -20,
-		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp) return target.hp - 1;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Dark",
-	},
-
-	// dhelmise
-	bioticorb: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: ">50% HP:Set orb that damages foes.<50% heals you.",
-		desc: "If the user's HP is at or above 50% of its maximum HP, a damaging orb is set on the opponent's side of the field, dealing 50 points of damage at the end of each turn for 4 turns. If the user's HP is below 50% of its maximum HP, a healing orb is set on the user's side of the field, healing the active Pokemon for 65 HP at the end of each turn until it has healed a total of 300 HP. If the appropriate side already has its orb, this move will try to place the other orb down. This move fails if an orb is already in place on the side an orb would be set.",
-		name: "Biotic Orb",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: {reflectable: 1, mustpressure: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			if (source.hp < source.maxhp / 2) {
-				this.add('-anim', source, 'Wish', source);
-			} else {
-				this.add('-anim', source, 'Shadow Ball', target);
-			}
-		},
-		// Volatiles implemented in conditions.ts
-		onHit(target, source, move) {
-			if (source.hp < source.maxhp / 2) {
-				if (!source.side.addSideCondition('bioticorbself', source, move)) {
-					if (!source.side.foe.addSideCondition('bioticorbfoe', source, move)) return null;
-				}
-			} else {
-				if (!source.side.foe.addSideCondition('bioticorbfoe', source, move)) {
-					if (!source.side.addSideCondition('bioticorbself', source, move)) return null;
-				}
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Poison",
-	},
-
-	// DianaNicole
-	breathoftiamat: {
-		accuracy: 95,
-		basePower: 20,
-		category: "Special",
-		shortDesc: "5 hits: Fire, Ice, Poison, Elec, Poison. Is STAB.",
-		desc: "This move hits 5 times. The first hit is Fire-type, the second is Ice-type, the third is Poison-type, the fourth is Electric-type, and the fifth is Poison-type. Each move checks accuracy individually, and if one hit misses, the attack stops. If the target is immune to one or more of the hits, the rest will still execute as normal. This move will always have Same-Type Attack Bonus.",
-		name: "Breath of Tiamat",
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source, move) {
-			if (target.runImmunity('Fire')) {
-				this.add('-anim', source, 'Flamethrower', target);
-			}
-		},
-		onHit(target, source, move) {
-			const moveTypes = ['Fire', 'Ice', 'Poison', 'Electric', 'Poison'];
-			const hitTypes = moveTypes.filter(x => target.runImmunity(x));
-			if (move.hit >= hitTypes.length) {
-				move.basePower = 0;
-				move.category = 'Status';
-				/* Problem here - we can't retroactively change the multihit parameter.
-				With this specific code, the move functions as intended, but will display the incorrect
-				number of hits if a target is immune to any of them. Even if you try to return false, null, etc
-				during this step, it will not interrupt the move. Nor will a this.add(-fail) do so either.
-				This seems to be the only way to get it to work and is a decent enough compromise for now. */
-			} else {
-				move.type = hitTypes[move.hit];
-				const moveAnims = ['Flamethrower', 'Ice Beam', 'Gunk Shot', 'Charge Beam', 'Sludge Bomb'];
-				const hitAnims = [];
-				for (const [i, anim] of moveAnims.entries()) {
-					const index2 = Math.min(i, hitTypes.length - 1);
-					if (moveTypes[i] === hitTypes[index2]) {
-						hitAnims.push(anim);
-					}
-				}
-				this.add('-anim', source, hitAnims[move.hit], target);
-			}
-		},
-		multihit: 5,
-		multiaccuracy: true,
-		forceSTAB: true,
-		secondary: null,
-		target: 'normal',
-		type: "Fire",
-	},
-
-	// EasyOnTheHills
-	snacktime: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Charges.Turn 2: +2 Atk/Def, heal 25% for 3 turns.",
-		desc: "Boosts the user's Attack and Defense by 2 stages, and heals the user for 1/4 of its maximum HP at the end of each turn for 3 turns. This attack charges on the first turn and executes on the second. This move will fail if it is already in effect.",
-		name: "Snack Time",
-		pp: 10,
-		priority: 0,
-		flags: {},
-		volatileStatus: 'snack',
-		onTryMove(attacker, defender, move) {
-			if (attacker.volatiles['snack']) {
-				this.add('-fail', attacker, 'move: Snack Time');
-				this.attrLastMove('[still]');
-				return null;
-			}
-			if (attacker.removeVolatile(move.id)) {
-				this.attrLastMove('[still]');
-				this.add('-anim', attacker, 'Shell Smash', attacker);
-				return;
-			}
-			this.attrLastMove('[still]');
-			this.add('-anim', attacker, 'Geomancy', attacker);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
-		boosts: {
-			atk: 2,
-			def: 2,
-		},
-		// passive recovery implemented in conditions.ts
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
-
-	// Elliot
-	teaparty: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Recover & Refresh. 7/8 get Boiled, 1/8 Beefed.",
-		desc: "The user heals 1/2 of its maximum HP and cures its non-volatile status condition. The user has a 7/8 chance of gaining the Boiled condition, removing all previously-added extra types, adding a Water typing to the user, replacing its ability with Speed Boost, and replacing Teatime or Body Press with Steam Eruption if it exists on the set; and a 1/8 chance of gaining the Beefed condition, removing all previously-added extra types, adding a Fighting typing to the user, replacing its ability with Stamina, and replacing Teatime or Steam Eruption with Body Press.",
-		name: "Tea Party",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Milk Drink', source);
-		},
-		onHit(pokemon) {
-			this.heal(pokemon.baseMaxhp / 2);
-			pokemon.cureStatus();
-			let newMove = "";
-			let backupMove = "";
-			if (this.randomChance(7, 8)) { // get boiled
-				pokemon.removeVolatile('beefed');
-				pokemon.addVolatile('boiled');
-				pokemon.setAbility("Speed Boost");
-				newMove = 'steameruption';
-				backupMove = 'bodypress';
-				if (!pokemon.hasType('Water') && pokemon.addType('Water')) {
-					this.add('-start', pokemon, 'typeadd', 'Water', '[from] move: Tea Party');
-				}
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Just tea, thank you`);
-			} else { // get beefed
-				pokemon.removeVolatile('boiled');
-				pokemon.addVolatile('beefed');
-				pokemon.setAbility("Stamina");
-				newMove = 'bodypress';
-				backupMove = 'steameruption';
-				if (!pokemon.hasType('Fighting') && pokemon.addType('Fighting')) {
-					this.add('-start', pokemon, 'typeadd', 'Fighting', '[from] move: Tea Party');
-				}
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|BOVRIL TIME`);
-			}
-			// -start for beefed and boiled is not necessary, i put it in there for an indicator
-			// as to what form sinistea is currently using. backupMove also eases the form switch
-			let teaIndex = pokemon.moves.indexOf('teatime');
-			const replacement = this.dex.moves.get(newMove);
-			if (teaIndex < 0) {
-				if (pokemon.moves.includes(backupMove)) {
-					teaIndex = pokemon.moves.indexOf(backupMove);
-				} else {
-					return;
-				}
-			}
-			const newMoveSlot = {
-				move: replacement.name,
-				id: replacement.id,
-				pp: replacement.pp,
-				maxpp: replacement.pp,
-				target: replacement.target,
-				disabled: false,
-				used: false,
-			};
-			pokemon.moveSlots[teaIndex] = newMoveSlot;
-		},
-		secondary: null,
-		target: 'self',
-		type: "Flying",
-	},
-
-	// Elly
-	sustainedwinds: {
-		accuracy: 90,
-		basePower: 20,
-		category: "Special",
-		shortDesc: "Hits 5 times.",
-		name: "Sustained Winds",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, wind: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Bleakwind Storm');
-		},
-		multihit: 5,
-		secondary: null,
-		target: 'normal',
-		type: "Flying",
-	},
-
-	// Emboar02
-	insertboarpunhere: {
-		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		shortDesc: "Has 33% recoil. Switch after using.",
-		desc: "If the target lost HP, the user takes recoil damage equal to 33% of the HP lost by the target, rounded half up, but not less than 1 HP. If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
-		name: "Insert boar pun here",
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Collision Course', target);
-			this.add('-anim', source, 'U-turn', target);
-		},
-		selfSwitch: true,
-		recoil: [33, 100],
-		secondary: null,
-		target: 'normal',
-		type: "Fighting",
-	},
-
-	// eva
-	asoulforasoul: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Physical",
-		shortDesc: "KOes foe + user if ally was KOed prev. turn.",
-		desc: "If one of the user's party members fainted last turn, this move results in a guaranteed KO for both the target and the user. This move can hit Normal-type Pokemon. Fails if one of the user's party members did not faint last turn.",
-		name: "A Soul for a Soul",
-		pp: 5,
-		priority: 1,
-		flags: {protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Explosion', target);
-			this.add('-anim', source, 'Final Gambit', target);
-		},
-		onTry(source, target) {
-			if (!source.side.faintedLastTurn) return false;
-			source.faint(source);
-			target?.faint(source);
-		},
-		ignoreImmunity: true,
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
-
-	// Fame
-	solidarity: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Creates a Substitute and sets Leech Seed.",
-		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If either of the affected Pokemon uses Baton Pass, its respective effect will remain for its replacement.",
-		name: "Solidarity",
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1, reflectable: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Substitute');
-			this.add('-anim', source, 'Leech Seed', target);
-		},
-		onHit(target, source) {
-			if (target.hasType('Grass') || target.isProtected()) return null;
-			target.addVolatile('leechseed', source);
-		},
-		self: {
-			onHit(target, source) {
-				if (source.volatiles['substitute']) return;
-				if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
-					this.add('-fail', source, 'move: Substitute', '[weak]');
-				} else {
-					source.addVolatile('substitute');
-					this.directDamage(source.maxhp / 4);
-				}
-			},
-		},
-		secondary: null,
-		target: 'normal',
-		type: "Grass",
-	},
-
-	// Felucia
-	riggeddice: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Stat changes: inverts, else Taunt. User switches.",
-		desc: "If the target has any stat stage changes, the target's positive stat stages become negative and vice versa. If the target does not have any stat stage changes, the target cannot use status moves for 3 turns. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		name: "Rigged Dice",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, reflectable: 1},
-		selfSwitch: true,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Smart Strike', source);
-		},
-		onHit(target, source) {
-			let success = false;
-			let i: BoostID;
-			for (i in target.boosts) {
-				if (target.boosts[i] === 0) continue;
-				target.boosts[i] = -target.boosts[i];
-				success = true;
-			}
-			if (success) {
-				this.add('-invertboost', target, '[from] move: Rigged Dice');
-			} else {
-				target.addVolatile('taunt', source);
-			}
-		},
-		secondary: null,
-		target: 'normal',
-		type: "Bug",
-	},
-
-	// Froggeh
-	cringedadjoke: {
-		accuracy: 90,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Confuses the foe. Foe self-hits: +1 Atk/Def.",
-		desc: "Confuses the target. When the target hits itself in confusion from this move, the user's Attack and Defense are boosted by 1 stage.",
-		name: "Cringe Dad Joke",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dizzy Punch', target);
-			this.add('-anim', source, 'Bulk Up', source);
-		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'confusion',
-		},
-		target: 'normal',
-		type: "Fighting",
-		// confusion self-hit stat bonus implemented as an innate because it doesn't work as a move effect
-	},
-
-	// Frostyicelad
-	puffyspikydestruction: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Turn 1 out: DDance, Protect, TSpikes, -Psn type.",
-		desc: "Nearly always moves first. Protects the user from most attacks made by other Pokemon this turn, removes the user's Poison typing if it has one, and boosts the user's Attack and Speed by 1 stage. Sets one layer of Toxic Spikes on the opposing side of the field, poisoning all grounded, non-Poison-type Pokemon that switch in. Fails unless it's the user's first turn on the field.",
-		name: "Puffy Spiky Destruction",
-		pp: 5,
-		priority: 4,
-		flags: {},
-		onTry(source) {
-			if (source.activeMoveActions > 1) {
-				this.hint("Puffy Spiky Destruction only works on your first turn out.");
-				return false;
-			}
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Quiver Dance', source);
-			this.add('-anim', source, 'Spiky Shield', source);
-			this.add('-anim', source, 'Toxic Spikes', target);
-		},
-		volatileStatus: 'spikyshield',
-		onHit(target, source, move) {
-			source.setType(source.getTypes(true).filter(type => type !== "Poison"));
-			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] move: Puffy Spiky Destruction');
-			const foeSide = source.side.foe;
-			if (!foeSide.sideConditions['toxicspikes'] || foeSide.sideConditions['toxicspikes'].layers < 2) {
-				foeSide.addSideCondition('toxicspikes', source, move);
-			}
-		},
-		boosts: {
-			spe: 1,
-			atk: 1,
-		},
-		secondary: null,
-		target: 'self',
-		type: "Poison",
-	},
-
-	// Frozoid
-	flatoutfalling: {
-		accuracy: 100,
-		basePower: 75,
-		category: "Physical",
-		shortDesc: "Sets Gravity.",
-		desc: "Sets Gravity for 5 turns, multiplying the evasiveness of all active Pokemon by 0.6 and grounding them.",
-		name: "Flat out falling",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Head Smash', target);
-			this.add('-anim', source, 'Gravity', target);
-		},
-		self: {
-			onHit(source) {
-				this.field.addPseudoWeather('gravity', source);
-			},
-		},
-		secondary: null,
-		target: 'normal',
-		type: "???",
-	},
-
-	// Ganjafin
-	wigglingstrike: {
-		accuracy: 95,
-		basePower: 10,
-		category: "Physical",
-		shortDesc: "Applies Salt Cure and sets a layer of spikes.",
-		desc: "Causes damage to the target equal to 1/8 of its maximum HP (1/4 if the target is Steel or Water type), rounded down, at the end of each turn during effect. This effect ends when the target is no longer active. Sets a layer of Spikes on the target's side of the field, damaging grounded foes when they switch in.",
-		name: "Wiggling Strike",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Water Pulse', target);
-			this.add('-anim', target, 'Aqua Ring', target);
-		},
-		self: {
-			onHit(source) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('spikes');
-				}
-			},
-		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'saltcure',
-		},
-		target: "normal",
-		type: "Water",
-	},
-
-	// Goro Yagami
-	shadowambush: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		shortDesc: "-1 Def/SpD, gives Slow Start, user switches.",
-		desc: "Lowers the target's Defense and Special Defense by 1 stage and replaces the target's ability with Slow Start. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		name: "Shadow Ambush",
-		gen: 9,
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Spectral Thief', target);
-		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'slowstart',
-			boosts: {
-				def: -1,
-				spd: -1,
-			},
-		},
-		selfSwitch: true,
-		target: "normal",
-		type: "Ghost",
-	},
-
-	// Haste Inky
-	hastyrevolution: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Clear foe stats+copies neg stats+inverts on user.",
-		desc: "Resets the stat stages of the target to 0. Then, the target receives a copy of the user's negative stat stage changes, and the user's negative stat stage changes become positive.",
-		name: "Hasty Revolution",
-		pp: 10,
-		priority: 4,
-		flags: {protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Pain Split', target);
-			return !!this.queue.willAct() && this.runEvent('StallMove', source);
-		},
-		onHit(target, source, move) {
-			source.addVolatile('stall');
-			target.clearBoosts();
-			this.add('-clearboost', target);
-			let i: BoostID;
-			for (i in source.boosts) {
-				if (source.boosts[i] < 0) {
-					target.boosts[i] += source.boosts[i];
-					source.boosts[i] = -source.boosts[i];
-				}
-			}
-			this.add('-copyboost', target, source, '[from] move: Hasty Revolution');
-			this.add('-invertboost', source, '[from] move: Hasty Revolution');
-		},
-		stallingMove: true,
-		self: {
-			volatileStatus: 'protect',
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
-	},
-
-	// havi
-	augurofebrietas: {
-		accuracy: 100,
-		basePower: 70,
-		category: "Special",
-		shortDesc: "Disables the target's last move and switches.",
-		desc: "The target's last used move is disabled and cannot be selected for 4 turns. This move cannot disable more than one move at a time. The user then switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		name: "Augur of Ebrietas",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Spirit Shackle');
-		},
-		onAfterHit(target, source, move) {
-			this.add(`c:|${getName((source.illusion || source).name)}|as you once did for the vacuous Rom,`);
-		},
-		selfSwitch: true,
-		volatileStatus: 'disable',
-		target: "normal",
-		type: "Ghost",
-	},
-
-	// Hecate
+	// Cassiopeia
 	testinginproduction: {
 		accuracy: true,
 		basePower: 0,
@@ -2387,9 +1448,966 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.setStatus(status);
 			}
 		},
-		secondary: null,
 		target: "self",
 		type: "Electric",
+	},
+
+	// chaos
+	outage: {
+		accuracy: 95,
+		basePower: 110,
+		category: "Special",
+		shortDesc: "Clear Smog + Taunt + Embargo.",
+		desc: "If this move is successful, the target has all stat stages reset to 0, cannot use status moves for the next 3 turns, and cannot gain any effect from held items for 5 turns. Z-Crystals and forme-changing items are unaffected.",
+		name: "Outage",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dark Pulse', target);
+		},
+		secondaries: [
+			{
+				chance: 100,
+				volatileStatus: 'taunt',
+			}, {
+				chance: 100,
+				volatileStatus: 'embargo',
+			},
+			{
+				chance: 100,
+				onHit(target) {
+					target.clearBoosts();
+					this.add('-clearboost', target);
+				},
+			},
+		],
+		target: "normal",
+		type: "Dark",
+	},
+
+	// Chloe
+	detodaslasflores: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Sets Grassy Terrain before. -50% HP on miss.",
+		desc: "Before attacking, this move will set Grassy Terrain for 5 turns. If the attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage.",
+		name: "De Todas las Flores",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, gravity: 1 },
+		hasCrashDamage: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.field.setTerrain('grassyterrain');
+			this.add('-anim', source, 'High Jump Kick', target);
+		},
+		onMoveFail(target, source, move) {
+			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
+		},
+		target: "normal",
+		type: "Grass",
+	},
+
+	// Chris
+	antidote: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Antidote",
+		shortDesc: "Heal 50% HP + 3 turn Magnet Rise.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up. If the user is not currently under the effect of Magnet Rise, it gains the effect of Magnet Rise for 3 turns, causing it to be immune to all Ground-type moves except Thousand Arrows for the duration.",
+		pp: 10,
+		priority: 0,
+		flags: { snatch: 1, heal: 1, gravity: 1, metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Recover', pokemon);
+			this.add('-anim', pokemon, 'Magnet Rise', pokemon);
+		},
+		onTry(source, target, move) {
+			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
+
+			// Additional Gravity check for Z-move variant
+			if (this.field.getPseudoWeather('Gravity')) {
+				this.add('cant', source, 'move: Gravity', move);
+				return null;
+			}
+		},
+		onHit(target, source, move) {
+			const success = !!this.heal(this.modify(source.maxhp, 0.25));
+			return source.addVolatile('magnetrise', source, move) || success;
+		},
+		target: "self",
+		type: "Normal",
+	},
+
+	// ciran
+	summonmonsterviiifiendishmonstrouspiplupedecolossal: {
+		accuracy: 90,
+		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			if (move.hit === 1) return 60;
+			if (move.hit === 2) return 0;
+			return 22;
+		},
+		category: "Physical",
+		shortDesc: "60 BP Bite->Toxic->2-5 multihit w/ 20 BP each.",
+		desc: "The user calls the following effects in order: a 100% accurate 60 Base Power Poison-type attack with a 20% chance to cause the target to flinch; 100% accurate Toxic; and 2-5 90% accurate 20 Base Power Poison-type attacks.",
+		name: "Summon Monster VIII: Fiendish monstrous Piplupede, Colossal",
+		gen: 9,
+		pp: 15,
+		priority: 1,
+		flags: { protect: 1, contact: 1, mirror: 1 },
+		multihit: [3, 7],
+		self: {
+			volatileStatus: 'summonmonsterviiifiendishmonstrouspiplupedecolossal',
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Crunch', target);
+			this.add('-anim', source, 'Fury Swipes', target);
+		},
+		condition: {
+			duration: 1,
+			noCopy: true,
+			onAccuracy(accuracy, target, source, move) {
+				if (move.hit <= 2) return 100;
+				return 90;
+			},
+		},
+		secondaries: [
+			{
+				chance: 20,
+				onHit(target, source, move) {
+					if (move.hit !== 1) return;
+					target.addVolatile('flinch', source, move);
+				},
+			},
+			{
+				chance: 100,
+				onHit(target, source, move) {
+					if (move.hit !== 2) return;
+					target.trySetStatus('tox', source, move);
+				},
+			},
+		],
+		onAfterMove(source, target, move) {
+			this.add(`c:|${getName((source.illusion || source).name)}|There's no way this'll faint in one punch!`);
+		},
+		target: "allAdjacentFoes",
+		type: "Poison",
+	},
+
+	// Clefable
+	giveaway: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "User switches, passing stat changes and more.",
+		desc: "The user is replaced with another Pokemon in its party. The selected Pokemon has the user's stat stage changes, confusion, and certain move effects transferred to it.",
+		name: "Giveaway!",
+		gen: 9,
+		pp: 10,
+		priority: 1,
+		flags: { metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Teleport', target);
+			this.add('-anim', source, 'Baton Pass', target);
+		},
+		// Baton Pass clones are stupid client side so we're doing this
+		onHit(target) {
+			this.actions.useMove('batonpass', target);
+		},
+		target: "self",
+		type: "Normal",
+	},
+
+	// Clem
+	o: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		shortDesc: "Phys if Atk > SpA. Flips user.",
+		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. This move's type depends on the user's primary type. If this move is successful and the user is an Avalugg, it either gains or loses the Flipped condition, changing its moveset and base stats. When under the Flipped condition, Avalugg's Base Stats are 95/46/44/184/116/95 and its moveset changes to Earth Power, Volt Switch, and Heal Pulse. This move is super effective against Kennedy.",
+		name: "(╯°o°）╯︵ ┻━┻",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, failcopycat: 1, nosketch: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Malicious Moonsault', target);
+			this.add('-anim', source, 'Blizzard', target);
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		onModifyType(move, pokemon) {
+			let type = pokemon.getTypes()[0];
+			if (type === "Bird") type = "???";
+			if (type === "Stellar") type = pokemon.getTypes(false, true)[0];
+			move.type = type;
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (target?.name === 'Kennedy') return 1;
+		},
+		onHit(target, source, move) {
+			if (source.illusion || source.baseSpecies.baseSpecies !== 'Avalugg') return;
+			if (source.volatiles['flipped']) {
+				source.removeVolatile('flipped');
+				changeSet(this, source, ssbSets['Clem']);
+			} else {
+				source.addVolatile('flipped', source, move);
+				changeSet(this, source, ssbSets['Clem-Flipped']);
+			}
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
+	// clerica
+	stockholmsyndrome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Curses and traps foe. User loses 1/2 HP.",
+		desc: "The user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active and becoming unable to switch out.",
+		name: "Stockholm Syndrome",
+		pp: 5,
+		priority: 0,
+		flags: { bypasssub: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Curse', target);
+			this.add('-anim', source, 'Block', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			if (!target.volatiles['curse']) {
+				this.directDamage(source.maxhp / 2, source, source);
+				target.addVolatile('curse');
+				success = true;
+			}
+			return target.addVolatile('trapped', source, move, 'trapper') || success;
+		},
+		zMove: { effect: 'heal' },
+		target: "normal",
+		type: "Ghost",
+	},
+
+	// Clouds
+	windsofchange: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		shortDesc: "User sets Tailwind and switches out.",
+		desc: "If this attack is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member, and its party members have their Speed doubled for 4 turns.",
+		name: "Winds of Change",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1 },
+		self: {
+			sideCondition: 'tailwind',
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Tailwind', target);
+			this.add('-anim', source, 'U-turn', target);
+		},
+		selfSwitch: true,
+		target: "normal",
+		type: "Flying",
+	},
+
+	// Coolcodename
+	haxerswill: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "70% +1 SpA/Spe & Focus Energy, else lose boosts.",
+		desc: "This move has a 70% chance to boost the user's Special Attack and Speed by 1 stage and grant the user an increased chance of dealing critical hits. If it does not do this, the user's positive stat stage changes will instead be removed.",
+		name: "Haxer's Will",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Clangorous Soul', source);
+			this.add('-anim', source, 'Focus Energy', source);
+		},
+		onHit(pokemon) {
+			if (this.randomChance(7, 10)) {
+				this.boost({ spa: 1, spe: 1 });
+				pokemon.addVolatile('focusenergy');
+			} else {
+				pokemon.clearBoosts();
+				this.add('-clearboost', pokemon);
+			}
+		},
+		target: "self",
+		type: "Normal",
+	},
+
+	// Corthius
+	monkeybeatup: {
+		accuracy: 100,
+		basePower: 20,
+		category: "Physical",
+		shortDesc: "Hits 4-5 times. +1 priority under Grassy Terrain.",
+		desc: "Usually moves first when Grassy Terrain is in effect. This move has a 50% chance to hit 4 times and a 50% chance to hit 5 times.",
+		name: "Monkey Beat Up",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		multihit: [4, 5],
+		flags: { protect: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Beat Up', target);
+			this.add('-anim', source, 'Wood Hammer', target);
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
+				return priority + 1;
+			}
+		},
+		target: "normal",
+		type: "Grass",
+	},
+
+	// Dawn of Artemis
+	magicalfocus: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Magical Focus",
+		shortDesc: "Move type cycles. Sets Reflect. Fail if Ultra.",
+		desc: "This move's type cycles between Fire, Electric, and Ice depending on the current turn number, starting at Fire on turn 1, Electric on turn 2, Ice on turn 3, and repeating this pattern on future turns. For 5 turns, all Pokemon on the user's side of the field take 0.5x damage from physical attacks. This move fails if the user is Necrozma-Ultra.",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		onTryMove(target, source, move) {
+			switch (move.type) {
+			case 'Fire':
+				this.attrLastMove('[anim] Flamethrower');
+				break;
+			case 'Electric':
+				this.attrLastMove('[anim] Thunderbolt');
+				break;
+			case 'Ice':
+				this.attrLastMove('[anim] Ice Beam');
+				break;
+			default:
+				this.attrLastMove('[anim] Hyper Beam');
+				break;
+			}
+		},
+		onModifyType(move) {
+			if (this.turn % 3 === 1) {
+				move.type = 'Fire';
+			} else if (this.turn % 3 === 2) {
+				move.type = 'Electric';
+			} else {
+				move.type = 'Ice';
+			}
+		},
+		onDisableMove(pokemon) {
+			if (pokemon.species.id === 'necrozmaultra') pokemon.disableMove('magicalfocus');
+		},
+		self: {
+			sideCondition: 'reflect',
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
+	// DaWoblefet
+	superegoinflation: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "User heals 25% HP; Target: +2 Atk/SpA + Taunt.",
+		desc: "The user heals 1/4 of its maximum HP. The target's Attack and Special Attack are raised by 2 stages each, and the target cannot use status moves for 3 turns.",
+		name: "Super Ego Inflation",
+		gen: 9,
+		pp: 5,
+		priority: -7,
+		flags: { protect: 1, mirror: 1, bypasssub: 1, reflectable: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Follow Me', source);
+			this.add('-anim', target, 'Swords Dance', target);
+			this.add('-anim', target, 'Nasty Plot', target);
+		},
+		onHit(target, source) {
+			this.heal(source.maxhp / 4, source);
+			this.boost({ atk: 2, spa: 2 });
+			target.addVolatile('taunt');
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
+	// deftinwolf
+	trivialpursuit: {
+		accuracy: 100,
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			// You can't get here unless the pursuit succeeds
+			if (target.beingCalledBack || target.switchFlag) {
+				this.debug('Trivial Pursuit damage boost');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+		category: "Physical",
+		shortDesc: "If foe is switching out, 2x power. Doesn't KO.",
+		desc: "If an opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over. Leaves the target with at least 1 HP.",
+		name: "Trivial Pursuit",
+		pp: 5,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1 },
+		onPrepareHit() {
+			this.attrLastMove('[anim] Pursuit');
+		},
+		beforeTurnCallback(pokemon) {
+			pokemon.addVolatile(
+				'trivialpursuit', pokemon, this.dex.getActiveMove('trivialpursuit')
+			);
+		},
+		onModifyMove(move, source, target) {
+			if (target?.beingCalledBack || target?.switchFlag) {
+				move.accuracy = true;
+				move.tracksTarget = true;
+			}
+		},
+		condition: {
+			duration: 1,
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
+				this.debug('Trivial Pursuit start');
+				if (!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'trivialpursuit') ||
+					!this.queue.cancelMove(source)) return;
+				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+				// If it is, then Mega Evolve before moving.
+				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source) {
+							if (action.choice === 'megaEvo') {
+								this.actions.runMegaEvo(source);
+							} else if (action.choice === 'terastallize') {
+								this.actions.terastallize(source);
+							} else {
+								continue;
+							}
+							this.queue.list.splice(actionIndex, 1);
+							break;
+						}
+					}
+				}
+				pokemon.removeVolatile('destinybond');
+				this.actions.runMove(
+					'trivialpursuit', source, source.getLocOf(pokemon),
+					{ sourceEffect: this.effectState.sourceEffect }
+				);
+			},
+		},
+		onDamagePriority: -20,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp) return target.hp - 1;
+		},
+		target: "normal",
+		type: "Dark",
+	},
+
+	// dhelmise
+	emp: {
+		accuracy: true,
+		basePower: 0,
+		damageCallback(pokemon, target) {
+			return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 3), 1);
+		},
+		category: "Special",
+		shortDesc: "Hacks target, trapping + disabling a move.",
+		desc: "Inflicts the target with the Hacked volatile status. When a Pokemon is inflicted with Hacked, they become trapped for 3 turns and have 1 of their moves disabled at random.",
+		name: "EMP",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		ignoreImmunity: true,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Boomburst', target);
+		},
+		onTryHit(target, source, move) {
+			if (target?.volatiles['hacked']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
+			}
+		},
+		onHit(target, source, move) {
+			if (source.m.stealth) {
+				source.m.stealth = false;
+				this.add('-end', source, 'stealth');
+			}
+			target.addVolatile('hacked');
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+
+	// EasyOnTheHills
+	snacktime: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Charges.Turn 2: +2 Atk/Def, heal 33% for 3 turns.",
+		desc: "Boosts the user's Attack and Defense by 2 stages, and heals the user for 1/3 of its maximum HP at the end of each turn for 3 turns. This attack charges on the first turn and executes on the second. This move will fail if it is already in effect.",
+		name: "Snack Time",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'snack',
+		onTryMove(attacker, defender, move) {
+			if (attacker.volatiles['snack']) {
+				this.add('-fail', attacker, 'move: Snack Time');
+				this.attrLastMove('[still]');
+				return null;
+			}
+			if (attacker.removeVolatile(move.id)) {
+				this.attrLastMove('[still]');
+				this.add('-anim', attacker, 'Shell Smash', attacker);
+				return;
+			}
+			this.attrLastMove('[still]');
+			this.add('-anim', attacker, 'Geomancy', attacker);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		boosts: {
+			atk: 2,
+			def: 2,
+		},
+		// passive recovery implemented in conditions.ts
+		target: "self",
+		type: "Normal",
+	},
+
+	// Elliot
+	teaparty: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Recover & Refresh. 7/8 get Boiled, 1/8 Beefed.",
+		desc: "The user heals 1/2 of its maximum HP and cures its non-volatile status condition. The user has a 7/8 chance of gaining the Boiled condition, removing all previously-added extra types, adding a Water typing to the user, replacing its ability with Speed Boost, and replacing Teatime or Body Press with Steam Eruption if it exists on the set; and a 1/8 chance of gaining the Beefed condition, removing all previously-added extra types, adding a Fighting typing to the user, replacing its ability with Stamina, and replacing Teatime or Steam Eruption with Body Press.",
+		name: "Tea Party",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, heal: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Milk Drink', source);
+		},
+		onHit(pokemon) {
+			this.heal(pokemon.baseMaxhp / 2);
+			pokemon.cureStatus();
+			let newMove = "";
+			let backupMove = "";
+			if (this.randomChance(7, 8)) { // get boiled
+				pokemon.removeVolatile('beefed');
+				pokemon.addVolatile('boiled');
+				pokemon.setAbility("Speed Boost");
+				newMove = 'steameruption';
+				backupMove = 'bodypress';
+				if (!pokemon.hasType('Water') && pokemon.addType('Water')) {
+					this.add('-start', pokemon, 'typeadd', 'Water', '[from] move: Tea Party');
+				}
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Just tea, thank you`);
+			} else { // get beefed
+				pokemon.removeVolatile('boiled');
+				pokemon.addVolatile('beefed');
+				pokemon.setAbility("Stamina");
+				newMove = 'bodypress';
+				backupMove = 'steameruption';
+				if (!pokemon.hasType('Fighting') && pokemon.addType('Fighting')) {
+					this.add('-start', pokemon, 'typeadd', 'Fighting', '[from] move: Tea Party');
+				}
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|BOVRIL TIME`);
+			}
+			// -start for beefed and boiled is not necessary, i put it in there for an indicator
+			// as to what form sinistea is currently using. backupMove also eases the form switch
+			let teaIndex = pokemon.moves.indexOf('teatime');
+			const replacement = this.dex.moves.get(newMove);
+			if (teaIndex < 0) {
+				if (pokemon.moves.includes(backupMove)) {
+					teaIndex = pokemon.moves.indexOf(backupMove);
+				} else {
+					return;
+				}
+			}
+			const newMoveSlot = {
+				move: replacement.name,
+				id: replacement.id,
+				pp: replacement.pp,
+				maxpp: replacement.pp,
+				target: replacement.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[teaIndex] = newMoveSlot;
+		},
+		target: 'self',
+		type: "Flying",
+	},
+
+	// Elly
+	sustainedwinds: {
+		accuracy: 90,
+		basePower: 20,
+		category: "Special",
+		shortDesc: "Hits 5 times.",
+		name: "Sustained Winds",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, wind: 1 },
+		onPrepareHit() {
+			this.attrLastMove('[anim] Bleakwind Storm');
+		},
+		multihit: 5,
+		target: 'normal',
+		type: "Flying",
+	},
+
+	// Emboar02
+	insertboarpunhere: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Has 33% recoil. Switch after using.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 33% of the HP lost by the target, rounded half up, but not less than 1 HP. If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
+		name: "Insert boar pun here",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Collision Course', target);
+			this.add('-anim', source, 'U-turn', target);
+		},
+		selfSwitch: true,
+		recoil: [33, 100],
+		target: 'normal',
+		type: "Fighting",
+	},
+
+	// Fame
+	solidarity: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Creates a Substitute and sets Leech Seed.",
+		desc: "The user takes 1/6 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If either of the affected Pokemon uses Baton Pass, its respective effect will remain for its replacement.",
+		name: "Solidarity",
+		pp: 15,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Substitute');
+			this.add('-anim', source, 'Leech Seed', target);
+		},
+		onHit(target, source) {
+			if (target.hasType('Grass') || target.isProtected()) return null;
+			target.addVolatile('leechseed', source);
+		},
+		self: {
+			onHit(target, source) {
+				if (source.volatiles['substitute']) return;
+				if (source.hp <= source.maxhp / 6 || source.maxhp === 1) { // Shedinja clause
+					this.add('-fail', source, 'move: Substitute', '[weak]');
+				} else {
+					source.addVolatile('substitute');
+					this.directDamage(source.maxhp / 6);
+				}
+			},
+		},
+		target: 'normal',
+		type: "Grass",
+	},
+
+	// Felucia
+	riggeddice: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Stat changes: inverts, else Taunt. User switches.",
+		desc: "If the target has any stat stage changes, the target's positive stat stages become negative and vice versa. If the target does not have any stat stage changes, the target cannot use status moves for 3 turns. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		name: "Rigged Dice",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, reflectable: 1 },
+		selfSwitch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Smart Strike', source);
+		},
+		onHit(target, source) {
+			let success = false;
+			let i: BoostID;
+			for (i in target.boosts) {
+				if (target.boosts[i] === 0) continue;
+				target.boosts[i] = -target.boosts[i];
+				success = true;
+			}
+			if (success) {
+				this.add('-invertboost', target, '[from] move: Rigged Dice');
+			} else {
+				target.addVolatile('taunt', source);
+			}
+		},
+		target: 'normal',
+		type: "Bug",
+	},
+
+	// Froggeh
+	cringedadjoke: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Confuses the foe. Foe self-hits: +1 Atk/Def.",
+		desc: "Confuses the target. When the target hits itself in confusion from this move, the user's Attack and Defense are boosted by 1 stage.",
+		name: "Cringe Dad Joke",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dizzy Punch', target);
+			this.add('-anim', source, 'Bulk Up', source);
+		},
+		self: {
+			volatileStatus: 'cringedadjoke',
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'confusion',
+		},
+		target: 'normal',
+		type: "Fighting",
+		// confusion self-hit stat bonus implemented as an innate because it doesn't work as a move effect
+	},
+
+	// Frostyicelad
+	puffyspikydestruction: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Turn 1 out: DDance, TSpikes, -Psn type.",
+		desc: "Nearly always moves first. Removes the user's Poison typing if it has one, and boosts the user's Attack and Speed by 1 stage. Sets one layer of Toxic Spikes on the opposing side of the field, poisoning all grounded, non-Poison-type Pokemon that switch in. Fails unless it's the user's first turn on the field.",
+		name: "Puffy Spiky Destruction",
+		pp: 5,
+		priority: 4,
+		flags: {},
+		onTry(source) {
+			if (source.activeMoveActions > 1) {
+				this.hint("Puffy Spiky Destruction only works on your first turn out.");
+				return false;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Quiver Dance', source);
+			this.add('-anim', source, 'Spiky Shield', source);
+			this.add('-anim', source, 'Toxic Spikes', target);
+		},
+		onHit(target, source, move) {
+			source.setType(source.getTypes(true).filter(type => type !== "Poison"));
+			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] move: Puffy Spiky Destruction');
+			const foeSide = source.side.foe;
+			if (!foeSide.sideConditions['toxicspikes'] || foeSide.sideConditions['toxicspikes'].layers < 2) {
+				foeSide.addSideCondition('toxicspikes', source, move);
+			}
+		},
+		boosts: {
+			spe: 1,
+			atk: 1,
+		},
+		target: 'self',
+		type: "Poison",
+	},
+
+	// Frozoid
+	flatoutfalling: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Sets Gravity.",
+		desc: "Sets Gravity for 5 turns, multiplying the evasiveness of all active Pokemon by 0.6 and grounding them.",
+		name: "Flat out falling",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Head Smash', target);
+			this.add('-anim', source, 'Gravity', target);
+		},
+		self: {
+			onHit(source) {
+				this.field.addPseudoWeather('gravity', source);
+			},
+		},
+		target: 'normal',
+		type: "???",
+	},
+
+	// Ganjafin
+	wigglingstrike: {
+		accuracy: 95,
+		basePower: 40,
+		category: "Physical",
+		shortDesc: "Applies Salt Cure and sets a layer of spikes.",
+		desc: "Causes damage to the target equal to 1/8 of its maximum HP (1/4 if the target is Steel or Water type), rounded down, at the end of each turn during effect. This effect ends when the target is no longer active. Sets a layer of Spikes on the target's side of the field, damaging grounded foes when they switch in.",
+		name: "Wiggling Strike",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Water Pulse', target);
+			this.add('-anim', target, 'Aqua Ring', target);
+		},
+		self: {
+			onHit(source) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('spikes');
+				}
+			},
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'saltcure',
+		},
+		target: "normal",
+		type: "Water",
+	},
+
+	// Haste Inky
+	hastyrevolution: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Clear foe stats+copies neg stats+inverts on user.",
+		desc: "Resets the stat stages of the target to 0. Then, the target receives a copy of the user's negative stat stage changes, and the user's negative stat stage changes become positive.",
+		name: "Hasty Revolution",
+		pp: 10,
+		priority: 4,
+		flags: { protect: 1, mirror: 1, noassist: 1, failcopycat: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Pain Split', target);
+			return !!this.queue.willAct() && this.runEvent('StallMove', source);
+		},
+		onHit(target, source, move) {
+			source.addVolatile('stall');
+			target.clearBoosts();
+			this.add('-clearboost', target);
+			let i: BoostID;
+			for (i in source.boosts) {
+				if (source.boosts[i] < 0) {
+					target.boosts[i] += source.boosts[i];
+					this.add('-setboost', target, i as string, target.boosts[i], '[silent]');
+					source.boosts[i] = -source.boosts[i];
+					this.add('-setboost', source, i as string, source.boosts[i], '[silent]');
+				}
+			}
+			this.add('-message', `${target.name} received ${source.name}'s negative stat boosts!'`);
+			this.add('-message', `${source.name} inverted their negative stat boosts!`);
+		},
+		stallingMove: true,
+		self: {
+			volatileStatus: 'protect',
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
+	// havi
+	augurofebrietas: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		shortDesc: "Disables the target's last move and switches.",
+		desc: "The target's last used move is disabled and cannot be selected for 4 turns. This move cannot disable more than one move at a time. The user then switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		name: "Augur of Ebrietas",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1 },
+		onPrepareHit() {
+			this.attrLastMove('[anim] Spirit Shackle');
+		},
+		onAfterHit(target, source, move) {
+			this.add(`c:|${getName((source.illusion || source).name)}|as you once did for the vacuous Rom,`);
+		},
+		selfSwitch: true,
+		volatileStatus: 'disable',
+		target: "normal",
+		type: "Ghost",
 	},
 
 	// HiZo
@@ -2398,7 +2416,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "KO a teammate; gain more Atk/SpA/Spe if healthy.",
-		desc: "A party member is selected and faints, raising the user's Attack, Special Attack, and Speed by 1 stage if the party member's HP is below 33%, by 2 stages if the party member's HP is between 33% and 66%, and by 3 stages if the party member's HP is above 66%. Fails if there are no non-fainted Pokemon on the user's side.",
+		desc: "A party member is selected and faints, raising the user's Attack, Special Attack, and Speed by 2 stages if the party member's HP is below 33%, by 3 stages if the party member's HP is between 33% and 66%, and by 4 stages if the party member's HP is above 66%. Fails if there are no non-fainted Pokemon on the user's side.",
 		name: "Scapegoat",
 		gen: 9,
 		pp: 5,
@@ -2428,11 +2446,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			// reviving implemented in side.ts, kind of
 		},
-		secondary: null,
 		target: "self",
 		type: "Dark",
 	},
-
 
 	// HoeenHero
 	reprogram: {
@@ -2443,7 +2459,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Re-Program",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2459,7 +2475,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (source.addVolatile('lockon', target)) {
 				this.add('-message', 'HoeenHero double checked their work and fixed any errors!');
-				this.add('-activate', source, 'move: Lock-On', '[of] ' + target);
+				this.add('-activate', source, 'move: Lock-On', `[of] ${target}`);
 				success = true;
 			}
 			if (success) {
@@ -2480,7 +2496,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Wonder Wing",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1},
+		flags: { contact: 1 },
 		// No negative contact effects implemented in Battle#checkMovesMakeContact
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2502,7 +2518,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.removeVolatile('wonderwing');
 			},
 			onDamage(damage, target, source, effect) {
-				if (this.effectState.duration < 2) return;
+				if (this.effectState.duration! < 2) return;
 				this.add('-activate', source, 'move: Wonder Wing');
 				return false;
 			},
@@ -2527,7 +2543,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "If the user has not Terastallized, this move has a 70% chance to raise the user's Special Attack by 1 stage, has a 50% chance to paralyze the target, and combines the Water type in its type effectiveness. When the user has Terastallized, this move is a purely Water-type attack that gains Same-Type Attack Bonus with Water-types, and it has an 80% chance to raise the user's Special Attack by 1 stage, has a 60% chance to change the target's typing to Water, and is super effective against Water.",
 		pp: 20,
 		priority: 1,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onModifyMove(move, source, target) {
 			if (source.terastallized) {
 				move.type = 'Water';
@@ -2550,14 +2566,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// None of these stack with Serene Grace
 				if (!source.terastallized) {
 					if (this.randomChance(70, 100)) {
-						this.boost({spa: 1}, source);
+						this.boost({ spa: 1 }, source);
 					}
 					if (this.randomChance(50, 100)) {
 						if (target.isActive) target.trySetStatus('par', source, this.effect);
 					}
 				} else {
 					if (this.randomChance(80, 100)) {
-						this.boost({spa: 1}, source);
+						this.boost({ spa: 1 }, source);
 					}
 					if (this.randomChance(60, 100)) {
 						// Soak
@@ -2582,7 +2598,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Hits three times. Power increases to 20 for the second hit and 40 for the third. The third hit is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities. If this move deals damage, it applies the effect of Safeguard for 5 turns, protecting the user's team from confusion and non-volatile status conditions.",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		basePowerCallback(pokemon, target, move) {
 			return [10, 20, 40][move.hit - 1];
 		},
@@ -2597,35 +2613,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			sideCondition: 'safeguard',
 		},
-		secondary: null,
 		multihit: 3,
 		target: "normal",
 		type: "Ground",
-	},
-
-	// Irly
-	vruuuuuum: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Super effective on Water.",
-		name: "vruuuuuum",
-		pp: 20,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Shift Gear', source);
-			this.add('-anim', source, 'Ice Spinner', target);
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Water') return 1;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ice",
 	},
 
 	// ironwater
@@ -2638,7 +2628,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Jirachi Ban Hammer",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onPrepareHit() {
 			this.attrLastMove('[anim] Gigaton Hammer');
 		},
@@ -2658,17 +2648,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Changes target to a Randbats set.",
-		desc: "Z-Move requiring Irpatuzinium Z. Nearly always moves first. Permanently transforms the target into a randomized Pokemon that would be generated in one of the following formats: Gen 9 Random Battle, Gen 9 Hackmons Cup, Gen 9 Challenge Cup, or Computer-Generated Teams. In the vast majority of circumstances, this also prevents the target from acting this turn.",
+		desc: "Z-Move requiring Irpatuzinium Z. Nearly always moves first. Permanently transforms the target into a randomized Pokemon that would be generated in one of the following formats: Gen 9 Random Battle, Gen 9 Hackmons Cup, or Gen 9 Challenge Cup. In the vast majority of circumstances, this also prevents the target from acting this turn.",
 		name: "Bibbidi-Bobbidi-Rands",
 		gen: 9,
 		pp: 1,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		onPrepareHit(target, source) {
 			this.attrLastMove('[anim] Doom Desire');
 		},
 		onHit(target, source) {
-			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup1v1', 'gen9computergeneratedteams'];
+			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup1v1'];
 			const randFormat = this.sample(formats);
 			let msg;
 			switch (randFormat) {
@@ -2681,15 +2671,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'gen9challengecup1v1':
 				msg = "The only difference between a Challenge Cup Pokémon and my in-game one is that the former actually surpassed lvl. 60, enjoy n.n";
 				break;
-			case 'gen9computergeneratedteams':
-				msg = "We asked an AI to make a randbats set. YOU WON'T BELIEVE WHAT IT CAME UP WITH N.N";
-				break;
 			}
 			let team = [] as PokemonSet[];
-			const unModdedDex = Dex.mod('base');
+			const unModdedDex = this.dex.mod('gen9');
 			let depth = 0;
 			while (!team.length) {
-				team = Teams.generate(randFormat, {name: target.side.name});
+				team = Teams.generate(randFormat, { name: target.side.name });
 				if (depth >= 50) break; // Congrats you won the lottery!
 				team = team.filter(p => {
 					const baseSpecies = unModdedDex.species.get(p.species);
@@ -2711,12 +2698,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.addMove('-anim', target, 'Wish', target);
 			target.clearBoosts();
 			this.add('-clearboost', target);
-			// @ts-ignore set wants a sig but randbats sets don't have one
+			// @ts-expect-error set wants a sig but randbats sets don't have one
 			changeSet(this, target, team[0], true);
 			this.add(`c:|${getName((source.illusion || source).name)}|${msg}`);
 		},
 		isZ: "irpatuziniumz",
-		secondary: null,
 		target: "normal",
 		type: "Fairy",
 	},
@@ -2730,11 +2716,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "No additional effect.",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onPrepareHit(target, source) {
 			this.attrLastMove('[anim] High Jump Kick');
 		},
-		secondary: null,
 		target: "allAdjacent",
 		type: "Psychic",
 	},
@@ -2748,8 +2733,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Sets Snow, +1 Sp. Atk, +2 Speed.",
 		desc: "Raises the user's Special Attack by 1 stage and Speed by 2 stages, and changes the weather to Snow, boosting the defense of Ice-types by 1.5x for 5 turns. Snow will not be set if the weather cannot be changed or if the weather is already Snow.",
 		pp: 15,
-		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		priority: 1,
+		flags: { snatch: 1, metronome: 1 },
 		boosts: {
 			spe: 2,
 			spa: 1,
@@ -2761,8 +2746,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Agility', target);
 			this.add('-anim', source, 'Snowscape', target);
 		},
-		weather: 'snow',
-		secondary: null,
+		weather: 'snowscape',
 		target: "self",
 		type: "Ice",
 	},
@@ -2776,9 +2760,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Has 1/2 recoil.",
 		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
 		pp: 5,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		recoil: [1, 2],
-		secondary: null,
 		priority: 0,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2809,11 +2792,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "The user heals 1/4 of its maximum HP, then deals damage to the target equal to the user's current HP. If this attack is successful, the user faints.",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, metronome: 1, noparentalbond: 1},
+		flags: { protect: 1, metronome: 1, noparentalbond: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		secondary: null,
 		target: "normal",
 		type: "Fighting",
 	},
@@ -2824,11 +2806,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Does something random.",
-		desc: "This move performs exactly one of the following at random, ignoring options that would do nothing: 10% chance to burn the target; 10% chance to paralyze the target; 10% chance to poison the target; 3% chance to put the target to sleep; 2% chance to freeze the target; 5% chance each to confuse, infatuate, Taunt, Encore, Torment, or Heal Block the target; 5% chance each to set Stealth Rock, Spikes, Toxic Spikes, or Sticky Web; 5% chance to remove entry hazards from the user's side of the field; 5% chance to lower the foe's highest stat by 1 stage; and a 5% chance to switch out.",
+		desc: "This move performs exactly one of the following at random, ignoring options that would do nothing: 10% chance to burn the target; 10% chance to paralyze the target; 10% chance to poison the target; 3% chance to put the target to sleep; 2% chance to freeze the target; 5% chance each to confuse, infatuate, Taunt, Encore, Torment, or Heal Block the target; 5% chance each to set Stealth Rock, Spikes, Toxic Spikes, or Sticky Web; 5% chance to remove entry hazards from the user's side of the field; 5% chance to lower the foe's highest stat by 2 stages; and a 5% chance to switch out.",
 		name: ", (ac)",
 		pp: 15,
 		priority: 0,
-		flags: {reflectable: 1, mustpressure: 1},
+		flags: { reflectable: 1, mustpressure: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2912,12 +2894,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						for (const condition of sideConditions) {
 							if (source.side.removeSideCondition(condition)) {
 								success = true;
-								this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: , (ac)', '[of] ' + source);
+								this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: , (ac)', `[of] ${source}`);
 							}
 						}
 					} else if (effect < 95) {
 						const bestStat = target.getBestStat(true, true);
-						this.boost({[bestStat]: -1}, target);
+						this.boost({ [bestStat]: -2 }, target);
 						success = true;
 					} else {
 						if (this.canSwitch(source.side)) {
@@ -2942,7 +2924,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Stone Faced",
 		pp: 15,
 		priority: 0,
-		flags: {reflectable: 1, mustpressure: 1},
+		flags: { reflectable: 1, mustpressure: 1 },
 		sideCondition: 'stealthrock',
 		onPrepareHit(target, source) {
 			this.attrLastMove('[anim] Scary Face');
@@ -2952,7 +2934,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			def: -1,
 			spe: -1,
 		},
-		secondary: null,
 		target: "normal",
 		type: "Rock",
 	},
@@ -2968,7 +2949,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: { contact: 1, protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2998,10 +2979,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		name: "Anfield Atmosphere",
 		shortDesc: "No weather/sleep,share statuses,halve hazard dmg.",
-		desc: "For 6 turns, sets a field effect. Negates all weather conditions. Prevents Pokemon from falling asleep. Any status conditions and volatile status conditions applied to one Pokemon will also apply to the all Pokemon on the field. Halves entry hazard damage.",
+		desc: "For 6 turns, sets a field effect. Negates all weather conditions. Prevents Pokemon from falling asleep. Any status conditions and volatile status conditions applied to one Pokemon will also apply to all Pokemon on the field. Halves entry hazard damage.",
 		pp: 5,
 		priority: 0,
-		flags: {mirror: 1},
+		flags: { mirror: 1 },
 		pseudoWeather: 'anfieldatmosphere',
 		condition: {
 			duration: 6,
@@ -3019,9 +3000,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFieldStart(target, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source, '[persistent]');
+					this.add('-fieldstart', 'move: Anfield Atmosphere', `[of] ${source}`, '[persistent]');
 				} else {
-					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source);
+					this.add('-fieldstart', 'move: Anfield Atmosphere', `[of] ${source}`);
 				}
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.volatiles['confusion']) {
@@ -3064,7 +3045,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fieldend', 'move: Anfield Atmosphere');
 			},
 		},
-		secondary: null,
 		target: "all",
 		type: "Psychic",
 	},
@@ -3089,7 +3069,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onModifyPriority(priority, source, target, move) {
-			if (target && Object.values(target.boosts).some(x => x !== 0)) {
+			const foe = source.foes()[0];
+			if (foe && Object.values(foe.boosts).some(x => x !== 0)) {
 				return priority + 1;
 			}
 		},
@@ -3099,7 +3080,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.forceSwitchFlag = true;
 			}
 		},
-		secondary: null,
 		target: "all",
 		type: "Flying",
 	},
@@ -3109,12 +3089,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 70,
 		category: "Special",
-		shortDesc: "Heals 50% HP, restores 1 PP for all other moves.",
-		desc: "Heals the user for 1/2 of their maximum HP, and restores 1 PP to all moves on the user's set other than Platinum Record.",
+		shortDesc: "Heals 50% HP, restores 1-3 PP for all other moves.",
+		desc: "Heals the user for 1/2 of their maximum HP, and restores 1 to 3 PP to all moves on the user's set other than Platinum Record.",
 		name: "Platinum Record",
-		pp: 5,
+		pp: 10,
 		priority: 0,
-		flags: {sound: 1, heal: 1, protect: 1, mirror: 1},
+		flags: { sound: 1, heal: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3126,7 +3106,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.heal(source.maxhp / 2, source, source, move);
 			for (const moveSlot of source.moveSlots) {
 				if (moveSlot.id === move.id) continue;
-				if (moveSlot.pp < moveSlot.maxpp) moveSlot.pp += 1;
+				if (moveSlot.pp < moveSlot.maxpp) moveSlot.pp += this.sample([1, 2, 3]);
 			}
 		},
 		target: "normal",
@@ -3147,15 +3127,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		volatileStatus: 'curse',
 		onHit(target, source) {
-			const result = this.random(3);
-			if (result === 0) {
-				target.trySetStatus('psn', target);
-			} else if (result === 1) {
-				target.trySetStatus('par', target);
-			} else {
-				target.trySetStatus('brn', target);
-			}
-			this.boost({spe: 1}, source);
+			const status = this.sample(['psn', 'par', 'brn']);
+			target.trySetStatus(status, source);
+			this.boost({ spe: 1 }, source);
 		},
 		onPrepareHit(target, source) {
 			this.attrLastMove('[anim] Dark Void');
@@ -3175,9 +3149,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "The Better Water Shuriken",
 		pp: 30,
 		priority: 1,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [2, 5],
-		secondary: null,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3199,7 +3172,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "If this move is successful, the terrain becomes Electric Terrain.",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3236,7 +3209,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Attack of Opportunity",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3245,55 +3218,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Behemoth Blade', target);
 		},
 		beforeTurnCallback(pokemon) {
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('attackofopportunity', pokemon);
-				const data = side.getSideConditionData('attackofopportunity');
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
+			pokemon.addVolatile(
+				'attackofopportunity', pokemon, this.dex.getActiveMove('attackofopportunity')
+			);
 		},
 		onModifyMove(move, source, target) {
 			if (target?.beingCalledBack || target?.switchFlag) {
 				move.accuracy = true;
+				move.tracksTarget = true;
 				move.onAfterMoveSecondarySelf = function (s, t, m) {
 					if (!t || t.fainted || t.hp <= 0) {
-						this.boost({atk: 1}, s, s, m);
+						this.boost({ atk: 1 }, s, s, m);
 					}
 				};
 			}
 		},
-		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('attackofopportunity');
-		},
 		condition: {
 			duration: 1,
-			onBeforeSwitchOut(pokemon) {
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
 				this.debug('Attack of Opportunity start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					if (source.canMegaEvo) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
+				if (!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'attackofopportunity') ||
+					!this.queue.cancelMove(source)) return;
+				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source) {
+							if (action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
+							} else if (action.choice === 'terastallize') {
+								this.actions.terastallize(source);
+							} else {
+								continue;
 							}
+							this.queue.list.splice(actionIndex, 1);
+							break;
 						}
 					}
-					this.actions.runMove('attackofopportunity', source, source.getLocOf(pokemon));
 				}
+				pokemon.removeVolatile('destinybond');
+				this.actions.runMove(
+					'attackofopportunity', source, source.getLocOf(pokemon),
+					{ sourceEffect: this.effectState.sourceEffect }
+				);
 			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Steel",
 		contestType: "Clever",
@@ -3344,7 +3313,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', target, 'Rise Above');
 			},
 		},
-		secondary: null,
 		target: "self",
 		type: "Electric",
 	},
@@ -3368,77 +3336,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		pseudoWeather: 'trickroom',
 		volatileStatus: 'powertrick',
-		secondary: null,
 		target: "self",
 		type: "Psychic",
-	},
-
-	// Lily
-	recharge: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Recharge",
-		shortDesc: "Heals 50% HP. Heals 3% more per fainted ally.",
-		desc: "Heals the user for 50% of their maximum HP. Heals an additional 3% of the user's maximum HP for each team member on the user's side that has fainted.",
-		pp: 5,
-		priority: 0,
-		flags: {heal: 1},
-		onModifyMove(move, source, target) {
-			const fntAllies = source.side.pokemon.filter(ally => ally !== source && ally.fainted);
-			if (move.heal) move.heal[0] = 50 + (3 * fntAllies.length);
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(pokemon) {
-			this.add('-anim', pokemon, 'Shore Up', pokemon);
-			this.add('-anim', pokemon, 'Charge', pokemon);
-			this.add('-anim', pokemon, 'Moonlight', pokemon);
-		},
-		heal: [50, 100],
-		secondary: null,
-		target: "self",
-		type: "Electric",
-	},
-
-	// Lionyx
-	superrollout: {
-		accuracy: 95,
-		basePower: 30,
-		basePowerCallback(pokemon, target, move) {
-			if (!pokemon.volatiles['superrollout'] || move.hit === 1) {
-				pokemon.addVolatile('superrollout');
-			}
-			let bp = move.basePower * pokemon.volatiles['superrollout'].multiplier;
-			if (pokemon.volatiles['defensecurl']) {
-				bp *= 2;
-			}
-			this.debug('BP: ' + bp);
-			return bp;
-		},
-		category: "Physical",
-		shortDesc: "BP doubles after each hit. 2x if Defense Curl.",
-		desc: "Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user.",
-		name: "Super Rollout",
-		pp: 20,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, noparentalbond: 1},
-		condition: {
-			duration: 2,
-			onStart() {
-				this.effectState.multiplier = 1;
-			},
-			onRestart() {
-				if (this.effectState.multiplier < 4) {
-					this.effectState.multiplier <<= 1;
-				}
-				this.effectState.duration = 2;
-			},
-		},
-		secondary: null,
-		target: "normal",
-		type: "Rock",
 	},
 
 	// Loethalion
@@ -3447,7 +3346,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			const bp = move.basePower + 20 * pokemon.positiveBoosts();
-			this.debug('BP: ' + bp);
+			this.debug(`BP: ${bp}`);
 			return bp;
 		},
 		category: "Special",
@@ -3456,7 +3355,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Darkmoon Cackle",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3494,7 +3393,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Mystical Bonfire",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3520,13 +3419,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Praise the Moon",
 		pp: 10,
 		priority: 0,
-		flags: {charge: 1, protect: 1, mirror: 1},
+		flags: { charge: 1, protect: 1, mirror: 1 },
 		onTryMove(attacker, defender, move) {
 			this.attrLastMove('[still]');
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.boost({spa: 1}, attacker, attacker, move);
+			this.boost({ spa: 1 }, attacker, attacker, move);
 			if (this.field.pseudoWeather['gravity']) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
@@ -3538,8 +3437,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		secondary: null,
-		hasSheerForce: true,
+		hasSheerForceBoost: true,
 		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, 'Lunar Dance', target);
@@ -3560,7 +3458,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3577,123 +3475,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-start', source, 'typeadd', 'Fire', '[from] move: Wrath of Frozen Flames');
 			}
 		},
-		secondary: null,
 		target: "normal",
 		type: "Dragon",
 	},
 
-	// Mad Monty
-	stormshelter: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Storm Shelter",
-		shortDesc: "User protects and boosts random stat by 1 stage.",
-		desc: "Nearly always moves first. Protects the user from most attacks made by other Pokemon this turn, and boosts a random stat of the user by 1 stage, excluding Accuracy and Evasion. This move fails if the user moves last or if the foe switches out, and it has an increasing chance to fail if used consecutively.",
-		pp: 5,
-		priority: 4,
-		flags: {},
-		stallingMove: true,
-		volatileStatus: 'protect',
-		onPrepareHit(pokemon) {
-			this.attrLastMove('[anim] Protect');
-			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-		},
-		onHit(pokemon) {
-			pokemon.addVolatile('stall');
-			const boosts = pokemon.boosts;
-			const maxBoostIDs: BoostID[] = [];
-			for (const boost in boosts) {
-				if (boosts[boost as BoostID] >= 6) {
-					maxBoostIDs.push(boost as BoostID);
-					continue;
-				}
-				this.boost({[boost]: 1}, pokemon);
-			}
-			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
-			const unloweredStat = this.sample(Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID)));
-			for (const boost in boosts) {
-				if ((boosts[boost as BoostID] >= 6 && maxBoostIDs.includes(boost as BoostID)) || boost === unloweredStat) continue;
-				this.boost({[boost]: -1}, pokemon);
-			}
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
-
-	// marillvibes
-	goodvibesonly: {
+	// Maia
+	bodycount: {
 		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Raises the user's Speed by 1 stage.",
-		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
-		name: "Good Vibes Only",
-		gen: 9,
+		basePower: 50,
+		basePowerCallback(pokemon, target, move) {
+			return 50 + 50 * pokemon.side.totalFainted;
+		},
+		category: "Special",
+		shortDesc: "+50 power for each time a party member fainted.",
+		desc: "Power is equal to 50+(X*50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
+		name: "Body Count",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Aqua Step', target);
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					spe: 1,
-				},
-			},
+		flags: { protect: 1, mirror: 1 },
+		onPrepareHit() {
+			this.attrLastMove('[anim] Core Enforcer');
 		},
 		target: "normal",
-		type: "Fairy",
-	},
-
-	// maroon
-	metalblast: {
-		accuracy: 90,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Sets G-Max Steelsurge on the foe's side.",
-		desc: "If this move is successful, it sets up G-Max Steelsurge on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
-		name: "Metal Blast",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Steel Beam', target);
-			this.add('-anim', source, 'G-max Steelsurge', target);
-		},
-		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('gmaxsteelsurge');
-				}
-			}
-		},
-		onAfterSubDamage(damage, target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('gmaxsteelsurge');
-				}
-			}
-		},
-		secondary: {}, // Sheer Force-boosted
-		target: "normal",
-		type: "Steel",
+		type: "Ghost",
 	},
 
 	// Mathy
 	breakingchange: {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 100,
 		category: "Physical",
 		shortDesc: "Ignores target's Ability; disables it on hit.",
 		desc: "This move and its effects ignore the Abilities of other Pokemon. When this move hits the target, the target's Ability is suppressed until it switches out. Innate Abilities are unaffected.",
@@ -3701,7 +3511,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit() {
 			this.attrLastMove('[anim] Salt Cure');
 		},
@@ -3711,7 +3521,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add(`c:|${getName((source.illusion || source).name)}|Sorry i tried to fix smth but accidentally broke your ability :( will fix it next week`);
 		},
 		ignoreAbility: true,
-		secondary: null,
 		target: "normal",
 		type: "Normal",
 	},
@@ -3727,17 +3536,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTry(source) {
-			if (source.side.pokemonLeft === 1) return false;
+		onTryMove(source, target, move) {
+			this.attrLastMove('[still]');
+			if (source.side.pokemonLeft === 1) {
+				this.add('-fail', source);
+				return false;
+			}
 			if (!source.hasAbility('endround')) {
+				this.add('-fail', source);
 				this.hint(`The user's ability needs to be End Round for New Bracket to work.`);
 				return false;
 			}
-		},
-		onTryMove(source, target, move) {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source, move) {
 			this.attrLastMove(`[anim] Trick Room`);
 		},
 		onHitField(target, source, move) {
@@ -3748,7 +3557,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.forceSwitchFlag = true;
 			}
 		},
-		secondary: null,
 		target: "all",
 		type: "Electric",
 	},
@@ -3760,10 +3568,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		name: "Plagiarism",
 		shortDesc: "Steal+use foe sig move+imprison. Fail: +1 stats.",
-		desc: "User copies opponents signature move and adds it to its own movepool, replacing this move. The user then uses the copied move immediately and gains the Imprison condition, preventing foes from using moves in the user's moveset. The PP of the copied move will be adjusted to match the PP the copied signature move is supposed to have. If the copied custom move would fail if used in this manner, Plagiarism fails and the user boosts all stats by 1 stage, except Accuracy and Evasion.",
+		desc: "User copies opponent's signature move and adds it to its own movepool, replacing this move. The user then uses the copied move immediately and gains the Imprison condition, preventing foes from using moves in the user's moveset. The PP of the copied move will be adjusted to match the PP the copied signature move is supposed to have. If the copied custom move would fail if used in this manner, Plagiarism fails and the user boosts all stats by 1 stage, except Accuracy and Evasion.",
 		pp: 5,
 		priority: 1,
-		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1, nosketch: 1 },
 		onTry(source) {
 			if (source.m.usedPlagiarism) {
 				this.hint("Plagiarism only works once per switch-in.");
@@ -3775,11 +3583,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Imprison');
 		},
 		onHit(target, source, m) {
-			const sigMoveName = ssbSets[(target.illusion || target).name].signatureMove;
+			let sigMoveName = ssbSets[(target.illusion || target).name]?.signatureMove;
+			if (!sigMoveName) sigMoveName = target.moveSlots[target.moveSlots.length - 1].id;
 			const move = this.dex.getActiveMove(sigMoveName);
 			if (!target || this.queue.willSwitch(target) || target.beingCalledBack ||
-				move.flags['failcopycat'] || move.noSketch) {
-				this.boost({spa: 1, spd: 1, spe: 1}, source, source, m);
+				move.flags['failcopycat'] || move.flags['nosketch']) {
+				this.boost({ spa: 1, spd: 1, spe: 1 }, source, source, m);
 				return;
 			}
 			const plagiarismIndex = source.moves.indexOf('plagiarism');
@@ -3797,13 +3606,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.moveSlots[plagiarismIndex] = plagiarisedMove;
 			this.add('-activate', source, 'move: Plagiarism', move.name);
 			this.add('-message', `${source.name} plagiarised ${target.name}'s ${move.name}!`);
-			this.actions.useMove(move.id, source, target);
+			this.actions.useMove(move.id, source, { target });
 			delete target.volatiles['imprison'];
 			source.addVolatile('imprison', source);
 			source.m.usedPlagiarism = true;
 		},
-		noSketch: true,
-		secondary: null,
 		target: "normal",
 		type: "Dark",
 	},
@@ -3827,19 +3634,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 				for (const condition of sideConditions) {
 					if (pokemon.side.removeSideCondition(condition)) {
-						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Time Skip', '[of] ' + pokemon);
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Time Skip', `[of] ${pokemon}`);
 					}
 				}
-				// 9 turn addition so the +1 from nextTurn totals to 10 turns
+				// 9 turn addition so the +1 from endTurn totals to 10 turns
 				this.turn += 9;
 			},
 			boosts: {
 				spe: 1,
 			},
 		},
-		secondary: null,
 		target: "all",
 		type: "Dragon",
+	},
+
+	// Miojo
+	vruuuuuum: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Super effective on Water.",
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		name: "vruuuuuum",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shift Gear', source);
+			this.add('-anim', source, 'Ice Spinner', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 1;
+		},
+		target: "normal",
+		type: "Ice",
 	},
 
 	// Monkey
@@ -3847,13 +3678,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "2 random stats +1; Lock-On/Laser Focus/Charge.",
-		desc: "Boosts 2 random stats of the user by 1 stage each, except Accuracy and Evasion. These stats can be the same. Applies one of Lock-On, Laser Focus, or Charge to the user at random.",
+		shortDesc: "2 random stats +2; Lock-On/Laser Focus/Charge.",
+		desc: "Boosts 2 random stats of the user by 2 stage each, except Accuracy and Evasion. These stats can be the same. Applies one of Lock-On, Laser Focus, or Charge to the user at random.",
 		name: "Banana Breakfast",
 		gen: 9,
 		pp: 10,
 		priority: 2,
-		flags: {mirror: 1, heal: 1},
+		flags: { mirror: 1, heal: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3873,21 +3704,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 			const randomStat2: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1;
-			if (randomStat2 && randomStat === randomStat2) boost[randomStat] = 2;
-			else if (randomStat2) boost[randomStat2] = 1;
+			if (randomStat) boost[randomStat] = 2;
+			if (randomStat2 && randomStat === randomStat2) boost[randomStat] = 4;
+			else if (randomStat2) boost[randomStat2] = 2;
 			this.boost(boost, source);
-			const result = this.random(3);
-			if (result === 0) {
-				this.actions.useMove("laserfocus", target);
-			} else if (result === 1) {
-				this.actions.useMove("lockon", target);
-			} else {
-				this.actions.useMove("charge", target);
-			} // This is easier than implementing each condition manually
+			// This is easier than implementing each condition manually
+			const move = this.sample(['lockon', 'laserfocus', 'charge']);
+			this.actions.useMove(move, target);
 			this.heal(target.maxhp / 4, target, target, this.effect);
 		},
-		secondary: null,
 		target: "self",
 		type: "Grass",
 	},
@@ -3895,15 +3720,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// MyPearl
 	eonassault: {
 		accuracy: 100,
-		basePower: 35,
+		basePower: 45,
 		category: "Special",
-		shortDesc: "Hits twice. 20% -1 Sp. Atk, 20% -1 Sp. Def.",
-		desc: "Hits 2 times. Each hit has a 20% chance to lower Special Attack by 1 stage, and a 20% chance to lower Special Defense by 1 stage.",
+		shortDesc: "Hits twice. 40% -1 Sp. Atk, 40% -1 Sp. Def.",
+		desc: "Hits 2 times. Each hit has a 40% chance to lower Special Attack by 1 stage, and a 40% chance to lower Special Defense by 1 stage.",
 		name: "Eon Assault",
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		multihit: 2,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -3914,12 +3739,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondaries: [
 			{
-				chance: 20,
+				chance: 40,
 				boosts: {
 					spa: -1,
 				},
 			}, {
-				chance: 20,
+				chance: 40,
 				boosts: {
 					spd: -1,
 				},
@@ -3938,12 +3763,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower;
 		},
 		category: "Physical",
-		shortDesc: "User swap, replacement Booster Energy boost.",
+		shortDesc: "Pivot; switchin: Booster Energy. If last: 80BP.",
+		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The replacement party member gains a Cat Stamp of Approval with the effect of Booster Energy, boosting its highest stat by 1.3x, or 1.5x in the case of Speed. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities. If there are no unfainted party members, the move's Base Power is increased to 80 and the user gains the Cat Stamp of Approval boost instead.",
 		name: "Quality Control Zoomies",
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3955,7 +3781,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			slotCondition: 'qualitycontrolzoomies',
 		},
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.addVolatile('catstampofapproval');
 					target.side.removeSlotCondition(target, 'qualitycontrolzoomies');
@@ -3980,7 +3806,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		selfSwitch: true,
-		secondary: null,
 		target: "normal",
 		type: "Ice",
 	},
@@ -3996,7 +3821,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, dance: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, dance: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4027,7 +3852,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {bypasssub: 1},
+		flags: { bypasssub: 1 },
 		onPrepareHit(target, source) {
 			this.attrLastMove('[anim] Haze');
 			this.attrLastMove('[anim] Sweet Kiss');
@@ -4038,11 +3863,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
 			}
-			this.boost({atk: 1, def: 1}, source, source, move);
+			this.boost({ atk: 1, def: 1 }, source, source, move);
 		},
 		slotCondition: 'nyaa',
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				const source = this.effectState.source;
 				if (!target.fainted) {
 					this.add(`c:|${getName((source.illusion || source).name)}|~nyaa ${target.name}`);
@@ -4051,7 +3876,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
-		secondary: null,
 		target: "all",
 		type: "Steel",
 	},
@@ -4061,19 +3885,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
-		shortDesc: "Moves first. 40% infatuates. 10% backfire chance.",
-		desc: "Usually moves first. This move has a 40% chance to infatuate the target, regardless of gender, but this move has a 10% chance to be used by the target at the user instead.",
+		shortDesc: "40% infatuates. 10% backfire chance.",
+		desc: "This move has a 40% chance to infatuate the target, regardless of gender, but this move has a 10% chance to be used by the target at the user instead.",
 		name: ":3",
 		gen: 9,
 		pp: 5,
-		priority: 1,
-		flags: {protect: 1},
+		priority: 0,
+		flags: { protect: 1 },
 		onTry(pokemon, target, move) {
 			if (move.sourceEffect !== '3' && this.randomChance(1, 10)) {
 				this.add('-message', "The move backfired!");
 				const activeMove = this.dex.getActiveMove(':3');
 				activeMove.hasBounced = true;
-				this.actions.useMove(activeMove, target, pokemon);
+				this.actions.useMove(activeMove, target, { target: pokemon });
 				return null;
 			}
 		},
@@ -4091,60 +3915,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
-	// Nyx
-	cottoncandycrush: {
+	// pants
+	eerieapathy: {
 		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		shortDesc: "Uses Sp. Def over Attack in damage calculation.",
-		desc: "Damage is calculated using the user's Special Defense stat as its Attack, including stat stage changes. Other effects that modify the Attack stat are used as normal.",
-		name: "Cotton Candy Crush",
-		overrideOffensiveStat: "spd",
-		gen: 9,
-		pp: 15,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Fusion Bolt', target);
-			this.add('-anim', source, 'Fleur Cannon', target);
-		},
-		target: "normal",
-		type: "Fairy",
-	},
-
-	// Opple
-	woppleorflopple: {
-		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Confuse; +2 SpA/D. Fail=Confuse self; -1 SpA/D.",
-		desc: "Usually moves first. This move has a 50% chance of confusing the target and raising the user's Special Attack and Special Defense by 2 stages. Otherwise, it will confuse the user and lower the user's Special Attack and Special Defense by 1 stage.",
-		name: "Wopple or Flopple",
-		gen: 9,
-		pp: 10,
-		priority: 1,
-		flags: {protect: 1, reflectable: 1},
+		name: "Eerie Apathy",
+		shortDesc: "Wish + Taunts the foe.",
+		pp: 15,
+		priority: 0,
+		flags: { snatch: 1, heal: 1, protect: 1, reflectable: 1, mirror: 1, bypasssub: 1 },
+		self: {
+			slotCondition: 'Wish',
+		},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Moonlight', source);
+			this.add('-anim', source, 'Memento', target);
 		},
 		onHit(target, source, move) {
-			if (this.randomChance(1, 2)) {
-				target.addVolatile('confusion');
-				this.boost({spa: 2, spd: 2}, source);
-			} else {
-				source.addVolatile('confusion');
-				this.boost({spa: -1, spd: -1}, source);
+			if (!target.volatiles['taunt']) {
+				target.addVolatile('taunt', source, move);
 			}
 		},
-		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Ghost",
 	},
 
 	// PartMan
@@ -4157,7 +3953,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "If the user is not shiny, it switches out even if it is trapped and is replaced immediately by a selected party member, and if the user moved first this turn, the selected party member will be protected from most attacks made by other Pokemon this turn. If the user is shiny, this move instead becomes a 69 Base Power ???-type special attack.",
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: { snatch: 1 },
 		stallingMove: true,
 		sideCondition: 'alting',
 		onTryMove() {
@@ -4175,7 +3971,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.accuracy = 100;
 				move.basePower = 69;
 				move.category = "Special";
-				move.flags = {protect: 1, bypasssub: 1};
+				move.flags = { protect: 1, bypasssub: 1 };
 				move.target = "normal";
 
 				delete move.selfSwitch;
@@ -4194,12 +3990,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
-					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
-				if (move && (move.target === 'self' || move.category === 'Status')) return;
+				if (move.target === 'self') return;
+				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
 				this.add('-activate', target, 'move: Alting', move.name);
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -4221,12 +4013,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		shortDesc: "Applies Heal Block + taunts target.",
+		shortDesc: "Applies Heal Block and Taunt.",
+		desc: "If this move deals damage, the target is prevented from using any status moves for 3 turns or restoring any HP for 5 turns, with both effects ending if the target switches out. During the effect, status moves and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP or use status moves. The Regenerator Ability is unaffected, and Pokemon with Oblivious are immune to the Taunt effect.",
 		name: "Call to Repentance",
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4253,8 +4046,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "1000 Gears",
-		shortDesc: "Heals 100% HP,cures status,+1 Def/SpD,+5 levels.",
-		desc: "Z-Move requiring Pearyum Z. Heals the user for 100% of its maximum HP, cures its non-volatile status effects, boosts its Defense and Special Defense by 1 stage, and raises its level by 5.",
+		shortDesc: "Heals 100% HP,cures status,+1 Def/SpD/Spe,+10 levels.",
+		desc: "Z-Move requiring Pearyum Z. Heals the user for 100% of its maximum HP, cures its non-volatile status effects, boosts its Defense and Special Defense by 1 stage, and raises its level by 10.",
 		pp: 1,
 		priority: 0,
 		flags: {},
@@ -4268,53 +4061,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, pokemon, move) {
 			this.heal(pokemon.maxhp, pokemon, pokemon, move);
 			pokemon.cureStatus();
-			this.boost({def: 1, spd: 1});
-			(pokemon as any).level += 5;
-			pokemon.details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			this.boost({ def: 1, spd: 1, spe: 1 });
+			(pokemon as any).level += 10;
+			pokemon.details = pokemon.getUpdatedDetails();
 			this.add('-anim', pokemon, 'Geomancy', pokemon);
 			this.add('replace', pokemon, pokemon.details);
-			this.add('-message', `${pokemon.name} gained 5 levels!`);
+			this.add('-message', `${pokemon.name} gained 10 levels!`);
 		},
 		isZ: "pearyumz",
-		secondary: null,
 		target: "self",
 		type: "Steel",
-	},
-
-	// PenQuin
-	splashnluckyblaze: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		name: "Splash n' Lucky Blaze",
-		shortDesc: "User: +1 Attack; target: 100% chance of burn.",
-		desc: "Has a 100% chance to raise the user's Attack by 1 stage and a 100% chance to burn the target.",
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Jet Punch', target);
-			this.add('-anim', source, 'Flare Blitz', target);
-		},
-		secondaries: [
-			{
-				chance: 100,
-				status: 'brn',
-			}, {
-				chance: 100,
-				self: {
-					boosts: {
-						atk: 1,
-					},
-				},
-			},
-		],
-		target: "normal",
-		type: "Water",
 	},
 
 	// phoopes
@@ -4327,7 +4083,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "10% chance to freeze the target.",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit() {
 			this.attrLastMove('[anim] Blizzard');
 		},
@@ -4349,8 +4105,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "If the user is Volcarona, this move is Ice-type and, after dealing damage, transforms the user into a Snow Warning Frosmoth with Blizzard, Chilly Reception, and Aurora Veil. If the user is Frosmoth, this move is Fire-type and, after dealing damage, transforms the user into a Drought Volcarona with Torch Song, Morning Sun, and Solar Beam. This move fails if the user is neither Frosmoth nor Volcarona.",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, failcopycat: 1},
-		noSketch: true,
+		flags: { protect: 1, mirror: 1, failcopycat: 1, nosketch: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4385,11 +4140,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Roulette",
-		shortDesc: "Use a random move, and get a random moveset.",
+		shortDesc: "Use 2 random moves, and get a random moveset.",
 		desc: "A random move is selected for use, and then the user's other three moves are replaced with random moves. Aura Wheel, Dark Void, Explosion, Final Gambit, Healing Wish, Hyperspace Fury, Lunar Dance, Memento, Misty Explosion, Revival Blessing, and Self-Destruct cannot be selected.",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4407,6 +4162,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				!source.moves.includes(move.id) &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable')
 			));
+			this.actions.useMove(this.sample(moves.filter(x => !bannedList.includes(x.id))), target);
 			this.actions.useMove(this.sample(moves.filter(x => !bannedList.includes(x.id))), target);
 			for (const i of target.moveSlots.keys()) {
 				if (i > 2) break;
@@ -4428,17 +4184,41 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Princess Autumn
+	cottoncandycrush: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Uses Sp. Def over Attack in damage calculation.",
+		desc: "Damage is calculated using the user's Special Defense stat as its Attack, including stat stage changes. Other effects that modify the Attack stat are used as normal.",
+		name: "Cotton Candy Crush",
+		overrideOffensiveStat: "spd",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Fusion Bolt', target);
+			this.add('-anim', source, 'Fleur Cannon', target);
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// ptoad
 	pleek: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		name: "Pleek...",
-		shortDesc: "+4 Attack + inflict Perish Song on the user.",
-		desc: "Raises the user's Attack by 4 stages. Inflicts the Perish Song effect on the user, causing it to faint in three turns at the end of the turn.",
+		shortDesc: "+8 Attack + inflict Perish Song on the user.",
+		desc: "Raises the user's Attack by 8 stages. Inflicts the Perish Song effect on the user, causing it to faint in three turns at the end of the turn.",
 		pp: 10,
 		priority: 0,
-		flags: {sound: 1, bypasssub: 1},
+		flags: { sound: 1, bypasssub: 1 },
 		onTry(source) {
 			if (source.m.usedPleek) {
 				this.hint("Pleek... only works once per switch-in.");
@@ -4451,7 +4231,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			this.add(`c:|${getName((source.illusion || source).name)}|Pleek...`);
-			this.boost({atk: 4}, source, source, move);
+			this.boost({ atk: 8 }, source, source, move);
 			source.addVolatile('perishsong');
 			this.add('-start', source, 'perish3', '[silent]');
 			source.m.usedPleek = true;
@@ -4471,7 +4251,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		critRatio: 2,
 		pp: 10,
 		priority: 0,
-		flags: {pulse: 1, protect: 1},
+		flags: { pulse: 1, protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4516,25 +4296,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 40,
 			onHit(target, source, move) {
-				const table: {[k: string]: {volatileStatus?: string, status?: string}} = {
-					Normal: {volatileStatus: 'yawn'},
-					Fire: {status: 'brn'},
-					Water: {volatileStatus: 'aquaring'},
-					Grass: {volatileStatus: 'leechseed'},
-					Flying: {volatileStatus: 'confusion'},
-					Fighting: {volatileStatus: 'partiallytrapped'},
-					Poison: {status: 'tox'},
-					Electric: {status: 'par'},
-					Ground: {volatileStatus: 'trapped'},
-					Rock: {volatileStatus: 'saltcure'},
-					Psychic: {status: 'slp'},
-					Ice: {status: 'frz'},
-					Bug: {status: 'psn'},
-					Ghost: {volatileStatus: 'disable'},
-					Steel: {volatileStatus: 'flinch'},
-					Dark: {volatileStatus: 'mustrecharge'},
-					Dragon: {volatileStatus: 'taunt'},
-					Fairy: {volatileStatus: 'attract'},
+				const table: { [k: string]: { volatileStatus?: string, status?: string } } = {
+					Normal: { volatileStatus: 'yawn' },
+					Fire: { status: 'brn' },
+					Water: { volatileStatus: 'aquaring' },
+					Grass: { volatileStatus: 'leechseed' },
+					Flying: { volatileStatus: 'confusion' },
+					Fighting: { volatileStatus: 'partiallytrapped' },
+					Poison: { status: 'tox' },
+					Electric: { status: 'par' },
+					Ground: { volatileStatus: 'trapped' },
+					Rock: { volatileStatus: 'saltcure' },
+					Psychic: { status: 'slp' },
+					Ice: { status: 'frz' },
+					Bug: { status: 'psn' },
+					Ghost: { volatileStatus: 'disable' },
+					Steel: { volatileStatus: 'flinch' },
+					Dark: { volatileStatus: 'mustrecharge' },
+					Dragon: { volatileStatus: 'taunt' },
+					Fairy: { volatileStatus: 'attract' },
 				};
 				let condition = table[move.type];
 				if (!condition) condition = table['Normal'];
@@ -4555,11 +4335,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 60,
 		category: "Physical",
 		name: "Meat Grinder",
-		shortDesc: "User:+1/8 HP/turn;Foe:-1/8 HP/turn,Nrm/Fairy 1/4.",
-		desc: "Causes damage to the target equal to 1/8 of its maximum HP (1/4 if the target is Normal or Fairy type), rounded down, and heals the user equal to 1/8 of its maximum HP, both at the end of each turn during effect. This effect ends when the target is no longer active.",
+		shortDesc: "User:+1/8 HP/turn;Foe:-1/10 HP/turn,Nrm/Fairy 1/5.",
+		desc: "Causes damage to the target equal to 1/10 of its maximum HP (1/5 if the target is Normal or Fairy type), rounded down, and heals the user equal to 1/8 of its maximum HP, both at the end of each turn during effect. This effect ends when the target is no longer active.",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit() {
 			this.attrLastMove('[anim] Guillotine');
 		},
@@ -4570,7 +4350,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onResidualOrder: 13,
 			onResidual(pokemon, source) {
-				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal', 'Fairy']) ? 4 : 8));
+				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal', 'Fairy']) ? 5 : 10));
 
 				const target = this.getAtSlot(pokemon.volatiles['meatgrinder'].sourceSlot);
 				if (!pokemon || pokemon.fainted || pokemon.hp <= 0) {
@@ -4600,11 +4380,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 90,
 		category: "Special",
 		name: "*Worried Noises*",
-		shortDesc: "+1 SpA. Type varies based on user's primary type.",
+		shortDesc: "+2 SpA. Type varies based on user's primary type.",
 		desc: "Has a 100% chance to raise the user's Special Attack by 1 stage. This move's type depends on the user's primary type. If the user's primary type is typeless, this move's type is the user's secondary type if it has one, otherwise the added type from effects that add extra typings. This move is typeless if the user's type is typeless alone.",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4650,7 +4430,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
 			target.setType(type);
 			this.add('-start', target, 'typechange', type, '[from] move: Reshape');
-			this.boost({spa: 1}, source);
+			this.boost({ spa: 1 }, source);
 		},
 		target: "normal",
 		type: "Normal",
@@ -4663,10 +4443,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		name: "Magic Trick",
 		shortDesc: "Teleport + Clears field effects.",
-		desc: "Removes any terrain, weather, entry hazard, or other removable field condition, and then causes the user to switch out out even if it is trapped and be replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, and the user will still attempt to switch out if there are no active field conditions.",
+		desc: "Removes any terrain, weather, entry hazard, or other removable field condition, and then causes the user to switch out even if it is trapped and be replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, and the user will still attempt to switch out if there are no active field conditions.",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: { bypasssub: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4674,31 +4454,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Explosion', target);
 		},
 		onHit(target, source, move) {
+			let success = false;
 			const displayText = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-			for (const targetCondition of Object.keys(target.side.sideConditions)) {
-				if (target.side.removeSideCondition(targetCondition) && displayText.includes(targetCondition)) {
-					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] move: Magic Trick', '[of] ' + source);
+			for (const player of this.sides) {
+				for (const targetCondition of Object.keys(player.sideConditions)) {
+					if (player.removeSideCondition(targetCondition)) {
+						success = true;
+						if (displayText.includes(targetCondition)) {
+							this.add('-sideend', player, this.dex.conditions.get(targetCondition).name, '[from] move: Magic Trick', `[of] ${source}`);
+						}
+					}
 				}
 			}
-			for (const sideCondition of Object.keys(source.side.sideConditions)) {
-				if (source.side.removeSideCondition(sideCondition) && displayText.includes(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Magic Trick', '[of] ' + source);
-				}
-			}
-			this.field.clearTerrain();
-			this.field.clearWeather();
+			if (this.field.clearTerrain()) success = true;
+			if (this.field.clearWeather()) success = true;
 			for (const pseudoWeather of PSEUDO_WEATHERS) {
-				this.field.removePseudoWeather(pseudoWeather);
+				if (this.field.removePseudoWeather(pseudoWeather)) success = true;
 			}
-		},
-		self: {
-			onHit(target, source, move) {
-				return !!this.canSwitch(source.side);
-			},
+			return success || !!this.canSwitch(source.side);
 		},
 		selfSwitch: true,
-		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Normal",
 	},
 
@@ -4731,12 +4507,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (stats.length) {
 				const randomStat = this.sample(stats);
-				this.boost({[randomStat]: 3}, pokemon, pokemon, move);
+				this.boost({ [randomStat]: 3 }, pokemon, pokemon, move);
 				this.actions.useMove('Baton Pass', target);
 			}
 		},
 		isZ: "rainiumz",
-		secondary: null,
 		target: "self",
 		type: "Water",
 	},
@@ -4751,7 +4526,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "If this move is successful, the terrain becomes Psychic Terrain.",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		terrain: 'psychicterrain',
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -4759,7 +4534,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Photon Geyser', target);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Psychic",
 	},
@@ -4793,6 +4567,70 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Rio Vidal
+	metalblast: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Sets G-Max Steelsurge on the foe's side.",
+		desc: "If this move is successful, it sets up G-Max Steelsurge on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		name: "Metal Blast",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Steel Beam', target);
+			this.add('-anim', source, 'G-max Steelsurge', target);
+		},
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxsteelsurge');
+				}
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxsteelsurge');
+				}
+			}
+		},
+		secondary: {}, // Sheer Force-boosted
+		target: "normal",
+		type: "Steel",
+	},
+
+	// Rissoux
+	callofthewild: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Call of the Wild",
+		shortDesc: "Boosts Atk, Spe, and accuracy by 1 stage.",
+		pp: 5,
+		priority: 0,
+		flags: { sound: 1 },
+		boosts: {
+			atk: 1,
+			spe: 1,
+			accuracy: 1,
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dragon Dance', source);
+			this.add('-anim', source, 'Lock-On', source);
+		},
+		target: "self",
+		type: "Fire",
+	},
+
 	// RSB
 	confiscate: {
 		accuracy: 100,
@@ -4803,7 +4641,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Nearly always moves first. The target's stat stages greater than 0 are stolen from it and applied to the user, and any present effects of Reflect, Light Screen, and Aurora Veil are moved from the target's side of the field to the user's, before dealing damage. Fails unless it is the user's first turn on the field.",
 		pp: 5,
 		priority: 2,
-		flags: {contact: 1, protect: 1, mirror: 1, bite: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, bite: 1 },
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
 				this.hint("Confiscate only works on your first turn out.");
@@ -4836,11 +4674,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 85,
 		category: "Special",
 		name: "Midnight Bird",
-		shortDesc: "100% chance to raise the user's Sp. Atk by 1.",
-		desc: "Has a 100% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "100% chance to raise the user's Sp. Atk by 2.",
+		desc: "Has a 100% chance to raise the user's Special Attack by 2 stages.",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4852,7 +4690,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			self: {
 				boosts: {
-					spa: 1,
+					spa: 2,
 				},
 			},
 		},
@@ -4870,7 +4708,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Purification",
 		pp: 5,
 		priority: 0,
-		flags: {heal: 1, bypasssub: 1, allyanim: 1},
+		flags: { heal: 1, bypasssub: 1, allyanim: 1 },
 		onPrepareHit() {
 			this.attrLastMove('[anim] Moonlight');
 		},
@@ -4878,7 +4716,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const success = !!this.heal(this.modify(pokemon.maxhp, 0.5));
 			return pokemon.cureStatus() || success;
 		},
-		secondary: null,
 		target: "self",
 		type: "Water",
 	},
@@ -4893,7 +4730,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Hexadecimal Fire",
 		pp: 15,
 		priority: 0,
-		flags: {heal: 1, bypasssub: 1, allyanim: 1},
+		flags: { heal: 1, bypasssub: 1, allyanim: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4940,7 +4777,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4962,13 +4799,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				for (const targetCondition of removeTarget) {
 					if (targetSide.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
-						this.add('-sideend', targetSide, this.dex.conditions.get(targetCondition).name, '[from] move: Treacherous Traversal', '[of] ' + source);
+						this.add('-sideend', targetSide, this.dex.conditions.get(targetCondition).name, '[from] move: Treacherous Traversal', `[of] ${source}`);
 						success = true;
 					}
 				}
 				for (const sideCondition of removeAll) {
 					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Treacherous Traversal', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Treacherous Traversal', `[of] ${source}`);
 						success = true;
 					}
 				}
@@ -5011,7 +4848,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(icebeam, target);
 			return null;
 		},
-		secondary: null,
 		target: "self",
 		type: "Electric",
 	},
@@ -5026,7 +4862,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Grass Gaming",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5044,7 +4880,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (source.hp) {
 				const item = target.takeItem();
 				if (item) {
-					this.add('-enditem', target, item.name, '[from] move: Grass Gaming', '[of] ' + source);
+					this.add('-enditem', target, item.name, '[from] move: Grass Gaming', `[of] ${source}`);
 				}
 			}
 		},
@@ -5056,7 +4892,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.addVolatile('leechseed', source);
 			}
 		},
-		secondary: null,
 		target: "normal",
 		type: "Grass",
 	},
@@ -5071,7 +4906,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Like..?",
 		pp: 5,
 		priority: 0,
-		flags: {reflectable: 1, protect: 1},
+		flags: { reflectable: 1, protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5089,7 +4924,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Grass",
 	},
@@ -5099,13 +4933,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
-		shortDesc: "Sets up 3 random hazards+psn foe. Switch.",
-		desc: "If this move is successful, all entry hazards are removed from the user's side of the field, the target becomes poisoned, and a three random entry hazards are set on the target's side. If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
+		shortDesc: "Sets up 2 random hazards+psn foe. Switch.",
+		desc: "If this move is successful, all entry hazards are removed from the user's side of the field, the target becomes poisoned, and two random entry hazards are set on the target's side. If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities.",
 		name: "Concept Relevant",
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: { contact: 1, protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5116,18 +4950,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterHit(target, pokemon) {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', '[of] ' + pokemon);
+				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', `[of] ${pokemon}`);
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', `[of] ${pokemon}`);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
 				pokemon.removeVolatile('partiallytrapped');
 			}
-			for (let i = 0; i < 3; i++) {
+			for (let i = 0; i < 2; i++) {
 				const usableSideConditions = sideConditions.filter(condition => {
 					if (condition === 'spikes') {
 						return !target.side.sideConditions[condition] || target.side.sideConditions[condition].layers < 3;
@@ -5144,18 +4978,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterSubDamage(damage, target, pokemon) {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', '[of] ' + pokemon);
+				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', `[of] ${pokemon}`);
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', `[of] ${pokemon}`);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
 				pokemon.removeVolatile('partiallytrapped');
 			}
-			for (let i = 0; i < 3; i++) {
+			for (let i = 0; i < 2; i++) {
 				const usableSideConditions = sideConditions.filter(condition => {
 					if (condition === 'spikes') {
 						return !target.side.sideConditions[condition] || target.side.sideConditions[condition].layers < 3;
@@ -5185,11 +5019,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 90,
 		category: "Special",
 		shortDesc: "If target has boosts, steals them, +1 prio, 0 BP.",
-		desc: "This move's base power is doubled if the target has a higher number of positive stat stage changes than the user. If this move's power is doubled, a random stat, except Accuracy and Evasion, is boosted for the user by 1 stage and lowered for the target by 1 stage.",
+		desc: "If the target of this move has positive stat stage changes, this move will usually move first, and on use the attack deals no damage and instead moves all positive stat stage changes from the target to the user.",
 		name: "Adaptive Beam",
 		pp: 15,
 		priority: 0,
-		flags: {sound: 1, protect: 1, bypasssub: 1},
+		flags: { sound: 1, protect: 1, bypasssub: 1 },
 		stealsBoosts: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -5210,7 +5044,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (target?.positiveBoosts()) return priority + 1;
 			return priority;
 		},
-		secondary: null,
 		target: "normal",
 		type: "Steel",
 	},
@@ -5227,14 +5060,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Burn Up', target);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Fire",
 	},
@@ -5244,12 +5076,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 90,
 		basePower: 65,
 		category: "Physical",
-		shortDesc: "Sets Sticky Web. 1.3x BP if faster.",
+		shortDesc: "Sets Sticky Web. 1.3x power if moves first.",
+		desc: "If this move deals damage, it sets up a hazard on the opposing side of the field. This hazard lowers the Speed of each opposing Pokemon that switches in by 1 stage, unless it is a Flying-type Pokemon or has the Levitate Ability. This move's damage is multiplied by 1.3 if the user is the first Pokemon to move during the turn.",
 		name: "Shepherd of the Mafia Room",
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5296,7 +5129,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1, dance: 1, metronome: 1},
+		flags: { snatch: 1, dance: 1, metronome: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5308,7 +5141,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			def: 1,
 			spd: 1,
 		},
-		secondary: null,
 		target: "self",
 		type: "Fire",
 	},
@@ -5326,7 +5158,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyPriority(priority, pokemon) {
 			if (!pokemon.item) return priority + 1;
 		},
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onModifyMove(move, pokemon, target) {
 			if (!pokemon.item) {
 				move.flags['contact'] = 1;
@@ -5355,7 +5187,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.removeVolatile('phantomweapon');
 			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Ghost",
 	},
@@ -5371,7 +5202,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5380,7 +5211,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Nasty Plot', source);
 			this.add('-anim', source, 'Head Smash', target);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Steel",
 	},
@@ -5399,14 +5229,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Aura Sphere', source);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Fighting",
 	},
@@ -5422,7 +5251,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5432,9 +5261,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		multihit: 10,
 		multiaccuracy: true,
-		secondary: null,
 		target: "normal",
 		type: "Poison",
+	},
+
+	// Syrinix
+	asoulforasoul: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Physical",
+		shortDesc: "KOes foe + user if ally was KOed prev. turn.",
+		desc: "If one of the user's party members fainted last turn, this move results in a guaranteed KO for both the target and the user. This move can hit Normal-type Pokemon. Fails if one of the user's party members did not faint last turn.",
+		name: "A Soul for a Soul",
+		pp: 5,
+		priority: 1,
+		flags: { protect: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Explosion', target);
+			this.add('-anim', source, 'Final Gambit', target);
+		},
+		onTry(source, target) {
+			if (!source.side.faintedLastTurn) return false;
+			source.faint(source);
+			target?.faint(source);
+		},
+		ignoreImmunity: true,
+		target: "normal",
+		type: "Ghost",
 	},
 
 	// Teclis
@@ -5451,15 +5307,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onHit(pokemon) {
-			const success = !!this.boost({atk: 1, spe: 1});
+			const success = !!this.boost({ atk: 1, spe: 1 });
 			return pokemon.addVolatile('risingsword') || success;
 		},
 		condition: {
-			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'move: Rising Sword');
+			noCopy: true,
+			onStart(target, source, effect) {
+				this.effectState.layers = 1;
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: Rising Sword');
+				}
 			},
-			onModifyCritRatio(critRatio, source) {
-				return critRatio + 1;
+			onRestart(target, source, effect) {
+				if (this.effectState.layers >= 3) return false;
+				this.effectState.layers++;
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: Rising Sword');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return critRatio + this.effectState.layers;
 			},
 		},
 		flags: {},
@@ -5467,7 +5334,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Focus Energy', target);
 			this.add('-anim', source, 'Agility', target);
 		},
-		secondary: null,
 		target: "self",
 		type: "Psychic",
 	},
@@ -5478,11 +5344,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Protects user, changes type and gains a new move.",
-		desc: "Nearly always moves first. The user protects itself from most attacks made by other Pokemon this turn and gains a random type. If the user has Dynamic Punch, Pyro Ball, Triple Axel, Stone Edge, or Aqua Tail, it will also replace that move with a new move based on the type gained. It can gain Fire type and Pyro Ball, Ice type and Triple Axel, Rock type and Stone Edge, and Water type and Aqua Tail. This move fails entirely if the user moved last this turn or if the foe switches out, and this move has an increasing chance to fail when used consectively.",
+		desc: "Nearly always moves first. The user protects itself from most attacks made by other Pokemon this turn and gains a random type. If the user has Dynamic Punch, Pyro Ball, Triple Axel, Stone Edge, or Aqua Tail, it will also replace that move with a new move based on the type gained. It can gain Fire type and Pyro Ball, Ice type and Triple Axel, Rock type and Stone Edge, and Water type and Aqua Tail. This move fails entirely if the user moved last this turn or if the foe switches out, and this move has an increasing chance to fail when used consecutively.",
 		name: "SAND EAT",
 		pp: 10,
 		priority: 4,
-		flags: {noassist: 1},
+		flags: { noassist: 1 },
 		stallingMove: true,
 		volatileStatus: 'protect',
 		onTryMove() {
@@ -5527,31 +5393,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|he do be searching for rocks tho`);
 			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
-		secondary: null,
 		target: "self",
 		type: "Ground",
-	},
-
-	// Theia
-	bodycount: {
-		accuracy: 100,
-		basePower: 50,
-		basePowerCallback(pokemon, target, move) {
-			return 50 + 50 * pokemon.side.totalFainted;
-		},
-		category: "Special",
-		shortDesc: "+50 power for each time a party member fainted.",
-		desc: "Power is equal to 50+(X*50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
-		name: "Body Count",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Core Enforcer');
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
 	},
 
 	// Tico
@@ -5564,7 +5407,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Eternal Wish",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5575,7 +5418,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
 			const removeTarget = [
 				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
 			];
@@ -5585,13 +5428,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Eternal Wish', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Eternal Wish', `[of] ${source}`);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Eternal Wish', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Eternal Wish', `[of] ${source}`);
 					success = true;
 				}
 			}
@@ -5614,7 +5457,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return success;
 			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Ghost",
 	},
@@ -5631,7 +5473,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5643,7 +5485,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.addVolatile('attract', source);
 			target.addVolatile('confusion', source);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Normal",
 	},
@@ -5659,7 +5500,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onPrepareHit() {
 			this.attrLastMove('[anim] Future Sight');
 		},
@@ -5675,11 +5516,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (stats.length) {
 					const randomStat = this.sample(stats);
-					this.boost({[randomStat]: 2}, pokemon, pokemon, move);
+					this.boost({ [randomStat]: 2 }, pokemon, pokemon, move);
 				}
 			}
 		},
-		secondary: null,
 		target: "normal",
 		type: "Psychic",
 	},
@@ -5689,22 +5529,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		shortDesc: "Salt cures target. Ignores abilities.",
+		shortDesc: "Deals an additional 12.5% HP at end of turn.",
+		desc: "If this move deals damage, at the end of the turn, the target will take an additional 12.5% of its maximum HP in non-attack damage if it is still on the field.",
 		name: "Symphonie du Ze\u0301ro",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Alluring Voice', target);
 		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'saltcure',
+		volatileStatus: 'symphonieduzero',
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Symphonie du Ze\u0301ro');
+			},
+			onResidualOrder: 13,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 8);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Symphonie du Ze\u0301ro');
+			},
 		},
-		ignoreAbility: true,
 		target: "normal",
 		type: "Fairy",
 	},
@@ -5712,15 +5562,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Two of Roses
 	dillydally: {
 		accuracy: 90,
-		basePower: 40,
+		basePower: 30,
 		category: "Physical",
-		shortDesc: "2 hits, +1 random stat/hit. Type=User 2nd type.",
-		desc: "This move hits 2 times. For each successful hit, the user boosts a random stat, except Accuracy and Evasion, by 1 stage. The typing of this move is equal to the user's secondary type; it will instead use the user's primary type if the user lacks a secondary type.",
+		shortDesc: "3 hits, 50% +1 stat/hit. Type=User 2nd type.",
+		desc: "This move hits 3 times. For each successful hit, the user boosts a random stat, except Accuracy and Evasion, by 1 stage. The typing of this move is equal to the user's secondary type; it will instead use the user's primary type if the user lacks a secondary type.",
 		name: "Dilly Dally",
 		pp: 20,
 		priority: 0,
-		multihit: 2,
-		flags: {protect: 1, contact: 1},
+		multihit: 3,
+		flags: { protect: 1, contact: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5735,7 +5585,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			move.type = type;
 		},
 		secondary: {
-			chance: 100,
+			chance: 50,
 			onHit(target, source, move) {
 				const stats: BoostID[] = [];
 				const boost: SparseBoostsTable = {};
@@ -5755,7 +5605,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "???",
 	},
 
-
 	// UT
 	myboys: {
 		accuracy: 100,
@@ -5766,7 +5615,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "My Boys",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5782,7 +5631,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'U-Turn', target);
 		},
 		selfSwitch: true,
-		secondary: null,
 		target: "normal",
 		type: "Flying",
 	},
@@ -5797,7 +5645,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Boosts the user's Attack by 1 stage if the attack is not very effective, 2 stages if the attack is neutral, and 3 stages if the attack is super effective. Fails unless it is the user's first turn on the field.",
 		pp: 15,
 		priority: 3,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5818,9 +5666,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else if (typeMod < 0) {
 				boost = 1;
 			}
-			this.boost({atk: boost}, pokemon, pokemon, move);
+			this.boost({ atk: boost }, pokemon, pokemon, move);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Steel",
 	},
@@ -5835,7 +5682,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "The target becomes badly poisoned, and all entry hazards and terrain effects are removed from both sides of the field. If the target already has a non-volatile status condition, the removal effect can still occur.",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5855,13 +5702,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Your Crippling Interest', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Your Crippling Interest', `[of] ${source}`);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Your Crippling Interest', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Your Crippling Interest', `[of] ${source}`);
 					success = true;
 				}
 			}
@@ -5869,7 +5716,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return success;
 		},
 		ignoreAbility: true,
-		secondary: null,
 		target: "normal",
 		type: "Flying",
 	},
@@ -5895,7 +5741,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (target?.terastallized) return 0;
 		},
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5908,12 +5754,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add(`c:|${getName((source.illusion || source).name)}|lol never do that ever again thanks`);
 				this.add('custom', '-endterastallize', pokemon);
 				delete pokemon.terastallized;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				const details = pokemon.getUpdatedDetails();
 				this.add('detailschange', pokemon, details);
 			}
 		},
-		secondary: null,
 		target: "normal",
 		type: "Grass",
 	},
@@ -5928,8 +5772,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Virtual Avatar",
 		pp: 10,
 		priority: 0,
-		flags: {sound: 1, failcopycat: 1},
-		secondary: null,
+		flags: { sound: 1, failcopycat: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5972,7 +5815,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		secondary: null,
 		selfSwitch: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -5987,7 +5829,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
 			},
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (!target.fainted) target.addVolatile('aquaring', target);
 			},
 			onResidualOrder: 4,
@@ -6007,12 +5849,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 160,
 		category: "Special",
 		shortDesc: "Hit off higher atk, eats berry, Dragon/Fly eff.",
-		desc: "Uses the user's higher attack stat in damage calculation. Does not need to charge in sun. If this move is successful and the user is holding a berry, the user consumed its held berry and restored 25% of the its maximum HP. This move combines Dragon in its type effectiveness.",
+		desc: "Uses the user's higher attack stat in damage calculation. Does not need to charge in sun. If this move is successful and the user is holding a berry, the user consumes its held berry and restores 25% of its maximum HP. This move combines Dragon in its type effectiveness.",
 		name: "Fruitful Longbow",
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {charge: 1, protect: 1, mirror: 1, slicing: 1, wind: 1},
+		flags: { charge: 1, protect: 1, mirror: 1, slicing: 1, wind: 1 },
 		critRatio: 2,
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Dragon', type);
@@ -6049,7 +5891,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		secondary: null,
 		target: "normal",
 		type: "Flying",
 	},
@@ -6064,9 +5905,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Torrential Drain",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1 },
 		drain: [1, 2],
-		secondary: null,
 		target: "allAdjacent",
 		type: "Water",
 		onTryMove() {
@@ -6095,9 +5935,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[anim] Endure');
 		},
-		onDisableMove(pokemon) {
-			if (pokemon.lastMove?.id === 'perfectmimic') pokemon.disableMove('perfectmimic');
-		},
 		condition: {
 			duration: 1,
 			onStart(target) {
@@ -6113,15 +5950,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
-			onSourceAfterMove(source, target) {
-				if (source === this.effectState.target || target !== this.effectState.target) return;
-				if (!source.hp || !this.effectState.move) return;
+			onSourceAfterMove(target, source) {
+				if (target === this.effectState.target || source !== this.effectState.target) return;
+				if (!target.hp || !this.effectState.move) return;
 				const move = this.dex.getActiveMove(this.effectState.move);
 				if (move.isZ || move.isMax || move.category === 'Status') return;
-				this.add('-message', target.name + ' tried to copy the move!');
-				this.add('-anim', target, "Me First", source);
+				this.add('-message', source.name + ' tried to copy the move!');
+				this.add('-anim', source, "Me First", target);
 				move.overrideOffensiveStat = 'atk';
-				this.actions.useMove(move, target, source);
+				this.actions.useMove(move, source, { target });
 				delete this.effectState.move;
 			},
 			onBasePowerPriority: 12,
@@ -6129,7 +5966,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return this.chainModify(1.5);
 			},
 		},
-		secondary: null,
 		target: "self",
 		type: "Normal",
 	},
@@ -6139,14 +5975,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		shortDesc: "Always at least neutral. Hits in Primordial Sea.",
-		desc: "If the attack is successful, the move will always hit for at least neutral damage, but it may still deal super effective damage. Primordial Sea does not fizzle this move out, instead reducing damage by 50%.",
+		desc: "Damage is increased by 75% if this move is not very effective against the target.",
+		shortDesc: "Deals 1.75x damage with resisted hits.",
 		name: "Scorching Truth",
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		hasCrashDamage: true,
+		flags: { protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -6154,10 +5989,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Focus Energy', source);
 			this.add('-anim', source, 'Fusion Flare', target);
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (typeMod < 0) return 0;
+		onBasePower(basePower, source, target, move) {
+			if (target.runEffectiveness(move) < 0) {
+				this.debug(`Scorching truth resisted buff`);
+				return this.chainModify(1.75);
+			}
 		},
-		secondary: null,
 		target: "normal",
 		type: "Fire",
 	},
@@ -6172,10 +6009,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Badly poisons the target. If the infliction of status is successful, the target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, or if the target used Ingrain previously or has the Suction Cups Ability. This move will fail entirely if the target has a non-volatile status condition.",
 		pp: 10,
 		priority: -6,
-		flags: {reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1, wind: 1},
+		flags: { reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1, wind: 1 },
 		forceSwitch: true,
 		status: 'tox',
-		secondary: null,
 		target: "normal",
 		type: "Poison",
 	},
@@ -6186,10 +6022,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 70,
 		category: "Physical",
 		shortDesc: "Gives foe Miracle Seed. Cycles Treasure Bag.",
+		desc: "If the target is holding an item that can be removed from it, it is replaced with a Miracle Seed. Cycles Treasure Bag.",
 		name: "top kek",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -6203,61 +6040,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!target.hasItem('Miracle Seed')) {
 					const item = target.takeItem();
 					if (item) {
-						this.add('-enditem', target, item.name, '[from] move: top kek', '[of] ' + source);
+						this.add('-enditem', target, item.name, '[from] move: top kek', `[of] ${source}`);
 						target.setItem('Miracle Seed', source, move);
 					}
 				}
-				if (source.m.bag) {
-					const currentItem = source.m.bag.shift();
-					switch (currentItem) {
-					case 'Blast Seed': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (target) {
-							this.damage(100, target, source, this.effect);
-						} else {
-							this.add('-message', `But there was no target!`);
-						}
-						break;
-					}
-					case 'Oran Berry': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found an ${currentItem}!`);
-						this.heal(100, source, source, this.dex.items.get('Oran Berry'));
-						break;
-					}
-					case 'Petrify Orb': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (target?.trySetStatus('par', source, this.effect)) {
-							this.add('-message', `${source.name} petrified ${target.name}`);
-						} else if (!target) {
-							this.add('-message', `But there was no target!`);
-						} else {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					}
-					case 'Luminous Orb': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (!source.side.addSideCondition('auroraveil', source, this.effect)) {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					}
-					case 'Reviver Seed': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						break;
-					}
-					}
-					source.m.bag = [...source.m.bag, currentItem];
-					source.m.cycledTreasureBag = currentItem;
-				}
 			}
 		},
-		secondary: null,
 		target: "normal",
 		type: "Dark",
 	},
@@ -6270,9 +6058,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Sets up Snow. Target's ability becomes Normalize.",
 		desc: "If this move is successful, the current weather becomes snow, boosting the Defense of Ice-types by 1.5x for 5 turns, and the target's ability is replaced with Normalize.",
 		name: "Whiteout",
-		pp: 5,
+		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, bullet: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -6281,13 +6069,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Snowscape", source);
 		},
 		onHit(target, source) {
-			this.field.setWeather('snow');
+			this.field.setWeather('snowscape');
 			if (target.setAbility('normalize')) {
 				this.add('-ability', target, 'Normalize', '[from] move: Whiteout');
 			}
 			this.add(`c:|${getName((source.illusion || source).name)}|A blank canvas.`);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Ice",
 	},
@@ -6297,7 +6084,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "User swaps, replacement: Focus Energy, +1 Spe.",
+		shortDesc: "Switch out; replacement: Focus Energy, +1 Spe.",
+		desc: "The user switches out even if it is trapped and is replaced immediately by a selected party member. The replacement's Speed is boosted by 1 stage, and its critical hit rate is boosted by 2 stages. The user does not switch out if there are no unfainted party members.",
 		name: "Tag, You're It!",
 		pp: 5,
 		priority: 0,
@@ -6310,17 +6098,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		slotCondition: 'tagyoureit',
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (target && !target.fainted) {
 					this.add('-anim', target, "Baton Pass", target);
 					target.addVolatile('focusenergy');
-					this.boost({spe: 1}, target, this.effectState.source, this.dex.getActiveMove('tagyoureit'));
+					this.boost({ spe: 1 }, target, this.effectState.source, this.dex.getActiveMove('tagyoureit'));
 					target.side.removeSlotCondition(target, 'tagyoureit');
 				}
 			},
 		},
 		selfSwitch: true,
-		secondary: null,
 		target: "self",
 		type: "Dark",
 	},
@@ -6335,12 +6122,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "High Ground",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: { protect: 1, mirror: 1 },
 		secondary: {
 			chance: 100,
 			onHit(target, source, move) {
 				if (this.dex.species.get(source.species).heightm > this.dex.species.get(target.species).heightm) {
-					this.boost({spa: 1}, source);
+					this.boost({ spa: 1 }, source);
 				}
 			},
 		},
@@ -6365,7 +6152,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Dud ur a fish",
 		pp: 5,
 		priority: 0,
-		flags: {heal: 1, snatch: 1},
+		flags: { heal: 1, snatch: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -6384,7 +6171,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			didSomething = pokemon.addVolatile('aquaring') || didSomething;
 			return didSomething;
 		},
-		secondary: null,
 		target: "self",
 		type: "Water",
 	},
@@ -6398,7 +6184,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Confuses and paralyzes the target.",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1},
+		flags: { protect: 1, reflectable: 1 },
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
 			if (this.randomChance(1, 256)) {
@@ -6416,7 +6202,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			target.trySetStatus('par', source, move);
 		},
-		secondary: null,
 		target: "normal",
 		type: "Normal",
 	},
@@ -6456,7 +6241,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreNegativeOffensive: true,
 		breaksProtect: true,
 		ignoreAccuracy: true,
-		secondary: null,
 		target: "normal",
 		type: "Normal",
 	},
@@ -6466,8 +6250,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Sets up Sunny Day and creates a Substitute.",
-		desc: "Sets sun, powering up Fire-type moves and weakening Water-type moves for 5 turns. The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. If one part of this move is already in effect, the other part will still be attempted.",
+		shortDesc: "Sunny Day, Substitute, +1 Sp. Def.",
+		desc: "Raises the user's Special Defense by 1 stage. Sets sun, powering up Fire-type moves and weakening Water-type moves for 5 turns. The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. If one part of this move is already in effect, the other part will still be attempted.",
 		name: "Solar Summon",
 		gen: 9,
 		pp: 5,
@@ -6490,7 +6274,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			return success;
 		},
-		secondary: null,
+		self: {
+			boosts: {
+				spd: 1,
+			},
+		},
 		target: "self",
 		type: "Fire",
 	},
@@ -6505,9 +6293,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Darkest Night",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		overrideOffensivePokemon: 'target',
-		secondary: null,
 		target: "normal",
 		type: "Dark",
 		onTryMove() {
@@ -6580,7 +6367,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			this.boost({spa: 1}, attacker, attacker, move);
+			this.boost({ spa: 1 }, attacker, attacker, move);
 			if (['raindance', 'primordialsea', 'stormsurge'].includes(attacker.effectiveWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
@@ -6650,6 +6437,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mistyterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -6687,7 +6475,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
@@ -6714,7 +6502,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'deserteddunes':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				factor = 0.25;
 				break;
 			}
@@ -6741,7 +6529,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'deserteddunes':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				factor = 0.25;
 				break;
 			}
@@ -6772,6 +6560,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	psychicterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -6788,7 +6577,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!target.isGrounded()) {
 					const baseMove = this.dex.moves.get(effect.id);
 					if (baseMove.priority > 0) {
-						this.hint("Psychic Terrain doesn't affect Pokémon immune to Ground.");
+						this.hint("Psychic Terrain doesn't affect airborne Pokémon.");
 					}
 					return;
 				}
@@ -6804,7 +6593,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
@@ -6826,7 +6615,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			}
 			if (source.hasAbility(['insomnia', 'vitalspirit'])) {
-				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, `[of] ${source}`);
 				return null;
 			}
 		},
@@ -6869,7 +6658,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	solarbeam: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'stormsurge', 'sandstorm', 'deserteddunes', 'hail', 'snow'];
+			const weakWeathers = ['raindance', 'primordialsea', 'stormsurge', 'sandstorm', 'deserteddunes', 'hail', 'snowscape'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -6879,7 +6668,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	solarblade: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'stormsurge', 'sandstorm', 'deserteddunes', 'hail', 'snow'];
+			const weakWeathers = ['raindance', 'primordialsea', 'stormsurge', 'sandstorm', 'deserteddunes', 'hail', 'snowscape'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -6892,10 +6681,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('eternalgenerator')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
-				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
+				this.boost({ spe: -1 }, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
 			},
 		},
 	},
@@ -6914,7 +6703,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'deserteddunes':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				factor = 0.25;
 				break;
 			}
@@ -6970,7 +6759,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.type = 'Rock';
 				break;
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				move.type = 'Ice';
 				break;
 			}
@@ -6985,11 +6774,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'sandstorm':
 			case 'deserteddunes':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				move.basePower *= 2;
 				break;
 			}
-			this.debug('BP: ' + move.basePower);
+			this.debug(`BP: ${move.basePower}`);
 		},
 	},
 	wildboltstorm: {
@@ -7124,7 +6913,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, effect) {
 			const moves = [];
 			for (const move of this.dex.moves.all()) {
-				if (move.realMove || move.id.includes('metronome')) continue;
+				if (move.placeholderFor || move.id.includes('metronome')) continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;
@@ -7141,7 +6930,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(randomMove, target);
 		},
 		multihit: [2, 5],
-		secondary: null,
 		target: "self",
 		type: "???",
 	},

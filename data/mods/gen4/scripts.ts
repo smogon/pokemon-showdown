@@ -1,9 +1,59 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
-
+	pokemon: {
+		inherit: true,
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
+				!this.battle.field.getPseudoWeather('trickroom') : this.battle.field.getPseudoWeather('trickroom');
+			if (trickRoomCheck) {
+				speed = -speed;
+			}
+			return speed;
+		},
+	},
 	actions: {
 		inherit: true,
+		runSwitch(pokemon) {
+			this.battle.runEvent('EntryHazard', pokemon);
+
+			this.battle.runEvent('SwitchIn', pokemon);
+
+			if (this.battle.gen <= 2) {
+				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
+				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+				if (this.battle.gen === 1) {
+					pokemon.side.lastSelectedMoveSlot = 0;
+					for (const poke of pokemon.foes()) {
+						if (poke.volatiles['partialtrappinglock'] && poke.moveSlots[poke.side.lastSelectedMoveSlot].id === 'metronome') {
+							// this is not done for Mirror Move, potentially resulting in a desync
+							poke.side.lastSelectedMove = 'metronome' as ID;
+							poke.side.lastEnemySelectedMove = 'metronome' as ID;
+							if (this.battle.queue.willMove(poke)) {
+								this.battle.queue.changeAction(poke, { choice: 'move', poke, moveid: 'metronome' });
+							}
+						}
+					}
+				}
+				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
+					this.battle.runEvent('AfterSwitchInSelf', pokemon);
+				}
+			}
+			if (!pokemon.hp) return false;
+			pokemon.isStarted = true;
+			if (!pokemon.fainted) {
+				this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
+			}
+			if (this.battle.gen === 4) {
+				for (const foeActive of pokemon.foes()) {
+					foeActive.removeVolatile('substitutebroken');
+				}
+			}
+			pokemon.draggedIn = null;
+			return true;
+		},
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 			// DPP divides modifiers into several mathematically important stages
 			// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
@@ -22,16 +72,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Double battle multi-hit
 			if (move.spreadHit) {
 				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
-				this.battle.debug('Spread modifier: ' + spreadModifier);
+				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			}
 
 			// Weather
-			baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
-
-			if (this.battle.gen === 3 && move.category === 'Physical' && !Math.floor(baseDamage)) {
-				baseDamage = 1;
-			}
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 			baseDamage += 2;
 
@@ -121,7 +167,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					let boost!: number;
 					if (accuracy !== true) {
 						if (!move.ignoreAccuracy) {
-							boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+							boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 							boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 							if (boost > 0) {
 								accuracy *= boostTable[boost];
@@ -130,7 +176,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 						if (!move.ignoreEvasion) {
-							boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+							boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 							boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];
@@ -156,8 +202,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-		calcRecoilDamage(damageDealt, move) {
-			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
+		applyRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
+			let recoilDamage = 0;
+			if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.floor(pokemon.baseMaxhp / 4), 1);
+			else if (move.mindBlownRecoil || move.chloroblastRecoil) recoilDamage = Math.round(pokemon.maxhp / 2);
+			else if (move.recoil) {
+				recoilDamage = this.battle.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+			} else return null;
+
+			if (move.struggleRecoil) {
+				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
+			} else {
+				const effect = move.mindBlownRecoil ? this.dex.conditions.get(move.name) : 'recoil';
+				this.battle.damage(recoilDamage, pokemon, pokemon, effect);
+			}
+			return recoilDamage;
 		},
 	},
 };

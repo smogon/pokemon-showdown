@@ -8,8 +8,8 @@
  * @license MIT
  */
 
-import {SQL, Utils, FS} from '../../lib';
-import {Config} from '../config-loader';
+import { SQL, Utils, FS } from '../../lib';
+import * as ConfigLoader from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
@@ -35,13 +35,25 @@ const PUNISHMENTS = [
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK', 'PERMABLACKLIST',
 ];
 
+const database = SQL('modlog', module, {
+	file: MODLOG_DB_PATH,
+	extension: 'server/modlog/transactions.js',
+	sqliteOptions: Config.modlogsqliteoptions,
+	onError: (error, data, isParent) => {
+		if (!isParent) return;
+		Monitor.crashlog(error, 'A modlog SQLite query', {
+			query: JSON.stringify(data),
+		});
+	},
+});
+
 export type ModlogID = RoomID | 'global' | 'all';
 interface SQLQuery {
 	query: string;
 	args: (string | number)[];
 }
 interface ModlogResults {
-	results: (ModlogEntry & {entryID: number})[];
+	results: (ModlogEntry & { entryID: number })[];
 	duration: number;
 }
 
@@ -52,11 +64,11 @@ interface ModlogSQLQuery<T> {
 }
 
 export interface ModlogSearch {
-	note: {search: string, isExact?: boolean, isExclusion?: boolean}[];
-	user: {search: string, isExact?: boolean, isExclusion?: boolean}[];
-	ip: {search: string, isExclusion?: boolean}[];
-	action: {search: string, isExclusion?: boolean}[];
-	actionTaker: {search: string, isExclusion?: boolean}[];
+	note: { search: string, isExact?: boolean, isExclusion?: boolean }[];
+	user: { search: string, isExact?: boolean, isExclusion?: boolean }[];
+	ip: { search: string, isExclusion?: boolean }[];
+	action: { search: string, isExclusion?: boolean }[];
+	actionTaker: { search: string, isExclusion?: boolean }[];
 }
 
 export interface ModlogEntry {
@@ -80,12 +92,12 @@ export interface TransactionArguments extends Record<string, unknown> {
 	altsInsertionStatement: string;
 }
 
-export type PartialModlogEntry = Partial<ModlogEntry> & {action: string};
+export type PartialModlogEntry = Partial<ModlogEntry> & { action: string };
 
 export class Modlog {
 	readonly database: SQL.DatabaseManager;
-	readyPromise: Promise<void> | null;
-	private databaseReady: boolean;
+	readyPromise: null | Promise<void>;
+	databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
 
@@ -94,50 +106,29 @@ export class Modlog {
 	renameQuery: SQL.Statement | null = null;
 	globalPunishmentsSearchQuery: SQL.Statement | null = null;
 
-	constructor(databasePath: string, options: Partial<SQL.Options>) {
+	constructor() {
 		this.queuedEntries = [];
 		this.databaseReady = false;
-		if (!options.onError) {
-			options.onError = (error, data, isParent) => {
-				if (!isParent) return;
-				Monitor.crashlog(error, 'A modlog SQLite query', {
-					query: JSON.stringify(data),
-				});
-			};
-		}
-		this.database = SQL(module, {
-			file: databasePath,
-			extension: 'server/modlog/transactions.js',
-			...options,
-		});
+		this.database = database;
+		this.readyPromise = null;
+	}
 
-		if (Config.usesqlite) {
-			if (this.database.isParentProcess) {
-				this.database.spawn(Config.modlogprocesses || 1);
-			} else {
-				global.Monitor = {
-					crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
-						const repr = JSON.stringify([error.name, error.message, source, details]);
-						process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-					},
-				};
-				process.on('uncaughtException', err => {
-					Monitor.crashlog(err, 'A modlog database process');
-				});
-				process.on('unhandledRejection', err => {
-					Monitor.crashlog(err as Error, 'A modlog database process');
-				});
-			}
-		}
-
+	setup() {
+		this.databaseReady = false;
 		this.readyPromise = this.setupDatabase().then(result => {
-			this.databaseReady = result;
+			this.databaseReady = true;
+			this.readyPromise = null;
+		}, () => {
 			this.readyPromise = null;
 		});
 	}
 
+	restart() {
+		restart();
+	}
+
 	async setupDatabase() {
-		if (!Config.usesqlite) return false;
+		if (!Config.usesqlite || !Config.usesqlitemodlog) throw new Error(`SQLite is disabled.`);
 		await this.database.exec("PRAGMA foreign_keys = ON;");
 		await this.database.exec(`PRAGMA case_sensitive_like = true;`);
 
@@ -147,7 +138,7 @@ export class Modlog {
 			await this.database.runFile(MODLOG_SCHEMA_PATH);
 		}
 
-		const {hasDBInfo} = await this.database.get(
+		const { hasDBInfo } = await this.database.get(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
 		);
 
@@ -186,13 +177,8 @@ export class Modlog {
 	 * Methods for writing to the modlog. *
 	 **************************************/
 
-	/**
-	 * @deprecated Modlogs use SQLite and no longer need initialization.
-	 */
-	initialize(roomid: ModlogID) {
-		return;
-	}
-
+	/** @deprecated Modlogs use SQLite and no longer need initialization. */
+	initialize(roomid: ModlogID) {}
 
 	/**
 	 * Writes to the modlog
@@ -218,7 +204,7 @@ export class Modlog {
 	}
 
 	async writeSQL(entries: Iterable<ModlogEntry>) {
-		if (!Config.usesqlite) return;
+		if (!Config.usesqlite || !Config.usesqlitemodlog) return;
 		if (!this.databaseReady) {
 			this.queuedEntries.push(...entries);
 			return;
@@ -249,7 +235,7 @@ export class Modlog {
 	}
 
 	async rename(oldID: ModlogID, newID: ModlogID) {
-		if (!Config.usesqlite) return;
+		if (!Config.usesqlite || !Config.usesqlitemodlog) return;
 		if (oldID === newID) return;
 
 		// rename SQL modlogs
@@ -291,7 +277,7 @@ export class Modlog {
 	 */
 	async search(
 		roomid: ModlogID = 'global',
-		search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []},
+		search: ModlogSearch = { note: [], user: [], ip: [], action: [], actionTaker: [] },
 		maxLines = 20,
 		onlyPunishments = false,
 	): Promise<ModlogResults | null> {
@@ -319,10 +305,10 @@ export class Modlog {
 		if (duration > LONG_QUERY_DURATION) {
 			Monitor.slow(`[slow SQL modlog search] ${duration}ms - ${JSON.stringify(query)}`);
 		}
-		return {results, duration};
+		return { results, duration };
 	}
 
-	dbRowToModlogEntry(row: any): ModlogEntry & {entryID: number} {
+	dbRowToModlogEntry(row: any): ModlogEntry & { entryID: number } {
 		return {
 			entryID: row.modlog_id,
 			action: row.action,
@@ -396,7 +382,7 @@ export class Modlog {
 		const select = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
 		const ors = [];
 		const ands = [];
-		const sortAndLimit = {query: `ORDER BY timestamp DESC`, args: []} as SQLQuery;
+		const sortAndLimit = { query: `ORDER BY timestamp DESC`, args: [] } as SQLQuery;
 		if (maxLines) {
 			sortAndLimit.query += ` LIMIT ?`;
 			sortAndLimit.args.push(maxLines);
@@ -416,36 +402,36 @@ export class Modlog {
 					args.pop();
 				}
 			}
-			ands.push({query: roomChecker, args});
+			ands.push({ query: roomChecker, args });
 		}
 
 		for (const action of search.action) {
 			const args = [action.search + '%'];
 			if (action.isExclusion) {
-				ands.push({query: `action NOT LIKE ?`, args});
+				ands.push({ query: `action NOT LIKE ?`, args });
 			} else {
-				ands.push({query: `action LIKE ?`, args});
+				ands.push({ query: `action LIKE ?`, args });
 			}
 		}
 		if (onlyPunishments) {
 			const args: (string | number)[] = [];
-			ands.push({query: `action IN (${Utils.formatSQLArray(PUNISHMENTS, args)})`, args});
+			ands.push({ query: `action IN (${Utils.formatSQLArray(PUNISHMENTS, args)})`, args });
 		}
 
 		for (const ip of search.ip) {
 			const args = [ip.search + '%'];
 			if (ip.isExclusion) {
-				ands.push({query: `ip NOT LIKE ?`, args});
+				ands.push({ query: `ip NOT LIKE ?`, args });
 			} else {
-				ands.push({query: `ip LIKE ?`, args});
+				ands.push({ query: `ip LIKE ?`, args });
 			}
 		}
 		for (const actionTaker of search.actionTaker) {
 			const args = [actionTaker.search + '%'];
 			if (actionTaker.isExclusion) {
-				ands.push({query: `action_taker_userid NOT LIKE ?`, args});
+				ands.push({ query: `action_taker_userid NOT LIKE ?`, args });
 			} else {
-				ands.push({query: `action_taker_userid LIKE ?`, args});
+				ands.push({ query: `action_taker_userid LIKE ?`, args });
 			}
 		}
 
@@ -453,9 +439,9 @@ export class Modlog {
 			const tester = noteSearch.isExact ? `= ?` : `LIKE ?`;
 			const args = [noteSearch.isExact ? noteSearch.search : `%${noteSearch.search}%`];
 			if (noteSearch.isExclusion) {
-				ands.push({query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args});
+				ands.push({ query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args });
 			} else {
-				ands.push({query: `note ${tester}`, args});
+				ands.push({ query: `note ${tester}`, args });
 			}
 		}
 
@@ -470,7 +456,7 @@ export class Modlog {
 				param = user.search.toLowerCase() + '%';
 			}
 
-			ors.push({query: `(userid ${tester} OR autoconfirmed_userid ${tester})`, args: [param, param]});
+			ors.push({ query: `(userid ${tester} OR autoconfirmed_userid ${tester})`, args: [param, param] });
 			ors.push({
 				query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid ${tester})`,
 				args: [param],
@@ -480,4 +466,39 @@ export class Modlog {
 	}
 }
 
-export const mainModlog = new Modlog(MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions});
+export const mainModlog = new Modlog();
+
+if (!database.isParentProcess) {
+	ConfigLoader.ensureLoaded();
+	global.Monitor = {
+		crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		Monitor.crashlog(err, 'A modlog database process');
+	});
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as Error, 'A modlog database process');
+	});
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	if (!Config.usesqlite || !Config.usesqlitemodlog) {
+		return;
+	}
+	database.spawn(processCount['modlog'] ?? 1);
+	mainModlog.setup();
+}
+
+export function restart() {
+	void database.respawn();
+	mainModlog.setup();
+}
+
+export function destroy() {
+	// No need to destroy the PM under normal circumstances, since
+	// hotpatching uses PM.respawn()
+	void database.destroy();
+}

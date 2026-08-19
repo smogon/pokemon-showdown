@@ -3,7 +3,7 @@
  * By Mia.
  * @author mia-pi-git
  */
-import {Net, FS, Utils} from '../../lib';
+import { Net, FS, Utils } from '../../lib';
 
 export interface Nomination {
 	by: ID;
@@ -61,7 +61,7 @@ export const Smogon = new class {
 				// special case to be loud
 				throw new Error("WHO DELETED THE PERMA THREAD");
 			}
-			return {error: e.message};
+			return { error: e.message };
 		}
 	}
 };
@@ -76,7 +76,7 @@ export const Nominations = new class {
 		try {
 			let data = JSON.parse(FS('config/chat-plugins/permas.json').readSync());
 			if (Array.isArray(data)) {
-				data = {noms: data, icons: {}};
+				data = { noms: data, icons: {} };
 				FS('config/chat-plugins/permas.json').writeSync(JSON.stringify(data));
 			}
 			this.noms = data.noms;
@@ -85,7 +85,7 @@ export const Nominations = new class {
 	}
 	fetchModlog(id: string) {
 		return Rooms.Modlog.search('global', {
-			user: [{search: id, isExact: true}],
+			user: [{ search: id, isExact: true }],
 			note: [],
 			ip: [],
 			action: [],
@@ -93,7 +93,7 @@ export const Nominations = new class {
 		}, undefined, true);
 	}
 	save() {
-		FS('config/chat-plugins/permas.json').writeUpdate(() => JSON.stringify({noms: this.noms, icons: this.icons}));
+		FS('config/chat-plugins/permas.json').writeUpdate(() => JSON.stringify({ noms: this.noms, icons: this.icons }));
 	}
 	notifyStaff() {
 		const usRoom = Rooms.get('upperstaff');
@@ -126,10 +126,10 @@ export const Nominations = new class {
 			}
 		}
 		const ipTable = new Set<string>(ips);
-		const altTable = new Set<string>([...alts]);
+		const altTable = new Set<string>(alts);
 		for (const alt of [primaryID, ...alts]) {
 			const modlog = await this.fetchModlog(alt);
-			if (!modlog || !modlog.results.length) continue;
+			if (!modlog?.results.length) continue;
 			for (const entry of modlog.results) {
 				if (entry.ip) ipTable.add(entry.ip);
 				if (entry.autoconfirmedID) altTable.add(entry.autoconfirmedID);
@@ -151,7 +151,7 @@ export const Nominations = new class {
 		Utils.sortBy(this.noms, nom => -nom.date);
 		this.save();
 		this.notifyStaff();
-		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`);
+		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`).update();
 	}
 	find(id: string) {
 		return this.noms.find(f => f.primaryID === id);
@@ -178,7 +178,7 @@ export const Nominations = new class {
 			title = `<a href="/view-permalocks-view-${nom.primaryID}" target="_replace">${nom.primaryID}</a>`;
 		}
 		buf += `<strong>${title}</strong> (submitted by ${nom.by})<br />`;
-		buf += `Submitted ${Chat.toTimestamp(new Date(nom.date), {human: true})}<br />`;
+		buf += `Submitted ${Chat.toTimestamp(new Date(nom.date), { human: true })}<br />`;
 		buf += `${Chat.count(nom.alts, 'alts')}, ${Chat.count(nom.ips, 'IPs')}`;
 		buf += `</div>`;
 		return buf;
@@ -189,7 +189,7 @@ export const Nominations = new class {
 		return results.map(result => {
 			const date = new Date(result.time || Date.now());
 			const entryRoom = result.visualRoomID || result.roomID || 'global';
-			let [dateString, timestamp] = Chat.toTimestamp(date, {human: true}).split(' ');
+			let [dateString, timestamp] = Chat.toTimestamp(date, { human: true }).split(' ');
 			let line = `<small>[${timestamp}] (${entryRoom})</small> ${result.action}`;
 			if (result.userid) {
 				line += `: [${result.userid}]`;
@@ -270,10 +270,10 @@ export const Nominations = new class {
 		});
 		if (matches?.results?.length) {
 			buf += `<details class="readmore"><summary><strong>Registration IP matches</strong></summary>`;
-			for (const [i, {userid, banstate}] of matches.results.entries()) {
+			for (const [i, { userid, banstate }] of matches.results.entries()) {
 				buf += `- ${userid}: `;
 				buf += `<form data-submitsend="/perma standing ${userid},{standing}">`;
-				buf += this.standingDropdown("standing", banstate + "");
+				buf += this.standingDropdown("standing", `${banstate}`);
 				buf += ` <button class="button notifying" type="submit">Change standing</button></form>`;
 				if (matches.results[i + 1]) buf += `<br />`;
 			}
@@ -513,7 +513,7 @@ export const commands: Chat.ChatCommands = {
 			if (!targetId) targetId = user.id;
 			const mon = Dex.species.get(monName);
 			if (!mon.exists) {
-				return this.errorReply(`Species ${monName} does not exist.`);
+				throw new Chat.ErrorMessage(`Species ${monName} does not exist.`);
 			}
 			Nominations.icons[targetId] = mon.name.toLowerCase();
 			Nominations.save();
@@ -526,16 +526,16 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('rangeban');
 			const targetID = toID(target);
 			if (!Nominations.icons[targetID]) {
-				return this.errorReply(`${targetID} does not have an icon set.`);
+				throw new Chat.ErrorMessage(`${targetID} does not have an icon set.`);
 			}
 			delete Nominations.icons[targetID];
 			Nominations.save();
 			this.sendReply(`Removed ${targetID}'s permalock post icon.`);
 		},
 		help: [
-			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ &',
-			'/perma list - View open nominations. Requires: &',
-			'/perma viewnom [userid] - View a nomination for the given [userid]. Requires: &',
+			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ ~',
+			'/perma list - View open nominations. Requires: % @ ~',
+			'/perma viewnom [userid] - View a nomination for the given [userid]. Requires: ~',
 		],
 	},
 };
@@ -550,9 +550,9 @@ export const pages: Chat.PageTable = {
 		view(query, user) {
 			this.checkCan('rangeban');
 			const id = toID(query.shift());
-			if (!id) return this.errorReply(`Invalid userid.`);
+			if (!id) throw new Chat.ErrorMessage(`Invalid userid.`);
 			const nom = Nominations.find(id);
-			if (!nom) return this.errorReply(`No nomination found for '${id}'.`);
+			if (!nom) throw new Chat.ErrorMessage(`No nomination found for '${id}'.`);
 			this.title = `[Perma Nom] ${nom.primaryID}`;
 			return Nominations.displayActionPage(nom);
 		},
@@ -564,6 +564,6 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register('/perma(noms?)? ');
-});
+}

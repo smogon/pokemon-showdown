@@ -2,11 +2,12 @@
  * Async worker thread wrapper around SQLite, written to improve concurrent performance.
  * @author mia-pi-git
  */
-import {QueryProcessManager} from './process-manager';
+import { QueryProcessManager } from './process-manager';
 import type * as sqlite from 'better-sqlite3';
-import {FS} from './fs';
+import { FS } from './fs';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case not installed
-import type {SQLStatement} from 'sql-template-strings';
+import type { SQLStatement } from 'sql-template-strings';
 
 export const DB_NOT_FOUND = null;
 
@@ -27,7 +28,7 @@ export interface SQLOptions {
 
 type DataType = unknown[] | Record<string, unknown>;
 export type SQLInput = string | number | null;
-export interface ResultRow {[k: string]: SQLInput}
+export interface ResultRow { [k: string]: SQLInput }
 
 export interface TransactionEnvironment {
 	db: sqlite.Database;
@@ -61,6 +62,8 @@ type ErrorHandler = (error: Error, data: DatabaseQuery, isParentProcess: boolean
 
 function getModule() {
 	try {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore does not exist while building NPM package???
 		return require('better-sqlite3') as typeof sqlite.default;
 	} catch {
 		return null;
@@ -99,8 +102,8 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		statements: Map<string, sqlite.Statement>,
 	};
 	private dbReady = false;
-	constructor(module: NodeJS.Module, options: SQLOptions) {
-		super(module, query => {
+	constructor(id: string, module: NodeJS.Module, options: SQLOptions) {
+		super(id, module, query => {
 			if (!this.dbReady) {
 				this.setupDatabase();
 			}
@@ -124,7 +127,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 					return transaction(query.data, env) || null;
 				}
 				case 'exec': {
-					if (!this.database) return {changes: 0};
+					if (!this.database) return { changes: 0 };
 					this.database.exec(query.data);
 					return true;
 				}
@@ -166,6 +169,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		if (!this.isParentProcess) this.setupDatabase();
 	}
 	private onError(err: Error, query: DatabaseQuery) {
+		err.message += ` [process ${process.pid}]`;
 		if (this.options.onError) {
 			const result = this.options.onError(err, query, false);
 			if (result) return result;
@@ -191,7 +195,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		this.database!.function(key, cb);
 	}
 	private extractStatement(
-		query: DatabaseQuery & {statement: string, noPrepare?: boolean}
+		query: DatabaseQuery & { statement: string, noPrepare?: boolean }
 	) {
 		query.statement = query.statement.trim();
 		const statement = query.noPrepare ?
@@ -203,7 +207,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	setupDatabase() {
 		if (this.dbReady) return;
 		this.dbReady = true;
-		const {file, extension} = this.options;
+		const { file, extension } = this.options;
 		const Database = getModule();
 		this.database = Database ? new Database(file) : null;
 		if (extension) this.loadExtensionFile(extension);
@@ -242,7 +246,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			}
 		}
 	}
-	async query(input: DatabaseQuery) {
+	override async query(input: DatabaseQuery) {
 		const result = await super.query(input);
 		if (result?.queryError) {
 			const err = new Error(result.queryError.message);
@@ -259,38 +263,38 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		statement: string | Statement, data: DataType = [], noPrepare?: boolean
 	): Promise<T[]> {
 		if (typeof statement !== 'string') statement = statement.toString();
-		return this.query({type: 'all', statement, data, noPrepare});
+		return this.query({ type: 'all', statement, data, noPrepare });
 	}
 	get<T = any>(
 		statement: string | Statement, data: DataType = [], noPrepare?: boolean
 	): Promise<T> {
 		if (typeof statement !== 'string') statement = statement.toString();
-		return this.query({type: 'get', statement, data, noPrepare});
+		return this.query({ type: 'get', statement, data, noPrepare });
 	}
 	run(
 		statement: string | Statement, data: DataType = [], noPrepare?: boolean
 	): Promise<sqlite.RunResult> {
 		if (typeof statement !== 'string') statement = statement.toString();
-		return this.query({type: 'run', statement, data, noPrepare});
+		return this.query({ type: 'run', statement, data, noPrepare });
 	}
 	transaction<T = any>(name: string, data: DataType = []): Promise<T> {
-		return this.query({type: 'transaction', name, data});
+		return this.query({ type: 'transaction', name, data });
 	}
 	async prepare(statement: string): Promise<Statement | null> {
-		const source = await this.query({type: 'prepare', data: statement});
+		const source = await this.query({ type: 'prepare', data: statement });
 		if (!source) return null;
 		return new Statement(source, this);
 	}
-	exec(data: string): Promise<{changes: number}> {
-		return this.query({type: 'exec', data});
+	exec(data: string): Promise<{ changes: number }> {
+		return this.query({ type: 'exec', data });
 	}
 	loadExtension(filepath: string) {
-		return this.query({type: 'load-extension', data: filepath});
+		return this.query({ type: 'load-extension', data: filepath });
 	}
 
 	async runFile(file: string) {
 		const contents = await FS(file).read();
-		return this.query({type: 'exec', data: contents});
+		return this.query({ type: 'exec', data: contents });
 	}
 }
 
@@ -420,7 +424,7 @@ export class DatabaseTable<T> {
 
 	// catch-alls for "we can't fit this query into any of the wrapper functions"
 	run(sql: SQLStatement) {
-		return this.database.run(sql.sql, sql.values) as Promise<{changes: number}>;
+		return this.database.run(sql.sql, sql.values) as Promise<{ changes: number }>;
 	}
 	all<R = T>(sql: SQLStatement) {
 		return this.database.all<R>(sql.sql, sql.values);
@@ -428,14 +432,11 @@ export class DatabaseTable<T> {
 }
 
 function getSQL(
-	module: NodeJS.Module, input: SQLOptions & {processes?: number}
+	id: string, module: NodeJS.Module, input: SQLOptions
 ) {
-	const {processes} = input;
-	const PM = new SQLDatabaseManager(module, input);
-	if (PM.isParentProcess) {
-		if (processes) PM.spawn(processes);
-	}
-	return PM;
+	if (typeof input === 'undefined') throw new Error(`SQLDatabaseManager factory requires 3 arguments.`);
+	if ('processes' in input) throw new Error(`Passing process count to SQLDatabaseManager factory no longer supported.`);
+	return new SQLDatabaseManager(id, module, input);
 }
 
 export const SQL = Object.assign(getSQL, {
@@ -453,7 +454,7 @@ export const SQL = Object.assign(getSQL, {
 	})() as typeof import('sql-template-strings').SQL,
 });
 
-export namespace SQL {
+export declare namespace SQL {
 	export type DatabaseManager = import('./sql').SQLDatabaseManager;
 	export type Statement = import('./sql').Statement;
 	export type Options = import('./sql').SQLOptions;

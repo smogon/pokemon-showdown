@@ -1,5 +1,5 @@
 // Gen 2 Stadium fixes Dragon Fang and Dragon Scale having the wrong effects.
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	dragonfang: {
 		inherit: true,
 		onModifyDamage(damage, source, target, move) {
@@ -10,6 +10,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	dragonscale: {
 		inherit: true,
-		onModifyDamage() {},
+		onModifyDamage: undefined, // no inherit
 	},
 };

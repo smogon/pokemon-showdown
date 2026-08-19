@@ -1,4 +1,4 @@
-export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 	bulbasaur: {
 		tier: "LC",
 	},
@@ -408,7 +408,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	gengar: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DOU",
 	},
 	gengarmega: {
@@ -549,7 +549,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	starmie: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "(DUU)",
 	},
 	mimejr: {
@@ -603,7 +603,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	pinsirmega: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "(DUU)",
 	},
 	tauros: {
@@ -1074,7 +1074,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	tyranitarmega: {
-		tier: "(OU)",
+		tier: "OU",
 		doublesTier: "(DOU)",
 	},
 	lugia: {
@@ -1208,7 +1208,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	gardevoirmega: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DOU",
 	},
 	gallade: {
@@ -1230,7 +1230,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	breloom: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DOU",
 	},
 	slakoth: {
@@ -1335,7 +1335,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	manectricmega: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "(DUU)",
 	},
 	plusle: {
@@ -1585,7 +1585,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	huntail: {
-		tier: "ZU",
+		tier: "ZUBL",
 		doublesTier: "(DUU)",
 	},
 	gorebyss: {
@@ -1646,7 +1646,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	latiasmega: {
-		tier: "(OU)",
+		tier: "OU",
 		doublesTier: "(DUU)",
 	},
 	latios: {
@@ -1678,7 +1678,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	jirachi: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DUber",
 	},
 	deoxys: {
@@ -1979,7 +1979,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "(DUU)",
 	},
 	azelf: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "(DUU)",
 	},
 	dialga: {

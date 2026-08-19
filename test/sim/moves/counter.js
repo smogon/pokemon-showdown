@@ -5,24 +5,28 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Counter', function () {
-	afterEach(function () {
+describe('Counter', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should deal damage equal to twice the damage taken from the last Physical attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'sturdy', moves: ['seismictoss']}]});
-		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['counter']}]});
+	it('should deal damage equal to twice the damage taken from the last Physical attack', () => {
+		battle = common.createBattle([[
+			{ species: 'Sawk', ability: 'sturdy', moves: ['seismictoss'] },
+		], [
+			{ species: 'Throh', ability: 'guts', moves: ['counter'] },
+		]]);
 		assert.hurtsBy(battle.p1.active[0], 200, () => battle.makeChoices());
 	});
 
-	it('should deal damage based on the last hit from the last Physical attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'sturdy', moves: ['doublekick']}]});
-		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['counter']}]});
+	it('should deal damage based on the last hit from the last Physical attack', () => {
+		battle = common.createBattle([[
+			{ species: 'Sawk', ability: 'sturdy', moves: ['doublekick'] },
+		], [
+			{ species: 'Throh', ability: 'guts', moves: ['counter'] },
+		]]);
 		let lastDamage = 0;
-		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
+		battle.onEvent('Damage', battle.format, (damage, attacker, defender, move) => {
 			if (move.id === 'doublekick') {
 				lastDamage = damage;
 			}
@@ -32,53 +36,51 @@ describe('Counter', function () {
 		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
-	it('should fail if user is not damaged by Physical attacks this turn', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Sawk', ability: 'sturdy', moves: ['aurasphere']}]});
-		battle.setPlayer('p2', {team: [{species: 'Throh', ability: 'guts', moves: ['counter']}]});
+	it('should fail if user is not damaged by Physical attacks this turn', () => {
+		battle = common.createBattle([[
+			{ species: 'Sawk', ability: 'sturdy', moves: ['aurasphere'] },
+		], [
+			{ species: 'Throh', ability: 'guts', moves: ['counter'] },
+		]]);
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', function () {
-		battle = common.gen(5).createBattle({gameType: 'triples'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
-			{species: 'Toucannon', ability: 'keeneye', moves: ['beakblast']},
-			{species: 'Kingdra', ability: 'sniper', moves: ['dragonpulse']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Crobat', ability: 'innerfocus', moves: ['acrobatics']},
-			{species: 'Avalugg', ability: 'sturdy', moves: ['avalanche']},
-			{species: 'Castform', ability: 'forecast', moves: ['weatherball']},
-		]});
+	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', () => {
+		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
+			{ species: 'Bastiodon', ability: 'sturdy', moves: ['counter'] },
+			{ species: 'Toucannon', ability: 'keeneye', moves: ['beakblast'] },
+			{ species: 'Kingdra', ability: 'sniper', moves: ['dragonpulse'] },
+		], [
+			{ species: 'Crobat', ability: 'innerfocus', moves: ['acrobatics'] },
+			{ species: 'Avalugg', ability: 'sturdy', moves: ['avalanche'] },
+			{ species: 'Castform', ability: 'forecast', moves: ['weatherball'] },
+		]]);
 		battle.makeChoices('move counter, move beakblast -1, move dragonpulse -1', 'move acrobatics 1, move avalanche 1, move weatherball 1');
 		assert.fullHP(battle.p1.active[1]);
 		assert.fullHP(battle.p2.active[0]);
 		assert.false.fullHP(battle.p2.active[1]);
 	});
 
-	it('should respect Follow Me', function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
-			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Crobat', ability: 'innerfocus', moves: ['acrobatics']},
-			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
-		]});
+	it('should respect Follow Me', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Bastiodon', ability: 'sturdy', moves: ['counter'] },
+			{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
+		], [
+			{ species: 'Crobat', ability: 'innerfocus', moves: ['acrobatics'] },
+			{ species: 'Clefable', ability: 'unaware', moves: ['followme'] },
+		]]);
 		battle.makeChoices('move counter, move splash', 'move acrobatics 1, move followme');
 		assert.false.fullHP(battle.p2.active[1]);
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not have its target changed by Stalwart`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Duraludon", ability: 'stalwart', moves: ['counter']},
-			{species: "Diglett", moves: ['sleeptalk']},
+	it(`should not have its target changed by Stalwart`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Duraludon", ability: 'stalwart', moves: ['counter'] },
+			{ species: "Diglett", moves: ['sleeptalk'] },
 		], [
-			{species: "Wynaut", moves: ['sleeptalk']},
-			{species: "Noivern", moves: ['dragonclaw']},
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Noivern", moves: ['dragonclaw'] },
 		]]);
 
 		const wynaut = battle.p2.active[0];
@@ -87,26 +89,28 @@ describe('Counter', function () {
 	});
 });
 
-describe('Mirror Coat', function () {
-	afterEach(function () {
+describe('Mirror Coat', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should deal damage equal to twice the damage taken from the last Special attack`, function () {
+	it(`should deal damage equal to twice the damage taken from the last Special attack`, () => {
 		battle = common.createBattle([[
-			{species: 'Espeon', ability: 'noguard', moves: ['sonicboom']},
+			{ species: 'Espeon', ability: 'noguard', moves: ['sonicboom'] },
 		], [
-			{species: 'Umbreon', moves: ['mirrorcoat']},
+			{ species: 'Umbreon', moves: ['mirrorcoat'] },
 		]]);
 		assert.hurtsBy(battle.p1.active[0], 40, () => battle.makeChoices());
 	});
 
-	it('should deal damage based on the last hit from the last Special attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['watershuriken']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
+	it('should deal damage based on the last hit from the last Special attack', () => {
+		battle = common.createBattle([[
+			{ species: 'Espeon', ability: 'synchronize', moves: ['watershuriken'] },
+		], [
+			{ species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat'] },
+		]]);
 		let lastDamage = 0;
-		battle.onEvent('Damage', battle.format, function (damage, attacker, defender, move) {
+		battle.onEvent('Damage', battle.format, (damage, attacker, defender, move) => {
 			if (move.id === 'watershuriken') {
 				lastDamage = damage;
 			}
@@ -116,51 +120,49 @@ describe('Mirror Coat', function () {
 		assert.equal(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
-	it('should fail if user is not damaged by Special attacks this turn', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['tackle']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
+	it('should fail if user is not damaged by Special attacks this turn', () => {
+		battle = common.createBattle([[
+			{ species: 'Espeon', ability: 'synchronize', moves: ['tackle'] },
+		], [
+			{ species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat'] },
+		]]);
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should target the opposing Pokemon that hit the user with a Special attack most recently that turn', function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
-			{species: 'Lucario', ability: 'justified', item: 'laggingtail', moves: ['aurasphere']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
-			{species: 'Avalugg', ability: 'sturdy', moves: ['flashcannon']},
-		]});
+	it('should target the opposing Pokemon that hit the user with a Special attack most recently that turn', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat'] },
+			{ species: 'Lucario', ability: 'justified', item: 'laggingtail', moves: ['aurasphere'] },
+		], [
+			{ species: 'Crobat', ability: 'innerfocus', moves: ['venoshock'] },
+			{ species: 'Avalugg', ability: 'sturdy', moves: ['flashcannon'] },
+		]]);
 		battle.makeChoices('move mirrorcoat, move aurasphere -1', 'move venoshock 1, move flashcannon 1');
 		assert.fullHP(battle.p1.active[1]);
 		assert.fullHP(battle.p2.active[0]);
 		assert.false.fullHP(battle.p2.active[1]);
 	});
 
-	it('should respect Follow Me', function () {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
-			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
-			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
-		]});
+	it('should respect Follow Me', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat'] },
+			{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
+		], [
+			{ species: 'Crobat', ability: 'innerfocus', moves: ['venoshock'] },
+			{ species: 'Clefable', ability: 'unaware', moves: ['followme'] },
+		]]);
 		battle.makeChoices('move mirrorcoat, move splash', 'move venoshock 1, move followme');
 		assert.false.fullHP(battle.p2.active[1]);
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not have its target changed by Stalwart`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat']},
-			{species: "Diglett", moves: ['sleeptalk']},
+	it(`should not have its target changed by Stalwart`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat'] },
+			{ species: "Diglett", moves: ['sleeptalk'] },
 		], [
-			{species: "Wynaut", moves: ['sleeptalk']},
-			{species: "Noivern", moves: ['dragonpulse']},
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Noivern", moves: ['dragonpulse'] },
 		]]);
 
 		const wynaut = battle.p2.active[0];
@@ -169,81 +171,80 @@ describe('Mirror Coat', function () {
 	});
 });
 
-describe('Counter', function () {
-	afterEach(function () {
+describe('Counter', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`[Gen 1] Counter Desync Clause`, function () {
-		// seed chosen so Water Gun succeeds and Pound full paras
-		battle = common.gen(1).createBattle({seed: [1, 2, 3, 3]}, [[
-			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
-		], [
-			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
-		]]);
-		battle.makeChoices('move watergun', 'move thunderwave');
-		battle.makeChoices('move pound', 'move counter');
-		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
-
-		// seed chosen so Pound succeeds and Water Gun full paras
-		battle = common.gen(1).createBattle({seed: [1, 2, 3, 3]}, [[
-			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
-		], [
-			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
-		]]);
-		battle.makeChoices('move pound', 'move thunderwave');
-		battle.makeChoices('move watergun', 'move counter');
-		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
-
+	it(`[Gen 1] Counter Desync Clause`, () => {
+		// target switched in, is sleeping and has Counter in its first slot
 		battle = common.gen(1).createBattle([[
-			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'splash']},
+			{ species: 'Mew', moves: ['spore', 'pound', 'counter'] },
 		], [
-			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'splash']},
+			{ species: 'Snorlax', moves: ['counter', 'pound'] },
+			{ species: 'Chansey', moves: ['splash'] },
 		]]);
-		battle.makeChoices('move watergun', 'move splash');
-		battle.makeChoices('move pound', 'move counter');
-		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
-		assert.false.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move pound', 'move pound');
+		battle.makeChoices('move spore', 'move pound');
+		battle.makeChoices('move pound', 'switch 2');
+		assert(battle.lastDamage > 0);
+		battle.lastDamage = 1; // avoid KO's
+		battle.makeChoices('move counter', 'switch 2');
+		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move fight'));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert(battle.log.some(line => line.includes("In Gen 1, if Counter is used against a target that switched in and spent the turn sleeping, from the Counter user's perspective, it will fail if the move in the target's first slot is also Counter.")));
 
-		battle = common.gen(1).createBattle([[
-			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'splash']},
+		// seed chosen so the second move full paras
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
+			{ species: 'Mew', moves: ['thunderwave', 'counter'] },
 		], [
-			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'splash']},
+			{ species: 'Persian', moves: ['pound', 'watergun'] },
 		]]);
-		battle.makeChoices('move pound', 'move splash');
-		battle.makeChoices('move watergun', 'move counter');
-		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
-		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move thunderwave', 'move pound');
+		assert.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move watergun'));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the target's team to determine if it will succeed.")));
+
+		// seed chosen so the second move full paras
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
+			{ species: 'Mew', moves: ['thunderwave', 'counter'] },
+		], [
+			{ species: 'Persian', moves: ['pound', 'watergun'] },
+		]]);
+		battle.makeChoices('move thunderwave', 'move watergun');
+		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move pound'));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the target's team to determine if it will succeed.")));
 	});
 
-	it(`[Gen 1] should counter attacks made against substitutes`, function () {
+	it(`[Gen 1] should counter attacks made against substitutes`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Chansey', moves: ['substitute', 'counter']},
+			{ species: 'Chansey', moves: ['substitute', 'counter'] },
 		], [
-			{species: 'Snorlax', moves: ['bodyslam']},
-			{species: 'Chansey', moves: ['softboiled']},
+			{ species: 'Snorlax', moves: ['bodyslam'] },
+			{ species: 'Chansey', moves: ['softboiled'] },
 		]]);
 		battle.makeChoices('move substitute', 'move bodyslam');
 		battle.makeChoices('move counter', 'switch 2');
 		assert.fainted(battle.p2.active[0]);
 
 		battle = common.gen(1).createBattle([[
-			{species: 'Chansey', moves: ['substitute', 'counter']},
+			{ species: 'Chansey', moves: ['substitute', 'counter'] },
 		], [
-			{species: 'Snorlax', moves: ['bodyslam', 'splash']},
+			{ species: 'Snorlax', moves: ['bodyslam', 'splash'] },
 		]]);
 		battle.makeChoices('move substitute', 'move splash');
 		battle.makeChoices('move counter', 'move bodyslam');
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`[Gen 1] simultaneous counters should both fail`, function () {
+	it(`[Gen 1] simultaneous counters should both fail`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Golem', moves: ['bodyslam']},
-			{species: 'Chansey', moves: ['counter']},
+			{ species: 'Golem', moves: ['bodyslam'] },
+			{ species: 'Chansey', moves: ['counter'] },
 		], [
-			{species: 'Tauros', moves: ['bodyslam']},
-			{species: 'Chansey', moves: ['counter']},
+			{ species: 'Tauros', moves: ['bodyslam'] },
+			{ species: 'Chansey', moves: ['counter'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('switch 2', 'switch 2');
@@ -252,12 +253,12 @@ describe('Counter', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`[Gen 1 Stadium] should counter Normal/Fighting moves only`, function () {
+	it(`[Gen 1 Stadium] should counter Normal/Fighting moves only`, () => {
 		// should counter Normal/Fighting moves
 		battle = common.mod('gen1stadium').createBattle([[
-			{species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+			{ species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave'] },
 		], [
-			{species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave']},
+			{ species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave'] },
 		]]);
 		battle.makeChoices('move watergun', 'move counter');
 		assert.fullHP(battle.p1.active[0]);
@@ -265,33 +266,33 @@ describe('Counter', function () {
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it(`[Gen 1 Stadium] should counter attacks made against substitutes`, function () {
+	it(`[Gen 1 Stadium] should counter attacks made against substitutes`, () => {
 		battle = common.mod('gen1stadium').createBattle([[
-			{species: 'Chansey', moves: ['substitute', 'counter']},
+			{ species: 'Chansey', moves: ['substitute', 'counter'] },
 		], [
-			{species: 'Snorlax', moves: ['bodyslam', 'splash']},
+			{ species: 'Snorlax', moves: ['bodyslam', 'splash'] },
 		]]);
 		battle.makeChoices('move substitute', 'move splash');
 		battle.makeChoices('move counter', 'move bodyslam');
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`[Gen 1] (High) Jump Kick recoil can be countered`, function () {
+	it(`[Gen 1] (High) Jump Kick recoil can be countered`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Gengar', moves: ['counter']},
+			{ species: 'Gengar', moves: ['counter'] },
 		], [
-			{species: 'Hitmonlee', moves: ['highjumpkick']},
+			{ species: 'Hitmonlee', moves: ['highjumpkick'] },
 		]]);
 		battle.makeChoices();
 		const hitmonlee = battle.p2.active[0];
 		assert.equal(hitmonlee.maxhp - hitmonlee.hp, 3);
 	});
 
-	it(`[Gen 1] confusion damage can be countered`, function () {
-		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
-			{species: 'Gengar', moves: ['confuseray', 'counter']},
+	it(`[Gen 1] confusion damage can be countered`, () => {
+		battle = common.gen(1).createBattle({ seed: [1, 0, 0, 0] }, [[
+			{ species: 'Gengar', moves: ['confuseray', 'counter'] },
 		], [
-			{species: 'Alakazam', moves: ['seismictoss']},
+			{ species: 'Alakazam', moves: ['seismictoss'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move counter', 'move seismictoss');
@@ -301,12 +302,12 @@ describe('Counter', function () {
 		assert.false.equal(alakazam.maxhp - alakazam.hp, 200);
 	});
 
-	it(`[Gen 1] draining can be countered`, function () {
-		battle = common.gen(1).createBattle({seed: [1, 0, 0, 0]}, [[
-			{species: 'Gengar', moves: ['megadrain', 'counter']},
+	it(`[Gen 1] draining can be countered`, () => {
+		battle = common.gen(1).createBattle({ seed: [1, 0, 0, 0] }, [[
+			{ species: 'Gengar', moves: ['megadrain', 'counter'] },
 		], [
-			{species: 'Alakazam', moves: ['seismictoss']},
-			{species: 'Exeggutor', moves: ['barrage']},
+			{ species: 'Alakazam', moves: ['seismictoss'] },
+			{ species: 'Exeggutor', moves: ['barrage'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move counter', 'switch 2');
@@ -315,11 +316,11 @@ describe('Counter', function () {
 		assert.equal(exeggutor.maxhp - exeggutor.hp, (gengar.hp - (gengar.maxhp - 100)) * 2);
 	});
 
-	it(`[Gen 1] Mirror Move can be countered when it calls a counterable move`, function () {
+	it(`[Gen 1] Mirror Move can be countered when it calls a counterable move`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Pidgeot', moves: ['mirrormove']},
+			{ species: 'Pidgeot', moves: ['mirrormove'] },
 		], [
-			{species: 'Alakazam', moves: ['seismictoss', 'counter']},
+			{ species: 'Alakazam', moves: ['seismictoss', 'counter'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move mirrormove', 'move counter');
@@ -327,21 +328,21 @@ describe('Counter', function () {
 		assert.equal(pidgeot.maxhp - pidgeot.hp, 300);
 	});
 
-	it(`[Gen 1] Moves with unique damage calculation don't overdamage a target with less HP`, function () {
+	it(`[Gen 1] Moves with unique damage calculation don't overdamage a target with less HP`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Gengar', moves: ['seismictoss']},
+			{ species: 'Gengar', moves: ['seismictoss'] },
 		], [
-			{species: 'Abra', moves: ['teleport'], level: 5},
+			{ species: 'Abra', moves: ['teleport'], level: 5 },
 		]]);
 		battle.makeChoices();
 		assert(battle.lastDamage < 100);
 	});
 
-	it(`[Gen 1] Metronome calling Counter fails`, function () {
-		battle = common.gen(1).createBattle({seed: [1, 3, 1, 7]}, [[
-			{species: 'Persian', moves: ['Swift']},
+	it(`[Gen 1] Metronome calling Counter fails`, () => {
+		battle = common.gen(1).createBattle({ seed: [1, 3, 1, 7] }, [[
+			{ species: 'Persian', moves: ['Swift'] },
 		], [
-			{species: 'Chansey', moves: ['Metronome']},
+			{ species: 'Chansey', moves: ['Metronome'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('Chansey|Counter')));

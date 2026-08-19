@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	aerilate: {
 		inherit: true,
 		onBasePower(basePower, pokemon, target, move) {
@@ -32,7 +32,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	liquidooze: {
 		inherit: true,
 		onSourceTryHeal(damage, target, source, effect) {
-			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
 			const canOoze = ['drain', 'leechseed'];
 			if (canOoze.includes(effect.id)) {
 				this.damage(damage, null, null, null, true);
@@ -54,7 +54,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.type = 'Normal';
 			}
 		},
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		rating: -1,
 	},
 	parentalbond: {
@@ -93,7 +93,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
-		onModifyMove() {},
+		onModifyMove: undefined, // no inherit
 	},
 	symbiosis: {
 		inherit: true,
@@ -108,20 +108,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				source.item = myItem.id;
 				return;
 			}
-			this.add('-activate', source, 'ability: Symbiosis', myItem, '[of] ' + pokemon);
+			this.add('-activate', source, 'ability: Symbiosis', myItem, `[of] ${pokemon}`);
 		},
 	},
 	weakarmor: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
-				this.boost({def: -1, spe: 1}, target, target);
+				this.boost({ def: -1, spe: 1 }, target, target);
 			}
 		},
 		rating: 0.5,
 	},
 	zenmode: {
 		inherit: true,
-		flags: {failroleplay: 1, noentrain: 1, notrace: 1},
+		flags: { failroleplay: 1, noentrain: 1, notrace: 1 },
 	},
 };

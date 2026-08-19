@@ -7,7 +7,6 @@
 
 import * as https from 'https';
 import * as http from 'http';
-import * as url from 'url';
 import * as Streams from './streams';
 declare const Config: any;
 
@@ -76,7 +75,7 @@ export class NetStream extends Streams.ReadWriteStream {
 			}
 		}
 
-		const protocol = url.parse(this.uri).protocol as string;
+		const protocol = new URL(this.uri).protocol;
 		const net = protocol === 'https:' ? https : http;
 
 		let resolveResponse: ((value: http.IncomingMessage | null) => void) | null;
@@ -97,6 +96,9 @@ export class NetStream extends Streams.ReadWriteStream {
 
 			response.on('data', data => {
 				this.push(data);
+			});
+			response.on('error', error => {
+				if (!this.atEOF) this.pushError(error, true);
 			});
 			response.on('end', () => {
 				if (this.state === 'open') this.state = 'success';
@@ -143,11 +145,11 @@ export class NetStream extends Streams.ReadWriteStream {
 		let out = '';
 		for (const key in data) {
 			if (out) out += `&`;
-			out += `${key}=${encodeURIComponent('' + data[key])}`;
+			out += `${key}=${encodeURIComponent(`${data[key]}`)}`;
 		}
 		return out;
 	}
-	_write(data: string | Buffer): Promise<void> | void {
+	override _write(data: string | Buffer): Promise<void> | void {
 		if (!this.nodeWritableStream) {
 			throw new Error("You must specify opts.writable to write to a request.");
 		}
@@ -163,10 +165,10 @@ export class NetStream extends Streams.ReadWriteStream {
 			this.drainListeners.push(resolve);
 		});
 	}
-	_read() {
+	override _read() {
 		this.nodeReadableStream?.resume();
 	}
-	_pause() {
+	override _pause() {
 		this.nodeReadableStream?.pause();
 	}
 }

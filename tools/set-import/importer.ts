@@ -5,15 +5,13 @@ import * as util from 'util';
 
 import * as smogon from 'smogon';
 
-import {Streams} from '../../lib';
-import {Dex, toID} from '../../sim/dex';
-import {TeamValidator} from '../../sim/team-validator';
+import { Streams } from '../../lib';
+import { Dex, toID } from '../../sim/dex';
+import { TeamValidator } from '../../sim/team-validator';
 Dex.includeModData();
 
 type DeepPartial<T> = {
-	[P in keyof T]?: T[P] extends (infer I)[]
-		? (DeepPartial<I>)[]
-		: DeepPartial<T[P]>;
+	[P in keyof T]?: T[P] extends (infer I)[] ? (DeepPartial<I>)[] : DeepPartial<T[P]>;
 };
 
 interface PokemonSets {
@@ -24,7 +22,7 @@ interface PokemonSets {
 
 interface IncomingMessage extends NodeJS.ReadableStream {
 	statusCode: number;
-	headers: {location?: string};
+	headers: { location?: string };
 }
 
 // eg. 'gen1.json'
@@ -50,13 +48,13 @@ export const TIERS = new Set([
 	'anythinggoes', 'nationaldexag', 'almostanyability', 'balancedhackmons',
 	'letsgoou', 'monotype', 'purehackmons', 'nationaldexmonotype',
 ]);
-const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
+const FORMATS = new Map<ID, { gen: GenerationNum, format: Format }>();
 const VALIDATORS = new Map<ID, TeamValidator>();
 for (let gen = 1; gen <= 9; gen++) {
 	for (const tier of TIERS) {
 		const format = Dex.formats.get(`gen${gen}${tier}`);
-		if (format.exists) {
-			FORMATS.set(format.id, {gen: gen as GenerationNum, format});
+		if (format.effectType === 'Format') {
+			FORMATS.set(format.id, { gen: gen as GenerationNum, format });
 			VALIDATORS.set(format.id, new TeamValidator(format));
 		}
 	}
@@ -76,10 +74,10 @@ export async function importAll() {
 async function importGen(gen: GenerationNum, index: string) {
 	const data: GenerationData = {};
 
-	const smogonSetsByFormat: {[formatid: string]: PokemonSets} = {};
-	const thirdPartySetsByFormat: {[source: string]: {[formatid: string]: PokemonSets}} = {};
+	const smogonSetsByFormat: { [formatid: string]: PokemonSets } = {};
+	const thirdPartySetsByFormat: { [source: string]: { [formatid: string]: PokemonSets } } = {};
 
-	const numByFormat: {[formatid: string]: number} = {};
+	const numByFormat: { [formatid: string]: number } = {};
 	const imports = [];
 	const dex = Dex.forFormat(`gen${gen}ou`);
 	for (const id in dex.data.Pokedex) {
@@ -90,7 +88,7 @@ async function importGen(gen: GenerationNum, index: string) {
 	}
 	await Promise.all(imports);
 
-	for (const {format, gen: g} of FORMATS.values()) {
+	for (const { format, gen: g } of FORMATS.values()) {
 		if (g !== gen) continue;
 
 		if (smogonSetsByFormat[format.id] && Object.keys(smogonSetsByFormat[format.id]).length) {
@@ -167,8 +165,8 @@ function toGen(dex: ModdedDex, name: string): GenerationNum | undefined {
 async function importSmogonSets(
 	pokemon: string,
 	gen: GenerationNum,
-	setsByFormat: {[format: string]: PokemonSets},
-	numByFormat: {[format: string]: number}
+	setsByFormat: { [format: string]: PokemonSets },
+	numByFormat: { [format: string]: number }
 ) {
 	const analysesByFormat = await getAnalysesByFormat(pokemon, gen);
 	if (!analysesByFormat) return;
@@ -200,7 +198,7 @@ async function importSmogonSets(
 				addSmogonSet(dex, format, pokemon, name, set, setsForPokemon, numByFormat);
 				for (const battleOnlyForme of battleOnlyFormes) {
 					// Note: this is just a shallow copy which is fine because we're just modifying the ability
-					const s = {...set};
+					const s = { ...set };
 					if (!format.id.includes('balancedhackmons')) s.ability = battleOnlyForme.abilities[0];
 					if (typeof battleOnlyForme.battleOnly !== 'string') {
 						if (!battleOnlyForme.battleOnly!.includes(pokemon)) continue;
@@ -223,7 +221,7 @@ function addSmogonSet(
 	name: string,
 	set: DeepPartial<PokemonSet>,
 	setsForPokemon: PokemonSets,
-	numByFormat: {[format: string]: number},
+	numByFormat: { [format: string]: number },
 	outOfBattleSpeciesName?: string
 ) {
 	if (validSet('dex', dex, format, pokemon, name, set, outOfBattleSpeciesName)) {
@@ -302,8 +300,8 @@ function validSet(
 }
 
 function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<PokemonSet>) {
-	const {gen} = FORMATS.get(format.id)!;
-	const hasMove = (m: string) => set.moves && set.moves.includes(m);
+	const { gen } = FORMATS.get(format.id)!;
+	const hasMove = (m: string) => set.moves?.includes(m);
 	const bh = format.id.includes('balancedhackmons');
 
 	if (pokemon === 'Groudon-Primal' && set.item !== 'Red Orb') return true;
@@ -314,7 +312,8 @@ function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<
 		if (pokemon === 'Rayquaza-Mega') {
 			return format.id.includes('ubers') || !hasMove('Dragon Ascent');
 		} else {
-			return dex.items.get(set.item).megaStone !== pokemon;
+			const item = dex.items.get(set.item);
+			return !item.megaStone || !Object.values(item.megaStone).includes(pokemon);
 		}
 	}
 	if (pokemon === 'Necrozma-Ultra' && set.item !== 'Ultranecrozium Z') return true;
@@ -334,7 +333,7 @@ function toPokemonSet(
 	outOfBattleSpeciesName?: string
 ): PokemonSet {
 	// To simplify things, during validation we mutate the input set to correct for HP mismatches
-	const hp = set.moves && set.moves.find(m => m.startsWith('Hidden Power'));
+	const hp = set.moves?.find(m => m.startsWith('Hidden Power'));
 	let fill = dex.gen === 2 ? 30 : 31;
 	if (hp) {
 		const type = hp.slice(13);
@@ -343,23 +342,23 @@ function toPokemonSet(
 				set.hpType = type;
 				fill = 31;
 			} else if (dex.gen === 2) {
-				const dvs = {...dex.types.get(type).HPdvs};
+				const dvs = { ...dex.types.get(type).HPdvs };
 				let stat: StatID;
 				for (stat in dvs) {
 					dvs[stat]! *= 2;
 				}
-				set.ivs = {...dvs, ...set.ivs};
+				set.ivs = { ...dvs, ...set.ivs };
 				set.ivs.hp = expectedHP(set.ivs);
 			} else {
-				set.ivs = {...dex.types.get(type).HPivs, ...set.ivs};
+				set.ivs = { ...dex.types.get(type).HPivs, ...set.ivs };
 			}
 		}
 	}
 
-	const copy = {species: pokemon, ...set} as PokemonSet;
+	const copy = { species: pokemon, ...set } as PokemonSet;
 	copy.ivs = fillStats(set.ivs, fill);
 	// The validator expects us to have at least 1 EV set to prove it is intentional
-	if (!set.evs && dex.gen >= 3 && format.id !== 'gen7letsgoou') set.evs = {spe: 1};
+	if (!set.evs && dex.gen >= 3 && format.id !== 'gen7letsgoou') set.evs = { spe: 1 };
 	copy.evs = fillStats(set.evs, dex.gen <= 2 ? 252 : 0);
 	// The validator wants an ability even when Gen < 3
 	copy.ability = copy.ability || 'None';
@@ -377,7 +376,6 @@ function toPokemonSet(
 	}
 	return copy;
 }
-
 
 function expectedHP(ivs: Partial<StatsTable>) {
 	ivs = fillStats(ivs, 31);
@@ -405,7 +403,7 @@ const SMOGON = {
 	vgc24regulatione: 'vgc2023regulatione',
 	// bssseries1: 'battlestadiumsinglesseries1', // ?
 	bssseries2: 'battlestadiumsinglesseries2',
-} as unknown as {[id: string]: ID};
+} as unknown as { [id: string]: ID };
 
 const getAnalysis = retrying(async (u: string) => {
 	try {
@@ -459,11 +457,11 @@ function getLevel(format: Format, level = 0) {
 export async function getStatisticsURL(
 	index: string,
 	format: Format
-): Promise<{url: string, count: number} | undefined> {
+): Promise<{ url: string, count: number } | undefined> {
 	const current = index.includes(format.id);
 	const latest = await smogon.Statistics.latestDate(format.id, !current);
 	if (!latest) return undefined;
-	return {url: smogon.Statistics.url(latest.date, format.id, current || 1500), count: latest.count};
+	return { url: smogon.Statistics.url(latest.date, format.id, current || 1500), count: latest.count };
 }
 
 // TODO: Use bigram matrix, bucketed spreads and generative validation logic for more realistic sets
@@ -487,7 +485,7 @@ function importUsageBasedSets(gen: GenerationNum, format: Format, statistics: sm
 			if (gen >= 3) {
 				const id = top(stats.Abilities) as string;
 				set.ability = fixedAbility(dex, pokemon, dex.abilities.get(id).name);
-				const {nature, evs} = fromSpread(top(stats.Spreads) as string);
+				const { nature, evs } = fromSpread(top(stats.Spreads) as string);
 				set.nature = nature;
 				if (format.id !== 'gen7letsgoou') {
 					if (!evs || !Object.keys(evs).length) continue;
@@ -523,10 +521,10 @@ function fromSpread(spread: string) {
 		const ev = Number(rev);
 		if (ev) evs[STATS[i]] = ev;
 	}
-	return {nature, evs};
+	return { nature, evs };
 }
 
-function top(weighted: {[key: string]: number}, n = 1): string | string[] | undefined {
+function top(weighted: { [key: string]: number }, n = 1): string | string[] | undefined {
 	if (n === 0) return undefined;
 	// Optimize the more common case with an linear algorithm instead of log-linear
 	if (n === 1) {
@@ -554,7 +552,7 @@ class RetryableError extends Error {
 // is importantly different than using the more obvious 20 and 1000ms here,
 // as it results in more spaced out requests which won't cause as many gettaddrinfo
 // ENOTFOUND (nodejs/node-v0.x-archive#5488). Similarly, the evenly spaced
-// requests makes us signficantly less likely to encounter ECONNRESET errors
+// requests makes us significantly less likely to encounter ECONNRESET errors
 // on macOS (though these are still pretty frequent, Linux is recommended for running
 // this tool). Retry up to 5 times with a 20ms backoff increment.
 const request = retrying(throttling(fetch, 1, 50), 5, 20);
@@ -562,7 +560,7 @@ const request = retrying(throttling(fetch, 1, 50), 5, 20);
 export function fetch(u: string) {
 	const client = u.startsWith('http:') ? http : https;
 	return new Promise<string>((resolve, reject) => {
-		// @ts-ignore Typescript bug - thinks the second argument should be RequestOptions, not a callback
+		// @ts-expect-error Typescript bug - thinks the second argument should be RequestOptions, not a callback
 		const req = client.get(u, (res: IncomingMessage) => {
 			if (res.statusCode !== 200) {
 				if (res.statusCode >= 500 && res.statusCode < 600) {

@@ -382,18 +382,34 @@
           },
           {
               "species": "Flutter Mane",
-              "weight": 5,
+              "weight": 2,
               "moves": [
                   ["Moonblast"],
                   ["Shadow Ball"],
                   ["Psyshock"],
-                  ["Energy Ball", "Mystical Fire"]
+                  ["Energy Ball"]
               ],
               "item": ["Assault Vest"],
               "nature": "Modest",
               "evs": {"hp": 164, "def": 28, "spa": 196, "spd": 4, "spe": 116},
               "ivs": {"atk": 0},
-              "teraType": ["Fire", "Grass"],
+              "teraType": ["Grass"],
+              "ability": ["Protosynthesis"]
+          },
+          {
+              "species": "Flutter Mane",
+              "weight": 3,
+              "moves": [
+                  ["Moonblast"],
+                  ["Shadow Ball"],
+                  ["Psyshock"],
+                  ["Mystical Fire"]
+              ],
+              "item": ["Assault Vest"],
+              "nature": "Modest",
+              "evs": {"hp": 164, "def": 28, "spa": 196, "spd": 4, "spe": 116},
+              "ivs": {"atk": 0},
+              "teraType": ["Fire"],
               "ability": ["Protosynthesis"]
           }
       ]
@@ -1019,6 +1035,57 @@
           }
       ]
   },
+  "archaludon": {
+      "weight": 9,
+      "sets": [
+        {
+            "species": "Archaludon",
+            "weight": 45,
+            "moves": [
+                ["Steel Beam"],
+                ["Draco Meteor", "Dragon Tail"],
+                ["Stealth Rock"],
+                ["Thunder Wave", "Mirror Coat", "Metal Burst"]
+            ],
+            "item": ["Custap Berry", "Red Card"],
+            "nature": "Modest",
+            "evs": {"def": 4, "spa": 252, "spe": 252},
+            "teraType": ["Fairy", "Ghost"],
+            "ability": ["Sturdy"]
+        },
+        {
+            "species": "Archaludon",
+            "weight": 35,
+            "moves": [
+                ["Electro Shot"],
+                ["Draco Meteor"],
+                ["Flash Cannon"],
+                ["Thunderbolt", "Dark Pulse"]
+            ],
+            "item": ["Power Herb"],
+            "nature": "Timid",
+            "evs": {"def": 4, "spa": 252, "spe": 252},
+            "teraType": ["Electric"],
+            "wantsTera": true,
+            "ability": ["Sturdy", "Stamina"]
+        },
+        {
+            "species": "Archaludon",
+            "weight": 20,
+            "moves": [
+                ["Body Press"],
+                ["Flash Cannon"],
+                ["Stealth Rock", "Thunderbolt"],
+                ["Dark Pulse", "Roar", "Dragon Tail"]
+            ],
+            "item": ["Leftovers", "Sitrus Berry", "Air Balloon"],
+            "nature": "Modest",
+            "evs": {"def": 180, "spa": 252, "spe": 76},
+            "teraType": ["Fairy", "Flying"],
+            "ability": ["Stamina"]
+        }
+    ]
+},
   "garganacl": {
       "weight": 9,
       "sets": [
@@ -1414,14 +1481,30 @@
           },
           {
               "species": "Roaring Moon",
-              "weight": 10,
+              "weight": 5,
               "moves": [
                   ["Knock Off"],
                   ["U-turn"],
                   ["Earthquake", "Scale Shot"],
                   ["Tera Blast"]
               ],
-              "item": ["Choice Band", "Choice Scarf"],
+              "item": ["Choice Band"],
+              "nature": "Jolly",
+              "evs": {"atk": 252, "spd": 4, "spe": 252},
+              "teraType": ["Fairy", "Fire"],
+              "wantsTera": true,
+              "ability": ["Protosynthesis"]
+          },
+          {
+              "species": "Roaring Moon",
+              "weight": 5,
+              "moves": [
+                  ["Knock Off"],
+                  ["U-turn"],
+                  ["Earthquake"],
+                  ["Tera Blast"]
+              ],
+              "item": ["Choice Scarf"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Fairy", "Fire"],
@@ -1467,7 +1550,7 @@
       "sets": [
           {
               "species": "Dragapult",
-              "weight": 30,
+              "weight": 35,
               "moves": [
                   ["Dragon Darts"],
                   ["U-turn"],
@@ -1489,7 +1572,7 @@
                   ["Sucker Punch"],
                   ["Tera Blast"]
               ],
-              "item": ["Choice Band", "Choice Scarf"],
+              "item": ["Choice Band"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Fairy", "Fire", "Ghost", "Steel"],
@@ -1499,22 +1582,6 @@
           {
               "species": "Dragapult",
               "weight": 15,
-              "moves": [
-                  ["Reflect"],
-                  ["Light Screen"],
-                  ["Curse"],
-                  ["Shadow Ball", "Will-O-Wisp"]
-              ],
-              "item": ["Light Clay"],
-              "nature": "Timid",
-              "evs": {"hp": 244, "def": 12, "spe": 252},
-              "ivs": {"atk": 0},
-              "teraType": ["Ghost", "Normal"],
-              "ability": ["Cursed Body"]
-          },
-          {
-              "species": "Dragapult",
-              "weight": 10,
               "moves": [
                   ["Dragon Darts"],
                   ["Baton Pass", "Tera Blast"],
@@ -1546,17 +1613,32 @@
           },
           {
               "species": "Dragapult",
-              "weight": 15,
+              "weight": 10,
               "moves": [
                   ["Shadow Ball"],
                   ["Draco Meteor"],
                   ["Thunderbolt"],
-                  ["Flamethrower", "U-turn"]
+                  ["Flamethrower"]
               ],
-              "item": ["Choice Scarf", "Choice Specs"],
+              "item": ["Choice Specs"],
               "nature": "Timid",
               "evs": {"spa": 252, "spd": 4, "spe": 252},
               "teraType": ["Electric", "Fighting", "Fire", "Ghost"],
+              "ability": ["Infiltrator"]
+          },
+          {
+              "species": "Dragapult",
+              "weight": 10,
+              "moves": [
+                  ["Shadow Ball"],
+                  ["Draco Meteor"],
+                  ["Thunderbolt"],
+                  ["U-turn"]
+              ],
+              "item": ["Choice Specs"],
+              "nature": "Timid",
+              "evs": {"spa": 252, "spd": 4, "spe": 252},
+              "teraType": ["Electric", "Fighting", "Ghost"],
               "ability": ["Infiltrator"]
           }
       ]
@@ -1961,7 +2043,7 @@
       "sets": [
           {
               "species": "Breloom",
-              "weight": 80,
+              "weight": 85,
               "moves": [
                   ["Bullet Seed"],
                   ["Mach Punch"],
@@ -1976,7 +2058,7 @@
           },
           {
               "species": "Breloom",
-              "weight": 10,
+              "weight": 15,
               "moves": [
                   ["Bullet Seed"],
                   ["Mach Punch"],
@@ -1989,23 +2071,6 @@
               "teraType": ["Fire"],
               "wantsTera": true,
               "ability": ["Technician"]
-          },
-          {
-              "species": "Breloom",
-              "weight": 10,
-              "moves": [
-                  ["Substitute"],
-                  ["Leech Seed", "Toxic"],
-                  ["Spore"],
-                  ["Protect"]
-              ],
-              "item": ["Toxic Orb"],
-              "nature": "Bold",
-              "evs": {"hp": 204, "def": 252, "spd": 48, "spe": 4},
-              "ivs": {"atk": 0},
-              "teraType": ["Fire", "Steel"],
-              "wantsTera": true,
-              "ability": ["Poison Heal"]
           }
       ]
   },
@@ -2174,7 +2239,6 @@
                   ["Curse"],
                   ["Trick Room"]
               ],
-              "gender": "F",
               "item": ["Life Orb"],
               "nature": "Adamant",
               "evs": {"hp": 36, "atk": 236, "def": 180, "spd": 4, "spe": 52},
@@ -2250,7 +2314,6 @@
                   ["Trick Room"],
                   ["Shadow Sneak"]
               ],
-              "gender": "F",
               "item": ["Covert Cloak"],
               "nature": "Adamant",
               "evs": {"hp": 36, "atk": 236, "def": 180, "spd": 4, "spe": 52},
@@ -2415,7 +2478,7 @@
           },
           {
               "species": "Basculegion",
-              "weight": 5,
+              "weight": 10,
               "moves": [
                   ["Wave Crash"],
                   ["Aqua Jet"],
@@ -2428,22 +2491,6 @@
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Ghost", "Normal", "Water"],
               "ability": ["Adaptability"]
-          },
-          {
-              "species": "Basculegion",
-              "weight": 5,
-              "moves": [
-                  ["Wave Crash"],
-                  ["Aqua Jet"],
-                  ["Flip Turn", "Liquidation", "Substitute"],
-                  ["Last Respects"]
-              ],
-              "gender": "M",
-              "item": ["Life Orb"],
-              "nature": "Adamant",
-              "evs": {"atk": 252, "spd": 4, "spe": 252},
-              "teraType": ["Water"],
-              "ability": ["Swift Swim"]
           }
       ]
   },
@@ -2787,7 +2834,7 @@
           },
           {
               "species": "Iron Moth",
-              "weight": 20,
+              "weight": 10,
               "moves": [
                   ["Toxic Spikes"],
                   ["Fiery Dance"],
@@ -2798,8 +2845,24 @@
               "nature": "Calm",
               "evs": {"hp": 196, "spd": 132, "spe": 180},
               "ivs": {"atk": 0},
-              "teraType": ["Grass", "Poison"],
+              "teraType": ["Poison"],
               "ability": ["Quark Drive"]
+          },
+          {
+            "species": "Iron Moth",
+            "weight": 10,
+            "moves": [
+                ["Toxic Spikes"],
+                ["Fiery Dance"],
+                ["Morning Sun"],
+                ["Whirlwind"]
+            ],
+            "item": ["Heavy-Duty Boots", "Leftovers"],
+            "nature": "Calm",
+            "evs": {"hp": 196, "spd": 132, "spe": 180},
+            "ivs": {"atk": 0},
+            "teraType": ["Grass"],
+            "ability": ["Quark Drive"]
           },
           {
               "species": "Iron Moth",
@@ -2913,7 +2976,6 @@
                   ["Fake Out"],
                   ["Toxic Spikes"]
               ],
-              "gender": "F",
               "item": ["Air Balloon", "Focus Sash", "Normal Gem", "Red Card", "Sitrus Berry"],
               "nature": "Adamant",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -2929,7 +2991,6 @@
                   ["Fake Out"],
                   ["Toxic Spikes"]
               ],
-              "gender": "F",
               "item": ["Air Balloon", "Focus Sash", "Sitrus Berry"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -2938,33 +2999,17 @@
           },
           {
               "species": "Sneasler",
-              "weight": 55,
+              "weight": 60,
               "moves": [
                   ["Dire Claw"],
                   ["Close Combat"],
                   ["Shadow Claw"],
                   ["Toxic Spikes"]
               ],
-              "gender": "F",
               "item": ["Air Balloon", "Focus Sash", "Red Card", "Sitrus Berry"],
               "nature": "Adamant",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Ghost"],
-              "ability": ["Unburden"]
-          },
-          {
-              "species": "Sneasler",
-              "weight": 5,
-              "moves": [
-                  ["Dire Claw"],
-                  ["Close Combat"],
-                  ["Swords Dance"],
-                  ["Acrobatics", "Shadow Claw"]
-              ],
-              "item": ["Grassy Seed"],
-              "nature": "Adamant",
-              "evs": {"hp": 92, "atk": 252, "def": 4, "spd": 4, "spe": 156},
-              "teraType": ["Flying", "Ghost"],
               "ability": ["Unburden"]
           }
       ]
@@ -3019,7 +3064,7 @@
               "item": ["Choice Scarf"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Dark", "Grass"],
+              "teraType": ["Dark", "Ghost", "Grass"],
               "ability": ["Protean"]
           },
           {
@@ -3034,7 +3079,7 @@
               "item": ["Choice Scarf"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Ghost", "Rock"],
+              "teraType": ["Rock"],
               "wantsTera": true,
               "ability": ["Protean"]
           },
@@ -3050,7 +3095,7 @@
               "item": ["Focus Sash"],
               "nature": "Jolly",
               "evs": {"atk": 252, "def": 4, "spe": 252},
-              "teraType": ["Grass"],
+              "teraType": ["Ghost", "Grass"],
               "ability": ["Overgrow"]
           },
           {
@@ -3065,7 +3110,7 @@
               "item": ["Focus Sash"],
               "nature": "Jolly",
               "evs": {"atk": 252, "def": 4, "spe": 252},
-              "teraType": ["Ghost", "Rock"],
+              "teraType": ["Rock"],
               "wantsTera": true,
               "ability": ["Overgrow"]
           },
@@ -3081,7 +3126,7 @@
               "item": ["Choice Band"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Grass"],
+              "teraType": ["Ghost", "Grass"],
               "ability": ["Protean"]
           },
           {
@@ -3096,7 +3141,7 @@
               "item": ["Choice Band"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Ghost", "Rock"],
+              "teraType": ["Rock"],
               "wantsTera": true,
               "ability": ["Protean"]
           }
@@ -3132,7 +3177,7 @@
               "item": ["Assault Vest", "Choice Band"],
               "nature": "Adamant",
               "evs": {"hp": 252, "atk": 252, "spd": 4},
-              "teraType": ["Electric", "Fairy", "Fire", "Grass"],
+              "teraType": ["Electric", "Fire", "Grass"],
               "wantsTera": true,
               "ability": ["Huge Power"]
           },
@@ -3223,7 +3268,7 @@
               "moves": [
                   ["Moonblast"],
                   ["Encore", "Shadow Ball", "Shadow Sneak"],
-                  ["Aura Sphere", "Close Combat", "Shadow Ball"],
+                  ["Aura Sphere", "Close Combat"],
                   ["Destiny Bond"]
               ],
               "item": ["Booster Energy", "Focus Sash"],
@@ -3239,7 +3284,7 @@
                   ["Moonblast"],
                   ["Close Combat"],
                   ["Encore", "Shadow Ball"],
-                  ["Psychic", "Psyshock", "Shadow Ball", "Thunderbolt"]
+                  ["Psychic", "Psyshock", "Thunderbolt"]
               ],
               "item": ["Booster Energy", "Life Orb"],
               "nature": "Naive",
@@ -3669,21 +3714,51 @@
           },
           {
               "species": "Blissey",
-              "weight": 40,
+              "weight": 13,
               "moves": [
                   ["Calm Mind"],
                   ["Soft-Boiled"],
                   ["Shadow Ball"],
-                  ["Flamethrower", "Stealth Rock", "Tera Blast"]
+                  ["Flamethrower"]
               ],
               "item": ["Leftovers"],
               "nature": "Calm",
               "evs": {"hp": 4, "def": 252, "spd": 252},
               "teraType": ["Dark", "Fire", "Ghost"],
-              "wantsTera": true,
               "ability": ["Natural Cure"]
           },
           {
+            "species": "Blissey",
+            "weight": 13,
+            "moves": [
+                ["Calm Mind"],
+                ["Soft-Boiled"],
+                ["Shadow Ball"],
+                ["Stealth Rock"]
+            ],
+            "item": ["Leftovers"],
+            "nature": "Calm",
+            "evs": {"hp": 4, "def": 252, "spd": 252},
+            "teraType": ["Dark", "Ghost"],
+            "ability": ["Natural Cure"]
+            },
+            {
+                "species": "Blissey",
+                "weight": 14,
+                "moves": [
+                    ["Calm Mind"],
+                    ["Soft-Boiled"],
+                    ["Shadow Ball"],
+                    ["Tera Blast"]
+                ],
+                "item": ["Leftovers"],
+                "nature": "Calm",
+                "evs": {"hp": 4, "def": 252, "spd": 252},
+                "teraType": ["Fighting", "Fire"],
+                "wantsTera": true,
+                "ability": ["Natural Cure"]
+            },
+            {
               "species": "Blissey",
               "weight": 50,
               "moves": [
@@ -3692,12 +3767,12 @@
                   ["Flamethrower", "Shadow Ball"],
                   ["Fling"]
               ],
-              "item": ["Flame Orb", "Light Ball", "Poison Barb"],
+              "item": ["Flame Orb", "Poison Barb"],
               "nature": "Calm",
               "evs": {"hp": 4, "def": 252, "spd": 252},
               "teraType": ["Dark", "Fire"],
               "ability": ["Natural Cure"]
-          }
+            }
       ]
   },
   "ceruledge": {
@@ -3723,7 +3798,7 @@
               "weight": 65,
               "moves": [
                   ["Bitter Blade"],
-                  ["Close Combat", "Shadow Claw"],
+                  ["Close Combat", "Poltergeist"],
                   ["Shadow Sneak"],
                   ["Destiny Bond", "Swords Dance"]
               ],
@@ -3756,10 +3831,10 @@
       "sets": [
           {
               "species": "Chansey",
-              "weight": 100,
+              "weight": 70,
               "moves": [
                   ["Seismic Toss"],
-                  ["Shadow Ball", "Stealth Rock", "Thunder Wave"],
+                  ["Shadow Ball"],
                   ["Calm Mind"],
                   ["Soft-Boiled"]
               ],
@@ -3769,6 +3844,22 @@
               "ivs": {"atk": 0},
               "teraType": ["Dark", "Ghost"],
               "ability": ["Natural Cure"]
+          },
+          {
+            "species": "Chansey",
+            "weight": 30,
+            "moves": [
+                ["Seismic Toss"],
+                ["Stealth Rock"],
+                ["Thunder Wave"],
+                ["Soft-Boiled"]
+            ],
+            "item": ["Eviolite"],
+            "nature": "Bold",
+            "evs": {"hp": 12, "def": 252, "spd": 244},
+            "ivs": {"atk": 0},
+            "teraType": ["Dark", "Ghost"],
+            "ability": ["Natural Cure"]
           }
       ]
   },
@@ -3882,7 +3973,6 @@
                   ["Hammer Arm", "Low Kick", "Taunt"],
                   ["Thunder Wave"]
               ],
-              "gender": "M",
               "item": ["Focus Sash"],
               "nature": "Adamant",
               "evs": {"atk": 252, "def": 4, "spe": 252},
@@ -4000,7 +4090,7 @@
       "sets": [
           {
               "species": "Kleavor",
-              "weight": 55,
+              "weight": 28,
               "moves": [
                   ["Stone Axe"],
                   ["Night Slash"],
@@ -4010,12 +4100,27 @@
               "item": ["Focus Sash"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
-              "teraType": ["Bug", "Grass", "Water"],
+              "teraType": ["Grass", "Water"],
               "ability": ["Sharpness"]
           },
           {
+            "species": "Kleavor",
+            "weight": 27,
+            "moves": [
+                ["Stone Axe"],
+                ["Night Slash"],
+                ["Feint", "Trailblaze"],
+                ["U-turn", "X-Scissor"]
+            ],
+            "item": ["Focus Sash"],
+            "nature": "Jolly",
+            "evs": {"atk": 252, "spd": 4, "spe": 252},
+            "teraType": ["Bug", "Grass", "Water"],
+            "ability": ["Sharpness"]
+          },
+          {
               "species": "Kleavor",
-              "weight": 10,
+              "weight": 5,
               "moves": [
                   ["Stone Axe"],
                   ["Night Slash"],
@@ -4025,12 +4130,27 @@
               "item": ["Assault Vest"],
               "nature": "Adamant",
               "evs": {"hp": 140, "atk": 52, "def": 4, "spd": 244, "spe": 68},
-              "teraType": ["Bug", "Grass", "Water"],
+              "teraType": ["Grass", "Water"],
               "ability": ["Sharpness"]
           },
           {
+            "species": "Kleavor",
+            "weight": 5,
+            "moves": [
+                ["Stone Axe"],
+                ["Night Slash"],
+                ["Feint", "Trailblaze"],
+                ["U-turn", "X-Scissor"]
+            ],
+            "item": ["Assault Vest"],
+            "nature": "Adamant",
+            "evs": {"hp": 140, "atk": 52, "def": 4, "spd": 244, "spe": 68},
+            "teraType": ["Bug", "Grass", "Water"],
+            "ability": ["Sharpness"]
+          },
+          {
               "species": "Kleavor",
-              "weight": 35,
+              "weight": 18,
               "moves": [
                   ["Stone Axe"],
                   ["U-turn"],
@@ -4040,8 +4160,23 @@
               "item": ["Choice Scarf"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
-              "teraType": ["Bug", "Grass"],
+              "teraType": ["Grass"],
               "ability": ["Sharpness"]
+          },
+          {
+            "species": "Kleavor",
+            "weight": 17,
+            "moves": [
+                ["Stone Axe"],
+                ["U-turn"],
+                ["Night Slash"],
+                ["X-Scissor"]
+            ],
+            "item": ["Choice Scarf"],
+            "nature": "Jolly",
+            "evs": {"atk": 252, "spd": 4, "spe": 252},
+            "teraType": ["Bug", "Grass"],
+            "ability": ["Sharpness"]
           }
       ]
   },
@@ -4151,17 +4286,32 @@
       "sets": [
           {
               "species": "Okidogi",
-              "weight": 40,
+              "weight": 15,
+              "moves": [
+                  ["Bulk Up"],
+                  ["Drain Punch"],
+                  ["Knock Off"],
+                  ["Poison Jab"]
+              ],
+              "item": ["Black Sludge", "Rocky Helmet"],
+              "nature": "Adamant",
+              "evs": {"hp": 252, "atk": 156, "spe": 100},
+              "teraType": ["Poison"],
+              "ability": ["Toxic Chain"]
+          },
+          {
+              "species": "Okidogi",
+              "weight": 25,
               "moves": [
                   ["Bulk Up"],
                   ["Drain Punch"],
                   ["Knock Off"],
                   ["Ice Punch", "Poison Jab", "Substitute", "Taunt"]
               ],
-              "item": ["Black Sludge", "Leftovers", "Rocky Helmet"],
+              "item": ["Leftovers", "Rocky Helmet"],
               "nature": "Adamant",
               "evs": {"hp": 252, "atk": 156, "spe": 100},
-              "teraType": ["Flying", "Poison", "Water"],
+              "teraType": ["Flying", "Water"],
               "ability": ["Toxic Chain"]
           },
           {
@@ -4450,7 +4600,7 @@
                   ["Roost"],
                   ["Taunt", "Toxic"],
                   ["U-turn"],
-                  ["Charm", "Play Rough"]
+                  ["Play Rough"]
               ],
               "item": ["Leftovers"],
               "nature": "Careful",
@@ -4461,41 +4611,25 @@
       ]
   },
   "pelipper": {
-      "weight": 3,
-      "sets": [
-          {
-              "species": "Pelipper",
-              "weight": 70,
-              "moves": [
-                  ["U-turn"],
-                  ["Hydro Pump", "Surf"],
-                  ["Ice Beam"],
-                  ["Hurricane", "Roost"]
-              ],
-              "item": ["Damp Rock"],
-              "nature": "Quiet",
-              "evs": {"hp": 252, "def": 4, "spa": 252},
-              "ivs": {"spe": 0},
-              "teraType": ["Grass", "Ground", "Steel"],
-              "ability": ["Drizzle"]
-          },
-          {
-              "species": "Pelipper",
-              "weight": 30,
-              "moves": [
-                  ["U-turn"],
-                  ["Hydro Pump", "Surf"],
-                  ["Ice Beam"],
-                  ["Hurricane"]
-              ],
-              "item": ["Choice Specs", "Damp Rock"],
-              "nature": "Modest",
-              "evs": {"spa": 252, "spd": 4, "spe": 252},
-              "teraType": ["Flying", "Grass", "Ground", "Steel", "Water"],
-              "ability": ["Drizzle"]
-          }
-      ]
-  },
+    "weight": 3,
+    "sets": [
+        {
+            "species": "Pelipper",
+            "weight": 100,
+            "moves": [
+                ["U-turn"],
+                ["Hydro Pump"],
+                ["Ice Beam"],
+                ["Hurricane"]
+            ],
+            "item": ["Choice Specs"],
+            "nature": "Modest",
+            "evs": {"spa": 252, "spd": 4, "spe": 252},
+            "teraType": ["Flying", "Grass", "Ground", "Steel", "Water"],
+            "ability": ["Drizzle"]
+        }
+    ]
+},
   "rotomheat": {
       "weight": 3,
       "sets": [
@@ -4815,7 +4949,22 @@
       "sets": [
           {
               "species": "Gyarados",
-              "weight": 100,
+              "weight": 50,
+              "moves": [
+                  ["Taunt"],
+                  ["Iron Head", "Waterfall"],
+                  ["Earthquake"],
+                  ["Thunder Wave"]
+              ],
+              "item": ["Rocky Helmet"],
+              "nature": "Impish",
+              "evs": {"hp": 228, "atk": 4, "def": 220, "spd": 4, "spe": 52},
+              "teraType": ["Ground"],
+              "ability": ["Intimidate"]
+          },
+          {
+              "species": "Gyarados",
+              "weight": 50,
               "moves": [
                   ["Taunt"],
                   ["Iron Head", "Waterfall"],
@@ -4825,7 +4974,7 @@
               "item": ["Rocky Helmet"],
               "nature": "Impish",
               "evs": {"hp": 228, "atk": 4, "def": 220, "spd": 4, "spe": 52},
-              "teraType": ["Ground", "Steel"],
+              "teraType": ["Steel"],
               "ability": ["Intimidate"]
           }
       ]
@@ -4895,7 +5044,7 @@
               "item": ["Focus Sash"],
               "nature": "Timid",
               "evs": {"def": 4, "spa": 252, "spe": 252},
-              "teraType": ["Fairy", "Fighting", "Ghost"],
+              "teraType": ["Fairy", "Fighting"],
               "wantsTera": true,
               "ability": ["Illusion"]
           },
@@ -4922,7 +5071,7 @@
       "sets": [
           {
               "species": "Drifblim",
-              "weight": 95,
+              "weight": 100,
               "moves": [
                   ["Minimize"],
                   ["Substitute"],
@@ -4930,22 +5079,6 @@
                   ["Air Slash", "Shadow Ball", "Stockpile", "Strength Sap", "Will-O-Wisp"]
               ],
               "item": ["Kee Berry", "Sitrus Berry"],
-              "nature": "Timid",
-              "evs": {"def": 164, "spd": 92, "spe": 252},
-              "ivs": {"atk": 0},
-              "teraType": ["Dark", "Normal", "Water"],
-              "ability": ["Unburden"]
-          },
-          {
-              "species": "Drifblim",
-              "weight": 5,
-              "moves": [
-                  ["Minimize"],
-                  ["Substitute"],
-                  ["Baton Pass"],
-                  ["Air Slash", "Shadow Ball", "Stockpile", "Strength Sap", "Will-O-Wisp"]
-              ],
-              "item": ["Grassy Seed"],
               "nature": "Timid",
               "evs": {"def": 164, "spd": 92, "spe": 252},
               "ivs": {"atk": 0},
@@ -5956,7 +6089,24 @@
       "sets": [
           {
               "species": "Polteageist",
-              "weight": 100,
+              "weight": 50,
+              "moves": [
+                  ["Shell Smash"],
+                  ["Strength Sap"],
+                  ["Stored Power"],
+                  ["Tera Blast"]
+              ],
+              "item": ["Focus Sash"],
+              "nature": "Bold",
+              "evs": {"hp": 108, "def": 196, "spe": 204},
+              "ivs": {"atk": 0},
+              "teraType": ["Fighting", "Water"],
+              "wantsTera": true,
+              "ability": ["Weak Armor"]
+          },
+          {
+              "species": "Polteageist",
+              "weight": 50,
               "moves": [
                   ["Shell Smash"],
                   ["Strength Sap"],

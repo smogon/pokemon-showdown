@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Unnerve`, function () {
-	afterEach(function () {
+describe(`Unnerve`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should allow Berry activation between switches of Unnerve`, function () {
+	it(`should allow Berry activation between switches of Unnerve`, () => {
 		battle = common.createBattle([[
-			{species: 'toxapex', ability: 'unnerve', moves: ['toxic']},
-			{species: 'corviknight', ability: 'unnerve', moves: ['sleeptalk']},
+			{ species: 'toxapex', ability: 'unnerve', moves: ['toxic'] },
+			{ species: 'corviknight', ability: 'unnerve', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', item: 'lumberry', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'lumberry', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('switch 2', 'auto');
@@ -24,28 +24,28 @@ describe(`Unnerve`, function () {
 
 	// See writeup by SadisticMystic: https://glitchcity.wiki/Unnerve_desync_glitch
 	// Tests done with Oran Berry here, but also possible with other healing Berries or Cheek Pouch
-	describe.skip(`Unnerve Desync Glitch`, function () {
-		beforeEach(function () {
+	describe.skip(`Unnerve Desync Glitch`, () => {
+		beforeEach(() => {
 			battle = common.createBattle([[
 				// 18 HP on Wynaut
-				{species: 'Wynaut', level: 3, ivs: {hp: 0}, ability: 'dazzling', item: 'oranberry', moves: ['bellydrum', 'flamethrower']},
-				{species: 'Aggron', moves: ['sleeptalk']},
+				{ species: 'Wynaut', level: 3, ivs: { hp: 0 }, ability: 'dazzling', item: 'oranberry', moves: ['bellydrum', 'flamethrower'] },
+				{ species: 'Aggron', moves: ['sleeptalk'] },
 			], [
-				{species: 'Mewtwo', ability: 'unnerve', item: 'laggingtail', moves: ['explosion']},
-				{species: 'Celesteela', moves: ['tackle', 'poweruppunch', 'quickattack', 'roar']},
+				{ species: 'Mewtwo', ability: 'unnerve', item: 'laggingtail', moves: ['explosion'] },
+				{ species: 'Celesteela', moves: ['tackle', 'poweruppunch', 'quickattack', 'roar'] },
 			]]);
 			battle.makeChoices();
 			assert.false.fainted(battle.p1.active[0], `Wynaut should not have fainted.`);
 			battle.choose('p2', 'switch celesteela');
 		});
 
-		it(`should allow the undead Pokemon to switch back in after "fainting"`, function () {
+		it(`should allow the undead Pokemon to switch back in after "fainting"`, () => {
 			battle.makeChoices(); // "KO" Wynaut
 			battle.choose('p1', 'switch aggron');
 			assert.false.cantMove(() => battle.choose('p1', 'switch wynaut'));
 		});
 
-		it(`should make attacks used against the undead Pokemon fail due to lack of target`, function () {
+		it(`should make attacks used against the undead Pokemon fail due to lack of target`, () => {
 			battle.makeChoices(); // "KO" Wynaut
 			battle.choose('p1', 'switch aggron');
 			battle.makeChoices('switch wynaut', 'move poweruppunch');
@@ -55,7 +55,7 @@ describe(`Unnerve`, function () {
 			assert.equal(move.pp, move.maxpp - 1);
 		});
 
-		it(`should allow some passive abilities on the undead Pokemon to work normally`, function () {
+		it(`should allow some passive abilities on the undead Pokemon to work normally`, () => {
 			battle.makeChoices(); // "KO" Wynaut
 			battle.choose('p1', 'switch aggron');
 			battle.makeChoices('switch wynaut', 'move quickattack');
@@ -63,7 +63,7 @@ describe(`Unnerve`, function () {
 			assert(dazzlingIndex > 0, `Undead Dazzling should have still blocked Quick Attack`);
 		});
 
-		it(`should allow the undead Pokemon to choose to switch, but the turn will be skipped`, function () {
+		it(`should allow the undead Pokemon to choose to switch, but the turn will be skipped`, () => {
 			battle.makeChoices(); // "KO" Wynaut
 			battle.choose('p1', 'switch aggron');
 			battle.makeChoices('switch wynaut', 'auto');
@@ -71,7 +71,7 @@ describe(`Unnerve`, function () {
 			assert.species(battle.p1.active[0], 'Wynaut');
 		});
 
-		it(`should allow the undead Pokemon to choose moves, but the turn will be skipped`, function () {
+		it(`should allow the undead Pokemon to choose moves, but the turn will be skipped`, () => {
 			battle.makeChoices(); // "KO" Wynaut
 			battle.choose('p1', 'switch aggron');
 			battle.makeChoices('switch wynaut', 'auto');
@@ -80,7 +80,7 @@ describe(`Unnerve`, function () {
 			assert.equal(move.pp, move.maxpp);
 		});
 
-		it(`should allow the undead Pokemon to choose to Dynamax, but the turn will be skipped`, function () {
+		it(`should allow the undead Pokemon to choose to Dynamax, but the turn will be skipped`, () => {
 			battle.makeChoices(); // "KO" Wynaut
 			battle.choose('p1', 'switch aggron');
 			battle.makeChoices('switch wynaut', 'auto');

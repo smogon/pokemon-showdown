@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	aguavberry: {
 		inherit: true,
 		onUpdate(pokemon) {
@@ -165,7 +165,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	souldew: {
 		inherit: true,
-		onBasePower() {},
+		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
 		onModifySpA(spa, pokemon) {
 			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {

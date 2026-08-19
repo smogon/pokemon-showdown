@@ -2,27 +2,27 @@
 
 const assert = require('assert').strict;
 
-const {makeUser, makeConnection} = require('../users-utils');
+const { makeUser, makeConnection } = require('../users-utils');
 
-describe('Users features', function () {
-	describe('Users', function () {
-		describe('get', function () {
-			it('should be a function', function () {
+describe('Users features', () => {
+	describe('Users', () => {
+		describe('get', () => {
+			it('should be a function', () => {
 				assert.equal(typeof Users.get, 'function');
 			});
 		});
-		describe('connections', function () {
-			it('should be a Map', function () {
+		describe('connections', () => {
+			it('should be a Map', () => {
 				assert(Users.connections instanceof Map);
 			});
 		});
-		describe('users', function () {
-			it('should be a Map', function () {
+		describe('users', () => {
+			it('should be a Map', () => {
 				assert(Users.users instanceof Map);
 			});
 		});
-		describe('Connection', function () {
-			describe('#onDisconnect', function () {
+		describe('Connection', () => {
+			describe('#onDisconnect', () => {
 				beforeEach(function () {
 					this.connection = makeConnection('127.0.0.1');
 				});
@@ -43,27 +43,27 @@ describe('Users features', function () {
 				});
 			});
 
-			describe('#joinRoom', function () {
+			describe('#joinRoom', () => {
 				let room, connection;
-				beforeEach(function () {
+				beforeEach(() => {
 					connection = makeConnection('127.0.0.1');
 				});
 
-				afterEach(function () {
+				afterEach(() => {
 					connection.destroy();
 					if (room) room.destroy();
 				});
 
-				it('should join a room if not already present', function () {
+				it('should join a room if not already present', () => {
 					room = Rooms.createChatRoom('test');
 					connection.joinRoom(Rooms.get('test'));
 					assert(connection.inRooms.has('test'));
 				});
 			});
 
-			describe('#leaveRoom', function () {
+			describe('#leaveRoom', () => {
 				let room;
-				afterEach(function () {
+				afterEach(() => {
 					if (room) room.destroy();
 				});
 				it('should leave a room that is present', function () {
@@ -75,7 +75,7 @@ describe('Users features', function () {
 				});
 			});
 		});
-		describe('User', function () {
+		describe('User', () => {
 			it('should store IP addresses after disconnect', () => {
 				const conn = makeConnection('127.0.0.1');
 				const user = makeUser('', conn);
@@ -84,9 +84,9 @@ describe('Users features', function () {
 				assert.deepEqual(['127.0.0.1'], user.ips);
 			});
 
-			describe('#disconnectAll', function () {
+			describe('#disconnectAll', () => {
 				for (const totalConnections of [1, 2]) {
-					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', function () {
+					it('should drop all ' + totalConnections + ' connection(s) and mark as inactive', () => {
 						const user = makeUser();
 						let iterations = totalConnections;
 						while (--iterations) user.mergeConnection(makeConnection());
@@ -96,7 +96,7 @@ describe('Users features', function () {
 						assert.equal(user.connected, false);
 					});
 
-					it('should unref all ' + totalConnections + ' connection(s)', function () {
+					it('should unref all ' + totalConnections + ' connection(s)', () => {
 						const user = makeUser();
 						let iterations = totalConnections;
 						while (--iterations) user.mergeConnection(makeConnection());
@@ -109,7 +109,7 @@ describe('Users features', function () {
 						}
 					});
 
-					it('should clear `user` property for all ' + totalConnections + ' connection(s)', function () {
+					it('should clear `user` property for all ' + totalConnections + ' connection(s)', () => {
 						const user = makeUser();
 						let iterations = totalConnections;
 						while (--iterations) user.mergeConnection(makeConnection());
@@ -122,14 +122,14 @@ describe('Users features', function () {
 					});
 				}
 			});
-			describe('#ban (network) (slow)', function () {
-				afterEach(function () {
+			describe('#ban (network) (slow)', () => {
+				afterEach(() => {
 					for (const ip in Users.bannedIps) {
 						delete Users.bannedIps[ip];
 					}
 				});
 
-				it('should disconnect every user at that IP', async function () {
+				it('should disconnect every user at that IP', async () => {
 					Punishments.sharedIps = new Map();
 					const user1 = makeUser('', '192.168.1.1');
 					const user2 = makeUser('', '192.168.1.1');
@@ -138,7 +138,7 @@ describe('Users features', function () {
 					assert.equal(user2.connected, false);
 				});
 
-				it('should not disconnect users at other IPs', async function () {
+				it('should not disconnect users at other IPs', async () => {
 					const user1 = makeUser('', '192.168.1.1');
 					const user2 = makeUser('', '192.168.1.2');
 					await Punishments.ban(user1);
@@ -146,9 +146,9 @@ describe('Users features', function () {
 				});
 			});
 
-			describe('#can', function () {
+			describe('#can', () => {
 				let room;
-				afterEach(function () {
+				afterEach(() => {
 					for (const user of Users.users.values()) {
 						user.disconnectAll();
 						user.destroy();
@@ -157,7 +157,7 @@ describe('Users features', function () {
 						if (room) room.destroy();
 					}
 				});
-				it(`should allow 'u' permissions on lower ranked users`, function () {
+				it(`should allow 'u' permissions on lower ranked users`, () => {
 					const user = makeUser();
 					user.tempGroup = '@';
 					assert.equal(user.can('globalban', user), false, 'targeting self');
@@ -167,10 +167,10 @@ describe('Users features', function () {
 					assert.equal(user.can('globalban', target), true, 'targeting lower rank');
 					target.tempGroup = '@';
 					assert.equal(user.can('globalban', target), false, 'targeting same rank');
-					target.tempGroup = '&';
+					target.tempGroup = '~';
 					assert.equal(user.can('globalban', target), false, 'targeting higher rank');
 				});
-				it(`should not allow users to demote themselves`, function () {
+				it(`should not allow users to demote themselves`, () => {
 					room = Rooms.createChatRoom("test");
 					const user = makeUser("User");
 					user.joinRoom(room);

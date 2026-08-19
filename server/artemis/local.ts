@@ -5,9 +5,9 @@
  */
 
 import * as child_process from 'child_process';
-import {ProcessManager, Streams, Utils, Repl, FS} from '../../lib';
-import {Config} from '../config-loader';
-import {toID} from '../../sim/dex-data';
+import { ProcessManager, Streams, Utils, FS } from '../../lib';
+import * as ConfigLoader from '../config-loader';
+import { toID } from '../../sim/dex-data';
 
 class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	tasks = new Set<string>();
@@ -22,7 +22,7 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	listen() {
 		this.process.stdout.setEncoding('utf8');
 		this.process.stderr.setEncoding('utf8');
-		this.process.stdout.on('data', (data) => {
+		this.process.stdout.on('data', data => {
 			// so many bugs were created by \nready\n
 			data = data.trim();
 			const [taskId, dataStr] = data.split("|");
@@ -54,12 +54,12 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 			this.pushEnd();
 		});
 	}
-	_write(chunk: string) {
+	override _write(chunk: string) {
 		const [taskId, message] = Utils.splitFirst(chunk, '\n');
 		this.tasks.add(taskId);
 		this.process.stdin.write(`${taskId}|${message}\n`);
 	}
-	destroy() {
+	override destroy() {
 		try {
 			this.process.kill();
 		} catch {}
@@ -67,11 +67,14 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
-export const PM = new ProcessManager.StreamProcessManager(module, () => new ArtemisStream(), message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
+export const PM = new ProcessManager.StreamProcessManager(
+	'abusemonitor-local', module,
+	() => new ArtemisStream(), message => {
+		if (message.startsWith('SLOW\n')) {
+			Monitor.slow(message.slice(5));
+		}
 	}
-});
+);
 
 export class LocalClassifier {
 	static readonly PM = PM;
@@ -148,13 +151,13 @@ export class LocalClassifier {
 		}
 		return data as Record<string, number>;
 	}
+	static start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
+	}
 }
 
-// main module check necessary since this gets required in other non-parent processes sometimes
-// when that happens we do not want to take over or set up or anything
-if (require.main === module) {
-	// This is a child process!
-	global.Config = Config;
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A local Artemis child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -171,7 +174,9 @@ if (require.main === module) {
 		}
 	});
 	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-local-${process.pid}`, cmd => eval(cmd));
-} else if (!process.send) {
-	PM.spawn(Config.localartemisprocesses || 1);
+	PM.startRepl(cmd => eval(cmd));
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['localartemis'] ?? 1);
 }

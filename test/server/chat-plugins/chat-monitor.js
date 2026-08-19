@@ -6,11 +6,14 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {makeUser} = require('../../users-utils');
-
-const {Filters} = require('../../../dist/server/chat-plugins/chat-monitor');
+const { makeUser } = require('../../users-utils');
 
 describe('Chat monitor', () => {
+	let Filters = null;
+	before(() => {
+		Filters = require('../../../dist/server/chat-plugins/chat-monitor').Filters;
+	});
+
 	describe('regex generator', () => {
 		it('should generate case-insensitive regexes', () => {
 			const regex = Filters.generateRegex('slur');

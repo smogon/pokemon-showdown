@@ -12,9 +12,42 @@ import * as fs from 'fs';
 import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
-import {crashlogger} from './crashlogger';
-import {FS} from './fs';
+import { crashlogger } from './crashlogger';
+import { FS } from './fs';
 declare const Config: any;
+
+const MAX_CONCURRENT_CLEANUP_SOCKETS = 8;
+
+async function isSocket(pathname: string) {
+	try {
+		const stat = await fs.promises.stat(pathname);
+		return stat.isSocket();
+	} catch {
+		return false;
+	}
+}
+
+async function runParallelWithLimit(items: string[], max: number, fn: (item: string) => Promise<void>) {
+	const results: Promise<void>[] = [];
+	const runningPromises = new Map<Promise<void>, Promise<boolean>>();
+
+	for (const item of items) {
+		const p = fn(item);
+		results.push(p);
+		runningPromises.set(p, p.then(
+			() => runningPromises.delete(p),
+			() => runningPromises.delete(p)
+		));
+
+		if (max <= runningPromises.size) {
+			await Promise.race(runningPromises.values());
+		}
+	}
+
+	return Promise.all(results);
+}
+
+export type EvalType = (script: string) => unknown;
 
 export const Repl = new class {
 	/**
@@ -60,11 +93,8 @@ export const Repl = new class {
 	/**
 	 * Delete old sockets in the REPL directory (presumably from a crashed
 	 * previous launch of PS).
-	 *
-	 * Does everything synchronously, so that the directory is guaranteed
-	 * clean and ready for new REPL sockets by the time this function returns.
 	 */
-	cleanup() {
+	async cleanup() {
 		const config = typeof Config !== 'undefined' ? Config : {};
 		if (!config.repl) return;
 
@@ -72,34 +102,36 @@ export const Repl = new class {
 		const directory = path.dirname(
 			path.resolve(FS.ROOT_PATH, config.replsocketprefix || 'logs/repl', 'app')
 		);
-		let files;
-		try {
-			files = fs.readdirSync(directory);
-		} catch {}
-		if (files) {
-			for (const file of files) {
-				const pathname = path.resolve(directory, file);
-				const stat = fs.statSync(pathname);
-				if (!stat.isSocket()) continue;
-
+		const files = await fs.promises.readdir(directory);
+		await runParallelWithLimit(files, MAX_CONCURRENT_CLEANUP_SOCKETS, async (file: string) => {
+			const pathname = path.resolve(directory, file);
+			if (!(await isSocket(pathname))) return;
+			await new Promise((resolve, reject) => {
 				const socket = net.connect(pathname, () => {
 					socket.end();
 					socket.destroy();
+					resolve(null);
 				}).on('error', () => {
-					fs.unlinkSync(pathname);
+					resolve(fs.promises.unlink(pathname).catch(err => null));
 				});
-			}
-		}
+			});
+		});
 	}
 
 	/**
 	 * Starts a REPL server, using a UNIX socket for IPC. The eval function
-	 * parametre is passed in because there is no other way to access a file's
+	 * parameter is passed in because there is no other way to access a file's
 	 * non-global context.
 	 */
-	start(filename: string, evalFunction: (input: string) => any) {
+	start(filename: string, evalFunction: EvalType) {
 		const config = typeof Config !== 'undefined' ? Config : {};
 		if (!config.repl) return;
+		// eslint-disable-next-line no-eval
+		if (evalFunction === eval) {
+			// Direct eval is most useful for debugging, but
+			// nothing prevents consumers from wrapping indirect eval if required (see startGlobal).
+			throw new TypeError(`Expected 'evalFunction' to be a wrapper around direct eval.`);
+		}
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
 		// this only supports UNIX sockets.
@@ -151,5 +183,11 @@ export const Repl = new class {
 		} catch (err) {
 			console.error(`Could not start REPL server "${filename}": ${err}`);
 		}
+	}
+
+	startGlobal(filename: string) {
+		/* eslint-disable @typescript-eslint/no-implied-eval */
+		return this.start(filename, new Function(`script`, `return eval(script);`) as EvalType);
+		/* eslint-enable @typescript-eslint/no-implied-eval */
 	}
 };

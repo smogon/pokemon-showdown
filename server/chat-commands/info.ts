@@ -9,16 +9,16 @@
  * @license MIT
  */
 import * as net from 'net';
-import {YouTube, Twitch} from '../chat-plugins/youtube';
-import {Net, Utils} from '../../lib';
-import {RoomSections} from './room-settings';
+import { YouTube, Twitch } from '../chat-plugins/youtube';
+import { Net, Utils } from '../../lib';
+import { RoomSections } from './room-settings';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
 interface DexResources {
 	url: string;
-	resources: {resource_name: string, url: string}[];
+	resources: { resource_name: string, url: string }[];
 }
 
 export function getCommonBattles(
@@ -46,7 +46,7 @@ export function findFormats(targetId: string, isOMSearch = false) {
 	const formatList = exactFormat.exists ? [exactFormat] : Dex.formats.all();
 
 	// Filter formats and group by section
-	const sections: {[k: string]: {name: string, formats: ID[]}} = {};
+	const sections: { [k: string]: { name: string, formats: ID[] } } = {};
 	let totalMatches = 0;
 	for (const format of formatList) {
 		const sectionId = toID(format.section);
@@ -65,11 +65,11 @@ export function findFormats(targetId: string, isOMSearch = false) {
 				}
 			}
 			totalMatches++;
-			if (!sections[sectionId]) sections[sectionId] = {name: format.section!, formats: []};
+			if (!sections[sectionId]) sections[sectionId] = { name: format.section!, formats: [] };
 			sections[sectionId].formats.push(format.id);
 		}
 	}
-	return {totalMatches, sections};
+	return { totalMatches, sections };
 }
 
 export const formatsDataCache = new Map<string, DexResources | null>();
@@ -106,15 +106,15 @@ export const commands: Chat.ChatCommands = {
 	profile: 'whois',
 	whois(target, room, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
-		const targetUser = this.getUserOrSelf(target, {exactName: user.tempGroup === ' '});
+		const targetUser = this.getUserOrSelf(target, { exactName: user.tempGroup === ' ' });
 		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
 			if (showAll) return this.parse('/offlinewhois ' + target);
-			return this.errorReply(`User ${target} not found.`);
+			throw new Chat.ErrorMessage(`User ${target} not found.`);
 		}
 		if (showAll && !user.trusted && targetUser !== user) {
-			return this.errorReply(`/${cmd} - Access denied.`);
+			throw new Chat.ErrorMessage(`/${cmd} - Access denied.`);
 		}
 
 		let buf = Utils.html`<strong class="username"><small style="display:none">${targetUser.tempGroup}</small>${targetUser.name}</strong> `;
@@ -268,7 +268,7 @@ export const commands: Chat.ChatCommands = {
 				const punishments = Punishments.ips.get(ip);
 				if (user.can('alts') && punishments) {
 					for (const punishment of punishments) {
-						const {type, id} = punishment;
+						const { type, id } = punishment;
 						let punishMsg = Punishments.punishmentTypes.get(type)?.desc || type;
 						if (id !== targetUser.id) punishMsg += ` as ${id}`;
 						status.push(punishMsg);
@@ -316,17 +316,17 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (canViewPunishments) {
-			const punishments = Punishments.getRoomPunishments(targetUser, {checkIps: true});
+			const punishments = Punishments.getRoomPunishments(targetUser, { checkIps: true });
 
 			if (punishments.length) {
 				buf += `<br />Room punishments: `;
 
 				buf += punishments.map(([curRoom, curPunishment]) => {
-					const {type: punishType, id: punishUserid, expireTime, reason} = curPunishment;
+					const { type: punishType, id: punishUserid, expireTime, reason } = curPunishment;
 					let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 					if (punishUserid !== targetUser.id) punishDesc += ` as ${punishUserid}`;
 					const expiresIn = new Date(expireTime).getTime() - Date.now();
-					const expireString = Chat.toDurationString(expiresIn, {precision: 1});
+					const expireString = Chat.toDurationString(expiresIn, { precision: 1 });
 					punishDesc += ` for ${expireString}`;
 
 					if (reason) punishDesc += `: ${reason}`;
@@ -347,17 +347,17 @@ export const commands: Chat.ChatCommands = {
 	},
 	whoishelp: [
 		`/whois - Get details on yourself: alts, group, IP address, and rooms.`,
-		`/whois [username] - Get details on a username: alts (Requires: % @ &), group, IP address (Requires: @ &), and rooms.`,
+		`/whois [username] - Get details on a username: alts (Requires: % @ ~), group, IP address (Requires: @ ~), and rooms.`,
 	],
 
 	'chp': 'offlinewhois',
 	checkpunishment: 'offlinewhois',
 	offlinewhois(target, room, user) {
 		if (!user.trusted) {
-			return this.errorReply("/offlinewhois - Access denied.");
+			throw new Chat.ErrorMessage("/offlinewhois - Access denied.");
 		}
 		const userid = toID(target);
-		if (!userid) return this.errorReply("Please enter a valid username.");
+		if (!userid) throw new Chat.ErrorMessage("Please enter a valid username.");
 		const targetUser = Users.get(userid);
 		let buf = Utils.html`<strong class="username">${target}</strong>`;
 		if (!targetUser?.connected) buf += ` <em style="color:gray">(offline)</em>`;
@@ -380,7 +380,7 @@ export const commands: Chat.ChatCommands = {
 		const idPunishments = Punishments.userids.get(userid);
 		if (idPunishments) {
 			for (const p of idPunishments) {
-				const {type: punishType, id: punishUserid, reason} = p;
+				const { type: punishType, id: punishUserid, reason } = p;
 				if (!user.can('alts') && !['LOCK', 'BAN'].includes(punishType)) continue;
 				const punishDesc = (Punishments.punishmentTypes.get(punishType)?.desc || punishType);
 				buf += `${punishDesc}: ${punishUserid}`;
@@ -395,21 +395,21 @@ export const commands: Chat.ChatCommands = {
 		if (!user.can('alts') && !atLeastOne) {
 			const hasJurisdiction = room && user.can('mute', null, room) && Punishments.roomUserids.nestedHas(room.roomid, userid);
 			if (!hasJurisdiction) {
-				return this.errorReply("/checkpunishment - User not found.");
+				throw new Chat.ErrorMessage("/checkpunishment - User not found.");
 			}
 		}
 
-		const punishments = Punishments.getRoomPunishments(targetUser || {id: userid} as User);
+		const punishments = Punishments.getRoomPunishments(targetUser || { id: userid } as User);
 
 		if (punishments?.length) {
 			buf += `<br />Room punishments: `;
 
 			buf += punishments.map(([curRoom, curPunishment]) => {
-				const {type: punishType, id: punishUserid, expireTime, reason} = curPunishment;
+				const { type: punishType, id: punishUserid, expireTime, reason } = curPunishment;
 				let punishDesc = Punishments.roomPunishmentTypes.get(punishType)?.desc || punishType;
 				if (punishUserid !== userid) punishDesc += ` as ${punishUserid}`;
 				const expiresIn = new Date(expireTime).getTime() - Date.now();
-				const expireString = Chat.toDurationString(expiresIn, {precision: 1});
+				const expireString = Chat.toDurationString(expiresIn, { precision: 1 });
 				punishDesc += ` for ${expireString}`;
 
 				if (reason) punishDesc += `: ${reason}`;
@@ -447,35 +447,35 @@ export const commands: Chat.ChatCommands = {
 			return Utils.html`<a href="/${id}">${shortId}</a>`;
 		}).join(' | '));
 	},
-	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ &`],
+	sharedbattleshelp: [`/sharedbattles [user1], [user2] - Finds recent battles common to [user1] and [user2]. Requires % @ ~`],
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) {
-			return this.errorReply("This command is unavailable in temporary rooms.");
+			throw new Chat.ErrorMessage("This command is unavailable in temporary rooms.");
 		}
 		return this.parse(`/join view-punishments-${room}`);
 	},
-	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # &`],
+	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # ~`],
 
 	sgp: 'showglobalpunishments',
 	showglobalpunishments(target, room, user) {
 		this.checkCan('lock');
 		return this.parse(`/join view-globalpunishments`);
 	},
-	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # &`],
+	showglobalpunishmentshelp: [`/showpunishments - Shows the current global punishments. Requires: % @ # ~`],
 
 	async host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		this.checkCan('alts');
 		target = target.trim();
-		if (!net.isIPv4(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		const {dnsbl, host, hostType} = await IPTools.lookup(target);
+		if (!net.isIPv4(target)) throw new Chat.ErrorMessage('You must pass a valid IPv4 IP to /host.');
+		const { dnsbl, host, hostType } = await IPTools.lookup(target);
 		const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
 		this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 	},
-	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: % @ &`],
+	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: % @ ~`],
 
 	searchip: 'ipsearch',
 	ipsearchall: 'ipsearch',
@@ -487,7 +487,7 @@ export const commands: Chat.ChatCommands = {
 		const [ipOrHost, roomid] = this.splitOne(target);
 		const targetRoom = roomid ? Rooms.get(roomid) : null;
 		if (typeof targetRoom === 'undefined') {
-			return this.errorReply(`The room "${roomid}" does not exist.`);
+			throw new Chat.ErrorMessage(`The room "${roomid}" does not exist.`);
 		}
 		const results: string[] = [];
 		const isAll = (cmd === 'ipsearchall');
@@ -520,7 +520,7 @@ export const commands: Chat.ChatCommands = {
 				results.push(`${curUser.connected ? ONLINE_SYMBOL : OFFLINE_SYMBOL} ${curUser.name}`);
 			}
 		} else {
-			return this.errorReply(`${ipOrHost} is not a valid IP, IP range, or host.`);
+			throw new Chat.ErrorMessage(`${ipOrHost} is not a valid IP, IP range, or host.`);
 		}
 
 		if (!results.length) {
@@ -531,7 +531,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`More than 100 users found. Use /ipsearchall for the full list.`);
 		}
 	},
-	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: &`],
+	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: ~`],
 
 	checkchallenges(target, room, user) {
 		room = this.requireRoom();
@@ -541,12 +541,12 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`This command must be broadcast:`);
 			return this.parse(`/help checkchallenges`);
 		}
-		if (!target || !target.includes(',')) return this.parse(`/help checkchallenges`);
-		const {targetUser: user1, rest} = this.requireUser(target);
-		const {targetUser: user2, rest: rest2} = this.requireUser(rest);
+		if (!target?.includes(',')) return this.parse(`/help checkchallenges`);
+		const { targetUser: user1, rest } = this.requireUser(target);
+		const { targetUser: user2, rest: rest2 } = this.requireUser(rest);
 		if (user1 === user2 || rest2) return this.parse(`/help checkchallenges`);
 		if (!(user1.id in room.users) || !(user2.id in room.users)) {
-			return this.errorReply(`Both users must be in this room.`);
+			throw new Chat.ErrorMessage(`Both users must be in this room.`);
 		}
 		const chall = Ladders.challenges.search(user1.id, user2.id);
 
@@ -556,7 +556,7 @@ export const commands: Chat.ChatCommands = {
 		const [from, to] = user1.id === chall.from ? [user1, user2] : [user2, user1];
 		this.sendReplyBox(Utils.html`${from.name} is challenging ${to.name} in ${Dex.formats.get(chall.format).name}.`);
 	},
-	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: * @ # &`],
+	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: * @ # ~`],
 
 	/*********************************************************
 	 * Client fallback
@@ -585,8 +585,9 @@ export const commands: Chat.ChatCommands = {
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
-		const {dex, format, targets} = this.splitFormat(target, true);
+		const { dex, format, targets } = this.splitFormat(target, true, true);
 
+		const prefix = `|c|${user.getIdentity(room)}|/raw `;
 		let buffer = '';
 		target = targets.join(',');
 		const targetId = toID(target);
@@ -602,15 +603,18 @@ export const commands: Chat.ChatCommands = {
 		}
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
-		if (!newTargets || !newTargets.length) {
-			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
+		if (!newTargets?.length) {
+			throw new Chat.ErrorMessage(`'${target}' doesn't match any Pok\u00e9mon, item, move, ability or nature${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
+		}
+		if (newTargets.length > 2) {
+			throw new Chat.ErrorMessage(`'${target}' has no exact match. Too many approximate matches: ${newTargets.map(t => t.name).join(', ')}`);
 		}
 
 		for (const [i, newTarget] of newTargets.entries()) {
 			if (newTarget.isInexact && !i) {
-				buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
+				buffer = `'${target}' has no exact match${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Approximate match${newTargets.length === 1 ? '' : 'es'}:\n`;
 			}
-			let details: {[k: string]: string} = {};
+			let details: { [k: string]: string } = {};
 			switch (newTarget.searchType) {
 			case 'nature':
 				const nature = Dex.natures.get(newTarget.name);
@@ -624,7 +628,7 @@ export const commands: Chat.ChatCommands = {
 			case 'pokemon':
 				let pokemon = dex.species.get(newTarget.name);
 				if (format?.onModifySpecies) {
-					pokemon = format.onModifySpecies.call({dex, clampIntRange: Utils.clampIntRange, toID} as Battle, pokemon) || pokemon;
+					pokemon = format.onModifySpecies.call({ dex, clampIntRange: Utils.clampIntRange, toID } as Battle, pokemon) || pokemon;
 				}
 				let tierDisplay = room?.settings.dataCommandTierDisplay;
 				if (!tierDisplay && room?.battle) {
@@ -639,7 +643,7 @@ export const commands: Chat.ChatCommands = {
 					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
 					tierDisplay === 'National Dex tiers' ? pokemon.natDexTier :
 					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
-				buffer += `|raw|${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
+				buffer += `${prefix}${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
@@ -660,7 +664,8 @@ export const commands: Chat.ChatCommands = {
 					};
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
-					if (gmaxMove && dex.gen >= 8) details["G-Max Move"] = gmaxMove;
+					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
+					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -699,7 +704,7 @@ export const commands: Chat.ChatCommands = {
 						details["Pre-Evolution"] = pokemon.prevo;
 					}
 					if (!evos.length) {
-						details[`<font color="#686868">Does Not Evolve</font>`] = "";
+						details[`<span class="gray">Does Not Evolve</span>`] = "";
 					} else {
 						details["Evolution"] = evos.join(", ");
 					}
@@ -707,7 +712,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'item':
 				const item = dex.items.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataItemHTML(item)}\n`;
+				buffer += `${prefix}${Chat.getDataItemHTML(item)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(item.gen),
@@ -739,15 +744,18 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataMoveHTML(move)}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex.currentMod.startsWith('champions'))}\n`;
 				if (showDetails) {
 					details = {
 						Priority: String(move.priority),
 						Gen: String(move.gen) || 'CAP',
 					};
 
-					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
-					if (move.secondary || move.secondaries || move.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
+					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
+					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
+						details["&#10003; Boosted by Sheer Force"] = "";
+					}
 					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
 					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
 					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
@@ -772,7 +780,7 @@ export const commands: Chat.ChatCommands = {
 						} else if (move.zMove?.basePower) {
 							details["Z-Power"] = String(move.zMove.basePower);
 						} else if (move.zMove?.effect) {
-							const zEffects: {[k: string]: string} = {
+							const zEffects: { [k: string]: string } = {
 								clearnegativeboost: "Restores negative stat stages to 0",
 								crit2: "Crit ratio +2",
 								heal: "Restores HP 100%",
@@ -784,7 +792,7 @@ export const commands: Chat.ChatCommands = {
 						} else if (move.zMove?.boost) {
 							details["Z-Effect"] = "";
 							const boost = move.zMove.boost;
-							const stats: {[k in BoostID]: string} = {
+							const stats: { [k in BoostID]: string } = {
 								atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness',
 							};
 							let h: BoostID;
@@ -804,16 +812,14 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 
-					if (dex.gen >= 8) {
-						if (move.isMax) {
-							details["&#10003; Max Move"] = "";
-							if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
-						} else if (move.maxMove?.basePower) {
-							details["Dynamax Power"] = String(move.maxMove.basePower);
-						}
+					if (move.isMax) {
+						details["&#10003; Max Move"] = "";
+						if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
+					} else if (dex.gen === 8 && move.maxMove?.basePower) {
+						details["Dynamax Power"] = String(move.maxMove.basePower);
 					}
 
-					const targetTypes: {[k: string]: string} = {
+					const targetTypes: { [k: string]: string } = {
 						normal: "One Adjacent Pok\u00e9mon",
 						self: "User",
 						adjacentAlly: "One Ally",
@@ -822,7 +828,7 @@ export const commands: Chat.ChatCommands = {
 						allAdjacentFoes: "All Adjacent Opponents",
 						foeSide: "Opposing Side",
 						allySide: "User's Side",
-						allyTeam: "User's Side",
+						allyTeam: "User's Team",
 						allAdjacent: "All Adjacent Pok\u00e9mon",
 						any: "Any Pok\u00e9mon",
 						all: "All Pok\u00e9mon",
@@ -845,13 +851,16 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'ability':
 				const ability = dex.abilities.get(newTarget.name);
-				buffer += `|raw|${Chat.getDataAbilityHTML(ability)}\n`;
+				buffer += `${prefix}${Chat.getDataAbilityHTML(ability)}\n`;
 				if (showDetails) {
 					details = {
 						Gen: String(ability.gen) || 'CAP',
 					};
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
+					if (ability.isNonstandard) {
+						details[`Unobtainable in Gen ${dex.gen}`] = "";
+					}
 				}
 				break;
 			default:
@@ -859,8 +868,8 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (showDetails) {
-				buffer += `|raw|<font size="1">${Object.entries(details).map(([detail, value]) => (
-					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
+					value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
 		}
@@ -869,7 +878,7 @@ export const commands: Chat.ChatCommands = {
 	datahelp: [
 		`/data [pokemon/item/move/ability/nature] - Get details on this pokemon/item/move/ability/nature.`,
 		`/data [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # &`,
+		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # ~`,
 	],
 
 	dt: 'details',
@@ -892,7 +901,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/details [Pok\u00e9mon/item/move/ability/nature], Gen [generation number]</code>: get details on this Pok\u00e9mon/item/move/ability/nature in that generation.<br />` +
 			`You can also append the generation number to <code>/dt</code>; for example, <code>/dt1 Mewtwo</code> gets details on Mewtwo in Gen 1.<br />` +
 			`<code>/details [Pok\u00e9mon/item/move/ability/nature], [format]</code>: get details on this Pok\u00e9mon/item/move/ability/nature in that format.<br />` +
-			`<code>!details [Pok\u00e9mon/item/move/ability/nature]</code>: show everyone these details. Requires: + % @ # &`
+			`<code>!details [Pok\u00e9mon/item/move/ability/nature]</code>: show everyone these details. Requires: + % @ # ~`
 		);
 	},
 
@@ -902,7 +911,7 @@ export const commands: Chat.ChatCommands = {
 	weakness(target, room, user) {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
-		const {format, dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
+		const { format, dex, targets } = this.splitFormat(target.split(/[,/]/).map(toID));
 
 		let isInverse = false;
 		if (format && Dex.formats.getRuleTable(format).has('inversemod')) {
@@ -912,40 +921,94 @@ export const commands: Chat.ChatCommands = {
 			targets.pop();
 		}
 
-		let species: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
-		const type1 = dex.types.get(targets[0]);
-		const type2 = dex.types.get(targets[1]);
-		const type3 = dex.types.get(targets[2]);
-
-		if (species.exists) {
-			target = species.name;
-		} else {
-			const types = [];
-			if (type1.exists) {
-				types.push(type1.name);
-				if (type2.exists && type2 !== type1) {
-					types.push(type2.name);
-				}
-				if (type3.exists && type3 !== type1 && type3 !== type2) {
-					types.push(type3.name);
-				}
+		const originalSearch = target;
+		let imperfectMatch = false;
+		let isMatch = false;
+		let species = dex.species.get(targets[0]);
+		let type1 = dex.types.get(targets[0]);
+		let type2 = dex.types.get(targets[1]);
+		let type3 = dex.types.get(targets[2]);
+		if (species.name !== "" && !species.exists && type1.name !== "" && !type1.exists) {
+			const typeSearchResults = dex.dataSearch(targets[0], ['TypeChart']);
+			const speciesSearchResults = dex.dataSearch(targets[0], ['Pokedex']);
+			if (typeSearchResults && typeSearchResults[0].name !== "") {
+				type1 = dex.types.get(typeSearchResults[0].name);
+				imperfectMatch = true;
+			} else if (speciesSearchResults && speciesSearchResults[0].name !== "") {
+				species = dex.species.get(speciesSearchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
 			}
-
-			if (types.length === 0) {
-				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
-			}
-			species = {types: types};
-			target = types.join("/");
 		}
 
+		if (type2.name !== "" && !type2.exists) {
+			const searchResults = dex.dataSearch(targets[1], ['TypeChart']);
+			if (searchResults && searchResults[0].name !== "") {
+				type2 = dex.types.get(searchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+			}
+		}
+
+		if (type3.name !== "" && !type3.exists) {
+			const searchResults = dex.dataSearch(targets[2], ['TypeChart']);
+			if (searchResults && searchResults[0].name !== "") {
+				type3 = dex.types.get(searchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+			}
+		}
+
+		const types = [];
+		if (species.exists) {
+			for (const type of species.types) {
+				types.push(type);
+			}
+			target = species.name;
+			isMatch = true;
+		} else if (type1.exists) {
+			types.push(type1.name);
+			target = type1.name;
+			isMatch = true;
+		}
+
+		let alreadyFoundType2 = false;
+		let alreadyFoundType3 = false;
+		if (types.toString().toLowerCase().includes(type2.name.toLowerCase())) {
+			alreadyFoundType2 = true;
+		}
+		if (types.toString().toLowerCase().includes(type3.name.toLowerCase())) {
+			alreadyFoundType3 = true;
+		}
+
+		if (isMatch) {
+			const searchTarget = [];
+			searchTarget.push(target);
+			if (type2.exists && !alreadyFoundType2) {
+				types.push(type2.name);
+				searchTarget.push(type2.name);
+			}
+			if (type3.exists && !alreadyFoundType3) {
+				types.push(type3.name);
+				searchTarget.push(type3.name);
+			}
+			target = searchTarget.join("/");
+		}
+
+		if (imperfectMatch) {
+			this.sendReply(`No Pok\u00e9mon or type named '${originalSearch}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${target}' instead.`);
+		}
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
 		for (const type of dex.types.names()) {
-			const notImmune = dex.getImmunity(type, species);
+			const notImmune = dex.getImmunity(type, types);
 			if (notImmune || isInverse) {
 				let typeMod = !notImmune && isInverse ? 1 : 0;
-				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, species);
+				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, types);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -971,7 +1034,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
-		const statuses: {[k: string]: string} = {
+		const statuses: { [k: string]: string } = {
 			brn: "Burn",
 			frz: "Frozen",
 			hail: "Hail damage",
@@ -983,31 +1046,33 @@ export const commands: Chat.ChatCommands = {
 			trapped: "Trapping",
 		};
 		for (const status in statuses) {
-			if (!dex.getImmunity(status, species)) {
+			if (!dex.getImmunity(status, types)) {
 				immunities.push(statuses[status]);
 			}
 		}
 
 		const buffer = [];
-		buffer.push(`${species.exists ? `${species.name} (ignoring abilities):` : `${target}:`}`);
-		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
-		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<font color=#999999>None</font>'}`);
-		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<font color=#999999>None</font>'}`);
+		buffer.push(`${species.exists ? `${target} (ignoring abilities):` : `${target}:`}`);
+		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<span class="gray">None</span>'}`);
+		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<span class="gray">None</span>'}`);
+		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<span class="gray">None</span>'}`);
 		this.sendReplyBox(buffer.join('<br />'));
 	},
 	weaknesshelp: [
 		`/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.`,
-		`/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
+		`/weakness [type 1], [type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
+		`/weakness [pokemon], [type 1], [type 2] - Provides a Pok\u00e9mon's type and type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
-		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
+		`!weakness [type 1], [type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
+		`!weakness [pokemon], [type 1], [type 2] - Shows everyone a Pok\u00e9mon's type and type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
 	],
 
 	eff: 'effectiveness',
 	type: 'effectiveness',
 	matchup: 'effectiveness',
 	effectiveness(target, room, user) {
-		const {dex, targets} = this.splitFormat(target.split(/[,/]/));
-		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
+		const { dex, targets } = this.splitFormat(target.split(/[,/]/));
+		if (targets.length !== 2) throw new Chat.ErrorMessage("Attacker and defender must be separated with a comma.");
 
 		let searchMethods = ['types', 'moves', 'species'];
 		const sourceMethods = ['types', 'moves'];
@@ -1042,7 +1107,7 @@ export const commands: Chat.ChatCommands = {
 					defender = foundData;
 					defName = `${foundData.name} (not counting abilities)`;
 				} else {
-					defender = {types: [foundData.name]};
+					defender = { types: [foundData.name] };
 					defName = foundData.name;
 				}
 				searchMethods = sourceMethods;
@@ -1058,11 +1123,11 @@ export const commands: Chat.ChatCommands = {
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (const type of defender.types) {
 					const baseMod = dex.getEffectiveness(source, type);
-					const moveMod = source.onEffectiveness?.call({dex: Dex} as Battle, baseMod, null, type, source);
+					const moveMod = source.onEffectiveness?.call({ dex: Dex } as Battle, baseMod, null, type, source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 			}
-			factor = Math.pow(2, totalTypeMod);
+			factor = 2 ** totalTypeMod;
 		}
 
 		const hasThousandArrows = source.id === 'thousandarrows' && defender.types.includes('Flying');
@@ -1080,10 +1145,10 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse("/help coverage");
 
-		const {dex, targets} = this.splitFormat(target.split(/[,+/]/));
+		const { dex, targets } = this.splitFormat(target.split(/[,+/]/));
 		const sources: (string | Move)[] = [];
 		let dispTable = false;
-		const bestCoverage: {[k: string]: number} = {};
+		const bestCoverage: { [k: string]: number } = {};
 		let hasThousandArrows = false;
 
 		for (const type of dex.types.names()) {
@@ -1120,9 +1185,9 @@ export const commands: Chat.ChatCommands = {
 			// arg is a move?
 			const move = dex.moves.get(arg);
 			if (!move.exists) {
-				return this.errorReply(`Type or move '${arg}' not found.`);
+				throw new Chat.ErrorMessage(`Type or move '${arg}' not found.`);
 			} else if (move.gen > dex.gen) {
-				return this.errorReply(`Move '${arg}' is not available in Gen ${dex.gen}.`);
+				throw new Chat.ErrorMessage(`Move '${arg}' is not available in Gen ${dex.gen}.`);
 			}
 
 			if (!move.basePower && !move.basePowerCallback) continue;
@@ -1134,14 +1199,16 @@ export const commands: Chat.ChatCommands = {
 				} else {
 					if (!dex.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
 					const baseMod = dex.getEffectiveness(move, type);
-					const moveMod = move.onEffectiveness?.call({dex} as Battle, baseMod, null, type, move as ActiveMove);
+					const moveMod = move.onEffectiveness?.call({ dex } as Battle, baseMod, null, type, move as ActiveMove);
 					eff = typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 				if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 			}
 		}
-		if (sources.length === 0) return this.errorReply("No moves using a type table for determining damage were specified.");
-		if (sources.length > 4) return this.errorReply("Specify a maximum of 4 moves or types.");
+		if (sources.length === 0) {
+			throw new Chat.ErrorMessage("No moves using a type table for determining damage were specified.");
+		}
+		if (sources.length > 4) throw new Chat.ErrorMessage("Specify a maximum of 4 moves or types.");
 
 		// converts to fractional effectiveness, 0 for immune
 		for (const type in bestCoverage) {
@@ -1149,7 +1216,7 @@ export const commands: Chat.ChatCommands = {
 				bestCoverage[type] = 0;
 				continue;
 			}
-			bestCoverage[type] = Math.pow(2, bestCoverage[type]);
+			bestCoverage[type] = 2 ** bestCoverage[type];
 		}
 
 		if (!dispTable) {
@@ -1160,34 +1227,25 @@ export const commands: Chat.ChatCommands = {
 			const immune: string[] = [];
 
 			for (const type in bestCoverage) {
-				switch (bestCoverage[type]) {
-				case 0:
+				if (bestCoverage[type] === 0) {
 					immune.push(type);
-					break;
-				case 0.25:
-				case 0.5:
+				} else if (bestCoverage[type] < 1) {
 					resists.push(type);
-					break;
-				case 1:
-					neutral.push(type);
-					break;
-				case 2:
-				case 4:
+				} else if (bestCoverage[type] > 1) {
 					superEff.push(type);
-					break;
-				default:
-					throw new Error(`/coverage effectiveness of ${bestCoverage[type]} from parameters: ${target}`);
+				} else {
+					neutral.push(type);
 				}
 			}
 			buffer.push(`Coverage for ${sources.join(' + ')}:`);
-			buffer.push(`<b><font color=#559955>Super Effective</font></b>: ${superEff.join(', ') || '<font color=#999999>None</font>'}`);
-			buffer.push(`<span class="message-effect-resist">Neutral</span>: ${neutral.join(', ') || '<font color=#999999>None</font>'}`);
-			buffer.push(`<span class="message-effect-weak">Resists</span>: ${resists.join(', ') || '<font color=#999999>None</font>'}`);
-			buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immune.join(', ') || '<font color=#999999>None</font>'}`);
+			buffer.push(`<b><font color=#559955>Super Effective</font></b>: ${superEff.join(', ') || '<span class="gray">None</span>'}`);
+			buffer.push(`<span class="message-effect-resist">Neutral</span>: ${neutral.join(', ') || '<span class="gray">None</span>'}`);
+			buffer.push(`<span class="message-effect-weak">Resists</span>: ${resists.join(', ') || '<span class="gray">None</span>'}`);
+			buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immune.join(', ') || '<span class="gray">None</span>'}`);
 			return this.sendReplyBox(buffer.join('<br />'));
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
-			const icon: {[k: string]: string} = {};
+			const icon: { [k: string]: string } = {};
 			for (const type of dex.types.names()) {
 				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
@@ -1222,10 +1280,10 @@ export const commands: Chat.ChatCommands = {
 									continue;
 								}
 								let baseMod = dex.getEffectiveness(move.type, type1);
-								let moveMod = move.onEffectiveness?.call({dex} as Battle, baseMod, null, type1, move as ActiveMove);
+								let moveMod = move.onEffectiveness?.call({ dex } as Battle, baseMod, null, type1, move as ActiveMove);
 								curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 								baseMod = dex.getEffectiveness(move.type, type2);
-								moveMod = move.onEffectiveness?.call({dex} as Battle, baseMod, null, type2, move as ActiveMove);
+								moveMod = move.onEffectiveness?.call({ dex } as Battle, baseMod, null, type2, move as ActiveMove);
 								curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 							}
 
@@ -1234,26 +1292,17 @@ export const commands: Chat.ChatCommands = {
 						if (bestEff === -5) {
 							bestEff = 0;
 						} else {
-							bestEff = Math.pow(2, bestEff);
+							bestEff = 2 ** bestEff;
 						}
 					}
-					switch (bestEff) {
-					case 0:
+					if (bestEff === 0) {
 						cell += `bgcolor=#666666 title="${typing}"><font color=#000000>${bestEff}</font>`;
-						break;
-					case 0.25:
-					case 0.5:
+					} else if (bestEff < 1) {
 						cell += `bgcolor=#AA5544 title="${typing}"><font color=#660000>${bestEff}</font>`;
-						break;
-					case 1:
-						cell += `bgcolor=#6688AA title="${typing}"><font color=#000066>${bestEff}</font>`;
-						break;
-					case 2:
-					case 4:
+					} else if (bestEff > 1) {
 						cell += `bgcolor=#559955 title="${typing}"><font color=#003300>${bestEff}</font>`;
-						break;
-					default:
-						throw new Error(`/coverage effectiveness of ${bestEff} from parameters: ${target}`);
+					} else {
+						cell += `bgcolor=#6688AA title="${typing}"><font color=#000066>${bestEff}</font>`;
 					}
 					cell += '</th>';
 					buffer += cell;
@@ -1316,8 +1365,11 @@ export const commands: Chat.ChatCommands = {
 				} else if (lowercase.startsWith('lv') || lowercase.startsWith('level')) {
 					level = parseInt(arg.replace(/\D/g, ''));
 					lvlSet = true;
+					if (isNaN(level)) {
+						return this.sendReplyBox('Invalid value for level: ' + Utils.escapeHTML(arg));
+					}
 					if (level < 1 || level > 9999) {
-						return this.sendReplyBox('Invalid value for level: ' + level);
+						return this.sendReplyBox('Level should be between 1 and 9999.');
 					}
 					continue;
 				}
@@ -1511,7 +1563,7 @@ export const commands: Chat.ChatCommands = {
 				if (ev < 0) iv += ev;
 				ev *= 4;
 				if (iv < 0 || ev > 255) {
-					return this.sendReplyBox('No valid EV/IV combination possible with given parameters. Maybe try a different nature?' + ev);
+					return this.sendReplyBox(`No valid EV/IV combination possible with given parameters. Maybe try a different nature?${ev}`);
 				}
 			} else {
 				return this.sendReplyBox('Too many parameters given; nothing to calculate.');
@@ -1538,7 +1590,7 @@ export const commands: Chat.ChatCommands = {
 		`/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.`,
 		`!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.`,
 		`Inputting 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
-		`An actual stat can be given in place of a base stat or EVs. In this case, the minumum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
+		`An actual stat can be given in place of a base stat or EVs. In this case, the minimum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
 	],
 
 	/*********************************************************
@@ -1551,13 +1603,13 @@ export const commands: Chat.ChatCommands = {
 		let uptimeText;
 		if (uptime > 24 * 60 * 60) {
 			const uptimeDays = Math.floor(uptime / (24 * 60 * 60));
-			uptimeText = uptimeDays + " " + (uptimeDays === 1 ? "day" : "days");
+			uptimeText = `${uptimeDays} ${uptimeDays === 1 ? "day" : "days"}`;
 			const uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
-			if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
+			if (uptimeHours) uptimeText += `, ${uptimeHours} ${uptimeHours === 1 ? "hour" : "hours"}`;
 		} else {
 			uptimeText = Chat.toDurationString(uptime * 1000);
 		}
-		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
+		this.sendReplyBox(`Uptime: <b>${uptimeText}</b>`);
 	},
 	uptimehelp: [`/uptime - Shows how long the server has been online for.`],
 
@@ -1588,11 +1640,10 @@ export const commands: Chat.ChatCommands = {
 		const globalRanks = [
 			`<strong>Global ranks</strong>`,
 			`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
-			`§ <strong>Section Leader</strong> - They oversee rooms in a particular section`,
 			`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
 			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
 			`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
-			`&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
+			`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
 		];
 
 		this.sendReplyBox(
@@ -1604,7 +1655,7 @@ export const commands: Chat.ChatCommands = {
 	groupshelp: [
 		`/groups - Explains what the symbols (like % and @) before people's names mean.`,
 		`/groups [global|room] - Explains only global or room symbols.`,
-		`!groups - Shows everyone that information. Requires: + % @ # &`,
+		`!groups - Shows everyone that information. Requires: + % @ # ~`,
 	],
 
 	punishments(target, room, user) {
@@ -1634,8 +1685,8 @@ export const commands: Chat.ChatCommands = {
 		const indefinitePunishments = [
 			this.tr`<strong>Indefinite global punishments</strong>:`,
 			this.tr`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
-				this.tr`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
-				this.tr` forum after at least 3 months without incident.`,
+			this.tr`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
+			this.tr` forum after at least 3 months without incident.`,
 			this.tr`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
 		];
 
@@ -1648,7 +1699,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	punishmentshelp: [
 		`/punishments - Explains punishments.`,
-		`!punishments - Show everyone that information. Requires: + % @ # &`,
+		`!punishments - Show everyone that information. Requires: + % @ # ~`,
 	],
 
 	repo: 'opensource',
@@ -1668,12 +1719,12 @@ export const commands: Chat.ChatCommands = {
 	},
 	opensourcehelp: [
 		`/opensource - Links to PS's source code repository.`,
-		`!opensource - Show everyone that information. Requires: + % @ # &`,
+		`!opensource - Show everyone that information. Requires: + % @ # ~`,
 	],
 
 	staff(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/posts/10715136/">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 	staffhelp: [`/staff - View the staff list.`],
 
@@ -1698,7 +1749,7 @@ export const commands: Chat.ChatCommands = {
 	suggestion: 'suggestions',
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
+		this.sendReplyBox(`<a href="https://play.pokemonshowdown.com/suggestions">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
 	suggestionshelp: [`/suggestions - Links to the place to make suggestions for Pokemon Showdown.`],
 
@@ -1707,12 +1758,12 @@ export const commands: Chat.ChatCommands = {
 	bugs(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room?.battle) {
-			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/ps-bug-report-form/">Bug Reports</a></center>`);
+			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://play.pokemonshowdown.com/bugs">Bug Reports</a></center>`);
 		} else {
 			this.sendReplyBox(
 				`Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />` +
 				`- <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a><br />` +
-				`- <a href="https://www.smogon.com/forums/ps-bug-report-form/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
+				`- <a href="https://play.pokemonshowdown.com/bugs">Bug Reports</a> (ask in <a href="/help">Help</a> before posting if you're unsure)`
 			);
 		}
 	},
@@ -1741,14 +1792,14 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://www.smogon.com/forums/threads/3676132/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
 			`- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
 			`- <a href="https://www.smogon.com/sm/articles/sm_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
-			`- <a href="https://www.smogon.com/dex/ss/formats/">What are the rules for each format?</a><br />` +
-			`- <a href="https://www.smogon.com/ss/articles/clauses">What is 'Sleep Clause' and other clauses?</a><br />` +
+			`- <a href="https://www.smogon.com/dex/sv/formats/">What are the rules for each format?</a><br />` +
+			`- <a href="https://www.smogon.com/sv/articles/clauses">What is 'Sleep Clause' and other clauses?</a><br />` +
 			`- <a href="https://www.smogon.com/articles/getting-started">Next Steps for Competitive Battling</a>`
 		);
 	},
 	introhelp: [
 		`/intro - Provides an introduction to competitive Pok\u00e9mon.`,
-		`!intro - Show everyone that information. Requires: + % @ # &`,
+		`!intro - Show everyone that information. Requires: + % @ # ~`,
 	],
 
 	mentoring: 'smogintro',
@@ -1757,8 +1808,8 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`Welcome to Smogon's official simulator! The <a href="https://www.smogon.com/forums/forums/intro_hub">Information & Resources forum</a> can help you get integrated into the community.<br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3526346">Useful Smogon Info</a><br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3644714">Tiering FAQ</a><br />`
+			`- <a href="https://www.smogon.com/forums/threads/3710821/">Introduction to Smogon</a><br />` +
+			`- <a href="https://www.smogon.com/forums/threads/3652546/">Smogon Discord Directory</a><br />`
 		);
 	},
 	smogintrohelp: [`/smogintro - Provides an introduction to Smogon.`],
@@ -1782,15 +1833,16 @@ export const commands: Chat.ChatCommands = {
 		const SUPPORTED_BATTLESPOT_FORMATS = [
 			'gen5gbusingles', 'gen5gbudoubles', 'gen6battlespotsingles', 'gen6battlespotdoubles', 'gen6battlespottriples', 'gen7battlespotsingles', 'gen7battlespotdoubles', 'gen7bssfactory',
 		];
-		const isRandomBattle = room?.battle?.format.endsWith('randombattle');
+		const isRandomBattle = (room?.battle && (room.battle.format.endsWith('randombattle') ||
+			room.battle.format.endsWith('randomdoublesbattle')));
 		const isBattleSpotBattle = (room?.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) ||
 			room.battle.format.includes("battlespotspecial")));
-		const {dex} = this.extractFormat(room?.battle?.format);
+		const { dex } = this.extractFormat(room?.battle?.format);
 
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
 			(isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
-				`Random Battles damage calculator. (Courtesy of Austin)<br />` +
+				`Random Battles damage calculator. (Courtesy of dhelmise &amp; jetou)<br />` +
 				`- <a href="https://calc.pokemonshowdown.com/randoms.html?gen=${dex.gen}">Random Battles Damage Calculator</a>`
 			);
 		}
@@ -1801,7 +1853,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, dhelmise, &amp; jetou)<br />` +
 			`- <a href="https://calc.pokemonshowdown.com/index.html?gen=${dex.gen}">Damage Calculator</a>`
 		);
 	},
@@ -1809,7 +1861,7 @@ export const commands: Chat.ChatCommands = {
 		`/calc - Provides a link to a damage calculator`,
 		`/rcalc - Provides a link to the random battles damage calculator`,
 		`/bsscalc - Provides a link to the Battle Spot damage calculator`,
-		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # &`,
+		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # ~`,
 	],
 
 	capintro: 'cap',
@@ -1826,20 +1878,8 @@ export const commands: Chat.ChatCommands = {
 	},
 	caphelp: [
 		`/cap - Provides an introduction to the Create-A-Pok\u00e9mon project.`,
-		`!cap - Show everyone that information. Requires: + % @ # &`,
+		`!cap - Show everyone that information. Requires: + % @ # ~`,
 	],
-
-	gennext(target, room, user) {
-		if (!this.runBroadcast()) return;
-		this.sendReplyBox(
-			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
-			`- <a href="https://github.com/smogon/pokemon-showdown/blob/master/data/mods/gennext/README.md">README: overview of NEXT</a><br />` +
-			"Example replays:<br />" +
-			`- <a href="https://replay.pokemonshowdown.com/gennextou-120689854">Zergo vs Mr Weegle Snarf</a><br />` +
-			`- <a href="https://replay.pokemonshowdown.com/gennextou-130756055">NickMP vs Khalogie</a>`
-		);
-	},
-	gennexthelp: [`/gennext - Provides information on the Gen-NEXT mod.`],
 
 	battlerules(target, room, user) {
 		return this.parse(`/join view-battlerules`);
@@ -1858,10 +1898,10 @@ export const commands: Chat.ChatCommands = {
 	async formathelp(target, room, user, connection, cmd) {
 		if (!target && this.runBroadcast()) {
 			return this.sendReplyBox(
-				`- <a href="https://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
-				`- <a href="https://www.smogon.com/forums/threads/3498332/">Tiering FAQ</a><br />` +
-				`- <a href="https://www.smogon.com/xyhub/tiers">The banlists for each tier</a><br />` +
-				"<br /><em>Type /formatshelp <strong>[format|section]</strong> to get details about an available format or group of formats.</em>"
+				`- <a href="https://www.smogon.com/forums/forums/smogon-metagames.725/">Smogon Metagames</a><br />` +
+				`- <a href="https://www.smogon.com/forums/threads/3628026/">Tiering Framework</a><br />` +
+				`- <a href="https://www.smogon.com/forums/threads/3644714/">Tiering FAQ</a><br />` +
+				"<br /><em>Type /tier <strong>[tier name]</strong> to get details, banlists, and helpful resources like sample teams for any tier!</em>"
 			);
 		}
 
@@ -1870,7 +1910,7 @@ export const commands: Chat.ChatCommands = {
 		let targetId = toID(target);
 		if (targetId === 'ladder') targetId = 'search' as ID;
 		if (targetId === 'all') targetId = '';
-		const {totalMatches, sections} = findFormats(targetId, isOMSearch);
+		const { totalMatches, sections } = findFormats(targetId, isOMSearch);
 
 		if (!totalMatches) return this.errorReply("No matched formats found.");
 
@@ -1895,36 +1935,32 @@ export const commands: Chat.ChatCommands = {
 					rules.push(`<b>Restricted</b> - ${Utils.escapeHTML(format.restricted.join(", "))}`);
 				}
 				if (rules.length > 0) {
-					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
+					rulesetHtml = `<details class="details"><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
 					rulesetHtml = `No ruleset found for ${format.name}`;
 				}
 			}
-			let formatType: string = (format.gameType || "singles");
-			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!format.desc && !format.threads) {
-				if (format.effectType === 'Format') {
-					return this.sendReplyBox(`No description found for this ${formatType} ${format.section} format.<br />${rulesetHtml}`);
-				} else {
-					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
-				}
-			}
 			const formatDesc = format.desc || '';
-			let descHtml = [];
+			const descHtml: string[] = [];
 			const data = await getFormatResources(format.id);
 			if (data) {
-				for (const {resource_name, url} of data.resources) {
+				for (const { resource_name, url } of data.resources) {
 					let rn = resource_name;
 					rn = rn.replace(/ thread$/gi, '');
 					rn = rn.replace(/Pokemon Showdown/gi, 'PS');
 					rn = rn.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' ');
 					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
 				}
+			} else if (format.threads?.length) {
+				descHtml.push(...format.threads);
+			} else {
+				const genID = ['rb', 'gs', 'rs', 'dp', 'bw', 'xy', 'sm', 'ss', 'sv'];
+				const gen = Dex.forFormat(format).gen;
+				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[gen - 1] || 'sv'}/formats/">Smogon Dex page</a>. ` +
+					`Please contact a <a href="https://www.smogon.com/forums/forums/757/">C&amp;C Leader</a> to resolve this. ` +
+					`Alternatively, if this format can't have a page on the Smogon Dex, message <username>dhelmise</username>.<br />`);
 			}
-			if (!descHtml.length && format.threads) {
-				descHtml = format.threads;
-			}
-			return this.sendReplyBox(`<h1>${format.name}</h1><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
+			return this.sendReplyBox(`<h2>${format.name}</h2><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
@@ -1943,7 +1979,7 @@ export const commands: Chat.ChatCommands = {
 				const desc = subformat.desc ? [subformat.desc] : [];
 				const data = await getFormatResources(subformat.id);
 				if (data) {
-					for (const {resource_name, url} of data.resources) {
+					for (const { resource_name, url } of data.resources) {
 						desc.push(`&bullet; <a href="${url}">${resource_name}</a>`);
 					}
 				}
@@ -1952,7 +1988,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		buf.push(`</table>`);
-		return this.sendReply(`|raw|${buf.join("")}`);
+		return this.sendReply(`|c|${user.getIdentity(room)}|/raw ${buf.join("")}`);
 	},
 	formathelphelp: [
 		`/formathelp [format] - Provides information on the given [format].`,
@@ -2045,15 +2081,16 @@ export const commands: Chat.ChatCommands = {
 			return;
 		}
 		if (!room) {
-			return this.errorReply(`This is not a room you can set the rules of.`);
+			throw new Chat.ErrorMessage(`This is not a room you can set the rules of.`);
 		}
 		const possibleRoom = Rooms.search(toID(target));
-		const {totalMatches: formatMatches} = findFormats(toID(target));
+		const { totalMatches: formatMatches } = findFormats(toID(target));
 		if (formatMatches && possibleRoom && cmd !== 'roomrules') {
-			this.errorReply(`'${target}' is both a room and a tier. `);
-			this.errorReply(`If you were looking for rules of that room, use /roomrules [room].`);
-			this.errorReply(`Otherwise, use /tier [tiername].`);
-			return;
+			throw new Chat.ErrorMessage([
+				`'${target}' is both a room and a tier.`,
+				`If you were looking for rules of that room, use /roomrules [room].`,
+				`Otherwise, use /tier [tiername].`,
+			]);
 		}
 
 		if (possibleRoom) {
@@ -2069,13 +2106,13 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('editroom', null, room);
 		if (target.length > 150) {
-			return this.errorReply(`Error: Room rules link is too long (must be under 150 characters). You can use a URL shortener to shorten the link.`);
+			throw new Chat.ErrorMessage(`Error: Room rules link is too long (must be under 150 characters). You can use a URL shortener to shorten the link.`);
 		}
 
 		target = target.trim();
 
 		if (target === 'delete' || target === 'remove') {
-			if (!room.settings.rulesLink) return this.errorReply(`This room does not have rules set to remove.`);
+			if (!room.settings.rulesLink) throw new Chat.ErrorMessage(`This room does not have rules set to remove.`);
 			delete room.settings.rulesLink;
 			this.privateModAction(`${user.name} has removed the room rules link.`);
 			this.modlog('RULES', null, `removed room rules link`);
@@ -2089,26 +2126,24 @@ export const commands: Chat.ChatCommands = {
 	},
 	ruleshelp: [
 		`/rules - Show links to room rules and global rules.`,
-		`!rules - Show everyone links to room rules and global rules. Requires: + % @ # &`,
-		`/rules [url] - Change the room rules URL. Requires: # &`,
-		`/rules remove - Removes a room rules URL. Requires: # &`,
+		`!rules - Show everyone links to room rules and global rules. Requires: + % @ # ~`,
+		`/rules [url] - Change the room rules URL. Requires: # ~`,
+		`/rules remove - Removes a room rules URL. Requires: # ~`,
 	],
 
 	faq(target, room, user) {
-		if (!this.runBroadcast()) return;
-		target = toID(target);
+		target = toID(this.splitOne(target)[0]);
 		const showAll = target === 'all';
-		if (showAll && this.broadcasting) {
-			return this.sendReplyBox(this.tr`You cannot broadcast all FAQs at once.`);
+		if (showAll && this.shouldBroadcast()) {
+			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);
 		}
-
 		const buffer = [];
 		if (showAll || target === 'staff') {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/staff`}">${this.tr`Staff FAQ`}</a>`);
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push(this.tr`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
-			if (!this.broadcasting) void this.parse(`/regtime`);
+			if (!this.shouldBroadcast()) void this.parse(`/regtime`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
 			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/ladderhelp`}">${this.tr`How the ladder works`}</a>`);
@@ -2116,8 +2151,8 @@ export const commands: Chat.ChatCommands = {
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">${this.tr`Tiering FAQ`}</a>`);
 		}
-		if (showAll || target === 'badge' || target === 'badges') {
-			buffer.push(`<a href="https://www.smogon.com/badge_faq">${this.tr`Badge FAQ`}</a>`);
+		if (showAll || ['badge', 'badges', 'badgeholders'].includes(target)) {
+			buffer.push(`<a href="https://www.smogon.com/forums/threads/60351/">${this.tr`Badge FAQ`}</a>`);
 		}
 		if (showAll || target === 'rng') {
 			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/rng`}">${this.tr`Common misconceptions about our RNG`}</a>`);
@@ -2135,7 +2170,7 @@ export const commands: Chat.ChatCommands = {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
 		}
 		if (showAll || ['lostpassword', 'password', 'lostpass'].includes(target)) {
-			buffer.push(`If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">${this.tr`Password Reset Form`}</a>. You will need to make a Smogon account to be able to fill out the form, as password resets are processed through the Smogon forums.`);
+			buffer.push(`Until an email server for Pokemon Showdown is set up, <b>it is no longer possible to reset the password for your account</b>`);
 		}
 		if (!buffer.length && target) {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
@@ -2144,11 +2179,12 @@ export const commands: Chat.ChatCommands = {
 		if (!target || showAll) {
 			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.tr`pages/faq`}">${this.tr`Frequently Asked Questions`}</a>`);
 		}
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
 	faqhelp: [
-		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # &`,
+		`/faq [topic] - Provides a link that answers the FAQ topic. List of FAQ topics: autoconfirmed, badges, customavatar, decay, ladder, lostpassword, privacy, proxy, rng, staff, tiers, tournaments.`,
+		`!faq [topic] - Shows to other users a link that answers the FAQ topic. List of FAQ topics: autoconfirmed, badges, customavatar, decay, ladder, lostpassword, privacy, proxy, rng, staff, tiers, tournaments. Requires: + % @ # ~`,
 	],
 
 	analysis: 'smogdex',
@@ -2239,7 +2275,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (extraFormat.effectType !== 'Format') {
 				formatName = formatId = '';
 			}
-			const supportedLanguages: {[k: string]: string} = {
+			const supportedLanguages: { [k: string]: string } = {
 				spanish: 'es',
 				french: 'fr',
 				italian: 'it',
@@ -2328,14 +2364,14 @@ export const commands: Chat.ChatCommands = {
 	},
 	smogdexhelp: [
 		`/analysis [pokemon], [generation], [format] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.`,
-		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # &`,
+		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # ~`,
 	],
 
-	veekun(target, broadcast, user) {
-		if (!target) return this.parse('/help veekun');
+	bulbapedia(target, broadcast, user) {
+		if (!target) return this.parse('/help bulbapedia');
 		if (!this.runBroadcast()) return;
 
-		const baseLink = 'http://veekun.com/dex/';
+		const baseLink = 'https://bulbapedia.bulbagarden.net/wiki/';
 
 		const pokemon = Dex.species.get(target);
 		const item = Dex.items.get(target);
@@ -2348,76 +2384,60 @@ export const commands: Chat.ChatCommands = {
 		if (pokemon.exists) {
 			atLeastOne = true;
 			if (pokemon.isNonstandard && pokemon.isNonstandard !== 'Past') {
-				return this.errorReply(`${pokemon.name} is not a real Pok\u00e9mon.`);
+				throw new Chat.ErrorMessage(`${pokemon.name} is not a real Pok\u00e9mon.`);
 			}
+			let baseSpecies = pokemon.baseSpecies;
+			if (pokemon.id.startsWith('flabebe')) baseSpecies = 'Flabébé';
+			const link = `${baseLink}${encodeURIComponent(baseSpecies)}_(Pokémon)`;
 
-			const baseSpecies = pokemon.baseSpecies || pokemon.name;
-			let forme = pokemon.forme;
-
-			// Showdown and Veekun have different names for various formes
-			if (baseSpecies === 'Meowstic' && forme === 'F') forme = 'Female';
-			if (baseSpecies === 'Zygarde' && forme === '10%') forme = '10';
-			if (baseSpecies === 'Necrozma' && !Dex.species.get(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
-			if (baseSpecies === 'Pikachu' && Dex.species.get(baseSpecies + forme).gen === 7) forme += '-Cap';
-			if (forme.endsWith('Totem')) {
-				if (baseSpecies === 'Raticate') forme = 'Totem-Alola';
-				if (baseSpecies === 'Marowak') forme = 'Totem';
-				if (baseSpecies === 'Mimikyu') forme += forme === 'Busted-Totem' ? '-Busted' : '-Disguised';
-			}
-
-			let link = `${baseLink}pokemon/${baseSpecies.toLowerCase()}`;
-			if (forme) {
-				if (baseSpecies === 'Arceus' || baseSpecies === 'Silvally') link += '/flavor';
-				link += `?form=${forme.toLowerCase()}`;
-			}
-
-			this.sendReplyBox(`<a href="${link}">${pokemon.name} description</a> by Veekun`);
+			this.sendReplyBox(Utils.html`<a href="${link}">${pokemon.name} in-game information</a>, provided by Bulbapedia`);
 		}
 
 		// Item
 		if (item.exists) {
 			atLeastOne = true;
 			if (item.isNonstandard && item.isNonstandard !== 'Past') {
-				return this.errorReply(`${item.name} is not a real item.`);
+				throw new Chat.ErrorMessage(`${item.name} is not a real item.`);
 			}
-			const link = `${baseLink}items/${item.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${item.name} item description</a> by Veekun`);
+			let link = `${baseLink}${encodeURIComponent(item.name)}`;
+			if (Dex.moves.get(item.name).exists) link += '_(item)';
+			this.sendReplyBox(Utils.html`<a href="${link}">${item.name} item description</a>, provided by Bulbapedia`);
 		}
 
 		// Ability
 		if (ability.exists) {
 			atLeastOne = true;
 			if (ability.isNonstandard && ability.isNonstandard !== 'Past') {
-				return this.errorReply(`${ability.name} is not a real ability.`);
+				throw new Chat.ErrorMessage(`${ability.name} is not a real ability.`);
 			}
-			const link = `${baseLink}abilities/${ability.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${ability.name} ability description</a> by Veekun`);
+			const link = `${baseLink}${encodeURIComponent(ability.name)}_(Ability)`;
+			this.sendReplyBox(`<a href="${link}">${ability.name} ability description</a>, provided by Bulbapedia`);
 		}
 
 		// Move
 		if (move.exists) {
 			atLeastOne = true;
 			if (move.isNonstandard && move.isNonstandard !== 'Past') {
-				return this.errorReply(`${move.name} is not a real move.`);
+				throw new Chat.ErrorMessage(`${move.name} is not a real move.`);
 			}
-			const link = `${baseLink}moves/${move.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${move.name} move description</a> by Veekun`);
+			const link = `${baseLink}${encodeURIComponent(move.name)}_(move)`;
+			this.sendReplyBox(`<a href="${link}">${move.name} move description</a>, provided by Bulbapedia`);
 		}
 
 		// Nature
 		if (nature.exists) {
 			atLeastOne = true;
-			const link = `${baseLink}natures/${nature.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${nature.name} nature description</a> by Veekun`);
+			const link = `${baseLink}Nature`;
+			this.sendReplyBox(`<a href="${link}">Nature descriptions</a>, provided by Bulbapedia`);
 		}
 
 		if (!atLeastOne) {
 			return this.sendReplyBox(`Pok&eacute;mon, item, move, ability, or nature not found.`);
 		}
 	},
-	veekunhelp: [
-		`/veekun [pokemon] - Links to Veekun website for this pokemon/item/move/ability/nature.`,
-		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ # &`,
+	bulbapediahelp: [
+		`/bulbapedia [pokemon/item/move/ability/nature] - Links to Bulbapedia wiki page for this pokemon/item/move/ability/nature.`,
+		`!bulbapedia [pokemon/item/move/ability/nature] - Shows everyone this link. Requires: + % @ # ~`,
 	],
 
 	register() {
@@ -2464,11 +2484,11 @@ export const commands: Chat.ChatCommands = {
 				offset = Number(target.slice(modifierData.index));
 				if (isNaN(offset)) return this.parse('/help dice');
 				if (!Number.isSafeInteger(offset)) {
-					return this.errorReply(`The specified offset must be an integer up to ${Number.MAX_SAFE_INTEGER}.`);
+					throw new Chat.ErrorMessage(`The specified offset must be an integer up to ${Number.MAX_SAFE_INTEGER}.`);
 				}
 			}
 			if (removeOutlier && diceQuantity <= 1) {
-				return this.errorReply(`More than one dice should be rolled before removing outliers.`);
+				throw new Chat.ErrorMessage(`More than one dice should be rolled before removing outliers.`);
 			}
 			target = target.slice(0, modifierData.index);
 		}
@@ -2477,21 +2497,21 @@ export const commands: Chat.ChatCommands = {
 		if (target.length) {
 			diceFaces = Number(target);
 			if (!Number.isSafeInteger(diceFaces) || diceFaces <= 0) {
-				return this.errorReply(`Rolled dice must have a natural amount of faces up to ${Number.MAX_SAFE_INTEGER}.`);
+				throw new Chat.ErrorMessage(`Rolled dice must have a natural amount of faces up to ${Number.MAX_SAFE_INTEGER}.`);
 			}
 		}
 
 		if (diceQuantity > 1) {
 			// Make sure that we can deal with high rolls
 			if (!Number.isSafeInteger(offset < 0 ? diceQuantity * diceFaces : diceQuantity * diceFaces + offset)) {
-				return this.errorReply(`The maximum sum of rolled dice must be lower or equal than ${Number.MAX_SAFE_INTEGER}.`);
+				throw new Chat.ErrorMessage(`The maximum sum of rolled dice must be lower or equal than ${Number.MAX_SAFE_INTEGER}.`);
 			}
 		}
 
 		let maxRoll = 0;
 		let minRoll = Number.MAX_SAFE_INTEGER;
 
-		const trackRolls = diceQuantity * (('' + diceFaces).length + 1) <= 60;
+		const trackRolls = diceQuantity * (`${diceFaces}`.length + 1) <= 60;
 		const rolls = [];
 		let rollSum = 0;
 
@@ -2536,8 +2556,7 @@ export const commands: Chat.ChatCommands = {
 	pr: 'pickrandom',
 	pick: 'pickrandom',
 	pickrandom(target, room, user) {
-		if (!target) return false;
-		if (!target.includes(',')) return this.parse('/help pick');
+		if (!target?.includes(',')) return this.parse('/help pick');
 		if (!this.runBroadcast(true)) return false;
 		if (this.broadcasting) {
 			[, target] = Utils.splitFirst(this.message, ' ');
@@ -2560,17 +2579,17 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	showimage(target, room, user) {
-		return this.errorReply(`/showimage has been deprecated - use /show instead.`);
+		throw new Chat.ErrorMessage(`/showimage has been deprecated - use /show instead.`);
 	},
 
 	async requestshow(target, room, user) {
 		room = this.requireRoom();
 		this.checkChat();
 		if (!room.settings.requestShowEnabled) {
-			return this.errorReply(`Media approvals are disabled in this room.`);
+			throw new Chat.ErrorMessage(`Media approvals are disabled in this room.`);
 		}
-		if (user.can('showmedia', null, room, 'show')) return this.errorReply(`Use !show instead.`);
-		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
+		if (user.can('showmedia', null, room, 'show')) throw new Chat.ErrorMessage(`Use !show instead.`);
+		if (room.pendingApprovals?.has(user.id)) throw new Chat.ErrorMessage('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
 		let [link, comment] = this.splitOne(target);
@@ -2588,14 +2607,14 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (comment && this.checkChat(comment) !== comment) {
-			return this.errorReply(`You cannot use filtered words in comments.`);
+			throw new Chat.ErrorMessage(`You cannot use filtered words in comments.`);
 		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, {
 			name: user.name,
-			link: link,
-			comment: comment,
-			dimensions: dimensions,
+			link,
+			comment,
+			dimensions,
 		});
 		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
 		const message = `|tempnotify|pendingapprovals|Pending media request!` +
@@ -2614,14 +2633,14 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
 		if (!room.settings.requestShowEnabled) {
-			return this.errorReply(`Media approvals are disabled in this room.`);
+			throw new Chat.ErrorMessage(`Media approvals are disabled in this room.`);
 		}
 		const userid = toID(target);
 		if (!userid) return this.parse(`/help approveshow`);
 		const request = room.pendingApprovals?.get(userid);
-		if (!request) return this.errorReply(`${userid} has no pending request.`);
+		if (!request) throw new Chat.ErrorMessage(`${userid} has no pending request.`);
 		if (userid === user.id) {
-			return this.errorReply(`You can't approve your own /show request.`);
+			throw new Chat.ErrorMessage(`You can't approve your own /show request.`);
 		}
 		room.pendingApprovals!.delete(userid);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
@@ -2633,8 +2652,8 @@ export const commands: Chat.ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		} else {
-			buf = await YouTube.generateVideoDisplay(request.link, false, true);
-			if (!buf) return this.errorReply('Could not get YouTube video');
+			buf = await YouTube.generateVideoDisplay(request.link, false);
+			if (!buf) throw new Chat.ErrorMessage('Could not get YouTube video');
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
 		if (request.comment) {
@@ -2645,19 +2664,19 @@ export const commands: Chat.ChatCommands = {
 		room.add(`|c| ${request.name}|/raw ${buf}`);
 		this.privateModAction(`${user.name} approved showing media from ${request.name}.`);
 	},
-	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # &`],
+	approveshowhelp: [`/approveshow [user] - Approves the media display request of [user]. Requires: % @ # ~`],
 
 	denyshow(target, room, user) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
 		if (!room.settings.requestShowEnabled) {
-			return this.errorReply(`Media approvals are disabled in this room.`);
+			throw new Chat.ErrorMessage(`Media approvals are disabled in this room.`);
 		}
 		target = toID(target);
 		if (!target) return this.parse(`/help denyshow`);
 
 		const entry = room.pendingApprovals?.get(target);
-		if (!entry) return this.errorReply(`${target} has no pending request.`);
+		if (!entry) throw new Chat.ErrorMessage(`${target} has no pending request.`);
 
 		room.pendingApprovals!.delete(target);
 		room.sendMods(`|uhtmlchange|request-${target}|`);
@@ -2669,13 +2688,13 @@ export const commands: Chat.ChatCommands = {
 		room.sendUser(targetUser, `|raw|<div class="broadcast-red">Your media request was denied.</div>`);
 		room.sendUser(targetUser, `|notify|Media request denied`);
 	},
-	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # &`],
+	denyshowhelp: [`/denyshow [user] - Denies the media display request of [user]. Requires: % @ # ~`],
 
 	approvallog(target, room, user) {
 		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
-	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: &`],
+	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: ~`],
 
 	viewapprovals(target, room, user) {
 		room = this.requireRoom();
@@ -2683,16 +2702,16 @@ export const commands: Chat.ChatCommands = {
 	},
 	viewapprovalshelp: [
 		`/viewapprovals - View a list of users who have requested to show media in the current room.`,
-		`Requires: % @ # &`,
+		`Requires: % @ # ~`,
 	],
 
 	async show(target, room, user, connection) {
 		if (!room?.persist && !this.pmTarget && !room?.roomid.startsWith('help-')) {
-			return this.errorReply(`/show cannot be used in temporary rooms.`);
+			throw new Chat.ErrorMessage(`/show cannot be used in temporary rooms.`);
 		}
 		if (!toID(target).trim()) return this.parse(`/help show`);
 		if (Monitor.countNetRequests(connection.ip)) {
-			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
+			throw new Chat.ErrorMessage(`You are using this command too quickly. Wait a bit and try again.`);
 		}
 
 		const [link, comment] = Utils.splitFirst(target, ',').map(f => f.trim());
@@ -2708,13 +2727,13 @@ export const commands: Chat.ChatCommands = {
 		this.runBroadcast();
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
-			buf = await YouTube.generateVideoDisplay(link, false, this.broadcasting);
+			buf = await YouTube.generateVideoDisplay(link, false);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
-			if (!channelId) return this.errorReply(`Specify a Twitch channel.`);
+			if (!channelId) throw new Chat.ErrorMessage(`Specify a Twitch channel.`);
 			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
-			buf += `<twitch src="${link}" />`;
+			buf += Utils.html`<twitch src="${link}" />`;
 		} else {
 			if (Chat.linkRegex.test(link)) {
 				if (/^https?:\/\/(.*)\.(mp4|mov)\b(\?|$)/i.test(link)) { // video
@@ -2733,13 +2752,13 @@ export const commands: Chat.ChatCommands = {
 					buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
 					if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
 				} catch {
-					return this.errorReply('Invalid image, audio, or video URL.');
+					throw new Chat.ErrorMessage('Invalid image, audio, or video URL.');
 				}
 			}
 		}
 		if (comment) {
 			if (this.checkChat(comment) !== comment) {
-				return this.errorReply(`You cannot use filtered words in comments.`);
+				throw new Chat.ErrorMessage(`You cannot use filtered words in comments.`);
 			}
 			buf += Utils.html`<br />(${comment})</div>`;
 		}
@@ -2748,7 +2767,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	showhelp: [
 		`/show [url] - Shows you an image, audio clip, video file, or YouTube video.`,
-		`!show [url] - Shows an image, audio clip, video file, or YouTube video to everyone in a chatroom. Requires: whitelist % @ # &`,
+		`!show [url] - Shows an image, audio clip, video file, or YouTube video to everyone in a chatroom. Requires: whitelist % @ # ~`,
 	],
 
 	rebroadcast(target, room, user, connection) {
@@ -2757,7 +2776,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		room = this.requireRoom();
 		room.lastBroadcast = '';
-		this.parse(target, {broadcastPrefix: "!rebroadcast "});
+		this.parse(target, { broadcastPrefix: "!rebroadcast " });
 	},
 	rebroadcasthelp: [
 		`!rebroadcast ![command] - Bypasses the broadcast cooldown to broadcast a command.`,
@@ -2768,9 +2787,9 @@ export const commands: Chat.ChatCommands = {
 	async registertime(target, room, user, connection) {
 		this.runBroadcast();
 		if (Monitor.countNetRequests(connection.ip)) {
-			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
+			throw new Chat.ErrorMessage(`You are using this command too quickly. Wait a bit and try again.`);
 		}
-		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
+		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`Only autoconfirmed users can use this command.`);
 		target = toID(target);
 		if (!target) target = user.id;
 		let rawResult;
@@ -2787,7 +2806,7 @@ export const commands: Chat.ChatCommands = {
 		// hardcode, since the loginserver doesn't store exact times, and
 		// so this can look quite inaccurate if it was within the last day
 		const regTimeAgo = duration > 24 * 60 * 60 * 1000 ?
-			Chat.toDurationString(duration, {precision: 1}) :
+			Chat.toDurationString(duration, { precision: 1 }) :
 			'less than a day';
 		this.sendReplyBox(Utils.html`The user '${target}' registered ${regTimeAgo} ago, on the date ${date.toDateString()}.`);
 	},
@@ -2807,16 +2826,16 @@ export const commands: Chat.ChatCommands = {
 	code(target, room, user, connection) {
 		// target is trimmed by Chat#splitMessage, but leading spaces can be
 		// important to code block indentation.
-		target = this.message.substr(this.cmdToken.length + this.cmd.length + +this.message.includes(' ')).trimRight();
+		target = this.message.substr(this.cmdToken.length + this.cmd.length + (this.message.includes(' ') ? 1 : 0)).trimRight();
 		if (!target) return this.parse('/help code');
-		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
+		if (target.length >= 8192) throw new Chat.ErrorMessage("Your code must be under 8192 characters long!");
 		if (target.length < 80 && !target.includes('\n') && !target.includes('```') && this.shouldBroadcast()) {
 			return this.checkChat(`\`\`\`${target}\`\`\``);
 		}
 
 		if (this.room?.settings.isPersonal !== false && this.shouldBroadcast()) {
 			target = this.filter(target)!;
-			if (!target) return this.errorReply(`Invalid code.`);
+			if (!target) throw new Chat.ErrorMessage(`Invalid code.`);
 		}
 
 		this.checkBroadcast(true, '!code');
@@ -2829,7 +2848,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	codehelp: [
-		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & #`,
+		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ ~ #`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
 
@@ -2849,12 +2868,15 @@ export const commands: Chat.ChatCommands = {
 		const args = Chat.parseArguments(target, ' | ', {
 			allowEmpty: true, useIDs: false,
 		});
+		if (!args.format?.[0]) {
+			return this.popupReply(`No format specified.`);
+		}
 		const format = Dex.formats.get(toID(args.format[0]));
-		if (!format.exists) {
+		if (format.effectType !== 'Format') {
 			return this.popupReply(`The format '${format}' does not exist.`);
 		}
 		delete args.format;
-		const targetUserID = toID(args.user[0]);
+		const targetUserID = toID(args.user?.[0] || '');
 		if (targetUserID) {
 			this.checkChat();
 			if (!Users.get(targetUserID)) {
@@ -2975,7 +2997,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox(buf);
 	},
-	adminhelphelp: [`/adminhelp - Programmatically generates a list of all administrator commands. Requires: &`],
+	adminhelphelp: [`/adminhelp - Programmatically generates a list of all administrator commands. Requires: ~`],
 
 	altlog: 'altslog',
 	altslog(target, room, user) {
@@ -2987,21 +3009,21 @@ export const commands: Chat.ChatCommands = {
 		return this.parse(`/join view-altslog-${target}`);
 	},
 	altsloghelp: [
-		`/altslog [userid] - View the alternate account history for the given [userid]. Requires: % @ &`,
+		`/altslog [userid] - View the alternate account history for the given [userid]. Requires: % @ ~`,
 	],
 
 	randtopic(target, room, user) {
 		room = this.requireRoom();
 		if (!room.settings.topics?.length) {
-			return this.errorReply(`This room has no random topics to select from.`);
+			throw new Chat.ErrorMessage(`This room has no random topics to select from.`);
 		}
 		this.runBroadcast();
 		this.sendReply(Utils.html`|html|<div class="broadcast-blue">${Utils.randomElement(room.settings.topics)}</div>`);
 	},
 	randtopichelp: [
 		`/randtopic - Randomly selects a topic from the room's discussion topic pool and displays it.`,
-		`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`,
-		`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`,
+		`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # ~`,
+		`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # ~`,
 		`/randomtopics - View the discussion topic pool for the current room.`,
 	],
 
@@ -3018,7 +3040,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('ADDTOPIC', null, target);
 		room.saveSettings();
 	},
-	addtopichelp: [`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`],
+	addtopichelp: [`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # ~`],
 
 	removetopic(target, room, user) {
 		room = this.requireRoom();
@@ -3028,17 +3050,17 @@ export const commands: Chat.ChatCommands = {
 		}
 		const index = Number(toID(target)) - 1;
 		if (isNaN(index)) {
-			return this.errorReply(`Invalid topic index: ${target}. Must be a number.`);
+			throw new Chat.ErrorMessage(`Invalid topic index: ${target}. Must be a number.`);
 		}
 		if (!room.settings.topics?.[index]) {
-			return this.errorReply(`Topic ${index + 1} not found.`);
+			throw new Chat.ErrorMessage(`Topic ${index + 1} not found.`);
 		}
 		const topic = room.settings.topics.splice(index, 1)[0];
 		room.saveSettings();
 		this.privateModAction(`${user.name} removed topic ${index + 1} from the random topic pool.`);
 		this.modlog('REMOVETOPIC', null, topic);
 	},
-	removetopichelp: [`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`],
+	removetopichelp: [`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # ~`],
 
 	listtopics: 'randomtopics',
 	randtopics: 'randomtopics',
@@ -3064,19 +3086,19 @@ export const pages: Chat.PageTable = {
 		this.title = '[Alts Log]';
 		const target = toID(query.shift());
 		if (!target) {
-			return this.errorReply(`Please specify a user to find alternate accounts for.`);
+			throw new Chat.ErrorMessage(`Please specify a user to find alternate accounts for.`);
 		}
 		this.title += ` ${target}`;
 		if (!Config.usesqlite) {
-			return this.errorReply(`The alternate account log is currently disabled.`);
+			throw new Chat.ErrorMessage(`The alternate account log is currently disabled.`);
 		}
 		const rawLimit = query.shift() || "100";
 		const num = parseInt(rawLimit);
 		if (num > 3000) {
-			return this.errorReply(`3000 is the maximum number of results from the alternate account log.`);
+			throw new Chat.ErrorMessage(`3000 is the maximum number of results from the alternate account log.`);
 		}
 		if (isNaN(num) || num < 1) {
-			return this.errorReply(`The max results must be a real number that is at least one (received "${rawLimit}")`);
+			throw new Chat.ErrorMessage(`The max results must be a real number that is at least one (received "${rawLimit}")`);
 		}
 		const showIPs = user.can('globalban');
 		const results = await Chat.database.all(
@@ -3201,8 +3223,8 @@ export const pages: Chat.PageTable = {
 		buf += `<hr />`;
 		const formatId = toID(query[0]);
 		const format = Dex.formats.get(formatId);
-		if (!formatId || !format.exists) {
-			if (formatId && !format.exists) {
+		if (!formatId || format.effectType !== 'Format') {
+			if (formatId) {
 				buf += `<div class="message-error">The format '${formatId}' does not exist.</div><br />`;
 			}
 			buf += `<form data-submitsend="/buildformat {format}">`;
@@ -3314,7 +3336,7 @@ export const pages: Chat.PageTable = {
 		return buf;
 	},
 	approvals(args) {
-		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
+		const room = Rooms.get(args[0])!;
 		this.checkCan('mute', null, room);
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		if (room.pendingApprovals.size < 1) return `<h2>No pending approvals on ${room.title}</h2>`;

@@ -1,9 +1,9 @@
 'use strict';
 
 const assert = require('../assert');
-const {extractChannelMessages} = require('../../dist/sim/battle');
+const { extractChannelMessages } = require('../../dist/sim/battle');
 
-describe('ServerStream', function () {
+describe('ServerStream', () => {
 	const omniscientPlayer = -1;
 	const spectatorPlayer = 0;
 
@@ -13,8 +13,8 @@ describe('ServerStream', function () {
 		shared,
 	]);
 
-	describe('extractChannel', function () {
-		it('should return the same messages if no privileged messages are within it', function () {
+	describe('extractChannel', () => {
+		it('should return the same messages if no privileged messages are within it', () => {
 			const messages = [
 				'|-start|p1a: Hellfrog|ability: Flash Fire',
 				'|-start|p2a: Hellfrog|ability: Flash Fire',
@@ -26,7 +26,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), messages);
 		});
 
-		it('should return all privileged messages for an omniscient player', function () {
+		it('should return all privileged messages for an omniscient player', () => {
 			const messages = [
 				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
 				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
@@ -45,7 +45,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[omniscientPlayer].join('\n'), expectedMessages);
 		});
 
-		it('should return player-privileged messages for each player', function () {
+		it('should return player-privileged messages for each player', () => {
 			const expectedMessages = [
 				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
 				...createSplit(2, '|-start|p2a: Aerodactyl|ability: Pressure', ''),
@@ -65,7 +65,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), '');
 		});
 
-		it('should return privileged messages with non-privileged messages', function () {
+		it('should return privileged messages with non-privileged messages', () => {
 			const messages = [
 				'|-start|p2b: Hellfrog|ability: Flash Fire',
 				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
@@ -101,7 +101,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), expectedSpectatorMessages);
 		});
 
-		it('should return consecutive player-privileged messages for a player', function () {
+		it('should return consecutive player-privileged messages for a player', () => {
 			const messages = [
 				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
 				...createSplit(1, '|-start|p1b: Aerodactyl|ability: Pressure', ''),
@@ -120,7 +120,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), '');
 		});
 
-		it('should return shared messages for non-privileged players', function () {
+		it('should return shared messages for non-privileged players', () => {
 			const messages = [
 				...createSplit(1, '|-heal|p1a: Rhyperior|420/420', '|-heal|p1a: Rhyperior|100/100'),
 				...createSplit(2, '|-heal|p2a: Rhyperior|420/420', '|-heal|p2a: Rhyperior|100/100'),
@@ -158,7 +158,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), expectedSpectatorMessages);
 		});
 
-		it('should return messages made up of secret and shared messages', function () {
+		it('should return messages made up of secret and shared messages', () => {
 			const messages = [
 				...createSplit(1, '|-heal|p1a: Rhyperior|420/420', '|-heal|p1a: Rhyperior|100/100'),
 				...createSplit(1, '|-start|p1a: Aerodactyl|ability: Pressure', ''),
@@ -194,7 +194,7 @@ describe('ServerStream', function () {
 			assert.equal(actualChannelMessages[spectatorPlayer].join('\n'), expectedSpectatorMessages);
 		});
 
-		it('should not extract channel messages for unspecified channels', function () {
+		it('should not extract channel messages for unspecified channels', () => {
 			const messages = [
 				...createSplit(1, '|-heal|p1a: Rhyperior|420/420', '|-heal|p1a: Rhyperior|100/100'),
 				...createSplit(2, '|-heal|p2a: Rhyperior|420/420', '|-heal|p2a: Rhyperior|100/100'),

@@ -49,7 +49,7 @@ games asynchronously.
     large performance benefits over the default sequential mode and may require
     additional memory.
 
-**TODO**: Add support for running battles in `--parallel` on muliple cores with
+**TODO**: Add support for running battles in `--parallel` on multiple cores with
 [`worker_threads`](https://nodejs.org/api/worker_threads.html).
 
 ## exhaustive
@@ -57,7 +57,7 @@ games asynchronously.
 The `exhaustive` subcommand cycles through all generations and game types,
 attempting to use as many different effects as possible in the battles it
 randomly simulates. This can be useful as a form of
-['smoke testing'](https://en.wikipedia.org/wiki/Smoke_testing_\(software\)), a
+['smoke testing'](<https://en.wikipedia.org/wiki/Smoke_testing_(software)>), a
 form of sanity testing/build verification which can be used to expose obvious
 critical issues with the application. Making it through a successful cycle of
 smoke tests does *not* mean the application is without bugs, or even that it is
@@ -74,4 +74,4 @@ likely to catch fire.
 -   **`--forever`**: continue iterating through formats infinitely, exhausting
     each `--cycles` times.
 -   **`--seed`**: PRNG seed to use (eg. `'1234,5678,9012,3456'`).
--   **`--maxFailures`**: exit early if this many failures have occured.
+-   **`--maxFailures`**: exit early if this many failures have occurred.

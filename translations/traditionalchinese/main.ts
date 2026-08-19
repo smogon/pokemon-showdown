@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "Traditional Chinese",
@@ -16,11 +16,10 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>全服權限</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>全服信任用戶</strong> -可以使用!廣播指令，比如!groups，並可以在限制發言期間發言",
-		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>分部頭領</strong> - 負責掌管一個分部的房間",
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>全服見習管理</strong> - 同信任用戶，並可以鎖定用戶或查看他們的小號 ",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>全服管理員</strong> - 同上，並可以將用戶從服務器封禁",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>全服機器人</strong> - 跟全服管理員一樣，隻不過是機器",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息",
 
 		"<strong>Room ranks</strong>": "<strong>房權限</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
@@ -43,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "管理員指令",
 		"ADMIN COMMANDS": "總管指令",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(把/換成!就可以廣播指令。廣播功能需要：+ % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(把/換成!就可以廣播指令。廣播功能需要：+ % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>房間處罰</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - 顯示規則與警告",

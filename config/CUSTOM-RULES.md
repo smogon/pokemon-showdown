@@ -33,29 +33,75 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- item: Metronome` - ban an item with an ambiguous name
 
-### Group bans
+### Species group bans
 
 `- OU` or `- DUU` - ban a tier
 
-`- CAP` or `- Mega` - ban a pokemon category
+`- CAP` or `- Mega` or `- Gigantamax` - ban a pokemon category
 
-`- LGPE` - ban things only available Let's Ge Pikachu/Eevee
+`- Mythical` - ban all Mythical Pokémon (such as Mew, Celebi)
+
+`- Restricted Legendary` - ban all Restricted Legendary Pokémon (such as Zekrom, Eternatus)
+
+### Move group bans
+
+`- Physical` - ban Physical moves
+
+`- Special` - ban Special moves
+
+`- Status` - ban Status moves
+
+`- Contact` - ban contact moves
+
+`- Sound` - ban sound moves
+
+`- Powder` - ban powder moves
+
+`- Fist` - ban moves that are boosted by Iron Fist
+
+`- Pulse` - ban moves that are boosted by Mega Launcher
+
+`- Bite` - ban moves that are boosted by Strong Jaw
+
+`- Ballistic` - ban moves that are blocked by Bulletproof
+
+`- Bypass Protect` - ban moves that bypass Protect, Detect, etc
+
+`- Nonreflectable` - ban moves that bypass Magic Coat and Magic Bounce
+
+`- Nonmirror` - ban moves that can't be copied by Mirror Move
+
+`- Nonsnatchable` - ban moves that can't be copied by Snatch
+
+`- Bypass Substitute` - ban moves that bypass Substitute
+
+### Numeric bans
+
+`- BST > 600` - ban all pokemon with BST above 600
+
+`- HP > 250` - ban species with base HP (not actual max HP) above 250, i.e. Blissey
+
+`- Base Power = 100` - ban all moves with base power exactly 100
+
+`- Height >= 2` - ban all pokemon with height at least 2 meters
+
+`- Weight < 5` - ban all pokemon with weight under 5 kg
+
+### Generic group bans
+
+`- LGPE` - ban things only available Let's Go Pikachu/Eevee
 
 `- Past` - ban things that only appear in a past generation (such as Berserk Gene in Gen 5, spiky-eared Pichu in Gen 5, or Unown in Gen 8)
 
 `- Future` - ban things that only appears in a future generation (such as Arceus in Gen 1)
 
-`- Custom` - ban made-up things other than CAP (such as Magikarp's Revenge, or Staff Bros moves)
+`- Custom` - (DEPRECATED) ban miscellaneous other things
 
 `- Nonexistent` - catch-all to ban all nonexistent Pokémon, items, etc. Includes: `- CAP, - Past, - Future, - LGPE`
 
 `- Unobtainable` - ban all things designed never to be released (Pokestars in Gen 5, Eternatus-E, Floette-E)
 
 `- Unreleased` - ban all things that will probably be released eventually (Venusaur in Gen 8)
-
-`- Mythical` - ban all Mythical Pokémon (such as Mew, Celebi)
-
-`- Restricted Legendary` - ban all Restricted Legendary Pokémon (such as Zekrom, Eternatus)
 
 `- all items` - ban all items
 
@@ -83,9 +129,19 @@ Syntax is identical to bans, just replace `-` with `+`, like:
 
 More specific always trumps less specific:
 
-`- all Pokemon, + Uber, - Giratina, + Giratina-Altered` - allow only Ubers other than Giratina-Origin
+`- all pokemon, + Uber, - Giratina, + Giratina-Altered` - allow only Ubers other than Giratina-Origin
+
+`- all pokemon, + Giratina-Altered, - Giratina, + Uber` - allow only Ubers other than Giratina-Origin
 
 `- Nonexistent, + Necturna` - don't allow anything from outside the game, except the CAP Necturna
+
+Except `all pokemon`, which removes all bans/unbans of pokemon before it:
+
+`- all pokemon, + Pikachu, + Raichu` - allow Pikachu and Raichu
+
+`+ Pikachu, - all pokemon, + Raichu` - allow only Raichu
+
+(Note that `all pokemon` does not affect obtainability rules. `+ all pokemon` will not allow CAPs or anything like that.)
 
 For equally specific rules, the last rule wins:
 
@@ -128,7 +184,7 @@ Whitelisting
 
 Instead of a banlist, you can have a list of allowed things:
 
-`- all Pokemon, + Charmander, + Squirtle, + Bulbasaur` - allow only Kanto starters
+`- all pokemon, + Charmander, + Squirtle, + Bulbasaur` - allow only Kanto starters
 
 `- all moves, + move: Metronome` - allow only the move Metronome
 
@@ -176,6 +232,8 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Species Clause` - limit one Pokémon per dex number
 
+`Forme Clause` - limit one of each forme of a Pokémon on a team (a team can have Zamazenta + Zamazenta-Crowned, but not Zamazenta + Zamazenta)
+
 `Nickname Clause` - limit one Pokémon per nickname
 
 `Item Clause` - no two Pokémon can have the same item
@@ -202,11 +260,13 @@ Custom rules can have more complicated behavior. They can also include other rul
 
 `Accuracy Moves Clause` - ban moves that have a chance to lower the target's accuracy when used
 
+`Same Color Clause` - force all Pokémon on a team to share a Pokédex color with one another
+
+`Same Letter Clause` - force all Pokémon on a team to have their species names start with the same English letter
+
 `Same Type Clause` - force all Pokémon on a team to share a type with one another
 
 `NFE Clause` - ban all Pokémon that are not fully evolved (Pokémon can be re-added manually by simply unbanning them)
-
-`Forme Clause` - limit one of each forme of a Pokémon on a team (a team can have Zamazenta + Zamazenta-Crowned, but not Zamazenta + Zamazenta)
 
 ### Miscellaneous
 
@@ -279,6 +339,8 @@ In-battle rules
 `Gen 7 Tier Shift` - Pokémon will have higher base stats the lower their Gen 7 Smogon tier is
 
 `Dynamax Clause` - prevent Pokémon from Dynamaxing during battle. Cannot be used to allow Dynamaxing in old gens
+
+`Terastal Clause` - prevent Pokémon from Terastalizing during battle. Cannot be used to allow Terastalizing in old gens
 
 `Endless Battle Clause` - prevent battles from proceeding endlessly
 

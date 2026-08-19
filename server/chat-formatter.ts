@@ -2,13 +2,13 @@
  * Chat parser
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Parses formate.
+ * Parses format.
  *
  * @license MIT
  */
 
 /*
-REGEXFREE SOURCE FOR LINKREGEX
+SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 
 	(
 		(
@@ -35,11 +35,13 @@ REGEXFREE SOURCE FOR LINKREGEX
 			(
 				# characters allowed inside URL paths
 				(
-					[^\s()&<>] | &amp; | &quot;
+					[^\s()&<>[\]`] | &amp; | &quot;
 				|
 					# parentheses in URLs should be matched, so they're not confused
 					# for parentheses around URLs
-					\( ( [^\\s()<>&] | &amp; )* \)
+					\( ( [^\s()<>&[\]] | &amp; )* \)
+					|
+					\[ ( [^\s()<>&[\]] | &amp; )* ]
 				)*
 				# URLs usually don't end with punctuation, so don't allow
 				# punctuation symbols that probably arent related to URL.
@@ -47,7 +49,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 					[^\s()[\]{}\".,!?;:&<>*`^~\\]
 				|
 					# annoyingly, Wikipedia URLs often end in )
-					\( ( [^\s()<>&] | &amp; )* \)
+					\( ( [^\s()<>&[\]] | &amp; )* \)
 				)
 			)?
 		)?
@@ -58,7 +60,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 	(?! [^ ]*&gt; )
 
 */
-export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
+export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>[\]`]|&amp;|&quot;|\((?:[^\s()<>&[\]]|&amp;)*\)|\[(?:[^\s()<>&[\]]|&amp;)*])*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&[\]]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
 /**
  * A span is a part of the text that's formatted. In the text:
@@ -104,15 +106,15 @@ class TextFormatter {
 				fulluri = 'mailto:' + uri;
 			} else {
 				fulluri = uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1');
-				if (uri.substr(0, 24) === 'https://docs.google.com/' || uri.substr(0, 16) === 'docs.google.com/') {
+				if (uri.startsWith('https://docs.google.com/') || uri.startsWith('docs.google.com/')) {
 					if (uri.startsWith('https')) uri = uri.slice(8);
-					if (uri.substr(-12) === '?usp=sharing' || uri.substr(-12) === '&usp=sharing') uri = uri.slice(0, -12);
-					if (uri.substr(-6) === '#gid=0') uri = uri.slice(0, -6);
+					if (uri.endsWith('?usp=sharing') || uri.endsWith('&usp=sharing')) uri = uri.slice(0, -12);
+					if (uri.endsWith('#gid=0')) uri = uri.slice(0, -6);
 					let slashIndex = uri.lastIndexOf('/');
 					if (uri.length - slashIndex > 18) slashIndex = uri.length;
 					if (slashIndex - 4 > 19 + 3) {
-						uri = uri.slice(0, 19) +
-						'<small class="message-overflow">' + uri.slice(19, slashIndex - 4) + '</small>' + uri.slice(slashIndex - 4);
+						uri = `${uri.slice(0, 19)}<small class="message-overflow">${uri.slice(19, slashIndex - 4)}</small>` +
+							`${uri.slice(slashIndex - 4)}`;
 					}
 				}
 			}
@@ -257,6 +259,62 @@ class TextFormatter {
 		return encodeURIComponent(component);
 	}
 
+	runEvalLookahead(i: number) {
+		const evalIndex = this.slice(0, 9) === '&gt;&gt; ' ? 8 : this.slice(0, 13) === '&gt;&gt;&gt; ' ? 12 : 0;
+		if (!evalIndex) return false;
+
+		this.pushSlice(i);
+		this.buffers.push(`<tt class="message-cmd"><strong>`);
+		this.buffers.push(this.slice(i, i + evalIndex));
+		this.buffers.push(`</strong>`);
+		this.buffers.push(this.str.slice(i + evalIndex));
+		this.buffers.push(`</tt>`);
+		this.offset = this.str.length;
+		return true;
+	}
+	runCommandLookahead(i: number) {
+		if (!this.str || !'!/'.includes(this.at(i))) return false;
+		if (this.at(i + 1) === '/') {
+			if (this.at(i) === '!') return false;
+			this.pushSlice(i);
+			this.buffers.push(`<tt>/</tt>`);
+			this.offset = i + 1;
+			return true;
+		}
+		let spaceIndex = this.str.indexOf(' ', i);
+		if (spaceIndex < 0) spaceIndex = this.str.length;
+		if (this.slice(i, i + 9).toLowerCase() === `/me&apos;`) spaceIndex = i + 3;
+
+		const command = this.slice(i + 1, spaceIndex);
+		switch (command.toLowerCase()) {
+		case 'me':
+		case 'mee':
+		case 'announce':
+			this.pushSlice(i);
+			this.buffers.push(`<tt class="message-cmd"><strong>`);
+			this.buffers.push(this.slice(i, spaceIndex));
+			this.buffers.push(`</strong></tt>`);
+			this.offset = spaceIndex;
+			return true;
+		case '':
+			if (this.at(i) === '!') return false;
+			this.pushSlice(i);
+			this.buffers.push(`<tt class="message-error"><strong>/</strong>`);
+			this.buffers.push(this.str.slice(i + 1));
+			this.buffers.push(`</tt>`);
+			this.offset = this.str.length;
+			return true;
+		}
+		this.pushSlice(i);
+		this.buffers.push(`<tt class="message-cmd"><strong>`);
+		this.buffers.push(this.slice(i, spaceIndex));
+		this.buffers.push(`</strong>`);
+		this.buffers.push(this.str.slice(spaceIndex));
+		this.buffers.push(`</tt>`);
+		this.offset = this.str.length;
+		return true;
+	}
+
 	/**
 	 * Handles special cases.
 	 */
@@ -310,7 +368,7 @@ class TextFormatter {
 			}
 			return true;
 		case '[':
-			// Link span. Several possiblilities:
+			// Link span. Several possibilities:
 			// [[text <uri>]] - a link with custom text
 			// [[search term]] - Google search
 			// [[wiki: search term]] - Wikipedia search
@@ -420,7 +478,12 @@ class TextFormatter {
 				let i = start + 2;
 				// Find </a> or </u>.
 				// We need to check the location of `>` to disambiguate from </small>.
-				while (this.at(i) !== '<' || this.at(i + 1) !== '/' || this.at(i + 3) !== '>') i++;
+				while (this.at(i) !== '<' || this.at(i + 1) !== '/' || this.at(i + 3) !== '>') {
+					if (i >= this.str.length) {
+						throw new Error(`Unclosed URL span when parsing: ${this.str}`);
+					}
+					i++;
+				}
 				i += 4;
 				this.pushSlice(i);
 			}
@@ -437,6 +500,15 @@ class TextFormatter {
 		for (let i = beginningOfLine; i < this.str.length; i++) {
 			const char = this.at(i);
 			switch (char) {
+			case '/':
+			case '!':
+				if (!this.showSyntax || i !== beginningOfLine) break;
+				this.runCommandLookahead(i);
+				if (i < this.offset) {
+					i = this.offset;
+					break;
+				}
+				break;
 			case '_':
 			case '*':
 			case '~':
@@ -504,11 +576,13 @@ class TextFormatter {
 				}
 				break;
 			case '&': // escaped '<' or '>'
-				// greentext or roomid
+				// eval or greentext or roomid
 				if (i === beginningOfLine && this.slice(i, i + 4) === '&gt;') {
-					// greentext span, normal except it lacks an ending span
-					// check for certain emoticons like `>_>` or `>w<`
-					if (!"._/=:;".includes(this.at(i + 4)) && !['w&lt;', 'w&gt;'].includes(this.slice(i + 4, i + 9))) {
+					if (this.runEvalLookahead(i)) {
+						// eval span
+					} else if (!"._/=:;".includes(this.at(i + 4)) && !['w&lt;', 'w&gt;'].includes(this.slice(i + 4, i + 9))) {
+						// greentext span, normal except it lacks an ending span
+						// check for certain emoticons like `>_>` or `>w<`
 						this.pushSpan('>', i, i);
 					}
 				} else {

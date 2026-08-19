@@ -46,8 +46,7 @@ The beginning of a battle will look something like this:
 > - `PLAYER` is `p1` or `p2`
 > - `PLAYER` may also be `p3` or `p4` in 4 player battles
 > - `USERNAME` is the username
-> - `AVATAR` is the player's avatar identifier (usually a number, but other
->    values can be used for custom avatars)
+> - `AVATAR` is the player's avatar
 > - `RATING` is the player's Elo rating in the format they're playing. This will only be displayed in rated battles and when the player is first introduced otherwise it's blank
 
 `|teamsize|PLAYER|NUMBER`
@@ -83,13 +82,13 @@ The beginning of a battle will look something like this:
 
 `|rule|RULE: DESCRIPTION`
 
-> Will appear multiple times, one for each 
+> Will appear multiple times, one for each rule.
 
-    |clearpoke
-    |poke|PLAYER|DETAILS|ITEM
-    |poke|PLAYER|DETAILS|ITEM
-    ...
-    |teampreview
+`|clearpoke`  
+`|poke|PLAYER|DETAILS|ITEM`  
+`|poke|PLAYER|DETAILS|ITEM`  
+...  
+`|teampreview`
 
 > These messages appear if you're playing a format that uses team previews.
 
@@ -156,7 +155,7 @@ The beginning of a battle will look something like this:
 `|t:|TIMESTAMP`
 
 > The current UNIX timestamp (the number of seconds since 1970) - useful for determining
-> when events occured in real time.
+> when events occurred in real time.
 
 ### Identifying Pokémon
 
@@ -316,7 +315,7 @@ stat boosts are minor actions.
 
 `|-fail|POKEMON|ACTION`
 
-> The specified `ACTION` has failed against the `POKEMON` targetted. The
+> The specified `ACTION` has failed against the `POKEMON` targeted. The
 > `ACTION` in question should be a move that fails due to its own mechanics.
 > Moves (or effect activations) that fail because they're blocked by another
 > effect should use `-block` instead.
@@ -434,6 +433,11 @@ stat boosts are minor actions.
 `|-fieldend|CONDITION`
 
 > Indicates that the field condition `CONDITION` has ended.
+
+`|-fieldactivate|CONDITION`
+
+> A single-event field effect `CONDITION` has triggered.
+> (i.e. Teatime, Electrify, Perish Song, extreme weather activation)
 
 `|-sidestart|SIDE|CONDITION`
 
@@ -656,9 +660,12 @@ To be exact, `CHOICE` is one of:
     other pokemon in order.
   - `TEAMSPEC` does not have to be all pokemon: `team 5231` might be a choice
     in VGC.
-  - `TEAMSPEC` does not need separators unless you have over 10 Pokémon, but
-    in custom games, separate slots with `,`. For instance:
+  - If you have more than 10 Pokémon, `TEAMSPEC` must be comma-separated:
     `team 2, 1, 3, 4, 5, 6, 7, 8, 9, 10`
+  - `TEAMSPEC` can be surrounded by brackets to disable auto-adding commas.
+    `team [31]` will be an error while `team 31` will be parsed as
+    `team 3, 1`. This is intended to be used by clients for stricter error
+    messages; end users can always leave them off for convenience.
 
 - `default`, to auto-choose a decision. This will be the first possible legal
   choice. This is what's used in VGC if you run out of Move Time.
@@ -687,6 +694,8 @@ To be exact, `CHOICE` is one of:
 - `move MOVESPEC zmove`, to use a z-move version of a move
 
 - `move MOVESPEC max`, to Dynamax/Gigantamax and make a move
+
+- `move MOVESPEC terastalize`, to Terastalize and make a move
 
 - `switch SWITCHSPEC`, to make a switch
 

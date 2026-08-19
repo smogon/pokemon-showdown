@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "Italian",
@@ -16,11 +16,10 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Ruoli Globali</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Possono utilizzare i comandi con !, come !groups",
-		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Supervisionano le room di una sezione specifica",
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Come i Global Voice, e possono lockare gli utenti e controllare i loro alts",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Come i Global Driver, e possono bannare globalmente gli utenti",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Come i Global Moderator, ma il simbolo specifica che l'utente è un bot",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio e promuovere globalmente gli utenti",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio e promuovere globalmente gli utenti",
 
 		"<strong>Room ranks</strong>": "<strong>Ruoli della Room</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Non hanno alcun potere, eccezion fatta per un segno distintivo",
@@ -43,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMANDI PER I MODERATORI",
 		"ADMIN COMMANDS": "COMANDI PER GLI AMMINISTRATORI",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(sostituisci / con ! per mostrare in room un comando. L'operazione richiede i seguenti rank: + % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(sostituisci / con ! per mostrare in room un comando. L'operazione richiede i seguenti rank: + % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Punizioni della room</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Mostra un popup con le regole.",

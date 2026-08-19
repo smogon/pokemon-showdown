@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	absorbbulb: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -102,18 +102,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	ejectbutton: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
-				for (const pokemon of this.getAllActive()) {
-					if (pokemon.switchFlag === true) return;
-				}
-				// TODO: Confirm mechanics
-				this.add("-activate", target, "item: Eject Button");
-				target.switchFlag = true;
-				source.switchFlag = false;
-			}
-		},
 	},
 	ejectpack: {
 		inherit: true,

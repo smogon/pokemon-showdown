@@ -7,7 +7,7 @@ type AuthLevel = import('./user-groups').AuthLevel;
 type PunishType = '#hostfilter' | '#dnsbl' | '#ipban';
 
 // Chat
-namespace Chat {
+declare namespace Chat {
 	export type CommandContext = import('./chat').CommandContext;
 	export type PageContext = import('./chat').PageContext;
 	export type SettingsHandler = import('./chat').SettingsHandler;
@@ -37,8 +37,8 @@ type RoomGame = Rooms.RoomGame;
 type MinorActivity = Rooms.MinorActivity;
 type RoomBattle = Rooms.RoomBattle;
 type Room = Rooms.Room;
-type RoomID = "" | "lobby" | "staff" | "upperstaff" | "development" | string & {__isRoomID: true};
-namespace Rooms {
+type RoomID = "" | "lobby" | "staff" | "upperstaff" | "development" | Lowercase<string> & { __isRoomID: true };
+declare namespace Rooms {
 	export type GlobalRoomState = import('./rooms').GlobalRoomState;
 	export type ChatRoom = import('./rooms').ChatRoom;
 	export type GameRoom = import('./rooms').GameRoom;
@@ -54,19 +54,19 @@ namespace Rooms {
 	export type Room = import('./rooms').Room;
 }
 
-namespace JSX {
+declare namespace JSX {
 	export type IntrinsicElements = import('./chat-jsx').PSElements;
 }
 
 // Users
 type User = Users.User;
 type Connection = Users.Connection;
-namespace Users {
+declare namespace Users {
 	export type User = import('./users').User;
 	export type Connection = import('./users').Connection;
 }
 
-namespace Ladders {
+declare namespace Ladders {
 	export type Challenge = import('./ladders-challenges').Challenge;
 	export type BattleChallenge = import('./ladders-challenges').BattleChallenge;
 	export type GameChallenge = import('./ladders-challenges').GameChallenge;

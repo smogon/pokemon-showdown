@@ -27,6 +27,14 @@ describe("IP tools", () => {
 		assert.equal(range.maxIP, IPTools.ipToNumber('42.42.63.255'));
 	});
 
+	it('should parse CIDR ranges with an IP not at the start of the range', () => {
+		assert.equal(IPTools.getCidrRange('10.69.42.69/8').minIP, IPTools.ipToNumber('10.0.0.0'));
+	});
+
+	it('should not yield negative values when parsing CIDR ranges at 128.* or higher', () => {
+		assert.equal(IPTools.getCidrRange('173.255.160.0/19').minIP, IPTools.ipToNumber('173.255.160.0'));
+	});
+
 	it('should guess whether a range is CIDR or hyphen', () => {
 		const cidrRange = IPTools.stringToRange('42.42.0.0/18');
 		const stringRange = IPTools.stringToRange('42.42.0.0 - 42.42.63.255');
@@ -79,22 +87,22 @@ describe("IP tools", () => {
 	it('should handle wildcards in string ranges', () => {
 		assert.deepEqual(
 			IPTools.stringToRange('1.*'),
-			{minIP: IPTools.ipToNumber('1.0.0.0'), maxIP: IPTools.ipToNumber('1.255.255.255')}
+			{ minIP: IPTools.ipToNumber('1.0.0.0'), maxIP: IPTools.ipToNumber('1.255.255.255') }
 		);
 		assert.deepEqual(
 			IPTools.stringToRange('1.1.*'),
-			{minIP: IPTools.ipToNumber('1.1.0.0'), maxIP: IPTools.ipToNumber('1.1.255.255')}
+			{ minIP: IPTools.ipToNumber('1.1.0.0'), maxIP: IPTools.ipToNumber('1.1.255.255') }
 		);
 		assert.deepEqual(
 			IPTools.stringToRange('1.1.1.*'),
-			{minIP: IPTools.ipToNumber('1.1.1.0'), maxIP: IPTools.ipToNumber('1.1.1.255')}
+			{ minIP: IPTools.ipToNumber('1.1.1.0'), maxIP: IPTools.ipToNumber('1.1.1.255') }
 		);
 	});
 
 	it('should handle single IPs as string ranges', () => {
 		assert.deepEqual(
 			IPTools.stringToRange('1.1.1.1'),
-			{minIP: IPTools.ipToNumber('1.1.1.1'), maxIP: IPTools.ipToNumber('1.1.1.1')}
+			{ minIP: IPTools.ipToNumber('1.1.1.1'), maxIP: IPTools.ipToNumber('1.1.1.1') }
 		);
 	});
 });
@@ -131,7 +139,7 @@ describe("IP tools helper functions", () => {
 
 describe('IP range conflict checker', () => {
 	it('should not allow inserting a range where maxIP < minIP', () => {
-		assert.throws(() => IPTools.checkRangeConflicts({maxIP: 1000, minIP: 9999}, []));
+		assert.throws(() => IPTools.checkRangeConflicts({ maxIP: 1000, minIP: 9999 }, []));
 	});
 
 	it('should respect the widen parameter', () => {
@@ -141,19 +149,19 @@ describe('IP range conflict checker', () => {
 		}];
 
 		// Widen the minimum IP
-		assert.throws(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 200}, ranges, false));
-		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 200}, ranges, true));
+		assert.throws(() => IPTools.checkRangeConflicts({ minIP: 99, maxIP: 200 }, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({ minIP: 99, maxIP: 200 }, ranges, true));
 
 		// Widen the maximum IP
-		assert.throws(() => IPTools.checkRangeConflicts({minIP: 100, maxIP: 201}, ranges, false));
-		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 100, maxIP: 201}, ranges, true));
+		assert.throws(() => IPTools.checkRangeConflicts({ minIP: 100, maxIP: 201 }, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({ minIP: 100, maxIP: 201 }, ranges, true));
 
 		// Widen both IPs
-		assert.throws(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 201}, ranges, false));
-		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 99, maxIP: 201}, ranges, true));
+		assert.throws(() => IPTools.checkRangeConflicts({ minIP: 99, maxIP: 201 }, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({ minIP: 99, maxIP: 201 }, ranges, true));
 
 		// Don't widen at all
-		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 98, maxIP: 99}, ranges, false));
-		assert.doesNotThrow(() => IPTools.checkRangeConflicts({minIP: 98, maxIP: 99}, ranges, true));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({ minIP: 98, maxIP: 99 }, ranges, false));
+		assert.doesNotThrow(() => IPTools.checkRangeConflicts({ minIP: 98, maxIP: 99 }, ranges, true));
 	});
 });

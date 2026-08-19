@@ -16,10 +16,21 @@ const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 const logPath = path.resolve(
 	// not sure why this is necessary, but in Windows testing it was
 	__dirname, '../', __dirname.includes(`${path.sep}dist${path.sep}`) ? '..' : '',
-	path.join(global.Config?.logsdir || 'logs', 'errors.txt')
+	path.join((global as any).Config?.logsdir || 'logs', 'errors.txt')
 );
 let lastCrashLog = 0;
 let transport: any;
+
+function appendCause(error: any) {
+	let stack = ``;
+	if (typeof error.cause === 'string') {
+		stack += `\n\n[cause]: ${error.cause}\n`;
+	} else {
+		stack += `\n\n[cause]: ${(error.cause as Error).message}\n`;
+		stack += `  ${(error.cause as Error)?.stack}`;
+	}
+	return stack;
+}
 
 /**
  * Logs when a crash happens to console, then e-mails those who are configured
@@ -34,6 +45,9 @@ export function crashlogger(
 	const datenow = Date.now();
 
 	let stack = (typeof error === 'string' ? error : (error as Error)?.stack) || '';
+	if ((error as any)?.cause) {
+		stack += appendCause(error as Error);
+	}
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (const k in data) {
@@ -41,16 +55,16 @@ export function crashlogger(
 		}
 	}
 
-	console.error(`\nCRASH: ${stack}\n`);
-	const out = fs.createWriteStream(logPath, {flags: 'a'});
+	console.error(`\n[${Date.now()}] CRASH: ${stack}\n`);
+	const out = fs.createWriteStream(logPath, { flags: 'a' });
 	out.on('open', () => {
-		out.write(`\n${stack}\n`);
+		out.write(`\n[${Date.now()}] ${stack}\n`);
 		out.end();
 	}).on('error', (err: Error) => {
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 
-	const emailOpts = emailConfig || global.Config?.crashguardemail;
+	const emailOpts = emailConfig || (global as any).Config?.crashguardemail;
 	if (emailOpts && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
 		lastCrashLog = datenow;
 

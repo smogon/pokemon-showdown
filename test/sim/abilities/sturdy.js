@@ -5,74 +5,86 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Sturdy', function () {
-	afterEach(function () {
+describe('Sturdy', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should give the user an immunity to OHKO moves', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Aron', level: 1, ability: 'sturdy', moves: ['sleeptalk']}]});
-		battle.setPlayer('p2', {team: [{species: 'Kyogre', ability: 'noguard', moves: ['sheercold']}]});
+	it('should give the user an immunity to OHKO moves', () => {
+		battle = common.createBattle([[
+			{ species: 'Aron', level: 1, ability: 'sturdy', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Kyogre', ability: 'noguard', moves: ['sheercold'] },
+		]]);
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move sleeptalk', 'move sheercold'));
 	});
 
-	it('should allow its user to survive an attack from full HP', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Paras', ability: 'sturdy', moves: ['sleeptalk']}]});
-		battle.setPlayer('p2', {team: [{species: 'Charizard', ability: 'drought', moves: ['fusionflare']}]});
+	it('should allow its user to survive an attack from full HP', () => {
+		battle = common.createBattle([[
+			{ species: 'Paras', ability: 'sturdy', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Charizard', ability: 'drought', moves: ['fusionflare'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move fusionflare');
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
-	it('should allow its user to survive a confusion damage hit from full HP', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'sturdy', moves: ['absorb']}]});
-		battle.setPlayer('p2', {team: [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]});
+	it('should allow its user to survive a confusion damage hit from full HP', () => {
+		battle = common.createBattle([[
+			{ species: 'Shedinja', ability: 'sturdy', moves: ['absorb'] },
+		], [
+			{ species: 'Klefki', ability: 'prankster', moves: ['confuseray'] },
+		]]);
 		battle.makeChoices('move absorb', 'move confuseray');
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
-	it('should not trigger on recoil damage', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'sturdy', moves: ['doubleedge']}]});
-		battle.setPlayer('p2', {team: [{species: 'Klefki', ability: 'prankster', moves: ['reflect']}]});
+	it('should not trigger on recoil damage', () => {
+		battle = common.createBattle([[
+			{ species: 'Shedinja', ability: 'sturdy', moves: ['doubleedge'] },
+		], [
+			{ species: 'Klefki', ability: 'prankster', moves: ['reflect'] },
+		]]);
 		battle.makeChoices('move doubleedge', 'move reflect');
 		assert.fainted(battle.p1.active[0]);
 	});
 
-	it('should not trigger on residual damage', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'sturdy', moves: ['sleeptalk']}]});
-		battle.setPlayer('p2', {team: [{species: 'Crobat', ability: 'infiltrator', moves: ['toxic']}]});
+	it('should not trigger on residual damage', () => {
+		battle = common.createBattle([[
+			{ species: 'Shedinja', ability: 'sturdy', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Crobat', ability: 'infiltrator', moves: ['toxic'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move toxic');
 		assert.fainted(battle.p1.active[0]);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Paras', ability: 'sturdy', moves: ['sleeptalk']}]});
-		battle.setPlayer('p2', {team: [{species: 'Reshiram', ability: 'turboblaze', moves: ['fusionflare']}]});
+	it('should be suppressed by Mold Breaker', () => {
+		battle = common.createBattle([[
+			{ species: 'Paras', ability: 'sturdy', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Reshiram', ability: 'turboblaze', moves: ['fusionflare'] },
+		]]);
 		battle.makeChoices('move sleeptalk', 'move fusionflare');
 		assert.fainted(battle.p1.active[0]);
 	});
 
-	it(`should trigger before Focus Sash`, function () {
+	it(`should trigger before Focus Sash`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['tackle']},
+			{ species: "Wynaut", moves: ['tackle'] },
 		], [
-			{species: "Stufful", level: 1, ability: 'sturdy', item: 'focussash', moves: ['sleeptalk']},
+			{ species: "Stufful", level: 1, ability: 'sturdy', item: 'focussash', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
 		assert.holdsItem(battle.p2.active[0]);
 	});
 
-	it(`should not trigger when the user also uses Endure`, function () {
+	it(`should not trigger when the user also uses Endure`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['tackle']},
+			{ species: "Wynaut", moves: ['tackle'] },
 		], [
-			{species: "Stufful", level: 1, ability: 'sturdy', moves: ['endure']},
+			{ species: "Stufful", level: 1, ability: 'sturdy', moves: ['endure'] },
 		]]);
 
 		battle.makeChoices();
@@ -80,11 +92,11 @@ describe('Sturdy', function () {
 		assert.equal(sturdyIndex, -1, 'Sturdy should not activate.');
 	});
 
-	it(`should not trigger when the user is damaged to 1 HP from False Swipe`, function () {
+	it(`should not trigger when the user is damaged to 1 HP from False Swipe`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['falseswipe']},
+			{ species: "Wynaut", moves: ['falseswipe'] },
 		], [
-			{species: "Stufful", level: 1, ability: 'sturdy', moves: ['sleeptalk']},
+			{ species: "Stufful", level: 1, ability: 'sturdy', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();

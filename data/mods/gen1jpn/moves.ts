@@ -2,7 +2,7 @@
  * The japanese version of Blizzard in Gen 1 had a 30% chance to freeze
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	blizzard: {
 		inherit: true,
 		secondary: {
@@ -13,12 +13,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	substitute: {
 		inherit: true,
 		condition: {
-			onStart(target) {
-				this.add('-start', target, 'Substitute');
-				this.effectState.hp = Math.floor(target.maxhp / 4) + 1;
-				delete target.volatiles['partiallytrapped'];
-			},
-			onTryHitPriority: -1,
+			inherit: true,
 			onTryHit(target, source, move) {
 				if (move.drain) {
 					this.add('-miss', source);
@@ -39,10 +34,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
-				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
+				const uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
-				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
-				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;
@@ -54,8 +47,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				// Drain/recoil does not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
-					if (move.recoil) {
-						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+					if (uncappedDamage) {
+						this.actions.applyRecoilDamage(uncappedDamage, move, source);
 					}
 					if (move.drain) {
 						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');
@@ -65,7 +58,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, thisTurn: true, slot: source.getSlot()});
+					target.attackedBy.push({ source, move: move.id, damage: uncappedDamage, thisTurn: true, slot: source.getSlot() });
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = uncappedDamage;
@@ -77,9 +70,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return true;
 				}
 				return accuracy;
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Substitute');
 			},
 		},
 	},

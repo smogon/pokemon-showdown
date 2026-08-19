@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Damp', function () {
-	afterEach(function () {
+describe('Damp', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should prevent self-destruction moves from activating', function () {
+	it('should prevent self-destruction moves from activating', () => {
 		battle = common.createBattle([[
-			{species: 'Politoed', ability: 'damp', moves: ['calmmind']},
+			{ species: 'Politoed', ability: 'damp', moves: ['calmmind'] },
 		], [
-			{species: 'Electrode', ability: 'static', moves: ['explosion']},
+			{ species: 'Electrode', ability: 'static', moves: ['explosion'] },
 		]]);
 		const [dampMon, selfKOMon] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move calmmind', 'move explosion');
@@ -22,11 +22,11 @@ describe('Damp', function () {
 		assert.fullHP(selfKOMon);
 	});
 
-	it('should prevent Aftermath from activating', function () {
+	it('should prevent Aftermath from activating', () => {
 		battle = common.createBattle([[
-			{species: 'Poliwrath', ability: 'damp', moves: ['closecombat']},
+			{ species: 'Poliwrath', ability: 'damp', moves: ['closecombat'] },
 		], [
-			{species: 'Aron', ability: 'aftermath', moves: ['leer']},
+			{ species: 'Aron', ability: 'aftermath', moves: ['leer'] },
 		]]);
 		const [dampMon, afterMathMon] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move closecombat', 'move leer');
@@ -34,11 +34,11 @@ describe('Damp', function () {
 		assert.fainted(afterMathMon);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
-			{species: 'Politoed', ability: 'damp', moves: ['calmmind']},
+			{ species: 'Politoed', ability: 'damp', moves: ['calmmind'] },
 		], [
-			{species: 'Electrode', ability: 'moldbreaker', moves: ['explosion']},
+			{ species: 'Electrode', ability: 'moldbreaker', moves: ['explosion'] },
 		]]);
 		const [dampMon, mbSelfKOMon] = [battle.p1.active[0], battle.p2.active[0]];
 		assert.hurts(dampMon, () => battle.makeChoices('move calmmind', 'move explosion'));

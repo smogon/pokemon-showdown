@@ -1,20 +1,20 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	commander: {
 		inherit: true,
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
 	},
 	gulpmissile: {
 		inherit: true,
-		flags: {cantsuppress: 1, notransform: 1},
+		flags: { cantsuppress: 1, notransform: 1 },
 	},
 	hadronengine: {
 		inherit: true,
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
 	},
 	illuminate: {
 		inherit: true,
-		onTryBoost() {},
-		onModifyMove() {},
+		onTryBoost: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		flags: {},
 		rating: 0,
 	},
@@ -24,7 +24,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	orichalcumpulse: {
 		inherit: true,
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
 	},
 	supersweetsyrup: {
 		inherit: true,
@@ -38,7 +38,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		isNonstandard: "Future",
 	},
-	embodyaspect: {
+	embodyaspectcornerstone: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	embodyaspecthearthflame: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	embodyaspectteal: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	embodyaspectwellspring: {
 		inherit: true,
 		isNonstandard: "Future",
 	},

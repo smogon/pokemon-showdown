@@ -3,10 +3,10 @@
  * By Mia.
  * @author mia-pi-git
  */
-import {SQL, FS} from '../../lib';
-import {MAX_PENDING} from '.';
+import { type SQL, FS } from '../../lib';
+import { MAX_PENDING } from '.';
 
-export const statements: {[k: string]: string} = {
+export const statements = {
 	send: 'INSERT INTO offline_pms (sender, receiver, message, time) VALUES (?, ?, ?, ?)',
 	clear: 'DELETE FROM offline_pms WHERE receiver = ?',
 	fetch: 'SELECT * FROM offline_pms WHERE receiver = ?',
@@ -18,23 +18,25 @@ export const statements: {[k: string]: string} = {
 	getSettings: 'SELECT * FROM pm_settings WHERE userid = ?',
 	setBlock: 'REPLACE INTO pm_settings (userid, view_only) VALUES (?, ?)',
 	deleteSettings: 'DELETE FROM pm_settings WHERE userid = ?',
-};
+} as const;
+
+type Statement = keyof typeof statements;
 
 class StatementMap {
 	env: SQL.TransactionEnvironment;
 	constructor(env: SQL.TransactionEnvironment) {
 		this.env = env;
 	}
-	run(name: string, args: any[] | AnyObject) {
+	run(name: Statement, args: any[] | AnyObject) {
 		return this.getStatement(name).run(args);
 	}
-	all(name: string, args: any[] | AnyObject) {
+	all(name: Statement, args: any[] | AnyObject) {
 		return this.getStatement(name).all(args);
 	}
-	get(name: string, args: any[] | AnyObject) {
+	get(name: Statement, args: any[] | AnyObject) {
 		return this.getStatement(name).get(args);
 	}
-	getStatement(name: string) {
+	getStatement(name: Statement) {
 		const source = statements[name];
 		return this.env.statements.get(source)!;
 	}
@@ -48,7 +50,7 @@ export const transactions: {
 		const [sender, receiver, message] = args;
 		const count = statementList.get('checkSentCount', [sender, receiver])?.count;
 		if (count && count > MAX_PENDING) {
-			return {error: `You have already sent the maximum ${MAX_PENDING} offline PMs to that user.`};
+			return { error: `You have already sent the maximum ${MAX_PENDING} offline PMs to that user.` };
 		}
 		return statementList.run('send', [sender, receiver, message, Date.now()]);
 	},

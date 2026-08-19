@@ -1,6 +1,6 @@
-import type {Learnset} from "../../../sim/dex-species";
+import type { Learnset } from "../../../sim/dex-species";
 
-export const Rulesets: {[k: string]: ModdedFormatData} = {
+export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
 	obtainablemoves: {
 		inherit: true,
 		banlist: [
@@ -28,7 +28,10 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
+		],
 		banlist: [
 			'Hypnosis + Mean Look',
 			'Hypnosis + Spider Web',
@@ -47,34 +50,34 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		name: 'NC 2000 Move Legality',
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		onValidateSet(set) {
-			const illegalCombos: {[speciesid: string]: {[moveid: string]: 'E' | 'L' | 'S'}} = {
-				arbok: {crunch: 'E'},
-				sandslash: {metalclaw: 'E'},
-				golduck: {crosschop: 'E'},
-				marowak: {swordsdance: 'E'},
-				electabuzz: {crosschop: 'E'},
-				magmar: {crosschop: 'E'},
-				jolteon: {batonpass: 'L'},
-				vaporeon: {batonpass: 'L'},
-				flareon: {batonpass: 'L'},
-				espeon: {batonpass: 'L'},
-				umbreon: {batonpass: 'L'},
-				dragonite: {extremespeed: 'S'},
-				meganium: {swordsdance: 'E'},
-				typhlosion: {submission: 'E'},
-				ariados: {agility: 'L'},
-				yanma: {wingattack: 'L'},
-				murkrow: {skyattack: 'E'},
-				qwilfish: {spikes: 'L'},
-				sneasel: {metalclaw: 'L'},
-				ursaring: {metalclaw: 'E'},
-				piloswine: {amnesia: 'L'},
-				skarmory: {skyattack: 'E'},
-				donphan: {watergun: 'E'},
-				suicune: {aurorabeam: 'L'},
-				dugtrio: {triattack: 'L'},
-				magneton: {triattack: 'L'},
-				cloyster: {spikes: 'L'},
+			const illegalCombos: { [speciesid: string]: { [moveid: string]: 'E' | 'L' | 'S' } } = {
+				arbok: { crunch: 'E' },
+				sandslash: { metalclaw: 'E' },
+				golduck: { crosschop: 'E' },
+				marowak: { swordsdance: 'E' },
+				electabuzz: { crosschop: 'E' },
+				magmar: { crosschop: 'E' },
+				jolteon: { batonpass: 'L' },
+				vaporeon: { batonpass: 'L' },
+				flareon: { batonpass: 'L' },
+				espeon: { batonpass: 'L' },
+				umbreon: { batonpass: 'L' },
+				dragonite: { extremespeed: 'S' },
+				meganium: { swordsdance: 'E' },
+				typhlosion: { submission: 'E' },
+				ariados: { agility: 'L' },
+				yanma: { wingattack: 'L' },
+				murkrow: { skyattack: 'E' },
+				qwilfish: { spikes: 'L' },
+				sneasel: { metalclaw: 'L' },
+				ursaring: { metalclaw: 'E' },
+				piloswine: { amnesia: 'L' },
+				skarmory: { skyattack: 'E' },
+				donphan: { watergun: 'E' },
+				suicune: { aurorabeam: 'L' },
+				dugtrio: { triattack: 'L' },
+				magneton: { triattack: 'L' },
+				cloyster: { spikes: 'L' },
 			};
 
 			const moveSources: NonNullable<Learnset['learnset']> = Object.fromEntries(
@@ -82,7 +85,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			);
 
 			const species = this.dex.species.get(set.species);
-			for (const {learnset} of this.dex.species.getFullLearnset(species.id)) {
+			for (const { learnset } of this.dex.species.getFullLearnset(species.id)) {
 				for (const moveid in moveSources) {
 					moveSources[moveid].push(...(learnset[moveid] || []));
 				}

@@ -10,5 +10,5 @@ CREATE TABLE teams (
 );
 
 CREATE INDEX owner_idx ON teams(ownerid);
-CREATE INDEX format_idx ON teams(ownerid);
+CREATE INDEX format_idx ON teams(format);
 CREATE INDEX owner_fmt_idx ON teams(ownerid, format);

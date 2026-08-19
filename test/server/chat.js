@@ -2,8 +2,19 @@
 
 const assert = require('assert').strict;
 
-describe('Chat', function () {
-	it('should run formatText correctly', function () {
+describe('Chat', () => {
+	it('should not infinite loop formatText', () => {
+		assert.equal(
+			Chat.formatText(`<\\\\||^^**~~\`\`https://a/Olaaaseusbobalhos\`\`~~**^^||\\\\`),
+			`&lt;<sub><span class="spoiler"><sup><b><s><code><a href="https://a/Olaaaseusbobalhos" rel="noopener" target="_blank">https://a/Olaaaseusbobalhos</a></code></s></b></sup></span></sub>`
+		);
+		assert.equal(
+			Chat.formatText(`[[https://google.com/]]text`),
+			`<a href="//www.google.com/search?ie=UTF-8&btnI&q=https%3A%2F%2Fgoogle.com%2F" target="_blank">https://google.com/</a>text`
+		);
+	});
+
+	it('should run formatText correctly', () => {
 		assert.equal(
 			Chat.formatText(`hi **__bold italics__** ^^superscript^^ \\\\subscript\\\\ normal ~~strikethrough~~ bye`),
 			`hi <b><i>bold italics</i></b> <sup>superscript</sup> <sub>subscript</sub> normal <s>strikethrough</s> bye`
@@ -106,7 +117,7 @@ describe('Chat', function () {
 		);
 	});
 
-	it('should run toDurationString correctly', function () {
+	it('should run toDurationString correctly', () => {
 		assert(Chat.toDurationString(1e50));
 
 		assert(!Chat.toDurationString(10000000 * 24 * 60 * 60 * 1000).includes('  '));

@@ -5,48 +5,74 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Rock Head', function () {
-	afterEach(function () {
+describe('Rock Head', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should block recoil from most moves', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Aerodactyl', ability: 'rockhead', moves: ['doubleedge']}]});
-		battle.setPlayer('p2', {team: [{species: 'Registeel', ability: 'clearbody', moves: ['rest']}]});
+	it('should block recoil from most moves', () => {
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'rockhead', moves: ['doubleedge'] },
+		], [
+			{ species: 'Registeel', ability: 'clearbody', moves: ['rest'] },
+		]]);
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move doubleedge', 'move rest'));
 	});
 
-	it('should not block recoil if the ability is disabled/removed mid-attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Aerodactyl', ability: 'rockhead', moves: ['doubleedge']}]});
-		battle.setPlayer('p2', {team: [{species: 'Registeel', ability: 'mummy', moves: ['rest']}]});
+	it('should not block recoil if the ability is disabled/removed mid-attack', () => {
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'rockhead', moves: ['doubleedge'] },
+		], [
+			{ species: 'Registeel', ability: 'mummy', moves: ['rest'] },
+		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move doubleedge', 'move rest'));
 	});
 
-	it('should not block recoil from Struggle', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Aerodactyl', ability: 'rockhead', moves: ['roost']}]});
-		battle.setPlayer('p2', {team: [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]});
+	it('should not block recoil from Struggle', () => {
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'rockhead', moves: ['roost'] },
+		], [
+			{ species: 'Sableye', ability: 'prankster', moves: ['taunt'] },
+		]]);
 		battle.makeChoices('move roost', 'move taunt');
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move 1', 'move taunt'));
 	});
 
-	it('should not block crash damage', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Rampardos', ability: 'rockhead', moves: ['jumpkick']}]});
-		battle.setPlayer('p2', {team: [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]});
+	it('should not block crash damage', () => {
+		battle = common.createBattle([[
+			{ species: 'Rampardos', ability: 'rockhead', moves: ['jumpkick'] },
+		], [
+			{ species: 'Sableye', ability: 'prankster', moves: ['taunt'] },
+		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move jumpkick', 'move taunt'));
 	});
 
-	it(`should not block indirect damage`, function () {
+	it(`should not block indirect damage`, () => {
 		battle = common.createBattle([[
-			{species: 'Rampardos', ability: 'rockhead', moves: ['splash']},
+			{ species: 'Rampardos', ability: 'rockhead', moves: ['splash'] },
 		], [
-			{species: 'Crobat', moves: ['toxic']},
+			{ species: 'Crobat', moves: ['toxic'] },
 		]]);
 
 		battle.makeChoices();
 		assert.false.fullHP(battle.p1.active[0]);
+	});
+
+	it('should not block recoil from Mind Blown', () => {
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'rockhead', moves: ['mindblown'] },
+		], [
+			{ species: 'Registeel', ability: 'clearbody', moves: ['rest'] },
+		]]);
+		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move mindblown', 'move rest'));
+	});
+
+	it('should block recoil from Chloroblast', () => {
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'rockhead', moves: ['chloroblast'] },
+		], [
+			{ species: 'Registeel', ability: 'clearbody', moves: ['rest'] },
+		]]);
+		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move chloroblast', 'move rest'));
 	});
 });

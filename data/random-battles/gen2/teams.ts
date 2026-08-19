@@ -1,6 +1,6 @@
 import RandomGen3Teams from '../gen3/teams';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../gen8/teams';
+import type { PRNG, PRNGSeed } from '../../../sim/prng';
+import type { MoveCounter } from '../gen9/teams';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -26,7 +26,7 @@ const MOVE_PAIRS = [
 ];
 
 export class RandomGen2Teams extends RandomGen3Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
+	override randomSets: { [species: IDEntry]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -47,8 +47,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		};
 	}
 
-	cullMovePool(
-		types: string[],
+	override cullMovePool(
+		types: Set<string>,
 		moves: Set<string>,
 		abilities = {},
 		counter: MoveCounter,
@@ -112,6 +112,10 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
+		if (teamDetails.statusCure) {
+			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
 
 		// General incompatibilities
 		const incompatiblePairs = [
@@ -134,9 +138,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
-	randomMoveset(
-		types: string[],
-		abilities: Set<string>,
+	override randomMoveset(
+		types: Set<string>,
+		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
@@ -146,7 +150,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	): Set<string> {
 		const preferredTypes = preferredType ? preferredType.split(',') : [];
 		const moves = new Set<string>();
-		let counter = this.newQueryMoves(moves, species, preferredType, abilities);
+		let counter = this.queryMoves(moves, species, preferredType, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead,
 			preferredType, role);
 
@@ -164,7 +168,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		const runEnforcementChecker = (checkerName: string) => {
 			if (!this.moveEnforcementCheckers[checkerName]) return false;
 			return this.moveEnforcementCheckers[checkerName](
-				movePool, moves, abilities, new Set(types), counter, species, teamDetails
+				movePool, moves, abilities, types, counter, species, teamDetails, isLead, false, preferredType, role
 			);
 		};
 
@@ -235,7 +239,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, preferredType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.has(moveType)) {
 					stabMoves.push(moveid);
 				}
 			}
@@ -308,7 +312,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -345,9 +349,9 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		return moves;
 	}
 
-	getItem(
+	override getItem(
 		ability: string,
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -358,7 +362,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	): string {
 		// First, the high-priority items
 		if (species.id === 'ditto') return 'Metal Powder';
-		if (species.id === 'farfetchd') return 'Stick';
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
 
@@ -375,7 +378,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		return 'Leftovers';
 	}
 
-	randomSet(
+	override randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
@@ -394,16 +397,16 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		const ability = '';
 		let item = undefined;
 
-		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
-		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+		const evs = { hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255 };
+		const ivs = { hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30 };
 
-		const types = species.types;
-		const abilities = new Set(Object.values(species.abilities));
+		const types = new Set(species.types);
+		const abilities: string[] = [];
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool,
 			preferredType, role);
-		const counter = this.newQueryMoves(moves, species, preferredType, abilities);
+		const counter = this.queryMoves(moves, species, preferredType, abilities);
 
 		// Get items
 		item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
@@ -423,22 +426,22 @@ export class RandomGen2Teams extends RandomGen3Teams {
 				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
 			}
 			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
-			const hpIVs: {[k: string]: Partial<typeof ivs>} = {
-				dragon: {def: 28},
-				ice: {def: 26},
-				psychic: {def: 24},
-				electric: {atk: 28},
-				grass: {atk: 28, def: 28},
-				water: {atk: 28, def: 26},
-				fire: {atk: 28, def: 24},
-				steel: {atk: 26},
-				ghost: {atk: 26, def: 28},
-				bug: {atk: 26, def: 26},
-				rock: {atk: 26, def: 24},
-				ground: {atk: 24},
-				poison: {atk: 24, def: 28},
-				flying: {atk: 24, def: 26},
-				fighting: {atk: 24, def: 24},
+			const hpIVs: { [k: string]: Partial<typeof ivs> } = {
+				dragon: { def: 28 },
+				ice: { def: 26 },
+				psychic: { def: 24 },
+				electric: { atk: 28 },
+				grass: { atk: 28, def: 28 },
+				water: { atk: 28, def: 26 },
+				fire: { atk: 28, def: 24 },
+				steel: { atk: 26 },
+				ghost: { atk: 26, def: 28 },
+				bug: { atk: 26, def: 26 },
+				rock: { atk: 26, def: 24 },
+				ground: { atk: 24 },
+				poison: { atk: 24, def: 28 },
+				flying: { atk: 24, def: 26 },
+				fighting: { atk: 24, def: 24 },
 			};
 			let iv: StatID;
 			for (iv in hpIVs[hpType]) {
@@ -470,6 +473,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			level,
 			moves: shuffledMoves,
 			ability: 'No Ability',
@@ -481,6 +485,33 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			shiny: false,
 			gender: species.gender ? species.gender : 'M',
 		};
+	}
+
+	/**
+	 * Checks if the new species is compatible with the other mons currently on the team.
+	 */
+	override getPokemonCompatibility(
+		species: Species,
+		pokemon: RandomTeamsTypes.RandomSet[],
+	): boolean {
+		const spikesSetters = ['cloyster', 'delibird', 'qwilfish', 'forretress', 'smeargle'];
+		const incompatibilityList = [
+			// These combinations are prevented to avoid double spikes.
+			[spikesSetters, spikesSetters],
+		];
+
+		for (const pair of incompatibilityList) {
+			const monsArrayA = (Array.isArray(pair[0])) ? pair[0] : [pair[0]];
+			const monsArrayB = (Array.isArray(pair[1])) ? pair[1] : [pair[1]];
+			if (monsArrayB.includes(species.id)) {
+				if (pokemon.some(m => monsArrayA.includes(m.speciesId!))) return false;
+			}
+			if (monsArrayA.includes(species.id)) {
+				if (pokemon.some(m => monsArrayB.includes(m.speciesId!))) return false;
+			}
+		}
+
+		return true;
 	}
 }
 

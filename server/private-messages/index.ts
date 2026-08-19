@@ -3,13 +3,13 @@
  * By Mia.
  * @author mia-pi-git
  */
-import {SQL, Utils} from '../../lib';
-import {Config} from '../config-loader';
-import {Auth} from '../user-groups';
-import {statements} from './database';
+import { SQL, Utils } from '../../lib';
+import * as ConfigLoader from '../config-loader';
+import { Auth } from '../user-groups';
+import { statements } from './database';
 /** The time until a PM sent offline expires. Presently, 60 days. */
 export const EXPIRY_TIME = 60 * 24 * 60 * 60 * 1000;
-/** The time until a PM that has been seen by the user expires. Presently, one week.*/
+/** The time until a PM that has been seen by the user expires. Presently, one week. */
 export const SEEN_EXPIRY_TIME = 7 * 24 * 60 * 60 * 1000;
 /** The max PMs that one user can have pending to a specific user at one time */
 export const MAX_PENDING = 20;
@@ -17,7 +17,7 @@ export const MAX_PENDING = 20;
 // this would be in database.ts, but for some weird reason, if the extension and the pm are the same
 // it doesn't work. all the keys in the require() result are there, but they're also set to undefined.
 // no idea why.
-export const PM = SQL(module, {
+export const database = SQL('private-messages', module, {
 	file: 'databases/offline-pms.db',
 	extension: 'server/private-messages/database.js',
 });
@@ -31,12 +31,12 @@ export interface ReceivedPM {
 }
 
 export const PrivateMessages = new class {
-	database = PM;
+	database = database;
 	clearInterval = this.nextClear();
 	offlineIsEnabled = Config.usesqlitepms && Config.usesqlite;
 	async sendOffline(to: string, from: User | string, message: string, context?: Chat.CommandContext) {
 		await this.checkCanSend(to, from);
-		const result = await PM.transaction('send', [toID(from), toID(to), message]);
+		const result = await database.transaction('send', [toID(from), toID(to), message]);
 		if (result.error) throw new Chat.ErrorMessage(result.error);
 		if (typeof from === 'object') {
 			from.send(`|pm|${this.getIdentity(from)}|${this.getIdentity(to)}|${message} __[sent offline]__`);
@@ -48,10 +48,10 @@ export const PrivateMessages = new class {
 		return changed;
 	}
 	getSettings(userid: string) {
-		return PM.get(statements.getSettings, [toID(userid)]);
+		return database.get(statements.getSettings, [toID(userid)]);
 	}
 	deleteSettings(userid: string) {
-		return PM.run(statements.deleteSettings, [toID(userid)]);
+		return database.run(statements.deleteSettings, [toID(userid)]);
 	}
 	async checkCanSend(to: string, from: User | string) {
 		from = toID(from);
@@ -75,7 +75,7 @@ export const PrivateMessages = new class {
 		case 'none':
 			// drivers+ can override
 			if (!Auth.atLeast(Users.globalAuth.get(from as ID), '%')) {
-				throw new Chat.ErrorMessage(`${to} has indicated that they do not wish to receive offine PMs.`);
+				throw new Chat.ErrorMessage(`${to} has indicated that they do not wish to receive offline PMs.`);
 			}
 			break;
 		default:
@@ -91,18 +91,18 @@ export const PrivateMessages = new class {
 	setViewOnly(user: User | string, val: string | null) {
 		const id = toID(user);
 		if (!val) { // if null, no need to save
-			return PM.run(statements.deleteSettings, [id]);
+			return database.run(statements.deleteSettings, [id]);
 		}
-		return PM.run(statements.setBlock, [id, val]);
+		return database.run(statements.setBlock, [id, val]);
 	}
-	checkCanUse(user: User, options = {forceBool: false, isLogin: false}) {
+	checkCanUse(user: User, options = { forceBool: false, isLogin: false }) {
 		if (!this.offlineIsEnabled) {
 			if (options.forceBool) return false;
 			throw new Chat.ErrorMessage(`Offline PMs are currently disabled.`);
 		}
 		if (!(options.isLogin ? user.registered : user.autoconfirmed)) {
 			if (options.forceBool) return false;
-			throw new Chat.ErrorMessage("You must be autoconfirmed to use offine messaging.");
+			throw new Chat.ErrorMessage("To use offline messaging you must be autoconfirmed, which means being registered for at least one week and winning one rated game.");
 		}
 		if (!Users.globalAuth.atLeast(user, Config.usesqlitepms)) {
 			if (options.forceBool) return false;
@@ -122,7 +122,7 @@ export const PrivateMessages = new class {
 		const userid = toID(user);
 		// we only want to send the unseen pms to them when they login - they can replay the rest at will otherwise
 		const messages = await this.fetchUnseen(userid);
-		for (const {message, time, sender} of messages) {
+		for (const { message, time, sender } of messages) {
 			user.send(
 				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|/html ` +
 				`${Utils.escapeHTML(message)} <i>[sent offline, <time>${new Date(time).toISOString()}</time>]</i>`
@@ -136,12 +136,12 @@ export const PrivateMessages = new class {
 		}
 		return `${Users.globalAuth.get(toID(user))}${user}`;
 	}
-	nextClear(): NodeJS.Timer {
-		if (!PM.isParentProcess) return null!;
+	nextClear(): NodeJS.Timeout {
+		if (!database.isParentProcess) return null!;
 		const time = Date.now();
 		// even though we expire once a week atm, we check once a day
-		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
-		nextMidnight.setHours(0, 0, 1);
+		const nextMidnight = new Date();
+		nextMidnight.setHours(24, 0, 0, 0);
 		if (this.clearInterval) clearTimeout(this.clearInterval);
 		this.clearInterval = setTimeout(() => {
 			void this.clearOffline();
@@ -151,7 +151,7 @@ export const PrivateMessages = new class {
 		return this.clearInterval;
 	}
 	clearSeen() {
-		return PM.run(statements.clearSeen, [Date.now(), SEEN_EXPIRY_TIME]);
+		return database.run(statements.clearSeen, [Date.now(), SEEN_EXPIRY_TIME]);
 	}
 	send(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
@@ -163,16 +163,16 @@ export const PrivateMessages = new class {
 	}
 	async fetchUnseen(user: User | string): Promise<ReceivedPM[]> {
 		const userid = toID(user);
-		return (await PM.transaction('listNew', [userid])) || [];
+		return (await database.transaction('listNew', [userid])) || [];
 	}
 	async fetchAll(user: User | string): Promise<ReceivedPM[]> {
-		return (await PM.all(statements.fetch, [toID(user)])) || [];
+		return (await database.all(statements.fetch, [toID(user)])) || [];
 	}
 	async renderReceived(user: User) {
 		const all = await this.fetchAll(user);
 		let buf = `<div class="ladder pad">`;
 		buf += `<h2>PMs received offline in the last ${Chat.toDurationString(SEEN_EXPIRY_TIME)}</h2>`;
-		const sortedPMs: {[userid: string]: ReceivedPM[]} = {};
+		const sortedPMs: { [userid: string]: ReceivedPM[] } = {};
 		for (const curPM of all) {
 			if (!sortedPMs[curPM.sender]) sortedPMs[curPM.sender] = [];
 			sortedPMs[curPM.sender].push(curPM);
@@ -189,7 +189,7 @@ export const PrivateMessages = new class {
 			buf += Utils.html`<div class="pm-window pm-window-${id}" width="30px" data-userid="${id}" data-name="${group}${name}" style="width:300px">`;
 			buf += Utils.html`<h3><small>${group}</small>${name}</h3>`;
 			buf += `<div class="pm-log"><div class="pm-buttonbar">`;
-			for (const {message, time} of messages) {
+			for (const { message, time } of messages) {
 				buf += `<div class="chat chatmessage-${toID(sender)}">&nbsp;&nbsp;`;
 				buf += `<small>[<time>${new Date(time).toISOString()}</time>] </small>`;
 				buf += Utils.html`<small>${group}</small>`;
@@ -203,31 +203,39 @@ export const PrivateMessages = new class {
 		return buf;
 	}
 	clearOffline() {
-		return PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
+		return database.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	}
 	destroy() {
-		void PM.destroy();
+		if (this.clearInterval) clearTimeout(this.clearInterval);
+		this.clearInterval = null!;
+		void database.destroy();
+	}
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 };
 
-if (Config.usesqlite) {
-	if (!process.send) {
-		PM.spawn(Config.pmprocesses || 1);
-		// clear super old pms on startup
-		void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
-	} else if (process.send && process.mainModule === module) {
-		global.Monitor = {
-			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
-				const repr = JSON.stringify([error.name, error.message, source, details]);
-				process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-			},
-		};
-		process.on('uncaughtException', err => {
-			Monitor.crashlog(err, 'A private message database process');
-		});
-		process.on('unhandledRejection', err => {
-			Monitor.crashlog(err as Error, 'A private message database process');
-		});
-	}
+if (!database.isParentProcess) {
+	ConfigLoader.ensureLoaded();
+	global.Monitor = {
+		crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		Monitor.crashlog(err, 'A private message database process');
+	});
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as Error, 'A private message database process');
+	});
 }
 
+function start(processCount: ConfigLoader.SubProcessesConfig) {
+	if (!Config.usesqlite) {
+		return;
+	}
+	database.spawn(processCount['pm'] ?? 1);
+	// clear super old pms on startup
+	void database.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
+}

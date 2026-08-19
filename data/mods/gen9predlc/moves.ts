@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	aurawheel: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -37,7 +37,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	jetpunch: {
 		inherit: true,
-		hasSheerForce: true,
+		hasSheerForceBoost: true,
 	},
 	matchagotcha: {
 		inherit: true,

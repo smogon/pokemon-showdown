@@ -6,49 +6,49 @@
  * @author Annika
  */
 const assert = require('../assert');
-const {makeUser, makeConnection} = require('../users-utils');
-const {Punishments} = require('../../dist/server/punishments');
+const { makeUser, makeConnection } = require('../users-utils');
+const { Punishments } = require('../../dist/server/punishments');
 
 const TEST_PUNISHMENT_DURATION = 1000; // 1 second
 
 describe("Punishments", () => {
 	it("Should properly sort punishments by weight", () => {
 		const list = [
-			{type: "LOCK", id: "User 1", expireTime: Date.now() + 1000, reason: ''},
-			{type: "SEMILOCK", id: "User 2", expireTime: Date.now() + 1000, reason: ''},
-			{type: "BAN", id: "", expireTime: Date.now() + 1000, reason: ''},
+			{ type: "LOCK", id: "User 1", expireTime: Date.now() + 1000, reason: '' },
+			{ type: "SEMILOCK", id: "User 2", expireTime: Date.now() + 1000, reason: '' },
+			{ type: "BAN", id: "", expireTime: Date.now() + 1000, reason: '' },
 		];
 		Punishments.byWeight(list);
 		assert.equal(list[0].type, 'BAN');
 	});
 	it("Should prevent a user from having two punishments of the same type", () => {
-		Punishments.userids.add('banmeplease', {type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: ''});
-		Punishments.userids.add("banmeplease", {type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: 'ok'});
+		Punishments.userids.add('banmeplease', { type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: '' });
+		Punishments.userids.add("banmeplease", { type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: 'ok' });
 		assert.equal(Punishments.userids.get('banmeplease').length, 1);
 	});
 	it("Should overwrite the old reason when a user receives two of the same punishment", () => {
-		Punishments.userids.add('banmeplease', {type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: ''});
-		Punishments.userids.add("banmeplease", {type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: 'ok'});
+		Punishments.userids.add('banmeplease', { type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: '' });
+		Punishments.userids.add("banmeplease", { type: 'BAN', expireTime: Date.now() + 30 * 1000, id: 'banmeplease', reason: 'ok' });
 		assert.equal(Punishments.userids.getByType('banmeplease', 'BAN').reason, 'ok');
 	});
 	it("Should properly filter out expiring punishments", () => {
-		const punishments = [{type: 'BAN', expireTime: Date.now() - 1000, id: 'banmeplease', reason: ''}];
+		const punishments = [{ type: 'BAN', expireTime: Date.now() - 1000, id: 'banmeplease', reason: '' }];
 		Punishments.userids.removeExpiring(punishments);
 		assert.equal(punishments.length, 0);
 	});
 	it("Should be able to remove only one punishment from the list by passing an object", () => {
 		const [expireTime, reason, id] = [Date.now() + 1000, '', 'banmeplease'];
-		Punishments.userids.add(id, {type: 'BAN', expireTime, reason, id});
-		Punishments.userids.add(id, {type: 'RICKROLL', expireTime, reason, id});
-		Punishments.userids.deleteOne(id, {type: 'RICKROLL', expireTime, reason, id});
+		Punishments.userids.add(id, { type: 'BAN', expireTime, reason, id });
+		Punishments.userids.add(id, { type: 'RICKROLL', expireTime, reason, id });
+		Punishments.userids.deleteOne(id, { type: 'RICKROLL', expireTime, reason, id });
 		assert.equal(Punishments.userids.get(id).length, 1);
 	});
 
 	it('should properly search for IP punishments by type', () => {
 		const [expireTime, reason, id] = [Date.now() + 1000, '', 'banmeplease'];
-		Punishments.ips.add('127.0.0.1', {type: 'BAN', expireTime, reason, id});
-		Punishments.ips.add('127.0.0.1', {type: 'RICKROLL', expireTime, reason, id});
-		Punishments.ips.add('127.0.*', {type: 'RANGEBAN', expireTime, reason, id});
+		Punishments.ips.add('127.0.0.1', { type: 'BAN', expireTime, reason, id });
+		Punishments.ips.add('127.0.0.1', { type: 'RICKROLL', expireTime, reason, id });
+		Punishments.ips.add('127.0.*', { type: 'RANGEBAN', expireTime, reason, id });
 
 		const allIPPunishments = Punishments.ipSearch('127.0.0.1');
 		assert(Array.isArray(allIPPunishments));
@@ -124,13 +124,13 @@ describe('broader, more integrated Punishments tests', function () {
 			const initialLogLength = this.room.log.log.length;
 
 			await this.parse("Hi! I'm a locked user!");
-			assert.equal(this.room.log.log.length, initialLogLength, `user should be unable to sucessfully chat while locked`);
+			assert.equal(this.room.log.log.length, initialLogLength, `user should be unable to successfully chat while locked`);
 
 			Punishments.unlock(this.user.id);
 			await this.parse("/msgroom lobby,Hi! I'm no longer locked!");
 			// we can't just check the roomlog length because unlocking adds a |n| message to
 			const lastMessage = this.room.log.log.pop();
-			assert(lastMessage.endsWith(` Lock Me Please|Hi! I'm no longer locked!`), `user should have sucessfuly sent a message after being locked`);
+			assert(lastMessage.endsWith(` Lock Me Please|Hi! I'm no longer locked!`), `user should have successfully sent a message after being locked`);
 		});
 
 		// This test relies on Chat#parse returning `false` when permission is denied.
@@ -138,13 +138,13 @@ describe('broader, more integrated Punishments tests', function () {
 		// an `ErrorMessage` is the only time `false` will be returned by Chat#parse (unless a chat command returns it, which /msg does not).
 		// If you are here because this test is failing, check if the above assumptions are still valid.
 		// If they are not, the test should either be refactored to use another way of
-		// determining whether a PM was sucessful (such as modifying Chat.sendPM), or skipped entirely.
+		// determining whether a PM was successful (such as modifying Chat.sendPM), or skipped entirely.
 		it('should prevent users from sending PMs other than to staff while they are locked', async () => {
 			makeUser("Some Random Reg", '127.0.0.4');
-			makeUser("Annika", '127.0.0.5').tempGroup = '&';
+			makeUser("Annika", '127.0.0.5').tempGroup = '~';
 
 			let result = await this.parse("/msg Some Random Reg, Hi! I'm a locked user!");
-			assert.equal(result, false, `user should be unable to sucessfully send PMs while locked`);
+			assert.equal(result, false, `user should be unable to successfully send PMs while locked`);
 
 			result = await this.parse("/msg Annika, Hi! I'm a locked user!");
 			assert.notEqual(result, false, `user should be able to send PMs to global staff while locked`);

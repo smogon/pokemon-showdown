@@ -8,7 +8,7 @@ class WorkerStream extends ObjectReadWriteStream {
 	constructor(id) {
 		super();
 		this.id = id;
-		this.process = {connected: true};
+		this.process = { connected: true };
 		this.sockets = new Set();
 		this.rooms = new Map();
 		this.roomChannels = new Map();

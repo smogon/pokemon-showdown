@@ -5,20 +5,18 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Leftovers [Gen 2]', function () {
-	afterEach(function () {
+describe('Leftovers [Gen 2]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should heal after switch', function () {
-		battle = common.gen(2).createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: 'Blissey', item: 'leftovers', moves: ['healbell']},
-			{species: 'Magikarp', level: 1, moves: ['splash']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Miltank", moves: ['seismictoss']},
-		]});
+	it('should heal after switch', () => {
+		battle = common.gen(2).createBattle([[
+			{ species: 'Blissey', item: 'leftovers', moves: ['healbell'] },
+			{ species: 'Magikarp', level: 1, moves: ['splash'] },
+		], [
+			{ species: "Miltank", moves: ['seismictoss'] },
+		]]);
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move healbell', 'move seismictoss');
 		assert.equal(holder.hp, 590);

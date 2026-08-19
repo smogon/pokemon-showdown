@@ -19,7 +19,7 @@ const HOSTS_FILE = 'config/hosts.csv';
 const PROXIES_FILE = 'config/proxies.csv';
 
 import * as dns from 'dns';
-import {FS, Net, Utils} from '../lib';
+import { FS, Net, Utils } from '../lib';
 
 export interface AddressRange {
 	minIP: number;
@@ -55,7 +55,7 @@ export const IPTools = new class {
 		]);
 		const shortHost = this.shortenHost(host);
 		const hostType = this.getHostType(shortHost, ip);
-		return {dnsbl, host, shortHost, hostType};
+		return { dnsbl, host, shortHost, hostType };
 	}
 
 	queryDnsblLoop(ip: string, callback: (val: string | null) => void, reversedIpDot: string, index: number) {
@@ -143,21 +143,23 @@ export const IPTools = new class {
 		if (index <= 0) {
 			const ip = IPTools.ipToNumber(cidr);
 			if (ip === null) return null;
-			return {minIP: ip, maxIP: ip};
+			return { minIP: ip, maxIP: ip };
 		}
-		const low = IPTools.ipToNumber(cidr.slice(0, index));
+		let low = IPTools.ipToNumber(cidr.slice(0, index));
 		const bits = Utils.parseExactInt(cidr.slice(index + 1));
 		// fun fact: IPTools fails if bits <= 1 because JavaScript
 		// does << with signed int32s.
 		if (low === null || !bits || bits < 2 || bits > 32) return null;
+		low &= ~((1 << (32 - bits)) - 1);
+		if (low < 0) low += 4294967296;
 		const high = low + (1 << (32 - bits)) - 1;
-		return {minIP: low, maxIP: high};
+		return { minIP: low, maxIP: high };
 	}
 	/** Is this an IP range supported by `stringToRange`? Note that exact IPs are also valid IP ranges. */
 	isValidRange(range: string): boolean {
 		return IPTools.stringToRange(range) !== null;
 	}
-	stringToRange(range: string | null): AddressRange | null {
+	stringToRange(this: void, range: string | null): AddressRange | null {
 		if (!range) return null;
 		if (range.endsWith('*')) {
 			const parts = range.replace('.*', '').split('.');
@@ -166,7 +168,7 @@ export const IPTools = new class {
 			const minIP = IPTools.ipToNumber(`${a || '0'}.${b || '0'}.${c || '0'}.0`);
 			const maxIP = IPTools.ipToNumber(`${a || '255'}.${b || '255'}.${c || '255'}.255`);
 			if (minIP === null || maxIP === null) return null;
-			return {minIP, maxIP};
+			return { minIP, maxIP };
 		}
 		const index = range.indexOf('-');
 		if (index <= 0) {
@@ -174,13 +176,13 @@ export const IPTools = new class {
 			const ip = IPTools.ipToNumber(range);
 			if (ip === null) return null;
 
-			return {maxIP: ip, minIP: ip};
+			return { maxIP: ip, minIP: ip };
 		}
 		const minIP = IPTools.ipToNumber(range.slice(0, index));
 		const maxIP = IPTools.ipToNumber(range.slice(index + 1));
 
 		if (minIP === null || maxIP === null || maxIP < minIP) return null;
-		return {minIP, maxIP};
+		return { minIP, maxIP };
 	}
 	rangeToString(range: AddressRange, sep = '-') {
 		return `${this.numberToIP(range.minIP)}${sep}${this.numberToIP(range.maxIP)}`;
@@ -223,7 +225,7 @@ export const IPTools = new class {
 	/**
 	 * Proxy and host management functions
 	 */
-	ranges: (AddressRange & {host: string})[] = [];
+	ranges: (AddressRange & { host: string })[] = [];
 	singleIPOpenProxies = new Set<string>();
 	torProxyIps = new Set<string>();
 	proxyHosts = new Set<string>();
@@ -269,7 +271,7 @@ export const IPTools = new class {
 					continue;
 				}
 
-				const range = {host: IPTools.urlToHost(host), maxIP, minIP};
+				const range = { host: IPTools.urlToHost(host), maxIP, minIP };
 				if (range.maxIP < range.minIP) throw new Error(`Bad range at ${hostOrLowIP}.`);
 				ranges.push(range);
 				break;
@@ -453,7 +455,7 @@ export const IPTools = new class {
 		}
 	}
 
-	addRange(range: AddressRange & {host: string}) {
+	addRange(range: AddressRange & { host: string }) {
 		if (IPTools.getRange(range.minIP, range.maxIP)) {
 			IPTools.removeRange(range.minIP, range.maxIP);
 		}
@@ -638,7 +640,7 @@ export const IPTools = new class {
 	}
 };
 
-const telstraRange: AddressRange & {host: string} = {
+const telstraRange: AddressRange & { host: string } = {
 	minIP: IPTools.ipToNumber("101.160.0.0")!,
 	maxIP: IPTools.ipToNumber("101.191.255.255")!,
 	host: 'telstra.net?/res',

@@ -1,8 +1,17 @@
-export const Rulesets: {[k: string]: ModdedFormatData} = {
+export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
+	standardag: {
+		inherit: true,
+		ruleset: [
+			'Obtainable', 'Desync Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+		],
+	},
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Obtainable', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause',
+		],
 		banlist: ['Dig', 'Fly'],
 	},
 	'350cupmod': {
@@ -36,7 +45,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: {[k: string]: number} = {
+			const stats: { [k: string]: number } = {
 				hp: newSpecies.baseStats.spe,
 				atk: newSpecies.baseStats.spa,
 				def: newSpecies.baseStats.def,

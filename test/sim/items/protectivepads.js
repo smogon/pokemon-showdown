@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Protective Pads', function () {
-	afterEach(function () {
+describe('Protective Pads', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should prevent ability-changing abilities triggered by contact from acting`, function () {
+	it(`should prevent ability-changing abilities triggered by contact from acting`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'sturdy', item: 'protectivepads', moves: ['bulletpunch']},
+			{ species: 'wynaut', ability: 'sturdy', item: 'protectivepads', moves: ['bulletpunch'] },
 		], [
-			{species: 'cofagrigus', ability: 'mummy', moves: ['sleeptalk']},
+			{ species: 'cofagrigus', ability: 'mummy', moves: ['sleeptalk'] },
 		]]);
 
 		const wynaut = battle.p1.active[0];
@@ -26,11 +26,11 @@ describe('Protective Pads', function () {
 		assert.false(mummyActivationMessages[0].includes('Sturdy'), `Attacker's ability should not be revealed`);
 	});
 
-	it(`should prevent damaging abilities triggered by contact from acting`, function () {
+	it(`should prevent damaging abilities triggered by contact from acting`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch'] },
 		], [
-			{species: 'ferrothorn', ability: 'ironbarbs', moves: ['sleeptalk']},
+			{ species: 'ferrothorn', ability: 'ironbarbs', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0], `Attacker should not be damaged`);
@@ -38,11 +38,11 @@ describe('Protective Pads', function () {
 		assert(battle.log.some(line => line.includes('Protective Pads')));
 	});
 
-	it(`should prevent stat stage-changing abilities triggered by contact from acting`, function () {
+	it(`should prevent stat stage-changing abilities triggered by contact from acting`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch'] },
 		], [
-			{species: 'goodra', ability: 'gooey', moves: ['sleeptalk']},
+			{ species: 'goodra', ability: 'gooey', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'spe', 0, `Speed should not be lowered`);
@@ -50,22 +50,22 @@ describe('Protective Pads', function () {
 		assert(battle.log.some(line => line.includes('Protective Pads')));
 	});
 
-	it(`should not stop Pickpocket`, function () {
+	it(`should not stop Pickpocket`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch'] },
 		], [
-			{species: 'weavile', ability: 'pickpocket', moves: ['sleeptalk']},
+			{ species: 'weavile', ability: 'pickpocket', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.holdsItem(battle.p1.active[0], `Attacker should lose their item`);
 		assert.equal(battle.p2.active[0].item, 'protectivepads', `Target should receive stolen Protective Pads`);
 	});
 
-	it(`should prevent item effects triggered by contact from acting`, function () {
+	it(`should prevent item effects triggered by contact from acting`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch'] },
 		], [
-			{species: 'miltank', item: 'rockyhelmet', moves: ['sleeptalk']},
+			{ species: 'miltank', item: 'rockyhelmet', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0], `Attacker should not be hurt`);
@@ -73,21 +73,21 @@ describe('Protective Pads', function () {
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
 
-	it(`should not activate on the opponent's moves`, function () {
+	it(`should not activate on the opponent's moves`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['sleeptalk'] },
 		], [
-			{species: 'happiny', moves: ['lunge']},
+			{ species: 'happiny', moves: ['lunge'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1, `Attack should be lowered`);
 	});
 
-	it(`should not start Perish Body on either Pokemon`, function () {
+	it(`should not start Perish Body on either Pokemon`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch'] },
 		], [
-			{species: 'cursola', ability: 'perishbody', moves: ['sleeptalk']},
+			{ species: 'cursola', ability: 'perishbody', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false(battle.p1.active[0].volatiles['perishsong'], 'Perish Body should not have activated on Wynaut due to Protective Pads.');
@@ -96,11 +96,11 @@ describe('Protective Pads', function () {
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
 
-	it(`should block against Protecting effects with a contact side effect`, function () {
+	it(`should block against Protecting effects with a contact side effect`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['sleeptalk', 'tackle']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['sleeptalk', 'tackle'] },
 		], [
-			{species: 'aggron', moves: ['sleeptalk', 'banefulbunker', 'obstruct', 'spikyshield']},
+			{ species: 'aggron', moves: ['sleeptalk', 'banefulbunker', 'obstruct', 'spikyshield'] },
 		]]);
 		battle.makeChoices('move tackle', 'move banefulbunker');
 		battle.makeChoices();
@@ -115,11 +115,11 @@ describe('Protective Pads', function () {
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
 
-	it(`should not protect against Gulp Missile when using a contact move`, function () {
+	it(`should not protect against Gulp Missile when using a contact move`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
+			{ species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch'] },
 		], [
-			{species: 'cramorantgorging', ability: 'gulpmissile', item: 'rockyhelmet', moves: ['sleeptalk']},
+			{ species: 'cramorantgorging', ability: 'gulpmissile', item: 'rockyhelmet', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const wynaut = battle.p1.active[0];

@@ -2,10 +2,12 @@
 "use strict";
 
 try {
-	// technically this was introduced in Node 15, but we'll ask for the most recent LTS with it to be safe
-	Promise.any([null]);
+	// fetch was introduced in Node 18, which is EOL,
+	// so we'll ask for the most recent "Active LTS" with it to be safe
+	// https://nodejs.org/en/about/previous-releases
+	fetch;
 } catch (e) {
-	console.log("We require Node.js version 16 or later; you're using " + process.version);
+	console.error("We require Node.js version 22 or later; you're using " + process.version);
 	process.exit(1);
 }
 
@@ -22,13 +24,10 @@ function shell(cmd) {
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	var version = require('esbuild').version.split('.');
-	if (parseInt(version[1]) < 16) {
-		throw new Error("esbuild version too old");
-	}
+	require.resolve('ts-chacha20');
 } catch (e) {
 	console.log('Installing dependencies...');
-	shell('npm install');
+	shell('npm ci');
 }
 
 // Make sure config.js exists. If not, copy it over synchronously from
@@ -48,7 +47,5 @@ try {
 // for some reason, esbuild won't be requirable until a tick has passed
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
-	// npm package, don't rebuild
-	if (process.argv[2] === 'postinstall' && fs.existsSync('dist')) return;
 	require('./tools/build-utils').transpile(force, decl);
 });

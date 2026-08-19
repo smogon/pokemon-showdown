@@ -2,172 +2,217 @@
 
 const assert = require('../../assert');
 
-describe('Team Validator', function () {
-	it('should require Hidden Ability status to match event moves', function () {
+describe('Team Validator', () => {
+	it('should require Hidden Ability status to match event moves', () => {
 		const team = [
-			{species: 'raichu', ability: 'lightningrod', moves: ['extremespeed'], evs: {hp: 1}},
+			{ species: 'raichu', ability: 'lightningrod', moves: ['extremespeed'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it('should handle Dream World moves', function () {
+	it('should handle Dream World moves', () => {
 		const team = [
-			{species: 'garchomp', ability: 'roughskin', moves: ['endure'], evs: {hp: 1}},
+			{ species: 'garchomp', ability: 'roughskin', moves: ['endure'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen5ou');
 	});
 
-	it('should reject mutually incompatible Dream World moves', function () {
+	it('should reject mutually incompatible Dream World moves', () => {
 		let team = [
-			{species: 'spinda', ability: 'contrary', moves: ['superpower', 'fakeout'], evs: {hp: 1}},
+			{ species: 'spinda', ability: 'contrary', moves: ['superpower', 'fakeout'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen5ou');
 
 		// Both are Dream World moves, but Smack Down is also level-up/TM
 		team = [
-			{species: 'boldore', ability: 'sandforce', moves: ['heavyslam', 'smackdown'], evs: {hp: 1}},
+			{ species: 'boldore', ability: 'sandforce', moves: ['heavyslam', 'smackdown'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen5ou');
 	});
 
-	it('should consider Dream World Abilities as Hidden based on Gen 5 data', function () {
+	it('should consider Dream World Abilities as Hidden based on Gen 5 data', () => {
 		let team = [
-			{species: 'kecleon', ability: 'colorchange', moves: ['reflecttype'], evs: {hp: 1}},
+			{ species: 'kecleon', ability: 'colorchange', moves: ['reflecttype'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen6ou');
 
 		team = [
-			{species: 'kecleon', ability: 'protean', moves: ['reflecttype'], evs: {hp: 1}},
+			{ species: 'kecleon', ability: 'protean', moves: ['reflecttype'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen6ou');
 	});
 
-	it('should properly validate Greninja-Ash', function () {
+	it('should properly validate Greninja-Ash', () => {
 		let team = [
-			{species: 'greninja-ash', ability: 'battlebond', moves: ['happyhour'], shiny: true, evs: {hp: 1}},
+			{ species: 'greninja-ash', ability: 'battlebond', moves: ['happyhour'], shiny: true, evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 
 		team = [
-			{species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], shiny: true, evs: {hp: 1}},
+			{ species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], shiny: true, evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 
 		team = [
-			{species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], ivs: {atk: 0}, evs: {hp: 1}},
+			{ species: 'greninja-ash', ability: 'battlebond', moves: ['protect'], ivs: { atk: 0 }, evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 
 		team = [
-			{species: 'greninja-ash', ability: 'battlebond', moves: ['hiddenpowergrass'], evs: {hp: 1}},
+			{ species: 'greninja-ash', ability: 'battlebond', moves: ['hiddenpowergrass'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it('should not allow evolutions of Shiny-locked events to be Shiny', function () {
+	it('should not allow evolutions of Shiny-locked events to be Shiny', () => {
 		const team = [
-			{species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: {hp: 1}},
-			{species: 'cosmoem', ability: 'sturdy', shiny: true, moves: ['teleport'], evs: {hp: 1}},
+			{ species: 'urshifu', ability: 'unseenfist', shiny: true, moves: ['snore'], evs: { hp: 1 } },
+			{ species: 'cosmoem', ability: 'sturdy', shiny: true, moves: ['teleport'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen8anythinggoes');
 	});
 
-	it('should not allow events to use moves only obtainable in a previous generation', function () {
+	it('should not allow events to use moves only obtainable in a previous generation', () => {
 		const team = [
-			{species: 'zeraora', ability: 'voltabsorb', shiny: true, moves: ['knockoff'], evs: {hp: 1}},
+			{ species: 'zeraora', ability: 'voltabsorb', shiny: true, moves: ['knockoff'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen8anythinggoes');
 	});
 
-	it(`should accept event Pokemon with oldgen tutor moves and HAs in formats with Ability Patch`, function () {
+	it(`should accept event Pokemon with oldgen tutor moves and HAs in formats with Ability Patch`, () => {
 		const team = [
-			{species: 'heatran', ability: 'flamebody', moves: ['eruption'], evs: {hp: 1}},
-			{species: 'regirock', ability: 'sturdy', moves: ['counter'], evs: {hp: 1}},
-			{species: 'zapdos', ability: 'static', moves: ['aircutter'], evs: {hp: 1}},
+			{ species: 'heatran', ability: 'flamebody', moves: ['eruption'], evs: { hp: 1 } },
+			{ species: 'regirock', ability: 'sturdy', moves: ['counter'], evs: { hp: 1 } },
+			{ species: 'zapdos', ability: 'static', moves: ['aircutter'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen8anythinggoes');
 	});
 
-	it('should validate the Diancie released with zero perfect IVs', function () {
+	it('should validate the Diancie released with zero perfect IVs', () => {
 		let team = [
-			{species: 'diancie', ability: 'clearbody', shiny: true, moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+			{ species: 'diancie', ability: 'clearbody', shiny: true, moves: ['hiddenpowerfighting'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen6ou');
 
 		team = [
-			{species: 'diancie', ability: 'clearbody', moves: ['hiddenpowerfighting'], evs: {hp: 1}},
+			{ species: 'diancie', ability: 'clearbody', moves: ['hiddenpowerfighting'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen6ou');
 	});
 
-	it('should not allow Gen 1 JP events', function () {
+	it('should not allow Gen 1 JP events', () => {
 		const team = [
-			{species: 'rapidash', moves: ['payday']},
+			{ species: 'rapidash', moves: ['payday'] },
 		];
 		assert.false.legalTeam(team, 'gen1ou');
 	});
 
 	it('should allow Gen 2 events of Gen 1 Pokemon to learn moves exclusive to Gen 1', () => {
 		let team = [
-			{species: 'nidoking', moves: ['lovelykiss', 'counter']},
+			{ species: 'nidoking', moves: ['lovelykiss', 'counter'] },
 		];
 		assert.legalTeam(team, 'gen2ou');
 
 		// Espeon should be allowed to learn moves as an Eevee
 		team = [
-			{species: 'espeon', moves: ['growth', 'substitute']},
+			{ species: 'espeon', moves: ['growth', 'substitute'] },
 		];
 		assert.legalTeam(team, 'gen2ou');
 	});
 
 	it('should allow Gen 2 events that evolve into Gen 1 Pokemon to learn moves exclusive to Gen 1', () => {
 		const team = [
-			{species: 'pikachu', moves: ['sing', 'surf']},
-			{species: 'clefairy', moves: ['dizzypunch', 'bodyslam']},
+			{ species: 'pikachu', moves: ['sing', 'surf'] },
+			{ species: 'clefairy', moves: ['dizzypunch', 'bodyslam'] },
 		];
 		assert.legalTeam(team, 'gen2ou');
 	});
 
 	it('should allow Gen 2 events in Gen 1 Tradebacks OU', () => {
 		const team = [
-			{species: 'charizard', moves: ['crunch']},
+			{ species: 'charizard', moves: ['crunch'] },
 		];
 		assert.false.legalTeam(team, 'gen1tradebacksou');
 	});
 
-	it('should allow use of a Hidden Ability if the format has the item Ability Patch', function () {
+	it('should allow use of a Hidden Ability if the format has the item Ability Patch', () => {
 		let team = [
-			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
-			{species: 'entei', ability: 'innerfocus', moves: ['sleeptalk'], evs: {hp: 1}},
-			{species: 'dracovish', ability: 'sandrush', moves: ['sleeptalk'], evs: {hp: 1}},
-			{species: 'zapdos', ability: 'static', moves: ['sleeptalk'], evs: {hp: 1}},
+			{ species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: { hp: 1 } },
+			{ species: 'entei', ability: 'innerfocus', moves: ['sleeptalk'], evs: { hp: 1 } },
+			{ species: 'dracovish', ability: 'sandrush', moves: ['sleeptalk'], evs: { hp: 1 } },
+			{ species: 'zapdos', ability: 'static', moves: ['sleeptalk'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen8vgc2021');
 
 		team = [
-			{species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: {hp: 1}},
+			{ species: 'heatran', ability: 'flamebody', moves: ['sleeptalk'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it('should identify the minimum source gen of event-only Pokemon which haven\'t already been identified by its moves', function () {
+	it('should allow evolved Pokemon obtainable from events at lower levels than they could otherwise be obtained', () => {
 		let team = [
-			{species: 'jirachi', ability: 'serenegrace', shiny: true, moves: ['aurasphere'], evs: {hp: 1}, ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}},
-		];
-		assert.legalTeam(team, 'gen9ou');
-
-		team = [
-			{species: 'jirachi', ability: 'serenegrace', shiny: true, moves: ['hiddenpowerfighting'], nature: 'serious', evs: {hp: 1}, ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}},
-		];
-		assert.false.legalTeam(team, 'gen7ou');
-	});
-
-	it.skip('should allow evolved Pokemon obtainable from events at lower levels than they could otherwise be obtained', function () {
-		const team = [
-			{species: 'dragonite', ability: 'innerfocus', moves: ['dracometeor'], evs: {hp: 1}, level: 50},
-			{species: 'magmar', ability: 'flamebody', moves: ['ember'], evs: {hp: 1}, level: 10},
-			{species: 'electivire', ability: 'motordrive', moves: ['quickattack'], evs: {hp: 1}, level: 10},
+			{ species: 'dragonite', ability: 'innerfocus', moves: ['dracometeor'], nature: 'Mild', evs: { hp: 1 }, level: 50 },
+			{ species: 'magmar', ability: 'flamebody', moves: ['ember'], evs: { hp: 1 }, level: 10 },
+			{ species: 'electivire', ability: 'motordrive', moves: ['quickattack'], evs: { hp: 1 }, level: 10 },
 		];
 		assert.legalTeam(team, 'gen4ou');
+
+		team = [
+			{ species: 'mandibuzz', level: 25, ability: 'weakarmor', moves: ['pluck'], evs: { hp: 1 } },
+			{ species: 'volcarona', level: 35, ability: 'flamebody', moves: ['leechlife'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen5ou');
+	});
+
+	it(`should force Gen 4 Arceus to have max 100 EVs in any one stat and only multiples of 10`, () => {
+		let team = [
+			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 110 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+
+		team = [
+			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 99 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+
+		team = [
+			{ species: 'arceus', ability: 'multitype', moves: ['judgment'], evs: { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 10 } },
+		];
+		assert.legalTeam(team, 'gen4anythinggoes');
+	});
+
+	it(`should allow Hall of Origin Arceus with Full Arceus Clause`, () => {
+		let team = [
+			{ species: 'arceus', level: 80, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.false.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
+
+		team = [
+			{ species: 'arceus', level: 100, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
+	});
+
+	it(`should properly validate Rock Head Basculin-Blue-Striped in gen5bw1`, () => {
+		// only available from an in-game trade - it must be male, at least level 25, have Adamant nature, and IVs 20/31/20/20/20/20
+		let team = [
+			{ species: 'basculinbluestriped', ability: 'rockhead', moves: ['aquajet'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen5bw1ou');
+
+		// legal
+		team = [
+			{ species: 'basculinbluestriped', ability: 'rockhead', moves: ['aquajet'], evs: { hp: 1 }, nature: 'Adamant', ivs: { hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20 } },
+		];
+		assert.legalTeam(team, 'gen5bw1ou');
+
+		// can't have egg moves
+		team = [
+			{ species: 'basculinbluestriped', ability: 'rockhead', moves: ['agility'], evs: { hp: 1 }, nature: 'Adamant', ivs: { hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20 } },
+		];
+		assert.false.legalTeam(team, 'gen5bw1ou');
 	});
 });

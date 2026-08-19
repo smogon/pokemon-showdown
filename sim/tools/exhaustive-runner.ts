@@ -5,11 +5,11 @@
  * @license MIT
  */
 
-import {ObjectReadWriteStream} from '../../lib/streams';
-import {Dex, toID} from '../dex';
-import {PRNG, PRNGSeed} from '../prng';
-import {RandomPlayerAI} from './random-player-ai';
-import {AIOptions, Runner} from './runner';
+import type { ObjectReadWriteStream } from '../../lib/streams';
+import { Dex, toID } from '../dex';
+import { PRNG, type PRNGSeed } from '../prng';
+import { RandomPlayerAI } from './random-player-ai';
+import { type AIOptions, Runner } from './runner';
 
 interface Pools {
 	pokemon: Pool;
@@ -59,8 +59,7 @@ export class ExhaustiveRunner {
 	constructor(options: ExhaustiveRunnerOptions) {
 		this.format = options.format;
 		this.cycles = options.cycles || ExhaustiveRunner.DEFAULT_CYCLES;
-		this.prng = (options.prng && !Array.isArray(options.prng)) ?
-			options.prng : new PRNG(options.prng);
+		this.prng = PRNG.get(options.prng);
 		this.log = !!options.log;
 		this.maxGames = options.maxGames;
 		this.maxFailures = options.maxFailures || ExhaustiveRunner.MAX_FAILURES;
@@ -72,9 +71,8 @@ export class ExhaustiveRunner {
 
 	async run() {
 		const dex = Dex.forFormat(this.format);
-		dex.loadData(); // FIXME: This is required for `dex.gen` to be set properly...
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const pools = this.createPools(dex);
 		const createAI = (s: ObjectReadWriteStream<string>, o: AIOptions) => new CoordinatedPlayerAI(s, o, pools);
 		const generator = new TeamGenerator(dex, this.prng, pools, ExhaustiveRunner.getSignatures(dex, pools));
@@ -87,10 +85,10 @@ export class ExhaustiveRunner {
 				// and the AI can coordinate usage properly.
 				await new Runner({
 					prng: this.prng,
-					p1options: {team: generator.generate(), createAI},
-					p2options: {team: generator.generate(), createAI},
-					p3options: is4P ? {team: generator.generate(), createAI} : undefined,
-					p4options: is4P ? {team: generator.generate(), createAI} : undefined,
+					p1options: { team: generator.generate(), createAI },
+					p2options: { team: generator.generate(), createAI },
+					p3options: is4P ? { team: generator.generate(), createAI } : undefined,
+					p4options: is4P ? { team: generator.generate(), createAI } : undefined,
 					format: this.format,
 					dual: this.dual,
 					error: true,
@@ -101,13 +99,13 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-						`--format=${this.format} --seed=${seed.join()}\`:\n`,
+					`--format=${this.format} --seed=${seed}\`:\n`,
 					err
 				);
 			}
 		} while ((!this.maxGames || this.games < this.maxGames) &&
-					(!this.maxFailures || this.failures < this.maxFailures) &&
-					generator.exhausted < this.cycles);
+			(!this.maxFailures || this.failures < this.maxFailures) &&
+			generator.exhausted < this.cycles);
 
 		return this.failures;
 	}
@@ -115,7 +113,8 @@ export class ExhaustiveRunner {
 	private createPools(dex: typeof Dex): Pools {
 		return {
 			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Pokedex, p => dex.species.get(p), (_, p) =>
-				(p.name !== 'Pichu-Spiky-eared' && p.name.substr(0, 8) !== 'Pikachu-') && p.name !== 'Greninja-Bond'),
+				(p.name !== 'Pichu-Spiky-eared' && p.name.substr(0, 8) !== 'Pikachu-') &&
+				!['Greninja-Bond', 'Rockruff-Dusk'].includes(p.name)),
 			this.prng),
 			items: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Items, i => dex.items.get(i)), this.prng),
 			abilities: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Abilities, a => dex.abilities.get(a)), this.prng),
@@ -134,13 +133,13 @@ export class ExhaustiveRunner {
 		);
 	}
 
-	private static getSignatures(dex: typeof Dex, pools: Pools): Map<string, {item: string, move?: string}[]> {
+	private static getSignatures(dex: typeof Dex, pools: Pools): Map<string, { item: string, move?: string }[]> {
 		const signatures = new Map();
 		for (const id of pools.items.possible) {
 			const item = dex.data.Items[id];
-			if (item.megaEvolves) {
-				const pokemon = toID(item.megaEvolves);
-				const combo = {item: id};
+			if (item.megaStone) {
+				const pokemon = toID(Object.keys(item.megaStone)[0]);
+				const combo = { item: id };
 				let combos = signatures.get(pokemon);
 				if (!combos) {
 					combos = [];
@@ -150,7 +149,7 @@ export class ExhaustiveRunner {
 			} else if (item.itemUser) {
 				for (const user of item.itemUser) {
 					const pokemon = toID(user);
-					const combo: {item: string, move?: string} = {item: id};
+					const combo: { item: string, move?: string } = { item: id };
 					if (item.zMoveFrom) combo.move = toID(item.zMoveFrom);
 					let combos = signatures.get(pokemon);
 					if (!combos) {
@@ -165,7 +164,7 @@ export class ExhaustiveRunner {
 	}
 
 	private static onlyValid<T>(
-		gen: number, obj: {[key: string]: T}, getter: (k: string) => AnyObject,
+		gen: number, obj: { [key: string]: T }, getter: (k: string) => AnyObject,
 		additional?: (k: string, v: AnyObject) => boolean, nonStandard?: boolean
 	) {
 		return Object.keys(obj).filter(k => {
@@ -181,7 +180,7 @@ export class ExhaustiveRunner {
 // validation). Coordinates with the CoordinatedPlayerAI below through Pools to ensure as
 // many different options as possible get exercised in battle.
 class TeamGenerator {
-	// By default, the TeamGenerator generates sets completely at random which unforunately means
+	// By default, the TeamGenerator generates sets completely at random which unfortunately means
 	// certain signature combinations (eg. Mega Stone/Z Moves which only work for specific Pokemon)
 	// are unlikely to be chosen. To combat this, we keep a mapping of these combinations and some
 	// fraction of the time when we are generating sets for these particular Pokemon we give them
@@ -191,15 +190,15 @@ class TeamGenerator {
 	private readonly dex: typeof Dex;
 	private readonly prng: PRNG;
 	private readonly pools: Pools;
-	private readonly signatures: Map<string, {item: string, move?: string}[]>;
+	private readonly signatures: Map<string, { item: string, move?: string }[]>;
 	private readonly natures: readonly string[];
 
 	constructor(
 		dex: typeof Dex, prng: PRNG | PRNGSeed | null, pools: Pools,
-		signatures: Map<string, {item: string, move?: string}[]>
+		signatures: Map<string, { item: string, move?: string }[]>
 	) {
 		this.dex = dex;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 		this.pools = pools;
 		this.signatures = signatures;
 
@@ -217,13 +216,13 @@ class TeamGenerator {
 		const team: PokemonSet[] = [];
 		for (const pokemon of this.pools.pokemon.next(6)) {
 			const species = this.dex.species.get(pokemon);
-			const randomEVs = () => this.prng.next(253);
-			const randomIVs = () => this.prng.next(32);
+			const randomEVs = () => this.prng.random(253);
+			const randomIVs = () => this.prng.random(32);
 
 			let item;
 			const moves = [];
 			const combos = this.signatures.get(species.id);
-			if (combos && this.prng.next() > TeamGenerator.COMBO) {
+			if (combos && this.prng.random() > TeamGenerator.COMBO) {
 				const combo = this.prng.sample(combos);
 				item = combo.item;
 				if (combo.move) moves.push(combo.move);
@@ -255,8 +254,8 @@ class TeamGenerator {
 					spe: randomIVs(),
 				},
 				nature: this.prng.sample(this.natures),
-				level: this.prng.next(50, 100),
-				happiness: this.prng.next(256),
+				level: this.prng.random(50, 100),
+				happiness: this.prng.random(256),
 				shiny: this.prng.randomChance(1, 1024),
 			});
 		}
@@ -272,7 +271,7 @@ class Pool {
 	private unused: Set<string>;
 	private filled: Set<string> | undefined;
 	private filler: string[] | undefined;
-	private iter: (Iterator<string> & {done?: boolean}) | undefined;
+	private iter: (Iterator<string> & { done?: boolean }) | undefined;
 
 	exhausted: number;
 
@@ -310,7 +309,7 @@ class Pool {
 
 	private shuffle<T>(arr: T[]): T[] {
 		for (let i = arr.length - 1; i > 0; i--) {
-			const j = Math.floor(this.prng.next() * (i + 1));
+			const j = this.prng.random(i + 1);
 			[arr[i], arr[j]] = [arr[j], arr[i]];
 		}
 		return arr;
@@ -384,7 +383,7 @@ class Pool {
 			this.filler = this.possible.slice();
 			length = this.filler.length;
 		}
-		const index = this.prng.next(length);
+		const index = this.prng.random(length);
 		const element = this.filler![index];
 		this.filler![index] = this.filler![length - 1];
 		this.filler!.pop();
@@ -410,14 +409,14 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		this.pools = pools;
 	}
 
-	protected chooseTeamPreview(team: AnyObject[]): string {
-		return `team ${this.choosePokemon(team.map((p, i) => ({slot: i + 1, pokemon: p}))) || 1}`;
+	protected override chooseTeamPreview(team: AnyObject[]): string {
+		return `team ${this.choosePokemon(team.map((p, i) => ({ slot: i + 1, pokemon: p }))) || 1}`;
 	}
 
-	protected chooseMove(active: AnyObject, moves: {choice: string, move: AnyObject}[]): string {
+	protected override chooseMove(active: AnyObject, moves: { choice: string, move: AnyObject }[]): string {
 		this.markUsedIfGmax(active);
 		// Prefer to use a move which hasn't been used yet.
-		for (const {choice, move} of moves) {
+		for (const { choice, move } of moves) {
 			const id = this.fixMove(move);
 			if (!this.pools.moves.wasUsed(id)) {
 				this.pools.moves.markUsed(id);
@@ -427,19 +426,23 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return super.chooseMove(active, moves);
 	}
 
-	protected chooseSwitch(active: AnyObject | undefined, switches: {slot: number, pokemon: AnyObject}[]): number {
+	protected override chooseSwitch(
+		active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]
+	): number {
 		this.markUsedIfGmax(active);
 		return this.choosePokemon(switches) || super.chooseSwitch(active, switches);
 	}
 
-	private choosePokemon(choices: {slot: number, pokemon: AnyObject}[]) {
+	private choosePokemon(choices: { slot: number, pokemon: AnyObject }[]) {
 		// Prefer to choose a Pokemon that has a species/ability/item/move we haven't seen yet.
-		for (const {slot, pokemon} of choices) {
+		for (const { slot, pokemon } of choices) {
 			const species = toID(pokemon.details.split(',')[0]);
-			if (!this.pools.pokemon.wasUsed(species) ||
-					!this.pools.abilities.wasUsed(pokemon.baseAbility) ||
-					!this.pools.items.wasUsed(pokemon.item) ||
-					pokemon.moves.some((m: AnyObject) => !this.pools.moves.wasUsed(this.fixMove(m)))) {
+			if (
+				!this.pools.pokemon.wasUsed(species) ||
+				!this.pools.abilities.wasUsed(pokemon.baseAbility) ||
+				!this.pools.items.wasUsed(pokemon.item) ||
+				pokemon.moves.some((m: AnyObject) => !this.pools.moves.wasUsed(this.fixMove(m)))
+			) {
 				this.pools.pokemon.markUsed(species);
 				this.pools.abilities.markUsed(pokemon.baseAbility);
 				this.pools.items.markUsed(pokemon.item);
@@ -461,7 +464,7 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	// Gigantamax Pokemon need to be special cased for tracking because the current
 	// tracking only works if you can switch in a Pokemon.
 	private markUsedIfGmax(active: AnyObject | undefined) {
-		if (active && !active.canDynamax && active.maxMoves && active.maxMoves.gigantamax) {
+		if (active && !active.canDynamax && active.maxMoves?.gigantamax) {
 			this.pools.pokemon.markUsed(toID(active.maxMoves.gigantamax));
 		}
 	}

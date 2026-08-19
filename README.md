@@ -16,7 +16,7 @@ Introduction
 
 Pokémon Showdown is many things:
 
-- A **web site** you can use for Pokémon battling
+- A **website** you can use for Pokémon battling
 
   - http://pokemonshowdown.com/
 
@@ -89,10 +89,10 @@ Staff
 - Andrew Werner [HoeenHero] - Development
 - Annika L. [Annika] - Development
 - Chris Monsanto [chaos] - Development, Sysadmin
-- Kris Johnson [Kris] - Development
+- Kris Johnson [dhelmise] - Development
 - Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
-- Mia A [Mia] - Development
+- Mia A [Cassiopeia] - Development
 
 Contributors
 

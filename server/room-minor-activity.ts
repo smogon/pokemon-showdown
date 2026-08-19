@@ -26,12 +26,12 @@ export interface MinorActivityData {
 	question: string;
 	supportHTML: boolean;
 	multiPoll: boolean;
-	pendingVotes?: {[userid: string]: number[]};
-	voters?: {[k: string]: number[]};
-	voterIps?: {[k: string]: number[]};
+	pendingVotes?: { [userid: string]: number[] };
+	voters?: { [k: string]: number[] };
+	voterIps?: { [k: string]: number[] };
 	totalVotes?: number;
 	isQuiz?: boolean;
-	answers: string[] | {name: string, votes: number, correct?: boolean}[];
+	answers: string[] | { name: string, votes: number, correct?: boolean }[];
 }
 
 // globally Rooms.MinorActivity
@@ -39,7 +39,7 @@ export abstract class MinorActivity {
 	abstract activityid: ID;
 	abstract name: string;
 
-	timeout: NodeJS.Timer | null;
+	timeout: NodeJS.Timeout | null;
 	timeoutMins: number;
 	timerEnd: number;
 	roomid: RoomID;
@@ -54,7 +54,7 @@ export abstract class MinorActivity {
 		this.supportHTML = false;
 	}
 
-	setTimer(options: {timeoutMins?: number, timerEnd?: number}) {
+	setTimer(options: { timeoutMins?: number, timerEnd?: number }) {
 		if (this.timeout) clearTimeout(this.timeout);
 
 		this.timeoutMins = options.timeoutMins || 0;
@@ -87,7 +87,7 @@ export abstract class MinorActivity {
 
 			if (pollData.activityid !== 'poll') throw new Error(`Unexpected Minor Activity (${pollData.activityid}) in queue`);
 
-			room.add(`|c|&|/log ${room.tr`The queued poll was started.`}`).update();
+			room.add(`|c|~|/log ${room.tr`The queued poll was started.`}`).update();
 			room.modlog({
 				action: 'POLL',
 				note: '(queued)',
@@ -95,7 +95,7 @@ export abstract class MinorActivity {
 
 			if (!MinorActivityClass) {
 				if (pollData.activityid === 'poll') {
-					const {Poll} = require('./chat-plugins/poll');
+					const { Poll } = require('./chat-plugins/poll');
 					room.setMinorActivity(new Poll(room, pollData));
 				}
 			} else {

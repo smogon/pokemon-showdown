@@ -22,7 +22,11 @@
 // on the side of caution and run `node build` to ensure we're always running
 // with the latest code.
 var fs = require('fs');
+var util = require('util');
+var cli = null;
+
 function build() {
+	if (cli.values['skip-build']) return;
 	require('child_process').execSync('node build', {stdio: 'inherit', cwd: __dirname});
 }
 
@@ -39,64 +43,116 @@ function ensureBuilt() {
 	}
 }
 
-if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
+function showHelp() {
+	console.log('pokemon-showdown start [--skip-build] [PORT]');
+	console.log('');
+	console.log('  Starts a PS server on the specified port');
+	console.log('  (Defaults to the port setting in config/config.js)');
+	console.log('  (The port setting in config/config.js defaults to 8000)');
+	console.log('');
+	console.log('pokemon-showdown generate-team [FORMAT-ID] [RANDOM-SEED]');
+	console.log('');
+	console.log('  Generates a random team, and writes it to stdout in packed team format');
+	console.log('  (Format defaults to the latest Random Battles format)');
+	console.log('');
+	console.log('pokemon-showdown validate-team [FORMAT-ID]');
+	console.log('');
+	console.log('  Reads a team from stdin, and validates it');
+	console.log('  If valid: exits with code 0');
+	console.log('  If invalid: writes errors to stderr, exits with code 1');
+	console.log('');
+	console.log('pokemon-showdown simulate-battle');
+	console.log('');
+	console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
+	console.log('  Protocol is documented in ./dist/sim/README.md');
+	console.log('');
+	console.log('pokemon-showdown json-team');
+	console.log('');
+	console.log('  Reads a team in any format from stdin, writes the unpacked JSON to stdout');
+	console.log('');
+	console.log('pokemon-showdown pack-team');
+	console.log('');
+	console.log('  Reads a team in any format from stdin, writes the packed team to stdout');
+	console.log('');
+	console.log('pokemon-showdown export-team');
+	console.log('');
+	console.log('  Reads a team in any format from stdin, writes the exported (human-readable) team to stdout');
+	console.log('');
+	console.log('pokemon-showdown help');
+	console.log('');
+	console.log('  Displays this reference');
+}
+
+try {
+	fetch;
+} catch (e) {
+	// fetch was introduced in Node 18, which is EOL,
+	// so we'll ask for the most recent "Active LTS" with it to be safe
+	// https://nodejs.org/en/about/previous-releases
+	console.error("We require Node.js version 22 or later; you're using " + process.version);
+	process.exit(1);
+}
+
+var cliOpts = {
+	help: {
+		type: 'boolean',
+		short: 'h',
+		default: false
+	},
+	'skip-build': {
+		type: 'boolean',
+		default: false
+	},
+	debug: {
+		type: 'boolean',
+		short: 'D',
+		default: false
+	},
+	replay: {
+		type: 'boolean',
+		short: 'R',
+		default: false
+	},
+	spectate: {
+		type: 'boolean',
+		short: 'S',
+		default: false
+	}
+};
+
+var parserOpts = {
+	options: cliOpts,
+	strict: false,
+	allowPositionals: true,
+	allowNegative: false
+};
+
+cli = util.parseArgs(parserOpts);
+
+if (cli.values['help']) {
+	showHelp();
+	process.exit(0);
+}
+
+if (!cli.positionals.length || /^[0-9]+$/.test(cli.positionals[0])) {
 	// Start the server.
 	//
-	// The port the server should host on can be passed using the second argument
-	// when launching with this file the same way app.js normally allows, e.g. to
+	// The port the server should host on can be passed as an argument, e.g. to
 	// host on port 9000:
 	// $ ./pokemon-showdown 9000
 	build();
 	require('module')._load('./dist/server/index.js', module, true);
 } else {
-	switch (process.argv[2]) {
+	switch (cli.positionals[0]) {
 	case 'help':
 	case 'h':
 	case '?':
-	case '-h':
-	case '--help':
-	case '-?':
-		console.log('pokemon-showdown start [--skip-build] [PORT]');
-		console.log('');
-		console.log('  Starts a PS server on the specified port');
-		console.log('  (Defaults to the port setting in config/config.js)');
-		console.log('  (The port setting in config/config.js defaults to 8000)');
-		console.log('');
-		console.log('pokemon-showdown generate-team [FORMAT-ID [RANDOM-SEED]]');
-		console.log('');
-		console.log('  Generates a random team, and writes it to stdout in packed team format');
-		console.log('  (Format defaults to the latest Random Battles format)');
-		console.log('');
-		console.log('pokemon-showdown validate-team [FORMAT-ID]');
-		console.log('');
-		console.log('  Reads a team from stdin, and validates it');
-		console.log('  If valid: exits with code 0');
-		console.log('  If invalid: writes errors to stderr, exits with code 1');
-		console.log('');
-		console.log('pokemon-showdown simulate-battle');
-		console.log('');
-		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
-		console.log('  Protocol is documented in ./dist/sim/README.md');
-		console.log('');
-		console.log('pokemon-showdown json-team');
-		console.log('');
-		console.log('  Reads a team in any format from stdin, writes the unpacked JSON to stdout');
-		console.log('');
-		console.log('pokemon-showdown pack-team');
-		console.log('');
-		console.log('  Reads a team in any format from stdin, writes the packed team to stdout');
-		console.log('');
-		console.log('pokemon-showdown export-team');
-		console.log('');
-		console.log('  Reads a team in any format from stdin, writes the exported (human-readable) team to stdout');
-		console.log('');
-		console.log('pokemon-showdown help');
-		console.log('');
-		console.log('  Displays this reference');
+	{
+		showHelp();
 		break;
+	}
 	case 'start':
 	{
-		process.argv.splice(2, 1);
 		build();
 		require('module')._load('./dist/server/index.js', module, true);
 		break;
@@ -105,17 +161,25 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			ensureBuilt();
 			var Teams = require('./dist/sim/teams.js').Teams;
-			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
-			console.log(Teams.pack(Teams.generate(process.argv[3], {seed})));
+			var seed = cli.positionals[2] || undefined;
+			console.log(Teams.pack(Teams.generate(cli.positionals[1], {seed})));
 		}
 		break;
+	case 'generate-teams':
+			{
+				ensureBuilt();
+				var Teams = require('./dist/sim/teams.js').Teams;
+				for (var i = 0; i < (process.argv[4] || 1000); i++)
+					console.log(Teams.pack(Teams.generate(process.argv[3], { seed })));
+			}
+			break;
 	case 'validate-team':
 		{
 			ensureBuilt();
 			require('source-map-support/register');
 			var Teams = require('./dist/sim/teams.js').Teams;
 			var TeamValidator = require('./dist/sim/team-validator.js').TeamValidator;
-			var validator = TeamValidator.get(process.argv[3]);
+			var validator = TeamValidator.get(cli.positionals[1]);
 			var Streams = require('./dist/lib/streams.js');
 			var stdin = Streams.stdin();
 
@@ -143,44 +207,10 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			var stdin = Streams.stdin();
 			var stdout = Streams.stdout();
 
-			var args = process.argv.slice(3);
-
-			var options = args.flatMap(function (arg) {
-				if (arg.charAt(0) !== '-') {
-					if (arg) console.error("Invalid parameter: " + arg);
-					return [];
-				} else if (arg.charAt(1) === '-') {
-					return arg.slice(2);
-				} else {
-					return Array.from(arg.slice(1));
-				}
-			});
-
-			var debug = false;
-			var replay = false;
-			var spectate = false;
-			for (var i = 0; i < options.length; i++) {
-				switch (options[i]) {
-				case 'debug': case 'D':
-					debug = true;
-					break;
-				case 'replay': case 'R':
-					replay = true;
-					break;
-				case 'spectate': case 'spectator': case 'S':
-					replay = true;
-					spectate = true;
-					break;
-				default:
-					console.error("Invalid option: " + options[i]);
-					break;
-				}
-			}
-
 			var battleStream = new BattleTextStream({
 				noCatch: true,
-				debug: debug,
-				replay: spectate ? 'spectator' : replay,
+				debug: cli.values['debug'],
+				replay: cli.values['spectate'] ? 'spectator' : cli.values['replay']
 			});
 			stdin.pipeTo(battleStream);
 			battleStream.pipeTo(stdout);
@@ -245,7 +275,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		}
 		break;
 	default:
-		console.error('Unrecognized command: ' + process.argv[2]);
+		console.error('Unrecognized command: ' + cli.positionals[0]);
 		console.error('Use `pokemon-showdown help` for help');
 		process.exit(1);
 	}

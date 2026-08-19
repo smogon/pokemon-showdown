@@ -17,15 +17,23 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        # Testing multiple Node versions makes CI take forever, and basically
+        # never actually finds anything we care about. Testing one is enough.
+        #
+        # This number should be left at the oldest Node LTS version capable of
+        # running Node without errors (it doesn't matter if it's unsupported).
+        # Please freely bump this version (and the check in `pokemon-showdown`
+        # and `server/index.ts`) if you want to use features from newer versions;
+        # this is purely for our own reference, not to constrain programmers.
+        node-version: ['18.x']
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
       with:
         fetch-depth: 100 # assumes PR/push to master is no larger than 100 commits. Other solutions are needlessly complex.
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
@@ -35,7 +43,7 @@ jobs:
     - name: Determine which files to lint (if pull request)
       if: ${{ github.event_name == 'pull_request' }}
       id: changed-files
-      uses: tj-actions/changed-files@v35
+      uses: tj-actions/changed-files@v47
       with:
         files: |
           ./config/*.ts
@@ -58,14 +66,14 @@ jobs:
     - name: Determine whether test/sim or test/random-battles need to run (if pull request)
       if: ${{ github.event_name == 'pull_request' }}
       id: changed-directories
-      uses: tj-actions/changed-files@v35
+      uses: tj-actions/changed-files@v47
       with:
         files: |
           config/formats.ts
           data/**
           sim/**
 
-    - name: Run selective lint & neccessary tests (if pull request)
+    - name: Run selective lint & necessary tests (if pull request)
       if: ${{ github.event_name == 'pull_request' }}
       run: npm run full-test-ci
       env:

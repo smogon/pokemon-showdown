@@ -1,7 +1,7 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	aeroblast: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1 },
 		isNonstandard: "Past",
 	},
 	alluringvoice: {
@@ -14,7 +14,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	bitterblade: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 	},
 	blueflare: {
 		inherit: true,
@@ -42,7 +42,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	darkvoid: {
 		inherit: true,
-		noSketch: false,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 	},
 	decorate: {
 		inherit: true,
@@ -90,7 +90,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	hyperspacefury: {
 		inherit: true,
-		noSketch: false,
+		flags: { mirror: 1, bypasssub: 1 },
 	},
 	iceburn: {
 		inherit: true,
@@ -107,7 +107,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	matchagotcha: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, defrost: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, defrost: 1, metronome: 1 },
 	},
 	mightycleave: {
 		inherit: true,
@@ -140,7 +140,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	revivalblessing: {
 		inherit: true,
-		noSketch: false,
+		flags: { heal: 1 },
 	},
 	rockwrecker: {
 		inherit: true,

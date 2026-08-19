@@ -1,28 +1,30 @@
-import {FS, Utils} from '../../lib';
-import {YouTube} from './youtube';
+import { FS, Utils } from '../../lib';
+import { YouTube } from './youtube';
 
 const MINUTE = 60 * 1000;
+const DAY = 24 * 60 * MINUTE;
+const WEEK = DAY * 7;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
 
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 const DATA_FILE = 'config/chat-plugins/otds.json';
 
-export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
+export const prenoms: { [k: string]: [string, AnyObject][] } = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
 export const otds = new Map<string, OtdHandler>();
 
-const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => Promise<void>} = {
+const FINISH_HANDLERS: { [k: string]: (winner: AnyObject) => Promise<void> } = {
 	cotw: async winner => {
-		const {channel, nominator} = winner;
+		const { channel, nominator } = winner;
 		const searchResults = await YouTube.searchChannel(channel, 1);
 		const result = searchResults?.[0];
 		if (result) {
 			if (YouTube.data.channels[result]) return;
 			void YouTube.getChannelData(`https://www.youtube.com/channel/${result}`);
-			const yt = Rooms.get('youtube');
+			const yt = Rooms.search('youtube');
 			if (!yt) return;
 			yt.sendMods(
-				`|c|&|/log The channel with ID ${result} was added to the YouTube channel database.`
+				`|c|~|/log The channel with ID ${result} was added to the YouTube channel database.`
 			);
 			yt.modlog({
 				action: `ADDCHANNEL`,
@@ -44,7 +46,7 @@ interface OtdSettings {
 }
 
 interface OtdData {
-	[k: string]: {settings: OtdSettings, winners: AnyObject[]};
+	[k: string]: { settings: OtdSettings, winners: AnyObject[] };
 }
 
 function savePrenoms() {
@@ -63,6 +65,7 @@ class OtdHandler {
 	removedNominations: Map<string, AnyObject>;
 	voting: boolean;
 	timer: NodeJS.Timeout | null;
+	autoStartTimer: NodeJS.Timeout | null;
 	keys: string[];
 	keyLabels: string[];
 	timeLabel: string;
@@ -81,6 +84,7 @@ class OtdHandler {
 
 		this.voting = false;
 		this.timer = null;
+		this.autoStartTimer = null;
 
 		this.keys = settings.keys;
 		this.keyLabels = settings.keyLabels;
@@ -93,7 +97,7 @@ class OtdHandler {
 	}
 
 	static create(room: Room, settings: OtdSettings) {
-		const {title, timeLabel} = settings;
+		const { title, timeLabel } = settings;
 		const id = settings.id || toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
 		const handler = new OtdHandler(id, room, settings);
 		otds.set(id, handler);
@@ -105,12 +109,13 @@ class OtdHandler {
 				needsSave = true;
 			}
 		}
+		if (room.settings.autoStartOtd) handler.toggleAutoStartTimer(true);
 		if (needsSave) handler.save();
 		return handler;
 	}
 
 	static parseOldWinners(content: string, keyLabels: string[], keys: string[]) {
-		const data = ('' + content).split("\n");
+		const data = `${content}`.split("\n");
 		const winners = [];
 		for (const arg of data) {
 			if (!arg || arg === '\r') continue;
@@ -139,6 +144,22 @@ class OtdHandler {
 		for (const value of this.removedNominations.values()) {
 			if (!Array.isArray(value.userids)) value.userids = Object.keys(value.userids);
 			if (!Array.isArray(value.ips)) value.ips = Object.keys(value.ips);
+		}
+	}
+
+	toggleAutoStartTimer(on: boolean) {
+		if (on && !this.autoStartTimer) {
+			this.autoStartTimer = setInterval(() => {
+				if (this.voting) {
+				// in case the 20 min auto-end timer didnt end the nomm process due to 0 nomms
+					this.rollWinner();
+				}
+				this.startVote();
+				this.room.modlog({ action: `${this.id.toUpperCase()} START` });
+			}, this.timeLabel === 'week' ? WEEK : DAY);
+		} else if (!on && this.autoStartTimer) {
+			clearInterval(this.autoStartTimer);
+			this.autoStartTimer = null;
 		}
 	}
 
@@ -195,11 +216,11 @@ class OtdHandler {
 			}
 		}
 
-		const obj: {[k: string]: string} = {};
+		const obj: { [k: string]: string } = {};
 		obj[user.id] = user.name;
 
 		const nomObj = {
-			nomination: nomination,
+			nomination,
 			name: user.name,
 			userids: user.previousIDs.concat(user.id),
 			ips: user.ips.slice(),
@@ -294,7 +315,7 @@ class OtdHandler {
 			void finishHandler(winnerEntry);
 		}
 		this.room.add(
-			Utils.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
+			Utils.html`|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
 			`Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">` +
 			`Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! ` +
 			`(Nomination by ${winner.name})</p><p style="font-weight:bold;">Thanks to today's participants:` + namesHTML
@@ -334,7 +355,7 @@ class OtdHandler {
 	}
 
 	appendWinner(nomination: string, user: string): AnyObject {
-		const entry: AnyObject = {time: Date.now(), nominator: user};
+		const entry: AnyObject = { time: Date.now(), nominator: user };
 		entry[this.keys[0]] = nomination;
 		this.winners.push(entry);
 		this.save();
@@ -352,7 +373,7 @@ class OtdHandler {
 		throw new Chat.ErrorMessage(`The winner with nomination ${nominationName} could not be found.`);
 	}
 
-	setWinnerProperty(properties: {[k: string]: string}) {
+	setWinnerProperty(properties: { [k: string]: string }) {
 		if (!this.winners.length) return;
 		for (const i in properties) {
 			this.winners[this.winners.length - 1][i] = properties[i];
@@ -383,46 +404,46 @@ class OtdHandler {
 		if (!this.winners.length) return false;
 		const winner = this.winners[this.winners.length - 1];
 
-		let output = Utils.html `<div class="broadcast-blue" style="text-align:center;">` +
-		`<p><span style="font-weight:bold;font-size:11pt">The ${this.name} of the ${this.timeLabel} is ` +
-		`${winner[this.keys[0]]}${winner.author ? ` by ${winner.author}` : ''}.</span>`;
+		let output = `<div class="broadcast-blue" style="text-align:center;">` +
+			Utils.html`<p><span style="font-weight:bold;font-size:11pt">The ${this.name} of the ${this.timeLabel} is ` +
+			Utils.html`${winner[this.keys[0]]}${winner.author ? ` by ${winner.author}` : ''}.</span>`;
 
-		if (winner.quote) output += Utils.html `<br /><span style="font-style:italic;">"${winner.quote}"</span>`;
-		if (winner.tagline) output += Utils.html `<br />${winner.tagline}`;
+		if (winner.quote) output += Utils.html`<br /><span style="font-style:italic;">"${winner.quote}"</span>`;
+		if (winner.tagline) output += Utils.html`<br />${winner.tagline}`;
 		output += `</p><table style="margin:auto;"><tr>`;
 		if (winner.image) {
 			try {
 				const [width, height] = await Chat.fitImage(winner.image, 100, 100);
-				output += Utils.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
+				output += Utils.html`<td><img src="${winner.image}" width=${width} height=${height}></td>`;
 			} catch {}
 		}
 		output += `<td style="text-align:right;margin:5px;">`;
-		if (winner.event) output += Utils.html `<b>Event:</b> ${winner.event}<br />`;
+		if (winner.event) output += Utils.html`<b>Event:</b> ${winner.event}<br />`;
 		if (winner.song) {
 			output += `<b>Song:</b> `;
 			if (winner.link) {
-				output += Utils.html `<a href="${winner.link}">${winner.song}</a>`;
+				output += Utils.html`<a href="${winner.link}">${winner.song}</a>`;
 			} else {
 				output += Utils.escapeHTML(winner.song);
 			}
 			output += `<br />`;
 		} else if (winner.link) {
-			output += Utils.html `<b>Link:</b> <a href="${winner.link}">${winner.link}</a><br />`;
+			output += Utils.html`<b>Link:</b> <a href="${winner.link}">${winner.link}</a><br />`;
 		}
 
 		// Batch these together on 2 lines. Order intentional.
 		const athleteDetails = [];
-		if (winner.sport) athleteDetails.push(Utils.html `<b>Sport:</b> ${winner.sport}`);
-		if (winner.team) athleteDetails.push(Utils.html `<b>Team:</b> ${winner.team}`);
-		if (winner.age) athleteDetails.push(Utils.html `<b>Age:</b> ${winner.age}`);
-		if (winner.country) athleteDetails.push(Utils.html `<b>Nationality:</b> ${winner.country}`);
+		if (winner.sport) athleteDetails.push(Utils.html`<b>Sport:</b> ${winner.sport}`);
+		if (winner.team) athleteDetails.push(Utils.html`<b>Team:</b> ${winner.team}`);
+		if (winner.age) athleteDetails.push(Utils.html`<b>Age:</b> ${winner.age}`);
+		if (winner.country) athleteDetails.push(Utils.html`<b>Nationality:</b> ${winner.country}`);
 
 		if (athleteDetails.length) {
 			output += athleteDetails.slice(0, 2).join(' | ') + '<br />';
 			if (athleteDetails.length > 2) output += athleteDetails.slice(2).join(' | ') + '<br />';
 		}
 
-		output += Utils.html `Nominated by ${winner.nominator}.`;
+		output += Utils.html`Nominated by ${winner.nominator}.`;
 		output += `</td></tr></table></div>`;
 
 		return output;
@@ -460,7 +481,7 @@ class OtdHandler {
 				case 'time':
 					const date = new Date(parseInt(this.winners[i].time));
 
-					const pad = (num: number) => num < 10 ? '0' + num : num;
+					const pad = (num: number) => `${num}`.padStart(2, '0');
 
 					return Utils.html`${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`;
 				case 'song':
@@ -472,7 +493,7 @@ class OtdHandler {
 					val = `${val}${this.winners[i].author ? ` by ${this.winners[i].author}` : ''}`;
 					// falls through
 				case columns[0]:
-					return `${Utils.escapeHTML(val)}${this.winners[i].nominator ? Utils.html `<br /><span style="font-style:italic;font-size:8pt;">nominated by ${this.winners[i].nominator}</span>` : ''}`;
+					return `${Utils.escapeHTML(val)}${this.winners[i].nominator ? Utils.html`<br /><span style="font-style:italic;font-size:8pt;">nominated by ${this.winners[i].nominator}</span>` : ''}`;
 				default:
 					return Utils.escapeHTML(val);
 				}
@@ -502,36 +523,34 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		if (handler.voting) {
-			return this.errorReply(
-				`The nomination for the ${handler.name} of the ${handler.timeLabel} nomination is already in progress.`
-			);
+			throw new Chat.ErrorMessage(`The nomination for the ${handler.name} of the ${handler.timeLabel} nomination is already in progress.`);
 		}
 		handler.startVote();
 
 		this.privateModAction(`${user.name} has started nominations for the ${handler.name} of the ${handler.timeLabel}.`);
 		this.modlog(`${handler.id.toUpperCase()} START`, null);
 	},
-	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`],
+	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # ~`],
 
 	end(target, room, user) {
 		this.checkChat();
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		if (!handler.voting) {
-			return this.errorReply(`There is no ${handler.name} of the ${handler.timeLabel} nomination in progress.`);
+			throw new Chat.ErrorMessage(`There is no ${handler.name} of the ${handler.timeLabel} nomination in progress.`);
 		}
 		if (!handler.nominations.size) {
-			return this.errorReply(`Can't select the ${handler.name} of the ${handler.timeLabel} without nominations.`);
+			throw new Chat.ErrorMessage(`Can't select the ${handler.name} of the ${handler.timeLabel} without nominations.`);
 		}
 		handler.rollWinner();
 
@@ -539,7 +558,7 @@ export const otdCommands: Chat.ChatCommands = {
 		this.modlog(`${handler.id.toUpperCase()} END`, null);
 	},
 	endhelp: [
-		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
+		`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # ~`,
 	],
 
 	nom(target, room, user) {
@@ -548,8 +567,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		if (!toNominationId(target).length || target.length > 75) {
 			return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
@@ -564,8 +583,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		if (this.broadcasting) {
 			selectHandler(this.message).display();
@@ -580,12 +599,12 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		const userid = toID(target);
-		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
+		if (!userid) throw new Chat.ErrorMessage(`'${target}' is not a valid username.`);
 
 		if (handler.removeNomination(userid)) {
 			this.privateModAction(`${user.name} removed ${target}'s nomination for the ${handler.name} of the ${handler.timeLabel}.`);
@@ -596,7 +615,7 @@ export const otdCommands: Chat.ChatCommands = {
 	},
 	removehelp: [
 		`/-otd remove [username] - Remove a user's nomination for the Thing of the Day.`,
-		 `Prevents them from voting again until the next round. Requires: % @ # &`,
+		`Prevents them from voting again until the next round. Requires: % @ # ~`,
 	],
 
 	removewinner(target, room, user) {
@@ -613,7 +632,7 @@ export const otdCommands: Chat.ChatCommands = {
 	},
 	removewinnerhelp: [
 		`/-otd removewinner [nomination] - Remove winners matching the given [nomination] from Thing of the Day.`,
-		`Requires: % @ # &`,
+		`Requires: % @ # ~`,
 	],
 
 	force(target, room, user) {
@@ -622,8 +641,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('declare', null, room);
 
 		if (!toNominationId(target).length || target.length > 50) {
@@ -635,7 +654,7 @@ export const otdCommands: Chat.ChatCommands = {
 		room.add(`The ${handler.name} of the ${handler.timeLabel} was forcibly set to '${target}'`);
 	},
 	forcehelp: [
-		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
+		`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # ~`,
 	],
 
 	delay(target, room, user) {
@@ -643,19 +662,19 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		if (!(handler.voting && handler.timer)) {
-			return this.errorReply(`There is no ${handler.name} of the ${handler.timeLabel} nomination to disable the timer for.`);
+			throw new Chat.ErrorMessage(`There is no ${handler.name} of the ${handler.timeLabel} nomination to disable the timer for.`);
 		}
 		clearTimeout(handler.timer);
 
 		this.privateModAction(`${user.name} disabled the ${handler.name} of the ${handler.timeLabel} timer.`);
 	},
 	delayhelp: [
-		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
+		`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # ~`,
 	],
 
 	set(target, room, user) {
@@ -663,23 +682,23 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		const params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 
-		const changelist: {[k: string]: string} = {};
+		const changelist: { [k: string]: string } = {};
 
 		for (const param of params) {
 			let [key, ...values] = param.split(':');
-			if (!key || !values.length) return this.errorReply(`Syntax error in '${param}'`);
+			if (!key || !values.length) throw new Chat.ErrorMessage(`Syntax error in '${param}'`);
 
 			key = key.trim();
 			const value = values.join(':').trim();
 
 			if (!handler.keys.includes(key)) {
-				return this.errorReply(`Invalid key: '${key}'. Valid keys: ${handler.keys.join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid key: '${key}'. Valid keys: ${handler.keys.join(', ')}`);
 			}
 
 			switch (key) {
@@ -690,38 +709,38 @@ export const otdCommands: Chat.ChatCommands = {
 			case 'book':
 			case 'author':
 			case 'athlete':
-				if (!toNominationId(value) || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
+				if (!toNominationId(value) || value.length > 50) throw new Chat.ErrorMessage(`Please enter a valid ${key} name.`);
 				break;
 			case 'quote':
 			case 'tagline':
 			case 'match':
 			case 'event':
 			case 'videogame':
-				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
+				if (!value.length || value.length > 150) throw new Chat.ErrorMessage(`Please enter a valid ${key}.`);
 				break;
 			case 'sport':
 			case 'team':
 			case 'song':
 			case 'country':
-				if (!value.length || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
+				if (!value.length || value.length > 50) throw new Chat.ErrorMessage(`Please enter a valid ${key} name.`);
 				break;
 			case 'link':
 			case 'image':
 				if (!/https?:\/\//.test(value)) {
-					return this.errorReply(`Please enter a valid URL for the ${key} (starting with http:// or https://)`);
+					throw new Chat.ErrorMessage(`Please enter a valid URL for the ${key} (starting with http:// or https://)`);
 				}
-				if (value.length > 200) return this.errorReply("URL too long.");
+				if (value.length > 200) throw new Chat.ErrorMessage("URL too long.");
 				break;
 			case 'age':
 				const num = parseInt(value);
 				// let's assume someone isn't over 100 years old? Maybe we should for the memes
 				// but i doubt there's any legit athlete over 100.
-				if (isNaN(num) || num < 1 || num > 100) return this.errorReply('Please enter a valid number as an age');
+				if (isNaN(num) || num < 1 || num > 100) throw new Chat.ErrorMessage('Please enter a valid number as an age');
 				break;
 			default:
 				// another custom key w/o validation
 				if (!toNominationId(value)) {
-					return this.errorReply(`No value provided for key ${key}.`);
+					throw new Chat.ErrorMessage(`No value provided for key ${key}.`);
 				}
 				break;
 			}
@@ -739,8 +758,37 @@ export const otdCommands: Chat.ChatCommands = {
 	},
 	sethelp: [
 		`/-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day.`,
-		`Requires: % @ # &`,
+		`Requires: % @ # ~`,
 	],
+
+	toggleautostart(target, room, user) {
+		const otd = selectHandler(this.message);
+		room = this.requireRoom(otd.room.roomid);
+
+		this.checkCan('declare', null, room);
+		let logMessage = '';
+		const handler = selectHandler(this.message);
+
+		if (this.meansYes(target)) {
+			if (room.settings.autoStartOtd) {
+				throw new Chat.ErrorMessage(`This -OTD is already set to automatically start.`);
+			}
+			room.settings.autoStartOtd = true;
+			handler.toggleAutoStartTimer(true);
+
+			logMessage = 'start automatically';
+		} else {
+			if (!room.settings.autoStartOtd) {
+				throw new Chat.ErrorMessage(`This -OTD is not set to automatically start.`);
+			}
+			room.settings.autoStartOtd = false;
+			logMessage = 'not start automatically';
+			handler.toggleAutoStartTimer(false);
+		}
+		this.privateModAction(`${user.name} set the ${otd.name} nomination to ${logMessage}`);
+		this.modlog(`OTD TOGGLEAUTOSTART`, null, logMessage);
+		room.saveSettings();
+	},
 
 	toggleupdate(target, room, user) {
 		const otd = selectHandler(this.message);
@@ -772,8 +820,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		return this.parse(`/join view-${handler.id}`);
 	},
@@ -784,12 +832,12 @@ export const otdCommands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return false;
 
 		const handler = selectHandler(this.message);
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
 
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		const text = await handler.generateWinnerDisplay();
-		if (!text) return this.errorReply("There is no winner yet.");
+		if (!text) throw new Chat.ErrorMessage("There is no winner yet.");
 		this.sendReplyBox(text);
 	},
 };
@@ -800,11 +848,11 @@ export const commands: Chat.ChatCommands = {
 		create(target, room, user) {
 			room = this.requireRoom();
 			if (room.settings.isPrivate) {
-				return this.errorReply(`This command is only available in public rooms`);
+				throw new Chat.ErrorMessage(`This command is only available in public rooms`);
 			}
-			const count = [...otds.values()].filter(otd => otd.room.roomid === room!.roomid).length;
+			const count = [...otds.values()].filter(otd => otd.room.roomid === room.roomid).length;
 			if (count > 3) {
-				return this.errorReply(`This room already has 3+ -otd's.`);
+				throw new Chat.ErrorMessage(`This room already has 3+ -otd's.`);
 			}
 			this.checkCan('rangeban');
 
@@ -813,17 +861,19 @@ export const commands: Chat.ChatCommands = {
 			}
 			const [title, time, ...keyLabels] = target.split(',').map(i => i.trim());
 			if (!toID(title)) {
-				return this.errorReply(`Invalid title.`);
+				throw new Chat.ErrorMessage(`Invalid title.`);
 			}
 			const timeLabel = toID(time);
 			if (!['week', 'day'].includes(timeLabel)) {
-				return this.errorReply("Invalid time label - use 'week' or 'month'");
+				throw new Chat.ErrorMessage("Invalid time label - use 'week' or 'month'");
 			}
 			const id = `${title.charAt(0)}ot${timeLabel.charAt(0)}`;
 			const existing = otds.get(id);
 			if (existing) {
-				this.errorReply(`That -OTD already exists (${existing.name} of the ${existing.timeLabel}, in ${existing.room.title})`);
-				return this.errorReply(`Try picking a new title.`);
+				throw new Chat.ErrorMessage([
+					`That -OTD already exists (${existing.name} of the ${existing.timeLabel}, in ${existing.room.title})`,
+					`Try picking a new title.`,
+				]);
 			}
 			const titleIdx = keyLabels.map(toID).indexOf(toID(title));
 			if (titleIdx > -1) {
@@ -833,16 +883,16 @@ export const commands: Chat.ChatCommands = {
 
 			const filteredKeys = keyLabels.map(toNominationId).filter(Boolean);
 			if (!filteredKeys.length) {
-				return this.errorReply(`No valid key labels given.`);
+				throw new Chat.ErrorMessage(`No valid key labels given.`);
 			}
 			if (new Set(filteredKeys).size !== keyLabels.length) {
-				return this.errorReply(`Invalid keys in set - do not use duplicate key labels.`);
+				throw new Chat.ErrorMessage(`Invalid keys in set - do not use duplicate key labels.`);
 			}
 			if (filteredKeys.length < 3) {
-				return this.errorReply(`Specify at least 3 key labels.`);
+				throw new Chat.ErrorMessage(`Specify at least 3 key labels.`);
 			}
 			if (filteredKeys.some(k => k.length < 3 || k.length > 50)) {
-				return this.errorReply(`All labels must be more than 3 characters and less than 50 characters long.`);
+				throw new Chat.ErrorMessage(`All labels must be more than 3 characters and less than 50 characters long.`);
 			}
 			const otd = OtdHandler.create(room, {
 				keyLabels, keys: filteredKeys, title, timeLabel, roomid: room.roomid,
@@ -860,11 +910,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const otd = otds.get(otdId);
 			if (!otd) {
-				return this.errorReply(`OTD ${otd} not found.`);
+				throw new Chat.ErrorMessage(`OTD ${otd} not found.`);
 			}
 			const targetRoom = Rooms.get(roomid);
 			if (!targetRoom) {
-				return this.errorReply(`Room ${roomid} not found.`);
+				throw new Chat.ErrorMessage(`Room ${roomid} not found.`);
 			}
 			const oldRoom = otd.settings.roomid.slice();
 			otd.settings.roomid = targetRoom.roomid;
@@ -882,32 +932,33 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/help otd`);
 			}
 			const otd = otds.get(target);
-			if (!otd) return this.errorReply(`OTD ${target} not found.`);
+			if (!otd) throw new Chat.ErrorMessage(`OTD ${target} not found.`);
 			otd.destroy();
 			this.globalModlog(`OTD DELETE`, null, target);
 			this.privateGlobalModAction(`${user.name} deleted the OTD ${otd.name} of the ${otd.timeLabel}`);
 		},
 	},
 	otdhelp: [
-		`/otd create [title], [time], [...labels] - Creates a Thing of the Day with the given [name], [time], and [labels]. Requires: &`,
-		`/otd updateroom [otd], [room] - Updates the room for the given [otd] to the new [room]. Requires: &`,
-		`/otd delete [otd] - Removes the given Thing of the Day. Requires: &`,
+		`/otd create [title], [time], [...labels] - Creates a Thing of the Day with the given [name], [time], and [labels]. Requires: ~`,
+		`/otd updateroom [otd], [room] - Updates the room for the given [otd] to the new [room]. Requires: ~`,
+		`/otd delete [otd] - Removes the given Thing of the Day. Requires: ~`,
 	],
 };
 
 const otdHelp = [
 	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw, anotd):`,
 	`- /-otd - View the current Thing of the Day.`,
-	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # &`,
+	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # ~`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
-	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # &`,
-	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # &`,
-	`- /-otd removewinner [nomination] - Remove a winner with the given [nomination] from the winners list. Requires: % @ # &`,
-	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # &`,
-	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # &`,
-	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # &`,
+	`- /-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ # ~`,
+	`- /-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # ~`,
+	`- /-otd removewinner [nomination] - Remove a winner with the given [nomination] from the winners list. Requires: % @ # ~`,
+	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # ~`,
+	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # ~`,
+	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ # ~`,
 	`- /-otd winners - Displays a list of previous things of the day.`,
-	`- /-otd toggleupdate [on|off] - Changes the Thing of the Day to display on nomination ([on] to update, [off] to turn off updates). Requires: # &`,
+	`- /-otd toggleupdate [on|off] - Changes the Thing of the Day to display on nomination ([on] to update, [off] to turn off updates). Requires: # ~`,
+	`- /-otd toggleautostart [on|off] - Enables or disables automatic start for Thing of the Day ([on] enables autostart, [off] disables it). Requires: # ~`,
 ];
 
 for (const otd in otdData) {
@@ -929,6 +980,15 @@ for (const [k, v] of otds) {
 	commands[`${k}help`] = otdHelp;
 }
 
+const getKeyByRoomId = (id: string): string | undefined => {
+	for (const [key, handler] of otds.entries()) {
+		if (handler.room.roomid === id) {
+			return key;
+		}
+	}
+	return undefined;
+};
+
 export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID, room) {
 		for (const otd in otdData) {
@@ -948,5 +1008,26 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 	if (!['NAMELOCK', 'BAN'].includes(punishment.type)) return;
 	for (const handler of otds.values()) {
 		handler.removeNomination(user);
+	}
+};
+
+export const roomSettings: Chat.SettingsHandler[] = [
+	(room, user) => ({
+		label: `Autostart -OTD`,
+		permission: "editroom",
+		options: getKeyByRoomId(room.roomid) ? [
+			['off', !room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)} toggleautostart off`],
+			['on', room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)} toggleautostart on`],
+		] : [['disabled', true]],
+	}),
+];
+
+export const destroy = () => {
+	for (const [, v] of otds) {
+		if (v.autoStartTimer) {
+			clearInterval(v.autoStartTimer);
+			v.autoStartTimer = null;
+			v.room.modlog({ action: `${v.id.toUpperCase()} TIMER RESTART` });
+		}
 	}
 };

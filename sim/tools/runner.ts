@@ -5,16 +5,16 @@
  * @license MIT
  */
 
-import {strict as assert} from 'assert';
+import { strict as assert } from 'assert';
 import * as fs from 'fs';
 
-import {Dex} from '..';
-import {ObjectReadWriteStream} from '../../lib/streams';
-import {Battle} from '../battle';
+import { Dex } from '..';
+import { type ObjectReadWriteStream } from '../../lib/streams';
+import { Battle } from '../battle';
 import * as BattleStreams from '../battle-stream';
-import {State} from '../state';
-import {PRNG, PRNGSeed} from '../prng';
-import {RandomPlayerAI} from './random-player-ai';
+import { State } from '../state';
+import { PRNG, type PRNGSeed } from '../prng';
+import { RandomPlayerAI } from './random-player-ai';
 
 export interface AIOptions {
 	createAI: (stream: ObjectReadWriteStream<string>, options: AIOptions) => RandomPlayerAI;
@@ -58,12 +58,11 @@ export class Runner {
 	constructor(options: RunnerOptions) {
 		this.format = options.format;
 
-		this.prng = (options.prng && !Array.isArray(options.prng)) ?
-			options.prng : new PRNG(options.prng);
-		this.p1options = {...Runner.AI_OPTIONS, ...options.p1options};
-		this.p2options = {...Runner.AI_OPTIONS, ...options.p2options};
-		this.p3options = {...Runner.AI_OPTIONS, ...options.p3options};
-		this.p4options = {...Runner.AI_OPTIONS, ...options.p4options};
+		this.prng = PRNG.get(options.prng);
+		this.p1options = { ...Runner.AI_OPTIONS, ...options.p1options };
+		this.p2options = { ...Runner.AI_OPTIONS, ...options.p2options };
+		this.p3options = { ...Runner.AI_OPTIONS, ...options.p3options };
+		this.p4options = { ...Runner.AI_OPTIONS, ...options.p4options };
 
 		this.input = !!options.input;
 		this.output = !!options.output;
@@ -84,9 +83,9 @@ export class Runner {
 	}
 
 	private async runGame(format: string, battleStream: RawBattleStream | DualStream) {
-		// @ts-ignore - DualStream implements everything relevant from BattleStream.
+		// @ts-expect-error - DualStream implements everything relevant from BattleStream.
 		const streams = BattleStreams.getPlayerStreams(battleStream);
-		const spec = {formatid: format, seed: this.prng.seed};
+		const spec = { formatid: format, seed: this.prng.getSeed() };
 		const is4P = Dex.formats.get(format).playerCount > 2;
 		const p1spec = this.getPlayerSpec("Bot 1", this.p1options);
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
@@ -97,18 +96,18 @@ export class Runner {
 		}
 
 		const p1 = this.p1options.createAI(
-			streams.p1, {seed: this.newSeed(), ...this.p1options}
+			streams.p1, { seed: this.newSeed(), ...this.p1options }
 		);
 		const p2 = this.p2options.createAI(
-			streams.p2, {seed: this.newSeed(), ...this.p2options}
+			streams.p2, { seed: this.newSeed(), ...this.p2options }
 		);
 		let p3: RandomPlayerAI, p4: RandomPlayerAI;
 		if (is4P) {
 			p3 = this.p4options.createAI(
-				streams.p3, {seed: this.newSeed(), ...this.p3options}
+				streams.p3, { seed: this.newSeed(), ...this.p3options }
 			);
 			p4 = this.p4options.createAI(
-				streams.p4, {seed: this.newSeed(), ...this.p4options}
+				streams.p4, { seed: this.newSeed(), ...this.p4options }
 			);
 		}
 		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
@@ -121,12 +120,12 @@ export class Runner {
 		}
 
 		let initMessage = `>start ${JSON.stringify(spec)}\n` +
-		`>player p1 ${JSON.stringify(p1spec)}\n` +
-		`>player p2 ${JSON.stringify(p2spec)}`;
+			`>player p1 ${JSON.stringify(p1spec)}\n` +
+			`>player p2 ${JSON.stringify(p2spec)}`;
 		if (is4P) {
 			initMessage += `\n` +
-			`>player p3 ${JSON.stringify(p3spec!)}\n` +
-			`>player p4 ${JSON.stringify(p4spec!)}`;
+				`>player p3 ${JSON.stringify(p3spec!)}\n` +
+				`>player p4 ${JSON.stringify(p4spec!)}`;
 		}
 		void streams.omniscient.write(initMessage);
 
@@ -140,16 +139,16 @@ export class Runner {
 	// NOTE: advances this.prng's seed by 4.
 	private newSeed(): PRNGSeed {
 		return [
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
-		];
+			this.prng.random(2 ** 16),
+			this.prng.random(2 ** 16),
+			this.prng.random(2 ** 16),
+			this.prng.random(2 ** 16),
+		].join(',') as PRNGSeed;
 	}
 
 	private getPlayerSpec(name: string, options: AIOptions) {
-		if (options.team) return {name, team: options.team};
-		return {name, seed: this.newSeed()};
+		if (options.team) return { name, team: options.team };
+		return { name, seed: this.newSeed() };
 	}
 }
 
@@ -164,7 +163,7 @@ class RawBattleStream extends BattleStreams.BattleStream {
 		this.rawInputLog = [];
 	}
 
-	_write(message: string) {
+	override _write(message: string) {
 		if (this.input) console.log(message);
 		this.rawInputLog.push(message);
 		super._write(message);

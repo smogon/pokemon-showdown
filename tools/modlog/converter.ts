@@ -1,4 +1,3 @@
-
 /**
  * Converts modlogs between text and SQLite; also modernizes old-format modlogs
  * @author Annika
@@ -17,16 +16,16 @@ if (!global.Config) {
 		nofswriting: false,
 		usesqlitemodlog: hasSQLite,
 		usesqlite: hasSQLite,
-	};
+	} as any;
 }
 
 import type * as DatabaseType from 'better-sqlite3';
-import type {ModlogEntry} from '../../server/modlog';
-import {FS} from '../../lib';
-import {IPTools} from '../../server/ip-tools';
+import type { ModlogEntry } from '../../server/modlog';
+import { FS } from '../../lib';
+import { IPTools } from '../../server/ip-tools';
 
 const Database = Config.usesqlite ? require('better-sqlite3') : null;
-const {Modlog} = require('../../server/modlog');
+const { Modlog } = require('../../server/modlog');
 
 type ModlogFormat = 'txt' | 'sqlite';
 
@@ -56,7 +55,7 @@ function toID(text: any): ID {
 
 export function modernizeLog(line: string, nextLine?: string): string | undefined {
 	// first we save and remove the timestamp and the roomname
-	const prefix = line.match(/\[.+?\] \(.+?\) /i)?.[0];
+	const prefix = (/\[.+?\] \(.+?\) /i.exec(line))?.[0];
 	if (!prefix) return;
 	if (ALTS_REGEX.test(line) || AUTOCONFIRMED_REGEX.test(line)) return;
 	line = line.replace(prefix, '');
@@ -122,13 +121,13 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 		return `${prefix}TRIVIAGAME: by unknown: ${line}`;
 	}
 
-	const modernizerTransformations: {[k: string]: (log: string) => string} = {
-		'notes: ': (log) => {
+	const modernizerTransformations: { [k: string]: (log: string) => string } = {
+		'notes: ': log => {
 			const [actionTaker, ...rest] = line.split(' notes: ');
 			return `NOTE: by ${toID(actionTaker)}: ${rest.join('')}`;
 		},
 
-		' declared': (log) => {
+		' declared': log => {
 			let newAction = 'DECLARE';
 			let oldAction = ' declared';
 			if (log.includes(' globally declared')) {
@@ -148,14 +147,14 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			return `${newAction}: by ${actionTakerName}: ${log}`;
 		},
 
-		'changed the roomdesc to: ': (log) => {
+		'changed the roomdesc to: ': log => {
 			const actionTaker = parseBrackets(log, '[');
 			log = log.slice(actionTaker.length + 3);
 			log = log.slice('changed the roomdesc to: '.length + 1, -2);
 			return `ROOMDESC: by ${actionTaker}: to "${log}"`;
 		},
 
-		'roomevent titled "': (log) => {
+		'roomevent titled "': log => {
 			let action;
 			if (log.includes(' added a roomevent titled "')) {
 				action = 'added a';
@@ -170,54 +169,54 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			return `ROOMEVENT: by ${toID(actionTakerName)}: ${action.split(' ')[0]} "${eventName}"`;
 		},
 
-		'set modchat to ': (log) => {
+		'set modchat to ': log => {
 			const actionTaker = parseBrackets(log, '[');
 			log = log.slice(actionTaker.length + 3);
 			log = log.slice('set modchat to '.length);
 			return `MODCHAT: by ${actionTaker}: to ${log}`;
 		},
-		'set modjoin to ': (log) => {
+		'set modjoin to ': log => {
 			const actionTakerName = log.slice(0, log.lastIndexOf(' set'));
 			log = log.slice(actionTakerName.length + 1);
 			log = log.slice('set modjoin to '.length);
 			const rank = log.startsWith('sync') ? 'sync' : log.replace('.', '');
 			return `MODJOIN${rank === 'sync' ? ' SYNC' : ''}: by ${toID(actionTakerName)}${rank !== 'sync' ? `: ${rank}` : ``}`;
 		},
-		'turned off modjoin': (log) => {
+		'turned off modjoin': log => {
 			const actionTakerName = log.slice(0, log.lastIndexOf(' turned off modjoin'));
 			return `MODJOIN: by ${toID(actionTakerName)}: OFF`;
 		},
 
-		'changed the roomintro': (log) => {
+		'changed the roomintro': log => {
 			const isDeletion = /deleted the (staff|room)intro/.test(log);
 			const isRoomintro = log.includes('roomintro');
 			const actionTaker = toID(log.slice(0, log.indexOf(isDeletion ? 'deleted' : 'changed')));
 			return `${isDeletion ? 'DELETE' : ''}${isRoomintro ? 'ROOM' : 'STAFF'}INTRO: by ${actionTaker}`;
 		},
-		'deleted the roomintro': (log) => modernizerTransformations['changed the roomintro'](log),
-		'changed the staffintro': (log) => modernizerTransformations['changed the roomintro'](log),
-		'deleted the staffintro': (log) => modernizerTransformations['changed the roomintro'](log),
+		'deleted the roomintro': log => modernizerTransformations['changed the roomintro'](log),
+		'changed the staffintro': log => modernizerTransformations['changed the roomintro'](log),
+		'deleted the staffintro': log => modernizerTransformations['changed the roomintro'](log),
 
-		'created a tournament in': (log) => {
+		'created a tournament in': log => {
 			const actionTaker = parseBrackets(log, '[');
 			log = log.slice(actionTaker.length + 3);
 			log = log.slice(24, -8);
 			return `TOUR CREATE: by ${actionTaker}: ${log}`;
 		},
-		'was disqualified from the tournament by': (log) => {
+		'was disqualified from the tournament by': log => {
 			const disqualified = parseBrackets(log, '[');
 			log = log.slice(disqualified.length + 3);
 			log = log.slice('was disqualified from the tournament by'.length);
 			return `TOUR DQ: [${toID(disqualified)}] by ${toID(log)}`;
 		},
-		'The tournament auto disqualify timeout was set to': (log) => {
+		'The tournament auto disqualify timeout was set to': log => {
 			const byIndex = log.indexOf(' by ');
 			const actionTaker = log.slice(byIndex + ' by '.length);
 			const length = log.slice('The tournament auto disqualify timeout was set to'.length, byIndex);
 			return `TOUR AUTODQ: by ${toID(actionTaker)}: ${length.trim()}`;
 		},
 
-		' was blacklisted from ': (log) => {
+		' was blacklisted from ': log => {
 			const isName = log.includes(' was nameblacklisted from ');
 			const banned = toID(log.slice(0, log.indexOf(` was ${isName ? 'name' : ''}blacklisted from `)));
 			log = log.slice(log.indexOf(' by ') + ' by '.length);
@@ -230,8 +229,8 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			const actionTaker = toID(log);
 			return `${isName ? 'NAME' : ''}BLACKLIST: [${banned}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
-		' was nameblacklisted from ': (log) => modernizerTransformations[' was blacklisted from '](log),
-		' was banned from room ': (log) => {
+		' was nameblacklisted from ': log => modernizerTransformations[' was blacklisted from '](log),
+		' was banned from room ': log => {
 			const banned = toID(log.slice(0, log.indexOf(' was banned from room ')));
 			log = log.slice(log.indexOf(' by ') + ' by '.length);
 			let reason, ip;
@@ -243,7 +242,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			const actionTaker = toID(log);
 			return `ROOMBAN: [${banned}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
-		' was muted by ': (log) => {
+		' was muted by ': log => {
 			let muted = '';
 			let isHour = false;
 			[muted, log] = log.split(' was muted by ');
@@ -261,7 +260,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			}
 			return `${isHour ? 'HOUR' : ''}MUTE: [${muted}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
-		' was locked from talking ': (log) => {
+		' was locked from talking ': log => {
 			const isWeek = log.includes(' was locked from talking for a week ');
 			const locked = toID(log.slice(0, log.indexOf(' was locked from talking ')));
 			log = log.slice(log.indexOf(' by ') + ' by '.length);
@@ -274,7 +273,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			const actionTaker = toID(log);
 			return `${isWeek ? 'WEEK' : ''}LOCK: [${locked}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
-		' was banned ': (log) => {
+		' was banned ': log => {
 			if (log.includes(' was banned from room ')) return modernizerTransformations[' was banned from room '](log);
 			const banned = toID(log.slice(0, log.indexOf(' was banned ')));
 			log = log.slice(log.indexOf(' by ') + ' by '.length);
@@ -288,7 +287,7 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			return `BAN: [${banned}] ${getAutoconfirmed()}${getAlts()}${ip ? `[${ip}] ` : ``}by ${actionTaker}${reason ? `: ${reason}` : ``}`;
 		},
 
-		'was promoted to ': (log) => {
+		'was promoted to ': log => {
 			const isDemotion = log.includes('was demoted to ');
 			const userid = toID(log.split(' was ')[0]);
 			if (!userid) {
@@ -303,8 +302,8 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			const actionTaker = parseBrackets(log, '[');
 			return `${rank}: [${userid}] by ${actionTaker}${isDemotion ? ': (demote)' : ''}`;
 		},
-		'was demoted to ': (log) => modernizerTransformations['was promoted to '](log),
-		'was appointed Room Owner by ': (log) => {
+		'was demoted to ': log => modernizerTransformations['was promoted to '](log),
+		'was appointed Room Owner by ': log => {
 			const userid = parseBrackets(log, '[');
 			log = log.slice(userid.length + 3);
 			log = log.slice('was appointed Room Owner by '.length);
@@ -312,8 +311,8 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			return `ROOMOWNER: [${userid}] by ${actionTaker}`;
 		},
 
-		' claimed this ticket': (log) => {
-			const actions: {[k: string]: string} = {
+		' claimed this ticket': log => {
+			const actions: { [k: string]: string } = {
 				' claimed this ticket': 'TICKETCLAIM',
 				' closed this ticket': 'TICKETCLOSE',
 				' deleted this ticket': 'TICKETDELETE',
@@ -326,24 +325,24 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			}
 			return log;
 		},
-		'This ticket is now claimed by ': (log) => {
+		'This ticket is now claimed by ': log => {
 			const claimer = toID(log.slice(log.indexOf(' by ') + ' by '.length));
 			return `TICKETCLAIM: by ${claimer}`;
 		},
-		' is no longer interested in this ticket': (log) => {
+		' is no longer interested in this ticket': log => {
 			const abandoner = toID(log.slice(0, log.indexOf(' is no longer interested in this ticket')));
 			return `TICKETABANDON: by ${abandoner}`;
 		},
-		' opened a new ticket': (log) => {
+		' opened a new ticket': log => {
 			const opener = toID(log.slice(0, log.indexOf(' opened a new ticket')));
 			const problem = log.slice(log.indexOf(' Issue: ') + ' Issue: '.length).trim();
 			return `TICKETOPEN: by ${opener}: ${problem}`;
 		},
-		' closed this ticket': (log) => modernizerTransformations[' claimed this ticket'](log),
-		' deleted this ticket': (log) => modernizerTransformations[' claimed this ticket'](log),
+		' closed this ticket': log => modernizerTransformations[' claimed this ticket'](log),
+		' deleted this ticket': log => modernizerTransformations[' claimed this ticket'](log),
 		'This ticket is no longer claimed': () => 'TICKETUNCLAIM',
 
-		' has been caught attempting a hunt with ': (log) => {
+		' has been caught attempting a hunt with ': log => {
 			const index = log.indexOf(' has been caught attempting a hunt with ');
 			const user = toID(log.slice(0, index));
 			log = log.slice(index + ' has been caught attempting a hunt with '.length);
@@ -351,40 +350,40 @@ export function modernizeLog(line: string, nextLine?: string): string | undefine
 			return `SCAV CHEATER: [${user}]: caught attempting a hunt with ${log}`;
 		},
 
-		'made this room hidden': (log) => {
+		'made this room hidden': log => {
 			const user = toID(log.slice(0, log.indexOf(' made this room hidden')));
 			return `HIDDENROOM: by ${user}`;
 		},
 
-		'The tournament auto start timer was set to ': (log) => {
+		'The tournament auto start timer was set to ': log => {
 			log = log.slice('The tournament auto start timer was set to'.length);
 			const [length, setter] = log.split(' by ').map(toID);
 			return `TOUR AUTOSTART: by ${setter}: ${length}`;
 		},
-		'The tournament auto disqualify timer was set to ': (log) => {
+		'The tournament auto disqualify timer was set to ': log => {
 			log = log.slice('The tournament auto disqualify timer was set to'.length);
 			const [length, setter] = log.split(' by ').map(toID);
 			return `TOUR AUTODQ: by ${setter}: ${length}`;
 		},
-		" set the tournament's banlist to ": (log) => {
+		" set the tournament's banlist to ": log => {
 			const [setter, banlist] = log.split(` set the tournament's banlist to `);
 			return `TOUR BANLIST: by ${toID(setter)}: ${banlist.slice(0, -1)}`; // remove trailing . from banlist
 		},
-		" set the tournament's custom rules to": (log) => {
+		" set the tournament's custom rules to": log => {
 			const [setter, rules] = log.split(` set the tournament's custom rules to `);
 			return `TOUR RULES: by ${toID(setter)}: ${rules.slice(0, -1)}`;
 		},
-		'[agameofhangman] was started by ': (log) => `HANGMAN: by ${toID(log.slice('[agameofhangman] was started by '.length))}`,
-		'[agameofunowas] created by ': (log) => `UNO CREATE: by ${toID(log.slice('[agameofunowas] created by '.length))}`,
-		'[thetournament] was set to autostart': (log) => {
+		'[agameofhangman] was started by ': log => `HANGMAN: by ${toID(log.slice('[agameofhangman] was started by '.length))}`,
+		'[agameofunowas] created by ': log => `UNO CREATE: by ${toID(log.slice('[agameofunowas] created by '.length))}`,
+		'[thetournament] was set to autostart': log => {
 			const [, user] = log.split(' by ');
 			return `TOUR AUTOSTART: by ${toID(user)}: when playercap is reached`;
 		},
-		'[thetournament] was set to allow scouting': (log) => {
+		'[thetournament] was set to allow scouting': log => {
 			const [, user] = log.split(' by ');
 			return `TOUR SCOUT: by ${toID(user)}: allow`;
 		},
-		'[thetournament] was set to disallow scouting': (log) => {
+		'[thetournament] was set to disallow scouting': log => {
 			const [, user] = log.split(' by ');
 			return `TOUR SCOUT: by ${toID(user)}: disallow`;
 		},
@@ -440,13 +439,13 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		log.action = action;
 		if (log.action === 'OLD MODLOG') {
 			log.loggedBy = 'unknown' as ID;
-			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown :'.length).trim();
+			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown: '.length).trim();
 			return log;
 		}
 		line = line.slice(actionColonIndex + 2);
 	}
 
-	if (line[0] === '[') {
+	if (line.startsWith('[')) {
 		if (!IP_ONLY_ACTIONS.has(log.action)) {
 			const userid = toID(parseBrackets(line, '['));
 			log.userid = userid;
@@ -481,7 +480,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 				log.alts = [...alts];
 			}
 		}
-		if (line[0] === '[') {
+		if (line.startsWith('[')) {
 			log.ip = parseBrackets(line, '[');
 			line = line.slice(log.ip.length + 3).trim();
 		}
@@ -523,7 +522,7 @@ export function rawifyLog(log: ModlogEntry) {
 export class ModlogConverterSQLite {
 	readonly databaseFile: string;
 	readonly textLogDir: string;
-	readonly isTesting: {files: Map<string, string>, db: DatabaseType.Database} | null = null;
+	readonly isTesting: { files: Map<string, string>, db: DatabaseType.Database } | null = null;
 	readonly newestAllowedTimestamp?: number;
 
 	constructor(
@@ -533,16 +532,16 @@ export class ModlogConverterSQLite {
 		this.databaseFile = databaseFile;
 		this.textLogDir = textLogDir;
 		if (isTesting || Config.nofswriting) {
-			this.isTesting = {files: new Map<string, string>(), db: isTesting || new Database(':memory:')};
+			this.isTesting = { files: new Map<string, string>(), db: isTesting || new Database(':memory:') };
 		}
 		this.newestAllowedTimestamp = newestAllowedTimestamp;
 	}
 
 	async toTxt() {
-		const database = this.isTesting?.db || new Database(this.databaseFile, {fileMustExist: true});
+		const database = this.isTesting?.db || new Database(this.databaseFile, { fileMustExist: true });
 		const roomids = database.prepare('SELECT DISTINCT roomid FROM modlog').all();
 		const globalEntries = [];
-		for (const {roomid} of roomids) {
+		for (const { roomid } of roomids) {
 			if (!Config.nofswriting) console.log(`Reading ${roomid}...`);
 			const results = database.prepare(
 				`SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts ` +
@@ -563,6 +562,7 @@ export class ModlogConverterSQLite {
 					process.stdout.write(`Wrote ${entriesLogged} entries from '${trueRoomID}'`);
 				}
 				await this.writeFile(`${this.textLogDir}/modlog_${trueRoomID}.txt`, entries.join(''));
+				// eslint-disable-next-line require-atomic-updates
 				entries = [];
 			};
 
@@ -611,7 +611,7 @@ export class ModlogConverterTxt {
 	readonly newestAllowedTimestamp?: number;
 
 	readonly textLogDir: string;
-	readonly isTesting: {files: Map<string, string>, ml?: typeof Modlog} | null = null;
+	readonly isTesting: { files: Map<string, string>, ml?: typeof Modlog } | null = null;
 	constructor(
 		databaseFile: string,
 		textLogDir: string,
@@ -630,7 +630,7 @@ export class ModlogConverterTxt {
 			this.isTesting ? ':memory:' : this.databaseFile,
 			// wait 15 seconds for DB to no longer be busy - this is important since I'm trying to do
 			// a no-downtime transfer of text -> SQLite
-			{sqliteOptions: {timeout: 15000}},
+			{ sqliteOptions: { timeout: 15000 } },
 		);
 		this.newestAllowedTimestamp = newestAllowedTimestamp;
 	}
@@ -647,7 +647,7 @@ export class ModlogConverterTxt {
 		// we don't want to insert global modlog entries twice, so we keep track of global ones
 		// and don't reinsert them
 		/** roomid:list of modlog entry strings */
-		const globalEntries: {[k: string]: string[]} = {};
+		const globalEntries: { [k: string]: string[] } = {};
 
 		for (const file of files) {
 			if (file === 'README.md') continue;
@@ -730,6 +730,7 @@ export class ModlogConverterTest {
 					process.stdout.write(`Wrote ${entriesLogged} entries from '${roomid}'`);
 				}
 				await FS(`${this.outputDir}/modlog_${roomid}.txt`).append(entries.join(''));
+				// eslint-disable-next-line require-atomic-updates
 				entries = [];
 			};
 

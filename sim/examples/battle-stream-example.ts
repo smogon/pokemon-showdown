@@ -9,8 +9,8 @@
  * @author Guangcong Luo <guangcongluo@gmail.com>
  */
 
-import {BattleStream, getPlayerStreams, Teams} from '..';
-import {RandomPlayerAI} from '../tools/random-player-ai';
+import { BattleStream, getPlayerStreams, Teams } from '..';
+import { RandomPlayerAI } from '../tools/random-player-ai';
 
 /*********************************************************************
  * Run AI

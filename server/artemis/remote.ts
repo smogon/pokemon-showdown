@@ -2,9 +2,9 @@
  * Code for using Google's Perspective API for filters.
  * @author mia-pi-git
  */
-import {ProcessManager, Net, Repl} from '../../lib';
-import {Config} from '../config-loader';
-import {toID} from '../../sim/dex-data';
+import { ProcessManager, Net } from '../../lib';
+import * as ConfigLoader from '../config-loader';
+import { toID } from '../../sim/dex-data';
 
 // 20m. this is mostly here so we can use Monitor.slow()
 const PM_TIMEOUT = 20 * 60 * 1000;
@@ -19,11 +19,10 @@ export const ATTRIBUTES = {
 	"FLIRTATION": {},
 };
 
-
 export interface PerspectiveRequest {
 	languages: string[];
 	requestedAttributes: AnyObject;
-	comment: {text: string};
+	comment: { text: string };
 }
 
 function time() {
@@ -50,82 +49,60 @@ export class Limiter {
 
 function isCommon(message: string) {
 	message = message.toLowerCase().replace(/\?!\., ;:/g, '');
-	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
+	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello', 'hi'].includes(message);
 }
 
 let throttleTime: number | null = null;
 export const limiter = new Limiter(800);
-export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
-	if (isCommon(text) || !limiter.shouldRequest()) return null;
-	if (throttleTime && (Date.now() - throttleTime < 10000)) {
-		return null;
-	}
-	if (throttleTime) throttleTime = null;
-
-	const requestData: PerspectiveRequest = {
-		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
-		languages: ['en'],
-		requestedAttributes: ATTRIBUTES,
-		comment: {text},
-	};
-	try {
-		const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
-			query: {
-				key: Config.perspectiveKey,
-			},
-			body: JSON.stringify(requestData),
-			headers: {
-				'Content-Type': "application/json",
-			},
-			timeout: 10 * 1000, // 10s
-		});
-		if (!raw) return null;
-		const data = JSON.parse(raw);
-		if (data.error) throw new Error(data.message);
-		const result: {[k: string]: number} = {};
-		for (const k in data.attributeScores) {
-			const score = data.attributeScores[k];
-			result[k] = score.summaryScore.value;
-		}
-		return result;
-	} catch (e: any) {
-		throttleTime = Date.now();
-		if (e.message.startsWith('Request timeout')) {
-			// just ignore this. error on their end not ours.
-			// todo maybe stop sending requests for a bit?
+export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(
+	'abusemonitor-remote', module,
+	async text => {
+		if (isCommon(text) || !limiter.shouldRequest()) return null;
+		if (throttleTime && ((Date.now() - throttleTime) < 10000)) {
 			return null;
 		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
-		return null;
-	}
-}, PM_TIMEOUT);
+		if (throttleTime) throttleTime = null;
 
-
-// main module check necessary since this gets required in other non-parent processes sometimes
-// when that happens we do not want to take over or set up or anything
-if (require.main === module) {
-	// This is a child process!
-	global.Config = Config;
-	global.Monitor = {
-		crashlog(error: Error, source = 'A remote Artemis child process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-		slow(text: string) {
-			process.send!(`CALLBACK\nSLOW\n${text}`);
-		},
-	};
-	global.toID = toID;
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A remote Artemis child process');
+		const requestData: PerspectiveRequest = {
+			// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
+			languages: ['en'],
+			requestedAttributes: ATTRIBUTES,
+			comment: { text },
+		};
+		try {
+			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
+				query: {
+					key: Config.perspectiveKey,
+				},
+				body: JSON.stringify(requestData),
+				headers: {
+					'Content-Type': "application/json",
+				},
+				timeout: 10 * 1000, // 10s
+			});
+			if (!raw) return null;
+			const data = JSON.parse(raw);
+			if (data.error) throw new Error(data.message);
+			const result: { [k: string]: number } = {};
+			for (const k in data.attributeScores) {
+				const score = data.attributeScores[k];
+				result[k] = score.summaryScore.value;
+			}
+			return result;
+		} catch (e: any) {
+			// eslint-disable-next-line require-atomic-updates
+			throttleTime = Date.now();
+			if (e.message.startsWith('Request timeout') || e.statusCode === 429 || e.code === 'ETIMEDOUT') {
+				// request timeout: just ignore this. error on their end not ours.
+				// 429: too many requests, we already freeze for 10s above so. not much more we can do
+				return null;
+			}
+			Monitor.crashlog(e, 'A Perspective API request', { request: JSON.stringify(requestData) });
+			return null;
 		}
-	});
-	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-remote-${process.pid}`, cmd => eval(cmd));
-} else if (!process.send) {
-	PM.spawn(Config.remoteartemisprocesses || 1);
-}
+	},
+	PM_TIMEOUT
+);
 
 export class RemoteClassifier {
 	static readonly PM = PM;
@@ -137,11 +114,11 @@ export class RemoteClassifier {
 	async suggestScore(text: string, data: Record<string, number>) {
 		if (!Config.perspectiveKey) return Promise.resolve(null);
 		const body: AnyObject = {
-			comment: {text},
+			comment: { text },
 			attributeScores: {},
 		};
 		for (const k in data) {
-			body.attributeScores[k] = {summaryScore: {value: data[k]}};
+			body.attributeScores[k] = { summaryScore: { value: data[k] } };
 		}
 		try {
 			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:suggestscore`).post({
@@ -156,7 +133,7 @@ export class RemoteClassifier {
 			});
 			return JSON.parse(raw);
 		} catch (e: any) {
-			return {error: e.message};
+			return { error: e.message };
 		}
 	}
 	destroy() {
@@ -171,5 +148,32 @@ export class RemoteClassifier {
 	getActiveProcesses() {
 		return PM.processes.length;
 	}
+	static start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
+	}
 }
 
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
+	global.Monitor = {
+		crashlog(error: Error, source = 'A remote Artemis child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
+		},
+	} as any;
+	global.toID = toID;
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			Monitor.crashlog(err, 'A remote Artemis child process');
+		}
+	});
+	// eslint-disable-next-line no-eval
+	PM.startRepl(cmd => eval(cmd));
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['remoteartemis'] ?? 1);
+}

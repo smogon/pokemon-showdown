@@ -3,12 +3,13 @@
  *
  * Ported to TypeScript by Annika and Mia.
  */
-import {SQL, PGDatabase} from '../lib/database';
+import { SQL, PGDatabase } from '../lib/database';
+import * as crypto from 'crypto';
 
 export const replaysDB = Config.replaysdb ? new PGDatabase(Config.replaysdb) : null!;
 
 export const replays = replaysDB?.getTable<
-ReplayRow
+	ReplayRow
 >('replays', 'id');
 
 export const replayPlayers = replaysDB?.getTable<{
@@ -25,7 +26,6 @@ export const replayPlayers = replaysDB?.getTable<{
 }>('replayplayers');
 
 // must be a type and not an interface to qualify as an SQLRow
-// eslint-disable-next-line
 export type ReplayRow = {
 	id: string,
 	format: string,
@@ -83,15 +83,15 @@ export const Replays = new class {
 		if (replayData.private === 1 && !replayData.password) {
 			replayData.password = Replays.generatePassword();
 		} else {
-			if (replayData.private === 2) replayData.private = 1;
-			replayData.password = null;
+			if (replayData.private === 2) {
+				replayData.private = 1;
+				replayData.password = null;
+			}
 		}
 		return replayData;
 	}
 
 	async add(replay: Replay) {
-		const fullid = replay.id + (replay.password ? `-${replay.password}pw` : '');
-
 		// obviously upsert exists but this is the easiest way when multiple things need to be changed
 		const replayData = this.toReplayRow(replay);
 		try {
@@ -124,27 +124,27 @@ export const Replays = new class {
 				password: replayData.password,
 			})`WHERE id = ${replay.id}`;
 		}
-		return fullid;
+		return replayData.id + (replayData.password ? `-${replayData.password}pw` : '');
 	}
 
 	async get(id: string): Promise<Replay | null> {
 		const replayData = await replays.get(id);
 		if (!replayData) return null;
 
-		await replays.update(replayData.id, {views: SQL`views + 1`});
+		await replays.update(replayData.id, { views: SQL`views + 1` });
 
 		return this.toReplay(replayData);
 	}
 
 	async edit(replay: Replay) {
 		const replayData = this.toReplayRow(replay);
-		await replays.update(replay.id, {private: replayData.private, password: replayData.password});
+		await replays.update(replay.id, { private: replayData.private, password: replayData.password });
 	}
 
 	generatePassword(length = 31) {
 		let password = '';
 		for (let i = 0; i < length; i++) {
-			password += this.passwordCharacters[Math.floor(Math.random() * this.passwordCharacters.length)];
+			password += this.passwordCharacters[crypto.randomInt(0, this.passwordCharacters.length - 1)];
 		}
 
 		return password;

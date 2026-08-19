@@ -2,7 +2,7 @@
  * Poll chat plugin
  * By bumbadadabum and Zarel.
  */
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 const MINUTES = 60000;
 const MAX_QUESTIONS = 10;
@@ -16,9 +16,9 @@ export interface PollOptions {
 	question: string;
 	supportHTML: boolean;
 	multiPoll: boolean;
-	pendingVotes?: {[userid: string]: number[]};
-	voters?: {[k: string]: number[]};
-	voterIps?: {[k: string]: number[]};
+	pendingVotes?: { [userid: string]: number[] };
+	voters?: { [k: string]: number[] };
+	voterIps?: { [k: string]: number[] };
 	maxVotes?: number;
 	totalVotes?: number;
 	timeoutMins?: number;
@@ -37,9 +37,9 @@ export class Poll extends Rooms.MinorActivity {
 	activityNumber: number;
 	question: string;
 	multiPoll: boolean;
-	pendingVotes: {[userid: string]: number[]};
-	voters: {[k: string]: number[]};
-	voterIps: {[k: string]: number[]};
+	pendingVotes: { [userid: string]: number[] };
+	voters: { [k: string]: number[] };
+	voterIps: { [k: string]: number[] };
 	totalVotes: number;
 	isQuiz: boolean;
 	/** Max votes of 0 means no vote cap */
@@ -117,7 +117,7 @@ export class Poll extends Rooms.MinorActivity {
 		if (this.maxVotes && this.totalVotes >= this.maxVotes) {
 			this.end(this.room);
 			return this.room
-				.add(`|c|&|/log The poll hit the max vote cap of ${this.maxVotes}, and has ended.`)
+				.add(`|c|~|/log The poll hit the max vote cap of ${this.maxVotes}, and has ended.`)
 				.update();
 		}
 
@@ -303,11 +303,11 @@ export class Poll extends Rooms.MinorActivity {
 		}
 	}
 
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
 		this.displayTo(user, connection);
 	}
 
-	onRename(user: User, oldid: ID, joining: boolean) {
+	override onRename(user: User, oldid: ID, joining: boolean) {
 		if (user.id in this.voters) {
 			this.updateFor(user);
 		}
@@ -377,11 +377,11 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
-			if (target.length > 1024) return this.errorReply(this.tr`Poll too long.`);
-			if (room.battle) return this.errorReply(this.tr`Battles do not support polls.`);
+			if (target.length > 1024) throw new Chat.ErrorMessage(this.tr`Poll too long.`);
+			if (room.battle) throw new Chat.ErrorMessage(this.tr`Battles do not support polls.`);
 
 			const text = this.filter(target);
-			if (target !== text) return this.errorReply(this.tr`You are not allowed to use filtered words in polls.`);
+			if (target !== text) throw new Chat.ErrorMessage(this.tr`You are not allowed to use filtered words in polls.`);
 
 			const supportHTML = cmd.includes('html');
 			const multiPoll = cmd.includes('multi');
@@ -396,7 +396,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (text.includes(',')) {
 				separator = ',';
 			} else {
-				return this.errorReply(this.tr`Not enough arguments for /poll new.`);
+				throw new Chat.ErrorMessage(this.tr`Not enough arguments for /poll new.`);
 			}
 
 			let currentParam = "";
@@ -412,7 +412,7 @@ export const commands: Chat.ChatCommands = {
 						currentParam += nextCharacter;
 						i += 1;
 					} else {
-						return this.errorReply(this.tr`Extra escape character. To end a poll with '\\', enter it as '\\\\'`);
+						throw new Chat.ErrorMessage(this.tr`Extra escape character. To end a poll with '\\', enter it as '\\\\'`);
 					}
 					continue;
 				}
@@ -436,21 +436,21 @@ export const commands: Chat.ChatCommands = {
 			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
 			if (room.minorActivity && !queue) {
-				return this.errorReply(this.tr`There is already a poll or announcement in progress in this room.`);
+				throw new Chat.ErrorMessage(this.tr`There is already a poll or announcement in progress in this room.`);
 			}
 
-			if (params.length < 3) return this.errorReply(this.tr`Not enough arguments for /poll new.`);
+			if (params.length < 3) throw new Chat.ErrorMessage(this.tr`Not enough arguments for /poll new.`);
 
 			// the function throws on failure, so no handling needs to be done anymore
 			if (supportHTML) params = params.map(parameter => this.checkHTML(parameter));
 
 			const questions = params.splice(1);
 			if (questions.length > MAX_QUESTIONS) {
-				return this.errorReply(this.tr`Too many options for poll (maximum is ${MAX_QUESTIONS}).`);
+				throw new Chat.ErrorMessage(this.tr`Too many options for poll (maximum is ${MAX_QUESTIONS}).`);
 			}
 
 			if (new Set(questions).size !== questions.length) {
-				return this.errorReply(this.tr`There are duplicate options in the poll.`);
+				throw new Chat.ErrorMessage(this.tr`There are duplicate options in the poll.`);
 			}
 
 			if (room.minorActivity) {
@@ -469,8 +469,8 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(room.tr`A poll was started by ${user.name}.`);
 		},
 		newhelp: [
-			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # &`,
-			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &`,
+			`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # ~`,
+			`/poll createmulti [question], [option1], [option2], [...] - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # ~`,
 			`To queue a poll, use [queue], [queuemulti], [queuehtml], or [htmlqueuemulti].`,
 			`Polls can be used as quiz questions. To do this, prepend all correct answers with a +.`,
 		],
@@ -480,7 +480,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			this.parse(`/join view-pollqueue-${room.roomid}`);
 		},
-		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # &`],
+		viewqueuehelp: [`/viewqueue - view the queue of polls in the room. Requires: % @ # ~`],
 
 		deletequeue(target, room, user) {
 			room = this.requireRoom();
@@ -489,13 +489,13 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const queue = room.getMinorActivityQueue();
 			if (!queue) {
-				return this.errorReply(this.tr`The queue is already empty.`);
+				throw new Chat.ErrorMessage(this.tr`The queue is already empty.`);
 			}
 			const slot = parseInt(target);
 			if (isNaN(slot)) {
-				return this.errorReply(this.tr`Can't delete poll at slot ${target} - "${target}" is not a number.`);
+				throw new Chat.ErrorMessage(this.tr`Can't delete poll at slot ${target} - "${target}" is not a number.`);
 			}
-			if (!queue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
+			if (!queue[slot - 1]) throw new Chat.ErrorMessage(this.tr`There is no poll in queue at slot ${slot}.`);
 
 			room.clearMinorActivityQueue(slot - 1);
 
@@ -509,21 +509,21 @@ export const commands: Chat.ChatCommands = {
 			this.refreshPage(`pollqueue-${room.roomid}`);
 		},
 		deletequeuehelp: [
-			`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # &`,
+			`/poll deletequeue [number] - deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc). Requires: % @ # ~`,
 		],
 		clearqueue(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 			const queue = room.getMinorActivityQueue();
 			if (!queue) {
-				return this.errorReply(this.tr`The queue is already empty.`);
+				throw new Chat.ErrorMessage(this.tr`The queue is already empty.`);
 			}
 			room.clearMinorActivityQueue();
 			this.modlog('CLEARQUEUE');
 			this.sendReply(this.tr`Cleared poll queue.`);
 		},
 		clearqueuehelp: [
-			`/poll clearqueue - deletes the queue of polls. Requires: % @ # &`,
+			`/poll clearqueue - deletes the queue of polls. Requires: % @ # ~`,
 		],
 
 		deselect: 'select',
@@ -534,7 +534,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help poll vote');
 
 			const parsed = parseInt(target);
-			if (isNaN(parsed)) return this.errorReply(this.tr`To vote, specify the number of the option.`);
+			if (isNaN(parsed)) throw new Chat.ErrorMessage(this.tr`To vote, specify the number of the option.`);
 
 			if (!poll.answers.has(parsed)) return this.sendReply(this.tr`Option not in poll.`);
 
@@ -564,14 +564,14 @@ export const commands: Chat.ChatCommands = {
 			if (target) {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
-					if (!poll.endTimer()) return this.errorReply(this.tr("There is no timer to clear."));
+					if (!poll.endTimer()) throw new Chat.ErrorMessage(this.tr("There is no timer to clear."));
 					return this.add(this.tr`The poll timer was turned off.`);
 				}
 				const timeoutMins = parseFloat(target);
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
-					return this.errorReply(this.tr`Time should be a number of minutes less than one week.`);
+					throw new Chat.ErrorMessage(this.tr`Time should be a number of minutes less than one week.`);
 				}
-				poll.setTimer({timeoutMins});
+				poll.setTimer({ timeoutMins });
 				room.add(this.tr`The poll timer was turned on: the poll will end in ${Chat.toDurationString(timeoutMins * MINUTES)}.`);
 				this.modlog('POLL TIMER', null, `${timeoutMins} minutes`);
 				return this.privateModAction(room.tr`The poll timer was set to ${timeoutMins} minute(s) by ${user.name}.`);
@@ -585,8 +585,8 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		timerhelp: [
-			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # &`,
-			`/poll timer clear - Clears the poll's timer. Requires: % @ # &`,
+			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # ~`,
+			`/poll timer clear - Clears the poll's timer. Requires: % @ # ~`,
 		],
 
 		results(target, room, user) {
@@ -610,7 +610,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(room.tr`The poll was ended by ${user.name}.`);
 			poll.end(room, Poll);
 		},
-		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # &`],
+		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # ~`],
 
 		show: '',
 		display: '',
@@ -638,10 +638,10 @@ export const commands: Chat.ChatCommands = {
 				num = 0;
 			}
 			if (isNaN(num)) {
-				return this.errorReply(`Invalid max vote cap: '${target}'`);
+				throw new Chat.ErrorMessage(`Invalid max vote cap: '${target}'`);
 			}
 			if (poll.maxVotes === num) {
-				return this.errorReply(`The poll's vote cap is already set to ${num}.`);
+				throw new Chat.ErrorMessage(`The poll's vote cap is already set to ${num}.`);
 			}
 			poll.maxVotes = num;
 			this.addModAction(`${user.name} set the poll's vote cap to ${num}.`);
@@ -659,19 +659,19 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(
 			`|html|<details class="readmore"><summary>/poll allows rooms to run their own polls (limit 1 at a time).<br />` +
 			`Polls can be used as quiz questions, by putting <code>+</code> before correct answers.<br />` +
-			`<code>/poll create [question], [option1], [option2], [...]</code> - Creates a poll. Requires: % @ # &</summary>` +
-			`<code>/poll createmulti [question], [option1], [option2], [...]</code> - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # &<br />` +
-			`<code>/poll htmlcreate(multi) [question], [option1], [option2], [...]</code> - Creates a poll, with HTML allowed in the question and options. Requires: # &<br />` +
+			`<code>/poll create [question], [option1], [option2], [...]</code> - Creates a poll. Requires: % @ # ~</summary>` +
+			`<code>/poll createmulti [question], [option1], [option2], [...]</code> - Creates a poll, allowing for multiple answers to be selected. Requires: % @ # ~<br />` +
+			`<code>/poll htmlcreate(multi) [question], [option1], [option2], [...]</code> - Creates a poll, with HTML allowed in the question and options. Requires: # ~<br />` +
 			`<code>/poll vote [number]</code> - Votes for option [number].<br />` +
-			`<code>/poll timer [minutes]</code> - Sets the poll to automatically end after [minutes]. Requires: % @ # &.<br />` +
+			`<code>/poll timer [minutes]</code> - Sets the poll to automatically end after [minutes]. Requires: % @ # ~.<br />` +
 			`<code>/poll results</code> - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.<br />` +
 			`<code>/poll display</code> - Displays the poll.<br />` +
-			`<code>/poll end</code> - Ends a poll and displays the results. Requires: % @ # &.<br />` +
-			`<code>/poll queue [question], [option1], [option2], [...]</code> - Add a poll in queue. Requires: % @ # &<br />` +
+			`<code>/poll end</code> - Ends a poll and displays the results. Requires: % @ # ~.<br />` +
+			`<code>/poll queue [question], [option1], [option2], [...]</code> - Add a poll in queue. Requires: % @ # ~<br />` +
 			`<code>/poll deletequeue [number]</code> - Deletes poll at the corresponding queue slot (1 = next, 2 = the one after that, etc).<br />` +
-			`<code>/poll clearqueue</code> - Deletes the queue of polls. Requires: % @ # &.<br />` +
-			`<code>/poll viewqueue</code> - View the queue of polls in the room. Requires: % @ # &<br />` +
-			`<code>/poll maxvotes [number]</code> - Set the max poll votes to the given [number]. Requires: % @ # &<br />` +
+			`<code>/poll clearqueue</code> - Deletes the queue of polls. Requires: % @ # ~.<br />` +
+			`<code>/poll viewqueue</code> - View the queue of polls in the room. Requires: % @ # ~<br />` +
+			`<code>/poll maxvotes [number]</code> - Set the max poll votes to the given [number]. Requires: % @ # ~<br />` +
 			`</details>`
 		);
 	},
@@ -690,7 +690,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		}
 		for (const [i, poll] of queue.entries()) {
-			const number = i + 1; // for translation convienence
+			const number = i + 1; // for translation convenience
 			const button = (
 				`<strong>${this.tr`#${number} in queue`} </strong>` +
 				`<button class="button" name="send" value="/msgroom ${room.roomid},/poll deletequeue ${i + 1}">` +
@@ -704,45 +704,46 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-process.nextTick(() => {
+// (should handle restarts and also hotpatches)
+export function start() {
 	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti|queue|queuemulti|htmlqueuemulti) ');
-});
 
-// should handle restarts and also hotpatches
-for (const room of Rooms.rooms.values()) {
-	if (room.getMinorActivityQueue(true)) {
-		for (const poll of room.getMinorActivityQueue(true)!) {
-			if (!poll.activityid) {
-				// @ts-ignore
-				poll.activityid = poll.activityId;
-				// @ts-ignore
-				delete poll.activityId;
+	// convert from old format
+	for (const room of Rooms.rooms.values()) {
+		if (room.getMinorActivityQueue(true)) {
+			for (const poll of room.getMinorActivityQueue(true)!) {
+				if (!poll.activityid) {
+					// @ts-expect-error old format
+					poll.activityid = poll.activityId;
+					// @ts-expect-error old format
+					delete poll.activityId;
+				}
+				if (!poll.activityNumber) {
+					// @ts-expect-error old format
+					poll.activityNumber = poll.pollNumber;
+					// @ts-expect-error old format
+					delete poll.pollNumber;
+				}
+				room.saveSettings();
 			}
-			if (!poll.activityNumber) {
-				// @ts-ignore
-				poll.activityNumber = poll.pollNumber;
-				// @ts-ignore
-				delete poll.pollNumber;
+		}
+		if (room.settings.minorActivity) {
+			if (!room.settings.minorActivity.activityid) {
+				// @ts-expect-error old format
+				room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
+				// @ts-expect-error old format
+				delete room.settings.minorActivity.activityId;
+			}
+			if (typeof room.settings.minorActivity.activityNumber !== 'number') {
+				// @ts-expect-error old format
+				room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
+					// @ts-expect-error old format
+					room.settings.minorActivity.announcementNumber;
 			}
 			room.saveSettings();
 		}
-	}
-	if (room.settings.minorActivity) {
-		if (!room.settings.minorActivity.activityid) {
-			// @ts-ignore
-			room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
-			// @ts-ignore
-			delete room.settings.minorActivity.activityId;
+		if (room.settings.minorActivity?.activityid === 'poll') {
+			room.setMinorActivity(new Poll(room, room.settings.minorActivity), true);
 		}
-		if (typeof room.settings.minorActivity.activityNumber !== 'number') {
-			// @ts-ignore
-			room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
-				// @ts-ignore
-				room.settings.minorActivity.announcementNumber;
-		}
-		room.saveSettings();
-	}
-	if (room.settings.minorActivity?.activityid === 'poll') {
-		room.setMinorActivity(new Poll(room, room.settings.minorActivity), true);
 	}
 }

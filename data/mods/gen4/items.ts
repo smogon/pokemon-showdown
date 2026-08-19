@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	adamantorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -32,24 +32,24 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	choiceband: {
 		inherit: true,
-		onStart() {},
-		onModifyMove() {},
+		onStart: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 	},
 	choicescarf: {
 		inherit: true,
-		onStart() {},
-		onModifyMove() {},
+		onStart: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 	},
 	choicespecs: {
 		inherit: true,
-		onStart() {},
-		onModifyMove() {},
+		onStart: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
@@ -72,11 +72,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	custapberry: {
 		inherit: true,
-		onFractionalPriority() {},
+		onFractionalPriority: undefined, // no inherit
 		onBeforeTurn(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				const action = this.queue.willMove(pokemon);
 				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
 				this.queue.insertChoice({
 					choice: 'event',
 					event: 'Custap',
@@ -89,10 +91,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onCustap(pokemon) {
 			const action = this.queue.willMove(pokemon);
-			this.debug('custap action: ' + action);
+			this.debug(`custap action: ${action?.moveid}`);
 			if (action && pokemon.eatItem()) {
 				this.queue.cancelAction(pokemon);
-				this.add('-message', "Custap Berry activated.");
+				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
 				this.runAction(action);
 			}
 		},
@@ -113,18 +115,38 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	dracoplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	dreadplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	earthplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	fastball: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	fistplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	flameorb: {
 		inherit: true,
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
 	},
+	flameplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	focussash: {
 		inherit: true,
-		onDamage() { },
+		onDamage: undefined, // no inherit
 		onTryHit(target, source, move) {
 			if (target !== source && target.hp === target.maxhp) {
 				target.addVolatile('focussash');
@@ -144,6 +166,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			},
 		},
 	},
+	fullincense: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
+	},
 	griseousorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -151,14 +178,28 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(1.2);
 			}
 		},
+		onTakeItem: false,
+		onSetAbility: false,
 	},
 	heavyball: {
 		inherit: true,
 		isNonstandard: null,
 	},
+	icicleplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	insectplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	ironball: {
 		inherit: true,
-		onEffectiveness() {},
+		onEffectiveness: undefined, // no inherit
+	},
+	ironplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	kingsrock: {
 		inherit: true,
@@ -174,6 +215,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 				});
 			}
 		},
+	},
+	laggingtail: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
 	},
 	laxincense: {
 		inherit: true,
@@ -195,8 +241,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lifeorb: {
 		inherit: true,
-		onModifyDamage() {},
-		onAfterMoveSecondarySelf() {},
+		onModifyDamage: undefined, // no inherit
+		onAfterMoveSecondarySelf: undefined, // no inherit
 		onBasePower(basePower, user, target) {
 			if (!target.volatiles['substitute']) {
 				user.addVolatile('lifeorb');
@@ -209,7 +255,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
-				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
+				if (move && move.effectType === 'Move' && source?.volatiles['lifeorb']) {
 					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
@@ -218,8 +264,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyAtk() {},
-		onModifySpA() {},
+		onModifyAtk: undefined, // no inherit
+		onModifySpA: undefined, // no inherit
 		onBasePower(basePower, pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
@@ -250,6 +296,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	meadowplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	mentalherb: {
 		inherit: true,
 		fling: {
@@ -270,11 +320,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	metronome: {
 		inherit: true,
 		condition: {
-			onStart(pokemon) {
-				this.effectState.numConsecutive = 0;
-				this.effectState.lastMove = '';
-			},
-			onTryMovePriority: -2,
+			inherit: true,
 			onTryMove(pokemon, target, move) {
 				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
@@ -287,6 +333,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				}
 				this.effectState.lastMove = move.id;
 			},
+			onModifyDamage: undefined, // no inherit
 			onModifyDamagePhase2(damage, source, target, move) {
 				return damage * (1 + (this.effectState.numConsecutive / 10));
 			},
@@ -295,7 +342,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	micleberry: {
 		inherit: true,
 		condition: {
-			duration: 2,
+			inherit: true,
 			onSourceModifyAccuracyPriority: 3,
 			onSourceModifyAccuracy(accuracy, target, source) {
 				this.add('-enditem', source, 'Micle Berry');
@@ -306,9 +353,41 @@ export const Items: {[k: string]: ModdedItemData} = {
 			},
 		},
 	},
+	mindplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	moonball: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	quickclaw: {
+		inherit: true,
+		onFractionalPriority: undefined, // no inherit
+		onBeforeTurn(pokemon) {
+			if (this.randomChance(1, 5)) {
+				const action = this.queue.willMove(pokemon);
+				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
+				this.queue.insertChoice({
+					choice: 'event',
+					event: 'Custap',
+					priority: action.priority + 0.1,
+					pokemon: action.pokemon,
+					move: action.move,
+					targetLoc: action.targetLoc,
+				});
+			}
+		},
+		onCustap(pokemon) {
+			const action = this.queue.willMove(pokemon);
+			if (action) {
+				this.queue.cancelAction(pokemon);
+				this.add('-activate', pokemon, 'item: Quick Claw');
+				this.runAction(action);
+			}
+		},
 	},
 	razorfang: {
 		inherit: true,
@@ -324,6 +403,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 				});
 			}
 		},
+	},
+	skyplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	splashplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	spookyplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	sportball: {
 		inherit: true,
@@ -342,6 +433,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
 	},
+	stoneplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	thickclub: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
@@ -355,6 +450,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
 	},
+	toxicplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	widelens: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 4,
@@ -363,6 +462,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return accuracy * 1.1;
 			}
 		},
+	},
+	zapplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	zoomlens: {
 		inherit: true,

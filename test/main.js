@@ -29,12 +29,16 @@ config.crashguard = false;
 config.watchconfig = false;
 // Don't try to write to file system
 config.nofswriting = true;
-// allow renaming without a token
+// Don't try to listen to the network
+config.lazysockets = true;
+// Allow renaming without a token
 config.noguestsecurity = true;
 // Test a normal ladder
 config.fakeladder = false;
 // Don't log monitor messages to the console (necessary so that chat monitor tests don't clog up stdout)
 config.loglevel = 3;
+// If sqlite is enabled at all, run tests in server/modlog
+config.usesqlitemodlog = true;
 
 require('./../dist/lib/process-manager').ProcessManager.disabled = true;
 
@@ -48,14 +52,18 @@ try {
 require('../dist/lib/repl').Repl.start = noop;
 
 // Start the server.
-// NOTE: This used "server" before when we needed "server"
-require('../dist/server');
+const server = require('../dist/server');
 
-LoginServer.disabled = true;
-Ladders.disabled = true;
+// Preload so that sim tests have access to Dex ASAP
+const { Dex } = require('../dist/sim/dex');
+global.Dex = Dex;
+global.toID = Dex.toID;
 
-before('initialization', function () {
+before('initialization', async function () {
 	this.timeout(0); // Remove timeout limitation
+	await server.readyPromise;
+	LoginServer.disabled = true;
+	Ladders.disabled = true;
 	process.on('unhandledRejection', err => {
 		// I'd throw the err, but we have a heisenbug on our hands and I'd
 		// rather not have it screw with Travis in the interim
