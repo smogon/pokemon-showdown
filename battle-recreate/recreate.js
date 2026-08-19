@@ -16,12 +16,17 @@
  *   --seed=a,b,c,d   PRNG seed for the post-turn-N simulation (default: random)
  *   --max-turns=N    Safety cap on turns played past N (default: 50)
  *   --quiet          Suppress per-turn console output
+ *   --out=FILE       Write the recreated battle's protocol log (the
+ *                    directly-applied turns 1..N-1 plus the randomly-played
+ *                    remainder, in the same `|...` line format as a real
+ *                    replay) to FILE
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const { BattleStream } = require(path.join(__dirname, '..', 'dist', 'sim', 'battle-stream'));
+const { extractChannelMessages } = require(path.join(__dirname, '..', 'dist', 'sim', 'battle'));
 const { Teams } = require(path.join(__dirname, '..', 'dist', 'sim', 'teams'));
 const { Dex } = require(path.join(__dirname, '..', 'dist', 'sim', 'dex'));
 const { PRNG } = require(path.join(__dirname, '..', 'dist', 'sim', 'prng'));
@@ -33,7 +38,7 @@ const { snapshotState } = require('./state-snapshot');
 
 function parseArgs(argv) {
 	const positional = [];
-	const options = { seed: null, maxTurns: 50, quiet: false };
+	const options = { seed: null, maxTurns: 50, quiet: false, out: null };
 	for (const arg of argv) {
 		if (arg.startsWith('--seed=')) {
 			options.seed = arg.slice('--seed='.length).split(',').map(Number);
@@ -41,6 +46,8 @@ function parseArgs(argv) {
 			options.maxTurns = parseInt(arg.slice('--max-turns='.length), 10);
 		} else if (arg === '--quiet') {
 			options.quiet = true;
+		} else if (arg.startsWith('--out=')) {
+			options.out = arg.slice('--out='.length);
 		} else {
 			positional.push(arg);
 		}
@@ -48,7 +55,7 @@ function parseArgs(argv) {
 	if (positional.length !== 5) {
 		throw new Error(
 			'Usage: recreate.js <format> <logFile> <turnN> <paste1> <paste2> ' +
-			'[--seed=a,b,c,d] [--max-turns=N] [--quiet]'
+			'[--seed=a,b,c,d] [--max-turns=N] [--quiet] [--out=FILE]'
 		);
 	}
 	const [formatArg, logFile, turnNStr, paste1File, paste2File] = positional;
@@ -156,7 +163,18 @@ function recreateAtTurn(formatArg, eventLog, turnN, team1, team2, { quiet } = {}
 	battle.requestState = '';
 	battle.makeRequest('move');
 
-	return { stream, battle, applier };
+	// LogApplier's direct mutators mostly don't call battle.add() themselves
+	// (that's the point -- no re-derived, possibly-differently-worded log
+	// output for turns we already know exactly what happened in), so
+	// battle.log is not a faithful record of turns 1..N-1. For a combined
+	// "recreated battle log" (see --out), the caller should use the
+	// *original* raw lines for the pre-turn-N portion (returned here as
+	// preTurnLines) and only take battle.log from postTurnLogStart onward,
+	// which is exactly what the real engine produces for turn N onward.
+	const preTurnLines = entries.map(e => e.raw);
+	const postTurnLogStart = battle.log.length;
+
+	return { stream, battle, applier, preTurnLines, postTurnLogStart };
 }
 
 /** Plays the battle forward from its current pending request using random legal choices. */
@@ -192,7 +210,9 @@ function main() {
 	const team1 = loadTeam(args.paste1File);
 	const team2 = loadTeam(args.paste2File);
 
-	const { battle } = recreateAtTurn(args.formatArg, eventLog, args.turnN, team1, team2, args);
+	const { battle, preTurnLines, postTurnLogStart } = recreateAtTurn(
+		args.formatArg, eventLog, args.turnN, team1, team2, args
+	);
 
 	if (!args.quiet) {
 		console.log(`Recreated battle state at start of turn ${args.turnN}.`);
@@ -203,6 +223,21 @@ function main() {
 
 	if (!args.quiet) {
 		console.log(battle.ended ? `Battle ended. Winner: ${battle.winner || '(tie)'}` : 'Reached max-turns cap.');
+	}
+
+	if (args.out) {
+		// original text verbatim for turns 1..N-1, then whatever the real
+		// engine actually produced for turn N onward -- see recreateAtTurn's
+		// comment on why battle.log alone isn't usable for the first part.
+		// battle.log itself is the omniscient view (it still has `|split|`
+		// secret/public pairs); reduce the new portion to the spectator
+		// channel (-1) so it matches the pre-turn-N lines, which came from
+		// an already-spectator-filtered downloaded replay.
+		const rawPostTurn = battle.log.slice(postTurnLogStart).join('\n');
+		const postTurnLines = extractChannelMessages(rawPostTurn, [-1])[-1];
+		const combinedLog = [...preTurnLines, ...postTurnLines].join('\n');
+		fs.writeFileSync(args.out, combinedLog);
+		if (!args.quiet) console.log(`Wrote recreated battle log to ${args.out}`);
 	}
 
 	return { battle, actions };

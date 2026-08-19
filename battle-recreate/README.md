@@ -42,7 +42,7 @@ present as their own log lines).
 
 ```
 node battle-recreate/recreate.js <format> <logFile> <turnN> <paste1> <paste2> \
-  [--seed=a,b,c,d] [--max-turns=N] [--quiet]
+  [--seed=a,b,c,d] [--max-turns=N] [--quiet] [--out=FILE]
 ```
 
 - `format` — a format id, e.g. `gen9championsvgc2026regma`. "Champions
@@ -56,6 +56,12 @@ node battle-recreate/recreate.js <format> <logFile> <turnN> <paste1> <paste2> \
 - `paste1`, `paste2` — Pokepaste/Showdown-export text files for the two
   teams, **in the same order the teams were originally submitted in**
   (see "bring N, pick M" note below).
+- `--out=FILE` (optional) — write the recreated battle's protocol log to
+  FILE, in the same `|...` line format as a real replay: the *original*
+  lines verbatim for turns `1..N-1`, followed by whatever the real engine
+  actually produced for turn N onward. Without this flag, the CLI only
+  prints the turn-N state snapshot and the chosen actions per turn to
+  stdout — the recreated game's own protocol log isn't written anywhere.
 
 ## Testing
 
