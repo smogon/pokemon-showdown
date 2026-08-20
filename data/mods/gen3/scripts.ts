@@ -261,7 +261,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return true;
 		},
-		tryMoveHit(target, pokemon, move) {
+		tryMoveHit(target: Pokemon, pokemon, move) {
 			this.battle.setActiveMove(move, pokemon, target);
 			let naturalImmunity = false;
 			let accPass = true;
