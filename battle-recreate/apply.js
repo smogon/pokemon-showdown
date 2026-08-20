@@ -169,15 +169,31 @@ class LogApplier {
 		if (oldActive && oldActive !== pokemon) {
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
-			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
 			oldActive.clearVolatile();
-			pokemon.position = pos;
-			side.pokemon[pokemon.position] = pokemon;
-			side.pokemon[oldActive.position] = oldActive;
-		} else {
-			pokemon.position = pos;
 		}
+		// Unconditionally swap `pokemon` into side.pokemon[pos] (the array
+		// slot that corresponds to active slot `pos`), trading places with
+		// whoever currently sits there -- this must run even when `oldActive`
+		// is null (an empty active slot, e.g. every very first switch-in):
+		// the real engine only ever hits that case for team-preview leads
+		// whose `.position` already happens to equal their array index (see
+		// runAction's 'start' case, which switches in `side.pokemon[i]`
+		// directly by index), but here leads are placed by species-match, in
+		// whatever order the pokepaste happened to list them -- an order
+		// that has no reason to match team-preview's actual lead order. Skip
+		// this and `pokemon.position`/array-index drift apart on the very
+		// first switch, silently corrupting unrelated roster slots on every
+		// switch after that (a Pokemon can vanish from `side.pokemon`
+		// entirely while another gets duplicated into two slots).
+		const displaced = side.pokemon[pos];
+		if (displaced !== pokemon) {
+			const pokemonOldPos = pokemon.position;
+			side.pokemon[pos] = pokemon;
+			side.pokemon[pokemonOldPos] = displaced;
+			if (displaced) displaced.position = pokemonOldPos;
+		}
+		pokemon.position = pos;
 		pokemon.isActive = true;
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
