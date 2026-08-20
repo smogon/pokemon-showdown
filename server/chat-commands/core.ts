@@ -541,8 +541,8 @@ export const commands: Chat.ChatCommands = {
 		return true;
 	},
 	blockpmshelp: [
-		`/blockpms [group] - Blocks PMs, except from staff and the target group, if specified.`,
-		`/blockofflinepms [group] - Blocks private messages except from staff and the target group, if specified.`,
+		`/blockpms [group] - Blocks private messages, except from staff and the target group, if specified.`,
+		`/blockofflinepms [group] - Blocks offline private messages, except from staff and the target group, if specified.`,
 		`Valid groups are unlocked, autoconfirmed, trusted, + (global Voices), and friends.`,
 		`You can unblock PMs with /unblockpms, and offline PMs with /unblockofflinepms.`,
 	],
