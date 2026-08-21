@@ -1,4 +1,5 @@
 import { type SSBSet, ssbSets } from "../../../data/mods/gen9ssb/random-teams";
+import type { ModdedEffectText } from "../../../sim/dex-data";
 import { formatNature, STAT_NAMES } from ".";
 
 class SSBSetHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, baseDex: ModdedDex }> {
@@ -125,17 +126,18 @@ class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex }> 
 		if (sigMove.isNonstandard === 'Unobtainable') {
 			details[`Unobtainable in Gen ${dex.gen}`] = "";
 		}
-		if (sigMove.shortDesc || sigMove.desc) {
+		const moveText = dex.text.get(sigMove);
+		if (moveText.shortDesc || moveText.desc) {
 			return <><hr />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataMoveHTML(sigMove) }}></span>
+				<span dangerouslySetInnerHTML={{ __html: Chat.getDataMoveHTML(sigMove, dex) }}></span>
 				<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 					const lastEntry = idx === arr.length - 1;
 					if (!value) return <>&#10003; {detail}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
 					if (value === 'x') return <>&#10007; {detail}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
 					return <><span class="gray">{detail}:</span> {value}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
 				})}</font>
-				{(sigMove.desc && sigMove.desc !== sigMove.shortDesc) &&
-					<details><summary><strong>In-Depth Description</strong></summary>{sigMove.desc}</details>}
+				{(moveText.desc && moveText.desc !== moveText.shortDesc) &&
+					<details><summary><strong>In-Depth Description</strong></summary>{moveText.desc}</details>}
 			</>;
 		}
 	}
@@ -173,9 +175,11 @@ class SSBItemHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, base
 			if (sigItem.isNonstandard && sigItem.isNonstandard !== "Custom") {
 				details[`Unobtainable in Gen ${dex.gen}`] = "";
 			}
-			if (!baseItem.exists || (baseItem.desc || baseItem.shortDesc) !== (sigItem.desc || sigItem.shortDesc)) {
+			const baseText = baseDex.text.get(baseItem);
+			const itemText = dex.text.get(sigItem);
+			if (!baseItem.exists || baseText.desc !== itemText.desc || baseText.shortDesc !== itemText.shortDesc) {
 				return <><hr />
-					<span dangerouslySetInnerHTML={{ __html: Chat.getDataItemHTML(sigItem) }}></span>
+					<span dangerouslySetInnerHTML={{ __html: Chat.getDataItemHTML(sigItem, dex) }}></span>
 					<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 						const lastEntry = idx === arr.length - 1;
 						if (value === '') return <>{detail}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
@@ -199,8 +203,11 @@ class SSBAbilityHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, b
 				const megaAbil = dex.species.get(`${set.species}-Mega`).abilities[0];
 				sigAbil = baseDex.deepClone(dex.abilities.get(megaAbil));
 			}
-			if (!sigAbil.desc && !sigAbil.shortDesc) {
-				sigAbil.desc = `This ability doesn't have a description. Try contacting the SSB dev team.`;
+			let abilityText = dex.text.get(sigAbil);
+			if (!abilityText.desc && !abilityText.shortDesc) {
+				const desc = `This ability doesn't have a description. Try contacting the SSB dev team.`;
+				Object.assign(sigAbil, { desc, shortDesc: desc });
+				abilityText = dex.text.get(sigAbil);
 			}
 			const details: { [k: string]: string } = {
 				Gen: String(sigAbil.gen || 9) || 'CAP',
@@ -208,14 +215,14 @@ class SSBAbilityHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, b
 			if (sigAbil.flags['cantsuppress']) details["Not affected by Gastro Acid"] = "";
 			if (sigAbil.flags['breakable']) details["Ignored by Mold Breaker"] = "";
 			return <><hr />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(sigAbil) }}></span>
+				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(sigAbil, dex) }}></span>
 				<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 					const lastEntry = idx === arr.length - 1;
 					if (value === '') return <>{detail}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
 					return <><span class="gray">${detail}:</span> {value}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
 				})}</font>
-				{(sigAbil.desc && sigAbil.shortDesc && sigAbil.desc !== sigAbil.shortDesc) &&
-					<details><summary><strong>In-Depth Description</strong></summary>{sigAbil.desc}</details>}
+				{(abilityText.desc && abilityText.shortDesc && abilityText.desc !== abilityText.shortDesc) &&
+					<details><summary><strong>In-Depth Description</strong></summary>{abilityText.desc}</details>}
 			</>;
 		}
 		return <></>;
@@ -290,7 +297,7 @@ class SSBPokemonHTML extends Chat.JSX.Component<{ species: string, dex: ModdedDe
 			Object.values(newSpecies.baseStats).join('/') !== Object.values(origSpecies.baseStats).join('/')
 		) {
 			return <><hr />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataPokemonHTML(newSpecies, dex.gen, 'SSB') }}></span>
+				<span dangerouslySetInnerHTML={{ __html: Chat.getDataPokemonHTML(newSpecies, dex, 'SSB') }}></span>
 				<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 					const lastEntry = idx === arr.length - 1;
 					if (detail.includes('<font')) {
@@ -322,14 +329,13 @@ class SSBInnateHTML extends Chat.JSX.Component<{ name: string, dex: ModdedDex, b
 		if (effect.innateName) {
 			// @ts-expect-error
 			baseAbility.name = effect.innateName;
-			if (!effect.desc && !effect.shortDesc) {
-				baseAbility.desc = baseAbility.shortDesc = "This innate does not have a description.";
-			}
-			if (effect.desc) baseAbility.desc = effect.desc;
-			if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
+			const effectText = effect as ModdedEffectText;
+			const desc = effectText.desc || effectText.shortDesc || "This innate does not have a description.";
+			const shortDesc = effectText.shortDesc || effectText.desc || "This innate does not have a description.";
+			Object.assign(baseAbility, { desc, shortDesc });
 			return <><hr />
 				Innate Ability:<br />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(baseAbility) }}></span>
+				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(baseAbility, dex) }}></span>
 				<font size="1"><span class="gray">Gen:</span> 9</font>
 				{longDesc && <details><summary><strong>In-Depth Description</strong></summary>{longDesc}</details>}
 			</>;

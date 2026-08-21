@@ -398,7 +398,7 @@ export const commands: Chat.ChatCommands = {
 			species.baseStats[i] *= (bst <= 350 ? 2 : 1);
 			species.bst += species.baseStats[i];
 		}
-		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex)}`);
 	},
 	'350cuphelp': [
 		`/350 OR /350cup <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in 350 Cup.`,
@@ -453,7 +453,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		let tier = species.tier;
 		if (tier[0] === '(') tier = tier.slice(1, -1);
-		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex)}`);
 		const boost = boosts[tier as TierShiftTiers];
 		species.bst = species.baseStats.hp;
 		for (const statName in species.baseStats) {
@@ -462,7 +462,7 @@ export const commands: Chat.ChatCommands = {
 			species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + boost, 1, 255);
 			species.bst += species.baseStats[statName];
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex)}`);
 	},
 	tiershifthelp: [
 		`/ts OR /tiershift <pokemon>[, generation] - Shows the base stats that a Pok\u00e9mon would have in Tier Shift.`,
@@ -655,7 +655,7 @@ export const commands: Chat.ChatCommands = {
 			species.bst += species.baseStats[stat];
 		}
 		species.bst += species.baseStats.hp;
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex)}`);
 	},
 	scalemonshelp: [
 		`/scale OR /scalemons <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in Scalemons.`,
@@ -703,14 +703,14 @@ export const commands: Chat.ChatCommands = {
 			for (const stat in species.baseStats) {
 				species.baseStats[stat] = flippedStats[stat];
 			}
-			this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex)}`);
 			return;
 		}
 		const stats = Object.values(species.baseStats).reverse();
 		for (const [i, statName] of Object.keys(species.baseStats).entries()) {
 			species.baseStats[statName] = stats[i];
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex)}`);
 	},
 	flippedhelp: [
 		`/flip OR /flipped <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in Flipped.`,
@@ -754,7 +754,7 @@ export const commands: Chat.ChatCommands = {
 			species.baseStats[natureObj.plus] = swap;
 			species.tier = 'NS';
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex)}`);
 	},
 	natureswaphelp: [
 		`/ns OR /natureswap <nature>, <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in Nature Swap.`,
@@ -978,8 +978,9 @@ export const commands: Chat.ChatCommands = {
 		move.pp = 5;
 		move.gen = species.gen;
 		move.num = species.num;
-		move.desc = move.shortDesc = `Gives ${species.abilities['0']} as a second ability after use.`;
 		move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
+		const desc = `Gives ${species.abilities['0']} as a second ability after use.`;
+		Object.assign(move, { desc, shortDesc: desc });
 		this.sendReply(`|raw|${Chat.getDataMoveHTML(move)}`);
 	},
 	pokemovehelp: [
@@ -1010,7 +1011,7 @@ export const commands: Chat.ChatCommands = {
 			species.baseStats[i] *= (species.baseStats[i] <= 70 ? 2 : 1);
 			species.bst += species.baseStats[i];
 		}
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen, 'BnB')}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex, 'BnB')}`);
 	},
 	'badnboostedhelphelp': [
 		`/bnb OR /badnboosted <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in Bad 'n Boosted.`,

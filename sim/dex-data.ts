@@ -40,6 +40,54 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 	}
 }
 
+export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedPokedexText;
+
+/** English-only text for custom effects defined by mods. */
+export interface ModdedEffectText {
+	desc?: string;
+	shortDesc?: string;
+}
+
+type EffectTextTable = 'Abilities' | 'Items' | 'Moves' | 'Pokedex';
+
+export class DexText {
+	readonly dex: ModdedDex;
+
+	constructor(dex: ModdedDex) {
+		this.dex = dex;
+	}
+
+	get(effect: Species, lang?: string): ResolvedPokedexText;
+	get(effect: Item, lang?: string): ResolvedItemText;
+	get(effect: Ability, lang?: string): ResolvedAbilityText;
+	get(effect: Move, lang?: string): ResolvedMoveText;
+	get(effect: Species | Item | Ability | Move, lang?: string): EffectText;
+	get(effect: Species | Item | Ability | Move, lang = 'en'): EffectText {
+		let table: EffectTextTable;
+		switch (effect.effectType) {
+		case 'Pokemon': table = 'Pokedex'; break;
+		case 'Item': table = 'Items'; break;
+		case 'Ability': table = 'Abilities'; break;
+		case 'Move': table = 'Moves'; break;
+		default: throw new Error(`Unsupported effect type`);
+		}
+
+		const entry = this.dex.loadTextData(lang)[table][effect.id];
+		const customText = effect as ModdedEffectText;
+		if (customText.desc !== undefined || customText.shortDesc !== undefined) {
+			const desc = customText.desc || customText.shortDesc || '';
+			const shortDesc = customText.shortDesc || customText.desc || '';
+			return { ...entry, name: effect.name, desc, shortDesc };
+		}
+
+		return entry || {
+			name: effect.name,
+			desc: '',
+			shortDesc: '',
+		};
+	}
+}
+
 export abstract class BasicEffect implements EffectData {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
@@ -82,13 +130,6 @@ export abstract class BasicEffect implements EffectData {
 	 */
 	gen: number;
 	/**
-	 * A shortened form of the description of this effect.
-	 * Not all effects have this.
-	 */
-	shortDesc: string;
-	/** The full description for this effect. */
-	desc: string;
-	/**
 	 * Is this item/move/ability/pokemon nonstandard? Specified for effects
 	 * that have no use in standard formats: made-up pokemon (CAP),
 	 * glitches (MissingNo etc), Pokestar pokemon, etc.
@@ -118,8 +159,6 @@ export abstract class BasicEffect implements EffectData {
 		this.exists = data.exists ?? !!this.id;
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
-		this.shortDesc = data.shortDesc || '';
-		this.desc = data.desc || '';
 		this.isNonstandard = data.isNonstandard || null;
 		this.duration = data.duration;
 		this.noCopy = !!data.noCopy;

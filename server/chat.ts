@@ -2440,11 +2440,13 @@ export const Chat = new class {
 		return Chat.getReadmoreBlock(str, true, cutoff);
 	}
 
-	getDataPokemonHTML(species: Species, gen = 8, tier = '') {
+	getDataPokemonHTML(species: Species, dex = Dex, tier = '') {
+		const gen = dex.gen;
+		const text = dex.text.get(species);
 		let buf = '<li class="result">';
 		buf += `<span class="col numcol">${tier || species.tier}</span> `;
 		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
-		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${text.name}</a></span> `;
 		buf += '<span class="col typecol">';
 		if (species.types) {
 			for (const type of species.types) {
@@ -2454,7 +2456,7 @@ export const Chat = new class {
 		buf += '</span> ';
 		if (gen >= 3) {
 			buf += '<span style="float:left;min-height:26px">';
-			if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
+			if (species.abilities['1'] && (gen >= 4 || dex.abilities.get(species.abilities['1']).gen === 3)) {
 				buf += `<span class="col twoabilitycol">${species.abilities['0']}<br />${species.abilities['1']}</span>`;
 			} else {
 				buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
@@ -2487,9 +2489,10 @@ export const Chat = new class {
 		buf += '</li>';
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 	}
-	getDataMoveHTML(move: Move, isChampions = false) {
+	getDataMoveHTML(move: Move, dex = Dex) {
+		const text = dex.text.get(move);
 		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
+		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${text.name}</a></span> `;
 		// encoding is important for the ??? type icon
 		const encodedMoveType = encodeURIComponent(move.type);
 		buf += `<span class="col typecol"><img src="//${Config.routes.client}/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
@@ -2500,23 +2503,25 @@ export const Chat = new class {
 		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (`${move.accuracy}%`) : '—'}</span> `;
 		const basePP = move.pp || 1;
 		let pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
-		if (isChampions) pp = move.noPPBoosts ? basePP : (basePP / 5 + 1) * 4;
+		if (dex.currentMod.startsWith('champions')) pp = move.noPPBoosts ? basePP : (basePP / 5 + 1) * 4;
 		buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
-		buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
+		buf += `<span class="col movedesccol">${text.shortDesc || text.desc}</span> `;
 		buf += `</li><li style="clear:both"></li></ul>`;
 		return buf;
 	}
-	getDataAbilityHTML(ability: Ability) {
+	getDataAbilityHTML(ability: Ability, dex = Dex) {
+		const text = dex.text.get(ability);
 		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${ability.name}</a></span> `;
-		buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
+		buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${text.name}</a></span> `;
+		buf += `<span class="col abilitydesccol">${text.shortDesc || text.desc}</span> `;
 		buf += `</li><li style="clear:both"></li></ul>`;
 		return buf;
 	}
-	getDataItemHTML(item: Item) {
+	getDataItemHTML(item: Item, dex = Dex) {
+		const text = dex.text.get(item);
 		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${item.name}</a></span> `;
-		buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
+		buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${text.name}</a></span> `;
+		buf += `<span class="col itemdesccol">${text.shortDesc || text.desc}</span> `;
 		buf += `</li><li style="clear:both"></li></ul>`;
 		return buf;
 	}
