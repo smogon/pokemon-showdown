@@ -2069,7 +2069,7 @@ export class GameRoom extends BasicRoom {
 			options === 'forpunishment' || (this as any).unlistReplay ? 2 :
 			isPrivate ? 1 :
 			0;
-		if (isPrivate && hidden === 10) {
+		if (isPrivate && hidden === 10 || this.hideReplay) {
 			password = (battle.password ||= Replays.generatePassword());
 		}
 		if (battle.replaySaved !== true && hidden === 10) {
