@@ -1344,7 +1344,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		// bird type crashes during testing (runStatusImmunity for Bird at sim\pokemon.ts:2101:10). no-go.
 	},
 
-	// calmvibes
+	// marillvibes
 	goodvibesonly: {
 		accuracy: 100,
 		basePower: 90,

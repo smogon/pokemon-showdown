@@ -258,7 +258,7 @@ export const ssbSets: SSBSets = {
 		// eslint-disable-next-line @stylistic/max-len
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Hardy', teraType: ['Ghost', 'Poison', 'Fairy'], shiny: 1024, level: 97,
 	},
-	'calmvibes ♫': {
+	'marillvibes': {
 		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
 		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
 		signatureMove: 'Good Vibes Only',
