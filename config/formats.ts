@@ -2263,6 +2263,98 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] No Holds Barred!",
+		desc: `Pok&eacute;mon combine their Attack and Special Attack stats, as well as their Defense and Special defense stats.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause'],
+		banlist: [
+			'Annihilape', 'Arceus', 'Archaludon', 'Calyrex-Ice', 'Calyrex-Shadow', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Dialga-Origin', 'Espathra',
+			'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
+			'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Palafin',
+			'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Terapagos', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned',
+			'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
+		],
+		pokemon: {
+			calculateStat(statName, boost, modifier, statUser) {
+				statName = this.battle.toID(statName) as StatIDExceptHP;
+				// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
+				if (statName === 'hp') throw new Error("Please read `maxhp` directly");
+
+				// base stat
+				let stat = this.storedStats[statName];
+
+				// Wonder Room swaps defenses before calculating anything else
+				if ('wonderroom' in this.battle.field.pseudoWeather) {
+					if (statName === 'def') {
+						stat = this.storedStats['spd'];
+					} else if (statName === 'spd') {
+						stat = this.storedStats['def'];
+					}
+				}
+
+				// stat boosts
+				let boosts: SparseBoostsTable = {};
+				let boostName = statName as BoostID;
+				boosts[boostName] = boost;
+				boosts = this.battle.runEvent('ModifyBoost', statUser || this, null, null, boosts);
+				boost = boosts[boostName]!;
+				const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+				if (boost > 6) boost = 6;
+				if (boost < -6) boost = -6;
+				if (boost >= 0) {
+					stat = Math.floor(stat * boostTable[boost]);
+				} else {
+					stat = Math.floor(stat / boostTable[-boost]);
+				}
+
+				// stat modifier
+				const firstStatHalf = this.battle.modify(stat, (modifier || 1));
+
+				if (statName === 'spe') return firstStatHalf;
+
+				const otherHalf: { [k: string]: StatIDExceptHP } = {
+					'atk': 'spa',
+					'def': 'spd',
+					'spa': 'atk',
+					'spd': 'def',
+				};
+
+				statName = otherHalf[statName];
+
+				// other base stat
+				stat = this.storedStats[statName];
+
+				// Wonder Room swaps defenses before calculating anything else
+				if ('wonderroom' in this.battle.field.pseudoWeather) {
+					if (statName === 'def') {
+						stat = this.storedStats['spd'];
+					} else if (statName === 'spd') {
+						stat = this.storedStats['def'];
+					}
+				}
+
+				// stat boosts
+				boosts = {};
+				boostName = statName as BoostID;
+				boosts[boostName] = boost;
+				boosts = this.battle.runEvent('ModifyBoost', statUser || this, null, null, boosts);
+				boost = boosts[boostName]!;
+				if (boost > 6) boost = 6;
+				if (boost < -6) boost = -6;
+				if (boost >= 0) {
+					stat = Math.floor(stat * boostTable[boost]);
+				} else {
+					stat = Math.floor(stat / boostTable[-boost]);
+				}
+
+				// stat modifier
+				const secondStatHalf = this.battle.modify(stat, (modifier || 1));
+				return firstStatHalf + secondStatHalf;
+			},
+		},
+	},
+	{
 		name: "[Gen 9] Partners in Crime",
 		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
 		mod: 'partnersincrime',
