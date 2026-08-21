@@ -44,9 +44,9 @@ class SSBSetHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, baseD
 	}
 }
 
-class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex }> {
+class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex, language: ID | null }> {
 	render() {
-		const { sigMove, dex } = this.props;
+		const { sigMove, dex, language } = this.props;
 		const details: { [k: string]: string } = {
 			Priority: String(sigMove.priority),
 			Gen: String(sigMove.gen || 9),
@@ -129,7 +129,7 @@ class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex }> 
 		const moveText = dex.text.get(sigMove);
 		if (moveText.shortDesc || moveText.desc) {
 			return <><hr />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataMoveHTML(sigMove, dex) }}></span>
+				<span dangerouslySetInnerHTML={{ __html: Chat.getDataMoveHTML(sigMove, { dex, language }) }}></span>
 				<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 					const lastEntry = idx === arr.length - 1;
 					if (!value) return <>&#10003; {detail}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
@@ -143,9 +143,11 @@ class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex }> 
 	}
 }
 
-class SSBItemHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, baseDex: ModdedDex }> {
+class SSBItemHTML extends Chat.JSX.Component<{
+	set: SSBSet, dex: ModdedDex, baseDex: ModdedDex, language: ID | null,
+}> {
 	render() {
-		const { set, dex, baseDex } = this.props;
+		const { set, dex, baseDex, language } = this.props;
 		if (!Array.isArray(set.item)) {
 			const baseItem = baseDex.items.get(set.item);
 			const sigItem = dex.items.get(set.item);
@@ -179,7 +181,7 @@ class SSBItemHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, base
 			const itemText = dex.text.get(sigItem);
 			if (!baseItem.exists || baseText.desc !== itemText.desc || baseText.shortDesc !== itemText.shortDesc) {
 				return <><hr />
-					<span dangerouslySetInnerHTML={{ __html: Chat.getDataItemHTML(sigItem, dex) }}></span>
+					<span dangerouslySetInnerHTML={{ __html: Chat.getDataItemHTML(sigItem, { dex, language }) }}></span>
 					<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 						const lastEntry = idx === arr.length - 1;
 						if (value === '') return <>{detail}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
@@ -192,9 +194,11 @@ class SSBItemHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, base
 	}
 }
 
-class SSBAbilityHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, baseDex: ModdedDex }> {
+class SSBAbilityHTML extends Chat.JSX.Component<{
+	set: SSBSet, dex: ModdedDex, baseDex: ModdedDex, language: ID | null,
+}> {
 	render() {
-		const { set, dex, baseDex } = this.props;
+		const { set, dex, baseDex, language } = this.props;
 		const customMegaAbilities = ['Sableye', 'Ampharos'];
 		if (!Array.isArray(set.ability) &&
 			(customMegaAbilities.includes(set.species) || !baseDex.abilities.get(set.ability).exists)) {
@@ -215,7 +219,7 @@ class SSBAbilityHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, b
 			if (sigAbil.flags['cantsuppress']) details["Not affected by Gastro Acid"] = "";
 			if (sigAbil.flags['breakable']) details["Ignored by Mold Breaker"] = "";
 			return <><hr />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(sigAbil, dex) }}></span>
+				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(sigAbil, { dex, language }) }}></span>
 				<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 					const lastEntry = idx === arr.length - 1;
 					if (value === '') return <>{detail}{!lastEntry && <>&nbsp;|&#8287;&#8202;</>}</>;
@@ -229,9 +233,11 @@ class SSBAbilityHTML extends Chat.JSX.Component<{ set: SSBSet, dex: ModdedDex, b
 	}
 }
 
-class SSBPokemonHTML extends Chat.JSX.Component<{ species: string, dex: ModdedDex, baseDex: ModdedDex }> {
+class SSBPokemonHTML extends Chat.JSX.Component<{
+	species: string, dex: ModdedDex, baseDex: ModdedDex, language: ID | null,
+}> {
 	render() {
-		const { species, dex, baseDex } = this.props;
+		const { species, dex, baseDex, language } = this.props;
 		const origSpecies = baseDex.species.get(species);
 		const newSpecies = dex.species.get(species);
 		let weighthit = 20;
@@ -297,7 +303,10 @@ class SSBPokemonHTML extends Chat.JSX.Component<{ species: string, dex: ModdedDe
 			Object.values(newSpecies.baseStats).join('/') !== Object.values(origSpecies.baseStats).join('/')
 		) {
 			return <><hr />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataPokemonHTML(newSpecies, dex, 'SSB') }}></span>
+				<span dangerouslySetInnerHTML={{
+					__html: Chat.getDataPokemonHTML(newSpecies, { dex, tier: 'SSB', language }),
+				}}
+				></span>
 				<font size="1">{Object.entries(details).map(([detail, value], idx, arr) => {
 					const lastEntry = idx === arr.length - 1;
 					if (detail.includes('<font')) {
@@ -317,9 +326,11 @@ class SSBPokemonHTML extends Chat.JSX.Component<{ species: string, dex: ModdedDe
 	}
 }
 
-class SSBInnateHTML extends Chat.JSX.Component<{ name: string, dex: ModdedDex, baseDex: ModdedDex }> {
+class SSBInnateHTML extends Chat.JSX.Component<{
+	name: string, dex: ModdedDex, baseDex: ModdedDex, language: ID | null,
+}> {
 	render() {
-		const { name, dex, baseDex } = this.props;
+		const { name, dex, baseDex, language } = this.props;
 		// Special casing for users whose usernames are already existing conditions/etc, i.e. dhelmise
 		let effect = dex.conditions.get(name + 'user');
 		if (!effect.exists) effect = dex.conditions.get(name);
@@ -335,7 +346,7 @@ class SSBInnateHTML extends Chat.JSX.Component<{ name: string, dex: ModdedDex, b
 			Object.assign(baseAbility, { desc, shortDesc });
 			return <><hr />
 				Innate Ability:<br />
-				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(baseAbility, dex) }}></span>
+				<span dangerouslySetInnerHTML={{ __html: Chat.getDataAbilityHTML(baseAbility, { dex, language }) }}></span>
 				<font size="1"><span class="gray">Gen:</span> 9</font>
 				{longDesc && <details><summary><strong>In-Depth Description</strong></summary>{longDesc}</details>}
 			</>;
@@ -344,9 +355,9 @@ class SSBInnateHTML extends Chat.JSX.Component<{ name: string, dex: ModdedDex, b
 	}
 }
 
-class SSBSetsHTML extends Chat.JSX.Component<{ target: string }> {
+class SSBSetsHTML extends Chat.JSX.Component<{ target: string, language: ID | null }> {
 	render() {
-		const target = this.props.target;
+		const { target, language } = this.props;
 		const targetID = toID(target);
 		const baseDex = Dex;
 		const dex = Dex.forFormat('gen9superstaffbrosultimate');
@@ -375,17 +386,23 @@ class SSBSetsHTML extends Chat.JSX.Component<{ target: string }> {
 					`${`${setName.split('-').slice(1).join('-')} forme`}</strong></summary>` }}
 				></span>}
 			<SSBSetHTML set={set} dex={dex} baseDex={baseDex} />
-			{(!set.skip || set.signatureMove !== ssbSets[set.skip].signatureMove) && <SSBMoveHTML sigMove={sigMove} dex={dex} />}
-			<SSBItemHTML set={set} dex={dex} baseDex={baseDex} />
-			<SSBAbilityHTML set={set} dex={dex} baseDex={baseDex} />
-			<SSBInnateHTML name={setName} dex={dex} baseDex={baseDex} />
-			<SSBPokemonHTML species={set.species} dex={dex} baseDex={baseDex} />
+			{(!set.skip || set.signatureMove !== ssbSets[set.skip].signatureMove) && <SSBMoveHTML
+				sigMove={sigMove} dex={dex} language={language}
+			/>}
+			<SSBItemHTML set={set} dex={dex} baseDex={baseDex} language={language} />
+			<SSBAbilityHTML set={set} dex={dex} baseDex={baseDex} language={language} />
+			<SSBInnateHTML name={setName} dex={dex} baseDex={baseDex} language={language} />
+			<SSBPokemonHTML species={set.species} dex={dex} baseDex={baseDex} language={language} />
 			{(!Array.isArray(set.item) && item.megaStone) && <SSBPokemonHTML
-				species={Object.values(item.megaStone)[0]} dex={dex} baseDex={baseDex}
+				species={Object.values(item.megaStone)[0]} dex={dex} baseDex={baseDex} language={language}
 			/>}
 			{/* keys and Kennedy have an itemless forme change */}
-			{['Rayquaza'].includes(set.species) && <SSBPokemonHTML species={`${set.species}-Mega`} dex={dex} baseDex={baseDex} />}
-			{['Cinderace'].includes(set.species) && <SSBPokemonHTML species={`${set.species}-Gmax`} dex={dex} baseDex={baseDex} />}
+			{['Rayquaza'].includes(set.species) && <SSBPokemonHTML
+				species={`${set.species}-Mega`} dex={dex} baseDex={baseDex} language={language}
+			/>}
+			{['Cinderace'].includes(set.species) && <SSBPokemonHTML
+				species={`${set.species}-Gmax`} dex={dex} baseDex={baseDex} language={language}
+			/>}
 			{set.skip && <span dangerouslySetInnerHTML={{ __html: `</details>` }}></span>}</>;
 		});
 	}
@@ -405,7 +422,7 @@ export const commands: Chat.ChatCommands = {
 	ssb(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse(`/help ssb`);
-		return this.sendReplyBox(<SSBSetsHTML target={target} />);
+		return this.sendReplyBox(<SSBSetsHTML target={target} language={this.language} />);
 	},
 	ssbhelp: [
 		`/ssb [staff member] - Displays a staff member's Super Staff Bros. set and custom features.`,

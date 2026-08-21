@@ -41,6 +41,7 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 }
 
 export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedPokedexText;
+export type TextLanguage = 'en' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
 
 /** English-only text for custom effects defined by mods. */
 export interface ModdedEffectText {
@@ -57,12 +58,12 @@ export class DexText {
 		this.dex = dex;
 	}
 
-	get(effect: Species, lang?: string): ResolvedPokedexText;
-	get(effect: Item, lang?: string): ResolvedItemText;
-	get(effect: Ability, lang?: string): ResolvedAbilityText;
-	get(effect: Move, lang?: string): ResolvedMoveText;
-	get(effect: Species | Item | Ability | Move, lang?: string): EffectText;
-	get(effect: Species | Item | Ability | Move, lang = 'en'): EffectText {
+	get(effect: Species, lang?: TextLanguage): ResolvedPokedexText;
+	get(effect: Item, lang?: TextLanguage): ResolvedItemText;
+	get(effect: Ability, lang?: TextLanguage): ResolvedAbilityText;
+	get(effect: Move, lang?: TextLanguage): ResolvedMoveText;
+	get(effect: Species | Item | Ability | Move, lang?: TextLanguage): EffectText;
+	get(effect: Species | Item | Ability | Move, lang: TextLanguage = 'en'): EffectText {
 		let table: EffectTextTable;
 		switch (effect.effectType) {
 		case 'Pokemon': table = 'Pokedex'; break;

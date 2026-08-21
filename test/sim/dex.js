@@ -116,10 +116,12 @@ describe('DexText#get', () => {
 			desc: 'No additional effect.',
 			shortDesc: 'No additional effect.',
 		});
-		assert.equal(
-			Dex.loadTextData('ja').Moves.acid.shortDesc,
-			'10% chance to lower the foe(s) Sp. Def by 1.'
-		);
+		assert.equal(Dex.loadTextData('ja').Moves.tackle.shortDesc, 'No additional effect.');
+	});
+
+	it(`should keep long and short description fallbacks separate`, () => {
+		const text = Dex.text.get(Dex.moves.get('Close Combat'), 'ja');
+		assert.notEqual(text.desc, text.shortDesc);
 	});
 
 	it(`should not use a current-generation translation for an old-generation description`, () => {

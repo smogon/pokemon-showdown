@@ -603,6 +603,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
+		const textLanguage = Chat.getDexLanguage(this.language);
 		if (!newTargets?.length) {
 			throw new Chat.ErrorMessage(`'${target}' doesn't match any Pok\u00e9mon, item, move, ability or nature${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
@@ -615,6 +616,7 @@ export const commands: Chat.ChatCommands = {
 				buffer = `'${target}' has no exact match${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Approximate match${newTargets.length === 1 ? '' : 'es'}:\n`;
 			}
 			let details: { [k: string]: string } = {};
+			let description = '';
 			switch (newTarget.searchType) {
 			case 'nature':
 				const nature = Dex.natures.get(newTarget.name);
@@ -643,8 +645,11 @@ export const commands: Chat.ChatCommands = {
 					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
 					tierDisplay === 'National Dex tiers' ? pokemon.natDexTier :
 					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
-				buffer += `${prefix}${Chat.getDataPokemonHTML(pokemon, dex, displayedTier)}\n`;
+				buffer += `${prefix}${Chat.getDataPokemonHTML(
+					pokemon, { dex, tier: displayedTier, language: this.language }
+				)}\n`;
 				if (showDetails) {
+					description = dex.text.get(pokemon, textLanguage).desc;
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
 						weighthit = 120;
@@ -712,8 +717,11 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'item':
 				const item = dex.items.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataItemHTML(item, dex)}\n`;
+				buffer += `${prefix}${Chat.getDataItemHTML(
+					item, { dex, language: this.language, hideShortDescription: showDetails }
+				)}\n`;
 				if (showDetails) {
+					description = dex.text.get(item, textLanguage).desc;
 					details = {
 						Gen: String(item.gen),
 					};
@@ -744,8 +752,11 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex)}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(
+					move, { dex, language: this.language, hideShortDescription: showDetails }
+				)}\n`;
 				if (showDetails) {
+					description = dex.text.get(move, textLanguage).desc;
 					details = {
 						Priority: String(move.priority),
 						Gen: String(move.gen) || 'CAP',
@@ -851,8 +862,11 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'ability':
 				const ability = dex.abilities.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataAbilityHTML(ability, dex)}\n`;
+				buffer += `${prefix}${Chat.getDataAbilityHTML(
+					ability, { dex, language: this.language, hideShortDescription: showDetails }
+				)}\n`;
 				if (showDetails) {
+					description = dex.text.get(ability, textLanguage).desc;
 					details = {
 						Gen: String(ability.gen) || 'CAP',
 					};
@@ -868,6 +882,9 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (showDetails) {
+				if (description) {
+					buffer += `${prefix}${Utils.escapeHTML(description)}\n`;
+				}
 				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
 					value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
