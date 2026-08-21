@@ -41,7 +41,7 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 }
 
 export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedPokedexText;
-export type TextLanguage = 'en' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
+export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
 
 /** English-only text for custom effects defined by mods. */
 export interface ModdedEffectText {

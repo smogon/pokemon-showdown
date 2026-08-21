@@ -119,6 +119,12 @@ describe('DexText#get', () => {
 		assert.equal(Dex.loadTextData('ja').Moves.tackle.shortDesc, 'No additional effect.');
 	});
 
+	it(`should allow localized text files to be omitted`, () => {
+		const afd = Dex.loadTextData('en-afd');
+		assert.equal(afd.Moves.tackle.name, 'Tackle');
+		assert.equal(afd.Default.default.mega, "  [POKEMON]'s [ITEM] glows!");
+	});
+
 	it(`should keep long and short description fallbacks separate`, () => {
 		const text = Dex.text.get(Dex.moves.get('Close Combat'), 'ja');
 		assert.notEqual(text.desc, text.shortDesc);

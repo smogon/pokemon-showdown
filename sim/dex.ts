@@ -472,9 +472,18 @@ export class ModdedDex {
 	}
 
 	loadTextFile(
-		name: string, exportName: string
+		name: string, exportName: string, optional = false
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
-		return require(`${DATA_DIR}/text/${name}`)[exportName];
+		const filePath = `${DATA_DIR}/text/${name}`;
+		if (optional) {
+			try {
+				require.resolve(filePath);
+			} catch (e: any) {
+				if (e.code === 'MODULE_NOT_FOUND' || e.code === 'ENOENT') return {};
+				throw e;
+			}
+		}
+		return require(filePath)[exportName];
 	}
 
 	includeMods(): this {
@@ -521,12 +530,13 @@ export class ModdedDex {
 	private loadRawTextData(lang: TextLanguage = 'en'): RawTextTableData {
 		if (dexes['base'].rawTextCache[lang]) return dexes['base'].rawTextCache[lang];
 		const langDir = lang === 'en' ? `` : `${lang}/`;
+		const optional = lang !== 'en';
 		return (dexes['base'].rawTextCache[lang] = {
-			Pokedex: this.loadTextFile(`${langDir}pokedex`, 'PokedexText') as DexTable<PokedexText>,
-			Moves: this.loadTextFile(`${langDir}moves`, 'MovesText') as DexTable<MoveText>,
-			Abilities: this.loadTextFile(`${langDir}abilities`, 'AbilitiesText') as DexTable<AbilityText>,
-			Items: this.loadTextFile(`${langDir}items`, 'ItemsText') as DexTable<ItemText>,
-			Default: this.loadTextFile(`${langDir}default`, 'DefaultText') as DexTable<DefaultText>,
+			Pokedex: this.loadTextFile(`${langDir}pokedex`, 'PokedexText', optional) as DexTable<PokedexText>,
+			Moves: this.loadTextFile(`${langDir}moves`, 'MovesText', optional) as DexTable<MoveText>,
+			Abilities: this.loadTextFile(`${langDir}abilities`, 'AbilitiesText', optional) as DexTable<AbilityText>,
+			Items: this.loadTextFile(`${langDir}items`, 'ItemsText', optional) as DexTable<ItemText>,
+			Default: this.loadTextFile(`${langDir}default`, 'DefaultText', optional) as DexTable<DefaultText>,
 		});
 	}
 
