@@ -134,27 +134,27 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	// stats
 	hp: {
 		statName: "ＨＰ",
-		statShortName: "ＨＰ",
+		statShortName: "Ｈ",
 	},
 	atk: {
 		statName: "攻撃",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: "Ａ",
 	},
 	def: {
 		statName: "防御",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: "Ｂ",
 	},
 	spa: {
 		statName: "特攻",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: "Ｃ",
 	},
 	spd: {
 		statName: "特防",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: "Ｄ",
 	},
 	spe: {
 		statName: "素早さ",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: "Ｓ",
 	},
 	accuracy: {
 		statName: "命中率",
@@ -164,7 +164,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	spc: {
 		statName: "特殊",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: "ＣＤ",
 	},
 	stats: {
 		statName: "ステータス",
