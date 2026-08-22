@@ -3,7 +3,7 @@ Pokemon Showdown uses mocha for its unit tests. To run, use `npm test` on the co
 To run specific tests, you can change `it` or `describe` to `it.only` or `describe.only`. `npx mocha -g "text"` can let you run tests with "text" in its title (e.g. `npx mocha -g "Gen 1"` for all tests with the string "Gen 1").
 
 ## Creating tests
-Check the test/ directory to see if a file already exists for the effect that you're writing a test. If not, create the file with the following boiler plate:
+Check the test/ directory to see if a file already exists for the effect that you're writing a test. If not, create the file with this boilerplate:
 
 	'use strict';
 

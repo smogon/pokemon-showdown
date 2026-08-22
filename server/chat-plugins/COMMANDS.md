@@ -100,7 +100,7 @@ sent in PMs, so please be careful about that.
 Functions
 ------------------------------------------------------------------------
 
-Commands have access to the following functions:
+Commands have access to these functions:
 
 `this.sendReply(pline)`
 *	Sends a pline to the room/PM the user typed the command into.

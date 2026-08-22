@@ -1557,7 +1557,7 @@ const commands: Chat.ChatCommands = {
 				const formatName = Dex.formats.get(tournament.baseFormat).name;
 				// split/join is the easiest way to do a find/replace with an untrusted string, sadly
 				const reasons = result.slice(1).split(formatName).join('this tournament');
-				connection.popup(`Your team was rejected for the following reasons:\n\n- ${reasons.replace(/\n/g, '\n- ')}`);
+				connection.popup(`Your team was rejected because:\n\n- ${reasons.replace(/\n/g, '\n- ')}`);
 			}
 		},
 		viewruleset: 'viewcustomrules',
