@@ -71,7 +71,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		activateWeaken: "  [POKEMON]への ダメージを [ITEM]が 弱めた！",
 
 		damage: "  ([POKEMON]は ダメージを 受けた！)",
-		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: "  ([POKEMON]は 体力の [PERCENTAGE]％を 失った！)",
 		damageFromPokemon: "  [POKEMON]は [SOURCE]の [ITEM]で ダメージを 受けた！",
 		damageFromItem: "  [POKEMON]は [ITEM]で ダメージを 受けた！",
 		damageFromPartialTrapping: "  [POKEMON]は [MOVE]の ダメージを 受けている",

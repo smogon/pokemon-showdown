@@ -71,7 +71,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		activateWeaken: "  [POKEMON]'s [ITEM] lessened the damage it took!",
 
 		damage: "  ([POKEMON] was hurt!)",
-		damagePercentage: "  ([POKEMON] lost [PERCENTAGE] of its health!)",
+		damagePercentage: "  ([POKEMON] lost [PERCENTAGE]% of its health!)",
 		damageFromPokemon: "  [POKEMON] was hurt by [SOURCE]'s [ITEM]!", // Jaboca/Rowap Berry
 		damageFromItem: "  [POKEMON] was hurt by its [ITEM]!", // Sticky Barb
 		damageFromPartialTrapping: "  [POKEMON] is hurt by [MOVE]!",
