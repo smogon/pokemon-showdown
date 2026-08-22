@@ -79,6 +79,12 @@ describe('Dex#getItem', () => {
 		assert.false(Dex.forGen(8).items.get('Normal Gem').isNonstandard);
 		assert.equal(Dex.forGen(8).items.get('Rock Gem').isNonstandard, "Past");
 	});
+
+	it(`should hide non-held items from /dt`, () => {
+		assert.equal(Dex.items.get('Linking Cord').exists, true);
+		assert.equal(Dex.items.get('Linking Cord').isHeldItem, false);
+		assert.equal(Dex.dataSearch('Linking Cord'), null);
+	});
 });
 
 describe('Dex#getMove', () => {
