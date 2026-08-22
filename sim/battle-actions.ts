@@ -106,14 +106,17 @@ export class BattleActions {
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 			this.battle.queue.cancelAction(oldActive);
 
-			let newMove = null;
-			if (this.battle.gen === 4 && sourceEffect) {
-				newMove = oldActive.lastMove;
+			let lastMove = null;
+			let lastMoveSketch = null;
+			if (sourceEffect) {
+				if (this.battle.gen === 3) lastMoveSketch = oldActive.lastMoveSketch;
+				if (this.battle.gen === 4) lastMove = oldActive.lastMove;
 			}
 			if (switchCopyFlag) {
 				pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
 			}
-			if (newMove) pokemon.lastMove = newMove;
+			if (lastMove) pokemon.lastMove = this.battle.lastMove;
+			if (lastMoveSketch) pokemon.lastMoveSketch = this.battle.lastMove;
 			oldActive.clearVolatile();
 		}
 		if (oldActive) {
@@ -256,6 +259,8 @@ export class BattleActions {
 		if (!willTryMove) {
 			this.battle.runEvent('MoveAborted', pokemon, target, move);
 			this.battle.clearActiveMove(true);
+			// clear Copycat's flag
+			if (this.battle.gen <= 4) this.battle.lastMove = null;
 			// The event 'BeforeMove' could have returned false or null
 			// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
 			// null indicates the opposite, as the Pokemon didn't have an option to choose anything
