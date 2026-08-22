@@ -58,3 +58,23 @@ The second field names the placeholder to inflect on. The rest are:
 - `mp=` - show if the placeholder is masculine plural
 - `fs=` - show if the placeholder is feminine singular
 - `fp=` - show if the placeholder is feminine plural
+
+Text grammar
+------------
+
+Gender, singular/plural, and classified versions are stored for item and stat names, in languages that use them (Spanish, French, Italian, and German):
+
+    name: "Agua Mística",
+    grammar: "fu",
+    articleRule: "stressed-a",
+    classified: {
+        name: "colgante de Agua Mística",
+        grammar: "ms",
+    },
+
+- The first letter of `grammar` is gender (`m` - masculine, `f` - feminine, or `n` - neuter).
+- The second letter is countability (`s` - singular, `p` - plural, or `u` - uncountable).
+- `classified` is optional, for item names that change when they need to be counted.
+  - Example: `¡Mew ha tirado al suelo el colgante de Agua Mística de Vaporeon!`
+- `articleRule: "stressed-a"` is also optional, and is for Spanish feminine words which use "el" instead of "la" because of a stressed initial `a`.
+  - Not actually used in any game text; kept around in case someone needs it for something else

@@ -7,10 +7,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	abomasite: {
 		name: "Abomasnowite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	absolite: {
 		name: "Absolite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	absolitez: {
@@ -35,10 +37,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	aerodactylite: {
 		name: "Aerodactylite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aggronite: {
 		name: "Aggronite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aguavberry: {
@@ -60,6 +64,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	alakazite: {
 		name: "Alakazamite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aloraichiumz: {
@@ -68,10 +73,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	altarianite: {
 		name: "Altarite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ampharosite: {
 		name: "Ampharosite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	apicotberry: {
@@ -84,6 +91,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	aspearberry: {
 		name: "Baccaperina",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	assaultvest: {
@@ -92,6 +100,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	audinite: {
 		name: "Audinite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	auspiciousarmor: {
@@ -100,14 +109,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	babiriberry: {
 		name: "Baccababiri",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	banettite: {
 		name: "Banettite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	barbaracite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	baxcalibrite: {
@@ -120,6 +132,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	beedrillite: {
 		name: "Beedrillite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	belueberry: {
@@ -140,6 +153,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	bigroot: {
 		name: "Granradice",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -151,6 +165,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	blackbelt: {
 		name: "Cinturanera",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -164,6 +179,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	blackglasses: {
 		name: "Occhialineri",
+		grammar: "mp",
+		classified: {
+			name: "paio di Occhialineri",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -171,10 +191,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	blastoisinite: {
 		name: "Blastoisite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazikenite: {
 		name: "Blazikenite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blueorb: {
@@ -199,6 +221,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	brightpowder: {
 		name: "Luminpolvere",
+		grammar: "fu",
+		classified: {
+			name: "sacchetto di Luminpolvere",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -225,6 +252,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	cameruptite: {
 		name: "Cameruptite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cellbattery: {
@@ -233,10 +261,16 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	chandelurite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	charcoal: {
 		name: "Carbonella",
+		grammar: "fu",
+		classified: {
+			name: "pezzo di Carbonella",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -244,18 +278,22 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	charizarditex: {
 		name: "Charizardite X",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	charizarditey: {
 		name: "Charizardite Y",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chartiberry: {
 		name: "Baccaciofo",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cheriberry: {
 		name: "Baccaliegia",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cherishball: {
@@ -264,14 +302,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	chesnaughtite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chestoberry: {
 		name: "Baccastagna",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chilanberry: {
 		name: "Baccacinlan",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chilldrive: {
@@ -280,6 +321,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	chimechite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chippedpot: {
@@ -292,6 +334,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	choicescarf: {
 		name: "Stolascelta",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	choicespecs: {
@@ -300,6 +343,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	chopleberry: {
 		name: "Baccarosmel",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clawfossil: {
@@ -314,6 +358,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	clefablite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cloversweet: {
@@ -322,10 +367,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	cobaberry: {
 		name: "Baccababa",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	colburberry: {
 		name: "Baccaxan",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cornerstonemask: {
@@ -347,6 +394,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	crabominite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crackedpot: {
@@ -361,6 +409,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	damprock: {
 		name: "Rocciaumida",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkgem: {
@@ -403,6 +452,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	delphoxite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	destinyknot: {
@@ -431,10 +481,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dragalgite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonfang: {
 		name: "Dentedidrago",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -452,6 +504,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dragoninite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragoniumz: {
@@ -471,6 +524,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	drampanite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dreadplate: {
@@ -507,6 +561,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	eelektrossite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eeviumz: {
@@ -550,6 +605,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	emboarite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	enigmaberry: {
@@ -565,10 +621,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	excadrite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	expertbelt: {
 		name: "Abilcintura",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairiumz: {
@@ -577,6 +635,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	fairyfeather: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairygem: {
@@ -589,6 +648,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	falinksite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fastball: {
@@ -597,6 +657,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	feraligite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fightinggem: {
@@ -662,6 +723,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	floettite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowersweet: {
@@ -685,6 +747,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	focusband: {
 		name: "Bandana",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -694,6 +757,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	focussash: {
 		name: "Focalnastro",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -723,6 +787,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	froslassite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fullincense: {
@@ -739,6 +804,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	galladite: {
 		name: "Galladite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ganlonberry: {
@@ -747,6 +813,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	garchompite: {
 		name: "Garchompite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	garchompitez: {
@@ -755,10 +822,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	gardevoirite: {
 		name: "Gardevoirite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gengarite: {
 		name: "Gengarite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ghostgem: {
@@ -778,10 +847,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	glalitite: {
 		name: "Glalite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glimmoranite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	goldbottlecap: {
@@ -794,6 +865,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	golurkite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grassgem: {
@@ -821,6 +893,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	greninjite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grepaberry: {
@@ -859,14 +932,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	gyaradosite: {
 		name: "Gyaradosite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	habanberry: {
 		name: "Baccahaban",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hardstone: {
 		name: "Pietradura",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -874,6 +950,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	hawluchanite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	healball: {
@@ -890,6 +967,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	heatrock: {
 		name: "Rocciacalda",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heavyball: {
@@ -906,6 +984,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	heracronite: {
 		name: "Heracrossite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hondewberry: {
@@ -914,6 +993,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	houndoominite: {
 		name: "Houndoomite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iapapaberry: {
@@ -955,6 +1035,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icyrock: {
 		name: "Rocciafredda",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -970,6 +1051,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	ironball: {
 		name: "Ferropalla",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -989,14 +1071,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	kangaskhanite: {
 		name: "Kangaskhanite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kasibberry: {
 		name: "Baccacitrus",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kebiaberry: {
 		name: "Baccakebia",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	keeberry: {
@@ -1009,6 +1094,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	kingsrock: {
 		name: "Roccia di Re",
+		grammar: "fs",
 		desc: "Strumento da dare a un Pokémon. Se chi lo usa arreca danni, può far tentennare il nemico.",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1053,12 +1139,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	leftovers: {
 		name: "Avanzi",
+		grammar: "mp",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 
 		heal: "  Recupera alcuni PS con gli Avanzi!",
 	},
 	leppaberry: {
 		name: "Baccamela",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] recupera i PP della mossa [MOVE] con la Baccamela!",
@@ -1073,12 +1161,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lifeorb: {
 		name: "Assorbisfera",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "  [POKEMON] perde qualche PS!",
 	},
 	lightball: {
 		name: "Elettropalla",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1089,6 +1179,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lightclay: {
 		name: "Creta Luce",
+		grammar: "fu",
+		classified: {
+			name: "pezzo di Creta luce",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1101,6 +1196,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lopunnite: {
 		name: "Lopunnite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	loveball: {
@@ -1113,6 +1209,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lucarionite: {
 		name: "Lucarite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lucarionitez: {
@@ -1128,6 +1225,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lumberry: {
 		name: "Baccaprugna",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	luminousmoss: {
@@ -1172,6 +1270,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	magnet: {
 		name: "Calamita",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1197,6 +1296,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	malamarite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maliciousarmor: {
@@ -1205,6 +1305,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	manectite: {
 		name: "Manectricite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	marangaberry: {
@@ -1225,6 +1326,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	mawilite: {
 		name: "Mawilite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meadowplate: {
@@ -1233,14 +1335,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	medichamite: {
 		name: "Medichamite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meganiumite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mentalherb: {
 		name: "Mentalerba",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1248,10 +1353,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	meowsticite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metagrossite: {
 		name: "Metagrossite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalalloy: {
@@ -1260,6 +1367,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	metalcoat: {
 		name: "Metalcoperta",
+		grammar: "fs",
 		desc: "Strumento da dare a un Pokémon. Speciale pellicola metallica che potenzia le mosse di tipo Acciaio.",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
@@ -1276,6 +1384,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	metronome: {
 		name: "Plessimetro",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1307,6 +1416,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	miracleseed: {
 		name: "Miracolseme",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1333,10 +1443,16 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	muscleband: {
 		name: "Muscolbanda",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticwater: {
 		name: "Acqua Magica",
+		grammar: "fu",
+		classified: {
+			name: "ciondolo di Acqua magica",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1356,6 +1472,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	nevermeltice: {
 		name: "Gelomai",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1378,6 +1495,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	occaberry: {
 		name: "Baccacao",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	oddincense: {
@@ -1390,6 +1508,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	oranberry: {
 		name: "Baccarancia",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ovalstone: {
@@ -1406,18 +1525,22 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	passhoberry: {
 		name: "Baccapasflo",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	payapaberry: {
 		name: "Baccapayapa",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pechaberry: {
 		name: "Baccapesca",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	persimberry: {
 		name: "Baccaki",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	petayaberry: {
@@ -1426,6 +1549,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	pidgeotite: {
 		name: "Pidgeotite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikaniumz: {
@@ -1442,6 +1566,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	pinsirite: {
 		name: "Pinsirite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pixieplate: {
@@ -1454,6 +1579,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	poisonbarb: {
 		name: "Velenaculeo",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1563,6 +1689,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	pyroarite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	qualotberry: {
@@ -1575,6 +1702,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	quickclaw: {
 		name: "Rapidartigli",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1592,10 +1720,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	raichunitex: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	raichunitey: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rarebone: {
@@ -1604,6 +1734,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	rawstberry: {
 		name: "Baccafrago",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorclaw: {
@@ -1644,6 +1775,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	rindoberry: {
 		name: "Baccarindo",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ringtarget: {
@@ -1689,6 +1821,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	roseliberry: {
 		name: "Baccarcadè",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rowapberry: {
@@ -1705,6 +1838,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sablenite: {
 		name: "Sableyite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sachet: {
@@ -1735,26 +1869,32 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sceptilite: {
 		name: "Sceptilite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scizorite: {
 		name: "Scizorite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scolipite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scopelens: {
 		name: "Mirino",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scovillainite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scraftinite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	seaincense: {
@@ -1766,6 +1906,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sharpbeak: {
 		name: "Beccaffilato",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1773,14 +1914,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sharpedonite: {
 		name: "Sharpedite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shedshell: {
 		name: "Disfoguscio",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shellbell: {
 		name: "Conchinella",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 
 		heal: "  Recupera alcuni PS con la Conchinella!",
@@ -1796,10 +1940,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	shucaberry: {
 		name: "Baccanaca",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	silkscarf: {
 		name: "Sciarpa Seta",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1807,6 +1953,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	silverpowder: {
 		name: "Argenpolvere",
+		grammar: "fu",
+		classified: {
+			name: "mucchietto di Argenpolvere",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1814,6 +1965,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sitrusberry: {
 		name: "Baccacedro",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1821,6 +1973,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	skarmorite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	skullfossil: {
@@ -1833,6 +1986,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	slowbronite: {
 		name: "Slowbroite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1840,6 +1994,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	smoothrock: {
 		name: "Roccialiscia",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snorliumz: {
@@ -1852,6 +2007,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	softsand: {
 		name: "Sabbia Soffice",
+		grammar: "fu",
+		classified: {
+			name: "sacchetto di Sabbia soffice",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1870,6 +2030,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	spelltag: {
 		name: "Spettrotarga",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1893,6 +2054,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	staraptite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	starfberry: {
@@ -1901,6 +2063,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	starminite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	starsweet: {
@@ -1920,6 +2083,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	steelixite: {
 		name: "Steelixite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelmemory: {
@@ -1956,6 +2120,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	swampertite: {
 		name: "Swampertite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sweetapple: {
@@ -1972,6 +2137,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	tangaberry: {
 		name: "Baccaitan",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tapuniumz: {
@@ -2420,6 +2586,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	twistedspoon: {
 		name: "Cucchiaio Torto",
+		grammar: "ms",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2427,6 +2594,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	tyranitarite: {
 		name: "Tyranitarite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ultraball: {
@@ -2458,14 +2626,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	venusaurite: {
 		name: "Venusaurite",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	victreebelite: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wacanberry: {
 		name: "Baccaparmen",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watergem: {
@@ -2514,12 +2685,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	whiteherb: {
 		name: "Erbachiara",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 
 		end: "  Le statistiche vengono ristabilite grazie all’Erbachiara!",
 	},
 	widelens: {
 		name: "Grandelente",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wikiberry: {
@@ -2534,10 +2707,16 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	wiseglasses: {
 		name: "Saviocchiali",
+		grammar: "mp",
+		classified: {
+			name: "paio di Saviocchiali",
+			grammar: "ms",
+		},
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	yacheberry: {
 		name: "Baccamoya",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zapplate: {
@@ -2550,6 +2729,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	zoomlens: {
 		name: "Zoomlente",
+		grammar: "fs",
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zygardite: {

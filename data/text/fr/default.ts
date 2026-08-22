@@ -138,36 +138,45 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	atk: {
 		statName: "Attaque",
+		grammar: "fs",
 		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	def: {
 		statName: "Défense",
+		grammar: "fs",
 		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spa: {
 		statName: "Attaque Spéciale",
+		grammar: "fs",
 		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spd: {
 		statName: "Défense Spéciale",
+		grammar: "fs",
 		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	spe: {
 		statName: "Vitesse",
+		grammar: "fs",
 		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	accuracy: {
 		statName: "Précision",
+		grammar: "fs",
 	},
 	evasion: {
 		statName: "Esquive",
+		grammar: "fs",
 	},
 	spc: {
 		statName: "Spécial",
+		grammar: "ms",
 		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	stats: {
 		statName: "Stats",
+		grammar: "fp",
 	},
 
 	// statuses

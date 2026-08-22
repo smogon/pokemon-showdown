@@ -421,6 +421,13 @@ interface PlayerOptions {
 interface BasicTextData {
 	desc?: string;
 	shortDesc?: string;
+	grammar?: string;
+	articleRule?: 'stressed-a';
+	classified?: {
+		name: string,
+		grammar: string,
+		articleRule?: 'stressed-a',
+	};
 }
 interface ConditionTextData extends BasicTextData {
 	activate?: string;
