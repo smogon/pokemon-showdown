@@ -3109,15 +3109,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (source.item || source.volatiles['gem']) {
 				return;
 			}
+			const yourItemState = target.itemState;
 			const yourItem = target.takeItem(source);
 			if (!yourItem) {
 				return;
 			}
 			if (
-				!this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem) ||
+				!this.singleEvent('TakeItem', yourItem, yourItemState, source, target, move, yourItem) ||
 				!source.setItem(yourItem)
 			) {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				target.itemState = yourItemState;
 				return;
 			}
 			this.add('-item', source, yourItem, '[from] move: Covet', `[of] ${target}`);
@@ -9971,15 +9973,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onBasePower(basePower, source, target, move) {
 			const item = target.getItem();
 			if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
+			if (!this.singleEvent('TakeItem', item, target.itemState, source, target, move, item)) return;
 			if (item.id) {
 				return this.chainModify(1.5);
 			}
 		},
-		onAfterHit(target, source) {
+		onAfterHit(target, source, move) {
+			const itemState = target.itemState;
 			const item = target.takeItem();
-			if (item) {
-				this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
+			if (!item) {
+				return;
 			}
+			if (!this.singleEvent('TakeItem', item, itemState, source, target, move, item)) {
+				target.item = item.id; // bypass setItem so we don't break choicelock or anything
+				target.itemState = itemState;
+				return;
+			}
+			this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
 		},
 		target: "normal",
 		type: "Dark",
@@ -19306,13 +19316,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (source.item || source.volatiles['gem']) {
 				return;
 			}
+			const yourItemState = target.itemState;
 			const yourItem = target.takeItem(source);
 			if (!yourItem) {
 				return;
 			}
-			if (!this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem) ||
+			if (!this.singleEvent('TakeItem', yourItem, yourItemState, source, target, move, yourItem) ||
 				!source.setItem(yourItem)) {
 				target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+				target.itemState = yourItemState;
 				return;
 			}
 			this.add('-enditem', target, yourItem, '[silent]', '[from] move: Thief', `[of] ${source}`);
