@@ -25,11 +25,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	darkaura: {
 		inherit: true,
-		flags: { breakable: 1 },
+		flags: { inherit: true, breakable: 1 },
 	},
 	fairyaura: {
 		inherit: true,
-		flags: { breakable: 1 },
+		flags: { inherit: true, breakable: 1 },
 	},
 	innerfocus: {
 		inherit: true,

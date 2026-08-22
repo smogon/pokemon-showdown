@@ -1,11 +1,11 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	commander: {
 		inherit: true,
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
+		flags: { inherit: true, notransform: 1 },
 	},
 	gulpmissile: {
 		inherit: true,
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
+		flags: { inherit: true, failroleplay: 1, failskillswap: 1, noentrain: 1, noreceiver: 1, notrace: 1 },
 	},
 	protosynthesis: {
 		inherit: true,
@@ -46,7 +46,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			},
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1, cantsuppress: 1 },
+		flags: { inherit: true, cantsuppress: 1 },
 	},
 	quarkdrive: {
 		inherit: true,
@@ -81,6 +81,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-end', pokemon, 'Quark Drive');
 			},
 		},
-		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1, cantsuppress: 1 },
+		flags: { inherit: true, cantsuppress: 1 },
 	},
 };

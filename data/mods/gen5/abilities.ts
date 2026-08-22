@@ -69,7 +69,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (type === 'sandstorm' || type === 'hail') return false;
 		},
 		onTryHit: undefined, // no inherit
-		flags: {},
+		flags: { inherit: true, breakable: 0 },
 		rating: 0.5,
 	},
 	sapsipper: {
