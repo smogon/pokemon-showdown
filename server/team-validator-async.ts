@@ -85,7 +85,7 @@ if (!PM.isParentProcess) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
-	};
+	} as typeof Monitor;
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', (err: Error) => {
