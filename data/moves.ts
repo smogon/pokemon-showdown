@@ -17362,21 +17362,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			volatileStatus: 'sparklingaria',
 		},
 		onAfterMove(source, target, move) {
-			if (source.fainted || !move.hitTargets || move.hasSheerForce) {
-				// make sure the volatiles are cleared
-				for (const pokemon of this.getAllActive()) delete pokemon.volatiles['sparklingaria'];
-				return;
-			}
-			const numberTargets = move.hitTargets.length;
-			for (const pokemon of move.hitTargets) {
-				// bypasses Shield Dust when hitting multiple targets
-				if (pokemon !== source && pokemon.isActive && (pokemon.removeVolatile('sparklingaria') || numberTargets > 1) &&
-					pokemon.status === 'brn') {
+			if (source.fainted) return;
+			for (const pokemon of this.getAllActive()) {
+				if ((pokemon.removeVolatile('sparklingaria') || move.dustproof) && pokemon.status === 'brn') {
 					pokemon.cureStatus();
 				}
 			}
 		},
 		target: "allAdjacent",
+		dustproof: true,
 		type: "Water",
 		contestType: "Tough",
 	},
