@@ -821,9 +821,6 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	quagsire: {
 		name: "Quagsire",
 	},
-	quagsirepaldea: {
-		name: "Quagsire-Paldea",
-	},
 	espeon: {
 		name: "Espeon",
 	},
