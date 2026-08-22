@@ -206,6 +206,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	conversion2: {
 		inherit: true,
+		flags: { metronome: 1 },
 		onHit(target, source) {
 			if (!target.lastMoveUsed) {
 				return false;
@@ -838,6 +839,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
+	memento: {
+		inherit: true,
+		selfdestruct: "always",
+	},
 	metalburst: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
@@ -868,7 +873,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			protect: 1, allyanim: 1, noassist: 1, failcopycat: 1, failencore: 1, failinstruct: 1, failmimic: 1,
 		},
 		onHit(target, source) {
-			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
+			if (source.transformed || !target.lastMove) {
 				return false;
 			}
 			if (target.lastMove.flags['failmimic'] || source.moves.includes(target.lastMove.id)) {
@@ -1175,11 +1180,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	sketch: {
 		inherit: true,
 		flags: {
-			bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1,
-			failcopycat: 1, failinstruct: 1, failmimic: 1, nosketch: 1,
+			allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1, nosketch: 1,
 		},
 		onHit(target, source) {
-			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
+			if (source.transformed || !target.lastMove) {
 				return false;
 			}
 			if (target.lastMove.flags['nosketch'] || source.moves.includes(target.lastMove.id)) {
