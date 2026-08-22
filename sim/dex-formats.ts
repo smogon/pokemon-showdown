@@ -441,6 +441,7 @@ export class RuleTable extends Map<string, string> {
 
 export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly mod: string;
+	declare readonly desc: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses
 	 * random/fixed teams. null if players can bring teams.

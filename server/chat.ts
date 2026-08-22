@@ -34,6 +34,42 @@ import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 import { pluginDatabase } from './chat-db';
+import type { TextLanguage } from '../sim/dex-data';
+
+export interface DataHTMLRenderOptions {
+	dex?: ModdedDex;
+	hideShortDescription?: boolean;
+	language?: ID | null;
+	tier?: string;
+}
+
+const LANGUAGE_CODES: Readonly<Record<string, TextLanguage>> = {
+	english: 'en',
+	german: 'de',
+	spanish: 'es',
+	french: 'fr',
+	italian: 'it',
+	japanese: 'ja',
+	korean: 'ko',
+	simplifiedchinese: 'zh-cn',
+	traditionalchinese: 'zh-tw',
+};
+
+const LANGUAGE_NATIVE_NAMES: Readonly<Record<string, string>> = {
+	english: 'English',
+	german: 'Deutsch',
+	spanish: 'Español',
+	french: 'Français',
+	italian: 'Italiano',
+	dutch: 'Nederlands',
+	portuguese: 'Português',
+	turkish: 'Türkçe',
+	hindi: 'हिंदी',
+	japanese: '日本語',
+	korean: '한국어',
+	simplifiedchinese: '简体中文',
+	traditionalchinese: '繁體中文',
+};
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
@@ -1736,6 +1772,15 @@ export const Chat = new class {
 	/** language id -> (english string -> translated string) */
 	readonly translations = new Map<ID, Map<string, [string, string[], string[]]>>();
 
+	getDexLanguage(language: ID | null = null): TextLanguage {
+		return LANGUAGE_CODES[language || 'english'] || 'en';
+	}
+	getLanguageName(language: ID): string {
+		const englishName = Chat.languages.get(language) || "Unknown Language";
+		const nativeName = LANGUAGE_NATIVE_NAMES[language];
+		return nativeName && nativeName !== englishName ? `${nativeName} (${englishName})` : englishName;
+	}
+
 	async loadTranslations() {
 		const directories = await FS(TRANSLATION_DIRECTORY).readdir();
 
@@ -2440,11 +2485,15 @@ export const Chat = new class {
 		return Chat.getReadmoreBlock(str, true, cutoff);
 	}
 
-	getDataPokemonHTML(species: Species, gen = 8, tier = '') {
+	getDataPokemonHTML(species: Species, options: DataHTMLRenderOptions = {}) {
+		const { dex = Dex, tier = '' } = options;
+		const lang = Chat.getDexLanguage(options.language);
+		const gen = dex.gen;
+		const text = dex.text.get(species, lang);
 		let buf = '<li class="result">';
 		buf += `<span class="col numcol">${tier || species.tier}</span> `;
 		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
-		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${text.name}</a></span> `;
 		buf += '<span class="col typecol">';
 		if (species.types) {
 			for (const type of species.types) {
@@ -2454,18 +2503,18 @@ export const Chat = new class {
 		buf += '</span> ';
 		if (gen >= 3) {
 			buf += '<span style="float:left;min-height:26px">';
-			if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
-				buf += `<span class="col twoabilitycol">${species.abilities['0']}<br />${species.abilities['1']}</span>`;
+			if (species.abilities['1'] && (gen >= 4 || dex.abilities.get(species.abilities['1']).gen === 3)) {
+				buf += `<span class="col twoabilitycol">${dex.text.get(dex.abilities.get(species.abilities['0']), lang).name}<br />${dex.text.get(dex.abilities.get(species.abilities['1']), lang).name}</span>`;
 			} else {
-				buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
+				buf += `<span class="col abilitycol">${dex.text.get(dex.abilities.get(species.abilities['0']), lang).name}</span>`;
 			}
 			if (species.abilities['H'] && species.abilities['S']) {
-				buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br /><span style="display: inline-block;">(${species.abilities['S']})</span></em></span>`;
+				buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${dex.text.get(dex.abilities.get(species.abilities['H']), lang).name}<br /><span style="display: inline-block;">(${dex.text.get(dex.abilities.get(species.abilities['S']), lang).name})</span></em></span>`;
 			} else if (species.abilities['H']) {
-				buf += `<span class="col abilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}</em></span>`;
+				buf += `<span class="col abilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${dex.text.get(dex.abilities.get(species.abilities['H']), lang).name}</em></span>`;
 			} else if (species.abilities['S']) {
 				// special case for Zygarde
-				buf += `<span class="col abilitycol"><em>(${species.abilities['S']})</em></span>`;
+				buf += `<span class="col abilitycol"><em>(${dex.text.get(dex.abilities.get(species.abilities['S']), lang).name})</em></span>`;
 			} else {
 				buf += '<span class="col abilitycol"></span>';
 			}
@@ -2487,9 +2536,11 @@ export const Chat = new class {
 		buf += '</li>';
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 	}
-	getDataMoveHTML(move: Move, isChampions = false) {
+	getDataMoveHTML(move: Move, options: DataHTMLRenderOptions = {}) {
+		const { dex = Dex } = options;
+		const text = dex.text.get(move, Chat.getDexLanguage(options.language));
 		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
+		buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${text.name}</a></span> `;
 		// encoding is important for the ??? type icon
 		const encodedMoveType = encodeURIComponent(move.type);
 		buf += `<span class="col typecol"><img src="//${Config.routes.client}/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
@@ -2500,23 +2551,33 @@ export const Chat = new class {
 		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (`${move.accuracy}%`) : '—'}</span> `;
 		const basePP = move.pp || 1;
 		let pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
-		if (isChampions) pp = move.noPPBoosts ? basePP : (basePP / 5 + 1) * 4;
+		if (dex.currentMod.startsWith('champions')) pp = move.noPPBoosts ? basePP : (basePP / 5 + 1) * 4;
 		buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
-		buf += `<span class="col movedesccol">${move.shortDesc || move.desc}</span> `;
+		if (!options.hideShortDescription) {
+			buf += `<span class="col movedesccol">${text.shortDesc || text.desc}</span> `;
+		}
 		buf += `</li><li style="clear:both"></li></ul>`;
 		return buf;
 	}
-	getDataAbilityHTML(ability: Ability) {
+	getDataAbilityHTML(ability: Ability, options: DataHTMLRenderOptions = {}) {
+		const { dex = Dex } = options;
+		const text = dex.text.get(ability, Chat.getDexLanguage(options.language));
 		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${ability.name}</a></span> `;
-		buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
+		buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${text.name}</a></span> `;
+		if (!options.hideShortDescription) {
+			buf += `<span class="col abilitydesccol">${text.shortDesc || text.desc}</span> `;
+		}
 		buf += `</li><li style="clear:both"></li></ul>`;
 		return buf;
 	}
-	getDataItemHTML(item: Item) {
+	getDataItemHTML(item: Item, options: DataHTMLRenderOptions = {}) {
+		const { dex = Dex } = options;
+		const text = dex.text.get(item, Chat.getDexLanguage(options.language));
 		let buf = `<ul class="utilichart"><li class="result">`;
-		buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${item.name}</a></span> `;
-		buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
+		buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${text.name}</a></span> `;
+		if (!options.hideShortDescription) {
+			buf += `<span class="col itemdesccol">${text.shortDesc || text.desc}</span> `;
+		}
 		buf += `</li><li style="clear:both"></li></ul>`;
 		return buf;
 	}
