@@ -4032,4 +4032,586 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	enamorus: {
 		name: "러브로스",
 	},
+	sprigatito: {
+		name: "나오하",
+	},
+	floragato: {
+		name: "나로테",
+	},
+	meowscarada: {
+		name: "마스카나",
+	},
+	fuecoco: {
+		name: "뜨아거",
+	},
+	crocalor: {
+		name: "악뜨거",
+	},
+	skeledirge: {
+		name: "라우드본",
+	},
+	quaxly: {
+		name: "꾸왁스",
+	},
+	quaxwell: {
+		name: "아꾸왁",
+	},
+	quaquaval: {
+		name: "웨이니발",
+	},
+	lechonk: {
+		name: "맛보돈",
+	},
+	oinkologne: {
+		name: "퍼퓨돈",
+	},
+	tarountula: {
+		name: "타랜툴라",
+	},
+	spidops: {
+		name: "트래피더",
+	},
+	nymble: {
+		name: "콩알뚜기",
+	},
+	lokix: {
+		name: "엑스레그",
+	},
+	pawmi: {
+		name: "빠모",
+	},
+	pawmo: {
+		name: "빠모트",
+	},
+	pawmot: {
+		name: "빠르모트",
+	},
+	tandemaus: {
+		name: "두리쥐",
+	},
+	maushold: {
+		name: "파밀리쥐",
+	},
+	fidough: {
+		name: "쫀도기",
+	},
+	dachsbun: {
+		name: "바우첼",
+	},
+	smoliv: {
+		name: "미니브",
+	},
+	dolliv: {
+		name: "올리뇨",
+	},
+	arboliva: {
+		name: "올리르바",
+	},
+	squawkabilly: {
+		name: "시비꼬",
+	},
+	nacli: {
+		name: "베베솔트",
+	},
+	naclstack: {
+		name: "스태솔트",
+	},
+	garganacl: {
+		name: "콜로솔트",
+	},
+	charcadet: {
+		name: "카르본",
+	},
+	armarouge: {
+		name: "카디나르마",
+	},
+	ceruledge: {
+		name: "파라블레이즈",
+	},
+	tadbulb: {
+		name: "빈나두",
+	},
+	bellibolt: {
+		name: "찌리배리",
+	},
+	wattrel: {
+		name: "찌리비",
+	},
+	kilowattrel: {
+		name: "찌리비크",
+	},
+	maschiff: {
+		name: "오라티프",
+	},
+	mabosstiff: {
+		name: "마피티프",
+	},
+	shroodle: {
+		name: "땃쭈르",
+	},
+	grafaiai: {
+		name: "태깅구르",
+	},
+	bramblin: {
+		name: "그푸리",
+	},
+	brambleghast: {
+		name: "공푸리",
+	},
+	toedscool: {
+		name: "들눈해",
+	},
+	toedscruel: {
+		name: "육파리",
+	},
+	klawf: {
+		name: "절벼게",
+	},
+	capsakid: {
+		name: "캡싸이",
+	},
+	scovillain: {
+		name: "스코빌런",
+	},
+	rellor: {
+		name: "구르데",
+	},
+	rabsca: {
+		name: "베라카스",
+	},
+	flittle: {
+		name: "하느라기",
+	},
+	espathra: {
+		name: "클레스퍼트라",
+	},
+	tinkatink: {
+		name: "어리짱",
+	},
+	tinkatuff: {
+		name: "벼리짱",
+	},
+	tinkaton: {
+		name: "두드리짱",
+	},
+	wiglett: {
+		name: "바다그다",
+	},
+	wugtrio: {
+		name: "바닥트리오",
+	},
+	bombirdier: {
+		name: "떨구새",
+	},
+	finizen: {
+		name: "맨돌핀",
+	},
+	palafin: {
+		name: "돌핀맨",
+	},
+	varoom: {
+		name: "부르롱",
+	},
+	revavroom: {
+		name: "부르르룸",
+	},
+	cyclizar: {
+		name: "모토마",
+	},
+	orthworm: {
+		name: "꿈트렁",
+	},
+	glimmet: {
+		name: "초롱순",
+	},
+	glimmora: {
+		name: "킬라플로르",
+	},
+	greavard: {
+		name: "망망이",
+	},
+	houndstone: {
+		name: "묘두기",
+	},
+	flamigo: {
+		name: "꼬이밍고",
+	},
+	cetoddle: {
+		name: "터벅고래",
+	},
+	cetitan: {
+		name: "우락고래",
+	},
+	veluza: {
+		name: "가비루사",
+	},
+	dondozo: {
+		name: "어써러셔",
+	},
+	tatsugiri: {
+		name: "싸리용",
+	},
+	annihilape: {
+		name: "저승갓숭",
+	},
+	clodsire: {
+		name: "토오",
+	},
+	farigiraf: {
+		name: "키키링",
+	},
+	dudunsparce: {
+		name: "노고고치",
+	},
+	kingambit: {
+		name: "대도각참",
+	},
+	greattusk: {
+		name: "위대한엄니",
+	},
+	screamtail: {
+		name: "우렁찬꼬리",
+	},
+	brutebonnet: {
+		name: "사나운버섯",
+	},
+	fluttermane: {
+		name: "날개치는머리",
+	},
+	slitherwing: {
+		name: "땅을기는날개",
+	},
+	sandyshocks: {
+		name: "모래털가죽",
+	},
+	irontreads: {
+		name: "무쇠바퀴",
+	},
+	ironbundle: {
+		name: "무쇠보따리",
+	},
+	ironhands: {
+		name: "무쇠손",
+	},
+	ironjugulis: {
+		name: "무쇠머리",
+	},
+	ironmoth: {
+		name: "무쇠독나방",
+	},
+	ironthorns: {
+		name: "무쇠가시",
+	},
+	frigibax: {
+		name: "드니차",
+	},
+	arctibax: {
+		name: "드니꽁",
+	},
+	baxcalibur: {
+		name: "드닐레이브",
+	},
+	gimmighoul: {
+		name: "모으령",
+	},
+	gholdengo: {
+		name: "타부자고",
+	},
+	wochien: {
+		name: "총지엔",
+	},
+	chienpao: {
+		name: "파오젠",
+	},
+	tinglu: {
+		name: "딩루",
+	},
+	chiyu: {
+		name: "위유이",
+	},
+	roaringmoon: {
+		name: "고동치는달",
+	},
+	ironvaliant: {
+		name: "무쇠무인",
+	},
+	koraidon: {
+		name: "코라이돈",
+	},
+	miraidon: {
+		name: "미라이돈",
+	},
+	walkingwake: {
+		name: "굽이치는물결",
+	},
+	ironleaves: {
+		name: "무쇠잎새",
+	},
+	dipplin: {
+		name: "과미르",
+	},
+	poltchageist: {
+		name: "차데스",
+	},
+	sinistcha: {
+		name: "그우린차",
+	},
+	okidogi: {
+		name: "조타구",
+	},
+	munkidori: {
+		name: "이야후",
+	},
+	fezandipiti: {
+		name: "기로치",
+	},
+	ogerpon: {
+		name: "오거폰",
+	},
+	archaludon: {
+		name: "브리두라스",
+	},
+	hydrapple: {
+		name: "과미드라",
+	},
+	gougingfire: {
+		name: "꿰뚫는화염",
+	},
+	ragingbolt: {
+		name: "날뛰는우레",
+	},
+	ironboulder: {
+		name: "무쇠암석",
+	},
+	ironcrown: {
+		name: "무쇠감투",
+	},
+	terapagos: {
+		name: "테라파고스",
+	},
+	pecharunt: {
+		name: "복숭악동",
+	},
+	missingno: {
+		name: "MissingNo.",
+	},
+	syclar: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	syclant: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	revenankh: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	embirch: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	flarelm: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pyroak: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	breezi: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	fidgit: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	rebble: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	tactite: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	stratagem: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	privatyke: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	arghonaut: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	kitsunoh: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cyclohm: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	colossoil: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	krilowatt: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	voodoll: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	voodoom: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	scratchet: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	tomohawk: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	necturine: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	necturna: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	mollux: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cupra: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	argalis: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	aurumoth: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	brattler: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	malaconda: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cawdet: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cawmodore: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	volkritter: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	volkraken: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	snugglow: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	plasmanta: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	floatoy: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	caimanoe: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	naviathan: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	crucibelle: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	crucibellemega: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pluffle: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	kerfluffle: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pajantom: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	mumbao: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	jumbao: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	fawnifer: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	electrelk: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	caribolt: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	smogecko: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	smoguana: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	smokomodo: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	swirlpool: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	coribalis: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	snaelstrom: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	equilibra: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	astrolotl: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pokestarsmeargle: {
+		name: "포켓우드 루브도2",
+	},
+	pokestarufo: {
+		name: "포켓우드 UFO",
+	},
+	pokestarufo2: {
+		name: "포켓우드 UFO2",
+	},
+	pokestarbrycenman: {
+		name: "포켓우드 담죽맨",
+	},
+	pokestarmt: {
+		name: "포켓우드 MM",
+	},
+	pokestarmt2: {
+		name: "포켓우드 MM2",
+	},
+	pokestartransport: {
+		name: "포켓우드 전송기",
+	},
+	pokestargiant: {
+		name: "포켓우드 거대 여사원",
+	},
+	pokestarhumanoid: {
+		name: "포켓우드 인간형태",
+	},
+	pokestarmonster: {
+		name: "포켓우드 괴물",
+	},
+	pokestarf00: {
+		name: "포켓우드 F-00",
+	},
+	pokestarf002: {
+		name: "포켓우드 F-002",
+	},
+	pokestarspirit: {
+		name: "포켓우드 악령",
+	},
+	pokestarblackdoor: {
+		name: "포켓우드 검은 벽",
+	},
+	pokestarwhitedoor: {
+		name: "포켓우드 하얀 벽",
+	},
+	pokestarblackbelt: {
+		name: "포켓우드 태권왕",
+	},
+	pokestarufopropu2: {
+		name: "포켓우드 세트 U2",
+	},
 };

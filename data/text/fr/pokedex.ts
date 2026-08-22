@@ -4209,4 +4209,586 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	enamorustherian: {
 		name: "Amovénus Totémique",
 	},
+	sprigatito: {
+		name: "Poussacha",
+	},
+	floragato: {
+		name: "Matourgeon",
+	},
+	meowscarada: {
+		name: "Miascarade",
+	},
+	fuecoco: {
+		name: "Chochodile",
+	},
+	crocalor: {
+		name: "Crocogril",
+	},
+	skeledirge: {
+		name: "Flâmigator",
+	},
+	quaxly: {
+		name: "Coiffeton",
+	},
+	quaxwell: {
+		name: "Canarbello",
+	},
+	quaquaval: {
+		name: "Palmaval",
+	},
+	lechonk: {
+		name: "Gourmelet",
+	},
+	oinkologne: {
+		name: "Fragroin",
+	},
+	tarountula: {
+		name: "Tissenboule",
+	},
+	spidops: {
+		name: "Filentrappe",
+	},
+	nymble: {
+		name: "Lilliterelle",
+	},
+	lokix: {
+		name: "Gambex",
+	},
+	pawmi: {
+		name: "Pohm",
+	},
+	pawmo: {
+		name: "Pohmotte",
+	},
+	pawmot: {
+		name: "Pohmarmotte",
+	},
+	tandemaus: {
+		name: "Compagnol",
+	},
+	maushold: {
+		name: "Famignol",
+	},
+	fidough: {
+		name: "Pâtachiot",
+	},
+	dachsbun: {
+		name: "Briochien",
+	},
+	smoliv: {
+		name: "Olivini",
+	},
+	dolliv: {
+		name: "Olivado",
+	},
+	arboliva: {
+		name: "Arboliva",
+	},
+	squawkabilly: {
+		name: "Tapatoès",
+	},
+	nacli: {
+		name: "Selutin",
+	},
+	naclstack: {
+		name: "Amassel",
+	},
+	garganacl: {
+		name: "Gigansel",
+	},
+	charcadet: {
+		name: "Charbambin",
+	},
+	armarouge: {
+		name: "Carmadura",
+	},
+	ceruledge: {
+		name: "Malvalame",
+	},
+	tadbulb: {
+		name: "Têtampoule",
+	},
+	bellibolt: {
+		name: "Ampibidou",
+	},
+	wattrel: {
+		name: "Zapétrel",
+	},
+	kilowattrel: {
+		name: "Fulgulairo",
+	},
+	maschiff: {
+		name: "Grondogue",
+	},
+	mabosstiff: {
+		name: "Dogrino",
+	},
+	shroodle: {
+		name: "Gribouraigne",
+	},
+	grafaiai: {
+		name: "Tag-Tag",
+	},
+	bramblin: {
+		name: "Virovent",
+	},
+	brambleghast: {
+		name: "Virevorreur",
+	},
+	toedscool: {
+		name: "Terracool",
+	},
+	toedscruel: {
+		name: "Terracruel",
+	},
+	klawf: {
+		name: "Craparoi",
+	},
+	capsakid: {
+		name: "Pimito",
+	},
+	scovillain: {
+		name: "Scovilain",
+	},
+	rellor: {
+		name: "Léboulérou",
+	},
+	rabsca: {
+		name: "Bérasca",
+	},
+	flittle: {
+		name: "Flotillon",
+	},
+	espathra: {
+		name: "Cléopsytra",
+	},
+	tinkatink: {
+		name: "Forgerette",
+	},
+	tinkatuff: {
+		name: "Forgella",
+	},
+	tinkaton: {
+		name: "Forgelina",
+	},
+	wiglett: {
+		name: "Taupikeau",
+	},
+	wugtrio: {
+		name: "Triopikeau",
+	},
+	bombirdier: {
+		name: "Lestombaile",
+	},
+	finizen: {
+		name: "Dofin",
+	},
+	palafin: {
+		name: "Superdofin",
+	},
+	varoom: {
+		name: "Vrombi",
+	},
+	revavroom: {
+		name: "Vrombotor",
+	},
+	cyclizar: {
+		name: "Motorizard",
+	},
+	orthworm: {
+		name: "Ferdeter",
+	},
+	glimmet: {
+		name: "Germéclat",
+	},
+	glimmora: {
+		name: "Floréclat",
+	},
+	greavard: {
+		name: "Toutombe",
+	},
+	houndstone: {
+		name: "Tomberro",
+	},
+	flamigo: {
+		name: "Flamenroule",
+	},
+	cetoddle: {
+		name: "Piétacé",
+	},
+	cetitan: {
+		name: "Balbalèze",
+	},
+	veluza: {
+		name: "Délestin",
+	},
+	dondozo: {
+		name: "Oyacata",
+	},
+	tatsugiri: {
+		name: "Nigirigon",
+	},
+	annihilape: {
+		name: "Courrousinge",
+	},
+	clodsire: {
+		name: "Terraiste",
+	},
+	farigiraf: {
+		name: "Farigiraf",
+	},
+	dudunsparce: {
+		name: "Deusolourdo",
+	},
+	kingambit: {
+		name: "Scalpereur",
+	},
+	greattusk: {
+		name: "Fort-Ivoire",
+	},
+	screamtail: {
+		name: "Hurle-Queue",
+	},
+	brutebonnet: {
+		name: "Fongus-Furie",
+	},
+	fluttermane: {
+		name: "Flotte-Mèche",
+	},
+	slitherwing: {
+		name: "Rampe-Ailes",
+	},
+	sandyshocks: {
+		name: "Pelage-Sablé",
+	},
+	irontreads: {
+		name: "Roue-de-Fer",
+	},
+	ironbundle: {
+		name: "Hotte-de-Fer",
+	},
+	ironhands: {
+		name: "Paume-de-Fer",
+	},
+	ironjugulis: {
+		name: "Têtes-de-Fer",
+	},
+	ironmoth: {
+		name: "Mite-de-Fer",
+	},
+	ironthorns: {
+		name: "Épine-de-Fer",
+	},
+	frigibax: {
+		name: "Frigodo",
+	},
+	arctibax: {
+		name: "Cryodo",
+	},
+	baxcalibur: {
+		name: "Glaivodo",
+	},
+	gimmighoul: {
+		name: "Mordudor",
+	},
+	gholdengo: {
+		name: "Gromago",
+	},
+	wochien: {
+		name: "Chongjian",
+	},
+	chienpao: {
+		name: "Baojian",
+	},
+	tinglu: {
+		name: "Dinglu",
+	},
+	chiyu: {
+		name: "Yuyu",
+	},
+	roaringmoon: {
+		name: "Rugit-Lune",
+	},
+	ironvaliant: {
+		name: "Garde-de-Fer",
+	},
+	koraidon: {
+		name: "Koraidon",
+	},
+	miraidon: {
+		name: "Miraidon",
+	},
+	walkingwake: {
+		name: "Serpente-Eau",
+	},
+	ironleaves: {
+		name: "Vert-de-Fer",
+	},
+	dipplin: {
+		name: "Pomdramour",
+	},
+	poltchageist: {
+		name: "Poltchageist",
+	},
+	sinistcha: {
+		name: "Théffroyable",
+	},
+	okidogi: {
+		name: "Félicanis",
+	},
+	munkidori: {
+		name: "Fortusimia",
+	},
+	fezandipiti: {
+		name: "Favianos",
+	},
+	ogerpon: {
+		name: "Ogerpon",
+	},
+	archaludon: {
+		name: "Pondralugon",
+	},
+	hydrapple: {
+		name: "Pomdorochi",
+	},
+	gougingfire: {
+		name: "Feu-Perçant",
+	},
+	ragingbolt: {
+		name: "Ire-Foudre",
+	},
+	ironboulder: {
+		name: "Roc-de-Fer",
+	},
+	ironcrown: {
+		name: "Chef-de-Fer",
+	},
+	terapagos: {
+		name: "Terapagos",
+	},
+	pecharunt: {
+		name: "Pêchaminus",
+	},
+	missingno: {
+		name: "MissingNo.",
+	},
+	syclar: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	syclant: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	revenankh: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	embirch: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	flarelm: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pyroak: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	breezi: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	fidgit: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	rebble: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	tactite: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	stratagem: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	privatyke: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	arghonaut: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	kitsunoh: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cyclohm: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	colossoil: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	krilowatt: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	voodoll: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	voodoom: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	scratchet: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	tomohawk: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	necturine: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	necturna: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	mollux: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cupra: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	argalis: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	aurumoth: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	brattler: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	malaconda: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cawdet: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	cawmodore: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	volkritter: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	volkraken: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	snugglow: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	plasmanta: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	floatoy: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	caimanoe: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	naviathan: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	crucibelle: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	crucibellemega: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pluffle: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	kerfluffle: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pajantom: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	mumbao: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	jumbao: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	fawnifer: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	electrelk: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	caribolt: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	smogecko: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	smoguana: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	smokomodo: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	swirlpool: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	coribalis: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	snaelstrom: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	equilibra: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	astrolotl: {
+		name: "", // NEEDS TRANSLATION: Showdown custom text
+	},
+	pokestarsmeargle: {
+		name: "Pokéwood Queulorior",
+	},
+	pokestarufo: {
+		name: "Pokéwood OVNI",
+	},
+	pokestarufo2: {
+		name: "Pokéwood OVNI 2",
+	},
+	pokestarbrycenman: {
+		name: "Pokéwood Zhuman",
+	},
+	pokestarmt: {
+		name: "Pokéwood MT",
+	},
+	pokestarmt2: {
+		name: "Pokéwood MT-02",
+	},
+	pokestartransport: {
+		name: "Pokéwood Dispositif",
+	},
+	pokestargiant: {
+		name: "Pokéwood Colosse",
+	},
+	pokestarhumanoid: {
+		name: "Pokéwood Humanoïde",
+	},
+	pokestarmonster: {
+		name: "Pokéwood Monstre",
+	},
+	pokestarf00: {
+		name: "Pokéwood F-00",
+	},
+	pokestarf002: {
+		name: "Pokéwood F-00 2",
+	},
+	pokestarspirit: {
+		name: "Pokéwood Démon",
+	},
+	pokestarblackdoor: {
+		name: "Pokéwood Portail N.",
+	},
+	pokestarwhitedoor: {
+		name: "Pokéwood Portail B.",
+	},
+	pokestarblackbelt: {
+		name: "Pokéwood Karatécarl",
+	},
+	pokestarufopropu2: {
+		name: "Pokéwood Acc. O2",
+	},
 };
