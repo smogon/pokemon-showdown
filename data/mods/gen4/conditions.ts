@@ -173,4 +173,23 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 		},
 	},
+	cherrim: {
+		name: "Cherrim",
+		onSwitchIn(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
+			if (!pokemon.isActive || !pokemon.hp) return;
+			this.debug('Cherrim form change check');
+			if (pokemon.effectiveWeather() === 'sunnyday') {
+				if (pokemon.species.id !== 'cherrimsunshine') {
+					pokemon.formeChange('Cherrim-Sunshine', null, false, '0', '[msg]');
+				}
+			} else {
+				if (pokemon.species.id === 'cherrimsunshine') {
+					pokemon.formeChange('Cherrim', null, false, '0', '[msg]');
+				}
+			}
+		},
+	},
 };
