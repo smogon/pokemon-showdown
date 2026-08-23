@@ -2573,7 +2573,7 @@ function runItemsearch(target: string, cmd: string, message: string) {
 		for (const item of dex.items.all()) {
 			let matched = 0;
 			// splits words in the description into a toID()-esk format except retaining / and . in numbers
-			let descWords = item.desc || '';
+			let descWords = dex.text.get(item).desc || '';
 			// add more general quantifier words to descriptions
 			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 			if (item.isBerry) descWords += ' berry';
@@ -2757,7 +2757,7 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 	for (const ability of dex.abilities.all()) {
 		let matched = 0;
 		// splits words in the description into a toID()-esque format except retaining / and . in numbers
-		let descWords = ability.desc || ability.shortDesc || '';
+		let descWords = dex.text.get(ability).desc;
 		// add more general quantifier words to descriptions
 		if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 		descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');

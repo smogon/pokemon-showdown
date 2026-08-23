@@ -2451,7 +2451,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (!set.item) return;
 			const item = this.dex.items.get(set.item);
 			if (!/^tr\d\d/i.test(item.name)) return;
-			const moveName = item.desc.split('move ')[1].split('.')[0];
+			const moveName = this.dex.text.get(item).desc.split('move ')[1].split('.')[0];
 			if (set.moves.map(this.toID).includes(this.toID(moveName))) {
 				return [
 					`${set.species} can't run ${item.name} (${moveName}) as its item because it already has that move in its moveset.`,
@@ -2517,7 +2517,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			for (const pokemon of this.getAllPokemon()) {
 				const item = pokemon.getItem();
 				if (/^tr\d\d/i.test(item.name)) {
-					const move = this.dex.moves.get(item.desc.split('move ')[1].split('.')[0]);
+					const move = this.dex.moves.get(this.dex.text.get(item).desc.split('move ')[1].split('.')[0]);
 					const pp = this.calculatePP(move);
 					pokemon.moveSlots = (pokemon as any).baseMoveSlots = [
 						...pokemon.baseMoveSlots, {

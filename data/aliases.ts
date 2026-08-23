@@ -448,6 +448,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	wash: "Rotom-Wash",
 	ham: "Samurott-Hisui",
 	hamurott: "Samurott-Hisui",
+	quagsirepaldea: "Clodsire",
 	snowslash: "Sandslash-Alola",
 	shaymins: "Shaymin-Sky",
 	skymin: "Shaymin-Sky",

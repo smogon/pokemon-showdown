@@ -13678,7 +13678,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onTryMovePriority: -1,
 			onTryMove(pokemon, target, move) {
 				if (move.type === 'Fire') {
-					this.add('-activate', pokemon, 'move: Powder');
+					this.add('-activate', pokemon, 'move: Powder', `[move] ${move.name}`);
 					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					this.attrLastMove('[still]');
 					return false;
