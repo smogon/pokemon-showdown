@@ -20789,6 +20789,19 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		battleOnly: "Ramnarok",
 		gen: 9,
 	},
+	scraptor: {
+		num: -79,
+		name: "Scraptor",
+		types: ["Dark", "Flying"],
+		baseStats: { hp: 52, atk: 78, def: 51, spa: 35, spd: 43, spe: 84 },
+		abilities: { 0: "Opportunist", 1: "Early Bird", H: "Pickup" },
+		heightm: 0.3,
+		weightkg: 7,
+		color: "Black",
+		evos: ["Obliteryx"],
+		eggGroups: ["Flying", "Monster"],
+		gen: 9,
+	},
 	obliteryx: {
 		num: -80,
 		name: "Obliteryx",
@@ -20798,7 +20811,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.6,
 		weightkg: 62,
 		color: "Black",
-		eggGroups: ["Flying", "Dragon"],
+		prevo: "Scraptor",
+		evoLevel: 48
+		eggGroups: ["Flying", "Monster"],
 		gen: 9,
 	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
