@@ -20812,7 +20812,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 62,
 		color: "Black",
 		prevo: "Scraptor",
-		evoLevel: 48
+		evoLevel: 48,
 		eggGroups: ["Flying", "Monster"],
 		gen: 9,
 	},
