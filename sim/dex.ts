@@ -30,6 +30,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
+import type { TextLanguage } from './dex-data';
 import { Condition, DexConditions } from './dex-conditions';
 import { DataMove, DexMoves } from './dex-moves';
 import { Item, DexItems } from './dex-items';
@@ -86,11 +87,18 @@ interface DexTableData {
 	Conditions: DexTable<import('./dex-conditions').ConditionData>;
 	TypeChart: DexTable<import('./dex-data').TypeData>;
 }
-interface TextTableData {
+interface RawTextTableData {
 	Abilities: DexTable<AbilityText>;
 	Items: DexTable<ItemText>;
 	Moves: DexTable<MoveText>;
 	Pokedex: DexTable<PokedexText>;
+	Default: DexTable<DefaultText>;
+}
+interface TextTableData {
+	Abilities: DexTable<ResolvedAbilityText>;
+	Items: DexTable<ResolvedItemText>;
+	Moves: DexTable<ResolvedMoveText>;
+	Pokedex: DexTable<ResolvedPokedexText>;
 	Default: DexTable<DefaultText>;
 }
 
@@ -118,7 +126,8 @@ export class ModdedDex {
 	modsLoaded = false;
 
 	dataCache: DexTableData | null;
-	textCache: TextTableData | null;
+	textCache: { [lang: string]: TextTableData | null | undefined };
+	rawTextCache: { [lang: string]: RawTextTableData | null | undefined };
 
 	deepClone = Utils.deepClone;
 	deepFreeze = Utils.deepFreeze;
@@ -130,6 +139,7 @@ export class ModdedDex {
 	readonly moves: DexMoves;
 	readonly species: DexSpecies;
 	readonly conditions: DexConditions;
+	readonly text: Data.DexText;
 	readonly natures: Data.DexNatures;
 	readonly types: Data.DexTypes;
 	readonly stats: Data.DexStats;
@@ -142,7 +152,8 @@ export class ModdedDex {
 		this.dataDir = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
 
 		this.dataCache = null;
-		this.textCache = null;
+		this.textCache = {};
+		this.rawTextCache = {};
 
 		this.formats = new DexFormats(this);
 		this.abilities = new DexAbilities(this);
@@ -150,6 +161,7 @@ export class ModdedDex {
 		this.moves = new DexMoves(this);
 		this.species = new DexSpecies(this);
 		this.conditions = new DexConditions(this);
+		this.text = new Data.DexText(this);
 		this.natures = new Data.DexNatures(this);
 		this.types = new Data.DexTypes(this);
 		this.stats = new Data.DexStats(this);
@@ -299,35 +311,6 @@ export class ModdedDex {
 			return !!(tag.moveFilter || tag.genericFilter)?.(thing);
 		}
 		return !!tag.genericFilter?.(thing);
-	}
-
-	getDescs(table: keyof TextTableData, id: ID, dataEntry: AnyObject) {
-		if (dataEntry.shortDesc) {
-			return {
-				desc: dataEntry.desc,
-				shortDesc: dataEntry.shortDesc,
-			};
-		}
-		const entry = this.loadTextData()[table][id];
-		if (!entry) return null;
-		const descs = {
-			desc: '',
-			shortDesc: '',
-		};
-		for (let i = this.gen; i < dexes['base'].gen; i++) {
-			const curDesc = entry[`gen${i}` as keyof typeof entry]?.desc;
-			const curShortDesc = entry[`gen${i}` as keyof typeof entry]?.shortDesc;
-			if (!descs.desc && curDesc) {
-				descs.desc = curDesc;
-			}
-			if (!descs.shortDesc && curShortDesc) {
-				descs.shortDesc = curShortDesc;
-			}
-			if (descs.desc && descs.shortDesc) break;
-		}
-		if (!descs.shortDesc) descs.shortDesc = entry.shortDesc || '';
-		if (!descs.desc) descs.desc = entry.desc || descs.shortDesc;
-		return descs;
 	}
 
 	/**
@@ -489,9 +472,18 @@ export class ModdedDex {
 	}
 
 	loadTextFile(
-		name: string, exportName: string
+		name: string, exportName: string, optional = false
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
-		return require(`${DATA_DIR}/text/${name}`)[exportName];
+		const filePath = `${DATA_DIR}/text/${name}`;
+		if (optional) {
+			try {
+				require.resolve(filePath);
+			} catch (e: any) {
+				if (e.code === 'MODULE_NOT_FOUND' || e.code === 'ENOENT') return {};
+				throw e;
+			}
+		}
+		return require(filePath)[exportName];
 	}
 
 	includeMods(): this {
@@ -518,16 +510,70 @@ export class ModdedDex {
 		return this;
 	}
 
-	loadTextData() {
-		if (dexes['base'].textCache) return dexes['base'].textCache;
-		dexes['base'].textCache = {
-			Pokedex: this.loadTextFile('pokedex', 'PokedexText') as DexTable<PokedexText>,
-			Moves: this.loadTextFile('moves', 'MovesText') as DexTable<MoveText>,
-			Abilities: this.loadTextFile('abilities', 'AbilitiesText') as DexTable<AbilityText>,
-			Items: this.loadTextFile('items', 'ItemsText') as DexTable<ItemText>,
-			Default: this.loadTextFile('default', 'DefaultText') as DexTable<DefaultText>,
-		};
-		return dexes['base'].textCache;
+	loadTextData(lang: TextLanguage = 'en'): TextTableData {
+		if (!this.gen) this.loadData();
+		lang ||= 'en';
+		const cacheKey = `${this.gen}:${lang}`;
+		if (dexes['base'].textCache[cacheKey]) return dexes['base'].textCache[cacheKey];
+
+		const englishData = this.loadRawTextData();
+		const localizedData = lang === 'en' ? englishData : this.loadRawTextData(lang);
+		return (dexes['base'].textCache[cacheKey] = {
+			Pokedex: this.resolveTextTable(englishData.Pokedex, localizedData.Pokedex),
+			Moves: this.resolveTextTable(englishData.Moves, localizedData.Moves),
+			Abilities: this.resolveTextTable(englishData.Abilities, localizedData.Abilities),
+			Items: this.resolveTextTable(englishData.Items, localizedData.Items),
+			Default: localizedData.Default,
+		});
+	}
+
+	private loadRawTextData(lang: TextLanguage = 'en'): RawTextTableData {
+		if (dexes['base'].rawTextCache[lang]) return dexes['base'].rawTextCache[lang];
+		const langDir = lang === 'en' ? `` : `${lang}/`;
+		const optional = lang !== 'en';
+		return (dexes['base'].rawTextCache[lang] = {
+			Pokedex: this.loadTextFile(`${langDir}pokedex`, 'PokedexText', optional) as DexTable<PokedexText>,
+			Moves: this.loadTextFile(`${langDir}moves`, 'MovesText', optional) as DexTable<MoveText>,
+			Abilities: this.loadTextFile(`${langDir}abilities`, 'AbilitiesText', optional) as DexTable<AbilityText>,
+			Items: this.loadTextFile(`${langDir}items`, 'ItemsText', optional) as DexTable<ItemText>,
+			Default: this.loadTextFile(`${langDir}default`, 'DefaultText', optional) as DexTable<DefaultText>,
+		});
+	}
+
+	private resolveTextTable<T extends AbilityText | ItemText | MoveText | PokedexText>(
+		englishTable: DexTable<T>, localizedTable: DexTable<T>
+	): DexTable<ResolvedText<T>> {
+		const table: DexTable<ResolvedText<T>> = {};
+		for (const id in englishTable) {
+			const englishEntry = englishTable[id];
+			const localizedEntry = localizedTable[id];
+			const englishDesc = this.resolveTextField(englishEntry, englishEntry, 'desc');
+			const englishShortDesc = this.resolveTextField(englishEntry, englishEntry, 'shortDesc');
+			const localizedDesc = this.resolveTextField(localizedEntry, englishEntry, 'desc');
+			const localizedShortDesc = this.resolveTextField(localizedEntry, englishEntry, 'shortDesc');
+			table[id] = {
+				...(localizedEntry || englishEntry),
+				name: localizedEntry?.name || englishEntry.name,
+				desc: localizedDesc || englishDesc || localizedShortDesc || englishShortDesc,
+				shortDesc: localizedShortDesc || englishShortDesc || localizedDesc || englishDesc,
+			} as ResolvedText<T>;
+		}
+		return table;
+	}
+
+	private resolveTextField<T extends AbilityText | ItemText | MoveText | PokedexText>(
+		localizedEntry: T | undefined, englishEntry: T, field: 'desc' | 'shortDesc'
+	): string {
+		const genKeys = Object.keys(englishEntry)
+			.filter(key => /^gen\d+$/.test(key) && Number(key.slice(3)) >= this.gen)
+			.sort((a, b) => Number(a.slice(3)) - Number(b.slice(3)));
+		for (const genKey of genKeys) {
+			const englishGen = (englishEntry as AnyObject)[genKey] as BasicTextData | undefined;
+			if (!englishGen?.[field]) continue;
+			const localizedGen = (localizedEntry as AnyObject | undefined)?.[genKey] as BasicTextData | undefined;
+			return localizedGen?.[field] || '';
+		}
+		return localizedEntry?.[field] || '';
 	}
 
 	getAlias(id: ID): ID | undefined {
