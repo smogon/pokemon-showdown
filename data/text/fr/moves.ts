@@ -2,12 +2,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "Giga-Tonnerre",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Taux de critique très élevé.",
 	},
 	absorb: {
 		name: "Vole-Vie",
 		desc: "Une attaque qui convertit la moitié des dégâts infligés en PV pour le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -24,12 +24,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	accelerock: {
 		name: "Vif Roc",
 		desc: "Le lanceur charge l’ennemi à toute vitesse. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	acid: {
 		name: "Acide",
 		desc: "Le lanceur attaque l’ennemi avec un jet d’acide corrosif. Peut aussi baisser sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Déf. Spé de 1.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -45,73 +45,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	acidarmor: {
 		name: "Acidarmure",
 		desc: "Le lanceur modifie sa structure moléculaire pour se liquéfier et beaucoup augmenter sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense du Pokémon de 2.",
 	},
 	aciddownpour: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Déluge Causti-Toxique",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	acidspray: {
 		name: "Bombe Acide",
 		desc: "Projette un liquide acide qui fait fondre l’ennemi. Sa Défense Spéciale diminue beaucoup.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Déf. Spé de 2.",
 	},
 	acrobatics: {
 		name: "Acrobatie",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si le lanceur n'a pas d'objet.",
 	},
 	acupressure: {
 		name: "Acupression",
 		desc: "Le lanceur utilise sa connaissance des points de pression pour beaucoup augmenter une stat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente une stat aléatoire d'un allié ou soi de 2.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	aerialace: {
 		name: "Aéropique",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	aeroblast: {
 		name: "Aéroblast",
 		desc: "Le lanceur projette une tornade sur l’ennemi pour infliger des dégâts. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	afteryou: {
 		name: "Après Vous",
 		desc: "S’il est le premier à agir, le lanceur permet à sa cible d’utiliser une capacité juste après lui.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La cible agit juste après le lanceur.",
 
 		activate: "  [TARGET] accepte avec joie !",
 	},
 	agility: {
 		name: "Hâte",
 		desc: "Le lanceur se relaxe et allège son corps pour beaucoup augmenter sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Vitesse du lanceur de 2.",
 	},
 	aircutter: {
 		name: "Tranch’Air",
 		desc: "Le lanceur appelle des vents tranchants qui lacèrent l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique. Touche en zone.",
 	},
 	airslash: {
 		name: "Lame d’Air",
 		desc: "Le lanceur attaque avec une lame d’air qui fend tout. Peut aussi apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 	},
 	alloutpummeling: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Combo Hyper-Furie",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	alluringvoice: {
 		name: "Voix Envoûtante",
 		desc: "Le lanceur attaque la cible avec sa voix angélique. Cette capacité rend la cible confuse si ses stats ont augmenté pendant ce tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% confus si la cible a augmenté une stat ce tour.",
 	},
 	allyswitch: {
 		name: "Interversion",
 		desc: "Le lanceur se téléporte à l’aide d’un pouvoir mystérieux. Il échange sa place avec celle d’un allié sur le terrain.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur échange de position avec son allié.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -124,7 +124,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	amnesia: {
 		name: "Amnésie",
 		desc: "Le lanceur fait le vide dans son esprit pour oublier ses soucis. Augmente beaucoup sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Déf. Spé du lanceur de 2.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -133,7 +133,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	anchorshot: {
 		name: "Ancrage",
 		desc: "Le lanceur jette son ancre sur la cible pour l’attaquer. Une fois accrochée, elle l’empêche de s’enfuir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empêche la cible de switcher.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -141,27 +141,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ancientpower: {
 		name: "Pouvoir Antique",
 		desc: "Une attaque préhistorique qui peut augmenter toutes les stats du lanceur d’un seul coup.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance : toutes les stats +1 (pas Pré/Esq).",
 	},
 	appleacid: {
 		name: "Acide Malique",
 		desc: "Le lanceur attaque son adversaire avec un liquide corrosif créé à partir d’une pomme acide. Baisse la Défense Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Déf. Spé de 1.",
 	},
 	aquacutter: {
 		name: "Tranch'Aqua",
 		desc: "Le lanceur projette de l'eau pressurisée qui entaille la cible comme une lame. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	aquajet: {
 		name: "Aqua-Jet",
 		desc: "Le lanceur fonce sur l’ennemi si rapidement qu’on parvient à peine à le discerner. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	aquaring: {
 		name: "Anneau Hydro",
 		desc: "Un voile d’eau recouvre le lanceur et régénère ses PV à chaque tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur récupère 1/16 PV max chaque tour.",
 
 		start: "  [POKEMON] s’entoure d’un voile d’eau !",
 		heal: "  Le voile d’eau restaure les PV [POKEMON:de] !",
@@ -169,21 +169,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	aquastep: {
 		name: "Danse Aquatique",
 		desc: "Le lanceur se joue de la cible et lui inflige des dégâts avec ses pas de danse gracieux et légers. Cette capacité augmente la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance d'augmenter la Vitesse de 1.",
 	},
 	aquatail: {
 		name: "Hydro-Queue",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	armorcannon: {
 		name: "Canon Blindé",
 		desc: "Le lanceur tire un boulet de canon ardent provenant de sa propre armure sur la cible. Cela baisse la Défense et la Défense Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense et la Déf. Spé du lanceur de 1.",
 	},
 	armthrust: {
 		name: "Cogne",
 		desc: "Un déluge de coups adressés avec la paume qui frappe de deux à cinq fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -197,7 +197,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	aromatherapy: {
 		name: "Aromathérapie",
 		desc: "Le lanceur libère un parfum apaisant qui guérit toutes les altérations de statut de l’équipe.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne l'équipe de tout problème de statut.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -207,12 +207,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	aromaticmist: {
 		name: "Brume Capiteuse",
 		desc: "Grâce à un parfum mystérieux, augmente la Défense Spéciale d’un allié.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Déf. Spé d'un allié de 1.",
 	},
 	assist: {
 		name: "Assistance",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Utilise une capacité aléatoire de l'équipe.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -235,7 +235,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	assurance: {
 		name: "Assurance",
 		desc: "Cette attaque est deux fois plus efficace si l’ennemi a déjà été blessé durant ce tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si la cible a été blessée ce tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -243,7 +243,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	astonish: {
 		name: "Étonnement",
 		desc: "Le lanceur attaque l’ennemi en poussant un cri terrifiant. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -251,17 +251,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	astralbarrage: {
 		name: "Éclat Spectral",
 		desc: "Le lanceur attaque l’ennemi avec une multitude de petits spectres.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	attackorder: {
 		name: "Appel Attaque",
 		desc: "Le lanceur appelle ses sous-fifres pour frapper l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	attract: {
 		name: "Attraction",
 		desc: "Si l’ennemi est du sexe opposé, il tombe amoureux et rechigne alors à attaquer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Une cible du genre opposé tombe amoureuse.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -278,17 +278,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurasphere: {
 		name: "Aurasphère",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	aurawheel: {
 		name: "Roue Libre",
 		desc: "Morpeko libère l’énergie stockée dans ses joues pour attaquer et augmenter sa Vitesse. Le type de cette capacité change en fonction de la forme de Morpeko.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Morpeko:Électrik ; Affamé:Ténèbres ; 100% +1 Vit.",
 	},
 	aurorabeam: {
 		name: "Onde Boréale",
 		desc: "Envoie un rayon arc-en-ciel sur l’ennemi. Peut aussi baisser son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser l'Attaque de 1.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -297,7 +297,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	auroraveil: {
 		name: "Voile Aurore",
 		desc: "Réduit les dégâts causés par les capacités physiques et spéciales durant cinq tours. Ne peut être utilisée que lorsqu’il grêle.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts aux alliés divisés par 2 (Grêle). (5 tours)",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -309,14 +309,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	autotomize: {
 		name: "Allègement",
 		desc: "Le lanceur se débarrasse des parties inutiles de son corps. Son poids diminue et sa Vitesse augmente beaucoup.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Vitesse de 2. Le lanceur perd 100 kg.",
 
 		start: "  [POKEMON] est devenu très vif !",
 	},
 	avalanche: {
 		name: "Avalanche",
 		desc: "Une attaque deux fois plus puissante si le lanceur a été blessé par l’ennemi durant le tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si la cible inflige des dégâts au lanceur.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -324,24 +324,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	axekick: {
 		name: "Talon-Marteau",
 		desc: "Le lanceur donne un coup de talon descendant à la cible, ce qui peut aussi la rendre confuse. S'il échoue, le lanceur se blesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Subit 50% des PV max si échoue. 30% confusion.",
 
 		damage: "#crash",
 	},
 	babydolleyes: {
 		name: "Regard Touchant",
 		desc: "Fixe l’ennemi d’un air très attendrissant qui le touche et diminue son Attaque. Agit en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque de la cible de 1.",
 	},
 	baddybad: {
 		name: "Évo-Ténébro",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Protection.",
 	},
 	banefulbunker: {
 		name: "Blockhaus",
 		desc: "Protège le lanceur contre les attaques de l’ennemi et empoisonne ce dernier s’il utilise une attaque directe sur le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège des capacités. Contact : poison.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -357,7 +357,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	barrage: {
 		name: "Pilonnage",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -371,12 +371,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	barrier: {
 		name: "Bouclier",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense du lanceur de 2.",
 	},
 	batonpass: {
 		name: "Relais",
 		desc: "Le lanceur échange sa place et tout changement de stat avec un Pokémon de l’équipe.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur switch, donnant ses boosts de stats, etc.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -399,14 +399,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	beakblast: {
 		name: "Bec-Canon",
 		desc: "Le lanceur fait chauffer son bec avant d’attaquer. S’il subit une attaque directe pendant la montée en température, l’attaquant sera brûlé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Brûle si contact avec le lanceur avant l'attaque.",
 
 		start: "  [POKEMON] fait chauffer son bec !",
 	},
 	beatup: {
 		name: "Baston",
 		desc: "Le lanceur appelle tous les Pokémon de son équipe à attaquer. Plus ils sont nombreux, plus il y a d’attaques.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Tous les alliés en bonne santé attaquent aussi.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -421,14 +421,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	behemothbash: {
 		name: "Aegis Maxima",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Double les dégâts si la cible est Dynamaxée.",
 		gen8: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	behemothblade: {
 		name: "Gladius Maximus",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Double les dégâts si la cible est Dynamaxée.",
 		gen8: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -436,7 +436,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	belch: {
 		name: "Éructation",
 		desc: "Le lanceur se tourne vers l’ennemi et lui éructe dessus, infligeant des dégâts. Ne fonctionne que si le lanceur consomme la Baie qu’il tient.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inutilisable avant que le lanceur ne mange sa Baie.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -445,7 +445,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bellydrum: {
 		name: "Cognobidon",
 		desc: "Améliore l’Attaque au maximum en sacrifiant la moitié des PV max.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur perd 50% PV max. Maximise l'Attaque.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -455,7 +455,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bestow: {
 		name: "Passe-Cadeau",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur donne son objet à la cible.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -468,7 +468,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bide: {
 		name: "Patience",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Attend 2 tours. Inflige le double des dégâts subis.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -490,7 +490,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bind: {
 		name: "Étreinte",
 		desc: "Ligote l’ennemi avec les tentacules ou le corps pour l’écraser durant quatre à cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -518,7 +518,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bite: {
 		name: "Morsure",
 		desc: "L’ennemi est mordu par de tranchantes canines. Peut l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -527,7 +527,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bitterblade: {
 		name: "Lame en Peine",
 		desc: "Le lanceur concentre son amertume du monde des vivants dans la pointe de ses épées et tranche la cible. La moitié des dégâts infligés sont convertis en PV pour le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 	},
 	bittermalice: {
 		name: "Cœur de Rancœur",
@@ -535,23 +535,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blackholeeclipse: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Trou Noir des Ombres",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	blastburn: {
 		name: "Rafale Feu",
 		desc: "Une explosion ardente souffle l’adversaire. Le lanceur doit se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	blazekick: {
 		name: "Pied Brûleur",
 		desc: "Le lanceur envoie un coup de pied au taux de critiques élevé. Peut aussi brûler la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique. 10% de chance de brûlure.",
 	},
 	blazingtorque: {
 		name: "Crash Brûlant",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: "Cette capacité a 30% de chances de brûler la cible.",
+		shortDesc: "30% de chance de brûler la cible.",
 	},
 	bleakwindstorm: {
 		name: "Typhon Hivernal",
@@ -561,7 +561,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	blizzard: {
 		name: "Blizzard",
 		desc: "Une violente tempête de neige s’abat sur l’ennemi. Peut aussi le geler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de geler. Ne rate jamais sous Grêle.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -577,7 +577,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	block: {
 		name: "Barrage",
 		desc: "Le lanceur bloque la route de l’ennemi pour empêcher sa fuite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empêche la cible de switcher.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -593,26 +593,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bloodmoon: {
 		name: "Lune Rouge",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ne peut pas être utilisée deux fois d'affilée.",
 	},
 	bloomdoom: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pétalexplosion Éblouissante",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	blueflare: {
 		name: "Flamme Bleue",
 		desc: "De magnifiques et redoutables flammes bleues fondent sur l’ennemi. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de brûler la cible.",
 	},
 	bodypress: {
 		name: "Big Splash",
 		desc: "Le lanceur utilise son corps pour attaquer sa cible. Plus la Défense du lanceur est élevée, plus les dégâts infligés sont importants.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Utilise la Déf à la place de l'Atq pour les dégâts.",
 	},
 	bodyslam: {
 		name: "Plaquage",
 		desc: "Le lanceur se laisse tomber sur l’ennemi de tout son poids. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de paralyser la cible.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -620,22 +620,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	boltbeak: {
 		name: "Prise de Bec",
 		desc: "Le lanceur transperce sa cible avec son bec chargé d’électricité. Si cette attaque est lancée avant que la cible n’attaque, elle infligera deux fois plus de dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si le lanceur agit avant la cible.",
 	},
 	boltstrike: {
 		name: "Charge Foudre",
 		desc: "Le lanceur s’enveloppe d’une charge électrique surpuissante et se jette sur l’ennemi. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de paralyser la cible.",
 	},
 	boneclub: {
 		name: "Massd’Os",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance d'apeurer la cible.",
 	},
 	bonemerang: {
 		name: "Osmerang",
 		desc: "Le lanceur projette son os comme un boomerang. Cette attaque frappe à l’aller et au retour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois en un tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -649,7 +649,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bonerush: {
 		name: "Charge Os",
 		desc: "Le lanceur frappe l’ennemi avec un os de deux à cinq fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -663,12 +663,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	boomburst: {
 		name: "Bang Sonique",
 		desc: "Attaque les Pokémon alentour grâce à une onde sonore assourdissante qui détruit tout sur son passage.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	bounce: {
 		name: "Rebond",
 		desc: "Le lanceur bondit très haut et plonge sur l’ennemi au second tour. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Rebondit tour 1. Touche tour 2. 30% paralysie.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -684,17 +684,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bouncybubble: {
 		name: "Évo-Thalasso",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 	},
 	branchpoke: {
 		name: "Tapotige",
 		desc: "Le lanceur attaque sa cible en la piquant avec une branche pointue.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	bravebird: {
 		name: "Rapace",
 		desc: "Le lanceur replie ses ailes et charge en rase-mottes. Blesse gravement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "33% de recul.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -703,16 +703,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	breakingswipe: {
 		name: "Abattage",
 		desc: "Le lanceur balaie violemment le camp adverse avec son immense queue. Baisse l’Attaque de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Attaque de 1. (Zone)",
 	},
 	breakneckblitz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Turbo-Charge Bulldozer",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	brickbreak: {
 		name: "Casse-Brique",
 		desc: "Le lanceur attaque avec le tranchant de la main. Permet aussi de briser les barrières comme Mur Lumière et Protection.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Détruit les protections si la cible n'est pas immunisée.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -729,17 +729,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	brine: {
 		name: "Saumure",
 		desc: "Cette attaque est deux fois plus puissante lorsque l’ennemi a moins de la moitié de ses PV.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si PV de la cible sont à 50% ou moins.",
 	},
 	brutalswing: {
 		name: "Centrifugifle",
 		desc: "Le lanceur pivote pour prendre de l’élan et infliger des dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	bubble: {
 		name: "Écume",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Vitesse de 1. (Zone)",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -751,7 +751,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bubblebeam: {
 		name: "Bulles d’O",
 		desc: "Des bulles sont envoyées avec puissance sur l’ennemi. Peut aussi baisser sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Vitesse de 1.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -760,7 +760,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bugbite: {
 		name: "Piqûre",
 		desc: "Le lanceur pique l’ennemi. Si ce dernier tient une Baie, le lanceur la dévore et obtient son effet.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur vole et mange la Baie de la cible.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -770,27 +770,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bugbuzz: {
 		name: "Bourdon",
 		desc: "Le lanceur fait vibrer son corps pour lancer une vague sonique. Peut aussi baisser la Défense Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Déf. Spé de 1.",
 	},
 	bulkup: {
 		name: "Gonflette",
 		desc: "Le lanceur tend ses muscles pour se gonfler, ce qui booste son Attaque et sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque et la Défense du lanceur de 1.",
 	},
 	bulldoze: {
 		name: "Piétisol",
 		desc: "Le lanceur piétine le sol et inflige des dégâts à tous les Pokémon autour de lui. Baisse aussi leur Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1. (Zone)",
 	},
 	bulletpunch: {
 		name: "Pisto-Poing",
 		desc: "Le lanceur envoie des coups de poing aussi rapides que des balles de revolver. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	bulletseed: {
 		name: "Balle Graine",
 		desc: "Le lanceur mitraille l’ennemi avec une rafale de graines. De deux à cinq rafales sont lancées à la suite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -804,17 +804,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	burningbulwark: {
 		name: "Rempart Brûlant",
 		desc: "Le lanceur se protège contre les attaques grâce à son pelage incandescent, et si un assaillant utilise une attaque directe contre lui, il le brûle.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège le lanceur des capacités. Contact : brûlure.",
 	},
 	burningjealousy: {
 		name: "Feu Envieux",
 		desc: "Le lanceur attaque sa cible avec toute sa jalousie. Cette capacité brûle tout Pokémon dont les stats ont augmenté pendant ce tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% brûle la cible si boost de stat ce tour.",
 	},
 	burnup: {
 		name: "Flamme Ultime",
 		desc: "Le Pokémon se consume et les flammes de son corps infligent des dégâts élevés à la cible. Le lanceur perd le type Feu.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur perd son type Feu.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -824,17 +824,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	buzzybuzz: {
 		name: "Évo-Dynamo",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de paralyser la cible.",
 	},
 	calmmind: {
 		name: "Plénitude",
 		desc: "Le lanceur se concentre et fait le vide dans son esprit pour augmenter son Attaque Spéciale et sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq. Spé et la Déf. Spé du lanceur de 1.",
 	},
 	camouflage: {
 		name: "Camouflage",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Change le type du lanceur selon le terrain.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -853,11 +853,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	captivate: {
 		name: "Séduction",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé des cibles de 2 si genre opposé.",
 	},
 	catastropika: {
 		name: "Pikachute Foudroyante",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	ceaselessedge: {
 		name: "Vagues à Lames",
@@ -866,14 +866,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	celebrate: {
 		name: "Célébration",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'utilisation compétitive.",
 
 		activate: "  Félicitations, [TRAINER] !",
 	},
 	charge: {
 		name: "Chargeur",
 		desc: "Le lanceur concentre sa puissance pour sa prochaine attaque Électrik. Augmente sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "+1 SpD, puissance attaque Électrik prochain tour x2.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -888,17 +888,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	chargebeam: {
 		name: "Rayon Chargé",
 		desc: "Le lanceur tire un rayon chargé d’électricité. Peut aussi augmenter son Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "70% de chance d'augmenter l'Atq. Spé de 1.",
 	},
 	charm: {
 		name: "Charme",
 		desc: "Le lanceur fait les yeux doux pour berner l’ennemi et beaucoup réduire son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque de la cible de 2.",
 	},
 	chatter: {
 		name: "Babil",
 		desc: "Attaque avec les ondes sonores assourdissantes qu’il émet en bavardant. Rend l’ennemi confus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de rendre la cible confuse.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -911,19 +911,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	chillingwater: {
 		name: "Douche Froide",
 		desc: "Le lanceur attaque la cible en l'arrosant d'une eau si froide qu'elle détériore son esprit combatif. Baisse l'Attaque de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Attaque de 1.",
 	},
 	chillyreception: {
 		name: "Neigeux de Mots",
 		desc: "Le lanceur fait un si mauvais jeu de mots qu'il jette un froid et échange sa place avec un Pokémon de l'équipe prêt à combattre. La neige tombe pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Fait tomber la Neige puis switch out.",
 
 		prepare: "  [POKEMON] s’apprête à faire un mauvais jeu de mots...",
 	},
 	chipaway: {
 		name: "Attrition",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore les changements de stats de la cible.",
 	},
 	chloroblast: {
 		name: "Herblast",
@@ -933,12 +933,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	circlethrow: {
 		name: "Projection",
 		desc: "Projette le Pokémon ennemi et le remplace par un autre. Lors d’un combat contre un Pokémon sauvage seul, met fin au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Force la cible à switcher avec un allié aléatoire.",
 	},
 	clamp: {
 		name: "Claquoir",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -966,51 +966,51 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	clangingscales: {
 		name: "Vibrécaille",
 		desc: "Le lanceur déclenche un vacarme en frottant ses écailles les unes contre les autres pour attaquer. Baisse la Défense du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense de la cible de 1.",
 	},
 	clangoroussoul: {
 		name: "Dracacophonie",
 		desc: "Le lanceur sacrifie une partie de ses PV pour augmenter toutes ses stats.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur perd 33% des PV max. +1 à toutes les stats.",
 	},
 	clangoroussoulblaze: {
 		name: "Dracacophonie Flamboyante",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente Atq/Déf/AtqSp/DéfSp/Vit du lanceur de 1.",
 	},
 	clearsmog: {
 		name: "Bain de Smog",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Réinitialise tout changement de stats de la cible.",
 	},
 	closecombat: {
 		name: "Close Combat",
 		desc: "Le lanceur combat au corps à corps sans se protéger. Baisse aussi sa Défense et sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense et la Déf. Spé du lanceur de 1.",
 	},
 	coaching: {
 		name: "Coaching",
 		desc: "Le lanceur coache ses alliés, augmentant ainsi leur Attaque et leur Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque et la Défense d'un allié de 1.",
 	},
 	coil: {
 		name: "Enroulement",
 		desc: "Le lanceur s’enroule sur lui-même et se concentre. Son Attaque, sa Défense et sa Précision augmentent.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque, la Défense et la Précision de 1.",
 	},
 	collisioncourse: {
 		name: "Nitro Crash",
 		desc: "Le lanceur change de forme et s'écrase sur la cible dans une explosion antique. Si la capacité est super efficace, elle inflige encore plus de dégâts que d'ordinaire.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts +30% si la capacité est super efficace.",
 	},
 	combattorque: {
 		name: "Crash Musclé",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: "Cette capacité a 30% de chances de paralyser la cible.",
+		shortDesc: "30% de chance de paralyser la cible.",
 	},
 	cometpunch: {
 		name: "Poing Comète",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1024,40 +1024,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	comeuppance: {
 		name: "Vindicte",
 		desc: "Le lanceur contre-attaque avec un coup infligeant des dégâts supérieurs à ceux de la dernière capacité qui l'a blessé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si touché par attaque, renvoie dégâts x1.5.",
 	},
 	confide: {
 		name: "Confidence",
 		desc: "Dévoile des secrets à l’ennemi, qui perd alors sa concentration et voit son Attaque Spéciale diminuer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé de la cible de 1.",
 	},
 	confuseray: {
 		name: "Onde Folie",
 		desc: "Un rayon sinistre qui plonge l’ennemi dans un état de confusion.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Rend la cible confuse.",
 	},
 	confusion: {
 		name: "Choc Mental",
 		desc: "Une faible vague télékinétique frappe l’ennemi. Peut aussi le plonger dans la confusion.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de rendre la cible confuse.",
 	},
 	constrict: {
 		name: "Constriction",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Vitesse de 1.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	continentalcrush: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Apocalypse Gigalithique",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	conversion: {
 		name: "Conversion",
 		desc: "Le lanceur change de type pour prendre celui de la première capacité de sa liste.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Change le type du lanceur en celui de sa Capacité 1.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1078,7 +1078,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	conversion2: {
 		name: "Conversion 2",
 		desc: "Le lanceur change de type pour être résistant au type de la dernière attaque lancée par sa cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Type du lanceur = résistance à Capacité 4 de la cible.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1094,7 +1094,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	copycat: {
 		name: "Photocopie",
 		desc: "Le lanceur imite la dernière capacité employée. Échoue si aucune capacité n’a été utilisée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Utilise la dernière capacité utilisée dans le combat.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1114,7 +1114,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	coreenforcer: {
 		name: "Sanction Suprême",
 		desc: "La cible subit des dégâts et, si elle a déjà agi à ce tour, elle perd aussi son talent.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Annule le Talent de la cible si elle a agi en premier.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1123,13 +1123,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	corkscrewcrash: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Vrille Maximum",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	corrosivegas: {
 		name: "Gaz Corrosif",
 		desc: "Un gaz corrosif qui enveloppe tous les Pokémon alentour et qui dissout les objets qu’ils tiennent.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Enlève les objets des Pokémon adjacents.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1140,22 +1140,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	cosmicpower: {
 		name: "Force Cosmique",
 		desc: "Le lanceur absorbe un pouvoir mystique spatial qui augmente sa Défense et sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense et la Déf. Spé du lanceur de 1.",
 	},
 	cottonguard: {
 		name: "Cotogarde",
 		desc: "Le lanceur se protège en s’emmitouflant dans du coton. Sa Défense augmente énormément.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense du lanceur de 3.",
 	},
 	cottonspore: {
 		name: "Spore Coton",
 		desc: "Le lanceur libère des spores cotonneuses qui collent à l’ennemi et baissent beaucoup sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse de la cible de 2.",
 	},
 	counter: {
 		name: "Riposte",
 		desc: "Une riposte qui répond à toute capacité physique en infligeant le double de dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si touché par attaque physique, renvoie dégâts x2.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1176,14 +1176,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	courtchange: {
 		name: "Change-Côté",
 		desc: "Une force mystérieuse intervertit les effets affectant chaque côté du terrain.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échange les effets de terrain des deux côtés.",
 
 		activate: "  Les effets affectant chaque côté du terrain ont été échangés par [POKEMON] !",
 	},
 	covet: {
 		name: "Implore",
 		desc: "Le lanceur s’approche de la cible avec un air angélique afin de dérober l’objet qu’elle tient.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si le lanceur n'a pas d'objet, vole celui de la cible.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1209,12 +1209,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	crabhammer: {
 		name: "Pince-Masse",
 		desc: "Une grande pince martèle l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	craftyshield: {
 		name: "Vigilance",
 		desc: "Utilise une force mystérieuse pour protéger l’équipe des capacités de statut. Ne protège pas des autres capacités.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège les alliés des attaques de statut ce tour.",
 
 		start: "  [TEAM] est protégé par la capacité Vigilance !",
 		block: "  [POKEMON] est protégé par la capacité Vigilance !",
@@ -1222,17 +1222,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	crosschop: {
 		name: "Coup Croix",
 		desc: "Le lanceur délivre un coup double en croisant les avant-bras. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	crosspoison: {
 		name: "Poison Croix",
 		desc: "Un coup tranchant qui peut empoisonner l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique. 10% de chance de poison.",
 	},
 	crunch: {
 		name: "Mâchouille",
 		desc: "Le lanceur mord l’ennemi de ses crocs pointus. Peut aussi baisser sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de baisser la Défense de 1.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1241,12 +1241,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	crushclaw: {
 		name: "Éclate Griffe",
 		desc: "Lacère l’ennemi avec des griffes solides et aiguisées. Peut aussi baisser sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de baisser la Défense de 1.",
 	},
 	crushgrip: {
 		name: "Presse",
 		desc: "Une force puissante écrase l’ennemi. Plus il lui reste de PV et plus l’attaque est puissante.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Plus la cible a de PV, plus la puissance augmente.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1254,7 +1254,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	curse: {
 		name: "Malédiction",
 		desc: "Une capacité à l’effet différent selon que le lanceur est un Pokémon Spectre ou non.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Maudit si Spectre, sinon -1 Vit, +1 Atq, +1 Déf.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1267,22 +1267,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cut: {
 		name: "Coupe",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	darkestlariat: {
 		name: "Dark Lariat",
 		desc: "Le Pokémon étend les bras et frappe l’adversaire en tournant violemment. Inflige des dégâts et ignore les changements de stats de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore les changements de stats de la cible.",
 	},
 	darkpulse: {
 		name: "Vibrobscur",
 		desc: "Le lanceur dégage une horrible aura chargée de pensées maléfiques. Peut aussi apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance d'apeurer la cible.",
 	},
 	darkvoid: {
 		name: "Trou Noir",
 		desc: "L’ennemi est plongé dans les ténèbres. Il tombe dans un profond sommeil.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Darkrai : Endort la cible. Touche en Zone.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1294,22 +1294,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dazzlinggleam: {
 		name: "Éclat Magique",
 		desc: "Libère une puissante décharge lumineuse qui inflige des dégâts à l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	decorate: {
 		name: "Nappage",
 		desc: "Le lanceur augmente beaucoup l’Attaque et l’Attaque Spéciale de la cible en la nappant de glaçage.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque et l'Atq Spé. de la cible de 2.",
 	},
 	defendorder: {
 		name: "Appel Défense",
 		desc: "Le lanceur appelle ses sous-fifres pour former un bouclier qui augmente sa Défense et sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense et la Déf. Spé du lanceur de 1.",
 	},
 	defensecurl: {
 		name: "Boul’Armure",
 		desc: "Le lanceur s’enroule pour cacher ses points faibles, ce qui augmente sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense du lanceur de 1.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1320,7 +1320,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	defog: {
 		name: "Anti-Brume",
 		desc: "Un grand coup de vent qui disperse la Protection ou le Mur Lumière de l’ennemi. Diminue aussi son Esquive.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "-1 Esquive. Enlève Champ et hazards des deux côtés.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1336,7 +1336,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	destinybond: {
 		name: "Lien du Destin",
 		desc: "Si un ennemi porte un coup fatal au lanceur après qu’il a activé cette capacité, ils sont tous les deux mis K.O. La capacité échoue si elle est immédiatement réutilisée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si un adversaire KO le lanceur, il tombe aussi KO",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1350,7 +1350,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	detect: {
 		name: "Détection",
 		desc: "Le lanceur se protège de toutes les attaques. Peut échouer si utilisée plusieurs fois de suite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège le lanceur des capacités ce tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1374,13 +1374,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	devastatingdrake: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Chaos Draconique",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	diamondstorm: {
 		name: "Orage Adamantin",
 		desc: "Provoque une tempête de diamants qui inflige des dégâts. Peut beaucoup augmenter la Défense du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance d'augmenter la Défense de 2.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1389,7 +1389,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dig: {
 		name: "Tunnel",
 		desc: "Le lanceur creuse au premier tour et frappe au second.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Creuse un trou tour 1, attaque tour 2.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1417,7 +1417,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disable: {
 		name: "Entrave",
 		desc: "Empêche l’ennemi d’employer à nouveau sa dernière attaque. Dure quatre tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Entrave dernière capacité utilisée de cible. (5 tours)",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1448,17 +1448,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disarmingvoice: {
 		name: "Voix Enjôleuse",
 		desc: "Laisse s’échapper une voix enchanteresse qui inflige des dégâts psychiques à l’ennemi. Touche à coup sûr.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais. Touche en zone.",
 	},
 	discharge: {
 		name: "Coup d’Jus",
 		desc: "Un flamboiement d’électricité frappe tous les Pokémon autour du lanceur. Peut aussi les paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de paralyser les Pokémon adjacents.",
 	},
 	dive: {
 		name: "Plongée",
 		desc: "Le lanceur plonge sous l’eau au premier tour et frappe au second.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Plonge sous l'eau tour 1, attaque tour 2.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1471,7 +1471,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dizzypunch: {
 		name: "Uppercut",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de rendre la cible confuse.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1480,12 +1480,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doodle: {
 		name: "Décalquage",
 		desc: "Le lanceur capture l'essence de la cible et la décalque. Le talent du lanceur et de ses alliés devient alors identique à celui de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Talent du Pokémon et allié devient celui de la cible.",
 	},
 	doomdesire: {
 		name: "Vœu Destructeur",
 		desc: "Le lanceur génère une sphère lumineuse qu’il projette sur l’ennemi deux tours plus tard.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 tours après avoir été utilisé.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1496,7 +1496,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleedge: {
 		name: "Damoclès",
 		desc: "Une charge dangereuse et imprudente. Blesse aussi gravement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "33% de recul.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1512,7 +1512,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doublehit: {
 		name: "Coup Double",
 		desc: "Le lanceur frappe l’ennemi deux fois d’affilée à l’aide de sa queue, de lianes ou d’un autre membre.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois en un tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1520,12 +1520,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleironbash: {
 		name: "Écrous d’Poing",
 		desc: "Le lanceur fait pivoter l’écrou de sa poitrine deux fois d’affilée pour frapper l’adversaire avec ses bras. Peut apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois. 30% de chance d'apeurer la cible.",
 	},
 	doublekick: {
 		name: "Double Pied",
 		desc: "Deux coups de pied qui frappent l’ennemi deux fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois en un tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1539,14 +1539,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleshock: {
 		name: "Double Décharge",
 		desc: "Le lanceur libère toute l'électricité contenue dans son corps pour infliger des dégâts élevés à la cible. Le lanceur perd le type Électrik.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur perd son type Électrik.",
 
 		typeChange: "  [POKEMON] a utilisé toute son électricité !",
 	},
 	doubleslap: {
 		name: "Torgnoles",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1560,67 +1560,67 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleteam: {
 		name: "Reflet",
 		desc: "Le lanceur se déplace si vite qu’il crée des copies illusoires de lui-même, augmentant son Esquive.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Esquive du lanceur de 1.",
 	},
 	dracometeor: {
 		name: "Draco-Météore",
 		desc: "Le lanceur invoque des comètes. Le contrecoup réduit beaucoup son Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé du lanceur de 2.",
 	},
 	dragonascent: {
 		name: "Draco-Ascension",
 		desc: "Le Pokémon s’abat à toute vitesse sur la cible depuis les hautes couches de l’atmosphère. Baisse la Défense et la Défense Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense et la Déf. Spé du lanceur de 1.",
 
 		megaNoItem: "  L’esprit [TRAINER:de] entre en résonance avec la volonté [POKEMON:de] !",
 	},
 	dragonbreath: {
 		name: "Draco-Souffle",
 		desc: "Le lanceur souffle fort sur l’ennemi pour lui infliger des dégâts. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de paralyser la cible.",
 	},
 	dragoncheer: {
 		name: "Cri Draconique",
 		desc: "Le lanceur galvanise ses alliés avec un encouragement draconique qui augmente leur taux de critiques. L'effet est plus puissant si les alliés ont le type Dragon.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Sur allié : taux critique +1, +2 si Dragon.",
 
 		start: "#focusenergy",
 	},
 	dragonclaw: {
 		name: "Draco-Griffe",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	dragondance: {
 		name: "Danse Draco",
 		desc: "Une danse mystique dont le rythme effréné augmente l’Attaque et la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque et la Vitesse du lanceur de 1.",
 	},
 	dragondarts: {
 		name: "Draco-Flèches",
 		desc: "Le lanceur attaque en propulsant deux Fantyrm. S’il y a deux adversaires, chacun d’entre eux est frappé par un Fantyrm.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois. Double : touche chaque cible 1 fois.",
 	},
 	dragonenergy: {
 		name: "Draco-Énergie",
 		desc: "Le lanceur utilise son énergie vitale pour attaquer l’ennemi. Moins il a de PV, moins l’attaque est puissante.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance proportionnelle aux PV du lanceur. (Zone)",
 	},
 	dragonhammer: {
 		name: "Draco-Marteau",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	dragonpulse: {
 		name: "Draco-Choc",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	dragonrage: {
 		name: "Draco-Rage",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige 40 PV de dégâts à la cible.",
 	},
 	dragonrush: {
 		name: "Draco-Charge",
 		desc: "Le lanceur frappe l’ennemi en prenant un air menaçant. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance d'apeurer la cible.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1628,17 +1628,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dragontail: {
 		name: "Draco-Queue",
 		desc: "Un coup puissant qui blesse la cible et l’envoie au loin. Lors d’un combat contre un Pokémon sauvage seul, met fin au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Force la cible à switcher avec un allié aléatoire.",
 	},
 	drainingkiss: {
 		name: "Vampibaiser",
 		desc: "Aspire la force vitale de l’ennemi par un baiser. Rend au lanceur un nombre de PV supérieur ou égal à la moitié des dégâts infligés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 75% des dommages infligés.",
 	},
 	drainpunch: {
 		name: "Vampi-Poing",
 		desc: "Un coup de poing qui draine l’énergie. Convertit la moitié des dégâts infligés en PV pour le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1646,7 +1646,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dreameater: {
 		name: "Dévorêve",
 		desc: "Le lanceur mange le rêve de l’ennemi endormi et récupère en PV la moitié des dégâts infligés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur soigne 50% des dégâts si la cible dort.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1659,31 +1659,31 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	drillpeck: {
 		name: "Bec Vrille",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	drillrun: {
 		name: "Tunnelier",
 		desc: "Le lanceur tourne sur lui-même comme une perceuse et se jette sur l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	drumbeating: {
 		name: "Tambour Battant",
 		desc: "Le lanceur bat son tambour pour en diriger les racines sur la cible, l’attaquer, et baisser sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1.",
 	},
 	dualchop: {
 		name: "Double Baffe",
 		desc: "Le lanceur frappe l’ennemi deux fois d’affilée avec les parties les plus robustes de son corps.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois en un tour.",
 	},
 	dualwingbeat: {
 		name: "Double Volée",
 		desc: "Le lanceur frappe l’ennemi avec ses ailes deux fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois en un tour.",
 	},
 	dynamaxcannon: {
 		name: "Canon Dynamax",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Double les dégâts si la cible est Dynamaxée.",
 		gen8: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1691,17 +1691,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dynamicpunch: {
 		name: "Dynamo-Poing",
 		desc: "Le lanceur rassemble ses forces et envoie un coup de poing à l’ennemi. Rend ce dernier confus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de rendre la cible confuse.",
 	},
 	earthpower: {
 		name: "Telluriforce",
 		desc: "De terribles séismes secouent l’ennemi. Peut aussi baisser sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Déf. Spé de 1.",
 	},
 	earthquake: {
 		name: "Séisme",
 		desc: "Le lanceur provoque un tremblement de terre touchant tous les Pokémon autour de lui.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche en zone. Dégâts x2 sur Tunnel.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1717,28 +1717,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	echoedvoice: {
 		name: "Écho",
 		desc: "Un cri retentissant blesse l’ennemi. Si le lanceur ou d’autres Pokémon l’utilisent à chaque tour, l’effet augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La puissance augmente si utilisé tous les tours.",
 	},
 	eerieimpulse: {
 		name: "Ondes Étranges",
 		desc: "Le corps du lanceur produit des ondes anormales qui enveloppent l’ennemi et diminuent beaucoup son Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé de la cible de 2.",
 	},
 	eeriespell: {
 		name: "Sort Sinistre",
 		desc: "Le lanceur attaque avec de puissants pouvoirs psychiques et retire 3 PP de la dernière capacité de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Enlève 3 PP à la dernière capacité de la cible.",
 
 		activate: "#spite",
 	},
 	eggbomb: {
 		name: "Bombe Œuf",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	electricterrain: {
 		name: "Champ Électrifié",
 		desc: "Pendant cinq tours, le terrain se charge d’électricité. Les Pokémon au sol ne peuvent pas s’endormir et la puissance des capacités de type Électrik augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "5 tours. Au sol : +puissance Électrik, pas sommeil.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1746,14 +1746,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	electrify: {
 		name: "Électrisation",
 		desc: "Si le lanceur attaque avant la cible, les capacités de celle-ci seront de type Électrik jusqu’à la fin du tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Type de la capacité de la cible = Électrik ce tour.",
 
 		start: "  Électrisation donne le type Électrik à la prochaine capacité [POKEMON:de] !",
 	},
 	electroball: {
 		name: "Boule Élek",
 		desc: "Le lanceur envoie une boule d’électricité. Si sa Vitesse est plus grande que celle de l’ennemi, les dégâts augmentent d’autant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur plus rapide que cible : puissance augmente.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1761,24 +1761,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	electrodrift: {
 		name: "Turbo Volt",
 		desc: "Le lanceur change de forme et fonce sur la cible en la perforant d'électricité futuriste. Si la capacité est super efficace, sa puissance augmente encore plus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts +30% si la capacité est super efficace.",
 	},
 	electroshot: {
 		name: "Fulgurayon",
 		desc: "Le lanceur absorbe de l'électricité au premier tour, ce qui augmente son Attaque Spéciale, et envoie une puissante décharge au second. S'il pleut, il l'envoie au premier tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "SpA +1. Attaque Tour 2. Pluie : pas de charge.",
 
 		prepare: "[POKEMON] absorbe de l’électricité !",
 	},
 	electroweb: {
 		name: "Toile Élek",
 		desc: "Attrape l’ennemi dans un filet électrique. Baisse aussi la Vitesse de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1. (Zone)",
 	},
 	embargo: {
 		name: "Embargo",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "L'objet de la cible n'a aucun effet. (5 tours)",
 
 		start: "  [POKEMON] ne peut plus utiliser d’objets !",
 		end: "  [POKEMON] peut de nouveau utiliser des objets !",
@@ -1786,12 +1786,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ember: {
 		name: "Flammèche",
 		desc: "L’ennemi est attaqué par une faible flamme. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler la cible.",
 	},
 	encore: {
 		name: "Encore",
 		desc: "Oblige l’ennemi à répéter la dernière capacité utilisée durant trois tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La cible doit réutiliser sa dernière capacité. (3 tours)",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1819,12 +1819,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	endeavor: {
 		name: "Effort",
 		desc: "Une attaque qui réduit les PV de l’ennemi au niveau des PV du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Diminue les PV de la cible jusqu'aux PV du lanceur.",
 	},
 	endure: {
 		name: "Ténacité",
 		desc: "Le lanceur résiste aux attaques avec 1 PV. Peut échouer si utilisée plusieurs fois de suite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur encaisse les attaques ce tour avec 1 PV.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1853,12 +1853,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	energyball: {
 		name: "Éco-Sphère",
 		desc: "Utilise les pouvoirs de la nature pour attaquer l’ennemi. Peut aussi baisser sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Déf. Spé de 1.",
 	},
 	entrainment: {
 		name: "Ten-Danse",
 		desc: "Le lanceur danse sur un rythme étrange. Il force sa cible à l’imiter, ce qui lui fait adopter son talent.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le Talent de la cible devient celui du lanceur.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1875,7 +1875,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	eruption: {
 		name: "Éruption",
 		desc: "Le lanceur laisse exploser sa colère. Plus ses PV sont bas, moins l’attaque est puissante.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance proportionnelle aux PV du lanceur. (Zone)",
 	},
 	esperwing: {
 		name: "Ailes Psycho",
@@ -1885,17 +1885,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	eternabeam: {
 		name: "Laser Infinimax",
 		desc: "L’attaque la plus puissante d’Éthernatos sous sa forme originelle. S’il l’utilise, il devra se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	expandingforce: {
 		name: "Vaste Pouvoir",
 		desc: "Le lanceur attaque la cible avec ses pouvoirs psychiques. Si un Champ Psychique est actif, la puissance de cette capacité augmente et elle touche tous les ennemis.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Champ Psychique : puissance x1.5. Touche en zone.",
 	},
 	explosion: {
 		name: "Explosion",
 		desc: "Le lanceur explose et inflige des dégâts à tous les Pokémon autour de lui. Met K.O. le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur tombe KO Touche en zone.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -1913,7 +1913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	extrasensory: {
 		name: "Extrasenseur",
 		desc: "Le lanceur attaque avec un pouvoir étrange et invisible. Peut aussi apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance d'apeurer la cible.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1921,12 +1921,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	extremeevoboost: {
 		name: "Neuf pour Un",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq, Déf, Atq Spé, Déf. Spé et Vit de 2.",
 	},
 	extremespeed: {
 		name: "Vitesse Extrême",
 		desc: "Le lanceur charge à une vitesse renversante. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +2.",
 		gen4: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1934,7 +1934,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	facade: {
 		name: "Façade",
 		desc: "Une attaque dont la puissance double lorsque le lanceur est empoisonné, paralysé ou brûlé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si lanceur brûlé/empoisonné/paralysé.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1942,7 +1942,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fairylock: {
 		name: "Verrou Enchanté",
 		desc: "Des chaînes entourent la zone de combat, empêchant tous les Pokémon de fuir au prochain tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empêche tout le monde de switcher prochain tour.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1951,12 +1951,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fairywind: {
 		name: "Vent Féérique",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	fakeout: {
 		name: "Bluff",
 		desc: "Permet de frapper en priorité et apeure l’ennemi. Ne fonctionne qu’au premier tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1, 100% peur, que au 1er tour.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1964,26 +1964,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	faketears: {
 		name: "Croco Larme",
 		desc: "Le lanceur fait semblant de pleurer pour troubler l’ennemi et beaucoup baisser sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Déf. Spé de la cible de 2.",
 	},
 	falsesurrender: {
 		name: "Fourbette",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	falseswipe: {
 		name: "Faux-Chage",
 		desc: "Le lanceur retient ses coups pour que l’ennemi garde au moins 1 PV et ne tombe pas K.O.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Laisse toujours au moins 1 PV à la cible.",
 	},
 	featherdance: {
 		name: "Danse Plumes",
 		desc: "Une montagne de plumes ensevelit l’ennemi et réduit beaucoup son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque de la cible de 2.",
 	},
 	feint: {
 		name: "Ruse",
 		desc: "Une attaque capable de toucher un ennemi qui utilise une capacité comme Détection ou Abri. Annule l’effet de ces capacités.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore Détection, Abri, Prévention et Garde Large.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -1999,12 +1999,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	feintattack: {
 		name: "Feinte",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	fellstinger: {
 		name: "Dard Mortel",
 		desc: "Augmente énormément l’Attaque du lanceur si un ennemi est mis K.O. avec cette capacité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque du lanceur de 3 s'il KO la cible.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2012,34 +2012,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ficklebeam: {
 		name: "Laser Hasard",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de doubler la puissance.",
 
 		activate: "  [POKEMON] a pris cette capacité au sérieux !",
 	},
 	fierydance: {
 		name: "Danse du Feu",
 		desc: "Le lanceur enveloppe l’ennemi de flammes. Peut aussi augmenter l’Attaque Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance d'augmenter l'Atq. Spé de 1.",
 	},
 	fierywrath: {
 		name: "Fureur Ardente",
 		desc: "Le lanceur canalise sa colère et la transforme en aura brûlante, avec laquelle il attaque l’ennemi. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance d'apeurer les ennemis.",
 	},
 	filletaway: {
 		name: "Décharnement",
 		desc: "Le lanceur sacrifie des PV pour beaucoup augmenter son Attaque, son Attaque Spéciale, et sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Sacrifie 50% des PV max. +2 à Atq, Atq Spé, Vit.",
 	},
 	finalgambit: {
 		name: "Tout ou Rien",
 		desc: "Une attaque très risquée. Le lanceur perd tous ses PV restants et inflige autant de dégâts à l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts infligés = PV du lanceur, puis tombe KO",
 	},
 	fireblast: {
 		name: "Déflagration",
 		desc: "Un déluge de flammes ardentes submerge l’ennemi. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler la cible.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2048,7 +2048,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firefang: {
 		name: "Crocs Feu",
 		desc: "Le lanceur utilise une morsure enflammée. Peut aussi brûler ou apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler. 10% de chance d'apeurer.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2056,12 +2056,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firelash: {
 		name: "Fouet de Feu",
 		desc: "Frappe la cible avec un fouet incandescent et baisse sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Défense de 1.",
 	},
 	firepledge: {
 		name: "Aire de Feu",
 		desc: "Une masse de feu s’abat sur l’ennemi. En l’utilisant avec Aire d’Herbe, l’effet augmente et une mer de feu apparaît.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Couplé avec Aire d'Eau ou d'Herbe : effet bonus.",
 
 		activate: "#waterpledge",
 		start: "  [TEAM:capitalize] est cernée par une mer de feu !",
@@ -2071,12 +2071,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firepunch: {
 		name: "Poing Feu",
 		desc: "Un coup de poing enflammé vient frapper l’ennemi. Peut le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler la cible.",
 	},
 	firespin: {
 		name: "Danse Flammes",
 		desc: "Un tourbillon de flammes emprisonne l’ennemi pendant quatre à cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2104,7 +2104,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firstimpression: {
 		name: "Escarmouche",
 		desc: "Une capacité très puissante, mais qui ne fonctionne qu’au premier tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1. Utilisable qu'au 1er tour.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2112,12 +2112,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fishiousrend: {
 		name: "Branchicrok",
 		desc: "Le lanceur mord sa cible avec ses solides branchies. Si cette capacité est lancée avant que la cible n’attaque, elle infligera deux fois plus de dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si le lanceur agit avant la cible.",
 	},
 	fissure: {
 		name: "Abîme",
 		desc: "Le lanceur fait tomber l’ennemi dans une crevasse. Si cette attaque réussit, elle met K.O. sur le coup.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "OHKO la cible. Échoue si lanceur est plus bas niveau.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2129,7 +2129,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flail: {
 		name: "Gigotage",
 		desc: "Le lanceur attaque en gigotant dans tous les sens. Plus ses PV sont bas, plus l’attaque est puissante.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "PV du lanceur bas : puissance augmente.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2143,7 +2143,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flameburst: {
 		name: "Rebondifeu",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Blesse aussi les Pokémon adjacents à la cible.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2153,22 +2153,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flamecharge: {
 		name: "Nitrocharge",
 		desc: "Le lanceur s’entoure de flammes pour attaquer l’ennemi. Il se concentre et sa Vitesse augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance d'augmenter la Vitesse de 1.",
 	},
 	flamethrower: {
 		name: "Lance-Flammes",
 		desc: "L’ennemi reçoit un torrent de flammes. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler la cible.",
 	},
 	flamewheel: {
 		name: "Roue de Feu",
 		desc: "Le lanceur s’entoure de feu et charge l’ennemi. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler la cible. Dégèle le lanceur.",
 	},
 	flareblitz: {
 		name: "Boutefeu",
 		desc: "Le lanceur s’embrase avant de charger l’ennemi. Le choc blesse aussi gravement le lanceur. Peut brûler l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "33% de recul. 10% brûlure. Dégèle le lanceur.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2177,27 +2177,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flash: {
 		name: "Flash",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Précision de la cible de 1.",
 	},
 	flashcannon: {
 		name: "Luminocanon",
 		desc: "Le lanceur concentre son énergie lumineuse et la fait exploser. Peut aussi baisser la Défense Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Déf. Spé de 1.",
 	},
 	flatter: {
 		name: "Flatterie",
 		desc: "Rend la cible confuse, mais augmente son Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq. Spé de la cible de 1 et rend confus.",
 	},
 	fleurcannon: {
 		name: "Canon Floral",
 		desc: "Envoie un rayon laser dévastateur. Baisse beaucoup l’Attaque Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé du lanceur de 2.",
 	},
 	fling: {
 		name: "Dégommage",
 		desc: "Le lanceur envoie l’objet qu’il tient sur l’ennemi. La puissance et les effets dépendent de l’objet.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lance l'objet du lanceur sur la cible. Puissance varie.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2207,34 +2207,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flipturn: {
 		name: "Eau Revoir",
 		desc: "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l’équipe prêt au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur attaque la cible puis switch.",
 
 		switchOut: "#uturn",
 	},
 	floatyfall: {
 		name: "Pika-Piqué",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 	},
 	floralhealing: {
 		name: "Soin Floral",
 		desc: "Rend la moitié de ses PV max à la cible. Plus efficace sur un Champ Herbu.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne la cible de 50% de ses PV max.",
 	},
 	flowershield: {
 		name: "Garde Florale",
 		desc: "Grâce à une force mystérieuse, la Défense de tous les Pokémon Plante au combat augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense des Pokémon Plante actifs de 1.",
 	},
 	flowertrick: {
 		name: "Magie Florale",
 		desc: "Le lanceur attaque en jetant un bouquet de fleurs piégé sur la cible. N'échoue jamais et inflige toujours un coup critique.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige toujours un coup critique. N'échoue jamais.",
 	},
 	fly: {
 		name: "Vol",
 		desc: "Le lanceur s’envole au premier tour et frappe au second.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "S'envole au tour 1, puis attaque au tour 2.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2256,17 +2256,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flyingpress: {
 		name: "Flying Press",
 		desc: "Une attaque en piqué depuis le ciel, à la fois de type Combat et de type Vol.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ajoute le type Vol à cette capacité.",
 	},
 	focusblast: {
 		name: "Exploforce",
 		desc: "Le lanceur rassemble ses forces et laisse éclater son pouvoir. Peut aussi baisser la Défense Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Déf. Spé de 1.",
 	},
 	focusenergy: {
 		name: "Puissance",
 		desc: "Le lanceur prend une profonde inspiration et se concentre pour augmenter son taux de critiques.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente le taux de coup critiques du lanceur de 2.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2283,7 +2283,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	focuspunch: {
 		name: "Mitra-Poing",
 		desc: "Le lanceur se concentre avant d’attaquer. Échoue s’il est touché avant d’avoir frappé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échoue si le lanceur subit des dégâts avant l'attaque.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2294,7 +2294,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	followme: {
 		name: "Par Ici",
 		desc: "Attire l’attention des ennemis pour les forcer à n’attaquer que le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les capacités des ennemis ciblent le lanceur ce tour.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2311,12 +2311,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forcepalm: {
 		name: "Forte-Paume",
 		desc: "Une onde de choc frappe l’ennemi. Peut aussi paralyser la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de paralyser la cible.",
 	},
 	foresight: {
 		name: "Clairvoyance",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Combat, Normal touchent Spectre. Esquive ignorée.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2332,17 +2332,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forestscurse: {
 		name: "Maléfice Sylvain",
 		desc: "La cible est charmée par l’esprit de la forêt. Le type Plante est ajouté à ses types actuels.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ajoute le type Plante aux types du lanceur.",
 	},
 	foulplay: {
 		name: "Tricherie",
 		desc: "Le lanceur utilise la force de l’ennemi. Plus l’Attaque de l’ennemi est élevée, plus le lanceur inflige de dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Utilise l'Attaque de la cible pour calculer les dégâts.",
 	},
 	freezedry: {
 		name: "Lyophilisation",
 		desc: "Refroidit violemment l’ennemi et peut le geler. Super efficace sur les Pokémon de type Eau.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de geler. Super efficace sur type Eau.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2351,39 +2351,39 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	freezeshock: {
 		name: "Éclair Gelé",
 		desc: "Projette un bloc de glace électrifié sur l’ennemi au second tour. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Charge tour 1, Attaque tour 2. 30% paralysie.",
 
 		prepare: "  [POKEMON] est baigné d’une lumière blafarde !",
 	},
 	freezingglare: {
 		name: "Regard Glaçant",
 		desc: "Les yeux du lanceur tirent des rayons psychiques. Peut aussi geler l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de geler la cible.",
 	},
 	freezyfrost: {
 		name: "Évo-Congélo",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Annule tous les changements de stats.",
 	},
 	frenzyplant: {
 		name: "Végé-Attaque",
 		desc: "Un violent coup de racines s’abat sur l’ennemi. Immobilise le lanceur au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	frostbreath: {
 		name: "Souffle Glacé",
 		desc: "Un souffle froid blesse l’ennemi. L’effet est toujours critique.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige toujours un coup critique.",
 	},
 	frustration: {
 		name: "Frustration",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance max de 102 avec Bonheur minimum.",
 	},
 	furyattack: {
 		name: "Furie",
 		desc: "Frappe l’ennemi deux à cinq fois d’affilée avec un bec ou une corne, par exemple.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2400,12 +2400,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	furycutter: {
 		name: "Taillade",
 		desc: "Un coup de faux ou de griffe dont la force augmente quand il touche plusieurs fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La puissance double à chaque coup, jusqu'à 160.",
 	},
 	furyswipes: {
 		name: "Combo-Griffe",
 		desc: "L’ennemi est lacéré par des faux ou des griffes de deux à cinq fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2422,17 +2422,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fusionbolt: {
 		name: "Éclair Croix",
 		desc: "Projette un orbe électrique gigantesque. L’effet augmente sous l’influence de Flamme Croix.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si utilisé après Flamme Croix ce tour.",
 	},
 	fusionflare: {
 		name: "Flamme Croix",
 		desc: "Projette une boule de feu gigantesque. L’effet augmente sous l’influence d’Éclair Croix.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si utilisée après Éclair Croix ce tour.",
 	},
 	futuresight: {
 		name: "Prescience",
 		desc: "De l’énergie psychique vient frapper l’ennemi deux tours après l’utilisation de cette capacité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 tours après avoir été utilisée.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2446,7 +2446,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gastroacid: {
 		name: "Suc Digestif",
 		desc: "Le lanceur répand ses sucs digestifs sur l’ennemi. Le fluide neutralise le talent de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Annule le Talent de la cible.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2462,29 +2462,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	geargrind: {
 		name: "Lancécrou",
 		desc: "Le lanceur jette deux écrous d’acier qui frappent l’ennemi deux fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois en un tour.",
 	},
 	gearup: {
 		name: "Engrenage",
 		desc: "Change de réglage pour augmenter l’Attaque et l’Attaque Spéciale des alliés ayant les talents Plus ou Moins.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente Atq/SpA des alliés avec Plus/Minus de 1.",
 	},
 	genesissupernova: {
 		name: "Supernova Originelle",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Champ Psychique.",
 	},
 	geomancy: {
 		name: "Géo-Contrôle",
 		desc: "Le lanceur absorbe de l’énergie au premier tour et augmente beaucoup son Attaque Spéciale, sa Défense Spéciale et sa Vitesse au second.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Se charge, puis tour 2 augmente SpA/SpD/Vit de 2.",
 
 		prepare: "[POKEMON] concentre son énergie !",
 	},
 	gigadrain: {
 		name: "Giga-Sangsue",
 		desc: "Une attaque qui convertit la moitié des dégâts infligés en PV pour le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2495,35 +2495,35 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gigaimpact: {
 		name: "Giga Impact",
 		desc: "Le lanceur charge l’ennemi de toute sa puissance et doit ensuite se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	gigatonhammer: {
 		name: "Marteau Mastoc",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ne peut pas être utilisé deux fois d'affilée.",
 	},
 	gigavolthavoc: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fulguro-Lance Gigavolt",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	glaciallance: {
 		name: "Lance de Glace",
 		desc: "Le lanceur attaque l’ennemi avec une lance de glace entourée d’un blizzard.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	glaciate: {
 		name: "Ère Glaciaire",
 		desc: "Un souffle de vent qui congèle tout sur son passage s’abat sur l’ennemi. Réduit aussi sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1. (Zone)",
 	},
 	glaiverush: {
 		name: "Charge Glaive",
 		desc: "Le lanceur se jette dans une charge inconsciente sur la cible. Une fois cette capacité utilisée, toute attaque sur le lanceur inflige le double de dégâts et n'échoue jamais.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Prochain tour : capacité subie x2 et n'échoue pas.",
 	},
 	glare: {
 		name: "Regard Médusant",
 		desc: "Le lanceur intimide l’ennemi grâce à son regard terrifiant pour le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Paralyse la cible.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2534,202 +2534,202 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	glitzyglow: {
 		name: "Évo-Psycho",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Mur Lumière.",
 	},
 	gmaxbefuddle: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Illusion G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Illusion G-Max. Si la capacité réussit, chaque Pokémon du camp adverse devient soit paralysé, soit empoisonné, soit endormi, même s'il se trouve derrière un clone.",
+		shortDesc: "Endort, empoisonne ou paralyse les ennemis.",
 	},
 	gmaxcannonade: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Canonnade G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Canonnade G-Max. Si la capacité réussit, pendant 4 tours chaque Pokémon adverse qui n'est pas de type Eau prend des dégâts équivalents à 1/6 de ses PVs totaux à la fin de chaque tour, même s'il se trouve derrière un clone.",
+		shortDesc: "Ennemis non-Eau subissent 1/6 des PV. (4 tours)",
 
 		start: "  La violence des courants frappe [PARTY] !",
 		damage: "  [POKEMON] subit la violence du tourbillon provoqué par Canonnade G-Max !",
 	},
 	gmaxcentiferno: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Combustion G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Combustion G-Max. Si la capacité réussit, elle empêche chaque Pokémon adverse de quitter le terrain pendant 4 ou 5 tours (7 tours si l'utilisateur tient l'Accro Griffe). Elle inflige aussi à la cible des dégâts égaux à 1/8 de ses PVs maximums (1/6 si l'utilisateur tient la Bande Étreinte), arrondis à l'unité inférieure, à la fin de chaque tour pendant l'effet. La cible peut toujours se retirer si elle tient la Carapace Mue ou utilise Relais, Eau Revoir, Dernier Mot, Téléport, Demi-Tour, ou Change Éclair. L'effet prend fin si l'utilisateur ou la cible quitte le terrain, ou si la cible utilise Tour Rapide ou Clonage avec succès. Cet effet n'est pas cumulable ou réinitialisé par l'utilisation de cette attaque ou d'une autre attaque piégeant un Pokémon sur le terrain.",
+		shortDesc: "Déclenche Danse-Flammes sur les ennemis.",
 	},
 	gmaxchistrike: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Frappe G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Frappe G-Max. Si la capacité réussit, le taux de coup critique de chaque Pokémon du camp allié est augmenté d'1 cran, même s'ils se trouvent derrière un clone.",
+		shortDesc: "Augmente le taux de critiques des alliés de 1.",
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Câlin G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Câlin G-Max. Si la capacité réussit, chaque Pokémon du camp adverse est rendu amoureux, même s'il est derrière un clone. Cet effet ne se produit pas si la cible est du sexe opposé à l'utilisateur ou si la cible est déjà amoureuse.",
+		shortDesc: "Déclenche Attraction sur les ennemis.",
 	},
 	gmaxdepletion: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Usure G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Usure G-Max. Si la capacité réussit, chaque Pokémon du camp adverse voit les PPs de sa dernière attaque utilisée diminués de 2, même s'il se trouve derrière un clone. ",
+		shortDesc: "Réduit PP de la dernière capacité des ennemis de 3.",
 
 		activate: "  Les PP [TARGET:de] baissent !",
 	},
 	gmaxdrumsolo: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Percussion G-Max",
+		desc: "La puissance de cette attaque est égale à 160 peu importe la puissance de l'attaque de base. Cette attaque et ses effets ignorent les talents des autres Pokémon.",
+		shortDesc: "Puissance toujours égale à 160 et ignore les Talents.",
 	},
 	gmaxfinale: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Cure G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Cure G-Max. Si la capacité réussit, chaque Pokémon du camp allié est soigné de 1/6 de ses PVs totaux, même s'il se trouve derrière un clone.",
+		shortDesc: "Déclenche Fontaine de Vie.",
 	},
 	gmaxfireball: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pyroball G-Max",
+		desc: "La puissance de cette attaque est égale à 160 peu importe la puissance de l'attaque de base. Cette attaque et ses effets ignorent les talents des autres Pokémon.",
+		shortDesc: "Puissance toujours égale à 160 et ignore les Talents.",
 	},
 	gmaxfoamburst: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Bulles G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Bulles G-Max. Si la capacité réussit, la Vitesse de chaque Pokémon du camp adverse est diminuée de 2 crans, même s'ils se trouvent derrière un clone.",
+		shortDesc: "Baisse la Vitesse des ennemis de 2.",
 	},
 	gmaxgoldrush: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pactole G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Pactole G-Max. Si la capacité réussit, chaque Pokémon du camp adverse devient confus, même s'il se trouve derrière un clone.",
+		shortDesc: "Rend les ennemis confus.",
 	},
 	gmaxgravitas: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ondes G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Ondes G-Max. Si la capacité réussit, elle déclenche la capacité Gravité.",
+		shortDesc: "Déclenche Gravité.",
 	},
 	gmaxhydrosnipe: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gâchette G-Max",
+		desc: "La puissance de cette attaque est égale à 160 peu importe la puissance de l'attaque de base. Cette attaque et ses effets ignorent les talents des autres Pokémon.",
+		shortDesc: "Puissance toujours égale à 160 et ignore les Talents.",
 	},
 	gmaxmalodor: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pestilence G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Pestilence G-Max. Si la capacité réussit, chaque Pokémon du camp adverse est empoisonné, même s'il se trouve derrière un clone.",
+		shortDesc: "Empoisonne les ennemis.",
 	},
 	gmaxmeltdown: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fonte G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Fonte G-Max. Si la capacité réussit, chaque Pokémon du camp adverse est affecté par la Tourmente, même s'il se trouve derrière un clone.",
+		shortDesc: "Déclenche Tourmente sur les ennemis.",
 	},
 	gmaxoneblow: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Coup Final G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Coup Final G-Max. Cette attaque inflige les dégâts maximum même si l'adversaire se protège grâce à Abri, un équivalent ou Gardomax.",
+		shortDesc: "Passe au travers d'Abri, équivalent, et Gardomax.",
 	},
 	gmaxrapidflow: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Multicoup G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Multicoup G-Max. Cette attaque inflige les dégâts maximum même si l'adversaire se protège grâce à Abri, un équivalent, ou Gardomax.",
+		shortDesc: "Passe au travers d'Abri, équivalent, et Gardomax.",
 	},
 	gmaxreplenish: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Récolte G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Récolte G-Max. Si la capacité réussit, chaque Pokémon du camp allié a 50% de chances de récupérer sa baie précédemment consommée, même s'il a un clone.",
+		shortDesc: "50% de chance de restaurer la Baie consommée.",
 	},
 	gmaxresonance: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Résonance G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Résonance G-Max. Si la capacité réussit, elle déclenche la capacité Voile Aurore pour l'équipe alliée, même s'il se trouve derrière un clone.",
+		shortDesc: "Déclenche Voile Aurore (même sans Grêle)",
 	},
 	gmaxsandblast: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Enlisement G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Enlisement G-Max. Si la capacité réussit, elle empêche chaque Pokémon adverse de quitter le terrain pendant 4 ou 5 tours (7 tours si l'utilisateur tient l'Accro Griffe). Elle inflige aussi à la cible des dégâts égaux à 1/8 de ses PVs maximums (1/6 si l'utilisateur tient la Bande Étreinte), arrondis à l'unité inférieure, à la fin de chaque tour pendant l'effet. La cible peut toujours se retirer si elle tient la Carapace Mue ou utilise Relais, Eau Revoir, Dernier Mot, Téléport, Demi-Tour, ou Change Éclair. L'effet prend fin si l'utilisateur ou la cible quitte le terrain, ou si la cible utilise Tour Rapide ou Clonage avec succès. Cet effet n'est pas cumulable ou réinitialisé par l'utilisation de cette attaque ou d'une autre attaque piégeant un Pokémon sur le terrain.",
+		shortDesc: "Déclenche Tourbi-Sable sur les ennemis.",
 	},
 	gmaxsmite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Sentence G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Sentence G-Max. Si la capacité réussit, chaque Pokémon du camp adverse est plongé dans la confusion, même s'il se trouve derrière un clone.",
+		shortDesc: "Rend les ennemis confus.",
 	},
 	gmaxsnooze: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Torpeur G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Torpeur G-Max. Si la capacité réussit, l'effet de Bâillement commence sur la cible, même si elle est derrière un clone.",
+		shortDesc: "Rend les ennemis somnolents.",
 	},
 	gmaxsteelsurge: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Percée G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Percée G-Max. Si la capacité réussit, des pics de métal pointus sont posés du côté adverse du terrain, blessant chaque Pokémon adverse qui est envoyé sur le terrain, même s'il se trouve derrière un clone. Échoue si l'effet est déjà actif sur le terrain adverse. Les ennemis perdent 1/32, 1/16, 1/8, 1/4, ou 1/2 de leurs PVs maximums, en fonction de leur faiblesse au type Acier; 0.25x, 0.5x, neutre, 2x, ou 4x, respectivement. Peut être retiré du terrain adverse si un Pokémon adverse utilise Tour Rapide ou Anti-Brume avec succès.",
+		shortDesc: "Fait apparaître des hazards de type Acier.",
 
 		start: "  Des morceaux d’acier acérés lévitent autour de [PARTY] !",
 		end: "  Les morceaux d’acier acérés autour de [PARTY] ont disparu !",
 		damage: "  L’acier pointu transperce [POKEMON] !",
 	},
 	gmaxstonesurge: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Récif G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Récif G-Max. Si la capacité réussit, pose les Pièges de Roc du côté adverse du terrain, blessant chaque Pokémon adverse qui est envoyé sur le terrain, même s'il se trouve derrière un clone. Échoue si l'effet est déjà actif sur le terrain adverse. Les ennemis perdent 1/32, 1/16, 1/8, 1/4, ou 1/2 de leurs PVs maximums, en fonction de leur faiblesse au type Roche; 0.25x, 0.5x, neutre, 2x, ou 4x, respectivement. Peut être retiré du terrain adverse si un Pokémon adverse utilise Tour Rapide ou Anti-Brume avec succès.",
+		shortDesc: "Déclenche Piège de Roc",
 	},
 	gmaxstunshock: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Choc G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Choc G-Max. Si la capacité réussit, chaque Pokémon du camp adverse devient soit paralysé soit empoisonné, même s'il se trouve derrière un clone.",
+		shortDesc: "Paralyse ou empoisonne les ennemis.",
 	},
 	gmaxsweetness: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Nectar G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Nectar G-Max. Si la capacité réussit, chaque Pokémon de l'équipe a ses problèmes de statut soignés",
+		shortDesc: "Soigne les problèmes de statut des alliés.",
 	},
 	gmaxtartness: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Corrosion G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Corrosion G-Max. Si la capacité réussit, l'Esquive de chaque Pokémon adverse est diminuée d'1 cran, même s'il se trouve derrière un clone.",
+		shortDesc: "Baisse l'Esquive des ennemis de 1.",
 	},
 	gmaxterror: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hantise G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Hantise G-Max. Si la capacité réussit, elle empêche chaque Pokémon adverse de quitter le terrain même s'il se trouve derrière un clone. Les cibles peuvent toujours partir si elle tiennent la Carapace Mue ou utilisent Relais, Demi-Tour, Dernier Mot, Eau Revoir, Télèport ou Change Éclair. Si la cible quitte le terrain en utilisant Relais, le remplaçant restera piégé. L'effet prend fin si le lanceur est retiré.",
+		shortDesc: "Empêche les ennemis de switcher.",
 	},
 	gmaxvinelash: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fouet G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Fouet G-Max. Si la capacité réussit, pendant 4 tours chaque Pokémon adverse qui n'est pas de type Plante prend des dégâts équivalents à 1/6 de ses PVs totaux à la fin de chaque tour, même s'il se trouve derrière un clone.",
+		shortDesc: "Ennemis non-Plante subissent 1/6 des PV. (4 tours)",
 
 		start: "  Des coups de fouet frappent [PARTY] !",
 		damage: "  [POKEMON] subit des coups de Fouet G-Max !",
 	},
 	gmaxvolcalith: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Téphra G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Téphra G-Max. Si la capacité réussit, pendant 4 tours chaque Pokémon adverse qui n'est pas de type Roche, prend des dégâts équivalents à 1/6 de ses PVs totaux à la fin de chaque tour, même s'il se trouve derrière un clone.",
+		shortDesc: "Ennemis non-Roche subissent 1/6 des PV. (4 tours)",
 
 		start: "  Les rochers encerclent [PARTY] !",
 		damage: "  [POKEMON] est blessé par les pierres éjectées par Téphra G-Max !",
 	},
 	gmaxvoltcrash: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Foudre G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Foudre G-Max. Si la capacité réussit, chaque Pokémon du camp adverse devient paralysé, même s'il se trouve derrière un clone.",
+		shortDesc: "Paralyse les ennemis.",
 	},
 	gmaxwildfire: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fournaise G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Fournaise G-Max. Si la capacité réussit, pendant 4 tours chaque Pokémon adverse qui n'est pas de type Feu prend des dégâts équivalents a 1/6 de ses PVs totaux à la fin de chaque tour, même s'il se trouve derrière un clone.",
+		shortDesc: "Ennemis non-Feu subissent 1/6 des PV. (4 tours)",
 
 		start: "  Les flammes encerclent [PARTY] !",
 		damage: "  [POKEMON] est brûlé par les flammes de Fournaise G-Max !",
 	},
 	gmaxwindrage: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Rafale G-Max",
+		desc: "La puissance de cette attaque est proportionnelle à la puissance de la capacité qui est devenue Rafale G-Max. Si la capacité réussit, les effets de Protection, Mur Lumière, Rune Protect, Brume, Voile Aurore, Picots, Pics Toxik, Toile Gluante et Piège de Roc prennent fin du côté de la cible. Retire également Picots, Pics Toxik, Pièges de Roc et Toile Gluante du côté du lanceur. Si la cible est derrière un clone, son Esquive ne diminuera pas. Si un Champ est en place, cette capacité y met fin, même si les cibles ont un clone.",
+		shortDesc: "Annule les barrières, hazards et Champ",
 	},
 	grassknot: {
 		name: "Nœud Herbe",
 		desc: "L’ennemi est piégé dans de l’herbe qui le fait trébucher. Plus il est lourd, plus il subit de dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts proportionnels au poids de la cible.",
 	},
 	grasspledge: {
 		name: "Aire d’Herbe",
 		desc: "Une masse végétale s’abat sur l’ennemi. En l’utilisant avec Aire d’Eau, l’effet augmente et un marécage apparaît.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Couplé avec Aire d'Eau ou de Feu : effet bonus.",
 
 		activate: "#waterpledge",
 		start: "  [TEAM:capitalize] est cernée par un marécage !",
@@ -2737,17 +2737,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grasswhistle: {
 		name: "Siffl’Herbe",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Endort la cible.",
 	},
 	grassyglide: {
 		name: "Gliss’Herbe",
 		desc: "Le lanceur attaque l’ennemi en glissant sur le terrain. Frappe toujours en priorité si un Champ Herbu est actif.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Sur Champ Herbu : frappe en priorité +1.",
 	},
 	grassyterrain: {
 		name: "Champ Herbu",
 		desc: "Pendant cinq tours, les Pokémon au sol récupèrent quelques PV à chaque tour et la puissance des capacités de type Plante augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Au sol : +puissance Plante, soin 1/16 PV. (5 tours)",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2755,12 +2755,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gravapple: {
 		name: "Force G",
 		desc: "Le lanceur attaque son adversaire avec une pomme qu’il fait tomber de très haut. Baisse la Défense de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cible : -1 Déf. Gravité : puissance x1.5.",
 	},
 	gravity: {
 		name: "Gravité",
 		desc: "Pendant cinq tours, les Pokémon Vol ou qui ont Lévitation deviennent sensibles aux capacités Sol, et les capacités volantes deviennent inutilisables.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'immunité Sol. Précision x1.67. (5 tours)",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2777,7 +2777,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	growl: {
 		name: "Rugissement",
 		desc: "Le lanceur pousse un cri tout mimi pour tromper la vigilance de l’ennemi et baisser son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque des ennemis de 1.",
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2785,7 +2785,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	growth: {
 		name: "Croissance",
 		desc: "Le corps du lanceur se développe. Augmente l’Attaque et l’Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque et l'Atq. Spé de 1 ; 2 sous Soleil.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2804,7 +2804,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	grudge: {
 		name: "Rancune",
 		desc: "Si le lanceur est mis K.O., sa rancune épuise les PP de la capacité utilisée par l’ennemi pour le mettre K.O.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si lanceur tombe KO : capacité utilisée perd ses PP.",
 
 		activate: "  La capacité [MOVE] [POKEMON:de] perd ses PP à cause de Rancune !",
 		start: "[POKEMON] veut que sa cible subisse sa rancune !",
@@ -2812,24 +2812,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	guardianofalola: {
 		name: "Colère du Gardien d’Alola",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige 3/4 des PV actuels de la cible.",
 	},
 	guardsplit: {
 		name: "Partage Garde",
 		desc: "Additionne la Défense et la Défense Spéciale du lanceur et de sa cible et les redistribue équitablement entre les deux.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Équilibre Défense et Déf. Spé entre lanceur et cible.",
 
 		activate: "  [POKEMON] additionne sa garde à celle de sa cible et redistribue le tout équitablement !",
 	},
 	guardswap: {
 		name: "Permugarde",
 		desc: "Pouvoir qui échange les modifications de la Défense Spéciale et de la Défense avec la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échange les changements de Déf/SpD avec la cible.",
 	},
 	guillotine: {
 		name: "Guillotine",
 		desc: "Des pinces lacèrent violemment l’ennemi, le mettant K.O. sur le coup s’il est touché.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "OHKO la cible. Échoue si lanceur est plus bas niveau.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2841,12 +2841,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gunkshot: {
 		name: "Détricanon",
 		desc: "Le lanceur envoie des détritus sur l’ennemi. Peut aussi l’empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'empoisonner la cible.",
 	},
 	gust: {
 		name: "Tornade",
 		desc: "Le lanceur bat des ailes pour générer une bourrasque qui blesse l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 sur Rebond, Vol et Chute Libre.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2863,7 +2863,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gyroball: {
 		name: "Gyroballe",
 		desc: "Le lanceur effectue une rotation et frappe l’ennemi. Plus la Vitesse du lanceur est basse, plus il inflige de dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur plus lent que cible : puissance augmente.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2871,7 +2871,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hail: {
 		name: "Grêle",
 		desc: "Invoque une tempête de grêle qui dure cinq tours. Blesse tous les Pokémon, sauf ceux de type Glace.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Invoque la grêle pendant 5 tours.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2882,28 +2882,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hammerarm: {
 		name: "Marto-Poing",
 		desc: "Le lanceur donne un puissant coup de poing à l’ennemi. Réduit la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse du lanceur de 1.",
 	},
 	happyhour: {
 		name: "Étrennes",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'utilisation compétitive.",
 
 		activate: "  L’ambiance est euphorique !",
 	},
 	harden: {
 		name: "Armure",
 		desc: "Le lanceur contracte tous ses muscles pour augmenter sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense du lanceur de 1.",
 	},
 	hardpress: {
 		name: "Pression Extrême",
 		desc: "Le lanceur écrase la cible avec ses bras ou ses pinces. Plus il reste de PV à la cible, plus la puissance de la capacité augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance proportionnelle aux PV de la cible.",
 	},
 	haze: {
 		name: "Buée Noire",
 		desc: "Crée un brouillard qui annule les changements de stats de tous les Pokémon au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Annule tous les changements de stats.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2915,12 +2915,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	headbutt: {
 		name: "Coup d’Boule",
 		desc: "Le lanceur donne un coup de tête. Peut apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 	},
 	headcharge: {
 		name: "Peignée",
 		desc: "Le lanceur donne un coup avec sa tête couronnée d’une fière crinière. Blesse aussi légèrement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "25% de recul.",
 	},
 	headlongrush: {
 		name: "Assaut Frontal",
@@ -2930,7 +2930,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	headsmash: {
 		name: "Fracass’Tête",
 		desc: "Le lanceur assène un coup de tête désespéré. Blesse aussi gravement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de recul.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2938,7 +2938,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healbell: {
 		name: "Glas de Soin",
 		desc: "Carillon apaisant qui soigne les altérations de statut de tous les Pokémon de l’équipe.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne l'équipe de tout problème de statut.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2957,7 +2957,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healblock: {
 		name: "Anti-Soin",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les ennemis ne peuvent pas se soigner. (5 tours)",
 		gen8: {
 			end: "  [POKEMON] peut à nouveau guérir !",
 			cant: "[POKEMON] ne peut pas utiliser la capacité [MOVE] à cause d’Anti-Soin !",
@@ -2980,7 +2980,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healingwish: {
 		name: "Vœu Soin",
 		desc: "Le lanceur tombe K.O. pour soigner les PV et le statut du Pokémon qui passe après lui.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur tombe KO Prochain allié blessé est soigné.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -2994,7 +2994,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healorder: {
 		name: "Appel Soins",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur de 50% de ses PV max.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3002,7 +3002,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healpulse: {
 		name: "Vibra Soin",
 		desc: "Une aura de bien-être fait récupérer la moitié de ses PV max à la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne la cible de 50% de ses PV max.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3010,17 +3010,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	heartstamp: {
 		name: "Crève-Cœur",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 	},
 	heartswap: {
 		name: "Permucœur",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échange tout changement de stat avec la cible.",
 	},
 	heatcrash: {
 		name: "Tacle Feu",
 		desc: "Le lanceur projette son corps enflammé contre l’ennemi. S’il est plus lourd que l’ennemi, l’effet augmente en conséquence.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur plus lourd que cible : puissance augmente.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3028,12 +3028,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	heatwave: {
 		name: "Canicule",
 		desc: "Le lanceur provoque une vague de chaleur. Peut aussi brûler l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler les ennemis.",
 	},
 	heavyslam: {
 		name: "Tacle Lourd",
 		desc: "Le lanceur se jette sur l’ennemi de tout son poids. S’il est plus lourd que l’ennemi, l’effet augmente en conséquence.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur plus lourd que cible : puissance augmente.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3041,80 +3041,80 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	helpinghand: {
 		name: "Coup d’Main",
 		desc: "Une capacité qui augmente la puissance d’attaque d’un allié.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Une capacité d'un allié adjacent est x1.5 ce tour.",
 
 		start: "  [SOURCE] est prêt à aider [POKEMON] !",
 	},
 	hex: {
 		name: "Châtiment",
 		desc: "Attaque acharnée qui cause davantage de dégâts à l’ennemi s’il a un problème de statut.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si la cible a un problème de statut.",
 	},
 	hiddenpower: {
 		name: "Puissance Cachée",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Type de la capacité dépend des IVs du lanceur.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	hiddenpowerbug: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Insecte",
 	},
 	hiddenpowerdark: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Ténèbres",
 	},
 	hiddenpowerdragon: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Dragon",
 	},
 	hiddenpowerelectric: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Électrik",
 	},
 	hiddenpowerfighting: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Combat",
 	},
 	hiddenpowerfire: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Feu",
 	},
 	hiddenpowerflying: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Vol",
 	},
 	hiddenpowerghost: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Spectre",
 	},
 	hiddenpowergrass: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Plante",
 	},
 	hiddenpowerground: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Sol",
 	},
 	hiddenpowerice: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Glace",
 	},
 	hiddenpowerpoison: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Poison",
 	},
 	hiddenpowerpsychic: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Psy",
 	},
 	hiddenpowerrock: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Roche",
 	},
 	hiddenpowersteel: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Acier",
 	},
 	hiddenpowerwater: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puissance Cachée Eau",
 	},
 	highhorsepower: {
 		name: "Cavalerie Lourde",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	highjumpkick: {
 		name: "Pied Voltige",
 		desc: "Le lanceur s’élance pour effectuer un coup de genou sauté. S’il échoue, le lanceur se blesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur subit 50% de ses PV max s'il rate.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3137,26 +3137,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	holdback: {
 		name: "Retenue",
 		desc: "Le lanceur attaque avec retenue, et laisse au moins 1 PV à l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Laisse toujours au moins 1 PV à la cible.",
 	},
 	holdhands: {
 		name: "Mains Jointes",
 		desc: "Le lanceur et un allié se prennent la main, ce qui les rend heureux.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'utilisation compétitive.",
 	},
 	honeclaws: {
 		name: "Aiguisage",
 		desc: "Le lanceur s’aiguise les griffes. Augmente l’Attaque et la Précision.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque et la Précision du lanceur de 1.",
 	},
 	hornattack: {
 		name: "Koud’Korne",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	horndrill: {
 		name: "Empal’Korne",
 		desc: "Un coup de corne en vrille qui empale l’ennemi, le mettant K.O. sur le coup s’il est touché.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "OHKO la cible. Échoue si lanceur est plus bas niveau.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3168,12 +3168,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hornleech: {
 		name: "Encornebois",
 		desc: "Un coup de corne qui draine l’énergie de l’ennemi. Convertit la moitié des dégâts infligés en PV pour le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 	},
 	howl: {
 		name: "Grondement",
 		desc: "Le lanceur grogne pour se rassurer, ce qui augmente son Attaque et celle de ses alliés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque du lanceur et des alliés de 1.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3182,7 +3182,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hurricane: {
 		name: "Vent Violent",
 		desc: "Le lanceur déclenche une tempête de vents violents qui s’abat sur l’ennemi. Peut aussi le rendre confus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de confusion. Pluie : ne rate jamais.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3193,25 +3193,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hydrocannon: {
 		name: "Hydroblast",
 		desc: "Une trombe d’eau heurte l’ennemi. Le lanceur doit se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	hydropump: {
 		name: "Hydrocanon",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	hydrosteam: {
 		name: "Hydrovapeur",
 		desc: "Le lanceur asperge la cible avec un puissant jet d'eau bouillante. Quand le soleil brille, la puissance de cette capacité augmente de 50 % au lieu de baisser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Sous Soleil : puissance x1.5 à la place de x0.5.",
 	},
 	hydrovortex: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Super Tourbillon Abyssal",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	hyperbeam: {
 		name: "Ultralaser",
 		desc: "Projette un puissant rayon sur l’ennemi. Le lanceur doit se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3219,17 +3219,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperdrill: {
 		name: "Hyperceuse",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Annule les effets d'Abri et équivalent.",
 	},
 	hyperfang: {
 		name: "Croc de Mort",
 		desc: "Le lanceur mord l’ennemi à l’aide de ses incisives aiguisées. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance d'apeurer la cible.",
 	},
 	hyperspacefury: {
 		name: "Furie Dimension",
 		desc: "Le Pokémon utilise sa multitude de bras pour infliger une nuée de coups qui ignorent les capacités telles qu’Abri ou Détection. Baisse la Défense du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Hoopa-D : Baisse Déf du lanceur de 1, ignore abris.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3240,7 +3240,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hyperspacehole: {
 		name: "TrouDimensionnel",
 		desc: "Crée une faille dimensionnelle pour attaquer soudainement l’ennemi de côté. Ignore même les capacités comme Abri ou Détection.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Annule les effets d'Abri et équivalent.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3250,16 +3250,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hypervoice: {
 		name: "Mégaphone",
 		desc: "Le lanceur pousse un cri dont l’écho terrifiant a le pouvoir d’infliger des dégâts à l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	hypnosis: {
 		name: "Hypnose",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Endort la cible.",
 	},
 	iceball: {
 		name: "Ball’Glace",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 à chaque coup. Répète pendant 5 tours.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3270,49 +3270,49 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	icebeam: {
 		name: "Laser Glace",
 		desc: "Un rayon de glace frappe l’ennemi. Peut aussi le geler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de geler la cible.",
 	},
 	iceburn: {
 		name: "Feu Glacé",
 		desc: "Au second tour, le lanceur projette un souffle de vent glacial dévastateur sur l’ennemi. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Charge tour 1. Attaque tour 2. 30% brûlure.",
 
 		prepare: "  [POKEMON] est entouré d’un air glacial !",
 	},
 	icefang: {
 		name: "Crocs Givre",
 		desc: "Le lanceur utilise une morsure glaciale. Peut aussi geler ou apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de geler. 10% de chance d'apeurer.",
 	},
 	icehammer: {
 		name: "Marteau de Glace",
 		desc: "Le lanceur donne un puissant coup de poing à l’ennemi. Réduit la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse du lanceur de 1.",
 	},
 	icepunch: {
 		name: "Poing Glace",
 		desc: "Un coup de poing glacé vient frapper l’ennemi. Peut le geler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de geler la cible.",
 	},
 	iceshard: {
 		name: "Éclats Glace",
 		desc: "Le lanceur crée des éclats de glace qu’il envoie sur l’ennemi. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	icespinner: {
 		name: "Cryo-Pirouette",
 		desc: "Le lanceur enveloppe ses jambes d'une fine couche de glace et heurte la cible en tournant sur lui-même. Ses rotations détruisent le champ actif sur le terrain.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Enlève les Champs sur le terrain",
 	},
 	iciclecrash: {
 		name: "Chute Glace",
 		desc: "Envoie de gros blocs de glace sur l’ennemi pour lui infliger des dégâts. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 	},
 	iciclespear: {
 		name: "Stalactite",
 		desc: "Le lanceur jette des pics de glace sur l’ennemi, de deux à cinq fois de suite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3326,7 +3326,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	icywind: {
 		name: "Vent Glace",
 		desc: "Une bourrasque de vent froid blesse l’ennemi. Réduit aussi sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1. (Zone)",
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3334,7 +3334,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	imprison: {
 		name: "Possessif",
 		desc: "Si l’ennemi et le lanceur ont des capacités en commun, l’ennemi ne pourra pas les utiliser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les ennemis ne peut utiliser de capacité du lanceur.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3351,7 +3351,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	incinerate: {
 		name: "Calcination",
 		desc: "Des flammes calcinent l’ennemi. S’il tient un objet, une Baie par exemple, celui-ci est brûlé et devient inutilisable.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Détruit les Baies/Gemmes des ennemis.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3367,16 +3367,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	inferno: {
 		name: "Feu d’Enfer",
 		desc: "L’ennemi est entouré d’un torrent de flammes ardentes qui le brûlent.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de brûler la cible.",
 	},
 	infernooverdrive: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pyro-Explosion Cataclysmique",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	infestation: {
 		name: "Harcèlement",
 		desc: "Cette attaque perdure pendant quatre à cinq tours. L’ennemi ne peut pas fuir au cours de cette période.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3389,7 +3389,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ingrain: {
 		name: "Racines",
 		desc: "Le lanceur plante ses racines et récupère des PV à chaque tour. Une fois enraciné, il ne peut plus fuir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège le lanceur. Soigne 1/16 PV max chaque tour.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3411,7 +3411,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	instruct: {
 		name: "Sommation",
 		desc: "Force la cible à lancer immédiatement la dernière capacité qu’elle a utilisée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La cible utilise sa dernière capacité utilisée.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3424,19 +3424,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	iondeluge: {
 		name: "Déluge Plasmique",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les capacités Normal deviennent Électrik ce tour.",
 
 		activate: "  Un déluge de plasma s’abat sur le terrain !",
 	},
 	irondefense: {
 		name: "Mur de Fer",
 		desc: "L’épiderme du lanceur devient dur comme du fer, ce qui augmente beaucoup sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense du lanceur de 2.",
 	},
 	ironhead: {
 		name: "Tête de Fer",
 		desc: "Le lanceur heurte l’ennemi avec sa tête dure comme de l’acier. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3445,32 +3445,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	irontail: {
 		name: "Queue de Fer",
 		desc: "Attaque l’ennemi avec une queue de fer. Peut aussi baisser sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de baisser la Défense de 1.",
 	},
 	ivycudgel: {
 		name: "Massue Liane",
 		desc: "Le lanceur frappe avec un gourdin enveloppé de lierre. Le type de cette capacité change selon le masque porté par le lanceur, et a un taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique. Type dépend de la forme.",
 	},
 	jawlock: {
 		name: "Croque Fort",
 		desc: "Le lanceur et sa cible ne peuvent plus quitter le terrain jusqu’à ce que l’un d’entre eux tombe K.O. L’effet est annulé si l’un des deux Pokémon disparaît.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empêche le lanceur et la cible de switcher.",
 	},
 	jetpunch: {
 		name: "Poing Sonique",
 		desc: "Le lanceur enveloppe son poing d'un torrent furieux et attaque si rapidement qu'on peine à le discerner. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	judgment: {
 		name: "Jugement",
 		desc: "Le lanceur libère une myriade de rayons de lumière. Le type varie selon la Plaque que tient le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le type varie en fonction de la Plaque tenue.",
 	},
 	jumpkick: {
 		name: "Pied Sauté",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur subit 50% de ses PV max s'il rate.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3493,22 +3493,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	junglehealing: {
 		name: "Selve Salvatrice",
 		desc: "Le lanceur fait appel au pouvoir de la jungle pour restaurer les PV et soigner les altérations d’état de ses alliés et de lui-même.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur et alliés soignent statut et 25% des PV max.",
 	},
 	karatechop: {
 		name: "Poing Karaté",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	kinesis: {
 		name: "Télékinésie",
 		desc: "Le lanceur distrait l’ennemi en pliant une cuillère, ce qui baisse sa Précision.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Précision de la cible de 1.",
 	},
 	kingsshield: {
 		name: "Bouclier Royal",
 		desc: "Prend une posture défensive pour bloquer les dégâts. Diminue l’Attaque de tout Pokémon qui entre en contact avec le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège des capacités offensives. Contact : -1 Atq.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3523,7 +3523,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	knockoff: {
 		name: "Sabotage",
 		desc: "Fait plus de dégâts aux cibles qui tiennent un objet. De plus, fait tomber cet objet et empêche la cible de l’utiliser jusqu’à la fin du combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x1.5 si la cible a un objet. Enlève l'objet.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3552,63 +3552,63 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	kowtowcleave: {
 		name: "Génusection",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	landswrath: {
 		name: "Force Chtonienne",
 		desc: "Utilise la puissance du sol et la concentre sur l’ennemi pour infliger des dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	laserfocus: {
 		name: "Affilage",
 		desc: "Le lanceur se concentre pour être sûr de porter un coup critique au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur coup critique jusqu'à fin du prochain tour.",
 
 		start: "  [POKEMON] aiguise son esprit !",
 	},
 	lashout: {
 		name: "Cent Rancunes",
 		desc: "Le lanceur frappe l’ennemi avec toute sa rancune. Si les stats du lanceur ont diminué pendant ce tour, la puissance de cette attaque est doublée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si le lanceur a une stat baissée ce tour.",
 	},
 	lastresort: {
 		name: "Dernier Recours",
 		desc: "Cette capacité ne peut être utilisée qu’après que le lanceur a utilisé toutes les autres.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échoue si une autre capacité peut être lancée.",
 	},
 	lastrespects: {
 		name: "Hommage Posthume",
 		desc: "Le lanceur attaque pour venger ses alliés. Plus le nombre de Pokémon alliés mis K.O. est élevé, plus la puissance de cette capacité augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance augmente de 50 par allié KO.",
 	},
 	lavaplume: {
 		name: "Ébullilave",
 		desc: "Des boules de feu s’abattent sur tous les Pokémon autour du lanceur. Peut aussi les brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de brûler les Pokémon adjacents.",
 	},
 	leafage: {
 		name: "Feuillage",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	leafblade: {
 		name: "Lame Feuille",
 		desc: "Une feuille coupante comme une lame entaille l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	leafstorm: {
 		name: "Tempête Verte",
 		desc: "Invoque une tempête de feuilles acérées. Le contrecoup réduit beaucoup l’Attaque Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé du lanceur de 2.",
 	},
 	leaftornado: {
 		name: "Phytomixeur",
 		desc: "L’ennemi est pris dans un tourbillon de feuilles acérées. Peut aussi baisser sa Précision.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de baisser la Précision de 1.",
 	},
 	leechlife: {
 		name: "Vampirisme",
 		desc: "Une attaque qui aspire le sang de l’ennemi. La moitié des dégâts sont convertis en PV pour le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3619,7 +3619,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	leechseed: {
 		name: "Vampigraine",
 		desc: "Une graine est semée sur l’ennemi. À chaque tour, elle lui dérobe des PV que le lanceur récupère.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur récupère 1/8 PV de la cible chaque tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3638,34 +3638,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	leer: {
 		name: "Groz’Yeux",
 		desc: "Le lanceur fait les gros yeux à l’ennemi pour l’intimider et baisser sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense des ennemis de 1.",
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	letssnuggleforever: {
 		name: "Patati-Patattrape",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	lick: {
 		name: "Léchouille",
 		desc: "Un grand coup de langue qui inflige des dégâts à l’ennemi. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de paralyser la cible.",
 	},
 	lifedew: {
 		name: "Fontaine de Vie",
 		desc: "Le lanceur projette une eau mystérieuse autour du terrain pour restaurer ses PV et ceux de ses alliés au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur et alliés soignent 25% de leur PV max.",
 	},
 	lightofruin: {
 		name: "Lumière du Néant",
 		desc: "Utilise la puissance de la fleur Éternelle pour lancer un formidable rayon d’énergie. Blesse aussi gravement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de recul.",
 	},
 	lightscreen: {
 		name: "Mur Lumière",
 		desc: "Crée un fabuleux mur de lumière qui réduit les dégâts causés par les capacités spéciales pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts spéciaux sur les alliés sont 1/2. (5 tours)",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3691,17 +3691,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lightthatburnsthesky: {
 		name: "Apocalypsis Luminis",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Physique si Atq>Atq.Spé du lanceur. Ignore Talents.",
 	},
 	liquidation: {
 		name: "Aqua-Brèche",
 		desc: "Le lanceur utilise la force de l’eau pour attaquer. Peut aussi baisser la Défense de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de baisser la Défense de 1.",
 	},
 	lockon: {
 		name: "Verrouillage",
 		desc: "Verrouille l’ennemi pour ne pas le rater au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Prochaine capacité du lanceur n'échouera pas.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3714,12 +3714,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lovelykiss: {
 		name: "Grobisou",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Endort la cible.",
 	},
 	lowkick: {
 		name: "Balayage",
 		desc: "Un puissant coup de pied bas qui fauche l’ennemi. Il est plus efficace contre les ennemis lourds.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts proportionnels au poids de la cible.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3728,12 +3728,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lowsweep: {
 		name: "Balayette",
 		desc: "Un coup rapide qui affecte la mobilité de l’ennemi et diminue sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1.",
 	},
 	luckychant: {
 		name: "Air Veinard",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège l'équipe des coups critiques. (5 tours)",
 
 		start: "  Air Veinard immunise [TEAM] contre les coups critiques !",
 		end: "  Les effets d’Air Veinard sur [TEAM] prennent fin !",
@@ -3741,7 +3741,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	luminacrash: {
 		name: "Lumino-Impact",
 		desc: "Le lanceur attaque en émettant une étrange lumière qui ébranle l'esprit de la cible. Cela baisse beaucoup la Défense Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Déf. Spé de 2.",
 	},
 	lunarblessing: {
 		name: "Prière Lunaire",
@@ -3751,7 +3751,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lunardance: {
 		name: "Danse Lune",
 		desc: "Le lanceur tombe K.O. pour soigner le statut et les PV du Pokémon qui prendra sa place au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur KO Allié blessé envoyé entièrement soigné.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3765,31 +3765,31 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lunge: {
 		name: "Furie-Bond",
 		desc: "Le lanceur se jette sur la cible de toutes ses forces pour lui infliger des dégâts et baisser son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Attaque de 1.",
 	},
 	lusterpurge: {
 		name: "Lumi-Éclat",
 		desc: "Le lanceur libère un éclair lumineux. Peut aussi baisser la Défense Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de baisser la Déf. Spé de 1.",
 	},
 	machpunch: {
 		name: "Mach Punch",
 		desc: "Coup de poing fulgurant. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	magicalleaf: {
 		name: "Feuille Magik",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	magicaltorque: {
 		name: "Crash Magique",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: "Cette capacité a 30% de chances de plonger la cible dans la Confusion.",
+		shortDesc: "30% de chance de rendre la cible confuse.",
 	},
 	magiccoat: {
 		name: "Reflet Magik",
 		desc: "Une barrière qui renvoie les capacités comme Vampigraine et celles affectant le statut et les stats.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Renvoie certaines capacités de statut.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3806,7 +3806,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magicpowder: {
 		name: "Poudre Magique",
 		desc: "Le lanceur recouvre sa cible d’une poudre magique qui change son type en Psy.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Change le type de la cible en Psy.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3814,12 +3814,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magicroom: {
 		name: "Zone Magique",
 		desc: "Le lanceur crée une zone mystérieuse où les objets tenus par tous les Pokémon n’ont plus aucun effet pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les objets tenus n'ont plus d'effet. (5 tours)",
 	},
 	magmastorm: {
 		name: "Vortex Magma",
 		desc: "L’ennemi est pris dans un tourbillon de feu qui dure de quatre à cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3838,17 +3838,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magnetbomb: {
 		name: "Bombe Aimant",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	magneticflux: {
 		name: "Magné-Contrôle",
 		desc: "Manipule les champs magnétiques pour augmenter la Défense et la Défense Spéciale des Pokémon alliés dotés du talent Plus ou du talent Moins.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente Déf/SpD des alliés avec Plus/Minus de 1.",
 	},
 	magnetrise: {
 		name: "Vol Magnétik",
 		desc: "Le lanceur utilise l’électricité pour générer un champ magnétique et léviter durant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur est immunisé au type Sol. (5 tours)",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3862,7 +3862,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magnitude: {
 		name: "Ampleur",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche en zone. Puissance varie, x2 sur Tunnel.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -3872,7 +3872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	makeitrain: {
 		name: "Ruée d'Or",
 		desc: "Le lanceur attaque en lançant de nombreuses pièces, ce qui baisse son Attaque Spéciale. Permet d'obtenir plus d'argent à la fin du combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé du lanceur de 1.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -3883,17 +3883,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	maliciousmoonsault: {
 		name: "Dark Body Press",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts x2 si la cible a utilisé Lilliput.",
 	},
 	malignantchain: {
 		name: "Chaîne Malsaine",
 		desc: "Le lanceur ligote la cible avec une chaîne faite de poison et lui injecte un venin corrosif, ce qui peut aussi gravement l'empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de gravement empoisonner la cible.",
 	},
 	matblock: {
 		name: "Tatamigaeshi",
 		desc: "Retourne un tatami pour bloquer, comme avec un bouclier, les capacités visant le lanceur ou ses alliés. N’a pas d’effet sur les attaques de statut.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "1er tour : protège les alliés des capacités offensives.",
 
 		start: "  [POKEMON] se prépare à utiliser un tatami pour bloquer les attaques !",
 		block: "  La capacité [MOVE] a été bloquée par un tatami !",
@@ -3901,109 +3901,109 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	matchagotcha: {
 		name: "Mortier Matcha",
 		desc: "Le lanceur remue son thé et en bombarde la cible. La moitié des dégâts infligés sont convertis en PV pour le lanceur. Cette capacité peut aussi brûler la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% brûlure. Soigne 50% dégâts infligés. Dégèle.",
 	},
 	maxairstream: {
 		name: "Aéromax",
 		desc: "Une attaque de type Vol que seuls les Pokémon Dynamax peuvent utiliser. Augmente la Vitesse des alliés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Vitesse des alliés de 1.",
 	},
 	maxdarkness: {
 		name: "Sinistromax",
 		desc: "Une attaque de type Ténèbres que seuls les Pokémon Dynamax peuvent utiliser. Baisse la Défense Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Déf Spé. des ennemis de 1.",
 	},
 	maxflare: {
 		name: "Pyromax",
 		desc: "Une attaque de type Feu que seuls les Pokémon Dynamax peuvent utiliser. Fait briller le soleil pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Zénith.",
 	},
 	maxflutterby: {
 		name: "Insectomax",
 		desc: "Une attaque de type Insecte que seuls les Pokémon Dynamax peuvent utiliser. Baisse l’Attaque Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé des ennemis de 1.",
 	},
 	maxgeyser: {
 		name: "Hydromax",
 		desc: "Une attaque de type Eau que seuls les Pokémon Dynamax peuvent utiliser. Invoque de fortes pluies qui durent cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Danse Pluie.",
 	},
 	maxguard: {
 		name: "Gardomax",
 		desc: "Le lanceur se protège de toutes les attaques. Peut échouer si utilisée plusieurs fois de suite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Se protège des capacités et capacités Dmax ce tour.",
 
 		activate: "  [POKEMON] se protège !",
 	},
 	maxhailstorm: {
 		name: "Cryomax",
 		desc: "Une attaque de type Glace que seuls les Pokémon Dynamax peuvent utiliser. Invoque une tempête de grêle qui dure cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Grêle.",
 	},
 	maxknuckle: {
 		name: "Pugilomax",
 		desc: "Une attaque de type Combat que seuls les Pokémon Dynamax peuvent utiliser. Augmente l’Attaque des alliés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque des alliés de 1.",
 	},
 	maxlightning: {
 		name: "Fulguromax",
 		desc: "Une attaque de type Électrik que seuls les Pokémon Dynamax peuvent utiliser. Crée un Champ Électrifié qui dure cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Champ Électrifié.",
 	},
 	maxmindstorm: {
 		name: "Psychomax",
 		desc: "Une attaque de type Psy que seuls les Pokémon Dynamax peuvent utiliser. Crée un Champ Psychique qui dure cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Champ Psychique.",
 	},
 	maxooze: {
 		name: "Toxinomax",
 		desc: "Une attaque de type Poison que seuls les Pokémon Dynamax peuvent utiliser. Augmente l’Attaque Spéciale des alliés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq. Spé des alliés de 1.",
 	},
 	maxovergrowth: {
 		name: "Phytomax",
 		desc: "Une attaque de type Plante que seuls les Pokémon Dynamax peuvent utiliser. Crée un Champ Herbu qui dure cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Champ Herbu.",
 	},
 	maxphantasm: {
 		name: "Spectromax",
 		desc: "Une attaque de type Spectre que seuls les Pokémon Dynamax peuvent utiliser. Baisse la Défense de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense des ennemis de 1.",
 	},
 	maxquake: {
 		name: "Sismomax",
 		desc: "Une attaque de type Sol que seuls les Pokémon Dynamax peuvent utiliser. Augmente la Défense Spéciale des alliés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Déf. Spé des alliés de 1.",
 	},
 	maxrockfall: {
 		name: "Lithomax",
 		desc: "Une attaque de type Roche que seuls les Pokémon Dynamax peuvent utiliser. Invoque une tempête de sable qui dure cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Tempête de Sable.",
 	},
 	maxstarfall: {
 		name: "Enchantomax",
 		desc: "Une attaque de type Fée que seuls les Pokémon Dynamax peuvent utiliser. Crée un Champ Brumeux qui dure cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Champ Brumeux.",
 	},
 	maxsteelspike: {
 		name: "Métallomax",
 		desc: "Une attaque de type Acier que seuls les Pokémon Dynamax peuvent utiliser. Augmente la Défense des alliés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense des alliés de 1.",
 	},
 	maxstrike: {
 		name: "Normalomax",
 		desc: "Une attaque de type Normal que seuls les Pokémon Dynamax peuvent utiliser. Baisse la Vitesse de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse des ennemis de 1.",
 	},
 	maxwyrmwind: {
 		name: "Dracomax",
 		desc: "Une attaque de type Dragon que seuls les Pokémon Dynamax peuvent utiliser. Baisse l’Attaque de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque des ennemis de 1.",
 	},
 	meanlook: {
 		name: "Regard Noir",
 		desc: "Le lanceur pétrifie l’ennemi en lui lançant un regard noir. Il devient incapable de s’enfuir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empêche la cible de switcher.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4020,12 +4020,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	meditate: {
 		name: "Yoga",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque du lanceur de 1.",
 	},
 	mefirst: {
 		name: "Moi d’Abord",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si lanceur plus rapide, copie capacité de cible à x1.5.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4045,7 +4045,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	megadrain: {
 		name: "Méga-Sangsue",
 		desc: "Une attaque qui convertit la moitié des dégâts infligés en PV pour le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4055,20 +4055,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	megahorn: {
 		name: "Mégacorne",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	megakick: {
 		name: "Ultimawashi",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	megapunch: {
 		name: "Ultimapoing",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	memento: {
 		name: "Souvenir",
 		desc: "Le lanceur est mis K.O., mais l’Attaque et l’Attaque Spéciale de l’ennemi baissent beaucoup.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur KO Baisse l'Attaque et l'Atq. Spé de 2.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4081,12 +4081,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	menacingmoonrazemaelstrom: {
 		name: "Rayons Séléno-Explosifs",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore les Talents des autres Pokémon.",
 	},
 	metalburst: {
 		name: "Fulmifer",
 		desc: "Le lanceur attaque le dernier ennemi l’ayant blessé durant le même tour en frappant plus fort.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si touché par une attaque, renvoie dégâts x1.5.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4097,34 +4097,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	metalclaw: {
 		name: "Griffe Acier",
 		desc: "Attaque avec des griffes d’acier. Peut aussi augmenter l’Attaque du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance d'augmenter l'Attaque de 1.",
 	},
 	metalsound: {
 		name: "Strido-Son",
 		desc: "Un cri horrible tel un crissement métallique qui réduit beaucoup la Défense Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Déf. Spé de la cible de 2.",
 	},
 	meteorassault: {
 		name: "Joute Astrale",
 		desc: "Le lanceur attaque son adversaire avec son poireau. Toutefois, cette action le fait vaciller et il doit se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	meteorbeam: {
 		name: "Laser Météore",
 		desc: "Le lanceur concentre l’énergie cosmique au premier tour, ce qui augmente son Attaque Spéciale, et frappe au second.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq. Spé au tour 1. Attaque au tour 2.",
 
 		prepare: "La puissance du cosmos afflue dans le corps [POKEMON:de] !",
 	},
 	meteormash: {
 		name: "Poing Météore",
 		desc: "Un coup de poing lancé à la vitesse d’un météore. Peut aussi augmenter l’Attaque du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance d'augmenter l'Attaque de 1.",
 	},
 	metronome: {
 		name: "Métronome",
 		desc: "Le lanceur agite un doigt et stimule son cerveau pour utiliser presque n’importe quelle capacité au hasard.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Utilise une capacité aléatoire.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4154,12 +4154,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mightycleave: {
 		name: "Lame Puissante",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Passe à travers les protections sans les briser.",
 	},
 	milkdrink: {
 		name: "Lait à Boire",
 		desc: "Le lanceur récupère jusqu’à la moitié de ses PV max.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur de 50% de ses PV max.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4167,7 +4167,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mimic: {
 		name: "Copie",
 		desc: "Le lanceur copie la dernière capacité utilisée par la cible et la conserve tant qu’il reste au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Remplacée par dernière capacité utilisée par la cible.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4196,14 +4196,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mindblown: {
 		name: "Caboche-Kaboum",
 		desc: "Le lanceur fait exploser sa tête pour attaquer toutes les cibles autour de lui. Il subit aussi des dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur perd 50% PV max. Touche en zone.",
 
 		damage: "", // NEEDS TRANSLATION: Showdown custom text
 	},
 	mindreader: {
 		name: "Lire-Esprit",
 		desc: "Le lanceur analyse les mouvements de l’ennemi pour être sûr de toucher au coup suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Prochaine capacité du lanceur n'échouera pas.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4217,7 +4217,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	minimize: {
 		name: "Lilliput",
 		desc: "Le lanceur comprime son corps pour se faire tout petit et beaucoup augmenter son Esquive.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Esquive du lanceur de 2.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4244,7 +4244,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	miracleeye: {
 		name: "Œil Miracle",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Psy touche Ténèbres. Esquive ignorée.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4254,7 +4254,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mirrorcoat: {
 		name: "Voile Miroir",
 		desc: "Une riposte qui contre n’importe quelle capacité spéciale en infligeant le double des dégâts subis.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si touché par attaque spéciale, renvoie dégâts x2.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4271,7 +4271,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mirrormove: {
 		name: "Mimique",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Utilise la dernière capacité utilisée par la cible.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4288,12 +4288,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mirrorshot: {
 		name: "Miroi-Tir",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de baisser la Précision de 1.",
 	},
 	mist: {
 		name: "Brume",
 		desc: "Une brume blanche enveloppe l’équipe du lanceur et empêche la réduction des stats pour cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège l'équipe des baisses de stats. (5 tours)",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4313,17 +4313,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mistball: {
 		name: "Ball’Brume",
 		desc: "Une bulle de brume inflige des dégâts à l’ennemi. Peut aussi réduire son Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de baisser l'Atq. Spé de 1.",
 	},
 	mistyexplosion: {
 		name: "Explo-Brume",
 		desc: "Le lanceur frappe tous les Pokémon autour de lui en explosant, ce qui le met K.O. La puissance de cette attaque augmente si un Champ Brumeux est actif.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur KO Champ Brumeux : puissance x1.5.",
 	},
 	mistyterrain: {
 		name: "Champ Brumeux",
 		desc: "Pendant cinq tours, les Pokémon au sol ne peuvent pas subir d’altération de statut et la puissance des capacités de type Dragon est divisée par deux.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas statut, Au sol : -puissance Dragon. (5 tours)",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4331,7 +4331,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	moonblast: {
 		name: "Pouvoir Lunaire",
 		desc: "Attaque l’ennemi grâce au pouvoir de la lune. Peut diminuer son Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de baisser l'Atq. Spé de 1.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4340,12 +4340,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	moongeistbeam: {
 		name: "Rayon Spectral",
 		desc: "Le lanceur attaque avec un rayon de lumière mystérieux. Ignore le talent de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore les Talents des autres Pokémon.",
 	},
 	moonlight: {
 		name: "Rayon Lune",
 		desc: "Un soin qui restaure des PV au lanceur. Son efficacité varie en fonction de la météo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur en fonction de la météo.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4365,7 +4365,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	morningsun: {
 		name: "Aurore",
 		desc: "Un soin qui restaure des PV au lanceur. Son efficacité varie en fonction de la météo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur en fonction de la météo.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4385,7 +4385,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mortalspin: {
 		name: "Toupie Éclat",
 		desc: "Le lanceur attaque en tournant sur lui-même et empoisonne la cible. Il se libère également des effets de capacités comme Étreinte, Ligotage ou Vampigraine.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Enlève hazards/ligotages/Vampigraine. Empoisonne.",
 	},
 	mountaingale: {
 		name: "Bise Glaciaire",
@@ -4395,27 +4395,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mudbomb: {
 		name: "Boue-Bombe",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de baisser la Précision de 1.",
 	},
 	muddywater: {
 		name: "Ocroupi",
 		desc: "Le lanceur attaque en projetant de l’eau boueuse. Peut aussi réduire la Précision de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de baisser la Précision de 1 (Zone)",
 	},
 	mudshot: {
 		name: "Tir de Boue",
 		desc: "Le lanceur attaque en projetant de la boue sur l’ennemi. Réduit aussi la Vitesse de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1.",
 	},
 	mudslap: {
 		name: "Coud’Boue",
 		desc: "Le lanceur envoie de la boue au visage de l’ennemi pour infliger des dégâts et baisser sa Précision.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Précision de 1.",
 	},
 	mudsport: {
 		name: "Lance-Boue",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Capacités Électrik ont puissance 1/3. (5 tours)",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4428,12 +4428,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	multiattack: {
 		name: "Coup Varia-Type",
 		desc: "Le Pokémon s’entoure d’une puissante énergie avant de foncer sur sa cible. Le type de la capacité dépend de la ROM installée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le type varie en fonction de la ROM tenue.",
 	},
 	mysticalfire: {
 		name: "Feu Ensorcelé",
 		desc: "Attaque avec des flammes brûlantes soufflées de la bouche du lanceur. Diminue l’Attaque Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Atq. Spé de 1.",
 	},
 	mysticalpower: {
 		name: "Force Mystique",
@@ -4443,12 +4443,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	nastyplot: {
 		name: "Machination",
 		desc: "Stimule l’esprit par de mauvaises pensées. Augmente beaucoup l’Attaque Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq. Spé du lanceur de 2.",
 	},
 	naturalgift: {
 		name: "Don Naturel",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance et type dépendent de la Baie du lanceur.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4456,7 +4456,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	naturepower: {
 		name: "Force Nature",
 		desc: "Une attaque qui tire sa force de la nature. Son type varie selon le terrain.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Attaque dépend du terrain (Triplattaque par défaut)",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4478,29 +4478,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	naturesmadness: {
 		name: "Ire de la Nature",
 		desc: "Le lanceur déchaîne toute la colère de la nature pour baisser les PV de la cible de moitié.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts égaux à la motiié des PV actuels de la cible.",
 	},
 	needlearm: {
 		name: "Poing Dard",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	neverendingnightmare: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Appel des Ombres Éternelles",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	nightdaze: {
 		name: "Explonuit",
 		desc: "Le lanceur attaque l’ennemi avec une onde de choc ténébreuse. Peut aussi baisser sa Précision.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "40% de chance de baisser la Précision de 1.",
 	},
 	nightmare: {
 		name: "Cauchemar",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Une cible endormie subit 25% PV max chaque tour.",
 
 		start: "  [POKEMON] commence à cauchemarder !",
 		damage: "  [POKEMON] est prisonnier d’un cauchemar !",
@@ -4508,7 +4508,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	nightshade: {
 		name: "Ombre Nocturne",
 		desc: "Le lanceur invoque un mirage. Inflige des dégâts équivalents au niveau du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige des dégâts équivalents au niveau du lanceur.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4517,63 +4517,63 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	nightslash: {
 		name: "Tranche-Nuit",
 		desc: "Le lanceur lacère l’ennemi à la première occasion. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	nobleroar: {
 		name: "Râle Mâle",
 		desc: "Le lanceur pousse un rugissement qui intimide l’ennemi et diminue son Attaque et son Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque et l'Atq. Spé de la cible de 1.",
 	},
 	noretreat: {
 		name: "Ultime Bastion",
 		desc: "Le lanceur voit toutes ses stats augmenter, mais en contrepartie, il ne peut plus fuir ou se retirer du combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Toutes les stats +1 (pas Pré/Esq). Piège le lanceur.",
 
 		start: "  [POKEMON] ne peut plus fuir à cause d’Ultime Bastion !",
 	},
 	noxioustorque: {
 		name: "Crash Toxique",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: "Cette capacité a 30% de chances d'empoisonner la cible.",
+		shortDesc: "30% de chance d'empoisonner la cible.",
 	},
 	nuzzle: {
 		name: "Frotte-Frimousse",
 		desc: "Le lanceur attaque en frottant ses bajoues chargées d’électricité. Paralyse l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de paralyser la cible.",
 	},
 	oblivionwing: {
 		name: "Mort’Ailes",
 		desc: "Vole l’énergie de la cible. Rend au lanceur un nombre de PV supérieur ou égal à la moitié des dégâts infligés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 75% des dommages infligés.",
 	},
 	obstruct: {
 		name: "Blocage",
 		desc: "Le lanceur se protège de toutes les attaques. Peut échouer si utilisée plusieurs fois de suite. Baisse beaucoup la Défense de l’assaillant s’il utilise une attaque directe.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège des capacités offensives. Contact : -2 Déf.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	oceanicoperetta: {
 		name: "Symphonie des Ondines",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	octazooka: {
 		name: "Octazooka",
 		desc: "Le lanceur attaque en projetant de l’encre au visage de l’ennemi. Peut aussi baisser sa Précision.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de baisser la Précision de 1.",
 	},
 	octolock: {
 		name: "Octoprise",
 		desc: "Le lanceur empêche l’adversaire de fuir. À chaque tour qui passe, cette capacité baisse la Défense et la Défense Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège la cible et baisse sa Déf/SpD de 1 chaque tour.",
 
 		start: "  [POKEMON] ne peut plus fuir à cause d’Octoprise !",
 	},
 	odorsleuth: {
 		name: "Flair",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Combat et Normal touchent Spectre. Esquive ignorée.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4584,22 +4584,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ominouswind: {
 		name: "Vent Mauvais",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance : toutes les stats +1 (pas Pré/Esq).",
 	},
 	orderup: {
 		name: "Plat du Jour",
 		desc: "Le lanceur attaque avec grâce et élégance. Si le lanceur a un Nigirigon dans sa bouche, cette capacité augmente une des statistiques du lanceur selon la forme du Nigirigon.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "+1 dans une stat selon la couleur de Nigirigon.",
 	},
 	originpulse: {
 		name: "Onde Originelle",
 		desc: "D’innombrables rayons lumineux d’un bleu étincelant s’abattent sur la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	outrage: {
 		name: "Colère",
 		desc: "Le lanceur enrage et attaque pendant deux ou trois tours avant de devenir confus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dure 2-3 tours puis rend le lanceur confus.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4616,17 +4616,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	overdrive: {
 		name: "Overdrive",
 		desc: "Le lanceur gratte ses cordes de guitare ou de basse pour créer de violentes vibrations sonores qui blessent la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	overheat: {
 		name: "Surchauffe",
 		desc: "Attaque l’ennemi à pleine puissance. Le contrecoup baisse beaucoup l’Attaque Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé du lanceur de 2.",
 	},
 	painsplit: {
 		name: "Balance",
 		desc: "Le lanceur ajoute ses PV à ceux de sa cible et les répartit équitablement.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Partage équitablement les PV du lanceur/cible.",
 
 		activate: "  Le lanceur et sa cible partagent leurs PV !",
 	},
@@ -4638,12 +4638,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	paraboliccharge: {
 		name: "Parabocharge",
 		desc: "Inflige des dégâts à tous les Pokémon autour du lanceur. Il récupère en PV la moitié des dégâts infligés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur se soigne de 50% des dommages infligés.",
 	},
 	partingshot: {
 		name: "Dernier Mot",
 		desc: "Menace l’ennemi dans une ultime tirade avant de changer de place avec un autre Pokémon. Réduit l’Attaque et l’Attaque Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse Atq/SpA de la cible de 1 et switch le lanceur.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4654,7 +4654,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	payback: {
 		name: "Représailles",
 		desc: "Le lanceur charge son énergie, puis attaque. La puissance est doublée si le lanceur agit après l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si le lanceur agit après la cible.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4665,18 +4665,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	payday: {
 		name: "Jackpot",
 		desc: "Des pièces sont lancées sur l’ennemi. Permet d’obtenir de l’argent à la fin du combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Une pluie de pièces !",
 
 		activate: "  Il pleut des pièces !",
 	},
 	peck: {
 		name: "Picpic",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	perishsong: {
 		name: "Requiem",
 		desc: "Tout Pokémon qui entend ce requiem est K.O. dans trois tours à moins qu’il ne soit remplacé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Tous les Pokémon actifs tombent KO dans 3 tours.",
 
 		start: "  Les Pokémon au combat seront K.O. dans trois tours !",
 		activate: "  Le compte à rebours de Requiem [POKEMON:de] descend à [NUMBER] !",
@@ -4684,12 +4684,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	petalblizzard: {
 		name: "Tempête Florale",
 		desc: "Déclenche une violente tempête de fleurs qui inflige des dégâts à tous les Pokémon alentour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	petaldance: {
 		name: "Danse Fleurs",
 		desc: "Le lanceur attaque en projetant des pétales pendant deux à trois tours avant de céder à la confusion.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dure 2-3 tours puis rend le lanceur confus.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4710,7 +4710,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	phantomforce: {
 		name: "Hantise",
 		desc: "Le lanceur disparaît au premier tour et frappe au second. Cette attaque passe outre les protections.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Disparaît tour 1. Attaque tour 2. Ignore protections.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4721,17 +4721,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	photongeyser: {
 		name: "Photo-Geyser",
 		desc: "Le lanceur fait jaillir un pilier de lumière. Compare l’Attaque et l’Attaque Spéciale, et utilise celle qui infligera le plus de dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Physique si Atq>Atq.Spé du lanceur. Ignore Talents.",
 	},
 	pikapapow: {
 		name: "Pika-Fracas",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Bonheur max : puissance de 102. N'échoue jamais.",
 	},
 	pinmissile: {
 		name: "Dard-Nuée",
 		desc: "Envoie une rafale de dards. Peut toucher de deux à cinq fois.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4748,22 +4748,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	plasmafists: {
 		name: "Plasma Punch",
 		desc: "Le lanceur attaque en projetant de l’électricité avec ses poings. Convertit les capacités de type Normal en type Électrik.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les capacités Normal deviennent Électrik ce tour.",
 	},
 	playnice: {
 		name: "Camaraderie",
 		desc: "L’ennemi se lie d’amitié avec le lanceur et perd sa combativité, diminuant son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque de la cible de 1.",
 	},
 	playrough: {
 		name: "Câlinerie",
 		desc: "Attaque l’ennemi avec un câlin. Peut diminuer son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser l'Attaque de 1.",
 	},
 	pluck: {
 		name: "Picore",
 		desc: "Le lanceur picore la cible. Si cette dernière tient une Baie, le lanceur la mange et profite de ses effets.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur vole et mange la Baie de la cible.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4773,7 +4773,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	poisonfang: {
 		name: "Crochet Venin",
 		desc: "Le lanceur mord l’ennemi de ses crocs toxiques. Peut aussi l’empoisonner gravement.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance d'empoisonner gravement la cible.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4782,7 +4782,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	poisongas: {
 		name: "Gaz Toxik",
 		desc: "Un nuage de gaz toxique est projeté au visage de l’ennemi pour l’empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empoisonne les ennemis.",
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4790,17 +4790,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	poisonjab: {
 		name: "Direct Toxik",
 		desc: "Attaque l’ennemi avec un tentacule, un bras, ou un autre membre plein de poison. Peut aussi l’empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'empoisonner la cible.",
 	},
 	poisonpowder: {
 		name: "Poudre Toxik",
 		desc: "Une poudre toxique empoisonne l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empoisonne la cible.",
 	},
 	poisonsting: {
 		name: "Dard-Venin",
 		desc: "Un dard toxique qui transperce l’ennemi. Peut aussi l’empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'empoisonner la cible.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4809,7 +4809,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	poisontail: {
 		name: "Queue-Poison",
 		desc: "Attaque à taux de critiques élevé. Peut aussi empoisonner l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique. 10% de chance de poison.",
 	},
 	polarflare: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4819,32 +4819,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	pollenpuff: {
 		name: "Boule Pollen",
 		desc: "Utilisée sur l’ennemi, envoie une boule explosive qui fait des dégâts ; sur un allié, donne du bon pollen nutritif qui fait récupérer des PV.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si la cible est un allié, soigne 50% de ses PV max.",
 	},
 	poltergeist: {
 		name: "Esprit Frappeur",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échoue si la cible n'a pas d'objet.",
 
 		activate: "  [POKEMON] est attaqué par [INFLECT:ITEM:ms=son propre:fs=sa propre:mp=ses propres:fp=ses propres] [ITEM:classified] !",
 	},
 	populationbomb: {
 		name: "Prolifération",
 		desc: "Le lanceur et ses congénères prolifèrent en masse et attaquent ensemble d'une à dix fois d'affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 10 fois. Chaque coup peut rater.",
 	},
 	pounce: {
 		name: "Bond",
 		desc: "Le lanceur attaque en bondissant sur la cible, ce qui baisse la Vitesse de celle-ci.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1.",
 	},
 	pound: {
 		name: "Écras’Face",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	powder: {
 		name: "Nuée de Poudre",
 		desc: "L’ennemi est pris dans un nuage de poudre. S’il utilise une capacité de type Feu lors du même tour, le nuage explose et lui inflige des dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La cible perd 25% PV max si utilise une capacité Feu.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4855,26 +4855,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powdersnow: {
 		name: "Poudreuse",
 		desc: "Le lanceur projette de la neige poudreuse. Peut aussi geler l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de geler les ennemis.",
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	powergem: {
 		name: "Rayon Gemme",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	powersplit: {
 		name: "Partage Force",
 		desc: "Additionne l’Attaque Spéciale et l’Attaque du lanceur et de sa cible et les redistribue équitablement entre les deux.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Équilibre Attaque et Atq. Spé entre lanceur et cible.",
 
 		activate: "  [POKEMON] additionne sa force à celle de sa cible et redistribue le tout équitablement !",
 	},
 	powerswap: {
 		name: "Permuforce",
 		desc: "Pouvoir qui échange les modifications de l’Attaque Spéciale et de l’Attaque du lanceur avec la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échange les changements de Atq/SpA avec la cible.",
 	},
 	powershift: {
 		name: "Échange Force",
@@ -4887,7 +4887,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrick: {
 		name: "Astuce Force",
 		desc: "Le lanceur utilise ses pouvoirs psychiques pour échanger sa Défense et son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échange l'Attaque et la Défense du lanceur.",
 
 		start: "  [POKEMON] intervertit son Attaque et sa Défense !",
 		end: "#.start",
@@ -4895,26 +4895,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrip: {
 		name: "Arrogance",
 		desc: "Ivre de puissance, le lanceur attaque de toutes ses forces. Plus ses stats ont été augmentées, plus la puissance de l’attaque est élevée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance +20 pour chaque boost du lanceur.",
 	},
 	poweruppunch: {
 		name: "Poing Boost",
 		desc: "À force de frapper, les poings deviennent plus durs. Augmente l’Attaque du lanceur si l’ennemi est touché.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance d'augmenter l'Attaque de 1.",
 	},
 	powerwhip: {
 		name: "Mégafouet",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	precipiceblades: {
 		name: "Lame Pangéenne",
 		desc: "Le Pokémon transforme la puissance de la terre et attaque la cible avec une lame acérée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel. Touche en zone.",
 	},
 	present: {
 		name: "Cadeau",
 		desc: "Le lanceur attaque en offrant un cadeau piégé à la cible. Peut cependant restaurer certains de ses PV.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance 40/80/120 ou soin cible de 25% PV max.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4922,12 +4922,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	prismaticlaser: {
 		name: "Laser Prisme",
 		desc: "Le lanceur utilise la puissance d’un prisme pour envoyer un laser destructeur, mais il doit se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	protect: {
 		name: "Abri",
 		desc: "Le lanceur se protège de toutes les attaques. Peut échouer si utilisée plusieurs fois de suite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège le lanceur des capacités ce tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4956,17 +4956,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psybeam: {
 		name: "Rafale Psy",
 		desc: "Un étrange rayon frappe l’ennemi. Peut aussi le rendre confus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de rendre la cible confuse.",
 	},
 	psyblade: {
 		name: "Lame Psychique",
 		desc: "Le lanceur lacère la cible à l'aide d'une lame intangible. S'il se trouve dans un champ électrifié, la puissance de cette capacité augmente de 50 %.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 sur Champ Électrifié.",
 	},
 	psychic: {
 		name: "Psyko",
 		desc: "Une puissante force télékinétique frappe l’ennemi. Peut aussi faire baisser sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de baisser la Déf. Spé de 1.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -4975,17 +4975,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psychicfangs: {
 		name: "Psycho-Croc",
 		desc: "Le lanceur mord la cible avec ses pouvoirs psychiques. Brise aussi les barrières comme Mur Lumière et Protection.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Détruit les protections sauf si la cible est immunisée.",
 	},
 	psychicnoise: {
 		name: "Dissonance Psy",
 		desc: "Le lanceur attaque avec des ondes sonores dissonantes. Cela empêche la cible de récupérer des PV à l'aide de capacités, talents ou objets tenus pendant 2 tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La cible ne peut pas se soigner. (2 tours)",
 	},
 	psychicterrain: {
 		name: "Champ Psychique",
 		desc: "Pendant cinq tours, les Pokémon au sol ne peuvent plus subir d’attaques prioritaires et la puissance des capacités de type Psy augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Au sol : +puissance Psy, pas de Priorité. (5 tours)",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -4993,22 +4993,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psychoboost: {
 		name: "Psycho-Boost",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Atq. Spé du lanceur de 2.",
 	},
 	psychocut: {
 		name: "Coupe Psycho",
 		desc: "Le lanceur entaille l’ennemi grâce à des lames faites d’énergie psychique. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	psychoshift: {
 		name: "Échange Psy",
 		desc: "Le lanceur transfère ses problèmes de statut à l’ennemi grâce à son pouvoir de suggestion.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Transfère le problème de statut du lanceur à la cible.",
 	},
 	psychup: {
 		name: "Boost",
 		desc: "Une autohypnose qui permet au lanceur de copier les changements de stats de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Copie les changements de stats de la cible.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5021,17 +5021,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psyshock: {
 		name: "Choc Psy",
 		desc: "Le lanceur matérialise des ondes mystérieuses qu’il projette sur l’ennemi. Inflige des dégâts physiques.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts infligés basés sur la Défense, pas Déf. Spé.",
 	},
 	psystrike: {
 		name: "Frappe Psy",
 		desc: "Le lanceur matérialise des ondes mystérieuses qu’il projette sur l’ennemi. Inflige des dégâts physiques.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts infligés basés sur la Défense, pas Déf. Spé.",
 	},
 	psywave: {
 		name: "Vague Psy",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts aléatoires entre 0.5x-1.5x niveau du lanceur.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5042,22 +5042,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pulverizingpancake: {
 		name: "Gare au Ronflex",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	punishment: {
 		name: "Punition",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance = 60 + 20 pour chaque boost de la cible.",
 	},
 	purify: {
 		name: "Purification",
 		desc: "Le lanceur soigne les altérations de statut de la cible, ce qui lui permet de regagner des PV.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne statut de cible, soigne lanceur 50% PV max.",
 	},
 	pursuit: {
 		name: "Poursuite",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si la cible switch.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5081,24 +5081,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	pyroball: {
 		name: "Ballon Brûlant",
 		desc: "Le lanceur attaque avec un ballon fait à partir d’un caillou enflammé. Peut aussi brûler la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de brûler la cible. Dégèle le lanceur.",
 	},
 	quash: {
 		name: "À la Queue",
 		desc: "Retient la cible de force, l’obligeant à agir en dernier.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La cible agira en dernier ce tour.",
 
 		activate: "  [TARGET] doit retourner à la queue !",
 	},
 	quickattack: {
 		name: "Vive-Attaque",
 		desc: "Le lanceur fonce sur l’ennemi si rapidement qu’on parvient à peine à le discerner. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	quickguard: {
 		name: "Prévention",
 		desc: "Le lanceur et son équipe sont protégés contre les attaques prioritaires.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège les alliés des attaques de priorité ce tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5118,12 +5118,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	quiverdance: {
 		name: "Papillodanse",
 		desc: "Une danse mystique dont le rythme parfait augmente l’Attaque Spéciale, la Défense Spéciale et la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq. Spé, Déf. Spé et Vit du lanceur de 1.",
 	},
 	rage: {
 		name: "Frénésie",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Attaque du lanceur +1 si touché durant l'effet.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5139,7 +5139,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ragefist: {
 		name: "Poing de Colère",
 		desc: "Le lanceur transforme sa colère en énergie pour attaquer. Plus il a subi d'attaques, plus la puissance de cette capacité augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance augmente de 50 à chaque capacité subie.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5148,7 +5148,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ragepowder: {
 		name: "Poudre Fureur",
 		desc: "Le lanceur s’asperge d’une poudre irritante pour attirer l’attention. Il attire toutes les attaques ennemies.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les capacités des ennemis ciblent le lanceur ce tour.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5159,7 +5159,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ragingbull: {
 		name: "Taurogne",
 		desc: "Le lanceur effectue un plaquage comme un taureau enragé. Le type de cette capacité dépend de la forme du lanceur. Peut aussi briser les barrières comme Mur Lumière et Protection.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Détruit les protections. Type dépend de la forme.",
 
 		activate: "", // NEEDS TRANSLATION: Showdown custom text
 	},
@@ -5171,7 +5171,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	raindance: {
 		name: "Danse Pluie",
 		desc: "Invoque de fortes pluies qui durent cinq tours, augmentant la puissance des capacités de type Eau et baissant celle des capacités de type Feu.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Invoque la pluie. Améliore capacités Eau. (5 tours)",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5182,7 +5182,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rapidspin: {
 		name: "Tour Rapide",
 		desc: "Une attaque tournoyante pouvant aussi annuler, par exemple, Étreinte, Ligotage ou Vampigraine. Augmente également la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Enlève les hazards, ligotages et vampigraine. Vit +1.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5197,7 +5197,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	razorleaf: {
 		name: "Tranch’Herbe",
 		desc: "Des feuilles aiguisées comme des rasoirs entaillent l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique. Touche en zone.",
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5205,12 +5205,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	razorshell: {
 		name: "Coqui-Lame",
 		desc: "Un coquillage aiguisé lacère l’ennemi. Peut aussi baisser sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de baisser la Défense de 1.",
 	},
 	razorwind: {
 		name: "Coupe-Vent",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Charge et attaque tour 2. Haux taux critique. (Zone)",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5232,7 +5232,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	recover: {
 		name: "Soin",
 		desc: "Un soin qui permet au lanceur de récupérer jusqu’à la moitié de ses PV max.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur de 50% de ses PV max.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5243,7 +5243,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	recycle: {
 		name: "Recyclage",
 		desc: "Recycle un objet tenu à usage unique déjà utilisé lors du combat pour pouvoir l’utiliser à nouveau.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Récupère le dernier objet que le lanceur a utilisé.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5256,7 +5256,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflect: {
 		name: "Protection",
 		desc: "Crée un fabuleux mur de lumière qui réduit les dégâts causés par les capacités physiques pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts physiques sur les alliés sont 1/2. (5 tours)",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5282,7 +5282,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflecttype: {
 		name: "Copie-Type",
 		desc: "Le lanceur copie le type de la cible et devient du même type.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur devient du même type que la cible.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5295,17 +5295,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	refresh: {
 		name: "Régénération",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur soigne sa brûlure, paralysie ou poison.",
 	},
 	relicsong: {
 		name: "Chant Antique",
 		desc: "Le lanceur attaque l’ennemi en lui chantant une chanson d’un autre temps. Peut l’endormir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% pour endormir (Zone). Meloetta se transforme.",
 	},
 	rest: {
 		name: "Repos",
 		desc: "Le lanceur regagne tous ses PV et soigne ses altérations de statut, puis il dort pendant deux tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur dort 2 tours et soigne tous ses PV et statut.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5316,22 +5316,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	retaliate: {
 		name: "Vengeance",
 		desc: "Venge un Pokémon de l’équipe mis K.O. Si un Pokémon de l’équipe a été mis K.O. au tour d’avant, l’effet augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si un allié est tombé KO dernier tour.",
 	},
 	return: {
 		name: "Retour",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance max de 102 avec Bonheur maximum.",
 	},
 	revelationdance: {
 		name: "Danse Éveil",
 		desc: "Le lanceur attaque en dansant avec enthousiasme. Le type de la capacité est le même que celui du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Type varie en fonction du type principal du lanceur.",
 	},
 	revenge: {
 		name: "Vendetta",
 		desc: "Une attaque deux fois plus puissante si le lanceur a été blessé par l’ennemi durant ce tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si le lanceur est touché par la cible.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5343,7 +5343,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reversal: {
 		name: "Contre",
 		desc: "Le lanceur ne retient plus ses coups. Plus ses PV sont bas, plus l’attaque est puissante.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "PV du lanceur bas : puissance augmente.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5357,19 +5357,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	revivalblessing: {
 		name: "Second Souffle",
 		desc: "Dans un élan de compassion, le lanceur adresse une prière afin de ranimer un Pokémon de l'équipe K.O. en lui rendant la moitié de ses PV.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ranime un Pokémon KO à 50% de ses PV max.",
 
 		heal: "  [POKEMON] a repris connaissance et est prêt à se battre de nouveau !",
 	},
 	risingvoltage: {
 		name: "Monte-Tension",
 		desc: "Des éclairs surgissent du sol et frappent l’ennemi. La puissance de cette attaque est doublée si la cible est sur un Champ Électrifié.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Champ Électrifié : puissance x2 si la cible est au sol.",
 	},
 	roar: {
 		name: "Hurlement",
 		desc: "Effraie le Pokémon ennemi et le remplace par un autre. Lors d’un combat contre un Pokémon sauvage seul, met fin au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Force la cible à switcher avec un allié aléatoire.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5384,12 +5384,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	roaroftime: {
 		name: "Hurle-Temps",
 		desc: "Le lanceur frappe si fort qu’il affecte le cours du temps. Il se repose au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	rockblast: {
 		name: "Boule Roc",
 		desc: "Le lanceur projette un rocher sur l’ennemi de deux à cinq fois d’affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5403,17 +5403,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rockclimb: {
 		name: "Escalade",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de rendre la cible confuse.",
 	},
 	rockpolish: {
 		name: "Poliroche",
 		desc: "Le lanceur polit son corps pour diminuer sa résistance au vent. Augmente beaucoup la Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Vitesse du lanceur de 2.",
 	},
 	rockslide: {
 		name: "Éboulement",
 		desc: "Envoie de gros rochers sur l’ennemi pour infliger des dégâts. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer les ennemis.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5425,26 +5425,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rocksmash: {
 		name: "Éclate-Roc",
 		desc: "Porte un coup de poing à l’ennemi qui peut baisser sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de baisser la Défense de 1.",
 	},
 	rockthrow: {
 		name: "Jet-Pierres",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	rocktomb: {
 		name: "Tomberoche",
 		desc: "Des rochers frappent l’ennemi. Réduit aussi sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Vitesse de 1.",
 	},
 	rockwrecker: {
 		name: "Roc-Boulet",
 		desc: "Le lanceur attaque en projetant un gros rocher sur l’ennemi. Il doit se reposer au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur ne peut rien faire au prochain tour.",
 	},
 	roleplay: {
 		name: "Imitation",
 		desc: "Imite la cible et copie son talent.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur remplace son Talent avec celui de la cible.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5469,12 +5469,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rollingkick: {
 		name: "Mawashi Geri",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 	},
 	rollout: {
 		name: "Roulade",
 		desc: "Un rocher roule sur l’ennemi pendant cinq tours. L’attaque gagne en puissance à chaque coup.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 à chaque coup. Répète pendant 5 tours.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5485,7 +5485,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	roost: {
 		name: "Atterrissage",
 		desc: "Le lanceur atterrit et se repose. Restaure jusqu’à la moitié de ses PV max.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur soigne 50% PV max et perd type Vol ce tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5498,32 +5498,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rototiller: {
 		name: "Fertilisation",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq/SpA des types Plante au sol de 1.",
 	},
 	round: {
 		name: "Chant Canon",
 		desc: "Le lanceur attaque l’ennemi en chantant. Si plusieurs Pokémon déclenchent cette attaque à la suite, l’effet augmente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si d'autres font Chant Canon ce tour.",
 	},
 	ruination: {
 		name: "Cataclysme",
 		desc: "Le lanceur déclenche un cataclysme qui baisse les PV de la cible de moitié.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts égaux à la motiié des PV actuels de la cible.",
 	},
 	sacredfire: {
 		name: "Feu Sacré",
 		desc: "Le lanceur génère un feu mystique d’une intensité redoutable pour attaquer l’ennemi. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% de chance de brûler la cible. Dégèle le lanceur.",
 	},
 	sacredsword: {
 		name: "Lame Sainte",
 		desc: "Un coup de corne violent qui lacère l’ennemi et lui inflige des dégâts quels que soient ses changements de stats.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore les changements de stats de la cible.",
 	},
 	safeguard: {
 		name: "Rune Protect",
 		desc: "Crée un champ protecteur qui empêche toutes les altérations de statut pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège les alliés des problèmes de statut. (5 tours)",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5538,7 +5538,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	saltcure: {
 		name: "Salaison",
 		desc: "Le lanceur couvre la cible de sel, ce qui lui inflige des dégâts à chaque tour. Si la cible est de type Acier ou Eau, ces dégâts sont plus élevés.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige 1/8 PV max chaque tour, 1/4 si Acier ou Eau.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5550,7 +5550,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandattack: {
 		name: "Jet de Sable",
 		desc: "Lance du sable au visage de l’ennemi pour baisser sa Précision.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Précision de la cible de 1.",
 	},
 	sandsearstorm: {
 		name: "Typhon Pyrosable",
@@ -5560,7 +5560,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandstorm: {
 		name: "Tempête de Sable",
 		desc: "Une tempête de sable blesse tous les Pokémon pendant cinq tours, sauf ceux de type Roche, Sol ou Acier. Augmente la Défense Spéciale des Pokémon Roche.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Tempête de sable. SpD types Roche x1.5. (5 tours)",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5575,7 +5575,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandtomb: {
 		name: "Tourbi-Sable",
 		desc: "Le lanceur emprisonne l’ennemi dans une tempête de sable terrifiante qui dure de quatre à cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5598,16 +5598,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sappyseed: {
 		name: "Évo-Écolo",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Déclenche Vampigraine.",
 	},
 	savagespinout: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Cocon Fatal",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	scald: {
 		name: "Ébullition",
 		desc: "L’ennemi est attaqué par un jet d’eau bouillante. Peut aussi le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de brûler la cible. Dégèle la cible.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5616,41 +5616,41 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	scaleshot: {
 		name: "Rafale Écailles",
 		desc: "Le lanceur projette des écailles sur la cible de deux à cinq fois d’affilée. Augmente la Vitesse, mais diminue la Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois puis lanceur -1 Déf, +1 Vit.",
 	},
 	scaryface: {
 		name: "Grimace",
 		desc: "Le lanceur fait une grimace qui effraie l’ennemi et réduit beaucoup sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse de la cible de 2.",
 	},
 	scorchingsands: {
 		name: "Sable Ardent",
 		desc: "Le lanceur projette du sable chauffé à blanc sur l’ennemi. Peut aussi brûler la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de brûler la cible. Dégèle la cible.",
 	},
 	scratch: {
 		name: "Griffe",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	screech: {
 		name: "Grincement",
 		desc: "Le lanceur émet un son strident qui baisse beaucoup la Défense de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense de la cible de 2.",
 	},
 	searingshot: {
 		name: "Incendie",
 		desc: "Des boules de feu s’abattent sur tous les Pokémon autour du lanceur. Peut aussi les brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de brûler les Pokémon adjacents.",
 	},
 	searingsunrazesmash: {
 		name: "Hélio-Choc Dévastateur",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore les Talents des autres Pokémon.",
 	},
 	secretpower: {
 		name: "Force Cachée",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Effet varie selon le terrain (30% effet secondaire)",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5666,21 +5666,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	secretsword: {
 		name: "Lame Ointe",
 		desc: "L’ennemi est lacéré par une longue corne. Son pouvoir mystérieux inflige des dégâts physiques.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts infligés basés sur la Défense, pas Déf. Spé.",
 	},
 	seedbomb: {
 		name: "Canon Graine",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	seedflare: {
 		name: "Fulmigraine",
 		desc: "Le corps du lanceur émet une onde de choc. Peut aussi beaucoup baisser la Défense Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "40% de chance de baisser la Déf. Spé de 2.",
 	},
 	seismictoss: {
 		name: "Frappe Atlas",
 		desc: "L’ennemi est projeté grâce au pouvoir de la gravité. Inflige des dégâts équivalents au niveau du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige des dégâts équivalents au niveau du lanceur.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5689,7 +5689,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	selfdestruct: {
 		name: "Destruction",
 		desc: "Le lanceur explose en blessant tous les Pokémon autour de lui. Le lanceur tombe K.O.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur tombe KO Touche en zone.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5707,22 +5707,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	shadowball: {
 		name: "Ball’Ombre",
 		desc: "Projette une grande ombre sur l’ennemi. Peut aussi faire baisser sa Défense Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de baisser la Déf. Spé de 1.",
 	},
 	shadowbone: {
 		name: "Os Ombre",
 		desc: "Le lanceur frappe avec un os possédé par l’âme d’un défunt. Peut aussi baisser la Défense de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de baisser la Défense de 1.",
 	},
 	shadowclaw: {
 		name: "Griffe Ombre",
 		desc: "Attaque avec une griffe puissante faite d’ombres. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	shadowforce: {
 		name: "Revenant",
 		desc: "Le lanceur disparaît et frappe l’ennemi au second tour. Fonctionne même si l’ennemi se protège.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Disparaît tour 1. Attaque tour 2. Ignore protections.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5735,12 +5735,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowpunch: {
 		name: "Poing Ombre",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	shadowsneak: {
 		name: "Ombre Portée",
 		desc: "Le lanceur étend son ombre pour frapper par-derrière. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	shadowstrike: {
 		name: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5750,16 +5750,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sharpen: {
 		name: "Affûtage",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque du lanceur de 1.",
 	},
 	shatteredpsyche: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Psycho-Pulvérisation EX",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	shedtail: {
 		name: "Queulonage",
 		desc: "Le lanceur crée un clone en sacrifiant des PV, puis il revient et échange sa place avec un Pokémon de l'équipe prêt à combattre.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Sacrifie 50% des PV max, crée un clone et switch.",
 
 		start: "  [POKEMON] détache sa queue pour créer un leurre !",
 		alreadyStarted: "#substitute",
@@ -5768,7 +5768,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sheercold: {
 		name: "Glaciation",
 		desc: "Une vague de froid glacial frappe l’ennemi pour le mettre K.O. en un coup. A peu de chances de réussir si le lanceur ne possède pas le type Glace.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "OHKO non-Glace. Échoue si lanceur plus bas niveau.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5777,17 +5777,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	shellsidearm: {
 		name: "Kokiyarme",
 		desc: "Une attaque physique ou spéciale, en fonction de ce qui est le plus efficace contre la cible. Peut aussi empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Physique si dégâts supérieurs. 20% Poison.",
 	},
 	shellsmash: {
 		name: "Exuviation",
 		desc: "Le lanceur brise sa coquille. Il baisse sa Défense et sa Défense Spéciale, mais augmente beaucoup son Attaque, son Attaque Spéciale et sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse Déf, SpD de 1, augmente Atq, SpA, Vit de 2.",
 	},
 	shelltrap: {
 		name: "Carapiège",
 		desc: "Pose une carapace piégée. Si l’adversaire utilise une capacité physique, la carapace explose et lui inflige des dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pose un piège, attaque si subit dégâts physiques.",
 
 		start: "  [POKEMON] déclenche le Carapiège !",
 		prepare: "  [POKEMON] déclenche le Carapiège !",
@@ -5801,36 +5801,36 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	shiftgear: {
 		name: "Chgt Vitesse",
 		desc: "Le lanceur fait tourner ses engrenages. Cela augmente son Attaque et augmente beaucoup sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Vitesse de 2 et l'Attaque de 1.",
 	},
 	shockwave: {
 		name: "Onde de Choc",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	shoreup: {
 		name: "Amass’Sable",
 		desc: "Le lanceur récupère jusqu’à la moitié de ses PV max. Durant une tempête de sable, il en récupère encore plus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur soigne 50% PV, 66% si Tempête de sable.",
 	},
 	signalbeam: {
 		name: "Rayon Signal",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de rendre la cible confuse.",
 	},
 	silktrap: {
 		name: "Piège de Fil",
 		desc: "Le lanceur déploie un piège de fil pour se protéger contre les attaques, et si un assaillant utilise une attaque directe contre lui, la Vitesse de l'assaillant baisse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège des capacités. Contact : -1 Vit.",
 	},
 	silverwind: {
 		name: "Vent Argenté",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance : toutes les stats +1 (pas Pré/Esq).",
 	},
 	simplebeam: {
 		name: "Rayon Simple",
 		desc: "Le lanceur envoie des ondes mystérieuses à l’ennemi. Son talent devient Simple.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le Talent de la cible devient Simple.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5846,21 +5846,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sing: {
 		name: "Berceuse",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Endort la cible.",
 	},
 	sinisterarrowraid: {
 		name: "Fureur des Plumes Spectrales",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	sizzlyslide: {
 		name: "Évo-Flambo",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de brûler la cible.",
 	},
 	sketch: {
 		name: "Gribouille",
 		desc: "Le lanceur apprend la dernière capacité utilisée par la cible. Gribouille disparaît après utilisation.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Apprend la dernière capacité utilisée par la cible.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5877,7 +5877,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skillswap: {
 		name: "Échange",
 		desc: "Le lanceur utilise ses pouvoirs psychiques pour échanger son talent avec la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur et la cible échangent leur Talent.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5902,12 +5902,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skittersmack: {
 		name: "Ravage Rampant",
 		desc: "Le lanceur rampe derrière l’ennemi pour l’attaquer. Baisse l’Attaque Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Atq. Spé de 1.",
 	},
 	skullbash: {
 		name: "Coud’Krâne",
 		desc: "Le lanceur baisse la tête pour augmenter sa Défense au premier tour et percuter l’ennemi au second.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente Défense de 1 au tour 1, attaque tour 2.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5921,7 +5921,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyattack: {
 		name: "Piqué",
 		desc: "Une attaque en deux tours au taux de critiques élevé. Peut aussi apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Charge, tape tour 2. 30% peur. Haut taux critiques.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5935,7 +5935,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skydrop: {
 		name: "Chute Libre",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur et cible s'envolent tour 1. Attaque tour 2.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -5948,7 +5948,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyuppercut: {
 		name: "Stratopercut",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Peut toucher contre Rebond, Vol et Chute Libre.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -5957,28 +5957,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	slackoff: {
 		name: "Paresse",
 		desc: "Le lanceur se tourne les pouces et récupère jusqu’à la moitié de ses PV max.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur de 50% de ses PV max.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	slam: {
 		name: "Souplesse",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	slash: {
 		name: "Tranche",
 		desc: "Un coup de griffe ou autre tranche l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	sleeppowder: {
 		name: "Poudre Dodo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Endort la cible.",
 	},
 	sleeptalk: {
 		name: "Blabla Dodo",
 		desc: "Le lanceur utilise une de ses capacités au hasard pendant qu’il dort.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si lanceur endormi, utilise une autre capacité.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6004,7 +6004,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sludge: {
 		name: "Détritus",
 		desc: "Des détritus toxiques sont projetés sur l’ennemi. Peut aussi l’empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'empoisonner la cible.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6013,28 +6013,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sludgebomb: {
 		name: "Bombe Beurk",
 		desc: "Des détritus toxiques sont projetés sur l’ennemi. Peut aussi l’empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'empoisonner la cible.",
 	},
 	sludgewave: {
 		name: "Cradovague",
 		desc: "Une vague de détritus attaque tous les Pokémon autour du lanceur. Peut aussi empoisonner.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance d'empoisonner les cibles. (Zone)",
 	},
 	smackdown: {
 		name: "Anti-Air",
 		desc: "Le lanceur jette toutes sortes de projectiles à un ennemi. Si ce dernier vole, il tombe au sol.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Enlève l'immunité Sol de la cible.",
 
 		start: "  Touché dans les airs, [POKEMON] s’écrase au sol !",
 	},
 	smartstrike: {
 		name: "Estocorne",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais.",
 	},
 	smellingsalts: {
 		name: "Stimulant",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si cible paralysée, puis enlève paralysie.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6046,17 +6046,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	smog: {
 		name: "Purédpois",
 		desc: "Le lanceur attaque à l’aide d’une éruption de gaz répugnants. Peut aussi empoisonner l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "40% de chance d'empoisonner la cible.",
 	},
 	smokescreen: {
 		name: "Brouillard",
 		desc: "Le lanceur disperse un nuage d’encre ou de fumée. Réduit la Précision de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Précision de la cible de 1.",
 	},
 	snaptrap: {
 		name: "Troquenard",
 		desc: "Le lanceur piège sa cible dans son Troquenard d’acier et lui inflige des dégâts pendant quatre ou cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6066,12 +6066,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snarl: {
 		name: "Aboiement",
 		desc: "Le lanceur hurle sur l’ennemi. Baisse l’Attaque Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Atq Spé. de 1. (Zone)",
 	},
 	snatch: {
 		name: "Saisie",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur vole les effets de capacités de support.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6082,22 +6082,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snipeshot: {
 		name: "Tir de Précision",
 		desc: "Le lanceur parvient toujours à viser la cible voulue, en ignorant l’effet des talents et des capacités capables de détourner les attaques.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique. Impossible à rediriger.",
 	},
 	snore: {
 		name: "Ronflement",
 		desc: "Une attaque qui ne fonctionne que si le lanceur est endormi. Le boucan peut aussi apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur doit être endormi. 30% d'apeurer la cible.",
 	},
 	snowscape: {
 		name: "Chute de Neige",
 		desc: "Le lanceur invoque une tempête de neige qui dure cinq tours, ce qui augmente la Défense des Pokémon de type Glace.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Invoque la neige. Déf type Glace +50%. (5 tours)",
 	},
 	soak: {
 		name: "Détrempage",
 		desc: "Le lanceur projette beaucoup d’eau sur sa cible, qui devient de type Eau.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Change le type de la cible en type Eau.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6111,7 +6111,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	softboiled: {
 		name: "E-Coque",
 		desc: "Le lanceur récupère jusqu’à la moitié de ses PV max.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur de 50% de ses PV max.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6122,7 +6122,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	solarbeam: {
 		name: "Lance-Soleil",
 		desc: "Absorbe la lumière au premier tour et envoie un rayon puissant au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Charge tour 1. Attaque tour 2. Soleil : pas de charge.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6151,7 +6151,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	solarblade: {
 		name: "Lame Solaire",
 		desc: "Le lanceur absorbe la lumière au premier tour et attaque au second tour en libérant cette énergie sous forme de lames.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Charge tour 1. Attaque tour 2. Soleil : pas de charge.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6164,58 +6164,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sonicboom: {
 		name: "Sonic Boom",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige 20 PV de dégâts à la cible.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	soulstealing7starstrike: {
 		name: "Fauche-Âme des Sept Étoiles",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	spacialrend: {
 		name: "Spatio-Rift",
 		desc: "Le lanceur déchire l’ennemi et l’espace autour de lui. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	spark: {
 		name: "Étincelle",
 		desc: "Lance une charge électrique sur l’ennemi. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de paralyser la cible.",
 	},
 	sparklingaria: {
 		name: "Aria de l’Écume",
 		desc: "Le lanceur émet plusieurs bulles en chantant. Soigne les brûlures des Pokémon touchés par ces bulles.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne la cible de sa brûlure.",
 	},
 	sparklyswirl: {
 		name: "Évo-Fabulo",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne l'équipe de tout problème de statut.",
 	},
 	spectralthief: {
 		name: "Clepto-Mânes",
 		desc: "Le lanceur plonge dans l’ombre de la cible, vole ses augmentations de stats et l’attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Vole les boosts de stat de la cible avant les dégâts.",
 
 		clearBoost: "  [SOURCE] vole les augmentations de stats !",
 	},
 	speedswap: {
 		name: "Permuvitesse",
 		desc: "Intervertit la Vitesse du lanceur et celle de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échange la Vitesse du lanceur avec celle de la cible.",
 
 		activate: "  [POKEMON] et sa cible échangent leur Vitesse !",
 	},
 	spicyextract: {
 		name: "Habanerage",
 		desc: "Le lanceur relâche un concentré extrêmement pimenté sur la cible, ce qui augmente beaucoup l'Attaque de celle-ci, mais baisse aussi beaucoup sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Attaque du lanceur +2 et Défense du lanceur -2.",
 	},
 	spiderweb: {
 		name: "Toile",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empêche la cible de switcher.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6232,7 +6232,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spikecannon: {
 		name: "Picanon",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6246,7 +6246,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spikes: {
 		name: "Picots",
 		desc: "Le lanceur disperse des piquants sur le sol pour blesser tout ennemi qui entre au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Blesse ennemis au sol qui switch-in. Max 3 couches.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6268,7 +6268,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spikyshield: {
 		name: "Pico-Défense",
 		desc: "Protège des attaques, et diminue les PV de tout attaquant qui entre en contact avec le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège des capacités. Contact : perd 1/8 PV max.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6284,17 +6284,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spinout: {
 		name: "Dérapage",
 		desc: "Le lanceur met tout son poids sur ses pattes et effectue de violentes rotations, ce qui inflige des dégâts à la cible, mais baisse beaucoup la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse du lanceur de 2.",
 	},
 	spiritbreak: {
 		name: "Choc Émotionnel",
 		desc: "Le lanceur attaque son adversaire avec une telle force que ce dernier peut s’en retrouver profondément troublé. Baisse l’Attaque Spéciale de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Atq. Spé de 1.",
 	},
 	spiritshackle: {
 		name: "Tisse Ombre",
 		desc: "Une attaque qui coud l’ennemi à son ombre, ce qui l’empêche de s’enfuir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empêche la cible de switcher.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6302,7 +6302,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spite: {
 		name: "Dépit",
 		desc: "Le lanceur exprime son ressentiment en retirant 4 PP de la dernière capacité de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Réduit PP de la dernière capacité de la cible de 4.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6316,7 +6316,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spitup: {
 		name: "Relâche",
 		desc: "Libère dans une attaque la puissance précédemment accumulée avec Stockage.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance augmente avec utilisations de Stockage.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6326,28 +6326,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	splash: {
 		name: "Trempette",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'utilisation compétitive.",
 
 		activate: "  Mais rien ne se passe !",
 	},
 	splinteredstormshards: {
 		name: "Hurlement des Roches-Lames",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Met find à tout Champ.",
 	},
 	splishysplash: {
 		name: "Pika-Splash",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de paralyser la cible.",
 	},
 	spore: {
 		name: "Spore",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Endort la cible.",
 	},
 	spotlight: {
 		name: "Projecteur",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Attaques des ennemis redirigées vers cible ce tour.",
 
 		start: "#followme",
 		startFromZEffect: "#followme",
@@ -6360,7 +6360,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stealthrock: {
 		name: "Piège de Roc",
 		desc: "Lance des pierres flottantes autour de l’ennemi, qui blessent tout adversaire entrant au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Blesse ennemis qui switch-in (garde faiblesse Roche)",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6375,12 +6375,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	steameruption: {
 		name: "Jet de Vapeur",
 		desc: "Plonge l’ennemi dans une chaleur étouffante. Peut le brûler.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance de brûler la cible. Dégèle la cible.",
 	},
 	steamroller: {
 		name: "Bulldoboule",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6388,24 +6388,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	steelbeam: {
 		name: "Métalaser",
 		desc: "Le lanceur concentre du métal issu de tout son corps en un rayon qu’il projette violemment sur sa cible. Il subit aussi des dégâts.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur perd 50% PV max.",
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "Métalliroue",
 		desc: "Une attaque qui inflige des dégâts et fait disparaître le champ actif, mais qui échoue s’il n’y en a pas à ce moment.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échoue si aucun Champ n'est actif. Met fin au Champ.",
 	},
 	steelwing: {
 		name: "Ailes d’Acier",
 		desc: "Le lanceur frappe l’ennemi avec des ailes d’acier. Peut aussi augmenter la Défense du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance d'augmenter la Défense de 1.",
 	},
 	stickyweb: {
 		name: "Toile Gluante",
 		desc: "Déploie une toile visqueuse autour de l’ennemi qui ralentit la Vitesse de tout adversaire entrant au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse Vitesse des ennemis au sol qui switch-in de 1.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6417,7 +6417,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stockpile: {
 		name: "Stockage",
 		desc: "Le lanceur accumule de la puissance et augmente sa Défense et sa Défense Spéciale. Peut être utilisée trois fois.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente Défense et Déf. Spé de 1. Max 3 fois.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6429,12 +6429,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stokedsparksurfer: {
 		name: "Électro-Surf Survolté",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de paralyser la cible.",
 	},
 	stomp: {
 		name: "Écrasement",
 		desc: "Écrase l’ennemi avec un énorme pied. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6454,7 +6454,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stompingtantrum: {
 		name: "Trépignement",
 		desc: "Le lanceur attaque en utilisant sa frustration. S’il a utilisé une capacité qui a échoué au tour précédent, la puissance de Trépignement est doublée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si dernière capacité du lanceur a raté.",
 	},
 	stoneaxe: {
 		name: "Hache de Pierre",
@@ -6464,36 +6464,36 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stoneedge: {
 		name: "Lame de Roc",
 		desc: "Fait surgir des pierres aiguisées sous l’ennemi. Taux de critiques élevé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Haut taux de critique.",
 	},
 	storedpower: {
 		name: "Force Ajoutée",
 		desc: "Le lanceur attaque l’ennemi avec une force accumulée. Plus les stats du lanceur sont augmentées, plus le coup est efficace.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance +20 pour chaque boost du lanceur.",
 	},
 	stormthrow: {
 		name: "Yama Arashi",
 		desc: "Un coup très puissant dont l’effet est toujours critique.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige toujours un coup critique.",
 	},
 	strangesteam: {
 		name: "Vapeur Féérique",
 		desc: "Le lanceur émet de la vapeur pour attaquer sa cible. Peut aussi la rendre confuse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de rendre la cible confuse.",
 	},
 	strength: {
 		name: "Force",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	strengthsap: {
 		name: "Vole-Force",
 		desc: "Rend au lanceur une quantité de PV équivalente à la stat d’Attaque de la cible, puis baisse celle-ci.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur soigné de l'Atq de la cible. Baisse Atq de 1.",
 	},
 	stringshot: {
 		name: "Sécrétion",
 		desc: "Le lanceur crache de la soie pour ligoter l’ennemi et beaucoup baisser sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse des ennemis de 2.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6505,7 +6505,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	struggle: {
 		name: "Lutte",
 		desc: "Une attaque désespérée, utilisée quand le lanceur n’a plus de PP. Le blesse aussi légèrement.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur perd 25% de ses PV max.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6527,12 +6527,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	strugglebug: {
 		name: "Survinsecte",
 		desc: "Le lanceur se débat de toutes ses forces, et baisse l’Attaque Spéciale de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Atq Spé. de 1. (Zone)",
 	},
 	stuffcheeks: {
 		name: "Garde-à-Joues",
 		desc: "Le lanceur mange la Baie qu’il tient, ce qui augmente beaucoup sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Doit tenir une Baie. Lanceur mange Baie et +2 Déf.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6541,7 +6541,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stunspore: {
 		name: "Para-Spore",
 		desc: "Le lanceur répand sur l’ennemi une poudre qui le paralyse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Paralyse la cible.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6552,7 +6552,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	submission: {
 		name: "Sacrifice",
 		desc: "Le lanceur agrippe l’ennemi et l’écrase au sol. Blesse aussi légèrement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "25% de recul.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6566,7 +6566,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	substitute: {
 		name: "Clonage",
 		desc: "Le lanceur crée un clone en sacrifiant quelques PV. Ce clone sert de leurre.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur sacrifie 25% PV max et crée un clone.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6585,13 +6585,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  Le clone subit l’attaque à la place [POKEMON:de] !",
 	},
 	subzeroslammer: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Laser Cryogénique",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	suckerpunch: {
 		name: "Coup Bas",
 		desc: "Permet au lanceur de frapper en priorité. Échoue si l’ennemi ne prépare pas une attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité. Échoue si la cible n'attaque pas.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6599,7 +6599,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sunnyday: {
 		name: "Zénith",
 		desc: "Fait briller le soleil pendant cinq tours, augmentant la puissance des capacités de type Feu et baissant celle des capacités de type Eau.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Invoque le soleil. Améliore capacités Feu. (5 tours)",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6610,19 +6610,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sunsteelstrike: {
 		name: "Choc Météore",
 		desc: "Le lanceur fonce sur la cible à la vitesse d’une météorite. Ignore le talent de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ignore les Talents des autres Pokémon.",
 	},
 	supercellslam: {
 		name: "Volt Assaut",
 		desc: "Le lanceur se charge en électricité et fond sur la cible. S'il échoue, le lanceur se blesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur subit 50% de ses PV max s'il rate.",
 
 		damage: "#crash",
 	},
 	superfang: {
 		name: "Croc Fatal",
 		desc: "Une vilaine morsure d’incisives qui réduit de moitié les PV de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dégâts égaux à la motiié des PV actuels de la cible.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6631,20 +6631,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	superpower: {
 		name: "Surpuissance",
 		desc: "Une attaque puissante, mais qui baisse l’Attaque et la Défense du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque et la Défense du lanceur de 1.",
 	},
 	supersonic: {
 		name: "Ultrason",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Rend la cible confuse.",
 	},
 	supersonicskystrike: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Piqué Supersonique",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	surf: {
 		name: "Surf",
 		desc: "Une énorme vague s’abat sur le champ de bataille et inflige des dégâts à tous les Pokémon autour du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche en zone. Dégâts x2 sur Plongée.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6660,12 +6660,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	surgingstrikes: {
 		name: "Torrent de Coups",
 		desc: "Le lanceur assène trois coups fluides à l’ennemi. Cette technique qui inflige toujours un coup critique est réservée à ceux qui maîtrisent la puissance de l’Eau.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige toujours un coup critique. Touche 3 fois.",
 	},
 	swagger: {
 		name: "Vantardise",
 		desc: "Fait enrager la cible et la plonge dans la confusion, mais augmente beaucoup son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque de la cible de 2 et rend confus.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6673,7 +6673,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	swallow: {
 		name: "Avale",
 		desc: "Le lanceur absorbe la puissance accumulée avec Stockage pour restaurer ses PV.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne en fonction des utilisations de Stockage.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6683,12 +6683,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sweetkiss: {
 		name: "Doux Baiser",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Rend la cible confuse.",
 	},
 	sweetscent: {
 		name: "Doux Parfum",
 		desc: "Un doux parfum qui réduit beaucoup l’Esquive de l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Esquive des ennemis de 2.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6700,7 +6700,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	swift: {
 		name: "Météores",
 		desc: "Le lanceur envoie des rayons d’étoiles. Touche toujours l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais. Touche en zone.",
 		gen1: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6712,7 +6712,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	switcheroo: {
 		name: "Passe-Passe",
 		desc: "Le lanceur échange son objet avec celui de la cible à une vitesse que l’œil a du mal à suivre.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur échange son objet avec celui de la cible.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6737,17 +6737,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	swordsdance: {
 		name: "Danse Lames",
 		desc: "Une danse frénétique qui exalte l’esprit combatif. Augmente beaucoup l’Attaque du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque du lanceur de 2.",
 	},
 	synchronoise: {
 		name: "Synchropeine",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Tape Pokémon adjacents avec même type que cible.",
 	},
 	synthesis: {
 		name: "Synthèse",
 		desc: "Un soin qui restaure des PV au lanceur. Son efficacité varie en fonction de la météo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Soigne le lanceur en fonction de la météo.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6767,23 +6767,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	syrupbomb: {
 		name: "Bombe au Sirop",
 		desc: "Le lanceur jette une bombe qui recouvre la cible de sirop gluant et fait progressivement baisser la Vitesse de la cible pendant trois tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse de la cible de 1 pendant 3 tours.",
 
 		start: "  [POKEMON] est recouvert de sirop !",
 	},
 	tackle: {
 		name: "Charge",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	tachyoncutter: {
 		name: "Lame Tachyonique",
 		desc: "Le lanceur concentre des particules élémentaires pour créer une lame qui inflige des dégâts à la cible deux fois d'affilée. N'échoue jamais.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois. N'échoue jamais.",
 	},
 	tailglow: {
 		name: "Lumi-Queue",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Atq. Spé du lanceur de 3.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6792,7 +6792,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tailslap: {
 		name: "Plumo-Queue",
 		desc: "Le lanceur frappe l’ennemi de deux à cinq fois d’affilée avec sa queue robuste.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6800,7 +6800,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tailwhip: {
 		name: "Mimi-Queue",
 		desc: "Le lanceur remue son adorable queue pour tromper la vigilance de l’ennemi et baisser sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Défense des ennemis de 1.",
 		gen2: {
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6808,7 +6808,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tailwind: {
 		name: "Vent Arrière",
 		desc: "Génère une rafale de vent qui augmente la Vitesse des Pokémon de l’équipe pendant quatre tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La Vitesse des alliés est doublée. (4 tours)",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6820,7 +6820,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	takedown: {
 		name: "Bélier",
 		desc: "Une charge violente qui blesse aussi légèrement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "25% de recul.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6839,14 +6839,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tarshot: {
 		name: "Goudronnage",
 		desc: "Le lanceur recouvre sa cible de goudron liquide pour baisser sa Vitesse et la rendre vulnérable au feu.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cible devient faible au Feu et -1 Vitesse.",
 
 		start: "  [POKEMON] est maintenant vulnérable au feu !",
 	},
 	taunt: {
 		name: "Provoc",
 		desc: "Provoque l’ennemi. L’oblige à n’utiliser que des attaques pendant trois tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cible doit utiliser capacités offensives. (3 tours)",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6872,12 +6872,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tearfullook: {
 		name: "Larme à l’Œil",
 		desc: "Le lanceur jette un regard plein de larmes à la cible. Celle-ci perd toute velléité de combat et voit son Attaque et son Attaque Spéciale baisser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque et l'Atq. Spé de la cible de 1.",
 	},
 	teatime: {
 		name: "Thérémonie",
 		desc: "Le lanceur invite tous les Pokémon sur le terrain à prendre le goûter autour d’une tasse de thé. Ceux qui tiennent une Baie la mangent.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Les Pokémon actifs doivent manger leur Baie.",
 
 		activate: "  C’est l’heure du thé ! Tout le monde mange sa Baie.",
 		fail: "  Mais rien ne se passe !",
@@ -6885,21 +6885,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	technoblast: {
 		name: "Techno-Buster",
 		desc: "Le lanceur projette un rayon lumineux sur l’ennemi. Le type varie selon le Module que tient le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le type varie en fonction du Module tenu.",
 	},
 	tectonicrage: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Éruption Géo-Sismique",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	teeterdance: {
 		name: "Danse Folle",
 		desc: "Danse qui rend confus tous les Pokémon autour du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Rend les Pokémon adjacents confus.",
 	},
 	telekinesis: {
 		name: "Lévikinésie",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "La cible flotte mais ne peut pas esquiver. (3 tours)",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6913,7 +6913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	teleport: {
 		name: "Téléport",
 		desc: "Permet de changer de place avec un autre Pokémon de l’équipe s’il y en a. Quand cette capacité est utilisée par un Pokémon sauvage, celui-ci fuit le combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur switch avec un autre allié.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -6922,27 +6922,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	temperflare: {
 		name: "Indignition",
 		desc: "Le lanceur utilise la force de son dépit pour attaquer. S'il a utilisé une capacité qui a échoué au tour précédent, la puissance d'Indignition est doublée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si la dernière capacité a échoué.",
 	},
 	terablast: {
 		name: "Téra Explosion",
 		desc: "Si le lanceur est Téracristallisé, il libère l'énergie de son Type Téracristal. Cette capacité inflige des dégâts en utilisant l'Attaque ou l'Attaque Spéciale du lanceur, selon la statistique la plus élevée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Téracristal : Phys si Atq > SpA, Type = Type Teracr.",
 	},
 	terastarstorm: {
 		name: "Pluie Térastrale",
 		desc: "Le lanceur bombarde la cible afin de l'éliminer grâce au pouvoir des cristaux. Si le lanceur est Terapagos sous sa Forme Stellaire, la capacité touche tous les ennemis.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Terapagos-Stellaire : Type Stellaire. (Zone)",
 	},
 	terrainpulse: {
 		name: "Champlification",
 		desc: "Une attaque qui tire sa force des champs. Son type et sa puissance varient selon le champ actif.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Sur un Champ : Puissance x2, type varie.",
 	},
 	thief: {
 		name: "Larcin",
 		desc: "Le lanceur attaque la cible et vole son objet. Le lanceur ne peut rien voler s’il tient déjà un objet.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Si le lanceur n'a pas d'objet, vole celui de la cible.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6971,12 +6971,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thousandarrows: {
 		name: "Myria-Flèches",
 		desc: "Touche même les Pokémon dans les airs. Dans ce cas, la cible retombe au sol.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ennemis au sol (Zone). Neutre sur type Vol 1ere fois.",
 	},
 	thousandwaves: {
 		name: "Myria-Vagues",
 		desc: "Attaque avec des vagues glissant au sol. L’ennemi pris dedans ne peut pas s’échapper.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche en zone. Empêche de switcher.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -6984,7 +6984,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thrash: {
 		name: "Mania",
 		desc: "Une attaque furieuse qui dure de deux à trois tours. Le lanceur devient confus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Dure 2-3 tours puis rend le lanceur confus.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7005,7 +7005,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	throatchop: {
 		name: "Exécu-Son",
 		desc: "Inflige une douleur tellement violente à la cible qu’elle ne peut plus émettre de sons pendant deux tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cible peut plus utiliser de capacité de son. (2 tours)",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7015,7 +7015,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thunder: {
 		name: "Fatal-Foudre",
 		desc: "La foudre tombe sur l’ennemi pour lui infliger des dégâts. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance paralysie. Pluie : ne rate jamais.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7036,12 +7036,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thunderbolt: {
 		name: "Tonnerre",
 		desc: "Une grosse décharge électrique tombe sur l’ennemi. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de paralyser la cible.",
 	},
 	thundercage: {
 		name: "Voltageôle",
 		desc: "Le lanceur frappe l’ennemi, et le piège dans une prison électrique qui dure de quatre à cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7051,59 +7051,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thunderclap: {
 		name: "Vif Éclair",
 		desc: "Permet au lanceur d'attaquer la cible en priorité avec une décharge électrique. Échoue si la cible ne prépare pas une attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité. Échoue si la cible n'attaque pas.",
 	},
 	thunderfang: {
 		name: "Crocs Éclair",
 		desc: "Le lanceur utilise une morsure électrifiée. Peut aussi paralyser ou apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance paralysie. 10% de chance peur.",
 	},
 	thunderouskick: {
 		name: "Coup Fulgurant",
 		desc: "Le lanceur assène un coup de pied à la cible à la vitesse de l’éclair. Baisse aussi la Défense de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser la Défense de 1.",
 	},
 	thunderpunch: {
 		name: "Poing Éclair",
 		desc: "Un coup de poing électrique vient frapper l’ennemi. Peut le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de paralyser la cible.",
 	},
 	thundershock: {
 		name: "Éclair",
 		desc: "Une décharge électrique tombe sur l’ennemi. Peut aussi le paralyser.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "10% de chance de paralyser la cible.",
 	},
 	thunderwave: {
 		name: "Cage Éclair",
 		desc: "Un faible choc électrique frappe l’ennemi. Si l’attaque le touche, celui-ci est paralysé.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Paralyse la cible.",
 	},
 	tickle: {
 		name: "Chatouille",
 		desc: "Le lanceur chatouille l’ennemi, ce qui baisse son Attaque et sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse l'Attaque et la Défense de la cible de 1.",
 	},
 	tidyup: {
 		name: "Grand Nettoyage",
 		desc: "Le lanceur fait le ménage sur le terrain, ce qui annule les effets de Picots, Piège de Roc, Toile Gluante, Pics Toxik, et Clonage. Augmente l'Attaque et la Vitesse du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Lanceur : +1 Atq et Vit. Enlève clones et hazards.",
 
 		activate: "  Le grand nettoyage est terminé !",
 	},
 	topsyturvy: {
 		name: "Renversement",
 		desc: "Inverse tous les changements de stats de la cible.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inverse les changements de stats de la cible.",
 	},
 	torchsong: {
 		name: "Chant Flamboyant",
 		desc: "Le lanceur carbonise la cible en projetant sur elle de vives flammes créées par un chant. Cette capacité augmente l'Attaque Spéciale du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque Spéciale de l'utilisateur d'1 cran.",
 	},
 	torment: {
 		name: "Tourmente",
 		desc: "Le lanceur irrite l’ennemi pour l’empêcher d’utiliser la même capacité deux fois de suite.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cible peut pas utiliser même capacité 2 fois d'affilée.",
 
 		start: "  [POKEMON] est tourmenté !",
 		end: "  Les tourments [POKEMON:de] sont apaisés !",
@@ -7111,7 +7111,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxic: {
 		name: "Toxik",
 		desc: "Empoisonne gravement l’ennemi. Les dégâts dus au poison augmentent à chaque tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Empoisonne gravement. Type Poison n'échouent pas.",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -7120,7 +7120,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxicspikes: {
 		name: "Pics Toxik",
 		desc: "Lance des pics autour de l’ennemi. Ils empoisonnent les ennemis qui entrent au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Poison ennemis au sol qui switch-in. Max 2 couches.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7137,7 +7137,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxicthread: {
 		name: "Fil Toxique",
 		desc: "Tisse un fil imprégné de venin. Empoisonne la cible et baisse sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Vitesse de la cible de 1 et l'empoisonne.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -7146,12 +7146,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	trailblaze: {
 		name: "Désherbaffe",
 		desc: "Le lanceur surgit des hautes herbes pour attaquer la cible. Les mouvements agiles du lanceur augmentent sa Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Vitesse de l'utilisateur d'1 cran.",
 	},
 	transform: {
 		name: "Morphing",
 		desc: "Le lanceur devient une copie de sa cible et obtient la même palette de capacités.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Copie les stats, capacités, types et Talent de la cible.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7168,7 +7168,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	triattack: {
 		name: "Triplattaque",
 		desc: "Le lanceur envoie trois boules d’énergie simultanément. Peut aussi paralyser, brûler ou geler l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de paralyser, brûler ou geler la cible.",
 		gen2: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7180,7 +7180,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	trick: {
 		name: "Tour de Magie",
 		desc: "Le lanceur prend la cible au dépourvu et l’oblige à échanger son objet contre le sien.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur échange son objet avec celui de la cible.",
 		champions: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7208,12 +7208,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	trickortreat: {
 		name: "Halloween",
 		desc: "Insuffle à la cible l’esprit d’Halloween, et ajoute le type Spectre à ses types actuels.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Ajoute le type Spectre aux types de la cible.",
 	},
 	trickroom: {
 		name: "Distorsion",
 		desc: "Le lanceur crée une zone mystérieuse où les Pokémon les plus lents frappent en priorité pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Agit en dernier. Ordre du tour inversé. (5 tours)",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7226,17 +7226,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tripleaxel: {
 		name: "Triple Axel",
 		desc: "Une salve composée de un à trois coups de pied dont la puissance augmente à chaque coup porté.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "3 coups, peuvent rater, leur puissance augmente.",
 	},
 	tripledive: {
 		name: "Triple Plongeon",
 		desc: "Le lanceur effectue des plongeons parfaitement cadencés pour éclabousser la cible et lui infliger des dégâts trois fois d'affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche trois fois.",
 	},
 	triplekick: {
 		name: "Triple Pied",
 		desc: "Une salve de un à trois coups de pied dont la puissance augmente à chaque coup porté.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "3 coups, peuvent rater, leur puissance augmente.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7251,22 +7251,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tropkick: {
 		name: "Botte Sucrette",
 		desc: "Un coup de pied chaud comme les tropiques qui inflige des dégâts à la cible et baisse son Attaque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de baisser l'Attaque de 1.",
 	},
 	trumpcard: {
 		name: "Atout",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance augmente quand PP de la capacité baisse.",
 	},
 	twinbeam: {
 		name: "Double Laser",
 		desc: "Le lanceur projette d'étranges rayons lumineux avec ses yeux et inflige des dégâts deux fois d'affilée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois en un tour.",
 	},
 	twineedle: {
 		name: "Double Dard",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Touche 2 fois. Chaque coup a 20% poison.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7282,13 +7282,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	twinkletackle: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Impact Choupinova",
+		shortDesc: "La puissance dépend de la capacité de base.",
 	},
 	twister: {
 		name: "Ouragan",
 		desc: "Déclenche un terrible ouragan sur l’ennemi. Peut aussi l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance d'apeurer les ennemis.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7300,12 +7300,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	upperhand: {
 		name: "Prio-Parade",
 		desc: "Le lanceur réagit instinctivement au moindre mouvement et donne un coup de paume qui apeure la cible. Échoue si cette dernière n'a pas utilisé une attaque prioritaire.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% peur, échoue sauf si la cible agit en priorité.",
 	},
 	uproar: {
 		name: "Brouhaha",
 		desc: "Le lanceur attaque en rugissant durant trois tours. Pendant ce temps, aucun Pokémon ne peut s’endormir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pokémon actifs ne peuvent pas dormir. (3 tours)",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7327,7 +7327,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	uturn: {
 		name: "Demi-Tour",
 		desc: "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l’équipe prêt au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur attaque la cible puis switch.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7340,27 +7340,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	vacuumwave: {
 		name: "Onde Vide",
 		desc: "Le lanceur agite son poing pour projeter une onde de vide. Frappe en priorité.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1.",
 	},
 	vcreate: {
 		name: "Coup Victoire",
 		desc: "Le lanceur projette une flamme ardente de son front et se jette sur l’ennemi. Baisse la Défense, la Défense Spéciale et la Vitesse.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse la Déf, Déf. Spé et Vit du lanceur de 1.",
 	},
 	veeveevolley: {
 		name: "Évo-Chardasso",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Bonheur max : puissance de 102. N'échoue jamais.",
 	},
 	venomdrench: {
 		name: "Piège de Venin",
 		desc: "Sécrète un liquide empoisonné. Diminue l’Attaque, l’Attaque Spéciale et la Vitesse de l’ennemi empoisonné.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Baisse Atq/SpA/Vit des ennemis empoisonnés de 1.",
 	},
 	venoshock: {
 		name: "Choc Venin",
 		desc: "Le lanceur inocule un poison spécial à l’ennemi. L’effet est doublé si l’ennemi est déjà empoisonné.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si la cible est empoisonnée.",
 	},
 	victorydance: {
 		name: "Danse Victoire",
@@ -7369,21 +7369,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	vinewhip: {
 		name: "Fouet Lianes",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	visegrip: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Force Poigne",
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	vitalthrow: {
 		name: "Corps Perdu",
 		desc: "Le lanceur porte son coup en dernier. En échange, cette capacité n’échoue jamais.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Cette capacité n'échoue jamais. Attaque en dernier.",
 	},
 	voltswitch: {
 		name: "Change Éclair",
 		desc: "Après son attaque, le lanceur revient à toute vitesse et change de place avec un Pokémon de l’équipe prêt au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le lanceur attaque la cible puis switch.",
 		gen6: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7393,7 +7393,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	volttackle: {
 		name: "Électacle",
 		desc: "Le lanceur électrifie son corps avant de charger. Le choc blesse aussi gravement le lanceur et peut paralyser l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "33% de recul. 10% de chance de paralyser la cible.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -7406,7 +7406,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wakeupslap: {
 		name: "Réveil Forcé",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 si la cible dort, et la réveille.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7414,7 +7414,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	waterfall: {
 		name: "Cascade",
 		desc: "Le lanceur charge l’ennemi à une vitesse remarquable, ce qui peut l’apeurer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance d'apeurer la cible.",
 		gen3: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -7422,12 +7422,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watergun: {
 		name: "Pistolet à O",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	waterpledge: {
 		name: "Aire d’Eau",
 		desc: "Une masse d’eau s’abat sur l’ennemi. En l’utilisant avec Aire de Feu, l’effet augmente et un arc-en-ciel apparaît.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Couplé avec Aire de Feu ou d'Herbe : effet bonus.",
 
 		activate: "  [POKEMON] attend [TARGET]...",
 		start: "  Un arc-en-ciel apparaît au-dessus de [TEAM] !",
@@ -7436,12 +7436,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	waterpulse: {
 		name: "Vibraqua",
 		desc: "Le lanceur envoie un puissant jet d’eau sur l’ennemi. Peut le rendre confus.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance de rendre la cible confuse.",
 	},
 	watershuriken: {
 		name: "Sheauriken",
 		desc: "Attaque l’ennemi avec des shuriken de mucus. Frappe en priorité deux à cinq fois d’affilée en un tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1. Touche 2-5 fois en un tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7452,7 +7452,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	watersport: {
 		name: "Tourniquet",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Capacités Feu ont puissance 1/3. (5 tours)",
 		gen5: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -7465,7 +7465,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	waterspout: {
 		name: "Giclédo",
 		desc: "Le lanceur attaque avec un jet d’eau. Moins il a de PV et moins l’attaque est puissante.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance proportionnelle aux PV du lanceur. (Zone)",
 	},
 	wavecrash: {
 		name: "Aquatacle",
@@ -7475,7 +7475,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	weatherball: {
 		name: "Ball’Météo",
 		desc: "Une attaque dont la puissance et le type varient en fonction du temps qu’il fait.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Puissance x2 et type varie en fonction de la météo.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7492,7 +7492,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlpool: {
 		name: "Siphon",
 		desc: "Piège l’ennemi dans une trombe d’eau pendant quatre à cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7515,7 +7515,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlwind: {
 		name: "Cyclone",
 		desc: "Éjecte le Pokémon ennemi et le remplace par un autre. Lors d’un combat contre un Pokémon sauvage seul, met fin au combat.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Force la cible à switcher avec un allié aléatoire.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7530,17 +7530,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wickedblow: {
 		name: "Poing Obscur",
 		desc: "Le lanceur assène un coup puissant à l’ennemi. Cette technique qui inflige toujours un coup critique est réservée à ceux qui maîtrisent la puissance des Ténèbres.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Inflige toujours un coup critique.",
 	},
 	wickedtorque: {
 		name: "Crash Obscur",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: "Cette capacité a 10% de chances d'endormir la cible.",
+		shortDesc: "10% de chance d'endormir la cible.",
 	},
 	wideguard: {
 		name: "Garde Large",
 		desc: "Annule les attaques visant toute l’équipe pendant un tour.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Protège les alliés des capacités multi-cible ce tour.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7566,21 +7566,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wildcharge: {
 		name: "Éclair Fou",
 		desc: "Une charge électrique violente qui blesse aussi légèrement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "25% de recul.",
 	},
 	willowisp: {
 		name: "Feu Follet",
 		desc: "Lance un bouquet de flammes maléfiques à l’ennemi pour lui infliger une brûlure.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Brûle la cible.",
 	},
 	wingattack: {
 		name: "Cru-Ailes",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	wish: {
 		name: "Vœu",
 		desc: "Un vœu qui permet au lanceur ou au Pokémon entrant sur le terrain au tour suivant de récupérer la moitié des PV max du lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "50% des PV du lanceur sont restaurés prochain tour.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -7591,17 +7591,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	withdraw: {
 		name: "Repli",
 		desc: "Le lanceur se recroqueville dans sa carapace, ce qui augmente sa Défense.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente la Défense du lanceur de 1.",
 	},
 	wonderroom: {
 		name: "Zone Étrange",
 		desc: "Le lanceur crée une zone mystérieuse où la Défense et la Défense Spéciale de tous les Pokémon sont inversées pendant cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Échange toutes les Défenses et Déf. Spé. (5 tours)",
 	},
 	woodhammer: {
 		name: "Martobois",
 		desc: "Le lanceur heurte l’ennemi de son corps robuste. Blesse aussi gravement le lanceur.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "33% de recul.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
@@ -7610,12 +7610,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	workup: {
 		name: "Rengorgement",
 		desc: "Le lanceur se rengorge. Augmente l’Attaque et l’Attaque Spéciale.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Augmente l'Attaque et l'Atq. Spé du lanceur de 1.",
 	},
 	worryseed: {
 		name: "Soucigraine",
 		desc: "Plante sur la cible une graine qui la rend soucieuse et remplace son talent par Insomnia, l’empêchant ainsi de dormir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Le Talent de la cible devient Insomnia.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7635,7 +7635,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wrap: {
 		name: "Ligotage",
 		desc: "Le lanceur ligote l’ennemi avec des lianes ou son corps pour l’écraser durant quatre à cinq tours.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Piège et blesse la cible pendant 4-5 tours.",
 		gen8: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -7663,41 +7663,41 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wringout: {
 		name: "Essorage",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Plus la cible a de PV, plus la puissance augmente.",
 		gen4: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	xscissor: {
 		name: "Plaie Croix",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Pas d'effet additionnel.",
 	},
 	yawn: {
 		name: "Bâillement",
 		desc: "Fait bâiller l’ennemi qui s’endort au tour suivant.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Endort la cible à la fin du prochain tour.",
 
 		start: "  Ça rend [POKEMON] somnolent !",
 	},
 	zapcannon: {
 		name: "Élecanon",
 		desc: "Un boulet de canon électrifié qui inflige des dégâts et paralyse l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "100% de chance de paralyser la cible.",
 	},
 	zenheadbutt: {
 		name: "Psykoud’Boul",
 		desc: "Le lanceur concentre sa volonté et donne un coup de tête. Peut aussi apeurer l’ennemi.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "20% de chance d'apeurer la cible.",
 	},
 	zingzap: {
 		name: "Électrikipik",
 		desc: "Le lanceur fonce sur la cible et lui envoie un puissant choc électrique. Peut aussi l’effrayer.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "30% de chance d'apeurer la cible.",
 	},
 	zippyzap: {
 		name: "Pika-Sprint",
 		desc: "Cette capacité ne peut pas être utilisée. Il est recommandé de l’oublier, même s’il sera impossible de se la remémorer une fois oubliée.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: "Frappe en priorité +1. Augmente l'Esquive de 1.",
 		gen7: {
 			desc: "", // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
