@@ -1,12 +1,14 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "千万伏特",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	absorb: {
 		name: "吸取",
-		desc: "吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。",
+		// Official flavor text: "吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -23,12 +25,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	accelerock: {
 		name: "冲岩",
-		desc: "迅速撞向对手进行攻击。 必定能够先制攻击。",
+		// Official flavor text: "迅速撞向对手进行攻击。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acid: {
 		name: "溶解液",
-		desc: "将强酸泼向对手进行攻击。 有时会降低对手的特防。",
+		// Official flavor text: "将强酸泼向对手进行攻击。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -44,7 +48,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acidarmor: {
 		name: "溶化",
-		desc: "通过细胞的变化进行液化， 从而大幅提高自己的防御。",
+		// Official flavor text: "通过细胞的变化进行液化， 从而大幅提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
@@ -53,7 +58,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acidspray: {
 		name: "酸液炸弹",
-		desc: "喷出能溶化对手的液体进行攻击。 大幅降低对手的特防。",
+		// Official flavor text: "喷出能溶化对手的液体进行攻击。 大幅降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acrobatics: {
@@ -62,7 +68,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acupressure: {
 		name: "点穴",
-		desc: "通过点穴 让身体舒筋活络。 大幅提高某１项能力。",
+		// Official flavor text: "通过点穴 让身体舒筋活络。 大幅提高某１项能力。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -74,29 +81,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aeroblast: {
 		name: "气旋攻击",
-		desc: "发射空气旋涡 进行攻击。 容易击中要害。",
+		// Official flavor text: "发射空气旋涡 进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	afteryou: {
 		name: "您先请",
-		desc: "支援我方或对手的行动， 使其紧接着此招式之后行动。",
+		// Official flavor text: "支援我方或对手的行动， 使其紧接着此招式之后行动。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [TARGET]接受了对手的好意！",
 	},
 	agility: {
 		name: "高速移动",
-		desc: "让身体放松变得轻盈， 以便高速移动。 大幅提高自己的速度。",
+		// Official flavor text: "让身体放松变得轻盈， 以便高速移动。 大幅提高自己的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aircutter: {
 		name: "空气利刃",
-		desc: "用锐利的风 切斩对手进行攻击。 容易击中要害。",
+		// Official flavor text: "用锐利的风 切斩对手进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	airslash: {
 		name: "空气斩",
-		desc: "用连天空也能劈开的 空气之刃进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "用连天空也能劈开的 空气之刃进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
@@ -110,7 +122,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	allyswitch: {
 		name: "交换场地",
-		desc: "用神奇的力量瞬间移动， 互换自己和同伴所在的位置。",
+		// Official flavor text: "用神奇的力量瞬间移动， 互换自己和同伴所在的位置。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -123,7 +136,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	amnesia: {
 		name: "瞬间失忆",
-		desc: "将头脑清空， 瞬间忘记某事， 从而大幅提高自己的特防。",
+		// Official flavor text: "将头脑清空， 瞬间忘记某事， 从而大幅提高自己的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -132,7 +146,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	anchorshot: {
 		name: "掷锚",
-		desc: "将锚缠住对手进行攻击。 使对手无法逃走。",
+		// Official flavor text: "将锚缠住对手进行攻击。 使对手无法逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -140,12 +155,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ancientpower: {
 		name: "原始之力",
-		desc: "用原始之力进行攻击。 有时会提高 自己所有的能力。",
+		// Official flavor text: "用原始之力进行攻击。 有时会提高 自己所有的能力。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	appleacid: {
 		name: "苹果酸",
-		desc: "使用从酸苹果中提取出来的 酸性液体进行攻击。 降低对手的特防。",
+		// Official flavor text: "使用从酸苹果中提取出来的 酸性液体进行攻击。 降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquacutter: {
@@ -155,12 +172,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aquajet: {
 		name: "水流喷射",
-		desc: "以迅雷不及掩耳之势 扑向对手。 必定能够先制攻击。",
+		// Official flavor text: "以迅雷不及掩耳之势 扑向对手。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquaring: {
 		name: "水流环",
-		desc: "在自己身体的周围 覆盖用水制造的幕。 每回合回复ＨＰ。",
+		// Official flavor text: "在自己身体的周围 覆盖用水制造的幕。 每回合回复ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]套上了水环！",
@@ -182,7 +201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	armthrust: {
 		name: "猛推",
-		desc: "用张开着的双手 猛推对手进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "用张开着的双手 猛推对手进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -196,7 +216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "芳香治疗",
-		desc: "让同伴闻沁人心脾的香气， 从而治愈我方全员的异常状态。",
+		// Official flavor text: "让同伴闻沁人心脾的香气， 从而治愈我方全员的异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -206,12 +227,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromaticmist: {
 		name: "芳香薄雾",
-		desc: "通过神奇的芳香， 提高我方宝可梦的特防。",
+		// Official flavor text: "通过神奇的芳香， 提高我方宝可梦的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	assist: {
 		name: "借助",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -234,7 +257,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	assurance: {
 		name: "恶意追击",
-		desc: "如果此回合内对手 已经受到伤害的话， 招式威力会变成２倍。",
+		// Official flavor text: "如果此回合内对手 已经受到伤害的话， 招式威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -242,7 +266,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	astonish: {
 		name: "惊吓",
-		desc: "用尖叫声等 突然惊吓对手进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "用尖叫声等 突然惊吓对手进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -250,17 +275,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	astralbarrage: {
 		name: "星碎",
-		desc: "用大量的小灵体向 对手发起攻击。",
+		// Official flavor text: "用大量的小灵体向 对手发起攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	attackorder: {
 		name: "攻击指令",
-		desc: "召唤手下， 让其朝对手发起攻击。 容易击中要害。",
+		// Official flavor text: "召唤手下， 让其朝对手发起攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	attract: {
 		name: "迷人",
-		desc: "♂诱惑♀或♀诱惑♂， 让对手着迷。 对手将很难使出招式。",
+		// Official flavor text: "♂诱惑♀或♀诱惑♂， 让对手着迷。 对手将很难使出招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -282,12 +310,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurawheel: {
 		name: "气场轮",
-		desc: "用储存在颊囊里的能量 进行攻击，并提高自己的速度。 其属性会随着莫鲁贝可的样子而改变。",
+		// Official flavor text: "用储存在颊囊里的能量 进行攻击，并提高自己的速度。 其属性会随着莫鲁贝可的样子而改变。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aurorabeam: {
 		name: "极光束",
-		desc: "向对手发射 虹色光束进行攻击。 有时会降低对手的攻击。",
+		// Official flavor text: "向对手发射 虹色光束进行攻击。 有时会降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -296,7 +326,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	auroraveil: {
 		name: "极光幕",
-		desc: "在５回合内减弱 物理和特殊的伤害。 只有冰雹时才能使出。",
+		// Official flavor text: "在５回合内减弱 物理和特殊的伤害。 只有冰雹时才能使出。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -308,14 +339,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	autotomize: {
 		name: "身体轻量化",
-		desc: "削掉身体上没用的部分。 大幅提高自己的速度， 同时体重也会变轻。",
+		// Official flavor text: "削掉身体上没用的部分。 大幅提高自己的速度， 同时体重也会变轻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]变得身轻如燕了！",
 	},
 	avalanche: {
 		name: "雪崩",
-		desc: "如果受到对手的招式攻击， 就能给予该对手 ２倍威力的攻击。",
+		// Official flavor text: "如果受到对手的招式攻击， 就能给予该对手 ２倍威力的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -330,17 +363,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	babydolleyes: {
 		name: "圆瞳",
-		desc: "用圆瞳凝视对手， 从而降低其攻击。 必定能够先制攻击。",
+		// Official flavor text: "用圆瞳凝视对手， 从而降低其攻击。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	baddybad: {
 		name: "坏坏领域",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	banefulbunker: {
 		name: "碉堡",
-		desc: "防住对手攻击的同时， 让接触到自己的对手中毒。",
+		// Official flavor text: "防住对手攻击的同时， 让接触到自己的对手中毒。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -356,7 +392,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrage: {
 		name: "投球",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -370,12 +407,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrier: {
 		name: "屏障",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	batonpass: {
 		name: "接棒",
-		desc: "和后备宝可梦进行替换。 换上的宝可梦能直接继承 其能力的变化。",
+		// Official flavor text: "和后备宝可梦进行替换。 换上的宝可梦能直接继承 其能力的变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -398,14 +437,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	beakblast: {
 		name: "鸟嘴加农炮",
-		desc: "先加热鸟嘴后再进行攻击。 鸟嘴在加热时对手触碰的话， 就会使其灼伤。",
+		// Official flavor text: "先加热鸟嘴后再进行攻击。 鸟嘴在加热时对手触碰的话， 就会使其灼伤。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]开始给鸟嘴加热了！",
 	},
 	beatup: {
 		name: "围攻",
-		desc: "我方全员进行攻击。 同行的宝可梦越多， 招式的攻击次数越多。",
+		// Official flavor text: "我方全员进行攻击。 同行的宝可梦越多， 招式的攻击次数越多。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -435,7 +476,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	belch: {
 		name: "打嗝",
-		desc: "朝着对手打嗝， 并给予伤害。 如果不吃树果则无法使出。",
+		// Official flavor text: "朝着对手打嗝， 并给予伤害。 如果不吃树果则无法使出。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -444,7 +486,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bellydrum: {
 		name: "腹鼓",
-		desc: "将自己的ＨＰ减少到 最大ＨＰ的一半， 从而最大限度提高自己的攻击。",
+		// Official flavor text: "将自己的ＨＰ减少到 最大ＨＰ的一半， 从而最大限度提高自己的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -454,7 +497,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bestow: {
 		name: "传递礼物",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -467,7 +511,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bide: {
 		name: "忍耐",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -489,7 +534,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bind: {
 		name: "绑紧",
-		desc: "使用长长的身体或藤蔓等， 在４～５回合内 绑紧对手进行攻击。",
+		// Official flavor text: "使用长长的身体或藤蔓等， 在４～５回合内 绑紧对手进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -517,7 +563,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bite: {
 		name: "咬住",
-		desc: "用尖锐的牙 咬住对手进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "用尖锐的牙 咬住对手进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -540,12 +587,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blastburn: {
 		name: "爆炸烈焰",
-		desc: "用爆炸的火焰 烧尽对手进行攻击。 下一回合自己将无法动弹。",
+		// Official flavor text: "用爆炸的火焰 烧尽对手进行攻击。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazekick: {
 		name: "火焰踢",
-		desc: "攻击对手后， 有时会使其陷入灼伤状态。 也容易击中要害。",
+		// Official flavor text: "攻击对手后， 有时会使其陷入灼伤状态。 也容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazingtorque: {
@@ -560,7 +609,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blizzard: {
 		name: "暴风雪",
-		desc: "将猛烈的暴风雪 刮向对手进行攻击。 有时会让对手陷入冰冻状态。",
+		// Official flavor text: "将猛烈的暴风雪 刮向对手进行攻击。 有时会让对手陷入冰冻状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -576,7 +626,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	block: {
 		name: "挡路",
-		desc: "张开双手进行阻挡， 封住对手的退路， 使其不能逃走。",
+		// Official flavor text: "张开双手进行阻挡， 封住对手的退路， 使其不能逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -601,17 +652,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blueflare: {
 		name: "青焰",
-		desc: "用美丽而激烈的青焰 包裹住对手进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "用美丽而激烈的青焰 包裹住对手进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bodypress: {
 		name: "扑击",
-		desc: "用身体撞向对手进行攻击。 防御越高， 给予的伤害就越高。",
+		// Official flavor text: "用身体撞向对手进行攻击。 防御越高， 给予的伤害就越高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bodyslam: {
 		name: "泰山压顶",
-		desc: "用整个身体 压住对手进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "用整个身体 压住对手进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -619,22 +673,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	boltbeak: {
 		name: "电喙",
-		desc: "用带电的喙啄刺对手。 如果比对手先出手攻击， 招式的威力会变成２倍。",
+		// Official flavor text: "用带电的喙啄刺对手。 如果比对手先出手攻击， 招式的威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	boltstrike: {
 		name: "雷击",
-		desc: "让强大的电流覆盖全身， 猛撞向对手进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "让强大的电流覆盖全身， 猛撞向对手进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	boneclub: {
 		name: "骨棒",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bonemerang: {
 		name: "骨头回力镖",
-		desc: "用手中的骨头投掷对手， 来回连续２次给予伤害。",
+		// Official flavor text: "用手中的骨头投掷对手， 来回连续２次给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -648,7 +706,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonerush: {
 		name: "骨棒乱打",
-		desc: "用坚硬的骨头 殴打对手进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "用坚硬的骨头 殴打对手进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -662,12 +721,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	boomburst: {
 		name: "爆音波",
-		desc: "通过震耳欲聋的爆炸声 产生的破坏力， 攻击自己周围所有的宝可梦。",
+		// Official flavor text: "通过震耳欲聋的爆炸声 产生的破坏力， 攻击自己周围所有的宝可梦。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bounce: {
 		name: "弹跳",
-		desc: "弹跳到高高的空中， 第２回合攻击对手。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "弹跳到高高的空中， 第２回合攻击对手。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -683,17 +744,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bouncybubble: {
 		name: "活活气泡",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	branchpoke: {
 		name: "木枝突刺",
-		desc: "使用尖锐的树枝 刺向对手进行攻击。",
+		// Official flavor text: "使用尖锐的树枝 刺向对手进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bravebird: {
 		name: "勇鸟猛攻",
-		desc: "收拢翅膀， 通过低空飞行突击对手。 自己也会受到不小的伤害。",
+		// Official flavor text: "收拢翅膀， 通过低空飞行突击对手。 自己也会受到不小的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -702,7 +766,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	breakingswipe: {
 		name: "广域破坏",
-		desc: "用坚韧的尾巴 猛扫对手进行攻击， 从而降低对手的攻击。",
+		// Official flavor text: "用坚韧的尾巴 猛扫对手进行攻击， 从而降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
@@ -711,7 +776,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	brickbreak: {
 		name: "劈瓦",
-		desc: "将手刀猛烈地挥下攻击对手。 还可以破坏光墙和反射壁等。",
+		// Official flavor text: "将手刀猛烈地挥下攻击对手。 还可以破坏光墙和反射壁等。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -728,17 +794,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	brine: {
 		name: "盐水",
-		desc: "当对手的ＨＰ 负伤到一半左右时， 招式威力会变成２倍。",
+		// Official flavor text: "当对手的ＨＰ 负伤到一半左右时， 招式威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brutalswing: {
 		name: "狂舞挥打",
-		desc: "用自己的身体狂舞挥打， 给予对手伤害。",
+		// Official flavor text: "用自己的身体狂舞挥打， 给予对手伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bubble: {
 		name: "泡沫",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -750,7 +819,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bubblebeam: {
 		name: "泡沫光线",
-		desc: "向对手猛烈地喷射 泡沫进行攻击。 有时会降低对手的速度。",
+		// Official flavor text: "向对手猛烈地喷射 泡沫进行攻击。 有时会降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -759,7 +829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bugbite: {
 		name: "虫咬",
-		desc: "咬住进行攻击。 当对手携带树果时， 可以食用并获得其效果。",
+		// Official flavor text: "咬住进行攻击。 当对手携带树果时， 可以食用并获得其效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -769,27 +840,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bugbuzz: {
 		name: "虫鸣",
-		desc: "利用振动发出音波进行攻击。 有时会降低对手的特防。",
+		// Official flavor text: "利用振动发出音波进行攻击。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulkup: {
 		name: "健美",
-		desc: "使出全身力气绷紧肌肉， 从而提高自己的攻击和防御。",
+		// Official flavor text: "使出全身力气绷紧肌肉， 从而提高自己的攻击和防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulldoze: {
 		name: "重踏",
-		desc: "用力踩踏地面并攻击 自己周围所有的宝可梦。 降低对方的速度。",
+		// Official flavor text: "用力踩踏地面并攻击 自己周围所有的宝可梦。 降低对方的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulletpunch: {
 		name: "子弹拳",
-		desc: "向对手使出如子弹般 快速而坚硬的拳头。 必定能够先制攻击。",
+		// Official flavor text: "向对手使出如子弹般 快速而坚硬的拳头。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulletseed: {
 		name: "种子机关枪",
-		desc: "向对手猛烈地 发射种子进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "向对手猛烈地 发射种子进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -808,12 +884,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	burningjealousy: {
 		name: "妒火",
-		desc: "用嫉妒的能量攻击对手。 会让在该回合内能力有所提高的 宝可梦陷入灼伤状态。",
+		// Official flavor text: "用嫉妒的能量攻击对手。 会让在该回合内能力有所提高的 宝可梦陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	burnup: {
 		name: "燃尽",
-		desc: "将自己全身燃烧起火焰来， 给予对手大大的伤害。 自己的火属性将会消失。",
+		// Official flavor text: "将自己全身燃烧起火焰来， 给予对手大大的伤害。 自己的火属性将会消失。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -823,17 +901,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	buzzybuzz: {
 		name: "麻麻电击",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	calmmind: {
 		name: "冥想",
-		desc: "静心凝神， 从而提高自己的特攻和特防。",
+		// Official flavor text: "静心凝神， 从而提高自己的特攻和特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	camouflage: {
 		name: "保护色",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -852,7 +933,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	captivate: {
 		name: "诱惑",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	catastropika: {
@@ -872,7 +954,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	charge: {
 		name: "充电",
-		desc: "提高下一回合使出的 电属性的招式威力。 自己的特防也会提高。",
+		// Official flavor text: "提高下一回合使出的 电属性的招式威力。 自己的特防也会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -887,17 +970,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	chargebeam: {
 		name: "充电光束",
-		desc: "向对手发射电击光束。 由于蓄满电流， 有时会提高自己的特攻。",
+		// Official flavor text: "向对手发射电击光束。 由于蓄满电流， 有时会提高自己的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	charm: {
 		name: "撒娇",
-		desc: "可爱地凝视， 诱使对手疏忽大意， 从而大幅降低对手的攻击。",
+		// Official flavor text: "可爱地凝视， 诱使对手疏忽大意， 从而大幅降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chatter: {
 		name: "喋喋不休",
-		desc: "用非常烦人的， 喋喋不休的音波攻击对手。 使对手混乱。",
+		// Official flavor text: "用非常烦人的， 喋喋不休的音波攻击对手。 使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -922,7 +1008,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	chipaway: {
 		name: "逐步击破",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chloroblast: {
@@ -932,12 +1019,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	circlethrow: {
 		name: "巴投",
-		desc: "扔飞对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。",
+		// Official flavor text: "扔飞对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clamp: {
 		name: "贝壳夹击",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -965,17 +1054,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	clangingscales: {
 		name: "鳞片噪音",
-		desc: "摩擦全身鳞片， 发出响亮的声音进行攻击。 攻击后自己的防御会降低。",
+		// Official flavor text: "摩擦全身鳞片， 发出响亮的声音进行攻击。 攻击后自己的防御会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clangoroussoul: {
 		name: "魂舞烈音爆",
-		desc: "削减少许自己的ＨＰ， 使所有能力都提高。",
+		// Official flavor text: "削减少许自己的ＨＰ， 使所有能力都提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clangoroussoulblaze: {
 		name: "炽魂热舞烈音爆",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clearsmog: {
@@ -984,17 +1076,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	closecombat: {
 		name: "近身战",
-		desc: "放弃守护， 向对手的怀里突击。 自己的防御和特防会降低。",
+		// Official flavor text: "放弃守护， 向对手的怀里突击。 自己的防御和特防会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	coaching: {
 		name: "指导",
-		desc: "通过进行正确合理的指导， 提高我方全员的攻击和防御。",
+		// Official flavor text: "通过进行正确合理的指导， 提高我方全员的攻击和防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	coil: {
 		name: "盘蜷",
-		desc: "盘蜷着集中精神。 提高自己的攻击、防御和命中率。",
+		// Official flavor text: "盘蜷着集中精神。 提高自己的攻击、防御和命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	collisioncourse: {
@@ -1009,7 +1104,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cometpunch: {
 		name: "连续拳",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1028,22 +1124,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	confide: {
 		name: "密语",
-		desc: "和对手进行密语， 使其失去集中力， 从而降低对手的特攻。",
+		// Official flavor text: "和对手进行密语， 使其失去集中力， 从而降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	confuseray: {
 		name: "奇异之光",
-		desc: "显示奇怪的光， 扰乱对手。 使对手混乱。",
+		// Official flavor text: "显示奇怪的光， 扰乱对手。 使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	confusion: {
 		name: "念力",
-		desc: "向对手发送 微弱的念力进行攻击。 有时会使对手混乱。",
+		// Official flavor text: "向对手发送 微弱的念力进行攻击。 有时会使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	constrict: {
 		name: "缠绕",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1056,7 +1156,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	conversion: {
 		name: "纹理",
-		desc: "将自己的属性转换成 和已学会的招式中 第一个招式相同的属性。",
+		// Official flavor text: "将自己的属性转换成 和已学会的招式中 第一个招式相同的属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1077,7 +1178,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	conversion2: {
 		name: "纹理２",
-		desc: "为了可以抵抗对手 最后使用的招式， 从而使自己的属性发生变化。",
+		// Official flavor text: "为了可以抵抗对手 最后使用的招式， 从而使自己的属性发生变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1093,7 +1195,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	copycat: {
 		name: "仿效",
-		desc: "模仿对手刚才使出的招式， 并使出相同招式。 如果对手还没出招则会失败。",
+		// Official flavor text: "模仿对手刚才使出的招式， 并使出相同招式。 如果对手还没出招则会失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1113,7 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	coreenforcer: {
 		name: "核心惩罚者",
-		desc: "如果给予过伤害的对手 已经结束行动， 其特性就会被消除。",
+		// Official flavor text: "如果给予过伤害的对手 已经结束行动， 其特性就会被消除。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1128,7 +1232,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	corrosivegas: {
 		name: "腐蚀气体",
-		desc: "用具有强酸性的气体 包裹住自己周围所有的宝可梦， 并融化其所携带的道具。",
+		// Official flavor text: "用具有强酸性的气体 包裹住自己周围所有的宝可梦， 并融化其所携带的道具。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1139,22 +1244,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cosmicpower: {
 		name: "宇宙力量",
-		desc: "汲取宇宙中神秘的力量， 从而提高自己的防御和特防。",
+		// Official flavor text: "汲取宇宙中神秘的力量， 从而提高自己的防御和特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cottonguard: {
 		name: "棉花防守",
-		desc: "用软绵绵的绒毛包裹住 自己的身体进行守护。 巨幅提高自己的防御。",
+		// Official flavor text: "用软绵绵的绒毛包裹住 自己的身体进行守护。 巨幅提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cottonspore: {
 		name: "棉孢子",
-		desc: "将棉花般柔软的孢子 紧贴对手， 从而大幅降低对手的速度。",
+		// Official flavor text: "将棉花般柔软的孢子 紧贴对手， 从而大幅降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	counter: {
 		name: "双倍奉还",
-		desc: "从对手那里受到 物理攻击的伤害将以 ２倍返还给同一个对手。",
+		// Official flavor text: "从对手那里受到 物理攻击的伤害将以 ２倍返还给同一个对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1175,14 +1284,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	courtchange: {
 		name: "换场",
-		desc: "用神奇的力量 交换双方的场地效果。",
+		// Official flavor text: "用神奇的力量 交换双方的场地效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]交换了双方的场地效果！",
 	},
 	covet: {
 		name: "渴望",
-		desc: "一边可爱地撒娇， 一边靠近对手进行攻击， 还能夺取对手携带的道具。",
+		// Official flavor text: "一边可爱地撒娇， 一边靠近对手进行攻击， 还能夺取对手携带的道具。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1208,12 +1319,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crabhammer: {
 		name: "蟹钳锤",
-		desc: "用大钳子 敲打对手进行攻击。 容易击中要害。",
+		// Official flavor text: "用大钳子 敲打对手进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	craftyshield: {
 		name: "戏法防守",
-		desc: "使用神奇的力量 防住攻击我方的变化招式。 但无法防住伤害招式的攻击。",
+		// Official flavor text: "使用神奇的力量 防住攻击我方的变化招式。 但无法防住伤害招式的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [TEAM]受到了戏法防守的保护！",
@@ -1221,17 +1334,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crosschop: {
 		name: "十字劈",
-		desc: "用两手呈十字 劈打对手进行攻击。 容易击中要害。",
+		// Official flavor text: "用两手呈十字 劈打对手进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crosspoison: {
 		name: "十字毒刃",
-		desc: "用毒刃劈开对手。 有时会让对手陷入中毒状态， 也容易击中要害。",
+		// Official flavor text: "用毒刃劈开对手。 有时会让对手陷入中毒状态， 也容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crunch: {
 		name: "咬碎",
-		desc: "用利牙咬碎对手进行攻击。 有时会降低对手的防御。",
+		// Official flavor text: "用利牙咬碎对手进行攻击。 有时会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1240,12 +1356,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crushclaw: {
 		name: "撕裂爪",
-		desc: "用坚硬的锐爪 劈开对手进行攻击。 有时会降低对手的防御。",
+		// Official flavor text: "用坚硬的锐爪 劈开对手进行攻击。 有时会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crushgrip: {
 		name: "捏碎",
-		desc: "用骇人的力量捏碎对手。 对手剩余的ＨＰ越多， 威力越大。",
+		// Official flavor text: "用骇人的力量捏碎对手。 对手剩余的ＨＰ越多， 威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1253,7 +1371,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	curse: {
 		name: "诅咒",
-		desc: "使用该招式的宝可梦， 其属性是幽灵属性或其他属性时， 效果会不一样。",
+		// Official flavor text: "使用该招式的宝可梦， 其属性是幽灵属性或其他属性时， 效果会不一样。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1271,17 +1390,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	darkestlariat: {
 		name: "ＤＤ金勾臂",
-		desc: "旋转双臂打向对手。 无视对手的能力变化， 直接给予伤害。",
+		// Official flavor text: "旋转双臂打向对手。 无视对手的能力变化， 直接给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkpulse: {
 		name: "恶之波动",
-		desc: "从体内发出 充满恶意的恐怖气场。 有时会使对手畏缩。",
+		// Official flavor text: "从体内发出 充满恶意的恐怖气场。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkvoid: {
 		name: "暗黑洞",
-		desc: "将对手强制拖入黑暗的世界， 从而让对手陷入睡眠状态。",
+		// Official flavor text: "将对手强制拖入黑暗的世界， 从而让对手陷入睡眠状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1293,22 +1415,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dazzlinggleam: {
 		name: "魔法闪耀",
-		desc: "向对手发射强光， 并给予伤害。",
+		// Official flavor text: "向对手发射强光， 并给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decorate: {
 		name: "装饰",
-		desc: "通过装饰， 大幅提高对方的 攻击和特攻。",
+		// Official flavor text: "通过装饰， 大幅提高对方的 攻击和特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defendorder: {
 		name: "防御指令",
-		desc: "召唤手下， 让其附在自己的身体上。 可以提高自己的防御和特防。",
+		// Official flavor text: "召唤手下， 让其附在自己的身体上。 可以提高自己的防御和特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defensecurl: {
 		name: "变圆",
-		desc: "将身体蜷曲变圆， 从而提高自己的防御。",
+		// Official flavor text: "将身体蜷曲变圆， 从而提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1319,7 +1445,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	defog: {
 		name: "清除浓雾",
-		desc: "用强风吹开对手的 反射壁或光墙等。 也会降低对手的闪避率。",
+		// Official flavor text: "用强风吹开对手的 反射壁或光墙等。 也会降低对手的闪避率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1335,7 +1462,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	destinybond: {
 		name: "同命",
-		desc: "使出招式后，当受到对手攻击 陷入濒死时，对手也会一同濒死。 连续使出则会失败。",
+		// Official flavor text: "使出招式后，当受到对手攻击 陷入濒死时，对手也会一同濒死。 连续使出则会失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1349,7 +1477,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	detect: {
 		name: "看穿",
-		desc: "完全抵挡 对手的攻击。 连续使出则容易失败。",
+		// Official flavor text: "完全抵挡 对手的攻击。 连续使出则容易失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1379,7 +1508,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	diamondstorm: {
 		name: "钻石风暴",
-		desc: "掀起钻石风暴给予伤害。 有时会大幅提高自己的防御。",
+		// Official flavor text: "掀起钻石风暴给予伤害。 有时会大幅提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1388,7 +1518,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dig: {
 		name: "挖洞",
-		desc: "第１回合钻入， 第２回合攻击对手。",
+		// Official flavor text: "第１回合钻入， 第２回合攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1416,7 +1547,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	disable: {
 		name: "定身法",
-		desc: "阻碍对手行动， 之前使出的招式 将在４回合内无法使用。",
+		// Official flavor text: "阻碍对手行动， 之前使出的招式 将在４回合内无法使用。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1447,17 +1579,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	disarmingvoice: {
 		name: "魅惑之声",
-		desc: "发出魅惑的叫声， 给予对手精神上的伤害。 攻击必定会命中。",
+		// Official flavor text: "发出魅惑的叫声， 给予对手精神上的伤害。 攻击必定会命中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	discharge: {
 		name: "放电",
-		desc: "用耀眼的电击 攻击自己周围所有的宝可梦。 有时会陷入麻痹状态。",
+		// Official flavor text: "用耀眼的电击 攻击自己周围所有的宝可梦。 有时会陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dive: {
 		name: "潜水",
-		desc: "第１回合潜入， 第２回合浮上来进行攻击。",
+		// Official flavor text: "第１回合潜入， 第２回合浮上来进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1470,7 +1605,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dizzypunch: {
 		name: "迷昏拳",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1484,7 +1620,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doomdesire: {
 		name: "破灭之愿",
-		desc: "使用招式２回合后， 会用无数道光束攻击对手。",
+		// Official flavor text: "使用招式２回合后， 会用无数道光束攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1495,7 +1632,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleedge: {
 		name: "舍身冲撞",
-		desc: "拼命地猛撞向对手进行攻击。 自己也会受到不小的伤害。",
+		// Official flavor text: "拼命地猛撞向对手进行攻击。 自己也会受到不小的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1511,7 +1649,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doublehit: {
 		name: "二连击",
-		desc: "使用尾巴等 拍打对手进行攻击。 连续２次给予伤害。",
+		// Official flavor text: "使用尾巴等 拍打对手进行攻击。 连续２次给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1519,12 +1658,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleironbash: {
 		name: "钢拳双击",
-		desc: "以胸口的螺帽为中心旋转， 并连续２次挥动手臂打击对手。 有时会使对手畏缩。",
+		// Official flavor text: "以胸口的螺帽为中心旋转， 并连续２次挥动手臂打击对手。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	doublekick: {
 		name: "二连踢",
-		desc: "用２只脚踢飞对手进行攻击。 连续２次给予伤害。",
+		// Official flavor text: "用２只脚踢飞对手进行攻击。 连续２次给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1545,7 +1686,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleslap: {
 		name: "连环巴掌",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1559,24 +1701,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleteam: {
 		name: "影子分身",
-		desc: "通过快速移动来制造分身， 扰乱对手，从而提高闪避率。",
+		// Official flavor text: "通过快速移动来制造分身， 扰乱对手，从而提高闪避率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dracometeor: {
 		name: "流星群",
-		desc: "从天空中向对手落下陨石。 使用之后因为反作用力， 自己的特攻会大幅降低。",
+		// Official flavor text: "从天空中向对手落下陨石。 使用之后因为反作用力， 自己的特攻会大幅降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonascent: {
 		name: "画龙点睛",
-		desc: "从天空中急速下降攻击对手。 自己的防御和特防会降低。",
+		// Official flavor text: "从天空中急速下降攻击对手。 自己的防御和特防会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		megaNoItem: "  [TRAINER]衷心的祈愿传递到了[POKEMON]那里！",
 	},
 	dragonbreath: {
 		name: "龙息",
-		desc: "将强烈的气息 吹向对手进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "将强烈的气息 吹向对手进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragoncheer: {
@@ -1592,17 +1738,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragondance: {
 		name: "龙之舞",
-		desc: "激烈地跳起神秘 且强有力的舞蹈。 从而提高自己的攻击和速度。",
+		// Official flavor text: "激烈地跳起神秘 且强有力的舞蹈。 从而提高自己的攻击和速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragondarts: {
 		name: "龙箭",
-		desc: "让多龙梅西亚进行２次攻击。 如果对手有２只宝可梦， 则对它们各进行１次攻击。",
+		// Official flavor text: "让多龙梅西亚进行２次攻击。 如果对手有２只宝可梦， 则对它们各进行１次攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonenergy: {
 		name: "巨龙威能",
-		desc: "把生命力转换为力量攻击对手。 自己的ＨＰ越少，招式的威力越小。",
+		// Official flavor text: "把生命力转换为力量攻击对手。 自己的ＨＰ越少，招式的威力越小。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonhammer: {
@@ -1619,7 +1768,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonrush: {
 		name: "龙之俯冲",
-		desc: "释放出骇人的杀气， 一边威慑一边撞击对手。 有时会使对手畏缩。",
+		// Official flavor text: "释放出骇人的杀气， 一边威慑一边撞击对手。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1627,17 +1777,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragontail: {
 		name: "龙尾",
-		desc: "弹飞对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。",
+		// Official flavor text: "弹飞对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drainingkiss: {
 		name: "吸取之吻",
-		desc: "用一个吻吸取对手的ＨＰ。 回复给予对手 伤害的一半以上的ＨＰ。",
+		// Official flavor text: "用一个吻吸取对手的ＨＰ。 回复给予对手 伤害的一半以上的ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drainpunch: {
 		name: "吸取拳",
-		desc: "用拳头吸取对手的力量。 可以回复给予对手 伤害的一半ＨＰ。",
+		// Official flavor text: "用拳头吸取对手的力量。 可以回复给予对手 伤害的一半ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1645,7 +1798,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dreameater: {
 		name: "食梦",
-		desc: "吃掉正在睡觉的对手的梦 进行攻击。回复对手 所受到伤害的一半ＨＰ。",
+		// Official flavor text: "吃掉正在睡觉的对手的梦 进行攻击。回复对手 所受到伤害的一半ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1663,22 +1817,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	drillrun: {
 		name: "直冲钻",
-		desc: "像钢钻一样，一边旋转身体 一边撞击对手。 容易击中要害。",
+		// Official flavor text: "像钢钻一样，一边旋转身体 一边撞击对手。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drumbeating: {
 		name: "鼓击",
-		desc: "用鼓点来控制 鼓的根部进行攻击， 从而降低对手的速度。",
+		// Official flavor text: "用鼓点来控制 鼓的根部进行攻击， 从而降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dualchop: {
 		name: "二连劈",
-		desc: "用身体坚硬的部分 拍打对手进行攻击。 连续２次给予伤害。",
+		// Official flavor text: "用身体坚硬的部分 拍打对手进行攻击。 连续２次给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dualwingbeat: {
 		name: "双翼",
-		desc: "将翅膀撞向对手进行攻击。 连续２次给予伤害。",
+		// Official flavor text: "将翅膀撞向对手进行攻击。 连续２次给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dynamaxcannon: {
@@ -1690,17 +1848,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dynamicpunch: {
 		name: "爆裂拳",
-		desc: "使出浑身力气出拳进行攻击。 必定会使对手混乱。",
+		// Official flavor text: "使出浑身力气出拳进行攻击。 必定会使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthpower: {
 		name: "大地之力",
-		desc: "向对手脚下 释放出大地之力。 有时会降低对手的特防。",
+		// Official flavor text: "向对手脚下 释放出大地之力。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthquake: {
 		name: "地震",
-		desc: "利用地震的冲击， 攻击自己周围所有的宝可梦。",
+		// Official flavor text: "利用地震的冲击， 攻击自己周围所有的宝可梦。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1716,17 +1877,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	echoedvoice: {
 		name: "回声",
-		desc: "用回声攻击对手。 如果每回合都有宝可梦接着 使用该招式，威力就会提高。",
+		// Official flavor text: "用回声攻击对手。 如果每回合都有宝可梦接着 使用该招式，威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eerieimpulse: {
 		name: "怪异电波",
-		desc: "从身体放射出怪异电波， 让对手沐浴其中， 从而大幅降低其特攻。",
+		// Official flavor text: "从身体放射出怪异电波， 让对手沐浴其中， 从而大幅降低其特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eeriespell: {
 		name: "诡异咒语",
-		desc: "用强大的精神力量攻击。 让对手最后使用的招式 减少３ＰＰ。",
+		// Official flavor text: "用强大的精神力量攻击。 让对手最后使用的招式 减少３ＰＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#spite",
@@ -1737,7 +1901,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electricterrain: {
 		name: "电气场地",
-		desc: "在５回合内变成电气场地。 地面上的宝可梦将无法入眠。 电属性的招式威力还会提高。",
+		// Official flavor text: "在５回合内变成电气场地。 地面上的宝可梦将无法入眠。 电属性的招式威力还会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1745,14 +1910,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electrify: {
 		name: "输电",
-		desc: "对手使出招式前， 如果输电，则该回合 对手的招式变成电属性。",
+		// Official flavor text: "对手使出招式前， 如果输电，则该回合 对手的招式变成电属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  因为输电，[POKEMON]的招式变成了电属性！",
 	},
 	electroball: {
 		name: "电球",
-		desc: "用电气团撞向对手。 自己比对手速度越快， 威力越大。",
+		// Official flavor text: "用电气团撞向对手。 自己比对手速度越快， 威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1772,12 +1939,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electroweb: {
 		name: "电网",
-		desc: "用电网捉住对手进行攻击。 降低对手的速度。",
+		// Official flavor text: "用电网捉住对手进行攻击。 降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	embargo: {
 		name: "查封",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]无法使用道具了！",
@@ -1785,12 +1954,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ember: {
 		name: "火花",
-		desc: "向对手发射 小型火焰进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "向对手发射 小型火焰进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	encore: {
 		name: "再来一次",
-		desc: "让对手接受再来一次， 连续３次使出最后使用的招式。",
+		// Official flavor text: "让对手接受再来一次， 连续３次使出最后使用的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1818,12 +1989,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	endeavor: {
 		name: "蛮干",
-		desc: "给予伤害， 使对手的ＨＰ变得 和自己的ＨＰ一样。",
+		// Official flavor text: "给予伤害， 使对手的ＨＰ变得 和自己的ＨＰ一样。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	endure: {
 		name: "挺住",
-		desc: "即使受到攻击， 也至少会留下１ＨＰ。 连续使出则容易失败。",
+		// Official flavor text: "即使受到攻击， 也至少会留下１ＨＰ。 连续使出则容易失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1852,12 +2025,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	energyball: {
 		name: "能量球",
-		desc: "发射从自然收集的生命力量。 有时会降低对手的特防。",
+		// Official flavor text: "发射从自然收集的生命力量。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	entrainment: {
 		name: "找伙伴",
-		desc: "用神奇的节奏跳舞。 使对手模仿自己的动作， 从而将特性变成一样。",
+		// Official flavor text: "用神奇的节奏跳舞。 使对手模仿自己的动作， 从而将特性变成一样。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1874,7 +2049,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eruption: {
 		name: "喷火",
-		desc: "爆发怒火攻击对手。 自己的ＨＰ越少， 招式的威力越小。",
+		// Official flavor text: "爆发怒火攻击对手。 自己的ＨＰ越少， 招式的威力越小。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	esperwing: {
@@ -1884,17 +2060,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eternabeam: {
 		name: "无极光束",
-		desc: "无极汰那变回原来的样子后， 发动的最强攻击。 下一回合自己将无法动弹。",
+		// Official flavor text: "无极汰那变回原来的样子后， 发动的最强攻击。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	expandingforce: {
 		name: "广域战力",
-		desc: "利用精神力量攻击对手。 在精神场地上威力会有所提高， 能对所有对手造成伤害。",
+		// Official flavor text: "利用精神力量攻击对手。 在精神场地上威力会有所提高， 能对所有对手造成伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	explosion: {
 		name: "大爆炸",
-		desc: "引发大爆炸， 攻击自己周围所有的宝可梦。 使用后自己会陷入濒死。",
+		// Official flavor text: "引发大爆炸， 攻击自己周围所有的宝可梦。 使用后自己会陷入濒死。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1912,7 +2091,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extrasensory: {
 		name: "神通力",
-		desc: "发出看不见的 神奇力量进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "发出看不见的 神奇力量进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1920,12 +2100,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extremeevoboost: {
 		name: "九彩升华齐聚顶",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	extremespeed: {
 		name: "神速",
-		desc: "以迅雷不及掩耳之势 猛撞向对手进行攻击。 必定能够先制攻击。",
+		// Official flavor text: "以迅雷不及掩耳之势 猛撞向对手进行攻击。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1933,7 +2115,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	facade: {
 		name: "硬撑",
-		desc: "当自己处于中毒、麻痹、灼伤状态时， 向对手使出此招式的话， 威力会变成２倍。",
+		// Official flavor text: "当自己处于中毒、麻痹、灼伤状态时， 向对手使出此招式的话， 威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1941,7 +2124,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fairylock: {
 		name: "妖精之锁",
-		desc: "通过封锁， 下一回合所有的 宝可梦都无法逃走。",
+		// Official flavor text: "通过封锁， 下一回合所有的 宝可梦都无法逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1955,7 +2139,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fakeout: {
 		name: "击掌奇袭",
-		desc: "进行先制攻击，使对手畏缩。 要在出场后立刻使出才能成功。",
+		// Official flavor text: "进行先制攻击，使对手畏缩。 要在出场后立刻使出才能成功。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1963,7 +2148,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	faketears: {
 		name: "假哭",
-		desc: "装哭流泪。 使对手不知所措， 从而大幅降低对手的特防。",
+		// Official flavor text: "装哭流泪。 使对手不知所措， 从而大幅降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	falsesurrender: {
@@ -1972,17 +2158,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	falseswipe: {
 		name: "点到为止",
-		desc: "对手的ＨＰ 至少会留下１ＨＰ， 如此般手下留情地攻击。",
+		// Official flavor text: "对手的ＨＰ 至少会留下１ＨＰ， 如此般手下留情地攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	featherdance: {
 		name: "羽毛舞",
-		desc: "撒出羽毛， 笼罩在对手的周围。 大幅降低对手的攻击。",
+		// Official flavor text: "撒出羽毛， 笼罩在对手的周围。 大幅降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	feint: {
 		name: "佯攻",
-		desc: "能够攻击正在使用 守住或看穿等招式的对手。 解除其守护效果。",
+		// Official flavor text: "能够攻击正在使用 守住或看穿等招式的对手。 解除其守护效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2003,7 +2192,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fellstinger: {
 		name: "致命针刺",
-		desc: "如果使用此招式打倒对手， 攻击会巨幅提高。",
+		// Official flavor text: "如果使用此招式打倒对手， 攻击会巨幅提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2018,12 +2208,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fierydance: {
 		name: "火之舞",
-		desc: "让火焰覆盖全身， 振翅攻击对手。 有时会提高自己的特攻。",
+		// Official flavor text: "让火焰覆盖全身， 振翅攻击对手。 有时会提高自己的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fierywrath: {
 		name: "怒火中烧",
-		desc: "将愤怒转化为火焰般的气场进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "将愤怒转化为火焰般的气场进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	filletaway: {
@@ -2033,12 +2225,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	finalgambit: {
 		name: "搏命",
-		desc: "拼命攻击对手。 虽然自己陷入濒死，但会给予对手 和自己目前ＨＰ等量的伤害。",
+		// Official flavor text: "拼命攻击对手。 虽然自己陷入濒死，但会给予对手 和自己目前ＨＰ等量的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fireblast: {
 		name: "大字爆炎",
-		desc: "用大字形状的火焰烧尽对手。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "用大字形状的火焰烧尽对手。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2047,7 +2241,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firefang: {
 		name: "火焰牙",
-		desc: "用覆盖着火焰的牙齿咬住对手。 有时会使对手畏缩 或陷入灼伤状态。",
+		// Official flavor text: "用覆盖着火焰的牙齿咬住对手。 有时会使对手畏缩 或陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2055,12 +2250,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firelash: {
 		name: "火焰鞭",
-		desc: "用燃烧的鞭子抽打对手。 受到攻击的对手防御会降低。",
+		// Official flavor text: "用燃烧的鞭子抽打对手。 受到攻击的对手防御会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firepledge: {
 		name: "火之誓约",
-		desc: "用火柱进行攻击。 如果和草组合，威力就会提高， 周围会变成火海。",
+		// Official flavor text: "用火柱进行攻击。 如果和草组合，威力就会提高， 周围会变成火海。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
@@ -2070,12 +2267,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firepunch: {
 		name: "火焰拳",
-		desc: "用充满火焰的拳头攻击对手。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "用充满火焰的拳头攻击对手。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firespin: {
 		name: "火焰旋涡",
-		desc: "将对手困在 激烈的火焰旋涡中， 在４～５回合内进行攻击。",
+		// Official flavor text: "将对手困在 激烈的火焰旋涡中， 在４～５回合内进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2103,7 +2302,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firstimpression: {
 		name: "迎头一击",
-		desc: "威力很高的招式， 但只有在出场战斗时， 立刻使出才能成功。",
+		// Official flavor text: "威力很高的招式， 但只有在出场战斗时， 立刻使出才能成功。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2111,12 +2311,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fishiousrend: {
 		name: "鳃咬",
-		desc: "用坚硬的腮咬住对手。 如果比对手先出手攻击， 招式的威力会变成２倍。",
+		// Official flavor text: "用坚硬的腮咬住对手。 如果比对手先出手攻击， 招式的威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fissure: {
 		name: "地裂",
-		desc: "让对手掉落于地裂的 裂缝中进行攻击。 只要命中就会一击濒死。",
+		// Official flavor text: "让对手掉落于地裂的 裂缝中进行攻击。 只要命中就会一击濒死。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2128,7 +2330,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flail: {
 		name: "抓狂",
-		desc: "抓狂般乱打进行攻击。 自己的ＨＰ越少， 招式的威力越大。",
+		// Official flavor text: "抓狂般乱打进行攻击。 自己的ＨＰ越少， 招式的威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2142,7 +2345,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flameburst: {
 		name: "烈焰溅射",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2152,22 +2356,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flamecharge: {
 		name: "蓄能焰袭",
-		desc: "让火焰覆盖全身，攻击对手。 积蓄力量并提高自己的速度。",
+		// Official flavor text: "让火焰覆盖全身，攻击对手。 积蓄力量并提高自己的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flamethrower: {
 		name: "喷射火焰",
-		desc: "向对手发射 烈焰进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "向对手发射 烈焰进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flamewheel: {
 		name: "火焰轮",
-		desc: "让火焰覆盖全身， 猛撞向对手进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "让火焰覆盖全身， 猛撞向对手进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flareblitz: {
 		name: "闪焰冲锋",
-		desc: "让火焰覆盖全身猛撞向对手。 自己也会受到不小的伤害。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "让火焰覆盖全身猛撞向对手。 自己也会受到不小的伤害。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2176,27 +2384,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flash: {
 		name: "闪光",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flashcannon: {
 		name: "加农光炮",
-		desc: "将身体的光芒 聚集在一点释放出去。 有时会降低对手的特防。",
+		// Official flavor text: "将身体的光芒 聚集在一点释放出去。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flatter: {
 		name: "吹捧",
-		desc: "吹捧对手，使其混乱。 同时还会提高对手的特攻。",
+		// Official flavor text: "吹捧对手，使其混乱。 同时还会提高对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fleurcannon: {
 		name: "花朵加农炮",
-		desc: "放出强力光束后， 自己的特攻会大幅降低。",
+		// Official flavor text: "放出强力光束后， 自己的特攻会大幅降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fling: {
 		name: "投掷",
-		desc: "快速投掷携带的道具进行攻击。 根据道具不同， 威力和效果会改变。",
+		// Official flavor text: "快速投掷携带的道具进行攻击。 根据道具不同， 威力和效果会改变。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2206,24 +2419,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flipturn: {
 		name: "快速折返",
-		desc: "在攻击之后急速返回， 和后备宝可梦进行替换。",
+		// Official flavor text: "在攻击之后急速返回， 和后备宝可梦进行替换。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		switchOut: "#uturn",
 	},
 	floatyfall: {
 		name: "飘飘坠落",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	floralhealing: {
 		name: "花疗",
-		desc: "回复对手最大ＨＰ的一半。 在青草场地时，效果会提高。",
+		// Official flavor text: "回复对手最大ＨＰ的一半。 在青草场地时，效果会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowershield: {
 		name: "鲜花防守",
-		desc: "使用神奇的力量 提高在场的所有 草属性宝可梦的防御。",
+		// Official flavor text: "使用神奇的力量 提高在场的所有 草属性宝可梦的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowertrick: {
@@ -2233,7 +2450,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fly: {
 		name: "飞翔",
-		desc: "第１回合飞上天空， 第２回合攻击对手。",
+		// Official flavor text: "第１回合飞上天空， 第２回合攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2255,17 +2473,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flyingpress: {
 		name: "飞身重压",
-		desc: "从空中俯冲向对手。 此招式同时带有 格斗属性和飞行属性。",
+		// Official flavor text: "从空中俯冲向对手。 此招式同时带有 格斗属性和飞行属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusblast: {
 		name: "真气弹",
-		desc: "提高气势， 释放出全部力量。 有时会降低对手的特防。",
+		// Official flavor text: "提高气势， 释放出全部力量。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusenergy: {
 		name: "聚气",
-		desc: "深深地吸口气，集中精神。 自己的攻击 会变得容易击中要害。",
+		// Official flavor text: "深深地吸口气，集中精神。 自己的攻击 会变得容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2282,7 +2503,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	focuspunch: {
 		name: "真气拳",
-		desc: "集中精神出拳。 在招式使出前 若受到攻击则会失败。",
+		// Official flavor text: "集中精神出拳。 在招式使出前 若受到攻击则会失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2293,7 +2515,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	followme: {
 		name: "看我嘛",
-		desc: "引起对手的注意， 将对手的攻击 全部转移到自己身上。",
+		// Official flavor text: "引起对手的注意， 将对手的攻击 全部转移到自己身上。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2310,12 +2533,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	forcepalm: {
 		name: "发劲",
-		desc: "向对手的身体 发出冲击波进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "向对手的身体 发出冲击波进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	foresight: {
 		name: "识破",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2331,17 +2556,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	forestscurse: {
 		name: "森林诅咒",
-		desc: "向对手施加森林诅咒。 中了诅咒的对手 会被追加草属性。",
+		// Official flavor text: "向对手施加森林诅咒。 中了诅咒的对手 会被追加草属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	foulplay: {
 		name: "欺诈",
-		desc: "利用对手的力量进行攻击。 正和自己战斗的对手， 其攻击越高，伤害越大。",
+		// Official flavor text: "利用对手的力量进行攻击。 正和自己战斗的对手， 其攻击越高，伤害越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	freezedry: {
 		name: "冷冻干燥",
-		desc: "急剧冷冻对手， 有时会让对手陷入冰冻状态。 对于水属性宝可梦也是效果绝佳。",
+		// Official flavor text: "急剧冷冻对手， 有时会让对手陷入冰冻状态。 对于水属性宝可梦也是效果绝佳。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2350,39 +2578,46 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	freezeshock: {
 		name: "冰冻伏特",
-		desc: "用覆盖着电流的冰块， 在第２回合撞向对手。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "用覆盖着电流的冰块， 在第２回合撞向对手。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "  [POKEMON]被冷光包围了！",
 	},
 	freezingglare: {
 		name: "冰冷视线",
-		desc: "从双眼发射精神力量进行攻击。 有时会让对手陷入冰冻状态。",
+		// Official flavor text: "从双眼发射精神力量进行攻击。 有时会让对手陷入冰冻状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	freezyfrost: {
 		name: "冰冰霜冻",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frenzyplant: {
 		name: "疯狂植物",
-		desc: "用大树摔打对手进行攻击。 下一回合自己将无法动弹。",
+		// Official flavor text: "用大树摔打对手进行攻击。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frostbreath: {
 		name: "冰息",
-		desc: "将冰冷的气息 吹向对手进行攻击。 必定会击中要害。",
+		// Official flavor text: "将冰冷的气息 吹向对手进行攻击。 必定会击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frustration: {
 		name: "迁怒",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	furyattack: {
 		name: "乱击",
-		desc: "用角或喙 刺向对手进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "用角或喙 刺向对手进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2399,12 +2634,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	furycutter: {
 		name: "连斩",
-		desc: "用镰刀或爪子等 切斩对手进行攻击。 连续击中，威力就会提高。",
+		// Official flavor text: "用镰刀或爪子等 切斩对手进行攻击。 连续击中，威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	furyswipes: {
 		name: "乱抓",
-		desc: "用爪子或镰刀等 抓对手进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "用爪子或镰刀等 抓对手进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2421,17 +2658,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fusionbolt: {
 		name: "交错闪电",
-		desc: "释放出巨大的闪电。 受到巨大的火焰影响时， 招式威力会提高。",
+		// Official flavor text: "释放出巨大的闪电。 受到巨大的火焰影响时， 招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fusionflare: {
 		name: "交错火焰",
-		desc: "释放出巨大的火焰。 受到巨大的闪电影响时， 招式威力会提高。",
+		// Official flavor text: "释放出巨大的火焰。 受到巨大的闪电影响时， 招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	futuresight: {
 		name: "预知未来",
-		desc: "在使用招式２回合后， 向对手发送一团念力进行攻击。",
+		// Official flavor text: "在使用招式２回合后， 向对手发送一团念力进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2445,7 +2685,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gastroacid: {
 		name: "胃液",
-		desc: "将胃液吐向对手的身体。 沾上的胃液会消除 对手的特性效果。",
+		// Official flavor text: "将胃液吐向对手的身体。 沾上的胃液会消除 对手的特性效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2461,29 +2702,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	geargrind: {
 		name: "齿轮飞盘",
-		desc: "向对手投掷 钢铁齿轮进行攻击。 连续２次给予伤害。",
+		// Official flavor text: "向对手投掷 钢铁齿轮进行攻击。 连续２次给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gearup: {
 		name: "辅助齿轮",
-		desc: "启动齿轮， 提高特性为正电和负电的 宝可梦的攻击和特攻。",
+		// Official flavor text: "启动齿轮， 提高特性为正电和负电的 宝可梦的攻击和特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	genesissupernova: {
 		name: "起源超新星大爆炸",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	geomancy: {
 		name: "大地掌控",
-		desc: "第１回合吸收能量， 第２回合大幅提高 特攻、特防和速度。",
+		// Official flavor text: "第１回合吸收能量， 第２回合大幅提高 特攻、特防和速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "[POKEMON]正在积蓄力量！",
 	},
 	gigadrain: {
 		name: "终极吸取",
-		desc: "吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。",
+		// Official flavor text: "吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2494,7 +2740,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gigaimpact: {
 		name: "终极冲击",
-		desc: "使出自己浑身力量突击对手。 下一回合自己将无法动弹。",
+		// Official flavor text: "使出自己浑身力量突击对手。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigatonhammer: {
@@ -2507,12 +2754,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glaciallance: {
 		name: "雪矛",
-		desc: "向对手投掷 掀起暴风雪的冰矛进行攻击。",
+		// Official flavor text: "向对手投掷 掀起暴风雪的冰矛进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciate: {
 		name: "冰封世界",
-		desc: "将冰冻的冷气 吹向对手进行攻击。 会降低对手的速度。",
+		// Official flavor text: "将冰冻的冷气 吹向对手进行攻击。 会降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaiverush: {
@@ -2522,7 +2771,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glare: {
 		name: "大蛇瞪眼",
-		desc: "用腹部的花纹使对手害怕， 从而让其陷入麻痹状态。",
+		// Official flavor text: "用腹部的花纹使对手害怕， 从而让其陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2533,7 +2783,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glitzyglow: {
 		name: "哗哗气场",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
@@ -2723,12 +2974,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grassknot: {
 		name: "打草结",
-		desc: "用草缠住并绊倒对手。 对手越重，威力越大。",
+		// Official flavor text: "用草缠住并绊倒对手。 对手越重，威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grasspledge: {
 		name: "草之誓约",
-		desc: "用草柱进行攻击。 如果和水组合，威力就会提高， 周围会变成湿地。",
+		// Official flavor text: "用草柱进行攻击。 如果和水组合，威力就会提高， 周围会变成湿地。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
@@ -2741,12 +2994,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grassyglide: {
 		name: "青草滑梯",
-		desc: "仿佛在地面上滑行般地攻击对手。 在青草场地上， 必定能够先制攻击。",
+		// Official flavor text: "仿佛在地面上滑行般地攻击对手。 在青草场地上， 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grassyterrain: {
 		name: "青草场地",
-		desc: "在５回合内变成青草场地。 地面上的宝可梦每回合都能回复。 草属性的招式威力还会提高。",
+		// Official flavor text: "在５回合内变成青草场地。 地面上的宝可梦每回合都能回复。 草属性的招式威力还会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2754,12 +3009,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gravapple: {
 		name: "万有引力",
-		desc: "从高处落下苹果， 给予对手伤害。 可降低对手的防御。",
+		// Official flavor text: "从高处落下苹果， 给予对手伤害。 可降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gravity: {
 		name: "重力",
-		desc: "在５回合内，飘浮特性和飞行属性的 宝可梦会被地面属性的招式击中。 飞向空中的招式也将无法使用。",
+		// Official flavor text: "在５回合内，飘浮特性和飞行属性的 宝可梦会被地面属性的招式击中。 飞向空中的招式也将无法使用。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2776,7 +3033,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	growl: {
 		name: "叫声",
-		desc: "让对手听可爱的叫声， 引开注意力使其疏忽， 从而降低对手的攻击。",
+		// Official flavor text: "让对手听可爱的叫声， 引开注意力使其疏忽， 从而降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2784,7 +3042,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	growth: {
 		name: "生长",
-		desc: "让身体一下子长大， 从而提高攻击和特攻。",
+		// Official flavor text: "让身体一下子长大， 从而提高攻击和特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2803,7 +3062,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grudge: {
 		name: "怨念",
-		desc: "因对手的招式而陷入濒死时 给对手施加怨念， 让该招式的ＰＰ变成０。",
+		// Official flavor text: "因对手的招式而陷入濒死时 给对手施加怨念， 让该招式的ＰＰ变成０。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  因为怨念，[POKEMON]失去了其招式[MOVE]的所有ＰＰ！",
@@ -2811,24 +3071,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	guardianofalola: {
 		name: "巨人卫士・阿罗拉",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guardsplit: {
 		name: "防守平分",
-		desc: "利用超能力将自己和对手的 防御和特防相加， 再进行平分。",
+		// Official flavor text: "利用超能力将自己和对手的 防御和特防相加， 再进行平分。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]平分了各自的防守！",
 	},
 	guardswap: {
 		name: "防守互换",
-		desc: "利用超能力互换 自己和对手的防御 以及特防的能力变化。",
+		// Official flavor text: "利用超能力互换 自己和对手的防御 以及特防的能力变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guillotine: {
 		name: "断头钳",
-		desc: "用大钳子或剪刀等 夹断对手进行攻击。 只要命中就会一击濒死。",
+		// Official flavor text: "用大钳子或剪刀等 夹断对手进行攻击。 只要命中就会一击濒死。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2840,12 +3104,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gunkshot: {
 		name: "垃圾射击",
-		desc: "用肮脏的垃圾 撞向对手进行攻击。 有时会让对手陷入中毒状态。",
+		// Official flavor text: "用肮脏的垃圾 撞向对手进行攻击。 有时会让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gust: {
 		name: "起风",
-		desc: "用翅膀将刮起的狂风 袭向对手进行攻击。",
+		// Official flavor text: "用翅膀将刮起的狂风 袭向对手进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2862,7 +3128,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gyroball: {
 		name: "陀螺球",
-		desc: "让身体高速旋转并撞击对手。 速度比对手越慢，威力越大。",
+		// Official flavor text: "让身体高速旋转并撞击对手。 速度比对手越慢，威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2870,7 +3137,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hail: {
 		name: "冰雹",
-		desc: "在５回合内一直降冰雹， 除冰属性的宝可梦以外， 给予全体宝可梦伤害。",
+		// Official flavor text: "在５回合内一直降冰雹， 除冰属性的宝可梦以外， 给予全体宝可梦伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2881,7 +3149,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hammerarm: {
 		name: "臂锤",
-		desc: "挥舞强力而沉重的拳头， 给予对手伤害。 自己的速度会降低。",
+		// Official flavor text: "挥舞强力而沉重的拳头， 给予对手伤害。 自己的速度会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	happyhour: {
@@ -2892,7 +3161,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	harden: {
 		name: "变硬",
-		desc: "全身使劲，让身体变硬， 从而提高自己的防御。",
+		// Official flavor text: "全身使劲，让身体变硬， 从而提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hardpress: {
@@ -2902,7 +3172,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	haze: {
 		name: "黑雾",
-		desc: "升起黑雾，将正在场上战斗的 全体宝可梦的能力变回原点。",
+		// Official flavor text: "升起黑雾，将正在场上战斗的 全体宝可梦的能力变回原点。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2914,12 +3185,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	headbutt: {
 		name: "头锤",
-		desc: "将头伸出， 笔直地扑向对手进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "将头伸出， 笔直地扑向对手进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headcharge: {
 		name: "爆炸头突击",
-		desc: "用厉害的爆炸头 猛撞向对手进行攻击。 自己也会受到少许伤害。",
+		// Official flavor text: "用厉害的爆炸头 猛撞向对手进行攻击。 自己也会受到少许伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headlongrush: {
@@ -2929,7 +3202,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	headsmash: {
 		name: "双刃头锤",
-		desc: "拼命使出浑身力气， 向对手进行头锤攻击。 自己也会受到非常大的伤害。",
+		// Official flavor text: "拼命使出浑身力气， 向对手进行头锤攻击。 自己也会受到非常大的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2937,7 +3211,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "治愈铃声",
-		desc: "让同伴听舒适的铃音， 从而治愈我方全员的异常状态。",
+		// Official flavor text: "让同伴听舒适的铃音， 从而治愈我方全员的异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2956,7 +3231,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healblock: {
 		name: "回复封锁",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			end: "  [POKEMON]的回复封锁的效果消失了！",
@@ -2979,7 +3255,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healingwish: {
 		name: "治愈之愿",
-		desc: "虽然自己陷入濒死， 但可以治愈后备上场的 宝可梦的异常状态以及回复ＨＰ。",
+		// Official flavor text: "虽然自己陷入濒死， 但可以治愈后备上场的 宝可梦的异常状态以及回复ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2993,7 +3270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healorder: {
 		name: "回复指令",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3001,7 +3279,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healpulse: {
 		name: "治愈波动",
-		desc: "放出治愈波动， 从而回复对手 最大ＨＰ的一半。",
+		// Official flavor text: "放出治愈波动， 从而回复对手 最大ＨＰ的一半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3009,17 +3288,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heartstamp: {
 		name: "爱心印章",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heartswap: {
 		name: "心灵互换",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heatcrash: {
 		name: "高温重压",
-		desc: "用燃烧的身体撞向对手进行攻击。 自己比对手越重，威力越大。",
+		// Official flavor text: "用燃烧的身体撞向对手进行攻击。 自己比对手越重，威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3027,12 +3309,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heatwave: {
 		name: "热风",
-		desc: "将炎热的气息 吹向对手进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "将炎热的气息 吹向对手进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heavyslam: {
 		name: "重磅冲撞",
-		desc: "用沉重的身体撞向对手进行攻击。 自己比对手越重，威力越大。",
+		// Official flavor text: "用沉重的身体撞向对手进行攻击。 自己比对手越重，威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3040,19 +3324,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	helpinghand: {
 		name: "帮助",
-		desc: "帮助伙伴。 被帮助的宝可梦， 其招式威力变得比平时大。",
+		// Official flavor text: "帮助伙伴。 被帮助的宝可梦， 其招式威力变得比平时大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [SOURCE]摆出了帮助[POKEMON]的架势！",
 	},
 	hex: {
 		name: "祸不单行",
-		desc: "接二连三地进行攻击。 对处于异常状态的对手 给予较大的伤害。",
+		// Official flavor text: "接二连三地进行攻击。 对处于异常状态的对手 给予较大的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hiddenpower: {
 		name: "觉醒力量",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3113,7 +3400,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	highjumpkick: {
 		name: "飞膝踢",
-		desc: "跳起后用膝盖撞对手进行攻击。 如果撞偏则自己会受到伤害。",
+		// Official flavor text: "跳起后用膝盖撞对手进行攻击。 如果撞偏则自己会受到伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3136,17 +3424,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	holdback: {
 		name: "手下留情",
-		desc: "在攻击的时候手下留情， 从而使对手的ＨＰ 至少会留下１ＨＰ。",
+		// Official flavor text: "在攻击的时候手下留情， 从而使对手的ＨＰ 至少会留下１ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	holdhands: {
 		name: "牵手",
-		desc: "我方宝可梦之间牵手。 能带来非常幸福的心情。",
+		// Official flavor text: "我方宝可梦之间牵手。 能带来非常幸福的心情。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	honeclaws: {
 		name: "磨爪",
-		desc: "将爪子磨得更加锋利。 提高自己的攻击和命中率。",
+		// Official flavor text: "将爪子磨得更加锋利。 提高自己的攻击和命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hornattack: {
@@ -3155,7 +3446,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	horndrill: {
 		name: "角钻",
-		desc: "用旋转的角 刺入对手进行攻击。 只要命中就会一击濒死。",
+		// Official flavor text: "用旋转的角 刺入对手进行攻击。 只要命中就会一击濒死。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3167,12 +3459,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hornleech: {
 		name: "木角",
-		desc: "将角刺入，吸取对手的养分。 可以回复给予对手 伤害的一半ＨＰ。",
+		// Official flavor text: "将角刺入，吸取对手的养分。 可以回复给予对手 伤害的一半ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	howl: {
 		name: "长嚎",
-		desc: "大声吼叫提高气势， 从而提高自己和同伴的攻击。",
+		// Official flavor text: "大声吼叫提高气势， 从而提高自己和同伴的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3181,7 +3475,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hurricane: {
 		name: "暴风",
-		desc: "用强烈的风席卷 对手进行攻击。 有时会使对手混乱。",
+		// Official flavor text: "用强烈的风席卷 对手进行攻击。 有时会使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3192,7 +3487,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hydrocannon: {
 		name: "加农水炮",
-		desc: "向对手喷射水炮进行攻击。 下一回合自己将无法动弹。",
+		// Official flavor text: "向对手喷射水炮进行攻击。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydropump: {
@@ -3210,7 +3506,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperbeam: {
 		name: "破坏光线",
-		desc: "向对手发射 强烈的光线进行攻击。 下一回合自己将无法动弹。",
+		// Official flavor text: "向对手发射 强烈的光线进行攻击。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3223,12 +3520,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperfang: {
 		name: "必杀门牙",
-		desc: "用锋利的门牙 牢牢地咬住对手进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "用锋利的门牙 牢牢地咬住对手进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperspacefury: {
 		name: "异次元猛攻",
-		desc: "用许多手臂，无视对手的 守住或看穿等招式进行连续攻击， 自己的防御会降低。",
+		// Official flavor text: "用许多手臂，无视对手的 守住或看穿等招式进行连续攻击， 自己的防御会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3239,7 +3538,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperspacehole: {
 		name: "异次元洞",
-		desc: "通过异次元洞， 突然出现在对手的侧面进行攻击。 还可以无视守住和看穿等招式。",
+		// Official flavor text: "通过异次元洞， 突然出现在对手的侧面进行攻击。 还可以无视守住和看穿等招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3249,7 +3549,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hypervoice: {
 		name: "巨声",
-		desc: "给予对手又吵又响的 巨大震动进行攻击。",
+		// Official flavor text: "给予对手又吵又响的 巨大震动进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hypnosis: {
@@ -3258,7 +3559,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iceball: {
 		name: "冰球",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3269,34 +3571,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icebeam: {
 		name: "冰冻光束",
-		desc: "向对手发射 冰冻光束进行攻击。 有时会让对手陷入冰冻状态。",
+		// Official flavor text: "向对手发射 冰冻光束进行攻击。 有时会让对手陷入冰冻状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iceburn: {
 		name: "极寒冷焰",
-		desc: "用能够冻结一切的强烈冷气， 在第２回合包裹住对手。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "用能够冻结一切的强烈冷气， 在第２回合包裹住对手。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "  [POKEMON]被冰冻的空气包围了！",
 	},
 	icefang: {
 		name: "冰冻牙",
-		desc: "用藏有冷气的牙齿咬住对手。 有时会使对手畏缩 或陷入冰冻状态。",
+		// Official flavor text: "用藏有冷气的牙齿咬住对手。 有时会使对手畏缩 或陷入冰冻状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icehammer: {
 		name: "冰锤",
-		desc: "挥舞强力而沉重的拳头， 给予对手伤害。 自己的速度会降低。",
+		// Official flavor text: "挥舞强力而沉重的拳头， 给予对手伤害。 自己的速度会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icepunch: {
 		name: "冰冻拳",
-		desc: "用充满寒气的拳头攻击对手。 有时会让对手陷入冰冻状态。",
+		// Official flavor text: "用充满寒气的拳头攻击对手。 有时会让对手陷入冰冻状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iceshard: {
 		name: "冰砾",
-		desc: "瞬间制作冰块， 快速地扔向对手。 必定能够先制攻击。",
+		// Official flavor text: "瞬间制作冰块， 快速地扔向对手。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icespinner: {
@@ -3306,12 +3614,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iciclecrash: {
 		name: "冰柱坠击",
-		desc: "用大冰柱激烈地 撞向对手进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "用大冰柱激烈地 撞向对手进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iciclespear: {
 		name: "冰锥",
-		desc: "向对手发射 锋利的冰柱进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "向对手发射 锋利的冰柱进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3325,7 +3635,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icywind: {
 		name: "冰冻之风",
-		desc: "将结冰的冷气 吹向对手进行攻击。 会降低对手的速度。",
+		// Official flavor text: "将结冰的冷气 吹向对手进行攻击。 会降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3333,7 +3644,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	imprison: {
 		name: "封印",
-		desc: "如果对手有和自己相同的招式， 那么只有对手无法使用该招式。",
+		// Official flavor text: "如果对手有和自己相同的招式， 那么只有对手无法使用该招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3350,7 +3662,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	incinerate: {
 		name: "烧尽",
-		desc: "用火焰攻击对手。 对手携带树果等时， 会烧掉，使其不能使用。",
+		// Official flavor text: "用火焰攻击对手。 对手携带树果等时， 会烧掉，使其不能使用。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3366,7 +3679,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	inferno: {
 		name: "炼狱",
-		desc: "用烈焰包裹住对手进行攻击。 让对手陷入灼伤状态。",
+		// Official flavor text: "用烈焰包裹住对手进行攻击。 让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
@@ -3375,7 +3689,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	infestation: {
 		name: "死缠烂打",
-		desc: "在４～５回合内 死缠烂打地进行攻击。 在此期间对手将无法逃走。",
+		// Official flavor text: "在４～５回合内 死缠烂打地进行攻击。 在此期间对手将无法逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3388,7 +3703,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ingrain: {
 		name: "扎根",
-		desc: "在大地上扎根， 每回合回复自己的ＨＰ。 因为扎根了，所以不能替换宝可梦。",
+		// Official flavor text: "在大地上扎根， 每回合回复自己的ＨＰ。 因为扎根了，所以不能替换宝可梦。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3410,7 +3726,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	instruct: {
 		name: "号令",
-		desc: "向对手下达指示， 让其再次使出刚才的招式。",
+		// Official flavor text: "向对手下达指示， 让其再次使出刚才的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3423,19 +3740,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iondeluge: {
 		name: "等离子浴",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  等离子雨倾盆而下！",
 	},
 	irondefense: {
 		name: "铁壁",
-		desc: "将皮肤变得坚硬如铁， 从而大幅提高自己的防御。",
+		// Official flavor text: "将皮肤变得坚硬如铁， 从而大幅提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ironhead: {
 		name: "铁头",
-		desc: "用钢铁般 坚硬的头部进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "用钢铁般 坚硬的头部进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3444,7 +3764,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	irontail: {
 		name: "铁尾",
-		desc: "使用坚硬的尾巴 摔打对手进行攻击。 有时会降低对手的防御。",
+		// Official flavor text: "使用坚硬的尾巴 摔打对手进行攻击。 有时会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ivycudgel: {
@@ -3454,7 +3775,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	jawlock: {
 		name: "紧咬不放",
-		desc: "使双方直到一方濒死为止 无法替换宝可梦。 其中一方退场则可以解除效果。",
+		// Official flavor text: "使双方直到一方濒死为止 无法替换宝可梦。 其中一方退场则可以解除效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jetpunch: {
@@ -3464,12 +3786,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	judgment: {
 		name: "制裁光砾",
-		desc: "向对手放出无数的光弹。 属性会根据自己 携带的石板不同而改变。",
+		// Official flavor text: "向对手放出无数的光弹。 属性会根据自己 携带的石板不同而改变。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jumpkick: {
 		name: "飞踢",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3492,22 +3816,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	junglehealing: {
 		name: "丛林治疗",
-		desc: "与丛林融为一体， 回复自己和场上同伴的ＨＰ和状态。",
+		// Official flavor text: "与丛林融为一体， 回复自己和场上同伴的ＨＰ和状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	karatechop: {
 		name: "空手劈",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kinesis: {
 		name: "折弯汤匙",
-		desc: "折弯汤匙引开注意， 从而降低对手的命中率。",
+		// Official flavor text: "折弯汤匙引开注意， 从而降低对手的命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kingsshield: {
 		name: "王者盾牌",
-		desc: "防住对手攻击的同时， 自己变为防御姿态。 能够降低所接触到的对手的攻击。",
+		// Official flavor text: "防住对手攻击的同时， 自己变为防御姿态。 能够降低所接触到的对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3522,7 +3850,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	knockoff: {
 		name: "拍落",
-		desc: "拍落对手的持有物， 直到战斗结束都不能使用。 对手携带道具时会增加伤害。",
+		// Official flavor text: "拍落对手的持有物， 直到战斗结束都不能使用。 对手携带道具时会增加伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3556,24 +3885,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	landswrath: {
 		name: "大地神力",
-		desc: "聚集大地的力量， 将此力量集中攻击对手， 并给予伤害。",
+		// Official flavor text: "聚集大地的力量， 将此力量集中攻击对手， 并给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	laserfocus: {
 		name: "磨砺",
-		desc: "集中精神， 下次攻击必定会击中要害。",
+		// Official flavor text: "集中精神， 下次攻击必定会击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]磨砺了精神！",
 	},
 	lashout: {
 		name: "泄愤",
-		desc: "攻击对手以发泄对其感到的恼怒情绪。 如果在该回合内自身能力遭到降低， 招式的威力会变成２倍。",
+		// Official flavor text: "攻击对手以发泄对其感到的恼怒情绪。 如果在该回合内自身能力遭到降低， 招式的威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastresort: {
 		name: "珍藏",
-		desc: "当战斗中已学会的招式 全部使用过后， 才能开始使出珍藏的招式。",
+		// Official flavor text: "当战斗中已学会的招式 全部使用过后， 才能开始使出珍藏的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastrespects: {
@@ -3583,7 +3916,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lavaplume: {
 		name: "喷烟",
-		desc: "用熊熊烈火 攻击自己周围所有的宝可梦。 有时会陷入灼伤状态。",
+		// Official flavor text: "用熊熊烈火 攻击自己周围所有的宝可梦。 有时会陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafage: {
@@ -3592,22 +3926,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leafblade: {
 		name: "叶刃",
-		desc: "像用剑一般操纵叶片 切斩对手进行攻击。 容易击中要害。",
+		// Official flavor text: "像用剑一般操纵叶片 切斩对手进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafstorm: {
 		name: "飞叶风暴",
-		desc: "用尖尖的叶片向对手卷起风暴。 使用之后因为反作用力 自己的特攻会大幅降低。",
+		// Official flavor text: "用尖尖的叶片向对手卷起风暴。 使用之后因为反作用力 自己的特攻会大幅降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leaftornado: {
 		name: "青草搅拌器",
-		desc: "用锋利的叶片包裹住 对手进行攻击。 有时会降低对手的命中率。",
+		// Official flavor text: "用锋利的叶片包裹住 对手进行攻击。 有时会降低对手的命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leechlife: {
 		name: "吸血",
-		desc: "吸取血液攻击对手。 可以回复给予对手 伤害的一半ＨＰ。",
+		// Official flavor text: "吸取血液攻击对手。 可以回复给予对手 伤害的一半ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3618,7 +3956,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leechseed: {
 		name: "寄生种子",
-		desc: "植入寄生种子后，将在每回合 一点一点吸取对手的ＨＰ， 从而用来回复自己的ＨＰ。",
+		// Official flavor text: "植入寄生种子后，将在每回合 一点一点吸取对手的ＨＰ， 从而用来回复自己的ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3637,7 +3976,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leer: {
 		name: "瞪眼",
-		desc: "用犀利的眼神使其害怕， 从而降低对手的防御。",
+		// Official flavor text: "用犀利的眼神使其害怕， 从而降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3649,22 +3989,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lick: {
 		name: "舌舔",
-		desc: "用长长的舌头， 舔遍对手进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "用长长的舌头， 舔遍对手进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lifedew: {
 		name: "生命水滴",
-		desc: "喷洒出神奇的水， 回复自己和场上同伴的ＨＰ。",
+		// Official flavor text: "喷洒出神奇的水， 回复自己和场上同伴的ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightofruin: {
 		name: "破灭之光",
-		desc: "借用永恒之花的力量， 发射出强力光线。 自己也会受到不小的伤害。",
+		// Official flavor text: "借用永恒之花的力量， 发射出强力光线。 自己也会受到不小的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightscreen: {
 		name: "光墙",
-		desc: "利用神奇的墙壁， 在５回合内减弱从对手那里 受到的特殊攻击的伤害。",
+		// Official flavor text: "利用神奇的墙壁， 在５回合内减弱从对手那里 受到的特殊攻击的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3690,17 +4034,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lightthatburnsthesky: {
 		name: "焚天灭世炽光爆",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	liquidation: {
 		name: "水流裂破",
-		desc: "用水之力量撞向对手进行攻击。 有时会降低对手的防御。",
+		// Official flavor text: "用水之力量撞向对手进行攻击。 有时会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lockon: {
 		name: "锁定",
-		desc: "紧紧瞄准对手， 下次攻击必定会打中。",
+		// Official flavor text: "紧紧瞄准对手， 下次攻击必定会打中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3718,7 +4065,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lowkick: {
 		name: "踢倒",
-		desc: "用力踢对手的脚， 使其摔倒进行攻击。 对手越重，威力越大。",
+		// Official flavor text: "用力踢对手的脚， 使其摔倒进行攻击。 对手越重，威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3727,12 +4075,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lowsweep: {
 		name: "下盘踢",
-		desc: "以敏捷的动作瞄准 对手的脚进行攻击。 降低对手的速度。",
+		// Official flavor text: "以敏捷的动作瞄准 对手的脚进行攻击。 降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	luckychant: {
 		name: "幸运咒语",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  因幸运咒语的力量，[TEAM]的要害被隐藏了起来！",
@@ -3750,7 +4100,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunardance: {
 		name: "新月舞",
-		desc: "虽然自己陷入濒死， 但可以治愈后备上场的 宝可梦的全部状态。",
+		// Official flavor text: "虽然自己陷入濒死， 但可以治愈后备上场的 宝可梦的全部状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3764,17 +4115,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunge: {
 		name: "猛扑",
-		desc: "全力猛扑对手进行攻击。 从而降低对手的攻击。",
+		// Official flavor text: "全力猛扑对手进行攻击。 从而降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lusterpurge: {
 		name: "洁净光芒",
-		desc: "释放耀眼的光芒进行攻击。 有时会降低对手的特防。",
+		// Official flavor text: "释放耀眼的光芒进行攻击。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	machpunch: {
 		name: "音速拳",
-		desc: "以迅雷不及掩耳之势出拳。 必定能够先制攻击。",
+		// Official flavor text: "以迅雷不及掩耳之势出拳。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magicalleaf: {
@@ -3788,7 +4142,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magiccoat: {
 		name: "魔法反射",
-		desc: "当对手使出会变成异常状态的 招式或寄生种子等时， 会将对手的招式反射回去。",
+		// Official flavor text: "当对手使出会变成异常状态的 招式或寄生种子等时， 会将对手的招式反射回去。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3805,7 +4160,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicpowder: {
 		name: "魔法粉",
-		desc: "向对手喷洒魔法粉， 使对手变为超能力属性。",
+		// Official flavor text: "向对手喷洒魔法粉， 使对手变为超能力属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3813,12 +4169,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicroom: {
 		name: "魔法空间",
-		desc: "制造出离奇的空间。 在５回合内所有宝可梦 携带道具的效果都会消失。",
+		// Official flavor text: "制造出离奇的空间。 在５回合内所有宝可梦 携带道具的效果都会消失。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magmastorm: {
 		name: "熔岩风暴",
-		desc: "将对手困在 熊熊燃烧的火焰中， 在４～５回合内进行攻击。",
+		// Official flavor text: "将对手困在 熊熊燃烧的火焰中， 在４～５回合内进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3842,12 +4200,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magneticflux: {
 		name: "磁场操控",
-		desc: "通过操控磁场， 会提高特性为正电和负电的 宝可梦的防御和特防。",
+		// Official flavor text: "通过操控磁场， 会提高特性为正电和负电的 宝可梦的防御和特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magnetrise: {
 		name: "电磁飘浮",
-		desc: "利用电气产生的磁力浮在空中。 在５回合内可以飘浮。",
+		// Official flavor text: "利用电气产生的磁力浮在空中。 在５回合内可以飘浮。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3861,7 +4221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magnitude: {
 		name: "震级",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3882,7 +4243,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maliciousmoonsault: {
 		name: "极恶飞跃粉碎击",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	malignantchain: {
@@ -3892,7 +4254,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	matblock: {
 		name: "掀榻榻米",
-		desc: "将掀起来的榻榻米当作盾牌， 防住自己和同伴免受招式伤害。 变化招式无法防住。",
+		// Official flavor text: "将掀起来的榻榻米当作盾牌， 防住自己和同伴免受招式伤害。 变化招式无法防住。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]正在伺机使出掀榻榻米！",
@@ -3905,104 +4268,124 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maxairstream: {
 		name: "极巨飞冲",
-		desc: "极巨化宝可梦使出的飞行属性攻击。 会提高我方的速度。",
+		// Official flavor text: "极巨化宝可梦使出的飞行属性攻击。 会提高我方的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxdarkness: {
 		name: "极巨恶霸",
-		desc: "极巨化宝可梦使出的恶属性攻击。 会降低对手的特防。",
+		// Official flavor text: "极巨化宝可梦使出的恶属性攻击。 会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxflare: {
 		name: "极巨火爆",
-		desc: "极巨化宝可梦使出的火属性攻击。 可在５回合内让日照变得强烈。",
+		// Official flavor text: "极巨化宝可梦使出的火属性攻击。 可在５回合内让日照变得强烈。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxflutterby: {
 		name: "极巨虫蛊",
-		desc: "极巨化宝可梦使出的虫属性攻击。 会降低对手的特攻。",
+		// Official flavor text: "极巨化宝可梦使出的虫属性攻击。 会降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxgeyser: {
 		name: "极巨水流",
-		desc: "极巨化宝可梦使出的水属性攻击。 可在５回合内降下大雨。",
+		// Official flavor text: "极巨化宝可梦使出的水属性攻击。 可在５回合内降下大雨。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxguard: {
 		name: "极巨防壁",
-		desc: "完全抵挡 对手的攻击。 连续使出则容易失败。",
+		// Official flavor text: "完全抵挡 对手的攻击。 连续使出则容易失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]在攻击中守护住了自己！",
 	},
 	maxhailstorm: {
 		name: "极巨寒冰",
-		desc: "极巨化宝可梦 才能使出的冰属性攻击。 在５回合内会降下冰雹。",
+		// Official flavor text: "极巨化宝可梦 才能使出的冰属性攻击。 在５回合内会降下冰雹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxknuckle: {
 		name: "极巨拳斗",
-		desc: "极巨化宝可梦使出的格斗属性攻击。 会提高我方的攻击。",
+		// Official flavor text: "极巨化宝可梦使出的格斗属性攻击。 会提高我方的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxlightning: {
 		name: "极巨闪电",
-		desc: "极巨化宝可梦使出的电属性攻击。 可在５回合内将脚下变成电气场地。",
+		// Official flavor text: "极巨化宝可梦使出的电属性攻击。 可在５回合内将脚下变成电气场地。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxmindstorm: {
 		name: "极巨超能",
-		desc: "极巨化宝可梦使出的超能力属性攻击。 可在５回合内将脚下变成精神场地。",
+		// Official flavor text: "极巨化宝可梦使出的超能力属性攻击。 可在５回合内将脚下变成精神场地。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxooze: {
 		name: "极巨酸毒",
-		desc: "极巨化宝可梦使出的毒属性攻击。 会提高我方的特攻。",
+		// Official flavor text: "极巨化宝可梦使出的毒属性攻击。 会提高我方的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxovergrowth: {
 		name: "极巨草原",
-		desc: "极巨化宝可梦使出的草属性攻击。 可在５回合内将脚下变成青草场地。",
+		// Official flavor text: "极巨化宝可梦使出的草属性攻击。 可在５回合内将脚下变成青草场地。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxphantasm: {
 		name: "极巨幽魂",
-		desc: "极巨化宝可梦使出的幽灵属性攻击。 会降低对手的防御。",
+		// Official flavor text: "极巨化宝可梦使出的幽灵属性攻击。 会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxquake: {
 		name: "极巨大地",
-		desc: "极巨化宝可梦使出的地面属性攻击。 会提高我方的特防。",
+		// Official flavor text: "极巨化宝可梦使出的地面属性攻击。 会提高我方的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxrockfall: {
 		name: "极巨岩石",
-		desc: "极巨化宝可梦使出的岩石属性攻击。 可在５回合内卷起沙暴。",
+		// Official flavor text: "极巨化宝可梦使出的岩石属性攻击。 可在５回合内卷起沙暴。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxstarfall: {
 		name: "极巨妖精",
-		desc: "极巨化宝可梦使出的妖精属性攻击。 可在５回合内将脚下变成薄雾场地。",
+		// Official flavor text: "极巨化宝可梦使出的妖精属性攻击。 可在５回合内将脚下变成薄雾场地。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxsteelspike: {
 		name: "极巨钢铁",
-		desc: "极巨化宝可梦使出的钢属性攻击。 会提高我方的防御。",
+		// Official flavor text: "极巨化宝可梦使出的钢属性攻击。 会提高我方的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxstrike: {
 		name: "极巨攻击",
-		desc: "极巨化宝可梦使出的一般属性攻击。 会降低对手的速度。",
+		// Official flavor text: "极巨化宝可梦使出的一般属性攻击。 会降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxwyrmwind: {
 		name: "极巨龙骑",
-		desc: "极巨化宝可梦使出的龙属性攻击。 会降低对手的攻击。",
+		// Official flavor text: "极巨化宝可梦使出的龙属性攻击。 会降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meanlook: {
 		name: "黑色目光",
-		desc: "用好似要勾人心魂的黑色目光 一动不动地凝视对手， 使其不能从战斗中逃走。",
+		// Official flavor text: "用好似要勾人心魂的黑色目光 一动不动地凝视对手， 使其不能从战斗中逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4019,12 +4402,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	meditate: {
 		name: "瑜伽姿势",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mefirst: {
 		name: "抢先一步",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4044,7 +4429,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	megadrain: {
 		name: "超级吸取",
-		desc: "吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。",
+		// Official flavor text: "吸取对手的养分进行攻击。 可以回复给予对手 伤害的一半ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4067,7 +4453,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	memento: {
 		name: "临别礼物",
-		desc: "虽然会使自己陷入濒死， 但是能够大幅降低 对手的攻击和特攻。",
+		// Official flavor text: "虽然会使自己陷入濒死， 但是能够大幅降低 对手的攻击和特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4080,12 +4467,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	menacingmoonrazemaelstrom: {
 		name: "月华飞溅落灵霄",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalburst: {
 		name: "金属爆炸",
-		desc: "使出招式前， 将最后受到的招式的伤害 大力返还给对手。",
+		// Official flavor text: "使出招式前， 将最后受到的招式的伤害 大力返还给对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4096,34 +4485,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	metalclaw: {
 		name: "金属爪",
-		desc: "用钢铁之爪 劈开对手进行攻击。 有时会提高自己的攻击。",
+		// Official flavor text: "用钢铁之爪 劈开对手进行攻击。 有时会提高自己的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalsound: {
 		name: "金属音",
-		desc: "让对手听摩擦金属般 讨厌的声音。 大幅降低对手的特防。",
+		// Official flavor text: "让对手听摩擦金属般 讨厌的声音。 大幅降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meteorassault: {
 		name: "流星突击",
-		desc: "大力挥舞粗壮的茎进行攻击。 但同时自己也会被晃晕， 下一回合自己将无法动弹。",
+		// Official flavor text: "大力挥舞粗壮的茎进行攻击。 但同时自己也会被晃晕， 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meteorbeam: {
 		name: "流星光束",
-		desc: "第１回合聚集宇宙之力提高特攻， 第２回合攻击对手。",
+		// Official flavor text: "第１回合聚集宇宙之力提高特攻， 第２回合攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "[POKEMON]身上溢出了宇宙之力！",
 	},
 	meteormash: {
 		name: "彗星拳",
-		desc: "使出彗星般的拳头攻击对手。 有时会提高自己的攻击。",
+		// Official flavor text: "使出彗星般的拳头攻击对手。 有时会提高自己的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metronome: {
 		name: "挥指",
-		desc: "挥动手指刺激自己的大脑， 从所有的招式中 任意使出１个。",
+		// Official flavor text: "挥动手指刺激自己的大脑， 从所有的招式中 任意使出１个。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4158,7 +4553,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	milkdrink: {
 		name: "喝牛奶",
-		desc: "回复自己最大ＨＰ的一半。",
+		// Official flavor text: "回复自己最大ＨＰ的一半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4166,7 +4562,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mimic: {
 		name: "模仿",
-		desc: "可以将对手 最后使用的招式， 在战斗内变成自己的招式。",
+		// Official flavor text: "可以将对手 最后使用的招式， 在战斗内变成自己的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4195,14 +4592,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mindblown: {
 		name: "惊爆大头",
-		desc: "让自己的头爆炸， 来攻击周围的一切。 自己也会受到伤害。",
+		// Official flavor text: "让自己的头爆炸， 来攻击周围的一切。 自己也会受到伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	mindreader: {
 		name: "心之眼",
-		desc: "用心感受对手的行动， 下次攻击必定 会击中对手。",
+		// Official flavor text: "用心感受对手的行动， 下次攻击必定 会击中对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4216,7 +4615,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	minimize: {
 		name: "变小",
-		desc: "蜷缩身体显得很小， 从而大幅提高 自己的闪避率。",
+		// Official flavor text: "蜷缩身体显得很小， 从而大幅提高 自己的闪避率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4243,7 +4643,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	miracleeye: {
 		name: "奇迹之眼",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4253,7 +4654,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrorcoat: {
 		name: "镜面反射",
-		desc: "从对手那里受到 特殊攻击的伤害将以 ２倍返还给同一个对手。",
+		// Official flavor text: "从对手那里受到 特殊攻击的伤害将以 ２倍返还给同一个对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4270,7 +4672,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrormove: {
 		name: "鹦鹉学舌",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4287,12 +4690,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrorshot: {
 		name: "镜光射击",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mist: {
 		name: "白雾",
-		desc: "用白雾覆盖身体。 在５回合内不会让对手 降低自己的能力。",
+		// Official flavor text: "用白雾覆盖身体。 在５回合内不会让对手 降低自己的能力。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4312,17 +4717,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mistball: {
 		name: "薄雾球",
-		desc: "用围绕着雾状 羽毛的球进行攻击。 有时会降低对手的特攻。",
+		// Official flavor text: "用围绕着雾状 羽毛的球进行攻击。 有时会降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistyexplosion: {
 		name: "薄雾炸裂",
-		desc: "对自己周围的所有宝可梦进行攻击， 但使出后，自己会陷入濒死。 在薄雾场地上，招式威力会提高。",
+		// Official flavor text: "对自己周围的所有宝可梦进行攻击， 但使出后，自己会陷入濒死。 在薄雾场地上，招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistyterrain: {
 		name: "薄雾场地",
-		desc: "在５回合内， 地面上的宝可梦不会陷入异常状态。 龙属性招式的伤害也会减半。",
+		// Official flavor text: "在５回合内， 地面上的宝可梦不会陷入异常状态。 龙属性招式的伤害也会减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4330,7 +4738,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moonblast: {
 		name: "月亮之力",
-		desc: "借用月亮的力量攻击对手。 有时会降低对手的特攻。",
+		// Official flavor text: "借用月亮的力量攻击对手。 有时会降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4339,12 +4748,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moongeistbeam: {
 		name: "暗影之光",
-		desc: "放出奇怪的光线攻击对手。 可以无视对手的特性进行攻击。",
+		// Official flavor text: "放出奇怪的光线攻击对手。 可以无视对手的特性进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	moonlight: {
 		name: "月光",
-		desc: "回复自己的ＨＰ。 根据天气的不同， 回复量也会有所变化。",
+		// Official flavor text: "回复自己的ＨＰ。 根据天气的不同， 回复量也会有所变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4364,7 +4775,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	morningsun: {
 		name: "晨光",
-		desc: "回复自己的ＨＰ。 根据天气的不同， 回复量也会有所变化。",
+		// Official flavor text: "回复自己的ＨＰ。 根据天气的不同， 回复量也会有所变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4394,27 +4806,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mudbomb: {
 		name: "泥巴炸弹",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muddywater: {
 		name: "浊流",
-		desc: "向对手喷射 浑浊的水进行攻击。 有时会降低对手的命中率。",
+		// Official flavor text: "向对手喷射 浑浊的水进行攻击。 有时会降低对手的命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudshot: {
 		name: "泥巴射击",
-		desc: "向对手投掷 泥块进行攻击。 同时降低对手的速度。",
+		// Official flavor text: "向对手投掷 泥块进行攻击。 同时降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudslap: {
 		name: "掷泥",
-		desc: "向对手的脸等 投掷泥块进行攻击。 会降低对手的命中率。",
+		// Official flavor text: "向对手的脸等 投掷泥块进行攻击。 会降低对手的命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudsport: {
 		name: "玩泥巴",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4427,12 +4844,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	multiattack: {
 		name: "多属性攻击",
-		desc: "一边覆盖高能量， 一边撞向对手进行攻击。 根据存储碟不同，属性会改变。",
+		// Official flavor text: "一边覆盖高能量， 一边撞向对手进行攻击。 根据存储碟不同，属性会改变。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalfire: {
 		name: "魔法火焰",
-		desc: "从口中喷出特别灼热的 火焰进行攻击。 降低对手的特攻。",
+		// Official flavor text: "从口中喷出特别灼热的 火焰进行攻击。 降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalpower: {
@@ -4442,12 +4861,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nastyplot: {
 		name: "诡计",
-		desc: "谋划诡计，激活头脑。 大幅提高自己的特攻。",
+		// Official flavor text: "谋划诡计，激活头脑。 大幅提高自己的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	naturalgift: {
 		name: "自然之恩",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4455,7 +4876,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	naturepower: {
 		name: "自然之力",
-		desc: "用自然之力进行攻击。 根据所使用场所的不同， 使出的招式也会有所变化。",
+		// Official flavor text: "用自然之力进行攻击。 根据所使用场所的不同， 使出的招式也会有所变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4477,12 +4899,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	naturesmadness: {
 		name: "自然之怒",
-		desc: "向对手释放自然之怒。 对手的ＨＰ会减半。",
+		// Official flavor text: "向对手释放自然之怒。 对手的ＨＰ会减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	needlearm: {
 		name: "尖刺臂",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4494,12 +4918,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightdaze: {
 		name: "暗黑爆破",
-		desc: "放出黑暗的冲击波攻击对手。 有时会降低对手的命中率。",
+		// Official flavor text: "放出黑暗的冲击波攻击对手。 有时会降低对手的命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightmare: {
 		name: "恶梦",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]开始做恶梦了！",
@@ -4507,7 +4933,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightshade: {
 		name: "黑夜魔影",
-		desc: "显示恐怖幻影， 只给予对手 和自己等级相同的伤害。",
+		// Official flavor text: "显示恐怖幻影， 只给予对手 和自己等级相同的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4516,17 +4943,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightslash: {
 		name: "暗袭要害",
-		desc: "抓住瞬间的空隙 切斩对手。 容易击中要害。",
+		// Official flavor text: "抓住瞬间的空隙 切斩对手。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nobleroar: {
 		name: "战吼",
-		desc: "发出战吼威吓对手， 从而降低对手的攻击和特攻。",
+		// Official flavor text: "发出战吼威吓对手， 从而降低对手的攻击和特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	noretreat: {
 		name: "背水一战",
-		desc: "提高自己的所有能力， 但无法替换或逃走。",
+		// Official flavor text: "提高自己的所有能力， 但无法替换或逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]受到背水一战的效果影响，无法逃走了！",
@@ -4538,17 +4968,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nuzzle: {
 		name: "蹭蹭脸颊",
-		desc: "将带电的脸颊 蹭蹭对手进行攻击。 让对手陷入麻痹状态。",
+		// Official flavor text: "将带电的脸颊 蹭蹭对手进行攻击。 让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	oblivionwing: {
 		name: "死亡之翼",
-		desc: "从锁定的对手身上吸取ＨＰ。 回复给予对手 伤害的一半以上的ＨＰ。",
+		// Official flavor text: "从锁定的对手身上吸取ＨＰ。 回复给予对手 伤害的一半以上的ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	obstruct: {
 		name: "拦堵",
-		desc: "完全抵挡对手的攻击。 连续使出则容易失败。 一旦触碰，防御就会大幅降低。",
+		// Official flavor text: "完全抵挡对手的攻击。 连续使出则容易失败。 一旦触碰，防御就会大幅降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4560,19 +4993,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	octazooka: {
 		name: "章鱼桶炮",
-		desc: "向对手的脸等 喷出墨汁进行攻击。 有时会降低对手的命中率。",
+		// Official flavor text: "向对手的脸等 喷出墨汁进行攻击。 有时会降低对手的命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	octolock: {
 		name: "蛸固",
-		desc: "让对手无法逃走。 对手被固定后， 每回合都会降低防御和特防。",
+		// Official flavor text: "让对手无法逃走。 对手被固定后， 每回合都会降低防御和特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]受到蛸固的效果影响，变得无法逃走了……",
 	},
 	odorsleuth: {
 		name: "气味侦测",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4583,7 +5019,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ominouswind: {
 		name: "奇异之风",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	orderup: {
@@ -4593,12 +5030,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	originpulse: {
 		name: "根源波动",
-		desc: "用无数青白色 且闪耀的光线攻击对手。",
+		// Official flavor text: "用无数青白色 且闪耀的光线攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	outrage: {
 		name: "逆鳞",
-		desc: "在２～３回合内， 乱打一气地进行攻击。 大闹一番后自己会陷入混乱。",
+		// Official flavor text: "在２～３回合内， 乱打一气地进行攻击。 大闹一番后自己会陷入混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4615,17 +5054,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	overdrive: {
 		name: "破音",
-		desc: "奏响吉他和贝斯，释放出 发出巨响的剧烈震动 攻击对手。",
+		// Official flavor text: "奏响吉他和贝斯，释放出 发出巨响的剧烈震动 攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	overheat: {
 		name: "过热",
-		desc: "使出全部力量攻击对手。 使用之后会因为反作用力， 自己的特攻大幅降低。",
+		// Official flavor text: "使出全部力量攻击对手。 使用之后会因为反作用力， 自己的特攻大幅降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	painsplit: {
 		name: "分担痛楚",
-		desc: "将自己的ＨＰ和 对手的ＨＰ相加， 然后自己和对手友好地平分。",
+		// Official flavor text: "将自己的ＨＰ和 对手的ＨＰ相加， 然后自己和对手友好地平分。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  均分了彼此的体力！",
@@ -4637,12 +5079,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	paraboliccharge: {
 		name: "抛物面充电",
-		desc: "给周围全体宝可梦造成伤害。 可以回复给予伤害的一半HP。",
+		// Official flavor text: "给周围全体宝可梦造成伤害。 可以回复给予伤害的一半HP。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	partingshot: {
 		name: "抛下狠话",
-		desc: "抛下狠话威吓对手， 降低攻击和特攻后， 和后备宝可梦进行替换。",
+		// Official flavor text: "抛下狠话威吓对手， 降低攻击和特攻后， 和后备宝可梦进行替换。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4653,7 +5097,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	payback: {
 		name: "以牙还牙",
-		desc: "蓄力攻击。 如果能在对手之后攻击， 招式的威力会变成２倍。",
+		// Official flavor text: "蓄力攻击。 如果能在对手之后攻击， 招式的威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4664,7 +5109,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	payday: {
 		name: "聚宝功",
-		desc: "向对手的身体 投掷小金币进行攻击。 战斗后可以拿到钱。",
+		// Official flavor text: "向对手的身体 投掷小金币进行攻击。 战斗后可以拿到钱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  金币散落一地！",
@@ -4675,7 +5121,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	perishsong: {
 		name: "灭亡之歌",
-		desc: "倾听歌声的宝可梦 经过３回合陷入濒死。 替换后效果消失。",
+		// Official flavor text: "倾听歌声的宝可梦 经过３回合陷入濒死。 替换后效果消失。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  听过终焉之歌的宝可梦会在3回合后步向终焉！",
@@ -4683,12 +5130,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	petalblizzard: {
 		name: "落英缤纷",
-		desc: "猛烈地刮起飞雪般的落花， 攻击周围所有的宝可梦， 并给予伤害。",
+		// Official flavor text: "猛烈地刮起飞雪般的落花， 攻击周围所有的宝可梦， 并给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	petaldance: {
 		name: "花瓣舞",
-		desc: "在２～３回合内， 散落花瓣攻击对手。 之后自己会陷入混乱。",
+		// Official flavor text: "在２～３回合内， 散落花瓣攻击对手。 之后自己会陷入混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4709,7 +5158,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	phantomforce: {
 		name: "潜灵奇袭",
-		desc: "第１回合消失在某处， 第２回合攻击对手。 可以无视守护进行攻击。",
+		// Official flavor text: "第１回合消失在某处， 第２回合攻击对手。 可以无视守护进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4720,17 +5170,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	photongeyser: {
 		name: "光子喷涌",
-		desc: "用光柱来进行攻击。 比较自己的攻击和特攻， 用数值相对较高的一项给予对方伤害。",
+		// Official flavor text: "用光柱来进行攻击。 比较自己的攻击和特攻， 用数值相对较高的一项给予对方伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikapapow: {
 		name: "闪闪雷光",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pinmissile: {
 		name: "飞弹针",
-		desc: "向对手发射 锐针进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "向对手发射 锐针进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4747,22 +5200,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	plasmafists: {
 		name: "等离子闪电拳",
-		desc: "用覆盖着电流的拳头进行攻击。 使一般属性的招式变成电属性。",
+		// Official flavor text: "用覆盖着电流的拳头进行攻击。 使一般属性的招式变成电属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	playnice: {
 		name: "和睦相处",
-		desc: "和对手和睦相处， 使其失去战斗的气力， 从而降低对手的攻击。",
+		// Official flavor text: "和对手和睦相处， 使其失去战斗的气力， 从而降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	playrough: {
 		name: "嬉闹",
-		desc: "与对手嬉闹并攻击。 有时会降低对手的攻击。",
+		// Official flavor text: "与对手嬉闹并攻击。 有时会降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pluck: {
 		name: "啄食",
-		desc: "用喙进行攻击。 当对手携带树果时， 可以食用并获得其效果。",
+		// Official flavor text: "用喙进行攻击。 当对手携带树果时， 可以食用并获得其效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4772,7 +5229,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisonfang: {
 		name: "剧毒牙",
-		desc: "用有毒的牙齿 咬住对手进行攻击。 有时会使对手中剧毒。",
+		// Official flavor text: "用有毒的牙齿 咬住对手进行攻击。 有时会使对手中剧毒。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4781,7 +5239,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisongas: {
 		name: "毒瓦斯",
-		desc: "将毒瓦斯吹到对手的脸上， 从而让对手陷入中毒状态。",
+		// Official flavor text: "将毒瓦斯吹到对手的脸上， 从而让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4789,17 +5248,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisonjab: {
 		name: "毒击",
-		desc: "用带毒的触手或手臂刺入对手。 有时会让对手陷入中毒状态。",
+		// Official flavor text: "用带毒的触手或手臂刺入对手。 有时会让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonpowder: {
 		name: "毒粉",
-		desc: "撒出毒粉， 从而让对手陷入中毒状态。",
+		// Official flavor text: "撒出毒粉， 从而让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonsting: {
 		name: "毒针",
-		desc: "将有毒的针 刺入对手进行攻击。 有时会让对手陷入中毒状态。",
+		// Official flavor text: "将有毒的针 刺入对手进行攻击。 有时会让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4808,7 +5270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisontail: {
 		name: "毒尾",
-		desc: "用尾巴拍打。 有时会让对手陷入中毒状态， 也容易击中要害。",
+		// Official flavor text: "用尾巴拍打。 有时会让对手陷入中毒状态， 也容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	polarflare: {
@@ -4818,7 +5281,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pollenpuff: {
 		name: "花粉团",
-		desc: "对敌人使用是会爆炸的团子。 对我方使用则是给予回复的团子。",
+		// Official flavor text: "对敌人使用是会爆炸的团子。 对我方使用则是给予回复的团子。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poltergeist: {
@@ -4843,7 +5307,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powder: {
 		name: "粉尘",
-		desc: "如果被撒到粉尘的对手 使用火招式， 则会爆炸并给予伤害。",
+		// Official flavor text: "如果被撒到粉尘的对手 使用火招式， 则会爆炸并给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4854,7 +5319,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powdersnow: {
 		name: "细雪",
-		desc: "将冰冷的细雪 吹向对手进行攻击。 有时会让对手陷入冰冻状态。",
+		// Official flavor text: "将冰冷的细雪 吹向对手进行攻击。 有时会让对手陷入冰冻状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4866,14 +5332,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powersplit: {
 		name: "力量平分",
-		desc: "利用超能力将自己和对手的 攻击和特攻相加， 再进行平分。",
+		// Official flavor text: "利用超能力将自己和对手的 攻击和特攻相加， 再进行平分。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]平分了各自的力量！",
 	},
 	powerswap: {
 		name: "力量互换",
-		desc: "利用超能力互换 自己和对手的攻击 以及特攻的能力变化。",
+		// Official flavor text: "利用超能力互换 自己和对手的攻击 以及特攻的能力变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powershift: {
@@ -4886,7 +5354,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powertrick: {
 		name: "力量戏法",
-		desc: "利用超能力交换 自己的攻击和 防御的力量。",
+		// Official flavor text: "利用超能力交换 自己的攻击和 防御的力量。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]互换了攻击和防御！",
@@ -4894,12 +5363,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powertrip: {
 		name: "嚣张",
-		desc: "耀武扬威地攻击对手， 自己的能力提高得越多， 威力就越大。",
+		// Official flavor text: "耀武扬威地攻击对手， 自己的能力提高得越多， 威力就越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poweruppunch: {
 		name: "增强拳",
-		desc: "通过反复击打对手， 使自己的拳头慢慢变硬。 打中对手攻击就会提高。",
+		// Official flavor text: "通过反复击打对手， 使自己的拳头慢慢变硬。 打中对手攻击就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powerwhip: {
@@ -4908,12 +5379,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	precipiceblades: {
 		name: "断崖之剑",
-		desc: "将大地的力量变化为利刃 攻击对手。",
+		// Official flavor text: "将大地的力量变化为利刃 攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	present: {
 		name: "礼物",
-		desc: "递给对手设有圈套的 盒子进行攻击。 也有可能回复对手ＨＰ。",
+		// Official flavor text: "递给对手设有圈套的 盒子进行攻击。 也有可能回复对手ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4921,12 +5394,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	prismaticlaser: {
 		name: "棱镜镭射",
-		desc: "用棱镜的力量发射强烈光线。 下一回合自己将无法动弹。",
+		// Official flavor text: "用棱镜的力量发射强烈光线。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	protect: {
 		name: "守住",
-		desc: "完全抵挡 对手的攻击。 连续使出则容易失败。",
+		// Official flavor text: "完全抵挡 对手的攻击。 连续使出则容易失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4955,7 +5430,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psybeam: {
 		name: "幻象光线",
-		desc: "向对手发射 神奇的光线进行攻击。 有时会使对手混乱。",
+		// Official flavor text: "向对手发射 神奇的光线进行攻击。 有时会使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psyblade: {
@@ -4965,7 +5441,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychic: {
 		name: "精神强念",
-		desc: "向对手发送 强大的念力进行攻击。 有时会降低对手的特防。",
+		// Official flavor text: "向对手发送 强大的念力进行攻击。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4974,7 +5451,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychicfangs: {
 		name: "精神之牙",
-		desc: "利用精神力量咬住对手进行攻击。 还可以破坏光墙和反射壁等。",
+		// Official flavor text: "利用精神力量咬住对手进行攻击。 还可以破坏光墙和反射壁等。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychicnoise: {
@@ -4984,7 +5462,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychicterrain: {
 		name: "精神场地",
-		desc: "在５回合内，地面上的宝可梦 不会受到先制招式的攻击。 超能力属性的招式威力会提高。",
+		// Official flavor text: "在５回合内，地面上的宝可梦 不会受到先制招式的攻击。 超能力属性的招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4992,22 +5471,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychoboost: {
 		name: "精神突进",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychocut: {
 		name: "精神利刃",
-		desc: "用实体化的 心之利刃劈开对手。 容易击中要害。",
+		// Official flavor text: "用实体化的 心之利刃劈开对手。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychoshift: {
 		name: "精神转移",
-		desc: "利用超能力施以暗示， 从而将自己受到的异常状态 转移给对手。",
+		// Official flavor text: "利用超能力施以暗示， 从而将自己受到的异常状态 转移给对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychup: {
 		name: "自我暗示",
-		desc: "向自己施以自我暗示， 将能力变化的状态 变得和对手一样。",
+		// Official flavor text: "向自己施以自我暗示， 将能力变化的状态 变得和对手一样。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5020,17 +5503,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psyshock: {
 		name: "精神冲击",
-		desc: "将神奇的念波实体化攻击对手。 给予物理伤害。",
+		// Official flavor text: "将神奇的念波实体化攻击对手。 给予物理伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psystrike: {
 		name: "精神击破",
-		desc: "将神奇的念波实体化攻击对手。 给予物理伤害。",
+		// Official flavor text: "将神奇的念波实体化攻击对手。 给予物理伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psywave: {
 		name: "精神波",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5046,17 +5532,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	punishment: {
 		name: "惩罚",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	purify: {
 		name: "净化",
-		desc: "治愈对手的异常状态。 治愈后可以回复自己的ＨＰ。",
+		// Official flavor text: "治愈对手的异常状态。 治愈后可以回复自己的ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pursuit: {
 		name: "追打",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5080,24 +5569,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pyroball: {
 		name: "火焰球",
-		desc: "点燃小石子，形成火球攻击对手。 有时会使对手陷入灼伤状态。",
+		// Official flavor text: "点燃小石子，形成火球攻击对手。 有时会使对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	quash: {
 		name: "延后",
-		desc: "压制对手， 从而将其行动顺序放到最后。",
+		// Official flavor text: "压制对手， 从而将其行动顺序放到最后。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  延后了[TARGET]的顺序！",
 	},
 	quickattack: {
 		name: "电光一闪",
-		desc: "以迅雷不及掩耳之势扑向对手。 必定能够先制攻击。",
+		// Official flavor text: "以迅雷不及掩耳之势扑向对手。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	quickguard: {
 		name: "快速防守",
-		desc: "守护自己和同伴， 以防对手的先制攻击。",
+		// Official flavor text: "守护自己和同伴， 以防对手的先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5117,12 +5610,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	quiverdance: {
 		name: "蝶舞",
-		desc: "轻巧地跳起神秘而又美丽的舞蹈。 提高自己的特攻、特防和速度。",
+		// Official flavor text: "轻巧地跳起神秘而又美丽的舞蹈。 提高自己的特攻、特防和速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rage: {
 		name: "愤怒",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5147,7 +5642,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragepowder: {
 		name: "愤怒粉",
-		desc: "将令人烦躁的粉末撒在自己身上， 用以吸引对手的注意。 使对手的攻击全部指向自己。",
+		// Official flavor text: "将令人烦躁的粉末撒在自己身上， 用以吸引对手的注意。 使对手的攻击全部指向自己。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5170,7 +5666,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	raindance: {
 		name: "求雨",
-		desc: "在５回合内一直降雨， 从而提高水属性的招式威力。 火属性的招式威力则降低。",
+		// Official flavor text: "在５回合内一直降雨， 从而提高水属性的招式威力。 火属性的招式威力则降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5181,7 +5678,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rapidspin: {
 		name: "高速旋转",
-		desc: "通过旋转来攻击对手。 可以摆脱绑紧、紧束、寄生种子 等招式。还能提高自己的速度。",
+		// Official flavor text: "通过旋转来攻击对手。 可以摆脱绑紧、紧束、寄生种子 等招式。还能提高自己的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5196,7 +5694,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	razorleaf: {
 		name: "飞叶快刀",
-		desc: "飞出叶片， 切斩对手进行攻击。 容易击中要害。",
+		// Official flavor text: "飞出叶片， 切斩对手进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5204,12 +5703,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	razorshell: {
 		name: "贝壳刃",
-		desc: "用锋利的贝壳切斩 对手进行攻击。 有时会降低对手的防御。",
+		// Official flavor text: "用锋利的贝壳切斩 对手进行攻击。 有时会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorwind: {
 		name: "旋风刀",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5231,7 +5732,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	recover: {
 		name: "自我再生",
-		desc: "让细胞再生， 从而回复自己 最大ＨＰ的一半。",
+		// Official flavor text: "让细胞再生， 从而回复自己 最大ＨＰ的一半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5242,7 +5744,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	recycle: {
 		name: "回收利用",
-		desc: "使战斗中已经消耗掉的 自己的持有物再生， 并可以再次使用。",
+		// Official flavor text: "使战斗中已经消耗掉的 自己的持有物再生， 并可以再次使用。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5255,7 +5758,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reflect: {
 		name: "反射壁",
-		desc: "利用神奇的墙壁， 在５回合内减弱从对手那里 受到的物理攻击的伤害。",
+		// Official flavor text: "利用神奇的墙壁， 在５回合内减弱从对手那里 受到的物理攻击的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5281,7 +5785,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reflecttype: {
 		name: "镜面属性",
-		desc: "反射对手的属性， 让自己也变成一样的属性。",
+		// Official flavor text: "反射对手的属性， 让自己也变成一样的属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5294,17 +5799,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	refresh: {
 		name: "焕然一新",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	relicsong: {
 		name: "古老之歌",
-		desc: "让对手听古老之歌， 打动对手的内心进行攻击。 有时会让对手陷入睡眠状态。",
+		// Official flavor text: "让对手听古老之歌， 打动对手的内心进行攻击。 有时会让对手陷入睡眠状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rest: {
 		name: "睡觉",
-		desc: "连续睡上２回合。 回复自己的全部ＨＰ 以及治愈所有异常状态。",
+		// Official flavor text: "连续睡上２回合。 回复自己的全部ＨＰ 以及治愈所有异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5315,22 +5823,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	retaliate: {
 		name: "报仇",
-		desc: "为倒下的同伴报仇。 如果上一回合有同伴倒下， 威力就会提高。",
+		// Official flavor text: "为倒下的同伴报仇。 如果上一回合有同伴倒下， 威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	return: {
 		name: "报恩",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	revelationdance: {
 		name: "觉醒之舞",
-		desc: "全力跳舞进行攻击。 此招式的属性将 变得和自己的属性相同。",
+		// Official flavor text: "全力跳舞进行攻击。 此招式的属性将 变得和自己的属性相同。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	revenge: {
 		name: "报复",
-		desc: "如果受到对手的招式攻击， 就能给予对手２倍的伤害。",
+		// Official flavor text: "如果受到对手的招式攻击， 就能给予对手２倍的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5342,7 +5854,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reversal: {
 		name: "起死回生",
-		desc: "竭尽全力进行攻击。 自己的ＨＰ越少， 招式的威力越大。",
+		// Official flavor text: "竭尽全力进行攻击。 自己的ＨＰ越少， 招式的威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5363,12 +5876,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	risingvoltage: {
 		name: "电力上升",
-		desc: "用从地面升腾而起的电击进行攻击。 当对手处于电气场地上时， 招式威力会变成２倍。",
+		// Official flavor text: "用从地面升腾而起的电击进行攻击。 当对手处于电气场地上时， 招式威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	roar: {
 		name: "吼叫",
-		desc: "放走对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。",
+		// Official flavor text: "放走对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5383,12 +5898,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roaroftime: {
 		name: "时光咆哮",
-		desc: "释放出扭曲时间般的 强大力量攻击对手。 下一回合自己将无法动弹。",
+		// Official flavor text: "释放出扭曲时间般的 强大力量攻击对手。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockblast: {
 		name: "岩石爆击",
-		desc: "向对手发射 坚硬的岩石进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "向对手发射 坚硬的岩石进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5402,17 +5919,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockclimb: {
 		name: "攀岩",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockpolish: {
 		name: "岩石打磨",
-		desc: "打磨自己的身体， 减少空气阻力。 可以大幅提高自己的速度。",
+		// Official flavor text: "打磨自己的身体， 减少空气阻力。 可以大幅提高自己的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockslide: {
 		name: "岩崩",
-		desc: "将大岩石 猛烈地撞向对手进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "将大岩石 猛烈地撞向对手进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5424,7 +5944,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocksmash: {
 		name: "碎岩",
-		desc: "用拳头进行攻击。 有时会降低对手的防御。",
+		// Official flavor text: "用拳头进行攻击。 有时会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockthrow: {
@@ -5433,17 +5954,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocktomb: {
 		name: "岩石封锁",
-		desc: "投掷岩石进行攻击。 封住对手的行动， 从而降低速度。",
+		// Official flavor text: "投掷岩石进行攻击。 封住对手的行动， 从而降低速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockwrecker: {
 		name: "岩石炮",
-		desc: "向对手发射 巨大的岩石进行攻击。 下一回合自己将无法动弹。",
+		// Official flavor text: "向对手发射 巨大的岩石进行攻击。 下一回合自己将无法动弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	roleplay: {
 		name: "扮演",
-		desc: "扮演对手， 让自己的特性 变得和对手相同。",
+		// Official flavor text: "扮演对手， 让自己的特性 变得和对手相同。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5468,12 +5992,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rollingkick: {
 		name: "回旋踢",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rollout: {
 		name: "滚动",
-		desc: "在５回合内连续滚动攻击对手。 招式每次击中，威力就会提高。",
+		// Official flavor text: "在５回合内连续滚动攻击对手。 招式每次击中，威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5484,7 +6010,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roost: {
 		name: "羽栖",
-		desc: "降到地面，使身体休息。 回复自己最大ＨＰ的一半。",
+		// Official flavor text: "降到地面，使身体休息。 回复自己最大ＨＰ的一半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5497,12 +6024,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rototiller: {
 		name: "耕地",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	round: {
 		name: "轮唱",
-		desc: "用歌声攻击对手。 同伴还可以接着使出轮唱招式， 威力也会提高。",
+		// Official flavor text: "用歌声攻击对手。 同伴还可以接着使出轮唱招式， 威力也会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ruination: {
@@ -5512,17 +6041,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sacredfire: {
 		name: "神圣之火",
-		desc: "用神秘的火焰 烧尽对手进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "用神秘的火焰 烧尽对手进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sacredsword: {
 		name: "圣剑",
-		desc: "用长角切斩对手进行攻击。 无视对手的能力变化， 直接给予伤害。",
+		// Official flavor text: "用长角切斩对手进行攻击。 无视对手的能力变化， 直接给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	safeguard: {
 		name: "神秘守护",
-		desc: "在５回合内 被神奇的力量守护， 从而不会陷入异常状态。",
+		// Official flavor text: "在５回合内 被神奇的力量守护， 从而不会陷入异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5549,7 +6081,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandattack: {
 		name: "泼沙",
-		desc: "向对手脸上泼沙子， 从而降低命中率。",
+		// Official flavor text: "向对手脸上泼沙子， 从而降低命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandsearstorm: {
@@ -5559,7 +6092,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandstorm: {
 		name: "沙暴",
-		desc: "在５回合内扬起沙暴，除岩石、地面和 钢属性以外的宝可梦，都会受到伤害。 岩石属性的特防还会提高。",
+		// Official flavor text: "在５回合内扬起沙暴，除岩石、地面和 钢属性以外的宝可梦，都会受到伤害。 岩石属性的特防还会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5574,7 +6108,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandtomb: {
 		name: "流沙地狱",
-		desc: "将对手困在 铺天盖地的沙暴中， 在４～５回合内进行攻击。",
+		// Official flavor text: "将对手困在 铺天盖地的沙暴中， 在４～５回合内进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5597,7 +6132,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sappyseed: {
 		name: "茁茁轰炸",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
@@ -5606,7 +6142,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scald: {
 		name: "热水",
-		desc: "向对手喷射 煮得翻滚的开水进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "向对手喷射 煮得翻滚的开水进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5615,17 +6152,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scaleshot: {
 		name: "鳞射",
-		desc: "发射鳞片进行攻击。 连续攻击２～５次。 速度会提高但防御会降低。",
+		// Official flavor text: "发射鳞片进行攻击。 连续攻击２～５次。 速度会提高但防御会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scaryface: {
 		name: "鬼面",
-		desc: "用恐怖的表情瞪着对手， 使其害怕， 从而大幅降低对手的速度。",
+		// Official flavor text: "用恐怖的表情瞪着对手， 使其害怕， 从而大幅降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scorchingsands: {
 		name: "热沙大地",
-		desc: "将滚烫的沙子砸向对手进行攻击。 有时会让对手陷入灼伤状态。",
+		// Official flavor text: "将滚烫的沙子砸向对手进行攻击。 有时会让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scratch: {
@@ -5634,22 +6174,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	screech: {
 		name: "刺耳声",
-		desc: "发出不由自主想要 捂起耳朵的刺耳声， 从而大幅降低对手的防御。",
+		// Official flavor text: "发出不由自主想要 捂起耳朵的刺耳声， 从而大幅降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	searingshot: {
 		name: "火焰弹",
-		desc: "用熊熊烈火 攻击自己周围所有的宝可梦。 有时会陷入灼伤状态。",
+		// Official flavor text: "用熊熊烈火 攻击自己周围所有的宝可梦。 有时会陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	searingsunrazesmash: {
 		name: "日光回旋下苍穹",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	secretpower: {
 		name: "秘密之力",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5665,7 +6209,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	secretsword: {
 		name: "神秘之剑",
-		desc: "用长角切斩对手进行攻击。 角上拥有的神奇力量 将给予物理伤害。",
+		// Official flavor text: "用长角切斩对手进行攻击。 角上拥有的神奇力量 将给予物理伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	seedbomb: {
@@ -5674,12 +6219,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	seedflare: {
 		name: "种子闪光",
-		desc: "从身体里产生冲击波。 有时会大幅降低对手的特防。",
+		// Official flavor text: "从身体里产生冲击波。 有时会大幅降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	seismictoss: {
 		name: "地球上投",
-		desc: "利用引力将对手甩飞出去。 给予对手和自己等级相同的伤害。",
+		// Official flavor text: "利用引力将对手甩飞出去。 给予对手和自己等级相同的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5688,7 +6235,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	selfdestruct: {
 		name: "自爆",
-		desc: "引发爆炸， 攻击自己周围所有的宝可梦。 使用后陷入濒死。",
+		// Official flavor text: "引发爆炸， 攻击自己周围所有的宝可梦。 使用后陷入濒死。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5706,22 +6254,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowball: {
 		name: "暗影球",
-		desc: "投掷一团黑影进行攻击。 有时会降低对手的特防。",
+		// Official flavor text: "投掷一团黑影进行攻击。 有时会降低对手的特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowbone: {
 		name: "暗影之骨",
-		desc: "用附有灵魂的骨头 殴打对手进行攻击。 有时会降低对手的防御。",
+		// Official flavor text: "用附有灵魂的骨头 殴打对手进行攻击。 有时会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowclaw: {
 		name: "暗影爪",
-		desc: "以影子做成的锐爪， 劈开对手。 容易击中要害。",
+		// Official flavor text: "以影子做成的锐爪， 劈开对手。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowforce: {
 		name: "暗影潜袭",
-		desc: "第１回合消失踪影， 第２回合攻击对手。 即使对手正受保护，也能击中。",
+		// Official flavor text: "第１回合消失踪影， 第２回合攻击对手。 即使对手正受保护，也能击中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5739,7 +6291,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowsneak: {
 		name: "影子偷袭",
-		desc: "伸长影子， 从对手的背后进行攻击。 必定能够先制攻击。",
+		// Official flavor text: "伸长影子， 从对手的背后进行攻击。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowstrike: {
@@ -5749,7 +6302,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sharpen: {
 		name: "棱角化",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
@@ -5767,7 +6321,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sheercold: {
 		name: "绝对零度",
-		desc: "给对手一击濒死。 如果是冰属性以外的宝可梦使用， 就会难以打中。",
+		// Official flavor text: "给对手一击濒死。 如果是冰属性以外的宝可梦使用， 就会难以打中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5776,17 +6331,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shellsidearm: {
 		name: "臂贝武器",
-		desc: "从物理攻击和特殊攻击中选择 可造成较多伤害的方式进行攻击。 有时会让对手陷入中毒状态。",
+		// Official flavor text: "从物理攻击和特殊攻击中选择 可造成较多伤害的方式进行攻击。 有时会让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shellsmash: {
 		name: "破壳",
-		desc: "打破外壳， 降低自己的防御和特防， 但大幅提高攻击、特攻和速度。",
+		// Official flavor text: "打破外壳， 降低自己的防御和特防， 但大幅提高攻击、特攻和速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shelltrap: {
 		name: "陷阱甲壳",
-		desc: "设下甲壳陷阱。 如果对手使出物理招式， 陷阱就会爆炸并给予对手伤害。",
+		// Official flavor text: "设下甲壳陷阱。 如果对手使出物理招式， 陷阱就会爆炸并给予对手伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]设置了陷阱甲壳！",
@@ -5800,7 +6358,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shiftgear: {
 		name: "换档",
-		desc: "转动齿轮， 不仅提高自己的攻击， 还会大幅提高速度。",
+		// Official flavor text: "转动齿轮， 不仅提高自己的攻击， 还会大幅提高速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockwave: {
@@ -5809,12 +6368,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shoreup: {
 		name: "集沙",
-		desc: "回复自己最大ＨＰ的一半。 在沙暴中回复得更多。",
+		// Official flavor text: "回复自己最大ＨＰ的一半。 在沙暴中回复得更多。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	signalbeam: {
 		name: "信号光束",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	silktrap: {
@@ -5824,12 +6385,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	silverwind: {
 		name: "银色旋风",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	simplebeam: {
 		name: "单纯光束",
-		desc: "向对手发送谜之念波。 接收到念波的对手， 其特性会变为单纯。",
+		// Official flavor text: "向对手发送谜之念波。 接收到念波的对手， 其特性会变为单纯。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5854,12 +6417,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sizzlyslide: {
 		name: "熊熊火爆",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sketch: {
 		name: "写生",
-		desc: "将对手使用的招式 变成自己的招式。 使用１次后写生消失。",
+		// Official flavor text: "将对手使用的招式 变成自己的招式。 使用１次后写生消失。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5876,7 +6441,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skillswap: {
 		name: "特性互换",
-		desc: "利用超能力互换 自己和对手的特性。",
+		// Official flavor text: "利用超能力互换 自己和对手的特性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5901,12 +6467,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skittersmack: {
 		name: "爬击",
-		desc: "从对手背后爬近后进行攻击。 会降低对手的特攻。",
+		// Official flavor text: "从对手背后爬近后进行攻击。 会降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	skullbash: {
 		name: "火箭头锤",
-		desc: "第１回合把头缩进去， 从而提高防御。 第２回合攻击对手。",
+		// Official flavor text: "第１回合把头缩进去， 从而提高防御。 第２回合攻击对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5920,7 +6488,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "神鸟猛击",
-		desc: "第２回合攻击对手。 偶尔使对手畏缩。 也容易击中要害。",
+		// Official flavor text: "第２回合攻击对手。 偶尔使对手畏缩。 也容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5934,7 +6503,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skydrop: {
 		name: "自由落体",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5947,7 +6517,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyuppercut: {
 		name: "冲天拳",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5956,7 +6527,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slackoff: {
 		name: "偷懒",
-		desc: "偷懒休息。 回复自己最大ＨＰ的一半。",
+		// Official flavor text: "偷懒休息。 回复自己最大ＨＰ的一半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5968,7 +6540,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slash: {
 		name: "劈开",
-		desc: "用爪子或镰刀等 劈开对手进行攻击。 容易击中要害。",
+		// Official flavor text: "用爪子或镰刀等 劈开对手进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sleeppowder: {
@@ -5977,7 +6550,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sleeptalk: {
 		name: "梦话",
-		desc: "从自己已学会的招式中 任意使出１个。 只能在自己睡觉时使用。",
+		// Official flavor text: "从自己已学会的招式中 任意使出１个。 只能在自己睡觉时使用。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6003,7 +6577,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sludge: {
 		name: "污泥攻击",
-		desc: "用污泥投掷对手进行攻击。 有时会让对手陷入中毒状态。",
+		// Official flavor text: "用污泥投掷对手进行攻击。 有时会让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6012,17 +6587,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sludgebomb: {
 		name: "污泥炸弹",
-		desc: "用污泥投掷对手进行攻击。 有时会让对手陷入中毒状态。",
+		// Official flavor text: "用污泥投掷对手进行攻击。 有时会让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sludgewave: {
 		name: "污泥波",
-		desc: "用污泥波攻击 自己周围所有的宝可梦。 有时会陷入中毒状态。",
+		// Official flavor text: "用污泥波攻击 自己周围所有的宝可梦。 有时会陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	smackdown: {
 		name: "击落",
-		desc: "扔石头或炮弹， 攻击飞行的对手。 对手会被击落，掉到地面。",
+		// Official flavor text: "扔石头或炮弹， 攻击飞行的对手。 对手会被击落，掉到地面。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]被击落，掉到了地面！",
@@ -6033,7 +6611,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	smellingsalts: {
 		name: "清醒",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6045,17 +6624,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	smog: {
 		name: "浊雾",
-		desc: "将肮脏的浓雾 吹向对手进行攻击。 有时会让对手陷入中毒状态。",
+		// Official flavor text: "将肮脏的浓雾 吹向对手进行攻击。 有时会让对手陷入中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	smokescreen: {
 		name: "烟幕",
-		desc: "向对手喷出烟或墨汁等， 从而降低对手的命中率。",
+		// Official flavor text: "向对手喷出烟或墨汁等， 从而降低对手的命中率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snaptrap: {
 		name: "捕兽夹",
-		desc: "使用捕兽夹， 在４～５回合内， 夹住对手进行攻击。",
+		// Official flavor text: "使用捕兽夹， 在４～５回合内， 夹住对手进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6065,12 +6647,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snarl: {
 		name: "大声咆哮",
-		desc: "没完没了地大声斥责， 从而降低对手的特攻。",
+		// Official flavor text: "没完没了地大声斥责， 从而降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snatch: {
 		name: "抢夺",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6081,12 +6665,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snipeshot: {
 		name: "狙击",
-		desc: "能无视具有吸引对手招式效果的 特性或招式的影响。 可以向选定的对手进行攻击。",
+		// Official flavor text: "能无视具有吸引对手招式效果的 特性或招式的影响。 可以向选定的对手进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snore: {
 		name: "打鼾",
-		desc: "在自己睡觉时， 发出噪音进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "在自己睡觉时， 发出噪音进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snowscape: {
@@ -6096,7 +6682,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	soak: {
 		name: "浸水",
-		desc: "将大量的水泼向对手， 从而使其变成水属性。",
+		// Official flavor text: "将大量的水泼向对手， 从而使其变成水属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6110,7 +6697,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	softboiled: {
 		name: "生蛋",
-		desc: "回复自己最大ＨＰ的一半。",
+		// Official flavor text: "回复自己最大ＨＰ的一半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6121,7 +6709,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarbeam: {
 		name: "日光束",
-		desc: "第１回合收集满满的日光， 第２回合发射光束进行攻击。",
+		// Official flavor text: "第１回合收集满满的日光， 第２回合发射光束进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6150,7 +6739,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarblade: {
 		name: "日光刃",
-		desc: "第１回合收集满满的日光， 第２回合将此力量 集中在剑上进行攻击。",
+		// Official flavor text: "第１回合收集满满的日光， 第２回合将此力量 集中在剑上进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6163,7 +6753,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sonicboom: {
 		name: "音爆",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6175,34 +6766,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spacialrend: {
 		name: "亚空裂斩",
-		desc: "将对手连同周围的空间一起 撕裂并给予伤害。 容易击中要害。",
+		// Official flavor text: "将对手连同周围的空间一起 撕裂并给予伤害。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spark: {
 		name: "电光",
-		desc: "让电流覆盖全身， 猛撞向对手进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "让电流覆盖全身， 猛撞向对手进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sparklingaria: {
 		name: "泡影的咏叹调",
-		desc: "随着唱歌会放出很多气球。 受到此招式攻击时， 灼伤会被治愈。",
+		// Official flavor text: "随着唱歌会放出很多气球。 受到此招式攻击时， 灼伤会被治愈。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sparklyswirl: {
 		name: "亮亮风暴",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spectralthief: {
 		name: "暗影偷盗",
-		desc: "潜入对手的影子进行攻击。 会夺取对手的能力提升。",
+		// Official flavor text: "潜入对手的影子进行攻击。 会夺取对手的能力提升。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		clearBoost: "  [SOURCE]夺取了提高的那部分能力！",
 	},
 	speedswap: {
 		name: "速度互换",
-		desc: "将对手和自己的速度 进行互换。",
+		// Official flavor text: "将对手和自己的速度 进行互换。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]互换了各自的速度！",
@@ -6214,7 +6811,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiderweb: {
 		name: "蛛网",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6231,7 +6829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikecannon: {
 		name: "尖刺加农炮",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6245,7 +6844,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikes: {
 		name: "撒菱",
-		desc: "在对手的脚下扔撒菱。 对替换出场的对手的宝可梦 给予伤害。",
+		// Official flavor text: "在对手的脚下扔撒菱。 对替换出场的对手的宝可梦 给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6267,7 +6867,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikyshield: {
 		name: "尖刺防守",
-		desc: "防住对手攻击的同时， 削减接触到自己的对手的体力。",
+		// Official flavor text: "防住对手攻击的同时， 削减接触到自己的对手的体力。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6288,12 +6889,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiritbreak: {
 		name: "灵魂冲击",
-		desc: "用足以让对手一蹶不振的 气势进行攻击。 会降低对手的特攻。",
+		// Official flavor text: "用足以让对手一蹶不振的 气势进行攻击。 会降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spiritshackle: {
 		name: "缝影",
-		desc: "攻击的同时， 缝住对手的影子， 使其无法逃走。",
+		// Official flavor text: "攻击的同时， 缝住对手的影子， 使其无法逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6301,7 +6904,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spite: {
 		name: "怨恨",
-		desc: "对对手最后使用的招式 怀有怨恨， 减少４ＰＰ该招式。",
+		// Official flavor text: "对对手最后使用的招式 怀有怨恨， 减少４ＰＰ该招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6315,7 +6919,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spitup: {
 		name: "喷出",
-		desc: "将积蓄的力量 撞向对手进行攻击。 积蓄得越多，威力越大。",
+		// Official flavor text: "将积蓄的力量 撞向对手进行攻击。 积蓄得越多，威力越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6332,12 +6937,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	splinteredstormshards: {
 		name: "狼啸石牙飓风暴",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	splishysplash: {
 		name: "滔滔冲浪",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spore: {
@@ -6346,7 +6953,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spotlight: {
 		name: "聚光灯",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#followme",
@@ -6359,7 +6967,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stealthrock: {
 		name: "隐形岩",
-		desc: "将无数岩石悬浮在对手的周围， 从而对替换出场的对手的 宝可梦给予伤害。",
+		// Official flavor text: "将无数岩石悬浮在对手的周围， 从而对替换出场的对手的 宝可梦给予伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6374,12 +6983,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steameruption: {
 		name: "蒸汽爆炸",
-		desc: "将滚烫的蒸汽喷向对手。 有时会让对手灼伤。",
+		// Official flavor text: "将滚烫的蒸汽喷向对手。 有时会让对手灼伤。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steamroller: {
 		name: "疯狂滚压",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6387,24 +6998,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steelbeam: {
 		name: "铁蹄光线",
-		desc: "将从全身聚集的钢铁 化为光束，激烈地发射出去。 自己也会受到伤害。",
+		// Official flavor text: "将从全身聚集的钢铁 化为光束，激烈地发射出去。 自己也会受到伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "铁滚轮",
-		desc: "在破坏场地的同时攻击对手。 如果脚下没有任何场地状态存在， 使出此招式时便会失败。",
+		// Official flavor text: "在破坏场地的同时攻击对手。 如果脚下没有任何场地状态存在， 使出此招式时便会失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelwing: {
 		name: "钢翼",
-		desc: "用坚硬的翅膀敲打 对手进行攻击。 有时会提高自己的防御。",
+		// Official flavor text: "用坚硬的翅膀敲打 对手进行攻击。 有时会提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stickyweb: {
 		name: "黏黏网",
-		desc: "在对手周围围上黏黏的网， 降低替换出场的对手的速度。",
+		// Official flavor text: "在对手周围围上黏黏的网， 降低替换出场的对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6416,7 +7031,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stockpile: {
 		name: "蓄力",
-		desc: "积蓄力量， 提高自己的防御和特防。 最多积蓄３次。",
+		// Official flavor text: "积蓄力量， 提高自己的防御和特防。 最多积蓄３次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6428,12 +7044,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stokedsparksurfer: {
 		name: "驾雷驭电戏冲浪",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stomp: {
 		name: "踩踏",
-		desc: "用大脚踩踏对手进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "用大脚踩踏对手进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6453,7 +7071,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stompingtantrum: {
 		name: "跺脚",
-		desc: "化悔恨为力量进行攻击。 如果上一回合招式没有打中， 威力就会翻倍。",
+		// Official flavor text: "化悔恨为力量进行攻击。 如果上一回合招式没有打中， 威力就会翻倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stoneaxe: {
@@ -6463,22 +7082,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneedge: {
 		name: "尖石攻击",
-		desc: "用尖尖的岩石 刺入对手进行攻击。 容易击中要害。",
+		// Official flavor text: "用尖尖的岩石 刺入对手进行攻击。 容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	storedpower: {
 		name: "辅助力量",
-		desc: "用蓄积起来的力量攻击对手。 自己的能力提高得越多， 威力就越大。",
+		// Official flavor text: "用蓄积起来的力量攻击对手。 自己的能力提高得越多， 威力就越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stormthrow: {
 		name: "山岚摔",
-		desc: "向对手使出强烈的一击。 攻击必定会击中要害。",
+		// Official flavor text: "向对手使出强烈的一击。 攻击必定会击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strangesteam: {
 		name: "神奇蒸汽",
-		desc: "喷出烟雾攻击对手。 有时会使对手混乱。",
+		// Official flavor text: "喷出烟雾攻击对手。 有时会使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strength: {
@@ -6487,12 +7110,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strengthsap: {
 		name: "吸取力量",
-		desc: "给自己回复和对手攻击力 相同数值的ＨＰ， 然后降低对手的攻击。",
+		// Official flavor text: "给自己回复和对手攻击力 相同数值的ＨＰ， 然后降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stringshot: {
 		name: "吐丝",
-		desc: "用口中吐出的丝缠绕对手， 从而大幅降低对手的速度。",
+		// Official flavor text: "用口中吐出的丝缠绕对手， 从而大幅降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6504,7 +7129,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	struggle: {
 		name: "挣扎",
-		desc: "当自己的ＰＰ耗尽时， 努力挣扎攻击对手。 自己也会受到少许伤害。",
+		// Official flavor text: "当自己的ＰＰ耗尽时， 努力挣扎攻击对手。 自己也会受到少许伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6526,12 +7152,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strugglebug: {
 		name: "虫之抵抗",
-		desc: "抵抗并攻击对手。 降低对手的特攻。",
+		// Official flavor text: "抵抗并攻击对手。 降低对手的特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stuffcheeks: {
 		name: "大快朵颐",
-		desc: "吃掉携带的树果， 大幅提高防御。",
+		// Official flavor text: "吃掉携带的树果， 大幅提高防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6540,7 +7168,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stunspore: {
 		name: "麻痹粉",
-		desc: "撒出麻痹粉， 从而让对手陷入麻痹状态。",
+		// Official flavor text: "撒出麻痹粉， 从而让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6551,7 +7180,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	submission: {
 		name: "地狱翻滚",
-		desc: "将对手连同自己一起 摔向地面进行攻击。 自己也会受到少许伤害。",
+		// Official flavor text: "将对手连同自己一起 摔向地面进行攻击。 自己也会受到少许伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6565,7 +7195,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	substitute: {
 		name: "替身",
-		desc: "削减少许自己的ＨＰ， 制造分身。 分身将成为自己的替身。",
+		// Official flavor text: "削减少许自己的ＨＰ， 制造分身。 分身将成为自己的替身。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6590,7 +7221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	suckerpunch: {
 		name: "突袭",
-		desc: "可以比对手先攻击。 对手使出的招式 如果不是攻击招式则会失败。",
+		// Official flavor text: "可以比对手先攻击。 对手使出的招式 如果不是攻击招式则会失败。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6598,7 +7230,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sunnyday: {
 		name: "大晴天",
-		desc: "在５回合内让日照变得强烈， 从而提高火属性的招式威力。 水属性的招式威力则降低。",
+		// Official flavor text: "在５回合内让日照变得强烈， 从而提高火属性的招式威力。 水属性的招式威力则降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6609,7 +7242,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sunsteelstrike: {
 		name: "流星闪冲",
-		desc: "以流星般的气势猛撞对手。 可以无视对手的特性进行攻击。",
+		// Official flavor text: "以流星般的气势猛撞对手。 可以无视对手的特性进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supercellslam: {
@@ -6621,7 +7255,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	superfang: {
 		name: "愤怒门牙",
-		desc: "用锋利的门牙 猛烈地咬住对手进行攻击。 对手的ＨＰ减半。",
+		// Official flavor text: "用锋利的门牙 猛烈地咬住对手进行攻击。 对手的ＨＰ减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6630,7 +7265,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	superpower: {
 		name: "蛮力",
-		desc: "发挥惊人的力量攻击对手。 自己的攻击和防御会降低。",
+		// Official flavor text: "发挥惊人的力量攻击对手。 自己的攻击和防御会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonic: {
@@ -6643,7 +7279,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	surf: {
 		name: "冲浪",
-		desc: "利用大浪 攻击自己周围所有的宝可梦。",
+		// Official flavor text: "利用大浪 攻击自己周围所有的宝可梦。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6659,12 +7296,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	surgingstrikes: {
 		name: "水流连打",
-		desc: "将水之流派修炼至大成的 仿若行云流水般的３次连击。 必定会击中要害。",
+		// Official flavor text: "将水之流派修炼至大成的 仿若行云流水般的３次连击。 必定会击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swagger: {
 		name: "虚张声势",
-		desc: "激怒对手，使其混乱。 因为愤怒，对手的攻击 会大幅提高。",
+		// Official flavor text: "激怒对手，使其混乱。 因为愤怒，对手的攻击 会大幅提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6672,7 +7311,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swallow: {
 		name: "吞下",
-		desc: "将积蓄的力量吞下， 从而回复自己的ＨＰ。 积蓄得越多，回复越大。",
+		// Official flavor text: "将积蓄的力量吞下， 从而回复自己的ＨＰ。 积蓄得越多，回复越大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6687,7 +7327,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sweetscent: {
 		name: "甜甜香气",
-		desc: "用香气大幅降低对手的闪避率。",
+		// Official flavor text: "用香气大幅降低对手的闪避率。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6699,7 +7340,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swift: {
 		name: "高速星星",
-		desc: "发射星形的光攻击对手。 攻击必定会命中。",
+		// Official flavor text: "发射星形的光攻击对手。 攻击必定会命中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6711,7 +7353,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	switcheroo: {
 		name: "掉包",
-		desc: "用一闪而过的速度 交换自己和对手的持有物。",
+		// Official flavor text: "用一闪而过的速度 交换自己和对手的持有物。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6736,17 +7379,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swordsdance: {
 		name: "剑舞",
-		desc: "激烈地跳起战舞提高气势。 大幅提高自己的攻击。",
+		// Official flavor text: "激烈地跳起战舞提高气势。 大幅提高自己的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	synchronoise: {
 		name: "同步干扰",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	synthesis: {
 		name: "光合作用",
-		desc: "回复自己的ＨＰ。 根据天气的不同， 回复量也会有所变化。",
+		// Official flavor text: "回复自己的ＨＰ。 根据天气的不同， 回复量也会有所变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6782,7 +7428,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailglow: {
 		name: "萤火",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6791,7 +7438,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailslap: {
 		name: "扫尾拍打",
-		desc: "用坚硬的尾巴 拍打对手进行攻击。 连续攻击２～５次。",
+		// Official flavor text: "用坚硬的尾巴 拍打对手进行攻击。 连续攻击２～５次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6799,7 +7447,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailwhip: {
 		name: "摇尾巴",
-		desc: "可爱地左右摇晃尾巴， 诱使对手疏忽大意。 会降低对手的防御。",
+		// Official flavor text: "可爱地左右摇晃尾巴， 诱使对手疏忽大意。 会降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6807,7 +7456,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailwind: {
 		name: "顺风",
-		desc: "刮起猛烈的旋风， 在４回合内 提高我方全员的速度。",
+		// Official flavor text: "刮起猛烈的旋风， 在４回合内 提高我方全员的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6819,7 +7469,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	takedown: {
 		name: "猛撞",
-		desc: "以惊人的气势 撞向对手进行攻击。 自己也会受到少许伤害。",
+		// Official flavor text: "以惊人的气势 撞向对手进行攻击。 自己也会受到少许伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6838,14 +7489,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tarshot: {
 		name: "沥青射击",
-		desc: "泼洒黏糊糊的沥青， 降低对手的速度， 并且使对手的弱点变为火。",
+		// Official flavor text: "泼洒黏糊糊的沥青， 降低对手的速度， 并且使对手的弱点变为火。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]变得怕火了！",
 	},
 	taunt: {
 		name: "挑衅",
-		desc: "使对手愤怒。 在３回合内让对手 只能使出给予伤害的招式。",
+		// Official flavor text: "使对手愤怒。 在３回合内让对手 只能使出给予伤害的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6871,12 +7524,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tearfullook: {
 		name: "泪眼汪汪",
-		desc: "变得泪眼汪汪， 让对手丧失斗志。 从而降低对手的攻击和特攻。",
+		// Official flavor text: "变得泪眼汪汪， 让对手丧失斗志。 从而降低对手的攻击和特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teatime: {
 		name: "茶会",
-		desc: "举办一场茶会， 场上的所有宝可梦都会 吃掉自己携带的树果。",
+		// Official flavor text: "举办一场茶会， 场上的所有宝可梦都会 吃掉自己携带的树果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  大家开茶会，吃了树果！",
@@ -6884,7 +7539,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	technoblast: {
 		name: "高科技光炮",
-		desc: "向对手放出光弹。 属性会根据自己 携带的卡带不同而改变。",
+		// Official flavor text: "向对手放出光弹。 属性会根据自己 携带的卡带不同而改变。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
@@ -6893,12 +7549,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	teeterdance: {
 		name: "摇晃舞",
-		desc: "摇摇晃晃地跳起舞蹈， 让自己周围的宝可梦 陷入混乱状态。",
+		// Official flavor text: "摇摇晃晃地跳起舞蹈， 让自己周围的宝可梦 陷入混乱状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	telekinesis: {
 		name: "意念移物",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6912,7 +7570,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	teleport: {
 		name: "瞬间移动",
-		desc: "当有后备宝可梦在时， 如果使用就可以进行替换。 野生的宝可梦会逃走。",
+		// Official flavor text: "当有后备宝可梦在时， 如果使用就可以进行替换。 野生的宝可梦会逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6936,12 +7595,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	terrainpulse: {
 		name: "大地波动",
-		desc: "借助场地的力量进行攻击。 视使出招式时场地状态不同， 招式的属性和威力会有所变化。",
+		// Official flavor text: "借助场地的力量进行攻击。 视使出招式时场地状态不同， 招式的属性和威力会有所变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thief: {
 		name: "小偷",
-		desc: "攻击的同时盗取道具。 当自己携带道具时， 不会去盗取。",
+		// Official flavor text: "攻击的同时盗取道具。 当自己携带道具时， 不会去盗取。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6970,12 +7631,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thousandarrows: {
 		name: "千箭齐发",
-		desc: "可以击中浮在空中的宝可梦。 空中的对手被击落后， 会掉到地面。",
+		// Official flavor text: "可以击中浮在空中的宝可梦。 空中的对手被击落后， 会掉到地面。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thousandwaves: {
 		name: "千波激荡",
-		desc: "从地面掀起波浪进行攻击。 被掀入波浪中的对手， 将无法从战斗中逃走。",
+		// Official flavor text: "从地面掀起波浪进行攻击。 被掀入波浪中的对手， 将无法从战斗中逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6983,7 +7646,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thrash: {
 		name: "大闹一番",
-		desc: "在２～３回合内， 乱打一气地攻击对手。 大闹一番后自己会陷入混乱。",
+		// Official flavor text: "在２～３回合内， 乱打一气地攻击对手。 大闹一番后自己会陷入混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7004,7 +7668,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	throatchop: {
 		name: "地狱突刺",
-		desc: "受到此招式攻击的对手， 会因为地狱般的痛苦，在２回合内， 变得无法使出声音类招式。",
+		// Official flavor text: "受到此招式攻击的对手， 会因为地狱般的痛苦，在２回合内， 变得无法使出声音类招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7014,7 +7679,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunder: {
 		name: "打雷",
-		desc: "向对手劈下暴雷进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "向对手劈下暴雷进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7035,12 +7701,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderbolt: {
 		name: "十万伏特",
-		desc: "向对手发出 强力电击进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "向对手发出 强力电击进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thundercage: {
 		name: "雷电囚笼",
-		desc: "将对手困在 电流四溅的囚笼中， 在４～５回合内进行攻击。",
+		// Official flavor text: "将对手困在 电流四溅的囚笼中， 在４～５回合内进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7055,32 +7723,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderfang: {
 		name: "雷电牙",
-		desc: "用蓄满电流的牙齿咬住对手。 有时会使对手畏缩 或陷入麻痹状态。",
+		// Official flavor text: "用蓄满电流的牙齿咬住对手。 有时会使对手畏缩 或陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderouskick: {
 		name: "雷鸣蹴击",
-		desc: "以雷电般的动作 戏耍对手的同时使出脚踢。 可降低对手的防御。",
+		// Official flavor text: "以雷电般的动作 戏耍对手的同时使出脚踢。 可降低对手的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderpunch: {
 		name: "雷电拳",
-		desc: "用充满电流的拳头攻击对手。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "用充满电流的拳头攻击对手。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thundershock: {
 		name: "电击",
-		desc: "发出电流刺激对手进行攻击。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "发出电流刺激对手进行攻击。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderwave: {
 		name: "电磁波",
-		desc: "向对手发出 微弱的电击， 从而让对手陷入麻痹状态。",
+		// Official flavor text: "向对手发出 微弱的电击， 从而让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tickle: {
 		name: "挠痒",
-		desc: "给对手挠痒，使其发笑， 从而降低对手的攻击和防御。",
+		// Official flavor text: "给对手挠痒，使其发笑， 从而降低对手的攻击和防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tidyup: {
@@ -7092,7 +7766,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	topsyturvy: {
 		name: "颠倒",
-		desc: "颠倒对手身上的 所有能力变化， 变成和原来相反的状态。",
+		// Official flavor text: "颠倒对手身上的 所有能力变化， 变成和原来相反的状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	torchsong: {
@@ -7102,7 +7777,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	torment: {
 		name: "无理取闹",
-		desc: "向对手无理取闹， 令其不能连续２次 使出相同招式。",
+		// Official flavor text: "向对手无理取闹， 令其不能连续２次 使出相同招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]遭到了无理取闹！",
@@ -7110,7 +7786,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxic: {
 		name: "剧毒",
-		desc: "让对手陷入剧毒状态。 随着回合的推进， 中毒伤害会增加。",
+		// Official flavor text: "让对手陷入剧毒状态。 随着回合的推进， 中毒伤害会增加。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7119,7 +7796,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicspikes: {
 		name: "毒菱",
-		desc: "在对手的脚下撒毒菱。 使对手替换出场的宝可梦中毒。",
+		// Official flavor text: "在对手的脚下撒毒菱。 使对手替换出场的宝可梦中毒。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7136,7 +7814,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicthread: {
 		name: "毒丝",
-		desc: "将混有毒的丝吐向对手。 使其中毒， 从而降低对手的速度。",
+		// Official flavor text: "将混有毒的丝吐向对手。 使其中毒， 从而降低对手的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7150,7 +7829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	transform: {
 		name: "变身",
-		desc: "变身成对手宝可梦的样子， 能够使用和对手 完全相同的招式。",
+		// Official flavor text: "变身成对手宝可梦的样子， 能够使用和对手 完全相同的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7167,7 +7847,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triattack: {
 		name: "三重攻击",
-		desc: "用３种光线进行攻击。 有时会让对手陷入 麻痹、灼伤或冰冻的状态。",
+		// Official flavor text: "用３种光线进行攻击。 有时会让对手陷入 麻痹、灼伤或冰冻的状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7179,7 +7860,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trick: {
 		name: "戏法",
-		desc: "抓住对手的空隙， 交换自己和对手的持有物。",
+		// Official flavor text: "抓住对手的空隙， 交换自己和对手的持有物。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7207,12 +7889,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trickortreat: {
 		name: "万圣夜",
-		desc: "邀请对手参加万圣夜。 使对手被追加幽灵属性。",
+		// Official flavor text: "邀请对手参加万圣夜。 使对手被追加幽灵属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	trickroom: {
 		name: "戏法空间",
-		desc: "制造出离奇的空间。 在５回合内 速度慢的宝可梦可以先行动。",
+		// Official flavor text: "制造出离奇的空间。 在５回合内 速度慢的宝可梦可以先行动。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7225,7 +7909,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tripleaxel: {
 		name: "三旋击",
-		desc: "连续３次踢对手进行攻击。 每踢中一次，威力就会提高。",
+		// Official flavor text: "连续３次踢对手进行攻击。 每踢中一次，威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tripledive: {
@@ -7235,7 +7920,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triplekick: {
 		name: "三连踢",
-		desc: "连续３次踢对手进行攻击。 每踢中一次，威力就会提高。",
+		// Official flavor text: "连续３次踢对手进行攻击。 每踢中一次，威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7250,12 +7936,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tropkick: {
 		name: "热带踢",
-		desc: "向对手使出来自南国的火热脚踢。 从而降低对手的攻击。",
+		// Official flavor text: "向对手使出来自南国的火热脚踢。 从而降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	trumpcard: {
 		name: "王牌",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twinbeam: {
@@ -7265,7 +7953,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twineedle: {
 		name: "双针",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7287,7 +7976,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twister: {
 		name: "龙卷风",
-		desc: "兴起龙卷风， 将对手卷入进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "兴起龙卷风， 将对手卷入进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7304,7 +7994,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	uproar: {
 		name: "吵闹",
-		desc: "在３回合内 用骚乱攻击对手。 在此期间谁都不能入眠。",
+		// Official flavor text: "在３回合内 用骚乱攻击对手。 在此期间谁都不能入眠。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7326,7 +8017,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	uturn: {
 		name: "急速折返",
-		desc: "在攻击之后急速返回， 和后备宝可梦进行替换。",
+		// Official flavor text: "在攻击之后急速返回， 和后备宝可梦进行替换。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7339,27 +8031,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	vacuumwave: {
 		name: "真空波",
-		desc: "挥动拳头， 掀起真空波。 必定能够先制攻击。",
+		// Official flavor text: "挥动拳头， 掀起真空波。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vcreate: {
 		name: "Ｖ热焰",
-		desc: "从前额产生灼热的火焰， 舍身撞击对手。 防御、特防和速度会降低。",
+		// Official flavor text: "从前额产生灼热的火焰， 舍身撞击对手。 防御、特防和速度会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	veeveevolley: {
 		name: "砰砰击破",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	venomdrench: {
 		name: "毒液陷阱",
-		desc: "将特殊的毒液泼向对手。 对处于中毒状态的对手， 其攻击、特攻和速度都会降低。",
+		// Official flavor text: "将特殊的毒液泼向对手。 对处于中毒状态的对手， 其攻击、特攻和速度都会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	venoshock: {
 		name: "毒液冲击",
-		desc: "将特殊的毒液泼向对手。 对处于中毒状态的对手， 威力会变成２倍。",
+		// Official flavor text: "将特殊的毒液泼向对手。 对处于中毒状态的对手， 威力会变成２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	victorydance: {
@@ -7377,12 +8074,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	vitalthrow: {
 		name: "借力摔",
-		desc: "会在对手之后进行攻击。 但是自己的攻击必定会命中。",
+		// Official flavor text: "会在对手之后进行攻击。 但是自己的攻击必定会命中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	voltswitch: {
 		name: "伏特替换",
-		desc: "在攻击之后急速返回， 和后备宝可梦进行替换。",
+		// Official flavor text: "在攻击之后急速返回， 和后备宝可梦进行替换。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7392,7 +8091,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	volttackle: {
 		name: "伏特攻击",
-		desc: "让电流覆盖全身猛撞向对手。 自己也会受到不小的伤害。 有时会让对手陷入麻痹状态。",
+		// Official flavor text: "让电流覆盖全身猛撞向对手。 自己也会受到不小的伤害。 有时会让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7405,7 +8105,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wakeupslap: {
 		name: "唤醒巴掌",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7413,7 +8114,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterfall: {
 		name: "攀瀑",
-		desc: "以惊人的气势扑向对手。 有时会使对手畏缩。",
+		// Official flavor text: "以惊人的气势扑向对手。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7426,7 +8128,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterpledge: {
 		name: "水之誓约",
-		desc: "用水柱进行攻击。 如果和火组合，威力就会提高， 天空中会挂上彩虹。",
+		// Official flavor text: "用水柱进行攻击。 如果和火组合，威力就会提高， 天空中会挂上彩虹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]正在等待[TARGET]……",
@@ -7435,12 +8138,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterpulse: {
 		name: "水之波动",
-		desc: "用水的震动攻击对手。 有时会使对手混乱。",
+		// Official flavor text: "用水的震动攻击对手。 有时会使对手混乱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watershuriken: {
 		name: "飞水手里剑",
-		desc: "用粘液制成的手里剑， 连续攻击２～５次。 必定能够先制攻击。",
+		// Official flavor text: "用粘液制成的手里剑， 连续攻击２～５次。 必定能够先制攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7451,7 +8156,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watersport: {
 		name: "玩水",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7464,7 +8170,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterspout: {
 		name: "喷水",
-		desc: "掀起潮水进行攻击。 自己的ＨＰ越少， 招式的威力越小。",
+		// Official flavor text: "掀起潮水进行攻击。 自己的ＨＰ越少， 招式的威力越小。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wavecrash: {
@@ -7474,7 +8181,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	weatherball: {
 		name: "气象球",
-		desc: "根据使用时的天气， 招式属性和威力会改变。",
+		// Official flavor text: "根据使用时的天气， 招式属性和威力会改变。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7491,7 +8199,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlpool: {
 		name: "潮旋",
-		desc: "将对手困在激烈的 水流旋涡中， 在４～５回合内进行攻击。",
+		// Official flavor text: "将对手困在激烈的 水流旋涡中， 在４～５回合内进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7514,7 +8223,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlwind: {
 		name: "吹飞",
-		desc: "吹飞对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。",
+		// Official flavor text: "吹飞对手，强制拉后备宝可梦上场。 如果对手为野生宝可梦， 战斗将直接结束。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7529,7 +8239,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wickedblow: {
 		name: "暗冥强击",
-		desc: "将恶之流派修炼至大成的 猛烈一击。 必定会击中要害。",
+		// Official flavor text: "将恶之流派修炼至大成的 猛烈一击。 必定会击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wickedtorque: {
@@ -7539,7 +8250,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wideguard: {
 		name: "广域防守",
-		desc: "在１回合内防住 击打我方全员的攻击。",
+		// Official flavor text: "在１回合内防住 击打我方全员的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7565,12 +8277,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildcharge: {
 		name: "疯狂伏特",
-		desc: "让电流覆盖全身， 撞向对手进行攻击。 自己也会受到少许伤害。",
+		// Official flavor text: "让电流覆盖全身， 撞向对手进行攻击。 自己也会受到少许伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	willowisp: {
 		name: "鬼火",
-		desc: "放出怪异的火焰， 从而让对手陷入灼伤状态。",
+		// Official flavor text: "放出怪异的火焰， 从而让对手陷入灼伤状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wingattack: {
@@ -7579,7 +8293,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wish: {
 		name: "祈愿",
-		desc: "在下一回合回复自己或是 替换出场的宝可梦最大ＨＰ的一半。",
+		// Official flavor text: "在下一回合回复自己或是 替换出场的宝可梦最大ＨＰ的一半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7590,17 +8305,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	withdraw: {
 		name: "缩入壳中",
-		desc: "缩入壳里保护身体， 从而提高自己的防御。",
+		// Official flavor text: "缩入壳里保护身体， 从而提高自己的防御。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wonderroom: {
 		name: "奇妙空间",
-		desc: "制造出离奇的空间。 在５回合内互换 所有宝可梦的防御和特防。",
+		// Official flavor text: "制造出离奇的空间。 在５回合内互换 所有宝可梦的防御和特防。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	woodhammer: {
 		name: "木槌",
-		desc: "用坚硬的躯体 撞击对手进行攻击。 自己也会受到不小的伤害。",
+		// Official flavor text: "用坚硬的躯体 撞击对手进行攻击。 自己也会受到不小的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7609,12 +8327,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	workup: {
 		name: "自我激励",
-		desc: "激励自己， 从而提高攻击和特攻。",
+		// Official flavor text: "激励自己， 从而提高攻击和特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	worryseed: {
 		name: "烦恼种子",
-		desc: "种植心神不宁的种子。 使对手不能入眠， 并将特性变成不眠。",
+		// Official flavor text: "种植心神不宁的种子。 使对手不能入眠， 并将特性变成不眠。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7634,7 +8354,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wrap: {
 		name: "紧束",
-		desc: "使用长长的身体或藤蔓等， 在４～５回合内 紧束对手进行攻击。",
+		// Official flavor text: "使用长长的身体或藤蔓等， 在４～５回合内 紧束对手进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7662,7 +8383,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wringout: {
 		name: "绞紧",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7674,29 +8396,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	yawn: {
 		name: "哈欠",
-		desc: "打个大哈欠引起睡意。 在下一回合让对手陷入睡眠状态。",
+		// Official flavor text: "打个大哈欠引起睡意。 在下一回合让对手陷入睡眠状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  让[POKEMON]产生睡意了！",
 	},
 	zapcannon: {
 		name: "电磁炮",
-		desc: "发射大炮一样的 电流进行攻击。 让对手陷入麻痹状态。",
+		// Official flavor text: "发射大炮一样的 电流进行攻击。 让对手陷入麻痹状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zenheadbutt: {
 		name: "意念头锤",
-		desc: "将思念的力量集中在 前额进行攻击。 有时会使对手畏缩。",
+		// Official flavor text: "将思念的力量集中在 前额进行攻击。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zingzap: {
 		name: "麻麻刺刺",
-		desc: "撞向对手，并发出强电， 使其感到麻麻刺刺的。 有时会使对手畏缩。",
+		// Official flavor text: "撞向对手，并发出强电， 使其感到麻麻刺刺的。 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zippyzap: {
 		name: "电电加速",
-		desc: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。",
+		// Official flavor text: "无法使用这个招式。 虽然忘记之后就再也想不起来了， 但还是建议忘记这个招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI

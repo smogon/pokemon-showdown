@@ -1,12 +1,14 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "1000만볼트",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	absorb: {
 		name: "흡수",
-		desc: "양분을 흡수하여 공격한다. 상대에게 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다.",
+		// Official flavor text: "양분을 흡수하여 공격한다. 상대에게 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -23,12 +25,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	accelerock: {
 		name: "액셀록",
-		desc: "재빠른 스피드로 상대에게 부딪쳐서 공격한다. 반드시 선제공격할 수 있다.",
+		// Official flavor text: "재빠른 스피드로 상대에게 부딪쳐서 공격한다. 반드시 선제공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acid: {
 		name: "용해액",
-		desc: "강한 산을 상대에게 끼얹어 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "강한 산을 상대에게 끼얹어 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -44,7 +48,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acidarmor: {
 		name: "녹기",
-		desc: "세포의 변화로 액체가 되어 자신의 방어를 크게 올린다.",
+		// Official flavor text: "세포의 변화로 액체가 되어 자신의 방어를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
@@ -53,7 +58,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acidspray: {
 		name: "애시드봄",
-		desc: "상대를 녹이는 액체를 토해내서 공격한다. 상대의 특수방어를 크게 떨어뜨린다.",
+		// Official flavor text: "상대를 녹이는 액체를 토해내서 공격한다. 상대의 특수방어를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acrobatics: {
@@ -62,7 +68,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acupressure: {
 		name: "경혈찌르기",
-		desc: "경혈을 눌러 몸을 활성화시킨다. 능력 중 하나를 크게 올린다.",
+		// Official flavor text: "경혈을 눌러 몸을 활성화시킨다. 능력 중 하나를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -74,29 +81,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aeroblast: {
 		name: "에어로블라스트",
-		desc: "공기의 소용돌이를 발사하여 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "공기의 소용돌이를 발사하여 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	afteryou: {
 		name: "당신먼저",
-		desc: "상대의 행동을 도와서 자신이 행동한 뒤에 바로 움직일 수 있도록 한다.",
+		// Official flavor text: "상대의 행동을 도와서 자신이 행동한 뒤에 바로 움직일 수 있도록 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [TARGET:topic] 배려를 받아들이기로 했다!",
 	},
 	agility: {
 		name: "고속이동",
-		desc: "힘을 빼고 몸을 가볍게 해서 고속으로 움직인다. 자신의 스피드를 크게 올린다.",
+		// Official flavor text: "힘을 빼고 몸을 가볍게 해서 고속으로 움직인다. 자신의 스피드를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aircutter: {
 		name: "에어커터",
-		desc: "날카로운 바람으로 상대를 베어 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "날카로운 바람으로 상대를 베어 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	airslash: {
 		name: "에어슬래시",
-		desc: "하늘까지 베어 가르는 공기의 칼날로 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "하늘까지 베어 가르는 공기의 칼날로 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
@@ -110,7 +122,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	allyswitch: {
 		name: "사이드체인지",
-		desc: "이상한 힘으로 순간이동하여 자신과 같은 편의 위치를 바꾼다.",
+		// Official flavor text: "이상한 힘으로 순간이동하여 자신과 같은 편의 위치를 바꾼다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -123,7 +136,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	amnesia: {
 		name: "망각술",
-		desc: "머리를 비워서 순간적으로 무언가를 잊어버림으로써 자신의 특수방어를 크게 올린다.",
+		// Official flavor text: "머리를 비워서 순간적으로 무언가를 잊어버림으로써 자신의 특수방어를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -132,7 +146,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	anchorshot: {
 		name: "앵커샷",
-		desc: "앵커를 상대에게 휘감아서 공격한다. 상대는 도망칠 수 없게 된다.",
+		// Official flavor text: "앵커를 상대에게 휘감아서 공격한다. 상대는 도망칠 수 없게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -140,12 +155,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ancientpower: {
 		name: "원시의힘",
-		desc: "원시의 힘으로 공격한다. 자신의 모든 능력이 오를 때가 있다.",
+		// Official flavor text: "원시의 힘으로 공격한다. 자신의 모든 능력이 오를 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	appleacid: {
 		name: "사과산",
-		desc: "새콤한 사과에서 만들어 낸 산성 액체로 공격한다. 상대의 특수방어를 떨어뜨린다.",
+		// Official flavor text: "새콤한 사과에서 만들어 낸 산성 액체로 공격한다. 상대의 특수방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquacutter: {
@@ -155,12 +172,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aquajet: {
 		name: "아쿠아제트",
-		desc: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진한다. 반드시 선제공격할 수 있다.",
+		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진한다. 반드시 선제공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquaring: {
 		name: "아쿠아링",
-		desc: "자신의 몸 주변을 물로 만든 베일로 덮는다. 매 턴 HP를 회복한다.",
+		// Official flavor text: "자신의 몸 주변을 물로 만든 베일로 덮는다. 매 턴 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 물의 고리를 둘렀다!",
@@ -182,7 +201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	armthrust: {
 		name: "손바닥치기",
-		desc: "펼친 양손으로 상대를 번갈아 쳐서 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "펼친 양손으로 상대를 번갈아 쳐서 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -196,7 +216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "아로마테라피",
-		desc: "기분 좋은 평온한 향기를 맡게 하여 같은 편 모두의 상태 이상을 회복한다.",
+		// Official flavor text: "기분 좋은 평온한 향기를 맡게 하여 같은 편 모두의 상태 이상을 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -206,12 +227,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromaticmist: {
 		name: "아로마미스트",
-		desc: "신비한 아로마 향으로 같은 편의 특수방어를 올린다.",
+		// Official flavor text: "신비한 아로마 향으로 같은 편의 특수방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	assist: {
 		name: "조수",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -234,7 +257,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	assurance: {
 		name: "승부굳히기",
-		desc: "그 턴에 상대가 이미 데미지를 입었다면 기술의 위력은 2배가 된다.",
+		// Official flavor text: "그 턴에 상대가 이미 데미지를 입었다면 기술의 위력은 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -242,7 +266,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	astonish: {
 		name: "놀래키기",
-		desc: "큰 소리 등으로 불시에 놀래켜서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "큰 소리 등으로 불시에 놀래켜서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -250,17 +275,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	astralbarrage: {
 		name: "아스트랄비트",
-		desc: "수많은 작은 영체를 상대에게 부딪쳐서 공격한다.",
+		// Official flavor text: "수많은 작은 영체를 상대에게 부딪쳐서 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	attackorder: {
 		name: "공격지령",
-		desc: "부하를 불러내어 상대를 향해서 공격시킨다. 급소에 맞기 쉽다.",
+		// Official flavor text: "부하를 불러내어 상대를 향해서 공격시킨다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	attract: {
 		name: "헤롱헤롱",
-		desc: "수컷은 암컷을 암컷은 수컷을 유혹하여 헤롱헤롱하게 만든다. 상대가 기술을 쓰기 어려워진다.",
+		// Official flavor text: "수컷은 암컷을 암컷은 수컷을 유혹하여 헤롱헤롱하게 만든다. 상대가 기술을 쓰기 어려워진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -282,12 +310,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurawheel: {
 		name: "오라휠",
-		desc: "볼주머니에 저장해둔 에너지로 공격하고 자신의 스피드를 올린다. 모르페코의 모습에 따라 타입이 바뀐다.",
+		// Official flavor text: "볼주머니에 저장해둔 에너지로 공격하고 자신의 스피드를 올린다. 모르페코의 모습에 따라 타입이 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aurorabeam: {
 		name: "오로라빔",
-		desc: "무지개색의 빔을 상대에게 발사하여 공격한다. 공격을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "무지개색의 빔을 상대에게 발사하여 공격한다. 공격을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -296,7 +326,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	auroraveil: {
 		name: "오로라베일",
-		desc: "5턴 동안 물리와 특수 기술의 데미지를 약하게 한다. 싸라기눈일 때만 쓸 수 있다.",
+		// Official flavor text: "5턴 동안 물리와 특수 기술의 데미지를 약하게 한다. 싸라기눈일 때만 쓸 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -308,14 +339,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	autotomize: {
 		name: "바디퍼지",
-		desc: "몸의 쓸모없는 부분을 깎는다. 자신의 스피드를 크게 올리고 체중도 가벼워진다.",
+		// Official flavor text: "몸의 쓸모없는 부분을 깎는다. 자신의 스피드를 크게 올리고 체중도 가벼워진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]의 몸이 가벼워졌다!",
 	},
 	avalanche: {
 		name: "눈사태",
-		desc: "상대로부터 기술을 받으면 그 상대에 대해서 기술의 위력이 2배가 된다.",
+		// Official flavor text: "상대로부터 기술을 받으면 그 상대에 대해서 기술의 위력이 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -330,17 +363,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	babydolleyes: {
 		name: "초롱초롱눈동자",
-		desc: "초롱초롱한 눈동자로 상대를 바라보며 공격을 떨어뜨린다. 반드시 선제공격할 수 있다.",
+		// Official flavor text: "초롱초롱한 눈동자로 상대를 바라보며 공격을 떨어뜨린다. 반드시 선제공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	baddybad: {
 		name: "아그아그존",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	banefulbunker: {
 		name: "토치카",
-		desc: "상대의 공격을 막음과 동시에 접촉한 상대에게 독을 퍼뜨린다.",
+		// Official flavor text: "상대의 공격을 막음과 동시에 접촉한 상대에게 독을 퍼뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -356,7 +392,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrage: {
 		name: "구슬던지기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -370,12 +407,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrier: {
 		name: "배리어",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	batonpass: {
 		name: "배턴터치",
-		desc: "교대 포켓몬과 바뀐다. 능력 변화는 바뀐 포켓몬이 그대로 이어받는다.",
+		// Official flavor text: "교대 포켓몬과 바뀐다. 능력 변화는 바뀐 포켓몬이 그대로 이어받는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -398,14 +437,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	beakblast: {
 		name: "부리캐논",
-		desc: "먼저 부리를 가열시킨 다음 공격을 날린다. 가열 중에 만지면 화상을 입는다.",
+		// Official flavor text: "먼저 부리를 가열시킨 다음 공격을 날린다. 가열 중에 만지면 화상을 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 부리를 가열하기 시작했다!",
 	},
 	beatup: {
 		name: "집단구타",
-		desc: "같은 편 전원이 공격한다. 동료 포켓몬이 많을수록 기술의 공격 횟수가 증가한다.",
+		// Official flavor text: "같은 편 전원이 공격한다. 동료 포켓몬이 많을수록 기술의 공격 횟수가 증가한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -435,7 +476,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	belch: {
 		name: "트림",
-		desc: "상대를 향해 트림을 하여 데미지를 준다. 나무열매를 먹지 않으면 쓸 수 없다.",
+		// Official flavor text: "상대를 향해 트림을 하여 데미지를 준다. 나무열매를 먹지 않으면 쓸 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -444,7 +486,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bellydrum: {
 		name: "배북",
-		desc: "자신의 HP를 최대 HP의 절반만큼 감소시켜 자신의 공격을 최대로 올린다.",
+		// Official flavor text: "자신의 HP를 최대 HP의 절반만큼 감소시켜 자신의 공격을 최대로 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -454,7 +497,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bestow: {
 		name: "기프트패스",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -467,7 +511,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bide: {
 		name: "참기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -489,7 +534,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bind: {
 		name: "조이기",
-		desc: "긴 몸이나 덩굴 등을 써서 4-5턴 동안 상대를 조여 공격한다.",
+		// Official flavor text: "긴 몸이나 덩굴 등을 써서 4-5턴 동안 상대를 조여 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -517,7 +563,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bite: {
 		name: "물기",
-		desc: "날카롭고 뾰족한 이빨로 물어서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "날카롭고 뾰족한 이빨로 물어서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -540,12 +587,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blastburn: {
 		name: "블라스트번",
-		desc: "폭발하는 불꽃으로 상대를 태워서 공격한다. 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "폭발하는 불꽃으로 상대를 태워서 공격한다. 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazekick: {
 		name: "블레이즈킥",
-		desc: "공격한 상대를 화상 상태로 만들 때가 있다. 급소에도 맞기 쉽다.",
+		// Official flavor text: "공격한 상대를 화상 상태로 만들 때가 있다. 급소에도 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazingtorque: {
@@ -560,7 +609,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blizzard: {
 		name: "눈보라",
-		desc: "세찬 눈보라를 상대에게 내뿜어 공격한다. 얼음 상태로 만들 때가 있다.",
+		// Official flavor text: "세찬 눈보라를 상대에게 내뿜어 공격한다. 얼음 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -576,7 +626,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	block: {
 		name: "블록",
-		desc: "양팔을 벌려 막아서서 상대의 도주로를 가로막아 도망칠 수 없게 한다.",
+		// Official flavor text: "양팔을 벌려 막아서서 상대의 도주로를 가로막아 도망칠 수 없게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -601,17 +652,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blueflare: {
 		name: "푸른불꽃",
-		desc: "아름다우면서도 격렬한 푸른불꽃으로 상대를 둘러싸서 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "아름다우면서도 격렬한 푸른불꽃으로 상대를 둘러싸서 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bodypress: {
 		name: "바디프레스",
-		desc: "몸을 부딪쳐서 공격한다. 방어가 높을수록 주는 데미지가 올라간다.",
+		// Official flavor text: "몸을 부딪쳐서 공격한다. 방어가 높을수록 주는 데미지가 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bodyslam: {
 		name: "누르기",
-		desc: "몸 전체로 상대를 덮쳐눌러 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "몸 전체로 상대를 덮쳐눌러 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -619,22 +673,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	boltbeak: {
 		name: "전격부리",
-		desc: "전기를 두른 부리로 찌른다. 상대보다 먼저 공격하면 기술의 위력은 2배가 된다.",
+		// Official flavor text: "전기를 두른 부리로 찌른다. 상대보다 먼저 공격하면 기술의 위력은 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	boltstrike: {
 		name: "뇌격",
-		desc: "방대한 전기를 몸에 둘러 상대에게 돌진해서 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "방대한 전기를 몸에 둘러 상대에게 돌진해서 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	boneclub: {
 		name: "뼈다귀치기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bonemerang: {
 		name: "뼈다귀부메랑",
-		desc: "손에 들고 있는 뼈를 상대에게 날려서 날아갈 때와 돌아올 때 2회 연속 데미지를 준다.",
+		// Official flavor text: "손에 들고 있는 뼈를 상대에게 날려서 날아갈 때와 돌아올 때 2회 연속 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -648,7 +706,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonerush: {
 		name: "본러시",
-		desc: "단단한 뼈로 상대를 세게 때려서 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "단단한 뼈로 상대를 세게 때려서 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -662,12 +721,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	boomburst: {
 		name: "폭음파",
-		desc: "무시무시한 폭음의 파괴력으로 주위에 있는 포켓몬을 공격한다.",
+		// Official flavor text: "무시무시한 폭음의 파괴력으로 주위에 있는 포켓몬을 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bounce: {
 		name: "뛰어오르기",
-		desc: "하늘 높이 뛰어올라 2턴째에 상대를 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "하늘 높이 뛰어올라 2턴째에 상대를 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -683,17 +744,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bouncybubble: {
 		name: "생생버블",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	branchpoke: {
 		name: "가지찌르기",
-		desc: "날카롭고 뾰족한 가지로 상대를 찔러서 공격한다.",
+		// Official flavor text: "날카롭고 뾰족한 가지로 상대를 찔러서 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bravebird: {
 		name: "브레이브버드",
-		desc: "날개를 접어 저공비행으로 돌격한다. 자신도 상당한 데미지를 입는다.",
+		// Official flavor text: "날개를 접어 저공비행으로 돌격한다. 자신도 상당한 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -702,7 +766,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	breakingswipe: {
 		name: "와이드브레이커",
-		desc: "강인한 꼬리를 세차게 휘둘러서 상대를 공격한다. 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "강인한 꼬리를 세차게 휘둘러서 상대를 공격한다. 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
@@ -711,7 +776,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	brickbreak: {
 		name: "깨뜨리다",
-		desc: "수도로 기세 좋게 내려쳐서 상대를 공격한다. 빛의장막이나 리플렉터 등도 파괴할 수 있다.",
+		// Official flavor text: "수도로 기세 좋게 내려쳐서 상대를 공격한다. 빛의장막이나 리플렉터 등도 파괴할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -728,17 +794,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	brine: {
 		name: "소금물",
-		desc: "상대가 HP의 절반 정도 상처를 입고 있으면 기술의 위력이 2배가 된다.",
+		// Official flavor text: "상대가 HP의 절반 정도 상처를 입고 있으면 기술의 위력이 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brutalswing: {
 		name: "세차게휘두르기",
-		desc: "자신의 몸을 세차게 휘둘러서 상대에게 데미지를 준다.",
+		// Official flavor text: "자신의 몸을 세차게 휘둘러서 상대에게 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bubble: {
 		name: "거품",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -750,7 +819,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bubblebeam: {
 		name: "거품광선",
-		desc: "거품을 기세 좋게 상대에게 발사하여 공격한다. 스피드를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "거품을 기세 좋게 상대에게 발사하여 공격한다. 스피드를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -759,7 +829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bugbite: {
 		name: "벌레먹기",
-		desc: "물어서 공격한다. 상대가 나무열매를 지니고 있을 때 먹어서 나무열매의 효과를 받을 수 있다.",
+		// Official flavor text: "물어서 공격한다. 상대가 나무열매를 지니고 있을 때 먹어서 나무열매의 효과를 받을 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -769,27 +840,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bugbuzz: {
 		name: "벌레의야단법석",
-		desc: "진동으로 음파를 일으켜서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "진동으로 음파를 일으켜서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulkup: {
 		name: "벌크업",
-		desc: "몸에 힘을 담아 근육을 두껍게 해서 자신의 공격과 방어를 올린다.",
+		// Official flavor text: "몸에 힘을 담아 근육을 두껍게 해서 자신의 공격과 방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulldoze: {
 		name: "땅고르기",
-		desc: "땅을 힘껏 밟아 자신의 주위에 있는 포켓몬을 공격한다. 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "땅을 힘껏 밟아 자신의 주위에 있는 포켓몬을 공격한다. 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulletpunch: {
 		name: "불릿펀치",
-		desc: "탄환처럼 빠르고 단단한 펀치를 상대에게 날린다. 반드시 선제공격을 할 수 있다.",
+		// Official flavor text: "탄환처럼 빠르고 단단한 펀치를 상대에게 날린다. 반드시 선제공격을 할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulletseed: {
 		name: "씨기관총",
-		desc: "씨앗을 기세 좋게 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "씨앗을 기세 좋게 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -808,12 +884,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	burningjealousy: {
 		name: "질투의불꽃",
-		desc: "질투의 에너지로 상대를 공격한다. 그 턴에 능력이 올라간 포켓몬을 화상 상태로 만든다.",
+		// Official flavor text: "질투의 에너지로 상대를 공격한다. 그 턴에 능력이 올라간 포켓몬을 화상 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	burnup: {
 		name: "불사르기",
-		desc: "전신의 불꽃을 모두 태워서 큰 데미지를 준다. 자신의 불꽃타입이 없어진다.",
+		// Official flavor text: "전신의 불꽃을 모두 태워서 큰 데미지를 준다. 자신의 불꽃타입이 없어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -823,17 +901,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	buzzybuzz: {
 		name: "찌릿찌릿일렉",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	calmmind: {
 		name: "명상",
-		desc: "조용히 정신을 통일하고 마음을 가라앉혀서 자신의 특수공격과 특수방어를 올린다.",
+		// Official flavor text: "조용히 정신을 통일하고 마음을 가라앉혀서 자신의 특수공격과 특수방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	camouflage: {
 		name: "보호색",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -852,7 +933,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	captivate: {
 		name: "유혹",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	catastropika: {
@@ -872,7 +954,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	charge: {
 		name: "충전",
-		desc: "다음 턴에 쓸 전기타입 기술의 위력을 올린다. 자신의 특수방어도 올라간다.",
+		// Official flavor text: "다음 턴에 쓸 전기타입 기술의 위력을 올린다. 자신의 특수방어도 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -887,17 +970,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	chargebeam: {
 		name: "차지빔",
-		desc: "전격의 다발을 상대에게 발사한다. 전기를 모아서 자신의 특수공격을 올릴 때가 있다.",
+		// Official flavor text: "전격의 다발을 상대에게 발사한다. 전기를 모아서 자신의 특수공격을 올릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	charm: {
 		name: "애교부리기",
-		desc: "귀엽게 바라보고 방심을 유도하여 상대의 공격을 크게 떨어뜨린다.",
+		// Official flavor text: "귀엽게 바라보고 방심을 유도하여 상대의 공격을 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chatter: {
 		name: "수다",
-		desc: "매우 시끄럽고 수다스러운 음파로 상대를 공격한다. 상대를 혼란시킨다.",
+		// Official flavor text: "매우 시끄럽고 수다스러운 음파로 상대를 공격한다. 상대를 혼란시킨다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -922,7 +1008,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	chipaway: {
 		name: "야금야금",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chloroblast: {
@@ -932,12 +1019,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	circlethrow: {
 		name: "배대뒤치기",
-		desc: "상대를 내던져서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다.",
+		// Official flavor text: "상대를 내던져서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clamp: {
 		name: "껍질끼우기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -965,17 +1054,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	clangingscales: {
 		name: "스케일노이즈",
-		desc: "전신의 비늘을 비벼서 큰 소리를 내 공격한다. 공격 후 자신의 방어가 떨어진다.",
+		// Official flavor text: "전신의 비늘을 비벼서 큰 소리를 내 공격한다. 공격 후 자신의 방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clangoroussoul: {
 		name: "소울비트",
-		desc: "자신의 HP를 조금 깎아서 모든 능력을 올린다.",
+		// Official flavor text: "자신의 HP를 조금 깎아서 모든 능력을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clangoroussoulblaze: {
 		name: "브레이징소울비트",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clearsmog: {
@@ -984,17 +1076,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	closecombat: {
 		name: "인파이트",
-		desc: "방어를 포기하고 상대 쪽으로 깊숙이 돌격한다. 자신의 방어와 특수방어가 떨어진다.",
+		// Official flavor text: "방어를 포기하고 상대 쪽으로 깊숙이 돌격한다. 자신의 방어와 특수방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	coaching: {
 		name: "코칭",
-		desc: "적절한 지도를 통해서 같은 편 전원의 공격과 방어를 올린다.",
+		// Official flavor text: "적절한 지도를 통해서 같은 편 전원의 공격과 방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	coil: {
 		name: "똬리틀기",
-		desc: "똬리를 틀어서 집중한다. 자신의 공격과 방어와 명중률을 올린다.",
+		// Official flavor text: "똬리를 틀어서 집중한다. 자신의 공격과 방어와 명중률을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	collisioncourse: {
@@ -1009,7 +1104,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cometpunch: {
 		name: "연속펀치",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1028,22 +1124,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	confide: {
 		name: "비밀이야기",
-		desc: "비밀 이야기를 해서 상대의 집중력을 잃게 하여 특수공격을 떨어뜨린다.",
+		// Official flavor text: "비밀 이야기를 해서 상대의 집중력을 잃게 하여 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	confuseray: {
 		name: "이상한빛",
-		desc: "이상한 빛을 상대에게 비춰 당황하게 한다. 상대를 혼란시킨다.",
+		// Official flavor text: "이상한 빛을 상대에게 비춰 당황하게 한다. 상대를 혼란시킨다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	confusion: {
 		name: "염동력",
-		desc: "약한 염동력을 상대에게 보내어 공격한다. 상대를 혼란시킬 때가 있다.",
+		// Official flavor text: "약한 염동력을 상대에게 보내어 공격한다. 상대를 혼란시킬 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	constrict: {
 		name: "휘감기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1056,7 +1156,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	conversion: {
 		name: "텍스처",
-		desc: "자신의 타입을 배운 기술 중 가장 위에 있는 기술과 같은 타입으로 바꾼다.",
+		// Official flavor text: "자신의 타입을 배운 기술 중 가장 위에 있는 기술과 같은 타입으로 바꾼다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1077,7 +1178,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	conversion2: {
 		name: "텍스처2",
-		desc: "상대가 마지막으로 쓴 기술에 저항할 수 있도록 자신의 타입을 변화시킨다.",
+		// Official flavor text: "상대가 마지막으로 쓴 기술에 저항할 수 있도록 자신의 타입을 변화시킨다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1093,7 +1195,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	copycat: {
 		name: "흉내쟁이",
-		desc: "직전에 나온 기술을 흉내 내어 같은 기술을 쓴다. 기술이 나오지 않았으면 실패한다.",
+		// Official flavor text: "직전에 나온 기술을 흉내 내어 같은 기술을 쓴다. 기술이 나오지 않았으면 실패한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1113,7 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	coreenforcer: {
 		name: "코어퍼니셔",
-		desc: "데미지를 준 상대가 이미 행동을 끝냈다면 상대의 특성을 없애버린다.",
+		// Official flavor text: "데미지를 준 상대가 이미 행동을 끝냈다면 상대의 특성을 없애버린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1128,7 +1232,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	corrosivegas: {
 		name: "부식가스",
-		desc: "주위에 있는 모든 것을 강력한 산성 가스로 뒤덮어서 지니고 있는 도구를 녹여버린다.",
+		// Official flavor text: "주위에 있는 모든 것을 강력한 산성 가스로 뒤덮어서 지니고 있는 도구를 녹여버린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1139,22 +1244,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cosmicpower: {
 		name: "코스믹파워",
-		desc: "우주로부터 신비한 힘을 손에 넣음으로써 자신의 방어와 특수방어를 올린다.",
+		// Official flavor text: "우주로부터 신비한 힘을 손에 넣음으로써 자신의 방어와 특수방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cottonguard: {
 		name: "코튼가드",
-		desc: "푹신푹신한 솜털로 자신의 몸을 둘러싸서 지킨다. 방어를 매우 크게 올린다.",
+		// Official flavor text: "푹신푹신한 솜털로 자신의 몸을 둘러싸서 지킨다. 방어를 매우 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cottonspore: {
 		name: "목화포자",
-		desc: "솜처럼 폭신폭신한 포자를 착 달라붙게 해서 상대의 스피드를 크게 떨어뜨린다.",
+		// Official flavor text: "솜처럼 폭신폭신한 포자를 착 달라붙게 해서 상대의 스피드를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	counter: {
 		name: "카운터",
-		desc: "상대로부터 받은 물리공격의 데미지를 2배로 만들어 같은 상대에게 돌려준다.",
+		// Official flavor text: "상대로부터 받은 물리공격의 데미지를 2배로 만들어 같은 상대에게 돌려준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1175,14 +1284,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	courtchange: {
 		name: "코트체인지",
-		desc: "이상한 힘으로 서로의 필드 효과를 교체한다.",
+		// Official flavor text: "이상한 힘으로 서로의 필드 효과를 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON:topic] 서로의 필드 효과를 교체했다!",
 	},
 	covet: {
 		name: "탐내다",
-		desc: "귀엽게 애교 부리며 상대에게 다가가 지니고 있는 도구를 뺏는다.",
+		// Official flavor text: "귀엽게 애교 부리며 상대에게 다가가 지니고 있는 도구를 뺏는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1208,12 +1319,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crabhammer: {
 		name: "집게해머",
-		desc: "큰 집게를 상대에게 내리쳐서 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "큰 집게를 상대에게 내리쳐서 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	craftyshield: {
 		name: "트릭가드",
-		desc: "이상한 힘을 사용하여 같은 편을 공격하는 변화 기술을 막는다. 데미지 기술은 받는다.",
+		// Official flavor text: "이상한 힘을 사용하여 같은 편을 공격하는 변화 기술을 막는다. 데미지 기술은 받는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [TEAM:object] 트릭가드가 지켜 줬다!",
@@ -1221,17 +1334,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crosschop: {
 		name: "크로스촙",
-		desc: "양손으로 당수를 상대에게 힘껏 쳐서 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "양손으로 당수를 상대에게 힘껏 쳐서 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crosspoison: {
 		name: "크로스포이즌",
-		desc: "독 칼날로 상대를 베어 가른다. 독 상태로 만들 때가 있고 급소에도 맞기 쉽다.",
+		// Official flavor text: "독 칼날로 상대를 베어 가른다. 독 상태로 만들 때가 있고 급소에도 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crunch: {
 		name: "깨물어부수기",
-		desc: "날카로운 이빨로 상대를 깨물어 부숴서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "날카로운 이빨로 상대를 깨물어 부숴서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1240,12 +1356,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crushclaw: {
 		name: "브레이크클로",
-		desc: "단단하고 날카로운 손톱으로 베어 갈라서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "단단하고 날카로운 손톱으로 베어 갈라서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crushgrip: {
 		name: "묵사발",
-		desc: "굉장한 힘으로 상대를 묵사발로 만든다. 상대의 HP가 남아 있을수록 위력이 올라간다.",
+		// Official flavor text: "굉장한 힘으로 상대를 묵사발로 만든다. 상대의 HP가 남아 있을수록 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1253,7 +1371,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	curse: {
 		name: "저주",
-		desc: "기술을 쓰는 포켓몬이 고스트타입일 때와 그 이외의 타입일 때는 효과가 다르다.",
+		// Official flavor text: "기술을 쓰는 포켓몬이 고스트타입일 때와 그 이외의 타입일 때는 효과가 다르다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1271,17 +1390,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	darkestlariat: {
 		name: "DD래리어트",
-		desc: "양팔을 돌려 상대에게 부딪친다. 상대의 능력 변화에 상관없이 데미지를 준다.",
+		// Official flavor text: "양팔을 돌려 상대에게 부딪친다. 상대의 능력 변화에 상관없이 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkpulse: {
 		name: "악의파동",
-		desc: "몸에서 악의로 가득한 무서운 오라를 발한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "몸에서 악의로 가득한 무서운 오라를 발한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkvoid: {
 		name: "다크홀",
-		desc: "암흑의 세계로 끌고 가서 떨어뜨려 상대를 잠듦 상태로 만든다.",
+		// Official flavor text: "암흑의 세계로 끌고 가서 떨어뜨려 상대를 잠듦 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1293,22 +1415,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dazzlinggleam: {
 		name: "매지컬샤인",
-		desc: "강력한 빛을 내어 상대에게 데미지를 준다.",
+		// Official flavor text: "강력한 빛을 내어 상대에게 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decorate: {
 		name: "데코레이션",
-		desc: "데코레이션을 해서 상대의 공격과 특수공격을 크게 올린다.",
+		// Official flavor text: "데코레이션을 해서 상대의 공격과 특수공격을 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defendorder: {
 		name: "방어지령",
-		desc: "부하를 불러내어 자신의 몸을 뒤덮게 한다. 방어와 특수방어를 올릴 수 있다.",
+		// Official flavor text: "부하를 불러내어 자신의 몸을 뒤덮게 한다. 방어와 특수방어를 올릴 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defensecurl: {
 		name: "웅크리기",
-		desc: "몸을 둥글게 웅크려서 자신의 방어를 올린다.",
+		// Official flavor text: "몸을 둥글게 웅크려서 자신의 방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1319,7 +1445,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	defog: {
 		name: "안개제거",
-		desc: "강한 바람으로 상대의 리플렉터나 빛의장막 등을 제거한다. 회피율도 떨어뜨린다.",
+		// Official flavor text: "강한 바람으로 상대의 리플렉터나 빛의장막 등을 제거한다. 회피율도 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1335,7 +1462,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	destinybond: {
 		name: "길동무",
-		desc: "기술을 쓴 뒤 상대의 공격으로 기절했을 때 공격 상대도 기절하게 한다. 연속으로 쓰면 실패한다.",
+		// Official flavor text: "기술을 쓴 뒤 상대의 공격으로 기절했을 때 공격 상대도 기절하게 한다. 연속으로 쓰면 실패한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1349,7 +1477,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	detect: {
 		name: "판별",
-		desc: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다.",
+		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1379,7 +1508,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	diamondstorm: {
 		name: "다이아스톰",
-		desc: "다이아 폭풍을 일으켜 데미지를 준다. 자신의 방어를 크게 올릴 때가 있다.",
+		// Official flavor text: "다이아 폭풍을 일으켜 데미지를 준다. 자신의 방어를 크게 올릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1388,7 +1518,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dig: {
 		name: "구멍파기",
-		desc: "1턴째에 파고들어 2턴째에 상대를 공격한다.",
+		// Official flavor text: "1턴째에 파고들어 2턴째에 상대를 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1416,7 +1547,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	disable: {
 		name: "사슬묶기",
-		desc: "상대의 움직임을 막아 바로 전에 쓴 기술을 4턴 동안 사용할 수 없게 만든다.",
+		// Official flavor text: "상대의 움직임을 막아 바로 전에 쓴 기술을 4턴 동안 사용할 수 없게 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1447,17 +1579,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	disarmingvoice: {
 		name: "차밍보이스",
-		desc: "매혹적인 울음소리를 내어 상대에게 정신적 데미지를 준다. 공격은 반드시 명중한다.",
+		// Official flavor text: "매혹적인 울음소리를 내어 상대에게 정신적 데미지를 준다. 공격은 반드시 명중한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	discharge: {
 		name: "방전",
-		desc: "눈부신 전격으로 자신의 주위에 있는 포켓몬을 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "눈부신 전격으로 자신의 주위에 있는 포켓몬을 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dive: {
 		name: "다이빙",
-		desc: "1턴째에 잠수했다가 2턴째에 떠올라 공격한다.",
+		// Official flavor text: "1턴째에 잠수했다가 2턴째에 떠올라 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1470,7 +1605,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dizzypunch: {
 		name: "잼잼펀치",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1484,7 +1620,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doomdesire: {
 		name: "파멸의소원",
-		desc: "기술을 사용한 2턴 뒤에 무수한 빛의 다발이 상대를 공격한다.",
+		// Official flavor text: "기술을 사용한 2턴 뒤에 무수한 빛의 다발이 상대를 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1495,7 +1632,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleedge: {
 		name: "이판사판태클",
-		desc: "목숨을 걸고 상대에게 돌진하여 공격을 한다. 자신도 상당한 데미지를 입는다.",
+		// Official flavor text: "목숨을 걸고 상대에게 돌진하여 공격을 한다. 자신도 상당한 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1511,7 +1649,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doublehit: {
 		name: "더블어택",
-		desc: "꼬리 등을 써서 상대를 때려 공격한다. 2회 연속으로 데미지를 준다.",
+		// Official flavor text: "꼬리 등을 써서 상대를 때려 공격한다. 2회 연속으로 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1519,12 +1658,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleironbash: {
 		name: "더블펀처",
-		desc: "가슴의 너트를 축으로 회전시켜 2번 연속 팔로 힘껏 친다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "가슴의 너트를 축으로 회전시켜 2번 연속 팔로 힘껏 친다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	doublekick: {
 		name: "두번차기",
-		desc: "2개의 다리로 상대를 걷어차서 공격한다. 2회 연속으로 데미지를 준다.",
+		// Official flavor text: "2개의 다리로 상대를 걷어차서 공격한다. 2회 연속으로 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1545,7 +1686,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleslap: {
 		name: "연속뺨치기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1559,24 +1701,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleteam: {
 		name: "그림자분신",
-		desc: "재빠른 움직임으로 분신을 만들어 상대를 혼란시켜 회피율을 올린다.",
+		// Official flavor text: "재빠른 움직임으로 분신을 만들어 상대를 혼란시켜 회피율을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dracometeor: {
 		name: "용성군",
-		desc: "천공에서 운석을 상대에게 떨어뜨린다. 사용하면 반동으로 자신의 특수공격이 크게 떨어진다.",
+		// Official flavor text: "천공에서 운석을 상대에게 떨어뜨린다. 사용하면 반동으로 자신의 특수공격이 크게 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonascent: {
 		name: "화룡점정",
-		desc: "넓은 하늘에서 급속으로 강하하여 상대를 공격한다. 자신의 방어와 특수방어가 떨어진다.",
+		// Official flavor text: "넓은 하늘에서 급속으로 강하하여 상대를 공격한다. 자신의 방어와 특수방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		megaNoItem: "  [TRAINER]의 강한 기도가 [POKEMON]에게 닿았다!",
 	},
 	dragonbreath: {
 		name: "용의숨결",
-		desc: "굉장한 숨결을 상대에게 내뿜어 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "굉장한 숨결을 상대에게 내뿜어 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragoncheer: {
@@ -1592,17 +1738,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragondance: {
 		name: "용의춤",
-		desc: "신비롭고 힘센 춤을 격렬하게 춘다. 자신의 공격과 스피드를 올린다.",
+		// Official flavor text: "신비롭고 힘센 춤을 격렬하게 춘다. 자신의 공격과 스피드를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragondarts: {
 		name: "드래곤애로",
-		desc: "드라꼰으로 2번 공격한다. 상대가 2마리일 때는 각각 1번씩 공격한다.",
+		// Official flavor text: "드라꼰으로 2번 공격한다. 상대가 2마리일 때는 각각 1번씩 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonenergy: {
 		name: "드래곤에너지",
-		desc: "생명력을 파워로 바꿔서 상대를 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다.",
+		// Official flavor text: "생명력을 파워로 바꿔서 상대를 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonhammer: {
@@ -1619,7 +1768,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonrush: {
 		name: "드래곤다이브",
-		desc: "굉장한 살기로 위압하면서 몸통박치기한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "굉장한 살기로 위압하면서 몸통박치기한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1627,17 +1777,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragontail: {
 		name: "드래곤테일",
-		desc: "상대를 튕겨내서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다.",
+		// Official flavor text: "상대를 튕겨내서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drainingkiss: {
 		name: "드레인키스",
-		desc: "키스로 상대의 HP를 흡수한다. 준 데미지의 반 이상 HP를 회복한다.",
+		// Official flavor text: "키스로 상대의 HP를 흡수한다. 준 데미지의 반 이상 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drainpunch: {
 		name: "드레인펀치",
-		desc: "주먹으로 상대의 힘을 흡수한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다.",
+		// Official flavor text: "주먹으로 상대의 힘을 흡수한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1645,7 +1798,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dreameater: {
 		name: "꿈먹기",
-		desc: "잠자고 있는 상대의 꿈을 먹어 공격한다. 데미지의 절반을 HP로 회복한다.",
+		// Official flavor text: "잠자고 있는 상대의 꿈을 먹어 공격한다. 데미지의 절반을 HP로 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1663,22 +1817,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	drillrun: {
 		name: "드릴라이너",
-		desc: "드릴처럼 몸을 회전시켜서 상대에게 몸통박치기한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "드릴처럼 몸을 회전시켜서 상대에게 몸통박치기한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drumbeating: {
 		name: "드럼어택",
-		desc: "드럼의 뿌리를 연주로 조종해서 공격하는 것으로 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "드럼의 뿌리를 연주로 조종해서 공격하는 것으로 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dualchop: {
 		name: "더블촙",
-		desc: "몸의 단단한 부분으로 상대를 때려 공격한다. 2회 연속으로 데미지를 준다.",
+		// Official flavor text: "몸의 단단한 부분으로 상대를 때려 공격한다. 2회 연속으로 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dualwingbeat: {
 		name: "더블윙",
-		desc: "날개를 상대에게 부딪쳐서 공격한다. 2회 연속으로 데미지를 준다.",
+		// Official flavor text: "날개를 상대에게 부딪쳐서 공격한다. 2회 연속으로 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dynamaxcannon: {
@@ -1690,17 +1848,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dynamicpunch: {
 		name: "폭발펀치",
-		desc: "혼신의 힘으로 펀치를 날려서 공격한다. 상대를 반드시 혼란시킨다.",
+		// Official flavor text: "혼신의 힘으로 펀치를 날려서 공격한다. 상대를 반드시 혼란시킨다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthpower: {
 		name: "대지의힘",
-		desc: "상대의 발밑에 대지의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "상대의 발밑에 대지의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthquake: {
 		name: "지진",
-		desc: "지진의 충격으로 자신의 주위에 있는 포켓몬을 공격한다.",
+		// Official flavor text: "지진의 충격으로 자신의 주위에 있는 포켓몬을 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1716,17 +1877,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	echoedvoice: {
 		name: "에코보이스",
-		desc: "울리는 목소리로 상대를 공격한다. 매 턴 누군가 이 기술을 계속해서 쓰면 위력이 올라간다.",
+		// Official flavor text: "울리는 목소리로 상대를 공격한다. 매 턴 누군가 이 기술을 계속해서 쓰면 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eerieimpulse: {
 		name: "괴전파",
-		desc: "몸에서 발생시킨 괴전파를 상대에게 쏘아 특수공격을 크게 떨어뜨린다.",
+		// Official flavor text: "몸에서 발생시킨 괴전파를 상대에게 쏘아 특수공격을 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eeriespell: {
 		name: "섬뜩한주문",
-		desc: "강력한 사이코 파워로 공격한다. 상대가 마지막으로 사용한 기술의 PP를 3만큼 줄인다.",
+		// Official flavor text: "강력한 사이코 파워로 공격한다. 상대가 마지막으로 사용한 기술의 PP를 3만큼 줄인다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#spite",
@@ -1737,7 +1901,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electricterrain: {
 		name: "일렉트릭필드",
-		desc: "5턴 동안 일렉트릭필드로 만든다. 땅에 있는 포켓몬은 잠들지 않는다. 전기타입의 위력이 올라간다.",
+		// Official flavor text: "5턴 동안 일렉트릭필드로 만든다. 땅에 있는 포켓몬은 잠들지 않는다. 전기타입의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1745,14 +1910,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electrify: {
 		name: "송전",
-		desc: "상대가 기술을 쓰기 전에 송전하면 그 턴에 상대가 사용하는 기술은 전기타입이 된다.",
+		// Official flavor text: "상대가 기술을 쓰기 전에 송전하면 그 턴에 상대가 사용하는 기술은 전기타입이 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]의 기술이 송전으로 전기타입이 되었다!",
 	},
 	electroball: {
 		name: "일렉트릭볼",
-		desc: "전기 덩어리를 상대에게 부딪쳐서 공격한다. 상대보다 스피드가 빠를수록 위력이 올라간다.",
+		// Official flavor text: "전기 덩어리를 상대에게 부딪쳐서 공격한다. 상대보다 스피드가 빠를수록 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1772,12 +1939,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electroweb: {
 		name: "일렉트릭네트",
-		desc: "전기 네트로 상대를 붙잡아서 공격한다. 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "전기 네트로 상대를 붙잡아서 공격한다. 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	embargo: {
 		name: "금제",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 도구를 쓸 수 없게 되었다!",
@@ -1785,12 +1954,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ember: {
 		name: "불꽃세례",
-		desc: "작은 불꽃을 상대에게 발사하여 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "작은 불꽃을 상대에게 발사하여 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	encore: {
 		name: "앙코르",
-		desc: "상대에게 앵콜시킨 기술을 3번 연속으로 쓰게 한다.",
+		// Official flavor text: "상대에게 앵콜시킨 기술을 3번 연속으로 쓰게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1818,12 +1989,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	endeavor: {
 		name: "죽기살기",
-		desc: "상대의 HP가 자신의 HP와 같아지도록 데미지를 준다.",
+		// Official flavor text: "상대의 HP가 자신의 HP와 같아지도록 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	endure: {
 		name: "버티기",
-		desc: "공격을 받아도 HP를 반드시 1만큼은 남긴다. 연속으로 쓰면 실패하기 쉽다.",
+		// Official flavor text: "공격을 받아도 HP를 반드시 1만큼은 남긴다. 연속으로 쓰면 실패하기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1852,12 +2025,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	energyball: {
 		name: "에너지볼",
-		desc: "자연으로부터 모은 생명의 힘을 발사한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "자연으로부터 모은 생명의 힘을 발사한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	entrainment: {
 		name: "동료만들기",
-		desc: "이상한 리듬으로 춤춘다. 움직임을 흉내 내게 해서 자신과 상대의 특성을 똑같게 만든다.",
+		// Official flavor text: "이상한 리듬으로 춤춘다. 움직임을 흉내 내게 해서 자신과 상대의 특성을 똑같게 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1874,7 +2049,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eruption: {
 		name: "분화",
-		desc: "분노를 폭발시켜 상대를 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다.",
+		// Official flavor text: "분노를 폭발시켜 상대를 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	esperwing: {
@@ -1884,17 +2060,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eternabeam: {
 		name: "무한다이빔",
-		desc: "본래의 모습이 된 무한다이노 최대의 공격. 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "본래의 모습이 된 무한다이노 최대의 공격. 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	expandingforce: {
 		name: "와이드포스",
-		desc: "사이코 파워로 상대를 공격한다. 사이코필드일 때는 위력이 오르며 모든 상대에게 데미지를 준다.",
+		// Official flavor text: "사이코 파워로 상대를 공격한다. 사이코필드일 때는 위력이 오르며 모든 상대에게 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	explosion: {
 		name: "대폭발",
-		desc: "큰 폭발로 자신의 주위에 있는 포켓몬을 공격한다. 쓰고 나서는 기절한다.",
+		// Official flavor text: "큰 폭발로 자신의 주위에 있는 포켓몬을 공격한다. 쓰고 나서는 기절한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1912,7 +2091,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extrasensory: {
 		name: "신통력",
-		desc: "보이지 않는 이상한 힘을 보내어 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "보이지 않는 이상한 힘을 보내어 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1920,12 +2100,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extremeevoboost: {
 		name: "나인이볼부스트",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	extremespeed: {
 		name: "신속",
-		desc: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진하여 공격한다. 반드시 선제공격을 할 수 있다.",
+		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진하여 공격한다. 반드시 선제공격을 할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1933,7 +2115,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	facade: {
 		name: "객기",
-		desc: "자신이 독, 마비, 화상 상태일 때 날리면 기술의 위력이 2배가 된다.",
+		// Official flavor text: "자신이 독, 마비, 화상 상태일 때 날리면 기술의 위력이 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1941,7 +2124,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fairylock: {
 		name: "페어리록",
-		desc: "록을 걸어 다음 턴의 모든 포켓몬을 도망가지 못하게 한다.",
+		// Official flavor text: "록을 걸어 다음 턴의 모든 포켓몬을 도망가지 못하게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1955,7 +2139,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fakeout: {
 		name: "속이기",
-		desc: "선제공격으로 상대를 풀죽게 한다. 배틀에 나가서 바로 쓰지 않으면 성공할 수 없다.",
+		// Official flavor text: "선제공격으로 상대를 풀죽게 한다. 배틀에 나가서 바로 쓰지 않으면 성공할 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1963,7 +2148,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	faketears: {
 		name: "거짓울음",
-		desc: "우는 척을 하며 눈물을 흘린다. 난처하게 만들어 상대의 특수방어를 크게 떨어뜨린다.",
+		// Official flavor text: "우는 척을 하며 눈물을 흘린다. 난처하게 만들어 상대의 특수방어를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	falsesurrender: {
@@ -1972,17 +2158,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	falseswipe: {
 		name: "칼등치기",
-		desc: "상대의 HP가 반드시 1만 남도록 조절하여 공격한다.",
+		// Official flavor text: "상대의 HP가 반드시 1만 남도록 조절하여 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	featherdance: {
 		name: "깃털댄스",
-		desc: "깃털을 흩뿌려 상대의 몸에 휘감는다. 상대의 공격을 크게 떨어뜨린다.",
+		// Official flavor text: "깃털을 흩뿌려 상대의 몸에 휘감는다. 상대의 공격을 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	feint: {
 		name: "페인트",
-		desc: "방어나 판별 등을 하고 있는 상대에게 공격할 수 있다. 방어 효과를 해제시킨다.",
+		// Official flavor text: "방어나 판별 등을 하고 있는 상대에게 공격할 수 있다. 방어 효과를 해제시킨다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2003,7 +2192,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fellstinger: {
 		name: "마지막일침",
-		desc: "이 기술을 사용하여 상대를 쓰러뜨리면 공격이 매우 크게 오른다.",
+		// Official flavor text: "이 기술을 사용하여 상대를 쓰러뜨리면 공격이 매우 크게 오른다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2018,12 +2208,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fierydance: {
 		name: "불꽃춤",
-		desc: "불꽃을 두른 날개를 쳐서 공격한다. 자신의 특수공격이 오를 때가 있다.",
+		// Official flavor text: "불꽃을 두른 날개를 쳐서 공격한다. 자신의 특수공격이 오를 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fierywrath: {
 		name: "타오르는분노",
-		desc: "분노를 불꽃 같은 오라로 바꿔서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "분노를 불꽃 같은 오라로 바꿔서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	filletaway: {
@@ -2033,12 +2225,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	finalgambit: {
 		name: "목숨걸기",
-		desc: "목숨을 걸고 상대를 공격한다. 자신은 기절하게 되지만 상대에게 HP만큼의 데미지를 준다.",
+		// Official flavor text: "목숨을 걸고 상대를 공격한다. 자신은 기절하게 되지만 상대에게 HP만큼의 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fireblast: {
 		name: "불대문자",
-		desc: "큰 대자의 불꽃으로 상대를 불태운다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "큰 대자의 불꽃으로 상대를 불태운다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2047,7 +2241,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firefang: {
 		name: "불꽃엄니",
-		desc: "불꽃을 두른 이빨로 문다. 상대를 풀죽게 하거나 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "불꽃을 두른 이빨로 문다. 상대를 풀죽게 하거나 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2055,12 +2250,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firelash: {
 		name: "불꽃채찍",
-		desc: "불타는 채찍으로 상대를 친다. 공격을 받은 상대는 방어가 떨어진다.",
+		// Official flavor text: "불타는 채찍으로 상대를 친다. 공격을 받은 상대는 방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firepledge: {
 		name: "불꽃의맹세",
-		desc: "불꽃기둥으로 공격한다. 풀과 조합하면 위력이 올라가고 주위가 불바다가 된다.",
+		// Official flavor text: "불꽃기둥으로 공격한다. 풀과 조합하면 위력이 올라가고 주위가 불바다가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
@@ -2070,12 +2267,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firepunch: {
 		name: "불꽃펀치",
-		desc: "불꽃을 담은 펀치로 상대를 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "불꽃을 담은 펀치로 상대를 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firespin: {
 		name: "회오리불꽃",
-		desc: "세차게 소용돌이치는 불꽃 속에 4-5턴 동안 상대를 가두어 공격한다.",
+		// Official flavor text: "세차게 소용돌이치는 불꽃 속에 4-5턴 동안 상대를 가두어 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2103,7 +2302,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firstimpression: {
 		name: "만나자마자",
-		desc: "위력이 높은 기술이지만 배틀에 나가서 바로 쓰지 않으면 성공할 수 없다.",
+		// Official flavor text: "위력이 높은 기술이지만 배틀에 나가서 바로 쓰지 않으면 성공할 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2111,12 +2311,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fishiousrend: {
 		name: "아가미물기",
-		desc: "단단한 아가미로 문다. 상대보다 먼저 공격하면 기술의 위력은 2배가 된다.",
+		// Official flavor text: "단단한 아가미로 문다. 상대보다 먼저 공격하면 기술의 위력은 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fissure: {
 		name: "땅가르기",
-		desc: "땅이 갈라진 곳에 상대를 떨어뜨려 공격한다. 맞으면 일격에 기절한다.",
+		// Official flavor text: "땅이 갈라진 곳에 상대를 떨어뜨려 공격한다. 맞으면 일격에 기절한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2128,7 +2330,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flail: {
 		name: "바둥바둥",
-		desc: "바둥바둥 난동 부려서 공격한다. 자신의 HP가 적을수록 기술의 위력이 올라간다.",
+		// Official flavor text: "바둥바둥 난동 부려서 공격한다. 자신의 HP가 적을수록 기술의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2142,7 +2345,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flameburst: {
 		name: "불꽃튀기기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2152,22 +2356,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flamecharge: {
 		name: "니트로차지",
-		desc: "불꽃을 둘러 상대를 공격한다. 힘을 모아서 자신의 스피드를 올린다.",
+		// Official flavor text: "불꽃을 둘러 상대를 공격한다. 힘을 모아서 자신의 스피드를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flamethrower: {
 		name: "화염방사",
-		desc: "세찬 불꽃을 상대에게 발사하여 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "세찬 불꽃을 상대에게 발사하여 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flamewheel: {
 		name: "화염바퀴",
-		desc: "불꽃을 둘러 상대에게 돌진하여 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "불꽃을 둘러 상대에게 돌진하여 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flareblitz: {
 		name: "플레어드라이브",
-		desc: "불꽃을 두르고 돌진한다. 자신도 상당한 데미지를 입는다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "불꽃을 두르고 돌진한다. 자신도 상당한 데미지를 입는다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2176,27 +2384,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flash: {
 		name: "플래시",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flashcannon: {
 		name: "러스터캐논",
-		desc: "몸의 빛을 한곳에 모아서 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "몸의 빛을 한곳에 모아서 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flatter: {
 		name: "부추기기",
-		desc: "상대를 부추겨서 혼란시킨다. 동시에 상대의 특수공격도 올라가 버린다.",
+		// Official flavor text: "상대를 부추겨서 혼란시킨다. 동시에 상대의 특수공격도 올라가 버린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fleurcannon: {
 		name: "플뢰르캐논",
-		desc: "강력한 빔을 발산한 후 자신의 특수공격이 크게 떨어진다.",
+		// Official flavor text: "강력한 빔을 발산한 후 자신의 특수공격이 크게 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fling: {
 		name: "내던지기",
-		desc: "지니게 한 도구를 재빠르게 내던져서 공격한다. 도구에 따라 위력과 효과가 바뀐다.",
+		// Official flavor text: "지니게 한 도구를 재빠르게 내던져서 공격한다. 도구에 따라 위력과 효과가 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2206,24 +2419,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flipturn: {
 		name: "퀵턴",
-		desc: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다.",
+		// Official flavor text: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		switchOut: "#uturn",
 	},
 	floatyfall: {
 		name: "둥실둥실폴",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	floralhealing: {
 		name: "플라워힐",
-		desc: "최대 HP의 절반만큼 상대의 HP를 회복한다. 그래스필드일 때 효과가 올라간다.",
+		// Official flavor text: "최대 HP의 절반만큼 상대의 HP를 회복한다. 그래스필드일 때 효과가 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowershield: {
 		name: "플라워가드",
-		desc: "이상한 힘을 사용하여 배틀에 나와 있는 모든 풀타입 포켓몬의 방어를 올린다.",
+		// Official flavor text: "이상한 힘을 사용하여 배틀에 나와 있는 모든 풀타입 포켓몬의 방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowertrick: {
@@ -2233,7 +2450,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fly: {
 		name: "공중날기",
-		desc: "1턴째에 하늘을 날아 2턴째에 상대를 공격한다.",
+		// Official flavor text: "1턴째에 하늘을 날아 2턴째에 상대를 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2255,17 +2473,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flyingpress: {
 		name: "플라잉프레스",
-		desc: "공중에서 상대에게 다이브한다. 이 기술은 격투타입임과 동시에 비행타입이기도 하다.",
+		// Official flavor text: "공중에서 상대에게 다이브한다. 이 기술은 격투타입임과 동시에 비행타입이기도 하다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusblast: {
 		name: "기합구슬",
-		desc: "기합을 높여서 혼신의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "기합을 높여서 혼신의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusenergy: {
 		name: "기충전",
-		desc: "깊게 숨을 들이마셔 기합을 넣는다. 자신의 공격이 급소에 맞기 쉬워진다.",
+		// Official flavor text: "깊게 숨을 들이마셔 기합을 넣는다. 자신의 공격이 급소에 맞기 쉬워진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2282,7 +2503,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	focuspunch: {
 		name: "힘껏펀치",
-		desc: "정신력을 높여 펀치를 날린다. 기술을 쓰기 전에 공격을 받으면 실패한다.",
+		// Official flavor text: "정신력을 높여 펀치를 날린다. 기술을 쓰기 전에 공격을 받으면 실패한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2293,7 +2515,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	followme: {
 		name: "날따름",
-		desc: "자신에게 주목시켜 상대로부터의 공격을 모두 자신에게 향하게 한다.",
+		// Official flavor text: "자신에게 주목시켜 상대로부터의 공격을 모두 자신에게 향하게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2310,12 +2533,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	forcepalm: {
 		name: "발경",
-		desc: "상대의 몸에 충격파를 부딪쳐 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "상대의 몸에 충격파를 부딪쳐 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	foresight: {
 		name: "꿰뚫어보기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2331,17 +2556,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	forestscurse: {
 		name: "숲의저주",
-		desc: "상대에게 숲의 저주를 건다. 저주에 걸린 상대는 타입에 풀타입이 추가된다.",
+		// Official flavor text: "상대에게 숲의 저주를 건다. 저주에 걸린 상대는 타입에 풀타입이 추가된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	foulplay: {
 		name: "속임수",
-		desc: "상대의 힘을 이용한다. 싸우고 있는 상대의 공격이 높을수록 데미지가 올라간다.",
+		// Official flavor text: "상대의 힘을 이용한다. 싸우고 있는 상대의 공격이 높을수록 데미지가 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	freezedry: {
 		name: "프리즈드라이",
-		desc: "상대를 급격히 차갑게 하여 얼음 상태로 만들 때가 있다. 물타입 포켓몬에게도 효과가 굉장해진다.",
+		// Official flavor text: "상대를 급격히 차갑게 하여 얼음 상태로 만들 때가 있다. 물타입 포켓몬에게도 효과가 굉장해진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2350,39 +2578,46 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	freezeshock: {
 		name: "프리즈볼트",
-		desc: "전기를 두른 얼음덩어리로 2턴째에 상대를 내리친다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "전기를 두른 얼음덩어리로 2턴째에 상대를 내리친다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "  [POKEMON:topic] 차가운 빛에 둘러싸였다!",
 	},
 	freezingglare: {
 		name: "얼어붙는시선",
-		desc: "두 눈에서 사이코 파워를 발사해서 공격한다. 얼음 상태로 만들 때가 있다.",
+		// Official flavor text: "두 눈에서 사이코 파워를 발사해서 공격한다. 얼음 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	freezyfrost: {
 		name: "꽁꽁프로스트",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frenzyplant: {
 		name: "하드플랜트",
-		desc: "큰 나무로 상대를 힘껏 쳐서 공격한다. 다음 턴은 움직일 수 없게 된다.",
+		// Official flavor text: "큰 나무로 상대를 힘껏 쳐서 공격한다. 다음 턴은 움직일 수 없게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frostbreath: {
 		name: "얼음숨결",
-		desc: "차가운 숨결을 상대에게 내뿜어 공격한다. 반드시 급소에 맞는다.",
+		// Official flavor text: "차가운 숨결을 상대에게 내뿜어 공격한다. 반드시 급소에 맞는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frustration: {
 		name: "화풀이",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	furyattack: {
 		name: "마구찌르기",
-		desc: "뿔이나 부리로 상대를 찔러서 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "뿔이나 부리로 상대를 찔러서 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2399,12 +2634,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	furycutter: {
 		name: "연속자르기",
-		desc: "낫이나 발톱 등으로 상대를 베어 공격한다. 연속으로 맞히면 위력이 올라간다.",
+		// Official flavor text: "낫이나 발톱 등으로 상대를 베어 공격한다. 연속으로 맞히면 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	furyswipes: {
 		name: "마구할퀴기",
-		desc: "손톱이나 낫 등으로 상대를 할퀴어서 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "손톱이나 낫 등으로 상대를 할퀴어서 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2421,17 +2658,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fusionbolt: {
 		name: "크로스썬더",
-		desc: "거대한 천둥을 내리친다. 거대한 불꽃의 영향을 받아 기술의 위력이 올라간다.",
+		// Official flavor text: "거대한 천둥을 내리친다. 거대한 불꽃의 영향을 받아 기술의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fusionflare: {
 		name: "크로스플레임",
-		desc: "거대한 불꽃을 내리친다. 거대한 천둥의 영향을 받아 기술의 위력이 올라간다.",
+		// Official flavor text: "거대한 불꽃을 내리친다. 거대한 천둥의 영향을 받아 기술의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	futuresight: {
 		name: "미래예지",
-		desc: "기술을 사용한 2턴 뒤에 상대에게 염동력의 덩어리를 보내어 공격한다.",
+		// Official flavor text: "기술을 사용한 2턴 뒤에 상대에게 염동력의 덩어리를 보내어 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2445,7 +2685,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gastroacid: {
 		name: "위액",
-		desc: "상대의 몸에 위액을 내뱉는다. 달라붙은 위액은 상대의 특성 효과를 지운다.",
+		// Official flavor text: "상대의 몸에 위액을 내뱉는다. 달라붙은 위액은 상대의 특성 효과를 지운다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2461,29 +2702,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	geargrind: {
 		name: "기어소서",
-		desc: "강철의 기어를 상대에게 던져서 공격한다. 2회 연속으로 데미지를 준다.",
+		// Official flavor text: "강철의 기어를 상대에게 던져서 공격한다. 2회 연속으로 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gearup: {
 		name: "어시스트기어",
-		desc: "기어를 넣는 것으로 특성 플러스와 마이너스의 공격과 특수공격이 올라간다.",
+		// Official flavor text: "기어를 넣는 것으로 특성 플러스와 마이너스의 공격과 특수공격이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	genesissupernova: {
 		name: "오리진즈슈퍼노바",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	geomancy: {
 		name: "지오컨트롤",
-		desc: "1턴째에 에너지를 흡수하여 2턴째에 특수공격, 특수방어, 스피드를 크게 올린다.",
+		// Official flavor text: "1턴째에 에너지를 흡수하여 2턴째에 특수공격, 특수방어, 스피드를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "[POKEMON:topic] 파워를 모으고 있다!",
 	},
 	gigadrain: {
 		name: "기가드레인",
-		desc: "양분을 흡수하여 공격한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다.",
+		// Official flavor text: "양분을 흡수하여 공격한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2494,7 +2740,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gigaimpact: {
 		name: "기가임팩트",
-		desc: "가진 힘을 모두 사용해서 상대에게 돌격한다. 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "가진 힘을 모두 사용해서 상대에게 돌격한다. 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigatonhammer: {
@@ -2507,12 +2754,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glaciallance: {
 		name: "블리자드랜스",
-		desc: "눈보라를 두른 얼음의 창을 상대에게 던져서 공격한다.",
+		// Official flavor text: "눈보라를 두른 얼음의 창을 상대에게 던져서 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciate: {
 		name: "얼어붙은세계",
-		desc: "차가운 냉기를 상대에게 내뿜어 공격한다. 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "차가운 냉기를 상대에게 내뿜어 공격한다. 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaiverush: {
@@ -2522,7 +2771,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glare: {
 		name: "뱀눈초리",
-		desc: "배의 무늬로 겁을 주어 상대를 마비 상태로 만든다.",
+		// Official flavor text: "배의 무늬로 겁을 주어 상대를 마비 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2533,7 +2783,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glitzyglow: {
 		name: "콸콸오라",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
@@ -2723,12 +2974,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grassknot: {
 		name: "풀묶기",
-		desc: "풀을 휘감아서 상대를 쓰러뜨린다. 상대가 무거울수록 위력이 올라간다.",
+		// Official flavor text: "풀을 휘감아서 상대를 쓰러뜨린다. 상대가 무거울수록 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grasspledge: {
 		name: "풀의맹세",
-		desc: "풀기둥으로 공격한다. 물과 조합하면 위력이 올라가고 주변이 습지초원이 된다.",
+		// Official flavor text: "풀기둥으로 공격한다. 물과 조합하면 위력이 올라가고 주변이 습지초원이 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
@@ -2741,12 +2994,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grassyglide: {
 		name: "그래스슬라이더",
-		desc: "지면에 미끄러지듯 상대를 공격한다. 그래스필드일 때 반드시 선제공격할 수 있다.",
+		// Official flavor text: "지면에 미끄러지듯 상대를 공격한다. 그래스필드일 때 반드시 선제공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grassyterrain: {
 		name: "그래스필드",
-		desc: "5턴 동안 그래스필드로 만든다. 땅에 있으면 매 턴 회복한다. 풀타입의 위력이 올라간다.",
+		// Official flavor text: "5턴 동안 그래스필드로 만든다. 땅에 있으면 매 턴 회복한다. 풀타입의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2754,12 +3009,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gravapple: {
 		name: "G의힘",
-		desc: "높은 곳에서 사과를 떨어뜨려서 데미지를 준다. 상대의 방어를 떨어뜨린다.",
+		// Official flavor text: "높은 곳에서 사과를 떨어뜨려서 데미지를 준다. 상대의 방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gravity: {
 		name: "중력",
-		desc: "5턴 동안 부유나 비행타입에 땅타입의 기술이 맞게 된다. 공중으로 나는 기술도 사용할 수 없다.",
+		// Official flavor text: "5턴 동안 부유나 비행타입에 땅타입의 기술이 맞게 된다. 공중으로 나는 기술도 사용할 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2776,7 +3033,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	growl: {
 		name: "울음소리",
-		desc: "귀여운 울음소리를 들려주고 관심을 끌어 방심한 사이에 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "귀여운 울음소리를 들려주고 관심을 끌어 방심한 사이에 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2784,7 +3042,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	growth: {
 		name: "성장",
-		desc: "몸을 일시에 크게 성장시켜 공격과 특수공격을 올린다.",
+		// Official flavor text: "몸을 일시에 크게 성장시켜 공격과 특수공격을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2803,7 +3062,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grudge: {
 		name: "원념",
-		desc: "상대의 기술로 기절하면 원념을 담아 그 기술의 PP를 0으로 만든다.",
+		// Official flavor text: "상대의 기술로 기절하면 원념을 담아 그 기술의 PP를 0으로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]의 [MOVE:topic] 원념으로 PP가 0이 되었다!",
@@ -2811,24 +3071,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	guardianofalola: {
 		name: "알로라의수호자",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guardsplit: {
 		name: "가드셰어",
-		desc: "초능력으로 자신과 상대의 방어와 특수방어를 더해서 반으로 나눈다.",
+		// Official flavor text: "초능력으로 자신과 상대의 방어와 특수방어를 더해서 반으로 나눈다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON:topic] 서로의 가드를 셰어했다!",
 	},
 	guardswap: {
 		name: "가드스왑",
-		desc: "초능력으로 자신과 상대의 방어와 특수방어의 능력 변화를 교체한다.",
+		// Official flavor text: "초능력으로 자신과 상대의 방어와 특수방어의 능력 변화를 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guillotine: {
 		name: "가위자르기",
-		desc: "큰 집게로 상대를 베어 갈라 공격한다. 맞으면 일격에 기절한다.",
+		// Official flavor text: "큰 집게로 상대를 베어 갈라 공격한다. 맞으면 일격에 기절한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2840,12 +3104,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gunkshot: {
 		name: "더스트슈트",
-		desc: "더러운 쓰레기를 상대에게 부딪쳐서 공격한다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "더러운 쓰레기를 상대에게 부딪쳐서 공격한다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gust: {
 		name: "바람일으키기",
-		desc: "날개로 일으킨 격한 바람을 상대에게 부딪쳐서 공격한다.",
+		// Official flavor text: "날개로 일으킨 격한 바람을 상대에게 부딪쳐서 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2862,7 +3128,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gyroball: {
 		name: "자이로볼",
-		desc: "몸을 고속으로 회전시켜 몸통박치기한다. 상대보다 스피드가 낮을수록 위력은 올라간다.",
+		// Official flavor text: "몸을 고속으로 회전시켜 몸통박치기한다. 상대보다 스피드가 낮을수록 위력은 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2870,7 +3137,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hail: {
 		name: "싸라기눈",
-		desc: "5턴 동안 싸라기눈을 내리게 해서 얼음타입이 아닌 포켓몬 모두에게 데미지를 준다.",
+		// Official flavor text: "5턴 동안 싸라기눈을 내리게 해서 얼음타입이 아닌 포켓몬 모두에게 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2881,7 +3149,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hammerarm: {
 		name: "암해머",
-		desc: "강하고 무거운 주먹을 휘둘러 데미지를 준다. 자신의 스피드가 떨어진다.",
+		// Official flavor text: "강하고 무거운 주먹을 휘둘러 데미지를 준다. 자신의 스피드가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	happyhour: {
@@ -2892,7 +3161,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	harden: {
 		name: "단단해지기",
-		desc: "전신에 힘을 담아 몸을 단단하게 해서 자신의 방어를 올린다.",
+		// Official flavor text: "전신에 힘을 담아 몸을 단단하게 해서 자신의 방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hardpress: {
@@ -2902,7 +3172,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	haze: {
 		name: "흑안개",
-		desc: "흑안개를 뿜어 배틀에 참가 중인 포켓몬 전원의 능력 변화를 원래대로 돌린다.",
+		// Official flavor text: "흑안개를 뿜어 배틀에 참가 중인 포켓몬 전원의 능력 변화를 원래대로 돌린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2914,12 +3185,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	headbutt: {
 		name: "박치기",
-		desc: "머리를 내밀어 곧장 돌진하여 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "머리를 내밀어 곧장 돌진하여 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headcharge: {
 		name: "아프로브레이크",
-		desc: "굉장한 아프로 머리로 상대에게 돌진하여 공격한다. 자신도 조금 데미지를 입는다.",
+		// Official flavor text: "굉장한 아프로 머리로 상대에게 돌진하여 공격한다. 자신도 조금 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headlongrush: {
@@ -2929,7 +3202,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	headsmash: {
 		name: "양날박치기",
-		desc: "목숨을 걸고 혼신의 힘으로 상대에게 박치기를 한다. 자신도 굉장한 데미지를 입는다.",
+		// Official flavor text: "목숨을 걸고 혼신의 힘으로 상대에게 박치기를 한다. 자신도 굉장한 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2937,7 +3211,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "치료방울",
-		desc: "기분 좋은 방울소리를 들려주어 같은 편 전원의 상태 이상을 회복한다.",
+		// Official flavor text: "기분 좋은 방울소리를 들려주어 같은 편 전원의 상태 이상을 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2956,7 +3231,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healblock: {
 		name: "회복봉인",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			end: "  [POKEMON]의 회복봉인 효과가 떨어졌다!",
@@ -2979,7 +3255,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healingwish: {
 		name: "치유소원",
-		desc: "자신은 기절하지만 교대하여 나오는 포켓몬의 상태 이상과 HP를 회복한다.",
+		// Official flavor text: "자신은 기절하지만 교대하여 나오는 포켓몬의 상태 이상과 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2993,7 +3270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healorder: {
 		name: "회복지령",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3001,7 +3279,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healpulse: {
 		name: "치유파동",
-		desc: "치유파동을 날려서 최대 HP의 절반만큼 상대의 HP를 회복한다.",
+		// Official flavor text: "치유파동을 날려서 최대 HP의 절반만큼 상대의 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3009,17 +3288,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heartstamp: {
 		name: "하트스탬프",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heartswap: {
 		name: "하트스왑",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heatcrash: {
 		name: "히트스탬프",
-		desc: "불타는 몸으로 상대에게 부딪쳐서 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다.",
+		// Official flavor text: "불타는 몸으로 상대에게 부딪쳐서 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3027,12 +3309,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heatwave: {
 		name: "열풍",
-		desc: "뜨거운 숨결을 상대에게 내뿜어 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "뜨거운 숨결을 상대에게 내뿜어 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heavyslam: {
 		name: "헤비봄버",
-		desc: "무거운 몸으로 상대에게 부딪쳐 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다.",
+		// Official flavor text: "무거운 몸으로 상대에게 부딪쳐 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3040,19 +3324,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	helpinghand: {
 		name: "도우미",
-		desc: "동료를 돕는다. 도움받은 포켓몬이 쓰는 기술의 위력은 여느 때보다 커진다.",
+		// Official flavor text: "동료를 돕는다. 도움받은 포켓몬이 쓰는 기술의 위력은 여느 때보다 커진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [SOURCE:topic] [POKEMON]에게 도우미가 되어 주려 한다!",
 	},
 	hex: {
 		name: "병상첨병",
-		desc: "엎친 데 덮친 격으로 공격한다. 상태 이상인 상대에게 큰 데미지를 준다.",
+		// Official flavor text: "엎친 데 덮친 격으로 공격한다. 상태 이상인 상대에게 큰 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hiddenpower: {
 		name: "잠재파워",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3113,7 +3400,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	highjumpkick: {
 		name: "무릎차기",
-		desc: "점프해서 무릎차기로 상대를 공격한다. 빗나가면 자신이 데미지를 입는다.",
+		// Official flavor text: "점프해서 무릎차기로 상대를 공격한다. 빗나가면 자신이 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3136,17 +3424,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	holdback: {
 		name: "적당히손봐주기",
-		desc: "적당히 공격하여 상대의 HP를 반드시 1은 남긴다.",
+		// Official flavor text: "적당히 공격하여 상대의 HP를 반드시 1은 남긴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	holdhands: {
 		name: "손에손잡기",
-		desc: "같은 편 포켓몬끼리 손에 손을 잡는다. 굉장히 행복한 기분이 들게 된다.",
+		// Official flavor text: "같은 편 포켓몬끼리 손에 손을 잡는다. 굉장히 행복한 기분이 들게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	honeclaws: {
 		name: "손톱갈기",
-		desc: "손톱을 갈아 날카롭게 한다. 자신의 공격과 명중률을 올린다.",
+		// Official flavor text: "손톱을 갈아 날카롭게 한다. 자신의 공격과 명중률을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hornattack: {
@@ -3155,7 +3446,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	horndrill: {
 		name: "뿔드릴",
-		desc: "회전하는 뿔을 상대에게 꿰찔러서 공격한다. 맞으면 일격에 기절한다.",
+		// Official flavor text: "회전하는 뿔을 상대에게 꿰찔러서 공격한다. 맞으면 일격에 기절한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3167,12 +3459,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hornleech: {
 		name: "우드혼",
-		desc: "뿔을 꿰찔러서 상대의 양분을 흡수한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다.",
+		// Official flavor text: "뿔을 꿰찔러서 상대의 양분을 흡수한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	howl: {
 		name: "멀리짖기",
-		desc: "큰 소리로 짖고 기합을 높여 자신과 같은 편의 공격을 올린다.",
+		// Official flavor text: "큰 소리로 짖고 기합을 높여 자신과 같은 편의 공격을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3181,7 +3475,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hurricane: {
 		name: "폭풍",
-		desc: "강렬한 바람으로 상대를 둘러싸서 공격한다. 상대를 혼란시킬 때가 있다.",
+		// Official flavor text: "강렬한 바람으로 상대를 둘러싸서 공격한다. 상대를 혼란시킬 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3192,7 +3487,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hydrocannon: {
 		name: "하이드로캐논",
-		desc: "물의 대포를 상대에게 발사해서 공격한다. 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "물의 대포를 상대에게 발사해서 공격한다. 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydropump: {
@@ -3210,7 +3506,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperbeam: {
 		name: "파괴광선",
-		desc: "강한 광선을 상대에게 발사하여 공격한다. 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "강한 광선을 상대에게 발사하여 공격한다. 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3223,12 +3520,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperfang: {
 		name: "필살앞니",
-		desc: "날카로운 앞니로 강하게 물어서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "날카로운 앞니로 강하게 물어서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperspacefury: {
 		name: "이차원러시",
-		desc: "많은 팔로 방어와 판별 등을 무시하는 연속 공격이다. 자신의 방어가 떨어진다.",
+		// Official flavor text: "많은 팔로 방어와 판별 등을 무시하는 연속 공격이다. 자신의 방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3239,7 +3538,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperspacehole: {
 		name: "이차원홀",
-		desc: "다른차원홀로 갑자기 상대 바로 옆에 나타나 공격한다. 방어나 판별 등도 무시할 수 있다.",
+		// Official flavor text: "다른차원홀로 갑자기 상대 바로 옆에 나타나 공격한다. 방어나 판별 등도 무시할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3249,7 +3549,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hypervoice: {
 		name: "하이퍼보이스",
-		desc: "시끄럽게 울리는 큰 진동을 상대에게 전달하여 공격한다.",
+		// Official flavor text: "시끄럽게 울리는 큰 진동을 상대에게 전달하여 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hypnosis: {
@@ -3258,7 +3559,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iceball: {
 		name: "아이스볼",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3269,34 +3571,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icebeam: {
 		name: "냉동빔",
-		desc: "냉동빔을 상대에게 발사하여 공격한다. 얼음 상태로 만들 때가 있다.",
+		// Official flavor text: "냉동빔을 상대에게 발사하여 공격한다. 얼음 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iceburn: {
 		name: "콜드플레어",
-		desc: "모든 것을 얼려버리는 격렬한 냉기로 2턴째에 상대를 둘러싼다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "모든 것을 얼려버리는 격렬한 냉기로 2턴째에 상대를 둘러싼다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "  [POKEMON:topic] 차디찬 공기에 둘러싸였다!",
 	},
 	icefang: {
 		name: "얼음엄니",
-		desc: "냉기를 품은 이빨로 문다. 상대를 풀죽게 하거나 얼음 상태로 만들 때가 있다.",
+		// Official flavor text: "냉기를 품은 이빨로 문다. 상대를 풀죽게 하거나 얼음 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icehammer: {
 		name: "아이스해머",
-		desc: "강하고 무거운 주먹을 휘둘러 데미지를 준다. 자신의 스피드가 떨어진다.",
+		// Official flavor text: "강하고 무거운 주먹을 휘둘러 데미지를 준다. 자신의 스피드가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icepunch: {
 		name: "냉동펀치",
-		desc: "냉기를 담은 펀치로 상대를 공격한다. 얼음 상태로 만들 때가 있다.",
+		// Official flavor text: "냉기를 담은 펀치로 상대를 공격한다. 얼음 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iceshard: {
 		name: "얼음뭉치",
-		desc: "얼음덩어리를 순식간에 만들어 상대에게 빠르게 쏜다. 반드시 선제공격을 할 수 있다.",
+		// Official flavor text: "얼음덩어리를 순식간에 만들어 상대에게 빠르게 쏜다. 반드시 선제공격을 할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icespinner: {
@@ -3306,12 +3614,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iciclecrash: {
 		name: "고드름떨구기",
-		desc: "큰 고드름을 격렬하게 부딪쳐서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "큰 고드름을 격렬하게 부딪쳐서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iciclespear: {
 		name: "고드름침",
-		desc: "날카로운 고드름을 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "날카로운 고드름을 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3325,7 +3635,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icywind: {
 		name: "얼어붙은바람",
-		desc: "차가운 냉기를 상대에게 내뿜어 공격한다. 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "차가운 냉기를 상대에게 내뿜어 공격한다. 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3333,7 +3644,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	imprison: {
 		name: "봉인",
-		desc: "상대가 자신과 같은 기술을 배웠다면 상대만 그 기술을 사용할 수 없게 한다.",
+		// Official flavor text: "상대가 자신과 같은 기술을 배웠다면 상대만 그 기술을 사용할 수 없게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3350,7 +3662,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	incinerate: {
 		name: "불태우기",
-		desc: "불꽃으로 상대를 공격한다. 상대가 나무열매 등을 지니고 있을 때 불태워서 쓸 수 없게 만든다.",
+		// Official flavor text: "불꽃으로 상대를 공격한다. 상대가 나무열매 등을 지니고 있을 때 불태워서 쓸 수 없게 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3366,7 +3679,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	inferno: {
 		name: "연옥",
-		desc: "격렬한 불꽃으로 상대를 둘러싸 공격한다. 화상 상태로 만든다.",
+		// Official flavor text: "격렬한 불꽃으로 상대를 둘러싸 공격한다. 화상 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
@@ -3375,7 +3689,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	infestation: {
 		name: "엉겨붙기",
-		desc: "4-5턴 동안 상대에게 엉겨 붙어서 공격한다. 그동안 상대는 도망갈 수 없다.",
+		// Official flavor text: "4-5턴 동안 상대에게 엉겨 붙어서 공격한다. 그동안 상대는 도망갈 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3388,7 +3703,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ingrain: {
 		name: "뿌리박기",
-		desc: "대지에 뿌리를 박아 매 턴마다 자신의 HP를 회복한다. 뿌리 박고 있으므로 교체할 수 없다.",
+		// Official flavor text: "대지에 뿌리를 박아 매 턴마다 자신의 HP를 회복한다. 뿌리 박고 있으므로 교체할 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3410,7 +3726,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	instruct: {
 		name: "지휘",
-		desc: "상대에게 지시하여 상대가 쓴 기술을 다시 한번 쓰게 할 수 있다.",
+		// Official flavor text: "상대에게 지시하여 상대가 쓴 기술을 다시 한번 쓰게 할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3423,19 +3740,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iondeluge: {
 		name: "플라스마샤워",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  전기 입자가 쏟아졌다!",
 	},
 	irondefense: {
 		name: "철벽",
-		desc: "피부를 쇠처럼 단단하게 만듦으로써 자신의 방어를 크게 올린다.",
+		// Official flavor text: "피부를 쇠처럼 단단하게 만듦으로써 자신의 방어를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ironhead: {
 		name: "아이언헤드",
-		desc: "강철과 같은 단단한 머리로 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "강철과 같은 단단한 머리로 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3444,7 +3764,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	irontail: {
 		name: "아이언테일",
-		desc: "단단한 꼬리로 상대를 힘껏 쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "단단한 꼬리로 상대를 힘껏 쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ivycudgel: {
@@ -3454,7 +3775,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	jawlock: {
 		name: "물고버티기",
-		desc: "어느 한쪽이 기절할 때까지 교체할 수 없게 된다. 한쪽의 포켓몬이 없어지면 효과가 사라진다.",
+		// Official flavor text: "어느 한쪽이 기절할 때까지 교체할 수 없게 된다. 한쪽의 포켓몬이 없어지면 효과가 사라진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jetpunch: {
@@ -3464,12 +3786,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	judgment: {
 		name: "심판의뭉치",
-		desc: "무수한 광탄을 상대에게 방출한다. 자신이 가지고 있는 플레이트에 따라 타입이 바뀐다.",
+		// Official flavor text: "무수한 광탄을 상대에게 방출한다. 자신이 가지고 있는 플레이트에 따라 타입이 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jumpkick: {
 		name: "점프킥",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3492,22 +3816,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	junglehealing: {
 		name: "정글힐",
-		desc: "정글과 하나가 되어 자신과 배틀에 나와 있는 같은 편의 HP와 모든 상태를 회복한다.",
+		// Official flavor text: "정글과 하나가 되어 자신과 배틀에 나와 있는 같은 편의 HP와 모든 상태를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	karatechop: {
 		name: "태권당수",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kinesis: {
 		name: "숟가락휘기",
-		desc: "숟가락을 휘어서 주의를 끌어 상대의 명중률을 낮춘다.",
+		// Official flavor text: "숟가락을 휘어서 주의를 끌어 상대의 명중률을 낮춘다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kingsshield: {
 		name: "킹실드",
-		desc: "상대의 공격을 막음과 동시에 방어 태세를 갖춘다. 접촉한 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "상대의 공격을 막음과 동시에 방어 태세를 갖춘다. 접촉한 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3522,7 +3850,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	knockoff: {
 		name: "탁쳐서떨구기",
-		desc: "상대의 지닌 물건을 탁 쳐서 떨어뜨려 배틀이 끝날 때까지 사용할 수 없게 한다. 물건을 가진 상대에게는 데미지를 더 준다.",
+		// Official flavor text: "상대의 지닌 물건을 탁 쳐서 떨어뜨려 배틀이 끝날 때까지 사용할 수 없게 한다. 물건을 가진 상대에게는 데미지를 더 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3556,24 +3885,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	landswrath: {
 		name: "그라운드포스",
-		desc: "대지의 힘을 모으고 그 힘을 상대에게 집중시켜서 데미지를 준다.",
+		// Official flavor text: "대지의 힘을 모으고 그 힘을 상대에게 집중시켜서 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	laserfocus: {
 		name: "예민해지기",
-		desc: "정신을 집중해서 다음 공격을 반드시 급소에 맞춘다.",
+		// Official flavor text: "정신을 집중해서 다음 공격을 반드시 급소에 맞춘다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 정신을 가다듬었다!",
 	},
 	lashout: {
 		name: "분풀이",
-		desc: "상대에 대한 울분이 담긴 공격을 한다. 그 턴에 능력이 떨어져 있으면 기술의 위력이 2배가 된다.",
+		// Official flavor text: "상대에 대한 울분이 담긴 공격을 한다. 그 턴에 능력이 떨어져 있으면 기술의 위력이 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastresort: {
 		name: "비장의무기",
-		desc: "배틀 중에 기억하고 있는 기술을 모두 사용하면 그때부터 쓸 수 있는 필살기이다.",
+		// Official flavor text: "배틀 중에 기억하고 있는 기술을 모두 사용하면 그때부터 쓸 수 있는 필살기이다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastrespects: {
@@ -3583,7 +3916,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lavaplume: {
 		name: "분연",
-		desc: "새빨간 불꽃으로 자신의 주위에 있는 포켓몬을 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "새빨간 불꽃으로 자신의 주위에 있는 포켓몬을 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafage: {
@@ -3592,22 +3926,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leafblade: {
 		name: "리프블레이드",
-		desc: "잎사귀를 칼처럼 이용해 상대를 베어 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "잎사귀를 칼처럼 이용해 상대를 베어 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafstorm: {
 		name: "리프스톰",
-		desc: "뾰족한 잎사귀로 상대에게 돌풍을 일으킨다. 사용하면 반동으로 자신의 특수공격이 크게 떨어진다.",
+		// Official flavor text: "뾰족한 잎사귀로 상대에게 돌풍을 일으킨다. 사용하면 반동으로 자신의 특수공격이 크게 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leaftornado: {
 		name: "그래스믹서",
-		desc: "날카로운 잎사귀로 상대를 둘러싸서 공격한다. 명중률을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "날카로운 잎사귀로 상대를 둘러싸서 공격한다. 명중률을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leechlife: {
 		name: "흡혈",
-		desc: "피를 빨아서 상대를 공격한다. 준 데미지의 절반을 HP로 회복한다.",
+		// Official flavor text: "피를 빨아서 상대를 공격한다. 준 데미지의 절반을 HP로 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3618,7 +3956,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leechseed: {
 		name: "씨뿌리기",
-		desc: "씨가 뿌려진 상대의 HP를 매 턴 조금씩 흡수하여 자신의 HP를 회복한다.",
+		// Official flavor text: "씨가 뿌려진 상대의 HP를 매 턴 조금씩 흡수하여 자신의 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3637,7 +3976,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leer: {
 		name: "째려보기",
-		desc: "날카로운 눈초리로 겁을 주어 상대의 방어를 떨어뜨린다.",
+		// Official flavor text: "날카로운 눈초리로 겁을 주어 상대의 방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3649,22 +3989,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lick: {
 		name: "핥기",
-		desc: "긴 혀로 상대를 핥아서 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "긴 혀로 상대를 핥아서 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lifedew: {
 		name: "생명의물방울",
-		desc: "신비한 물을 흩뿌려서 자신과 배틀에 나와 있는 같은 편의 HP를 회복한다.",
+		// Official flavor text: "신비한 물을 흩뿌려서 자신과 배틀에 나와 있는 같은 편의 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightofruin: {
 		name: "파멸의빛",
-		desc: "영원의 꽃의 파워를 빌려서 강력한 광선을 쏜다. 자신도 상당한 데미지를 입는다.",
+		// Official flavor text: "영원의 꽃의 파워를 빌려서 강력한 광선을 쏜다. 자신도 상당한 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightscreen: {
 		name: "빛의장막",
-		desc: "5턴 동안 이상한 장막을 쳐서 상대로부터 받는 특수공격의 데미지를 약하게 한다.",
+		// Official flavor text: "5턴 동안 이상한 장막을 쳐서 상대로부터 받는 특수공격의 데미지를 약하게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3690,17 +4034,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lightthatburnsthesky: {
 		name: "하늘을태우는멸망의빛",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	liquidation: {
 		name: "아쿠아브레이크",
-		desc: "물의 힘으로 상대에게 부딪쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "물의 힘으로 상대에게 부딪쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lockon: {
 		name: "록온",
-		desc: "조준을 잘 맞춰 다음 공격이 반드시 상대에게 명중하도록 한다.",
+		// Official flavor text: "조준을 잘 맞춰 다음 공격이 반드시 상대에게 명중하도록 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3718,7 +4065,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lowkick: {
 		name: "안다리걸기",
-		desc: "발을 강하게 걸고 상대를 넘어뜨려 공격한다. 상대가 무거울수록 위력이 올라간다.",
+		// Official flavor text: "발을 강하게 걸고 상대를 넘어뜨려 공격한다. 상대가 무거울수록 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3727,12 +4075,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lowsweep: {
 		name: "로킥",
-		desc: "재빠른 움직임으로 상대의 다리를 노려 공격한다. 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "재빠른 움직임으로 상대의 다리를 노려 공격한다. 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	luckychant: {
 		name: "주술",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  주술의 힘으로 [TEAM]의 급소가 숨겨졌다!",
@@ -3750,7 +4100,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunardance: {
 		name: "초승달춤",
-		desc: "자신은 기절하지만 교대하여 나오는 포켓몬의 모든 상태를 회복한다.",
+		// Official flavor text: "자신은 기절하지만 교대하여 나오는 포켓몬의 모든 상태를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3764,17 +4115,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunge: {
 		name: "덤벼들기",
-		desc: "전력으로 상대에게 덤벼들며 공격한다. 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "전력으로 상대에게 덤벼들며 공격한다. 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lusterpurge: {
 		name: "러스터퍼지",
-		desc: "눈부신 빛을 발산하여 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "눈부신 빛을 발산하여 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	machpunch: {
 		name: "마하펀치",
-		desc: "눈에 보이지 않는 굉장한 속도로 펀치를 날린다. 반드시 선제공격을 할 수 있다.",
+		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 펀치를 날린다. 반드시 선제공격을 할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magicalleaf: {
@@ -3788,7 +4142,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magiccoat: {
 		name: "매직코트",
-		desc: "상대가 상태 이상이 되는 기술이나 씨뿌리기 등을 썼을 때 되받아친다.",
+		// Official flavor text: "상대가 상태 이상이 되는 기술이나 씨뿌리기 등을 썼을 때 되받아친다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3805,7 +4160,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicpowder: {
 		name: "마법가루",
-		desc: "마법가루를 날려서 상대를 에스퍼타입으로 바꾼다.",
+		// Official flavor text: "마법가루를 날려서 상대를 에스퍼타입으로 바꾼다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3813,12 +4169,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicroom: {
 		name: "매직룸",
-		desc: "이상한 공간을 만든다. 5턴 동안 모든 포켓몬의 도구의 효과가 사라진다.",
+		// Official flavor text: "이상한 공간을 만든다. 5턴 동안 모든 포켓몬의 도구의 효과가 사라진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magmastorm: {
 		name: "마그마스톰",
-		desc: "세차게 타오르는 불꽃 속에 4-5턴 동안 상대를 가두어 공격한다.",
+		// Official flavor text: "세차게 타오르는 불꽃 속에 4-5턴 동안 상대를 가두어 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3842,12 +4200,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magneticflux: {
 		name: "자기장조작",
-		desc: "자기장 조작으로 인해 특성 플러스와 마이너스의 방어, 특수방어가 오른다.",
+		// Official flavor text: "자기장 조작으로 인해 특성 플러스와 마이너스의 방어, 특수방어가 오른다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magnetrise: {
 		name: "전자부유",
-		desc: "전기로 만든 자력의 힘으로 허공에 뜬다. 5턴 동안 부유할 수 있다.",
+		// Official flavor text: "전기로 만든 자력의 힘으로 허공에 뜬다. 5턴 동안 부유할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3861,7 +4221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magnitude: {
 		name: "매그니튜드",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3882,7 +4243,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maliciousmoonsault: {
 		name: "하이퍼다크크러셔",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	malignantchain: {
@@ -3892,7 +4254,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	matblock: {
 		name: "마룻바닥세워막기",
-		desc: "뒤집어 세운 마룻바닥을 방패로 하여 자신과 같은 편으로 향하는 기술 데미지를 막는다. 변화 기술은 막을 수 없다.",
+		// Official flavor text: "뒤집어 세운 마룻바닥을 방패로 하여 자신과 같은 편으로 향하는 기술 데미지를 막는다. 변화 기술은 막을 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 마룻바닥세워막기를 노리고 있다!",
@@ -3905,104 +4268,124 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maxairstream: {
 		name: "다이제트",
-		desc: "다이맥스한 포켓몬이 날리는 비행타입의 공격. 같은 편의 스피드를 올린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 비행타입의 공격. 같은 편의 스피드를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxdarkness: {
 		name: "다이아크",
-		desc: "다이맥스한 포켓몬이 날리는 악타입의 공격. 상대의 특수방어를 떨어뜨린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 악타입의 공격. 상대의 특수방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxflare: {
 		name: "다이번",
-		desc: "다이맥스한 포켓몬이 날리는 불꽃타입의 공격. 5턴 동안 햇살을 강하게 만든다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 불꽃타입의 공격. 5턴 동안 햇살을 강하게 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxflutterby: {
 		name: "다이웜",
-		desc: "다이맥스한 포켓몬이 날리는 벌레타입의 공격. 상대의 특수공격을 떨어뜨린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 벌레타입의 공격. 상대의 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxgeyser: {
 		name: "다이스트림",
-		desc: "다이맥스한 포켓몬이 날리는 물타입의 공격. 5턴 동안 비를 내리게 한다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 물타입의 공격. 5턴 동안 비를 내리게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxguard: {
 		name: "다이월",
-		desc: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다.",
+		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] 공격으로부터 몸을 지켰다!",
 	},
 	maxhailstorm: {
 		name: "다이아이스",
-		desc: "다이맥스한 포켓몬이 날리는 얼음타입의 공격. 5턴 동안 싸라기눈을 내리게 한다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 얼음타입의 공격. 5턴 동안 싸라기눈을 내리게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxknuckle: {
 		name: "다이너클",
-		desc: "다이맥스한 포켓몬이 날리는 격투타입의 공격. 같은 편의 공격을 올린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 격투타입의 공격. 같은 편의 공격을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxlightning: {
 		name: "다이썬더",
-		desc: "다이맥스한 포켓몬이 날리는 전기타입의 공격. 5턴 동안 일렉트릭필드로 만든다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 전기타입의 공격. 5턴 동안 일렉트릭필드로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxmindstorm: {
 		name: "다이사이코",
-		desc: "다이맥스한 포켓몬이 날리는 에스퍼타입의 공격. 5턴 동안 사이코필드로 만든다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 에스퍼타입의 공격. 5턴 동안 사이코필드로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxooze: {
 		name: "다이애시드",
-		desc: "다이맥스한 포켓몬이 날리는 독타입의 공격. 같은 편의 특수공격을 올린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 독타입의 공격. 같은 편의 특수공격을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxovergrowth: {
 		name: "다이그래스",
-		desc: "다이맥스한 포켓몬이 날리는 풀타입의 공격. 5턴 동안 그래스필드로 만든다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 풀타입의 공격. 5턴 동안 그래스필드로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxphantasm: {
 		name: "다이할로우",
-		desc: "다이맥스한 포켓몬이 날리는 고스트타입의 공격. 상대의 방어를 떨어뜨린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 고스트타입의 공격. 상대의 방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxquake: {
 		name: "다이어스",
-		desc: "다이맥스한 포켓몬이 날리는 땅타입의 공격. 같은 편의 특수방어를 올린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 땅타입의 공격. 같은 편의 특수방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxrockfall: {
 		name: "다이록",
-		desc: "다이맥스한 포켓몬이 날리는 바위타입의 공격. 5턴 동안 날씨를 모래바람으로 만든다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 바위타입의 공격. 5턴 동안 날씨를 모래바람으로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxstarfall: {
 		name: "다이페어리",
-		desc: "다이맥스한 포켓몬이 날리는 페어리타입의 공격. 5턴 동안 미스트필드로 만든다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 페어리타입의 공격. 5턴 동안 미스트필드로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxsteelspike: {
 		name: "다이스틸",
-		desc: "다이맥스한 포켓몬이 날리는 강철타입의 공격. 같은 편의 방어를 올린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 강철타입의 공격. 같은 편의 방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxstrike: {
 		name: "다이어택",
-		desc: "다이맥스한 포켓몬이 날리는 노말타입의 공격. 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 노말타입의 공격. 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxwyrmwind: {
 		name: "다이드라군",
-		desc: "다이맥스한 포켓몬이 날리는 드래곤타입의 공격. 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "다이맥스한 포켓몬이 날리는 드래곤타입의 공격. 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meanlook: {
 		name: "검은눈빛",
-		desc: "빨려 들어갈 것 같은 까만 눈빛으로 가만히 응시하여 상대를 배틀에서 도망갈 수 없게 한다.",
+		// Official flavor text: "빨려 들어갈 것 같은 까만 눈빛으로 가만히 응시하여 상대를 배틀에서 도망갈 수 없게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4019,12 +4402,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	meditate: {
 		name: "요가포즈",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mefirst: {
 		name: "선취",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4044,7 +4429,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	megadrain: {
 		name: "메가드레인",
-		desc: "양분을 흡수하여 공격한다. 상대에게 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다.",
+		// Official flavor text: "양분을 흡수하여 공격한다. 상대에게 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4067,7 +4453,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	memento: {
 		name: "추억의선물",
-		desc: "자신은 기절하게 되지만 그 대신 상대의 공격과 특수공격을 크게 떨어뜨린다.",
+		// Official flavor text: "자신은 기절하게 되지만 그 대신 상대의 공격과 특수공격을 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4080,12 +4467,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	menacingmoonrazemaelstrom: {
 		name: "문라이트블래스터",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalburst: {
 		name: "메탈버스트",
-		desc: "기술을 쓰기 전에 마지막으로 받은 기술의 데미지를 늘려서 기술을 쓴 상대에게 돌려준다.",
+		// Official flavor text: "기술을 쓰기 전에 마지막으로 받은 기술의 데미지를 늘려서 기술을 쓴 상대에게 돌려준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4096,34 +4485,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	metalclaw: {
 		name: "메탈클로",
-		desc: "강철의 발톱으로 상대를 베어 갈라 공격한다. 자신의 공격이 올라갈 때도 있다.",
+		// Official flavor text: "강철의 발톱으로 상대를 베어 갈라 공격한다. 자신의 공격이 올라갈 때도 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalsound: {
 		name: "금속음",
-		desc: "금속을 긁을 때 나는 듯한 싫은 소리를 들려준다. 상대의 특수방어를 크게 떨어뜨린다.",
+		// Official flavor text: "금속을 긁을 때 나는 듯한 싫은 소리를 들려준다. 상대의 특수방어를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meteorassault: {
 		name: "스타어설트",
-		desc: "굵은 줄기를 휘둘러서 공격한다. 단 자신도 비틀거리기 때문에 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "굵은 줄기를 휘둘러서 공격한다. 단 자신도 비틀거리기 때문에 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meteorbeam: {
 		name: "메테오빔",
-		desc: "1턴째에 우주의 힘을 모아서 특수공격을 올리고 2턴째에 상대를 공격한다.",
+		// Official flavor text: "1턴째에 우주의 힘을 모아서 특수공격을 올리고 2턴째에 상대를 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "[POKEMON]에게서 우주의 힘이 넘쳐난다!",
 	},
 	meteormash: {
 		name: "코멧펀치",
-		desc: "혜성과 같은 펀치를 날려서 상대를 공격한다. 자신의 공격이 올라갈 때가 있다.",
+		// Official flavor text: "혜성과 같은 펀치를 날려서 상대를 공격한다. 자신의 공격이 올라갈 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metronome: {
 		name: "손가락흔들기",
-		desc: "손가락을 흔들어 자신의 뇌를 자극해서 모든 기술 중 어느 하나를 날린다.",
+		// Official flavor text: "손가락을 흔들어 자신의 뇌를 자극해서 모든 기술 중 어느 하나를 날린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4158,7 +4553,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	milkdrink: {
 		name: "우유마시기",
-		desc: "자신의 최대 HP 절반을 회복한다.",
+		// Official flavor text: "자신의 최대 HP 절반을 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4166,7 +4562,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mimic: {
 		name: "흉내내기",
-		desc: "상대가 마지막에 사용한 기술을 배틀을 하는 동안 자신의 기술로 만들 수 있다.",
+		// Official flavor text: "상대가 마지막에 사용한 기술을 배틀을 하는 동안 자신의 기술로 만들 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4195,14 +4592,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mindblown: {
 		name: "깜짝헤드",
-		desc: "자신의 머리를 폭발시켜 주위의 모든 것을 공격한다. 자신도 데미지를 받는다.",
+		// Official flavor text: "자신의 머리를 폭발시켜 주위의 모든 것을 공격한다. 자신도 데미지를 받는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	mindreader: {
 		name: "마음의눈",
-		desc: "상대의 움직임을 마음으로 읽고 다음 공격이 반드시 상대에게 명중되게 한다.",
+		// Official flavor text: "상대의 움직임을 마음으로 읽고 다음 공격이 반드시 상대에게 명중되게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4216,7 +4615,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	minimize: {
 		name: "작아지기",
-		desc: "몸을 축소하여 작게 보임으로써 자신의 회피율을 크게 올린다.",
+		// Official flavor text: "몸을 축소하여 작게 보임으로써 자신의 회피율을 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4243,7 +4643,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	miracleeye: {
 		name: "미라클아이",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4253,7 +4654,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrorcoat: {
 		name: "미러코트",
-		desc: "상대에게 받은 특수공격의 데미지를 2배로 만들어 그 상대에게 돌려준다.",
+		// Official flavor text: "상대에게 받은 특수공격의 데미지를 2배로 만들어 그 상대에게 돌려준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4270,7 +4672,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrormove: {
 		name: "따라하기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4287,12 +4690,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrorshot: {
 		name: "미러샷",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mist: {
 		name: "흰안개",
-		desc: "하얀 안개로 몸을 덮는다. 5턴 동안 상대에 의해 능력이 떨어지지 않게 된다.",
+		// Official flavor text: "하얀 안개로 몸을 덮는다. 5턴 동안 상대에 의해 능력이 떨어지지 않게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4312,17 +4717,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mistball: {
 		name: "미스트볼",
-		desc: "안개의 깃털로 둘러싸 공격한다. 상대의 특수공격을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "안개의 깃털로 둘러싸 공격한다. 상대의 특수공격을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistyexplosion: {
 		name: "미스트버스트",
-		desc: "자신의 주위에 있는 모두를 공격하지만 사용하면 기절한다. 미스트필드일 때 위력이 올라간다.",
+		// Official flavor text: "자신의 주위에 있는 모두를 공격하지만 사용하면 기절한다. 미스트필드일 때 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistyterrain: {
 		name: "미스트필드",
-		desc: "5턴 동안 땅에 있으면 상태 이상이 되지 않고 드래곤타입 기술의 데미지도 절반이 된다.",
+		// Official flavor text: "5턴 동안 땅에 있으면 상태 이상이 되지 않고 드래곤타입 기술의 데미지도 절반이 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4330,7 +4738,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moonblast: {
 		name: "문포스",
-		desc: "달의 파워를 빌려서 상대를 공격한다. 상대의 특수공격을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "달의 파워를 빌려서 상대를 공격한다. 상대의 특수공격을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4339,12 +4748,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moongeistbeam: {
 		name: "섀도레이",
-		desc: "괴상한 광선을 쏘아 공격한다. 상대의 특성을 무시하고 공격할 수 있다.",
+		// Official flavor text: "괴상한 광선을 쏘아 공격한다. 상대의 특성을 무시하고 공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	moonlight: {
 		name: "달빛",
-		desc: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다.",
+		// Official flavor text: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4364,7 +4775,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	morningsun: {
 		name: "아침햇살",
-		desc: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다.",
+		// Official flavor text: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4394,27 +4806,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mudbomb: {
 		name: "진흙폭탄",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muddywater: {
 		name: "탁류",
-		desc: "탁해진 물을 상대에게 발사하여 공격한다. 명중률을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "탁해진 물을 상대에게 발사하여 공격한다. 명중률을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudshot: {
 		name: "머드샷",
-		desc: "진흙 덩어리를 상대에게 내던져서 공격한다. 동시에 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "진흙 덩어리를 상대에게 내던져서 공격한다. 동시에 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudslap: {
 		name: "진흙뿌리기",
-		desc: "상대의 얼굴 등에 진흙을 내던져서 공격한다. 명중률을 떨어뜨린다.",
+		// Official flavor text: "상대의 얼굴 등에 진흙을 내던져서 공격한다. 명중률을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudsport: {
 		name: "흙놀이",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4427,12 +4844,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	multiattack: {
 		name: "멀티어택",
-		desc: "높은 에너지를 둘러싸 상대에게 부딪쳐 공격한다. 메모리에 따라 타입이 바뀐다.",
+		// Official flavor text: "높은 에너지를 둘러싸 상대에게 부딪쳐 공격한다. 메모리에 따라 타입이 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalfire: {
 		name: "매지컬플레임",
-		desc: "입에서 내뱉는 아주 뜨거운 불꽃으로 공격한다. 상대의 특수공격을 떨어뜨린다.",
+		// Official flavor text: "입에서 내뱉는 아주 뜨거운 불꽃으로 공격한다. 상대의 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalpower: {
@@ -4442,12 +4861,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nastyplot: {
 		name: "나쁜음모",
-		desc: "나쁜 일을 생각해서 머리를 활성화시킨다. 자신의 특수공격을 크게 올린다.",
+		// Official flavor text: "나쁜 일을 생각해서 머리를 활성화시킨다. 자신의 특수공격을 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	naturalgift: {
 		name: "자연의은혜",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4455,7 +4876,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	naturepower: {
 		name: "자연의힘",
-		desc: "자연의 힘으로 공격한다. 사용하는 장소에 따라 나오는 기술이 변화한다.",
+		// Official flavor text: "자연의 힘으로 공격한다. 사용하는 장소에 따라 나오는 기술이 변화한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4477,12 +4899,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	naturesmadness: {
 		name: "자연의분노",
-		desc: "자연의 분노를 상대에게 부딪친다. 상대의 HP는 절반이 된다.",
+		// Official flavor text: "자연의 분노를 상대에게 부딪친다. 상대의 HP는 절반이 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	needlearm: {
 		name: "바늘팔",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4494,12 +4918,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightdaze: {
 		name: "나이트버스트",
-		desc: "암흑의 충격파를 날려서 상대를 공격한다. 명중률을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "암흑의 충격파를 날려서 상대를 공격한다. 명중률을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightmare: {
 		name: "악몽",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 악몽을 꾸기 시작했다!",
@@ -4507,7 +4933,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightshade: {
 		name: "나이트헤드",
-		desc: "무시무시한 환상을 보게 해서 자신의 레벨과 똑같은 만큼의 데미지를 상대에게 준다.",
+		// Official flavor text: "무시무시한 환상을 보게 해서 자신의 레벨과 똑같은 만큼의 데미지를 상대에게 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4516,17 +4943,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightslash: {
 		name: "깜짝베기",
-		desc: "순간적으로 틈을 노려 상대를 베어 버린다. 급소에 맞기 쉽다.",
+		// Official flavor text: "순간적으로 틈을 노려 상대를 베어 버린다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nobleroar: {
 		name: "부르짖기",
-		desc: "우렁차게 부르짖어서 상대를 위협하여 상대의 공격과 특수공격을 떨어뜨린다.",
+		// Official flavor text: "우렁차게 부르짖어서 상대를 위협하여 상대의 공격과 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	noretreat: {
 		name: "배수의진",
-		desc: "자신의 모든 능력이 올라가지만 교체하거나 도망칠 수 없게 된다.",
+		// Official flavor text: "자신의 모든 능력이 올라가지만 교체하거나 도망칠 수 없게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 배수의 진을 쳐서 도망칠 수 없게 되었다!",
@@ -4538,17 +4968,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nuzzle: {
 		name: "볼부비부비",
-		desc: "전기가 흐르는 볼을 비벼서 공격한다. 상대를 마비 상태로 만든다.",
+		// Official flavor text: "전기가 흐르는 볼을 비벼서 공격한다. 상대를 마비 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	oblivionwing: {
 		name: "데스윙",
-		desc: "조준한 상대로부터 HP를 흡수한다. 준 데미지의 반 이상 HP를 회복한다.",
+		// Official flavor text: "조준한 상대로부터 HP를 흡수한다. 준 데미지의 반 이상 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	obstruct: {
 		name: "블로킹",
-		desc: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다. 접촉한 상대의 방어를 크게 떨어뜨린다.",
+		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다. 접촉한 상대의 방어를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4560,19 +4993,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	octazooka: {
 		name: "대포무노포",
-		desc: "상대의 얼굴 등에 먹물을 내뿜어 공격한다. 명중률을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "상대의 얼굴 등에 먹물을 내뿜어 공격한다. 명중률을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	octolock: {
 		name: "문어굳히기",
-		desc: "상대를 도망칠 수 없게 한다. 굳히기에 당한 상대는 매 턴 방어와 특수방어가 떨어진다.",
+		// Official flavor text: "상대를 도망칠 수 없게 한다. 굳히기에 당한 상대는 매 턴 방어와 특수방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 문어굳히기 때문에 도망칠 수 없게 되었다!",
 	},
 	odorsleuth: {
 		name: "냄새구별",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4583,7 +5019,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ominouswind: {
 		name: "괴상한바람",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	orderup: {
@@ -4593,12 +5030,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	originpulse: {
 		name: "근원의파동",
-		desc: "파랗게 빛나는 무수한 광선으로 상대를 공격한다.",
+		// Official flavor text: "파랗게 빛나는 무수한 광선으로 상대를 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	outrage: {
 		name: "역린",
-		desc: "2-3턴 동안 마구 난동 부려서 공격한다. 난동 부린 뒤에는 혼란에 빠진다.",
+		// Official flavor text: "2-3턴 동안 마구 난동 부려서 공격한다. 난동 부린 뒤에는 혼란에 빠진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4615,17 +5054,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	overdrive: {
 		name: "오버드라이브",
-		desc: "기타나 베이스를 쳐서 큰 울림과 강한 진동을 상대에게 전달하여 공격한다.",
+		// Official flavor text: "기타나 베이스를 쳐서 큰 울림과 강한 진동을 상대에게 전달하여 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	overheat: {
 		name: "오버히트",
-		desc: "풀 파워로 상대를 공격한다. 쓰면 반동으로 자신의 특수공격이 크게 떨어진다.",
+		// Official flavor text: "풀 파워로 상대를 공격한다. 쓰면 반동으로 자신의 특수공격이 크게 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	painsplit: {
 		name: "아픔나누기",
-		desc: "자신의 HP와 상대의 HP를 합친 것을 자신과 상대가 사이좋게 나눈다.",
+		// Official flavor text: "자신의 HP와 상대의 HP를 합친 것을 자신과 상대가 사이좋게 나눈다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  서로의 체력을 나누어 가졌다!",
@@ -4637,12 +5079,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	paraboliccharge: {
 		name: "파라볼라차지",
-		desc: "주위에 있는 모든 포켓몬에게 데미지를 준다. 준 데미지의 절반을 자신이 회복한다.",
+		// Official flavor text: "주위에 있는 모든 포켓몬에게 데미지를 준다. 준 데미지의 절반을 자신이 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	partingshot: {
 		name: "막말내뱉기",
-		desc: "막말을 내뱉어 상대를 위협하여 공격과 특수공격을 떨어뜨린 후 교대 포켓몬과 교체한다.",
+		// Official flavor text: "막말을 내뱉어 상대를 위협하여 공격과 특수공격을 떨어뜨린 후 교대 포켓몬과 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4653,7 +5097,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	payback: {
 		name: "보복",
-		desc: "모아서 공격한다. 상대보다 나중에 공격할 수 있으면 기술의 위력은 2배가 된다.",
+		// Official flavor text: "모아서 공격한다. 상대보다 나중에 공격할 수 있으면 기술의 위력은 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4664,7 +5109,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	payday: {
 		name: "고양이돈받기",
-		desc: "상대의 몸에 돈을 세게 던져서 공격한다. 배틀 후에 돈을 받을 수 있다.",
+		// Official flavor text: "상대의 몸에 돈을 세게 던져서 공격한다. 배틀 후에 돈을 받을 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  돈이 주위에 흩어졌다!",
@@ -4675,7 +5121,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	perishsong: {
 		name: "멸망의노래",
-		desc: "노래를 들은 포켓몬은 3턴이 지나면 기절한다. 교체되면 효과가 없어진다.",
+		// Official flavor text: "노래를 들은 포켓몬은 3턴이 지나면 기절한다. 교체되면 효과가 없어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  멸망의노래를 들은 포켓몬은 3턴 후에 쓰러져 버린다!",
@@ -4683,12 +5130,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	petalblizzard: {
 		name: "꽃보라",
-		desc: "세찬 꽃보라를 일으켜서 주위에 있는 포켓몬을 공격하여 데미지를 준다.",
+		// Official flavor text: "세찬 꽃보라를 일으켜서 주위에 있는 포켓몬을 공격하여 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	petaldance: {
 		name: "꽃잎댄스",
-		desc: "2-3턴 동안 꽃을 흩뿌려서 상대를 공격한다. 흩뿌린 뒤에는 혼란에 빠진다.",
+		// Official flavor text: "2-3턴 동안 꽃을 흩뿌려서 상대를 공격한다. 흩뿌린 뒤에는 혼란에 빠진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4709,7 +5158,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	phantomforce: {
 		name: "고스트다이브",
-		desc: "1턴째에 어디론가 사라져서 2턴째에 상대를 공격한다. 기술 방어를 무시하고 공격할 수 있다.",
+		// Official flavor text: "1턴째에 어디론가 사라져서 2턴째에 상대를 공격한다. 기술 방어를 무시하고 공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4720,17 +5170,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	photongeyser: {
 		name: "포톤가이저",
-		desc: "빛의 기둥으로 공격한다. 공격과 특수공격을 비교해서 높은 쪽으로 데미지를 준다.",
+		// Official flavor text: "빛의 기둥으로 공격한다. 공격과 특수공격을 비교해서 높은 쪽으로 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikapapow: {
 		name: "피카피카썬더",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pinmissile: {
 		name: "바늘미사일",
-		desc: "날카로운 침을 상대에게 발사해서 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "날카로운 침을 상대에게 발사해서 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4747,22 +5200,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	plasmafists: {
 		name: "플라스마피스트",
-		desc: "전기를 두른 주먹으로 공격한다. 노말타입 기술을 전기타입으로 바꿔버린다.",
+		// Official flavor text: "전기를 두른 주먹으로 공격한다. 노말타입 기술을 전기타입으로 바꿔버린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	playnice: {
 		name: "친해지기",
-		desc: "상대와 친해져서 싸울 마음을 잃게 하여 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "상대와 친해져서 싸울 마음을 잃게 하여 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	playrough: {
 		name: "치근거리기",
-		desc: "상대에게 치근거리며 공격한다. 상대의 공격을 떨어뜨릴 때가 있다.",
+		// Official flavor text: "상대에게 치근거리며 공격한다. 상대의 공격을 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pluck: {
 		name: "쪼아대기",
-		desc: "부리로 공격한다. 상대가 나무열매를 지니고 있을 때 먹어서 나무열매의 효과를 받을 수 있다.",
+		// Official flavor text: "부리로 공격한다. 상대가 나무열매를 지니고 있을 때 먹어서 나무열매의 효과를 받을 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4772,7 +5229,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisonfang: {
 		name: "맹독엄니",
-		desc: "독이 있는 이빨로 상대를 물어서 공격한다. 맹독을 주입할 때가 있다.",
+		// Official flavor text: "독이 있는 이빨로 상대를 물어서 공격한다. 맹독을 주입할 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4781,7 +5239,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisongas: {
 		name: "독가스",
-		desc: "독가스를 상대의 얼굴에 내뿜어 독 상태로 만든다.",
+		// Official flavor text: "독가스를 상대의 얼굴에 내뿜어 독 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4789,17 +5248,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisonjab: {
 		name: "독찌르기",
-		desc: "독에 물든 촉수나 팔로 상대를 꿰찌른다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "독에 물든 촉수나 팔로 상대를 꿰찌른다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonpowder: {
 		name: "독가루",
-		desc: "독이 있는 가루를 많이 흩뿌려서 상대를 독 상태로 만든다.",
+		// Official flavor text: "독이 있는 가루를 많이 흩뿌려서 상대를 독 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonsting: {
 		name: "독침",
-		desc: "독이 있는 침을 상대에게 꿰찔러서 공격한다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "독이 있는 침을 상대에게 꿰찔러서 공격한다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4808,7 +5270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisontail: {
 		name: "포이즌테일",
-		desc: "꼬리로 때린다. 독 상태로 만들 때가 있고 급소에도 맞기 쉽다.",
+		// Official flavor text: "꼬리로 때린다. 독 상태로 만들 때가 있고 급소에도 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	polarflare: {
@@ -4818,7 +5281,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pollenpuff: {
 		name: "꽃가루경단",
-		desc: "상대에게는 폭발하는 경단을 사용하여 공격한다. 같은 편에게는 회복하는 경단을 준다.",
+		// Official flavor text: "상대에게는 폭발하는 경단을 사용하여 공격한다. 같은 편에게는 회복하는 경단을 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poltergeist: {
@@ -4843,7 +5307,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powder: {
 		name: "분진",
-		desc: "분진을 뒤집어쓴 상대가 불꽃 기술을 쓰면 폭발하여 데미지를 준다.",
+		// Official flavor text: "분진을 뒤집어쓴 상대가 불꽃 기술을 쓰면 폭발하여 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4854,7 +5319,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powdersnow: {
 		name: "눈싸라기",
-		desc: "차가운 가랑눈을 상대에게 내뿜어 공격한다. 얼음 상태로 만들 때가 있다.",
+		// Official flavor text: "차가운 가랑눈을 상대에게 내뿜어 공격한다. 얼음 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4866,14 +5332,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powersplit: {
 		name: "파워셰어",
-		desc: "초능력으로 자신과 상대의 공격과 특수공격을 더해서 반으로 나눈다.",
+		// Official flavor text: "초능력으로 자신과 상대의 공격과 특수공격을 더해서 반으로 나눈다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON:topic] 서로의 파워를 셰어했다!",
 	},
 	powerswap: {
 		name: "파워스왑",
-		desc: "초능력으로 자신과 상대의 공격과 특수공격의 능력 변화를 교체한다.",
+		// Official flavor text: "초능력으로 자신과 상대의 공격과 특수공격의 능력 변화를 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powershift: {
@@ -4886,7 +5354,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powertrick: {
 		name: "파워트릭",
-		desc: "초능력으로 자신의 공격과 방어의 힘을 교환한다.",
+		// Official flavor text: "초능력으로 자신의 공격과 방어의 힘을 교환한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 공격과 방어를 바꿨다!",
@@ -4894,12 +5363,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powertrip: {
 		name: "기어오르기",
-		desc: "자신의 강함을 뻐기고 공격한다. 자신의 능력이 올라가 있는 만큼 위력이 오른다.",
+		// Official flavor text: "자신의 강함을 뻐기고 공격한다. 자신의 능력이 올라가 있는 만큼 위력이 오른다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poweruppunch: {
 		name: "그로우펀치",
-		desc: "반복하여 때리면 점점 주먹이 단단해진다. 상대를 때리면 공격이 오른다.",
+		// Official flavor text: "반복하여 때리면 점점 주먹이 단단해진다. 상대를 때리면 공격이 오른다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powerwhip: {
@@ -4908,12 +5379,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	precipiceblades: {
 		name: "단애의칼",
-		desc: "대지의 힘을 칼날로 바꿔 상대를 공격한다.",
+		// Official flavor text: "대지의 힘을 칼날로 바꿔 상대를 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	present: {
 		name: "프레젠트",
-		desc: "덫을 설치한 상자를 상대에게 건네어 공격한다. HP가 회복돼버릴 때도 있다.",
+		// Official flavor text: "덫을 설치한 상자를 상대에게 건네어 공격한다. HP가 회복돼버릴 때도 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4921,12 +5394,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	prismaticlaser: {
 		name: "프리즘레이저",
-		desc: "프리즘의 힘으로 강력한 광선을 발사한다. 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "프리즘의 힘으로 강력한 광선을 발사한다. 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	protect: {
 		name: "방어",
-		desc: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다.",
+		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4955,7 +5430,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psybeam: {
 		name: "환상빔",
-		desc: "이상한 광선을 상대에게 발사하여 공격한다. 혼란시킬 때가 있다.",
+		// Official flavor text: "이상한 광선을 상대에게 발사하여 공격한다. 혼란시킬 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psyblade: {
@@ -4965,7 +5441,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychic: {
 		name: "사이코키네시스",
-		desc: "강한 염동력을 상대에게 보내어 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "강한 염동력을 상대에게 보내어 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4974,7 +5451,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychicfangs: {
 		name: "사이코팽",
-		desc: "사이코 파워로 물어서 상대를 공격한다. 빛의장막이나 리플렉터도 파괴할 수 있다.",
+		// Official flavor text: "사이코 파워로 물어서 상대를 공격한다. 빛의장막이나 리플렉터도 파괴할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychicnoise: {
@@ -4984,7 +5462,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychicterrain: {
 		name: "사이코필드",
-		desc: "5턴 동안 땅에 있으면 선제공격을 받지 않는다. 에스퍼타입의 위력이 올라간다.",
+		// Official flavor text: "5턴 동안 땅에 있으면 선제공격을 받지 않는다. 에스퍼타입의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4992,22 +5471,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychoboost: {
 		name: "사이코부스트",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychocut: {
 		name: "사이코커터",
-		desc: "실체화시킨 마음의 칼날로 상대를 베어 가른다. 급소에 맞기 쉽다.",
+		// Official flavor text: "실체화시킨 마음의 칼날로 상대를 베어 가른다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychoshift: {
 		name: "사이코시프트",
-		desc: "초능력으로 암시를 걸어서 자신에게 걸려 있는 상태 이상을 상대에게 옮긴다.",
+		// Official flavor text: "초능력으로 암시를 걸어서 자신에게 걸려 있는 상태 이상을 상대에게 옮긴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychup: {
 		name: "자기암시",
-		desc: "자신에게 암시를 걸어서 능력 변화 상태를 상대와 똑같은 상태로 만든다.",
+		// Official flavor text: "자신에게 암시를 걸어서 능력 변화 상태를 상대와 똑같은 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5020,17 +5503,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psyshock: {
 		name: "사이코쇼크",
-		desc: "이상한 염력파를 실체화하여 상대를 공격한다. 물리적인 데미지를 준다.",
+		// Official flavor text: "이상한 염력파를 실체화하여 상대를 공격한다. 물리적인 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psystrike: {
 		name: "사이코브레이크",
-		desc: "이상한 염력파를 실체화하여 상대를 공격한다. 물리적인 데미지를 준다.",
+		// Official flavor text: "이상한 염력파를 실체화하여 상대를 공격한다. 물리적인 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psywave: {
 		name: "사이코웨이브",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5046,17 +5532,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	punishment: {
 		name: "혼내기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	purify: {
 		name: "정화",
-		desc: "상대의 상태 이상을 회복한다. 회복하면 자신은 HP를 회복할 수 있다.",
+		// Official flavor text: "상대의 상태 이상을 회복한다. 회복하면 자신은 HP를 회복할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pursuit: {
 		name: "따라가때리기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5080,24 +5569,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pyroball: {
 		name: "화염볼",
-		desc: "작은 돌을 태운 불꽃의 공으로 상대를 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "작은 돌을 태운 불꽃의 공으로 상대를 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	quash: {
 		name: "순서미루기",
-		desc: "상대를 억눌러서 행동의 순서를 마지막으로 만든다.",
+		// Official flavor text: "상대를 억눌러서 행동의 순서를 마지막으로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [TARGET]의 순서를 미뤘다!",
 	},
 	quickattack: {
 		name: "전광석화",
-		desc: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진한다. 반드시 선제공격할 수 있다.",
+		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진한다. 반드시 선제공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	quickguard: {
 		name: "패스트가드",
-		desc: "자신과 같은 편을 상대의 선제공격으로부터 지킨다.",
+		// Official flavor text: "자신과 같은 편을 상대의 선제공격으로부터 지킨다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5117,12 +5610,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	quiverdance: {
 		name: "나비춤",
-		desc: "신비롭고 아름다운 춤을 경쾌하게 춘다. 자신의 특수공격과 특수방어와 스피드를 올린다.",
+		// Official flavor text: "신비롭고 아름다운 춤을 경쾌하게 춘다. 자신의 특수공격과 특수방어와 스피드를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rage: {
 		name: "분노",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5147,7 +5642,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragepowder: {
 		name: "분노가루",
-		desc: "안절부절못하게 하는 가루를 자신에게 뿌려서 주의를 끈다. 상대의 공격은 모두 자신에게 향한다.",
+		// Official flavor text: "안절부절못하게 하는 가루를 자신에게 뿌려서 주의를 끈다. 상대의 공격은 모두 자신에게 향한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5170,7 +5666,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	raindance: {
 		name: "비바라기",
-		desc: "5턴 동안 비를 내리게 해서 물타입 기술의 위력을 올린다. 불꽃타입의 위력은 떨어진다.",
+		// Official flavor text: "5턴 동안 비를 내리게 해서 물타입 기술의 위력을 올린다. 불꽃타입의 위력은 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5181,7 +5678,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rapidspin: {
 		name: "고속스핀",
-		desc: "회전해서 상대를 공격한다. 조이기, 김밥말이, 씨뿌리기 등을 날려버린다. 자신의 스피드도 오른다.",
+		// Official flavor text: "회전해서 상대를 공격한다. 조이기, 김밥말이, 씨뿌리기 등을 날려버린다. 자신의 스피드도 오른다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5196,7 +5694,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	razorleaf: {
 		name: "잎날가르기",
-		desc: "잎사귀를 날려 상대를 베어 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "잎사귀를 날려 상대를 베어 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5204,12 +5703,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	razorshell: {
 		name: "셸블레이드",
-		desc: "날카로운 조개껍질로 베어 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "날카로운 조개껍질로 베어 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorwind: {
 		name: "칼바람",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5231,7 +5732,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	recover: {
 		name: "HP회복",
-		desc: "세포를 재생시켜 자신의 최대 HP의 절반만큼 HP를 회복한다.",
+		// Official flavor text: "세포를 재생시켜 자신의 최대 HP의 절반만큼 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5242,7 +5744,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	recycle: {
 		name: "리사이클",
-		desc: "배틀 중에 사용하여 없어진 자신의 지닌 물건을 재생시켜 사용할 수 있게 한다.",
+		// Official flavor text: "배틀 중에 사용하여 없어진 자신의 지닌 물건을 재생시켜 사용할 수 있게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5255,7 +5758,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reflect: {
 		name: "리플렉터",
-		desc: "5턴 동안 이상한 장막을 쳐서 상대로부터 받는 물리공격의 데미지를 약하게 한다.",
+		// Official flavor text: "5턴 동안 이상한 장막을 쳐서 상대로부터 받는 물리공격의 데미지를 약하게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5281,7 +5785,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reflecttype: {
 		name: "미러타입",
-		desc: "상대의 타입을 반사해서 자신도 똑같은 타입이 된다.",
+		// Official flavor text: "상대의 타입을 반사해서 자신도 똑같은 타입이 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5294,17 +5799,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	refresh: {
 		name: "리프레시",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	relicsong: {
 		name: "옛노래",
-		desc: "옛 노래를 상대에게 들려주고 마음에 호소하여 공격한다. 잠듦 상태로 만들 때가 있다.",
+		// Official flavor text: "옛 노래를 상대에게 들려주고 마음에 호소하여 공격한다. 잠듦 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rest: {
 		name: "잠자기",
-		desc: "2턴 동안 계속 잠잔다. 자신의 HP와 상태 이상을 모두 회복한다.",
+		// Official flavor text: "2턴 동안 계속 잠잔다. 자신의 HP와 상태 이상을 모두 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5315,22 +5823,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	retaliate: {
 		name: "원수갚기",
-		desc: "쓰러진 같은 편의 원수를 갚는다. 앞 턴에서 같은 편이 쓰러지면 위력이 올라간다.",
+		// Official flavor text: "쓰러진 같은 편의 원수를 갚는다. 앞 턴에서 같은 편이 쓰러지면 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	return: {
 		name: "은혜갚기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	revelationdance: {
 		name: "잠재댄스",
-		desc: "전력으로 춤추며 공격한다. 이 기술의 타입은 자신의 타입과 같아진다.",
+		// Official flavor text: "전력으로 춤추며 공격한다. 이 기술의 타입은 자신의 타입과 같아진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	revenge: {
 		name: "리벤지",
-		desc: "상대에게 기술을 받으면 그 상대에게 주는 데미지가 2배가 된다.",
+		// Official flavor text: "상대에게 기술을 받으면 그 상대에게 주는 데미지가 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5342,7 +5854,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reversal: {
 		name: "기사회생",
-		desc: "힘을 쥐어짜서 공격한다. 자신의 HP가 적을수록 기술의 위력이 올라간다.",
+		// Official flavor text: "힘을 쥐어짜서 공격한다. 자신의 HP가 적을수록 기술의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5363,12 +5876,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	risingvoltage: {
 		name: "라이징볼트",
-		desc: "지면에서 올라오는 전격으로 공격한다. 상대가 일렉트릭필드 위에 있을 때 기술의 위력이 2배가 된다.",
+		// Official flavor text: "지면에서 올라오는 전격으로 공격한다. 상대가 일렉트릭필드 위에 있을 때 기술의 위력이 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	roar: {
 		name: "울부짖기",
-		desc: "상대를 도망가게 해서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다.",
+		// Official flavor text: "상대를 도망가게 해서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5383,12 +5898,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roaroftime: {
 		name: "시간의포효",
-		desc: "시간이 뒤틀릴 정도의 힘을 사용해서 상대를 공격한다. 다음 턴은 움직일 수 없다.",
+		// Official flavor text: "시간이 뒤틀릴 정도의 힘을 사용해서 상대를 공격한다. 다음 턴은 움직일 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockblast: {
 		name: "록블라스트",
-		desc: "단단한 암석을 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "단단한 암석을 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5402,17 +5919,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockclimb: {
 		name: "록클라임",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockpolish: {
 		name: "록커트",
-		desc: "자신의 몸을 갈아 공기의 저항을 적게 한다. 스피드를 크게 올릴 수 있다.",
+		// Official flavor text: "자신의 몸을 갈아 공기의 저항을 적게 한다. 스피드를 크게 올릴 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockslide: {
 		name: "스톤샤워",
-		desc: "큰 바위를 세차게 부딪쳐서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "큰 바위를 세차게 부딪쳐서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5424,7 +5944,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocksmash: {
 		name: "바위깨기",
-		desc: "펀치로 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "펀치로 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockthrow: {
@@ -5433,17 +5954,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocktomb: {
 		name: "암석봉인",
-		desc: "암석을 내던져서 공격한다. 상대의 움직임을 봉인함으로써 스피드를 떨어뜨린다.",
+		// Official flavor text: "암석을 내던져서 공격한다. 상대의 움직임을 봉인함으로써 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockwrecker: {
 		name: "암석포",
-		desc: "거대한 바위를 상대에게 발사하여 공격한다. 다음 턴은 움직일 수 없게 된다.",
+		// Official flavor text: "거대한 바위를 상대에게 발사하여 공격한다. 다음 턴은 움직일 수 없게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	roleplay: {
 		name: "역할",
-		desc: "상대의 역할을 하여 자신도 상대와 같은 특성으로 변화한다.",
+		// Official flavor text: "상대의 역할을 하여 자신도 상대와 같은 특성으로 변화한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5468,12 +5992,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rollingkick: {
 		name: "돌려차기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rollout: {
 		name: "구르기",
-		desc: "5턴 동안 구르기를 반복하여 공격한다. 기술이 맞을 때마다 위력이 올라간다.",
+		// Official flavor text: "5턴 동안 구르기를 반복하여 공격한다. 기술이 맞을 때마다 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5484,7 +6010,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roost: {
 		name: "날개쉬기",
-		desc: "땅에 내려와 몸을 쉬게 한다. 최대 HP의 절반만큼 HP를 회복한다.",
+		// Official flavor text: "땅에 내려와 몸을 쉬게 한다. 최대 HP의 절반만큼 HP를 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5497,12 +6024,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rototiller: {
 		name: "일구기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	round: {
 		name: "돌림노래",
-		desc: "노래로 상대를 공격한다. 함께 돌림노래를 하면 계속해서 쓸 수 있고 위력도 올라간다.",
+		// Official flavor text: "노래로 상대를 공격한다. 함께 돌림노래를 하면 계속해서 쓸 수 있고 위력도 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ruination: {
@@ -5512,17 +6041,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sacredfire: {
 		name: "성스러운불꽃",
-		desc: "신비한 불꽃으로 상대를 태워서 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "신비한 불꽃으로 상대를 태워서 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sacredsword: {
 		name: "성스러운칼",
-		desc: "긴 뿔로 베어 공격한다. 상대의 능력 변화에 관계없이 데미지를 준다.",
+		// Official flavor text: "긴 뿔로 베어 공격한다. 상대의 능력 변화에 관계없이 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	safeguard: {
 		name: "신비의부적",
-		desc: "5턴 동안 이상한 힘의 보호를 받아 상태 이상이 되지 않는다.",
+		// Official flavor text: "5턴 동안 이상한 힘의 보호를 받아 상태 이상이 되지 않는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5549,7 +6081,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandattack: {
 		name: "모래뿌리기",
-		desc: "상대의 얼굴에 모래를 뿌려서 명중률을 떨어뜨린다.",
+		// Official flavor text: "상대의 얼굴에 모래를 뿌려서 명중률을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandsearstorm: {
@@ -5559,7 +6092,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandstorm: {
 		name: "모래바람",
-		desc: "5턴 동안 모래바람을 일으켜 바위 땅, 강철타입 이외의 상대에게 데미지를 준다. 바위타입의 특수방어가 올라간다.",
+		// Official flavor text: "5턴 동안 모래바람을 일으켜 바위 땅, 강철타입 이외의 상대에게 데미지를 준다. 바위타입의 특수방어가 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5574,7 +6108,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandtomb: {
 		name: "모래지옥",
-		desc: "세차게 불어대는 모래바람 속에 4-5턴 동안 상대를 가두어 공격한다.",
+		// Official flavor text: "세차게 불어대는 모래바람 속에 4-5턴 동안 상대를 가두어 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5597,7 +6132,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sappyseed: {
 		name: "쑥쑥봄버",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
@@ -5606,7 +6142,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scald: {
 		name: "열탕",
-		desc: "뜨겁게 끓어오르는 물을 상대에게 발사해서 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "뜨겁게 끓어오르는 물을 상대에게 발사해서 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5615,17 +6152,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scaleshot: {
 		name: "스케일샷",
-		desc: "비늘을 쏘아서 공격한다. 2-5회 동안 연속으로 쓴다. 스피드가 올라가지만 방어가 떨어진다.",
+		// Official flavor text: "비늘을 쏘아서 공격한다. 2-5회 동안 연속으로 쓴다. 스피드가 올라가지만 방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scaryface: {
 		name: "겁나는얼굴",
-		desc: "무서운 얼굴로 노려보고 겁주어 상대의 스피드를 크게 떨어뜨린다.",
+		// Official flavor text: "무서운 얼굴로 노려보고 겁주어 상대의 스피드를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scorchingsands: {
 		name: "열사의대지",
-		desc: "뜨겁게 달궈진 모래를 상대에게 부딪쳐서 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "뜨겁게 달궈진 모래를 상대에게 부딪쳐서 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scratch: {
@@ -5634,22 +6174,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	screech: {
 		name: "싫은소리",
-		desc: "그만 귀를 막아버리고 싶은 싫은 소리를 내어 상대의 방어를 크게 떨어뜨린다.",
+		// Official flavor text: "그만 귀를 막아버리고 싶은 싫은 소리를 내어 상대의 방어를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	searingshot: {
 		name: "화염탄",
-		desc: "새빨간 불꽃으로 자신의 주위에 있는 포켓몬을 공격한다. 화상 상태로 만들 때가 있다.",
+		// Official flavor text: "새빨간 불꽃으로 자신의 주위에 있는 포켓몬을 공격한다. 화상 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	searingsunrazesmash: {
 		name: "선샤인스매셔",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	secretpower: {
 		name: "비밀의힘",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5665,7 +6209,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	secretsword: {
 		name: "신비의칼",
-		desc: "긴 뿔로 베어 공격한다. 뿔이 머금은 이상한 힘은 물리적인 데미지를 준다.",
+		// Official flavor text: "긴 뿔로 베어 공격한다. 뿔이 머금은 이상한 힘은 물리적인 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	seedbomb: {
@@ -5674,12 +6219,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	seedflare: {
 		name: "시드플레어",
-		desc: "몸속에서 충격파를 발생시킨다. 상대의 특수방어를 크게 떨어뜨릴 때가 있다.",
+		// Official flavor text: "몸속에서 충격파를 발생시킨다. 상대의 특수방어를 크게 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	seismictoss: {
 		name: "지구던지기",
-		desc: "인력을 사용해 내던진다. 자신의 레벨과 똑같은 데미지를 상대에게 준다.",
+		// Official flavor text: "인력을 사용해 내던진다. 자신의 레벨과 똑같은 데미지를 상대에게 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5688,7 +6235,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	selfdestruct: {
 		name: "자폭",
-		desc: "폭발을 일으켜서 자신의 주위에 있는 포켓몬을 공격한다. 쓰고 나서 기절하게 된다.",
+		// Official flavor text: "폭발을 일으켜서 자신의 주위에 있는 포켓몬을 공격한다. 쓰고 나서 기절하게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5706,22 +6254,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowball: {
 		name: "섀도볼",
-		desc: "까만 그림자의 덩어리를 내던져서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "까만 그림자의 덩어리를 내던져서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowbone: {
 		name: "섀도본",
-		desc: "영혼이 머물고 있는 뼈로 상대를 세게 때려서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다.",
+		// Official flavor text: "영혼이 머물고 있는 뼈로 상대를 세게 때려서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowclaw: {
 		name: "섀도클로",
-		desc: "그림자로 만든 날카로운 발톱으로 상대를 베어 가른다. 급소에 맞기 쉽다.",
+		// Official flavor text: "그림자로 만든 날카로운 발톱으로 상대를 베어 가른다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowforce: {
 		name: "섀도다이브",
-		desc: "1턴째에 모습을 감춰 2턴째에 상대를 공격한다. 방어하고 있어도 공격은 맞는다.",
+		// Official flavor text: "1턴째에 모습을 감춰 2턴째에 상대를 공격한다. 방어하고 있어도 공격은 맞는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5739,7 +6291,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowsneak: {
 		name: "야습",
-		desc: "그림자를 늘려 상대의 배후에서 공격한다. 반드시 선제공격할 수 있다.",
+		// Official flavor text: "그림자를 늘려 상대의 배후에서 공격한다. 반드시 선제공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowstrike: {
@@ -5749,7 +6302,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sharpen: {
 		name: "각지기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
@@ -5767,7 +6321,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sheercold: {
 		name: "절대영도",
-		desc: "상대를 일격에 기절시킨다. 얼음타입 이외의 포켓몬이 사용하면 잘 맞지 않는다.",
+		// Official flavor text: "상대를 일격에 기절시킨다. 얼음타입 이외의 포켓몬이 사용하면 잘 맞지 않는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5776,17 +6331,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shellsidearm: {
 		name: "셸암즈",
-		desc: "물리와 특수 중 더 많은 데미지를 줄 수 있는 능력으로 공격한다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "물리와 특수 중 더 많은 데미지를 줄 수 있는 능력으로 공격한다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shellsmash: {
 		name: "껍질깨기",
-		desc: "껍질을 깨서 자신의 방어와 특수방어를 떨어뜨리지만 공격과 특수공격, 스피드를 크게 올린다.",
+		// Official flavor text: "껍질을 깨서 자신의 방어와 특수방어를 떨어뜨리지만 공격과 특수공격, 스피드를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shelltrap: {
 		name: "트랩셸",
-		desc: "껍질의 트랩을 설치한다. 상대가 물리 기술을 쓰면 폭발해서 데미지를 준다.",
+		// Official flavor text: "껍질의 트랩을 설치한다. 상대가 물리 기술을 쓰면 폭발해서 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 트랩셸을 설치했다!",
@@ -5800,7 +6358,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shiftgear: {
 		name: "기어체인지",
-		desc: "톱니바퀴를 돌려서 자신의 공격을 올리는 것뿐만 아니라 스피드도 크게 올린다.",
+		// Official flavor text: "톱니바퀴를 돌려서 자신의 공격을 올리는 것뿐만 아니라 스피드도 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockwave: {
@@ -5809,12 +6368,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shoreup: {
 		name: "모래모으기",
-		desc: "자신의 최대 HP 절반을 회복한다. 모래바람일 때는 많이 회복한다.",
+		// Official flavor text: "자신의 최대 HP 절반을 회복한다. 모래바람일 때는 많이 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	signalbeam: {
 		name: "시그널빔",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	silktrap: {
@@ -5824,12 +6385,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	silverwind: {
 		name: "은빛바람",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	simplebeam: {
 		name: "심플빔",
-		desc: "수수께끼의 염력파를 상대에게 보낸다. 염력파를 받은 상대는 특성이 단순으로 바뀐다.",
+		// Official flavor text: "수수께끼의 염력파를 상대에게 보낸다. 염력파를 받은 상대는 특성이 단순으로 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5854,12 +6417,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sizzlyslide: {
 		name: "이글이글번",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sketch: {
 		name: "스케치",
-		desc: "상대가 쓴 기술을 자신의 것으로 만든다. 한 번 사용하면 스케치는 사라진다.",
+		// Official flavor text: "상대가 쓴 기술을 자신의 것으로 만든다. 한 번 사용하면 스케치는 사라진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5876,7 +6441,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skillswap: {
 		name: "스킬스왑",
-		desc: "초능력으로 자신의 특성과 상대의 특성을 바꾼다.",
+		// Official flavor text: "초능력으로 자신의 특성과 상대의 특성을 바꾼다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5901,12 +6467,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skittersmack: {
 		name: "엄습하는일격",
-		desc: "배후에서 엄습해서 공격한다. 상대의 특수공격을 떨어뜨린다.",
+		// Official flavor text: "배후에서 엄습해서 공격한다. 상대의 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	skullbash: {
 		name: "로켓박치기",
-		desc: "1턴째에 머리를 움츠려 방어를 올린다. 2턴째에 상대를 공격한다.",
+		// Official flavor text: "1턴째에 머리를 움츠려 방어를 올린다. 2턴째에 상대를 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5920,7 +6488,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "불새",
-		desc: "2턴째에 상대를 공격한다. 가끔 풀죽게 만든다. 급소에도 맞기 쉽다.",
+		// Official flavor text: "2턴째에 상대를 공격한다. 가끔 풀죽게 만든다. 급소에도 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5934,7 +6503,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skydrop: {
 		name: "프리폴",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5947,7 +6517,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyuppercut: {
 		name: "스카이어퍼",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5956,7 +6527,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slackoff: {
 		name: "게으름피우기",
-		desc: "게으름 피우며 쉰다. 자신의 HP를 최대 HP의 절반만큼 회복한다.",
+		// Official flavor text: "게으름 피우며 쉰다. 자신의 HP를 최대 HP의 절반만큼 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5968,7 +6540,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slash: {
 		name: "베어가르기",
-		desc: "발톱이나 낫 등으로 상대를 베어 갈라서 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "발톱이나 낫 등으로 상대를 베어 갈라서 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sleeppowder: {
@@ -5977,7 +6550,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sleeptalk: {
 		name: "잠꼬대",
-		desc: "자신이 배운 기술 중 하나를 무작위로 날린다. 자신이 잠들어 있을 때만 쓸 수 있다.",
+		// Official flavor text: "자신이 배운 기술 중 하나를 무작위로 날린다. 자신이 잠들어 있을 때만 쓸 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6003,7 +6577,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sludge: {
 		name: "오물공격",
-		desc: "더러운 오물을 상대에게 내던져서 공격한다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "더러운 오물을 상대에게 내던져서 공격한다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6012,17 +6587,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sludgebomb: {
 		name: "오물폭탄",
-		desc: "더러운 오물을 상대에게 내던져서 공격한다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "더러운 오물을 상대에게 내던져서 공격한다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sludgewave: {
 		name: "오물웨이브",
-		desc: "오물 파도로 자신의 주위에 있는 포켓몬을 공격한다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "오물 파도로 자신의 주위에 있는 포켓몬을 공격한다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	smackdown: {
 		name: "떨어뜨리기",
-		desc: "돌이나 구슬을 던져서 날고 있는 상대를 공격한다. 맞은 상대는 땅에 떨어진다.",
+		// Official flavor text: "돌이나 구슬을 던져서 날고 있는 상대를 공격한다. 맞은 상대는 땅에 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 떨어뜨리기를 당해서 땅에 떨어졌다!",
@@ -6033,7 +6611,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	smellingsalts: {
 		name: "정신차리기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6045,17 +6624,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	smog: {
 		name: "스모그",
-		desc: "더러운 가스를 상대에게 내뿜어 공격한다. 독 상태로 만들 때가 있다.",
+		// Official flavor text: "더러운 가스를 상대에게 내뿜어 공격한다. 독 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	smokescreen: {
 		name: "연막",
-		desc: "연기나 먹물을 내뿜어 상대의 명중률을 떨어뜨린다.",
+		// Official flavor text: "연기나 먹물을 내뿜어 상대의 명중률을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snaptrap: {
 		name: "집게덫",
-		desc: "집게덫으로 붙잡은 뒤 4-5턴 동안 상대를 끼워서 공격한다.",
+		// Official flavor text: "집게덫으로 붙잡은 뒤 4-5턴 동안 상대를 끼워서 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6065,12 +6647,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snarl: {
 		name: "바크아웃",
-		desc: "호되게 호통을 쳐서 상대의 특수공격을 떨어뜨린다.",
+		// Official flavor text: "호되게 호통을 쳐서 상대의 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snatch: {
 		name: "가로채기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6081,12 +6665,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snipeshot: {
 		name: "노려맞히기",
-		desc: "상대의 기술을 끌어모으는 특성이나 기술의 영향을 무시하고 선택한 상대를 공격할 수 있다.",
+		// Official flavor text: "상대의 기술을 끌어모으는 특성이나 기술의 영향을 무시하고 선택한 상대를 공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snore: {
 		name: "코골기",
-		desc: "자신이 잠들어 있을 때 소음을 내어 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "자신이 잠들어 있을 때 소음을 내어 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snowscape: {
@@ -6096,7 +6682,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	soak: {
 		name: "물붓기",
-		desc: "많은 물을 끼얹어서 상대를 물타입으로 바꾼다.",
+		// Official flavor text: "많은 물을 끼얹어서 상대를 물타입으로 바꾼다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6110,7 +6697,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	softboiled: {
 		name: "알낳기",
-		desc: "자신의 최대 HP 절반을 회복한다.",
+		// Official flavor text: "자신의 최대 HP 절반을 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6121,7 +6709,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarbeam: {
 		name: "솔라빔",
-		desc: "1턴째에 빛을 가득 모아 2턴째에 빛의 다발을 발사하여 공격한다.",
+		// Official flavor text: "1턴째에 빛을 가득 모아 2턴째에 빛의 다발을 발사하여 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6150,7 +6739,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarblade: {
 		name: "솔라블레이드",
-		desc: "1턴째에 빛을 가득 모아 2턴째에 그 힘을 검에 담아 공격한다.",
+		// Official flavor text: "1턴째에 빛을 가득 모아 2턴째에 그 힘을 검에 담아 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6163,7 +6753,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sonicboom: {
 		name: "소닉붐",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6175,34 +6766,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spacialrend: {
 		name: "공간절단",
-		desc: "주위의 공간과 더불어 상대를 찢어서 데미지를 준다. 급소에 맞기 쉽다.",
+		// Official flavor text: "주위의 공간과 더불어 상대를 찢어서 데미지를 준다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spark: {
 		name: "스파크",
-		desc: "전기를 둘러 상대에게 돌진하여 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "전기를 둘러 상대에게 돌진하여 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sparklingaria: {
 		name: "물거품아리아",
-		desc: "노래 부르는 것으로 많은 벌룬을 방출한다. 기술에 맞으면 화상이 낫는다.",
+		// Official flavor text: "노래 부르는 것으로 많은 벌룬을 방출한다. 기술에 맞으면 화상이 낫는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sparklyswirl: {
 		name: "반짝반짝스톰",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spectralthief: {
 		name: "섀도스틸",
-		desc: "상대의 그림자에 숨어들어 상대의 능력이 올라가는 것을 뺏어 공격한다.",
+		// Official flavor text: "상대의 그림자에 숨어들어 상대의 능력이 올라가는 것을 뺏어 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		clearBoost: "  [SOURCE:topic] 올라간 능력을 빼앗았다!",
 	},
 	speedswap: {
 		name: "스피드스왑",
-		desc: "상대의 스피드와 자신의 스피드를 교체한다.",
+		// Official flavor text: "상대의 스피드와 자신의 스피드를 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON:topic] 서로의 스피드를 교체했다!",
@@ -6214,7 +6811,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiderweb: {
 		name: "거미집",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6231,7 +6829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikecannon: {
 		name: "가시대포",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6245,7 +6844,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikes: {
 		name: "압정뿌리기",
-		desc: "상대의 발밑에 압정을 뿌린다. 교체된 상대 포켓몬에게 데미지를 준다.",
+		// Official flavor text: "상대의 발밑에 압정을 뿌린다. 교체된 상대 포켓몬에게 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6267,7 +6867,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikyshield: {
 		name: "니들가드",
-		desc: "상대의 공격을 막음과 동시에 접촉한 상대의 체력을 떨어뜨린다.",
+		// Official flavor text: "상대의 공격을 막음과 동시에 접촉한 상대의 체력을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6288,12 +6889,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiritbreak: {
 		name: "소울크래시",
-		desc: "맞으면 기가 꺾여버릴 것 같은 기세로 공격한다. 상대의 특수공격을 떨어뜨린다.",
+		// Official flavor text: "맞으면 기가 꺾여버릴 것 같은 기세로 공격한다. 상대의 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spiritshackle: {
 		name: "그림자꿰매기",
-		desc: "공격과 동시에 상대의 그림자를 꿰매 도망칠 수 없게 한다.",
+		// Official flavor text: "공격과 동시에 상대의 그림자를 꿰매 도망칠 수 없게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6301,7 +6904,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spite: {
 		name: "원한",
-		desc: "상대가 마지막으로 사용한 기술에 원한을 품어 그 기술의 PP를 4만큼 줄인다.",
+		// Official flavor text: "상대가 마지막으로 사용한 기술에 원한을 품어 그 기술의 PP를 4만큼 줄인다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6315,7 +6919,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spitup: {
 		name: "토해내기",
-		desc: "비축된 힘을 상대에게 부딪쳐서 공격한다. 비축된 만큼 위력이 올라간다.",
+		// Official flavor text: "비축된 힘을 상대에게 부딪쳐서 공격한다. 비축된 만큼 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6332,12 +6937,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	splinteredstormshards: {
 		name: "레이디얼에지스톰",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	splishysplash: {
 		name: "참방참방서핑",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spore: {
@@ -6346,7 +6953,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spotlight: {
 		name: "스포트라이트",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#followme",
@@ -6359,7 +6967,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stealthrock: {
 		name: "스텔스록",
-		desc: "상대의 주위에 무수한 바위를 띄워 교체해서 나온 상대 포켓몬에게 데미지를 준다.",
+		// Official flavor text: "상대의 주위에 무수한 바위를 띄워 교체해서 나온 상대 포켓몬에게 데미지를 준다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6374,12 +6983,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steameruption: {
 		name: "스팀버스트",
-		desc: "상대에게 굉장히 뜨거운 증기를 뿜는다. 상대는 화상을 입기도 한다.",
+		// Official flavor text: "상대에게 굉장히 뜨거운 증기를 뿜는다. 상대는 화상을 입기도 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steamroller: {
 		name: "하드롤러",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6387,24 +6998,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steelbeam: {
 		name: "철제광선",
-		desc: "전신에서 끌어모은 강철을 빔으로 바꿔 세차게 발사한다. 자신도 데미지를 받는다.",
+		// Official flavor text: "전신에서 끌어모은 강철을 빔으로 바꿔 세차게 발사한다. 자신도 데미지를 받는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "아이언롤러",
-		desc: "필드를 파괴하면서 공격한다. 필드가 어떤 상태로든 변해 있지 않은 경우 기술은 실패한다.",
+		// Official flavor text: "필드를 파괴하면서 공격한다. 필드가 어떤 상태로든 변해 있지 않은 경우 기술은 실패한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelwing: {
 		name: "강철날개",
-		desc: "단단한 날개를 상대에게 부딪쳐서 공격한다. 자신의 방어가 올라갈 때가 있다.",
+		// Official flavor text: "단단한 날개를 상대에게 부딪쳐서 공격한다. 자신의 방어가 올라갈 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stickyweb: {
 		name: "끈적끈적네트",
-		desc: "상대의 주위에 끈적끈적한 네트를 둘러 펼쳐 교체되어 나온 상대의 스피드를 떨어뜨린다.",
+		// Official flavor text: "상대의 주위에 끈적끈적한 네트를 둘러 펼쳐 교체되어 나온 상대의 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6416,7 +7031,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stockpile: {
 		name: "비축하기",
-		desc: "힘을 비축해서 자신의 방어와 특수방어를 올린다. 최대 3회까지 비축할 수 있다.",
+		// Official flavor text: "힘을 비축해서 자신의 방어와 특수방어를 올린다. 최대 3회까지 비축할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6428,12 +7044,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stokedsparksurfer: {
 		name: "라이트닝서프라이드",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stomp: {
 		name: "짓밟기",
-		desc: "큰 발로 상대를 짓밟아서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "큰 발로 상대를 짓밟아서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6453,7 +7071,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stompingtantrum: {
 		name: "분함의발구르기",
-		desc: "분함을 발판 삼아 공격한다. 앞 턴에서 기술이 빗나갔다면 위력이 배가 된다.",
+		// Official flavor text: "분함을 발판 삼아 공격한다. 앞 턴에서 기술이 빗나갔다면 위력이 배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stoneaxe: {
@@ -6463,22 +7082,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneedge: {
 		name: "스톤에지",
-		desc: "뾰족한 바위를 상대에게 꿰찔러서 공격한다. 급소에 맞기 쉽다.",
+		// Official flavor text: "뾰족한 바위를 상대에게 꿰찔러서 공격한다. 급소에 맞기 쉽다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	storedpower: {
 		name: "어시스트파워",
-		desc: "축적된 파워로 상대를 공격한다. 자신의 능력이 올라가 있는 만큼 위력이 오른다.",
+		// Official flavor text: "축적된 파워로 상대를 공격한다. 자신의 능력이 올라가 있는 만큼 위력이 오른다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stormthrow: {
 		name: "업어후리기",
-		desc: "강렬한 일격을 상대에게 날린다. 공격은 반드시 급소에 맞는다.",
+		// Official flavor text: "강렬한 일격을 상대에게 날린다. 공격은 반드시 급소에 맞는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strangesteam: {
 		name: "원더스팀",
-		desc: "연기를 분출해서 상대를 공격한다. 혼란시킬 때가 있다.",
+		// Official flavor text: "연기를 분출해서 상대를 공격한다. 혼란시킬 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strength: {
@@ -6487,12 +7110,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strengthsap: {
 		name: "힘흡수",
-		desc: "상대 공격력과 동일하게 자신의 HP를 회복한다. 그리고 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "상대 공격력과 동일하게 자신의 HP를 회복한다. 그리고 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stringshot: {
 		name: "실뿜기",
-		desc: "입에서 뿜어낸 실을 휘감아서 상대의 스피드를 크게 떨어뜨린다.",
+		// Official flavor text: "입에서 뿜어낸 실을 휘감아서 상대의 스피드를 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6504,7 +7129,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	struggle: {
 		name: "발버둥",
-		desc: "자신의 PP가 떨어지면 발버둥 쳐 상대를 공격한다. 자신도 조금 데미지를 입는다.",
+		// Official flavor text: "자신의 PP가 떨어지면 발버둥 쳐 상대를 공격한다. 자신도 조금 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6526,12 +7152,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strugglebug: {
 		name: "벌레의저항",
-		desc: "저항해서 상대를 공격한다. 상대의 특수공격을 떨어뜨린다.",
+		// Official flavor text: "저항해서 상대를 공격한다. 상대의 특수공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stuffcheeks: {
 		name: "볼가득넣기",
-		desc: "지니고 있는 나무열매를 먹고 방어를 크게 올린다.",
+		// Official flavor text: "지니고 있는 나무열매를 먹고 방어를 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6540,7 +7168,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stunspore: {
 		name: "저리가루",
-		desc: "저리가루를 많이 흩뿌려서 상대를 마비 상태로 만든다.",
+		// Official flavor text: "저리가루를 많이 흩뿌려서 상대를 마비 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6551,7 +7180,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	submission: {
 		name: "지옥의바퀴",
-		desc: "땅에 자신과 함께 상대를 내던져 공격한다. 자신도 조금 데미지를 입는다.",
+		// Official flavor text: "땅에 자신과 함께 상대를 내던져 공격한다. 자신도 조금 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6565,7 +7195,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	substitute: {
 		name: "대타출동",
-		desc: "자신의 HP를 조금 깎아서 분신을 만든다. 분신은 자신의 대타가 된다.",
+		// Official flavor text: "자신의 HP를 조금 깎아서 분신을 만든다. 분신은 자신의 대타가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6590,7 +7221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	suckerpunch: {
 		name: "기습",
-		desc: "상대보다 먼저 공격할 수 있다. 상대가 쓴 기술이 공격기술이 아니면 실패한다.",
+		// Official flavor text: "상대보다 먼저 공격할 수 있다. 상대가 쓴 기술이 공격기술이 아니면 실패한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6598,7 +7230,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sunnyday: {
 		name: "쾌청",
-		desc: "5턴 동안 햇살을 강하게 해서 불꽃타입 기술의 위력을 올린다. 물타입의 위력은 떨어진다.",
+		// Official flavor text: "5턴 동안 햇살을 강하게 해서 불꽃타입 기술의 위력을 올린다. 물타입의 위력은 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6609,7 +7242,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sunsteelstrike: {
 		name: "메테오드라이브",
-		desc: "유성 같은 기세로 돌진한다. 상대의 특성을 무시하고 공격할 수 있다.",
+		// Official flavor text: "유성 같은 기세로 돌진한다. 상대의 특성을 무시하고 공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supercellslam: {
@@ -6621,7 +7255,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	superfang: {
 		name: "분노의앞니",
-		desc: "날카로운 앞니로 강하게 물어서 공격한다. 상대의 HP는 절반이 된다.",
+		// Official flavor text: "날카로운 앞니로 강하게 물어서 공격한다. 상대의 HP는 절반이 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6630,7 +7265,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	superpower: {
 		name: "엄청난힘",
-		desc: "엄청난 힘을 발휘하여 상대를 공격한다. 자신의 공격과 방어가 떨어진다.",
+		// Official flavor text: "엄청난 힘을 발휘하여 상대를 공격한다. 자신의 공격과 방어가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonic: {
@@ -6643,7 +7279,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	surf: {
 		name: "파도타기",
-		desc: "큰 파도로 자신의 주위에 있는 포켓몬을 공격한다.",
+		// Official flavor text: "큰 파도로 자신의 주위에 있는 포켓몬을 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6659,12 +7296,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	surgingstrikes: {
 		name: "수류연타",
-		desc: "물의 태세가 극에 달하여 물 흐르듯 3회의 연격을 날린다. 반드시 급소에 맞는다.",
+		// Official flavor text: "물의 태세가 극에 달하여 물 흐르듯 3회의 연격을 날린다. 반드시 급소에 맞는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swagger: {
 		name: "뽐내기",
-		desc: "상대를 화내게 해서 혼란시킨다. 분노로 상대의 공격은 크게 올라가 버린다.",
+		// Official flavor text: "상대를 화내게 해서 혼란시킨다. 분노로 상대의 공격은 크게 올라가 버린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6672,7 +7311,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swallow: {
 		name: "꿀꺽",
-		desc: "비축된 힘을 꿀꺽해서 자신의 HP를 회복한다. 비축된 만큼 회복한다.",
+		// Official flavor text: "비축된 힘을 꿀꺽해서 자신의 HP를 회복한다. 비축된 만큼 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6687,7 +7327,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sweetscent: {
 		name: "달콤한향기",
-		desc: "향기로 상대의 회피율을 크게 떨어뜨린다.",
+		// Official flavor text: "향기로 상대의 회피율을 크게 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6699,7 +7340,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swift: {
 		name: "스피드스타",
-		desc: "별 모양의 빛을 발사해서 상대를 공격한다. 공격은 반드시 명중한다.",
+		// Official flavor text: "별 모양의 빛을 발사해서 상대를 공격한다. 공격은 반드시 명중한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6711,7 +7353,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	switcheroo: {
 		name: "바꿔치기",
-		desc: "눈에 보이지 않는 속도로 자신과 상대가 지닌 물건을 교환한다.",
+		// Official flavor text: "눈에 보이지 않는 속도로 자신과 상대가 지닌 물건을 교환한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6736,17 +7379,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swordsdance: {
 		name: "칼춤",
-		desc: "싸움의 춤을 격렬하게 춰서 기세를 높인다. 자신의 공격을 크게 올린다.",
+		// Official flavor text: "싸움의 춤을 격렬하게 춰서 기세를 높인다. 자신의 공격을 크게 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	synchronoise: {
 		name: "싱크로노이즈",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	synthesis: {
 		name: "광합성",
-		desc: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다.",
+		// Official flavor text: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6782,7 +7428,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailglow: {
 		name: "반딧불",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6791,7 +7438,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailslap: {
 		name: "스위프뺨치기",
-		desc: "단단한 꼬리로 상대를 때려서 공격한다. 2-5회 동안 연속으로 쓴다.",
+		// Official flavor text: "단단한 꼬리로 상대를 때려서 공격한다. 2-5회 동안 연속으로 쓴다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6799,7 +7447,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailwhip: {
 		name: "꼬리흔들기",
-		desc: "꼬리를 좌우로 귀엽게 흔들어 방심을 유도한다. 상대의 방어를 떨어뜨린다.",
+		// Official flavor text: "꼬리를 좌우로 귀엽게 흔들어 방심을 유도한다. 상대의 방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6807,7 +7456,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailwind: {
 		name: "순풍",
-		desc: "세차게 불어대는 바람의 소용돌이를 만들어 4턴 동안 같은 편 모두의 스피드를 올린다.",
+		// Official flavor text: "세차게 불어대는 바람의 소용돌이를 만들어 4턴 동안 같은 편 모두의 스피드를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6819,7 +7469,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	takedown: {
 		name: "돌진",
-		desc: "굉장한 기세로 상대에게 부딪쳐 공격한다. 자신도 조금 데미지를 입는다.",
+		// Official flavor text: "굉장한 기세로 상대에게 부딪쳐 공격한다. 자신도 조금 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6838,14 +7489,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tarshot: {
 		name: "타르샷",
-		desc: "끈적끈적한 타르를 날려서 상대의 스피드를 떨어뜨린다. 상대는 불꽃이 약점이 된다.",
+		// Official flavor text: "끈적끈적한 타르를 날려서 상대의 스피드를 떨어뜨린다. 상대는 불꽃이 약점이 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 불꽃에 약해졌다!",
 	},
 	taunt: {
 		name: "도발",
-		desc: "상대를 화나게 한다. 3턴 동안 상대는 데미지를 주는 기술밖에 쓸 수 없게 된다.",
+		// Official flavor text: "상대를 화나게 한다. 3턴 동안 상대는 데미지를 주는 기술밖에 쓸 수 없게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6871,12 +7524,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tearfullook: {
 		name: "눈물그렁그렁",
-		desc: "눈물을 그렁그렁거려 상대의 전의를 상실하게 한다. 상대의 공격과 특수공격이 떨어진다.",
+		// Official flavor text: "눈물을 그렁그렁거려 상대의 전의를 상실하게 한다. 상대의 공격과 특수공격이 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teatime: {
 		name: "다과회",
-		desc: "다과회를 열어서 배틀에 나와 있는 포켓몬이 각각 지니고 있는 나무열매를 먹는다.",
+		// Official flavor text: "다과회를 열어서 배틀에 나와 있는 포켓몬이 각각 지니고 있는 나무열매를 먹는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  다과회를 열어서 다 같이 나무열매를 먹었다!",
@@ -6884,7 +7539,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	technoblast: {
 		name: "테크노버스터",
-		desc: "광탄을 상대에게 방출한다. 자신이 지니고 있는 카세트에 의해 타입이 바뀐다.",
+		// Official flavor text: "광탄을 상대에게 방출한다. 자신이 지니고 있는 카세트에 의해 타입이 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
@@ -6893,12 +7549,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	teeterdance: {
 		name: "흔들흔들댄스",
-		desc: "흔들흔들 댄스를 춰서 주위에 있는 포켓몬을 혼란 상태로 만든다.",
+		// Official flavor text: "흔들흔들 댄스를 춰서 주위에 있는 포켓몬을 혼란 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	telekinesis: {
 		name: "텔레키네시스",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6912,7 +7570,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	teleport: {
 		name: "순간이동",
-		desc: "교대할 포켓몬이 있을 때 사용하면 교체한다. 야생 포켓몬은 도망가 버린다.",
+		// Official flavor text: "교대할 포켓몬이 있을 때 사용하면 교체한다. 야생 포켓몬은 도망가 버린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6936,12 +7595,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	terrainpulse: {
 		name: "대지의파동",
-		desc: "필드의 힘을 빌려서 공격한다. 사용했을 때의 필드 상태에 따라서 기술 타입과 위력이 바뀐다.",
+		// Official flavor text: "필드의 힘을 빌려서 공격한다. 사용했을 때의 필드 상태에 따라서 기술 타입과 위력이 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thief: {
 		name: "도둑질",
-		desc: "공격과 동시에 도구를 훔친다. 자신이 도구를 지니고 있을 경우에는 훔칠 수 없다.",
+		// Official flavor text: "공격과 동시에 도구를 훔친다. 자신이 도구를 지니고 있을 경우에는 훔칠 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6970,12 +7631,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thousandarrows: {
 		name: "사우전드애로",
-		desc: "떠 있는 포켓몬도 맞힐 수 있다. 떠 있던 상대는 맞아서 땅에 떨어진다.",
+		// Official flavor text: "떠 있는 포켓몬도 맞힐 수 있다. 떠 있던 상대는 맞아서 땅에 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thousandwaves: {
 		name: "사우전드웨이브",
-		desc: "땅 위를 뻗어 나가는 파도로 공격한다. 파도에 휩쓸린 상대는 전투에서 도망칠 수 없게 된다.",
+		// Official flavor text: "땅 위를 뻗어 나가는 파도로 공격한다. 파도에 휩쓸린 상대는 전투에서 도망칠 수 없게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6983,7 +7646,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thrash: {
 		name: "난동부리기",
-		desc: "2-3턴 동안 마구 난동 부려서 상대를 공격한다. 난동 부린 뒤에는 혼란에 빠진다.",
+		// Official flavor text: "2-3턴 동안 마구 난동 부려서 상대를 공격한다. 난동 부린 뒤에는 혼란에 빠진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7004,7 +7668,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	throatchop: {
 		name: "지옥찌르기",
-		desc: "이 기술에 맞은 상대는 지옥의 고통 때문에 2턴 동안 소리 기술을 낼 수 없다.",
+		// Official flavor text: "이 기술에 맞은 상대는 지옥의 고통 때문에 2턴 동안 소리 기술을 낼 수 없다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7014,7 +7679,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunder: {
 		name: "번개",
-		desc: "강한 번개를 상대에게 떨어뜨려 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "강한 번개를 상대에게 떨어뜨려 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7035,12 +7701,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderbolt: {
 		name: "10만볼트",
-		desc: "강한 전격을 상대에게 날려서 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "강한 전격을 상대에게 날려서 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thundercage: {
 		name: "썬더프리즌",
-		desc: "전기가 흐르는 우리 안에 4-5턴 동안 상대를 가두어 공격한다.",
+		// Official flavor text: "전기가 흐르는 우리 안에 4-5턴 동안 상대를 가두어 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7055,32 +7723,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderfang: {
 		name: "번개엄니",
-		desc: "전기를 모은 이빨로 문다. 상대를 풀죽게 하거나 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "전기를 모은 이빨로 문다. 상대를 풀죽게 하거나 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderouskick: {
 		name: "천둥차기",
-		desc: "번개 같은 움직임으로 상대를 농락하며 킥을 날린다. 상대의 방어를 떨어뜨린다.",
+		// Official flavor text: "번개 같은 움직임으로 상대를 농락하며 킥을 날린다. 상대의 방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderpunch: {
 		name: "번개펀치",
-		desc: "전격을 담은 펀치로 상대를 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "전격을 담은 펀치로 상대를 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thundershock: {
 		name: "전기쇼크",
-		desc: "전기 자극을 상대에게 날려서 공격한다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "전기 자극을 상대에게 날려서 공격한다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderwave: {
 		name: "전기자석파",
-		desc: "약한 전격을 날려서 상대를 마비 상태로 만든다.",
+		// Official flavor text: "약한 전격을 날려서 상대를 마비 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tickle: {
 		name: "간지르기",
-		desc: "몸을 간질여 웃게 만들어서 상대의 공격과 방어를 떨어뜨린다.",
+		// Official flavor text: "몸을 간질여 웃게 만들어서 상대의 공격과 방어를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tidyup: {
@@ -7092,7 +7766,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	topsyturvy: {
 		name: "뒤집어엎기",
-		desc: "상대에게 걸려 있는 모든 능력 변화를 뒤집어서 반대로 만든다.",
+		// Official flavor text: "상대에게 걸려 있는 모든 능력 변화를 뒤집어서 반대로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	torchsong: {
@@ -7102,7 +7777,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	torment: {
 		name: "트집",
-		desc: "상대에게 트집을 잡아서 똑같은 기술을 2회 연속으로 쓸 수 없게 한다.",
+		// Official flavor text: "상대에게 트집을 잡아서 똑같은 기술을 2회 연속으로 쓸 수 없게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON:topic] 트집을 잡혔다!",
@@ -7110,7 +7786,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxic: {
 		name: "맹독",
-		desc: "상대를 맹독의 상태로 만든다. 턴이 진행될수록 독의 데미지가 증가한다.",
+		// Official flavor text: "상대를 맹독의 상태로 만든다. 턴이 진행될수록 독의 데미지가 증가한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7119,7 +7796,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicspikes: {
 		name: "독압정",
-		desc: "상대의 발밑에 독 압정을 뿌린다. 교체로 나온 상대 포켓몬에게 독을 퍼지게 한다.",
+		// Official flavor text: "상대의 발밑에 독 압정을 뿌린다. 교체로 나온 상대 포켓몬에게 독을 퍼지게 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7136,7 +7814,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicthread: {
 		name: "독실",
-		desc: "독이 섞인 실을 뿜어낸다. 상대를 독 상태로 만들고 스피드를 떨어뜨린다.",
+		// Official flavor text: "독이 섞인 실을 뿜어낸다. 상대를 독 상태로 만들고 스피드를 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7150,7 +7829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	transform: {
 		name: "변신",
-		desc: "상대 포켓몬으로 변신하여 상대와 완전히 똑같은 기술을 사용할 수 있다.",
+		// Official flavor text: "상대 포켓몬으로 변신하여 상대와 완전히 똑같은 기술을 사용할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7167,7 +7847,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triattack: {
 		name: "트라이어택",
-		desc: "3개의 광선으로 공격한다. 마비, 화상 또는 얼음 상태 중 어느 하나로 만들 때가 있다.",
+		// Official flavor text: "3개의 광선으로 공격한다. 마비, 화상 또는 얼음 상태 중 어느 하나로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7179,7 +7860,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trick: {
 		name: "트릭",
-		desc: "상대의 빈틈을 노려 자신과 상대가 지닌 물건을 바꿔치기한다.",
+		// Official flavor text: "상대의 빈틈을 노려 자신과 상대가 지닌 물건을 바꿔치기한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7207,12 +7889,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trickortreat: {
 		name: "핼러윈",
-		desc: "상대를 핼러윈으로 초대한다. 상대 타입에 고스트타입이 추가된다.",
+		// Official flavor text: "상대를 핼러윈으로 초대한다. 상대 타입에 고스트타입이 추가된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	trickroom: {
 		name: "트릭룸",
-		desc: "이상한 공간을 만든다. 5턴 동안 느린 포켓몬부터 행동할 수 있다.",
+		// Official flavor text: "이상한 공간을 만든다. 5턴 동안 느린 포켓몬부터 행동할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7225,7 +7909,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tripleaxel: {
 		name: "트리플악셀",
-		desc: "3회 연속으로 킥을 날려 공격한다. 기술이 맞을 때마다 위력이 올라간다.",
+		// Official flavor text: "3회 연속으로 킥을 날려 공격한다. 기술이 맞을 때마다 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tripledive: {
@@ -7235,7 +7920,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triplekick: {
 		name: "트리플킥",
-		desc: "3회 연속으로 킥을 날려 공격한다. 기술이 맞을 때마다 위력이 올라간다.",
+		// Official flavor text: "3회 연속으로 킥을 날려 공격한다. 기술이 맞을 때마다 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7250,12 +7936,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tropkick: {
 		name: "트로피컬킥",
-		desc: "남쪽 나라에서 유래된 뜨거운 킥을 상대에게 날린다. 상대의 공격을 떨어뜨린다.",
+		// Official flavor text: "남쪽 나라에서 유래된 뜨거운 킥을 상대에게 날린다. 상대의 공격을 떨어뜨린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	trumpcard: {
 		name: "마지막수단",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twinbeam: {
@@ -7265,7 +7953,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twineedle: {
 		name: "더블니들",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7287,7 +7976,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twister: {
 		name: "회오리",
-		desc: "회오리를 일으켜 상대를 끌어들여 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "회오리를 일으켜 상대를 끌어들여 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7304,7 +7994,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	uproar: {
 		name: "소란피기",
-		desc: "3턴 동안 소란 피워 공격한다. 그동안은 아무도 잠들지 않게 된다.",
+		// Official flavor text: "3턴 동안 소란 피워 공격한다. 그동안은 아무도 잠들지 않게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7326,7 +8017,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	uturn: {
 		name: "유턴",
-		desc: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다.",
+		// Official flavor text: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7339,27 +8031,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	vacuumwave: {
 		name: "진공파",
-		desc: "주먹을 흔들어 진공의 파도를 일으킨다. 반드시 선제공격을 할 수 있다.",
+		// Official flavor text: "주먹을 흔들어 진공의 파도를 일으킨다. 반드시 선제공격을 할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vcreate: {
 		name: "V제너레이트",
-		desc: "작열하는 불꽃을 이마에서 발생시켜 이판사판으로 몸통박치기한다. 방어, 특수방어, 스피드가 떨어진다.",
+		// Official flavor text: "작열하는 불꽃을 이마에서 발생시켜 이판사판으로 몸통박치기한다. 방어, 특수방어, 스피드가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	veeveevolley: {
 		name: "브이브이브레이크",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	venomdrench: {
 		name: "베놈트랩",
-		desc: "특수한 독액을 끼얹는다. 독 상태인 상대는 공격, 특수공격, 스피드가 떨어진다.",
+		// Official flavor text: "특수한 독액을 끼얹는다. 독 상태인 상대는 공격, 특수공격, 스피드가 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	venoshock: {
 		name: "베놈쇼크",
-		desc: "특수한 독액을 끼얹는다. 독 상태의 상대에게는 위력이 2배가 된다.",
+		// Official flavor text: "특수한 독액을 끼얹는다. 독 상태의 상대에게는 위력이 2배가 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	victorydance: {
@@ -7377,12 +8074,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	vitalthrow: {
 		name: "받아던지기",
-		desc: "상대보다 나중에 공격한다. 그 대신 자신의 공격은 반드시 명중한다.",
+		// Official flavor text: "상대보다 나중에 공격한다. 그 대신 자신의 공격은 반드시 명중한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	voltswitch: {
 		name: "볼트체인지",
-		desc: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다.",
+		// Official flavor text: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7392,7 +8091,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	volttackle: {
 		name: "볼트태클",
-		desc: "전기를 한데 모아 돌진한다. 자신도 상당한 데미지를 입는다. 마비 상태로 만들 때가 있다.",
+		// Official flavor text: "전기를 한데 모아 돌진한다. 자신도 상당한 데미지를 입는다. 마비 상태로 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7405,7 +8105,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wakeupslap: {
 		name: "잠깨움뺨치기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7413,7 +8114,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterfall: {
 		name: "폭포오르기",
-		desc: "굉장한 기세로 상대에게 돌진한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "굉장한 기세로 상대에게 돌진한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7426,7 +8128,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterpledge: {
 		name: "물의맹세",
-		desc: "물기둥으로 공격한다. 불꽃과 조합하면 위력이 올라가고 하늘에 무지개가 걸린다.",
+		// Official flavor text: "물기둥으로 공격한다. 불꽃과 조합하면 위력이 올라가고 하늘에 무지개가 걸린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON:topic] [TARGET:object] 기다리고 있다...",
@@ -7435,12 +8138,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterpulse: {
 		name: "물의파동",
-		desc: "물의 진동을 상대에게 가하여 공격한다. 상대를 혼란시킬 때가 있다.",
+		// Official flavor text: "물의 진동을 상대에게 가하여 공격한다. 상대를 혼란시킬 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watershuriken: {
 		name: "물수리검",
-		desc: "점액으로 만든 수리검을 2-5회 동안 연속으로 던진다. 반드시 선제공격할 수 있다.",
+		// Official flavor text: "점액으로 만든 수리검을 2-5회 동안 연속으로 던진다. 반드시 선제공격할 수 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7451,7 +8156,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watersport: {
 		name: "물놀이",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7464,7 +8170,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterspout: {
 		name: "해수스파우팅",
-		desc: "바닷물을 내뿜어 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다.",
+		// Official flavor text: "바닷물을 내뿜어 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wavecrash: {
@@ -7474,7 +8181,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	weatherball: {
 		name: "웨더볼",
-		desc: "사용했을 때의 날씨에 따라서 기술 타입과 위력이 바뀐다.",
+		// Official flavor text: "사용했을 때의 날씨에 따라서 기술 타입과 위력이 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7491,7 +8199,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlpool: {
 		name: "바다회오리",
-		desc: "세차게 소용돌이치는 물속에 4-5턴 동안 상대를 가두어 공격한다.",
+		// Official flavor text: "세차게 소용돌이치는 물속에 4-5턴 동안 상대를 가두어 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7514,7 +8223,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlwind: {
 		name: "날려버리기",
-		desc: "상대를 날려버려서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다.",
+		// Official flavor text: "상대를 날려버려서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7529,7 +8239,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wickedblow: {
 		name: "암흑강타",
-		desc: "악의 태세가 극에 달하여 강렬한 일격을 날린다. 반드시 급소에 맞는다.",
+		// Official flavor text: "악의 태세가 극에 달하여 강렬한 일격을 날린다. 반드시 급소에 맞는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wickedtorque: {
@@ -7539,7 +8250,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wideguard: {
 		name: "와이드가드",
-		desc: "같은 편 전원에게 향하는 공격을 1턴 동안 막는다.",
+		// Official flavor text: "같은 편 전원에게 향하는 공격을 1턴 동안 막는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7565,12 +8277,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildcharge: {
 		name: "와일드볼트",
-		desc: "전기를 두르고 상대에게 부딪쳐 공격한다. 자신도 조금 데미지를 입는다.",
+		// Official flavor text: "전기를 두르고 상대에게 부딪쳐 공격한다. 자신도 조금 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	willowisp: {
 		name: "도깨비불",
-		desc: "으스스하고 괴상한 불꽃을 쏘아 상대를 화상 상태로 만든다.",
+		// Official flavor text: "으스스하고 괴상한 불꽃을 쏘아 상대를 화상 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wingattack: {
@@ -7579,7 +8293,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wish: {
 		name: "희망사항",
-		desc: "다음 턴에 자신 또는 교체한 포켓몬의 HP를 최대 HP의 절반만큼 회복한다.",
+		// Official flavor text: "다음 턴에 자신 또는 교체한 포켓몬의 HP를 최대 HP의 절반만큼 회복한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7590,17 +8305,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	withdraw: {
 		name: "껍질에숨기",
-		desc: "껍질에 숨어 몸을 보호하여 자신의 방어를 올린다.",
+		// Official flavor text: "껍질에 숨어 몸을 보호하여 자신의 방어를 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wonderroom: {
 		name: "원더룸",
-		desc: "이상한 공간을 만든다. 5턴 동안 모든 포켓몬의 방어와 특수방어가 바뀐다.",
+		// Official flavor text: "이상한 공간을 만든다. 5턴 동안 모든 포켓몬의 방어와 특수방어가 바뀐다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	woodhammer: {
 		name: "우드해머",
-		desc: "단단한 몸통을 상대에게 부딪쳐서 공격한다. 자신도 상당한 데미지를 입는다.",
+		// Official flavor text: "단단한 몸통을 상대에게 부딪쳐서 공격한다. 자신도 상당한 데미지를 입는다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7609,12 +8327,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	workup: {
 		name: "분발",
-		desc: "스스로 분발해서 공격과 특수공격을 올린다.",
+		// Official flavor text: "스스로 분발해서 공격과 특수공격을 올린다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	worryseed: {
 		name: "고민씨",
-		desc: "마음을 괴롭히는 씨앗을 심는다. 상대를 잠잘 수 없게 해서 특성을 불면으로 만든다.",
+		// Official flavor text: "마음을 괴롭히는 씨앗을 심는다. 상대를 잠잘 수 없게 해서 특성을 불면으로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7634,7 +8354,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wrap: {
 		name: "김밥말이",
-		desc: "긴 몸이나 덩굴 등을 사용해 4-5턴 동안 상대를 휘감아 공격한다.",
+		// Official flavor text: "긴 몸이나 덩굴 등을 사용해 4-5턴 동안 상대를 휘감아 공격한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7662,7 +8383,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wringout: {
 		name: "쥐어짜기",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7674,29 +8396,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	yawn: {
 		name: "하품",
-		desc: "큰 하품으로 졸음을 유도한다. 다음 턴에 상대를 잠듦 상태로 만든다.",
+		// Official flavor text: "큰 하품으로 졸음을 유도한다. 다음 턴에 상대를 잠듦 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]의 졸음을 유도했다!",
 	},
 	zapcannon: {
 		name: "전자포",
-		desc: "대포처럼 전기를 발사해서 공격한다. 상대를 마비 상태로 만든다.",
+		// Official flavor text: "대포처럼 전기를 발사해서 공격한다. 상대를 마비 상태로 만든다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zenheadbutt: {
 		name: "사념의박치기",
-		desc: "사념의 힘을 이마에 모아서 공격한다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "사념의 힘을 이마에 모아서 공격한다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zingzap: {
 		name: "찌리리따끔따끔",
-		desc: "상대에게 부딪쳐 강력한 전기를 날려서 찌리리따끔따끔하게 만든다. 상대를 풀죽게 만들 때가 있다.",
+		// Official flavor text: "상대에게 부딪쳐 강력한 전기를 날려서 찌리리따끔따끔하게 만든다. 상대를 풀죽게 만들 때가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zippyzap: {
 		name: "파찌파찌액셀",
-		desc: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다.",
+		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI

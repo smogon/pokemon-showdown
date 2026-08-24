@@ -384,7 +384,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dawnstone: {
 		name: "觉醒之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 像眼眸一般光彩动人。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 像眼眸一般光彩动人。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
@@ -393,12 +394,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	deepseascale: {
 		name: "深海鳞片",
-		desc: "让珍珠贝携带后， 特防就会提高的鳞片。 散发着淡淡的粉红色光芒。",
+		// Official flavor text: "让珍珠贝携带后， 特防就会提高的鳞片。 散发着淡淡的粉红色光芒。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "深海之牙",
-		desc: "让珍珠贝携带后， 特攻就会提高的牙齿。 散发着闪亮的银光。",
+		// Official flavor text: "让珍珠贝携带后， 特攻就会提高的牙齿。 散发着闪亮的银光。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	delphoxite: {
@@ -498,7 +501,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	duskstone: {
 		name: "暗之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 像黑夜一般漆黑。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 像黑夜一般漆黑。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthplate: {
@@ -637,7 +641,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firestone: {
 		name: "火之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 看上去是橙黄色的。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 看上去是橙黄色的。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
@@ -939,7 +944,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icestone: {
 		name: "冰之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 有着雪花般的花纹。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 有着雪花般的花纹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1009,7 +1015,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	kingsrock: {
 		name: "王者之证",
-		desc: "携带后进行攻击， 在造成伤害时， 有时会让对手畏缩。",
+		// Official flavor text: "携带后进行攻击， 在造成伤害时， 有时会让对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
@@ -1041,7 +1048,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	leafstone: {
 		name: "叶之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 有着叶子般的花纹。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 有着叶子般的花纹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1260,7 +1268,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	metalcoat: {
 		name: "金属膜",
-		desc: "特殊的金属膜。 携带后，钢属性的 招式威力就会提高。",
+		// Official flavor text: "特殊的金属膜。 携带后，钢属性的 招式威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1328,7 +1337,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	moonstone: {
 		name: "月之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 像夜空一样乌黑。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 像夜空一样乌黑。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muscleband: {
@@ -1608,12 +1618,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	razorclaw: {
 		name: "锐利之爪",
-		desc: "尖锐的爪子。 携带后，招式会 变得容易击中要害。",
+		// Official flavor text: "尖锐的爪子。 携带后，招式会 变得容易击中要害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorfang: {
 		name: "锐利之牙",
-		desc: "尖锐的牙齿。 携带后，在给予伤害时， 有时会让对手畏缩。",
+		// Official flavor text: "尖锐的牙齿。 携带后，在给予伤害时， 有时会让对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razzberry: {
@@ -1787,7 +1799,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	shinystone: {
 		name: "光之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 像光芒一样耀眼。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 像光芒一样耀眼。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockdrive: {
@@ -1951,7 +1964,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sunstone: {
 		name: "日之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 像太阳一样赤红。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 像太阳一样赤红。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swampertite: {
@@ -2000,7 +2014,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	thunderstone: {
 		name: "雷之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 有着闪电般的花纹。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 有着闪电般的花纹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2450,7 +2465,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	utilityumbrella: {
 		name: "万能伞",
-		desc: "携带它的宝可梦 在下雨或日照很强时， 不会受到天气的影响。",
+		// Official flavor text: "携带它的宝可梦 在下雨或日照很强时， 不会受到天气的影响。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2485,7 +2501,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	waterstone: {
 		name: "水之石",
-		desc: "能让某些特定宝可梦 进化的神奇石头。 看上去是澄蓝色的。",
+		// Official flavor text: "能让某些特定宝可梦 进化的神奇石头。 看上去是澄蓝色的。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watmelberry: {

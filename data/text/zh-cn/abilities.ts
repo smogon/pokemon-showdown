@@ -5,12 +5,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	adaptability: {
 		name: "适应力",
-		desc: "与自身同属性的招式 威力会提高。",
+		// Official flavor text: "与自身同属性的招式 威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aerilate: {
 		name: "飞行皮肤",
-		desc: "一般属性的招式 会变为飞行属性。 威力会少量提高。",
+		// Official flavor text: "一般属性的招式 会变为飞行属性。 威力会少量提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -19,7 +21,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aftermath: {
 		name: "引爆",
-		desc: "变为濒死时， 会对接触到自己的对手造成伤害。",
+		// Official flavor text: "变为濒死时， 会对接触到自己的对手造成伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "  [POKEMON]受到了伤害！",
@@ -32,12 +35,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	analytic: {
 		name: "分析",
-		desc: "如果在最后使出招式， 招式的威力会提高。",
+		// Official flavor text: "如果在最后使出招式， 招式的威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	angerpoint: {
 		name: "愤怒穴位",
-		desc: "要害被击中时， 会大发雷霆， 攻击力变为最大。",
+		// Official flavor text: "要害被击中时， 会大发雷霆， 攻击力变为最大。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -53,7 +58,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	anticipation: {
 		name: "危险预知",
-		desc: "可以察觉到 对手拥有的危险招式。",
+		// Official flavor text: "可以察觉到 对手拥有的危险招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -66,7 +72,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	arenatrap: {
 		name: "沙穴",
-		desc: "在战斗中让对手无法逃走。",
+		// Official flavor text: "在战斗中让对手无法逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -90,7 +97,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aromaveil: {
 		name: "芳香幕",
-		desc: "可以防住向自己和同伴 发出的心灵攻击。",
+		// Official flavor text: "可以防住向自己和同伴 发出的心灵攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  [POKEMON]正受到芳香幕的保护！",
@@ -111,14 +119,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aurabreak: {
 		name: "气场破坏",
-		desc: "让气场的效果发生逆转， 降低威力。",
+		// Official flavor text: "让气场的效果发生逆转， 降低威力。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]压制了所有气场！",
 	},
 	baddreams: {
 		name: "梦魇",
-		desc: "给予睡眠状态的对手伤害。",
+		// Official flavor text: "给予睡眠状态的对手伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -145,7 +155,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "牵绊变身",
-		desc: "打倒对手时，与训练家的牵绊会增强， 变为小智版甲贺忍蛙。 飞水手里剑的招式威力会增强。",
+		// Official flavor text: "打倒对手时，与训练家的牵绊会增强， 变为小智版甲贺忍蛙。 飞水手里剑的招式威力会增强。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -162,12 +173,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	beastboost: {
 		name: "异兽提升",
-		desc: "打倒对手的时候， 自己最高的那项能力会提高。",
+		// Official flavor text: "打倒对手的时候， 自己最高的那项能力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	berserk: {
 		name: "怒火冲天",
-		desc: "因对手的攻击 ＨＰ变为一半时， 特攻会提高。",
+		// Official flavor text: "因对手的攻击 ＨＰ变为一半时， 特攻会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bigpecks: {
@@ -176,7 +189,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blaze: {
 		name: "猛火",
-		desc: "ＨＰ减少的时候， 火属性的招式威力会提高。",
+		// Official flavor text: "ＨＰ减少的时候， 火属性的招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -189,7 +203,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cheekpouch: {
 		name: "颊囊",
-		desc: "无论是哪种树果， 食用后，ＨＰ都会回复。",
+		// Official flavor text: "无论是哪种树果， 食用后，ＨＰ都会回复。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -197,12 +212,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	chillingneigh: {
 		name: "苍白嘶鸣",
-		desc: "打倒对手时 会用冰冷的声音嘶鸣 并提高攻击。",
+		// Official flavor text: "打倒对手时 会用冰冷的声音嘶鸣 并提高攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chlorophyll: {
 		name: "叶绿素",
-		desc: "晴朗天气时， 速度会提高。",
+		// Official flavor text: "晴朗天气时， 速度会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -220,7 +237,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	colorchange: {
 		name: "变色",
-		desc: "自己的属性会变为 从对手处所受招式的属性。",
+		// Official flavor text: "自己的属性会变为 从对手处所受招式的属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -228,7 +246,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	comatose: {
 		name: "绝对睡眠",
-		desc: "总是半梦半醒的状态， 绝对不会醒来。 可以就这么睡着进行攻击。",
+		// Official flavor text: "总是半梦半醒的状态， 绝对不会醒来。 可以就这么睡着进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]处于半梦半醒状态！",
@@ -242,7 +261,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	competitive: {
 		name: "好胜",
-		desc: "如果能力被降低， 特攻就会大幅提高。",
+		// Official flavor text: "如果能力被降低， 特攻就会大幅提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	compoundeyes: {
@@ -269,7 +289,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cottondown: {
 		name: "棉絮",
-		desc: "受到攻击后撒下棉絮， 降低除自己以外的 所有宝可梦的速度。",
+		// Official flavor text: "受到攻击后撒下棉絮， 降低除自己以外的 所有宝可梦的速度。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cudchew: {
@@ -282,12 +303,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedbody: {
 		name: "诅咒之躯",
-		desc: "受到攻击时， 有时会把对手的招式 变为定身法状态。",
+		// Official flavor text: "受到攻击时， 有时会把对手的招式 变为定身法状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cutecharm: {
 		name: "迷人之躯",
-		desc: "有时会让接触到自己的对手着迷。",
+		// Official flavor text: "有时会让接触到自己的对手着迷。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -299,7 +322,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	damp: {
 		name: "湿气",
-		desc: "通过把周围都弄湿， 使谁都无法使用自爆等爆炸类的招式。",
+		// Official flavor text: "通过把周围都弄湿， 使谁都无法使用自爆等爆炸类的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -318,12 +342,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dancer: {
 		name: "舞者",
-		desc: "有谁使出跳舞招式时， 自己也能就这么接着使出跳舞招式。",
+		// Official flavor text: "有谁使出跳舞招式时， 自己也能就这么接着使出跳舞招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkaura: {
 		name: "暗黑气场",
-		desc: "全体的恶属性招式变强。",
+		// Official flavor text: "全体的恶属性招式变强。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]正在释放暗黑气场！",
@@ -337,34 +363,40 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dazzling: {
 		name: "鲜艳之躯",
-		desc: "让对手吓一跳， 使其无法对我方使出先制招式。",
+		// Official flavor text: "让对手吓一跳， 使其无法对我方使出先制招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "#damp",
 	},
 	defeatist: {
 		name: "软弱",
-		desc: "ＨＰ减半时， 会变得软弱， 攻击和特攻会减半。",
+		// Official flavor text: "ＨＰ减半时， 会变得软弱， 攻击和特攻会减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defiant: {
 		name: "不服输",
-		desc: "能力被降低时， 攻击会大幅提高。",
+		// Official flavor text: "能力被降低时， 攻击会大幅提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deltastream: {
 		name: "德尔塔气流",
-		desc: "变为令飞行属性的弱点 消失的天气。",
+		// Official flavor text: "变为令飞行属性的弱点 消失的天气。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	desolateland: {
 		name: "终结之地",
-		desc: "变为不会受到 水属性攻击的天气。",
+		// Official flavor text: "变为不会受到 水属性攻击的天气。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	disguise: {
 		name: "画皮",
-		desc: "通过画皮覆盖住身体， 可以防住１次攻击。",
+		// Official flavor text: "通过画皮覆盖住身体， 可以防住１次攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -376,7 +408,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	download: {
 		name: "下载",
-		desc: "比较对手的防御和特防， 根据较低的那项能力 相应地提高自己的攻击或特攻。",
+		// Official flavor text: "比较对手的防御和特防， 根据较低的那项能力 相应地提高自己的攻击或特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonize: {
@@ -398,7 +431,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dryskin: {
 		name: "干燥皮肤",
-		desc: "下雨天气时和受到水属性的招式时， ＨＰ会回复。晴朗天气时和受到火属性的 招式时，ＨＰ会减少。",
+		// Official flavor text: "下雨天气时和受到水属性的招式时， ＨＰ会回复。晴朗天气时和受到火属性的 招式时，ＨＰ会减少。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -422,7 +456,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	effectspore: {
 		name: "孢子",
-		desc: "受到攻击时， 有时会把接触到自己的对手 变为中毒、麻痹或睡眠状态。",
+		// Official flavor text: "受到攻击时， 有时会把接触到自己的对手 变为中毒、麻痹或睡眠状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -468,12 +503,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	emergencyexit: {
 		name: "危险回避",
-		desc: "ＨＰ变为一半时， 为了回避危险， 会退回到同行队伍中。",
+		// Official flavor text: "ＨＰ变为一半时， 为了回避危险， 会退回到同行队伍中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairyaura: {
 		name: "妖精气场",
-		desc: "全体的妖精属性招式变强。",
+		// Official flavor text: "全体的妖精属性招式变强。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]正在释放妖精气场！",
@@ -499,12 +536,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flareboost: {
 		name: "受热激升",
-		desc: "变为灼伤状态时， 特殊招式的威力会提高。",
+		// Official flavor text: "变为灼伤状态时， 特殊招式的威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flashfire: {
 		name: "引火",
-		desc: "受到火属性的招式攻击时， 吸收火焰，自己使出的 火属性招式会变强。",
+		// Official flavor text: "受到火属性的招式攻击时， 吸收火焰，自己使出的 火属性招式会变强。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -517,7 +556,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flowergift: {
 		name: "花之礼",
-		desc: "晴朗天气时， 自己与同伴的攻击和 特防能力会提高。",
+		// Official flavor text: "晴朗天气时， 自己与同伴的攻击和 特防能力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -529,19 +569,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flowerveil: {
 		name: "花幕",
-		desc: "我方的草属性宝可梦 能力不会降低， 也不会变为异常状态。",
+		// Official flavor text: "我方的草属性宝可梦 能力不会降低， 也不会变为异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  [POKEMON]正受到花幕的保护！",
 	},
 	fluffy: {
 		name: "毛茸茸",
-		desc: "会将对手所给予的接触类招式的伤害减半， 但火属性招式的伤害会变为２倍。",
+		// Official flavor text: "会将对手所给予的接触类招式的伤害减半， 但火属性招式的伤害会变为２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	forecast: {
 		name: "阴晴不定",
-		desc: "受天气的影响， 会变为水属性、火属性 或冰属性中的某一个。",
+		// Official flavor text: "受天气的影响， 会变为水属性、火属性 或冰属性中的某一个。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -549,7 +592,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	forewarn: {
 		name: "预知梦",
-		desc: "出场时， 只读取１个对手拥有的招式。",
+		// Official flavor text: "出场时， 只读取１个对手拥有的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -589,12 +633,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	galvanize: {
 		name: "电气皮肤",
-		desc: "一般属性的招式 会变为电属性。 威力会少量提高。",
+		// Official flavor text: "一般属性的招式 会变为电属性。 威力会少量提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gluttony: {
 		name: "贪吃鬼",
-		desc: "原本ＨＰ变得很少时才会吃树果， 在ＨＰ还有一半时就会把它吃掉。",
+		// Official flavor text: "原本ＨＰ变得很少时才会吃树果， 在ＨＰ还有一半时就会把它吃掉。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	goodasgold: {
@@ -607,7 +653,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	gorillatactics: {
 		name: "一猩一意",
-		desc: "虽然攻击会提高， 但是只能使出 一开始所选的招式。",
+		// Official flavor text: "虽然攻击会提高， 但是只能使出 一开始所选的招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grasspelt: {
@@ -620,7 +667,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	grimneigh: {
 		name: "漆黑嘶鸣",
-		desc: "打倒对手时 会用恐怖的声音嘶鸣 并提高特攻。",
+		// Official flavor text: "打倒对手时 会用恐怖的声音嘶鸣 并提高特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guarddog: {
@@ -630,12 +678,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	gulpmissile: {
 		name: "一口导弹",
-		desc: "冲浪或潜水时会叼来猎物。 受到伤害时， 会吐出猎物进行攻击。",
+		// Official flavor text: "冲浪或潜水时会叼来猎物。 受到伤害时， 会吐出猎物进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guts: {
 		name: "毅力",
-		desc: "如果变为异常状态， 会拿出毅力， 攻击会提高。",
+		// Official flavor text: "如果变为异常状态， 会拿出毅力， 攻击会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hadronengine: {
@@ -647,14 +697,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	harvest: {
 		name: "收获",
-		desc: "可以多次制作出 已被使用掉的树果。",
+		// Official flavor text: "可以多次制作出 已被使用掉的树果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		addItem: "  [POKEMON]收获了[ITEM]！",
 	},
 	healer: {
 		name: "治愈之心",
-		desc: "有时会治愈异常状态的同伴。",
+		// Official flavor text: "有时会治愈异常状态的同伴。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -667,7 +719,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heatproof: {
 		name: "耐热",
-		desc: "耐热的体质会 让火属性的招式威力减半。",
+		// Official flavor text: "耐热的体质会 让火属性的招式威力减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -676,7 +729,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heavymetal: {
 		name: "重金属",
-		desc: "自身的重量会变为２倍。",
+		// Official flavor text: "自身的重量会变为２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	honeygather: {
@@ -695,17 +749,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hungerswitch: {
 		name: "饱了又饿",
-		desc: "每回合结束时会在 满腹花纹与空腹花纹之间 交替改变样子。",
+		// Official flavor text: "每回合结束时会在 满腹花纹与空腹花纹之间 交替改变样子。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hustle: {
 		name: "活力",
-		desc: "自己的攻击变高， 但命中率会降低。",
+		// Official flavor text: "自己的攻击变高， 但命中率会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydration: {
 		name: "湿润之躯",
-		desc: "下雨天气时， 异常状态会治愈。",
+		// Official flavor text: "下雨天气时， 异常状态会治愈。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -717,7 +774,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	icebody: {
 		name: "冰冻之躯",
-		desc: "冰雹天气时， 会缓缓回复ＨＰ。",
+		// Official flavor text: "冰雹天气时， 会缓缓回复ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -726,7 +784,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	iceface: {
 		name: "结冻头",
-		desc: "头部的冰会代替自己承受 物理攻击，但是样子会改变。 下冰雹时，冰会恢复原状。",
+		// Official flavor text: "头部的冰会代替自己承受 物理攻击，但是样子会改变。 下冰雹时，冰会恢复原状。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -739,7 +798,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	illuminate: {
 		name: "发光",
-		desc: "通过让周围变亮， 变得容易遇到野生的宝可梦。",
+		// Official flavor text: "通过让周围变亮， 变得容易遇到野生的宝可梦。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -748,7 +808,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	illusion: {
 		name: "幻觉",
-		desc: "假扮成同行队伍中的 最后一只宝可梦出场， 迷惑对手。",
+		// Official flavor text: "假扮成同行队伍中的 最后一只宝可梦出场， 迷惑对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		end: "  [POKEMON]造成的幻觉解除了！",
@@ -759,12 +820,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	imposter: {
 		name: "变身者",
-		desc: "变身为当前面对的宝可梦。",
+		// Official flavor text: "变身为当前面对的宝可梦。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infiltrator: {
 		name: "穿透",
-		desc: "可以穿透对手的壁障 或替身进行攻击。",
+		// Official flavor text: "可以穿透对手的壁障 或替身进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -777,14 +840,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	innardsout: {
 		name: "飞出的内在物",
-		desc: "被对手打倒的时候， 会给予对手相当于 ＨＰ剩余量的伤害。",
+		// Official flavor text: "被对手打倒的时候， 会给予对手相当于 ＨＰ剩余量的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "#aftermath",
 	},
 	innerfocus: {
 		name: "精神力",
-		desc: "拥有经过锻炼的精神， 而不会因对手的攻击而畏缩。",
+		// Official flavor text: "拥有经过锻炼的精神， 而不会因对手的攻击而畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -797,7 +862,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	intimidate: {
 		name: "威吓",
-		desc: "出场时威吓对手， 让其退缩， 降低对手的攻击。",
+		// Official flavor text: "出场时威吓对手， 让其退缩， 降低对手的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -823,14 +889,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ironbarbs: {
 		name: "铁刺",
-		desc: "用铁刺给予接触到自己的 对手伤害。",
+		// Official flavor text: "用铁刺给予接触到自己的 对手伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "#roughskin",
 	},
 	ironfist: {
 		name: "铁拳",
-		desc: "使用拳类招式的威力会提高。",
+		// Official flavor text: "使用拳类招式的威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	justified: {
@@ -839,7 +907,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	keeneye: {
 		name: "锐利目光",
-		desc: "多亏了锐利的目光， 命中率不会被降低。",
+		// Official flavor text: "多亏了锐利的目光， 命中率不会被降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -848,12 +917,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	klutz: {
 		name: "笨拙",
-		desc: "无法使用持有的道具。",
+		// Official flavor text: "无法使用持有的道具。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafguard: {
 		name: "叶子防守",
-		desc: "晴朗天气时， 不会变为异常状态。",
+		// Official flavor text: "晴朗天气时， 不会变为异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -865,7 +936,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	levitate: {
 		name: "飘浮",
-		desc: "从地面浮起， 从而不会受到地面属性招式的攻击。",
+		// Official flavor text: "从地面浮起， 从而不会受到地面属性招式的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -881,7 +953,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	libero: {
 		name: "自由者",
-		desc: "变为与自己使出的招式 相同的属性。",
+		// Official flavor text: "变为与自己使出的招式 相同的属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -890,12 +963,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lightmetal: {
 		name: "轻金属",
-		desc: "自身的重量会减半。",
+		// Official flavor text: "自身的重量会减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightningrod: {
 		name: "避雷针",
-		desc: "将电属性的招式吸引到自己身上， 不会受到伤害，而是会提高特攻。",
+		// Official flavor text: "将电属性的招式吸引到自己身上， 不会受到伤害，而是会提高特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -933,7 +1008,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	liquidvoice: {
 		name: "湿润之声",
-		desc: "所有的声音招式 都变为水属性。",
+		// Official flavor text: "所有的声音招式 都变为水属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	longreach: {
@@ -942,7 +1018,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magicbounce: {
 		name: "魔法镜",
-		desc: "可以不受到由对手使出的 变化招式影响，并将其反弹。",
+		// Official flavor text: "可以不受到由对手使出的 变化招式影响，并将其反弹。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -952,7 +1029,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magicguard: {
 		name: "魔法防守",
-		desc: "不会受到攻击以外的伤害。",
+		// Official flavor text: "不会受到攻击以外的伤害。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -961,7 +1039,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magician: {
 		name: "魔术师",
-		desc: "夺走被自己的招式 击中的对手的道具。",
+		// Official flavor text: "夺走被自己的招式 击中的对手的道具。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magmaarmor: {
@@ -970,7 +1049,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magnetpull: {
 		name: "磁力",
-		desc: "用磁力吸住钢属性的宝可梦， 使其无法逃走。",
+		// Official flavor text: "用磁力吸住钢属性的宝可梦， 使其无法逃走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -995,7 +1075,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	megalauncher: {
 		name: "超级发射器",
-		desc: "波动和波导类招式的 威力会提高。",
+		// Official flavor text: "波动和波导类招式的 威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	megasol: {
@@ -1008,7 +1089,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mimicry: {
 		name: "拟态",
-		desc: "宝可梦的属性会根据 场地的状态而变化。",
+		// Official flavor text: "宝可梦的属性会根据 场地的状态而变化。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON]变回了原来的属性！",
@@ -1020,7 +1102,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	minus: {
 		name: "负电",
-		desc: "出场的伙伴之间 如果有正电或负电特性的宝可梦， 自己的特攻会提高。",
+		// Official flavor text: "出场的伙伴之间 如果有正电或负电特性的宝可梦， 自己的特攻会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1033,7 +1116,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mirrorarmor: {
 		name: "镜甲",
-		desc: "只反弹自己受到的 能力降低效果。",
+		// Official flavor text: "只反弹自己受到的 能力降低效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistysurge: {
@@ -1042,7 +1126,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	moldbreaker: {
 		name: "破格",
-		desc: "可以不受对手特性的干扰， 向对手使出招式。",
+		// Official flavor text: "可以不受对手特性的干扰， 向对手使出招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1064,7 +1149,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	moody: {
 		name: "心情不定",
-		desc: "每一回合，能力中的某项 会大幅提高，而某项会降低。",
+		// Official flavor text: "每一回合，能力中的某项 会大幅提高，而某项会降低。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1073,12 +1159,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	motordrive: {
 		name: "电气引擎",
-		desc: "受到电属性的招式攻击时， 不会受到伤害，而是速度会提高。",
+		// Official flavor text: "受到电属性的招式攻击时， 不会受到伤害，而是速度会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	moxie: {
 		name: "自信过度",
-		desc: "如果打倒对手， 就会充满自信，攻击会提高。",
+		// Official flavor text: "如果打倒对手， 就会充满自信，攻击会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	multiscale: {
@@ -1100,7 +1188,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mummy: {
 		name: "木乃伊",
-		desc: "被对手接触到后， 会将对手变为木乃伊。",
+		// Official flavor text: "被对手接触到后， 会将对手变为木乃伊。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1130,12 +1219,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neuroforce: {
 		name: "脑核之力",
-		desc: "效果绝佳的攻击， 威力会变得更强。",
+		// Official flavor text: "效果绝佳的攻击， 威力会变得更强。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	neutralizinggas: {
 		name: "化学变化气体",
-		desc: "特性为化学变化气体的宝可梦在场时， 场上所有宝可梦的 特性效果都会消失或者无法生效。",
+		// Official flavor text: "特性为化学变化气体的宝可梦在场时， 场上所有宝可梦的 特性效果都会消失或者无法生效。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1150,7 +1241,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	normalize: {
 		name: "一般皮肤",
-		desc: "无论是什么属性的招式， 全部会变为一般属性。 威力会少量提高。",
+		// Official flavor text: "无论是什么属性的招式， 全部会变为一般属性。 威力会少量提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1162,7 +1254,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	oblivious: {
 		name: "迟钝",
-		desc: "因为感觉迟钝， 不会变为着迷和被挑衅状态。",
+		// Official flavor text: "因为感觉迟钝， 不会变为着迷和被挑衅状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1186,7 +1279,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	overcoat: {
 		name: "防尘",
-		desc: "不会受到沙暴或冰雹等的伤害。 不会受到粉末类招式的攻击。",
+		// Official flavor text: "不会受到沙暴或冰雹等的伤害。 不会受到粉末类招式的攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1199,7 +1293,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	overgrow: {
 		name: "茂盛",
-		desc: "ＨＰ减少的时候， 草属性的招式威力会提高。",
+		// Official flavor text: "ＨＰ减少的时候， 草属性的招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1208,7 +1303,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	owntempo: {
 		name: "我行我素",
-		desc: "因为我行我素， 不会变为混乱状态。",
+		// Official flavor text: "因为我行我素， 不会变为混乱状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1217,7 +1313,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "亲子爱",
-		desc: "亲子俩可以合计攻击２次。",
+		// Official flavor text: "亲子俩可以合计攻击２次。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1232,24 +1329,28 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pastelveil: {
 		name: "粉彩护幕",
-		desc: "自己和同伴都不会 陷入中毒的异常状态。",
+		// Official flavor text: "自己和同伴都不会 陷入中毒的异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	perishbody: {
 		name: "灭亡之躯",
-		desc: "受到接触类招式攻击时， 双方都会在３回合后变为濒死状态。 替换后效果消失。",
+		// Official flavor text: "受到接触类招式攻击时， 双方都会在３回合后变为濒死状态。 替换后效果消失。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  双方将在３回合后灭亡！",
 	},
 	pickpocket: {
 		name: "顺手牵羊",
-		desc: "盗取接触到自己的 对手的道具。",
+		// Official flavor text: "盗取接触到自己的 对手的道具。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pickup: {
 		name: "捡拾",
-		desc: "有时会捡来对手用过的道具， 冒险过程中也会捡到。",
+		// Official flavor text: "有时会捡来对手用过的道具， 冒险过程中也会捡到。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1267,7 +1368,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pixilate: {
 		name: "妖精皮肤",
-		desc: "一般属性的招式 会变为妖精属性。 威力会少量提高。",
+		// Official flavor text: "一般属性的招式 会变为妖精属性。 威力会少量提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1276,7 +1378,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	plus: {
 		name: "正电",
-		desc: "出场的伙伴之间 如果有正电或负电特性的宝可梦， 自己的特攻会提高。",
+		// Official flavor text: "出场的伙伴之间 如果有正电或负电特性的宝可梦， 自己的特攻会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1289,7 +1392,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	poisonheal: {
 		name: "毒疗",
-		desc: "变为中毒状态时， ＨＰ不会减少，反而会增加起来。",
+		// Official flavor text: "变为中毒状态时， ＨＰ不会减少，反而会增加起来。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonpoint: {
@@ -1310,12 +1414,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	poisontouch: {
 		name: "毒手",
-		desc: "只通过接触就有可能 让对手变为中毒状态。",
+		// Official flavor text: "只通过接触就有可能 让对手变为中毒状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powerconstruct: {
 		name: "群聚变形",
-		desc: "ＨＰ变为一半时， 细胞们会赶来支援， 变为完全体形态。",
+		// Official flavor text: "ＨＰ变为一半时， 细胞们会赶来支援， 变为完全体形态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  你感受到了大量的气息……！",
@@ -1323,7 +1429,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	powerofalchemy: {
 		name: "化学之力",
-		desc: "继承被打倒的同伴的特性， 变为相同的特性。",
+		// Official flavor text: "继承被打倒的同伴的特性， 变为相同的特性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1336,12 +1443,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	powerspot: {
 		name: "能量点",
-		desc: "只要处在相邻位置， 招式的威力就会提高。",
+		// Official flavor text: "只要处在相邻位置， 招式的威力就会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prankster: {
 		name: "恶作剧之心",
-		desc: "可以率先使出变化招式。",
+		// Official flavor text: "可以率先使出变化招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1350,7 +1459,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pressure: {
 		name: "压迫感",
-		desc: "给予对手压迫感， 大量减少其使用招式的ＰＰ。",
+		// Official flavor text: "给予对手压迫感， 大量减少其使用招式的ＰＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1367,7 +1477,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	primordialsea: {
 		name: "始源之海",
-		desc: "变为不会受到 火属性攻击的天气。",
+		// Official flavor text: "变为不会受到 火属性攻击的天气。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prismarmor: {
@@ -1380,7 +1491,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	protean: {
 		name: "变幻自如",
-		desc: "变为与自己使出的招式 相同的属性。",
+		// Official flavor text: "变为与自己使出的招式 相同的属性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1403,7 +1515,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	punkrock: {
 		name: "庞克摇滚",
-		desc: "声音招式的威力会提高。 受到的声音招式伤害会减半。",
+		// Official flavor text: "声音招式的威力会提高。 受到的声音招式伤害会减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	purepower: {
@@ -1427,7 +1540,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	queenlymajesty: {
 		name: "女王的威严",
-		desc: "向对手施加威慑力， 使其无法对我方使出先制招式。",
+		// Official flavor text: "向对手施加威慑力， 使其无法对我方使出先制招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "#damp",
@@ -1440,7 +1554,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	quickfeet: {
 		name: "飞毛腿",
-		desc: "变为异常状态时， 速度会提高。",
+		// Official flavor text: "变为异常状态时， 速度会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1448,7 +1563,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	raindish: {
 		name: "雨盘",
-		desc: "下雨天气时， 会缓缓回复ＨＰ。",
+		// Official flavor text: "下雨天气时， 会缓缓回复ＨＰ。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1456,7 +1572,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rattled: {
 		name: "胆怯",
-		desc: "受到恶属性、幽灵属性 和虫属性的招式攻击时， 会因胆怯而速度提高。",
+		// Official flavor text: "受到恶属性、幽灵属性 和虫属性的招式攻击时， 会因胆怯而速度提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1465,7 +1582,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	receiver: {
 		name: "接球手",
-		desc: "继承被打倒的同伴的特性， 变为相同的特性。",
+		// Official flavor text: "继承被打倒的同伴的特性， 变为相同的特性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1478,12 +1596,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	reckless: {
 		name: "舍身",
-		desc: "自己会因反作用力受伤的招式， 其威力会提高。",
+		// Official flavor text: "自己会因反作用力受伤的招式， 其威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	refrigerate: {
 		name: "冰冻皮肤",
-		desc: "一般属性的招式 会变为冰属性。 威力会少量提高。",
+		// Official flavor text: "一般属性的招式 会变为冰属性。 威力会少量提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1496,12 +1616,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ripen: {
 		name: "熟成",
-		desc: "使树果成熟， 效果变为２倍。",
+		// Official flavor text: "使树果成熟， 效果变为２倍。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rivalry: {
 		name: "斗争心",
-		desc: "面对性别相同的对手， 会燃起斗争心，变得更强。 而面对性别不同的，则会变弱。",
+		// Official flavor text: "面对性别相同的对手， 会燃起斗争心，变得更强。 而面对性别不同的，则会变弱。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rkssystem: {
@@ -1510,7 +1632,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rockhead: {
 		name: "坚硬脑袋",
-		desc: "即使使出会受反作用力伤害的招式， ＨＰ也不会减少。",
+		// Official flavor text: "即使使出会受反作用力伤害的招式， ＨＰ也不会减少。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1523,7 +1646,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	roughskin: {
 		name: "粗糙皮肤",
-		desc: "受到攻击时， 用粗糙的皮肤弄伤 接触到自己的对手。",
+		// Official flavor text: "受到攻击时， 用粗糙的皮肤弄伤 接触到自己的对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1541,12 +1665,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandforce: {
 		name: "沙之力",
-		desc: "沙暴天气时， 岩石属性、地面属性 和钢属性的招式威力会提高。",
+		// Official flavor text: "沙暴天气时， 岩石属性、地面属性 和钢属性的招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandrush: {
 		name: "拨沙",
-		desc: "沙暴天气时， 速度会提高。",
+		// Official flavor text: "沙暴天气时， 速度会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandspit: {
@@ -1562,17 +1688,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandveil: {
 		name: "沙隐",
-		desc: "在沙暴的时候， 闪避率会提高。",
+		// Official flavor text: "在沙暴的时候， 闪避率会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sapsipper: {
 		name: "食草",
-		desc: "受到草属性的招式攻击时， 不会受到伤害，而是攻击会提高。",
+		// Official flavor text: "受到草属性的招式攻击时， 不会受到伤害，而是攻击会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	schooling: {
 		name: "鱼群",
-		desc: "ＨＰ多的时候会聚起来变强。 ＨＰ剩余量变少时， 群体会分崩离析。",
+		// Official flavor text: "ＨＰ多的时候会聚起来变强。 ＨＰ剩余量变少时， 群体会分崩离析。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		transform: "[POKEMON]一群群地聚集起来了！",
@@ -1580,7 +1709,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	scrappy: {
 		name: "胆量",
-		desc: "一般属性和格斗属性的招式 可以击中幽灵属性的宝可梦。",
+		// Official flavor text: "一般属性和格斗属性的招式 可以击中幽灵属性的宝可梦。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1597,7 +1727,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	serenegrace: {
 		name: "天恩",
-		desc: "托天恩的福， 招式的追加效果容易出现。",
+		// Official flavor text: "托天恩的福， 招式的追加效果容易出现。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1609,7 +1740,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowtag: {
 		name: "踩影",
-		desc: "踩住对手的影子 使其无法逃走或替换。",
+		// Official flavor text: "踩住对手的影子 使其无法逃走或替换。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1633,12 +1765,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shedskin: {
 		name: "蜕皮",
-		desc: "通过蜕去身上的皮， 有时会治愈异常状态。",
+		// Official flavor text: "通过蜕去身上的皮， 有时会治愈异常状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sheerforce: {
 		name: "强行",
-		desc: "招式的追加效果消失， 但因此能以更高的威力使出招式。",
+		// Official flavor text: "招式的追加效果消失， 但因此能以更高的威力使出招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1656,7 +1790,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shielddust: {
 		name: "鳞粉",
-		desc: "被鳞粉守护着， 不会受到招式的追加效果影响。",
+		// Official flavor text: "被鳞粉守护着， 不会受到招式的追加效果影响。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1676,7 +1811,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shieldsdown: {
 		name: "界限盾壳",
-		desc: "ＨＰ变为一半时， 壳会坏掉，变得有攻击性。",
+		// Official flavor text: "ＨＰ变为一半时， 壳会坏掉，变得有攻击性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		transform: "界限盾壳启动！",
@@ -1698,7 +1834,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	skilllink: {
 		name: "连续攻击",
-		desc: "如果使用连续招式， 总是能使出最高次数。",
+		// Official flavor text: "如果使用连续招式， 总是能使出最高次数。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1733,7 +1870,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	snowcloak: {
 		name: "雪隐",
-		desc: "冰雹天气时， 闪避率会提高。",
+		// Official flavor text: "冰雹天气时， 闪避率会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1749,7 +1887,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	solarpower: {
 		name: "太阳之力",
-		desc: "晴朗天气时， 特攻会提高， 而每回合ＨＰ会减少。",
+		// Official flavor text: "晴朗天气时， 特攻会提高， 而每回合ＨＰ会减少。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1778,7 +1917,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	speedboost: {
 		name: "加速",
-		desc: "每一回合速度会变快。",
+		// Official flavor text: "每一回合速度会变快。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spicyspray: {
@@ -1803,7 +1943,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "战斗切换",
-		desc: "如果使出攻击招式，会变为刀剑形态， 如果使出招式“王者盾牌”， 会变为盾牌形态。",
+		// Official flavor text: "如果使出攻击招式，会变为刀剑形态， 如果使出招式“王者盾牌”， 会变为盾牌形态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1829,7 +1970,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	steamengine: {
 		name: "蒸汽机",
-		desc: "受到水属性或 火属性的招式攻击时， 速度会巨幅提高。",
+		// Official flavor text: "受到水属性或 火属性的招式攻击时， 速度会巨幅提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelworker: {
@@ -1838,12 +1980,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	steelyspirit: {
 		name: "钢之意志",
-		desc: "我方的钢属性 攻击威力会提高。",
+		// Official flavor text: "我方的钢属性 攻击威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stench: {
 		name: "恶臭",
-		desc: "通过释放臭臭的气味， 在攻击的时候， 有时会使对手畏缩。",
+		// Official flavor text: "通过释放臭臭的气味， 在攻击的时候， 有时会使对手畏缩。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1852,7 +1996,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stickyhold: {
 		name: "黏着",
-		desc: "因为道具是粘在黏性身体上的， 所以不会被对手夺走。",
+		// Official flavor text: "因为道具是粘在黏性身体上的， 所以不会被对手夺走。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1862,7 +2007,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormdrain: {
 		name: "引水",
-		desc: "将水属性的招式引到自己身上， 不会受到伤害，而是会提高特攻。",
+		// Official flavor text: "将水属性的招式引到自己身上， 不会受到伤害，而是会提高特攻。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1873,12 +2019,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	strongjaw: {
 		name: "强壮之颚",
-		desc: "因为颚部强壮， 啃咬类招式的威力会提高。",
+		// Official flavor text: "因为颚部强壮， 啃咬类招式的威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sturdy: {
 		name: "结实",
-		desc: "即使受到对手的招式攻击， 也不会被一击打倒。 一击必杀的招式也没有效果。",
+		// Official flavor text: "即使受到对手的招式攻击， 也不会被一击打倒。 一击必杀的招式也没有效果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1916,7 +2064,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	swarm: {
 		name: "虫之预感",
-		desc: "ＨＰ减少的时候， 虫属性的招式威力会提高。",
+		// Official flavor text: "ＨＰ减少的时候， 虫属性的招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1925,14 +2074,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sweetveil: {
 		name: "甜幕",
-		desc: "我方的宝可梦 不会变为睡眠状态。",
+		// Official flavor text: "我方的宝可梦 不会变为睡眠状态。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  [POKEMON]因甜幕而不会睡着！",
 	},
 	swiftswim: {
 		name: "悠游自如",
-		desc: "下雨天气时， 速度会提高。",
+		// Official flavor text: "下雨天气时， 速度会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1946,7 +2097,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	symbiosis: {
 		name: "共生",
-		desc: "同伴使用道具时， 会把自己持有的道具传递给同伴。",
+		// Official flavor text: "同伴使用道具时， 会把自己持有的道具传递给同伴。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1959,7 +2111,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	synchronize: {
 		name: "同步",
-		desc: "将自己的中毒、麻痹 或灼伤状态传染给对手。",
+		// Official flavor text: "将自己的中毒、麻痹 或灼伤状态传染给对手。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1981,7 +2134,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	technician: {
 		name: "技术高手",
-		desc: "攻击时可以将 低威力招式的威力提高。",
+		// Official flavor text: "攻击时可以将 低威力招式的威力提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2013,7 +2167,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	teravolt: {
 		name: "兆级电压",
-		desc: "可以不受对手特性的干扰， 向对手使出招式。",
+		// Official flavor text: "可以不受对手特性的干扰， 向对手使出招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2040,7 +2195,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	thickfat: {
 		name: "厚脂肪",
-		desc: "因为被厚厚的脂肪保护着， 会让火属性和冰属性的招式伤害减半。",
+		// Official flavor text: "因为被厚厚的脂肪保护着， 会让火属性和冰属性的招式伤害减半。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2057,7 +2213,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	torrent: {
 		name: "激流",
-		desc: "ＨＰ减少的时候， 水属性的招式威力会提高。",
+		// Official flavor text: "ＨＰ减少的时候， 水属性的招式威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2070,7 +2227,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicboost: {
 		name: "中毒激升",
-		desc: "变为中毒状态时， 物理招式的威力会提高。",
+		// Official flavor text: "变为中毒状态时， 物理招式的威力会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	toxicchain: {
@@ -2084,7 +2242,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	trace: {
 		name: "复制",
-		desc: "出场时，复制对手的特性， 变为与之相同的特性。",
+		// Official flavor text: "出场时，复制对手的特性， 变为与之相同的特性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2129,7 +2288,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	turboblaze: {
 		name: "涡轮火焰",
-		desc: "可以不受对手特性的干扰， 向对手使出招式。",
+		// Official flavor text: "可以不受对手特性的干扰， 向对手使出招式。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2151,17 +2311,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	unaware: {
 		name: "纯朴",
-		desc: "可以无视对手能力的变化， 进行攻击。",
+		// Official flavor text: "可以无视对手能力的变化， 进行攻击。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	unburden: {
 		name: "轻装",
-		desc: "失去所持有的道具时， 速度会提高。",
+		// Official flavor text: "失去所持有的道具时， 速度会提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	unnerve: {
 		name: "紧张感",
-		desc: "让对手紧张， 使其无法食用树果。",
+		// Official flavor text: "让对手紧张， 使其无法食用树果。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [TEAM]因太紧张而无法食用树果！",
@@ -2189,7 +2352,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	voltabsorb: {
 		name: "蓄电",
-		desc: "受到电属性的招式攻击时， 不会受到伤害，而是会回复。",
+		// Official flavor text: "受到电属性的招式攻击时， 不会受到伤害，而是会回复。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2198,7 +2362,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wanderingspirit: {
 		name: "游魂",
-		desc: "与使用接触类招式 攻击自己的宝可梦互换特性。",
+		// Official flavor text: "与使用接触类招式 攻击自己的宝可梦互换特性。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2208,12 +2373,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	waterabsorb: {
 		name: "储水",
-		desc: "受到水属性的招式攻击时， 不会受到伤害，而是会回复。",
+		// Official flavor text: "受到水属性的招式攻击时， 不会受到伤害，而是会回复。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	waterbubble: {
 		name: "水泡",
-		desc: "降低自己受到的火属性 招式的威力，不会灼伤。",
+		// Official flavor text: "降低自己受到的火属性 招式的威力，不会灼伤。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watercompaction: {
@@ -2226,7 +2393,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	weakarmor: {
 		name: "碎裂铠甲",
-		desc: "如果因物理招式受到伤害， 防御会降低， 速度会大幅提高。",
+		// Official flavor text: "如果因物理招式受到伤害， 防御会降低， 速度会大幅提高。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2244,7 +2412,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wimpout: {
 		name: "跃跃欲逃",
-		desc: "ＨＰ变为一半时， 会慌慌张张逃走， 退回同行队伍中。",
+		// Official flavor text: "ＨＰ变为一半时， 会慌慌张张逃走， 退回同行队伍中。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	windpower: {
@@ -2271,12 +2440,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wonderskin: {
 		name: "奇迹皮肤",
-		desc: "成为不易受到变化招式 攻击的身体。",
+		// Official flavor text: "成为不易受到变化招式 攻击的身体。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zenmode: {
 		name: "达摩模式",
-		desc: "ＨＰ变为一半以下时， 样子会改变。",
+		// Official flavor text: "ＨＰ变为一半以下时， 样子会改变。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI

@@ -433,7 +433,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dawnstone: {
 		name: "Pierre Aube",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle brille comme un œil.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle brille comme un œil."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
@@ -442,12 +443,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	deepseascale: {
 		name: "Écaille Océan",
-		desc: "Objet à faire tenir à Coquiperl. Une écaille de couleur rose qui augmente sa Défense Spéciale.",
+		// Official flavor text: "Objet à faire tenir à Coquiperl. Une écaille de couleur rose qui augmente sa Défense Spéciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "Dent Océan",
-		desc: "Objet à faire tenir à Coquiperl. Une dent de couleur argent qui augmente son Attaque Spéciale.",
+		// Official flavor text: "Objet à faire tenir à Coquiperl. Une dent de couleur argent qui augmente son Attaque Spéciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	delphoxite: {
@@ -552,7 +555,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	duskstone: {
 		name: "Pierre Nuit",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est sombre comme une nuit sans lune.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est sombre comme une nuit sans lune."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthplate: {
@@ -698,7 +702,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firestone: {
 		name: "Pierre Feu",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est jaune et orange.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est jaune et orange."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
@@ -1019,7 +1024,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icestone: {
 		name: "Pierre Glace",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Un flocon de neige semble dessiné dessus.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Un flocon de neige semble dessiné dessus."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1095,7 +1101,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	kingsrock: {
 		name: "Roche Royale",
 		grammar: "fs",
-		desc: "Objet à tenir. Peut apeurer l’ennemi lorsque le porteur lui inflige des dégâts.",
+		// Official flavor text: "Objet à tenir. Peut apeurer l’ennemi lorsque le porteur lui inflige des dégâts."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
@@ -1127,7 +1134,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	leafstone: {
 		name: "Pierre Plante",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Une feuille est dessinée dessus.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Une feuille est dessinée dessus."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1376,7 +1384,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	metalcoat: {
 		name: "Peau Métal",
 		grammar: "fs",
-		desc: "Objet à tenir. Une pellicule métallique spéciale qui augmente la puissance des capacités de type Acier.",
+		// Official flavor text: "Objet à tenir. Une pellicule métallique spéciale qui augmente la puissance des capacités de type Acier."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1446,7 +1455,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	moonstone: {
 		name: "Pierre Lune",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est sombre comme la nuit.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est sombre comme la nuit."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muscleband: {
@@ -1747,12 +1757,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	razorclaw: {
 		name: "Griffe Rasoir",
-		desc: "Objet à tenir. Une griffe crochue et pointue augmentant le taux de critiques.",
+		// Official flavor text: "Objet à tenir. Une griffe crochue et pointue augmentant le taux de critiques."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorfang: {
 		name: "Croc Rasoir",
-		desc: "Objet à tenir. Peut apeurer l’ennemi quand le porteur lui inflige des dégâts.",
+		// Official flavor text: "Objet à tenir. Peut apeurer l’ennemi quand le porteur lui inflige des dégâts."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razzberry: {
@@ -1939,7 +1951,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	shinystone: {
 		name: "Pierre Éclat",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle brille d’une lumière aveuglante.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle brille d’une lumière aveuglante."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockdrive: {
@@ -2123,7 +2136,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sunstone: {
 		name: "Pierre Soleil",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est rouge comme le soleil couchant.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est rouge comme le soleil couchant."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swampertite: {
@@ -2174,7 +2188,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	thunderstone: {
 		name: "Pierre Foudre",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Un éclair est dessiné dessus.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Un éclair est dessiné dessus."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2626,7 +2641,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	utilityumbrella: {
 		name: "Parapluie Solide",
-		desc: "Objet à tenir. Protège le porteur des effets de la pluie et des rayons du soleil.",
+		// Official flavor text: "Objet à tenir. Protège le porteur des effets de la pluie et des rayons du soleil."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2664,7 +2680,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	waterstone: {
 		name: "Pierre Eau",
-		desc: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est de couleur bleue.",
+		// Official flavor text: "Une pierre étrange qui fait évoluer certaines espèces de Pokémon. Elle est de couleur bleue."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watmelberry: {

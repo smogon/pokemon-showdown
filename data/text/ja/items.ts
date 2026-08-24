@@ -384,7 +384,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dawnstone: {
 		name: "めざめいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 ひとみのように まばゆい。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 ひとみのように まばゆい。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
@@ -393,12 +394,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	deepseascale: {
 		name: "しんかいのウロコ",
-		desc: "パールルに 持たせると 特防が あがる ウロコ。 うすい ピンク色に 光る。",
+		// Official flavor text: "パールルに 持たせると 特防が あがる ウロコ。 うすい ピンク色に 光る。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "しんかいのキバ",
-		desc: "パールルに 持たせると 特攻が あがる キバ。 鋭く 銀色に 光る。",
+		// Official flavor text: "パールルに 持たせると 特攻が あがる キバ。 鋭く 銀色に 光る。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	delphoxite: {
@@ -498,7 +501,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	duskstone: {
 		name: "やみのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 やみのように 暗い。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 やみのように 暗い。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthplate: {
@@ -637,7 +641,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firestone: {
 		name: "ほのおのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 だいだい色を している。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 だいだい色を している。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
@@ -939,7 +944,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icestone: {
 		name: "こおりのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 雪の 模様が ある。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 雪の 模様が ある。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1009,7 +1015,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	kingsrock: {
 		name: "おうじゃのしるし",
-		desc: "持たせると 攻撃して ダメージを 与えたときに 相手を ひるませることが ある。",
+		// Official flavor text: "持たせると 攻撃して ダメージを 与えたときに 相手を ひるませることが ある。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
@@ -1041,7 +1048,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	leafstone: {
 		name: "リーフのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 はっぱの 模様が ある。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 はっぱの 模様が ある。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1260,7 +1268,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	metalcoat: {
 		name: "メタルコート",
-		desc: "特殊な 金属の 膜。 持たせると はがねタイプの 技の 威力が あがる。",
+		// Official flavor text: "特殊な 金属の 膜。 持たせると はがねタイプの 技の 威力が あがる。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1328,7 +1337,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	moonstone: {
 		name: "つきのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 夜空のように 黒い。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 夜空のように 黒い。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muscleband: {
@@ -1608,12 +1618,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	razorclaw: {
 		name: "するどいツメ",
-		desc: "鋭く とがった ツメ。 持たせると 技が 急所に 当たりやすくなる。",
+		// Official flavor text: "鋭く とがった ツメ。 持たせると 技が 急所に 当たりやすくなる。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorfang: {
 		name: "するどいキバ",
-		desc: "鋭く とがった キバ。 持たせると ダメージを 与えたとき ひるませることが ある。",
+		// Official flavor text: "鋭く とがった キバ。 持たせると ダメージを 与えたとき ひるませることが ある。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razzberry: {
@@ -1787,7 +1799,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	shinystone: {
 		name: "ひかりのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 ひかりのように まぶしい。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 ひかりのように まぶしい。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockdrive: {
@@ -1951,7 +1964,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sunstone: {
 		name: "たいようのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 太陽のように 赤い。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 太陽のように 赤い。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swampertite: {
@@ -2000,7 +2014,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	thunderstone: {
 		name: "かみなりのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 稲妻の 模様が ある。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 稲妻の 模様が ある。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2450,7 +2465,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	utilityumbrella: {
 		name: "ばんのうがさ",
-		desc: "持たせた ポケモンは 雨と 日差しが強いときの 影響を 受けなくなる。",
+		// Official flavor text: "持たせた ポケモンは 雨と 日差しが強いときの 影響を 受けなくなる。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2485,7 +2501,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	waterstone: {
 		name: "みずのいし",
-		desc: "ある 特定の ポケモンを 進化させる 不思議な 石。 澄んだ 水色を している。",
+		// Official flavor text: "ある 特定の ポケモンを 進化させる 不思議な 石。 澄んだ 水色を している。"
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watmelberry: {

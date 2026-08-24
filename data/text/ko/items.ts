@@ -384,7 +384,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dawnstone: {
 		name: "각성의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 눈동자처럼 아름답다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 눈동자처럼 아름답다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
@@ -393,12 +394,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	deepseascale: {
 		name: "심해의비늘",
-		desc: "진주몽에게 지니게 하면 특수방어가 올라가는 비늘. 연한 분홍색으로 빛난다.",
+		// Official flavor text: "진주몽에게 지니게 하면 특수방어가 올라가는 비늘. 연한 분홍색으로 빛난다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "심해의이빨",
-		desc: "진주몽에게 지니게 하면 특수공격이 올라가는 이빨. 날카로운 은색으로 빛난다.",
+		// Official flavor text: "진주몽에게 지니게 하면 특수공격이 올라가는 이빨. 날카로운 은색으로 빛난다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	delphoxite: {
@@ -498,7 +501,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	duskstone: {
 		name: "어둠의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 칠흑처럼 어둡다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 칠흑처럼 어둡다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthplate: {
@@ -637,7 +641,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firestone: {
 		name: "불꽃의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 주황색을 띠고 있다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 주황색을 띠고 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
@@ -939,7 +944,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icestone: {
 		name: "얼음의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 눈송이 무늬가 있다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 눈송이 무늬가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1009,7 +1015,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	kingsrock: {
 		name: "왕의징표석",
-		desc: "지니게 하면 공격해서 데미지를 줄 때 상대를 풀죽이기도 한다.",
+		// Official flavor text: "지니게 하면 공격해서 데미지를 줄 때 상대를 풀죽이기도 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
@@ -1041,7 +1048,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	leafstone: {
 		name: "리프의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 잎사귀 무늬가 있다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 잎사귀 무늬가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1260,7 +1268,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	metalcoat: {
 		name: "금속코트",
-		desc: "특수한 금속 장막. 지니게 하면 강철타입 기술의 위력이 올라간다.",
+		// Official flavor text: "특수한 금속 장막. 지니게 하면 강철타입 기술의 위력이 올라간다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1328,7 +1337,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	moonstone: {
 		name: "달의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 밤하늘처럼 까맣다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 밤하늘처럼 까맣다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muscleband: {
@@ -1608,12 +1618,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	razorclaw: {
 		name: "예리한손톱",
-		desc: "날카롭고 뾰족한 손톱. 지니게 하면 기술이 급소에 맞기 쉬워진다.",
+		// Official flavor text: "날카롭고 뾰족한 손톱. 지니게 하면 기술이 급소에 맞기 쉬워진다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorfang: {
 		name: "예리한이빨",
-		desc: "날카롭고 뾰족한 이빨. 지니게 하면 데미지를 줬을 때 풀죽게 하기도 한다.",
+		// Official flavor text: "날카롭고 뾰족한 이빨. 지니게 하면 데미지를 줬을 때 풀죽게 하기도 한다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razzberry: {
@@ -1787,7 +1799,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	shinystone: {
 		name: "빛의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 빛처럼 눈부시다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 빛처럼 눈부시다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockdrive: {
@@ -1951,7 +1964,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sunstone: {
 		name: "태양의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 태양처럼 빨갛다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 태양처럼 빨갛다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swampertite: {
@@ -2000,7 +2014,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	thunderstone: {
 		name: "천둥의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 천둥번개 무늬가 있다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 천둥번개 무늬가 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2450,7 +2465,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	utilityumbrella: {
 		name: "만능우산",
-		desc: "지니게 한 포켓몬은 비와 햇살이 강할 때의 영향을 받지 않게 된다.",
+		// Official flavor text: "지니게 한 포켓몬은 비와 햇살이 강할 때의 영향을 받지 않게 된다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2485,7 +2501,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	waterstone: {
 		name: "물의돌",
-		desc: "어느 특정 포켓몬을 진화시키는 이상한 돌. 투명한 푸른색을 띠고 있다.",
+		// Official flavor text: "어느 특정 포켓몬을 진화시키는 이상한 돌. 투명한 푸른색을 띠고 있다."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watmelberry: {

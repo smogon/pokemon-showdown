@@ -429,7 +429,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dawnstone: {
 		name: "Funkelstein",
-		desc: "Dieser besondere, glitzernde Stein hilft manchen Pokémon bei ihrer Entwicklung.",
+		// Official flavor text: "Dieser besondere, glitzernde Stein hilft manchen Pokémon bei ihrer Entwicklung."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
@@ -438,12 +439,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	deepseascale: {
 		name: "Abyssplatte",
-		desc: "Ein Item, das von Perlu getragen werden kann. Es schimmert pink und hebt die Spezial-Verteidigung.",
+		// Official flavor text: "Ein Item, das von Perlu getragen werden kann. Es schimmert pink und hebt die Spezial-Verteidigung."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "Abysszahn",
-		desc: "Ein Item, das von Perlu getragen werden kann. Es schimmert silbern und hebt den Spezial-Angriff.",
+		// Official flavor text: "Ein Item, das von Perlu getragen werden kann. Es schimmert silbern und hebt den Spezial-Angriff."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	delphoxite: {
@@ -548,7 +551,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	duskstone: {
 		name: "Finsterstein",
-		desc: "Dieser besondere, düstere Stein hilft manchen Pokémon bei ihrer Entwicklung.",
+		// Official flavor text: "Dieser besondere, düstere Stein hilft manchen Pokémon bei ihrer Entwicklung."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthplate: {
@@ -694,7 +698,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firestone: {
 		name: "Feuerstein",
-		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er schimmert in den Farben Orange und Gelb.",
+		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er schimmert in den Farben Orange und Gelb."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
@@ -1015,7 +1020,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icestone: {
 		name: "Eisstein",
-		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Schneeflockenmuster.",
+		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Schneeflockenmuster."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1091,7 +1097,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	kingsrock: {
 		name: "King-Stein",
 		grammar: "ms",
-		desc: "Gibst du es einem Pokémon zum Tragen, lässt es mit seinem Angriff das Ziel gelegentlich zurückschrecken.",
+		// Official flavor text: "Gibst du es einem Pokémon zum Tragen, lässt es mit seinem Angriff das Ziel gelegentlich zurückschrecken."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
@@ -1123,7 +1130,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	leafstone: {
 		name: "Blattstein",
-		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blattmuster.",
+		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blattmuster."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1372,7 +1380,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	metalcoat: {
 		name: "Metallmantel",
 		grammar: "ms",
-		desc: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es verstärkt Attacken vom Typ Stahl.",
+		// Official flavor text: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es verstärkt Attacken vom Typ Stahl."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1446,7 +1455,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	moonstone: {
 		name: "Mondstein",
-		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist schwarz wie die Nacht.",
+		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist schwarz wie die Nacht."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muscleband: {
@@ -1751,12 +1761,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	razorclaw: {
 		name: "Scharfklaue",
-		desc: "Ein Item zum Tragen. Die scharfe Klaue erhöht die Volltrefferquote des Trägers.",
+		// Official flavor text: "Ein Item zum Tragen. Die scharfe Klaue erhöht die Volltrefferquote des Trägers."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorfang: {
 		name: "Scharfzahn",
-		desc: "Ein Item zum Tragen. Verursacht der Träger Schaden, schreckt das Ziel eventuell zurück.",
+		// Official flavor text: "Ein Item zum Tragen. Verursacht der Träger Schaden, schreckt das Ziel eventuell zurück."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razzberry: {
@@ -1943,7 +1955,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	shinystone: {
 		name: "Leuchtstein",
-		desc: "Dieser besondere, hell leuchtende Stein hilft manchen Pokémon bei ihrer Entwicklung.",
+		// Official flavor text: "Dieser besondere, hell leuchtende Stein hilft manchen Pokémon bei ihrer Entwicklung."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockdrive: {
@@ -2127,7 +2140,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sunstone: {
 		name: "Sonnenstein",
-		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist rot wie die Abendsonne.",
+		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist rot wie die Abendsonne."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swampertite: {
@@ -2178,7 +2192,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	thunderstone: {
 		name: "Donnerstein",
-		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blitzmuster.",
+		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blitzmuster."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2630,7 +2645,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	utilityumbrella: {
 		name: "Allzweckschirm",
-		desc: "Der Träger ist gegen die Effekte von Regen und starkem Sonnenlicht geschützt.",
+		// Official flavor text: "Der Träger ist gegen die Effekte von Regen und starkem Sonnenlicht geschützt."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2668,7 +2684,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	waterstone: {
 		name: "Wasserstein",
-		desc: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist hellblau.",
+		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist hellblau."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watmelberry: {

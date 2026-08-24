@@ -433,7 +433,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dawnstone: {
 		name: "Pietralbore",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. È luccicante come gli occhi.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. È luccicante come gli occhi."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
@@ -442,12 +443,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	deepseascale: {
 		name: "Squamabissi",
-		desc: "Strumento da dare a Clamperl. Squama dai bagliori rosei che aumenta la Difesa Speciale.",
+		// Official flavor text: "Strumento da dare a Clamperl. Squama dai bagliori rosei che aumenta la Difesa Speciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseatooth: {
 		name: "Dente Abissi",
-		desc: "Strumento da dare a Clamperl. Dente dai bagliori argentei che aumenta l’Attacco Speciale.",
+		// Official flavor text: "Strumento da dare a Clamperl. Dente dai bagliori argentei che aumenta l’Attacco Speciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	delphoxite: {
@@ -552,7 +555,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	duskstone: {
 		name: "Neropietra",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. È scura come le tenebre.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. È scura come le tenebre."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthplate: {
@@ -698,7 +702,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firestone: {
 		name: "Pietrafocaia",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. È gialla e arancione.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. È gialla e arancione."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
@@ -1019,7 +1024,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icestone: {
 		name: "Pietragelo",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. Si intravede l’immagine di un fiocco di neve.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. Si intravede l’immagine di un fiocco di neve."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1095,7 +1101,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	kingsrock: {
 		name: "Roccia di Re",
 		grammar: "fs",
-		desc: "Strumento da dare a un Pokémon. Se chi lo usa arreca danni, può far tentennare il nemico.",
+		// Official flavor text: "Strumento da dare a un Pokémon. Se chi lo usa arreca danni, può far tentennare il nemico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
@@ -1127,7 +1134,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	leafstone: {
 		name: "Pietrafoglia",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. Riporta l’immagine di una foglia.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. Riporta l’immagine di una foglia."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1368,7 +1376,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	metalcoat: {
 		name: "Metalcoperta",
 		grammar: "fs",
-		desc: "Strumento da dare a un Pokémon. Speciale pellicola metallica che potenzia le mosse di tipo Acciaio.",
+		// Official flavor text: "Strumento da dare a un Pokémon. Speciale pellicola metallica che potenzia le mosse di tipo Acciaio."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1438,7 +1447,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	moonstone: {
 		name: "Pietralunare",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. È nera come la notte.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. È nera come la notte."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muscleband: {
@@ -1739,12 +1749,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	razorclaw: {
 		name: "Affilartigli",
-		desc: "Strumento da dare a un Pokémon. Artiglio che aumenta la probabilità di sferrare brutti colpi.",
+		// Official flavor text: "Strumento da dare a un Pokémon. Artiglio che aumenta la probabilità di sferrare brutti colpi."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorfang: {
 		name: "Affilodente",
-		desc: "Strumento da dare a un Pokémon. Chi ce l’ha può far tentennare il nemico colpito.",
+		// Official flavor text: "Strumento da dare a un Pokémon. Chi ce l’ha può far tentennare il nemico colpito."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razzberry: {
@@ -1931,7 +1943,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	shinystone: {
 		name: "Pietrabrillo",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. Brilla di una luce abbagliante.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. Brilla di una luce abbagliante."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockdrive: {
@@ -2115,7 +2128,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	sunstone: {
 		name: "Pietrasolare",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. È rossa come il sole al tramonto.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. È rossa come il sole al tramonto."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swampertite: {
@@ -2166,7 +2180,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	thunderstone: {
 		name: "Pietratuono",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. Riporta l’immagine di un fulmine.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. Riporta l’immagine di un fulmine."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2618,7 +2633,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	utilityumbrella: {
 		name: "Superombrello",
-		desc: "Strumento da dare a un Pokémon. Protegge dagli effetti causati dalla pioggia e dalla luce solare intensa.",
+		// Official flavor text: "Strumento da dare a un Pokémon. Protegge dagli effetti causati dalla pioggia e dalla luce solare intensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2656,7 +2672,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	waterstone: {
 		name: "Pietraidrica",
-		desc: "Pietra particolare che fa evolvere determinate specie di Pokémon. Ha delle macchioline azzurre.",
+		// Official flavor text: "Pietra particolare che fa evolvere determinate specie di Pokémon. Ha delle macchioline azzurre."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watmelberry: {

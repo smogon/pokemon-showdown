@@ -1,12 +1,14 @@
 export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "Gigarrayo Fulminante",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	absorb: {
 		name: "Absorber",
-		desc: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce.",
+		// Official flavor text: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -23,12 +25,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	accelerock: {
 		name: "Roca Veloz",
-		desc: "El usuario se lanza contra el objetivo a gran velocidad. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "El usuario se lanza contra el objetivo a gran velocidad. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acid: {
 		name: "Ácido",
-		desc: "Rocía a los enemigos con un ácido corrosivo. Puede bajar la Defensa Especial.",
+		// Official flavor text: "Rocía a los enemigos con un ácido corrosivo. Puede bajar la Defensa Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -44,7 +48,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acidarmor: {
 		name: "Armadura Ácida",
-		desc: "Transforma la estructura celular para hacerse líquido y aumenta mucho la Defensa.",
+		// Official flavor text: "Transforma la estructura celular para hacerse líquido y aumenta mucho la Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
@@ -53,7 +58,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acidspray: {
 		name: "Bomba Ácida",
-		desc: "Ataca con un líquido corrosivo que reduce mucho la Defensa Especial del objetivo.",
+		// Official flavor text: "Ataca con un líquido corrosivo que reduce mucho la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acrobatics: {
@@ -62,7 +68,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	acupressure: {
 		name: "Acupresión",
-		desc: "Aplica presión en puntos clave del cuerpo para potenciar mucho una de sus características.",
+		// Official flavor text: "Aplica presión en puntos clave del cuerpo para potenciar mucho una de sus características."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -74,29 +81,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aeroblast: {
 		name: "Aerochorro",
-		desc: "Lanza un chorro de aire que suele asestar un golpe crítico.",
+		// Official flavor text: "Lanza un chorro de aire que suele asestar un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	afteryou: {
 		name: "Cede Paso",
-		desc: "Si el usuario es el más rápido, permite al objetivo usar un movimiento justo tras él, adelantándose a Pokémon más rápidos.",
+		// Official flavor text: "Si el usuario es el más rápido, permite al objetivo usar un movimiento justo tras él, adelantándose a Pokémon más rápidos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[TARGET] ha decidido aprovechar la oportunidad!",
 	},
 	agility: {
 		name: "Agilidad",
-		desc: "Relaja el cuerpo para ganar mucha Velocidad.",
+		// Official flavor text: "Relaja el cuerpo para ganar mucha Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aircutter: {
 		name: "Aire Afilado",
-		desc: "Viento cortante que azota. Suele ser un golpe crítico.",
+		// Official flavor text: "Viento cortante que azota. Suele ser un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	airslash: {
 		name: "Tajo Aéreo",
-		desc: "Ataca con un viento afilado que incluso corta el aire. También puede amedrentar al objetivo.",
+		// Official flavor text: "Ataca con un viento afilado que incluso corta el aire. También puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
@@ -110,7 +122,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	allyswitch: {
 		name: "Cambio de Banda",
-		desc: "Extraño poder que intercambia la posición del usuario con la de un aliado sobre el terreno de combate.",
+		// Official flavor text: "Extraño poder que intercambia la posición del usuario con la de un aliado sobre el terreno de combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -123,7 +136,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	amnesia: {
 		name: "Amnesia",
-		desc: "El usuario olvida sus preocupaciones y aumenta mucho la Defensa Especial.",
+		// Official flavor text: "El usuario olvida sus preocupaciones y aumenta mucho la Defensa Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -132,7 +146,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	anchorshot: {
 		name: "Anclaje",
-		desc: "Ataca lanzando un ancla al oponente, que queda atrapado y no puede huir.",
+		// Official flavor text: "Ataca lanzando un ancla al oponente, que queda atrapado y no puede huir."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -140,12 +155,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ancientpower: {
 		name: "Poder Pasado",
-		desc: "Ataque prehistórico que puede subir todas las características.",
+		// Official flavor text: "Ataque prehistórico que puede subir todas las características."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	appleacid: {
 		name: "Ácido Málico",
-		desc: "Ataca al objetivo con el fluido corrosivo que desprende una manzana ácida, lo que también disminuye la Defensa Especial de este.",
+		// Official flavor text: "Ataca al objetivo con el fluido corrosivo que desprende una manzana ácida, lo que también disminuye la Defensa Especial de este."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquacutter: {
@@ -155,12 +172,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aquajet: {
 		name: "Acua Jet",
-		desc: "Ataque de una rapidez espeluznante. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Ataque de una rapidez espeluznante. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquaring: {
 		name: "Acua Aro",
-		desc: "Un manto de agua cubre al Pokémon que lo usa. Recupera algunos PS en cada turno.",
+		// Official flavor text: "Un manto de agua cubre al Pokémon que lo usa. Recupera algunos PS en cada turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] se ha rodeado de un manto de agua!",
@@ -182,7 +201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	armthrust: {
 		name: "Empujón",
-		desc: "Fuertes empujones que golpean de dos a cinco veces seguidas.",
+		// Official flavor text: "Fuertes empujones que golpean de dos a cinco veces seguidas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -196,7 +216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromatherapy: {
 		name: "Aromaterapia",
-		desc: "Cura todos los problemas de estado del equipo con un suave aroma.",
+		// Official flavor text: "Cura todos los problemas de estado del equipo con un suave aroma."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -206,12 +227,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aromaticmist: {
 		name: "Niebla Aromática",
-		desc: "Consigue aumentar la Defensa Especial de un Pokémon de su equipo con una fragancia misteriosa.",
+		// Official flavor text: "Consigue aumentar la Defensa Especial de un Pokémon de su equipo con una fragancia misteriosa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	assist: {
 		name: "Ayuda",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -234,7 +257,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	assurance: {
 		name: "Buena Baza",
-		desc: "Si el objetivo ya ha sufrido daño en ese turno, la fuerza del ataque se duplica.",
+		// Official flavor text: "Si el objetivo ya ha sufrido daño en ese turno, la fuerza del ataque se duplica."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -242,7 +266,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	astonish: {
 		name: "Impresionar",
-		desc: "Lanza un grito tan tremendo que impresiona y puede amedrentar al objetivo.",
+		// Official flavor text: "Lanza un grito tan tremendo que impresiona y puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -250,17 +275,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	astralbarrage: {
 		name: "Orbes Espectro",
-		desc: "El usuario ataca al objetivo lanzándole una ingente cantidad de pequeños fantasmas.",
+		// Official flavor text: "El usuario ataca al objetivo lanzándole una ingente cantidad de pequeños fantasmas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	attackorder: {
 		name: "Al Ataque",
-		desc: "El usuario llama a sus súbditos para que ataquen al objetivo. Suele ser crítico.",
+		// Official flavor text: "El usuario llama a sus súbditos para que ataquen al objetivo. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	attract: {
 		name: "Atracción",
-		desc: "Si el objetivo es del sexo opuesto, se enamorará y bajará la posibilidad de que ataque.",
+		// Official flavor text: "Si el objetivo es del sexo opuesto, se enamorará y bajará la posibilidad de que ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -282,12 +310,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurawheel: {
 		name: "Rueda Aural",
-		desc: "La energía que acumula en las mejillas le sirve para atacar y aumentar su Velocidad. Este movimiento cambia de tipo según la forma que adopte Morpeko.",
+		// Official flavor text: "La energía que acumula en las mejillas le sirve para atacar y aumentar su Velocidad. Este movimiento cambia de tipo según la forma que adopte Morpeko."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aurorabeam: {
 		name: "Rayo Aurora",
-		desc: "Rayo multicolor que puede reducir el Ataque.",
+		// Official flavor text: "Rayo multicolor que puede reducir el Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -296,7 +326,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	auroraveil: {
 		name: "Velo Aurora",
-		desc: "Reduce el daño de los ataques físicos y especiales que ejecuta el rival durante cinco turnos. Solo puede usarse cuando está granizando.",
+		// Official flavor text: "Reduce el daño de los ataques físicos y especiales que ejecuta el rival durante cinco turnos. Solo puede usarse cuando está granizando."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -308,14 +339,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	autotomize: {
 		name: "Aligerar",
-		desc: "El usuario se desprende de partes prescindibles de su cuerpo para hacerse más ligero y aumentar mucho su Velocidad.",
+		// Official flavor text: "El usuario se desprende de partes prescindibles de su cuerpo para hacerse más ligero y aumentar mucho su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] es ahora más ligero!",
 	},
 	avalanche: {
 		name: "Alud",
-		desc: "Este ataque inflige el doble de daño a un objetivo que haya golpeado al usuario en ese mismo turno.",
+		// Official flavor text: "Este ataque inflige el doble de daño a un objetivo que haya golpeado al usuario en ese mismo turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -330,17 +363,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	babydolleyes: {
 		name: "Ojitos Tiernos",
-		desc: "Lanza una mirada al objetivo con ojos acaramelados, con lo que logra que su Ataque se reduzca. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Lanza una mirada al objetivo con ojos acaramelados, con lo que logra que su Ataque se reduzca. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	baddybad: {
 		name: "Umbreozona",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	banefulbunker: {
 		name: "Búnker",
-		desc: "Protege de los ataques y, al mismo tiempo, envenena al Pokémon que use un movimiento de contacto contra el usuario.",
+		// Official flavor text: "Protege de los ataques y, al mismo tiempo, envenena al Pokémon que use un movimiento de contacto contra el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -356,7 +392,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrage: {
 		name: "Bombardeo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -370,12 +407,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	barrier: {
 		name: "Barrera",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	batonpass: {
 		name: "Relevo",
-		desc: "Cambia el puesto con otro miembro del equipo y le pasa los cambios de características.",
+		// Official flavor text: "Cambia el puesto con otro miembro del equipo y le pasa los cambios de características."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -398,14 +437,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	beakblast: {
 		name: "Pico Cañón",
-		desc: "Primero aumenta la temperatura de su pico y luego ejecuta un ataque. Quema al rival si este le propina un ataque físico mientras está calentando el pico.",
+		// Official flavor text: "Primero aumenta la temperatura de su pico y luego ejecuta un ataque. Quema al rival si este le propina un ataque físico mientras está calentando el pico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] empieza a calentar su pico!",
 	},
 	beatup: {
 		name: "Paliza",
-		desc: "Ataque de todo el equipo Pokémon. Cuantos más haya, más veces se atacará.",
+		// Official flavor text: "Ataque de todo el equipo Pokémon. Cuantos más haya, más veces se atacará."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -435,7 +476,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	belch: {
 		name: "Eructo",
-		desc: "El Pokémon causa daño a su oponente lanzándole un eructo. Para poder utilizar este movimiento tiene que llevar una baya y comérsela.",
+		// Official flavor text: "El Pokémon causa daño a su oponente lanzándole un eructo. Para poder utilizar este movimiento tiene que llevar una baya y comérsela."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -444,7 +486,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bellydrum: {
 		name: "Tambor",
-		desc: "Reduce la mitad de los PS máximos para mejorar al máximo el Ataque.",
+		// Official flavor text: "Reduce la mitad de los PS máximos para mejorar al máximo el Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -454,7 +497,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bestow: {
 		name: "Ofrenda",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -467,7 +511,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bide: {
 		name: "Venganza",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -489,7 +534,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bind: {
 		name: "Atadura",
-		desc: "Ata y oprime de cuatro a cinco turnos.",
+		// Official flavor text: "Ata y oprime de cuatro a cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -517,7 +563,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bite: {
 		name: "Mordisco",
-		desc: "Un voraz bocado que puede amedrentar al objetivo.",
+		// Official flavor text: "Un voraz bocado que puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -540,12 +587,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blastburn: {
 		name: "Anillo Ígneo",
-		desc: "Explosión de fuego. El atacante debe descansar el siguiente turno.",
+		// Official flavor text: "Explosión de fuego. El atacante debe descansar el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazekick: {
 		name: "Patada Ígnea",
-		desc: "Patada que suele ser un golpe crítico y puede causar quemaduras.",
+		// Official flavor text: "Patada que suele ser un golpe crítico y puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazingtorque: {
@@ -560,7 +609,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blizzard: {
 		name: "Ventisca",
-		desc: "Tormenta de hielo que puede llegar a congelar.",
+		// Official flavor text: "Tormenta de hielo que puede llegar a congelar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -576,7 +626,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	block: {
 		name: "Bloqueo",
-		desc: "Le corta el paso al objetivo para que no pueda escapar.",
+		// Official flavor text: "Le corta el paso al objetivo para que no pueda escapar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -601,17 +652,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	blueflare: {
 		name: "Llama Azul",
-		desc: "Ataca con una bella pero potente llama azul que rodea al objetivo. Puede quemarlo.",
+		// Official flavor text: "Ataca con una bella pero potente llama azul que rodea al objetivo. Puede quemarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bodypress: {
 		name: "Plancha Corporal",
-		desc: "El usuario usa el cuerpo para lanzar su ataque e infligir un daño directamente proporcional a su Defensa.",
+		// Official flavor text: "El usuario usa el cuerpo para lanzar su ataque e infligir un daño directamente proporcional a su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bodyslam: {
 		name: "Golpe Cuerpo",
-		desc: "Salta sobre el objetivo con todo su peso y puede llegar a paralizarlo.",
+		// Official flavor text: "Salta sobre el objetivo con todo su peso y puede llegar a paralizarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -619,22 +673,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	boltbeak: {
 		name: "Electropico",
-		desc: "El usuario ensarta al objetivo con su pico cargado de electricidad. Si ataca en primer lugar, la potencia del movimiento se duplica.",
+		// Official flavor text: "El usuario ensarta al objetivo con su pico cargado de electricidad. Si ataca en primer lugar, la potencia del movimiento se duplica."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	boltstrike: {
 		name: "Ataque Fulgor",
-		desc: "Ataca envolviéndose de una gran carga eléctrica y embistiendo al objetivo con ella. Puede paralizar.",
+		// Official flavor text: "Ataca envolviéndose de una gran carga eléctrica y embistiendo al objetivo con ella. Puede paralizar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	boneclub: {
 		name: "Hueso Palo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bonemerang: {
 		name: "Huesomerang",
-		desc: "Lanza un hueso a modo de bumerán que golpea dos veces.",
+		// Official flavor text: "Lanza un hueso a modo de bumerán que golpea dos veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -648,7 +706,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bonerush: {
 		name: "Ataque Óseo",
-		desc: "Hueso en ristre, aporrea al objetivo de dos a cinco veces.",
+		// Official flavor text: "Hueso en ristre, aporrea al objetivo de dos a cinco veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -662,12 +721,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	boomburst: {
 		name: "Estruendo",
-		desc: "Ataca a todos los Pokémon a su alrededor con una potentísima onda sonora.",
+		// Official flavor text: "Ataca a todos los Pokémon a su alrededor con una potentísima onda sonora."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bounce: {
 		name: "Bote",
-		desc: "El usuario bota en el primer turno y golpea al objetivo en el segundo y puede llegar a paralizarlo.",
+		// Official flavor text: "El usuario bota en el primer turno y golpea al objetivo en el segundo y puede llegar a paralizarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -683,17 +744,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bouncybubble: {
 		name: "Vapodrenaje",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	branchpoke: {
 		name: "Punzada Rama",
-		desc: "Ataca pinchando al objetivo con una rama afilada.",
+		// Official flavor text: "Ataca pinchando al objetivo con una rama afilada."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bravebird: {
 		name: "Pájaro Osado",
-		desc: "Pliega sus alas y ataca con un vuelo rasante. El Pokémon que lo usa también resulta seriamente dañado.",
+		// Official flavor text: "Pliega sus alas y ataca con un vuelo rasante. El Pokémon que lo usa también resulta seriamente dañado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -702,7 +766,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	breakingswipe: {
 		name: "Vasto Impacto",
-		desc: "El usuario sacude violentamente su enorme cola para golpear a todos los rivales y reducir su Ataque a la par.",
+		// Official flavor text: "El usuario sacude violentamente su enorme cola para golpear a todos los rivales y reducir su Ataque a la par."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
@@ -711,7 +776,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	brickbreak: {
 		name: "Demolición",
-		desc: "Potente ataque que también es capaz de destruir barreras como Pantalla de Luz y Reflejo.",
+		// Official flavor text: "Potente ataque que también es capaz de destruir barreras como Pantalla de Luz y Reflejo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -728,17 +794,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	brine: {
 		name: "Salmuera",
-		desc: "Si al objetivo le queda la mitad o menos de sus PS, el ataque será el doble de fuerte.",
+		// Official flavor text: "Si al objetivo le queda la mitad o menos de sus PS, el ataque será el doble de fuerte."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brutalswing: {
 		name: "Giro Vil",
-		desc: "Hace pivotar su cuerpo para causar daño a su alrededor.",
+		// Official flavor text: "Hace pivotar su cuerpo para causar daño a su alrededor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bubble: {
 		name: "Burbuja",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -750,7 +819,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bubblebeam: {
 		name: "Rayo Burbuja",
-		desc: "Diluvio de burbujas que puede bajar la Velocidad.",
+		// Official flavor text: "Diluvio de burbujas que puede bajar la Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -759,7 +829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bugbite: {
 		name: "Picadura",
-		desc: "Pica al objetivo. Si el objetivo lleva una baya, el usuario se la come y se beneficia de su efecto.",
+		// Official flavor text: "Pica al objetivo. Si el objetivo lleva una baya, el usuario se la come y se beneficia de su efecto."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -769,27 +840,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bugbuzz: {
 		name: "Zumbido",
-		desc: "El usuario crea una onda sónica dañina moviendo su cuerpo que también puede disminuir la Defensa Especial del objetivo.",
+		// Official flavor text: "El usuario crea una onda sónica dañina moviendo su cuerpo que también puede disminuir la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulkup: {
 		name: "Corpulencia",
-		desc: "Robustece el cuerpo para subir el Ataque y la Defensa.",
+		// Official flavor text: "Robustece el cuerpo para subir el Ataque y la Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulldoze: {
 		name: "Terratemblor",
-		desc: "Sacudida sísmica que afecta a los demás Pokémon adyacentes y también reduce su Velocidad.",
+		// Official flavor text: "Sacudida sísmica que afecta a los demás Pokémon adyacentes y también reduce su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulletpunch: {
 		name: "Puño Bala",
-		desc: "Ataca con fuertes puñetazos tan rápidos como proyectiles. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Ataca con fuertes puñetazos tan rápidos como proyectiles. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bulletseed: {
 		name: "Semilladora",
-		desc: "Dispara rápido de dos a cinco ráfagas de semillas de manera consecutiva.",
+		// Official flavor text: "Dispara rápido de dos a cinco ráfagas de semillas de manera consecutiva."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -808,12 +884,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	burningjealousy: {
 		name: "Envidia Ardiente",
-		desc: "Ataca al objetivo con la energía generada por la envidia y causa quemaduras a los Pokémon cuyas características hayan aumentado en ese turno.",
+		// Official flavor text: "Ataca al objetivo con la energía generada por la envidia y causa quemaduras a los Pokémon cuyas características hayan aumentado en ese turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	burnup: {
 		name: "Llama Final",
-		desc: "Utiliza hasta el último resquicio de llamas de su cuerpo para infligir un grave daño al oponente. Tras el ataque, el usuario deja de ser de tipo Fuego.",
+		// Official flavor text: "Utiliza hasta el último resquicio de llamas de su cuerpo para infligir un grave daño al oponente. Tras el ataque, el usuario deja de ser de tipo Fuego."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -823,17 +901,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	buzzybuzz: {
 		name: "Joltioparálisis",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	calmmind: {
 		name: "Paz Mental",
-		desc: "Aumenta la concentración y calma el espíritu para subir el Ataque Especial y la Defensa Especial.",
+		// Official flavor text: "Aumenta la concentración y calma el espíritu para subir el Ataque Especial y la Defensa Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	camouflage: {
 		name: "Camuflaje",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -852,7 +933,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	captivate: {
 		name: "Seducción",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	catastropika: {
@@ -872,7 +954,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	charge: {
 		name: "Carga",
-		desc: "Recarga energía para potenciar el siguiente movimiento de tipo Eléctrico. También sube la Defensa Especial.",
+		// Official flavor text: "Recarga energía para potenciar el siguiente movimiento de tipo Eléctrico. También sube la Defensa Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -887,17 +970,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	chargebeam: {
 		name: "Rayo Carga",
-		desc: "Lanza un rayo eléctrico contra el objetivo. Puede subir el Ataque Especial de quien lo usa.",
+		// Official flavor text: "Lanza un rayo eléctrico contra el objetivo. Puede subir el Ataque Especial de quien lo usa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	charm: {
 		name: "Encanto",
-		desc: "Engatusa al objetivo y reduce mucho su Ataque.",
+		// Official flavor text: "Engatusa al objetivo y reduce mucho su Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chatter: {
 		name: "Cháchara",
-		desc: "Ataca con una onda de sonido muy ruidosa compuesta por palabras y confunde al objetivo.",
+		// Official flavor text: "Ataca con una onda de sonido muy ruidosa compuesta por palabras y confunde al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -922,7 +1008,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	chipaway: {
 		name: "Guardia Baja",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chloroblast: {
@@ -932,12 +1019,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	circlethrow: {
 		name: "Llave Giro",
-		desc: "Lanza por los aires al objetivo y hace que salga otro Pokémon. Si es uno salvaje, acaba el combate.",
+		// Official flavor text: "Lanza por los aires al objetivo y hace que salga otro Pokémon. Si es uno salvaje, acaba el combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clamp: {
 		name: "Tenaza",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -965,17 +1054,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	clangingscales: {
 		name: "Fragor Escamas",
-		desc: "Frota todas las escamas de su cuerpo para crear un fuerte sonido con el que ataca. Cuando el ataque termina, su Defensa se ve reducida.",
+		// Official flavor text: "Frota todas las escamas de su cuerpo para crear un fuerte sonido con el que ataca. Cuando el ataque termina, su Defensa se ve reducida."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clangoroussoul: {
 		name: "Estruendo Escama",
-		desc: "Utiliza parte de los PS propios para subir sus características.",
+		// Official flavor text: "Utiliza parte de los PS propios para subir sus características."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clangoroussoulblaze: {
 		name: "Estruendo Implacable",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clearsmog: {
@@ -984,17 +1076,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	closecombat: {
 		name: "A Bocajarro",
-		desc: "Lucha abiertamente contra el objetivo sin protegerse. También reduce la Defensa y la Defensa Especial del usuario.",
+		// Official flavor text: "Lucha abiertamente contra el objetivo sin protegerse. También reduce la Defensa y la Defensa Especial del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	coaching: {
 		name: "Motivación",
-		desc: "El usuario imparte indicaciones precisas a sus aliados, que ven aumentados su Ataque y su Defensa.",
+		// Official flavor text: "El usuario imparte indicaciones precisas a sus aliados, que ven aumentados su Ataque y su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	coil: {
 		name: "Enrosque",
-		desc: "El usuario se concentra, lo que le permite aumentar su Ataque, Defensa y Precisión.",
+		// Official flavor text: "El usuario se concentra, lo que le permite aumentar su Ataque, Defensa y Precisión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	collisioncourse: {
@@ -1009,7 +1104,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cometpunch: {
 		name: "Puño Cometa",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1028,22 +1124,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	confide: {
 		name: "Confidencia",
-		desc: "Hace que el objetivo pierda la concentración contándole un secreto. Disminuye el Ataque Especial del oponente.",
+		// Official flavor text: "Hace que el objetivo pierda la concentración contándole un secreto. Disminuye el Ataque Especial del oponente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	confuseray: {
 		name: "Rayo Confuso",
-		desc: "Rayo siniestro que confunde al objetivo.",
+		// Official flavor text: "Rayo siniestro que confunde al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	confusion: {
 		name: "Confusión",
-		desc: "Débil ataque telequinético que puede causar confusión.",
+		// Official flavor text: "Débil ataque telequinético que puede causar confusión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	constrict: {
 		name: "Restricción",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1056,7 +1156,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	conversion: {
 		name: "Conversión",
-		desc: "Cambia el tipo del usuario por el del primero de sus movimientos.",
+		// Official flavor text: "Cambia el tipo del usuario por el del primero de sus movimientos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1077,7 +1178,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	conversion2: {
 		name: "Conversión 2",
-		desc: "El usuario cambia de tipo para hacerse resistente al último tipo de movimiento usado por el objetivo.",
+		// Official flavor text: "El usuario cambia de tipo para hacerse resistente al último tipo de movimiento usado por el objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1093,7 +1195,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	copycat: {
 		name: "Copión",
-		desc: "Imita el movimiento usado justo antes. El movimiento falla si no se ha usado aún ninguno.",
+		// Official flavor text: "Imita el movimiento usado justo antes. El movimiento falla si no se ha usado aún ninguno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1113,7 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	coreenforcer: {
 		name: "Núcleo Castigo",
-		desc: "Inflige daño al rival, y si este ya ha hecho uso de algún movimiento, pierde su habilidad.",
+		// Official flavor text: "Inflige daño al rival, y si este ya ha hecho uso de algún movimiento, pierde su habilidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1128,7 +1232,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	corrosivegas: {
 		name: "Gas Corrosivo",
-		desc: "El usuario libera un gas cáustico que envuelve a todos los que se encuentren alrededor y derrite por completo los objetos que lleven equipados.",
+		// Official flavor text: "El usuario libera un gas cáustico que envuelve a todos los que se encuentren alrededor y derrite por completo los objetos que lleven equipados."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1139,22 +1244,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cosmicpower: {
 		name: "Masa Cósmica",
-		desc: "Sube la Defensa y la Defensa Especial propias con energía mística.",
+		// Official flavor text: "Sube la Defensa y la Defensa Especial propias con energía mística."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cottonguard: {
 		name: "Rizo Algodón",
-		desc: "Cubre al Pokémon con una madeja protectora. Aumenta muchísimo la Defensa.",
+		// Official flavor text: "Cubre al Pokémon con una madeja protectora. Aumenta muchísimo la Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cottonspore: {
 		name: "Esporagodón",
-		desc: "Adhiere esporas a los rivales para reducir mucho su Velocidad.",
+		// Official flavor text: "Adhiere esporas a los rivales para reducir mucho su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	counter: {
 		name: "Contraataque",
-		desc: "Devuelve un golpe físico por duplicado.",
+		// Official flavor text: "Devuelve un golpe físico por duplicado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1175,14 +1284,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	courtchange: {
 		name: "Cambio de Cancha",
-		desc: "Extraño poder que intercambia los efectos en el terreno de combate de ambos bandos.",
+		// Official flavor text: "Extraño poder que intercambia los efectos en el terreno de combate de ambos bandos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[POKEMON] ha intercambiado los efectos del terreno de combate!",
 	},
 	covet: {
 		name: "Antojo",
-		desc: "Se acerca con ternura al objetivo, pero le ataca y le roba el objeto que lleve.",
+		// Official flavor text: "Se acerca con ternura al objetivo, pero le ataca y le roba el objeto que lleve."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1208,12 +1319,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crabhammer: {
 		name: "Martillazo",
-		desc: "Golpea con fuerza con una pinza enorme. Suele asestar un golpe crítico.",
+		// Official flavor text: "Golpea con fuerza con una pinza enorme. Suele asestar un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	craftyshield: {
 		name: "Truco Defensa",
-		desc: "Usa unos misteriosos poderes para protegerse a sí mismo y a sus aliados de movimientos de estado, pero no de otro tipo de ataques.",
+		// Official flavor text: "Usa unos misteriosos poderes para protegerse a sí mismo y a sus aliados de movimientos de estado, pero no de otro tipo de ataques."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[TEAM] está protegido por Truco Defensa!",
@@ -1221,17 +1334,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crosschop: {
 		name: "Tajo Cruzado",
-		desc: "Corte doble que suele propinar un golpe crítico.",
+		// Official flavor text: "Corte doble que suele propinar un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crosspoison: {
 		name: "Veneno X",
-		desc: "Tajo que puede envenenar al objetivo. Suele ser crítico.",
+		// Official flavor text: "Tajo que puede envenenar al objetivo. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crunch: {
 		name: "Triturar",
-		desc: "Tritura con afilados colmillos y puede bajar la Defensa del objetivo.",
+		// Official flavor text: "Tritura con afilados colmillos y puede bajar la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1240,12 +1356,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crushclaw: {
 		name: "Garra Brutal",
-		desc: "Hace trizas al objetivo con garras afiladas y puede bajar su Defensa.",
+		// Official flavor text: "Hace trizas al objetivo con garras afiladas y puede bajar su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	crushgrip: {
 		name: "Agarrón",
-		desc: "Estruja al objetivo con gran fuerza. Cuantos más PS le queden al objetivo, más fuerte será el ataque.",
+		// Official flavor text: "Estruja al objetivo con gran fuerza. Cuantos más PS le queden al objetivo, más fuerte será el ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1253,7 +1371,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	curse: {
 		name: "Maldición",
-		desc: "Un movimiento que tiene efectos distintos si el usuario es de tipo Fantasma o no.",
+		// Official flavor text: "Un movimiento que tiene efectos distintos si el usuario es de tipo Fantasma o no."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1271,17 +1390,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	darkestlariat: {
 		name: "Lariat Oscuro",
-		desc: "Gira sobre sí mismo y golpea al oponente con ambos brazos. Ignora los cambios en las características del objetivo.",
+		// Official flavor text: "Gira sobre sí mismo y golpea al oponente con ambos brazos. Ignora los cambios en las características del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkpulse: {
 		name: "Pulso Umbrío",
-		desc: "Libera una horrible aura llena de malos pensamientos que puede amedrentar al objetivo.",
+		// Official flavor text: "Libera una horrible aura llena de malos pensamientos que puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkvoid: {
 		name: "Brecha Negra",
-		desc: "El objetivo es enviado a un mundo de tinieblas que lo hace dormir.",
+		// Official flavor text: "El objetivo es enviado a un mundo de tinieblas que lo hace dormir."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1293,22 +1415,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dazzlinggleam: {
 		name: "Brillo Mágico",
-		desc: "Inflige daño a los oponentes con una potente luz.",
+		// Official flavor text: "Inflige daño a los oponentes con una potente luz."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decorate: {
 		name: "Decoración",
-		desc: "Aumenta mucho el Ataque y el Ataque Especial del objetivo al decorarlo.",
+		// Official flavor text: "Aumenta mucho el Ataque y el Ataque Especial del objetivo al decorarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defendorder: {
 		name: "A Defender",
-		desc: "El usuario llama a sus súbditos para que formen un escudo viviente. Sube la Defensa y la Defensa Especial.",
+		// Official flavor text: "El usuario llama a sus súbditos para que formen un escudo viviente. Sube la Defensa y la Defensa Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defensecurl: {
 		name: "Rizo Defensa",
-		desc: "Se enrosca para ocultar sus puntos débiles y aumentar la Defensa.",
+		// Official flavor text: "Se enrosca para ocultar sus puntos débiles y aumentar la Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1319,7 +1445,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	defog: {
 		name: "Despejar",
-		desc: "Potente viento que barre el reflejo o la pantalla de luz creada por el objetivo. También puede reducir su Evasión.",
+		// Official flavor text: "Potente viento que barre el reflejo o la pantalla de luz creada por el objetivo. También puede reducir su Evasión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1335,7 +1462,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	destinybond: {
 		name: "Mismo Destino",
-		desc: "Si el usuario se debilita por un ataque rival antes de usar otro movimiento, el Pokémon rival se debilitará también. Puede fallar si se usa repetidamente.",
+		// Official flavor text: "Si el usuario se debilita por un ataque rival antes de usar otro movimiento, el Pokémon rival se debilitará también. Puede fallar si se usa repetidamente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1349,7 +1477,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	detect: {
 		name: "Detección",
-		desc: "Frena todos los ataques, pero puede fallar si se usa repetidamente.",
+		// Official flavor text: "Frena todos los ataques, pero puede fallar si se usa repetidamente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1379,7 +1508,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	diamondstorm: {
 		name: "Tormenta de Diamantes",
-		desc: "Desata un devastador vendaval de diamantes para dañar a los oponentes. Puede aumentar mucho la Defensa del usuario.",
+		// Official flavor text: "Desata un devastador vendaval de diamantes para dañar a los oponentes. Puede aumentar mucho la Defensa del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1388,7 +1518,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dig: {
 		name: "Excavar",
-		desc: "El usuario cava durante el primer turno y ataca en el segundo.",
+		// Official flavor text: "El usuario cava durante el primer turno y ataca en el segundo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1416,7 +1547,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	disable: {
 		name: "Anulación",
-		desc: "Desactiva el último movimiento del objetivo durante cuatro turnos.",
+		// Official flavor text: "Desactiva el último movimiento del objetivo durante cuatro turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1447,17 +1579,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	disarmingvoice: {
 		name: "Voz Cautivadora",
-		desc: "Obnubila a los oponentes con su fascinante voz y les provoca daños emocionales. Siempre acierta al objetivo.",
+		// Official flavor text: "Obnubila a los oponentes con su fascinante voz y les provoca daños emocionales. Siempre acierta al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	discharge: {
 		name: "Chispazo",
-		desc: "Una deslumbradora onda eléctrica afecta a los Pokémon que hay combatiendo alrededor. Puede paralizar.",
+		// Official flavor text: "Una deslumbradora onda eléctrica afecta a los Pokémon que hay combatiendo alrededor. Puede paralizar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dive: {
 		name: "Buceo",
-		desc: "El usuario se sumerge en el primer turno y ataca en el segundo.",
+		// Official flavor text: "El usuario se sumerge en el primer turno y ataca en el segundo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1470,7 +1605,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dizzypunch: {
 		name: "Puño Mareo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1484,7 +1620,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doomdesire: {
 		name: "Deseo Oculto",
-		desc: "Concentra un haz de luz y ataca dos turnos después.",
+		// Official flavor text: "Concentra un haz de luz y ataca dos turnos después."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1495,7 +1632,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleedge: {
 		name: "Doble Filo",
-		desc: "Ataque arriesgado que también hiere al agresor.",
+		// Official flavor text: "Ataque arriesgado que también hiere al agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1511,7 +1649,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doublehit: {
 		name: "Doble Golpe",
-		desc: "Golpea al objetivo dos veces seguidas con la cola u otras partes de su cuerpo.",
+		// Official flavor text: "Golpea al objetivo dos veces seguidas con la cola u otras partes de su cuerpo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1519,12 +1658,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleironbash: {
 		name: "Ferropuño Doble",
-		desc: "Usando la tuerca del pecho como eje, gira sobre sí mismo y golpea con los brazos dos veces seguidas. Puede amedrentar al rival.",
+		// Official flavor text: "Usando la tuerca del pecho como eje, gira sobre sí mismo y golpea con los brazos dos veces seguidas. Puede amedrentar al rival."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	doublekick: {
 		name: "Doble Patada",
-		desc: "Una patada doble. Golpea dos veces.",
+		// Official flavor text: "Una patada doble. Golpea dos veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1545,7 +1686,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleslap: {
 		name: "Doble Bofetón",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1559,24 +1701,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	doubleteam: {
 		name: "Doble Equipo",
-		desc: "Crea copias de sí mismo para mejorar la Evasión.",
+		// Official flavor text: "Crea copias de sí mismo para mejorar la Evasión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dracometeor: {
 		name: "Cometa Draco",
-		desc: "Hace que grandes cometas caigan del cielo sobre el objetivo. Baja mucho el Ataque Especial del que lo usa.",
+		// Official flavor text: "Hace que grandes cometas caigan del cielo sobre el objetivo. Baja mucho el Ataque Especial del que lo usa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonascent: {
 		name: "Ascenso Draco",
-		desc: "El usuario se precipita desde el cielo a una velocidad de vértigo para atacar al objetivo, pero hace que bajen la Defensa y la Defensa Especial del usuario.",
+		// Official flavor text: "El usuario se precipita desde el cielo a una velocidad de vértigo para atacar al objetivo, pero hace que bajen la Defensa y la Defensa Especial del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		megaNoItem: "  ¡El ruego vehemente de [TRAINER] alcanza a [POKEMON]!",
 	},
 	dragonbreath: {
 		name: "Dragoaliento",
-		desc: "Poderosa ráfaga de aliento que golpea al objetivo y puede paralizarlo.",
+		// Official flavor text: "Poderosa ráfaga de aliento que golpea al objetivo y puede paralizarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragoncheer: {
@@ -1592,17 +1738,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragondance: {
 		name: "Danza Dragón",
-		desc: "Danza mística que sube el Ataque y la Velocidad.",
+		// Official flavor text: "Danza mística que sube el Ataque y la Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragondarts: {
 		name: "Dracoflechas",
-		desc: "El usuario ataca propulsando a ambos Dreepy. En caso de haber dos adversarios, cada Dreepy golpea a su propio objetivo por separado.",
+		// Official flavor text: "El usuario ataca propulsando a ambos Dreepy. En caso de haber dos adversarios, cada Dreepy golpea a su propio objetivo por separado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonenergy: {
 		name: "Dracoenergía",
-		desc: "El usuario convierte su fuerza vital en una energía con la que ataca al objetivo. Cuantos menos PS tenga el usuario, menor será la potencia del movimiento.",
+		// Official flavor text: "El usuario convierte su fuerza vital en una energía con la que ataca al objetivo. Cuantos menos PS tenga el usuario, menor será la potencia del movimiento."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonhammer: {
@@ -1619,7 +1768,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonrush: {
 		name: "Carga Dragón",
-		desc: "Ataca de forma brutal mientras intimida al objetivo. También puede amedrentarlo.",
+		// Official flavor text: "Ataca de forma brutal mientras intimida al objetivo. También puede amedrentarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1627,17 +1777,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragontail: {
 		name: "Cola Dragón",
-		desc: "Ataca al objetivo y lo obliga a cambiarse por otro Pokémon. Si es uno salvaje, acaba el combate.",
+		// Official flavor text: "Ataca al objetivo y lo obliga a cambiarse por otro Pokémon. Si es uno salvaje, acaba el combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drainingkiss: {
 		name: "Beso Drenaje",
-		desc: "El usuario absorbe PS del objetivo con un beso y restaura su propia energía en una cantidad igual o superior a la mitad del daño infligido.",
+		// Official flavor text: "El usuario absorbe PS del objetivo con un beso y restaura su propia energía en una cantidad igual o superior a la mitad del daño infligido."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drainpunch: {
 		name: "Puño Drenaje",
-		desc: "Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo.",
+		// Official flavor text: "Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1645,7 +1798,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dreameater: {
 		name: "Comesueños",
-		desc: "Restaura al usuario la mitad del daño causado a un objetivo dormido.",
+		// Official flavor text: "Restaura al usuario la mitad del daño causado a un objetivo dormido."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1663,22 +1817,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	drillrun: {
 		name: "Taladradora",
-		desc: "El usuario golpea usando su cuerpo como un taladro. Suele ser crítico.",
+		// Official flavor text: "El usuario golpea usando su cuerpo como un taladro. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	drumbeating: {
 		name: "Batería Asalto",
-		desc: "El usuario controla un tocón mediante la percusión y al atacar reduce la Velocidad del objetivo.",
+		// Official flavor text: "El usuario controla un tocón mediante la percusión y al atacar reduce la Velocidad del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dualchop: {
 		name: "Golpe Bis",
-		desc: "Golpea dos veces seguidas con las partes más recias de su cuerpo.",
+		// Official flavor text: "Golpea dos veces seguidas con las partes más recias de su cuerpo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dualwingbeat: {
 		name: "Ala Bis",
-		desc: "Ataca al adversario golpeándolo dos veces con las alas.",
+		// Official flavor text: "Ataca al adversario golpeándolo dos veces con las alas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dynamaxcannon: {
@@ -1690,17 +1848,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dynamicpunch: {
 		name: "Puño Dinámico",
-		desc: "Puñetazo con toda la fuerza concentrada. Causa confusión si atina.",
+		// Official flavor text: "Puñetazo con toda la fuerza concentrada. Causa confusión si atina."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthpower: {
 		name: "Tierra Viva",
-		desc: "La tierra a los pies del objetivo erupciona violentamente. Puede disminuir la Defensa Especial del objetivo.",
+		// Official flavor text: "La tierra a los pies del objetivo erupciona violentamente. Puede disminuir la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	earthquake: {
 		name: "Terremoto",
-		desc: "Un terremoto que afecta a todos los Pokémon que estén a su alrededor.",
+		// Official flavor text: "Un terremoto que afecta a todos los Pokémon que estén a su alrededor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1716,17 +1877,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	echoedvoice: {
 		name: "Eco Voz",
-		desc: "Un susurro que aumenta de potencia conforme el usuario y otros Pokémon lo van utilizando.",
+		// Official flavor text: "Un susurro que aumenta de potencia conforme el usuario y otros Pokémon lo van utilizando."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eerieimpulse: {
 		name: "Onda Anómala",
-		desc: "El usuario irradia unas raras ondas que, al alcanzar a un oponente, hacen que disminuya mucho su Ataque Especial.",
+		// Official flavor text: "El usuario irradia unas raras ondas que, al alcanzar a un oponente, hacen que disminuya mucho su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eeriespell: {
 		name: "Conjuro Funesto",
-		desc: "El usuario ataca con un poder psíquico de inmensa potencia y elimina 3 PP del último movimiento que haya usado el objetivo.",
+		// Official flavor text: "El usuario ataca con un poder psíquico de inmensa potencia y elimina 3 PP del último movimiento que haya usado el objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#spite",
@@ -1737,7 +1901,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electricterrain: {
 		name: "Campo Eléctrico",
-		desc: "Durante cinco turnos, se potencian los movimientos de tipo Eléctrico y los Pokémon que están en contacto con el suelo no pueden quedarse dormidos.",
+		// Official flavor text: "Durante cinco turnos, se potencian los movimientos de tipo Eléctrico y los Pokémon que están en contacto con el suelo no pueden quedarse dormidos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1745,14 +1910,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electrify: {
 		name: "Electrificación",
-		desc: "Si el objetivo queda electrificado antes de usar un movimiento, este será de tipo Eléctrico.",
+		// Official flavor text: "Si el objetivo queda electrificado antes de usar un movimiento, este será de tipo Eléctrico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡Electrificación hace que el siguiente movimiento de [POKEMON] sea de tipo Eléctrico!",
 	},
 	electroball: {
 		name: "Bola Voltio",
-		desc: "Lanza una bola eléctrica. Cuanto mayor sea la Velocidad del usuario en comparación con la del objetivo, mayor será el daño causado.",
+		// Official flavor text: "Lanza una bola eléctrica. Cuanto mayor sea la Velocidad del usuario en comparación con la del objetivo, mayor será el daño causado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1772,12 +1939,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electroweb: {
 		name: "Electrotela",
-		desc: "Atrapa y ataca a los objetivos con una telaraña eléctrica. También reduce su Velocidad.",
+		// Official flavor text: "Atrapa y ataca a los objetivos con una telaraña eléctrica. También reduce su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	embargo: {
 		name: "Embargo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] no puede usar objetos!",
@@ -1785,12 +1954,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ember: {
 		name: "Ascuas",
-		desc: "Ataca con llamas pequeñas que pueden causar quemaduras.",
+		// Official flavor text: "Ataca con llamas pequeñas que pueden causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	encore: {
 		name: "Otra Vez",
-		desc: "El objetivo repite su último movimiento durante tres turnos.",
+		// Official flavor text: "El objetivo repite su último movimiento durante tres turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1818,12 +1989,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	endeavor: {
 		name: "Esfuerzo",
-		desc: "Reduce los PS del objetivo para que igualen a los del atacante.",
+		// Official flavor text: "Reduce los PS del objetivo para que igualen a los del atacante."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	endure: {
 		name: "Aguante",
-		desc: "Resiste cualquier ataque y deja al menos 1 PS. Puede fallar si se usa repetidamente.",
+		// Official flavor text: "Resiste cualquier ataque y deja al menos 1 PS. Puede fallar si se usa repetidamente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1852,12 +2025,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	energyball: {
 		name: "Energibola",
-		desc: "Aúna fuerzas de la naturaleza y libera su ataque. Puede disminuir la Defensa Especial del objetivo.",
+		// Official flavor text: "Aúna fuerzas de la naturaleza y libera su ataque. Puede disminuir la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	entrainment: {
 		name: "Danza Amiga",
-		desc: "Una extraña danza que hace que el usuario y el objetivo tengan la misma habilidad.",
+		// Official flavor text: "Una extraña danza que hace que el usuario y el objetivo tengan la misma habilidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1874,7 +2049,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eruption: {
 		name: "Estallido",
-		desc: "Furia explosiva. Cuanto menor sea el número de PS del usuario, menos daño hará el ataque.",
+		// Official flavor text: "Furia explosiva. Cuanto menor sea el número de PS del usuario, menos daño hará el ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	esperwing: {
@@ -1884,17 +2060,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eternabeam: {
 		name: "Rayo Infinito",
-		desc: "Este es el mayor ataque de Eternatus una vez adquirida su forma original. No puede moverse en el turno siguiente.",
+		// Official flavor text: "Este es el mayor ataque de Eternatus una vez adquirida su forma original. No puede moverse en el turno siguiente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	expandingforce: {
 		name: "Vasta Fuerza",
-		desc: "El usuario ataca al objetivo con sus poderes psíquicos. Cuando se usa en conjunción con un campo psíquico, aumenta su potencia e inflige daño a todos los rivales.",
+		// Official flavor text: "El usuario ataca al objetivo con sus poderes psíquicos. Cuando se usa en conjunción con un campo psíquico, aumenta su potencia e inflige daño a todos los rivales."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	explosion: {
 		name: "Explosión",
-		desc: "El atacante causa una grandísima explosión y hiere a todos a su alrededor. El usuario se debilita de inmediato.",
+		// Official flavor text: "El atacante causa una grandísima explosión y hiere a todos a su alrededor. El usuario se debilita de inmediato."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1912,7 +2091,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extrasensory: {
 		name: "Paranormal",
-		desc: "Emite una energía muy extraña que puede amedrentar al objetivo.",
+		// Official flavor text: "Emite una energía muy extraña que puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1920,12 +2100,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	extremeevoboost: {
 		name: "Novena Potencia",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	extremespeed: {
 		name: "Velocidad Extrema",
-		desc: "Ataque de una velocidad extrema. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Ataque de una velocidad extrema. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1933,7 +2115,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	facade: {
 		name: "Fachada",
-		desc: "Si el usuario está quemado, paralizado o envenenado, ataca con el doble de potencia.",
+		// Official flavor text: "Si el usuario está quemado, paralizado o envenenado, ataca con el doble de potencia."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1941,7 +2124,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fairylock: {
 		name: "Cerrojo Feérico",
-		desc: "Consigue que ningún Pokémon pueda huir en el siguiente turno echando un cerrojo.",
+		// Official flavor text: "Consigue que ningún Pokémon pueda huir en el siguiente turno echando un cerrojo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1955,7 +2139,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fakeout: {
 		name: "Sorpresa",
-		desc: "Amedrenta al objetivo con este movimiento de prioridad alta. Solo sirve en el primer turno.",
+		// Official flavor text: "Amedrenta al objetivo con este movimiento de prioridad alta. Solo sirve en el primer turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1963,7 +2148,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	faketears: {
 		name: "Llanto Falso",
-		desc: "Lágrimas de cocodrilo que bajan mucho la Defensa Especial del objetivo.",
+		// Official flavor text: "Lágrimas de cocodrilo que bajan mucho la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	falsesurrender: {
@@ -1972,17 +2158,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	falseswipe: {
 		name: "Falso Tortazo",
-		desc: "Ataque moderado que no debilita al objetivo y le deja al menos 1 PS.",
+		// Official flavor text: "Ataque moderado que no debilita al objetivo y le deja al menos 1 PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	featherdance: {
 		name: "Danza Pluma",
-		desc: "Envuelve al objetivo con un manto de plumas para reducir mucho su Ataque.",
+		// Official flavor text: "Envuelve al objetivo con un manto de plumas para reducir mucho su Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	feint: {
 		name: "Amago",
-		desc: "Permite golpear a objetivos que han utilizado movimientos como Protección o Detección y anula sus efectos.",
+		// Official flavor text: "Permite golpear a objetivos que han utilizado movimientos como Protección o Detección y anula sus efectos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2003,7 +2192,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fellstinger: {
 		name: "Aguijón Letal",
-		desc: "Si se derrota al objetivo utilizando este movimiento, aumenta muchísimo el Ataque del usuario.",
+		// Official flavor text: "Si se derrota al objetivo utilizando este movimiento, aumenta muchísimo el Ataque del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2018,12 +2208,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fierydance: {
 		name: "Danza Llama",
-		desc: "Envuelve en llamas y daña al objetivo. Puede aumentar el Ataque Especial de quien lo usa.",
+		// Official flavor text: "Envuelve en llamas y daña al objetivo. Puede aumentar el Ataque Especial de quien lo usa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fierywrath: {
 		name: "Furia Candente",
-		desc: "El usuario convierte su ira en un aura flamígera para lanzar su ataque. Puede amedrentar al objetivo.",
+		// Official flavor text: "El usuario convierte su ira en un aura flamígera para lanzar su ataque. Puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	filletaway: {
@@ -2033,12 +2225,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	finalgambit: {
 		name: "Sacrificio",
-		desc: "El usuario se sacrifica causándole un daño al objetivo equivalente a sus propios PS perdidos.",
+		// Official flavor text: "El usuario se sacrifica causándole un daño al objetivo equivalente a sus propios PS perdidos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fireblast: {
 		name: "Llamarada",
-		desc: "Llama intensa que chamusca y puede causar quemaduras.",
+		// Official flavor text: "Llama intensa que chamusca y puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2047,7 +2241,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firefang: {
 		name: "Colmillo Ígneo",
-		desc: "El usuario muerde al objetivo con colmillos en llamas y puede hacer que se amedrente o sufra quemaduras.",
+		// Official flavor text: "El usuario muerde al objetivo con colmillos en llamas y puede hacer que se amedrente o sufra quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2055,12 +2250,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firelash: {
 		name: "Látigo Ígneo",
-		desc: "Golpea al oponente con un látigo incandescente y reduce su Defensa.",
+		// Official flavor text: "Golpea al oponente con un látigo incandescente y reduce su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firepledge: {
 		name: "Voto Fuego",
-		desc: "Ataca con columnas de fuego. Combinado con Voto Planta, crea un mar de llamas y aumenta su potencia.",
+		// Official flavor text: "Ataca con columnas de fuego. Combinado con Voto Planta, crea un mar de llamas y aumenta su potencia."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
@@ -2070,12 +2267,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firepunch: {
 		name: "Puño Fuego",
-		desc: "Puñetazo ardiente que puede causar quemaduras.",
+		// Official flavor text: "Puñetazo ardiente que puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firespin: {
 		name: "Giro Fuego",
-		desc: "Un aro de fuego que atrapa al objetivo de cuatro a cinco turnos.",
+		// Official flavor text: "Un aro de fuego que atrapa al objetivo de cuatro a cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2103,7 +2302,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	firstimpression: {
 		name: "Escaramuza",
-		desc: "Movimiento de gran potencia que solo puede usarse en el turno en que el usuario sale al combate.",
+		// Official flavor text: "Movimiento de gran potencia que solo puede usarse en el turno en que el usuario sale al combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2111,12 +2311,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fishiousrend: {
 		name: "Branquibocado",
-		desc: "El usuario agarra al objetivo con sus duras branquias. En caso de atacar antes que este último, la potencia del movimiento se duplica.",
+		// Official flavor text: "El usuario agarra al objetivo con sus duras branquias. En caso de atacar antes que este último, la potencia del movimiento se duplica."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fissure: {
 		name: "Fisura",
-		desc: "Abre una grieta en el suelo y mete al objetivo en ella. Fulmina en un golpe.",
+		// Official flavor text: "Abre una grieta en el suelo y mete al objetivo en ella. Fulmina en un golpe."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2128,7 +2330,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flail: {
 		name: "Azote",
-		desc: "Ataque frenético. Cuantos menos PS tenga el usuario, más daño producirá.",
+		// Official flavor text: "Ataque frenético. Cuantos menos PS tenga el usuario, más daño producirá."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2142,7 +2345,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flameburst: {
 		name: "Pirotecnia",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2152,22 +2356,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flamecharge: {
 		name: "Nitrocarga",
-		desc: "Llamas que golpean al objetivo y aumentan la Velocidad del atacante.",
+		// Official flavor text: "Llamas que golpean al objetivo y aumentan la Velocidad del atacante."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flamethrower: {
 		name: "Lanzallamas",
-		desc: "Ataca con una gran ráfaga de fuego que puede causar quemaduras.",
+		// Official flavor text: "Ataca con una gran ráfaga de fuego que puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flamewheel: {
 		name: "Rueda Fuego",
-		desc: "Ataca envuelto en fuego. Puede causar quemaduras.",
+		// Official flavor text: "Ataca envuelto en fuego. Puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flareblitz: {
 		name: "Envite Ígneo",
-		desc: "El Pokémon se cubre de llamas y carga contra el objetivo, aunque él también recibe daño. Puede quemar.",
+		// Official flavor text: "El Pokémon se cubre de llamas y carga contra el objetivo, aunque él también recibe daño. Puede quemar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2176,27 +2384,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flash: {
 		name: "Destello",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flashcannon: {
 		name: "Cañón Resplandor",
-		desc: "El usuario concentra toda la luz del cuerpo y la libera. Puede bajar la Defensa Especial del objetivo.",
+		// Official flavor text: "El usuario concentra toda la luz del cuerpo y la libera. Puede bajar la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flatter: {
 		name: "Camelo",
-		desc: "Halaga al objetivo y lo confunde, pero también sube su Ataque Especial.",
+		// Official flavor text: "Halaga al objetivo y lo confunde, pero también sube su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fleurcannon: {
 		name: "Cañón Floral",
-		desc: "El usuario emite un potente rayo, pero su Ataque Especial se reduce mucho.",
+		// Official flavor text: "El usuario emite un potente rayo, pero su Ataque Especial se reduce mucho."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fling: {
 		name: "Lanzamiento",
-		desc: "El usuario lanza contra el objetivo el objeto que lleva. La fuerza del ataque y su efecto varían según el objeto.",
+		// Official flavor text: "El usuario lanza contra el objetivo el objeto que lleva. La fuerza del ataque y su efecto varían según el objeto."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2206,24 +2419,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flipturn: {
 		name: "Viraje",
-		desc: "Tras atacar, el usuario da paso a toda prisa a otro Pokémon del equipo.",
+		// Official flavor text: "Tras atacar, el usuario da paso a toda prisa a otro Pokémon del equipo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		switchOut: "#uturn",
 	},
 	floatyfall: {
 		name: "Pikapicado",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	floralhealing: {
 		name: "Cura Floral",
-		desc: "Restaura la mitad de los PS máximos del objetivo. Es más efectivo cuando se usa en conjunción con Campo de Hierba.",
+		// Official flavor text: "Restaura la mitad de los PS máximos del objetivo. Es más efectivo cuando se usa en conjunción con Campo de Hierba."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowershield: {
 		name: "Defensa Floral",
-		desc: "Aumenta la Defensa de todos los Pokémon de tipo Planta que hay en el combate usando unos misteriosos poderes.",
+		// Official flavor text: "Aumenta la Defensa de todos los Pokémon de tipo Planta que hay en el combate usando unos misteriosos poderes."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowertrick: {
@@ -2233,7 +2450,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fly: {
 		name: "Vuelo",
-		desc: "El usuario vuela en el primer turno y ataca en el segundo.",
+		// Official flavor text: "El usuario vuela en el primer turno y ataca en el segundo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2255,17 +2473,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flyingpress: {
 		name: "Plancha Voladora",
-		desc: "El Pokémon que lo usa se lanza sobre su oponente. Este movimiento es de tipo Lucha y tipo Volador al mismo tiempo.",
+		// Official flavor text: "El Pokémon que lo usa se lanza sobre su oponente. Este movimiento es de tipo Lucha y tipo Volador al mismo tiempo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusblast: {
 		name: "Onda Certera",
-		desc: "Agudiza la concentración mental y libera su poder. Puede disminuir la Defensa Especial del objetivo.",
+		// Official flavor text: "Agudiza la concentración mental y libera su poder. Puede disminuir la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusenergy: {
 		name: "Foco Energía",
-		desc: "Concentra energía para aumentar las posibilidades de asestar un golpe crítico.",
+		// Official flavor text: "Concentra energía para aumentar las posibilidades de asestar un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2282,7 +2503,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	focuspunch: {
 		name: "Puño Certero",
-		desc: "Se concentra para dar un puñetazo. Falla si se sufre un golpe antes de su uso.",
+		// Official flavor text: "Se concentra para dar un puñetazo. Falla si se sufre un golpe antes de su uso."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2293,7 +2515,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	followme: {
 		name: "Señuelo",
-		desc: "Llama la atención para concentrar todos los ataques de todos los del equipo rival hacia sí mismo.",
+		// Official flavor text: "Llama la atención para concentrar todos los ataques de todos los del equipo rival hacia sí mismo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2310,12 +2533,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	forcepalm: {
 		name: "Palmeo",
-		desc: "Ataca al objetivo con una onda de choque y puede llegar a paralizarlo.",
+		// Official flavor text: "Ataca al objetivo con una onda de choque y puede llegar a paralizarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	foresight: {
 		name: "Profecía",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2331,17 +2556,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	forestscurse: {
 		name: "Condena Silvana",
-		desc: "El objetivo es presa de la maldición del bosque, por lo que pasa a ser un Pokémon de tipo Planta, además de conservar sus tipos habituales.",
+		// Official flavor text: "El objetivo es presa de la maldición del bosque, por lo que pasa a ser un Pokémon de tipo Planta, además de conservar sus tipos habituales."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	foulplay: {
 		name: "Juego Sucio",
-		desc: "El usuario emplea la fuerza del objetivo para atacarlo. Cuanto mayor es el Ataque del objetivo, más daño provoca.",
+		// Official flavor text: "El usuario emplea la fuerza del objetivo para atacarlo. Cuanto mayor es el Ataque del objetivo, más daño provoca."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	freezedry: {
 		name: "Liofilización",
-		desc: "Enfría súbitamente al objetivo e incluso puede congelarlo. Es supereficaz contra Pokémon de tipo Agua.",
+		// Official flavor text: "Enfría súbitamente al objetivo e incluso puede congelarlo. Es supereficaz contra Pokémon de tipo Agua."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2350,39 +2578,46 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	freezeshock: {
 		name: "Rayo Gélido",
-		desc: "El usuario carga un bloque de hielo con electricidad en el primer turno y ataca con él en el segundo. Puede paralizar.",
+		// Official flavor text: "El usuario carga un bloque de hielo con electricidad en el primer turno y ataca con él en el segundo. Puede paralizar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "  ¡Una luz fría envuelve a [POKEMON]!",
 	},
 	freezingglare: {
 		name: "Mirada Heladora",
-		desc: "A través de sus ojos emite poderes psíquicos con los que ataca al objetivo, al que puede llegar a congelar.",
+		// Official flavor text: "A través de sus ojos emite poderes psíquicos con los que ataca al objetivo, al que puede llegar a congelar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	freezyfrost: {
 		name: "Glaceoprisma",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frenzyplant: {
 		name: "Planta Feroz",
-		desc: "Golpea con una enorme planta. Quien lo usa no puede moverse en el siguiente turno.",
+		// Official flavor text: "Golpea con una enorme planta. Quien lo usa no puede moverse en el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frostbreath: {
 		name: "Vaho Gélido",
-		desc: "Quien lo usa ataca lanzando un aliento gélido. Siempre asesta un golpe crítico.",
+		// Official flavor text: "Quien lo usa ataca lanzando un aliento gélido. Siempre asesta un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	frustration: {
 		name: "Frustración",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	furyattack: {
 		name: "Ataque Furia",
-		desc: "Cornea al objetivo de dos a cinco veces.",
+		// Official flavor text: "Cornea al objetivo de dos a cinco veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2399,12 +2634,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	furycutter: {
 		name: "Corte Furia",
-		desc: "Ataque con garras o guadaña que crece en intensidad si se usa repetidas veces.",
+		// Official flavor text: "Ataque con garras o guadaña que crece en intensidad si se usa repetidas veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	furyswipes: {
 		name: "Golpes Furia",
-		desc: "Araña rápidamente de dos a cinco veces.",
+		// Official flavor text: "Araña rápidamente de dos a cinco veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2421,17 +2658,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	fusionbolt: {
 		name: "Rayo Fusión",
-		desc: "Ataca con una enorme descarga eléctrica. Aumenta su potencia si es influenciada por una gigantesca llamarada.",
+		// Official flavor text: "Ataca con una enorme descarga eléctrica. Aumenta su potencia si es influenciada por una gigantesca llamarada."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fusionflare: {
 		name: "Llama Fusión",
-		desc: "Ataca con una llamarada gigantesca. Aumenta su potencia si es influenciada por una gran energía eléctrica.",
+		// Official flavor text: "Ataca con una llamarada gigantesca. Aumenta su potencia si es influenciada por una gran energía eléctrica."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	futuresight: {
 		name: "Premonición",
-		desc: "Concentra energía psíquica para golpear al objetivo dos turnos después.",
+		// Official flavor text: "Concentra energía psíquica para golpear al objetivo dos turnos después."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2445,7 +2685,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gastroacid: {
 		name: "Bilis",
-		desc: "El usuario arroja sus jugos biliares al objetivo, lo que anula el efecto de la habilidad en uso.",
+		// Official flavor text: "El usuario arroja sus jugos biliares al objetivo, lo que anula el efecto de la habilidad en uso."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2461,29 +2702,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	geargrind: {
 		name: "Rueda Doble",
-		desc: "Rota dos engranajes de hierro sobre el objetivo. Golpea dos veces.",
+		// Official flavor text: "Rota dos engranajes de hierro sobre el objetivo. Golpea dos veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gearup: {
 		name: "Piñón Auxiliar",
-		desc: "Cambia de marcha y logra aumentar el Ataque y el Ataque Especial de los Pokémon aliados que cuenten con las habilidades Más y Menos.",
+		// Official flavor text: "Cambia de marcha y logra aumentar el Ataque y el Ataque Especial de los Pokémon aliados que cuenten con las habilidades Más y Menos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	genesissupernova: {
 		name: "Supernova Original",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	geomancy: {
 		name: "Geocontrol",
-		desc: "Concentra energía durante el primer turno, de forma que su Velocidad, Ataque Especial y Defensa Especial aumenten mucho en el segundo.",
+		// Official flavor text: "Concentra energía durante el primer turno, de forma que su Velocidad, Ataque Especial y Defensa Especial aumenten mucho en el segundo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "¡[POKEMON] está acumulando energía!",
 	},
 	gigadrain: {
 		name: "Gigadrenado",
-		desc: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce.",
+		// Official flavor text: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2494,7 +2740,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gigaimpact: {
 		name: "Gigaimpacto",
-		desc: "El usuario carga contra el objetivo con toda la fuerza que tiene y descansa durante el siguiente turno.",
+		// Official flavor text: "El usuario carga contra el objetivo con toda la fuerza que tiene y descansa durante el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigatonhammer: {
@@ -2507,12 +2754,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glaciallance: {
 		name: "Lanza Glacial",
-		desc: "El usuario ataca al objetivo lanzándole un carámbano de hielo envuelto en una ventisca.",
+		// Official flavor text: "El usuario ataca al objetivo lanzándole un carámbano de hielo envuelto en una ventisca."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciate: {
 		name: "Mundo Gélido",
-		desc: "Ataque con aire helado que baja la Velocidad del objetivo.",
+		// Official flavor text: "Ataque con aire helado que baja la Velocidad del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaiverush: {
@@ -2522,7 +2771,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glare: {
 		name: "Deslumbrar",
-		desc: "Intimida y asusta al objetivo con la mirada para dejarlo paralizado.",
+		// Official flavor text: "Intimida y asusta al objetivo con la mirada para dejarlo paralizado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2533,7 +2783,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	glitzyglow: {
 		name: "Espeaura",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
@@ -2723,12 +2974,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grassknot: {
 		name: "Hierba Lazo",
-		desc: "Enreda al objetivo con hierba y lo derriba. Cuanto más pesado es el objetivo, más daño inflige.",
+		// Official flavor text: "Enreda al objetivo con hierba y lo derriba. Cuanto más pesado es el objetivo, más daño inflige."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grasspledge: {
 		name: "Voto Planta",
-		desc: "Ataca con columnas de hojas. Combinado con Voto Agua, crea un pantano y aumenta su potencia.",
+		// Official flavor text: "Ataca con columnas de hojas. Combinado con Voto Agua, crea un pantano y aumenta su potencia."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
@@ -2741,12 +2994,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grassyglide: {
 		name: "Fitoimpulso",
-		desc: "Ataca al objetivo deslizándose sobre el terreno de combate. Este movimiento tiene prioridad alta cuando el terreno está cubierto por un campo de hierba.",
+		// Official flavor text: "Ataca al objetivo deslizándose sobre el terreno de combate. Este movimiento tiene prioridad alta cuando el terreno está cubierto por un campo de hierba."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grassyterrain: {
 		name: "Campo de Hierba",
-		desc: "Durante cinco turnos, se potencian los movimientos de tipo Planta y los Pokémon que están en contacto con el suelo recuperan PS en cada turno.",
+		// Official flavor text: "Durante cinco turnos, se potencian los movimientos de tipo Planta y los Pokémon que están en contacto con el suelo recuperan PS en cada turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2754,12 +3009,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gravapple: {
 		name: "Fuerza G",
-		desc: "El usuario ataca haciendo caer una manzana desde gran altura. Disminuye la Defensa del objetivo.",
+		// Official flavor text: "El usuario ataca haciendo caer una manzana desde gran altura. Disminuye la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gravity: {
 		name: "Gravedad",
-		desc: "Durante cinco turnos, se anulan los movimientos que alzan el vuelo y los Pokémon de tipo Volador o que levitan son vulnerables a movimientos de tipo Tierra.",
+		// Official flavor text: "Durante cinco turnos, se anulan los movimientos que alzan el vuelo y los Pokémon de tipo Volador o que levitan son vulnerables a movimientos de tipo Tierra."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2776,7 +3033,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	growl: {
 		name: "Gruñido",
-		desc: "Dulce gruñido que reduce el Ataque del equipo rival.",
+		// Official flavor text: "Dulce gruñido que reduce el Ataque del equipo rival."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2784,7 +3042,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	growth: {
 		name: "Desarrollo",
-		desc: "Hace que su cuerpo crezca a marchas forzadas con lo que aumenta su Ataque y Ataque Especial.",
+		// Official flavor text: "Hace que su cuerpo crezca a marchas forzadas con lo que aumenta su Ataque y Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2803,7 +3062,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grudge: {
 		name: "Rabia",
-		desc: "Si el usuario se debilita al recibir un ataque, todos los PP de este último ataque serán eliminados.",
+		// Official flavor text: "Si el usuario se debilita al recibir un ataque, todos los PP de este último ataque serán eliminados."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡A causa de la rabia [POKEMON] se ha quedado sin ningún PP de [MOVE]!",
@@ -2811,24 +3071,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	guardianofalola: {
 		name: "Cólera del Guardián",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guardsplit: {
 		name: "Isoguardia",
-		desc: "El usuario emplea sus poderes para hacer la media de su Defensa y Defensa Especial con las de su objetivo y compartirlas.",
+		// Official flavor text: "El usuario emplea sus poderes para hacer la media de su Defensa y Defensa Especial con las de su objetivo y compartirlas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[POKEMON] suma su capacidad defensiva a la del objetivo y la reparte equitativamente!",
 	},
 	guardswap: {
 		name: "Cambiadefensa",
-		desc: "El usuario emplea su poder mental para intercambiar los cambios en la Defensa y Defensa Especial con el objetivo.",
+		// Official flavor text: "El usuario emplea su poder mental para intercambiar los cambios en la Defensa y Defensa Especial con el objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guillotine: {
 		name: "Guillotina",
-		desc: "Ataque cortante que debilita al oponente de un golpe si acierta.",
+		// Official flavor text: "Ataque cortante que debilita al oponente de un golpe si acierta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2840,12 +3104,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gunkshot: {
 		name: "Lanzamugre",
-		desc: "Lanza contra el objetivo basura asquerosa y puede envenenarlo.",
+		// Official flavor text: "Lanza contra el objetivo basura asquerosa y puede envenenarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gust: {
 		name: "Tornado",
-		desc: "Crea un tornado con las alas y lo lanza contra el objetivo.",
+		// Official flavor text: "Crea un tornado con las alas y lo lanza contra el objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2862,7 +3128,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gyroball: {
 		name: "Giro Bola",
-		desc: "Embiste al objetivo con un potente ataque giratorio. Cuanto más lento es el usuario, más daño causa.",
+		// Official flavor text: "Embiste al objetivo con un potente ataque giratorio. Cuanto más lento es el usuario, más daño causa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2870,7 +3137,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hail: {
 		name: "Granizo",
-		desc: "Tormenta de granizo que dura cinco turnos. Hiere a todos los Pokémon excepto a los de tipo Hielo.",
+		// Official flavor text: "Tormenta de granizo que dura cinco turnos. Hiere a todos los Pokémon excepto a los de tipo Hielo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2881,7 +3149,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hammerarm: {
 		name: "Machada",
-		desc: "Gira con fuerza el puño y da un gran golpe. No obstante, baja la Velocidad.",
+		// Official flavor text: "Gira con fuerza el puño y da un gran golpe. No obstante, baja la Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	happyhour: {
@@ -2892,7 +3161,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	harden: {
 		name: "Fortaleza",
-		desc: "Tensa la musculatura del usuario para aumentar la Defensa.",
+		// Official flavor text: "Tensa la musculatura del usuario para aumentar la Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hardpress: {
@@ -2902,7 +3172,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	haze: {
 		name: "Niebla",
-		desc: "Neblina que elimina los cambios de características de todos los Pokémon en combate.",
+		// Official flavor text: "Neblina que elimina los cambios de características de todos los Pokémon en combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2914,12 +3185,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	headbutt: {
 		name: "Golpe Cabeza",
-		desc: "Potente cabezazo que puede amedrentar al objetivo.",
+		// Official flavor text: "Potente cabezazo que puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headcharge: {
 		name: "Ariete",
-		desc: "Propina un tremendo cabezazo. También daña al usuario un poco.",
+		// Official flavor text: "Propina un tremendo cabezazo. También daña al usuario un poco."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headlongrush: {
@@ -2929,7 +3202,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	headsmash: {
 		name: "Testarazo",
-		desc: "El usuario arriesga su vida y lanza un cabezazo con toda su fuerza. El agresor resulta seriamente dañado.",
+		// Official flavor text: "El usuario arriesga su vida y lanza un cabezazo con toda su fuerza. El agresor resulta seriamente dañado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2937,7 +3211,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healbell: {
 		name: "Cascabel Cura",
-		desc: "Tañido que cura los problemas de estado de todos los Pokémon del equipo.",
+		// Official flavor text: "Tañido que cura los problemas de estado de todos los Pokémon del equipo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2956,7 +3231,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healblock: {
 		name: "Anticura",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			end: "  ¡Se han pasado los efectos de Anticura en [POKEMON]!",
@@ -2979,7 +3255,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healingwish: {
 		name: "Deseo Cura",
-		desc: "El Pokémon cae debilitado, pero su sustituto recupera su estado y los PS.",
+		// Official flavor text: "El Pokémon cae debilitado, pero su sustituto recupera su estado y los PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2993,7 +3270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healorder: {
 		name: "Auxilio",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3001,7 +3279,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	healpulse: {
 		name: "Pulso Cura",
-		desc: "Una onda curativa restaura la mitad de los PS máximos del objetivo.",
+		// Official flavor text: "Una onda curativa restaura la mitad de los PS máximos del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3009,17 +3288,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heartstamp: {
 		name: "Arrumaco",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heartswap: {
 		name: "Cambiaalmas",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heatcrash: {
 		name: "Golpe Calor",
-		desc: "El usuario ataca con su cuerpo ardiente. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará.",
+		// Official flavor text: "El usuario ataca con su cuerpo ardiente. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3027,12 +3309,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	heatwave: {
 		name: "Onda Ígnea",
-		desc: "Provoca un viento abrasador que puede quemar al objetivo.",
+		// Official flavor text: "Provoca un viento abrasador que puede quemar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heavyslam: {
 		name: "Cuerpo Pesado",
-		desc: "El usuario golpea con todo su cuerpo. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará.",
+		// Official flavor text: "El usuario golpea con todo su cuerpo. Cuanto mayor sea su peso comparado con el del objetivo, más daño causará."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3040,19 +3324,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	helpinghand: {
 		name: "Refuerzo",
-		desc: "El usuario ayuda a un aliado reforzando la potencia de su ataque.",
+		// Official flavor text: "El usuario ayuda a un aliado reforzando la potencia de su ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[SOURCE] está listo para ayudar a [POKEMON]!",
 	},
 	hex: {
 		name: "Infortunio",
-		desc: "Ataque que causa un gran daño a los objetivos que sufren problemas de estado.",
+		// Official flavor text: "Ataque que causa un gran daño a los objetivos que sufren problemas de estado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hiddenpower: {
 		name: "Poder Oculto",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3113,7 +3400,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	highjumpkick: {
 		name: "Patada Salto Alta",
-		desc: "El usuario salta muy alto y da un rodillazo. Si falla, se hará daño.",
+		// Official flavor text: "El usuario salta muy alto y da un rodillazo. Si falla, se hará daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3136,17 +3424,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	holdback: {
 		name: "Clemencia",
-		desc: "El usuario se contiene a la hora de atacar y deja al objetivo con al menos 1 PS.",
+		// Official flavor text: "El usuario se contiene a la hora de atacar y deja al objetivo con al menos 1 PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	holdhands: {
 		name: "Manos Juntas",
-		desc: "El Pokémon le da la mano a un aliado y ambos se sienten muy felices.",
+		// Official flavor text: "El Pokémon le da la mano a un aliado y ambos se sienten muy felices."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	honeclaws: {
 		name: "Afilagarras",
-		desc: "El usuario se afila las garras para aumentar su Ataque y Precisión.",
+		// Official flavor text: "El usuario se afila las garras para aumentar su Ataque y Precisión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hornattack: {
@@ -3155,7 +3446,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	horndrill: {
 		name: "Perforador",
-		desc: "Ataque con un cuerno giratorio que fulmina de un solo golpe al objetivo si lo alcanza.",
+		// Official flavor text: "Ataque con un cuerno giratorio que fulmina de un solo golpe al objetivo si lo alcanza."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3167,12 +3459,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hornleech: {
 		name: "Asta Drenaje",
-		desc: "Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo.",
+		// Official flavor text: "Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	howl: {
 		name: "Aullido",
-		desc: "Aullido que sube el ánimo y aumenta el Ataque del equipo.",
+		// Official flavor text: "Aullido que sube el ánimo y aumenta el Ataque del equipo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3181,7 +3475,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hurricane: {
 		name: "Vendaval",
-		desc: "Golpea al objetivo con un fuerte torbellino que envuelve al rival y puede confundirlo.",
+		// Official flavor text: "Golpea al objetivo con un fuerte torbellino que envuelve al rival y puede confundirlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3192,7 +3487,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hydrocannon: {
 		name: "Hidrocañón",
-		desc: "Disparo de agua. El atacante debe descansar el siguiente turno.",
+		// Official flavor text: "Disparo de agua. El atacante debe descansar el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydropump: {
@@ -3210,7 +3506,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperbeam: {
 		name: "Hiperrayo",
-		desc: "Es eficaz, pero el atacante deberá descansar en el siguiente turno.",
+		// Official flavor text: "Es eficaz, pero el atacante deberá descansar en el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3223,12 +3520,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperfang: {
 		name: "Hipercolmillo",
-		desc: "Ataca con agudos colmillos. Puede amedrentar al objetivo.",
+		// Official flavor text: "Ataca con agudos colmillos. Puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperspacefury: {
 		name: "Cerco Dimensión",
-		desc: "Ataca al objetivo con una ráfaga de golpes que pasan por alto los efectos de movimientos como Protección o Detección. Baja la Defensa del usuario.",
+		// Official flavor text: "Ataca al objetivo con una ráfaga de golpes que pasan por alto los efectos de movimientos como Protección o Detección. Baja la Defensa del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3239,7 +3538,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hyperspacehole: {
 		name: "Paso Dimensional",
-		desc: "El usuario aparece junto al rival usando un agujero dimensional y le asesta un golpe que movimientos como Protección o Detección no pueden evitar.",
+		// Official flavor text: "El usuario aparece junto al rival usando un agujero dimensional y le asesta un golpe que movimientos como Protección o Detección no pueden evitar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3249,7 +3549,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hypervoice: {
 		name: "Vozarrón",
-		desc: "Grito desgarrador que inflige daño al objetivo.",
+		// Official flavor text: "Grito desgarrador que inflige daño al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hypnosis: {
@@ -3258,7 +3559,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iceball: {
 		name: "Bola Hielo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3269,34 +3571,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icebeam: {
 		name: "Rayo Hielo",
-		desc: "Rayo de hielo que puede llegar a congelar.",
+		// Official flavor text: "Rayo de hielo que puede llegar a congelar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iceburn: {
 		name: "Llama Gélida",
-		desc: "Ataca al objetivo en el segundo turno rodeándolo de un aire gélido. Puede causar quemaduras.",
+		// Official flavor text: "Ataca al objetivo en el segundo turno rodeándolo de un aire gélido. Puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "  ¡Una ráfaga gélida envuelve a [POKEMON]!",
 	},
 	icefang: {
 		name: "Colmillo Hielo",
-		desc: "El usuario muerde al objetivo con colmillos helados y puede hacer que se amedrente o se congele.",
+		// Official flavor text: "El usuario muerde al objetivo con colmillos helados y puede hacer que se amedrente o se congele."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icehammer: {
 		name: "Martillo Hielo",
-		desc: "Un terrible puño golpea al contrincante, pero la Velocidad del usuario se ve reducida.",
+		// Official flavor text: "Un terrible puño golpea al contrincante, pero la Velocidad del usuario se ve reducida."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icepunch: {
 		name: "Puño Hielo",
-		desc: "Puñetazo helado que puede llegar a congelar.",
+		// Official flavor text: "Puñetazo helado que puede llegar a congelar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iceshard: {
 		name: "Esquirla Helada",
-		desc: "Crea bolas de hielo y las lanza a gran velocidad. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Crea bolas de hielo y las lanza a gran velocidad. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icespinner: {
@@ -3306,12 +3614,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iciclecrash: {
 		name: "Chuzos",
-		desc: "Lanza grandes carámbanos. Puede amedrentar al objetivo.",
+		// Official flavor text: "Lanza grandes carámbanos. Puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iciclespear: {
 		name: "Carámbano",
-		desc: "Ataca lanzando de dos a cinco ráfagas consecutivas de carámbanos.",
+		// Official flavor text: "Ataca lanzando de dos a cinco ráfagas consecutivas de carámbanos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3325,7 +3635,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	icywind: {
 		name: "Viento Hielo",
-		desc: "Ataque con aire helado que baja la Velocidad de los rivales.",
+		// Official flavor text: "Ataque con aire helado que baja la Velocidad de los rivales."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3333,7 +3644,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	imprison: {
 		name: "Sellar",
-		desc: "Impide a los contrincantes usar ataques conocidos por el usuario durante el combate.",
+		// Official flavor text: "Impide a los contrincantes usar ataques conocidos por el usuario durante el combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3350,7 +3662,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	incinerate: {
 		name: "Calcinación",
-		desc: "Llamas que golpean a los objetivos adyacentes. Si estos llevan bayas o ciertos objetos, se quemarán y ya no se podrán usar.",
+		// Official flavor text: "Llamas que golpean a los objetivos adyacentes. Si estos llevan bayas o ciertos objetos, se quemarán y ya no se podrán usar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3366,7 +3679,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	inferno: {
 		name: "Infierno",
-		desc: "Ataca con una gran ráfaga de fuego que causa quemaduras.",
+		// Official flavor text: "Ataca con una gran ráfaga de fuego que causa quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
@@ -3375,7 +3689,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	infestation: {
 		name: "Acoso",
-		desc: "Hostiga al objetivo durante cuatro o cinco turnos e impide que pueda huir mientras tanto.",
+		// Official flavor text: "Hostiga al objetivo durante cuatro o cinco turnos e impide que pueda huir mientras tanto."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3388,7 +3703,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ingrain: {
 		name: "Arraigo",
-		desc: "Echa raíces para recuperar PS en cada turno, pero impide el relevo.",
+		// Official flavor text: "Echa raíces para recuperar PS en cada turno, pero impide el relevo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3410,7 +3726,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	instruct: {
 		name: "Mandato",
-		desc: "Fuerza al objetivo a repetir inmediatamente su último movimiento.",
+		// Official flavor text: "Fuerza al objetivo a repetir inmediatamente su último movimiento."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3423,19 +3740,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	iondeluge: {
 		name: "Cortina Plasma",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡Una lluvia de electrones cae sobre el terreno de combate!",
 	},
 	irondefense: {
 		name: "Defensa Férrea",
-		desc: "Fortalece el cuerpo como si fuera de hierro y sube mucho la Defensa.",
+		// Official flavor text: "Fortalece el cuerpo como si fuera de hierro y sube mucho la Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ironhead: {
 		name: "Cabeza de Hierro",
-		desc: "Ataca con su dura cabeza de hierro. Puede hacer que el objetivo se amedrente.",
+		// Official flavor text: "Ataca con su dura cabeza de hierro. Puede hacer que el objetivo se amedrente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3444,7 +3764,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	irontail: {
 		name: "Cola Férrea",
-		desc: "Ataca con una cola férrea y puede bajar la Defensa del objetivo.",
+		// Official flavor text: "Ataca con una cola férrea y puede bajar la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ivycudgel: {
@@ -3454,7 +3775,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	jawlock: {
 		name: "Presa Maxilar",
-		desc: "Impide que tanto el atacante como el defensor puedan ser intercambiados hasta que uno de ellos se debilite o abandone el terreno de combate.",
+		// Official flavor text: "Impide que tanto el atacante como el defensor puedan ser intercambiados hasta que uno de ellos se debilite o abandone el terreno de combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jetpunch: {
@@ -3464,12 +3786,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	judgment: {
 		name: "Sentencia",
-		desc: "Emite incontables haces de luz. El tipo del movimiento varía según la tabla que lleve el usuario.",
+		// Official flavor text: "Emite incontables haces de luz. El tipo del movimiento varía según la tabla que lleve el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jumpkick: {
 		name: "Patada Salto",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3492,22 +3816,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	junglehealing: {
 		name: "Cura Selvática",
-		desc: "Al entrar en plena armonía con la selva, el usuario cura problemas de estado y restaura PS no solo de sí mismo, sino también de los aliados presentes en el terreno.",
+		// Official flavor text: "Al entrar en plena armonía con la selva, el usuario cura problemas de estado y restaura PS no solo de sí mismo, sino también de los aliados presentes en el terreno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	karatechop: {
 		name: "Golpe Kárate",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kinesis: {
 		name: "Kinético",
-		desc: "Dobla una cuchara para distraer al objetivo y bajar su nivel de Precisión.",
+		// Official flavor text: "Dobla una cuchara para distraer al objetivo y bajar su nivel de Precisión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kingsshield: {
 		name: "Escudo Real",
-		desc: "El usuario adopta una postura defensiva y se protege de cualquier daño. Reduce el Ataque de cualquier Pokémon con el que entre en contacto.",
+		// Official flavor text: "El usuario adopta una postura defensiva y se protege de cualquier daño. Reduce el Ataque de cualquier Pokémon con el que entre en contacto."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3522,7 +3850,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	knockoff: {
 		name: "Desarme",
-		desc: "Impide al objetivo usar el objeto que lleva durante el combate. La potencia del movimiento se multiplica si el objetivo lleva un objeto.",
+		// Official flavor text: "Impide al objetivo usar el objeto que lleva durante el combate. La potencia del movimiento se multiplica si el objetivo lleva un objeto."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3556,24 +3885,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	landswrath: {
 		name: "Fuerza Telúrica",
-		desc: "Acumula energía de la corteza terrestre y la concentra contra los oponentes, dañándolos.",
+		// Official flavor text: "Acumula energía de la corteza terrestre y la concentra contra los oponentes, dañándolos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	laserfocus: {
 		name: "Aguzar",
-		desc: "El usuario se concentra para que el siguiente ataque propine un golpe crítico.",
+		// Official flavor text: "El usuario se concentra para que el siguiente ataque propine un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] aguza la mente!",
 	},
 	lashout: {
 		name: "Desahogo",
-		desc: "Ataca al rival presa de la rabia. Si el usuario ha sufrido una reducción de características en ese turno, la potencia del movimiento se duplica.",
+		// Official flavor text: "Ataca al rival presa de la rabia. Si el usuario ha sufrido una reducción de características en ese turno, la potencia del movimiento se duplica."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastresort: {
 		name: "Última Baza",
-		desc: "Este movimiento solo puede utilizarse tras haber usado al menos una vez todos los demás conocidos por el Pokémon.",
+		// Official flavor text: "Este movimiento solo puede utilizarse tras haber usado al menos una vez todos los demás conocidos por el Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastrespects: {
@@ -3583,7 +3916,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lavaplume: {
 		name: "Humareda",
-		desc: "Un infierno de llamas daña a los Pokémon adyacentes en combate. Puede quemar.",
+		// Official flavor text: "Un infierno de llamas daña a los Pokémon adyacentes en combate. Puede quemar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafage: {
@@ -3592,22 +3926,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leafblade: {
 		name: "Hoja Aguda",
-		desc: "Acuchilla con una hoja fina. Suele dar un golpe crítico.",
+		// Official flavor text: "Acuchilla con una hoja fina. Suele dar un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafstorm: {
 		name: "Lluevehojas",
-		desc: "Envuelve al objetivo con una lluvia de hojas afiladas, pero reduce mucho su Ataque Especial.",
+		// Official flavor text: "Envuelve al objetivo con una lluvia de hojas afiladas, pero reduce mucho su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leaftornado: {
 		name: "Ciclón de Hojas",
-		desc: "Tritura con afiladas hojas y puede bajar la Precisión del objetivo.",
+		// Official flavor text: "Tritura con afiladas hojas y puede bajar la Precisión del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leechlife: {
 		name: "Chupavidas",
-		desc: "Restaura al usuario la mitad del daño causado al objetivo.",
+		// Official flavor text: "Restaura al usuario la mitad del daño causado al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3618,7 +3956,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leechseed: {
 		name: "Drenadoras",
-		desc: "Planta semillas que absorben PS del objetivo en cada turno y que le sirven para recuperarse.",
+		// Official flavor text: "Planta semillas que absorben PS del objetivo en cada turno y que le sirven para recuperarse."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3637,7 +3976,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leer: {
 		name: "Malicioso",
-		desc: "Intimida a los rivales para bajar su Defensa.",
+		// Official flavor text: "Intimida a los rivales para bajar su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3649,22 +3989,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lick: {
 		name: "Lengüetazo",
-		desc: "Una lengua ataca al objetivo. Puede causar parálisis.",
+		// Official flavor text: "Una lengua ataca al objetivo. Puede causar parálisis."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lifedew: {
 		name: "Gota Vital",
-		desc: "Vierte un agua misteriosa y balsámica que restaura tanto sus propios PS como los de aquellos aliados presentes en el terreno de combate.",
+		// Official flavor text: "Vierte un agua misteriosa y balsámica que restaura tanto sus propios PS como los de aquellos aliados presentes en el terreno de combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightofruin: {
 		name: "Luz Aniquiladora",
-		desc: "El usuario emplea el poder de la Flor Eterna para lanzar un potente rayo de luz, pero sufre bastante daño al hacerlo.",
+		// Official flavor text: "El usuario emplea el poder de la Flor Eterna para lanzar un potente rayo de luz, pero sufre bastante daño al hacerlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightscreen: {
 		name: "Pantalla de Luz",
-		desc: "Pared de luz que reduce durante cinco turnos el daño producido por los ataques especiales.",
+		// Official flavor text: "Pared de luz que reduce durante cinco turnos el daño producido por los ataques especiales."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3690,17 +4034,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lightthatburnsthesky: {
 		name: "Fotodestrucción Apocalíptica",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	liquidation: {
 		name: "Hidroariete",
-		desc: "Ataca golpeando gracias a la fuerza del agua. También puede reducir la Defensa del objetivo.",
+		// Official flavor text: "Ataca golpeando gracias a la fuerza del agua. También puede reducir la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lockon: {
 		name: "Fijar Blanco",
-		desc: "Fija el blanco para que el siguiente ataque no falle.",
+		// Official flavor text: "Fija el blanco para que el siguiente ataque no falle."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3718,7 +4065,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lowkick: {
 		name: "Patada Baja",
-		desc: "Patada baja que derriba al oponente. Cuanto más pesa el objetivo, más daño le causa.",
+		// Official flavor text: "Patada baja que derriba al oponente. Cuanto más pesa el objetivo, más daño le causa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3727,12 +4075,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lowsweep: {
 		name: "Puntapié",
-		desc: "Ataque rápido dirigido a los pies del objetivo que le hace perder Velocidad.",
+		// Official flavor text: "Ataque rápido dirigido a los pies del objetivo que le hace perder Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	luckychant: {
 		name: "Conjuro",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡Conjuro protege a [TEAM] de los golpes críticos!",
@@ -3750,7 +4100,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunardance: {
 		name: "Danza Lunar",
-		desc: "El usuario se debilita, pero el Pokémon que lo sustituye recupera su estado, los PS y los PP.",
+		// Official flavor text: "El usuario se debilita, pero el Pokémon que lo sustituye recupera su estado, los PS y los PP."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3764,17 +4115,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunge: {
 		name: "Plancha",
-		desc: "Ataca al oponente abalanzándose sobre él con todas sus fuerzas y reduce su Ataque.",
+		// Official flavor text: "Ataca al oponente abalanzándose sobre él con todas sus fuerzas y reduce su Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lusterpurge: {
 		name: "Resplandor",
-		desc: "Fogonazo de luz que puede bajar la Defensa Especial del objetivo.",
+		// Official flavor text: "Fogonazo de luz que puede bajar la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	machpunch: {
 		name: "Ultrapuño",
-		desc: "Puñetazo de velocidad fulminante. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Puñetazo de velocidad fulminante. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magicalleaf: {
@@ -3788,7 +4142,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magiccoat: {
 		name: "Capa Mágica",
-		desc: "Barrera capaz de devolver al agresor movimientos como Drenadoras y otros que alteran el estado o las características.",
+		// Official flavor text: "Barrera capaz de devolver al agresor movimientos como Drenadoras y otros que alteran el estado o las características."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3805,7 +4160,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicpowder: {
 		name: "Polvo Mágico",
-		desc: "Cubre al objetivo con unos polvos mágicos que le hacen adquirir el tipo Psíquico.",
+		// Official flavor text: "Cubre al objetivo con unos polvos mágicos que le hacen adquirir el tipo Psíquico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3813,12 +4169,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magicroom: {
 		name: "Zona Mágica",
-		desc: "Crea un espacio misterioso que inutiliza todos los objetos de los Pokémon durante cinco turnos.",
+		// Official flavor text: "Crea un espacio misterioso que inutiliza todos los objetos de los Pokémon durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magmastorm: {
 		name: "Lluvia Ígnea",
-		desc: "El objetivo queda atrapado en una tormenta de fuego que dura de cuatro a cinco turnos.",
+		// Official flavor text: "El objetivo queda atrapado en una tormenta de fuego que dura de cuatro a cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3842,12 +4200,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magneticflux: {
 		name: "Aura Magnética",
-		desc: "Manipula el campo magnético y logra aumentar la Defensa y la Defensa Especial de los Pokémon aliados que cuenten con las habilidades Más y Menos.",
+		// Official flavor text: "Manipula el campo magnético y logra aumentar la Defensa y la Defensa Especial de los Pokémon aliados que cuenten con las habilidades Más y Menos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magnetrise: {
 		name: "Levitón",
-		desc: "Levita gracias a un campo magnético generado por electricidad durante cinco turnos.",
+		// Official flavor text: "Levita gracias a un campo magnético generado por electricidad durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3861,7 +4221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	magnitude: {
 		name: "Magnitud",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3882,7 +4243,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maliciousmoonsault: {
 		name: "Hiperplancha Oscura",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	malignantchain: {
@@ -3892,7 +4254,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	matblock: {
 		name: "Escudo Tatami",
-		desc: "El usuario usa un tatami para escudarse de los ataques enemigos. Protege también a los aliados. No funciona contra movimientos de estado.",
+		// Official flavor text: "El usuario usa un tatami para escudarse de los ataques enemigos. Protege también a los aliados. No funciona contra movimientos de estado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] va a usar un tatami para bloquear ataques!",
@@ -3905,104 +4268,124 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maxairstream: {
 		name: "Maxiciclón",
-		desc: "Ataque de tipo Volador ejecutado por un Pokémon Dinamax. Aumenta la Velocidad de tu bando.",
+		// Official flavor text: "Ataque de tipo Volador ejecutado por un Pokémon Dinamax. Aumenta la Velocidad de tu bando."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxdarkness: {
 		name: "Maxisombra",
-		desc: "Ataque de tipo Siniestro ejecutado por un Pokémon Dinamax. Reduce la Defensa Especial del objetivo.",
+		// Official flavor text: "Ataque de tipo Siniestro ejecutado por un Pokémon Dinamax. Reduce la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxflare: {
 		name: "Maxignición",
-		desc: "Ataque de tipo Fuego ejecutado por un Pokémon Dinamax. Hace que se intensifique el efecto del sol durante cinco turnos.",
+		// Official flavor text: "Ataque de tipo Fuego ejecutado por un Pokémon Dinamax. Hace que se intensifique el efecto del sol durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxflutterby: {
 		name: "Maxinsecto",
-		desc: "Ataque de tipo Bicho ejecutado por un Pokémon Dinamax. Reduce el Ataque Especial del objetivo.",
+		// Official flavor text: "Ataque de tipo Bicho ejecutado por un Pokémon Dinamax. Reduce el Ataque Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxgeyser: {
 		name: "Maxichorro",
-		desc: "Ataque de tipo Agua ejecutado por un Pokémon Dinamax. Desata un aguacero que dura cinco turnos.",
+		// Official flavor text: "Ataque de tipo Agua ejecutado por un Pokémon Dinamax. Desata un aguacero que dura cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxguard: {
 		name: "Maxibarrera",
-		desc: "Frena todos los ataques, pero puede fallar si se usa repetidamente.",
+		// Official flavor text: "Frena todos los ataques, pero puede fallar si se usa repetidamente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[POKEMON] se ha protegido!",
 	},
 	maxhailstorm: {
 		name: "Maxihelada",
-		desc: "Ataque de tipo Hielo ejecutado por un Pokémon Dinamax. Crea una tormenta de granizo que dura cinco turnos.",
+		// Official flavor text: "Ataque de tipo Hielo ejecutado por un Pokémon Dinamax. Crea una tormenta de granizo que dura cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxknuckle: {
 		name: "Maxipuño",
-		desc: "Ataque de tipo Lucha ejecutado por un Pokémon Dinamax. Aumenta el Ataque de tu bando.",
+		// Official flavor text: "Ataque de tipo Lucha ejecutado por un Pokémon Dinamax. Aumenta el Ataque de tu bando."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxlightning: {
 		name: "Maxitormenta",
-		desc: "Ataque de tipo Eléctrico ejecutado por un Pokémon Dinamax. Crea un campo eléctrico durante cinco turnos.",
+		// Official flavor text: "Ataque de tipo Eléctrico ejecutado por un Pokémon Dinamax. Crea un campo eléctrico durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxmindstorm: {
 		name: "Maxionda",
-		desc: "Ataque de tipo Psíquico ejecutado por un Pokémon Dinamax. Crea un campo psíquico durante cinco turnos.",
+		// Official flavor text: "Ataque de tipo Psíquico ejecutado por un Pokémon Dinamax. Crea un campo psíquico durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxooze: {
 		name: "Maxiácido",
-		desc: "Ataque de tipo Veneno ejecutado por un Pokémon Dinamax. Aumenta el Ataque Especial de tu bando.",
+		// Official flavor text: "Ataque de tipo Veneno ejecutado por un Pokémon Dinamax. Aumenta el Ataque Especial de tu bando."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxovergrowth: {
 		name: "Maxiflora",
-		desc: "Ataque de tipo Planta ejecutado por un Pokémon Dinamax. Crea un campo de hierba durante cinco turnos.",
+		// Official flavor text: "Ataque de tipo Planta ejecutado por un Pokémon Dinamax. Crea un campo de hierba durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxphantasm: {
 		name: "Maxiespectro",
-		desc: "Ataque de tipo Fantasma ejecutado por un Pokémon Dinamax. Reduce la Defensa de los rivales.",
+		// Official flavor text: "Ataque de tipo Fantasma ejecutado por un Pokémon Dinamax. Reduce la Defensa de los rivales."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxquake: {
 		name: "Maxitemblor",
-		desc: "Ataque de tipo Tierra ejecutado por un Pokémon Dinamax. Aumenta la Defensa Especial de tu bando.",
+		// Official flavor text: "Ataque de tipo Tierra ejecutado por un Pokémon Dinamax. Aumenta la Defensa Especial de tu bando."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxrockfall: {
 		name: "Maxilito",
-		desc: "Ataque de tipo Roca ejecutado por un Pokémon Dinamax. Levanta una tormenta de arena que dura cinco turnos.",
+		// Official flavor text: "Ataque de tipo Roca ejecutado por un Pokémon Dinamax. Levanta una tormenta de arena que dura cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxstarfall: {
 		name: "Maxiestela",
-		desc: "Ataque de tipo Hada ejecutado por un Pokémon Dinamax. Crea un campo de niebla durante cinco turnos.",
+		// Official flavor text: "Ataque de tipo Hada ejecutado por un Pokémon Dinamax. Crea un campo de niebla durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxsteelspike: {
 		name: "Maximetal",
-		desc: "Ataque de tipo Acero ejecutado por un Pokémon Dinamax. Aumenta la Defensa de tu bando.",
+		// Official flavor text: "Ataque de tipo Acero ejecutado por un Pokémon Dinamax. Aumenta la Defensa de tu bando."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxstrike: {
 		name: "Maxiataque",
-		desc: "Ataque de tipo Normal ejecutado por un Pokémon Dinamax. Reduce la Velocidad del objetivo.",
+		// Official flavor text: "Ataque de tipo Normal ejecutado por un Pokémon Dinamax. Reduce la Velocidad del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maxwyrmwind: {
 		name: "Maxidraco",
-		desc: "Ataque de tipo Dragón ejecutado por un Pokémon Dinamax. Reduce el Ataque del objetivo.",
+		// Official flavor text: "Ataque de tipo Dragón ejecutado por un Pokémon Dinamax. Reduce el Ataque del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meanlook: {
 		name: "Mal de Ojo",
-		desc: "Mal de ojo que impide al objetivo huir del combate.",
+		// Official flavor text: "Mal de ojo que impide al objetivo huir del combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4019,12 +4402,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	meditate: {
 		name: "Meditación",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mefirst: {
 		name: "Yo Primero",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4044,7 +4429,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	megadrain: {
 		name: "Megaagotar",
-		desc: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce.",
+		// Official flavor text: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4067,7 +4453,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	memento: {
 		name: "Legado",
-		desc: "El usuario se debilita, pero baja mucho tanto el Ataque como el Ataque Especial del objetivo.",
+		// Official flavor text: "El usuario se debilita, pero baja mucho tanto el Ataque como el Ataque Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4080,12 +4467,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	menacingmoonrazemaelstrom: {
 		name: "Deflagración Lunar",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalburst: {
 		name: "Represión Metal",
-		desc: "Devuelve al rival el último ataque recibido, pero con mucha más fuerza.",
+		// Official flavor text: "Devuelve al rival el último ataque recibido, pero con mucha más fuerza."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4096,34 +4485,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	metalclaw: {
 		name: "Garra Metal",
-		desc: "Ataque con garras de acero que puede aumentar el Ataque del usuario.",
+		// Official flavor text: "Ataque con garras de acero que puede aumentar el Ataque del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalsound: {
 		name: "Eco Metálico",
-		desc: "Horrible chirrido metálico que baja mucho la Defensa Especial del objetivo.",
+		// Official flavor text: "Horrible chirrido metálico que baja mucho la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meteorassault: {
 		name: "Asalto Estelar",
-		desc: "El usuario agita violentamente su grueso puerro para atacar, pero el mareo que le provocan las sacudidas le impide moverse en el turno siguiente.",
+		// Official flavor text: "El usuario agita violentamente su grueso puerro para atacar, pero el mareo que le provocan las sacudidas le impide moverse en el turno siguiente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	meteorbeam: {
 		name: "Rayo Meteórico",
-		desc: "El usuario dedica el primer turno a aumentar su Ataque Especial acumulando energía cósmica y lanza su ofensiva contra el objetivo en el segundo.",
+		// Official flavor text: "El usuario dedica el primer turno a aumentar su Ataque Especial acumulando energía cósmica y lanza su ofensiva contra el objetivo en el segundo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		prepare: "¡[POKEMON] rebosa energía cósmica!",
 	},
 	meteormash: {
 		name: "Puño Meteoro",
-		desc: "Puñetazo que impacta como un meteorito y puede subir el Ataque del agresor.",
+		// Official flavor text: "Puñetazo que impacta como un meteorito y puede subir el Ataque del agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metronome: {
 		name: "Metrónomo",
-		desc: "Mueve un dedo y estimula su cerebro para usar al azar casi cualquier movimiento.",
+		// Official flavor text: "Mueve un dedo y estimula su cerebro para usar al azar casi cualquier movimiento."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4158,7 +4553,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	milkdrink: {
 		name: "Batido",
-		desc: "Restaura la mitad de los PS máximos del usuario.",
+		// Official flavor text: "Restaura la mitad de los PS máximos del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4166,7 +4562,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mimic: {
 		name: "Mimético",
-		desc: "Copia el último movimiento usado por el objetivo, y puede utilizarlo mientras esté en el combate.",
+		// Official flavor text: "Copia el último movimiento usado por el objetivo, y puede utilizarlo mientras esté en el combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4195,14 +4592,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mindblown: {
 		name: "Cabeza Sorpresa",
-		desc: "El usuario hace explotar su cabeza para atacar a todos los Pokémon que se hallan a su alrededor, aunque también se hiere a sí mismo.",
+		// Official flavor text: "El usuario hace explotar su cabeza para atacar a todos los Pokémon que se hallan a su alrededor, aunque también se hiere a sí mismo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	mindreader: {
 		name: "Telépata",
-		desc: "El usuario adivina los movimientos del objetivo para hacer que su siguiente ataque no falle.",
+		// Official flavor text: "El usuario adivina los movimientos del objetivo para hacer que su siguiente ataque no falle."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4216,7 +4615,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	minimize: {
 		name: "Reducción",
-		desc: "El usuario mengua para aumentar mucho la Evasión.",
+		// Official flavor text: "El usuario mengua para aumentar mucho la Evasión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4243,7 +4643,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	miracleeye: {
 		name: "Gran Ojo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4253,7 +4654,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrorcoat: {
 		name: "Manto Espejo",
-		desc: "Responde a un ataque especial ocasionando el doble del daño recibido.",
+		// Official flavor text: "Responde a un ataque especial ocasionando el doble del daño recibido."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4270,7 +4672,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrormove: {
 		name: "Espejo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4287,12 +4690,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mirrorshot: {
 		name: "Disparo Espejo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mist: {
 		name: "Neblina",
-		desc: "Rodea de fina niebla al usuario y protege las características de su equipo durante cinco turnos.",
+		// Official flavor text: "Rodea de fina niebla al usuario y protege las características de su equipo durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4312,17 +4717,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mistball: {
 		name: "Bola Neblina",
-		desc: "Banco de niebla que puede bajar el Ataque Especial del objetivo.",
+		// Official flavor text: "Banco de niebla que puede bajar el Ataque Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistyexplosion: {
 		name: "Bruma Explosiva",
-		desc: "El usuario ataca a todos a su alrededor, pero se debilita de inmediato. La potencia del movimiento aumenta si el terreno está cubierto por un campo de niebla.",
+		// Official flavor text: "El usuario ataca a todos a su alrededor, pero se debilita de inmediato. La potencia del movimiento aumenta si el terreno está cubierto por un campo de niebla."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistyterrain: {
 		name: "Campo de Niebla",
-		desc: "Durante cinco turnos, los Pokémon que están en el suelo no sufren problemas de estado y se reduce a la mitad el daño de los movimientos de tipo Dragón.",
+		// Official flavor text: "Durante cinco turnos, los Pokémon que están en el suelo no sufren problemas de estado y se reduce a la mitad el daño de los movimientos de tipo Dragón."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4330,7 +4738,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moonblast: {
 		name: "Fuerza Lunar",
-		desc: "Invoca el poder de la luna para atacar al objetivo. Puede disminuir el Ataque Especial del objetivo.",
+		// Official flavor text: "Invoca el poder de la luna para atacar al objetivo. Puede disminuir el Ataque Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4339,12 +4748,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moongeistbeam: {
 		name: "Rayo Umbrío",
-		desc: "Ataca con un rayo misterioso que ignora la habilidad del objetivo.",
+		// Official flavor text: "Ataca con un rayo misterioso que ignora la habilidad del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	moonlight: {
 		name: "Luz Lunar",
-		desc: "Restaura PS del usuario. La cantidad varía según el tiempo que haga.",
+		// Official flavor text: "Restaura PS del usuario. La cantidad varía según el tiempo que haga."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4364,7 +4775,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	morningsun: {
 		name: "Sol Matinal",
-		desc: "Restaura PS del usuario. La cantidad varía según el tiempo que haga.",
+		// Official flavor text: "Restaura PS del usuario. La cantidad varía según el tiempo que haga."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4394,27 +4806,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	mudbomb: {
 		name: "Bomba Fango",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	muddywater: {
 		name: "Agua Lodosa",
-		desc: "Ataque con agua lodosa que puede bajar la Precisión del equipo rival.",
+		// Official flavor text: "Ataque con agua lodosa que puede bajar la Precisión del equipo rival."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudshot: {
 		name: "Disparo Lodo",
-		desc: "El usuario lanza lodo al objetivo y reduce su Velocidad.",
+		// Official flavor text: "El usuario lanza lodo al objetivo y reduce su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudslap: {
 		name: "Bofetón Lodo",
-		desc: "Echa lodo en la cara para bajar la Precisión.",
+		// Official flavor text: "Echa lodo en la cara para bajar la Precisión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mudsport: {
 		name: "Chapoteo Lodo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4427,12 +4844,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	multiattack: {
 		name: "Multiataque",
-		desc: "El Pokémon se rodea de una potente energía con la que golpea al rival. El tipo del movimiento depende del disco que lleva el usuario.",
+		// Official flavor text: "El Pokémon se rodea de una potente energía con la que golpea al rival. El tipo del movimiento depende del disco que lleva el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalfire: {
 		name: "Llama Embrujada",
-		desc: "El usuario lanza por la boca una singular llama a gran temperatura con la que ataca a su oponente y baja su Ataque Especial.",
+		// Official flavor text: "El usuario lanza por la boca una singular llama a gran temperatura con la que ataca a su oponente y baja su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalpower: {
@@ -4442,12 +4861,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nastyplot: {
 		name: "Maquinación",
-		desc: "Estimula su cerebro pensando en cosas malas. Aumenta mucho el Ataque Especial.",
+		// Official flavor text: "Estimula su cerebro pensando en cosas malas. Aumenta mucho el Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	naturalgift: {
 		name: "Don Natural",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4455,7 +4876,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	naturepower: {
 		name: "Adaptación",
-		desc: "Usa el poder de la naturaleza para atacar. Su efecto varía según el entorno de combate.",
+		// Official flavor text: "Usa el poder de la naturaleza para atacar. Su efecto varía según el entorno de combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4477,12 +4899,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	naturesmadness: {
 		name: "Furia Natural",
-		desc: "Golpea al objetivo con la furia de la naturaleza y reduce sus PS a la mitad.",
+		// Official flavor text: "Golpea al objetivo con la furia de la naturaleza y reduce sus PS a la mitad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	needlearm: {
 		name: "Brazo Pincho",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4494,12 +4918,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightdaze: {
 		name: "Pulso Noche",
-		desc: "Ataca al objetivo con una onda siniestra. Puede bajar su Precisión.",
+		// Official flavor text: "Ataca al objetivo con una onda siniestra. Puede bajar su Precisión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightmare: {
 		name: "Pesadilla",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] se ha sumido en una pesadilla!",
@@ -4507,7 +4933,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightshade: {
 		name: "Tinieblas",
-		desc: "Produce un espejismo ante el objetivo, que pierde tantos PS como nivel tenga el usuario.",
+		// Official flavor text: "Produce un espejismo ante el objetivo, que pierde tantos PS como nivel tenga el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4516,17 +4943,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nightslash: {
 		name: "Tajo Umbrío",
-		desc: "Ataca al objetivo a la primera oportunidad. Suele ser crítico.",
+		// Official flavor text: "Ataca al objetivo a la primera oportunidad. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nobleroar: {
 		name: "Rugido de Guerra",
-		desc: "Intimida a su oponente con un rugido de guerra, lo que hace que disminuyan tanto su Ataque como su Ataque Especial.",
+		// Official flavor text: "Intimida a su oponente con un rugido de guerra, lo que hace que disminuyan tanto su Ataque como su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	noretreat: {
 		name: "Bastión Final",
-		desc: "El usuario aumenta todas sus características, pero ya no puede huir ni ser cambiado por otro.",
+		// Official flavor text: "El usuario aumenta todas sus características, pero ya no puede huir ni ser cambiado por otro."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] ya no puede ser cambiado por otro porque ha usado Bastión Final!",
@@ -4538,17 +4968,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	nuzzle: {
 		name: "Moflete Estático",
-		desc: "Quien lo usa frota sus mofletes cargados de electricidad contra el objetivo y consigue paralizarlo.",
+		// Official flavor text: "Quien lo usa frota sus mofletes cargados de electricidad contra el objetivo y consigue paralizarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	oblivionwing: {
 		name: "Ala Mortífera",
-		desc: "El usuario absorbe energía del objetivo y aumenta sus PS en una cantidad igual o superior a la mitad del daño infligido.",
+		// Official flavor text: "El usuario absorbe energía del objetivo y aumenta sus PS en una cantidad igual o superior a la mitad del daño infligido."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	obstruct: {
 		name: "Obstrucción",
-		desc: "Frena todos los ataques, pero puede fallar si se usa repetidamente. Reduce mucho la Defensa de quien ejecute un movimiento de contacto contra el usuario.",
+		// Official flavor text: "Frena todos los ataques, pero puede fallar si se usa repetidamente. Reduce mucho la Defensa de quien ejecute un movimiento de contacto contra el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4560,19 +4993,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	octazooka: {
 		name: "Pulpocañón",
-		desc: "Dispara tinta a la cara. Puede bajar la Precisión.",
+		// Official flavor text: "Dispara tinta a la cara. Puede bajar la Precisión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	octolock: {
 		name: "Octopresa",
-		desc: "Retiene al objetivo para impedir su huida, a la vez que reduce su Defensa y Defensa Especial cada turno.",
+		// Official flavor text: "Retiene al objetivo para impedir su huida, a la vez que reduce su Defensa y Defensa Especial cada turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡Octopresa impide que [POKEMON] huya o sea cambiado por otro!",
 	},
 	odorsleuth: {
 		name: "Rastreo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4583,7 +5019,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ominouswind: {
 		name: "Viento Aciago",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	orderup: {
@@ -4593,12 +5030,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	originpulse: {
 		name: "Pulso Primigenio",
-		desc: "Ataca al objetivo con una infinidad de rayos de luz azulada.",
+		// Official flavor text: "Ataca al objetivo con una infinidad de rayos de luz azulada."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	outrage: {
 		name: "Enfado",
-		desc: "Ataca de dos a tres turnos y acaba confundiendo al agresor.",
+		// Official flavor text: "Ataca de dos a tres turnos y acaba confundiendo al agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4615,17 +5054,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	overdrive: {
 		name: "Amplificador",
-		desc: "El usuario rasguea la guitarra o el bajo para generar enormes vibraciones de intensa reverberación con las que ataca al objetivo.",
+		// Official flavor text: "El usuario rasguea la guitarra o el bajo para generar enormes vibraciones de intensa reverberación con las que ataca al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	overheat: {
 		name: "Sofoco",
-		desc: "Ataque en toda regla que baja mucho el Ataque Especial de quien lo usa.",
+		// Official flavor text: "Ataque en toda regla que baja mucho el Ataque Especial de quien lo usa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	painsplit: {
 		name: "Divide Dolor",
-		desc: "Suma los PS del usuario a los del objetivo y los reparte a partes iguales.",
+		// Official flavor text: "Suma los PS del usuario a los del objetivo y los reparte a partes iguales."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡Los combatientes comparten sus PS!",
@@ -4637,12 +5079,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	paraboliccharge: {
 		name: "Carga Parábola",
-		desc: "Inflige daño a todos los Pokémon a su alrededor. El usuario absorbe la mitad del daño producido para restaurar sus propios PS.",
+		// Official flavor text: "Inflige daño a todos los Pokémon a su alrededor. El usuario absorbe la mitad del daño producido para restaurar sus propios PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	partingshot: {
 		name: "Última Palabra",
-		desc: "El usuario se cambia por otro Pokémon de su equipo, pero antes amedrenta a su oponente y hace que disminuyan su Ataque y Ataque Especial.",
+		// Official flavor text: "El usuario se cambia por otro Pokémon de su equipo, pero antes amedrenta a su oponente y hace que disminuyan su Ataque y Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4653,7 +5097,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	payback: {
 		name: "Vendetta",
-		desc: "El usuario contraataca con el doble de fuerza si el objetivo usa un movimiento antes.",
+		// Official flavor text: "El usuario contraataca con el doble de fuerza si el objetivo usa un movimiento antes."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4664,7 +5109,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	payday: {
 		name: "Día de Pago",
-		desc: "Arroja monedas al objetivo y las recupera al final del combate.",
+		// Official flavor text: "Arroja monedas al objetivo y las recupera al final del combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡Hay monedas por todas partes!",
@@ -4675,7 +5121,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	perishsong: {
 		name: "Canto Mortal",
-		desc: "Si un Pokémon escucha este canto y no es cambiado por otro en tres turnos, acaba debilitándose.",
+		// Official flavor text: "Si un Pokémon escucha este canto y no es cambiado por otro en tres turnos, acaba debilitándose."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡Los Pokémon que han oído Canto Mortal se debilitarán dentro de tres turnos!",
@@ -4683,12 +5130,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	petalblizzard: {
 		name: "Tormenta Floral",
-		desc: "El usuario desata un intenso vendaval de pétalos que daña a los Pokémon a su alrededor.",
+		// Official flavor text: "El usuario desata un intenso vendaval de pétalos que daña a los Pokémon a su alrededor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	petaldance: {
 		name: "Danza Pétalo",
-		desc: "Lanza pétalos de dos a tres turnos y acaba confundiendo al atacante.",
+		// Official flavor text: "Lanza pétalos de dos a tres turnos y acaba confundiendo al atacante."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4709,7 +5158,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	phantomforce: {
 		name: "Golpe Fantasma",
-		desc: "El usuario desaparece en el primer turno y ataca a su objetivo en el segundo. Permite acertar aunque el objetivo esté protegiéndose.",
+		// Official flavor text: "El usuario desaparece en el primer turno y ataca a su objetivo en el segundo. Permite acertar aunque el objetivo esté protegiéndose."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4720,17 +5170,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	photongeyser: {
 		name: "Géiser Fotónico",
-		desc: "El usuario ataca con una gran columna de luz. Compara sus valores de Ataque y Ataque Especial para infligir daño con el más alto de los dos.",
+		// Official flavor text: "El usuario ataca con una gran columna de luz. Compara sus valores de Ataque y Ataque Especial para infligir daño con el más alto de los dos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikapapow: {
 		name: "Pikatormenta",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pinmissile: {
 		name: "Pin Misil",
-		desc: "Lanza finas púas que hieren de dos a cinco veces.",
+		// Official flavor text: "Lanza finas púas que hieren de dos a cinco veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4747,22 +5200,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	plasmafists: {
 		name: "Puños Plasma",
-		desc: "El usuario ataca con puños cargados de electricidad. Convierte los movimientos de tipo Normal en movimientos de tipo Eléctrico.",
+		// Official flavor text: "El usuario ataca con puños cargados de electricidad. Convierte los movimientos de tipo Normal en movimientos de tipo Eléctrico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	playnice: {
 		name: "Camaradería",
-		desc: "Se hace amigo de su oponente y consigue que a este se le quiten las ganas de combatir. Además, reduce su Ataque.",
+		// Official flavor text: "Se hace amigo de su oponente y consigue que a este se le quiten las ganas de combatir. Además, reduce su Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	playrough: {
 		name: "Carantoña",
-		desc: "El Pokémon que lo usa le hace cucamonas al objetivo y lo ataca. Puede disminuir el Ataque del objetivo.",
+		// Official flavor text: "El Pokémon que lo usa le hace cucamonas al objetivo y lo ataca. Puede disminuir el Ataque del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pluck: {
 		name: "Picoteo",
-		desc: "Picotea al objetivo. Si este sostiene una baya, la picotea también y obtiene sus efectos.",
+		// Official flavor text: "Picotea al objetivo. Si este sostiene una baya, la picotea también y obtiene sus efectos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4772,7 +5229,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisonfang: {
 		name: "Colmillo Veneno",
-		desc: "Colmillos tóxicos que pueden envenenar gravemente al objetivo.",
+		// Official flavor text: "Colmillos tóxicos que pueden envenenar gravemente al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4781,7 +5239,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisongas: {
 		name: "Gas Venenoso",
-		desc: "Lanza una nube de gas tóxico al objetivo. Produce envenenamiento.",
+		// Official flavor text: "Lanza una nube de gas tóxico al objetivo. Produce envenenamiento."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4789,17 +5248,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisonjab: {
 		name: "Puya Nociva",
-		desc: "Pincha al objetivo con un tentáculo o brazo envenenado. Puede llegar a envenenar al objetivo.",
+		// Official flavor text: "Pincha al objetivo con un tentáculo o brazo envenenado. Puede llegar a envenenar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonpowder: {
 		name: "Polvo Veneno",
-		desc: "Polvo tóxico que envenena al objetivo.",
+		// Official flavor text: "Polvo tóxico que envenena al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonsting: {
 		name: "Picotazo Veneno",
-		desc: "Lanza un aguijón tóxico que puede envenenar al objetivo.",
+		// Official flavor text: "Lanza un aguijón tóxico que puede envenenar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4808,7 +5270,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	poisontail: {
 		name: "Cola Veneno",
-		desc: "Puede envenenar y dar un golpe crítico.",
+		// Official flavor text: "Puede envenenar y dar un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	polarflare: {
@@ -4818,7 +5281,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pollenpuff: {
 		name: "Bola de Polen",
-		desc: "Ataca al oponente con una bola explosiva. Si esta alcanza a un aliado, le hará recuperar PS.",
+		// Official flavor text: "Ataca al oponente con una bola explosiva. Si esta alcanza a un aliado, le hará recuperar PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poltergeist: {
@@ -4843,7 +5307,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powder: {
 		name: "Polvo Explosivo",
-		desc: "Esparce un polvo sobre el objetivo. Si este usa un movimiento de tipo Fuego en el mismo turno, el polvo explota y le inflige daño.",
+		// Official flavor text: "Esparce un polvo sobre el objetivo. Si este usa un movimiento de tipo Fuego en el mismo turno, el polvo explota y le inflige daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4854,7 +5319,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powdersnow: {
 		name: "Nieve Polvo",
-		desc: "Lanza nieve que puede llegar a congelar.",
+		// Official flavor text: "Lanza nieve que puede llegar a congelar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4866,14 +5332,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powersplit: {
 		name: "Isofuerza",
-		desc: "El usuario emplea sus poderes para hacer la media de su Ataque y Ataque Especial con los de su objetivo y compartirlos.",
+		// Official flavor text: "El usuario emplea sus poderes para hacer la media de su Ataque y Ataque Especial con los de su objetivo y compartirlos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[POKEMON] suma su capacidad ofensiva a la del objetivo y la reparte equitativamente!",
 	},
 	powerswap: {
 		name: "Cambiafuerza",
-		desc: "El usuario emplea su poder mental para intercambiar los cambios en el Ataque y Ataque Especial con el objetivo.",
+		// Official flavor text: "El usuario emplea su poder mental para intercambiar los cambios en el Ataque y Ataque Especial con el objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powershift: {
@@ -4886,7 +5354,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powertrick: {
 		name: "Truco Fuerza",
-		desc: "Usa sus poderes mentales para intercambiar sus características de Ataque y Defensa.",
+		// Official flavor text: "Usa sus poderes mentales para intercambiar sus características de Ataque y Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] ha intercambiado el valor de su Ataque por el de su Defensa!",
@@ -4894,12 +5363,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	powertrip: {
 		name: "Chulería",
-		desc: "Ataca al oponente presumiendo de su fuerza. Cuanto más hayan subido las características del usuario, mayor será el daño.",
+		// Official flavor text: "Ataca al oponente presumiendo de su fuerza. Cuanto más hayan subido las características del usuario, mayor será el daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poweruppunch: {
 		name: "Puño Incremento",
-		desc: "Cada vez que golpea a un oponente se endurecen sus puños. Si acierta al objetivo, el Ataque del usuario aumenta.",
+		// Official flavor text: "Cada vez que golpea a un oponente se endurecen sus puños. Si acierta al objetivo, el Ataque del usuario aumenta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powerwhip: {
@@ -4908,12 +5379,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	precipiceblades: {
 		name: "Filo del Abismo",
-		desc: "Hace que el poder latente de la tierra se manifieste en forma de hojas afiladas y ataca al objetivo con ellas.",
+		// Official flavor text: "Hace que el poder latente de la tierra se manifieste en forma de hojas afiladas y ataca al objetivo con ellas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	present: {
 		name: "Presente",
-		desc: "Quien lo usa ataca al objetivo dándole un regalo con una bomba trampa. Sin embargo, a veces restaura sus PS.",
+		// Official flavor text: "Quien lo usa ataca al objetivo dándole un regalo con una bomba trampa. Sin embargo, a veces restaura sus PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4921,12 +5394,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	prismaticlaser: {
 		name: "Láser Prisma",
-		desc: "El usuario utiliza un prisma para emitir un rayo de gran potencia, pero no puede moverse en el turno siguiente.",
+		// Official flavor text: "El usuario utiliza un prisma para emitir un rayo de gran potencia, pero no puede moverse en el turno siguiente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	protect: {
 		name: "Protección",
-		desc: "Frena todos los ataques, pero puede fallar si se usa repetidamente.",
+		// Official flavor text: "Frena todos los ataques, pero puede fallar si se usa repetidamente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4955,7 +5430,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psybeam: {
 		name: "Psicorrayo",
-		desc: "Extraño rayo que puede causar confusión.",
+		// Official flavor text: "Extraño rayo que puede causar confusión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psyblade: {
@@ -4965,7 +5441,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychic: {
 		name: "Psíquico",
-		desc: "Fuerte ataque telequinético que puede bajar la Defensa Especial del objetivo.",
+		// Official flavor text: "Fuerte ataque telequinético que puede bajar la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4974,7 +5451,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychicfangs: {
 		name: "Psicocolmillo",
-		desc: "Ataca a sus rivales con poderes psíquicos que además destruyen barreras como Pantalla de Luz y Reflejo.",
+		// Official flavor text: "Ataca a sus rivales con poderes psíquicos que además destruyen barreras como Pantalla de Luz y Reflejo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychicnoise: {
@@ -4984,7 +5462,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychicterrain: {
 		name: "Campo Psíquico",
-		desc: "Durante cinco turnos, se potencian los movimientos de tipo Psíquico y los Pokémon que están en el suelo quedan protegidos contra movimientos con prioridad.",
+		// Official flavor text: "Durante cinco turnos, se potencian los movimientos de tipo Psíquico y los Pokémon que están en el suelo quedan protegidos contra movimientos con prioridad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4992,22 +5471,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psychoboost: {
 		name: "Psicoataque",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychocut: {
 		name: "Psicocorte",
-		desc: "Ataca al objetivo con cuchillas formadas por energía psíquica. Suele ser crítico.",
+		// Official flavor text: "Ataca al objetivo con cuchillas formadas por energía psíquica. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychoshift: {
 		name: "Psicocambio",
-		desc: "Usa su poder mental para transferir al objetivo sus problemas de estado.",
+		// Official flavor text: "Usa su poder mental para transferir al objetivo sus problemas de estado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychup: {
 		name: "Autosugestión",
-		desc: "Quien lo usa se sume en un trance y copia cualquier cambio que haya en las características de su objetivo.",
+		// Official flavor text: "Quien lo usa se sume en un trance y copia cualquier cambio que haya en las características de su objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5020,17 +5503,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psyshock: {
 		name: "Psicocarga",
-		desc: "Crea una onda psíquica que causa daño físico al objetivo.",
+		// Official flavor text: "Crea una onda psíquica que causa daño físico al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psystrike: {
 		name: "Onda Mental",
-		desc: "Crea una onda psíquica que causa daño físico al objetivo.",
+		// Official flavor text: "Crea una onda psíquica que causa daño físico al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psywave: {
 		name: "Psicoonda",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5046,17 +5532,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	punishment: {
 		name: "Castigo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	purify: {
 		name: "Purificación",
-		desc: "Cura los problemas de estado del Pokémon rival y a cambio recupera PS propios.",
+		// Official flavor text: "Cura los problemas de estado del Pokémon rival y a cambio recupera PS propios."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pursuit: {
 		name: "Persecución",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5080,24 +5569,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pyroball: {
 		name: "Balón Ígneo",
-		desc: "El usuario prende una pequeña piedra para crear una bola de fuego con la que ataca al rival. Puede causar quemaduras.",
+		// Official flavor text: "El usuario prende una pequeña piedra para crear una bola de fuego con la que ataca al rival. Puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	quash: {
 		name: "Último Lugar",
-		desc: "Consigue que el objetivo sea el último en moverse.",
+		// Official flavor text: "Consigue que el objetivo sea el último en moverse."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[TARGET] ha retrasado su turno!",
 	},
 	quickattack: {
 		name: "Ataque Rápido",
-		desc: "Ataca al objetivo a gran velocidad. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Ataca al objetivo a gran velocidad. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	quickguard: {
 		name: "Anticipo",
-		desc: "Se protege a sí mismo y a sus aliados de movimientos con prioridad.",
+		// Official flavor text: "Se protege a sí mismo y a sus aliados de movimientos con prioridad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5117,12 +5610,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	quiverdance: {
 		name: "Danza Aleteo",
-		desc: "Danza mística que sube el Ataque Especial, la Defensa Especial y la Velocidad.",
+		// Official flavor text: "Danza mística que sube el Ataque Especial, la Defensa Especial y la Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rage: {
 		name: "Furia",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5147,7 +5642,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragepowder: {
 		name: "Polvo Ira",
-		desc: "Usa un polvo que irrita y centra en el usuario la atención y los ataques de los rivales.",
+		// Official flavor text: "Usa un polvo que irrita y centra en el usuario la atención y los ataques de los rivales."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5170,7 +5666,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	raindance: {
 		name: "Danza Lluvia",
-		desc: "Genera una fuerte lluvia que refuerza los movimientos de tipo Agua durante cinco turnos y debilita los de tipo Fuego.",
+		// Official flavor text: "Genera una fuerte lluvia que refuerza los movimientos de tipo Agua durante cinco turnos y debilita los de tipo Fuego."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5181,7 +5678,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rapidspin: {
 		name: "Giro Rápido",
-		desc: "Ataque giratorio que puede eliminar movimientos como Atadura, Constricción y Drenadoras. También aumenta la Velocidad del usuario.",
+		// Official flavor text: "Ataque giratorio que puede eliminar movimientos como Atadura, Constricción y Drenadoras. También aumenta la Velocidad del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5196,7 +5694,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	razorleaf: {
 		name: "Hoja Afilada",
-		desc: "Corta con hojas afiladas. Un ataque que suele ser crítico.",
+		// Official flavor text: "Corta con hojas afiladas. Un ataque que suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5204,12 +5703,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	razorshell: {
 		name: "Concha Filo",
-		desc: "Una afilada vieira ataca al objetivo. También puede hacer disminuir su Defensa.",
+		// Official flavor text: "Una afilada vieira ataca al objetivo. También puede hacer disminuir su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	razorwind: {
 		name: "Viento Cortante",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5231,7 +5732,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	recover: {
 		name: "Recuperación",
-		desc: "Restaura hasta la mitad de los PS máximos.",
+		// Official flavor text: "Restaura hasta la mitad de los PS máximos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5242,7 +5744,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	recycle: {
 		name: "Reciclaje",
-		desc: "Recicla y así recupera un objeto equipado de un solo uso que ya haya sido empleado durante el combate.",
+		// Official flavor text: "Recicla y así recupera un objeto equipado de un solo uso que ya haya sido empleado durante el combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5255,7 +5758,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reflect: {
 		name: "Reflejo",
-		desc: "Pared de luz que reduce durante cinco turnos el daño producido por los ataques físicos.",
+		// Official flavor text: "Pared de luz que reduce durante cinco turnos el daño producido por los ataques físicos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5281,7 +5785,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reflecttype: {
 		name: "Clonatipo",
-		desc: "Cambia el tipo del Pokémon al mismo tipo que el del objetivo.",
+		// Official flavor text: "Cambia el tipo del Pokémon al mismo tipo que el del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5294,17 +5799,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	refresh: {
 		name: "Alivio",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	relicsong: {
 		name: "Canto Arcaico",
-		desc: "Ataca conmoviendo a los rivales de alrededor con un antiguo canto. Puede dormirlos.",
+		// Official flavor text: "Ataca conmoviendo a los rivales de alrededor con un antiguo canto. Puede dormirlos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rest: {
 		name: "Descanso",
-		desc: "Restaura todos los PS y cura todos los problemas de estado del usuario, que se duerme los dos turnos siguientes.",
+		// Official flavor text: "Restaura todos los PS y cura todos los problemas de estado del usuario, que se duerme los dos turnos siguientes."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5315,22 +5823,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	retaliate: {
 		name: "Represalia",
-		desc: "Venga a los amigos caídos. Si en el turno anterior han derrotado a alguno, la potencia del ataque aumentará.",
+		// Official flavor text: "Venga a los amigos caídos. Si en el turno anterior han derrotado a alguno, la potencia del ataque aumentará."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	return: {
 		name: "Retribución",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	revelationdance: {
 		name: "Danza Despertar",
-		desc: "Ataque que consiste en un baile muy enérgico. El tipo de este ataque se corresponde con el del Pokémon que lo ejecuta.",
+		// Official flavor text: "Ataque que consiste en un baile muy enérgico. El tipo de este ataque se corresponde con el del Pokémon que lo ejecuta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	revenge: {
 		name: "Desquite",
-		desc: "Ataque que produce el doble de daño si el usuario resulta herido en el mismo turno.",
+		// Official flavor text: "Ataque que produce el doble de daño si el usuario resulta herido en el mismo turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5342,7 +5854,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reversal: {
 		name: "Inversión",
-		desc: "Ataque desesperado que causa más daño cuantos menos PS tenga el usuario.",
+		// Official flavor text: "Ataque desesperado que causa más daño cuantos menos PS tenga el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5363,12 +5876,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	risingvoltage: {
 		name: "Alto Voltaje",
-		desc: "Ataca con una descarga eléctrica que surge del terreno de combate. La potencia del movimiento se duplica si el rival se ve afectado por un campo eléctrico.",
+		// Official flavor text: "Ataca con una descarga eléctrica que surge del terreno de combate. La potencia del movimiento se duplica si el rival se ve afectado por un campo eléctrico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	roar: {
 		name: "Rugido",
-		desc: "Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate.",
+		// Official flavor text: "Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5383,12 +5898,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roaroftime: {
 		name: "Distorsión",
-		desc: "Ataca al objetivo usando tal energía que el tiempo se distorsiona. El usuario descansa el siguiente turno.",
+		// Official flavor text: "Ataca al objetivo usando tal energía que el tiempo se distorsiona. El usuario descansa el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockblast: {
 		name: "Pedrada",
-		desc: "Lanza pedruscos al objetivo de dos a cinco veces consecutivas.",
+		// Official flavor text: "Lanza pedruscos al objetivo de dos a cinco veces consecutivas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5402,17 +5919,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rockclimb: {
 		name: "Treparrocas",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockpolish: {
 		name: "Pulimento",
-		desc: "Reduce la resistencia puliendo su cuerpo. Aumenta mucho la Velocidad.",
+		// Official flavor text: "Reduce la resistencia puliendo su cuerpo. Aumenta mucho la Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockslide: {
 		name: "Avalancha",
-		desc: "Lanza grandes pedruscos. Puede amedrentar al objetivo.",
+		// Official flavor text: "Lanza grandes pedruscos. Puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5424,7 +5944,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocksmash: {
 		name: "Golpe Roca",
-		desc: "Ataque con los puños. Puede bajar la Defensa del objetivo.",
+		// Official flavor text: "Ataque con los puños. Puede bajar la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockthrow: {
@@ -5433,17 +5954,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rocktomb: {
 		name: "Tumba Rocas",
-		desc: "Tira rocas que detienen al objetivo y bajan su Velocidad.",
+		// Official flavor text: "Tira rocas que detienen al objetivo y bajan su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockwrecker: {
 		name: "Romperrocas",
-		desc: "Lanza una piedra enorme contra el objetivo, pero tiene que descansar el siguiente turno.",
+		// Official flavor text: "Lanza una piedra enorme contra el objetivo, pero tiene que descansar el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	roleplay: {
 		name: "Imitación",
-		desc: "Imita al objetivo por completo y copia su habilidad.",
+		// Official flavor text: "Imita al objetivo por completo y copia su habilidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5468,12 +5992,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rollingkick: {
 		name: "Patada Giro",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rollout: {
 		name: "Rodar",
-		desc: "El atacante rueda contra el objetivo durante cinco turnos, cada vez con mayor fuerza.",
+		// Official flavor text: "El atacante rueda contra el objetivo durante cinco turnos, cada vez con mayor fuerza."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5484,7 +6010,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	roost: {
 		name: "Respiro",
-		desc: "Aterriza sobre la superficie para descansar. Recupera hasta la mitad del total de sus PS.",
+		// Official flavor text: "Aterriza sobre la superficie para descansar. Recupera hasta la mitad del total de sus PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5497,12 +6024,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	rototiller: {
 		name: "Fertilizante",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	round: {
 		name: "Canon",
-		desc: "Un canto que ataca al objetivo. Cuantos más Pokémon lo usan, más aumenta de potencia.",
+		// Official flavor text: "Un canto que ataca al objetivo. Cuantos más Pokémon lo usan, más aumenta de potencia."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ruination: {
@@ -5512,17 +6041,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sacredfire: {
 		name: "Fuego Sagrado",
-		desc: "Fuego místico de gran intensidad que puede causar quemaduras.",
+		// Official flavor text: "Fuego místico de gran intensidad que puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sacredsword: {
 		name: "Espada Santa",
-		desc: "El usuario ataca con una espada, ignorando cualquier cambio en las características del objetivo.",
+		// Official flavor text: "El usuario ataca con una espada, ignorando cualquier cambio en las características del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	safeguard: {
 		name: "Velo Sagrado",
-		desc: "Un escudo que protege de problemas de estado, como el sueño o la parálisis, durante cinco turnos.",
+		// Official flavor text: "Un escudo que protege de problemas de estado, como el sueño o la parálisis, durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5549,7 +6081,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandattack: {
 		name: "Ataque Arena",
-		desc: "Arroja arena a la cara y baja la Precisión.",
+		// Official flavor text: "Arroja arena a la cara y baja la Precisión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandsearstorm: {
@@ -5559,7 +6092,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandstorm: {
 		name: "Tormenta de Arena",
-		desc: "Tormenta de arena que dura cinco turnos y hiere a todos, excepto a los de tipo Roca, Tierra y Acero, y aumenta la Defensa Especial de los de tipo Roca.",
+		// Official flavor text: "Tormenta de arena que dura cinco turnos y hiere a todos, excepto a los de tipo Roca, Tierra y Acero, y aumenta la Defensa Especial de los de tipo Roca."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5574,7 +6108,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandtomb: {
 		name: "Bucle Arena",
-		desc: "Enreda al objetivo en un remolino de arena de cuatro a cinco turnos.",
+		// Official flavor text: "Enreda al objetivo en un remolino de arena de cuatro a cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5597,7 +6132,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sappyseed: {
 		name: "Leafitobombas",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
@@ -5606,7 +6142,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scald: {
 		name: "Escaldar",
-		desc: "Ataca arrojando agua hirviendo al objetivo. Puede causar quemaduras.",
+		// Official flavor text: "Ataca arrojando agua hirviendo al objetivo. Puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5615,17 +6152,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	scaleshot: {
 		name: "Ráfaga Escamas",
-		desc: "Lanza escamas al objetivo de dos a cinco veces seguidas. Aumenta la Velocidad del usuario, pero reduce su Defensa.",
+		// Official flavor text: "Lanza escamas al objetivo de dos a cinco veces seguidas. Aumenta la Velocidad del usuario, pero reduce su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scaryface: {
 		name: "Cara Susto",
-		desc: "Asusta al objetivo para reducir mucho su Velocidad.",
+		// Official flavor text: "Asusta al objetivo para reducir mucho su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scorchingsands: {
 		name: "Arenas Ardientes",
-		desc: "Ataca al objetivo arrojándole arena a temperaturas muy elevadas. Puede causar quemaduras.",
+		// Official flavor text: "Ataca al objetivo arrojándole arena a temperaturas muy elevadas. Puede causar quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scratch: {
@@ -5634,22 +6174,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	screech: {
 		name: "Chirrido",
-		desc: "Alarido agudo que reduce mucho la Defensa del objetivo.",
+		// Official flavor text: "Alarido agudo que reduce mucho la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	searingshot: {
 		name: "Bomba Ígnea",
-		desc: "Un infierno de llamas daña a los Pokémon adyacentes en combate. Puede quemar.",
+		// Official flavor text: "Un infierno de llamas daña a los Pokémon adyacentes en combate. Puede quemar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	searingsunrazesmash: {
 		name: "Embestida Solar",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	secretpower: {
 		name: "Daño Secreto",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5665,7 +6209,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	secretsword: {
 		name: "Sable Místico",
-		desc: "Ensarta al objetivo con un largo cuerno dotado de un poder místico que provoca daño físico.",
+		// Official flavor text: "Ensarta al objetivo con un largo cuerno dotado de un poder místico que provoca daño físico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	seedbomb: {
@@ -5674,12 +6219,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	seedflare: {
 		name: "Fulgor Semilla",
-		desc: "Una onda de choque se libera del cuerpo. Puede bajar mucho la Defensa Especial del objetivo.",
+		// Official flavor text: "Una onda de choque se libera del cuerpo. Puede bajar mucho la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	seismictoss: {
 		name: "Sísmico",
-		desc: "Aprovecha la gravedad para derribar al objetivo. Le resta tantos PS como nivel tenga el usuario.",
+		// Official flavor text: "Aprovecha la gravedad para derribar al objetivo. Le resta tantos PS como nivel tenga el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5688,7 +6235,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	selfdestruct: {
 		name: "Autodestrucción",
-		desc: "El atacante explota y hiere a todos a su alrededor. El usuario se debilita de inmediato.",
+		// Official flavor text: "El atacante explota y hiere a todos a su alrededor. El usuario se debilita de inmediato."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5706,22 +6254,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowball: {
 		name: "Bola Sombra",
-		desc: "Lanza una bola oscura que puede bajar la Defensa Especial del objetivo.",
+		// Official flavor text: "Lanza una bola oscura que puede bajar la Defensa Especial del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowbone: {
 		name: "Hueso Sombrío",
-		desc: "Ataca al oponente golpeándole con un hueso poseído por un espíritu. Puede reducir la Defensa del objetivo.",
+		// Official flavor text: "Ataca al oponente golpeándole con un hueso poseído por un espíritu. Puede reducir la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowclaw: {
 		name: "Garra Umbría",
-		desc: "Ataca con una garra afilada hecha de sombras. Suele ser crítico.",
+		// Official flavor text: "Ataca con una garra afilada hecha de sombras. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowforce: {
 		name: "Golpe Umbrío",
-		desc: "En el primer turno, desaparece. En el segundo, golpea al objetivo aunque se esté protegiendo.",
+		// Official flavor text: "En el primer turno, desaparece. En el segundo, golpea al objetivo aunque se esté protegiendo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5739,7 +6291,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowsneak: {
 		name: "Sombra Vil",
-		desc: "Extiende su sombra y ataca al objetivo por la espalda. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Extiende su sombra y ataca al objetivo por la espalda. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shadowstrike: {
@@ -5749,7 +6302,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sharpen: {
 		name: "Afilar",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
@@ -5767,7 +6321,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sheercold: {
 		name: "Frío Polar",
-		desc: "Debilita al objetivo de un solo golpe. Si lo usa un Pokémon que no sea de tipo Hielo, es difícil que acierte.",
+		// Official flavor text: "Debilita al objetivo de un solo golpe. Si lo usa un Pokémon que no sea de tipo Hielo, es difícil que acierte."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5776,17 +6331,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shellsidearm: {
 		name: "Moluscañón",
-		desc: "El usuario lanza un ataque físico o especial en función de cuál inflija más daño. Puede envenenar al objetivo.",
+		// Official flavor text: "El usuario lanza un ataque físico o especial en función de cuál inflija más daño. Puede envenenar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shellsmash: {
 		name: "Rompecoraza",
-		desc: "El usuario rompe su coraza y baja su Defensa y Defensa Especial, pero aumenta mucho su Ataque, Ataque Especial y Velocidad.",
+		// Official flavor text: "El usuario rompe su coraza y baja su Defensa y Defensa Especial, pero aumenta mucho su Ataque, Ataque Especial y Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shelltrap: {
 		name: "Coraza Trampa",
-		desc: "El caparazón del Pokémon se convierte en una trampa. Si le alcanza un ataque físico, la trampa estalla y los oponentes sufren daño.",
+		// Official flavor text: "El caparazón del Pokémon se convierte en una trampa. Si le alcanza un ataque físico, la trampa estalla y los oponentes sufren daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] ha activado la Coraza Trampa!",
@@ -5800,7 +6358,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shiftgear: {
 		name: "Cambio de Marcha",
-		desc: "Al hacer girar los engranajes, el usuario mejora su Ataque y aumenta mucho su Velocidad.",
+		// Official flavor text: "Al hacer girar los engranajes, el usuario mejora su Ataque y aumenta mucho su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shockwave: {
@@ -5809,12 +6368,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shoreup: {
 		name: "Recogearena",
-		desc: "Restaura la mitad de los PS máximos del usuario. Durante las tormentas de arena, restaura aún más PS.",
+		// Official flavor text: "Restaura la mitad de los PS máximos del usuario. Durante las tormentas de arena, restaura aún más PS."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	signalbeam: {
 		name: "Rayo Señal",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	silktrap: {
@@ -5824,12 +6385,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	silverwind: {
 		name: "Viento Plata",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	simplebeam: {
 		name: "Onda Simple",
-		desc: "Lanza una onda psíquica que hace que la habilidad del objetivo pase a ser Simple.",
+		// Official flavor text: "Lanza una onda psíquica que hace que la habilidad del objetivo pase a ser Simple."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5854,12 +6417,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sizzlyslide: {
 		name: "Flarembestida",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sketch: {
 		name: "Esquema",
-		desc: "Aprende de forma permanente el último movimiento utilizado por el objetivo. Es de un solo uso.",
+		// Official flavor text: "Aprende de forma permanente el último movimiento utilizado por el objetivo. Es de un solo uso."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5876,7 +6441,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skillswap: {
 		name: "Intercambio",
-		desc: "Usa el poder psíquico para intercambiar habilidades con el objetivo.",
+		// Official flavor text: "Usa el poder psíquico para intercambiar habilidades con el objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5901,12 +6467,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skittersmack: {
 		name: "Golpe Rastrero",
-		desc: "Ataca al objetivo por la espalda de forma subrepticia y además reduce su Ataque Especial.",
+		// Official flavor text: "Ataca al objetivo por la espalda de forma subrepticia y además reduce su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	skullbash: {
 		name: "Cabezazo",
-		desc: "El usuario se prepara y sube su Defensa en el primer turno y en el segundo arremete con un cabezazo.",
+		// Official flavor text: "El usuario se prepara y sube su Defensa en el primer turno y en el segundo arremete con un cabezazo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5920,7 +6488,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyattack: {
 		name: "Ataque Aéreo",
-		desc: "Ataca durante dos turnos y suele asestar un golpe crítico. También puede amedrentar al objetivo.",
+		// Official flavor text: "Ataca durante dos turnos y suele asestar un golpe crítico. También puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5934,7 +6503,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skydrop: {
 		name: "Caída Libre",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5947,7 +6517,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	skyuppercut: {
 		name: "Gancho Alto",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5956,7 +6527,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slackoff: {
 		name: "Relajo",
-		desc: "El usuario se relaja y restaura la mitad de sus PS máximos.",
+		// Official flavor text: "El usuario se relaja y restaura la mitad de sus PS máximos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5968,7 +6540,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	slash: {
 		name: "Cuchillada",
-		desc: "Ataca con cuchillas o con pinzas. Suele asestar un golpe crítico.",
+		// Official flavor text: "Ataca con cuchillas o con pinzas. Suele asestar un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sleeppowder: {
@@ -5977,7 +6550,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sleeptalk: {
 		name: "Sonámbulo",
-		desc: "Mientras duerme, usa uno de sus movimientos elegido al azar.",
+		// Official flavor text: "Mientras duerme, usa uno de sus movimientos elegido al azar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6003,7 +6577,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sludge: {
 		name: "Residuos",
-		desc: "Arroja residuos al objetivo. Puede llegar a envenenar.",
+		// Official flavor text: "Arroja residuos al objetivo. Puede llegar a envenenar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6012,17 +6587,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sludgebomb: {
 		name: "Bomba Lodo",
-		desc: "Arroja residuos al objetivo. Puede llegar a envenenar.",
+		// Official flavor text: "Arroja residuos al objetivo. Puede llegar a envenenar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sludgewave: {
 		name: "Onda Tóxica",
-		desc: "Una onda tóxica que daña a los Pokémon de alrededor. Puede envenenar.",
+		// Official flavor text: "Una onda tóxica que daña a los Pokémon de alrededor. Puede envenenar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	smackdown: {
 		name: "Antiaéreo",
-		desc: "Ataca lanzando una piedra o un proyectil. Si el objetivo está en el aire, lo estrella contra el suelo.",
+		// Official flavor text: "Ataca lanzando una piedra o un proyectil. Si el objetivo está en el aire, lo estrella contra el suelo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] ha sido derribado y ha caído al suelo!",
@@ -6033,7 +6611,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	smellingsalts: {
 		name: "Estímulo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6045,17 +6624,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	smog: {
 		name: "Polución",
-		desc: "Lanza un ataque con gases tóxicos que pueden llegar a envenenar.",
+		// Official flavor text: "Lanza un ataque con gases tóxicos que pueden llegar a envenenar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	smokescreen: {
 		name: "Pantalla de Humo",
-		desc: "Baja la Precisión del objetivo con una nube de humo o tinta.",
+		// Official flavor text: "Baja la Precisión del objetivo con una nube de humo o tinta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snaptrap: {
 		name: "Cepo",
-		desc: "Cepo que atrapa al objetivo durante cuatro o cinco turnos y le causa daño mientras se encuentra preso.",
+		// Official flavor text: "Cepo que atrapa al objetivo durante cuatro o cinco turnos y le causa daño mientras se encuentra preso."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6065,12 +6647,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snarl: {
 		name: "Alarido",
-		desc: "Chillido desagradable que baja el Ataque Especial del rival.",
+		// Official flavor text: "Chillido desagradable que baja el Ataque Especial del rival."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snatch: {
 		name: "Robo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6081,12 +6665,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snipeshot: {
 		name: "Disparo Certero",
-		desc: "Permite atacar al objetivo seleccionado ignorando las habilidades o movimientos que permiten a un rival centrar la atención sobre sí.",
+		// Official flavor text: "Permite atacar al objetivo seleccionado ignorando las habilidades o movimientos que permiten a un rival centrar la atención sobre sí."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snore: {
 		name: "Ronquido",
-		desc: "Fuerte ronquido que solo puede usarse dormido. Puede amedrentar al objetivo.",
+		// Official flavor text: "Fuerte ronquido que solo puede usarse dormido. Puede amedrentar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snowscape: {
@@ -6096,7 +6682,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	soak: {
 		name: "Empapar",
-		desc: "Potente lluvia que transforma al objetivo en un Pokémon de tipo Agua.",
+		// Official flavor text: "Potente lluvia que transforma al objetivo en un Pokémon de tipo Agua."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6110,7 +6697,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	softboiled: {
 		name: "Ovocuración",
-		desc: "Restaura la mitad de los PS máximos del usuario.",
+		// Official flavor text: "Restaura la mitad de los PS máximos del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6121,7 +6709,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarbeam: {
 		name: "Rayo Solar",
-		desc: "El usuario absorbe luz en el primer turno y en el segundo lanza un potente rayo de energía.",
+		// Official flavor text: "El usuario absorbe luz en el primer turno y en el segundo lanza un potente rayo de energía."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6150,7 +6739,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarblade: {
 		name: "Cuchilla Solar",
-		desc: "El usuario dedica un turno a absorber energía lumínica y concentrarla en forma de cuchilla con la que ataca al rival en el siguiente turno.",
+		// Official flavor text: "El usuario dedica un turno a absorber energía lumínica y concentrarla en forma de cuchilla con la que ataca al rival en el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6163,7 +6753,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sonicboom: {
 		name: "Bomba Sónica",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6175,34 +6766,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spacialrend: {
 		name: "Corte Vacío",
-		desc: "Desgarra al objetivo y el espacio a su alrededor. Suele ser crítico.",
+		// Official flavor text: "Desgarra al objetivo y el espacio a su alrededor. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spark: {
 		name: "Chispa",
-		desc: "Ataque eléctrico que puede llegar a paralizar.",
+		// Official flavor text: "Ataque eléctrico que puede llegar a paralizar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sparklingaria: {
 		name: "Aria Burbuja",
-		desc: "Libera burbujas al cantar. Este movimiento cura las quemaduras de los Pokémon que reciban daño.",
+		// Official flavor text: "Libera burbujas al cantar. Este movimiento cura las quemaduras de los Pokémon que reciban daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sparklyswirl: {
 		name: "Sylveotornado",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spectralthief: {
 		name: "Robasombra",
-		desc: "El usuario se esconde en la sombra del objetivo y lo ataca tras robarle las mejoras en sus características.",
+		// Official flavor text: "El usuario se esconde en la sombra del objetivo y lo ataca tras robarle las mejoras en sus características."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		clearBoost: "  ¡[SOURCE] se ha apropiado de las mejoras en las características de su rival!",
 	},
 	speedswap: {
 		name: "Cambiavelocidad",
-		desc: "Intercambia su Velocidad por la del oponente.",
+		// Official flavor text: "Intercambia su Velocidad por la del oponente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[POKEMON] cambia su Velocidad por la de su objetivo!",
@@ -6214,7 +6811,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiderweb: {
 		name: "Telaraña",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6231,7 +6829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikecannon: {
 		name: "Clavo Cañón",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6245,7 +6844,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikes: {
 		name: "Púas",
-		desc: "Esparce púas alrededor del equipo rival que hieren a los Pokémon rivales que entran en combate.",
+		// Official flavor text: "Esparce púas alrededor del equipo rival que hieren a los Pokémon rivales que entran en combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6267,7 +6867,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spikyshield: {
 		name: "Barrera Espinosa",
-		desc: "Protege al usuario de ataques, e inflige daño a quien se los lance si entra en contacto con él.",
+		// Official flavor text: "Protege al usuario de ataques, e inflige daño a quien se los lance si entra en contacto con él."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6288,12 +6889,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spiritbreak: {
 		name: "Choque Anímico",
-		desc: "El usuario ataca al objetivo con tal ímpetu que acaba minando su moral y, en consecuencia, reduce su Ataque Especial.",
+		// Official flavor text: "El usuario ataca al objetivo con tal ímpetu que acaba minando su moral y, en consecuencia, reduce su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spiritshackle: {
 		name: "Puntada Sombría",
-		desc: "Ataca al oponente y, al mismo tiempo, fija su sombra al terreno para impedir su huida.",
+		// Official flavor text: "Ataca al oponente y, al mismo tiempo, fija su sombra al terreno para impedir su huida."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6301,7 +6904,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spite: {
 		name: "Rencor",
-		desc: "Da rienda suelta a su rencor para reducir cuatro PP del último movimiento usado por el objetivo.",
+		// Official flavor text: "Da rienda suelta a su rencor para reducir cuatro PP del último movimiento usado por el objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6315,7 +6919,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spitup: {
 		name: "Escupir",
-		desc: "Libera de una vez la energía acumulada con Reserva. La potencia del ataque será proporcional a la cantidad de energía acumulada.",
+		// Official flavor text: "Libera de una vez la energía acumulada con Reserva. La potencia del ataque será proporcional a la cantidad de energía acumulada."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6332,12 +6937,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	splinteredstormshards: {
 		name: "Tempestad Rocosa",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	splishysplash: {
 		name: "Salpikasurf",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spore: {
@@ -6346,7 +6953,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	spotlight: {
 		name: "Foco",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#followme",
@@ -6359,7 +6967,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stealthrock: {
 		name: "Trampa Rocas",
-		desc: "Una trampa de rocas que flota en el aire y daña a los objetivos que entran en combate.",
+		// Official flavor text: "Una trampa de rocas que flota en el aire y daña a los objetivos que entran en combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6374,12 +6983,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steameruption: {
 		name: "Chorro de Vapor",
-		desc: "Envuelve al Pokémon oponente con vapor extremadamente caliente que puede llegar a quemarlo.",
+		// Official flavor text: "Envuelve al Pokémon oponente con vapor extremadamente caliente que puede llegar a quemarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steamroller: {
 		name: "Rodillo de Púas",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6387,24 +6998,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	steelbeam: {
 		name: "Metaláser",
-		desc: "Utiliza el acero de su cuerpo para disparar un potente rayo. También hiere al agresor.",
+		// Official flavor text: "Utiliza el acero de su cuerpo para disparar un potente rayo. También hiere al agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "Allanador Férreo",
-		desc: "El usuario lanza su ataque y destruye el campo activo en el terreno de combate, y falla si no hay ninguno en ese momento.",
+		// Official flavor text: "El usuario lanza su ataque y destruye el campo activo en el terreno de combate, y falla si no hay ninguno en ese momento."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelwing: {
 		name: "Ala de Acero",
-		desc: "Alas macizas que golpean al objetivo y pueden subir la Defensa del usuario.",
+		// Official flavor text: "Alas macizas que golpean al objetivo y pueden subir la Defensa del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stickyweb: {
 		name: "Red Viscosa",
-		desc: "Coloca una red pegajosa alrededor del equipo rival que baja la Velocidad de cualquier adversario que entre a combatir.",
+		// Official flavor text: "Coloca una red pegajosa alrededor del equipo rival que baja la Velocidad de cualquier adversario que entre a combatir."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6416,7 +7031,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stockpile: {
 		name: "Reserva",
-		desc: "Acumula energía y sube la Defensa y la Defensa Especial. Puede utilizarse hasta tres veces.",
+		// Official flavor text: "Acumula energía y sube la Defensa y la Defensa Especial. Puede utilizarse hasta tres veces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6428,12 +7044,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stokedsparksurfer: {
 		name: "Surfeo Galvánico",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stomp: {
 		name: "Pisotón",
-		desc: "Tremendo pisotón que puede hacer que el objetivo se amedrente.",
+		// Official flavor text: "Tremendo pisotón que puede hacer que el objetivo se amedrente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6453,7 +7071,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stompingtantrum: {
 		name: "Pataleta",
-		desc: "Usa la frustración como revulsivo para atacar. La potencia de Pataleta se duplica si el usuario ha fallado el último movimiento usado.",
+		// Official flavor text: "Usa la frustración como revulsivo para atacar. La potencia de Pataleta se duplica si el usuario ha fallado el último movimiento usado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stoneaxe: {
@@ -6463,22 +7082,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneedge: {
 		name: "Roca Afilada",
-		desc: "Clava piedras muy afiladas al objetivo. Suele ser crítico.",
+		// Official flavor text: "Clava piedras muy afiladas al objetivo. Suele ser crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	storedpower: {
 		name: "Poder Reserva",
-		desc: "Acumula poder para golpear. Cuanto más suban las características del usuario, mayor será el daño.",
+		// Official flavor text: "Acumula poder para golpear. Cuanto más suban las características del usuario, mayor será el daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stormthrow: {
 		name: "Llave Corsé",
-		desc: "Lanza un golpe devastador. Siempre asesta un golpe crítico.",
+		// Official flavor text: "Lanza un golpe devastador. Siempre asesta un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strangesteam: {
 		name: "Cautivapor",
-		desc: "Desprende un humo con el que ataca al objetivo, que puede acabar confundido.",
+		// Official flavor text: "Desprende un humo con el que ataca al objetivo, que puede acabar confundido."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strength: {
@@ -6487,12 +7110,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strengthsap: {
 		name: "Absorbefuerza",
-		desc: "Restaura una cantidad de PS equivalente al valor de Ataque del rival, que además verá reducida esta característica.",
+		// Official flavor text: "Restaura una cantidad de PS equivalente al valor de Ataque del rival, que además verá reducida esta característica."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stringshot: {
 		name: "Disparo Demora",
-		desc: "Lanza seda a los rivales y reduce mucho su Velocidad.",
+		// Official flavor text: "Lanza seda a los rivales y reduce mucho su Velocidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6504,7 +7129,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	struggle: {
 		name: "Forcejeo",
-		desc: "Solo se usa como último recurso al acabarse los PP. Hiere un poco al agresor.",
+		// Official flavor text: "Solo se usa como último recurso al acabarse los PP. Hiere un poco al agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6526,12 +7152,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strugglebug: {
 		name: "Estoicismo",
-		desc: "El usuario opone resistencia y ataca a los oponentes. También reduce su Ataque Especial.",
+		// Official flavor text: "El usuario opone resistencia y ataca a los oponentes. También reduce su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stuffcheeks: {
 		name: "Atiborramiento",
-		desc: "El usuario ingiere la baya que lleva equipada para aumentar mucho su Defensa.",
+		// Official flavor text: "El usuario ingiere la baya que lleva equipada para aumentar mucho su Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6540,7 +7168,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stunspore: {
 		name: "Paralizador",
-		desc: "Esparce polvo que paraliza al objetivo.",
+		// Official flavor text: "Esparce polvo que paraliza al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6551,7 +7180,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	submission: {
 		name: "Sumisión",
-		desc: "El usuario se lanza al suelo con el oponente en brazos y también se hace un poco de daño.",
+		// Official flavor text: "El usuario se lanza al suelo con el oponente en brazos y también se hace un poco de daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6565,7 +7195,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	substitute: {
 		name: "Sustituto",
-		desc: "Utiliza parte de los PS propios para crear un sustituto que actúa como señuelo.",
+		// Official flavor text: "Utiliza parte de los PS propios para crear un sustituto que actúa como señuelo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6590,7 +7221,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	suckerpunch: {
 		name: "Golpe Bajo",
-		desc: "Permite atacar con prioridad. Falla si el objetivo no está preparando ningún ataque.",
+		// Official flavor text: "Permite atacar con prioridad. Falla si el objetivo no está preparando ningún ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6598,7 +7230,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sunnyday: {
 		name: "Día Soleado",
-		desc: "Hace que se intensifique el efecto del sol durante cinco turnos, lo que potencia los movimientos de tipo Fuego y debilita los de tipo Agua.",
+		// Official flavor text: "Hace que se intensifique el efecto del sol durante cinco turnos, lo que potencia los movimientos de tipo Fuego y debilita los de tipo Agua."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6609,7 +7242,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sunsteelstrike: {
 		name: "Meteoimpacto",
-		desc: "Ataca al objetivo con la potencia de un meteoro, ignorando su habilidad.",
+		// Official flavor text: "Ataca al objetivo con la potencia de un meteoro, ignorando su habilidad."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supercellslam: {
@@ -6621,7 +7255,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	superfang: {
 		name: "Superdiente",
-		desc: "Finos colmillos que reducen a la mitad los PS del objetivo.",
+		// Official flavor text: "Finos colmillos que reducen a la mitad los PS del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6630,7 +7265,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	superpower: {
 		name: "Fuerza Bruta",
-		desc: "Ataque de gran potencia, pero que reduce el Ataque y la Defensa del agresor.",
+		// Official flavor text: "Ataque de gran potencia, pero que reduce el Ataque y la Defensa del agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonic: {
@@ -6643,7 +7279,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	surf: {
 		name: "Surf",
-		desc: "Inunda el terreno de combate con una ola gigante.",
+		// Official flavor text: "Inunda el terreno de combate con una ola gigante."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6659,12 +7296,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	surgingstrikes: {
 		name: "Azote Torrencial",
-		desc: "El usuario, dominador absoluto del líquido elemento, golpea hasta tres veces con movimientos fluidos. Siempre asesta un golpe crítico.",
+		// Official flavor text: "El usuario, dominador absoluto del líquido elemento, golpea hasta tres veces con movimientos fluidos. Siempre asesta un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	swagger: {
 		name: "Fanfarronear",
-		desc: "Provoca confusión en el objetivo, pero también sube mucho su Ataque.",
+		// Official flavor text: "Provoca confusión en el objetivo, pero también sube mucho su Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6672,7 +7311,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swallow: {
 		name: "Tragar",
-		desc: "Absorbe la energía acumulada con Reserva para recobrar salud. Cuanta más se haya acumulado, mayor será el número de PS que se recuperen.",
+		// Official flavor text: "Absorbe la energía acumulada con Reserva para recobrar salud. Cuanta más se haya acumulado, mayor será el número de PS que se recuperen."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6687,7 +7327,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sweetscent: {
 		name: "Dulce Aroma",
-		desc: "Un dulce aroma engatusa al objetivo, por lo que se reduce mucho su Evasión.",
+		// Official flavor text: "Un dulce aroma engatusa al objetivo, por lo que se reduce mucho su Evasión."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6699,7 +7340,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swift: {
 		name: "Meteoros",
-		desc: "Lanza rayos en forma de estrella que no fallan nunca.",
+		// Official flavor text: "Lanza rayos en forma de estrella que no fallan nunca."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6711,7 +7353,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	switcheroo: {
 		name: "Trapicheo",
-		desc: "Intercambia con el objetivo los objetos que llevan tan rápido que es imposible verlo a simple vista.",
+		// Official flavor text: "Intercambia con el objetivo los objetos que llevan tan rápido que es imposible verlo a simple vista."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6736,17 +7379,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	swordsdance: {
 		name: "Danza Espada",
-		desc: "Baile frenético que aumenta mucho el Ataque.",
+		// Official flavor text: "Baile frenético que aumenta mucho el Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	synchronoise: {
 		name: "Sincrorruido",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	synthesis: {
 		name: "Fotosíntesis",
-		desc: "Restaura PS del usuario. La cantidad varía según el tiempo que haga.",
+		// Official flavor text: "Restaura PS del usuario. La cantidad varía según el tiempo que haga."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6782,7 +7428,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailglow: {
 		name: "Luminicola",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6791,7 +7438,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailslap: {
 		name: "Plumerazo",
-		desc: "Golpea con la cola de dos a cinco veces seguidas.",
+		// Official flavor text: "Golpea con la cola de dos a cinco veces seguidas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6799,7 +7447,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailwhip: {
 		name: "Agitacola",
-		desc: "Agita la cola para bajar la Defensa del equipo rival.",
+		// Official flavor text: "Agita la cola para bajar la Defensa del equipo rival."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6807,7 +7456,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tailwind: {
 		name: "Viento Afín",
-		desc: "Crea un fuerte remolino que aumenta la Velocidad de los Pokémon de tu equipo durante cuatro turnos.",
+		// Official flavor text: "Crea un fuerte remolino que aumenta la Velocidad de los Pokémon de tu equipo durante cuatro turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6819,7 +7469,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	takedown: {
 		name: "Derribo",
-		desc: "Carga desmedida que también hiere al agresor.",
+		// Official flavor text: "Carga desmedida que también hiere al agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6838,14 +7489,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tarshot: {
 		name: "Alquitranazo",
-		desc: "Cubre al objetivo de un alquitrán pegajoso que reduce su Velocidad y lo vuelve débil contra el fuego.",
+		// Official flavor text: "Cubre al objetivo de un alquitrán pegajoso que reduce su Velocidad y lo vuelve débil contra el fuego."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] se ha vuelto débil ante el fuego!",
 	},
 	taunt: {
 		name: "Mofa",
-		desc: "Enfurece al objetivo para que solo use movimientos de ataque durante tres turnos.",
+		// Official flavor text: "Enfurece al objetivo para que solo use movimientos de ataque durante tres turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6871,12 +7524,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tearfullook: {
 		name: "Ojos Llorosos",
-		desc: "Mira al objetivo con ojos llorosos para hacerle perder su espíritu combativo y reduce su Ataque y Ataque Especial.",
+		// Official flavor text: "Mira al objetivo con ojos llorosos para hacerle perder su espíritu combativo y reduce su Ataque y Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teatime: {
 		name: "Hora del Té",
-		desc: "El usuario invita a tomar el té a todos los presentes en el terreno de combate, lo que hace que ingieran las bayas que lleven equipadas.",
+		// Official flavor text: "El usuario invita a tomar el té a todos los presentes en el terreno de combate, lo que hace que ingieran las bayas que lleven equipadas."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡Es la hora del té! A comer bayas se ha dicho.",
@@ -6884,7 +7539,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	technoblast: {
 		name: "Tecno Shock",
-		desc: "Ataca al objetivo con un gran láser. El tipo del ataque lo determina el cartucho que porta el usuario.",
+		// Official flavor text: "Ataca al objetivo con un gran láser. El tipo del ataque lo determina el cartucho que porta el usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
@@ -6893,12 +7549,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	teeterdance: {
 		name: "Danza Caos",
-		desc: "Danza histérica que confunde a los Pokémon que están alrededor del usuario.",
+		// Official flavor text: "Danza histérica que confunde a los Pokémon que están alrededor del usuario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	telekinesis: {
 		name: "Telequinesis",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6912,7 +7570,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	teleport: {
 		name: "Teletransporte",
-		desc: "Permite al usuario cambiarse por otro Pokémon del equipo, si es posible. Si un Pokémon salvaje usa este movimiento, huye del combate.",
+		// Official flavor text: "Permite al usuario cambiarse por otro Pokémon del equipo, si es posible. Si un Pokémon salvaje usa este movimiento, huye del combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6936,12 +7595,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	terrainpulse: {
 		name: "Pulso de Campo",
-		desc: "El usuario ataca aprovechando la energía del campo activo, que determina tanto el tipo como la potencia del movimiento.",
+		// Official flavor text: "El usuario ataca aprovechando la energía del campo activo, que determina tanto el tipo como la potencia del movimiento."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thief: {
 		name: "Ladrón",
-		desc: "El agresor ataca y le quita el objeto al objetivo siempre y cuando no lleve ninguno.",
+		// Official flavor text: "El agresor ataca y le quita el objeto al objetivo siempre y cuando no lleve ninguno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6970,12 +7631,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thousandarrows: {
 		name: "Mil Flechas",
-		desc: "Acierta incluso a Pokémon que estén en el aire y los hace caer al suelo.",
+		// Official flavor text: "Acierta incluso a Pokémon que estén en el aire y los hace caer al suelo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thousandwaves: {
 		name: "Mil Temblores",
-		desc: "El usuario genera ondas sísmicas que se propagan por el suelo y sacuden a los oponentes. Los Pokémon alcanzados no podrán huir del combate.",
+		// Official flavor text: "El usuario genera ondas sísmicas que se propagan por el suelo y sacuden a los oponentes. Los Pokémon alcanzados no podrán huir del combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6983,7 +7646,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thrash: {
 		name: "Saña",
-		desc: "Ataque de dos a tres turnos que acaba confundiendo al agresor.",
+		// Official flavor text: "Ataque de dos a tres turnos que acaba confundiendo al agresor."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7004,7 +7668,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	throatchop: {
 		name: "Golpe Mordaza",
-		desc: "Inflige al rival un dolor tan abrumador que le impide utilizar durante dos turnos ataques que se sirven del sonido.",
+		// Official flavor text: "Inflige al rival un dolor tan abrumador que le impide utilizar durante dos turnos ataques que se sirven del sonido."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7014,7 +7679,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunder: {
 		name: "Trueno",
-		desc: "Un poderoso rayo que daña al objetivo y puede paralizarlo.",
+		// Official flavor text: "Un poderoso rayo que daña al objetivo y puede paralizarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7035,12 +7701,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderbolt: {
 		name: "Rayo",
-		desc: "Potente ataque eléctrico que puede paralizar al objetivo.",
+		// Official flavor text: "Potente ataque eléctrico que puede paralizar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thundercage: {
 		name: "Electrojaula",
-		desc: "El objetivo queda atrapado en una jaula electrificada que permanece en el terreno de cuatro a cinco turnos.",
+		// Official flavor text: "El objetivo queda atrapado en una jaula electrificada que permanece en el terreno de cuatro a cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7055,32 +7723,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	thunderfang: {
 		name: "Colmillo Rayo",
-		desc: "El usuario muerde al objetivo con colmillos electrificados y puede hacer que se amedrente o se paralice.",
+		// Official flavor text: "El usuario muerde al objetivo con colmillos electrificados y puede hacer que se amedrente o se paralice."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderouskick: {
 		name: "Patada Relámpago",
-		desc: "El usuario desconcierta al rival con movimientos centelleantes y le propina una patada. Baja la Defensa del objetivo.",
+		// Official flavor text: "El usuario desconcierta al rival con movimientos centelleantes y le propina una patada. Baja la Defensa del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderpunch: {
 		name: "Puño Trueno",
-		desc: "Puñetazo eléctrico que puede paralizar al adversario.",
+		// Official flavor text: "Puñetazo eléctrico que puede paralizar al adversario."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thundershock: {
 		name: "Impactrueno",
-		desc: "Ataque eléctrico que puede paralizar al objetivo.",
+		// Official flavor text: "Ataque eléctrico que puede paralizar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thunderwave: {
 		name: "Onda Trueno",
-		desc: "Una ligera descarga que paraliza al objetivo si lo alcanza.",
+		// Official flavor text: "Una ligera descarga que paraliza al objetivo si lo alcanza."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tickle: {
 		name: "Cosquillas",
-		desc: "Hace reír al objetivo para bajar su Ataque y Defensa.",
+		// Official flavor text: "Hace reír al objetivo para bajar su Ataque y Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tidyup: {
@@ -7092,7 +7766,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	topsyturvy: {
 		name: "Reversión",
-		desc: "Invierte por completo los cambios en las características del objetivo.",
+		// Official flavor text: "Invierte por completo los cambios en las características del objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	torchsong: {
@@ -7102,7 +7777,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	torment: {
 		name: "Tormento",
-		desc: "Atormenta y enfurece al objetivo, que no puede usar dos veces seguidas el mismo movimiento.",
+		// Official flavor text: "Atormenta y enfurece al objetivo, que no puede usar dos veces seguidas el mismo movimiento."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] está atormentado!",
@@ -7110,7 +7786,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxic: {
 		name: "Tóxico",
-		desc: "Envenena gravemente al objetivo y causa un daño mayor en cada turno.",
+		// Official flavor text: "Envenena gravemente al objetivo y causa un daño mayor en cada turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7119,7 +7796,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicspikes: {
 		name: "Púas Tóxicas",
-		desc: "Lanza una trampa de púas tóxicas a los pies del objetivo. El veneno afecta a los Pokémon oponentes que entran en combate.",
+		// Official flavor text: "Lanza una trampa de púas tóxicas a los pies del objetivo. El veneno afecta a los Pokémon oponentes que entran en combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7136,7 +7814,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	toxicthread: {
 		name: "Hilo Venenoso",
-		desc: "Ataca al oponente con hilillos venenosos que reducen su Velocidad y lo envenenan.",
+		// Official flavor text: "Ataca al oponente con hilillos venenosos que reducen su Velocidad y lo envenenan."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7150,7 +7829,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	transform: {
 		name: "Transformación",
-		desc: "El usuario se transforma en una copia del objetivo, con los mismos movimientos.",
+		// Official flavor text: "El usuario se transforma en una copia del objetivo, con los mismos movimientos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7167,7 +7847,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triattack: {
 		name: "Triataque",
-		desc: "Ataque triple que puede paralizar, quemar o congelar al objetivo.",
+		// Official flavor text: "Ataque triple que puede paralizar, quemar o congelar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7179,7 +7860,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trick: {
 		name: "Truco",
-		desc: "Engaña al objetivo desprevenido e intercambia objetos.",
+		// Official flavor text: "Engaña al objetivo desprevenido e intercambia objetos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7207,12 +7889,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trickortreat: {
 		name: "Halloween",
-		desc: "Invita al objetivo a celebrar Halloween, lo que añade el tipo Fantasma a los tipos de este.",
+		// Official flavor text: "Invita al objetivo a celebrar Halloween, lo que añade el tipo Fantasma a los tipos de este."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	trickroom: {
 		name: "Espacio Raro",
-		desc: "Crea un espacio extraño en el que los Pokémon lentos se mueven primero durante cinco turnos.",
+		// Official flavor text: "Crea un espacio extraño en el que los Pokémon lentos se mueven primero durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7225,7 +7909,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tripleaxel: {
 		name: "Triple Axel",
-		desc: "Patea hasta tres veces seguidas y cada vez más fuerte.",
+		// Official flavor text: "Patea hasta tres veces seguidas y cada vez más fuerte."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tripledive: {
@@ -7235,7 +7920,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	triplekick: {
 		name: "Triple Patada",
-		desc: "Patea hasta tres veces seguidas y cada vez más fuerte.",
+		// Official flavor text: "Patea hasta tres veces seguidas y cada vez más fuerte."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7250,12 +7936,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	tropkick: {
 		name: "Patada Tropical",
-		desc: "Lanza una patada con la fuerza del trópico que golpea al rival y reduce su Ataque.",
+		// Official flavor text: "Lanza una patada con la fuerza del trópico que golpea al rival y reduce su Ataque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	trumpcard: {
 		name: "As Oculto",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twinbeam: {
@@ -7265,7 +7953,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twineedle: {
 		name: "Doble Ataque",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7287,7 +7976,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	twister: {
 		name: "Ciclón",
-		desc: "Crea un violento tornado para hacer trizas al objetivo. Puede amedrentarlo.",
+		// Official flavor text: "Crea un violento tornado para hacer trizas al objetivo. Puede amedrentarlo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7304,7 +7994,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	uproar: {
 		name: "Alboroto",
-		desc: "Ataca de forma alborotada durante tres turnos. Mantiene despiertos a todos.",
+		// Official flavor text: "Ataca de forma alborotada durante tres turnos. Mantiene despiertos a todos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7326,7 +8017,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	uturn: {
 		name: "Ida y Vuelta",
-		desc: "Tras atacar, el usuario vuelve a toda prisa para dar paso a otro Pokémon del equipo.",
+		// Official flavor text: "Tras atacar, el usuario vuelve a toda prisa para dar paso a otro Pokémon del equipo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7339,27 +8031,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	vacuumwave: {
 		name: "Onda Vacío",
-		desc: "Gira los puños y libera una onda de vacío contra el objetivo. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Gira los puños y libera una onda de vacío contra el objetivo. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vcreate: {
 		name: "V de Fuego",
-		desc: "Golpea con una V de llamas al objetivo. Baja la Defensa, la Defensa Especial y la Velocidad de quien lo usa.",
+		// Official flavor text: "Golpea con una V de llamas al objetivo. Baja la Defensa, la Defensa Especial y la Velocidad de quien lo usa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	veeveevolley: {
 		name: "Eevimpacto",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	venomdrench: {
 		name: "Trampa Venenosa",
-		desc: "Impregna a su objetivo con un líquido venenoso que disminuye el Ataque, el Ataque Especial y la Velocidad. Solo afecta a Pokémon ya envenenados.",
+		// Official flavor text: "Impregna a su objetivo con un líquido venenoso que disminuye el Ataque, el Ataque Especial y la Velocidad. Solo afecta a Pokémon ya envenenados."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	venoshock: {
 		name: "Carga Tóxica",
-		desc: "Cubre al objetivo con un líquido venenoso. El daño será doble si este ya está envenenado.",
+		// Official flavor text: "Cubre al objetivo con un líquido venenoso. El daño será doble si este ya está envenenado."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	victorydance: {
@@ -7377,12 +8074,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	vitalthrow: {
 		name: "Llave Vital",
-		desc: "El usuario ataca el último, pero no falla.",
+		// Official flavor text: "El usuario ataca el último, pero no falla."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	voltswitch: {
 		name: "Voltiocambio",
-		desc: "Tras atacar, el usuario vuelve a toda prisa para dar paso a otro Pokémon del equipo.",
+		// Official flavor text: "Tras atacar, el usuario vuelve a toda prisa para dar paso a otro Pokémon del equipo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7392,7 +8091,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	volttackle: {
 		name: "Placaje Eléctrico",
-		desc: "Quien lo usa electrifica su cuerpo para luego atacar. Se hiere mucho a sí mismo, pero puede paralizar al objetivo.",
+		// Official flavor text: "Quien lo usa electrifica su cuerpo para luego atacar. Se hiere mucho a sí mismo, pero puede paralizar al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7405,7 +8105,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wakeupslap: {
 		name: "Espabila",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7413,7 +8114,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterfall: {
 		name: "Cascada",
-		desc: "Embiste con un gran impulso que puede llegar a amedrentar.",
+		// Official flavor text: "Embiste con un gran impulso que puede llegar a amedrentar."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7426,7 +8128,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterpledge: {
 		name: "Voto Agua",
-		desc: "Ataca con columnas de agua. Combinado con Voto Fuego, crea un arcoíris y aumenta su potencia.",
+		// Official flavor text: "Ataca con columnas de agua. Combinado con Voto Fuego, crea un arcoíris y aumenta su potencia."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] está esperando a [TARGET]...",
@@ -7435,12 +8138,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterpulse: {
 		name: "Hidropulso",
-		desc: "Ataca con un potente chorro de agua. Puede confundir al objetivo.",
+		// Official flavor text: "Ataca con un potente chorro de agua. Puede confundir al objetivo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watershuriken: {
 		name: "Shuriken de Agua",
-		desc: "Golpea al oponente de dos a cinco veces con estrellas arrojadizas hechas de mucosidad. Este movimiento tiene prioridad alta.",
+		// Official flavor text: "Golpea al oponente de dos a cinco veces con estrellas arrojadizas hechas de mucosidad. Este movimiento tiene prioridad alta."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7451,7 +8156,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	watersport: {
 		name: "Hidrochorro",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7464,7 +8170,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterspout: {
 		name: "Salpicar",
-		desc: "Chorro de agua. Cuantos menos PS tenga el usuario, menos dañino será.",
+		// Official flavor text: "Chorro de agua. Cuantos menos PS tenga el usuario, menos dañino será."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wavecrash: {
@@ -7474,7 +8181,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	weatherball: {
 		name: "Meteorobola",
-		desc: "El tipo y fuerza del ataque varían según el tiempo que haga.",
+		// Official flavor text: "El tipo y fuerza del ataque varían según el tiempo que haga."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7491,7 +8199,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlpool: {
 		name: "Torbellino",
-		desc: "Una tromba de agua atrapa al objetivo durante cuatro o cinco turnos.",
+		// Official flavor text: "Una tromba de agua atrapa al objetivo durante cuatro o cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7514,7 +8223,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	whirlwind: {
 		name: "Remolino",
-		desc: "Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate.",
+		// Official flavor text: "Se lleva al objetivo, que es cambiado por otro Pokémon. Si es un Pokémon salvaje, acaba el combate."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7529,7 +8239,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wickedblow: {
 		name: "Golpe Oscuro",
-		desc: "Golpe devastador que requiere un absoluto dominio de las artes siniestras. Siempre asesta un golpe crítico.",
+		// Official flavor text: "Golpe devastador que requiere un absoluto dominio de las artes siniestras. Siempre asesta un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wickedtorque: {
@@ -7539,7 +8250,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wideguard: {
 		name: "Vasta Guardia",
-		desc: "Bloquea los ataques de objetivo múltiple lanzados contra tu equipo durante un turno.",
+		// Official flavor text: "Bloquea los ataques de objetivo múltiple lanzados contra tu equipo durante un turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7565,12 +8277,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildcharge: {
 		name: "Voltio Cruel",
-		desc: "Carga eléctrica muy potente que también hiere ligeramente a quien la usa.",
+		// Official flavor text: "Carga eléctrica muy potente que también hiere ligeramente a quien la usa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	willowisp: {
 		name: "Fuego Fatuo",
-		desc: "Siniestra llama morada que produce quemaduras.",
+		// Official flavor text: "Siniestra llama morada que produce quemaduras."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wingattack: {
@@ -7579,7 +8293,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wish: {
 		name: "Deseo",
-		desc: "Restaura en el siguiente turno la mitad de los PS máximos del usuario o se los pasa al Pokémon que lo sustituye.",
+		// Official flavor text: "Restaura en el siguiente turno la mitad de los PS máximos del usuario o se los pasa al Pokémon que lo sustituye."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7590,17 +8305,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	withdraw: {
 		name: "Refugio",
-		desc: "El usuario se resguarda en su coraza, por lo que le sube la Defensa.",
+		// Official flavor text: "El usuario se resguarda en su coraza, por lo que le sube la Defensa."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wonderroom: {
 		name: "Zona Extraña",
-		desc: "Crea una zona misteriosa donde se intercambian la Defensa y la Defensa Especial de todos los Pokémon durante cinco turnos.",
+		// Official flavor text: "Crea una zona misteriosa donde se intercambian la Defensa y la Defensa Especial de todos los Pokémon durante cinco turnos."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	woodhammer: {
 		name: "Mazazo",
-		desc: "Arremete contra el objetivo con su robusto cuerpo. El agresor también sufre bastante daño.",
+		// Official flavor text: "Arremete contra el objetivo con su robusto cuerpo. El agresor también sufre bastante daño."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7609,12 +8327,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	workup: {
 		name: "Avivar",
-		desc: "Quien lo usa se concentra y potencia su Ataque y su Ataque Especial.",
+		// Official flavor text: "Quien lo usa se concentra y potencia su Ataque y su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	worryseed: {
 		name: "Abatidoras",
-		desc: "Planta una semilla en el objetivo que le causa pesar. Sustituye la habilidad del objetivo por Insomnio y le impide dormirse.",
+		// Official flavor text: "Planta una semilla en el objetivo que le causa pesar. Sustituye la habilidad del objetivo por Insomnio y le impide dormirse."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7634,7 +8354,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wrap: {
 		name: "Constricción",
-		desc: "Oprime al objetivo de cuatro a cinco turnos con ramas o con su cuerpo.",
+		// Official flavor text: "Oprime al objetivo de cuatro a cinco turnos con ramas o con su cuerpo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7662,7 +8383,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wringout: {
 		name: "Estrujón",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7674,29 +8396,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	yawn: {
 		name: "Bostezo",
-		desc: "Gran bostezo que induce al sueño al objetivo en el siguiente turno.",
+		// Official flavor text: "Gran bostezo que induce al sueño al objetivo en el siguiente turno."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡[POKEMON] está somnoliento!",
 	},
 	zapcannon: {
 		name: "Electrocañón",
-		desc: "Dispara una descarga eléctrica que causa daño y parálisis.",
+		// Official flavor text: "Dispara una descarga eléctrica que causa daño y parálisis."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zenheadbutt: {
 		name: "Cabezazo Zen",
-		desc: "Concentra su energía psíquica en la cabeza para golpear. Puede hacer que el objetivo se amedrente.",
+		// Official flavor text: "Concentra su energía psíquica en la cabeza para golpear. Puede hacer que el objetivo se amedrente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zingzap: {
 		name: "Electropunzada",
-		desc: "Se lanza contra el objetivo y le suelta una potente descarga eléctrica que puede hacer que se amedrente.",
+		// Official flavor text: "Se lanza contra el objetivo y le suelta una potente descarga eléctrica que puede hacer que se amedrente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zippyzap: {
 		name: "Pikaturbo",
-		desc: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente.",
+		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI

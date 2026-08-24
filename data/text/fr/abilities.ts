@@ -5,12 +5,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	adaptability: {
 		name: "Adaptabilité",
-		desc: "Quand le Pokémon utilise une capacité du même type que lui, le bonus de puissance qu'elle reçoit est encore plus important que normalement.",
+		// Official flavor text: "Quand le Pokémon utilise une capacité du même type que lui, le bonus de puissance qu'elle reçoit est encore plus important que normalement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aerilate: {
 		name: "Peau Céleste",
-		desc: "Les capacités de type Normal deviennent de type Vol. Leur puissance augmente légèrement.",
+		// Official flavor text: "Les capacités de type Normal deviennent de type Vol. Leur puissance augmente légèrement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -19,7 +21,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aftermath: {
 		name: "Boom Final",
-		desc: "Si le Pokémon est mis K.O. par une attaque directe, il inflige des dégâts à l’attaquant avant de s’évanouir.",
+		// Official flavor text: "Si le Pokémon est mis K.O. par une attaque directe, il inflige des dégâts à l’attaquant avant de s’évanouir."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "  [POKEMON] est blessé !",
@@ -32,12 +35,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	analytic: {
 		name: "Analyste",
-		desc: "Augmente la puissance des capacités du Pokémon s’il attaque en dernier.",
+		// Official flavor text: "Augmente la puissance des capacités du Pokémon s’il attaque en dernier."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	angerpoint: {
 		name: "Colérique",
-		desc: "Si le Pokémon subit un coup critique, il entre dans une colère noire qui augmente son Attaque au maximum.",
+		// Official flavor text: "Si le Pokémon subit un coup critique, il entre dans une colère noire qui augmente son Attaque au maximum."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -48,12 +53,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	angershell: {
 		name: "Courroupace",
-		desc: "Le Pokémon enrage s’il a moins de la moitié de ses PV après avoir subi une attaque. Sa Déf. et sa Déf. Spé. baissent, et son Atq., son Atq. Spé. et sa Vit. augmentent.",
+		// Official flavor text: "Le Pokémon enrage s’il a moins de la moitié de ses PV après avoir subi une attaque. Sa Déf. et sa Déf. Spé. baissent, et son Atq., son Atq. Spé. et sa Vit. augmentent."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	anticipation: {
 		name: "Anticipation",
-		desc: "Le Pokémon devine si l'adversaire connaît une capacité dangereuse pour lui.",
+		// Official flavor text: "Le Pokémon devine si l'adversaire connaît une capacité dangereuse pour lui."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -66,7 +73,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	arenatrap: {
 		name: "Piège Sable",
-		desc: "Empêche l'adversaire de quitter le terrain.",
+		// Official flavor text: "Empêche l'adversaire de quitter le terrain."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -83,14 +91,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	armortail: {
 		name: "Armure Caudale",
-		desc: "Une étrange queue recouvre la tête du Pokémon, ce qui empêche ce dernier et ses alliés d’être visés par une capacité prioritaire.",
+		// Official flavor text: "Une étrange queue recouvre la tête du Pokémon, ce qui empêche ce dernier et ses alliés d’être visés par une capacité prioritaire."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "#damp",
 	},
 	aromaveil: {
 		name: "Aroma-Voile",
-		desc: "Protège le Pokémon et ses alliés des effets limitant le libre arbitre.",
+		// Official flavor text: "Protège le Pokémon et ses alliés des effets limitant le libre arbitre."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  [POKEMON] est protégé par Aroma-Voile !",
@@ -111,14 +121,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	aurabreak: {
 		name: "Aura Inversée",
-		desc: "Inverse l’effet des talents « Aura » afin que ceux-ci baissent la puissance des capacités affectées au lieu de l’augmenter.",
+		// Official flavor text: "Inverse l’effet des talents « Aura » afin que ceux-ci baissent la puissance des capacités affectées au lieu de l’augmenter."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON] inverse toutes les auras !",
 	},
 	baddreams: {
 		name: "Mauvais Rêve",
-		desc: "Inflige des dégâts aux ennemis endormis.",
+		// Official flavor text: "Inflige des dégâts aux ennemis endormis."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -145,7 +157,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battlebond: {
 		name: "Synergie",
-		desc: "En battant un ennemi, ce Pokémon renforce ses liens avec son Dresseur, ce qui augmente son Attaque, son Attaque Spéciale et sa Vitesse.",
+		// Official flavor text: "En battant un ennemi, ce Pokémon renforce ses liens avec son Dresseur, ce qui augmente son Attaque, son Attaque Spéciale et sa Vitesse."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -162,12 +175,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	beastboost: {
 		name: "Boost Chimère",
-		desc: "Augmente la stat la plus élevée du Pokémon quand il met K.O. un autre Pokémon.",
+		// Official flavor text: "Augmente la stat la plus élevée du Pokémon quand il met K.O. un autre Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	berserk: {
 		name: "Folle Furie",
-		desc: "Augmente l’Attaque Spéciale du Pokémon lorsque ses PV tombent à la moitié à cause d’une attaque de l’adversaire.",
+		// Official flavor text: "Augmente l’Attaque Spéciale du Pokémon lorsque ses PV tombent à la moitié à cause d’une attaque de l’adversaire."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bigpecks: {
@@ -176,7 +191,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	blaze: {
 		name: "Brasier",
-		desc: "Augmente la puissance des capacités de type Feu du Pokémon quand il a perdu une certaine quantité de PV.",
+		// Official flavor text: "Augmente la puissance des capacités de type Feu du Pokémon quand il a perdu une certaine quantité de PV."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -189,7 +205,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cheekpouch: {
 		name: "Bajoues",
-		desc: "Le Pokémon récupère des PV lorsqu’il consomme n’importe quelle Baie en plus de bénéficier de ses effets habituels.",
+		// Official flavor text: "Le Pokémon récupère des PV lorsqu’il consomme n’importe quelle Baie en plus de bénéficier de ses effets habituels."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -197,12 +214,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	chillingneigh: {
 		name: "Blanche Ruade",
-		desc: "Quand le Pokémon met un ennemi K.O., il émet un hennissement glaçant, ce qui augmente son Attaque.",
+		// Official flavor text: "Quand le Pokémon met un ennemi K.O., il émet un hennissement glaçant, ce qui augmente son Attaque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chlorophyll: {
 		name: "Chlorophylle",
-		desc: "Augmente la Vitesse du Pokémon s'il y a du soleil.",
+		// Official flavor text: "Augmente la Vitesse du Pokémon s'il y a du soleil."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -220,7 +239,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	colorchange: {
 		name: "Homochromie",
-		desc: "Lorsque le Pokémon est touché par une capacité, il prend le type de celle-ci.",
+		// Official flavor text: "Lorsque le Pokémon est touché par une capacité, il prend le type de celle-ci."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -228,21 +248,24 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	comatose: {
 		name: "Hypersommeil",
-		desc: "Le Pokémon rêve en permanence et ne se réveille jamais. Il est capable d’attaquer normalement tout en dormant.",
+		// Official flavor text: "Le Pokémon rêve en permanence et ne se réveille jamais. Il est capable d’attaquer normalement tout en dormant."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON] est en Hypersommeil !",
 	},
 	commander: {
 		name: "Commandant",
-		desc: "Si un Oyacata allié est sur le terrain quand ce Pokémon rejoint le combat, ce dernier entre dans sa bouche et devient son commandant.",
+		// Official flavor text: "Si un Oyacata allié est sur le terrain quand ce Pokémon rejoint le combat, ce dernier entre dans sa bouche et devient son commandant."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] a été avalé par [TARGET] et devient son commandant.",
 	},
 	competitive: {
 		name: "Battant",
-		desc: "Augmente beaucoup l’Attaque Spéciale du Pokémon quand ses stats ont été baissées par l’adversaire.",
+		// Official flavor text: "Augmente beaucoup l’Attaque Spéciale du Pokémon quand ses stats ont été baissées par l’adversaire."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	compoundeyes: {
@@ -269,7 +292,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cottondown: {
 		name: "Effilochage",
-		desc: "Quand le Pokémon est touché par une attaque, il dissémine des aigrettes qui diminuent la Vitesse de tout le monde, sauf la sienne.",
+		// Official flavor text: "Quand le Pokémon est touché par une attaque, il dissémine des aigrettes qui diminuent la Vitesse de tout le monde, sauf la sienne."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cudchew: {
@@ -282,12 +306,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	cursedbody: {
 		name: "Corps Maudit",
-		desc: "Quand le Pokémon est touché par une capacité adverse, il inflige parfois Entrave sur celle-ci.",
+		// Official flavor text: "Quand le Pokémon est touché par une capacité adverse, il inflige parfois Entrave sur celle-ci."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cutecharm: {
 		name: "Joli Sourire",
-		desc: "Peut séduire l'attaquant lorsque le Pokémon subit une attaque directe.",
+		// Official flavor text: "Peut séduire l'attaquant lorsque le Pokémon subit une attaque directe."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -299,7 +325,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	damp: {
 		name: "Moiteur",
-		desc: "Le Pokémon augmente l'humidité de l'air, ce qui empêche tous les Pokémon d'utiliser des capacités explosives telles que Destruction.",
+		// Official flavor text: "Le Pokémon augmente l'humidité de l'air, ce qui empêche tous les Pokémon d'utiliser des capacités explosives telles que Destruction."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -318,12 +345,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dancer: {
 		name: "Danseuse",
-		desc: "Si n’importe quel Pokémon utilise une capacité dansante, le Pokémon utilise immédiatement cette danse lui aussi.",
+		// Official flavor text: "Si n’importe quel Pokémon utilise une capacité dansante, le Pokémon utilise immédiatement cette danse lui aussi."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkaura: {
 		name: "Aura Ténébreuse",
-		desc: "Augmente la puissance des capacités de type Ténèbres de tous les Pokémon.",
+		// Official flavor text: "Augmente la puissance des capacités de type Ténèbres de tous les Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON] dégage une aura ténébreuse !",
@@ -337,34 +366,40 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dazzling: {
 		name: "Corps Coloré",
-		desc: "L’adversaire est abasourdi par le Pokémon, ce qui l’empêche de viser ce dernier et ses alliés avec une capacité prioritaire.",
+		// Official flavor text: "L’adversaire est abasourdi par le Pokémon, ce qui l’empêche de viser ce dernier et ses alliés avec une capacité prioritaire."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "#damp",
 	},
 	defeatist: {
 		name: "Défaitiste",
-		desc: "Le Pokémon devient défaitiste quand ses PV tombent à la moitié, et son Attaque et son Attaque Spéciale sont divisées par deux.",
+		// Official flavor text: "Le Pokémon devient défaitiste quand ses PV tombent à la moitié, et son Attaque et son Attaque Spéciale sont divisées par deux."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	defiant: {
 		name: "Acharné",
-		desc: "Augmente beaucoup l'Attaque du Pokémon quand ses stats sont baissées par l'adversaire.",
+		// Official flavor text: "Augmente beaucoup l'Attaque du Pokémon quand ses stats sont baissées par l'adversaire."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deltastream: {
 		name: "Souffle Delta",
-		desc: "Altère les conditions météo pour annuler les faiblesses du type Vol.",
+		// Official flavor text: "Altère les conditions météo pour annuler les faiblesses du type Vol."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	desolateland: {
 		name: "Terre Finale",
-		desc: "Altère les conditions météo pour neutraliser les attaques de type Eau.",
+		// Official flavor text: "Altère les conditions météo pour neutraliser les attaques de type Eau."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	disguise: {
 		name: "Fantômasque",
-		desc: "Le déguisement qui recouvre le corps du Pokémon est capable de le protéger d’une attaque.",
+		// Official flavor text: "Le déguisement qui recouvre le corps du Pokémon est capable de le protéger d’une attaque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -376,7 +411,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	download: {
 		name: "Télécharge",
-		desc: "Le Pokémon compare la Défense et la Défense Spéciale de l’adversaire et, en fonction de la stat la plus basse, il augmente sa propre Attaque ou Attaque Spéciale.",
+		// Official flavor text: "Le Pokémon compare la Défense et la Défense Spéciale de l’adversaire et, en fonction de la stat la plus basse, il augmente sa propre Attaque ou Attaque Spéciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonize: {
@@ -398,7 +434,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dryskin: {
 		name: "Peau Sèche",
-		desc: "Quand le soleil brille, le Pokémon perd des PV et subit plus de dégâts des capacités Feu, mais il regagne des PV lorsqu'il pleut ou s'il est touché par une capacité Eau.",
+		// Official flavor text: "Quand le soleil brille, le Pokémon perd des PV et subit plus de dégâts des capacités Feu, mais il regagne des PV lorsqu'il pleut ou s'il est touché par une capacité Eau."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -412,7 +449,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	eartheater: {
 		name: "Absorbe-Terre",
-		desc: "Si le Pokémon est touché par une capacité de type Sol, il regagne des PV au lieu de subir des dégâts.",
+		// Official flavor text: "Si le Pokémon est touché par une capacité de type Sol, il regagne des PV au lieu de subir des dégâts."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eelevate: {
@@ -422,7 +460,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	effectspore: {
 		name: "Pose Spore",
-		desc: "Peut paralyser, empoisonner ou endormir l'attaquant lorsque le Pokémon subit une attaque directe.",
+		// Official flavor text: "Peut paralyser, empoisonner ou endormir l'attaquant lorsque le Pokémon subit une attaque directe."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -468,12 +507,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	emergencyexit: {
 		name: "Repli Tactique",
-		desc: "Le Pokémon évite les situations inutilement dangereuses. Quand ses PV tombent à la moitié, il se réfugie dans sa Poké Ball.",
+		// Official flavor text: "Le Pokémon évite les situations inutilement dangereuses. Quand ses PV tombent à la moitié, il se réfugie dans sa Poké Ball."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairyaura: {
 		name: "Aura Féérique",
-		desc: "Augmente la puissance des capacités de type Fée de tous les Pokémon.",
+		// Official flavor text: "Augmente la puissance des capacités de type Fée de tous les Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON] dégage une aura féérique !",
@@ -499,12 +540,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flareboost: {
 		name: "Rage Brûlure",
-		desc: "Augmente la puissance des capacités spéciales quand le Pokémon est brûlé.",
+		// Official flavor text: "Augmente la puissance des capacités spéciales quand le Pokémon est brûlé."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flashfire: {
 		name: "Torche",
-		desc: "Lorsque le Pokémon est touché par une capacité de type Feu, il absorbe la chaleur pour renforcer ses propres capacités Feu.",
+		// Official flavor text: "Lorsque le Pokémon est touché par une capacité de type Feu, il absorbe la chaleur pour renforcer ses propres capacités Feu."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -517,7 +560,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flowergift: {
 		name: "Don Floral",
-		desc: "Augmente l’Attaque et la Défense Spéciale du Pokémon et de ses alliés lorsque le soleil brille.",
+		// Official flavor text: "Augmente l’Attaque et la Défense Spéciale du Pokémon et de ses alliés lorsque le soleil brille."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -529,19 +573,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	flowerveil: {
 		name: "Flora-Voile",
-		desc: "Empêche les alliés de type Plante de subir des baisses de stats et des altérations de statut.",
+		// Official flavor text: "Empêche les alliés de type Plante de subir des baisses de stats et des altérations de statut."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  [POKEMON] est protégé par Flora-Voile !",
 	},
 	fluffy: {
 		name: "Boule de Poils",
-		desc: "Divise par deux les dégâts des attaques directes subies par le Pokémon, mais double les dégâts des capacités de type Feu.",
+		// Official flavor text: "Divise par deux les dégâts des attaques directes subies par le Pokémon, mais double les dégâts des capacités de type Feu."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	forecast: {
 		name: "Météo",
-		desc: "Le Pokémon prend le type Eau, Feu ou Glace en fonction de la météo.",
+		// Official flavor text: "Le Pokémon prend le type Eau, Feu ou Glace en fonction de la météo."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -549,7 +596,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	forewarn: {
 		name: "Prédiction",
-		desc: "Révèle l’une des capacités de l’adversaire quand le combat commence.",
+		// Official flavor text: "Révèle l’une des capacités de l’adversaire quand le combat commence."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -589,12 +637,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	galvanize: {
 		name: "Peau Électrique",
-		desc: "Les capacités de type Normal deviennent de type Électrik. Leur puissance augmente légèrement.",
+		// Official flavor text: "Les capacités de type Normal deviennent de type Électrik. Leur puissance augmente légèrement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gluttony: {
 		name: "Gloutonnerie",
-		desc: "Si le Pokémon tient une Baie à manger en cas de PV bas, il la mange dès qu'il a perdu la moitié de ses PV.",
+		// Official flavor text: "Si le Pokémon tient une Baie à manger en cas de PV bas, il la mange dès qu'il a perdu la moitié de ses PV."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	goodasgold: {
@@ -607,7 +657,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	gorillatactics: {
 		name: "Entêtement",
-		desc: "Augmente l’Attaque, mais empêche d’utiliser toute autre capacité que celle utilisée en premier par le Pokémon.",
+		// Official flavor text: "Augmente l’Attaque, mais empêche d’utiliser toute autre capacité que celle utilisée en premier par le Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grasspelt: {
@@ -620,22 +671,26 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	grimneigh: {
 		name: "Sombre Ruade",
-		desc: "Quand le Pokémon met un ennemi K.O., il émet un hennissement terrifiant qui augmente son Attaque Spéciale.",
+		// Official flavor text: "Quand le Pokémon met un ennemi K.O., il émet un hennissement terrifiant qui augmente son Attaque Spéciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guarddog: {
 		name: "Chien de Garde",
-		desc: "L’Attaque du Pokémon augmente s’il subit l’effet du talent Intimidation. Les capacités ou objets qui font changer de Pokémon n’ont aucun effet sur lui.",
+		// Official flavor text: "L’Attaque du Pokémon augmente s’il subit l’effet du talent Intimidation. Les capacités ou objets qui font changer de Pokémon n’ont aucun effet sur lui."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gulpmissile: {
 		name: "Dégobage",
-		desc: "Quand le Pokémon utilise Surf ou Plongée, il revient avec une proie. Lorsqu’il subit des dégâts par la suite, il attaque en recrachant sa proie.",
+		// Official flavor text: "Quand le Pokémon utilise Surf ou Plongée, il revient avec une proie. Lorsqu’il subit des dégâts par la suite, il attaque en recrachant sa proie."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	guts: {
 		name: "Cran",
-		desc: "Augmente l'Attaque du Pokémon s'il est affecté par une altération de statut.",
+		// Official flavor text: "Augmente l'Attaque du Pokémon s'il est affecté par une altération de statut."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hadronengine: {
@@ -647,14 +702,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	harvest: {
 		name: "Récolte",
-		desc: "Permet de réutiliser une même Baie plusieurs fois.",
+		// Official flavor text: "Permet de réutiliser une même Baie plusieurs fois."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		addItem: "  [POKEMON] a récolté [ITEM:indefinite] !",
 	},
 	healer: {
 		name: "Cœur Soin",
-		desc: "Soigne parfois une altération de statut d’un allié proche.",
+		// Official flavor text: "Soigne parfois une altération de statut d’un allié proche."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -667,7 +724,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heatproof: {
 		name: "Ignifugé",
-		desc: "Diminue de moitié les dégâts infligés au Pokémon par les capacités de type Feu.",
+		// Official flavor text: "Diminue de moitié les dégâts infligés au Pokémon par les capacités de type Feu."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -676,7 +734,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	heavymetal: {
 		name: "Heavy Metal",
-		desc: "Double le poids du Pokémon.",
+		// Official flavor text: "Double le poids du Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	honeygather: {
@@ -695,17 +754,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	hungerswitch: {
 		name: "Déclic Fringale",
-		desc: "À la fin de chaque tour, le Pokémon alterne entre ses formes Mode Rassasié et Mode Affamé.",
+		// Official flavor text: "À la fin de chaque tour, le Pokémon alterne entre ses formes Mode Rassasié et Mode Affamé."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hustle: {
 		name: "Agitation",
-		desc: "Améliore l'Attaque du Pokémon, mais diminue la Précision.",
+		// Official flavor text: "Améliore l'Attaque du Pokémon, mais diminue la Précision."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydration: {
 		name: "Hydratation",
-		desc: "Soigne les altérations de statut du Pokémon quand il pleut.",
+		// Official flavor text: "Soigne les altérations de statut du Pokémon quand il pleut."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -717,7 +779,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	icebody: {
 		name: "Corps Gel",
-		desc: "Régénère peu à peu les PV du Pokémon quand il neige.",
+		// Official flavor text: "Régénère peu à peu les PV du Pokémon quand il neige."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -726,7 +789,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	iceface: {
 		name: "Tête de Gel",
-		desc: "Le glaçon sur sa tête encaisse les attaques physiques à la place du Pokémon, mais sa destruction modifie son apparence. Le glaçon se reforme quand il neige.",
+		// Official flavor text: "Le glaçon sur sa tête encaisse les attaques physiques à la place du Pokémon, mais sa destruction modifie son apparence. Le glaçon se reforme quand il neige."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -739,7 +803,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	illuminate: {
 		name: "Lumiattirance",
-		desc: "Le Pokémon illumine les alentours, ce qui empêche sa Précision de baisser.",
+		// Official flavor text: "Le Pokémon illumine les alentours, ce qui empêche sa Précision de baisser."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -748,7 +813,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	illusion: {
 		name: "Illusion",
-		desc: "Le Pokémon prend l’apparence du dernier membre de l’équipe pour tromper l’adversaire.",
+		// Official flavor text: "Le Pokémon prend l’apparence du dernier membre de l’équipe pour tromper l’adversaire."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		end: "  L’illusion [POKEMON:de] se brise !",
@@ -759,12 +825,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	imposter: {
 		name: "Imposteur",
-		desc: "Le Pokémon prend l’apparence du Pokémon adverse.",
+		// Official flavor text: "Le Pokémon prend l’apparence du Pokémon adverse."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infiltrator: {
 		name: "Infiltration",
-		desc: "Traverse les barrières et les clones adverses pour attaquer directement.",
+		// Official flavor text: "Traverse les barrières et les clones adverses pour attaquer directement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -777,14 +845,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	innardsout: {
 		name: "Expuls’Organes",
-		desc: "Le Pokémon inflige à l’adversaire l’ayant mis K.O. des dégâts égaux au nombre de PV qu’il lui restait avant le coup de grâce.",
+		// Official flavor text: "Le Pokémon inflige à l’adversaire l’ayant mis K.O. des dégâts égaux au nombre de PV qu’il lui restait avant le coup de grâce."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "#aftermath",
 	},
 	innerfocus: {
 		name: "Attention",
-		desc: "Le Pokémon a un mental à toute épreuve qui empêche les attaques ennemies de lui faire peur. Il est aussi immunisé contre le talent Intimidation.",
+		// Official flavor text: "Le Pokémon a un mental à toute épreuve qui empêche les attaques ennemies de lui faire peur. Il est aussi immunisé contre le talent Intimidation."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -797,7 +867,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	intimidate: {
 		name: "Intimidation",
-		desc: "Le Pokémon rugit lorsqu'il arrive au combat, ce qui intimide l'ennemi et baisse son Attaque.",
+		// Official flavor text: "Le Pokémon rugit lorsqu'il arrive au combat, ce qui intimide l'ennemi et baisse son Attaque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -823,14 +894,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ironbarbs: {
 		name: "Épine de Fer",
-		desc: "Inflige des dégâts à l’attaquant lorsque le Pokémon subit une attaque directe.",
+		// Official flavor text: "Inflige des dégâts à l’attaquant lorsque le Pokémon subit une attaque directe."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		damage: "#roughskin",
 	},
 	ironfist: {
 		name: "Poing de Fer",
-		desc: "Augmente la puissance des capacités coups de poing.",
+		// Official flavor text: "Augmente la puissance des capacités coups de poing."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	justified: {
@@ -839,7 +912,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	keeneye: {
 		name: "Regard Vif",
-		desc: "Les yeux perçants du Pokémon empêchent sa Précision de baisser.",
+		// Official flavor text: "Les yeux perçants du Pokémon empêchent sa Précision de baisser."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -848,12 +922,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	klutz: {
 		name: "Maladresse",
-		desc: "Le Pokémon ne peut utiliser aucun objet tenu.",
+		// Official flavor text: "Le Pokémon ne peut utiliser aucun objet tenu."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leafguard: {
 		name: "Feuille Garde",
-		desc: "Protège le Pokémon contre les altérations de statut quand le soleil brille.",
+		// Official flavor text: "Protège le Pokémon contre les altérations de statut quand le soleil brille."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -865,7 +941,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	levitate: {
 		name: "Lévitation",
-		desc: "Le Pokémon flotte, ce qui l'immunise contre les capacités de type Sol.",
+		// Official flavor text: "Le Pokémon flotte, ce qui l'immunise contre les capacités de type Sol."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -881,7 +958,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	libero: {
 		name: "Libéro",
-		desc: "Le Pokémon prend le type de la capacité qu’il utilise. Ce talent ne peut se déclencher qu’une fois par entrée au combat du Pokémon.",
+		// Official flavor text: "Le Pokémon prend le type de la capacité qu’il utilise. Ce talent ne peut se déclencher qu’une fois par entrée au combat du Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -890,12 +968,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lightmetal: {
 		name: "Light Metal",
-		desc: "Divise par deux le poids du Pokémon.",
+		// Official flavor text: "Divise par deux le poids du Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lightningrod: {
 		name: "Paratonnerre",
-		desc: "Le Pokémon détourne sur lui les capacités de type Électrik et les neutralise, tout en augmentant son Attaque Spéciale.",
+		// Official flavor text: "Le Pokémon détourne sur lui les capacités de type Électrik et les neutralise, tout en augmentant son Attaque Spéciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -914,7 +994,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	lingeringaroma: {
 		name: "Odeur Tenace",
-		desc: "Lorsque le Pokémon subit une attaque directe, le talent de l’attaquant est remplacé par Odeur Tenace.",
+		// Official flavor text: "Lorsque le Pokémon subit une attaque directe, le talent de l’attaquant est remplacé par Odeur Tenace."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -933,7 +1014,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	liquidvoice: {
 		name: "Hydrata-Son",
-		desc: "Toutes les attaques sonores du Pokémon prennent le type Eau.",
+		// Official flavor text: "Toutes les attaques sonores du Pokémon prennent le type Eau."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	longreach: {
@@ -942,7 +1024,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magicbounce: {
 		name: "Miroir Magik",
-		desc: "Annule les effets des capacités de statut subies par le Pokémon et les retourne à l’envoyeur.",
+		// Official flavor text: "Annule les effets des capacités de statut subies par le Pokémon et les retourne à l’envoyeur."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen5: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -952,7 +1035,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magicguard: {
 		name: "Garde Magik",
-		desc: "Seules les attaques peuvent blesser le Pokémon.",
+		// Official flavor text: "Seules les attaques peuvent blesser le Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -961,7 +1045,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magician: {
 		name: "Magicien",
-		desc: "Les capacités volent aussi l’objet tenu par la cible.",
+		// Official flavor text: "Les capacités volent aussi l’objet tenu par la cible."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magmaarmor: {
@@ -970,7 +1055,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	magnetpull: {
 		name: "Magnépiège",
-		desc: "Attire les Pokémon Acier grâce à un champ magnétique, ce qui les empêche de quitter le terrain.",
+		// Official flavor text: "Attire les Pokémon Acier grâce à un champ magnétique, ce qui les empêche de quitter le terrain."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -995,7 +1081,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	megalauncher: {
 		name: "Méga Blaster",
-		desc: "Augmente la puissance des capacités qui projettent une aura.",
+		// Official flavor text: "Augmente la puissance des capacités qui projettent une aura."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	megasol: {
@@ -1008,19 +1095,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mimicry: {
 		name: "Mimétisme",
-		desc: "Le Pokémon adopte le même type que le terrain lorsqu’un champ est actif.",
+		// Official flavor text: "Le Pokémon adopte le même type que le terrain lorsqu’un champ est actif."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] a repris son type d’origine !",
 	},
 	mindseye: {
 		name: "Œil Révélateur",
-		desc: "Le Pokémon ignore les changements d’Esquive des cibles et peut toucher les Pokémon Spectre avec des capacités Normal ou Combat. Sa Précision ne peut pas baisser.",
+		// Official flavor text: "Le Pokémon ignore les changements d’Esquive des cibles et peut toucher les Pokémon Spectre avec des capacités Normal ou Combat. Sa Précision ne peut pas baisser."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	minus: {
 		name: "Moins",
-		desc: "L’Attaque Spéciale du Pokémon augmente si un Pokémon allié a le talent Moins ou Plus.",
+		// Official flavor text: "L’Attaque Spéciale du Pokémon augmente si un Pokémon allié a le talent Moins ou Plus."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1033,7 +1123,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mirrorarmor: {
 		name: "Armure Miroir",
-		desc: "Le Pokémon renvoie les effets réducteurs de stats qu’il reçoit.",
+		// Official flavor text: "Le Pokémon renvoie les effets réducteurs de stats qu’il reçoit."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mistysurge: {
@@ -1042,7 +1133,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	moldbreaker: {
 		name: "Brise Moule",
-		desc: "Le Pokémon ignore les talents adverses qui auraient un effet sur ses capacités.",
+		// Official flavor text: "Le Pokémon ignore les talents adverses qui auraient un effet sur ses capacités."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1064,7 +1156,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	moody: {
 		name: "Lunatique",
-		desc: "Augmente beaucoup une stat du Pokémon et en baisse une autre au hasard à chaque tour.",
+		// Official flavor text: "Augmente beaucoup une stat du Pokémon et en baisse une autre au hasard à chaque tour."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1073,12 +1166,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	motordrive: {
 		name: "Motorisé",
-		desc: "Si le Pokémon est touché par une capacité de type Électrik, il ne subit aucun dégât et sa Vitesse augmente.",
+		// Official flavor text: "Si le Pokémon est touché par une capacité de type Électrik, il ne subit aucun dégât et sa Vitesse augmente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	moxie: {
 		name: "Impudence",
-		desc: "Quand le Pokémon met un ennemi K.O., sa confiance en lui ne connaît plus de limite et son Attaque augmente.",
+		// Official flavor text: "Quand le Pokémon met un ennemi K.O., sa confiance en lui ne connaît plus de limite et son Attaque augmente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	multiscale: {
@@ -1100,7 +1195,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	mummy: {
 		name: "Momie",
-		desc: "Lorsque le Pokémon subit une attaque directe, le talent de l’attaquant est remplacé par Momie.",
+		// Official flavor text: "Lorsque le Pokémon subit une attaque directe, le talent de l’attaquant est remplacé par Momie."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1119,7 +1215,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	myceliummight: {
 		name: "Force Fongique",
-		desc: "Le Pokémon agit toujours plus lentement quand il utilise une capacité de statut, mais il ignore les talents adverses.",
+		// Official flavor text: "Le Pokémon agit toujours plus lentement quand il utilise une capacité de statut, mais il ignore les talents adverses."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	naturalcure: {
@@ -1130,12 +1227,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	neuroforce: {
 		name: "Cérébro-Force",
-		desc: "Augmente encore plus la puissance des attaques super efficaces.",
+		// Official flavor text: "Augmente encore plus la puissance des attaques super efficaces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	neutralizinggas: {
 		name: "Gaz Inhibiteur",
-		desc: "Si un Pokémon avec Gaz Inhibiteur est sur le terrain, les effets des talents de tous les autres Pokémon ne s’activent pas ou sont neutralisés.",
+		// Official flavor text: "Si un Pokémon avec Gaz Inhibiteur est sur le terrain, les effets des talents de tous les autres Pokémon ne s’activent pas ou sont neutralisés."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1150,7 +1249,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	normalize: {
 		name: "Normalise",
-		desc: "Toutes les capacités du Pokémon deviennent de type Normal, quel que soit leur type original. Leur puissance augmente légèrement.",
+		// Official flavor text: "Toutes les capacités du Pokémon deviennent de type Normal, quel que soit leur type original. Leur puissance augmente légèrement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1162,7 +1262,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	oblivious: {
 		name: "Benêt",
-		desc: "Le Pokémon est un grand benêt, ce qui l'immunise contre l'attraction, la provocation ou l'intimidation.",
+		// Official flavor text: "Le Pokémon est un grand benêt, ce qui l'immunise contre l'attraction, la provocation ou l'intimidation."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1186,7 +1287,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	overcoat: {
 		name: "Envelocape",
-		desc: "Protège des dégâts occasionnés par les tempêtes de sable, ainsi que des effets des capacités qui libèrent de la poudre et des spores.",
+		// Official flavor text: "Protège des dégâts occasionnés par les tempêtes de sable, ainsi que des effets des capacités qui libèrent de la poudre et des spores."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1199,7 +1301,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	overgrow: {
 		name: "Engrais",
-		desc: "Augmente la puissance des capacités de type Plante du Pokémon quand il a perdu une certaine quantité de PV.",
+		// Official flavor text: "Augmente la puissance des capacités de type Plante du Pokémon quand il a perdu une certaine quantité de PV."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1208,7 +1311,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	owntempo: {
 		name: "Tempo Perso",
-		desc: "Le Pokémon vit sa vie à son propre rythme, ce qui l'immunise contre la confusion et l'intimidation.",
+		// Official flavor text: "Le Pokémon vit sa vie à son propre rythme, ce qui l'immunise contre la confusion et l'intimidation."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1217,7 +1321,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	parentalbond: {
 		name: "Amour Filial",
-		desc: "La mère et son petit unissent leurs forces pour attaquer deux fois d’affilée.",
+		// Official flavor text: "La mère et son petit unissent leurs forces pour attaquer deux fois d’affilée."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1232,24 +1337,28 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pastelveil: {
 		name: "Voile Pastel",
-		desc: "Protège le Pokémon et ses alliés contre toutes les altérations de statut liées à l’empoisonnement.",
+		// Official flavor text: "Protège le Pokémon et ses alliés contre toutes les altérations de statut liées à l’empoisonnement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	perishbody: {
 		name: "Corps Condamné",
-		desc: "Lorsque le Pokémon est directement touché par une capacité, l’assaillant et lui tomberont K.O. dans trois tours, à moins qu’ils ne soient remplacés entre temps.",
+		// Official flavor text: "Lorsque le Pokémon est directement touché par une capacité, l’assaillant et lui tomberont K.O. dans trois tours, à moins qu’ils ne soient remplacés entre temps."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  Les deux Pokémon seront K.O. dans trois tours !",
 	},
 	pickpocket: {
 		name: "Pickpocket",
-		desc: "Vole l’objet que tient l’attaquant quand le Pokémon subit une attaque directe.",
+		// Official flavor text: "Vole l’objet que tient l’attaquant quand le Pokémon subit une attaque directe."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pickup: {
 		name: "Ramassage",
-		desc: "Permet parfois au Pokémon de ramasser les objets que d’autres Pokémon ont utilisés. Il lui arrive aussi d’en trouver hors des combats.",
+		// Official flavor text: "Permet parfois au Pokémon de ramasser les objets que d’autres Pokémon ont utilisés. Il lui arrive aussi d’en trouver hors des combats."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1267,7 +1376,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pixilate: {
 		name: "Peau Féérique",
-		desc: "Les capacités de type Normal deviennent de type Fée. Leur puissance augmente légèrement.",
+		// Official flavor text: "Les capacités de type Normal deviennent de type Fée. Leur puissance augmente légèrement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1276,7 +1386,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	plus: {
 		name: "Plus",
-		desc: "L’Attaque Spéciale du Pokémon augmente si un Pokémon allié a le talent Moins ou Plus.",
+		// Official flavor text: "L’Attaque Spéciale du Pokémon augmente si un Pokémon allié a le talent Moins ou Plus."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1289,7 +1400,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	poisonheal: {
 		name: "Soin Poison",
-		desc: "Quand le Pokémon est empoisonné, il regagne des PV au lieu d’en perdre.",
+		// Official flavor text: "Quand le Pokémon est empoisonné, il regagne des PV au lieu d’en perdre."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonpoint: {
@@ -1305,17 +1417,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	poisonpuppeteer: {
 		name: "Emprise Toxique",
-		desc: "Lorsque Pêchaminus empoisonne un Pokémon grâce à l’une de ses capacités, ce dernier devient également confus.",
+		// Official flavor text: "Lorsque Pêchaminus empoisonne un Pokémon grâce à l’une de ses capacités, ce dernier devient également confus."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisontouch: {
 		name: "Toxitouche",
-		desc: "Peut empoisonner l’ennemi par simple contact.",
+		// Official flavor text: "Peut empoisonner l’ennemi par simple contact."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powerconstruct: {
 		name: "Rassemblement",
-		desc: "Lorsque le Pokémon perd la moitié de ses PV, ses Cellules se rassemblent pour l’encourager, ce qui lui permet de prendre sa Forme Parfaite.",
+		// Official flavor text: "Lorsque le Pokémon perd la moitié de ses PV, ses Cellules se rassemblent pour l’encourager, ce qui lui permet de prendre sa Forme Parfaite."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  Vous sentez la présence d’un grand nombre d’individus !",
@@ -1323,7 +1438,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	powerofalchemy: {
 		name: "Osmose",
-		desc: "Le Pokémon acquiert le talent d’un allié mis K.O.",
+		// Official flavor text: "Le Pokémon acquiert le talent d’un allié mis K.O."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1336,12 +1452,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	powerspot: {
 		name: "Cercle d’Énergie",
-		desc: "Augmente la puissance des capacités des Pokémon qui se trouvent à proximité.",
+		// Official flavor text: "Augmente la puissance des capacités des Pokémon qui se trouvent à proximité."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prankster: {
 		name: "Farceur",
-		desc: "Rend les capacités de statut du Pokémon prioritaires.",
+		// Official flavor text: "Rend les capacités de statut du Pokémon prioritaires."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1350,7 +1468,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	pressure: {
 		name: "Pression",
-		desc: "Met la pression à l’adversaire pour le forcer à dépenser plus de PP.",
+		// Official flavor text: "Met la pression à l’adversaire pour le forcer à dépenser plus de PP."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1367,7 +1486,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	primordialsea: {
 		name: "Mer Primaire",
-		desc: "Altère les conditions météo pour neutraliser les attaques de type Feu.",
+		// Official flavor text: "Altère les conditions météo pour neutraliser les attaques de type Feu."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prismarmor: {
@@ -1380,7 +1500,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	protean: {
 		name: "Protéen",
-		desc: "Le Pokémon prend le type de la capacité qu’il utilise. Ce talent ne peut se déclencher qu’une fois par entrée au combat du Pokémon.",
+		// Official flavor text: "Le Pokémon prend le type de la capacité qu’il utilise. Ce talent ne peut se déclencher qu’une fois par entrée au combat du Pokémon."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1389,7 +1510,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	protosynthesis: {
 		name: "Paléosynthèse",
-		desc: "Quand le soleil brille ou que le Pokémon tient une capsule d’Énergie Booster, sa stat la plus élevée augmente.",
+		// Official flavor text: "Quand le soleil brille ou que le Pokémon tient une capsule d’Énergie Booster, sa stat la plus élevée augmente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  Le soleil brille, ce qui a permis à [POKEMON] d’activer Paléosynthèse !",
@@ -1403,7 +1525,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	punkrock: {
 		name: "Punk Rock",
-		desc: "Augmente la puissance des capacités basées sur le son. Le Pokémon ne subit que la moitié des dégâts quand il est touché par ce genre de capacités.",
+		// Official flavor text: "Augmente la puissance des capacités basées sur le son. Le Pokémon ne subit que la moitié des dégâts quand il est touché par ce genre de capacités."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	purepower: {
@@ -1412,12 +1535,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	purifyingsalt: {
 		name: "Sel Purificateur",
-		desc: "Le sel pur immunise le Pokémon contre les altérations de statut, et diminue de moitié les dégâts des capacités de type Spectre.",
+		// Official flavor text: "Le sel pur immunise le Pokémon contre les altérations de statut, et diminue de moitié les dégâts des capacités de type Spectre."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	quarkdrive: {
 		name: "Charge Quantique",
-		desc: "Quand un champ électrifié est actif ou que le Pokémon tient une capsule d’Énergie Booster, sa stat la plus élevée augmente.",
+		// Official flavor text: "Quand un champ électrifié est actif ou que le Pokémon tient une capsule d’Énergie Booster, sa stat la plus élevée augmente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] a activé Charge Quantique grâce au champ électrifié !",
@@ -1427,7 +1552,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	queenlymajesty: {
 		name: "Prestance Royale",
-		desc: "L’adversaire est impressionné par la majesté du Pokémon, ce qui l’empêche de viser ce dernier et ses alliés avec une capacité prioritaire.",
+		// Official flavor text: "L’adversaire est impressionné par la majesté du Pokémon, ce qui l’empêche de viser ce dernier et ses alliés avec une capacité prioritaire."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "#damp",
@@ -1440,7 +1566,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	quickfeet: {
 		name: "Pied Véloce",
-		desc: "Augmente la Vitesse du Pokémon en cas d'altération de statut.",
+		// Official flavor text: "Augmente la Vitesse du Pokémon en cas d'altération de statut."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1448,7 +1575,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	raindish: {
 		name: "Cuvette",
-		desc: "Le Pokémon récupère progressivement des PV lorsqu'il pleut.",
+		// Official flavor text: "Le Pokémon récupère progressivement des PV lorsqu'il pleut."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1456,7 +1584,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rattled: {
 		name: "Phobique",
-		desc: "Si le Pokémon est touché par le talent Intimidation ou une attaque de type Ténèbres, Spectre ou Insecte, sa phobie se révèle et sa Vitesse augmente.",
+		// Official flavor text: "Si le Pokémon est touché par le talent Intimidation ou une attaque de type Ténèbres, Spectre ou Insecte, sa phobie se révèle et sa Vitesse augmente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1465,7 +1594,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	receiver: {
 		name: "Receveur",
-		desc: "Le Pokémon reçoit le talent d’un allié mis K.O.",
+		// Official flavor text: "Le Pokémon reçoit le talent d’un allié mis K.O."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1478,12 +1608,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	reckless: {
 		name: "Téméraire",
-		desc: "Augmente la puissance des capacités occasionnant un contrecoup.",
+		// Official flavor text: "Augmente la puissance des capacités occasionnant un contrecoup."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	refrigerate: {
 		name: "Peau Gelée",
-		desc: "Les capacités de type Normal deviennent de type Glace. Leur puissance augmente légèrement.",
+		// Official flavor text: "Les capacités de type Normal deviennent de type Glace. Leur puissance augmente légèrement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1496,12 +1628,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	ripen: {
 		name: "Mûrissement",
-		desc: "Le Pokémon fait mûrir la Baie qu’il tient et double ainsi son effet.",
+		// Official flavor text: "Le Pokémon fait mûrir la Baie qu’il tient et double ainsi son effet."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rivalry: {
 		name: "Rivalité",
-		desc: "Le Pokémon déteste la concurrence et inflige plus de dégâts si sa cible est du même sexe. Par contre, il en inflige moins si sa cible est du sexe opposé.",
+		// Official flavor text: "Le Pokémon déteste la concurrence et inflige plus de dégâts si sa cible est du même sexe. Par contre, il en inflige moins si sa cible est du sexe opposé."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rkssystem: {
@@ -1510,7 +1644,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rockhead: {
 		name: "Tête de Roc",
-		desc: "Le Pokémon peut utiliser des capacités occasionnant un contrecoup sans perdre de PV.",
+		// Official flavor text: "Le Pokémon peut utiliser des capacités occasionnant un contrecoup sans perdre de PV."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1523,7 +1658,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	roughskin: {
 		name: "Peau Dure",
-		desc: "Blesse l'attaquant lorsque le Pokémon subit une attaque directe.",
+		// Official flavor text: "Blesse l'attaquant lorsque le Pokémon subit une attaque directe."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1541,12 +1677,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandforce: {
 		name: "Force Sable",
-		desc: "Augmente la puissance des capacités de types Roche, Sol et Acier en cas de tempête de sable.",
+		// Official flavor text: "Augmente la puissance des capacités de types Roche, Sol et Acier en cas de tempête de sable."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandrush: {
 		name: "Baigne Sable",
-		desc: "Augmente la Vitesse lors des tempêtes de sable.",
+		// Official flavor text: "Augmente la Vitesse lors des tempêtes de sable."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandspit: {
@@ -1562,17 +1700,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sandveil: {
 		name: "Voile Sable",
-		desc: "Augmente l'Esquive du Pokémon lors des tempêtes de sable.",
+		// Official flavor text: "Augmente l'Esquive du Pokémon lors des tempêtes de sable."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sapsipper: {
 		name: "Herbivore",
-		desc: "Annule les attaques de type Plante subies par le Pokémon et augmente son Attaque.",
+		// Official flavor text: "Annule les attaques de type Plante subies par le Pokémon et augmente son Attaque."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	schooling: {
 		name: "Banc",
-		desc: "Le Pokémon se rassemble avec ses congénères quand ses PV sont élevés. Quand il ne lui reste plus beaucoup de PV, le banc se disperse.",
+		// Official flavor text: "Le Pokémon se rassemble avec ses congénères quand ses PV sont élevés. Quand il ne lui reste plus beaucoup de PV, le banc se disperse."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		transform: "[POKEMON] forme un banc !",
@@ -1580,7 +1721,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	scrappy: {
 		name: "Querelleur",
-		desc: "Permet aux capacités de type Normal ou Combat du Pokémon de toucher les Pokémon de type Spectre. Immunise aussi contre le talent Intimidation.",
+		// Official flavor text: "Permet aux capacités de type Normal ou Combat du Pokémon de toucher les Pokémon de type Spectre. Immunise aussi contre le talent Intimidation."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1597,7 +1739,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	serenegrace: {
 		name: "Sérénité",
-		desc: "Augmente les chances d'infliger des effets additionnels.",
+		// Official flavor text: "Augmente les chances d'infliger des effets additionnels."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1609,7 +1752,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shadowtag: {
 		name: "Marque Ombre",
-		desc: "Empêche les Pokémon ennemis de quitter le terrain.",
+		// Official flavor text: "Empêche les Pokémon ennemis de quitter le terrain."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1633,12 +1777,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shedskin: {
 		name: "Mue",
-		desc: "Le Pokémon soigne parfois ses altérations de statut en muant.",
+		// Official flavor text: "Le Pokémon soigne parfois ses altérations de statut en muant."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sheerforce: {
 		name: "Sans Limite",
-		desc: "Les capacités ayant un effet additionnel le perdent, mais leur puissance augmente.",
+		// Official flavor text: "Les capacités ayant un effet additionnel le perdent, mais leur puissance augmente."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1656,7 +1802,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shielddust: {
 		name: "Écran Poudre",
-		desc: "Le Pokémon dispose d'un écran naturel qui le protège des effets additionnels des attaques ennemies.",
+		// Official flavor text: "Le Pokémon dispose d'un écran naturel qui le protège des effets additionnels des attaques ennemies."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1676,7 +1823,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	shieldsdown: {
 		name: "Bouclier-Carcan",
-		desc: "Lorsque le Pokémon perd la moitié de ses PV, son enveloppe se brise et il adopte une posture offensive.",
+		// Official flavor text: "Lorsque le Pokémon perd la moitié de ses PV, son enveloppe se brise et il adopte une posture offensive."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		transform: "Le talent Bouclier-Carcan s’active !",
@@ -1698,7 +1846,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	skilllink: {
 		name: "Multi-Coups",
-		desc: "Les capacités pouvant frapper plusieurs fois frappent toujours le nombre maximal de coups.",
+		// Official flavor text: "Les capacités pouvant frapper plusieurs fois frappent toujours le nombre maximal de coups."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1733,7 +1882,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	snowcloak: {
 		name: "Rideau Neige",
-		desc: "Augmente l'Esquive du Pokémon quand il neige.",
+		// Official flavor text: "Augmente l'Esquive du Pokémon quand il neige."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1749,7 +1899,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	solarpower: {
 		name: "Force Soleil",
-		desc: "Quand le soleil brille, l'Attaque Spéciale du Pokémon augmente mais il perd des PV à chaque tour.",
+		// Official flavor text: "Quand le soleil brille, l'Attaque Spéciale du Pokémon augmente mais il perd des PV à chaque tour."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1778,7 +1929,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	speedboost: {
 		name: "Turbo",
-		desc: "La Vitesse du Pokémon augmente à chaque tour.",
+		// Official flavor text: "La Vitesse du Pokémon augmente à chaque tour."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	spicyspray: {
@@ -1803,7 +1955,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stancechange: {
 		name: "Déclic Tactique",
-		desc: "Le Pokémon prend la Forme Assaut lorsqu’il utilise une capacité offensive, et la Forme Parade lorsqu’il utilise Bouclier Royal.",
+		// Official flavor text: "Le Pokémon prend la Forme Assaut lorsqu’il utilise une capacité offensive, et la Forme Parade lorsqu’il utilise Bouclier Royal."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1829,7 +1982,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	steamengine: {
 		name: "Turbine",
-		desc: "Lorsque le Pokémon est touché par des capacités de type Eau ou Feu, sa Vitesse augmente énormément.",
+		// Official flavor text: "Lorsque le Pokémon est touché par des capacités de type Eau ou Feu, sa Vitesse augmente énormément."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelworker: {
@@ -1838,12 +1992,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	steelyspirit: {
 		name: "Boost Acier",
-		desc: "Augmente la puissance des attaques de type Acier du Pokémon et de ses alliés.",
+		// Official flavor text: "Augmente la puissance des attaques de type Acier du Pokémon et de ses alliés."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stench: {
 		name: "Puanteur",
-		desc: "Le Pokémon émet une odeur si nauséabonde qu'il peut effrayer sa cible en l'attaquant.",
+		// Official flavor text: "Le Pokémon émet une odeur si nauséabonde qu'il peut effrayer sa cible en l'attaquant."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1852,7 +2008,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stickyhold: {
 		name: "Glu",
-		desc: "Les objets sont collés au corps gluant du Pokémon, ce qui empêche ses adversaires de les dérober.",
+		// Official flavor text: "Les objets sont collés au corps gluant du Pokémon, ce qui empêche ses adversaires de les dérober."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1862,7 +2019,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	stormdrain: {
 		name: "Lavabo",
-		desc: "Le Pokémon détourne sur lui les capacités de type Eau et les neutralise, tout en augmentant son Attaque Spéciale.",
+		// Official flavor text: "Le Pokémon détourne sur lui les capacités de type Eau et les neutralise, tout en augmentant son Attaque Spéciale."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1873,12 +2031,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	strongjaw: {
 		name: "Prognathe",
-		desc: "Le Pokémon a une mâchoire robuste qui augmente la puissance de ses capacités de morsure.",
+		// Official flavor text: "Le Pokémon a une mâchoire robuste qui augmente la puissance de ses capacités de morsure."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sturdy: {
 		name: "Fermeté",
-		desc: "Le Pokémon encaisse toujours au moins une attaque s’il a tous ses PV. Il est également immunisé contre les capacités pouvant mettre K.O. en un coup.",
+		// Official flavor text: "Le Pokémon encaisse toujours au moins une attaque s’il a tous ses PV. Il est également immunisé contre les capacités pouvant mettre K.O. en un coup."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1905,7 +2065,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Général Suprême",
-		desc: "Quand le Pokémon entre sur le terrain, son Attaque et son Attaque Spéciale augmentent légèrement pour chaque allié mis K.O. auparavant.",
+		// Official flavor text: "Quand le Pokémon entre sur le terrain, son Attaque et son Attaque Spéciale augmentent légèrement pour chaque allié mis K.O. auparavant."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] reçoit la puissance de ses alliés mis K.O. !",
@@ -1916,7 +2077,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	swarm: {
 		name: "Essaim",
-		desc: "Augmente la puissance des capacités de type Insecte du Pokémon quand il a perdu une certaine quantité de PV.",
+		// Official flavor text: "Augmente la puissance des capacités de type Insecte du Pokémon quand il a perdu une certaine quantité de PV."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1925,14 +2087,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sweetveil: {
 		name: "Gluco-Voile",
-		desc: "Le Pokémon et ses alliés ne peuvent pas s’endormir.",
+		// Official flavor text: "Le Pokémon et ses alliés ne peuvent pas s’endormir."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  Gluco-Voile empêche [POKEMON] de dormir !",
 	},
 	swiftswim: {
 		name: "Glissade",
-		desc: "Augmente la Vitesse du Pokémon s'il pleut.",
+		// Official flavor text: "Augmente la Vitesse du Pokémon s'il pleut."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1946,7 +2110,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	symbiosis: {
 		name: "Symbiose",
-		desc: "Quand les alliés utilisent l’objet qu’ils tiennent, le Pokémon leur donne l’objet qu’il tient en remplacement.",
+		// Official flavor text: "Quand les alliés utilisent l’objet qu’ils tiennent, le Pokémon leur donne l’objet qu’il tient en remplacement."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1959,7 +2124,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	synchronize: {
 		name: "Synchro",
-		desc: "Quand le Pokémon est brûlé, paralysé ou empoisonné par un autre Pokémon, il partage ce statut avec celui-ci.",
+		// Official flavor text: "Quand le Pokémon est brûlé, paralysé ou empoisonné par un autre Pokémon, il partage ce statut avec celui-ci."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1981,7 +2147,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	technician: {
 		name: "Technicien",
-		desc: "Augmente la puissance des capacités les plus faibles.",
+		// Official flavor text: "Augmente la puissance des capacités les plus faibles."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2000,7 +2167,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	terashell: {
 		name: "Téra-Carapace",
-		desc: "Grâce à sa carapace qui renferme l’énergie de tous les types, les capacités subies par ce Pokémon quand ses PV sont au maximum ne sont pas très efficaces.",
+		// Official flavor text: "Grâce à sa carapace qui renferme l’énergie de tous les types, les capacités subies par ce Pokémon quand ses PV sont au maximum ne sont pas très efficaces."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] fait briller sa carapace et fausse les affinités de type !",
@@ -2013,7 +2181,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	teravolt: {
 		name: "Téra-Voltage",
-		desc: "Le Pokémon ignore les talents adverses qui auraient un effet sur ses capacités.",
+		// Official flavor text: "Le Pokémon ignore les talents adverses qui auraient un effet sur ses capacités."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2035,12 +2204,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	thermalexchange: {
 		name: "Thermodynamique",
-		desc: "Lorsque le Pokémon est touché par une capacité de type Feu, son Attaque augmente. Il ne peut pas être brûlé.",
+		// Official flavor text: "Lorsque le Pokémon est touché par une capacité de type Feu, son Attaque augmente. Il ne peut pas être brûlé."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	thickfat: {
 		name: "Isograisse",
-		desc: "Le Pokémon est protégé par une épaisse couche de graisse qui diminue de moitié les dégâts qu'il subit des capacités de types Feu et Glace.",
+		// Official flavor text: "Le Pokémon est protégé par une épaisse couche de graisse qui diminue de moitié les dégâts qu'il subit des capacités de types Feu et Glace."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2057,7 +2228,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	torrent: {
 		name: "Torrent",
-		desc: "Augmente la puissance des capacités de type Eau du Pokémon quand il a perdu une certaine quantité de PV.",
+		// Official flavor text: "Augmente la puissance des capacités de type Eau du Pokémon quand il a perdu une certaine quantité de PV."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen4: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2070,12 +2242,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	toxicboost: {
 		name: "Rage Poison",
-		desc: "Augmente la puissance des capacités physiques quand le Pokémon est empoisonné.",
+		// Official flavor text: "Augmente la puissance des capacités physiques quand le Pokémon est empoisonné."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	toxicchain: {
 		name: "Chaîne Toxique",
-		desc: "Grâce aux pouvoirs de sa chaîne imprégnée de toxines, le Pokémon peut empoisonner gravement sa cible en la touchant avec une capacité.",
+		// Official flavor text: "Grâce aux pouvoirs de sa chaîne imprégnée de toxines, le Pokémon peut empoisonner gravement sa cible en la touchant avec une capacité."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	toxicdebris: {
@@ -2084,7 +2258,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	trace: {
 		name: "Calque",
-		desc: "Lorsque le Pokémon entre au combat, il calque le talent d'un ennemi pour remplacer le sien.",
+		// Official flavor text: "Lorsque le Pokémon entre au combat, il calque le talent d'un ennemi pour remplacer le sien."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2129,7 +2304,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	turboblaze: {
 		name: "Turbo Brasier",
-		desc: "Le Pokémon ignore les talents adverses qui auraient un effet sur ses capacités.",
+		// Official flavor text: "Le Pokémon ignore les talents adverses qui auraient un effet sur ses capacités."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2151,17 +2327,20 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	unaware: {
 		name: "Inconscient",
-		desc: "Le Pokémon ignore les changements de stats des autres Pokémon, qu'il attaque ou soit attaqué.",
+		// Official flavor text: "Le Pokémon ignore les changements de stats des autres Pokémon, qu'il attaque ou soit attaqué."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	unburden: {
 		name: "Délestage",
-		desc: "Augmente la Vitesse du Pokémon s'il perd ou utilise l'objet qu'il tenait au début du combat.",
+		// Official flavor text: "Augmente la Vitesse du Pokémon s'il perd ou utilise l'objet qu'il tenait au début du combat."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	unnerve: {
 		name: "Tension",
-		desc: "Fait stresser l’adversaire, ce qui l’empêche de manger des Baies.",
+		// Official flavor text: "Fait stresser l’adversaire, ce qui l’empêche de manger des Baies."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [TEAM:capitalize] est tendue et ne peut plus manger de Baies !",
@@ -2189,7 +2368,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	voltabsorb: {
 		name: "Absorbe-Volt",
-		desc: "Si le Pokémon est touché par une capacité Électrik, il ne subit aucun dégât et regagne des PV à la place.",
+		// Official flavor text: "Si le Pokémon est touché par une capacité Électrik, il ne subit aucun dégât et regagne des PV à la place."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen3: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2198,7 +2378,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wanderingspirit: {
 		name: "Âme Vagabonde",
-		desc: "Lorsque le Pokémon est directement touché par une capacité, il échange son talent avec celui de l’assaillant.",
+		// Official flavor text: "Lorsque le Pokémon est directement touché par une capacité, il échange son talent avec celui de l’assaillant."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2208,12 +2389,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	waterabsorb: {
 		name: "Absorbe-Eau",
-		desc: "Si le Pokémon est touché par une capacité Eau, il ne subit aucun dégât et regagne des PV à la place.",
+		// Official flavor text: "Si le Pokémon est touché par une capacité Eau, il ne subit aucun dégât et regagne des PV à la place."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	waterbubble: {
 		name: "Aquabulle",
-		desc: "Réduit la puissance des capacités de type Feu subies par le Pokémon. Il est également immunisé contre les brûlures.",
+		// Official flavor text: "Réduit la puissance des capacités de type Feu subies par le Pokémon. Il est également immunisé contre les brûlures."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watercompaction: {
@@ -2226,7 +2409,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	weakarmor: {
 		name: "Armurouillée",
-		desc: "Quand le Pokémon est touché par une capacité physique, sa Défense baisse mais sa Vitesse augmente beaucoup.",
+		// Official flavor text: "Quand le Pokémon est touché par une capacité physique, sa Défense baisse mais sa Vitesse augmente beaucoup."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen6: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2235,7 +2419,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wellbakedbody: {
 		name: "Bien Cuit",
-		desc: "Si le Pokémon est touché par une capacité de type Feu, il ne subit aucun dégât et sa Défense augmente beaucoup.",
+		// Official flavor text: "Si le Pokémon est touché par une capacité de type Feu, il ne subit aucun dégât et sa Défense augmente beaucoup."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	whitesmoke: {
@@ -2244,19 +2429,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wimpout: {
 		name: "Escampette",
-		desc: "Le Pokémon perd confiance quand ses PV tombent à la moitié et s’enfuit dans sa Poké Ball.",
+		// Official flavor text: "Le Pokémon perd confiance quand ses PV tombent à la moitié et s’enfuit dans sa Poké Ball."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	windpower: {
 		name: "Turbine Éolienne",
-		desc: "Si le Pokémon est touché par une capacité faisant appel au vent, il se charge en électricité.",
+		// Official flavor text: "Si le Pokémon est touché par une capacité faisant appel au vent, il se charge en électricité."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#electromorphosis",
 	},
 	windrider: {
 		name: "Aéroporté",
-		desc: "L’Attaque du Pokémon augmente si un vent arrière souffle ou s’il est touché par une capacité faisant appel au vent. Dans ce dernier cas, il ne subit aucun dégât.",
+		// Official flavor text: "L’Attaque du Pokémon augmente si un vent arrière souffle ou s’il est touché par une capacité faisant appel au vent. Dans ce dernier cas, il ne subit aucun dégât."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wonderguard: {
@@ -2271,12 +2459,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	wonderskin: {
 		name: "Peau Miracle",
-		desc: "Le Pokémon résiste mieux aux capacités de statut.",
+		// Official flavor text: "Le Pokémon résiste mieux aux capacités de statut."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	zenmode: {
 		name: "Mode Transe",
-		desc: "Le Pokémon change de forme quand il lui reste moins de la moitié de ses PV.",
+		// Official flavor text: "Le Pokémon change de forme quand il lui reste moins de la moitié de ses PV."
+		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
