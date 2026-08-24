@@ -3199,9 +3199,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', '!Obtainable Abilities', 'Terastal Clause'],
 		banlist: [
-			'Calyrex-Shadow', 'Slaking', 'Arena Trap', 'Comatose', 'Contrary', 'Good as Gold', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Imposter', 'Innards Out',
-			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Toxic Debris', 'Water Bubble',
-			'Wonder Guard', 'Baton Pass',
+			'Calyrex-Shadow', 'Miraidon', 'Slaking', 'Arena Trap', 'Comatose', 'Contrary', 'Good as Gold', 'Gorilla Tactics', 'Huge Power', 'Illusion', 'Imposter',
+			'Innards Out', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Parental Bond', 'Pure Power', 'Shadow Tag', 'Simple', 'Stakeout', 'Speed Boost', 'Toxic Debris',
+			'Water Bubble', 'Wonder Guard', 'Baton Pass',
 		],
 	},
 	{
