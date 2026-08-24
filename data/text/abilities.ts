@@ -1095,7 +1095,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate.",
 		},
 		gen4: {
-			shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate. This Pokemon cannot lose its held item due to another Pokemon's attack.",
+			desc: "If this Pokemon is an Arceus, its type changes to match its held Plate. This Pokemon cannot lose its held item due to another Pokemon's attack.",
 		},
 	},
 	mummy: {

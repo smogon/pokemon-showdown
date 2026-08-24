@@ -15,6 +15,11 @@ Translation notes
 `shortDesc` and `statShortName` needs to fit in a dex chart row (teambuilder list).
 Moves have extremely low space, so you'll need to account for that.
 
+Approximate limits:
+- move `shortDesc`: at most ~55 Latin characters (~27 CJK); ideally ~45 (~25)
+- ability and item `shortDesc`: at most ~85 Latin characters (~42 CJK)
+- `statShortName`: at most 3 Latin letters or 2 CJK characters
+
 Untranslated text
 -----------------
 
@@ -35,8 +40,8 @@ Languages can add modifiers using colons:
 
 Modifiers used by Pokémon's battle text:
 
-- `definite` - add the appropriate definite article (English "the")
-- `indefinite` - add the appropriate indefinite article (English "a" or "an")
+- `definite` - prepend the appropriate definite article (English "the")
+- `indefinite` - prepend the appropriate indefinite article (English "a" or "an")
 - `nominative` - use the nominative case (like English "I")
 - `accusative` - use the accusative case (like English "me")
 - `singular` - force singular grammatical agreement
@@ -44,17 +49,17 @@ Modifiers used by Pokémon's battle text:
 - `masculine` - force masculine grammatical agreement
 - `capitalize` - capitalize the generated grammatical form
 - `classified` - use Pokémon's `ItemClassified` form instead of its ordinary item-name form
-- `a` - add French, Italian, or Spanish `a`/`à`, including contractions or elision
-- `de` - add French or Spanish `de`, including contractions or elision
-- `di` - add Italian `di`, including contractions
-- `su` - add Italian `su`, including contractions
-- `e` - select Italian `e` or `ed`
-- `y` - select Spanish `y` or `e`
-- `topic` - add the Korean topic particle `은` or `는`
-- `object` - add the Korean object particle `을` or `를`
-- `subject` - add the Korean subject particle `이` or `가`
-- `conjunctive` - add the Korean conjunctive particle `과` or `와`
-- `directional` - add the Korean directional particle `으로` or `로`
+- `a` - prepend French, Italian, or Spanish `a`/`à`, including contractions or elision
+- `de` - prepend French or Spanish `de`, including contractions or elision
+- `di` - prepend Italian `di`, including contractions
+- `su` - prepend Italian `su`, including contractions
+- `e` - prepend Italian `e` or `ed`
+- `y` - prepend Spanish `y` or `e`
+- `topic` - append the Korean topic particle `은` or `는`
+- `object` - append the Korean object particle `을` or `를`
+- `subject` - append the Korean subject particle `이` or `가`
+- `conjunctive` - append the Korean conjunctive particle `과` or `와`
+- `directional` - append the Korean directional particle `으로` or `로`
 
 Modifiers can be in any order.
 
