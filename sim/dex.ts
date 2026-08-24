@@ -531,13 +531,25 @@ export class ModdedDex {
 		if (dexes['base'].rawTextCache[lang]) return dexes['base'].rawTextCache[lang];
 		const langDir = lang === 'en' ? `` : `${lang}/`;
 		const optional = lang !== 'en';
-		return (dexes['base'].rawTextCache[lang] = {
+		const data = {
 			Pokedex: this.loadTextFile(`${langDir}pokedex`, 'PokedexText', optional) as DexTable<PokedexText>,
 			Moves: this.loadTextFile(`${langDir}moves`, 'MovesText', optional) as DexTable<MoveText>,
 			Abilities: this.loadTextFile(`${langDir}abilities`, 'AbilitiesText', optional) as DexTable<AbilityText>,
 			Items: this.loadTextFile(`${langDir}items`, 'ItemsText', optional) as DexTable<ItemText>,
 			Default: this.loadTextFile(`${langDir}default`, 'DefaultText', optional) as DexTable<DefaultText>,
-		});
+		};
+		if (lang !== 'en') this.validateTranslations(data, lang);
+		return (dexes['base'].rawTextCache[lang] = data);
+	}
+
+	private validateTranslations(value: unknown, lang: string, keyPath = ''): void {
+		if (value === '') {
+			throw new Error(`${lang} translation ${keyPath} must use null to fall back to English`);
+		}
+		if (!value || typeof value !== 'object') return;
+		for (const [key, child] of Object.entries(value)) {
+			this.validateTranslations(child, lang, keyPath ? `${keyPath}.${key}` : key);
+		}
 	}
 
 	private resolveTextTable<T extends AbilityText | ItemText | MoveText | PokedexText>(
@@ -553,7 +565,7 @@ export class ModdedDex {
 			const localizedShortDesc = this.resolveTextField(localizedEntry, englishEntry, 'shortDesc');
 			table[id] = {
 				...(localizedEntry || englishEntry),
-				name: localizedEntry?.name || englishEntry.name,
+				name: localizedEntry?.name ?? englishEntry.name,
 				desc: localizedDesc || englishDesc || localizedShortDesc || englishShortDesc,
 				shortDesc: localizedShortDesc || englishShortDesc || localizedDesc || englishDesc,
 			} as ResolvedText<T>;

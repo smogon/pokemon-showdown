@@ -36,7 +36,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "[POKEMON]の ゲンシカイキ！ 原始の姿を 取り戻した！",
 		zPower: "  [POKEMON]は Ｚパワーを 身体に まとった！",
 		zBroken: "  [POKEMON]は 攻撃を 守りきれずに ダメージを 受けた！",
-		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
@@ -52,22 +52,22 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  [POKEMON]は [EFFECT]で [TYPE]タイプに なった！",
 		typeAdd: "  [POKEMON]に [TYPE]タイプが 追加された！",
 
-		start: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
 		end: "  [POKEMON]は [EFFECT]から 解放された！",
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
 
 		changeAbility: "  [POKEMON]は [ABILITY]に なった！",
 		addItem: "  [POKEMON]は [ITEM]を 手に入れた！",
 		takeItem: "  [POKEMON]は [SOURCE]から [ITEM]を 奪い取った！",
-		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
 		useGem: "  [ITEM]は [MOVE]の 威力を 強めた！",
 		eatItemWeaken: "  [POKEMON]への ダメージを [ITEM]が 弱めた！",
-		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
-		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
+		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
 		activateWeaken: "  [POKEMON]への ダメージを [ITEM]が 弱めた！",
 
 		damage: "  ([POKEMON]は ダメージを 受けた！)",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  [POKEMON]の [STAT]が がくっと下がった！",
 		unboost3: "  [POKEMON]の [STAT]が がくーんと下がった！",
 		unboost0: "  [POKEMON]の [STAT]は もう 下がらない！",
-		unboostFromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
 
 		swapBoost: "  [POKEMON]は 相手と自分の 能力変化を 入れ替えた！",
 		swapOffensiveBoost: "  [POKEMON]は 相手と自分の 攻撃と 特攻の 能力変化を 入れ替えた！",
@@ -259,8 +259,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON]は もう 逃げられない！",
 	},
 	dynamax: {
-		start: "", // NEEDS TRANSLATION: Showdown custom text
-		end: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
+		end: null, // NEEDS TRANSLATION: Showdown custom text
 		block: "  ダイマックスの ちからで はじかれた！",
 		fail: "  [POKEMON]は 首を 横に振った この技を しかけることが できないようだ……",
 	},

@@ -36,13 +36,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "[POKEMON]的原始回归！恢复了原始的样子！",
 		zPower: "  [POKEMON]让Ｚ力量笼罩了全身！",
 		zBroken: "  [POKEMON]没能防住攻击，受到了伤害！",
-		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "[POKEMON]无法使用[MOVE]！",
-		cantNoMove: "", // NEEDS TRANSLATION: predates Chinese support
+		cantNoMove: null, // NEEDS TRANSLATION: predates Chinese support
 		fail: "  但是，没有起到效果！！",
 
 		// n.b. this is the default message for in-battle forme changes
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  [POKEMON]变成了[TYPE]属性！",
 		typeAdd: "  [POKEMON]增加了[TYPE]属性！",
 
-		start: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
 		end: "  [POKEMON]摆脱了[EFFECT]的束缚！",
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
 
 		changeAbility: "  [POKEMON]的特性变为[ABILITY]了！",
 		addItem: "  [POKEMON]获得了[ITEM]！",
 		takeItem: "  [POKEMON]从[SOURCE]那里夺取了[ITEM]！",
-		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
 		useGem: "  [ITEM]加强了[MOVE]的威力！",
 		eatItemWeaken: "  [ITEM]减轻了对[POKEMON]造成的伤害！",
-		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
-		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
+		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
 		activateWeaken: "  [ITEM]减轻了对[POKEMON]造成的伤害！",
 
 		damage: "  ([POKEMON]受到了伤害！)",
-		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: null, // NEEDS TRANSLATION: Showdown custom text
 		damageFromPokemon: "  [POKEMON]因[SOURCE]的[ITEM]而受到了伤害！",
 		damageFromItem: "  [POKEMON]因[ITEM]而受到了伤害！",
 		damageFromPartialTrapping: "  [POKEMON]受到了[MOVE]的伤害。",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  [POKEMON]的[STAT]大幅降低了！",
 		unboost3: "  [POKEMON]的[STAT]巨幅降低了！",
 		unboost0: "  [POKEMON]的[STAT]已经无法再降低了！",
-		unboostFromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
 
 		swapBoost: "  [POKEMON]和对手互换了自己的能力变化！",
 		swapOffensiveBoost: "  [POKEMON]和对手互换了自己的攻击和特攻的能力变化！",
@@ -122,10 +122,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		immuneNoPokemon: "  但是，没有效果！",
 		immuneOHKO: "  对于[POKEMON]，完全没有效果！",
 		miss: "  没有击中[POKEMON]！",
-		missNoPokemon: "", // NEEDS TRANSLATION: predates Chinese support
+		missNoPokemon: null, // NEEDS TRANSLATION: predates Chinese support
 
 		center: "  复位移动！！",
-		noTarget: "", // NEEDS TRANSLATION: predates Chinese support
+		noTarget: null, // NEEDS TRANSLATION: predates Chinese support
 		ohko: "  一击必杀！",
 		combine: "  两个招式合二为一！这是合体招式！！",
 		hitCount: "  击中了[NUMBER]次！",
@@ -138,23 +138,23 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	atk: {
 		statName: "攻击",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	def: {
 		statName: "防御",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spa: {
 		statName: "特攻",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spd: {
 		statName: "特防",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spe: {
 		statName: "速度",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	accuracy: {
 		statName: "命中率",
@@ -164,7 +164,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	spc: {
 		statName: "特殊",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	stats: {
 		statName: "状态",
@@ -259,8 +259,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON]已经无法逃走了！",
 	},
 	dynamax: {
-		start: "", // NEEDS TRANSLATION: Showdown custom text
-		end: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
+		end: null, // NEEDS TRANSLATION: Showdown custom text
 		block: "  被极巨化之力弹开了！",
 		fail: "  [POKEMON]摇了摇头，好像无法使出这个招式……",
 	},
@@ -277,13 +277,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "大晴天状态",
 		start: "  日照变强了！",
 		end: "  日照复原了！",
-		upkeep: "", // NEEDS TRANSLATION: predates Chinese support
+		upkeep: null, // NEEDS TRANSLATION: predates Chinese support
 	},
 	raindance: {
 		weatherName: "下雨状态",
 		start: "  开始下雨了！",
 		end: "  雨停了！",
-		upkeep: "", // NEEDS TRANSLATION: predates Chinese support
+		upkeep: null, // NEEDS TRANSLATION: predates Chinese support
 	},
 	hail: {
 		weatherName: "冰雹",

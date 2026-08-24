@@ -9,6 +9,18 @@ Translated battle messages in Champions sourced from projectpokemon/champout com
 
 Translated battle messages from oldgens sourced from abcboy101/poke-corpus commit 9dbc7fdc8bf49042d8ae47a42fed67c94903a4b5
 
+Translation notes
+-----------------
+
+`shortDesc` and `statShortName` needs to fit in a dex chart row (teambuilder list).
+Moves have extremely low space, so you'll need to account for that.
+
+Untranslated text
+-----------------
+
+Use `null` when a localized string still needs translation. It falls back to the
+English text. Empty strings are invalid and cause text loading to fail.
+
 Battle message grammar
 ----------------------
 

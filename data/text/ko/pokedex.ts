@@ -3498,172 +3498,172 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 		name: "MissingNo.",
 	},
 	syclar: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	syclant: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	revenankh: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	embirch: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	flarelm: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	pyroak: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	breezi: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	fidgit: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	rebble: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	tactite: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	stratagem: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	privatyke: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	arghonaut: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	kitsunoh: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	cyclohm: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	colossoil: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	krilowatt: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	voodoll: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	voodoom: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	scratchet: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	tomohawk: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	necturine: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	necturna: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	mollux: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	cupra: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	argalis: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	aurumoth: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	brattler: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	malaconda: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	cawdet: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	cawmodore: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	volkritter: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	volkraken: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	snugglow: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	plasmanta: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	floatoy: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	caimanoe: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	naviathan: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	crucibelle: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	crucibellemega: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	pluffle: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	kerfluffle: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	pajantom: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	mumbao: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	jumbao: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	fawnifer: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	electrelk: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	caribolt: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	smogecko: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	smoguana: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	smokomodo: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	swirlpool: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	coribalis: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	snaelstrom: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	equilibra: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	astrolotl: {
-		name: "", // NEEDS TRANSLATION: Showdown custom text
+		name: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	pokestarsmeargle: {
 		name: "포켓우드 루브도2",

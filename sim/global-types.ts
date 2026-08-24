@@ -418,10 +418,12 @@ interface PlayerOptions {
 	seed?: PRNGSeed;
 }
 
+type TranslationString = string | null;
+
 interface BasicTextData {
-	desc?: string;
-	shortDesc?: string;
-	grammar?: string;
+	desc?: TranslationString;
+	shortDesc?: TranslationString;
+	grammar?: TranslationString;
 	articleRule?: 'stressed-a';
 	classified?: {
 		name: string,
@@ -430,42 +432,42 @@ interface BasicTextData {
 	};
 }
 interface ConditionTextData extends BasicTextData {
-	activate?: string;
-	addItem?: string;
-	block?: string;
-	boost?: string;
-	cant?: string;
-	changeAbility?: string;
-	damage?: string;
-	end?: string;
-	heal?: string;
-	move?: string;
-	start?: string;
-	transform?: string;
+	activate?: TranslationString;
+	addItem?: TranslationString;
+	block?: TranslationString;
+	boost?: TranslationString;
+	cant?: TranslationString;
+	changeAbility?: TranslationString;
+	damage?: TranslationString;
+	end?: TranslationString;
+	heal?: TranslationString;
+	move?: TranslationString;
+	start?: TranslationString;
+	transform?: TranslationString;
 }
 
 interface MoveTextData extends ConditionTextData {
-	alreadyStarted?: string;
-	blockSelf?: string;
-	clearBoost?: string;
-	endFromItem?: string;
-	fail?: string;
-	failSelect?: string;
-	failTooHeavy?: string;
-	failWrongForme?: string;
-	megaNoItem?: string;
-	prepare?: string;
-	removeItem?: string;
-	startFromItem?: string;
-	startFromZEffect?: string;
-	switchOut?: string;
-	takeItem?: string;
-	typeChange?: string;
-	upkeep?: string;
+	alreadyStarted?: TranslationString;
+	blockSelf?: TranslationString;
+	clearBoost?: TranslationString;
+	endFromItem?: TranslationString;
+	fail?: TranslationString;
+	failSelect?: TranslationString;
+	failTooHeavy?: TranslationString;
+	failWrongForme?: TranslationString;
+	megaNoItem?: TranslationString;
+	prepare?: TranslationString;
+	removeItem?: TranslationString;
+	startFromItem?: TranslationString;
+	startFromZEffect?: TranslationString;
+	switchOut?: TranslationString;
+	takeItem?: TranslationString;
+	typeChange?: TranslationString;
+	upkeep?: TranslationString;
 }
 
 type TextFile<T> = T & {
-	name: string,
+	name: TranslationString,
 	gen1?: T,
 	gen2?: T,
 	gen3?: T,
@@ -478,17 +480,17 @@ type TextFile<T> = T & {
 };
 
 type AbilityText = TextFile<ConditionTextData & {
-	activateFromItem?: string,
-	activateNoTarget?: string,
-	copyBoost?: string,
-	transformEnd?: string,
+	activateFromItem?: TranslationString,
+	activateNoTarget?: TranslationString,
+	copyBoost?: TranslationString,
+	transformEnd?: TranslationString,
 }>;
 type MoveText = TextFile<MoveTextData>;
 type ItemText = TextFile<ConditionTextData>;
 type PokedexText = TextFile<BasicTextData>;
 type DefaultText = AnyObject;
 
-type ResolvedText<T extends BasicTextData> = T & { desc: string, shortDesc: string };
+type ResolvedText<T extends BasicTextData> = T & { name: string, desc: string, shortDesc: string };
 type ResolvedAbilityText = ResolvedText<AbilityText>;
 type ResolvedItemText = ResolvedText<ItemText>;
 type ResolvedMoveText = ResolvedText<MoveText>;

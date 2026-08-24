@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		winBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		tieBattle: "", // NEEDS TRANSLATION: Showdown custom text
+		startBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		winBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		tieBattle: null, // NEEDS TRANSLATION: Showdown custom text
 
 		pokemon: "[NICKNAME]",
 		opposingPokemon: "[NICKNAME] avversario",
@@ -36,7 +36,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "[POKEMON] si è archeorisvegliato! È tornato alla sua forma originaria!",
 		zPower: "  Il Potere Z circonda [POKEMON] come un’aura!",
 		zBroken: "  La protezione fallisce! [POKEMON] subisce dei danni!",
-		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  [EFFECT] di [POKEMON] lo ha reso di tipo [TYPE]!",
 		typeAdd: "  Adesso [POKEMON] è anche di tipo [TYPE]!",
 
-		start: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
 		end: "  [POKEMON] si è liberato da [EFFECT]!",
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
 
 		changeAbility: "  L’abilità di [POKEMON] è ora [ABILITY]!",
 		addItem: "  [POKEMON] ottiene [ITEM:indefinite:classified]!",
 		takeItem: "  [POKEMON] ruba [ITEM:definite:classified] di [SOURCE]!",
-		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
 		useGem: "  [ITEM:definite:capitalize:classified] incrementa la potenza di [MOVE]!",
 		eatItemWeaken: "  I danni inflitti [POKEMON:a] vengono ridotti d[ITEM:a:definite:classified]!",
-		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
-		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
+		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
 		activateWeaken: "  I danni inflitti [POKEMON:a] vengono ridotti d[ITEM:a:definite:classified]!",
 
 		damage: "  ([POKEMON] è ferito!)",
-		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: null, // NEEDS TRANSLATION: Showdown custom text
 		damageFromPokemon: "  [ITEM:definite:capitalize] di [SOURCE] ferisc[INFLECT:ITEM:s=e:p=ono] [POKEMON]!",
 		damageFromItem: "  [POKEMON] subisce dei danni a causa [ITEM:di:definite]!",
 		damageFromPartialTrapping: "  [POKEMON] subisce i danni della mossa [MOVE]!",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  [STAT:definite:capitalize] di [POKEMON] diminuisce di molto!",
 		unboost3: "  [STAT:definite:capitalize] di [POKEMON] cala drasticamente!",
 		unboost0: "  [STAT:definite:capitalize] di [POKEMON] non può diminuire di più!",
-		unboostFromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
 
 		swapBoost: "  [POKEMON] scambia con il bersaglio le modifiche alle statistiche!",
 		swapOffensiveBoost: "  [POKEMON] scambia con il bersaglio le modifiche ad Attacco e Attacco Speciale!",
@@ -139,27 +139,27 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	atk: {
 		statName: "Attacco",
 		grammar: "ms",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	def: {
 		statName: "Difesa",
 		grammar: "fs",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spa: {
 		statName: "Attacco Speciale",
 		grammar: "ms",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spd: {
 		statName: "Difesa Speciale",
 		grammar: "fs",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spe: {
 		statName: "Velocità",
 		grammar: "fs",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	accuracy: {
 		statName: "precisione",
@@ -172,7 +172,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	spc: {
 		statName: "Speciale",
 		grammar: "ms",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	stats: {
 		statName: "Statistiche",
@@ -268,8 +268,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON] non può più scappare!",
 	},
 	dynamax: {
-		start: "", // NEEDS TRANSLATION: Showdown custom text
-		end: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
+		end: null, // NEEDS TRANSLATION: Showdown custom text
 		block: "  La mossa è stata vanificata dalla potenza del fenomeno Dynamax!",
 		fail: "  [POKEMON] scuote il capo. Sembra che non riesca a usare questa mossa...",
 	},

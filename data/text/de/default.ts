@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		winBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		tieBattle: "", // NEEDS TRANSLATION: Showdown custom text
+		startBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		winBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		tieBattle: null, // NEEDS TRANSLATION: Showdown custom text
 
 		pokemon: "[NICKNAME]",
 		opposingPokemon: "[NICKNAME] (Gegner)",
@@ -36,7 +36,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "[POKEMON] hat eine Protomorphose durchgeführt und seine urzeitliche Form zurückerlangt!",
 		zPower: "  [POKEMON] hüllt sich in Z-Kraft!",
 		zBroken: "  [POKEMON] konnte den Angriff nicht abwehren und erleidet Schaden!",
-		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  [EFFECT] von [POKEMON] macht es zu einem [TYPE]-Typ!",
 		typeAdd: "  [POKEMON] nimmt zusätzlich den Typ [TYPE] an!",
 
-		start: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
 		end: "  [POKEMON] wurde von [EFFECT] befreit!",
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
 
 		changeAbility: "  [POKEMON] nimmt die Fähigkeit [ABILITY] an!",
 		addItem: "  [POKEMON] erhält das Item [ITEM]!",
 		takeItem: "  [POKEMON] hat [SOURCE] das Item [ITEM] geklaut!",
-		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
 		useGem: "  [ITEM] erhöht die Stärke von [MOVE]!",
 		eatItemWeaken: "  [ITEM] reduziert den Schaden gegen [POKEMON]!",
-		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
-		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
+		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
 		activateWeaken: "  [ITEM] reduziert den Schaden gegen [POKEMON]!",
 
 		damage: "  ([POKEMON] wurde Schaden zugefügt!)",
-		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: null, // NEEDS TRANSLATION: Showdown custom text
 		damageFromPokemon: "  [POKEMON] wird durch das Item [ITEM] von [SOURCE] verletzt!",
 		damageFromItem: "  [POKEMON] wurde durch das Item [ITEM] verletzt!",
 		damageFromPartialTrapping: "  [POKEMON] wurde durch [MOVE] verletzt!",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  [STAT] von [POKEMON] sinkt stark!",
 		unboost3: "  [STAT] von [POKEMON] sinkt drastisch!",
 		unboost0: "  [STAT] von [POKEMON] kann nicht weiter sinken!",
-		unboostFromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
 
 		swapBoost: "  [POKEMON] tauscht die Statusveränderungen mit dem Ziel!",
 		swapOffensiveBoost: "  [POKEMON] tauscht Änderungen an Angriff und Spezial-Angriff mit dem Ziel!",
@@ -139,27 +139,27 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	atk: {
 		statName: "Angriff",
 		grammar: "ms",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	def: {
 		statName: "Verteidigung",
 		grammar: "fs",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spa: {
 		statName: "Spezial-Angriff",
 		grammar: "ms",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spd: {
 		statName: "Spezial-Verteidigung",
 		grammar: "fs",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spe: {
 		statName: "Initiative",
 		grammar: "fs",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	accuracy: {
 		statName: "Genauigkeit",
@@ -172,7 +172,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	spc: {
 		statName: "Spezial",
 		grammar: "ns",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	stats: {
 		statName: "Statuswerte",
@@ -268,8 +268,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON] kann nicht mehr fliehen!",
 	},
 	dynamax: {
-		start: "", // NEEDS TRANSLATION: Showdown custom text
-		end: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
+		end: null, // NEEDS TRANSLATION: Showdown custom text
 		block: "  Die Wirkung der Attacke wurde durch die Dynamax-Energie blockiert!",
 		fail: "  [POKEMON] weigert sich. Es kann diese Attacke wohl nicht einsetzen...",
 	},

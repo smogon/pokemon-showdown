@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		winBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		tieBattle: "", // NEEDS TRANSLATION: Showdown custom text
+		startBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		winBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		tieBattle: null, // NEEDS TRANSLATION: Showdown custom text
 
 		pokemon: "[NICKNAME]",
 		opposingPokemon: "상대 [NICKNAME]",
@@ -36,13 +36,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "[POKEMON]의 원시회귀! 원시의 모습으로 돌아갔다!",
 		zPower: "  [POKEMON:topic] Z파워에 몸이 둘러싸였다!",
 		zBroken: "  [POKEMON:topic] 공격을 막아 내지 못하고 데미지를 입었다!",
-		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "[POKEMON:topic] [MOVE:object] 쓸 수 없다!",
-		cantNoMove: "", // NEEDS TRANSLATION: predates Chinese support
+		cantNoMove: null, // NEEDS TRANSLATION: predates Chinese support
 		fail: "  그러나 실패하고 말았다!!",
 
 		// n.b. this is the default message for in-battle forme changes
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  [POKEMON] [EFFECT] 때문에 [TYPE]타입이 되었다!",
 		typeAdd: "  [POKEMON]에게 [TYPE]타입이 추가되었다!",
 
-		start: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
 		end: "  [POKEMON:topic] [EFFECT:directional]로부터 풀려났다!",
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
 
 		changeAbility: "  [POKEMON:topic] [ABILITY:subject] 되었다!",
 		addItem: "  [POKEMON:topic] [ITEM:object] 손에 넣었다!",
 		takeItem: "  [POKEMON:topic] [SOURCE:directional]로부터 [ITEM:object] 빼앗았다!",
-		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
 		useGem: "  [ITEM:topic] [MOVE]의 위력을 강하게 했다!",
 		eatItemWeaken: "  [POKEMON:subject] 입는 데미지를 [ITEM:subject] 약하게 했다!",
-		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
-		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
+		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
 		activateWeaken: "  [POKEMON:subject] 입는 데미지를 [ITEM:subject] 약하게 했다!",
 
 		damage: "  ([POKEMON] 데미지를 입었다!)",
-		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: null, // NEEDS TRANSLATION: Showdown custom text
 		damageFromPokemon: "  [POKEMON:topic] [SOURCE]의 [ITEM] 때문에 데미지를 입었다!",
 		damageFromItem: "  [POKEMON:topic] [ITEM] 때문에 데미지를 입었다!",
 		damageFromPartialTrapping: "  [POKEMON:topic] [MOVE]의 데미지를 입고 있다.",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  [POKEMON]의 [STAT:subject] 크게 떨어졌다!",
 		unboost3: "  [POKEMON]의 [STAT:subject] 매우 크게 떨어졌다!",
 		unboost0: "  [POKEMON]의 [STAT:topic] 더 떨어지지 않는다!",
-		unboostFromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: "", // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: "", // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
 
 		swapBoost: "  [POKEMON:topic] 상대와 자신의 능력 변화를 바꿨다!",
 		swapOffensiveBoost: "  [POKEMON:topic] 상대와 자신의 공격과 특수공격의 능력 변화를 바꿨다!",
@@ -138,23 +138,23 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	atk: {
 		statName: "공격",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	def: {
 		statName: "방어",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spa: {
 		statName: "특수공격",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spd: {
 		statName: "특수방어",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	spe: {
 		statName: "스피드",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	accuracy: {
 		statName: "명중률",
@@ -164,7 +164,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	spc: {
 		statName: "특수",
-		statShortName: "", // NEEDS TRANSLATION: Showdown custom text
+		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	stats: {
 		statName: "스테이터스",
@@ -259,8 +259,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON:topic] 이제 도망칠 수 없다!",
 	},
 	dynamax: {
-		start: "", // NEEDS TRANSLATION: Showdown custom text
-		end: "", // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION: Showdown custom text
+		end: null, // NEEDS TRANSLATION: Showdown custom text
 		block: "  다이맥스의 힘으로 튕겨 냈다!",
 		fail: "  [POKEMON:topic] 고개를 가로저었다. 이 기술은 쓸 수 없는 것 같다...",
 	},
