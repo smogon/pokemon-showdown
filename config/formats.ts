@@ -782,7 +782,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Deltamon Random Battle",
 		mod: 'gen9deltamon',
-		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause', 'Data Preview'],
+		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause', 'Data Preview', 'Mega Data Preview'],
 		team: 'randomDelta',
 		desc: 'A format where Deltarune and Undertale characters are Pokemon!',
 		onBegin() {
@@ -3719,7 +3719,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		threads: [
 			`&bullet; <a href= "https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/">Deltamon Spreadsheet</a>`,
 		],
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview', 'Species Clause', 'Sleep Clause Mod', 'Evasion Clause', 'OHKO Clause'],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview', 'Mega Data Preview'],
 		banlist: [
 			'Arena Trap', 'Shadow Tag', 'Moody', 'King\'s Rock', 'Quick Claw', 'Razor Fang',
 			'Shed Tail', 'Baton Pass', 'Assist', 'Last Respects', 'All Pokemon',
