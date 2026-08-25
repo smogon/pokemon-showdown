@@ -1040,8 +1040,8 @@
 		"sets": [
 			{
 				"role": "Bulky Setup",
-				"movepool": ["Bulk Up", "Drain Punch", "Thunder", "Ice Punch"],
-				"abilities": ["Unseen Fist"]
+				"movepool": ["Bulk Up", "Drain Punch", "Thunder Punch", "Ice Punch"],
+				"abilities": ["Download"]
 			}
 		]
 	},
@@ -1321,7 +1321,7 @@
 			{
 				"role": "Wallbreaker",
 				"movepool": ["BIG SHOT", "Thunderbolt", "Dark Pulse", "Aura Sphere", "Armor Cannon", "Water Pulse", "Nasty Plot"],
-				"abilities": ["Mega Launcher"]
+				"abilities": ["Opportunist"]
 			}
 		]
 	},
@@ -1371,12 +1371,12 @@
 		]
 	},
 	"tasquemanager": {
-		"level": 87,
+		"level": 84,
 		"sets": [
 			{
 				"role": "Setup Sweeper",
 				"movepool": ["Tidy Up", "Zen Headbutt", "Close Combat", "Play Rough", "Encore"],
-				"abilities": ["Screen Cleaner"]
+				"abilities": ["Screen Cleaner", "Clear Body"]
 			}
 		]
 	},
@@ -1460,7 +1460,7 @@
 		"sets": [
 			{
 				"role": "Bulky Attacker",
-				"movepool": ["Calm Mind", "Umbral Laser", "Oblivion Wing", "Recover", "Toxic", "Protect"],
+				"movepool": ["Umbral Laser", "Oblivion Wing", "Recover", "Toxic", "Protect"],
 				"abilities": ["Constricting Darkness"]
 			}
 		]
