@@ -487,14 +487,13 @@ type AbilityText = TextFile<ConditionTextData & {
 }>;
 type MoveText = TextFile<MoveTextData>;
 type ItemText = TextFile<ConditionTextData>;
-type PokedexText = TextFile<BasicTextData>;
 type DefaultText = AnyObject;
 
 type ResolvedText<T extends BasicTextData> = T & { name: string, desc: string, shortDesc: string };
 type ResolvedAbilityText = ResolvedText<AbilityText>;
 type ResolvedItemText = ResolvedText<ItemText>;
 type ResolvedMoveText = ResolvedText<MoveText>;
-type ResolvedPokedexText = ResolvedText<PokedexText>;
+type ResolvedNameText = { name: string };
 
 declare namespace RandomTeamsTypes {
 	export interface TeamDetails {

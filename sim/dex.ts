@@ -91,16 +91,42 @@ interface RawTextTableData {
 	Abilities: DexTable<AbilityText>;
 	Items: DexTable<ItemText>;
 	Moves: DexTable<MoveText>;
-	Pokedex: DexTable<PokedexText>;
+	PokedexNames: DexTable<TranslationString>;
+	TermNames: DexTable<TranslationString>;
+	TypeNames: DexTable<TranslationString>;
+	NatureNames: DexTable<TranslationString>;
+	CategoryNames: DexTable<TranslationString>;
+	GenderNames: DexTable<TranslationString>;
+	EggGroupNames: DexTable<TranslationString>;
+	TagNames: DexTable<TranslationString>;
+	ColorNames: DexTable<TranslationString>;
+	ShapeNames: DexTable<TranslationString>;
 	Default: DexTable<DefaultText>;
 }
 interface TextTableData {
 	Abilities: DexTable<ResolvedAbilityText>;
 	Items: DexTable<ResolvedItemText>;
 	Moves: DexTable<ResolvedMoveText>;
-	Pokedex: DexTable<ResolvedPokedexText>;
+	PokedexNames: DexTable<string>;
+	TermNames: DexTable<string>;
+	TypeNames: DexTable<string>;
+	NatureNames: DexTable<string>;
+	CategoryNames: DexTable<string>;
+	GenderNames: DexTable<string>;
+	EggGroupNames: DexTable<string>;
+	TagNames: DexTable<string>;
+	ColorNames: DexTable<string>;
+	ShapeNames: DexTable<string>;
 	Default: DexTable<DefaultText>;
 }
+
+type OtherNameTable =
+	'TermNames' | 'TypeNames' | 'NatureNames' | 'CategoryNames' | 'GenderNames' |
+	'EggGroupNames' | 'TagNames' | 'ColorNames' | 'ShapeNames';
+const OTHER_NAME_TABLES: OtherNameTable[] = [
+	'TermNames', 'TypeNames', 'NatureNames', 'CategoryNames', 'GenderNames',
+	'EggGroupNames', 'TagNames', 'ColorNames', 'ShapeNames',
+];
 
 export const toID = Data.toID;
 
@@ -473,7 +499,7 @@ export class ModdedDex {
 
 	loadTextFile(
 		name: string, exportName: string, optional = false
-	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
+	): DexTable<MoveText | ItemText | AbilityText | TranslationString> {
 		const filePath = `${DATA_DIR}/text/${name}`;
 		if (optional) {
 			try {
@@ -514,12 +540,14 @@ export class ModdedDex {
 		if (!this.gen) this.loadData();
 		lang ||= 'en';
 		const cacheKey = `${this.gen}:${lang}`;
-		if (dexes['base'].textCache[cacheKey]) return dexes['base'].textCache[cacheKey];
+		const cached = dexes['base'].textCache[cacheKey];
+		if (cached) return cached;
 
 		const englishData = this.loadRawTextData();
 		const localizedData = lang === 'en' ? englishData : this.loadRawTextData(lang);
 		return (dexes['base'].textCache[cacheKey] = {
-			Pokedex: this.resolveTextTable(englishData.Pokedex, localizedData.Pokedex),
+			PokedexNames: this.resolveNameTable(englishData.PokedexNames, localizedData.PokedexNames),
+			...this.resolveOtherNameTables(englishData, localizedData),
 			Moves: this.resolveTextTable(englishData.Moves, localizedData.Moves),
 			Abilities: this.resolveTextTable(englishData.Abilities, localizedData.Abilities),
 			Items: this.resolveTextTable(englishData.Items, localizedData.Items),
@@ -528,11 +556,18 @@ export class ModdedDex {
 	}
 
 	private loadRawTextData(lang: TextLanguage = 'en'): RawTextTableData {
-		if (dexes['base'].rawTextCache[lang]) return dexes['base'].rawTextCache[lang];
+		const cached = dexes['base'].rawTextCache[lang];
+		if (cached) return cached;
 		const langDir = lang === 'en' ? `` : `${lang}/`;
 		const optional = lang !== 'en';
-		const data = {
-			Pokedex: this.loadTextFile(`${langDir}pokedex`, 'PokedexText', optional) as DexTable<PokedexText>,
+		const otherNameTables = Object.fromEntries(OTHER_NAME_TABLES.map(table => [
+			table, this.loadTextFile(`${langDir}other-names`, table, optional),
+		])) as Pick<RawTextTableData, OtherNameTable>;
+		const data: RawTextTableData = {
+			PokedexNames: this.loadTextFile(
+				`${langDir}pokedex-names`, 'PokedexNames', optional
+			) as Record<string, TranslationString>,
+			...otherNameTables,
 			Moves: this.loadTextFile(`${langDir}moves`, 'MovesText', optional) as DexTable<MoveText>,
 			Abilities: this.loadTextFile(`${langDir}abilities`, 'AbilitiesText', optional) as DexTable<AbilityText>,
 			Items: this.loadTextFile(`${langDir}items`, 'ItemsText', optional) as DexTable<ItemText>,
@@ -540,6 +575,24 @@ export class ModdedDex {
 		};
 		if (lang !== 'en') this.validateTranslations(data, lang);
 		return (dexes['base'].rawTextCache[lang] = data);
+	}
+
+	private resolveNameTable(
+		englishTable: Record<string, TranslationString>, localizedTable: Record<string, TranslationString>
+	): Record<string, string> {
+		const table: Record<string, string> = {};
+		for (const id in englishTable) {
+			table[id] = localizedTable[id] ?? englishTable[id]!;
+		}
+		return table;
+	}
+
+	private resolveOtherNameTables(
+		englishData: RawTextTableData, localizedData: RawTextTableData
+	): Pick<TextTableData, OtherNameTable> {
+		return Object.fromEntries(OTHER_NAME_TABLES.map(table => [
+			table, this.resolveNameTable(englishData[table], localizedData[table]),
+		])) as Pick<TextTableData, OtherNameTable>;
 	}
 
 	private validateTranslations(value: unknown, lang: string, keyPath = ''): void {
@@ -552,7 +605,7 @@ export class ModdedDex {
 		}
 	}
 
-	private resolveTextTable<T extends AbilityText | ItemText | MoveText | PokedexText>(
+	private resolveTextTable<T extends AbilityText | ItemText | MoveText>(
 		englishTable: DexTable<T>, localizedTable: DexTable<T>
 	): DexTable<ResolvedText<T>> {
 		const table: DexTable<ResolvedText<T>> = {};
@@ -573,7 +626,7 @@ export class ModdedDex {
 		return table;
 	}
 
-	private resolveTextField<T extends AbilityText | ItemText | MoveText | PokedexText>(
+	private resolveTextField<T extends AbilityText | ItemText | MoveText>(
 		localizedEntry: T | undefined, englishEntry: T, field: 'desc' | 'shortDesc'
 	): string {
 		const genKeys = Object.keys(englishEntry)

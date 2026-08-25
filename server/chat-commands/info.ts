@@ -649,7 +649,6 @@ export const commands: Chat.ChatCommands = {
 					pokemon, { dex, tier: displayedTier, language: this.language }
 				)}\n`;
 				if (showDetails) {
-					description = dex.text.get(pokemon, textLanguage).desc;
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
 						weighthit = 120;

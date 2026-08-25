@@ -91,10 +91,27 @@ describe('Dex#getMove', () => {
 
 describe('DexText#get', () => {
 	it(`should translate species, items, abilities, and moves`, () => {
-		assert.equal(Dex.text.get(Dex.species.get('Pikachu'), 'ja').name, 'ピカチュウ');
+		assert.deepEqual(Dex.text.get(Dex.species.get('Pikachu'), 'ja'), { name: 'ピカチュウ' });
+		assert.equal(Dex.loadTextData('ja').PokedexNames.pikachu, 'ピカチュウ');
 		assert.equal(Dex.text.get(Dex.items.get('Leftovers'), 'ja').name, 'たべのこし');
 		assert.equal(Dex.text.get(Dex.abilities.get('Levitate'), 'ja').name, 'ふゆう');
 		assert.equal(Dex.text.get(Dex.moves.get('Tackle'), 'ja').name, 'たいあたり');
+	});
+
+	it(`should translate names backed by Dex objects`, () => {
+		const { Tags } = require('../../dist/data/tags');
+		assert.deepEqual(Dex.text.get(Dex.types.get('Fire'), 'ja'), { name: 'Fire' });
+		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'ja'), { name: 'Adamant' });
+		assert.deepEqual(Dex.text.get(Tags.restrictedlegendary, 'ja'), { name: 'Restricted Legendary' });
+	});
+
+	it(`should translate scalar names`, () => {
+		assert.equal(Dex.text.termName('Egg Group', 'ja'), 'Egg Group');
+		assert.equal(Dex.text.categoryName('Physical', 'ja'), 'Physical');
+		assert.equal(Dex.text.genderName('F', 'ja'), 'Female');
+		assert.equal(Dex.text.eggGroupName('Human-Like', 'ja'), 'Human-Like');
+		assert.equal(Dex.text.colorName('Purple', 'ja'), 'Purple');
+		assert.equal(Dex.text.shapeName('bug-wings', 'ja'), 'Bug wings');
 	});
 
 	it(`should return the entire text entry`, () => {

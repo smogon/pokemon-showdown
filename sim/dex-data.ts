@@ -5,6 +5,7 @@
  * @license MIT
  */
 import { Utils } from '../lib/utils';
+import type { TagData } from '../data/tags';
 
 /**
 * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -40,8 +41,10 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 	}
 }
 
-export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedPokedexText;
+export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedNameText;
 export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
+
+type TextEffect = Species | Item | Ability | Move | Nature | TypeInfo | TagData;
 
 /** English-only text for custom effects defined by mods. */
 export interface ModdedEffectText {
@@ -49,7 +52,7 @@ export interface ModdedEffectText {
 	shortDesc?: string;
 }
 
-type EffectTextTable = 'Abilities' | 'Items' | 'Moves' | 'Pokedex';
+type EffectTextTable = 'Abilities' | 'Items' | 'Moves';
 
 export class DexText {
 	readonly dex: ModdedDex;
@@ -58,15 +61,26 @@ export class DexText {
 		this.dex = dex;
 	}
 
-	get(effect: Species, lang?: TextLanguage): ResolvedPokedexText;
+	get(effect: Species, lang?: TextLanguage): ResolvedNameText;
 	get(effect: Item, lang?: TextLanguage): ResolvedItemText;
 	get(effect: Ability, lang?: TextLanguage): ResolvedAbilityText;
 	get(effect: Move, lang?: TextLanguage): ResolvedMoveText;
-	get(effect: Species | Item | Ability | Move, lang?: TextLanguage): EffectText;
-	get(effect: Species | Item | Ability | Move, lang: TextLanguage = 'en'): EffectText {
+	get(effect: Nature | TypeInfo | TagData, lang?: TextLanguage): ResolvedNameText;
+	get(effect: TextEffect, lang?: TextLanguage): EffectText;
+	get(
+		effect: TextEffect, lang: TextLanguage = 'en'
+	): EffectText {
+		if (!('effectType' in effect)) {
+			return { name: this.otherName('TagNames', effect.name, lang) };
+		}
 		let table: EffectTextTable;
 		switch (effect.effectType) {
-		case 'Pokemon': table = 'Pokedex'; break;
+		case 'Pokemon': {
+			const name = this.dex.loadTextData(lang).PokedexNames[effect.id] || effect.name;
+			return { name };
+		}
+		case 'Nature': return { name: this.otherName('NatureNames', effect.name, lang) };
+		case 'Type': case 'EffectType': return { name: this.otherName('TypeNames', effect.name, lang) };
 		case 'Item': table = 'Items'; break;
 		case 'Ability': table = 'Abilities'; break;
 		case 'Move': table = 'Moves'; break;
@@ -86,6 +100,42 @@ export class DexText {
 			desc: '',
 			shortDesc: '',
 		};
+	}
+
+	termName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('TermNames', name, lang);
+	}
+
+	categoryName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('CategoryNames', name, lang);
+	}
+
+	genderName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('GenderNames', name, lang);
+	}
+
+	eggGroupName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('EggGroupNames', name, lang);
+	}
+
+	colorName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('ColorNames', name, lang);
+	}
+
+	shapeName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('ShapeNames', name, lang);
+	}
+
+	private otherName(
+		table: 'TermNames' | 'TypeNames' | 'NatureNames' | 'CategoryNames' | 'GenderNames' |
+		'EggGroupNames' | 'TagNames' | 'ColorNames' | 'ShapeNames',
+		name: string, lang: TextLanguage
+	): string {
+		let id: string = toID(name);
+		if (table === 'GenderNames') {
+			id = ({ m: 'male', f: 'female', n: 'genderless' } as Record<string, string>)[id] || id;
+		}
+		return this.dex.loadTextData(lang)[table][id] || name;
 	}
 }
 

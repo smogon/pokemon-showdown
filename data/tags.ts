@@ -1,4 +1,4 @@
-interface TagData {
+export interface TagData {
 	name: string;
 	desc?: string;
 	speciesFilter?: (species: Species) => boolean;
