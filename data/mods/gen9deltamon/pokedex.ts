@@ -217,6 +217,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Maketh the Rules" },
 		weightkg: 56,
 		requiredItem: "Kaardite",
+		battleOnly: "Rouxls Kaard",
 		eggGroups: [],
 	},
 	lancer: {
@@ -446,6 +447,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Mega Launcher" },
 		weightkg: 199.7,
 		requiredItem: "Spamtonite",
+		battleOnly: "Spamton",
 		eggGroups: [],
 	},
 	berdly: {
@@ -491,6 +493,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Unseen Fist" },
 		weightkg: 999.9,
 		requiredItem: "Queenite",
+		battleOnly: "Queen-Delta",
 		eggGroups: [],
 	},
 	thrashmachine: {

@@ -787,7 +787,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: 'A format where Deltarune and Undertale characters are Pokemon!',
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/" target="_blank">spreadsheet</a> for all the custom elements!</b></div>`);
-			this.add(`raw|Welcome to Mix and Mega: Limited Supply!`);
+			this.add(`raw|Welcome to Deltamon!`);
 			this.add(`raw|This is a Gen 9 random battles format based on Undertale and Deltarune.<br>You can find our metagame resources <a href="https://www.smogon.com/forums/threads/3711007/post-11052905" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
 		},
 	},

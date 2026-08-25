@@ -90,7 +90,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 	queenite: {
 		name: "Queenite",
-		megaStone: { "Queen-Delta": "Queen-Delta-Mega" },
+		megaStone: { "Queen-Delta": "Queen-Mega" },
 		shortDesc: "If Held By Queen This Item Allows Her To: Mega Evolve In Battle.",
 		itemUser: ["Queen-Delta"],
 		fling: {
