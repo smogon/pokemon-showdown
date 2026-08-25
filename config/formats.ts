@@ -780,6 +780,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: ['Ogerpon-Hearthflame', 'Ursaluna-Bloodmoon', 'Walking Wake', 'Yveltal', 'Urshifu', 'Naganadel'],
 	},
 	{
+		name: "[Gen 9] Deltamon Random Battle",
+		mod: 'gen9deltamon',
+		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause', 'Data Preview'],
+		team: 'randomDelta',
+		desc: 'A format where Deltarune and Undertale characters are Pokemon!',
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/" target="_blank">spreadsheet</a> for all the custom elements!</b></div>`);
+			this.add(`raw|Welcome to Mix and Mega: Limited Supply!`);
+			this.add(`raw|This is a Gen 9 random battles format based on Undertale and Deltarune.<br>You can find our metagame resources <a href="https://www.smogon.com/forums/threads/3711007/post-11052905" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
+		},
+	},
+	{
 		name: "[Gen 9] CCAPM2025 Random Battle",
 		desc: `A Gen 9 metagame created in the Pet Mods Room featuring Pokemon with new form changes.`,
 		mod: 'ccapm2025',
@@ -3699,6 +3711,22 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Pet Mods",
+	},
+	{
+		name: "[Gen 9] Deltamon",
+		mod: 'gen9deltamon',
+		desc: "A format where Deltarune and Undertale characters are Pokemon!",
+		threads: [
+			`&bullet; <a href= "https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/">Deltamon Spreadsheet</a>`,
+		],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Data Preview', 'Species Clause', 'Sleep Clause Mod', 'Evasion Clause', 'OHKO Clause'],
+		banlist: [
+			'Arena Trap', 'Shadow Tag', 'Moody', 'King\'s Rock', 'Quick Claw', 'Razor Fang',
+			'Shed Tail', 'Baton Pass', 'Assist', 'Last Respects', 'All Pokemon',
+		],
+		unbanlist: [
+
+		],
 	},
 	{
 		name: "[Gen 9] CCAPM2025", // roomtours
