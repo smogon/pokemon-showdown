@@ -3725,7 +3725,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Shed Tail', 'Baton Pass', 'Assist', 'Last Respects', 'All Pokemon',
 		],
 		unbanlist: [
-
+			'Rudinn', 'Rudinn Ranger', 'Hathy', 'Head Hathy', 'Jigsawry', 'Jigsaw Joe', 'Ponman', 'Mr. Elegance', 'Mr. Society', 'Top Chef', 'Seam',
+			'C. Round', 'K. Round', 'Rabbick', 'Bloxer', 'Clover', 'Starwalker', 'Jevil', 'Rouxls Kaard', 'Rouxls Kaard-Mega', 'Lancer', 'Chaos King',
+			'Plugperson', 'Werewire', 'Werewerewire', 'Tasque', 'Tasque Manager', 'Virovirokun', 'Sweet', 'Cap\'n', 'K_K', 'Nubert', 'Hacker', 'Poppup',
+			'Ambyu-Lance', 'Maus-Delta', 'Mauswheel', 'Swatchling', 'Swatch', 'Pipis', 'Spamton', 'Spamton-Mega', 'Berdly', 'Noelle', 'Queen-Delta',
+			'Queen-Mega', 'Thrash Machine', 'Thrash Machine-Laser', 'Thrash Machine-Flame', 'Thrash Machine-Duck', 'Shadowguy', 'Pippins', 'Lanino',
+			'Elnina', 'Shuttah', 'Zapper', 'Watercooler', 'Ribbick', 'Ramb', 'White Cloak', 'Shadow Mantle', 'Tenna', 'Roaring Knight', 'Motormouth Mike',
+			'Cowboy Mike', 'Cat Mike', 'Carol', 'Guei', 'Balthizard', 'Bibliox', 'Mizzle', 'Miss Mizzle', 'Cuptain', 'Jackenstein', 'Titan Spawn',
+			'Gerson', 'Gerson-Mega', 'Organikk', 'Wicabel', 'Winglade', 'Sound of Justice', 'Trashy', 'Floradinn', 'Sheary', 'Netskie', 'Shi',
+			'Leafling', 'Kawkaw', 'Shinobeetle', 'Terakota', 'Aqua', 'Seth', 'Orange', 'Green', 'Blue', 'Yellow', 'Pink', 'Pink-Ghost', 'Flowery', 'Kris',
+			'Susie', 'Ralsei', 'Froggit', 'Final Froggit', 'Whimsun', 'Whimsalot', 'Moldsmal', 'Moldbygg', 'Moldessa', 'Loox', 'Astigmatism', 'Migosp',
+			'Migospel', 'Vegetoid', 'Parsnik', 'Napstablook', 'Toriel', 'Snowdrake', 'Chilldrake', 'Ice Cap', 'Doggo', 'Lesser Dog', 'Jerry', 'Dogamy',
+			'Dogaressa', 'Gyftrot', 'Glyde', 'Greater Dog', 'Ice Wolf', 'Papyrus', 'Mr. Sunshine', 'Abberant', 'Aaron', 'Woshua', 'Shyren', 'Onionsan',
+			'Mad Dummy', 'Temmie', 'Undyne', 'Undyne-Mega', 'Alphys', 'Vulkin', 'Tsunderplane', 'Pyrope', 'Muffet', 'Royal Guard 1', 'Royal Guard 2',
+			'Madjick', 'Knight Knight', 'Mettaton', 'Mettaton-Mega-X', 'Mettaton-Mega-Y', 'Memoryhead', 'Reaper Bird', 'Endogeny', 'Lemon Bread',
+			'Crystal', 'Asgore', 'Flowey', 'Flowey-Mega',
 		],
 	},
 	{
