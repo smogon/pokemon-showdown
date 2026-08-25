@@ -682,7 +682,7 @@ export const commands: Chat.ChatCommands = {
 							details['Gender'] = "Female";
 							break;
 						case 'N':
-							details['Gender'] = "None";
+							details['Gender'] = "Unknown";
 							break;
 						};
 					};
