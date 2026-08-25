@@ -53,7 +53,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "애시드포이즌딜리트",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acidspray: {
@@ -112,7 +112,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "전력무쌍격렬권",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alluringvoice: {
@@ -582,7 +582,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blackholeeclipse: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "블랙홀이클립스",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blastburn: {
@@ -647,7 +647,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bloomdoom: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "블룸샤인엑스트라",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blueflare: {
@@ -771,7 +771,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "울트라대시어택",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brickbreak: {
@@ -1151,7 +1151,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	continentalcrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "월즈엔드폴",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	conversion: {
@@ -1227,7 +1227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	corkscrewcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "초월나선연격",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	corrosivegas: {
@@ -1503,7 +1503,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	devastatingdrake: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "얼티메이트드래곤번",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	diamondstorm: {
@@ -2749,7 +2749,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigavolthavoc: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "스파킹기가볼트",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciallance: {
@@ -2788,12 +2788,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이고혹",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxcannonade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이포격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2801,111 +2801,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON:topic] 거다이포격의 물살에 삼켜져서 괴로워하고 있다!",
 	},
 	gmaxcentiferno: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이백화",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxchistrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이회심격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이포옹",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxdepletion: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이감쇠",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [TARGET]의 PP가 줄었다!",
 	},
 	gmaxdrumsolo: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이난타",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfinale: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이단원",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfireball: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이화염구",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfoamburst: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이포말",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgoldrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이금화",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgravitas: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이천도",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxhydrosnipe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이저격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmalodor: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이악취",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmeltdown: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이융격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxoneblow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이일격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxrapidflow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이연격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxreplenish: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이재생",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxresonance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이선율",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsandblast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이사진",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsmite: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이천벌",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsnooze: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이수마",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsteelsurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이강철진",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2914,32 +2914,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]에게 뾰족한 강철이 박혔다!",
 	},
 	gmaxstonesurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이암진",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxstunshock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이감전",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsweetness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이감로",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxtartness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이산격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxterror: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이환영",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxvinelash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이편달",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2947,7 +2947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON:topic] 거다이편달이 퍼붓는 맹타에 아파하고 있다!",
 	},
 	gmaxvolcalith: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이분석",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2955,12 +2955,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON:topic] 거다이분석으로 날아든 바위에 맞아서 아파하고 있다!",
 	},
 	gmaxvoltcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이만뢰",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxwildfire: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이옥염",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2968,7 +2968,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON:topic] 거다이옥염의 불꽃에 휩싸여서 뜨거워하고 있다!",
 	},
 	gmaxwindrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "거다이풍격",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3501,7 +3501,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydrovortex: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "슈퍼아쿠아토네이도",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperbeam: {
@@ -3684,7 +3684,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "다이내믹풀플레임",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infestation: {
@@ -4913,7 +4913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	neverendingnightmare: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "무한암야로의유인",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightdaze: {
@@ -6137,7 +6137,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "절대포식회전참",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scald: {
@@ -6307,7 +6307,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "맥시멈사이브레이커",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shedtail: {
@@ -7216,7 +7216,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  [POKEMON:object] 대신하여 대타가 공격을 받았다!",
 	},
 	subzeroslammer: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "레이징지오프리즈",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	suckerpunch: {
@@ -7274,7 +7274,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonicskystrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "파이널다이브클래시",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	surf: {
@@ -7544,7 +7544,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "라이징랜드오버",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teeterdance: {
@@ -7971,7 +7971,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	twinkletackle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "러블리스타임팩트",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twister: {
@@ -8069,7 +8069,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	visegrip: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "찝기",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vitalthrow: {

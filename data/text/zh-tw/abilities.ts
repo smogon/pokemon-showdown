@@ -104,7 +104,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		block: "  [POKEMON]正受到芳香幕的保護！",
 	},
 	asone: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "人馬一體",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]兼具２種特性！",

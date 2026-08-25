@@ -53,7 +53,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "强酸剧毒灭绝雨",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acidspray: {
@@ -112,7 +112,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "全力无双激烈拳",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alluringvoice: {
@@ -166,7 +166,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquacutter: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "水波刀",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -186,7 +186,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		heal: "  [POKEMON]通过水环回复了体力！",
 	},
 	aquastep: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "流水旋舞",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -195,7 +195,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	armorcannon: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "铠农炮",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -355,7 +355,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	axekick: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "下压踢",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -386,7 +386,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	barbbarrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "毒千针",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -572,17 +572,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	bitterblade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "悔念剑",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bittermalice: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "冤冤相报",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blackholeeclipse: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "黑洞吞噬万物灭",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blastburn: {
@@ -598,12 +598,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazingtorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "灼热暴冲",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bleakwindstorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "枯叶风暴",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -643,11 +643,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	bloodmoon: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "血月",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bloomdoom: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "绚烂缤纷花怒放",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blueflare: {
@@ -771,7 +771,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "究极无敌大冲撞",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brickbreak: {
@@ -942,7 +942,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ceaselessedge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "秘剑・千重涛",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -995,12 +995,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	chillingwater: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "泼冷水",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chillyreception: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "冷笑话",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -1013,7 +1013,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chloroblast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "叶绿爆震",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1093,12 +1093,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	collisioncourse: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "全开猛撞",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	combattorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "格斗暴冲",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1118,7 +1118,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	comeuppance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "复仇",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1151,7 +1151,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	continentalcrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "毁天灭地巨岩坠",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	conversion: {
@@ -1227,7 +1227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	corkscrewcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超绝螺旋连击",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	corrosivegas: {
@@ -1503,7 +1503,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	devastatingdrake: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "究极巨龙震天地",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	diamondstorm: {
@@ -1537,7 +1537,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		prepare: "[POKEMON]钻入了地里！",
 	},
 	direclaw: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "克命爪",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -1614,7 +1614,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	doodle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "描绘",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1678,7 +1678,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	doubleshock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "电光双击",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -1926,7 +1926,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	electrodrift: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "闪电猛冲",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2054,7 +2054,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	esperwing: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "气场之翼",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2219,7 +2219,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	filletaway: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "甩肉",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2444,7 +2444,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowertrick: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "千变万花",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2745,11 +2745,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigatonhammer: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "巨力锤",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigavolthavoc: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "终极伏特狂雷闪",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciallance: {
@@ -2765,7 +2765,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaiverush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "巨剑突击",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2788,12 +2788,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨蝶影蛊惑",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxcannonade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨水炮轰灭",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2801,111 +2801,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]被吞没在超极巨水炮轰灭的水流里，痛苦难耐！",
 	},
 	gmaxcentiferno: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨百火焚野",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxchistrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨会心一击",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨热情拥抱",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxdepletion: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨劣化衰变",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [TARGET]的PP减少了！",
 	},
 	gmaxdrumsolo: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨狂擂乱打",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfinale: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨幸福圆满",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfireball: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨破阵火球",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfoamburst: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨激漩泡涡",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgoldrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨特大金币",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgravitas: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨天道七星",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxhydrosnipe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨狙击神射",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmalodor: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨臭气冲天",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmeltdown: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨液金熔击",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxoneblow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨夺命一击",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxrapidflow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨流水连击",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxreplenish: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨资源再生",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxresonance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨极光旋律",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsandblast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨沙尘漫天",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsmite: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨天谴雷诛",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsnooze: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨睡魔降临",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsteelsurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨钢铁阵法",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2914,32 +2914,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  尖锐的钢刺扎进了[POKEMON]体内！",
 	},
 	gmaxstonesurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨岩阵以待",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxstunshock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨异毒电场",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsweetness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨琼浆玉液",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxtartness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨酸不溜丢",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxterror: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨幻影幽魂",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxvinelash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨灰飞鞭灭",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2947,7 +2947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]被暴露在超极巨灰飞鞭灭的猛击下，疼痛难忍！",
 	},
 	gmaxvolcalith: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨炎石喷发",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2955,12 +2955,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]被困在超极巨炎石喷发的岩石之中，疼痛难忍！",
 	},
 	gmaxvoltcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨万雷轰顶",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxwildfire: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨地狱灭焰",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2968,7 +2968,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]被超极巨地狱灭焰的火焰包围，酷热难耐！",
 	},
 	gmaxwindrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超极巨旋风袭卷",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3196,7 +3196,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headlongrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "突飞猛扑",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3501,7 +3501,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydrovortex: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超级水流大漩涡",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperbeam: {
@@ -3515,7 +3515,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	hyperdrill: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "强力钻",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperfang: {
@@ -3608,7 +3608,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icespinner: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "冰旋",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3673,7 +3673,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		removeItem: "  [POKEMON]的[ITEM]被烧没了！",
 	},
 	infernalparade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "群魔乱舞",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3684,7 +3684,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "超强极限爆焰弹",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infestation: {
@@ -3769,7 +3769,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ivycudgel: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "棘藤棒",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3780,7 +3780,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jetpunch: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "喷射拳",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3880,7 +3880,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		removeItem: "  [SOURCE]拍落了[POKEMON]的[ITEM]！",
 	},
 	kowtowcleave: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "仆刀",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	landswrath: {
@@ -3910,7 +3910,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastrespects: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "扫墓",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4089,12 +4089,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		end: "  [TEAM]的幸运咒语解除了！",
 	},
 	luminacrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "琉光冲激",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lunarblessing: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "新月祈祷",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4136,7 +4136,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magicaltorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "魔法暴冲",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4231,7 +4231,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  震级[NUMBER]！",
 	},
 	makeitrain: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "淘金潮",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -4262,7 +4262,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		block: "  [MOVE]被掀榻榻米保护住了！",
 	},
 	matchagotcha: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "刷刷茶炮",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4795,12 +4795,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	mortalspin: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "晶光转转",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mountaingale: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "冰山风",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4855,7 +4855,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalpower: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "神秘之力",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4913,7 +4913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	neverendingnightmare: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "无尽暗夜之诱惑",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightdaze: {
@@ -4962,7 +4962,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		start: "  [POKEMON]受到背水一战的效果影响，无法逃走了！",
 	},
 	noxioustorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "剧毒暴冲",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5024,7 +5024,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	orderup: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "上菜",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5292,12 +5292,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  [POKEMON]被[ITEM]袭击了！",
 	},
 	populationbomb: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "鼠数儿",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pounce: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "虫扑",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5345,7 +5345,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powershift: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "力量转换",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -5497,7 +5497,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	psyshieldbash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "屏障猛攻",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5632,7 +5632,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	ragefist: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "愤怒之拳",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -5653,14 +5653,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		startFromZEffect: "#followme",
 	},
 	ragingbull: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "怒牛",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	ragingfury: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "大愤慨",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5868,7 +5868,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	revivalblessing: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "复生祈祷",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -6035,7 +6035,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ruination: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "大灾难",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6068,7 +6068,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		block: "  [POKEMON]正受到神秘之幕的保护！",
 	},
 	saltcure: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "盐腌",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -6086,7 +6086,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandsearstorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "热沙风暴",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6137,7 +6137,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "绝对捕食回旋斩",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scald: {
@@ -6307,11 +6307,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "至高精神破坏波",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shedtail: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "断尾",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -6352,7 +6352,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		cant: "[POKEMON]的陷阱甲壳没有被触发！",
 	},
 	shelter: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "闭关",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6379,7 +6379,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	silktrap: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "线阱",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6676,7 +6676,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snowscape: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "雪景",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6805,7 +6805,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  [POKEMON]互换了各自的速度！",
 	},
 	spicyextract: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "辣椒精华",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6883,7 +6883,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]受伤了！",
 	},
 	spinout: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "疾速转轮",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6961,7 +6961,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		startFromZEffect: "#followme",
 	},
 	springtidestorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "阳春风暴",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7076,7 +7076,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stoneaxe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "岩斧",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7216,7 +7216,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  替身代替[POKEMON]承受了攻击！",
 	},
 	subzeroslammer: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "激狂大地万里冰",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	suckerpunch: {
@@ -7274,7 +7274,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonicskystrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "极速俯冲轰烈撞",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	surf: {
@@ -7411,7 +7411,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	syrupbomb: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "糖浆炸弹",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -7483,7 +7483,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	takeheart: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "勇气填充",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7544,7 +7544,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "地隆啸天大终结",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teeterdance: {
@@ -7584,7 +7584,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	terablast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "太晶爆发",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7758,7 +7758,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tidyup: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "大扫除",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -7771,7 +7771,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	torchsong: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "闪焰高歌",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7823,7 +7823,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	trailblaze: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "起草",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7903,7 +7903,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	triplearrows: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "三连箭",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7914,7 +7914,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tripledive: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "三连钻",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7947,7 +7947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twinbeam: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "双光束",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7971,7 +7971,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	twinkletackle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "可爱星星飞天撞",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twister: {
@@ -8060,7 +8060,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	victorydance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "胜利之舞",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -8069,7 +8069,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	visegrip: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "夹住",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vitalthrow: {
@@ -8175,7 +8175,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wavecrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "波动冲",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -8244,7 +8244,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wickedtorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "黑暗暴冲",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -8271,7 +8271,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		block: "  [POKEMON]受到了广域防守的保护！",
 	},
 	wildboltstorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "鸣雷风暴",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},

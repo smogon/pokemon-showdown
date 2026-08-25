@@ -53,7 +53,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Diluvio Corrosivo",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acidspray: {
@@ -112,7 +112,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ráfaga Demoledora",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alluringvoice: {
@@ -582,7 +582,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blackholeeclipse: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Agujero Negro Aniquilador",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blastburn: {
@@ -647,7 +647,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bloomdoom: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Megatón Floral",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blueflare: {
@@ -771,7 +771,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Carrera Arrolladora",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brickbreak: {
@@ -1151,7 +1151,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	continentalcrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Aplastamiento Gigalítico",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	conversion: {
@@ -1227,7 +1227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	corkscrewcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hélice Trepanadora",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	corrosivegas: {
@@ -1503,7 +1503,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	devastatingdrake: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Dracoaliento Devastador",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	diamondstorm: {
@@ -2749,7 +2749,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigavolthavoc: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigavoltio Destructor",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciallance: {
@@ -2788,12 +2788,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigaestupor",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxcannonade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigacañonazo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2801,111 +2801,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  ¡[POKEMON] sufre al verse arrastrado por la corriente de Gigacañonazo!",
 	},
 	gmaxcentiferno: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigacienfuegos",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxchistrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigapuñición",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigaternura",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxdepletion: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigadesgaste",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  ¡[TARGET] ha perdido PP!",
 	},
 	gmaxdrumsolo: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigarredoble",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfinale: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigacolofón",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfireball: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigaesfera Ígnea",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfoamburst: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigaespuma",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgoldrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigamonedas",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgravitas: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigabóveda",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxhydrosnipe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigadisparo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmalodor: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigapestilencia",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmeltdown: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigafundido",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxoneblow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigagolpe Brusco",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxrapidflow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigagolpe Fluido",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxreplenish: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigarreciclaje",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxresonance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigamelodía",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsandblast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigapolvareda",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsmite: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigacastigo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsnooze: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigasopor",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsteelsurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigatrampa Acero",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2914,32 +2914,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  ¡Unas piezas de acero puntiagudas han dañado a [POKEMON]!",
 	},
 	gmaxstonesurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigatrampa Rocas",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxstunshock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigadescarga",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsweetness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giganéctar",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxtartness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigacorrosión",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxterror: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigaaparición",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxvinelash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigalianas",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2947,7 +2947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  ¡Los violentos golpes de Gigalianas hieren a [POKEMON]!",
 	},
 	gmaxvolcalith: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigarroca Ígnea",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2955,12 +2955,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  ¡Las piedras desprendidas por Gigarroca Ígnea han herido a [POKEMON]!",
 	},
 	gmaxvoltcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigatronada",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxwildfire: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigallamarada",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2968,7 +2968,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  ¡El fuego de Gigallamarada ha quemado a [POKEMON]!",
 	},
 	gmaxwindrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigahuracán",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3501,7 +3501,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydrovortex: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hidrovórtice Abisal",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperbeam: {
@@ -3684,7 +3684,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hecatombe Pírica",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infestation: {
@@ -4913,7 +4913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	neverendingnightmare: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Presa Espectral",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightdaze: {
@@ -6137,7 +6137,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Guadaña Sedosa",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scald: {
@@ -6307,7 +6307,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Disruptor Psíquico",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shedtail: {
@@ -7216,7 +7216,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  ¡El sustituto recibe el ataque en lugar de [POKEMON]!",
 	},
 	subzeroslammer: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Crioaliento Despiadado",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	suckerpunch: {
@@ -7274,7 +7274,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonicskystrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Picado Supersónico",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	surf: {
@@ -7544,7 +7544,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Barrena Telúrica",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teeterdance: {
@@ -7971,7 +7971,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	twinkletackle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Arrumaco Sideral",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twister: {
@@ -8069,7 +8069,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	visegrip: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Agarre",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vitalthrow: {

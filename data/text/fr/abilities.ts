@@ -106,7 +106,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		block: "  [POKEMON] est protégé par Aroma-Voile !",
 	},
 	asone: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Osmose Équine",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON] a deux talents !",

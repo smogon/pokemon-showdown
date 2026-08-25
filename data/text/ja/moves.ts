@@ -53,7 +53,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "アシッドポイズンデリート",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acidspray: {
@@ -112,7 +112,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ぜんりょくむそうげきれつけん",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alluringvoice: {
@@ -582,7 +582,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blackholeeclipse: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ブラックホールイクリプス",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blastburn: {
@@ -647,7 +647,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bloomdoom: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ブルームシャインエクストラ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blueflare: {
@@ -771,7 +771,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ウルトラダッシュアタック",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brickbreak: {
@@ -1151,7 +1151,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	continentalcrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ワールズエンドフォール",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	conversion: {
@@ -1227,7 +1227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	corkscrewcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ちょうぜつらせんれんげき",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	corrosivegas: {
@@ -1503,7 +1503,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	devastatingdrake: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "アルティメットドラゴンバーン",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	diamondstorm: {
@@ -2749,7 +2749,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigavolthavoc: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "スパーキングギガボルト",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciallance: {
@@ -2788,12 +2788,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイコワク",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxcannonade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイホウゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2801,111 +2801,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]は キョダイホウゲキの 流れに 飲みこまれていて 苦しい！",
 	},
 	gmaxcentiferno: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイヒャッカ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxchistrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイシンゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイホーヨー",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxdepletion: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイゲンスイ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [TARGET]の ＰＰが へった！",
 	},
 	gmaxdrumsolo: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイコランダ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfinale: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイダンエン",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfireball: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイカキュウ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfoamburst: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイホウマツ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgoldrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイコバン",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgravitas: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイテンドウ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxhydrosnipe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイソゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmalodor: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイシュウキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmeltdown: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイユウゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxoneblow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイイチゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxrapidflow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイレンゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxreplenish: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイサイセイ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxresonance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイセンリツ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsandblast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイサジン",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsmite: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイテンバツ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsnooze: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイスイマ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsteelsurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイコウジン",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2914,32 +2914,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]に とがった はがねが 食いこんだ！",
 	},
 	gmaxstonesurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイガンジン",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxstunshock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイカンデン",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsweetness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイカンロ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxtartness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイサンゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxterror: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイゲンエイ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxvinelash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイベンタツ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2947,7 +2947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]は キョダイベンタツの 猛打に さらされていて 痛い！",
 	},
 	gmaxvolcalith: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイフンセキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2955,12 +2955,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]は キョダイフンセキの 岩に 囲まれていて 痛い！",
 	},
 	gmaxvoltcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイバンライ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxwildfire: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイゴクエン",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2968,7 +2968,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON]は キョダイゴクエンの 炎に 包まれていて 熱い！",
 	},
 	gmaxwindrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "キョダイフウゲキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3501,7 +3501,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydrovortex: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "スーパーアクアトルネード",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperbeam: {
@@ -3684,7 +3684,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ダイナミックフルフレイム",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infestation: {
@@ -4913,7 +4913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	neverendingnightmare: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "むげんあんやへのいざない",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightdaze: {
@@ -6137,7 +6137,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ぜったいほしょくかいてんざん",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scald: {
@@ -6307,7 +6307,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "マキシマムサイブレイカー",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shedtail: {
@@ -7216,7 +7216,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  [POKEMON]に かわって 身代わりが 攻撃を 受けた！",
 	},
 	subzeroslammer: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "レイジングジオフリーズ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	suckerpunch: {
@@ -7274,7 +7274,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonicskystrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ファイナルダイブクラッシュ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	surf: {
@@ -7544,7 +7544,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ライジングランドオーバー",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teeterdance: {
@@ -7971,7 +7971,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	twinkletackle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ラブリースターインパクト",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twister: {
@@ -8069,7 +8069,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	visegrip: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "はさむ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vitalthrow: {

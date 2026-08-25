@@ -1,6 +1,6 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
 	abilityshield: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fähigkeitenschild",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  Die Fähigkeit von [POKEMON] ist dank der Wirkung des Items Fähigkeitenschild geschützt!",
@@ -24,7 +24,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	adamantcrystal: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Adamantkristall",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	adamantorb: {
@@ -68,7 +68,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aloraichiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "A-Raichunium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	altarianite: {
@@ -104,7 +104,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	auspiciousarmor: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Glorienrüstung",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	babiriberry: {
@@ -208,7 +208,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	boosterenergy: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Energiekapsel",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bottlecap: {
@@ -235,7 +235,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	buginiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Insectium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bugmemory: {
@@ -347,7 +347,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	clearamulet: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Neutralschmuck",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		block: "  Neutralschmuck verhindert, dass die Statuswerte von [POKEMON] gesenkt werden!",
@@ -372,7 +372,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cornerstonemask: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fundamentmaske",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	cornnberry: {
@@ -384,7 +384,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	covertcloak: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Tarnumhang",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -416,7 +416,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	darkiniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Noctium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkmemory: {
@@ -434,7 +434,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Silvarronium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseascale: {
@@ -507,7 +507,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragoniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Dracium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonmemory: {
@@ -565,7 +565,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eeviumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Evolium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ejectbutton: {
@@ -600,7 +600,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	electriumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Voltium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	emboarite: {
@@ -630,11 +630,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Sylphium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairyfeather: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Feendaune",
 		grammar: "fs",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -672,7 +672,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fightiniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Battalium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	figyberry: {
@@ -703,7 +703,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pyrium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fistplate: {
@@ -743,7 +743,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flyiniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Aerium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusband: {
@@ -839,7 +839,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	ghostiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Phantomium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ghostmemory: {
@@ -877,7 +877,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	grassiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Botanium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grassmemory: {
@@ -906,7 +906,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	griseouscore: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Platinumkristall",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	griseousorb: {
@@ -924,7 +924,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	groundiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Terrium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	groundmemory: {
@@ -959,7 +959,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hearthflamemask: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ofenmaske",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	heatranite: {
@@ -1032,7 +1032,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iciumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Glacium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icyrock: {
@@ -1044,7 +1044,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	inciniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fuegronium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	insectplate: {
@@ -1102,7 +1102,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Grandirasium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	laggingtail: {
@@ -1138,7 +1138,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	leek: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Lauchstange",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leftovers: {
@@ -1198,7 +1198,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	loadeddice: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gezinkter Würfel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1241,7 +1241,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lunaliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Lunalium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lureball: {
@@ -1249,7 +1249,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lustrousglobe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Weißkristall",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lustrousorb: {
@@ -1261,7 +1261,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lycaniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Wolwerockium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	machobrace: {
@@ -1308,7 +1308,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	maliciousarmor: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fluchrüstung",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	manectite: {
@@ -1321,7 +1321,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	marshadiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Marshadownium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	masterball: {
@@ -1329,7 +1329,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	masterpieceteacup: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Edle Teeschale",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mawilite: {
@@ -1404,7 +1404,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	mewniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Mewnium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mewtwonitex: {
@@ -1420,7 +1420,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mimikiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Mimigmium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mindplate: {
@@ -1440,7 +1440,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	mirrorherb: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Kopierkraut",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  [POKEMON] nutzt das Item Kopierkraut, um die gegnerischen Statuswertänderungen zu kopieren.",
@@ -1512,7 +1512,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	normaliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Normium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	occaberry: {
@@ -1575,11 +1575,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikaniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pikachium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikashuniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ash-Pikachium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pinapberry: {
@@ -1615,7 +1615,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	poisoniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Toxium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonmemory: {
@@ -1665,11 +1665,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prettyfeather: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Prachtfeder",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	primariumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Primarenium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prismscale: {
@@ -1702,11 +1702,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Psium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	punchingglove: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Boxhandschuh",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pyroarite: {
@@ -1818,7 +1818,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Petrium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockmemory: {
@@ -2023,7 +2023,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snorliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Relaxonium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snowball: {
@@ -2043,7 +2043,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	solganiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Solgalium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	souldew: {
@@ -2103,7 +2103,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	steeliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Metallium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelixite: {
@@ -2131,7 +2131,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strangeball: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Rätselball",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	strawberrysweet: {
@@ -2167,7 +2167,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tapuniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Kapium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tartapple: {
@@ -2629,14 +2629,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ultranecroziumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ultranecronium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		transform: "  Ein gleißendes Licht strömt aus [POKEMON]!",
 		activate: "[POKEMON] hat durch den Ultra Burst eine neue Form angenommen!",
 	},
 	unremarkableteacup: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Simple Teeschale",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	upgrade: {
@@ -2675,7 +2675,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	wateriumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Aquium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watermemory: {
@@ -2701,7 +2701,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wellspringmask: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Brunnenmaske",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wepearberry: {

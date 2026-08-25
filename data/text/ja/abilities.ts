@@ -106,7 +106,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		block: "  [POKEMON]は アロマベールに 守られている！",
 	},
 	asone: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "じんばいったい",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  [POKEMON]は ふたつの 特性を あわせ持つ！",

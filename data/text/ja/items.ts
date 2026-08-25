@@ -63,7 +63,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aloraichiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "アロライＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	altarianite: {
@@ -212,7 +212,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	buginiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ムシＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bugmemory: {
@@ -371,7 +371,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	darkiniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "アクＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	darkmemory: {
@@ -389,7 +389,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	decidiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ジュナイパーＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	deepseascale: {
@@ -458,7 +458,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragoniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ドラゴンＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	dragonmemory: {
@@ -514,7 +514,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	eeviumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "イーブイＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ejectbutton: {
@@ -549,7 +549,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	electriumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "デンキＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	emboarite: {
@@ -576,7 +576,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "フェアリーＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fairyfeather: {
@@ -615,7 +615,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fightiniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "カクトウＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	figyberry: {
@@ -646,7 +646,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	firiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ホノオＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	fistplate: {
@@ -685,7 +685,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flyiniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ヒコウＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	focusband: {
@@ -774,7 +774,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	ghostiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ゴーストＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ghostmemory: {
@@ -809,7 +809,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	grassiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "クサＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	grassmemory: {
@@ -855,7 +855,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	groundiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ジメンＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	groundmemory: {
@@ -956,7 +956,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	iciumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "コオリＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icyrock: {
@@ -967,7 +967,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	inciniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ガオガエンＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	insectplate: {
@@ -1020,7 +1020,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	kommoniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ジャラランガＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	laggingtail: {
@@ -1056,7 +1056,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	leek: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ながねぎ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	leftovers: {
@@ -1143,7 +1143,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lunaliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ルナアーラＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lureball: {
@@ -1163,7 +1163,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lycaniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ルガルガンＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	machobrace: {
@@ -1220,7 +1220,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	marshadiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "マーシャドーＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	masterball: {
@@ -1263,7 +1263,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalalloy: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ふくごうきんぞく",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	metalcoat: {
@@ -1291,7 +1291,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	mewniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ミュウＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mewtwonitex: {
@@ -1307,7 +1307,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mimikiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ミミッキュＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mindplate: {
@@ -1383,7 +1383,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	normaliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ノーマルＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	occaberry: {
@@ -1439,11 +1439,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikaniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ピカチュウＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pikashuniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "サトピカＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pinapberry: {
@@ -1477,7 +1477,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	poisoniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ドクＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	poisonmemory: {
@@ -1527,11 +1527,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prettyfeather: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "きれいなハネ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	primariumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "アシレーヌＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	prismscale: {
@@ -1564,7 +1564,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	psychiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "エスパーＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	punchingglove: {
@@ -1674,7 +1674,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "イワＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	rockmemory: {
@@ -1856,7 +1856,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snorliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "カビゴンＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snowball: {
@@ -1871,7 +1871,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	solganiumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ソルガレオＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	souldew: {
@@ -1928,7 +1928,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	steeliumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ハガネＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	steelixite: {
@@ -1989,7 +1989,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tapuniumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "カプＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tartapple: {
@@ -2449,7 +2449,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ultranecroziumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ウルトラネクロＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		transform: "  [POKEMON]から まばゆい 光が あふれだす！",
@@ -2492,7 +2492,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		},
 	},
 	wateriumz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "ミズＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	watermemory: {

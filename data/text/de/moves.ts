@@ -53,7 +53,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aciddownpour: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Vernichtender Säureregen",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	acidspray: {
@@ -112,7 +112,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alloutpummeling: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fulminante Faustschläge",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	alluringvoice: {
@@ -166,7 +166,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	aquacutter: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Aquaschnitt",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -186,7 +186,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		heal: "  Der Wasserring stellt KP von [POKEMON] wieder her!",
 	},
 	aquastep: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Wogentanz",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -195,7 +195,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	armorcannon: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Rüstungskanone",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -355,7 +355,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	axekick: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fersenkick",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -386,7 +386,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	barbbarrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giftstachelregen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -572,17 +572,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	bitterblade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Reueschwert",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bittermalice: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Niedertracht",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blackholeeclipse: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Schwarzes Loch des Grauens",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blastburn: {
@@ -598,12 +598,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blazingtorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hitzeturbo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bleakwindstorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Polarorkan",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -643,11 +643,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	bloodmoon: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Blutmond",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	bloomdoom: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Brillante Blütenpracht",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	blueflare: {
@@ -771,7 +771,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	breakneckblitz: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hyper-Sprintangriff",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	brickbreak: {
@@ -942,7 +942,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ceaselessedge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Klingenschwall",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -995,12 +995,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	chillingwater: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Kalte Dusche",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chillyreception: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Eisige Stimmung",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -1013,7 +1013,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	chloroblast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Chlorostrahl",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1093,12 +1093,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	collisioncourse: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Kollisionskurs",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	combattorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Raufturbo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1118,7 +1118,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	comeuppance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Vendetta",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1151,7 +1151,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	continentalcrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Apokalyptische Steinpresse",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	conversion: {
@@ -1227,7 +1227,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	corkscrewcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Turbo-Spiralkombo",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	corrosivegas: {
@@ -1503,7 +1503,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	devastatingdrake: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Drastisches Drachendröhnen",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	diamondstorm: {
@@ -1537,7 +1537,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		prepare: "[POKEMON] vergräbt sich in der Erde!",
 	},
 	direclaw: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Unheilsklauen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -1614,7 +1614,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	doodle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Abpausen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -1678,7 +1678,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	doubleshock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Zweifachladung",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -1926,7 +1926,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	electrodrift: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Blitztour",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2054,7 +2054,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	esperwing: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Auraschwingen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2219,7 +2219,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	filletaway: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Abspaltung",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2444,7 +2444,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	flowertrick: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Blumentrick",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2745,11 +2745,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigatonhammer: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Riesenhammer",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gigavolthavoc: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gigavolt-Funkensalve",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaciallance: {
@@ -2765,7 +2765,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	glaiverush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Großklingenstoß",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -2788,12 +2788,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxbefuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Benebelung",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxcannonade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Beschuss",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2801,111 +2801,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON] erleidet Schaden durch den Wasserwirbel der Attacke Giga-Beschuss!",
 	},
 	gmaxcentiferno: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Feuerkessel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxchistrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Fokusschlag",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Gekuschel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxdepletion: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Dämpfer",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  AP von [TARGET] wurden verringert!",
 	},
 	gmaxdrumsolo: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Getrommel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfinale: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Lichtblick",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfireball: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Brandball",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxfoamburst: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Schaumbad",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgoldrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Münzregen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxgravitas: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Astrowellen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxhydrosnipe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Schütze",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmalodor: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Gestank",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxmeltdown: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Schmelze",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxoneblow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Einzelhieb",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxrapidflow: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Multihieb",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxreplenish: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Recycling",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxresonance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Melodie",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsandblast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Sandstoß",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsmite: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Sanktion",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsnooze: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Gähnzwang",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsteelsurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Stahlschlag",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2914,32 +2914,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON] wird von zackigen Stahlsplittern getroffen!",
 	},
 	gmaxstonesurge: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Geröll",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxstunshock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Voltschlag",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxsweetness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Nektarflut",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxtartness: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Säureguss",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxterror: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Spuksperre",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxvinelash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Geißel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2947,7 +2947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON] erleidet Schaden durch die heftigen Hiebe der Attacke Giga-Geißel!",
 	},
 	gmaxvolcalith: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Schlacke",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2955,12 +2955,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON] erleidet Schaden durch die Steinbrocken der Attacke Giga-Schlacke!",
 	},
 	gmaxvoltcrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Blitzhagel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	gmaxwildfire: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Feuerflug",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -2968,7 +2968,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON] erleidet Schaden durch die Flammen der Attacke Giga-Feuerflug!",
 	},
 	gmaxwindrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Giga-Sturmstoß",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3196,7 +3196,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	headlongrush: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Schmetterramme",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3501,7 +3501,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hydrovortex: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Super-Wassertornado",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperbeam: {
@@ -3515,7 +3515,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	hyperdrill: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hyperbohrer",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	hyperfang: {
@@ -3608,7 +3608,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	icespinner: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Eiskreisel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3673,7 +3673,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		removeItem: "  [ITEM] von [POKEMON] ist verbrannt und somit nutzlos geworden!",
 	},
 	infernalparade: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Phantomparade",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3684,7 +3684,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infernooverdrive: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Dynamische Maxiflamme",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	infestation: {
@@ -3769,7 +3769,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ivycudgel: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Rankenkeule",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3780,7 +3780,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	jetpunch: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Düsenhieb",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -3880,7 +3880,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		removeItem: "  [SOURCE] schlägt das Item [ITEM] von [POKEMON] weg!",
 	},
 	kowtowcleave: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Kniefallspalter",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	landswrath: {
@@ -3910,7 +3910,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lastrespects: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Letzte Ehre",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4089,12 +4089,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		end: "  [TEAM:capitalize] sind nicht länger durch Beschwörung geschützt!",
 	},
 	luminacrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Lichteinschlag",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	lunarblessing: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Lunargebet",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4136,7 +4136,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	magicaltorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Zauberturbo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4231,7 +4231,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  Intensität [NUMBER]!",
 	},
 	makeitrain: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Goldrausch",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -4262,7 +4262,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		block: "  [MOVE] wurde durch den Tatami-Schild abgewehrt!",
 	},
 	matchagotcha: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Quirlschuss",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4795,12 +4795,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	mortalspin: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Letalwirbler",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mountaingale: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Frostfallwind",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4855,7 +4855,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	mysticalpower: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Mythenkraft",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -4913,7 +4913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	neverendingnightmare: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ewige Nacht",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	nightdaze: {
@@ -4962,7 +4962,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		start: "  [POKEMON] kann nicht mehr fliehen, weil es Finalformation eingesetzt hat!",
 	},
 	noxioustorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Toxiturbo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5024,7 +5024,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	orderup: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Auftischen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5292,12 +5292,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  [POKEMON] wird von seinem Item [ITEM] angegriffen!",
 	},
 	populationbomb: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Mäuseplage",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	pounce: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Anspringen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5345,7 +5345,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	powershift: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Kraftwechsel",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -5497,7 +5497,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	psyshieldbash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Barrierenstoß",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5632,7 +5632,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	ragefist: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Zornesfaust",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -5653,14 +5653,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		startFromZEffect: "#followme",
 	},
 	ragingbull: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Rasender Stier",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: null, // NEEDS TRANSLATION: Showdown custom text
 	},
 	ragingfury: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Flammenwut",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -5868,7 +5868,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	revivalblessing: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Vitalsegen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -6035,7 +6035,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	ruination: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Verderben",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6068,7 +6068,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		block: "  [POKEMON] wird durch Bodyguard geschützt!",
 	},
 	saltcure: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pökelsalz",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		champions: {
@@ -6086,7 +6086,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	sandsearstorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Wüstenorkan",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6137,7 +6137,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	savagespinout: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Wirbelnder Insektenhieb",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	scald: {
@@ -6307,11 +6307,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shatteredpsyche: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Psycho-Schmetterschlag",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	shedtail: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Schwanzabwurf",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -6352,7 +6352,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		cant: "Die Panzerfalle von [POKEMON] wurde nicht ausgelöst!",
 	},
 	shelter: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Refugium",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6379,7 +6379,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	silktrap: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fadenfalle",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6676,7 +6676,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	snowscape: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Schneelandschaft",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6805,7 +6805,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  [POKEMON] tauscht seinen Initiative-Wert mit dem des Ziels!",
 	},
 	spicyextract: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Chili-Essenz",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6883,7 +6883,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		damage: "  [POKEMON] wurde verletzt!",
 	},
 	spinout: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Reifendrehung",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -6961,7 +6961,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		startFromZEffect: "#followme",
 	},
 	springtidestorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Frühlingsorkan",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7076,7 +7076,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	stoneaxe: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Felsaxt",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7216,7 +7216,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		activate: "  Der Delegator steckt den Schlag für [POKEMON] ein!",
 	},
 	subzeroslammer: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Tobender Geofrost",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	suckerpunch: {
@@ -7274,7 +7274,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	supersonicskystrike: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Finaler Steilflug",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	surf: {
@@ -7411,7 +7411,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	syrupbomb: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Sirupbombe",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -7483,7 +7483,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	takeheart: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Mutschub",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7544,7 +7544,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tectonicrage: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Seismische Eruption",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	teeterdance: {
@@ -7584,7 +7584,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	terablast: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Tera-Ausbruch",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7758,7 +7758,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tidyup: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Aufräumen",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
@@ -7771,7 +7771,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	torchsong: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Loderlied",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7823,7 +7823,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	trailblaze: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Wegbereiter",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7903,7 +7903,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	triplearrows: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Drillingspfeile",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7914,7 +7914,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	tripledive: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Tauchtriade",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7947,7 +7947,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twinbeam: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Doppelstrahl",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -7971,7 +7971,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 	},
 	twinkletackle: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Entzückender Sternenstoß",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	twister: {
@@ -8060,7 +8060,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	victorydance: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Siegestanz",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -8069,7 +8069,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	visegrip: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Klammer",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	vitalthrow: {
@@ -8175,7 +8175,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wavecrash: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Wellentackle",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -8244,7 +8244,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
 	wickedtorque: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Finsterturbo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
@@ -8271,7 +8271,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		block: "  [POKEMON] wird durch Rundumschutz geschützt!",
 	},
 	wildboltstorm: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: "Donnerorkan",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},
