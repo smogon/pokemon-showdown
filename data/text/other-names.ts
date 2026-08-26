@@ -16,6 +16,7 @@ export const TermNames: { [id: string]: TranslationString } = {
 	avs: "AVs",
 	point: "Point",
 	points: "Points",
+	stats: "stats",
 
 	pokemon: "Pokémon",
 	move: "Move",
@@ -78,7 +79,6 @@ export const StatNames: { [id: string]: TranslationString } = {
 	accuracy: "accuracy",
 	evasion: "evasiveness",
 	spc: "Special",
-	stats: "stats",
 };
 
 export const StatMediumNames: { [id: string]: TranslationString } = {

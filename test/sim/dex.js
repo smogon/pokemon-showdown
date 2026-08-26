@@ -111,6 +111,10 @@ describe('DexText#get', () => {
 	it(`should translate scalar names`, () => {
 		assert.equal(Dex.text.termName('Egg Group', 'ja'), 'タマゴグループ');
 		assert.equal(Dex.text.termName('Moves', 'ja'), '技');
+		assert.equal(Dex.text.termName('Stats', 'fr'), 'Stats');
+		assert.equal(Dex.loadTextData('fr').TermNames.stats, 'Stats');
+		assert.equal(Dex.loadTextData('fr').TermNames['stats:grammar'], 'fp');
+		assert(!('stats' in Dex.loadTextData('fr').StatNames));
 		assert.equal(Dex.loadTextData('fr').StatNames.spd, 'Défense Spéciale');
 		assert.equal(Dex.loadTextData('fr').StatNames['spd:grammar'], 'fs');
 		assert.equal(Dex.loadTextData('fr').StatMediumNames.spd, 'Déf. Spé.');
