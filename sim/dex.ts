@@ -30,7 +30,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
-import type { TextLanguage } from './dex-data';
+import { OTHER_NAME_TABLES, type OtherNameTable, type TextLanguage } from './dex-data';
 import { Condition, DexConditions } from './dex-conditions';
 import { DataMove, DexMoves } from './dex-moves';
 import { Item, DexItems } from './dex-items';
@@ -46,13 +46,11 @@ const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
 const dexes: { [mod: string]: ModdedDex } = Object.create(null);
 
-type DataType =
-	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
-	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData';
-const DATA_TYPES: DataType[] = [
+const DATA_TYPES = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
 	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
-];
+] as const;
+type DataType = typeof DATA_TYPES[number];
 
 const DATA_FILES = {
 	Abilities: 'abilities',
@@ -87,46 +85,20 @@ interface DexTableData {
 	Conditions: DexTable<import('./dex-conditions').ConditionData>;
 	TypeChart: DexTable<import('./dex-data').TypeData>;
 }
-interface RawTextTableData {
+interface RawTextTableData extends Record<OtherNameTable, DexTable<TranslationString>> {
 	Abilities: DexTable<AbilityText>;
 	Items: DexTable<ItemText>;
 	Moves: DexTable<MoveText>;
 	PokedexNames: DexTable<TranslationString>;
-	TermNames: DexTable<TranslationString>;
-	TypeNames: DexTable<TranslationString>;
-	NatureNames: DexTable<TranslationString>;
-	CategoryNames: DexTable<TranslationString>;
-	GenderNames: DexTable<TranslationString>;
-	EggGroupNames: DexTable<TranslationString>;
-	TagNames: DexTable<TranslationString>;
-	ColorNames: DexTable<TranslationString>;
-	ShapeNames: DexTable<TranslationString>;
 	Default: DexTable<DefaultText>;
 }
-interface TextTableData {
+interface TextTableData extends Record<OtherNameTable, DexTable<string>> {
 	Abilities: DexTable<ResolvedAbilityText>;
 	Items: DexTable<ResolvedItemText>;
 	Moves: DexTable<ResolvedMoveText>;
 	PokedexNames: DexTable<string>;
-	TermNames: DexTable<string>;
-	TypeNames: DexTable<string>;
-	NatureNames: DexTable<string>;
-	CategoryNames: DexTable<string>;
-	GenderNames: DexTable<string>;
-	EggGroupNames: DexTable<string>;
-	TagNames: DexTable<string>;
-	ColorNames: DexTable<string>;
-	ShapeNames: DexTable<string>;
 	Default: DexTable<DefaultText>;
 }
-
-type OtherNameTable =
-	'TermNames' | 'TypeNames' | 'NatureNames' | 'CategoryNames' | 'GenderNames' |
-	'EggGroupNames' | 'TagNames' | 'ColorNames' | 'ShapeNames';
-const OTHER_NAME_TABLES: OtherNameTable[] = [
-	'TermNames', 'TypeNames', 'NatureNames', 'CategoryNames', 'GenderNames',
-	'EggGroupNames', 'TagNames', 'ColorNames', 'ShapeNames',
-];
 
 export const toID = Data.toID;
 
@@ -561,7 +533,7 @@ export class ModdedDex {
 		const langDir = lang === 'en' ? `` : `${lang}/`;
 		const optional = lang !== 'en';
 		const otherNameTables = Object.fromEntries(OTHER_NAME_TABLES.map(table => [
-			table, this.loadTextFile(`${langDir}other-names`, table, optional),
+			table, this.loadTextFile(`${langDir}other-names`, table, optional) || {},
 		])) as Pick<RawTextTableData, OtherNameTable>;
 		const data: RawTextTableData = {
 			PokedexNames: this.loadTextFile(
@@ -583,6 +555,11 @@ export class ModdedDex {
 		const table: Record<string, string> = {};
 		for (const id in englishTable) {
 			table[id] = localizedTable[id] ?? englishTable[id]!;
+		}
+		for (const id in localizedTable) {
+			if (!(id in englishTable) && localizedTable[id] !== null) {
+				table[id] = localizedTable[id]!;
+			}
 		}
 		return table;
 	}

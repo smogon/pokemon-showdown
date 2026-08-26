@@ -63,7 +63,13 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- Bite` - ban moves that are boosted by Strong Jaw
 
-`- Ballistic` - ban moves that are blocked by Bulletproof
+`- Bullet` - ban moves that are blocked by Bulletproof
+
+`- Dance` - ban moves that are copied by Dancer
+
+`- Slicing` - ban moves that are boosted by Sharpness
+
+`- Wind` - ban moves that activate Wind Power and Wind Rider
 
 `- Bypass Protect` - ban moves that bypass Protect, Detect, etc
 

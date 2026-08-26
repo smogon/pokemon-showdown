@@ -131,54 +131,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		hitCount: "  Colpi inflitti: [NUMBER]!",
 	},
 
-	// stats
-	hp: {
-		statName: "PS",
-		statShortName: "PS",
-	},
-	atk: {
-		statName: "Attacco",
-		grammar: "ms",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	def: {
-		statName: "Difesa",
-		grammar: "fs",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spa: {
-		statName: "Attacco Speciale",
-		grammar: "ms",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spd: {
-		statName: "Difesa Speciale",
-		grammar: "fs",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spe: {
-		statName: "Velocità",
-		grammar: "fs",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	accuracy: {
-		statName: "precisione",
-		grammar: "fs",
-	},
-	evasion: {
-		statName: "elusione",
-		grammar: "fs",
-	},
-	spc: {
-		statName: "Speciale",
-		grammar: "ms",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	stats: {
-		statName: "Statistiche",
-		grammar: "fp",
-	},
-
 	// statuses
 	brn: {
 		start: "  [POKEMON] è stato scottato!",

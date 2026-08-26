@@ -100,18 +100,25 @@ describe('DexText#get', () => {
 
 	it(`should translate names backed by Dex objects`, () => {
 		const { Tags } = require('../../dist/data/tags');
-		assert.deepEqual(Dex.text.get(Dex.types.get('Fire'), 'ja'), { name: 'Fire' });
-		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'ja'), { name: 'Adamant' });
-		assert.deepEqual(Dex.text.get(Tags.restrictedlegendary, 'ja'), { name: 'Restricted Legendary' });
+		assert.deepEqual(Dex.text.get(Dex.types.get('Fire'), 'ja'), { name: 'ほのお' });
+		assert.equal(Dex.text.typeName('Fire', 'ja'), 'ほのお');
+		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'ja'), { name: 'いじっぱり' });
+		assert.equal(Dex.text.natureName('Adamant', 'ja'), 'いじっぱり');
+		assert.equal(Dex.text.natureName('Adamant', 'en'), 'Adamant');
+		assert.deepEqual(Dex.text.get(Tags.restrictedlegendary, 'ja'), { name: '禁止級伝説' });
 	});
 
 	it(`should translate scalar names`, () => {
-		assert.equal(Dex.text.termName('Egg Group', 'ja'), 'Egg Group');
-		assert.equal(Dex.text.categoryName('Physical', 'ja'), 'Physical');
-		assert.equal(Dex.text.genderName('F', 'ja'), 'Female');
-		assert.equal(Dex.text.eggGroupName('Human-Like', 'ja'), 'Human-Like');
-		assert.equal(Dex.text.colorName('Purple', 'ja'), 'Purple');
-		assert.equal(Dex.text.shapeName('bug-wings', 'ja'), 'Bug wings');
+		assert.equal(Dex.text.termName('Egg Group', 'ja'), 'タマゴグループ');
+		assert.equal(Dex.text.termName('Moves', 'ja'), '技');
+		assert.equal(Dex.loadTextData('fr').StatNames.spd, 'Défense Spéciale');
+		assert.equal(Dex.loadTextData('fr').StatNames['spd:grammar'], 'fs');
+		assert.equal(Dex.loadTextData('fr').StatMediumNames.spd, 'Déf. Spé.');
+		assert.equal(Dex.loadTextData('fr').StatShortNames.spd, 'DSp');
+		assert.equal(Dex.text.categoryName('Physical', 'ja'), 'ぶつり');
+		assert.equal(Dex.text.genderName('F', 'ja'), 'メス');
+		assert.equal(Dex.text.eggGroupName('Human-Like', 'ja'), '人型');
+		assert.equal(Dex.text.colorName('Purple', 'ja'), '紫');
 	});
 
 	it(`should return the entire text entry`, () => {

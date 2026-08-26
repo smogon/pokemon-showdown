@@ -799,7 +799,7 @@ export const PokedexNames: { [id: string]: TranslationString } = {
 	froakie: "Froxy",
 	frogadier: "Amphizel",
 	greninja: "Quajutsu",
-	greninjaash: "Ash Quajutsu",
+	greninjaash: "Ash-Quajutsu",
 	bunnelby: "Scoppel",
 	diggersby: "Grebbit",
 	fletchling: "Dartiri",

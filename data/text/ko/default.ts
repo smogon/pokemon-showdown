@@ -131,45 +131,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		hitCount: "  [NUMBER]번 맞았다!",
 	},
 
-	// stats
-	hp: {
-		statName: "HP",
-		statShortName: "HP",
-	},
-	atk: {
-		statName: "공격",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	def: {
-		statName: "방어",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spa: {
-		statName: "특수공격",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spd: {
-		statName: "특수방어",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spe: {
-		statName: "스피드",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	accuracy: {
-		statName: "명중률",
-	},
-	evasion: {
-		statName: "회피율",
-	},
-	spc: {
-		statName: "특수",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	stats: {
-		statName: "스테이터스",
-	},
-
 	// statuses
 	brn: {
 		start: "  [POKEMON:topic] 화상을 입었다!",

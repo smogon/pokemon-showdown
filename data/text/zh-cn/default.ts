@@ -131,45 +131,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		hitCount: "  击中了[NUMBER]次！",
 	},
 
-	// stats
-	hp: {
-		statName: "HP",
-		statShortName: "HP",
-	},
-	atk: {
-		statName: "攻击",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	def: {
-		statName: "防御",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spa: {
-		statName: "特攻",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spd: {
-		statName: "特防",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spe: {
-		statName: "速度",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	accuracy: {
-		statName: "命中率",
-	},
-	evasion: {
-		statName: "闪避率",
-	},
-	spc: {
-		statName: "特殊",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	stats: {
-		statName: "状态",
-	},
-
 	// statuses
 	brn: {
 		start: "  [POKEMON]被灼伤了！",

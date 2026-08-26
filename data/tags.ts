@@ -106,13 +106,28 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		desc: "Boosted 1.5x by Strong Jaw.",
 		moveFilter: move => 'bite' in move.flags,
 	},
-	ballistic: {
-		name: "Ballistic",
+	bullet: {
+		name: "Bullet",
 		desc: "Doesn't affect Bulletproof Pokémon.",
 		moveFilter: move => 'bullet' in move.flags,
 	},
+	dance: {
+		name: "Dance",
+		desc: "Copied by Dancer.",
+		moveFilter: move => 'dance' in move.flags,
+	},
+	slicing: {
+		name: "Slicing",
+		desc: "Boosted 1.5x by Sharpness.",
+		moveFilter: move => 'slicing' in move.flags,
+	},
+	wind: {
+		name: "Wind",
+		desc: "Activates Wind Power and Wind Rider.",
+		moveFilter: move => 'wind' in move.flags,
+	},
 	bypassprotect: {
-		name: "Bypass Protect",
+		name: "Bypasses Protect",
 		desc: "Bypasses Protect, Detect, King's Shield, and Spiky Shield.",
 		moveFilter: move => move.target !== 'self' && !('protect' in move.flags),
 	},
@@ -132,7 +147,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		moveFilter: move => ['allyTeam', 'self', 'adjacentAllyOrSelf'].includes(move.target) && !('snatch' in move.flags),
 	},
 	bypasssubstitute: {
-		name: "Bypass Substitute",
+		name: "Bypasses Substitutes",
 		desc: "Bypasses but does not break a Substitute.",
 		moveFilter: move => 'bypasssub' in move.flags,
 	},

@@ -12,6 +12,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		opposingParty: "the opposing Pok\u00E9mon",
 
 		turn: "== Turn [NUMBER] ==",
+		whatDo: "What will [POKEMON] do?",
 		switchIn: "[TRAINER] sent out [FULLNAME]!",
 		switchInOwn: "Go! [FULLNAME]!",
 		switchOut: "[TRAINER] withdrew [NICKNAME]!",
@@ -129,45 +130,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		ohko: "  It's a one-hit KO!",
 		combine: "  The two moves have become one! It's a combined move!",
 		hitCount: "  The Pok\u00E9mon was hit [NUMBER] [INFLECT:NUMBER:s=time:p=times]!",
-	},
-
-	// stats
-	hp: {
-		statName: "HP",
-		statShortName: "HP",
-	},
-	atk: {
-		statName: "Attack",
-		statShortName: "Atk",
-	},
-	def: {
-		statName: "Defense",
-		statShortName: "Def",
-	},
-	spa: {
-		statName: "Sp. Atk",
-		statShortName: "SpA",
-	},
-	spd: {
-		statName: "Sp. Def",
-		statShortName: "SpD",
-	},
-	spe: {
-		statName: "Speed",
-		statShortName: "Spe",
-	},
-	accuracy: {
-		statName: "accuracy",
-	},
-	evasion: {
-		statName: "evasiveness",
-	},
-	spc: {
-		statName: "Special",
-		statShortName: "Spc",
-	},
-	stats: {
-		statName: "stats",
 	},
 
 	// statuses

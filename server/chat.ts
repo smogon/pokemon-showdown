@@ -290,6 +290,19 @@ export class Interruption extends Error {
 	}
 }
 
+export type Translator = {
+	(strings: TemplateStringsArray | string, ...keys: any[]): string,
+	term: { [id: string]: string },
+	type: { [id: string]: string },
+	nature: { [id: string]: string },
+	gender: { [id: string]: string },
+	egggroup: { [id: string]: string },
+	tag: { [id: string]: string },
+	color: { [id: string]: string },
+	status: { [id: string]: string },
+	target: { [id: string]: string },
+};
+
 // These classes need to be declared here because they aren't hoisted
 export abstract class MessageContext {
 	readonly user: User;
@@ -400,8 +413,8 @@ export abstract class MessageContext {
 
 		return Users.get(target, exactName);
 	}
-	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
-		return Chat.tr(this.language, strings, ...keys);
+	get tr(): Translator {
+		return Chat.getTranslator(this.language);
 	}
 }
 
@@ -1774,6 +1787,30 @@ export const Chat = new class {
 
 	getDexLanguage(language: ID | null = null): TextLanguage {
 		return LANGUAGE_CODES[language || 'english'] || 'en';
+	}
+	readonly translators = new Map<ID, Translator>();
+	getTranslator(language: ID | null = null): Translator {
+		const lang = language || 'english' as ID;
+		let translator = this.translators.get(lang);
+		if (!translator) {
+			const text = Dex.loadTextData(this.getDexLanguage(lang));
+			translator = Object.assign(
+				(strings: TemplateStringsArray | string, ...keys: any[]) => Chat.tr(lang, strings, ...keys),
+				{
+					term: text.TermNames,
+					type: text.TypeNames,
+					nature: text.NatureNames,
+					gender: text.GenderNames,
+					egggroup: text.EggGroupNames,
+					tag: text.TagNames,
+					color: text.ColorNames,
+					status: text.StatusNames,
+					target: text.TargetNames,
+				}
+			);
+			this.translators.set(lang, translator);
+		}
+		return translator;
 	}
 	getLanguageName(language: ID): string {
 		const englishName = Chat.languages.get(language) || "Unknown Language";

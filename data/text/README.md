@@ -12,13 +12,13 @@ Translated battle messages from oldgens sourced from abcboy101/poke-corpus commi
 Translation notes
 -----------------
 
-`shortDesc` and `statShortName` needs to fit in a dex chart row (teambuilder list).
+`shortDesc` and `StatShortNames` entries need to fit in a dex chart row (teambuilder list).
 Moves have extremely low space, so you'll need to account for that.
 
 Approximate limits:
 - move `shortDesc`: at most ~55 Latin characters (~27 CJK); ideally ~45 (~25)
 - ability and item `shortDesc`: at most ~85 Latin characters (~42 CJK)
-- `statShortName`: at most 3 Latin letters or 2 CJK characters
+- `StatShortNames`: at most 3 Latin letters or 2 CJK characters
 
 Untranslated text
 -----------------

@@ -131,45 +131,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		hitCount: "  [NUMBER]回 当たった！",
 	},
 
-	// stats
-	hp: {
-		statName: "ＨＰ",
-		statShortName: "Ｈ",
-	},
-	atk: {
-		statName: "攻撃",
-		statShortName: "Ａ",
-	},
-	def: {
-		statName: "防御",
-		statShortName: "Ｂ",
-	},
-	spa: {
-		statName: "特攻",
-		statShortName: "Ｃ",
-	},
-	spd: {
-		statName: "特防",
-		statShortName: "Ｄ",
-	},
-	spe: {
-		statName: "素早さ",
-		statShortName: "Ｓ",
-	},
-	accuracy: {
-		statName: "命中率",
-	},
-	evasion: {
-		statName: "回避率",
-	},
-	spc: {
-		statName: "特殊",
-		statShortName: "ＣＤ",
-	},
-	stats: {
-		statName: "ステータス",
-	},
-
 	// statuses
 	brn: {
 		start: "  [POKEMON]は やけどを 負った！",

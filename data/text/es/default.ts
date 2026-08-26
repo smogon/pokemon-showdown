@@ -131,54 +131,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		hitCount: "  N.º de golpes: [NUMBER].",
 	},
 
-	// stats
-	hp: {
-		statName: "PS",
-		statShortName: "PS",
-	},
-	atk: {
-		statName: "Ataque",
-		grammar: "ms",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	def: {
-		statName: "Defensa",
-		grammar: "fs",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spa: {
-		statName: "Ataque Especial",
-		grammar: "ms",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spd: {
-		statName: "Defensa Especial",
-		grammar: "fs",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	spe: {
-		statName: "Velocidad",
-		grammar: "fs",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	accuracy: {
-		statName: "Precisión",
-		grammar: "fs",
-	},
-	evasion: {
-		statName: "Evasión",
-		grammar: "fs",
-	},
-	spc: {
-		statName: "Especial",
-		grammar: "ms",
-		statShortName: null, // NEEDS TRANSLATION: Showdown custom text
-	},
-	stats: {
-		statName: "Características",
-		grammar: "fp",
-	},
-
 	// statuses
 	brn: {
 		start: "  ¡[POKEMON] se ha quemado!",

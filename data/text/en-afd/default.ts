@@ -135,45 +135,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		fail: "  [POKEMON] shook its head. It seems like it can't use this move...",
 	},
 
-	// stats
-	hp: {
-		statName: "Constitution",
-		statShortName: "HP",
-	},
-	atk: {
-		statName: "Strength",
-		statShortName: "Atk",
-	},
-	def: {
-		statName: "Armor",
-		statShortName: "Def",
-	},
-	spa: {
-		statName: "Intelligence",
-		statShortName: "SpA",
-	},
-	spd: {
-		statName: "Resistance",
-		statShortName: "SpD",
-	},
-	spe: {
-		statName: "Agility",
-		statShortName: "Spe",
-	},
-	accuracy: {
-		statName: "accuracy",
-	},
-	evasion: {
-		statName: "evasiveness",
-	},
-	spc: {
-		statName: "Intelligence",
-		statShortName: "Spc",
-	},
-	stats: {
-		statName: "stats",
-	},
-
 	// misc effects
 	confusion: {
 		start: "  [POKEMON] became confused!",

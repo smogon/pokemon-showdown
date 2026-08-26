@@ -604,6 +604,7 @@ export const commands: Chat.ChatCommands = {
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
 		const textLanguage = Chat.getDexLanguage(this.language);
+		const tr = this.tr;
 		if (!newTargets?.length) {
 			throw new Chat.ErrorMessage(`'${target}' doesn't match any Pok\u00e9mon, item, move, ability or nature${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
@@ -662,55 +663,58 @@ export const commands: Chat.ChatCommands = {
 						weighthit = 40;
 					}
 					details = {
-						"Dex#": String(pokemon.num),
-						Gen: String(pokemon.gen) || 'CAP',
-						Height: `${pokemon.heightm} m`,
+						[tr.term.dexnum]: String(pokemon.num),
+						[tr.term.gen]: String(pokemon.gen) || 'CAP',
+						[tr.term.height]: tr.term.numm.replace('[NUMBER]', `${pokemon.heightm}`),
 					};
-					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
+					details[tr.term.weight] = `${tr.term.numkg.replace('[NUMBER]', `${pokemon.weighthg / 10}`)} <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
-					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
+					if (gmaxMove && dex.gen === 8) details[tr.tag.gmaxmove] = gmaxMove;
 					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
-					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
-					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
+					if (pokemon.color && dex.gen >= 5) details[tr.term.color] = tr.color[toID(pokemon.color)] || pokemon.color;
+					if (pokemon.eggGroups && dex.gen >= 2) {
+						details[tr.term.egggroups] = pokemon.eggGroups.map(group => tr.egggroup[toID(group)] || group).join(", ");
+					}
 					const evos: string[] = [];
 					for (const evoName of pokemon.evos) {
 						const evo = dex.species.get(evoName);
 						if (evo.gen <= dex.gen) {
+							const name = dex.text.get(evo, textLanguage).name;
 							const condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
 							case 'levelExtra':
-								evos.push(`${evo.name} (level-up${condition})`);
+								evos.push(`${name} (level-up${condition})`);
 								break;
 							case 'levelFriendship':
-								evos.push(`${evo.name} (level-up with high Friendship${condition})`);
+								evos.push(`${name} (level-up with high Friendship${condition})`);
 								break;
 							case 'levelHold':
-								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
+								evos.push(`${name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
 							case 'useItem':
-								evos.push(`${evo.name} (${evo.evoItem})`);
+								evos.push(`${name} (${evo.evoItem})`);
 								break;
 							case 'levelMove':
-								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
+								evos.push(`${name} (level-up with ${evo.evoMove}${condition})`);
 								break;
 							case 'other':
-								evos.push(`${evo.name} (${evo.evoCondition})`);
+								evos.push(`${name} (${evo.evoCondition})`);
 								break;
 							case 'trade':
-								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
+								evos.push(`${name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
 								break;
 							default:
-								evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
+								evos.push(`${name} (${evo.evoLevel}${condition})`);
 							}
 						}
 					}
 					if (pokemon.prevo) {
-						details["Pre-Evolution"] = pokemon.prevo;
+						details[tr.term.preevolution] = dex.text.get(dex.species.get(pokemon.prevo), textLanguage).name;
 					}
 					if (!evos.length) {
-						details[`<span class="gray">Does Not Evolve</span>`] = "";
+						details[`<span class="gray">${tr.term.doesnotevolve}</span>`] = "";
 					} else {
-						details["Evolution"] = evos.join(", ");
+						details[tr.term.evolution] = evos.join(", ");
 					}
 				}
 				break;
@@ -722,14 +726,14 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(item, textLanguage).desc;
 					details = {
-						Gen: String(item.gen),
+						[tr.term.gen]: String(item.gen),
 					};
 
 					if (dex.gen >= 4) {
 						if (item.fling) {
 							details["Fling Base Power"] = String(item.fling.basePower);
-							if (item.fling.status) details["Fling Effect"] = item.fling.status;
-							if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
+							if (item.fling.status) details["Fling Effect"] = tr.status[item.fling.status] || item.fling.status;
+							if (item.fling.volatileStatus) details["Fling Effect"] = tr.status[item.fling.volatileStatus] || item.fling.volatileStatus;
 							if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
 							if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
 							if (item.id === 'mentalherb') {
@@ -741,7 +745,7 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 					if (item.naturalGift && dex.gen >= 3) {
-						details["Natural Gift Type"] = item.naturalGift.type;
+						details["Natural Gift Type"] = tr.type[toID(item.naturalGift.type)] || item.naturalGift.type;
 						details["Natural Gift Base Power"] = String(item.naturalGift.basePower);
 					}
 					if (item.isNonstandard) {
@@ -757,8 +761,8 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(move, textLanguage).desc;
 					details = {
-						Priority: String(move.priority),
-						Gen: String(move.gen) || 'CAP',
+						[tr.tag.priority]: String(move.priority),
+						[tr.term.gen]: String(move.gen) || 'CAP',
 					};
 
 					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
@@ -766,29 +770,29 @@ export const commands: Chat.ChatCommands = {
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
 						details["&#10003; Boosted by Sheer Force"] = "";
 					}
-					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
-					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
-					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
-					if (move.flags['pulse'] && dex.gen >= 6) details["&#10003; Pulse"] = "";
-					if (!move.flags['protect'] && move.target !== 'self') details["&#10003; Bypasses Protect"] = "";
-					if (move.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
+					if (move.flags['contact'] && dex.gen >= 3) details[`&#10003; ${tr.tag.contact}`] = "";
+					if (move.flags['sound'] && dex.gen >= 3) details[`&#10003; ${tr.tag.sound}`] = "";
+					if (move.flags['bullet'] && dex.gen >= 6) details[`&#10003; ${tr.tag.bullet}`] = "";
+					if (move.flags['pulse'] && dex.gen >= 6) details[`&#10003; ${tr.tag.pulse}`] = "";
+					if (!move.flags['protect'] && move.target !== 'self') details[`&#10003; ${tr.tag.bypassprotect}`] = "";
+					if (move.flags['bypasssub']) details[`&#10003; ${tr.tag.bypasssubstitute}`] = "";
 					if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
-					if (move.flags['bite'] && dex.gen >= 6) details["&#10003; Bite"] = "";
-					if (move.flags['punch'] && dex.gen >= 4) details["&#10003; Punch"] = "";
-					if (move.flags['powder'] && dex.gen >= 6) details["&#10003; Powder"] = "";
+					if (move.flags['bite'] && dex.gen >= 6) details[`&#10003; ${tr.tag.bite}`] = "";
+					if (move.flags['punch'] && dex.gen >= 4) details[`&#10003; ${tr.tag.fist}`] = "";
+					if (move.flags['powder'] && dex.gen >= 6) details[`&#10003; ${tr.tag.powder}`] = "";
 					if (move.flags['reflectable'] && dex.gen >= 3) details["&#10003; Bounceable"] = "";
 					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
 					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
 					if (move.flags['gravity'] && dex.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
-					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
-					if (move.flags['slicing'] && dex.gen >= 9) details["&#10003; Slicing move"] = "";
-					if (move.flags['wind'] && dex.gen >= 9) details["&#10003; Wind move"] = "";
+					if (move.flags['dance'] && dex.gen >= 7) details[`&#10003; ${tr.tag.dance}`] = "";
+					if (move.flags['slicing'] && dex.gen >= 9) details[`&#10003; ${tr.tag.slicing}`] = "";
+					if (move.flags['wind'] && dex.gen >= 9) details[`&#10003; ${tr.tag.wind}`] = "";
 
 					if (dex.gen >= 7) {
 						if (move.gen >= 8 && move.isMax) {
 							// Don't display Z-Power for Max/G-Max moves
 						} else if (move.zMove?.basePower) {
-							details["Z-Power"] = String(move.zMove.basePower);
+							details[tr.term.zpower] = String(move.zMove.basePower);
 						} else if (move.zMove?.effect) {
 							const zEffects: { [k: string]: string } = {
 								clearnegativeboost: "Restores negative stat stages to 0",
@@ -810,9 +814,9 @@ export const commands: Chat.ChatCommands = {
 								details["Z-Effect"] += ` ${stats[h]} +${boost[h]}`;
 							}
 						} else if (move.isZ && typeof move.isZ === 'string') {
-							details["&#10003; Z-Move"] = "";
+							details[`&#10003; ${tr.tag.zmove}`] = "";
 							const zCrystal = dex.items.get(move.isZ);
-							details["Z-Crystal"] = zCrystal.name;
+							details[tr.term.zcrystal] = dex.text.get(zCrystal, textLanguage).name;
 							if (zCrystal.itemUser) {
 								details["User"] = zCrystal.itemUser.join(", ");
 								details["Required Move"] = dex.items.get(move.isZ).zMoveFrom!;
@@ -823,30 +827,13 @@ export const commands: Chat.ChatCommands = {
 					}
 
 					if (move.isMax) {
-						details["&#10003; Max Move"] = "";
+						details[`&#10003; ${tr.tag.maxmove}`] = "";
 						if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
 					} else if (dex.gen === 8 && move.maxMove?.basePower) {
 						details["Dynamax Power"] = String(move.maxMove.basePower);
 					}
 
-					const targetTypes: { [k: string]: string } = {
-						normal: "One Adjacent Pok\u00e9mon",
-						self: "User",
-						adjacentAlly: "One Ally",
-						adjacentAllyOrSelf: "User or Ally",
-						adjacentFoe: "One Adjacent Opposing Pok\u00e9mon",
-						allAdjacentFoes: "All Adjacent Opponents",
-						foeSide: "Opposing Side",
-						allySide: "User's Side",
-						allyTeam: "User's Team",
-						allAdjacent: "All Adjacent Pok\u00e9mon",
-						any: "Any Pok\u00e9mon",
-						all: "All Pok\u00e9mon",
-						scripted: "Chosen Automatically",
-						randomNormal: "Random Adjacent Opposing Pok\u00e9mon",
-						allies: "User and Allies",
-					};
-					details["Target"] = targetTypes[move.target] || "Unknown";
+					details[tr.term.target] = tr.target[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && dex.gen >= 3) {
 						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">Non-Snatchable Moves</a>`] = '';
@@ -867,7 +854,7 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(ability, textLanguage).desc;
 					details = {
-						Gen: String(ability.gen) || 'CAP',
+						[tr.term.gen]: String(ability.gen) || 'CAP',
 					};
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";

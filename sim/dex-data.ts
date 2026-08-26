@@ -44,6 +44,13 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedNameText;
 export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
 
+export const OTHER_NAME_TABLES = [
+	'TermNames', 'TypeNames', 'NatureNames', 'GenderNames',
+	'EggGroupNames', 'TagNames', 'ColorNames', 'StatusNames', 'TargetNames',
+	'StatNames', 'StatMediumNames', 'StatShortNames',
+] as const;
+export type OtherNameTable = typeof OTHER_NAME_TABLES[number];
+
 type TextEffect = Species | Item | Ability | Move | Nature | TypeInfo | TagData;
 
 /** English-only text for custom effects defined by mods. */
@@ -106,8 +113,16 @@ export class DexText {
 		return this.otherName('TermNames', name, lang);
 	}
 
+	typeName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('TypeNames', name, lang);
+	}
+
+	natureName(name: string, lang: TextLanguage = 'en'): string {
+		return this.otherName('NatureNames', name, lang);
+	}
+
 	categoryName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('CategoryNames', name, lang);
+		return this.otherName('TagNames', name, lang);
 	}
 
 	genderName(name: string, lang: TextLanguage = 'en'): string {
@@ -122,15 +137,7 @@ export class DexText {
 		return this.otherName('ColorNames', name, lang);
 	}
 
-	shapeName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('ShapeNames', name, lang);
-	}
-
-	private otherName(
-		table: 'TermNames' | 'TypeNames' | 'NatureNames' | 'CategoryNames' | 'GenderNames' |
-		'EggGroupNames' | 'TagNames' | 'ColorNames' | 'ShapeNames',
-		name: string, lang: TextLanguage
-	): string {
+	private otherName(table: OtherNameTable, name: string, lang: TextLanguage): string {
 		let id: string = toID(name);
 		if (table === 'GenderNames') {
 			id = ({ m: 'male', f: 'female', n: 'genderless' } as Record<string, string>)[id] || id;
