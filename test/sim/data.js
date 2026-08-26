@@ -157,6 +157,7 @@ describe('Dex data', () => {
 
 	it('should have valid Aliases entries', () => {
 		const Aliases = require('../../dist/data/aliases').Aliases;
+		const Tags = require('../../dist/data/tags').Tags;
 		for (const aliasid in Aliases) {
 			const targetid = toID(Aliases[aliasid]);
 			if (targetid in Dex.data.Pokedex) {
@@ -169,8 +170,12 @@ describe('Dex data', () => {
 				assert.equal(Aliases[aliasid], Dex.data.Items[targetid].name, `Alias ${aliasid} has incorrect Item name "${Aliases[aliasid]}"`);
 			} else if (targetid in Dex.data.Rulesets) {
 				assert.equal(Aliases[aliasid], Dex.data.Rulesets[targetid].name, `Alias ${aliasid} has incorrect Ruleset name "${Aliases[aliasid]}"`);
+			} else if (targetid in Tags) {
+				if (toID(Tags[targetid].name) === targetid) {
+					assert.equal(Aliases[aliasid], Tags[targetid].name, `Alias ${aliasid} has incorrect Tag name "${Aliases[aliasid]}"`);
+				}
 			} else {
-				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format`);
+				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format/tag`);
 			}
 		}
 

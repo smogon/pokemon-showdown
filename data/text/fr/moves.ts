@@ -5324,7 +5324,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pollenpuff: {
 		name: "Boule Pollen",
-		// Official flavor text: "Utilisée sur l’ennemi, envoie une boule explosive qui fait des dégâts ; sur un allié, donne du bon pollen nutritif qui fait récupérer des PV."
+		// Official flavor text: "Utilisée sur l’ennemi, envoie une boule explosive qui fait des dégâts\u00A0; sur un allié, donne du bon pollen nutritif qui fait récupérer des PV."
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 	},

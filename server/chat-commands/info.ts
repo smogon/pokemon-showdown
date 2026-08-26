@@ -733,7 +733,9 @@ export const commands: Chat.ChatCommands = {
 						if (item.fling) {
 							details["Fling Base Power"] = String(item.fling.basePower);
 							if (item.fling.status) details["Fling Effect"] = TL.status[item.fling.status] || item.fling.status;
-							if (item.fling.volatileStatus) details["Fling Effect"] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
+							if (item.fling.volatileStatus) {
+								details["Fling Effect"] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
+							}
 							if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
 							if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
 							if (item.id === 'mentalherb') {
@@ -819,7 +821,7 @@ export const commands: Chat.ChatCommands = {
 							details[TL.term.zcrystal] = TL(zCrystal);
 							if (zCrystal.itemUser) {
 								details["User"] = zCrystal.itemUser.join(", ");
-								details["Required Move"] = TL(dex.items.get(zCrystal.zMoveFrom!));
+								details["Required Move"] = TL(dex.items.get(zCrystal.zMoveFrom));
 							}
 						} else {
 							details["Z-Effect"] = "None";

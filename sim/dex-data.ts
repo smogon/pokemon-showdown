@@ -68,11 +68,10 @@ export class DexText {
 		this.dex = dex;
 	}
 
-	get(effect: Species, lang?: TextLanguage): ResolvedNameText;
 	get(effect: Item, lang?: TextLanguage): ResolvedItemText;
 	get(effect: Ability, lang?: TextLanguage): ResolvedAbilityText;
 	get(effect: Move, lang?: TextLanguage): ResolvedMoveText;
-	get(effect: Nature | TypeInfo | TagData, lang?: TextLanguage): ResolvedNameText;
+	get(effect: Species | Nature | TypeInfo | TagData, lang?: TextLanguage): ResolvedNameText;
 	get(effect: TextEffect, lang?: TextLanguage): EffectText;
 	get(
 		effect: TextEffect, lang: TextLanguage = 'en'
