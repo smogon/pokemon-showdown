@@ -798,7 +798,7 @@ export const PokedexNames: { [id: string]: TranslationString } = {
 	froakie: "Grenousse",
 	frogadier: "Croâporal",
 	greninja: "Amphinobi",
-	greninjaash: "Amphinobi Forme Sacha",
+	greninjaash: "Sachanobi",
 	bunnelby: "Sapereau",
 	diggersby: "Excavarenne",
 	fletchling: "Passerouge",

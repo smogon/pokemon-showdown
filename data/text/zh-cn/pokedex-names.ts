@@ -1220,21 +1220,21 @@ export const PokedexNames: { [id: string]: TranslationString } = {
 	snaelstrom: null, // NEEDS TRANSLATION: Showdown custom text
 	equilibra: null, // NEEDS TRANSLATION: Showdown custom text
 	astrolotl: null, // NEEDS TRANSLATION: Showdown custom text
-	pokestarsmeargle: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarufo: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarufo2: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarbrycenman: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarmt: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarmt2: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestartransport: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestargiant: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarhumanoid: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarmonster: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarf00: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarf002: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarspirit: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarblackdoor: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarwhitedoor: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarblackbelt: null, // NEEDS TRANSLATION: predates Chinese support
-	pokestarufopropu2: null, // NEEDS TRANSLATION: predates Chinese support
+	pokestarsmeargle: "宝可坞的图图犬2", // NEEDS QC
+	pokestarufo: "宝可坞的UFO", // NEEDS QC
+	pokestarufo2: "宝可坞的UFO2", // NEEDS QC
+	pokestarbrycenman: "宝可坞的哈奇库侠", // NEEDS QC
+	pokestarmt: "宝可坞的MT", // NEEDS QC
+	pokestarmt2: "宝可坞的MT2", // NEEDS QC
+	pokestartransport: "宝可坞的传送机", // NEEDS QC
+	pokestargiant: "宝可坞的巨大OL", // NEEDS QC
+	pokestarhumanoid: "宝可坞的人型", // NEEDS QC
+	pokestarmonster: "宝可坞的怪物", // NEEDS QC
+	pokestarf00: "宝可坞的F-00", // NEEDS QC
+	pokestarf002: "宝可坞的F-002", // NEEDS QC
+	pokestarspirit: "宝可坞的恶灵", // NEEDS QC
+	pokestarblackdoor: "宝可坞的黑墙", // NEEDS QC
+	pokestarwhitedoor: "宝可坞的白墙", // NEEDS QC
+	pokestarblackbelt: "宝可坞的空手道王", // NEEDS QC
+	pokestarufopropu2: "宝可坞的布景U2", // NEEDS QC
 };
