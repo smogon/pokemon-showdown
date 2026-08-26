@@ -207,6 +207,14 @@ export class RandomDelta extends RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
+		if (species.id === 'glyde' && role === 'Fast Support') return this.sample(['Leftovers', 'Heavy-Duty Boots']);
+		if (species.id === 'doggo' && role === 'Fast Attacker') return this.sample(['Black Glasses', 'Silk Scarf']);
+		if (species.id === 'napstablook' && role === 'Bulky Support') return this.sample(['Leftovers', 'Colbur Berry']);
+		if (species.id === 'soundofjustice' && role === 'Setup Sweeper') return this.sample(['Leftovers', 'Sitrus Berry']);
+		if (species.id === 'wicabel' && role === 'Bulky Attacker') return 'Leftovers';
+		if (species.id === 'maddummy' && role === 'Setup Sweeper') return 'Sitrus Berry';
+		if (species.id === 'seth' && role === 'Choice Item user') return 'Choice Specs';
+
 		if (species.id === 'ambyulance' && role === 'Bulky Support') return this.sample(['Heavy-Duty Boots', 'Choice Specs']);
 		if (species.id === 'aqua' && role === 'Fast Attacker') return this.sample(['Choice Scarf', 'Choice Band']);
 		if (species.id === 'asgore' && role === 'Setup Sweeper') return this.sample(['Life Orb', 'Heavy-Duty Boots']);
@@ -223,7 +231,7 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'jevil' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
 		if (species.id === 'lemonbread' && role === 'Wallbreaker') return this.sample(['Choice Scarf', 'Life Orb']);
 		if (species.id === 'maddummy' && role === 'Wallbreaker') return this.sample(['Choice Scarf', 'Choice Band']);
-		if (species.id === 'mauswheel' && role === 'Fast Attacker') return this.sample(['Terrain Extender', 'Leftovers']);
+		if (species.id === 'mauswheel' && role === 'Fast Attacker') return 'Leftovers';
 		if (species.id === 'moldbygg' && role === 'Bulky Attacker') return this.sample(['Rocky Helmet', 'Leftovers', 'Heavy-Duty Boots']);
 		if (species.id === 'moldessa' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
 		if (species.id === 'orange' && role === 'Setup Sweeper') return this.sample(['Sitrus Berry', 'Salac Berry']);
@@ -243,10 +251,12 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'thrashmachinelaser' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Band']);
 		if (species.id === 'titanspawn' && role === 'Bulky Attacker') return this.sample(['Focus Sash', 'Leftovers', 'Black Glasses']);
 		if (species.id === 'virovirokun' && role === 'Fast Support') return this.sample(['Black Sludge', 'Heavy-Duty Boots']);
-		if (species.id === 'werewerewire' && role === 'Fast Attacker') return this.sample(['Heavy-Duty Boots', 'Leftovers']);
+		if (species.id === 'werewerewire' && role === 'Fast Attacker') return this.sample(['Heavy-Duty Boots', 'Leftovers', 'Booster Energy']);
 		if (species.id === 'whimsalot' && role === 'Z-Move user') return this.sample(['Fightinium Z', 'Flyinium Z']);
 		if (species.id === 'wicabel' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
 		if (species.id === 'yellow' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
+		if (species.id === 'shi' && role === 'Bulky Attacker') return this.sample(['Choice Band', 'Leftovers', 'Life Orb']);
+		if (species.id === 'nubert' && role === 'Bulky Attacker') return this.sample(['Choice Band', 'Soft Sand']);
 		if (
 			(species.id === 'aaron' && role === 'Wallbreaker') ||
 			(species.id === 'astigmatism' && role === 'Choice Item user') ||
@@ -261,9 +271,7 @@ export class RandomDelta extends RandomTeams {
 			(species.id === 'lancer' && role === 'Choice Item user') ||
 			(species.id === 'lemonbread' && role === 'Choice Item user') ||
 			(species.id === 'mauswheel' && role === 'Choice Item user') ||
-			(species.id === 'nubert' && role === 'Bulky Attacker') ||
 			(species.id === 'papyrus' && role === 'Choice Item user') ||
-			(species.id === 'shi' && role === 'Choice Item user') ||
 			(species.id === 'shinobeetle' && role === 'Choice Item user') ||
 			(species.id === 'tsunderplane' && role === 'Choice Item user') ||
 			(species.id === 'werewerewire' && role === 'Choice Item user')

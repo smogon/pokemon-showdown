@@ -110,7 +110,7 @@
 			{
 				"role": "Choice Item user",
 				"movepool": ["Double-Edge", "Psychic Fangs", "Knock Off", "Temper Flare"],
-				"abilities": ["Defiant"]
+				"abilities": ["Defiant", "Mind's Eye"]
 			}
 		]
 	},
@@ -291,6 +291,11 @@
 				"role": "Choice Item user",
 				"movepool": ["Double-Edge", "Knock Off", "Parting Shot", "Sucker Punch", "Fire Fang"],
 				"abilities": ["Stakeout"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Double-Edge", "Knock Off", "Parting Shot", "Sucker Punch", "Fire Fang"],
+				"abilities": ["Stakeout"]
 			}
 		]
 	},
@@ -405,6 +410,11 @@
 			{
 				"role": "Choice Item user",
 				"movepool": ["Extreme Speed", "Body Slam", "Flip Turn", "Ice Spinner", "Liquidation"],
+				"abilities": ["Aerilate"]
+			},
+			{
+				"role": "Fast Support",
+				"movepool": ["Extreme Speed", "Encore", "Flip Turn", "Ice Spinner", "Liquidation"],
 				"abilities": ["Aerilate"]
 			}
 		]
@@ -665,7 +675,7 @@
 		]
 	},
 	"lesserdog": {
-		"level": 89,
+		"level": 87,
 		"sets": [
 			{
 				"role": "Setup Sweeper",
@@ -680,8 +690,12 @@
 			{
 				"role": "Wallbreaker",
 				"movepool": ["Close Combat", "Poltergeist", "Switcheroo", "Night Slash"],
-				"abilities": ["Fury"],
-				"teraTypes": ["???"]
+				"abilities": ["Fury"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Close Combat", "Sacred Sword", "Agility", "Swords Dance", "Poltergeist", "Night Slash"],
+				"abilities": ["Fury"]
 			}
 		]
 	},
@@ -701,12 +715,12 @@
 			{
 				"role": "Fast Attacker",
 				"movepool": ["Earthquake", "Zing Zap", "Rapid Spin", "U-turn"],
-				"abilities": ["Electric Surge"]
+				"abilities": ["Electric Surge", "Speed Boost", "Trace"]
 			},
 			{
 				"role": "Choice Item user",
 				"movepool": ["Earthquake", "Zing Zap", "Ice Spinner", "U-turn", "Steel Roller"],
-				"abilities": ["Speed Boost"]
+				"abilities": ["Electric Surge"]
 			}
 		]
 	},
@@ -721,7 +735,7 @@
 		]
 	},
 	"mettaton": {
-		"level": 88,
+		"level": 90,
 		"sets": [
 			{
 				"role": "Fast Bulky Setup",
@@ -862,6 +876,11 @@
 				"role": "Choice Item user",
 				"movepool": ["Psychic Noise", "Moonblast", "Dark Pulse", "Sludge Bomb"],
 				"abilities": ["Ghostly Groove"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Psychic Noise", "Will-O-Wisp", "Perish Song", "Sludge Bomb", "Protect"],
+				"abilities": ["Ghostly Groove"]
 			}
 		]
 	},
@@ -885,7 +904,7 @@
 		"sets": [
 			{
 				"role": "Fast Support",
-				"movepool": ["Aurora Veil", "Encore", "Freeze-Dry", "Snowgrave", "Blizzard"],
+				"movepool": ["Aurora Veil", "Freeze-Dry", "Snowgrave", "Blizzard"],
 				"abilities": ["Snow Warning"]
 			},
 			{
@@ -1021,7 +1040,7 @@
 			{
 				"role": "Wallbreaker",
 				"movepool": ["Flare Blitz", "Earthquake", "Power Whip", "Play Rough", "Stone Edge"],
-				"abilities": ["Sand Rush"]
+				"abilities": ["Sand Rush", "Flash Fire"]
 			}
 		]
 	},
@@ -1207,6 +1226,11 @@
 				"role": "Z-Move user",
 				"movepool": ["Nasty Plot", "Petal Dance", "Psychic", "Earth Power", "Psyshock"],
 				"abilities": ["Tactical Dodge"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Leaf Storm", "Psychic", "Earth Power", "Hidden Power [Fire]", "Psyshock", "Dazzling Gleam"],
+				"abilities": ["Tactical Dodge"]
 			}
 		]
 	},
@@ -1244,7 +1268,7 @@
 		"level": 86,
 		"sets": [
 			{
-				"role": "Choice Item user",
+				"role": "Bulky Attacker",
 				"movepool": ["Close Combat", "Earthquake", "Knock Off", "Ice Punch", "Spirit Break"],
 				"abilities": ["Intimidate", "Scrappy"]
 			}
@@ -1301,6 +1325,11 @@
 			{
 				"role": "Choice Item user",
 				"movepool": ["Poltergeist", "Stone Edge", "Earthquake", "Knock Off"],
+				"abilities": ["Demoralize"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Autotomize", "Poltergeist", "Stone Edge", "Earthquake", "Knock Off"],
 				"abilities": ["Demoralize"]
 			}
 		]
@@ -1581,7 +1610,7 @@
 			{
 				"role": "Choice Item user",
 				"movepool": ["Plasma Fists", "Close Combat", "Shocking Snare", "Knock Off", "Fire Punch"],
-				"abilities": ["Quark Drive"]
+				"abilities": ["Quark Drive", "Motor Drive", "Volt Absorb"]
 			}
 		]
 	},
@@ -1612,6 +1641,11 @@
 				"role": "Choice Item user",
 				"movepool": ["Hyper Voice", "Bell Chime", "Psychic Noise", "Moonblast"],
 				"abilities": ["Reverberate"]
+			},
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Hyper Voice", "Bell Chime", "Perish Song", "Protect", "Moonblast"],
+				"abilities": ["Reverberate", "Levitate"]
 			}
 		]
 	},
