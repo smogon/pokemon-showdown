@@ -71,6 +71,22 @@ const LANGUAGE_NATIVE_NAMES: Readonly<Record<string, string>> = {
 	traditionalchinese: '繁體中文',
 };
 
+const TRANSLATION_LANGUAGE_IDS = {
+	en: 'english',
+	de: 'german',
+	es: 'spanish',
+	fr: 'french',
+	it: 'italian',
+	nl: 'dutch',
+	pt: 'portuguese',
+	tr: 'turkish',
+	hi: 'hindi',
+	ja: 'japanese',
+	ko: 'korean',
+	'zh-cn': 'simplifiedchinese',
+	'zh-tw': 'traditionalchinese',
+} as const;
+
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
 export interface PageTable {
@@ -1824,6 +1840,18 @@ export const Chat = new class {
 		const nativeName = LANGUAGE_NATIVE_NAMES[language];
 		return nativeName && nativeName !== englishName ? `${nativeName} (${englishName})` : englishName;
 	}
+	getLanguageID(language: string): ID | null {
+		const languageID = toID(language);
+		if (Chat.languages.has(languageID)) return languageID;
+
+		const code = language.trim().toLowerCase().replace(/_/g, '-');
+		const languageName = TRANSLATION_LANGUAGE_IDS[
+			code as keyof typeof TRANSLATION_LANGUAGE_IDS
+		];
+		if (!languageName) return null;
+		const codeLanguageID = toID(languageName);
+		return Chat.languages.has(codeLanguageID) ? codeLanguageID : null;
+	}
 
 	async loadTranslations() {
 		const directories = await FS(TRANSLATION_DIRECTORY).readdir();
@@ -1831,11 +1859,13 @@ export const Chat = new class {
 		// ensure that english is the first entry when we iterate over Chat.languages
 		Chat.languages.set('english' as ID, 'English');
 		for (const dirname of directories) {
-			// translation dirs shouldn't have caps, but things like sourceMaps and the README will
-			if (/[^a-z0-9]/.test(dirname)) continue;
+			const languageName = TRANSLATION_LANGUAGE_IDS[
+				dirname as keyof typeof TRANSLATION_LANGUAGE_IDS
+			];
+			if (!languageName) continue;
 			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
 
-			const languageID = toID(dirname);
+			const languageID = toID(languageName);
 			const files = await dir.readdir();
 			for (const filename of files) {
 				if (!filename.endsWith('.js')) continue;

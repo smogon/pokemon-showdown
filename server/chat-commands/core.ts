@@ -746,8 +746,8 @@ export const commands: Chat.ChatCommands = {
 			const language = Chat.getLanguageName(user.language || 'english' as ID);
 			return this.sendReply(this.TL`Currently, you're viewing Pokémon Showdown in ${language}.`);
 		}
-		const languageID = toID(target);
-		if (!Chat.languages.has(languageID)) {
+		const languageID = Chat.getLanguageID(target);
+		if (!languageID) {
 			const languages = [...Chat.languages].map(([id]) => Chat.getLanguageName(id)).join(', ');
 			throw new Chat.ErrorMessage(this.TL`Valid languages are: ${languages}`);
 		}

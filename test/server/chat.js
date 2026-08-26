@@ -14,6 +14,14 @@ describe('Chat', () => {
 		assert.equal(Chat.getLanguageName('english'), 'English');
 	});
 
+	it('should resolve language names and directory codes', () => {
+		assert.equal(Chat.getLanguageID('Japanese'), 'japanese');
+		assert.equal(Chat.getLanguageID('ja'), 'japanese');
+		assert.equal(Chat.getLanguageID('zh-cn'), 'simplifiedchinese');
+		assert.equal(Chat.getLanguageID('zh_tw'), 'traditionalchinese');
+		assert.equal(Chat.getLanguageID('not-a-language'), null);
+	});
+
 	it('should translate Dex objects with a Translator', () => {
 		const TL = Chat.getTranslator('japanese');
 		assert.equal(TL(Dex.items.get('Leftovers')), 'たべのこし');
