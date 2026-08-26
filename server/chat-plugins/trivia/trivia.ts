@@ -1524,7 +1524,7 @@ const triviaCommands: Chat.ChatCommands = {
 		this.checkCan('show', null, room);
 		this.checkChat();
 		if (room.game) {
-			throw new Chat.ErrorMessage(this.tr`There is already a game of ${room.game.title} in progress.`);
+			throw new Chat.ErrorMessage(this.TL`There is already a game of ${room.game.title} in progress.`);
 		}
 
 		const targets = (target ? target.split(',') : []);
@@ -1537,7 +1537,7 @@ const triviaCommands: Chat.ChatCommands = {
 			const acceptableModes = Object.keys(MODES).filter(curMode => curMode !== 'first');
 			mode = Utils.shuffle(acceptableModes)[0];
 		}
-		if (!MODES[mode]) throw new Chat.ErrorMessage(this.tr`"${mode}" is an invalid mode.`);
+		if (!MODES[mode]) throw new Chat.ErrorMessage(this.TL`"${mode}" is an invalid mode.`);
 
 		let categories: ID[] | 'random' = targets[1]
 			.split('+')
@@ -1555,7 +1555,7 @@ const triviaCommands: Chat.ChatCommands = {
 		let length: ID | number = toID(targets[2]);
 		if (!LENGTHS[length]) {
 			length = parseInt(length);
-			if (isNaN(length) || length < 1) throw new Chat.ErrorMessage(this.tr`"${length}" is an invalid game length.`);
+			if (isNaN(length) || length < 1) throw new Chat.ErrorMessage(this.TL`"${length}" is an invalid game length.`);
 		}
 
 		// Assume that infinite mode will last for at least 75 points
@@ -1563,16 +1563,16 @@ const triviaCommands: Chat.ChatCommands = {
 		if (questions.length < questionsNecessary) {
 			if (categories === 'random') {
 				throw new Chat.ErrorMessage(
-					this.tr`There are not enough questions in the randomly chosen category to finish a trivia game.`
+					this.TL`There are not enough questions in the randomly chosen category to finish a trivia game.`
 				);
 			}
 			if (categories.length === 1 && categories[0] === 'all') {
 				throw new Chat.ErrorMessage(
-					this.tr`There are not enough questions in the trivia database to finish a trivia game.`
+					this.TL`There are not enough questions in the trivia database to finish a trivia game.`
 				);
 			}
 			throw new Chat.ErrorMessage(
-				this.tr`There are not enough questions under the specified categories to finish a trivia game.`
+				this.TL`There are not enough questions under the specified categories to finish a trivia game.`
 			);
 		}
 
@@ -1604,7 +1604,7 @@ const triviaCommands: Chat.ChatCommands = {
 	join(target, room, user) {
 		room = this.requireRoom();
 		getTriviaGame(room).addTriviaPlayer(user);
-		this.sendReply(this.tr`You are now signed up for this game!`);
+		this.sendReply(this.TL`You are now signed up for this game!`);
 	},
 	joinhelp: [`/trivia join - Join the current game of Trivia or Mastermind.`],
 
@@ -1620,7 +1620,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 	leave(target, room, user) {
 		getTriviaGame(room).leave(user);
-		this.sendReply(this.tr`You have left the current game of Trivia.`);
+		this.sendReply(this.TL`You have left the current game of Trivia.`);
 	},
 	leavehelp: [`/trivia leave - Makes the player leave the game.`],
 
@@ -1646,13 +1646,13 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 
 		const answer = toID(target);
-		if (!answer) throw new Chat.ErrorMessage(this.tr`No valid answer was entered.`);
+		if (!answer) throw new Chat.ErrorMessage(this.TL`No valid answer was entered.`);
 
 		if (room.game?.gameid === 'trivia' && !Object.keys(game.playerTable).includes(user.id)) {
 			game.addTriviaPlayer(user);
 		}
 		game.answerQuestion(answer, user);
-		this.sendReply(this.tr`You have selected "${answer}" as your answer.`);
+		this.sendReply(this.TL`You have selected "${answer}" as your answer.`);
 	},
 	answerhelp: [`/trivia answer OR /ta [answer] - Answer a pending question.`],
 
@@ -1688,10 +1688,10 @@ const triviaCommands: Chat.ChatCommands = {
 		const game = getTriviaGame(room);
 		if (game.game.length !== 'infinite' && !user.can('editroom', null, room)) {
 			throw new Chat.ErrorMessage(
-				this.tr`Only Room Owners and higher can force a Trivia game to end with winners in a non-infinite length.`
+				this.TL`Only Room Owners and higher can force a Trivia game to end with winners in a non-infinite length.`
 			);
 		}
-		await game.win(this.tr`${user.name} ended the game of Trivia!`);
+		await game.win(this.TL`${user.name} ended the game of Trivia!`);
 	},
 	winhelp: [`/trivia win - End a trivia game and tally the points to find winners. Requires: + % @ # ~ in Infinite length, else # ~`],
 
@@ -1703,20 +1703,20 @@ const triviaCommands: Chat.ChatCommands = {
 		const game = getTriviaGame(room);
 
 		const targetUser = this.getUserOrSelf(target);
-		if (!targetUser) throw new Chat.ErrorMessage(this.tr`User ${target} does not exist.`);
-		let buffer = `${game.isPaused ? this.tr`There is a paused trivia game` : this.tr`There is a trivia game in progress`}, ` +
-			this.tr`and it is in its ${game.phase} phase.` + `<br />` +
-			this.tr`Mode: ${game.game.mode} | Category: ${game.game.category} | Cap: ${game.getDisplayableCap()}`;
+		if (!targetUser) throw new Chat.ErrorMessage(this.TL`User ${target} does not exist.`);
+		let buffer = `${game.isPaused ? this.TL`There is a paused trivia game` : this.TL`There is a trivia game in progress`}, ` +
+			this.TL`and it is in its ${game.phase} phase.` + `<br />` +
+			this.TL`Mode: ${game.game.mode} | Category: ${game.game.category} | Cap: ${game.getDisplayableCap()}`;
 
 		const player = game.playerTable[targetUser.id];
 		if (player) {
 			if (!this.broadcasting) {
-				buffer += `<br />${this.tr`Current score: ${player.points} | Correct Answers: ${player.correctAnswers}`}`;
+				buffer += `<br />${this.TL`Current score: ${player.points} | Correct Answers: ${player.correctAnswers}`}`;
 			}
 		} else if (targetUser.id !== user.id) {
-			throw new Chat.ErrorMessage(this.tr`User ${targetUser.name} is not a player in the current trivia game.`);
+			throw new Chat.ErrorMessage(this.TL`User ${targetUser.name} is not a player in the current trivia game.`);
 		}
-		buffer += `<br />${this.tr`Players: ${game.formatPlayerList({ max: null, requirePoints: false })}`}`;
+		buffer += `<br />${this.TL`Players: ${game.formatPlayerList({ max: null, requirePoints: false })}`}`;
 
 		this.sendReplyBox(buffer);
 	},
@@ -1734,29 +1734,29 @@ const triviaCommands: Chat.ChatCommands = {
 		const params = target.split('\n').map(str => str.split('|'));
 		for (const param of params) {
 			if (param.length !== 3) {
-				this.errorReply(this.tr`Invalid arguments specified in "${param}". View /trivia help for more information.`);
+				this.errorReply(this.TL`Invalid arguments specified in "${param}". View /trivia help for more information.`);
 				continue;
 			}
 
 			const categoryID = toID(param[0]);
 			const category = CATEGORY_ALIASES[categoryID] || categoryID;
 			if (!ALL_CATEGORIES[category]) {
-				this.errorReply(this.tr`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
+				this.errorReply(this.TL`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
 				continue;
 			}
 			if (cmd === 'submit' && !MAIN_CATEGORIES[category]) {
-				this.errorReply(this.tr`You cannot submit questions in the '${ALL_CATEGORIES[category]}' category`);
+				this.errorReply(this.TL`You cannot submit questions in the '${ALL_CATEGORIES[category]}' category`);
 				continue;
 			}
 
 			const question = Utils.escapeHTML(param[1].trim());
 			if (!question) {
-				this.errorReply(this.tr`'${param[1].trim()}' is not a valid question.`);
+				this.errorReply(this.TL`'${param[1].trim()}' is not a valid question.`);
 				continue;
 			}
 			if (question.length > MAX_QUESTION_LENGTH) {
 				this.errorReply(
-					this.tr`Question "${param[1].trim()}" is too long! It must remain under ${MAX_QUESTION_LENGTH} characters.`
+					this.TL`Question "${param[1].trim()}" is too long! It must remain under ${MAX_QUESTION_LENGTH} characters.`
 				);
 				continue;
 			}
@@ -1767,12 +1767,12 @@ const triviaCommands: Chat.ChatCommands = {
 				.map(toID)
 				.filter(answer => !cache.has(answer) && !!cache.add(answer));
 			if (!answers.length) {
-				this.errorReply(this.tr`No valid answers were specified for question '${param[1].trim()}'.`);
+				this.errorReply(this.TL`No valid answers were specified for question '${param[1].trim()}'.`);
 				continue;
 			}
 			if (answers.some(answer => answer.length > MAX_ANSWER_LENGTH)) {
 				this.errorReply(
-					this.tr`Some of the answers entered for question '${param[1].trim()}' were too long!\n` +
+					this.TL`Some of the answers entered for question '${param[1].trim()}' were too long!\n` +
 					`They must remain under ${MAX_ANSWER_LENGTH} characters.`
 				);
 				continue;
@@ -1812,7 +1812,7 @@ const triviaCommands: Chat.ChatCommands = {
 		this.checkCan('ban', null, room);
 
 		const submissions = await database.getSubmissions();
-		if (!submissions.length) return this.sendReply(this.tr`No questions await review.`);
+		if (!submissions.length) return this.sendReply(this.TL`No questions await review.`);
 
 		let innerBuffer = '';
 		for (const [index, question] of submissions.entries()) {
@@ -1821,7 +1821,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 		const buffer = `|raw|<div class="ladder"><table>` +
 			`<tr><td colspan="6"><strong>${Chat.count(submissions.length, "</strong> questions")} awaiting review:</td></tr>` +
-			`<tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th><th>${this.tr`Answer(s)`}</th><th>${this.tr`Submitted By`}</th></tr>` +
+			`<tr><th>#</th><th>${this.TL`Category`}</th><th>${this.TL`Question`}</th><th>${this.TL`Answer(s)`}</th><th>${this.TL`Submitted By`}</th></tr>` +
 			innerBuffer +
 			`</table></div>`;
 
@@ -1886,8 +1886,8 @@ const triviaCommands: Chat.ChatCommands = {
 			const indicesLen = indices.length;
 			if (!indicesLen) {
 				throw new Chat.ErrorMessage(
-					this.tr`'${target}' is not a valid set of submission index numbers.\n` +
-					this.tr`View /trivia review and /trivia help for more information.`
+					this.TL`'${target}' is not a valid set of submission index numbers.\n` +
+					this.TL`View /trivia review and /trivia help for more information.`
 				);
 			}
 
@@ -1903,7 +1903,7 @@ const triviaCommands: Chat.ChatCommands = {
 			return this.privateModAction(`${user.name} ${message} from the submission database.`);
 		}
 
-		throw new Chat.ErrorMessage(this.tr`'${target}' is an invalid argument. View /trivia help questions for more information.`);
+		throw new Chat.ErrorMessage(this.TL`'${target}' is an invalid argument. View /trivia help questions for more information.`);
 	},
 	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # ~`],
 	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # ~`],
@@ -1918,7 +1918,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 		const question = Utils.escapeHTML(target).trim();
 		if (!question) {
-			throw new Chat.ErrorMessage(this.tr`'${target}' is not a valid argument. View /trivia help questions for more information.`);
+			throw new Chat.ErrorMessage(this.TL`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 		}
 
 		const { category } = await database.ensureQuestionExists(question);
@@ -1940,20 +1940,20 @@ const triviaCommands: Chat.ChatCommands = {
 		const params = target.split('\n').map(str => str.split('|'));
 		for (const param of params) {
 			if (param.length !== 2) {
-				this.errorReply(this.tr`Invalid arguments specified in "${param}". View /trivia help for more information.`);
+				this.errorReply(this.TL`Invalid arguments specified in "${param}". View /trivia help for more information.`);
 				continue;
 			}
 
 			const categoryID = toID(param[0]);
 			const category = CATEGORY_ALIASES[categoryID] || categoryID;
 			if (!ALL_CATEGORIES[category]) {
-				this.errorReply(this.tr`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
+				this.errorReply(this.TL`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
 				continue;
 			}
 
 			const question = Utils.escapeHTML(param[1].trim());
 			if (!question) {
-				this.errorReply(this.tr`'${param[1].trim()}' is not a valid question.`);
+				this.errorReply(this.TL`'${param[1].trim()}' is not a valid question.`);
 				continue;
 			}
 
@@ -1961,8 +1961,8 @@ const triviaCommands: Chat.ChatCommands = {
 			await database.moveQuestionToCategory(question, category);
 			this.modlog('TRIVIAQUESTION', null, `changed category for '${param[1].trim()}' from '${oldCat}' to '${param[0]}'`);
 			return this.privateModAction(
-				this.tr`${user.name} changed question category from '${oldCat}' to '${param[0]}' for '${param[1].trim()}' ` +
-				this.tr`from the question database.`
+				this.TL`${user.name} changed question category from '${oldCat}' to '${param[0]}' for '${param[1].trim()}' ` +
+				this.TL`from the question database.`
 			);
 		}
 	},
@@ -2095,9 +2095,9 @@ const triviaCommands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return false;
 
 			const counts = await database.getQuestionCounts();
-			if (!counts.total) return this.sendReplyBox(this.tr`No questions have been submitted yet.`);
+			if (!counts.total) return this.sendReplyBox(this.TL`No questions have been submitted yet.`);
 
-			buffer += `<tr><th>Category</th><th>${this.tr`Question Count`}</th></tr>`;
+			buffer += `<tr><th>Category</th><th>${this.TL`Question Count`}</th></tr>`;
 			// we want all the named categories and also all the categories in SQL, without duplication
 			for (const category of new Set([...Object.keys(ALL_CATEGORIES), ...Object.keys(counts)])) {
 				const name = ALL_CATEGORIES[category] || category;
@@ -2105,7 +2105,7 @@ const triviaCommands: Chat.ChatCommands = {
 				const tally = counts[category] || 0;
 				buffer += `<tr><td>${name}</td><td>${tally} (${((tally * 100) / counts.total).toFixed(2)}%)</td></tr>`;
 			}
-			buffer += `<tr><td><strong>${this.tr`Total`}</strong></td><td><strong>${counts.total}</strong></td></table></div>`;
+			buffer += `<tr><td><strong>${this.TL`Total`}</strong></td><td><strong>${counts.total}</strong></td></table></div>`;
 
 			return this.sendReply(buffer);
 		}
@@ -2116,26 +2116,26 @@ const triviaCommands: Chat.ChatCommands = {
 		const category = CATEGORY_ALIASES[target] || target;
 		if (category === 'random') return false;
 		if (!ALL_CATEGORIES[category]) {
-			throw new Chat.ErrorMessage(this.tr`'${target}' is not a valid category. View /help trivia for more information.`);
+			throw new Chat.ErrorMessage(this.TL`'${target}' is not a valid category. View /help trivia for more information.`);
 		}
 
 		const list = await database.getQuestions([category], Number.MAX_SAFE_INTEGER, { order: 'oldestfirst' });
 		if (!list.length) {
-			buffer += `<tr><td>${this.tr`There are no questions in the ${ALL_CATEGORIES[category]} category.`}</td></table></div>`;
+			buffer += `<tr><td>${this.TL`There are no questions in the ${ALL_CATEGORIES[category]} category.`}</td></table></div>`;
 			return this.sendReply(buffer);
 		}
 
 		if (user.can('ban', null, room)) {
 			const cat = ALL_CATEGORIES[category];
-			buffer += `<tr><td colspan="3">${this.tr`There are <strong>${list.length}</strong> questions in the ${cat} category.`}</td></tr>` +
-				`<tr><th>#</th><th>${this.tr`Question`}</th><th>${this.tr`Answer(s)`}</th></tr>`;
+			buffer += `<tr><td colspan="3">${this.TL`There are <strong>${list.length}</strong> questions in the ${cat} category.`}</td></tr>` +
+				`<tr><th>#</th><th>${this.TL`Question`}</th><th>${this.TL`Answer(s)`}</th></tr>`;
 			for (const [i, entry] of list.entries()) {
 				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><tr>`;
 			}
 		} else {
 			const cat = target;
-			buffer += `<td colspan="2">${this.tr`There are <strong>${list.length}</strong> questions in the ${cat} category.`}</td></tr>` +
-				`<tr><th>#</th><th>${this.tr`Question`}</th></tr>`;
+			buffer += `<td colspan="2">${this.TL`There are <strong>${list.length}</strong> questions in the ${cat} category.`}</td></tr>` +
+				`<tr><th>#</th><th>${this.TL`Question`}</th></tr>`;
 			for (const [i, entry] of list.entries()) {
 				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${entry.question}</td></tr>`;
 			}
@@ -2162,7 +2162,7 @@ const triviaCommands: Chat.ChatCommands = {
 			type = target;
 		} else {
 			[type, ...query] = target.split(',');
-			if (!target.includes(',')) throw new Chat.ErrorMessage(this.tr`No valid search arguments entered.`);
+			if (!target.includes(',')) throw new Chat.ErrorMessage(this.TL`No valid search arguments entered.`);
 		}
 
 		type = toID(type);
@@ -2174,21 +2174,21 @@ const triviaCommands: Chat.ChatCommands = {
 			options = { searchSubmissions: true, caseSensitive: cmd !== 'search' };
 		} else {
 			return this.sendReplyBox(
-				this.tr`No valid search category was entered. Valid categories: submissions, subs, questions, qs`
+				this.TL`No valid search category was entered. Valid categories: submissions, subs, questions, qs`
 			);
 		}
 
 		let queryString = query.join(',');
 		if (cmd !== 'doublespacesearch') queryString = queryString.trim();
-		if (!queryString) throw new Chat.ErrorMessage(this.tr`No valid search query was entered.`);
+		if (!queryString) throw new Chat.ErrorMessage(this.TL`No valid search query was entered.`);
 
 		const results = await database.searchQuestions(queryString, options);
-		if (!results.length) return this.sendReply(this.tr`No results found under the ${type} list.`);
+		if (!results.length) return this.sendReply(this.TL`No results found under the ${type} list.`);
 
-		let buffer = `|raw|<div class="ladder"><table><tr><th>#</th><th>${this.tr`Category`}</th><th>${this.tr`Question`}</th></tr>` +
-			`<tr><td colspan="3">${this.tr`There are <strong>${results.length}</strong> matches for your query:`}</td></tr>`;
+		let buffer = `|raw|<div class="ladder"><table><tr><th>#</th><th>${this.TL`Category`}</th><th>${this.TL`Question`}</th></tr>` +
+			`<tr><td colspan="3">${this.TL`There are <strong>${results.length}</strong> matches for your query:`}</td></tr>`;
 		buffer += results.map(
-			(q, i) => this.tr`<tr><td><strong>${i + 1}</strong></td><td>${q.category}</td><td>${q.question}</td></tr>`
+			(q, i) => this.TL`<tr><td><strong>${i + 1}</strong></td><td>${q.category}</td><td>${q.question}</td></tr>`
 		).join('');
 		buffer += "</table></div>";
 
@@ -2252,7 +2252,7 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 
 		const allTimeScore = await database.getLeaderboardEntry(userid, 'alltime');
-		if (!allTimeScore) return this.sendReplyBox(this.tr`User '${name}' has not played any Trivia games yet.`);
+		if (!allTimeScore) return this.sendReplyBox(this.TL`User '${name}' has not played any Trivia games yet.`);
 		const score = (
 			await database.getLeaderboardEntry(userid, 'nonAlltime') ||
 			{ score: 0, totalPoints: 0, totalCorrectAnswers: 0 }
@@ -2309,10 +2309,10 @@ const triviaCommands: Chat.ChatCommands = {
 		if (cmd.includes('score')) leaderboard = 'nonAlltime';
 
 		const ladder = (await cachedLadder.get(leaderboard))?.ladder;
-		if (!ladder?.length) throw new Chat.ErrorMessage(this.tr`No Trivia games have been played yet.`);
+		if (!ladder?.length) throw new Chat.ErrorMessage(this.TL`No Trivia games have been played yet.`);
 
 		let buffer = "|raw|<div class=\"ladder\" style=\"overflow-y: scroll; max-height: 300px;\"><table>" +
-			`<tr><th>${this.tr`Rank`}</th><th>${this.tr`User`}</th><th>${this.tr`Leaderboard score`}</th><th>${this.tr`Total game points`}</th><th>${this.tr`Total correct answers`}</th></tr>`;
+			`<tr><th>${this.TL`Rank`}</th><th>${this.TL`User`}</th><th>${this.TL`Leaderboard score`}</th><th>${this.TL`Total game points`}</th><th>${this.TL`Total correct answers`}</th></tr>`;
 		let num = parseInt(target);
 		if (!num || num < 0) num = 100;
 		if (num > ladder.length) num = ladder.length;
@@ -2369,10 +2369,10 @@ const triviaCommands: Chat.ChatCommands = {
 				this.modlog(`TRIVIA CATEGORY CLEAR`, null, SPECIAL_CATEGORIES[category]);
 				return this.privateModAction(room.tr`${user.name} removed all questions of category '${category}'.`);
 			} else {
-				throw new Chat.ErrorMessage(this.tr`You cannot clear the category '${ALL_CATEGORIES[category]}'.`);
+				throw new Chat.ErrorMessage(this.TL`You cannot clear the category '${ALL_CATEGORIES[category]}'.`);
 			}
 		} else {
-			throw new Chat.ErrorMessage(this.tr`'${category}' is an invalid category.`);
+			throw new Chat.ErrorMessage(this.TL`'${category}' is an invalid category.`);
 		}
 	},
 	clearqshelp: [`/trivia clearqs [category] - Remove all questions of the given category. Requires: # ~`],
@@ -2392,8 +2392,8 @@ const triviaCommands: Chat.ChatCommands = {
 		const games = await database.getHistory(lines);
 		const buf = [];
 		for (const [i, game] of games.entries()) {
-			let gameInfo = Utils.html`<b>${i + 1}.</b> ${this.tr`${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category`}`;
-			if (game.creator) gameInfo += Utils.html` ${this.tr`hosted by ${game.creator}`}`;
+			let gameInfo = Utils.html`<b>${i + 1}.</b> ${this.TL`${game.mode} mode, ${game.length} length Trivia game in the ${game.category} category`}`;
+			if (game.creator) gameInfo += Utils.html` ${this.TL`hosted by ${game.creator}`}`;
 			gameInfo += '.';
 			buf.push(gameInfo);
 		}
@@ -2587,7 +2587,7 @@ const mastermindCommands: Chat.ChatCommands = {
 
 		const finalists = parseInt(target);
 		if (isNaN(finalists) || finalists < 2) {
-			throw new Chat.ErrorMessage(this.tr`You must specify a number that is at least 2 for finalists.`);
+			throw new Chat.ErrorMessage(this.TL`You must specify a number that is at least 2 for finalists.`);
 		}
 
 		room.game = new Mastermind(room, finalists);
@@ -2607,17 +2607,17 @@ const mastermindCommands: Chat.ChatCommands = {
 
 		category = CATEGORY_ALIASES[category] || category;
 		if (!(category in ALL_CATEGORIES)) {
-			throw new Chat.ErrorMessage(this.tr`${category} is not a valid category.`);
+			throw new Chat.ErrorMessage(this.TL`${category} is not a valid category.`);
 		}
 		const categoryName = ALL_CATEGORIES[category];
 		const timeout = parseInt(timeoutString);
 		if (isNaN(timeout) || timeout < 1 || (timeout * 1000) > Chat.MAX_TIMEOUT_DURATION) {
-			throw new Chat.ErrorMessage(this.tr`You must specify a round length of at least 1 second.`);
+			throw new Chat.ErrorMessage(this.TL`You must specify a round length of at least 1 second.`);
 		}
 
 		const questions = await getQuestions([category], 'random');
 		if (!questions.length) {
-			throw new Chat.ErrorMessage(this.tr`There are no questions in the ${categoryName} category.`);
+			throw new Chat.ErrorMessage(this.TL`There are no questions in the ${categoryName} category.`);
 		}
 
 		game.startRound(player, category, questions, timeout);
@@ -2635,7 +2635,7 @@ const mastermindCommands: Chat.ChatCommands = {
 
 		const timeout = parseInt(target);
 		if (isNaN(timeout) || timeout < 1 || (timeout * 1000) > Chat.MAX_TIMEOUT_DURATION) {
-			throw new Chat.ErrorMessage(this.tr`You must specify a length of at least 1 second.`);
+			throw new Chat.ErrorMessage(this.TL`You must specify a length of at least 1 second.`);
 		}
 
 		await game.startFinals(timeout);
@@ -2645,22 +2645,22 @@ const mastermindCommands: Chat.ChatCommands = {
 	join(target, room, user) {
 		room = this.requireRoom();
 		getMastermindGame(room).addTriviaPlayer(user);
-		this.sendReply(this.tr`You are now signed up for this game!`);
+		this.sendReply(this.TL`You are now signed up for this game!`);
 	},
 	joinhelp: [`/mastermind join — Joins the current game of Mastermind.`],
 
 	leave(target, room, user) {
 		getMastermindGame(room).leave(user);
-		this.sendReply(this.tr`You have left the current game of Mastermind.`);
+		this.sendReply(this.TL`You have left the current game of Mastermind.`);
 	},
 	leavehelp: [`/mastermind leave - Makes the player leave the game.`],
 
 	pass(target, room, user) {
 		room = this.requireRoom();
 		const round = getMastermindGame(room).currentRound;
-		if (!round) throw new Chat.ErrorMessage(this.tr`No round of Mastermind is currently being played.`);
+		if (!round) throw new Chat.ErrorMessage(this.TL`No round of Mastermind is currently being played.`);
 		if (!(user.id in round.playerTable)) {
-			throw new Chat.ErrorMessage(this.tr`You are not a player in the current round of Mastermind.`);
+			throw new Chat.ErrorMessage(this.TL`You are not a player in the current round of Mastermind.`);
 		}
 		round.pass();
 	},
@@ -2672,8 +2672,8 @@ const mastermindCommands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return false;
 		const game = getMastermindGame(room);
 
-		let buf = this.tr`There is a Mastermind game in progress, and it is in its ${game.phase} phase.`;
-		buf += `<br /><hr>${this.tr`Players`}: ${game.formatPlayerList()}`;
+		let buf = this.TL`There is a Mastermind game in progress, and it is in its ${game.phase} phase.`;
+		buf += `<br /><hr>${this.TL`Players`}: ${game.formatPlayerList()}`;
 
 		this.sendReplyBox(buf);
 	},

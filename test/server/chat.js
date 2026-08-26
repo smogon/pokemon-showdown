@@ -14,6 +14,13 @@ describe('Chat', () => {
 		assert.equal(Chat.getLanguageName('english'), 'English');
 	});
 
+	it('should translate Dex objects with a Translator', () => {
+		const TL = Chat.getTranslator('japanese');
+		assert.equal(TL(Dex.items.get('Leftovers')), 'たべのこし');
+		assert.equal(TL(Dex.moves.get('Tackle')), 'たいあたり');
+		assert.equal(TL(Dex.species.get('Pikachu')), 'ピカチュウ');
+	});
+
 	it('should localize data HTML', () => {
 		const html = Chat.getDataMoveHTML(Dex.moves.get('Close Combat'), { language: 'japanese' });
 		assert(html.includes('インファイト'));

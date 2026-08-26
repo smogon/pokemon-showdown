@@ -51,7 +51,7 @@ export const OTHER_NAME_TABLES = [
 ] as const;
 export type OtherNameTable = typeof OTHER_NAME_TABLES[number];
 
-type TextEffect = Species | Item | Ability | Move | Nature | TypeInfo | TagData;
+export type TextEffect = Species | Item | Ability | Move | Nature | TypeInfo | TagData;
 
 /** English-only text for custom effects defined by mods. */
 export interface ModdedEffectText {
