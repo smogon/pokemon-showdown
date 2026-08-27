@@ -39,7 +39,7 @@
 		"sets": [
 			{
 				"role": "Bulky Support",
-				"movepool": ["Wish", "U-turn", "Drain Punch", "Protect", "Recover", "Protect", "Knock Off"],
+				"movepool": ["Wish", "U-turn", "Drain Punch", "Protect", "Recover", "Knock Off"],
 				"abilities": ["Antivirus", "Regenerator"]
 			},
 			{
