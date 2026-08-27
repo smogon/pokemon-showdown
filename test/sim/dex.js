@@ -119,8 +119,8 @@ describe('DexText#get', () => {
 		assert.equal(Dex.text.termName('Moves', 'ja'), '技');
 		assert.equal(Dex.text.termName('Stats', 'fr'), 'Stats');
 		assert.equal(Dex.loadTextData('fr').TermNames.stats, 'Stats');
-		assert.equal(Dex.loadTextData('fr').TermNames['stats:grammar'], 'fp');
-		assert(!('stats' in Dex.loadTextData('fr').StatNames));
+		assert.equal(Dex.loadTextData('fr').StatNames.stats, 'stats');
+		assert.equal(Dex.loadTextData('fr').StatNames['stats:grammar'], 'fp');
 		assert.equal(Dex.loadTextData('fr').StatNames.spd, 'Défense Spéciale');
 		assert.equal(Dex.loadTextData('fr').StatNames['spd:grammar'], 'fs');
 		assert.equal(Dex.loadTextData('fr').StatMediumNames.spd, 'Déf. Spé.');

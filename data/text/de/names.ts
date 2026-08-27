@@ -13,7 +13,8 @@ export const TermNames: { [id: string]: TranslationString } = {
 	avs: "AVs",
 	point: "Punkt", // NEEDS QC
 	points: "Punkte", // NEEDS QC
-	stats: "Statuswerte", "stats:grammar": "mp",
+	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
+	stats: "Statuswerte",
 
 	pokemon: "Pokémon",
 	move: "Attacke", // NEEDS QC
@@ -87,6 +88,10 @@ export const StatNames: { [id: string]: TranslationString } = {
 	accuracy: "Genauigkeit", "accuracy:grammar": "fs",
 	evasion: "Ausweichwert", "evasion:grammar": "ms",
 	spc: "Spezial", "spc:grammar": "ns",
+
+	// n.b. used in "stats were lowered" battle messages,
+	// so it should be lowercase (unlike TermNames.stats)
+	stats: "Statuswerte", "stats:grammar": "mp",
 };
 
 export const StatMediumNames: { [id: string]: TranslationString } = {

@@ -13,6 +13,7 @@ export const TermNames: { [id: string]: TranslationString } = {
 	avs: "努力值", // NEEDS QC
 	point: "点数", // NEEDS QC
 	points: "点数", // NEEDS QC
+	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
 	stats: "状态",
 
 	pokemon: "宝可梦",
@@ -80,6 +81,10 @@ export const TermNames: { [id: string]: TranslationString } = {
 export const StatNames: { [id: string]: TranslationString } = {
 	hp: "HP", atk: "攻击", def: "防御", spa: "特攻", spd: "特防", spe: "速度",
 	accuracy: "命中率", evasion: "闪避率", spc: "特殊",
+
+	// n.b. used in "stats were lowered" battle messages,
+	// so it should be lowercase (unlike TermNames.stats)
+	stats: "状态",
 };
 
 export const StatMediumNames: { [id: string]: TranslationString } = {

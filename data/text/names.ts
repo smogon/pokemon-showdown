@@ -16,7 +16,8 @@ export const TermNames: { [id: string]: TranslationString } = {
 	avs: "AVs",
 	point: "Point",
 	points: "Points",
-	stats: "stats",
+	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
+	stats: "Stats",
 
 	pokemon: "Pokémon",
 	move: "Move",
@@ -92,6 +93,10 @@ export const StatNames: { [id: string]: TranslationString } = {
 	accuracy: "accuracy",
 	evasion: "evasiveness",
 	spc: "Special",
+
+	// n.b. used in "stats were lowered" battle messages,
+	// so it should be lowercase (unlike TermNames.stats)
+	stats: "stats",
 };
 
 export const StatMediumNames: { [id: string]: TranslationString } = {
