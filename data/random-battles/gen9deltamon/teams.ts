@@ -221,7 +221,8 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'asgore' && role === 'Bulky Attacker') return this.sample(['Terrain Extender', 'Leftovers']);
 		if (species.id === 'bibliox' && role === 'Fast Attacker') return this.sample(['Life Orb', 'Focus Sash']);
 		if (species.id === 'blue' && role === 'Setup Sweeper') return this.sample(['Leftovers', 'Heavy-Duty Boots']);
-		if (species.id === 'chaosking' && role === 'Bulky Attacker') return this.sample(['Leftovers', 'Life Orb', 'Black Glasses']);
+		if (species.id === 'chaosking' && role === 'Bulky Attacker')
+			return this.sample(['Leftovers', 'Life Orb', 'Black Glasses']);
 		if (species.id === 'doggo' && role === 'Choice Item user') return this.sample(['Choice Band', 'Choice Scarf']);
 		if (species.id === 'floradinn' && role === 'Bulky Support') return this.sample(['Heavy-Duty Boots', 'Black Sludge']);
 		if (species.id === 'guei' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
@@ -232,7 +233,8 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'lemonbread' && role === 'Wallbreaker') return this.sample(['Choice Scarf', 'Life Orb']);
 		if (species.id === 'maddummy' && role === 'Wallbreaker') return this.sample(['Choice Scarf', 'Choice Band']);
 		if (species.id === 'mauswheel' && role === 'Fast Attacker') return 'Leftovers';
-		if (species.id === 'moldbygg' && role === 'Bulky Attacker') return this.sample(['Rocky Helmet', 'Leftovers', 'Heavy-Duty Boots']);
+		if (species.id === 'moldbygg' && role === 'Bulky Attacker')
+			return this.sample(['Rocky Helmet', 'Leftovers', 'Heavy-Duty Boots']);
 		if (species.id === 'moldessa' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
 		if (species.id === 'orange' && role === 'Setup Sweeper') return this.sample(['Sitrus Berry', 'Salac Berry']);
 		if (species.id === 'organikk' && role === 'Bulky Support') return this.sample(['Terrain Extender', 'Leftovers']);
@@ -241,17 +243,19 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'reaperbird' && role === 'Choice Item user') return this.sample(['Choice Band', 'Choice Scarf']);
 		if (species.id === 'roaringknight' && role === 'Choice Item user') return this.sample(['Choice Band', 'Choice Scarf']);
 		if (species.id === 'rouxlskaard' && role === 'Bulky Attacker') return this.sample(['Choice Specs', 'Choice Scarf']);
-		if (species.id === 'royalguard2' && role === 'Setup Sweeper') return this.sample(['Focus Sash', 'Chople Berry', 'Shuca Berry']);
+		if (species.id === 'royalguard2' && role === 'Setup Sweeper')
+			return this.sample(['Focus Sash', 'Chople Berry', 'Shuca Berry']);
 		if (species.id === 'shinobeetle' && role === 'Fast Attacker') return this.sample(['Leftovers', 'Life Orb']);
 		if (species.id === 'soundofjustice' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Band']);
 		if (species.id === 'susie' && role === 'Setup Sweeper') return this.sample(['Chople Berry', 'Leftovers']);
-		if (species.id === 'thrashmachine' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Band']);
-		if (species.id === 'thrashmachineduck' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Band']);
-		if (species.id === 'thrashmachineflame' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Band']);
-		if (species.id === 'thrashmachinelaser' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Band']);
-		if (species.id === 'titanspawn' && role === 'Bulky Attacker') return this.sample(['Focus Sash', 'Leftovers', 'Black Glasses']);
+		if ((species.id === 'thrashmachine' || species.id === 'thrashmachineduck' ||
+			species.id === 'thrashmachineflame' || species.id === 'thrashmachinelaser') &&
+			role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Band']);
+		if (species.id === 'titanspawn' && role === 'Bulky Attacker')
+			return this.sample(['Focus Sash', 'Leftovers', 'Black Glasses']);
 		if (species.id === 'virovirokun' && role === 'Fast Support') return this.sample(['Black Sludge', 'Heavy-Duty Boots']);
-		if (species.id === 'werewerewire' && role === 'Fast Attacker') return this.sample(['Heavy-Duty Boots', 'Leftovers', 'Booster Energy']);
+		if (species.id === 'werewerewire' && role === 'Fast Attacker')
+			return this.sample(['Heavy-Duty Boots', 'Leftovers', 'Booster Energy']);
 		if (species.id === 'whimsalot' && role === 'Z-Move user') return this.sample(['Fightinium Z', 'Flyinium Z']);
 		if (species.id === 'wicabel' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
 		if (species.id === 'yellow' && role === 'Choice Item user') return this.sample(['Choice Scarf', 'Choice Specs']);
