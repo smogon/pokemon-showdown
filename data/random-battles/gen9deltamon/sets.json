@@ -450,7 +450,8 @@
 			{
 				"role": "Choice Item user",
 				"movepool": ["Flamethrower", "Infernal Parade", "U-turn", "Sludge Bomb", "Will-O-Wisp"],
-				"abilities": ["Flash Fire", "Cursed Body"]
+				"abilities": ["Flash Fire", "Cursed Body"],
+        "teraTypes": ["Stellar"]
 			}
 		]
 	},
@@ -1040,7 +1041,8 @@
 			{
 				"role": "Wallbreaker",
 				"movepool": ["Flare Blitz", "Earthquake", "Power Whip", "Play Rough", "Stone Edge"],
-				"abilities": ["Sand Rush", "Flash Fire"]
+				"abilities": ["Sand Rush", "Flash Fire"],
+        "teraTypes": ["Stellar"]
 			}
 		]
 	},
