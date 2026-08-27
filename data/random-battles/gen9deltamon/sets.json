@@ -509,7 +509,7 @@
 		"sets": [
 			{
 				"role": "Staller",
-				"movepool": ["Substitute", "Protect", "Knock Off", "Moonlight", "Glare", "Poltergeist", "Leech Seed"],
+				"movepool": ["Substitute", "Protect", "Moonlight", "Glare", "Poltergeist", "Leech Seed"],
 				"abilities": ["YOUR TAKING TOO LONG"]
 			}
 		]
