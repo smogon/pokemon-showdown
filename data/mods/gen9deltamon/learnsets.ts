@@ -1,4 +1,4 @@
-export const Learnsets: {[speciesid: string]: ModdedLearnsetData} = {
+export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 rudinn: {
 		learnset: {
 			airslash: ["9L1"],
