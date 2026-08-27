@@ -116,7 +116,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', `[of] ${target}`);
+				this.add('-fail', target, 'unboost', 'atk', '[from] ability: Paw Prints', `[of] ${target}`);
 			}
 		},
 		onModifyMove(move) {
@@ -376,7 +376,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Supervised Learning", `[of] ${target}`);
+				this.add('-fail', target, 'unboost', '[from] ability: Supervised Learning', `[of] ${target}`);
 			}
 		},
 		flags: {},
