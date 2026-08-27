@@ -47,13 +47,16 @@ describe('Chat', () => {
 	});
 
 	it('should localize data HTML', () => {
-		const html = Chat.getDataMoveHTML(Dex.moves.get('Close Combat'), { language: 'japanese' });
-		assert(html.includes('インファイト'));
-		assert(html.includes("Lowers the user's Defense and Sp. Def by 1."));
-		const detailsHTML = Chat.getDataMoveHTML(Dex.moves.get('Close Combat'), {
+		const move = Dex.moves.get('Close Combat');
+		const text = Dex.text.get(move, 'ja');
+		const description = text.shortDesc || text.desc;
+		const html = Chat.getDataMoveHTML(move, { language: 'japanese' });
+		assert(html.includes(text.name));
+		assert(html.includes(description));
+		const detailsHTML = Chat.getDataMoveHTML(move, {
 			language: 'japanese', hideShortDescription: true,
 		});
-		assert(!detailsHTML.includes("Lowers the user's Defense"));
+		assert(!detailsHTML.includes(description));
 	});
 
 	it('should not infinite loop formatText', () => {

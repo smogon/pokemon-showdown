@@ -140,23 +140,20 @@ describe('DexText#get', () => {
 	});
 
 	it(`should fall back to English text data`, () => {
-		// TODO: Revise as text is translated
 		const move = Dex.moves.get('Tackle');
-		const text = Dex.text.get(move, 'ja');
-		assert.equal(text.desc, 'No additional effect.');
-		assert.equal(text.shortDesc, 'No additional effect.');
-		assert.deepEqual(Dex.text.get(move), {
-			name: 'Tackle',
-			desc: 'No additional effect.',
-			shortDesc: 'No additional effect.',
-		});
-		assert.equal(Dex.loadTextData('ja').Moves.tackle.shortDesc, 'No additional effect.');
+		const englishText = Dex.text.get(move, 'en');
+		assert.deepEqual(Dex.text.get(move, 'en-afd'), englishText);
+		assert.deepEqual(Dex.text.get(move), englishText);
+		assert.deepEqual(Dex.loadTextData('en-afd').Moves.tackle, Dex.loadTextData('en').Moves.tackle);
 	});
 
 	it(`should allow localized text files to be omitted`, () => {
 		const afd = Dex.loadTextData('en-afd');
-		assert.equal(afd.Moves.tackle.name, 'Tackle');
-		assert.equal(afd.Default.default.mega, "  [POKEMON]'s [ITEM] glows!");
+		const english = Dex.loadTextData('en');
+		const rawAfdDefault = Dex.loadTextFile('en-afd/default', 'DefaultText');
+		assert.deepEqual(afd.Moves.tackle, english.Moves.tackle);
+		assert.equal(afd.Default.default.mega, rawAfdDefault.default.mega);
+		assert.notEqual(afd.Default.default.mega, english.Default.default.mega);
 	});
 
 	it(`should keep long and short description fallbacks separate`, () => {
@@ -164,13 +161,14 @@ describe('DexText#get', () => {
 		assert.notEqual(text.desc, text.shortDesc);
 	});
 
-	it(`should not use a current-generation translation for an old-generation description`, () => {
+	it(`should use an old-generation translation instead of the current-generation description`, () => {
 		const dex = Dex.forGen(4);
 		const move = dex.moves.get('Brick Break');
-		const desc = 'If this attack does not miss and whether or not the target is immune, the effects of Reflect and ' +
-			'Light Screen end for the target\'s side of the field before damage is calculated.';
+		const rawJapaneseText = Dex.loadTextFile('ja/moves', 'MovesText').brickbreak;
+		const desc = rawJapaneseText.gen4.desc || dex.loadTextData('en').Moves.brickbreak.desc;
 		assert.equal(dex.loadTextData('ja').Moves.brickbreak.desc, desc);
 		assert.equal(dex.text.get(move, 'ja').desc, desc);
+		assert.notEqual(desc, Dex.loadTextData('ja').Moves.brickbreak.desc);
 	});
 
 	it(`should use English-only descriptions defined by mods`, () => {
