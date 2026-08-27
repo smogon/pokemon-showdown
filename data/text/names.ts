@@ -26,6 +26,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	ability: "Ability",
 	abilities: "Abilities",
 	hiddenability: "Hidden Ability",
+	team: "Team",
+	teams: "Teams",
+	teamslist: "Teams List",
 
 	type: "Type",
 	types: "Types",
@@ -37,11 +40,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	egggroup: "Egg Group",
 	egggroups: "Egg Groups",
 	tag: "Tag",
+	article: "Article",
+	articles: "Articles",
+	tier: "Tier",
+	tiers: "Tiers",
 	color: "Color",
 	form: "Form",
 	forme: "Forme",
 	dexnum: "Dex#",
-	gen: "Gen",
+	generation: "Generation",
+	gennum: "Gen [NUMBER]",
 	evolution: "Evolution",
 	preevolution: "Pre-Evolution",
 	doesnotevolve: "Does Not Evolve",
@@ -67,6 +75,11 @@ export const TermNames: { [id: string]: TranslationString } = {
 	weak: "Weak",
 	resist: "Resist",
 	immune: "Immune",
+
+	// used in switch-in messages in battles
+	nicknamespecies: "[NICKNAME] ([SPECIES])",
+	// this one's not used in code; just a reference for how pokedex.ts should be filled
+	speciesforme: "[SPECIES]-[FORME]",
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

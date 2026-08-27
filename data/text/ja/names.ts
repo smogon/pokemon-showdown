@@ -23,6 +23,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	ability: "特性", // NEEDS QC
 	abilities: "特性", // NEEDS QC
 	hiddenability: "隠れ特性", // NEEDS QC
+	team: "チーム", // NEEDS QC
+	teams: "チーム", // NEEDS QC
+	teamslist: "チーム一覧", // NEEDS QC
 
 	type: "タイプ",
 	types: "タイプ",
@@ -34,11 +37,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	egggroup: "タマゴグループ", // NEEDS QC
 	egggroups: "タマゴグループ", // NEEDS QC
 	tag: "タグ", // NEEDS QC
+	article: "記事", // NEEDS QC
+	articles: "記事", // NEEDS QC
+	tier: "ティア", // NEEDS QC
+	tiers: "ティア", // NEEDS QC
 	color: "色",
 	form: "すがた", // NEEDS QC
 	forme: "フォルム", // NEEDS QC
 	dexnum: "図鑑No.", // NEEDS QC
-	gen: "世代", // NEEDS QC
+	generation: "世代", // NEEDS QC
+	gennum: "[NUMBER]世代", // NEEDS QC
 	evolution: "進化", // NEEDS QC
 	preevolution: "進化前", // NEEDS QC
 	doesnotevolve: "進化しない", // NEEDS QC
@@ -64,6 +72,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	weak: "弱点", // NEEDS QC: unofficial
 	resist: "半減", // NEEDS QC: unofficial
 	immune: "無効", // NEEDS QC: unofficial
+
+	nicknamespecies: "[NICKNAME]（[SPECIES]）", // NEEDS QC
+	speciesforme: "[SPECIES]・[FORME]", // NEEDS QC
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

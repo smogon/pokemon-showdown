@@ -91,8 +91,14 @@ describe('Dex#getMove', () => {
 
 describe('DexText#get', () => {
 	it(`should translate species, items, abilities, and moves`, () => {
-		assert.deepEqual(Dex.text.get(Dex.species.get('Pikachu'), 'ja'), { name: 'ピカチュウ' });
-		assert.equal(Dex.loadTextData('ja').PokedexNames.pikachu, 'ピカチュウ');
+		const pikachuText = Dex.loadTextData('ja').Pokedex.pikachu;
+		assert.deepEqual(pikachuText, {
+			name: 'ピカチュウ', baseSpecies: 'ピカチュウ',
+		});
+		assert.equal(Dex.text.get(Dex.species.get('Pikachu'), 'ja'), pikachuText);
+		assert.deepEqual(Dex.loadTextData('ja').Pokedex.unownb, {
+			name: 'アンノーン-B', baseSpecies: 'アンノーン', forme: 'B',
+		});
 		assert.equal(Dex.text.get(Dex.items.get('Leftovers'), 'ja').name, 'たべのこし');
 		assert.equal(Dex.text.get(Dex.abilities.get('Levitate'), 'ja').name, 'ふゆう');
 		assert.equal(Dex.text.get(Dex.moves.get('Tackle'), 'ja').name, 'たいあたり');

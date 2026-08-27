@@ -318,6 +318,9 @@ export type Translator = {
 	color: { [id: string]: string },
 	status: { [id: string]: string },
 	target: { [id: string]: string },
+	stat: { [id: string]: string },
+	statShort: { [id: string]: string },
+	statMedium: { [id: string]: string },
 };
 
 // These classes need to be declared here because they aren't hoisted
@@ -1829,6 +1832,9 @@ export const Chat = new class {
 					color: text.ColorNames,
 					status: text.StatusNames,
 					target: text.TargetNames,
+					stat: text.StatNames,
+					statShort: text.StatShortNames,
+					statMedium: text.StatMediumNames,
 				}
 			);
 			this.translators.set(lang, translator);

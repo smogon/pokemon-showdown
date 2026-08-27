@@ -41,7 +41,8 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 	}
 }
 
-export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedNameText;
+export type EffectText =
+	ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedNameText | ResolvedSpeciesText;
 export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
 
 export const OTHER_NAME_TABLES = [
@@ -71,7 +72,8 @@ export class DexText {
 	get(effect: Item, lang?: TextLanguage): ResolvedItemText;
 	get(effect: Ability, lang?: TextLanguage): ResolvedAbilityText;
 	get(effect: Move, lang?: TextLanguage): ResolvedMoveText;
-	get(effect: Species | Nature | TypeInfo | TagData, lang?: TextLanguage): ResolvedNameText;
+	get(effect: Species, lang?: TextLanguage): ResolvedSpeciesText;
+	get(effect: Nature | TypeInfo | TagData, lang?: TextLanguage): ResolvedNameText;
 	get(effect: TextEffect, lang?: TextLanguage): EffectText;
 	get(
 		effect: TextEffect, lang: TextLanguage = 'en'
@@ -82,8 +84,12 @@ export class DexText {
 		let table: EffectTextTable;
 		switch (effect.effectType) {
 		case 'Pokemon': {
-			const name = this.dex.loadTextData(lang).PokedexNames[effect.id] || effect.name;
-			return { name };
+			const species = effect;
+			return this.dex.loadTextData(lang).Pokedex[effect.id] || {
+				name: species.name,
+				baseSpecies: species.baseSpecies,
+				...(species.forme ? { forme: species.forme } : {}),
+			};
 		}
 		case 'Nature': return { name: this.otherName('NatureNames', effect.name, lang) };
 		case 'Type': case 'EffectType': return { name: this.otherName('TypeNames', effect.name, lang) };

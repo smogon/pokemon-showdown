@@ -23,6 +23,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	ability: "Habilidad", // NEEDS QC
 	abilities: "Habilidades", // NEEDS QC
 	hiddenability: "Habilidad oculta", // NEEDS QC
+	team: "Equipo", // NEEDS QC
+	teams: "Equipos", // NEEDS QC
+	teamslist: "Lista de equipos", // NEEDS QC
 
 	type: "Tipo",
 	types: "Tipos",
@@ -34,11 +37,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	egggroup: "Grupo Huevo", // NEEDS QC
 	egggroups: "Grupos Huevo", // NEEDS QC
 	tag: "Etiqueta", // NEEDS QC
+	article: "Artículo", // NEEDS QC
+	articles: "Artículos", // NEEDS QC
+	tier: "Tier",
+	tiers: "Tiers",
 	color: "Color",
 	form: "Forma", // NEEDS QC
 	forme: "Forma", // NEEDS QC
 	dexnum: "N.º Pokédex", // NEEDS QC
-	gen: "Generación", // NEEDS QC
+	generation: "Generación", // NEEDS QC
+	gennum: "Gen [NUMBER]",
 	evolution: "Evolución", // NEEDS QC
 	preevolution: "Preevolución", // NEEDS QC
 	doesnotevolve: "No evoluciona", // NEEDS QC
@@ -64,6 +72,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	weak: "Debilidad", // NEEDS QC: unofficial
 	resist: "Resistencia", // NEEDS QC: unofficial
 	immune: "Inmunidad", // NEEDS QC: unofficial
+
+	nicknamespecies: "[NICKNAME] ([SPECIES])",
+	speciesforme: "[SPECIES] [FORME]", // NEEDS QC
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

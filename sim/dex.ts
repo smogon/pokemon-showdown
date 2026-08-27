@@ -89,14 +89,14 @@ interface RawTextTableData extends Record<OtherNameTable, DexTable<TranslationSt
 	Abilities: DexTable<AbilityText>;
 	Items: DexTable<ItemText>;
 	Moves: DexTable<MoveText>;
-	PokedexNames: DexTable<TranslationString>;
+	Pokedex: DexTable<SpeciesText>;
 	Default: DexTable<DefaultText>;
 }
 interface TextTableData extends Record<OtherNameTable, DexTable<string>> {
 	Abilities: DexTable<ResolvedAbilityText>;
 	Items: DexTable<ResolvedItemText>;
 	Moves: DexTable<ResolvedMoveText>;
-	PokedexNames: DexTable<string>;
+	Pokedex: DexTable<ResolvedSpeciesText>;
 	Default: DexTable<DefaultText>;
 }
 
@@ -518,12 +518,12 @@ export class ModdedDex {
 		const englishData = this.loadRawTextData();
 		const localizedData = lang === 'en' ? englishData : this.loadRawTextData(lang);
 		return (dexes['base'].textCache[cacheKey] = {
-			PokedexNames: this.resolveNameTable(englishData.PokedexNames, localizedData.PokedexNames),
-			...this.resolveOtherNameTables(englishData, localizedData),
+			Pokedex: this.resolvePokedexTable(englishData.Pokedex, localizedData.Pokedex),
 			Moves: this.resolveTextTable(englishData.Moves, localizedData.Moves),
 			Abilities: this.resolveTextTable(englishData.Abilities, localizedData.Abilities),
 			Items: this.resolveTextTable(englishData.Items, localizedData.Items),
 			Default: localizedData.Default,
+			...this.resolveOtherNameTables(englishData, localizedData),
 		});
 	}
 
@@ -533,12 +533,12 @@ export class ModdedDex {
 		const langDir = lang === 'en' ? `` : `${lang}/`;
 		const optional = lang !== 'en';
 		const otherNameTables = Object.fromEntries(OTHER_NAME_TABLES.map(table => [
-			table, this.loadTextFile(`${langDir}other-names`, table, optional) || {},
+			table, this.loadTextFile(`${langDir}names`, table, optional) || {},
 		])) as Pick<RawTextTableData, OtherNameTable>;
 		const data: RawTextTableData = {
-			PokedexNames: this.loadTextFile(
-				`${langDir}pokedex-names`, 'PokedexNames', optional
-			) as Record<string, TranslationString>,
+			Pokedex: this.loadTextFile(
+				`${langDir}pokedex`, 'PokedexText', optional
+			) as DexTable<SpeciesText>,
 			...otherNameTables,
 			Moves: this.loadTextFile(`${langDir}moves`, 'MovesText', optional) as DexTable<MoveText>,
 			Abilities: this.loadTextFile(`${langDir}abilities`, 'AbilitiesText', optional) as DexTable<AbilityText>,
@@ -547,6 +547,40 @@ export class ModdedDex {
 		};
 		if (lang !== 'en') this.validateTranslations(data, lang);
 		return (dexes['base'].rawTextCache[lang] = data);
+	}
+
+	private resolvePokedexTable(
+		englishTable: DexTable<SpeciesText>, localizedTable: DexTable<SpeciesText>
+	): DexTable<ResolvedSpeciesText> {
+		const FIELDS = ['name', 'baseSpecies', 'forme', 'grammar'] as const;
+		const merge = (english?: SpeciesText, localized?: SpeciesText) => {
+			const entry: Partial<ResolvedSpeciesText> = {};
+			for (const field of FIELDS) {
+				const value = localized?.[field] ?? english?.[field];
+				if (value) entry[field] = value;
+			}
+			return entry;
+		};
+		const mergedTable: DexTable<Partial<ResolvedSpeciesText>> = {};
+		for (const id in englishTable) {
+			mergedTable[id] = merge(englishTable[id], localizedTable[id]);
+		}
+		for (const id in localizedTable) {
+			if (!(id in englishTable)) mergedTable[id] = merge(undefined, localizedTable[id]);
+		}
+
+		const table: DexTable<ResolvedSpeciesText> = {};
+		for (const id in mergedTable) {
+			const entry = mergedTable[id];
+			const species = this.species.get(id);
+			const baseEntry = mergedTable[toID(species.baseSpecies)];
+			table[id] = {
+				...entry,
+				name: entry.name || species.name,
+				baseSpecies: baseEntry?.baseSpecies ?? baseEntry?.name ?? species.baseSpecies,
+			};
+		}
+		return table;
 	}
 
 	private resolveNameTable(

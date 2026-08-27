@@ -23,6 +23,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	ability: "특성", // NEEDS QC
 	abilities: "특성", // NEEDS QC
 	hiddenability: "숨겨진 특성", // NEEDS QC
+	team: "팀", // NEEDS QC
+	teams: "팀", // NEEDS QC
+	teamslist: "팀 목록", // NEEDS QC
 
 	type: "타입",
 	types: "타입",
@@ -34,11 +37,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	egggroup: "알그룹", // NEEDS QC
 	egggroups: "알그룹", // NEEDS QC
 	tag: "태그", // NEEDS QC
+	article: "기사", // NEEDS QC
+	articles: "기사", // NEEDS QC
+	tier: "티어", // NEEDS QC
+	tiers: "티어", // NEEDS QC
 	color: "색",
 	form: "모습", // NEEDS QC
 	forme: "폼", // NEEDS QC
 	dexnum: "도감 No.", // NEEDS QC
-	gen: "세대", // NEEDS QC
+	generation: "세대", // NEEDS QC
+	gennum: "[NUMBER]세대", // NEEDS QC
 	evolution: "진화", // NEEDS QC
 	preevolution: "진화 전", // NEEDS QC
 	doesnotevolve: "진화하지 않음", // NEEDS QC
@@ -64,6 +72,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	weak: "약점", // NEEDS QC: unofficial
 	resist: "반감", // NEEDS QC: unofficial
 	immune: "무효", // NEEDS QC: unofficial
+
+	nicknamespecies: "[NICKNAME]([SPECIES])", // NEEDS QC
+	speciesforme: "[SPECIES]-[FORME]",
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

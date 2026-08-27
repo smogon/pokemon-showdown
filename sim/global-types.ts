@@ -487,6 +487,22 @@ type AbilityText = TextFile<ConditionTextData & {
 }>;
 type MoveText = TextFile<MoveTextData>;
 type ItemText = TextFile<ConditionTextData>;
+interface SpeciesText {
+	/**
+	 * Full species + short forme name - "Wormadam-Plant"
+	 *
+	 * Not the actual full official name, but the one Showdown uses that's
+	 * reasonably concise and mostly fits into teambuilder. Includes formes for
+	 * many but not all base formes. Can't contain parentheses because it's
+	 * designed to be used like "Go! Planty (Wormadam-Plant)".
+	 */
+	name?: TranslationString;
+	/** Species name by itself, without forme - "Wormadam" */
+	baseSpecies?: TranslationString;
+	/** Official forme name - "Plant Cloak" */
+	forme?: TranslationString;
+	grammar?: TranslationString;
+}
 type DefaultText = AnyObject;
 
 type ResolvedText<T extends BasicTextData> = T & { name: string, desc: string, shortDesc: string };
@@ -494,6 +510,7 @@ type ResolvedAbilityText = ResolvedText<AbilityText>;
 type ResolvedItemText = ResolvedText<ItemText>;
 type ResolvedMoveText = ResolvedText<MoveText>;
 type ResolvedNameText = { name: string };
+type ResolvedSpeciesText = { name: string, baseSpecies: string, forme?: string, grammar?: string };
 
 declare namespace RandomTeamsTypes {
 	export interface TeamDetails {

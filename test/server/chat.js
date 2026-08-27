@@ -27,6 +27,23 @@ describe('Chat', () => {
 		assert.equal(TL(Dex.items.get('Leftovers')), 'たべのこし');
 		assert.equal(TL(Dex.moves.get('Tackle')), 'たいあたり');
 		assert.equal(TL(Dex.species.get('Pikachu')), 'ピカチュウ');
+		const text = Dex.loadTextData('ja');
+		for (const [property, table] of Object.entries({
+			term: 'TermNames',
+			type: 'TypeNames',
+			nature: 'NatureNames',
+			gender: 'GenderNames',
+			egggroup: 'EggGroupNames',
+			tag: 'TagNames',
+			color: 'ColorNames',
+			status: 'StatusNames',
+			target: 'TargetNames',
+			stat: 'StatNames',
+			statShort: 'StatShortNames',
+			statMedium: 'StatMediumNames',
+		})) {
+			assert.equal(TL[property], text[table]);
+		}
 	});
 
 	it('should localize data HTML', () => {

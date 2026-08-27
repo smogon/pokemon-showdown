@@ -664,7 +664,7 @@ export const commands: Chat.ChatCommands = {
 					}
 					details = {
 						[TL.term.dexnum]: String(pokemon.num),
-						[TL.term.gen]: String(pokemon.gen) || 'CAP',
+						[TL.term.generation]: String(pokemon.gen) || 'CAP',
 						[TL.term.height]: TL.term.numm.replace('[NUMBER]', `${pokemon.heightm}`),
 					};
 					details[TL.term.weight] = `${TL.term.numkg.replace('[NUMBER]', `${pokemon.weighthg / 10}`)} <em>(${weighthit} BP)</em>`;
@@ -726,7 +726,7 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(item, textLanguage).desc;
 					details = {
-						[TL.term.gen]: String(item.gen),
+						[TL.term.generation]: String(item.gen),
 					};
 
 					if (dex.gen >= 4) {
@@ -764,7 +764,7 @@ export const commands: Chat.ChatCommands = {
 					description = dex.text.get(move, textLanguage).desc;
 					details = {
 						[TL.tag.priority]: String(move.priority),
-						[TL.term.gen]: String(move.gen) || 'CAP',
+						[TL.term.generation]: String(move.gen) || 'CAP',
 					};
 
 					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
@@ -856,7 +856,7 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(ability, textLanguage).desc;
 					details = {
-						[TL.term.gen]: String(ability.gen) || 'CAP',
+						[TL.term.generation]: String(ability.gen) || 'CAP',
 					};
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
