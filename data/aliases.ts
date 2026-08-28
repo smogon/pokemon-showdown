@@ -96,7 +96,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	lcotm: "[Gen 9] Pure Hackmons",
 	ommotm: "[Gen 9] NatDex Camove Chaos",
 	ommspotlight: "[Gen 9] NatDex Camove Chaos",
-	pmotm: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
+	pmotm: "[Gen 9] Deltamon Random Battle",
 	mnmls: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
 	ccapm: "[Gen 9] CCAPM2025 Random Battle",
 

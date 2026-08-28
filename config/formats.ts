@@ -812,6 +812,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Deltamon Random Battle",
+		desc: `A Gen 9 metagame where characters from Undertale and Deltarune are Pokemon.`,
+		mod: 'gen9deltamon',
+		team: 'randomDelta',
+		bestOfDefault: true,
+		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause', 'Data Preview', 'Mega Data Preview'],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/" target="_blank">spreadsheet</a> for all the custom elements!</b></div>`);
+			this.add(`raw|Welcome to Deltamon Random Battle!`);
+			this.add(`raw|<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3711007/post-11052905" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
+		},
+	},
+	{
 		name: "[Gen 9] CCAPM2025 Random Battle",
 		desc: `A Gen 9 metagame created in the Pet Mods Room featuring Pokemon with new form changes.`,
 		mod: 'ccapm2025',
@@ -3787,6 +3800,36 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
 			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
 		},
+	},
+	{
+		name: "[Gen 9] Deltamon",
+		mod: 'gen9deltamon',
+		desc: "A format where Deltarune and Undertale characters are Pokemon!",
+		threads: [
+			`&bullet; <a href= "https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/">Deltamon Spreadsheet</a>`,
+		],
+		ruleset: ['Standard', 'Terastal Clause', 'Data Preview', 'Mega Data Preview'],
+		banlist: [
+			'Arena Trap', 'Shadow Tag', 'Moody', 'King\'s Rock', 'Quick Claw', 'Razor Fang',
+			'Shed Tail', 'Baton Pass', 'Assist', 'Last Respects', 'All Pokemon',
+		],
+		unbanlist: [
+			'Rudinn', 'Rudinn Ranger', 'Hathy', 'Head Hathy', 'Jigsawry', 'Jigsaw Joe', 'Ponman', 'Mr. Elegance', 'Mr. Society', 'Top Chef', 'Seam',
+			'C. Round', 'K. Round', 'Rabbick', 'Bloxer', 'Clover', 'Starwalker', 'Jevil', 'Rouxls Kaard', 'Rouxls Kaard-Mega', 'Lancer', 'Chaos King',
+			'Plugperson', 'Werewire', 'Werewerewire', 'Tasque', 'Tasque Manager', 'Virovirokun', 'Sweet', 'Cap\'n', 'K_K', 'Nubert', 'Hacker', 'Poppup',
+			'Ambyu-Lance', 'Maus-Delta', 'Mauswheel', 'Swatchling', 'Swatch', 'Pipis', 'Spamton', 'Spamton-Mega', 'Berdly', 'Noelle', 'Queen-Delta',
+			'Queen-Mega', 'Thrash Machine', 'Thrash Machine-Laser', 'Thrash Machine-Flame', 'Thrash Machine-Duck', 'Shadowguy', 'Pippins', 'Lanino',
+			'Elnina', 'Shuttah', 'Zapper', 'Watercooler', 'Ribbick', 'Ramb', 'White Cloak', 'Shadow Mantle', 'Tenna', 'Roaring Knight', 'Motormouth Mike',
+			'Cowboy Mike', 'Cat Mike', 'Carol', 'Guei', 'Balthizard', 'Bibliox', 'Mizzle', 'Miss Mizzle', 'Cuptain', 'Jackenstein', 'Titan Spawn',
+			'Gerson', 'Gerson-Mega', 'Organikk', 'Wicabel', 'Winglade', 'Sound of Justice', 'Trashy', 'Floradinn', 'Sheary', 'Netskie', 'Shi',
+			'Leafling', 'Kawkaw', 'Shinobeetle', 'Terakota', 'Aqua', 'Seth', 'Orange', 'Green', 'Blue', 'Yellow', 'Pink', 'Pink-Ghost', 'Flowery', 'Kris',
+			'Susie', 'Ralsei', 'Froggit', 'Final Froggit', 'Whimsun', 'Whimsalot', 'Moldsmal', 'Moldbygg', 'Moldessa', 'Loox', 'Astigmatism', 'Migosp',
+			'Migospel', 'Vegetoid', 'Parsnik', 'Napstablook', 'Toriel', 'Snowdrake', 'Chilldrake', 'Ice Cap', 'Doggo', 'Lesser Dog', 'Jerry', 'Dogamy',
+			'Dogaressa', 'Gyftrot', 'Glyde', 'Greater Dog', 'Ice Wolf', 'Papyrus', 'Mr. Sunshine', 'Abberant', 'Aaron', 'Woshua', 'Shyren', 'Onionsan',
+			'Mad Dummy', 'Temmie', 'Undyne', 'Undyne-Mega', 'Alphys', 'Vulkin', 'Tsunderplane', 'Pyrope', 'Muffet', 'Royal Guard 1', 'Royal Guard 2',
+			'Madjick', 'Knight Knight', 'Mettaton', 'Mettaton-Mega-X', 'Mettaton-Mega-Y', 'Memoryhead', 'Reaper Bird', 'Endogeny', 'Lemon Bread',
+			'Crystal', 'Asgore', 'Flowey', 'Flowey-Mega',
+		],
 	},
 
 	// Randomized Metas
