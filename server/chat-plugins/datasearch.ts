@@ -2073,8 +2073,8 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		const move = mod.moves.get(moveid);
 		if (move.gen <= mod.gen) {
 			if (
-				(!nationalSearch && move.isNonstandard) ||
-				(nationalSearch && move.isNonstandard && !["Past", "Unobtainable"].includes(move.isNonstandard)) ||
+				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gmax") ||
+				(nationalSearch && move.isNonstandard && !["Gmax", "Past", "Unobtainable"].includes(move.isNonstandard)) ||
 				(move.isMax && mod.gen !== 8)
 			) {
 				continue;
