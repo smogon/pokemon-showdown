@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "{TRAINER}與{TRAINER}的對戰開始了！",
-		winBattle: "**{TRAINER}**在對戰中獲勝了！",
-		tieBattle: "{TRAINER}與{TRAINER}打成了平手！",
+		startBattle: "{TRAINER1}與{TRAINER2}的對戰開始了！", // NEEDS QC
+		winBattle: "**{TRAINER}**在對戰中獲勝了！", // NEEDS QC
+		tieBattle: "{TRAINER1}與{TRAINER2}打成了平手！", // NEEDS QC
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "對手的{NICKNAME}",

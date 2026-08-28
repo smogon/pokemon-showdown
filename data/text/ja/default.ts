@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "{TRAINER}と {TRAINER}の 勝負が 始まった！",
-		winBattle: "**{TRAINER}**が 勝負に 勝った！",
-		tieBattle: "{TRAINER}と {TRAINER}の 勝負は 引き分けだ！",
+		startBattle: "{TRAINER1}と {TRAINER2}の 勝負が 始まった！", // NEEDS QC
+		winBattle: "**{TRAINER}**が 勝負に 勝った！", // NEEDS QC
+		tieBattle: "{TRAINER1}と {TRAINER2}の 勝負は 引き分けだ！", // NEEDS QC
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "相手の {NICKNAME}",

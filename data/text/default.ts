@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "Battle started between {TRAINER} and {TRAINER}!",
+		startBattle: "Battle started between {TRAINER1} and {TRAINER2}!",
 		winBattle: "**{TRAINER}** won the battle!",
-		tieBattle: "Tie between {TRAINER} and {TRAINER}!",
+		tieBattle: "Tie between {TRAINER1} and {TRAINER2}!",
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "the opposing {NICKNAME}",

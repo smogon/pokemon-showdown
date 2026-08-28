@@ -5,9 +5,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		// (I think the jokes work best as a surprise, when most of the
 		// text is the same as before.)
 
-		// startBattle: "{TRAINER} and {TRAINER} commence battle!",
+		// startBattle: "{TRAINER1} and {TRAINER2} commence battle!",
 		// winBattle: "**{TRAINER}** is victorious!",
-		// tieBattle: "The feud between {TRAINER} and {TRAINER} remains unresolved!",
+		// tieBattle: "The feud between {TRAINER1} and {TRAINER2} remains unresolved!",
 
 		// pokemon: "{NICKNAME}",
 		// opposingPokemon: "a villainous {NICKNAME}",
