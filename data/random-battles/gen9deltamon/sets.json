@@ -451,7 +451,7 @@
 				"role": "Choice Item user",
 				"movepool": ["Flamethrower", "Infernal Parade", "U-turn", "Sludge Bomb", "Will-O-Wisp"],
 				"abilities": ["Flash Fire", "Cursed Body"],
-        "teraTypes": ["Stellar"]
+        		"teraTypes": ["Stellar"]
 			}
 		]
 	},
@@ -510,7 +510,12 @@
 		"sets": [
 			{
 				"role": "Staller",
-				"movepool": ["Substitute", "Protect", "Moonlight", "Glare", "Poltergeist", "Leech Seed"],
+				"movepool": ["Substitute", "Moonlight", "Glare", "Poltergeist"],
+				"abilities": ["YOUR TAKING TOO LONG"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Protect", "Moonlight", "Glare", "Knock Off", "Leech Seed"],
 				"abilities": ["YOUR TAKING TOO LONG"]
 			}
 		]
@@ -641,7 +646,8 @@
 			{
 				"role": "Bulky Attacker",
 				"movepool": ["Weather Ball", "U-turn", "Defog", "Earth Power"],
-				"abilities": ["Drought"]
+				"abilities": ["Drought"],
+				"teraTypes": ["Stellar"]
 			}
 		]
 	},
@@ -1042,7 +1048,7 @@
 				"role": "Wallbreaker",
 				"movepool": ["Flare Blitz", "Earthquake", "Power Whip", "Play Rough", "Stone Edge"],
 				"abilities": ["Sand Rush", "Flash Fire"],
-        "teraTypes": ["Stellar"]
+        		"teraTypes": ["Stellar"]
 			}
 		]
 	},

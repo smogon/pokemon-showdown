@@ -331,7 +331,7 @@ export class RandomDelta extends RandomTeams {
 			(species.id === 'flowey' && role === 'Fast Support') ||
 			(species.id === 'gerson' && role === 'Bulky Support') ||
 			(species.id === 'green' && role === 'Bulky Support') ||
-			(species.id === 'jackenstein' && role === 'Staller') ||
+			(species.id === 'jackenstein') ||
 			(species.id === 'jevil' && role === 'Fast Support') ||
 			(species.id === 'kawkaw' && role === 'Bulky Support') ||
 			(species.id === 'kk' && role === 'Bulky Support') ||
