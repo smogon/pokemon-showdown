@@ -12,7 +12,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		opposingParty: "the opposing Pok\u00E9mon",
 
 		turn: "== Turn {NUMBER} ==",
-		whatDo: "What will {POKEMON} do?",
 		switchIn: "{TRAINER} sent out {FULLNAME}!",
 		switchInOwn: "Go! {FULLNAME}!",
 		switchOut: "{TRAINER} withdrew {NICKNAME}!",
@@ -113,8 +112,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		superEffectiveSpread: "  It's super effective on {POKEMON}!",
 		resisted: "  It's not very effective...",
 		resistedSpread: "  It's not very effective on {POKEMON}.",
+		// this is official text meaning 4x effective. do not QC this
 		extremelyEffective: "  It's extremely effective!",
 		extremelyEffectiveSpread: "  It's extremely effective on {POKEMON}!",
+		// this is official text meaning 1/4x effective. do not QC this
 		mostlyIneffective: "  It's mostly ineffective...",
 		mostlyIneffectiveSpread: "  It's mostly ineffective on {POKEMON}.",
 		crit: "  A critical hit!",
@@ -130,6 +131,19 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		ohko: "  It's a one-hit KO!",
 		combine: "  The two moves have become one! It's a combined move!",
 		hitCount: "  The Pok\u00E9mon was hit {NUMBER} {INFLECT:NUMBER:s=time:p=times}!",
+	},
+	ui: {
+		whatDo: "What will **{POKEMON}** do?",
+		moveTarget: "Where should {POKEMON} use **{MOVE}**?",
+		reviveWho: "Who will **{POKEMON}** revive?",
+		replaceWho: "Who will replace **{POKEMON}**?",
+		teamStart: "How will you start the battle?",
+		teamRest: "What about the rest of your team?",
+		chooseLead: "Choose lead",
+		chooseSlot: "Choose slot {NUMBER}",
+		teamSoFar: "Team so far",
+		waitingOpponent: "Waiting for opponent...",
+		cantSwitchTrapped: "You're **trapped** and cannot switch!",
 	},
 
 	// statuses
