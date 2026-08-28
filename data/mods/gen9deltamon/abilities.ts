@@ -587,9 +587,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Dark') {
 				this.heal(target.baseMaxhp / 4, target, target);
-				if (!this.boost({atk: 1})) {
-						this.add('-immune', target, '[from] ability: Darkspawn');
-					}
+				if (!this.boost({ atk: 1 })) {
+					this.add('-immune', target, '[from] ability: Darkspawn');
+				}
 				return null;
 			}
 		},
