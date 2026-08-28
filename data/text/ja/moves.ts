@@ -91,7 +91,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET]は お言葉に 甘えることにした！",
+		activate: "  {TARGET}は お言葉に 甘えることにした！",
 	},
 	agility: {
 		name: "こうそくいどう",
@@ -182,8 +182,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は 水のリングを まとった！",
-		heal: "  [POKEMON]は 水のリングで 体力を回復！",
+		start: "  {POKEMON}は 水のリングを まとった！",
+		heal: "  {POKEMON}は 水のリングで 体力を回復！",
 	},
 	aquastep: {
 		name: "アクアステップ",
@@ -297,12 +297,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は メロメロに なった！",
-		startFromItem: "  [POKEMON]は [ITEM]で メロメロに なった！",
-		end: "  [POKEMON]は メロメロ状態が 治った！",
-		endFromItem: "  [POKEMON]は [ITEM]で メロメロ状態が 治った！",
-		activate: "  [POKEMON]は [TARGET]に メロメロだ！",
-		cant: "[POKEMON]は メロメロで 技が だせなかった！",
+		start: "  {POKEMON}は メロメロに なった！",
+		startFromItem: "  {POKEMON}は {ITEM}で メロメロに なった！",
+		end: "  {POKEMON}は メロメロ状態が 治った！",
+		endFromItem: "  {POKEMON}は {ITEM}で メロメロ状態が 治った！",
+		activate: "  {POKEMON}は {TARGET}に メロメロだ！",
+		cant: "{POKEMON}は メロメロで 技が だせなかった！",
 	},
 	aurasphere: {
 		name: "はどうだん",
@@ -334,8 +334,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]は オーロラベールで 物理と 特殊に 強くなった！",
-		end: "  [TEAM]の オーロラベールが なくなった！",
+		start: "  {TEAM}は オーロラベールで 物理と 特殊に 強くなった！",
+		end: "  {TEAM}の オーロラベールが なくなった！",
 	},
 	autotomize: {
 		name: "ボディパージ",
@@ -343,7 +343,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は 身軽になった！",
+		start: "  {POKEMON}は 身軽になった！",
 	},
 	avalanche: {
 		name: "ゆきなだれ",
@@ -441,7 +441,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は クチバシを 加熱し始めた！",
+		start: "  {POKEMON}は クチバシを 加熱し始めた！",
 	},
 	beatup: {
 		name: "ふくろだたき",
@@ -458,7 +458,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [NAME]の こうげき！",
+		activate: "  {NAME}の こうげき！",
 	},
 	behemothbash: {
 		name: "きょじゅうだん",
@@ -493,7 +493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		boost: "  [POKEMON]は 体力を削って パワー全開！",
+		boost: "  {POKEMON}は 体力を削って パワー全開！",
 	},
 	bestow: {
 		name: "ギフトパス",
@@ -507,7 +507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		takeItem: "  [POKEMON]は [SOURCE]から [ITEM]を 受け取った！",
+		takeItem: "  {POKEMON}は {SOURCE}から {ITEM}を 受け取った！",
 	},
 	bide: {
 		name: "がまん",
@@ -528,9 +528,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は がまんしている",
-		end: "  [POKEMON]の がまんが 解かれた！",
-		activate: "  [POKEMON]は がまんしている",
+		start: "  {POKEMON}は がまんしている",
+		end: "  {POKEMON}の がまんが 解かれた！",
+		activate: "  {POKEMON}は がまんしている",
 	},
 	bind: {
 		name: "しめつける",
@@ -558,7 +558,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は [SOURCE]に 締めつけられた！",
+		start: "  {POKEMON}は {SOURCE}に 締めつけられた！",
 		move: "#wrap",
 	},
 	bite: {
@@ -740,7 +740,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]は 高く 飛び跳ねた！",
+		prepare: "{POKEMON}は 高く 飛び跳ねた！",
 	},
 	bouncybubble: {
 		name: "いきいきバブル",
@@ -836,7 +836,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE]は [ITEM]を 奪って 食べた！",
+		removeItem: "  {SOURCE}は {ITEM}を 奪って 食べた！",
 	},
 	bugbuzz: {
 		name: "むしのさざめき",
@@ -897,7 +897,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  [POKEMON]の 炎は 燃え尽きた！",
+		typeChange: "  {POKEMON}の 炎は 燃え尽きた！",
 	},
 	buzzybuzz: {
 		name: "びりびりエレキ",
@@ -950,7 +950,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "おいわい",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  おめでとう！ [TRAINER]！！",
+		activate: "  おめでとう！ {TRAINER}！！",
 	},
 	charge: {
 		name: "じゅうでん",
@@ -966,7 +966,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 充電を 始めた！",
+		start: "  {POKEMON}は 充電を 始めた！",
 	},
 	chargebeam: {
 		name: "チャージビーム",
@@ -1004,7 +1004,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON]は さむい ギャグを かました！",
+		prepare: "  {POKEMON}は さむい ギャグを かました！",
 	},
 	chipaway: {
 		name: "なしくずし",
@@ -1049,7 +1049,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は [SOURCE]の からに 挟まれた！",
+		start: "  {POKEMON}は {SOURCE}の からに 挟まれた！",
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1174,7 +1174,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  [SOURCE]の ぞくせいを じぶんに はりつけた！",
+		typeChange: "  {SOURCE}の ぞくせいを じぶんに はりつけた！",
 	},
 	conversion2: {
 		name: "テクスチャー２",
@@ -1240,7 +1240,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  [SOURCE]は [POKEMON]の [ITEM]を 溶かした！",
+		removeItem: "  {SOURCE}は {POKEMON}の {ITEM}を 溶かした！",
 	},
 	cosmicpower: {
 		name: "コスモパワー",
@@ -1288,7 +1288,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は おたがいの 場の 効果を 入れ替えた！",
+		activate: "  {POKEMON}は おたがいの 場の 効果を 入れ替えた！",
 	},
 	covet: {
 		name: "ほしがる",
@@ -1329,8 +1329,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [TEAM]は トリックガードで 守られた！",
-		block: "  [POKEMON]は トリックガードで 守られた！",
+		start: "  {TEAM}は トリックガードで 守られた！",
+		block: "  {POKEMON}は トリックガードで 守られた！",
 	},
 	crosschop: {
 		name: "クロスチョップ",
@@ -1381,8 +1381,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE]は 自分の体力を 削って [POKEMON]に のろいを かけた！",
-		damage: "  [POKEMON]は のろわれている！",
+		start: "  {SOURCE}は 自分の体力を 削って {POKEMON}に のろいを かけた！",
+		damage: "  {POKEMON}は のろわれている！",
 	},
 	cut: {
 		name: "いあいぎり",
@@ -1410,8 +1410,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		fail: "しかし [POKEMON]には 使うことが できなかった！",
-		failWrongForme: "しかし 今の [POKEMON]には 使うことが できなかった！",
+		fail: "しかし {POKEMON}には 使うことが できなかった！",
+		failWrongForme: "しかし 今の {POKEMON}には 使うことが できなかった！",
 	},
 	dazzlinggleam: {
 		name: "マジカルシャイン",
@@ -1472,8 +1472,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 相手を 道連れに しようとしている！",
-		activate: "[POKEMON]は 相手を 道連れに した！",
+		start: "  {POKEMON}は 相手を 道連れに しようとしている！",
+		activate: "{POKEMON}は 相手を 道連れに した！",
 	},
 	detect: {
 		name: "みきり",
@@ -1534,7 +1534,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]は 地面に 潜った！",
+		prepare: "{POKEMON}は 地面に 潜った！",
 	},
 	direclaw: {
 		name: "フェイタルクロー",
@@ -1573,9 +1573,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]の [MOVE]を 封じこめた！",
-		end: "  [POKEMON]の かなしばりが 解けた！",
-		cant: "[POKEMON]は かなしばりで [MOVE]が だせない！",
+		start: "  {POKEMON}の {MOVE}を 封じこめた！",
+		end: "  {POKEMON}の かなしばりが 解けた！",
+		cant: "{POKEMON}は かなしばりで {MOVE}が だせない！",
 	},
 	disarmingvoice: {
 		name: "チャームボイス",
@@ -1601,7 +1601,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]は 水中に 身を潜めた！",
+		prepare: "{POKEMON}は 水中に 身を潜めた！",
 	},
 	dizzypunch: {
 		name: "ピヨピヨパンチ",
@@ -1627,8 +1627,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は はめつのねがいを 未来に託した！",
-		activate: "  [TARGET]は はめつのねがいの 攻撃を受けた！",
+		start: "  {POKEMON}は はめつのねがいを 未来に託した！",
+		activate: "  {TARGET}は はめつのねがいの 攻撃を受けた！",
 	},
 	doubleedge: {
 		name: "すてみタックル",
@@ -1682,7 +1682,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		typeChange: "  [POKEMON]は 電気を 使いきった！",
+		typeChange: "  {POKEMON}は 電気を 使いきった！",
 	},
 	doubleslap: {
 		name: "おうふくビンタ",
@@ -1717,7 +1717,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		megaNoItem: "  [TRAINER]の 強い祈りが [POKEMON]に 届く――！",
+		megaNoItem: "  {TRAINER}の 強い祈りが {POKEMON}に 届く――！",
 	},
 	dragonbreath: {
 		name: "りゅうのいぶき",
@@ -1914,7 +1914,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は そうでんで 技が でんきタイプになった！",
+		start: "  {POKEMON}は そうでんで 技が でんきタイプになった！",
 	},
 	electroball: {
 		name: "エレキボール",
@@ -1935,7 +1935,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON]は 電気を 吸収した！",
+		prepare: "{POKEMON}は 電気を 吸収した！",
 	},
 	electroweb: {
 		name: "エレキネット",
@@ -1949,8 +1949,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]には 道具が 使えなくなった！",
-		end: "  [POKEMON]に 道具が 使えるようになった！",
+		start: "  {POKEMON}には 道具が 使えなくなった！",
+		end: "  {POKEMON}に 道具が 使えるようになった！",
 	},
 	ember: {
 		name: "ひのこ",
@@ -1984,8 +1984,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は アンコールを受けた！",
-		end: "  [POKEMON]の アンコール状態が 解けた！",
+		start: "  {POKEMON}は アンコールを受けた！",
+		end: "  {POKEMON}の アンコール状態が 解けた！",
 	},
 	endeavor: {
 		name: "がむしゃら",
@@ -2020,8 +2020,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は こらえる 体勢に 入った！",
-		activate: "  [POKEMON]は 攻撃を こらえた！",
+		start: "  {POKEMON}は こらえる 体勢に 入った！",
+		activate: "  {POKEMON}は 攻撃を こらえた！",
 	},
 	energyball: {
 		name: "エナジーボール",
@@ -2184,7 +2184,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [TARGET]は フェイントに 引っかかった！",
+		activate: "  {TARGET}は フェイントに 引っかかった！",
 	},
 	feintattack: {
 		name: "だましうち",
@@ -2204,7 +2204,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "きまぐレーザー",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は 本気を 出した！",
+		activate: "  {POKEMON}は 本気を 出した！",
 	},
 	fierydance: {
 		name: "ほのおのまい",
@@ -2261,9 +2261,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  [TEAM]の 周りが 火の海に 包まれた！",
-		end: "  [TEAM]の 周りの 火の海が 消え去った！",
-		damage: "  [POKEMON]は 火の海の ダメージを受けた！",
+		start: "  {TEAM}の 周りが 火の海に 包まれた！",
+		end: "  {TEAM}の 周りの 火の海が 消え去った！",
+		damage: "  {POKEMON}は 火の海の ダメージを受けた！",
 	},
 	firepunch: {
 		name: "ほのおのパンチ",
@@ -2297,7 +2297,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 炎の渦に 閉じこめられた！",
+		start: "  {POKEMON}は 炎の渦に 閉じこめられた！",
 		move: "#wrap",
 	},
 	firstimpression: {
@@ -2352,7 +2352,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON]にも 火花が 降りかかった！",
+		damage: "  {POKEMON}にも 火花が 降りかかった！",
 	},
 	flamecharge: {
 		name: "ニトロチャージ",
@@ -2415,7 +2415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON]は [ITEM]を 投げつけた！",
+		removeItem: "  {POKEMON}は {ITEM}を 投げつけた！",
 	},
 	flipturn: {
 		name: "クイックターン",
@@ -2469,7 +2469,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]は 空高く 飛びあがった！",
+		prepare: "{POKEMON}は 空高く 飛びあがった！",
 	},
 	flyingpress: {
 		name: "フライングプレス",
@@ -2497,9 +2497,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 張り切っている！",
-		startFromItem: "  [POKEMON]は [ITEM]を 使って 張り切りだした！",
-		startFromZEffect: "  [POKEMON]は Ｚパワーで 急所に 当たりやすくなった！",
+		start: "  {POKEMON}は 張り切っている！",
+		startFromItem: "  {POKEMON}は {ITEM}を 使って 張り切りだした！",
+		startFromZEffect: "  {POKEMON}は Ｚパワーで 急所に 当たりやすくなった！",
 	},
 	focuspunch: {
 		name: "きあいパンチ",
@@ -2510,8 +2510,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 集中力を 高めている！",
-		cant: "[POKEMON]は 集中が 途切れて 技が だせない！",
+		start: "  {POKEMON}は 集中力を 高めている！",
+		cant: "{POKEMON}は 集中が 途切れて 技が だせない！",
 	},
 	followme: {
 		name: "このゆびとまれ",
@@ -2528,8 +2528,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 注目の的に なった！",
-		startFromZEffect: "  [POKEMON]は 注目の的に なった！",
+		start: "  {POKEMON}は 注目の的に なった！",
+		startFromZEffect: "  {POKEMON}は 注目の的に なった！",
 	},
 	forcepalm: {
 		name: "はっけい",
@@ -2552,7 +2552,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]の 正体を 見破った！",
+		start: "  {POKEMON}の 正体を 見破った！",
 	},
 	forestscurse: {
 		name: "もりののろい",
@@ -2582,7 +2582,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON]は 冷たい光に 包まれた！",
+		prepare: "  {POKEMON}は 冷たい光に 包まれた！",
 	},
 	freezingglare: {
 		name: "いてつくしせん",
@@ -2680,8 +2680,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 未来に 攻撃を予知した！",
-		activate: "  [TARGET]は みらいよちの 攻撃を受けた！",
+		start: "  {POKEMON}は 未来に 攻撃を予知した！",
+		activate: "  {TARGET}は みらいよちの 攻撃を受けた！",
 	},
 	gastroacid: {
 		name: "いえき",
@@ -2698,7 +2698,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]の 特性が 効かなくなった！",
+		start: "  {POKEMON}の 特性が 効かなくなった！",
 	},
 	geargrind: {
 		name: "ギアソーサー",
@@ -2724,7 +2724,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON]は パワーを ためこんでいる！",
+		prepare: "{POKEMON}は パワーを ためこんでいる！",
 	},
 	gigadrain: {
 		name: "ギガドレイン",
@@ -2797,8 +2797,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]が 水の 流れに 包まれた！",
-		damage: "  [POKEMON]は キョダイホウゲキの 流れに 飲みこまれていて 苦しい！",
+		start: "  {PARTY}が 水の 流れに 包まれた！",
+		damage: "  {POKEMON}は キョダイホウゲキの 流れに 飲みこまれていて 苦しい！",
 	},
 	gmaxcentiferno: {
 		name: "キョダイヒャッカ",
@@ -2822,7 +2822,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET]の ＰＰが へった！",
+		activate: "  {TARGET}の ＰＰが へった！",
 	},
 	gmaxdrumsolo: {
 		name: "キョダイコランダ",
@@ -2909,9 +2909,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]の 周りに とがった はがねが ただよいはじめた！",
-		end: "  [PARTY]の 周りの はがねが 消え去った！",
-		damage: "  [POKEMON]に とがった はがねが 食いこんだ！",
+		start: "  {PARTY}の 周りに とがった はがねが ただよいはじめた！",
+		end: "  {PARTY}の 周りの はがねが 消え去った！",
+		damage: "  {POKEMON}に とがった はがねが 食いこんだ！",
 	},
 	gmaxstonesurge: {
 		name: "キョダイガンジン",
@@ -2943,16 +2943,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]が ムチの 猛打に 包まれた！",
-		damage: "  [POKEMON]は キョダイベンタツの 猛打に さらされていて 痛い！",
+		start: "  {PARTY}が ムチの 猛打に 包まれた！",
+		damage: "  {POKEMON}は キョダイベンタツの 猛打に さらされていて 痛い！",
 	},
 	gmaxvolcalith: {
 		name: "キョダイフンセキ",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]が 岩に 囲まれた！",
-		damage: "  [POKEMON]は キョダイフンセキの 岩に 囲まれていて 痛い！",
+		start: "  {PARTY}が 岩に 囲まれた！",
+		damage: "  {POKEMON}は キョダイフンセキの 岩に 囲まれていて 痛い！",
 	},
 	gmaxvoltcrash: {
 		name: "キョダイバンライ",
@@ -2964,8 +2964,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]が ほのおに 包まれた！",
-		damage: "  [POKEMON]は キョダイゴクエンの 炎に 包まれていて 熱い！",
+		start: "  {PARTY}が ほのおに 包まれた！",
+		damage: "  {POKEMON}は キョダイゴクエンの 炎に 包まれていて 熱い！",
 	},
 	gmaxwindrage: {
 		name: "キョダイフウゲキ",
@@ -2985,8 +2985,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  [TEAM]の 周りに 湿原が 広がった！",
-		end: "  [TEAM]の 周りの 湿原が 消え去った！",
+		start: "  {TEAM}の 周りに 湿原が 広がった！",
+		end: "  {TEAM}の 周りの 湿原が 消え去った！",
 	},
 	grasswhistle: {
 		name: "くさぶえ",
@@ -3066,8 +3066,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]の [MOVE]は おんねんで ＰＰが０になった！",
-		start: "[POKEMON]は 相手に おんねんを かけようとしている！",
+		activate: "  {POKEMON}の {MOVE}は おんねんで ＰＰが０になった！",
+		start: "{POKEMON}は 相手に おんねんを かけようとしている！",
 	},
 	guardianofalola: {
 		name: "ガーディアン・デ・アローラ",
@@ -3081,7 +3081,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は おたがいのガードを シェアした！",
+		activate: "  {POKEMON}は おたがいのガードを シェアした！",
 	},
 	guardswap: {
 		name: "ガードスワップ",
@@ -3235,8 +3235,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
-			end: "  [POKEMON]の かいふくふうじの 効果が切れた！",
-			cant: "[POKEMON]は かいふくふうじで [MOVE]が だせない！",
+			end: "  {POKEMON}の かいふくふうじの 効果が切れた！",
+			cant: "{POKEMON}は かいふくふうじで {MOVE}が だせない！",
 		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3248,10 +3248,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 回復動作を 封じられた！",
-		end: "  [POKEMON]の かいふくふうじの 効果が切れた！",
-		cant: "[POKEMON]は かいふくふうじで [MOVE]が だせない！",
-		fail: "  しかし [POKEMON]には うまく 決まらなかった！",
+		start: "  {POKEMON}は 回復動作を 封じられた！",
+		end: "  {POKEMON}の かいふくふうじの 効果が切れた！",
+		cant: "{POKEMON}は かいふくふうじで {MOVE}が だせない！",
+		fail: "  しかし {POKEMON}には うまく 決まらなかった！",
 	},
 	healingwish: {
 		name: "いやしのねがい",
@@ -3266,7 +3266,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  いやしのねがいが [POKEMON]に 届いた！",
+		heal: "  いやしのねがいが {POKEMON}に 届いた！",
 	},
 	healorder: {
 		name: "かいふくしれい",
@@ -3328,7 +3328,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [SOURCE]は [POKEMON]を 手助けする 体勢に入った！",
+		start: "  {SOURCE}は {POKEMON}を 手助けする 体勢に入った！",
 	},
 	hex: {
 		name: "たたりめ",
@@ -3581,7 +3581,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON]は 凍える空気に 包まれた！",
+		prepare: "  {POKEMON}は 凍える空気に 包まれた！",
 	},
 	icefang: {
 		name: "こおりのキバ",
@@ -3657,8 +3657,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 相手の技を 封印した！",
-		cant: "[POKEMON]は ふういんで [MOVE]が だせない！",
+		start: "  {POKEMON}は 相手の技を 封印した！",
+		cant: "{POKEMON}は ふういんで {MOVE}が だせない！",
 	},
 	incinerate: {
 		name: "やきつくす",
@@ -3670,7 +3670,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON]の [ITEM]は 焼けてなくなった！",
+		removeItem: "  {POKEMON}の {ITEM}は 焼けてなくなった！",
 	},
 	infernalparade: {
 		name: "ひゃっきやこう",
@@ -3699,7 +3699,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は [SOURCE]に まとわりつかれた！",
+		start: "  {POKEMON}は {SOURCE}に まとわりつかれた！",
 	},
 	ingrain: {
 		name: "ねをはる",
@@ -3720,9 +3720,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 根を はった！",
-		block: "  [POKEMON]は 根をはって 動かない！",
-		heal: "  [POKEMON]は 根から 養分を 吸い取った！",
+		start: "  {POKEMON}は 根を はった！",
+		block: "  {POKEMON}は 根をはって 動かない！",
+		heal: "  {POKEMON}は 根から 養分を 吸い取った！",
 	},
 	instruct: {
 		name: "さいはい",
@@ -3736,7 +3736,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]の 指示で [TARGET]は 技を 繰り出した！",
+		activate: "  {POKEMON}の 指示で {TARGET}は 技を 繰り出した！",
 	},
 	iondeluge: {
 		name: "プラズマシャワー",
@@ -3877,7 +3877,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE]は [POKEMON]の [ITEM]を はたき落とした！",
+		removeItem: "  {SOURCE}は {POKEMON}の {ITEM}を はたき落とした！",
 	},
 	kowtowcleave: {
 		name: "ドゲザン",
@@ -3895,7 +3895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は 精神を 研ぎ澄ました！",
+		start: "  {POKEMON}は 精神を 研ぎ澄ました！",
 	},
 	lashout: {
 		name: "うっぷんばらし",
@@ -3970,9 +3970,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]に 種を 植えつけた！",
-		end: "  [POKEMON]は やどりぎのタネから 解放された！",
-		damage: "  やどりぎが [POKEMON]の 体力を奪う！",
+		start: "  {POKEMON}に 種を 植えつけた！",
+		end: "  {POKEMON}は やどりぎのタネから 解放された！",
+		damage: "  やどりぎが {POKEMON}の 体力を奪う！",
 	},
 	leer: {
 		name: "にらみつける",
@@ -4026,11 +4026,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  [POKEMON]は とくしゅこうげきに つよくなった！",
+			start: "  {POKEMON}は とくしゅこうげきに つよくなった！",
 		},
 
-		start: "  [TEAM]は ひかりのかべで 特殊に 強くなった！",
-		end: "  [TEAM]の ひかりのかべが なくなった！",
+		start: "  {TEAM}は ひかりのかべで 特殊に 強くなった！",
+		end: "  {TEAM}の ひかりのかべが なくなった！",
 	},
 	lightthatburnsthesky: {
 		name: "てんこがすめつぼうのひかり",
@@ -4057,7 +4057,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE]は [POKEMON]に ねらいを さだめた！",
+		start: "  {SOURCE}は {POKEMON}に ねらいを さだめた！",
 	},
 	lovelykiss: {
 		name: "あくまのキッス",
@@ -4085,8 +4085,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  おまじないの 力で [TEAM]の急所が 隠れた！",
-		end: "  [TEAM]の おまじないが解けた！",
+		start: "  おまじないの 力で {TEAM}の急所が 隠れた！",
+		end: "  {TEAM}の おまじないが解けた！",
 	},
 	luminacrash: {
 		name: "ルミナコリジョン",
@@ -4111,7 +4111,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [POKEMON]は 神秘的な 月の光に 包まれた！",
+		heal: "  {POKEMON}は 神秘的な 月の光に 包まれた！",
 	},
 	lunge: {
 		name: "とびかかる",
@@ -4155,8 +4155,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は マジックコートに 包まれた！",
-		move: "[POKEMON]は [MOVE]を 跳ね返した！",
+		start: "  {POKEMON}は マジックコートに 包まれた！",
+		move: "{POKEMON}は {MOVE}を 跳ね返した！",
 	},
 	magicpowder: {
 		name: "まほうのこな",
@@ -4192,7 +4192,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は マグマの渦に 閉じこめられた！",
+		start: "  {POKEMON}は マグマの渦に 閉じこめられた！",
 	},
 	magnetbomb: {
 		name: "マグネットボム",
@@ -4216,8 +4216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 電磁力で 浮かびあがった！",
-		end: "  [POKEMON]は 電磁力が なくなった！",
+		start: "  {POKEMON}は 電磁力で 浮かびあがった！",
+		end: "  {POKEMON}は 電磁力が なくなった！",
 	},
 	magnitude: {
 		name: "マグニチュード",
@@ -4228,7 +4228,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  マグニチュード[NUMBER]！！",
+		activate: "  マグニチュード{NUMBER}！！",
 	},
 	makeitrain: {
 		name: "ゴールドラッシュ",
@@ -4258,8 +4258,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は たたみがえしを ねらっている！",
-		block: "  [MOVE]は たたみがえしで 防がれた！",
+		start: "  {POKEMON}は たたみがえしを ねらっている！",
+		block: "  {MOVE}は たたみがえしで 防がれた！",
 	},
 	matchagotcha: {
 		name: "シャカシャカほう",
@@ -4302,7 +4302,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は 攻撃から 身を守った！",
+		activate: "  {POKEMON}は 攻撃から 身を守った！",
 	},
 	maxhailstorm: {
 		name: "ダイアイス",
@@ -4463,7 +4463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [POKEMON]は Ｚパワーで 体力が 回復した！",
+		heal: "  {POKEMON}は Ｚパワーで 体力が 回復した！",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "ムーンライトブラスター",
@@ -4507,7 +4507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON]に 宇宙の 力が あふれだす！",
+		prepare: "{POKEMON}に 宇宙の 力が あふれだす！",
 	},
 	meteormash: {
 		name: "コメットパンチ",
@@ -4545,7 +4545,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "指を振ったら [MOVE] がでた！",
+		move: "指を振ったら {MOVE} がでた！",
 	},
 	mightycleave: {
 		name: "パワフルエッジ",
@@ -4588,7 +4588,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は [MOVE]を 覚えた！",
+		start: "  {POKEMON}は {MOVE}を 覚えた！",
 	},
 	mindblown: {
 		name: "ビックリヘッド",
@@ -4702,18 +4702,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  [POKEMON]は しろいきりにつつまれた！",
-			block: "  [POKEMON]はしろいきりに まもられている",
+			start: "  {POKEMON}は しろいきりにつつまれた！",
+			block: "  {POKEMON}はしろいきりに まもられている",
 		},
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  [POKEMON]は しろいきりにつつまれた！",
+			start: "  {POKEMON}は しろいきりにつつまれた！",
 			block: "  しかしうまく決まらなかった！！",
 		},
 
-		start: "  [TEAM]は 白い霧に 包まれた！",
-		end: "  [TEAM]を 包んでいた 白い霧が なくなった！",
-		block: "  [POKEMON]は 白い霧に 守られている！",
+		start: "  {TEAM}は 白い霧に 包まれた！",
+		end: "  {TEAM}を 包んでいた 白い霧が なくなった！",
+		block: "  {POKEMON}は 白い霧に 守られている！",
 	},
 	mistball: {
 		name: "ミストボール",
@@ -4895,7 +4895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "しぜんのちからは [MOVE] になった！",
+		move: "しぜんのちからは {MOVE} になった！",
 	},
 	naturesmadness: {
 		name: "しぜんのいかり",
@@ -4928,8 +4928,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は 悪夢を 見始めた！",
-		damage: "  [POKEMON]は 悪夢に うなされている！",
+		start: "  {POKEMON}は 悪夢を 見始めた！",
+		damage: "  {POKEMON}は 悪夢に うなされている！",
 	},
 	nightshade: {
 		name: "ナイトヘッド",
@@ -4959,7 +4959,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は はいすいのじんで 逃げることが できなくなった！",
+		start: "  {POKEMON}は はいすいのじんで 逃げることが できなくなった！",
 	},
 	noxioustorque: {
 		name: "ポイズンアクセル",
@@ -5003,7 +5003,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は たこがためで 逃げられなくなった！",
+		start: "  {POKEMON}は たこがためで 逃げられなくなった！",
 	},
 	odorsleuth: {
 		name: "かぎわける",
@@ -5126,7 +5126,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ほろびのうたを 聴いたポケモンは ３ターン後に 滅びてしまう！",
-		activate: "  [POKEMON]の 滅びのカウントが [NUMBER]になった！",
+		activate: "  {POKEMON}の 滅びのカウントが {NUMBER}になった！",
 	},
 	petalblizzard: {
 		name: "はなふぶき",
@@ -5289,7 +5289,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ポルターガイスト",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]に [ITEM]が 襲いかかる！",
+		activate: "  {POKEMON}に {ITEM}が 襲いかかる！",
 	},
 	populationbomb: {
 		name: "ネズミざん",
@@ -5314,8 +5314,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]に ふんじんを あびせた！",
-		activate: "  [MOVE]に 反応して ふんじんが 爆発した！",
+		start: "  {POKEMON}に ふんじんを あびせた！",
+		activate: "  {MOVE}に 反応して ふんじんが 爆発した！",
 	},
 	powdersnow: {
 		name: "こなゆき",
@@ -5336,7 +5336,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は おたがいのパワーを シェアした！",
+		activate: "  {POKEMON}は おたがいのパワーを シェアした！",
 	},
 	powerswap: {
 		name: "パワースワップ",
@@ -5349,7 +5349,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は 攻めの力と 守りの力を 入れ替えた！",
+		start: "  {POKEMON}は 攻めの力と 守りの力を 入れ替えた！",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5358,7 +5358,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は 攻撃と 防御を 入れ替えた！",
+		start: "  {POKEMON}は 攻撃と 防御を 入れ替えた！",
 		end: "#.start",
 	},
 	powertrip: {
@@ -5425,8 +5425,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 守りの 体勢に 入った！",
-		block: "  [POKEMON]は 攻撃から 身を守った！",
+		start: "  {POKEMON}は 守りの 体勢に 入った！",
+		block: "  {POKEMON}は 攻撃から 身を守った！",
 	},
 	psybeam: {
 		name: "サイケこうせん",
@@ -5579,7 +5579,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET]の 順番を 先送りした！",
+		activate: "  {TARGET}の 順番を 先送りした！",
 	},
 	quickattack: {
 		name: "でんこうせっか",
@@ -5605,8 +5605,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]は ファストガードで 守られた！",
-		block: "  [POKEMON]は ファストガードで 守られた！",
+		start: "  {TEAM}は ファストガードで 守られた！",
+		block: "  {POKEMON}は ファストガードで 守られた！",
 	},
 	quiverdance: {
 		name: "ちょうのまい",
@@ -5728,7 +5728,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  [POKEMON]の 周りで 空気が 渦を巻く！",
+		prepare: "  {POKEMON}の 周りで 空気が 渦を巻く！",
 	},
 	recover: {
 		name: "じこさいせい",
@@ -5754,7 +5754,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		addItem: "  [POKEMON]は [ITEM]を 拾ってきた！",
+		addItem: "  {POKEMON}は {ITEM}を 拾ってきた！",
 	},
 	reflect: {
 		name: "リフレクター",
@@ -5777,11 +5777,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  [POKEMON]は だげきこうげきに つよくなった！",
+			start: "  {POKEMON}は だげきこうげきに つよくなった！",
 		},
 
-		start: "  [TEAM]は リフレクターで 物理に 強くなった！",
-		end: "  [TEAM]の リフレクターが なくなった！",
+		start: "  {TEAM}は リフレクターで 物理に 強くなった！",
+		end: "  {TEAM}の リフレクターが なくなった！",
 	},
 	reflecttype: {
 		name: "ミラータイプ",
@@ -5795,7 +5795,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  [POKEMON]は [SOURCE]と 同じタイプに なった！",
+		typeChange: "  {POKEMON}は {SOURCE}と 同じタイプに なった！",
 	},
 	refresh: {
 		name: "リフレッシュ",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		heal: "  [POKEMON]は 復活して 戦えるようになった！",
+		heal: "  {POKEMON}は 復活して 戦えるようになった！",
 	},
 	risingvoltage: {
 		name: "ライジングボルト",
@@ -5988,7 +5988,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  [POKEMON]は [SOURCE]の [ABILITY]を コピーした！",
+		changeAbility: "  {POKEMON}は {SOURCE}の {ABILITY}を コピーした！",
 	},
 	rollingkick: {
 		name: "まわしげり",
@@ -6063,9 +6063,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]は 神秘のベールに 包まれた！",
-		end: "  [TEAM]を 包んでいた 神秘のベールが なくなった！",
-		block: "  [POKEMON]は 神秘のベールに 守られている！",
+		start: "  {TEAM}は 神秘のベールに 包まれた！",
+		end: "  {TEAM}を 包んでいた 神秘のベールが なくなった！",
+		block: "  {POKEMON}は 神秘のベールに 守られている！",
 	},
 	saltcure: {
 		name: "しおづけ",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は しおづけに なった！",
-		damage: "  [POKEMON]は しおづけの ダメージを 受けている",
+		start: "  {POKEMON}は しおづけに なった！",
+		damage: "  {POKEMON}は しおづけの ダメージを 受けている",
 	},
 	sandattack: {
 		name: "すなかけ",
@@ -6128,7 +6128,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 砂じごくに 捕らわれた！",
+		start: "  {POKEMON}は 砂じごくに 捕らわれた！",
 	},
 	sappyseed: {
 		name: "すくすくボンバー",
@@ -6282,8 +6282,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [TARGET]の 守りを 打ち破った！",
-		prepare: "[POKEMON]の姿が 一瞬にして 消えた！",
+		activate: "  {TARGET}の 守りを 打ち破った！",
+		prepare: "{POKEMON}の姿が 一瞬にして 消えた！",
 	},
 	shadowpunch: {
 		name: "シャドーパンチ",
@@ -6315,7 +6315,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は しっぽを 切って みがわりにした！",
+		start: "  {POKEMON}は しっぽを 切って みがわりにした！",
 		alreadyStarted: "#substitute",
 		fail: "#substitute",
 	},
@@ -6347,9 +6347,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は トラップシェルを 仕掛けた！",
-		prepare: "  [POKEMON]は トラップシェルを 仕掛けた！",
-		cant: "[POKEMON]の トラップシェルは 不発に 終わった！",
+		start: "  {POKEMON}は トラップシェルを 仕掛けた！",
+		prepare: "  {POKEMON}は トラップシェルを 仕掛けた！",
+		cant: "{POKEMON}の トラップシェルは 不発に 終わった！",
 	},
 	shelter: {
 		name: "たてこもる",
@@ -6437,7 +6437,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]は [MOVE]を スケッチした！",
+		activate: "  {POKEMON}は {MOVE}を スケッチした！",
 	},
 	skillswap: {
 		name: "スキルスワップ",
@@ -6463,7 +6463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]は おたがいの 特性を 入れ替えた！",
+		activate: "  {POKEMON}は おたがいの 特性を 入れ替えた！",
 	},
 	skittersmack: {
 		name: "はいよるいちげき",
@@ -6484,7 +6484,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]は 首を 引っこめた！",
+		prepare: "{POKEMON}は 首を 引っこめた！",
 	},
 	skyattack: {
 		name: "ゴッドバード",
@@ -6499,7 +6499,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]を 激しい光が 包む！",
+		prepare: "{POKEMON}を 激しい光が 包む！",
 	},
 	skydrop: {
 		name: "フリーフォール",
@@ -6510,10 +6510,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]は [TARGET]を 上空に 連れ去った！",
-		end: "  [POKEMON]は フリーフォールから 解放された！",
-		failSelect: "[POKEMON]は フリーフォールで 自由に ならない！",
-		failTooHeavy: "  [POKEMON]は 重すぎて 持ち上げられない！",
+		prepare: "{POKEMON}は {TARGET}を 上空に 連れ去った！",
+		end: "  {POKEMON}は フリーフォールから 解放された！",
+		failSelect: "{POKEMON}は フリーフォールで 自由に ならない！",
+		failTooHeavy: "  {POKEMON}は 重すぎて 持ち上げられない！",
 	},
 	skyuppercut: {
 		name: "スカイアッパー",
@@ -6603,7 +6603,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は 撃ち落とされて 地面に 落ちた！",
+		start: "  {POKEMON}は 撃ち落とされて 地面に 落ちた！",
 	},
 	smartstrike: {
 		name: "スマートホーン",
@@ -6643,7 +6643,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は トラバサミに 捕らわれた！",
+		start: "  {POKEMON}は トラバサミに 捕らわれた！",
 	},
 	snarl: {
 		name: "バークアウト",
@@ -6660,8 +6660,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 相手の でかたを うかがっている！",
-		activate: "  [POKEMON]は [TARGET]の 技を 横取りした！",
+		start: "  {POKEMON}は 相手の でかたを うかがっている！",
+		activate: "  {POKEMON}は {TARGET}の 技を 横取りした！",
 	},
 	snipeshot: {
 		name: "ねらいうち",
@@ -6735,7 +6735,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  [POKEMON]は 光を 吸収した！",
+		prepare: "  {POKEMON}は 光を 吸収した！",
 	},
 	solarblade: {
 		name: "ソーラーブレード",
@@ -6794,7 +6794,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		clearBoost: "  [SOURCE]は 上がった 能力を 奪い取った！",
+		clearBoost: "  {SOURCE}は 上がった 能力を 奪い取った！",
 	},
 	speedswap: {
 		name: "スピードスワップ",
@@ -6802,7 +6802,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は おたがいの スピードを 入れ替えた！",
+		activate: "  {POKEMON}は おたがいの スピードを 入れ替えた！",
 	},
 	spicyextract: {
 		name: "ハバネロエキス",
@@ -6861,9 +6861,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]の 足下に まきびしが 散らばった！",
-		end: "  [TEAM]の 足下の まきびしが 消え去った！",
-		damage: "  [POKEMON]は まきびしの ダメージを受けた！",
+		start: "  {TEAM}の 足下に まきびしが 散らばった！",
+		end: "  {TEAM}の 足下の まきびしが 消え去った！",
+		damage: "  {POKEMON}は まきびしの ダメージを受けた！",
 	},
 	spikyshield: {
 		name: "ニードルガード",
@@ -6880,7 +6880,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON]は 傷ついた！",
+		damage: "  {POKEMON}は 傷ついた！",
 	},
 	spinout: {
 		name: "ホイールスピン",
@@ -6915,7 +6915,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [TARGET]の [MOVE]を [NUMBER]削った！",
+		activate: "  {TARGET}の {MOVE}を {NUMBER}削った！",
 	},
 	spitup: {
 		name: "はきだす",
@@ -6977,9 +6977,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]の 周りに とがった岩が ただよい始めた！",
-		end: "  [TEAM]の 周りの ステルスロックが 消え去った！",
-		damage: "  [POKEMON]に とがった岩が 食いこんだ！",
+		start: "  {TEAM}の 周りに とがった岩が ただよい始めた！",
+		end: "  {TEAM}の 周りの ステルスロックが 消え去った！",
+		damage: "  {POKEMON}に とがった岩が 食いこんだ！",
 	},
 	steameruption: {
 		name: "スチームバースト",
@@ -7025,9 +7025,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]の 足下に ねばねばネットが 広がった！",
-		end: "  [TEAM]の 足下の ねばねばネットが 消え去った！",
-		activate: "  [POKEMON]は ねばねばネットに ひっかかった！",
+		start: "  {TEAM}の 足下に ねばねばネットが 広がった！",
+		end: "  {TEAM}の 足下の ねばねばネットが 消え去った！",
+		activate: "  {POKEMON}は ねばねばネットに ひっかかった！",
 	},
 	stockpile: {
 		name: "たくわえる",
@@ -7039,8 +7039,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は [NUMBER]つ たくわえた！",
-		end: "  [POKEMON]が たくわえていた 効果が切れた！",
+		start: "  {POKEMON}は {NUMBER}つ たくわえた！",
+		end: "  {POKEMON}が たくわえていた 効果が切れた！",
 	},
 	stokedsparksurfer: {
 		name: "ライトニングサーフライド",
@@ -7209,11 +7209,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]の 身代わりが 現れた！",
-		alreadyStarted: "  しかし [POKEMON]の 身代わりは すでに でていた",
-		end: "  [POKEMON]の 身代わりは 消えてしまった…",
+		start: "  {POKEMON}の 身代わりが 現れた！",
+		alreadyStarted: "  しかし {POKEMON}の 身代わりは すでに でていた",
+		end: "  {POKEMON}の 身代わりは 消えてしまった…",
 		fail: "  しかし 身代わりを だすには 体力が 足りなかった！",
-		activate: "  [POKEMON]に かわって 身代わりが 攻撃を 受けた！",
+		activate: "  {POKEMON}に かわって 身代わりが 攻撃を 受けた！",
 	},
 	subzeroslammer: {
 		name: "レイジングジオフリーズ",
@@ -7415,7 +7415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は あめまみれに なった！",
+		start: "  {POKEMON}は あめまみれに なった！",
 	},
 	tackle: {
 		name: "たいあたり",
@@ -7464,8 +7464,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]に 追い風が 吹き始めた！",
-		end: "  [TEAM]の 追い風が 止んだ！",
+		start: "  {TEAM}に 追い風が 吹き始めた！",
+		end: "  {TEAM}の 追い風が 止んだ！",
 	},
 	takedown: {
 		name: "とっしん",
@@ -7493,7 +7493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は ほのおに 弱くなった！",
+		start: "  {POKEMON}は ほのおに 弱くなった！",
 	},
 	taunt: {
 		name: "ちょうはつ",
@@ -7518,9 +7518,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 挑発に 乗ってしまった！",
-		end: "  [POKEMON]は 挑発の効果が 解けた！",
-		cant: "[POKEMON]は 挑発されて [MOVE]が だせない！",
+		start: "  {POKEMON}は 挑発に 乗ってしまった！",
+		end: "  {POKEMON}は 挑発の効果が 解けた！",
+		cant: "{POKEMON}は 挑発されて {MOVE}が だせない！",
 	},
 	tearfullook: {
 		name: "なみだめ",
@@ -7565,8 +7565,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]を 宙に 浮かせた！",
-		end: "  [POKEMON]は テレキネシスから 解放された！",
+		start: "  {POKEMON}を 宙に 浮かせた！",
+		end: "  {POKEMON}は テレキネシスから 解放された！",
 	},
 	teleport: {
 		name: "テレポート",
@@ -7675,7 +7675,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		cant: "[POKEMON]は じごくづきの 効果で 技が 出せない！",
+		cant: "{POKEMON}は じごくづきの 効果で 技が 出せない！",
 	},
 	thunder: {
 		name: "かみなり",
@@ -7714,7 +7714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は [SOURCE]に 閉じこめられた！",
+		start: "  {POKEMON}は {SOURCE}に 閉じこめられた！",
 	},
 	thunderclap: {
 		name: "じんらい",
@@ -7781,8 +7781,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は いちゃもんを つけられた！",
-		end: "  [POKEMON]の いちゃもんの 効果が切れた！",
+		start: "  {POKEMON}は いちゃもんを つけられた！",
+		end: "  {POKEMON}の いちゃもんの 効果が切れた！",
 	},
 	toxic: {
 		name: "どくどく",
@@ -7809,8 +7809,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]の 足下に どくびしが 散らばった！",
-		end: "  [TEAM]の 足下の どくびしが 消え去った！",
+		start: "  {TEAM}の 足下に どくびしが 散らばった！",
+		end: "  {TEAM}の 足下の どくびしが 消え去った！",
 	},
 	toxicthread: {
 		name: "どくのいと",
@@ -7843,7 +7843,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		transform: "[POKEMON]は [SPECIES]に 変身した！",
+		transform: "{POKEMON}は {SPECIES}に 変身した！",
 	},
 	triattack: {
 		name: "トライアタック",
@@ -7885,7 +7885,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]は おたがいの 道具を入れ替えた！",
+		activate: "  {POKEMON}は おたがいの 道具を入れ替えた！",
 	},
 	trickortreat: {
 		name: "ハロウィン",
@@ -8009,11 +8009,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 騒ぎだした！",
-		end: "  [POKEMON]は おとなしくなった！",
-		upkeep: "  [POKEMON]は 騒いでいる！",
-		block: "  しかし [POKEMON]は 騒がしくて 眠れない！",
-		blockSelf: "  しかし [POKEMON]は 騒いでいて 眠れない！",
+		start: "  {POKEMON}は 騒ぎだした！",
+		end: "  {POKEMON}は おとなしくなった！",
+		upkeep: "  {POKEMON}は 騒いでいる！",
+		block: "  しかし {POKEMON}は 騒がしくて 眠れない！",
+		blockSelf: "  しかし {POKEMON}は 騒いでいて 眠れない！",
 	},
 	uturn: {
 		name: "とんぼがえり",
@@ -8027,7 +8027,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		switchOut: "[POKEMON]は [TRAINER]の元へ 戻っていく！",
+		switchOut: "{POKEMON}は {TRAINER}の元へ 戻っていく！",
 	},
 	vacuumwave: {
 		name: "しんくうは",
@@ -8132,9 +8132,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は [TARGET]を 待っている…",
-		start: "  [TEAM]の空に にじが かかった！",
-		end: "  [TEAM]の空から にじが 消えた！",
+		activate: "  {POKEMON}は {TARGET}を 待っている…",
+		start: "  {TEAM}の空に にじが かかった！",
+		end: "  {TEAM}の空から にじが 消えた！",
 	},
 	waterpulse: {
 		name: "みずのはどう",
@@ -8195,7 +8195,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "ウルトラダッシュアタックは 天気によって [MOVE]に なった！",
+		move: "ウルトラダッシュアタックは 天気によって {MOVE}に なった！",
 	},
 	whirlpool: {
 		name: "うずしお",
@@ -8219,7 +8219,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は 渦の中に 閉じこめられた！",
+		start: "  {POKEMON}は 渦の中に 閉じこめられた！",
 	},
 	whirlwind: {
 		name: "ふきとばし",
@@ -8267,8 +8267,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]は ワイドガードで 守られた！",
-		block: "  [POKEMON]は ワイドガードで 守られた！",
+		start: "  {TEAM}は ワイドガードで 守られた！",
+		block: "  {POKEMON}は ワイドガードで 守られた！",
 	},
 	wildboltstorm: {
 		name: "かみなりあらし",
@@ -8301,7 +8301,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [NICKNAME]の ねがいごとが かなった！",
+		heal: "  {NICKNAME}の ねがいごとが かなった！",
 	},
 	withdraw: {
 		name: "からにこもる",
@@ -8378,8 +8378,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]は [SOURCE]に 巻きつかれた！",
-		move: "[POKEMON]の こうげきは まだ つづいている",
+		start: "  {POKEMON}は {SOURCE}に 巻きつかれた！",
+		move: "{POKEMON}の こうげきは まだ つづいている",
 	},
 	wringout: {
 		name: "しぼりとる",
@@ -8400,7 +8400,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]の 眠気を 誘った！",
+		start: "  {POKEMON}の 眠気を 誘った！",
 	},
 	zapcannon: {
 		name: "でんじほう",

@@ -47,16 +47,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	forme: "Forma", // NEEDS QC
 	dexnum: "N.º Pokédex", // NEEDS QC
 	generation: "Generación", // NEEDS QC
-	gennum: "Gen [NUMBER]",
+	gennum: "Gen {NUMBER}",
 	evolution: "Evolución", // NEEDS QC
 	preevolution: "Preevolución", // NEEDS QC
 	doesnotevolve: "No evoluciona", // NEEDS QC
 	zcrystal: "Cristal Z", // NEEDS QC
 	target: "Objetivo", // NEEDS QC
 	height: "Altura",
-	numm: "[NUMBER] m",
+	numm: "{NUMBER} m",
 	weight: "Peso",
-	numkg: "[NUMBER] kg",
+	numkg: "{NUMBER} kg",
 
 	megaevolution: "Megaevolución", // NEEDS QC
 	zpower: "Poder Z", // NEEDS QC
@@ -74,8 +74,8 @@ export const TermNames: { [id: string]: TranslationString } = {
 	resist: "Resistencia", // NEEDS QC: unofficial
 	immune: "Inmunidad", // NEEDS QC: unofficial
 
-	nicknamespecies: "[NICKNAME] ([SPECIES])",
-	speciesforme: "[SPECIES] [FORME]", // NEEDS QC
+	nicknamespecies: "{NICKNAME} ({SPECIES})",
+	speciesforme: "{SPECIES} {FORME}", // NEEDS QC
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

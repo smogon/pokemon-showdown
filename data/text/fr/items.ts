@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Garde-Talent",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  Le talent [POKEMON:de] est protégé par l’effet du Garde-Talent !",
+		block: "  Le talent {POKEMON:de} est protégé par l’effet du Garde-Talent !",
 	},
 	abomasite: {
 		name: "Blizzarite",
@@ -59,8 +59,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ballon",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] flotte grâce à son Ballon !",
-		end: "  Le Ballon [POKEMON:de] a éclaté !",
+		start: "  {POKEMON} flotte grâce à son Ballon !",
+		end: "  Le Ballon {POKEMON:de} a éclaté !",
 	},
 	alakazite: {
 		name: "Alakazamite",
@@ -354,7 +354,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Talisman Sain",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  L’effet du Talisman Sain empêche les stats [POKEMON:de] de baisser !",
+		block: "  L’effet du Talisman Sain empêche les stats {POKEMON:de} de baisser !",
 	},
 	clefablite: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -405,7 +405,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Baie Chérim",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  La Baie Chérim [POKEMON:de] lui permet d’agir plus vite que d’habitude !",
+		activate: "  La Baie Chérim {POKEMON:de} lui permet d’agir plus vite que d’habitude !",
 	},
 	damprock: {
 		name: "Roche Humide",
@@ -576,13 +576,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Bouton Fuite",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] se retire grâce au Bouton Fuite !",
+		end: "  {POKEMON} se retire grâce au Bouton Fuite !",
 	},
 	ejectpack: {
 		name: "Sac Fuite",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] se retire grâce au Sac Fuite !",
+		end: "  {POKEMON} se retire grâce au Sac Fuite !",
 	},
 	electirizer: {
 		name: "Électriseur",
@@ -1161,7 +1161,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  La Baie Mepo [POKEMON:de] restaure les PP de sa capacité [MOVE] !",
+		activate: "  La Baie Mepo {POKEMON:de} restaure les PP de sa capacité {MOVE} !",
 	},
 	levelball: {
 		name: "Niveau Ball",
@@ -1176,7 +1176,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "ms",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON] perd quelques PV !",
+		damage: "  {POKEMON} perd quelques PV !",
 	},
 	lightball: {
 		name: "Balle Lumière",
@@ -1443,7 +1443,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Feuille Copieuse",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] copie les changements de stats de la cible grâce à la Feuille Copieuse !",
+		activate: "  {POKEMON} copie les changements de stats de la cible grâce à la Feuille Copieuse !",
 	},
 	mistyseed: {
 		name: "Graine Brume",
@@ -1646,7 +1646,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Herbe Pouvoir",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] est complètement chargé grâce à l’Herbe Pouvoir !",
+		end: "  {POKEMON} est complètement chargé grâce à l’Herbe Pouvoir !",
 	},
 	powerlens: {
 		name: "Lentille Pouvoir",
@@ -1676,7 +1676,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Pare-Effet",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON] évite l’effet grâce à son Pare-Effet !",
+		block: "  {POKEMON} évite l’effet grâce à son Pare-Effet !",
 	},
 	protector: {
 		name: "Protecteur",
@@ -1726,7 +1726,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  La Vive Griffe [POKEMON:de] lui permet d’agir plus vite que d’habitude !",
+		activate: "  La Vive Griffe {POKEMON:de} lui permet d’agir plus vite que d’habitude !",
 	},
 	quickpowder: {
 		name: "Poudre Vite",
@@ -1779,7 +1779,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Carton Rouge",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] a mis un Carton Rouge à [TARGET] !",
+		end: "  {POKEMON} a mis un Carton Rouge à {TARGET} !",
 	},
 	redorb: {
 		name: "Gemme Rouge",
@@ -1825,7 +1825,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Casque Brut",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON] est blessé par le Casque Brut !",
+		damage: "  {POKEMON} est blessé par le Casque Brut !",
 	},
 	roomservice: {
 		name: "Chariot Distordu",
@@ -1873,7 +1873,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Lunettes Filtre",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON] est protégé de la capacité [MOVE] par les Lunettes Filtre !",
+		block: "  {POKEMON} est protégé de la capacité {MOVE} par les Lunettes Filtre !",
 	},
 	sailfossil: {
 		name: "Fossile Nageoire",
@@ -2628,8 +2628,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ultranécrozélite",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "  Une lumière éblouissante émane [POKEMON:de] !",
-		activate: "[POKEMON] a pris une nouvelle forme grâce à l’Ultra-Explosion !",
+		transform: "  Une lumière éblouissante émane {POKEMON:de} !",
+		activate: "{POKEMON} a pris une nouvelle forme grâce à l’Ultra-Explosion !",
 	},
 	unremarkableteacup: {
 		name: "Bol Médiocre",
@@ -2804,7 +2804,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  La Baie Mystère [POKEMON:de] restaure les PP de sa capacité [MOVE] !",
+		activate: "  La Baie Mystère {POKEMON:de} restaure les PP de sa capacité {MOVE} !",
 	},
 	pinkbow: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI

@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Scudo abilità",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  L’abilità di [POKEMON] è protetta per effetto dello Scudo abilità!",
+		block: "  L’abilità di {POKEMON} è protetta per effetto dello Scudo abilità!",
 	},
 	abomasite: {
 		name: "Abomasnowite",
@@ -59,8 +59,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Palloncino",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] fluttua in aria grazie al Palloncino!",
-		end: "  Il Palloncino di [POKEMON] è scoppiato!",
+		start: "  {POKEMON} fluttua in aria grazie al Palloncino!",
+		end: "  Il Palloncino di {POKEMON} è scoppiato!",
 	},
 	alakazite: {
 		name: "Alakazamite",
@@ -354,7 +354,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ciondolochiaro",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  Le statistiche di [POKEMON] non si riducono per effetto del Ciondolochiaro!",
+		block: "  Le statistiche di {POKEMON} non si riducono per effetto del Ciondolochiaro!",
 	},
 	clefablite: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -405,7 +405,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Baccacrela",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] agisce più rapidamente del normale grazie alla Baccacrela!",
+		activate: "  {POKEMON} agisce più rapidamente del normale grazie alla Baccacrela!",
 	},
 	damprock: {
 		name: "Rocciaumida",
@@ -576,13 +576,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Pulsantefuga",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] viene sostituito grazie al Pulsantefuga!",
+		end: "  {POKEMON} viene sostituito grazie al Pulsantefuga!",
 	},
 	ejectpack: {
 		name: "Zainofuga",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] è sostituito grazie allo Zainofuga!",
+		end: "  {POKEMON} è sostituito grazie allo Zainofuga!",
 	},
 	electirizer: {
 		name: "Elettritore",
@@ -1157,7 +1157,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] recupera i PP della mossa [MOVE] con la Baccamela!",
+		activate: "  {POKEMON} recupera i PP della mossa {MOVE} con la Baccamela!",
 	},
 	levelball: {
 		name: "Level Ball",
@@ -1172,7 +1172,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON] perde qualche PS!",
+		damage: "  {POKEMON} perde qualche PS!",
 	},
 	lightball: {
 		name: "Elettropalla",
@@ -1435,7 +1435,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Foglia carbone",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] ha copiato le modifiche alle statistiche avversarie usando la Foglia carbone!",
+		activate: "  {POKEMON} ha copiato le modifiche alle statistiche avversarie usando la Foglia carbone!",
 	},
 	mistyseed: {
 		name: "Nebbiaseme",
@@ -1638,7 +1638,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Vigorerba",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] è completamente carico grazie alla Vigorerba!",
+		end: "  {POKEMON} è completamente carico grazie alla Vigorerba!",
 	},
 	powerlens: {
 		name: "Vigorlente",
@@ -1668,7 +1668,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Smorzaurti",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON] si protegge con lo Smorzaurti!",
+		block: "  {POKEMON} si protegge con lo Smorzaurti!",
 	},
 	protector: {
 		name: "Copertura",
@@ -1718,7 +1718,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] agisce più rapidamente del normale grazie al Rapidartiglio!",
+		activate: "  {POKEMON} agisce più rapidamente del normale grazie al Rapidartiglio!",
 	},
 	quickpowder: {
 		name: "Velopolvere",
@@ -1771,7 +1771,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Cartelrosso",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] dà un Cartelrosso [TARGET:a]!",
+		end: "  {POKEMON} dà un Cartelrosso {TARGET:a}!",
 	},
 	redorb: {
 		name: "Gemma rossa",
@@ -1817,7 +1817,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Bitorzolelmo",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON] è ferito da un Bitorzolelmo!",
+		damage: "  {POKEMON} è ferito da un Bitorzolelmo!",
 	},
 	roomservice: {
 		name: "Distorservizio",
@@ -1865,7 +1865,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Visierantisabbia",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  La Visierantisabbia protegge [POKEMON] da [MOVE]!",
+		block: "  La Visierantisabbia protegge {POKEMON} da {MOVE}!",
 	},
 	sailfossil: {
 		name: "Fossilpinna",
@@ -2620,8 +2620,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ultranecrozium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "  [POKEMON] emana una luce abbagliante!",
-		activate: "[POKEMON] ha assunto una nuova forma grazie all’Ultraesplosione!",
+		transform: "  {POKEMON} emana una luce abbagliante!",
+		activate: "{POKEMON} ha assunto una nuova forma grazie all’Ultraesplosione!",
 	},
 	unremarkableteacup: {
 		name: "Tazza dozzinale",
@@ -2792,7 +2792,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] recupera i PP della mossa [MOVE] con la Bacca mistero!",
+		activate: "  {POKEMON} recupera i PP della mossa {MOVE} con la Bacca mistero!",
 	},
 	pinkbow: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI

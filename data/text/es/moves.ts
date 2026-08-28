@@ -91,7 +91,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[TARGET] ha decidido aprovechar la oportunidad!",
+		activate: "  ¡{TARGET} ha decidido aprovechar la oportunidad!",
 	},
 	agility: {
 		name: "Agilidad",
@@ -182,8 +182,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] se ha rodeado de un manto de agua!",
-		heal: "  ¡[POKEMON] ha recuperado algunos PS gracias al manto de agua que rodea su cuerpo!",
+		start: "  ¡{POKEMON} se ha rodeado de un manto de agua!",
+		heal: "  ¡{POKEMON} ha recuperado algunos PS gracias al manto de agua que rodea su cuerpo!",
 	},
 	aquastep: {
 		name: "Danza Acuática",
@@ -297,12 +297,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] se ha enamorado!",
-		startFromItem: "  ¡[POKEMON] se ha enamorado debido [ITEM:a:definite]!",
-		end: "  ¡[POKEMON] ya no está enamorado!",
-		endFromItem: "  ¡[POKEMON] ya no está enamorado gracias [ITEM:a:definite:classified]!",
-		activate: "  ¡[POKEMON] está enamorado de [TARGET]!",
-		cant: "¡El enamoramiento impide que [POKEMON] reaccione!",
+		start: "  ¡{POKEMON} se ha enamorado!",
+		startFromItem: "  ¡{POKEMON} se ha enamorado debido {ITEM:a:definite}!",
+		end: "  ¡{POKEMON} ya no está enamorado!",
+		endFromItem: "  ¡{POKEMON} ya no está enamorado gracias {ITEM:a:definite:classified}!",
+		activate: "  ¡{POKEMON} está enamorado de {TARGET}!",
+		cant: "¡El enamoramiento impide que {POKEMON} reaccione!",
 	},
 	aurasphere: {
 		name: "Esfera Aural",
@@ -334,8 +334,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡Velo Aurora ha aumentado la resistencia de [TEAM] ante los ataques físicos y especiales!",
-		end: "  El efecto de Velo Aurora en [TEAM] se ha disipado.",
+		start: "  ¡Velo Aurora ha aumentado la resistencia de {TEAM} ante los ataques físicos y especiales!",
+		end: "  El efecto de Velo Aurora en {TEAM} se ha disipado.",
 	},
 	autotomize: {
 		name: "Aligerar",
@@ -343,7 +343,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] es ahora más ligero!",
+		start: "  ¡{POKEMON} es ahora más ligero!",
 	},
 	avalanche: {
 		name: "Alud",
@@ -441,7 +441,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] empieza a calentar su pico!",
+		start: "  ¡{POKEMON} empieza a calentar su pico!",
 	},
 	beatup: {
 		name: "Paliza",
@@ -458,7 +458,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡Ataque de [NAME]!",
+		activate: "  ¡Ataque de {NAME}!",
 	},
 	behemothbash: {
 		name: "Embate Supremo",
@@ -493,7 +493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		boost: "  ¡[POKEMON] ha sacrificado algunos PS y ha aumentado al máximo su Ataque!",
+		boost: "  ¡{POKEMON} ha sacrificado algunos PS y ha aumentado al máximo su Ataque!",
 	},
 	bestow: {
 		name: "Ofrenda",
@@ -507,7 +507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		takeItem: "  ¡[POKEMON] ha recibido [ITEM:indefinite] de [SOURCE]!",
+		takeItem: "  ¡{POKEMON} ha recibido {ITEM:indefinite} de {SOURCE}!",
 	},
 	bide: {
 		name: "Venganza",
@@ -528,9 +528,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] está acumulando energía!",
-		end: "  ¡[POKEMON] ha liberado la energía!",
-		activate: "  ¡[POKEMON] está acumulando energía!",
+		start: "  ¡{POKEMON} está acumulando energía!",
+		end: "  ¡{POKEMON} ha liberado la energía!",
+		activate: "  ¡{POKEMON} está acumulando energía!",
 	},
 	bind: {
 		name: "Atadura",
@@ -558,7 +558,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡La atadura de [SOURCE] oprime a [POKEMON]!",
+		start: "  ¡La atadura de {SOURCE} oprime a {POKEMON}!",
 		move: "#wrap",
 	},
 	bite: {
@@ -740,7 +740,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "¡[POKEMON] ha saltado muy alto!",
+		prepare: "¡{POKEMON} ha saltado muy alto!",
 	},
 	bouncybubble: {
 		name: "Vapodrenaje",
@@ -836,7 +836,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  ¡[SOURCE] ha robado [ITEM:definite:classified] del objetivo y se [INFLECT:ITEM:ms=lo:fs=la:mp=los:fp=las] ha comido!",
+		removeItem: "  ¡{SOURCE} ha robado {ITEM:definite:classified} del objetivo y se {INFLECT:ITEM:ms=lo:fs=la:mp=los:fp=las} ha comido!",
 	},
 	bugbuzz: {
 		name: "Zumbido",
@@ -897,7 +897,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  ¡El fuego interior de [POKEMON] se ha extinguido!",
+		typeChange: "  ¡El fuego interior de {POKEMON} se ha extinguido!",
 	},
 	buzzybuzz: {
 		name: "Joltioparálisis",
@@ -950,7 +950,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Celebración",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡Felicidades, [TRAINER]!",
+		activate: "  ¡Felicidades, {TRAINER}!",
 	},
 	charge: {
 		name: "Carga",
@@ -966,7 +966,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha comenzado a acumular energía!",
+		start: "  ¡{POKEMON} ha comenzado a acumular energía!",
 	},
 	chargebeam: {
 		name: "Rayo Carga",
@@ -1004,7 +1004,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON] se prepara para contar un chiste malo...",
+		prepare: "  {POKEMON} se prepara para contar un chiste malo...",
 	},
 	chipaway: {
 		name: "Guardia Baja",
@@ -1049,7 +1049,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[SOURCE] ha atenazado a [POKEMON]!",
+		start: "  ¡{SOURCE} ha atenazado a {POKEMON}!",
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1174,7 +1174,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  ¡Cambió tipo al de [SOURCE]!",
+		typeChange: "  ¡Cambió tipo al de {SOURCE}!",
 	},
 	conversion2: {
 		name: "Conversión 2",
@@ -1240,7 +1240,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  ¡[SOURCE] ha derretido [ITEM:definite:classified] de [POKEMON]!",
+		removeItem: "  ¡{SOURCE} ha derretido {ITEM:definite:classified} de {POKEMON}!",
 	},
 	cosmicpower: {
 		name: "Masa Cósmica",
@@ -1288,7 +1288,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] ha intercambiado los efectos del terreno de combate!",
+		activate: "  ¡{POKEMON} ha intercambiado los efectos del terreno de combate!",
 	},
 	covet: {
 		name: "Antojo",
@@ -1329,8 +1329,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[TEAM] está protegido por Truco Defensa!",
-		block: "  ¡[POKEMON] está protegido por Truco Defensa!",
+		start: "  ¡{TEAM} está protegido por Truco Defensa!",
+		block: "  ¡{POKEMON} está protegido por Truco Defensa!",
 	},
 	crosschop: {
 		name: "Tajo Cruzado",
@@ -1381,8 +1381,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[SOURCE] sacrifica algunos PS y maldice a [POKEMON]!",
-		damage: "  ¡[POKEMON] es víctima de una maldición!",
+		start: "  ¡{SOURCE} sacrifica algunos PS y maldice a {POKEMON}!",
+		damage: "  ¡{POKEMON} es víctima de una maldición!",
 	},
 	cut: {
 		name: "Corte",
@@ -1472,8 +1472,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] intenta que su atacante sufra su mismo destino!",
-		activate: "¡[POKEMON] ha conseguido debilitar también a su atacante!",
+		start: "  ¡{POKEMON} intenta que su atacante sufra su mismo destino!",
+		activate: "¡{POKEMON} ha conseguido debilitar también a su atacante!",
 	},
 	detect: {
 		name: "Detección",
@@ -1534,7 +1534,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "¡[POKEMON] se ha ocultado bajo tierra!",
+		prepare: "¡{POKEMON} se ha ocultado bajo tierra!",
 	},
 	direclaw: {
 		name: "Garra Nociva",
@@ -1573,9 +1573,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡Se ha anulado el movimiento [MOVE] de [POKEMON]!",
-		end: "  ¡El movimiento de [POKEMON] ya no está anulado!",
-		cant: "¡[POKEMON] no puede usar [MOVE] porque ha sido anulado!",
+		start: "  ¡Se ha anulado el movimiento {MOVE} de {POKEMON}!",
+		end: "  ¡El movimiento de {POKEMON} ya no está anulado!",
+		cant: "¡{POKEMON} no puede usar {MOVE} porque ha sido anulado!",
 	},
 	disarmingvoice: {
 		name: "Voz Cautivadora",
@@ -1601,7 +1601,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "¡[POKEMON] se ha ocultado bajo el agua!",
+		prepare: "¡{POKEMON} se ha ocultado bajo el agua!",
 	},
 	dizzypunch: {
 		name: "Puño Mareo",
@@ -1627,8 +1627,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha elegido Deseo Oculto para el futuro!",
-		activate: "  ¡[TARGET] ha sido alcanzado por Deseo Oculto!",
+		start: "  ¡{POKEMON} ha elegido Deseo Oculto para el futuro!",
+		activate: "  ¡{TARGET} ha sido alcanzado por Deseo Oculto!",
 	},
 	doubleedge: {
 		name: "Doble Filo",
@@ -1682,7 +1682,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		typeChange: "  ¡[POKEMON] ha descargado toda su electricidad!",
+		typeChange: "  ¡{POKEMON} ha descargado toda su electricidad!",
 	},
 	doubleslap: {
 		name: "Doble Bofetón",
@@ -1717,7 +1717,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		megaNoItem: "  ¡El ruego vehemente de [TRAINER] alcanza a [POKEMON]!",
+		megaNoItem: "  ¡El ruego vehemente de {TRAINER} alcanza a {POKEMON}!",
 	},
 	dragonbreath: {
 		name: "Dragoaliento",
@@ -1914,7 +1914,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡Electrificación hace que el siguiente movimiento de [POKEMON] sea de tipo Eléctrico!",
+		start: "  ¡Electrificación hace que el siguiente movimiento de {POKEMON} sea de tipo Eléctrico!",
 	},
 	electroball: {
 		name: "Bola Voltio",
@@ -1935,7 +1935,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "¡[POKEMON] está acumulando electricidad!",
+		prepare: "¡{POKEMON} está acumulando electricidad!",
 	},
 	electroweb: {
 		name: "Electrotela",
@@ -1949,8 +1949,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] no puede usar objetos!",
-		end: "  ¡[POKEMON] ya puede usar objetos de nuevo!",
+		start: "  ¡{POKEMON} no puede usar objetos!",
+		end: "  ¡{POKEMON} ya puede usar objetos de nuevo!",
 	},
 	ember: {
 		name: "Ascuas",
@@ -1984,8 +1984,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha sufrido los efectos de Otra Vez!",
-		end: "  ¡[POKEMON] ya no sufre los efectos de Otra Vez!",
+		start: "  ¡{POKEMON} ha sufrido los efectos de Otra Vez!",
+		end: "  ¡{POKEMON} ya no sufre los efectos de Otra Vez!",
 	},
 	endeavor: {
 		name: "Esfuerzo",
@@ -2020,8 +2020,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] se prepara para resistir los ataques!",
-		activate: "  ¡[POKEMON] ha aguantado el golpe!",
+		start: "  ¡{POKEMON} se prepara para resistir los ataques!",
+		activate: "  ¡{POKEMON} ha aguantado el golpe!",
 	},
 	energyball: {
 		name: "Energibola",
@@ -2184,7 +2184,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡[TARGET] se ha dejado engañar por Amago!",
+		activate: "  ¡{TARGET} se ha dejado engañar por Amago!",
 	},
 	feintattack: {
 		name: "Finta",
@@ -2204,7 +2204,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Láser Veleidoso",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] lo ha dado todo!",
+		activate: "  ¡{POKEMON} lo ha dado todo!",
 	},
 	fierydance: {
 		name: "Danza Llama",
@@ -2261,9 +2261,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  ¡[TEAM:capitalize] se ve rodeado por un mar de llamas!",
-		end: "  El mar de llamas que rodeaba a [TEAM] ha desaparecido.",
-		damage: "  ¡[POKEMON] ha resultado herido por un mar de llamas!",
+		start: "  ¡{TEAM:capitalize} se ve rodeado por un mar de llamas!",
+		end: "  El mar de llamas que rodeaba a {TEAM} ha desaparecido.",
+		damage: "  ¡{POKEMON} ha resultado herido por un mar de llamas!",
 	},
 	firepunch: {
 		name: "Puño Fuego",
@@ -2297,7 +2297,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha quedado atrapado en un torbellino de fuego!",
+		start: "  ¡{POKEMON} ha quedado atrapado en un torbellino de fuego!",
 		move: "#wrap",
 	},
 	firstimpression: {
@@ -2352,7 +2352,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  ¡Las chispas también han alcanzado a [POKEMON]!",
+		damage: "  ¡Las chispas también han alcanzado a {POKEMON}!",
 	},
 	flamecharge: {
 		name: "Nitrocarga",
@@ -2415,7 +2415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  ¡[POKEMON] ha tirado su[INFLECT:ITEM:s=:p=s] [ITEM:classified]!",
+		removeItem: "  ¡{POKEMON} ha tirado su{INFLECT:ITEM:s=:p=s} {ITEM:classified}!",
 	},
 	flipturn: {
 		name: "Viraje",
@@ -2469,7 +2469,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "¡[POKEMON] ha volado muy alto!",
+		prepare: "¡{POKEMON} ha volado muy alto!",
 	},
 	flyingpress: {
 		name: "Plancha Voladora",
@@ -2497,9 +2497,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] se está preparando para luchar!",
-		startFromItem: "  ¡La probabilidad de asestar golpes críticos de [POKEMON] ha aumentado gracias [ITEM:a:definite:classified]!",
-		startFromZEffect: "  ¡[POKEMON] ve aumentada su probabilidad de asestar golpes críticos gracias al Poder Z!",
+		start: "  ¡{POKEMON} se está preparando para luchar!",
+		startFromItem: "  ¡La probabilidad de asestar golpes críticos de {POKEMON} ha aumentado gracias {ITEM:a:definite:classified}!",
+		startFromZEffect: "  ¡{POKEMON} ve aumentada su probabilidad de asestar golpes críticos gracias al Poder Z!",
 	},
 	focuspunch: {
 		name: "Puño Certero",
@@ -2510,8 +2510,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] está reforzando su concentración!",
-		cant: "¡[POKEMON] ha perdido la concentración y no puede atacar!",
+		start: "  ¡{POKEMON} está reforzando su concentración!",
+		cant: "¡{POKEMON} ha perdido la concentración y no puede atacar!",
 	},
 	followme: {
 		name: "Señuelo",
@@ -2528,8 +2528,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] se ha convertido en el centro de atención!",
-		startFromZEffect: "  ¡[POKEMON] se ha convertido en el centro de atención!",
+		start: "  ¡{POKEMON} se ha convertido en el centro de atención!",
+		startFromZEffect: "  ¡{POKEMON} se ha convertido en el centro de atención!",
 	},
 	forcepalm: {
 		name: "Palmeo",
@@ -2552,7 +2552,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] identificado!",
+		start: "  ¡{POKEMON} identificado!",
 	},
 	forestscurse: {
 		name: "Condena Silvana",
@@ -2582,7 +2582,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  ¡Una luz fría envuelve a [POKEMON]!",
+		prepare: "  ¡Una luz fría envuelve a {POKEMON}!",
 	},
 	freezingglare: {
 		name: "Mirada Heladora",
@@ -2680,8 +2680,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha previsto un ataque!",
-		activate: "  ¡[TARGET] ha sido alcanzado por Premonición!",
+		start: "  ¡{POKEMON} ha previsto un ataque!",
+		activate: "  ¡{TARGET} ha sido alcanzado por Premonición!",
 	},
 	gastroacid: {
 		name: "Bilis",
@@ -2698,7 +2698,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡Se ha anulado la habilidad de [POKEMON]!",
+		start: "  ¡Se ha anulado la habilidad de {POKEMON}!",
 	},
 	geargrind: {
 		name: "Rueda Doble",
@@ -2724,7 +2724,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "¡[POKEMON] está acumulando energía!",
+		prepare: "¡{POKEMON} está acumulando energía!",
 	},
 	gigadrain: {
 		name: "Gigadrenado",
@@ -2797,8 +2797,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡La corriente arrastra a [PARTY]!",
-		damage: "  ¡[POKEMON] sufre al verse arrastrado por la corriente de Gigacañonazo!",
+		start: "  ¡La corriente arrastra a {PARTY}!",
+		damage: "  ¡{POKEMON} sufre al verse arrastrado por la corriente de Gigacañonazo!",
 	},
 	gmaxcentiferno: {
 		name: "Gigacienfuegos",
@@ -2822,7 +2822,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[TARGET] ha perdido PP!",
+		activate: "  ¡{TARGET} ha perdido PP!",
 	},
 	gmaxdrumsolo: {
 		name: "Gigarredoble",
@@ -2909,9 +2909,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡Piezas de acero puntiagudas rodean a [PARTY]!",
-		end: "  Las piezas de acero que rodeaban a [PARTY] han desaparecido.",
-		damage: "  ¡Unas piezas de acero puntiagudas han dañado a [POKEMON]!",
+		start: "  ¡Piezas de acero puntiagudas rodean a {PARTY}!",
+		end: "  Las piezas de acero que rodeaban a {PARTY} han desaparecido.",
+		damage: "  ¡Unas piezas de acero puntiagudas han dañado a {POKEMON}!",
 	},
 	gmaxstonesurge: {
 		name: "Gigatrampa Rocas",
@@ -2943,16 +2943,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡Violentos latigazos avasallan a [PARTY]!",
-		damage: "  ¡Los violentos golpes de Gigalianas hieren a [POKEMON]!",
+		start: "  ¡Violentos latigazos avasallan a {PARTY}!",
+		damage: "  ¡Los violentos golpes de Gigalianas hieren a {POKEMON}!",
 	},
 	gmaxvolcalith: {
 		name: "Gigarroca Ígnea",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡Las rocas rodean a [PARTY]!",
-		damage: "  ¡Las piedras desprendidas por Gigarroca Ígnea han herido a [POKEMON]!",
+		start: "  ¡Las rocas rodean a {PARTY}!",
+		damage: "  ¡Las piedras desprendidas por Gigarroca Ígnea han herido a {POKEMON}!",
 	},
 	gmaxvoltcrash: {
 		name: "Gigatronada",
@@ -2964,8 +2964,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡Las llamas rodean a [PARTY]!",
-		damage: "  ¡El fuego de Gigallamarada ha quemado a [POKEMON]!",
+		start: "  ¡Las llamas rodean a {PARTY}!",
+		damage: "  ¡El fuego de Gigallamarada ha quemado a {POKEMON}!",
 	},
 	gmaxwindrage: {
 		name: "Gigahuracán",
@@ -2985,8 +2985,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  ¡Ha aparecido un pantano alrededor de [TEAM]!",
-		end: "  El pantano que rodeaba a [TEAM] ha desaparecido.",
+		start: "  ¡Ha aparecido un pantano alrededor de {TEAM}!",
+		end: "  El pantano que rodeaba a {TEAM} ha desaparecido.",
 	},
 	grasswhistle: {
 		name: "Silbato",
@@ -3066,8 +3066,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡A causa de la rabia [POKEMON] se ha quedado sin ningún PP de [MOVE]!",
-		start: "¡[POKEMON] va a intentar que su rival sienta rabia!",
+		activate: "  ¡A causa de la rabia {POKEMON} se ha quedado sin ningún PP de {MOVE}!",
+		start: "¡{POKEMON} va a intentar que su rival sienta rabia!",
 	},
 	guardianofalola: {
 		name: "Cólera del Guardián",
@@ -3081,7 +3081,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] suma su capacidad defensiva a la del objetivo y la reparte equitativamente!",
+		activate: "  ¡{POKEMON} suma su capacidad defensiva a la del objetivo y la reparte equitativamente!",
 	},
 	guardswap: {
 		name: "Cambiadefensa",
@@ -3235,8 +3235,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
-			end: "  ¡Se han pasado los efectos de Anticura en [POKEMON]!",
-			cant: "¡[POKEMON] no puede usar [MOVE] debido a Anticura!",
+			end: "  ¡Se han pasado los efectos de Anticura en {POKEMON}!",
+			cant: "¡{POKEMON} no puede usar {MOVE} debido a Anticura!",
 		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3248,10 +3248,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] no puede curarse!",
-		end: "  ¡[POKEMON] ya puede curarse!",
-		cant: "¡[POKEMON] no puede usar [MOVE] porque se ha anulado la curación!",
-		fail: "  Pero no ha afectado a [POKEMON]...",
+		start: "  ¡{POKEMON} no puede curarse!",
+		end: "  ¡{POKEMON} ya puede curarse!",
+		cant: "¡{POKEMON} no puede usar {MOVE} porque se ha anulado la curación!",
+		fail: "  Pero no ha afectado a {POKEMON}...",
 	},
 	healingwish: {
 		name: "Deseo Cura",
@@ -3266,7 +3266,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  ¡El deseo de curación se ha hecho realidad para [POKEMON]!",
+		heal: "  ¡El deseo de curación se ha hecho realidad para {POKEMON}!",
 	},
 	healorder: {
 		name: "Auxilio",
@@ -3328,7 +3328,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[SOURCE] está listo para ayudar a [POKEMON]!",
+		start: "  ¡{SOURCE} está listo para ayudar a {POKEMON}!",
 	},
 	hex: {
 		name: "Infortunio",
@@ -3581,7 +3581,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  ¡Una ráfaga gélida envuelve a [POKEMON]!",
+		prepare: "  ¡Una ráfaga gélida envuelve a {POKEMON}!",
 	},
 	icefang: {
 		name: "Colmillo Hielo",
@@ -3657,8 +3657,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡Los movimientos de los rivales que [POKEMON] también conoce han sido sellados!",
-		cant: "¡[POKEMON] no puede usar el movimiento [MOVE] porque ha sido sellado!",
+		start: "  ¡Los movimientos de los rivales que {POKEMON} también conoce han sido sellados!",
+		cant: "¡{POKEMON} no puede usar el movimiento {MOVE} porque ha sido sellado!",
 	},
 	incinerate: {
 		name: "Calcinación",
@@ -3670,7 +3670,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  ¡[ITEM:definite:capitalize] de [POKEMON] se ha calcinado!",
+		removeItem: "  ¡{ITEM:definite:capitalize} de {POKEMON} se ha calcinado!",
 	},
 	infernalparade: {
 		name: "Marcha Espectral",
@@ -3699,7 +3699,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] es presa del acoso de [SOURCE]!",
+		start: "  ¡{POKEMON} es presa del acoso de {SOURCE}!",
 	},
 	ingrain: {
 		name: "Arraigo",
@@ -3720,9 +3720,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha echado raíces!",
-		block: "  ¡[POKEMON] se ha fijado al suelo con sus raíces!",
-		heal: "  ¡[POKEMON] ha absorbido nutrientes a través de las raíces!",
+		start: "  ¡{POKEMON} ha echado raíces!",
+		block: "  ¡{POKEMON} se ha fijado al suelo con sus raíces!",
+		heal: "  ¡{POKEMON} ha absorbido nutrientes a través de las raíces!",
 	},
 	instruct: {
 		name: "Mandato",
@@ -3736,7 +3736,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡[TARGET] sigue el mandato de [POKEMON] y repite su último movimiento!",
+		activate: "  ¡{TARGET} sigue el mandato de {POKEMON} y repite su último movimiento!",
 	},
 	iondeluge: {
 		name: "Cortina Plasma",
@@ -3877,7 +3877,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  ¡[SOURCE] ha tirado al suelo [ITEM:definite:classified] de [POKEMON]!",
+		removeItem: "  ¡{SOURCE} ha tirado al suelo {ITEM:definite:classified} de {POKEMON}!",
 	},
 	kowtowcleave: {
 		name: "Genufendiente",
@@ -3895,7 +3895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] aguza la mente!",
+		start: "  ¡{POKEMON} aguza la mente!",
 	},
 	lashout: {
 		name: "Desahogo",
@@ -3970,9 +3970,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha sido infectado!",
-		end: "  ¡[POKEMON] se ha liberado de Drenadoras!",
-		damage: "  ¡Las drenadoras han restado salud a [POKEMON]!",
+		start: "  ¡{POKEMON} ha sido infectado!",
+		end: "  ¡{POKEMON} se ha liberado de Drenadoras!",
+		damage: "  ¡Las drenadoras han restado salud a {POKEMON}!",
 	},
 	leer: {
 		name: "Malicioso",
@@ -4026,11 +4026,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  ¡[POKEMON] está protegido contra ataques especiales!",
+			start: "  ¡{POKEMON} está protegido contra ataques especiales!",
 		},
 
-		start: "  ¡Pantalla de Luz ha aumentado la resistencia de [TEAM] ante los ataques especiales!",
-		end: "  El efecto de Pantalla de Luz en [TEAM] se ha disipado.",
+		start: "  ¡Pantalla de Luz ha aumentado la resistencia de {TEAM} ante los ataques especiales!",
+		end: "  El efecto de Pantalla de Luz en {TEAM} se ha disipado.",
 	},
 	lightthatburnsthesky: {
 		name: "Fotodestrucción Apocalíptica",
@@ -4057,7 +4057,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[SOURCE] tiene en su punto de mira a [POKEMON]!",
+		start: "  ¡{SOURCE} tiene en su punto de mira a {POKEMON}!",
 	},
 	lovelykiss: {
 		name: "Beso Amoroso",
@@ -4085,8 +4085,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡Conjuro protege a [TEAM] de los golpes críticos!",
-		end: "  El efecto de Conjuro en [TEAM] se ha desvanecido.",
+		start: "  ¡Conjuro protege a {TEAM} de los golpes críticos!",
+		end: "  El efecto de Conjuro en {TEAM} se ha desvanecido.",
 	},
 	luminacrash: {
 		name: "Fotocolisión",
@@ -4111,7 +4111,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  ¡Un místico halo de luz de luna envuelve a [POKEMON]!",
+		heal: "  ¡Un místico halo de luz de luna envuelve a {POKEMON}!",
 	},
 	lunge: {
 		name: "Plancha",
@@ -4155,8 +4155,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] se ha cubierto con Capa Mágica!",
-		move: "¡[POKEMON] ha devuelto [MOVE]!",
+		start: "  ¡{POKEMON} se ha cubierto con Capa Mágica!",
+		move: "¡{POKEMON} ha devuelto {MOVE}!",
 	},
 	magicpowder: {
 		name: "Polvo Mágico",
@@ -4192,7 +4192,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha quedado atrapado en la lluvia ígnea!",
+		start: "  ¡{POKEMON} ha quedado atrapado en la lluvia ígnea!",
 	},
 	magnetbomb: {
 		name: "Bomba Imán",
@@ -4216,8 +4216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] levita gracias a un campo electromagnético!",
-		end: "  ¡El campo electromagnético de [POKEMON] se ha disipado!",
+		start: "  ¡{POKEMON} levita gracias a un campo electromagnético!",
+		end: "  ¡El campo electromagnético de {POKEMON} se ha disipado!",
 	},
 	magnitude: {
 		name: "Magnitud",
@@ -4228,7 +4228,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡Magnitud [NUMBER]!",
+		activate: "  ¡Magnitud {NUMBER}!",
 	},
 	makeitrain: {
 		name: "Fiebre Dorada",
@@ -4258,8 +4258,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] va a usar un tatami para bloquear ataques!",
-		block: "  ¡Escudo Tatami neutraliza [MOVE]!",
+		start: "  ¡{POKEMON} va a usar un tatami para bloquear ataques!",
+		block: "  ¡Escudo Tatami neutraliza {MOVE}!",
 	},
 	matchagotcha: {
 		name: "Cañón Batidor",
@@ -4302,7 +4302,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] se ha protegido!",
+		activate: "  ¡{POKEMON} se ha protegido!",
 	},
 	maxhailstorm: {
 		name: "Maxihelada",
@@ -4463,7 +4463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  ¡[POKEMON] ha recuperado PS gracias al Poder Z!",
+		heal: "  ¡{POKEMON} ha recuperado PS gracias al Poder Z!",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "Deflagración Lunar",
@@ -4507,7 +4507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "¡[POKEMON] rebosa energía cósmica!",
+		prepare: "¡{POKEMON} rebosa energía cósmica!",
 	},
 	meteormash: {
 		name: "Puño Meteoro",
@@ -4545,7 +4545,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "¡Metrónomo actúa como [MOVE]!",
+		move: "¡Metrónomo actúa como {MOVE}!",
 	},
 	mightycleave: {
 		name: "Filo Potente",
@@ -4588,7 +4588,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha aprendido [MOVE]!",
+		start: "  ¡{POKEMON} ha aprendido {MOVE}!",
 	},
 	mindblown: {
 		name: "Cabeza Sorpresa",
@@ -4702,18 +4702,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  ¡[POKEMON] está cubierto por una NEBLINA!",
-			block: "  [POKEMON] está protegido por la NEBLINA.",
+			start: "  ¡{POKEMON} está cubierto por una NEBLINA!",
+			block: "  {POKEMON} está protegido por la NEBLINA.",
 		},
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  ¡[POKEMON] está cubierto por una NEBLINA!",
+			start: "  ¡{POKEMON} está cubierto por una NEBLINA!",
 			block: "  ¡Pero ha fallado!",
 		},
 
-		start: "  ¡Una neblina ha cubierto a [TEAM]!",
-		end: "  Ha desaparecido el efecto de la neblina en [TEAM].",
-		block: "  ¡[POKEMON] está protegido por la neblina!",
+		start: "  ¡Una neblina ha cubierto a {TEAM}!",
+		end: "  Ha desaparecido el efecto de la neblina en {TEAM}.",
+		block: "  ¡{POKEMON} está protegido por la neblina!",
 	},
 	mistball: {
 		name: "Bola Neblina",
@@ -4895,7 +4895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "¡Adaptación actúa como [MOVE]!",
+		move: "¡Adaptación actúa como {MOVE}!",
 	},
 	naturesmadness: {
 		name: "Furia Natural",
@@ -4928,8 +4928,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] se ha sumido en una pesadilla!",
-		damage: "  ¡[POKEMON] está inmerso en una pesadilla!",
+		start: "  ¡{POKEMON} se ha sumido en una pesadilla!",
+		damage: "  ¡{POKEMON} está inmerso en una pesadilla!",
 	},
 	nightshade: {
 		name: "Tinieblas",
@@ -4959,7 +4959,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] ya no puede ser cambiado por otro porque ha usado Bastión Final!",
+		start: "  ¡{POKEMON} ya no puede ser cambiado por otro porque ha usado Bastión Final!",
 	},
 	noxioustorque: {
 		name: "Ponzochoque",
@@ -5003,7 +5003,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡Octopresa impide que [POKEMON] huya o sea cambiado por otro!",
+		start: "  ¡Octopresa impide que {POKEMON} huya o sea cambiado por otro!",
 	},
 	odorsleuth: {
 		name: "Rastreo",
@@ -5126,7 +5126,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  ¡Los Pokémon que han oído Canto Mortal se debilitarán dentro de tres turnos!",
-		activate: "  ¡La cuenta atrás de Canto Mortal de [POKEMON] ha bajado a [NUMBER]!",
+		activate: "  ¡La cuenta atrás de Canto Mortal de {POKEMON} ha bajado a {NUMBER}!",
 	},
 	petalblizzard: {
 		name: "Tormenta Floral",
@@ -5289,7 +5289,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Poltergeist",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] es atacado por [ITEM:definite:classified]!",
+		activate: "  ¡{POKEMON} es atacado por {ITEM:definite:classified}!",
 	},
 	populationbomb: {
 		name: "Proliferación",
@@ -5314,8 +5314,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] está cubierto de polvo!",
-		activate: "  ¡El polvo ha reaccionado con el movimiento [MOVE] y ha explotado!",
+		start: "  ¡{POKEMON} está cubierto de polvo!",
+		activate: "  ¡El polvo ha reaccionado con el movimiento {MOVE} y ha explotado!",
 	},
 	powdersnow: {
 		name: "Nieve Polvo",
@@ -5336,7 +5336,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] suma su capacidad ofensiva a la del objetivo y la reparte equitativamente!",
+		activate: "  ¡{POKEMON} suma su capacidad ofensiva a la del objetivo y la reparte equitativamente!",
 	},
 	powerswap: {
 		name: "Cambiafuerza",
@@ -5349,7 +5349,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] ha intercambiado los valores de su ofensiva y su defensiva!",
+		start: "  ¡{POKEMON} ha intercambiado los valores de su ofensiva y su defensiva!",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5358,7 +5358,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] ha intercambiado el valor de su Ataque por el de su Defensa!",
+		start: "  ¡{POKEMON} ha intercambiado el valor de su Ataque por el de su Defensa!",
 		end: "#.start",
 	},
 	powertrip: {
@@ -5425,8 +5425,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] se está protegiendo!",
-		block: "  ¡[POKEMON] se ha protegido!",
+		start: "  ¡{POKEMON} se está protegiendo!",
+		block: "  ¡{POKEMON} se ha protegido!",
 	},
 	psybeam: {
 		name: "Psicorrayo",
@@ -5579,7 +5579,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[TARGET] ha retrasado su turno!",
+		activate: "  ¡{TARGET} ha retrasado su turno!",
 	},
 	quickattack: {
 		name: "Ataque Rápido",
@@ -5605,8 +5605,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[TEAM] está protegido por Anticipo!",
-		block: "  ¡[POKEMON] está protegido por Anticipo!",
+		start: "  ¡{TEAM} está protegido por Anticipo!",
+		block: "  ¡{POKEMON} está protegido por Anticipo!",
 	},
 	quiverdance: {
 		name: "Danza Aleteo",
@@ -5728,7 +5728,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  ¡[POKEMON] se prepara para lanzar una borrasca!",
+		prepare: "  ¡{POKEMON} se prepara para lanzar una borrasca!",
 	},
 	recover: {
 		name: "Recuperación",
@@ -5754,7 +5754,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		addItem: "  ¡[POKEMON] ha reciclado [ITEM]!",
+		addItem: "  ¡{POKEMON} ha reciclado {ITEM}!",
 	},
 	reflect: {
 		name: "Reflejo",
@@ -5777,11 +5777,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  ¡[POKEMON] ganó blindaje!",
+			start: "  ¡{POKEMON} ganó blindaje!",
 		},
 
-		start: "  ¡Reflejo ha aumentado la resistencia de [TEAM] ante los ataques físicos!",
-		end: "  El efecto de Reflejo en [TEAM] se ha disipado.",
+		start: "  ¡Reflejo ha aumentado la resistencia de {TEAM} ante los ataques físicos!",
+		end: "  El efecto de Reflejo en {TEAM} se ha disipado.",
 	},
 	reflecttype: {
 		name: "Clonatipo",
@@ -5795,7 +5795,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  ¡[POKEMON] ahora es del mismo tipo que [SOURCE]!",
+		typeChange: "  ¡{POKEMON} ahora es del mismo tipo que {SOURCE}!",
 	},
 	refresh: {
 		name: "Alivio",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		heal: "  ¡[POKEMON] se ha repuesto y está listo para combatir!",
+		heal: "  ¡{POKEMON} se ha repuesto y está listo para combatir!",
 	},
 	risingvoltage: {
 		name: "Alto Voltaje",
@@ -5988,7 +5988,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  ¡[POKEMON] ha copiado la habilidad [ABILITY] de [SOURCE]!",
+		changeAbility: "  ¡{POKEMON} ha copiado la habilidad {ABILITY} de {SOURCE}!",
 	},
 	rollingkick: {
 		name: "Patada Giro",
@@ -6063,9 +6063,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[TEAM:capitalize] se ha protegido con Velo Sagrado!",
-		end: "  El efecto de Velo Sagrado en [TEAM] se ha disipado.",
-		block: "  ¡[POKEMON] está protegido por Velo Sagrado!",
+		start: "  ¡{TEAM:capitalize} se ha protegido con Velo Sagrado!",
+		end: "  El efecto de Velo Sagrado en {TEAM} se ha disipado.",
+		block: "  ¡{POKEMON} está protegido por Velo Sagrado!",
 	},
 	saltcure: {
 		name: "Salazón",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] está en salazón!",
-		damage: "  ¡Salazón ha herido a [POKEMON]!",
+		start: "  ¡{POKEMON} está en salazón!",
+		damage: "  ¡Salazón ha herido a {POKEMON}!",
 	},
 	sandattack: {
 		name: "Ataque Arena",
@@ -6128,7 +6128,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡Bucle Arena ha atrapado a [POKEMON]!",
+		start: "  ¡Bucle Arena ha atrapado a {POKEMON}!",
 	},
 	sappyseed: {
 		name: "Leafitobombas",
@@ -6282,8 +6282,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡Se ha atravesado la protección de [TARGET]!",
-		prepare: "¡[POKEMON] desaparece en un abrir y cerrar de ojos!",
+		activate: "  ¡Se ha atravesado la protección de {TARGET}!",
+		prepare: "¡{POKEMON} desaparece en un abrir y cerrar de ojos!",
 	},
 	shadowpunch: {
 		name: "Puño Sombra",
@@ -6315,7 +6315,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] se desprende de un segmento de su cuerpo y lo usa como señuelo!",
+		start: "  ¡{POKEMON} se desprende de un segmento de su cuerpo y lo usa como señuelo!",
 		alreadyStarted: "#substitute",
 		fail: "#substitute",
 	},
@@ -6347,9 +6347,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] ha activado la Coraza Trampa!",
-		prepare: "  ¡[POKEMON] ha activado la Coraza Trampa!",
-		cant: "¡La Coraza Trampa de [POKEMON] no ha estallado!",
+		start: "  ¡{POKEMON} ha activado la Coraza Trampa!",
+		prepare: "  ¡{POKEMON} ha activado la Coraza Trampa!",
+		cant: "¡La Coraza Trampa de {POKEMON} no ha estallado!",
 	},
 	shelter: {
 		name: "Retracción",
@@ -6437,7 +6437,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡[POKEMON] ha usado Esquema para copiar [MOVE]!",
+		activate: "  ¡{POKEMON} ha usado Esquema para copiar {MOVE}!",
 	},
 	skillswap: {
 		name: "Intercambio",
@@ -6463,7 +6463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡[POKEMON] ha intercambiado su habilidad con la del otro Pokémon!",
+		activate: "  ¡{POKEMON} ha intercambiado su habilidad con la del otro Pokémon!",
 	},
 	skittersmack: {
 		name: "Golpe Rastrero",
@@ -6484,7 +6484,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "¡[POKEMON] ha agachado la cabeza!",
+		prepare: "¡{POKEMON} ha agachado la cabeza!",
 	},
 	skyattack: {
 		name: "Ataque Aéreo",
@@ -6499,7 +6499,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "¡Un intenso halo rodea a [POKEMON]!",
+		prepare: "¡Un intenso halo rodea a {POKEMON}!",
 	},
 	skydrop: {
 		name: "Caída Libre",
@@ -6510,10 +6510,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "¡[POKEMON] se ha llevado a [TARGET] por los aires!",
-		end: "  ¡[POKEMON] se ha liberado de Caída Libre!",
-		failSelect: "¡[POKEMON] está bajo los efectos de Caída Libre! No puede actuar libremente.",
-		failTooHeavy: "  ¡[POKEMON] pesa demasiado, así que no puede ser levantado por los aires!",
+		prepare: "¡{POKEMON} se ha llevado a {TARGET} por los aires!",
+		end: "  ¡{POKEMON} se ha liberado de Caída Libre!",
+		failSelect: "¡{POKEMON} está bajo los efectos de Caída Libre! No puede actuar libremente.",
+		failTooHeavy: "  ¡{POKEMON} pesa demasiado, así que no puede ser levantado por los aires!",
 	},
 	skyuppercut: {
 		name: "Gancho Alto",
@@ -6603,7 +6603,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] ha sido derribado y ha caído al suelo!",
+		start: "  ¡{POKEMON} ha sido derribado y ha caído al suelo!",
 	},
 	smartstrike: {
 		name: "Cuerno Certero",
@@ -6643,7 +6643,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha quedado atrapado en un cepo!",
+		start: "  ¡{POKEMON} ha quedado atrapado en un cepo!",
 	},
 	snarl: {
 		name: "Alarido",
@@ -6660,8 +6660,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] está esperando a que se use algún movimiento!",
-		activate: "  ¡[POKEMON] le ha robado el movimiento a [TARGET]!",
+		start: "  ¡{POKEMON} está esperando a que se use algún movimiento!",
+		activate: "  ¡{POKEMON} le ha robado el movimiento a {TARGET}!",
 	},
 	snipeshot: {
 		name: "Disparo Certero",
@@ -6735,7 +6735,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  ¡[POKEMON] ha absorbido la luz solar!",
+		prepare: "  ¡{POKEMON} ha absorbido la luz solar!",
 	},
 	solarblade: {
 		name: "Cuchilla Solar",
@@ -6794,7 +6794,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		clearBoost: "  ¡[SOURCE] se ha apropiado de las mejoras en las características de su rival!",
+		clearBoost: "  ¡{SOURCE} se ha apropiado de las mejoras en las características de su rival!",
 	},
 	speedswap: {
 		name: "Cambiavelocidad",
@@ -6802,7 +6802,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] cambia su Velocidad por la de su objetivo!",
+		activate: "  ¡{POKEMON} cambia su Velocidad por la de su objetivo!",
 	},
 	spicyextract: {
 		name: "Extracto Picante",
@@ -6861,9 +6861,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[TEAM:capitalize] está rodeado de púas!",
-		end: "  Las púas lanzadas a [TEAM] han desaparecido.",
-		damage: "  ¡Las púas han herido a [POKEMON]!",
+		start: "  ¡{TEAM:capitalize} está rodeado de púas!",
+		end: "  Las púas lanzadas a {TEAM} han desaparecido.",
+		damage: "  ¡Las púas han herido a {POKEMON}!",
 	},
 	spikyshield: {
 		name: "Barrera Espinosa",
@@ -6880,7 +6880,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  ¡[POKEMON] se ha herido!",
+		damage: "  ¡{POKEMON} se ha herido!",
 	},
 	spinout: {
 		name: "Quemarrueda",
@@ -6915,7 +6915,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡El movimiento [MOVE] de [TARGET] ha perdido [NUMBER] PP!",
+		activate: "  ¡El movimiento {MOVE} de {TARGET} ha perdido {NUMBER} PP!",
 	},
 	spitup: {
 		name: "Escupir",
@@ -6977,9 +6977,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[TEAM:capitalize] está rodeado de piedras puntiagudas!",
-		end: "  Las piedras puntiagudas lanzadas a [TEAM] han desaparecido.",
-		damage: "  ¡Unas piedras puntiagudas han dañado a [POKEMON]!",
+		start: "  ¡{TEAM:capitalize} está rodeado de piedras puntiagudas!",
+		end: "  Las piedras puntiagudas lanzadas a {TEAM} han desaparecido.",
+		damage: "  ¡Unas piedras puntiagudas han dañado a {POKEMON}!",
 	},
 	steameruption: {
 		name: "Chorro de Vapor",
@@ -7025,9 +7025,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡Una red viscosa se extiende a los pies de [TEAM]!",
-		end: "  La red viscosa que rodeaba a [TEAM] ha desaparecido.",
-		activate: "  ¡[POKEMON] ha caído en una red viscosa!",
+		start: "  ¡Una red viscosa se extiende a los pies de {TEAM}!",
+		end: "  La red viscosa que rodeaba a {TEAM} ha desaparecido.",
+		activate: "  ¡{POKEMON} ha caído en una red viscosa!",
 	},
 	stockpile: {
 		name: "Reserva",
@@ -7039,8 +7039,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha reservado energía por [NUMBER].ª vez!",
-		end: "  ¡Han desaparecido los efectos de la reserva acumulada por [POKEMON]!",
+		start: "  ¡{POKEMON} ha reservado energía por {NUMBER}.ª vez!",
+		end: "  ¡Han desaparecido los efectos de la reserva acumulada por {POKEMON}!",
 	},
 	stokedsparksurfer: {
 		name: "Surfeo Galvánico",
@@ -7209,11 +7209,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha creado un sustituto!",
-		alreadyStarted: "  ¡[POKEMON] ya tiene un sustituto!",
-		end: "  ¡El sustituto de [POKEMON] ha desaparecido!",
+		start: "  ¡{POKEMON} ha creado un sustituto!",
+		alreadyStarted: "  ¡{POKEMON} ya tiene un sustituto!",
+		end: "  ¡El sustituto de {POKEMON} ha desaparecido!",
 		fail: "  ¡Está demasiado débil para crear un sustituto!",
-		activate: "  ¡El sustituto recibe el ataque en lugar de [POKEMON]!",
+		activate: "  ¡El sustituto recibe el ataque en lugar de {POKEMON}!",
 	},
 	subzeroslammer: {
 		name: "Crioaliento Despiadado",
@@ -7415,7 +7415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] está caramelizado!",
+		start: "  ¡{POKEMON} está caramelizado!",
 	},
 	tackle: {
 		name: "Placaje",
@@ -7464,8 +7464,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡El viento sopla a favor de [TEAM]!",
-		end: "  Ha dejado de soplar el viento que favorecía a [TEAM].",
+		start: "  ¡El viento sopla a favor de {TEAM}!",
+		end: "  Ha dejado de soplar el viento que favorecía a {TEAM}.",
 	},
 	takedown: {
 		name: "Derribo",
@@ -7493,7 +7493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] se ha vuelto débil ante el fuego!",
+		start: "  ¡{POKEMON} se ha vuelto débil ante el fuego!",
 	},
 	taunt: {
 		name: "Mofa",
@@ -7518,9 +7518,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] se ha dejado provocar por una mofa!",
-		end: "  ¡[POKEMON] ya se ha olvidado de la mofa!",
-		cant: "¡Se han mofado de [POKEMON], por lo que no puede usar [MOVE]!",
+		start: "  ¡{POKEMON} se ha dejado provocar por una mofa!",
+		end: "  ¡{POKEMON} ya se ha olvidado de la mofa!",
+		cant: "¡Se han mofado de {POKEMON}, por lo que no puede usar {MOVE}!",
 	},
 	tearfullook: {
 		name: "Ojos Llorosos",
@@ -7565,8 +7565,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha sido lanzado por los aires!",
-		end: "  ¡[POKEMON] se ha liberado de la telequinesis!",
+		start: "  ¡{POKEMON} ha sido lanzado por los aires!",
+		end: "  ¡{POKEMON} se ha liberado de la telequinesis!",
 	},
 	teleport: {
 		name: "Teletransporte",
@@ -7675,7 +7675,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		cant: "¡El efecto de Golpe Mordaza impide a [POKEMON] usar el movimiento!",
+		cant: "¡El efecto de Golpe Mordaza impide a {POKEMON} usar el movimiento!",
 	},
 	thunder: {
 		name: "Trueno",
@@ -7714,7 +7714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[SOURCE] ha enjaulado a [POKEMON]!",
+		start: "  ¡{SOURCE} ha enjaulado a {POKEMON}!",
 	},
 	thunderclap: {
 		name: "Relámpago Súbito",
@@ -7781,8 +7781,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] está atormentado!",
-		end: "  ¡[POKEMON] ya no está atormentado!",
+		start: "  ¡{POKEMON} está atormentado!",
+		end: "  ¡{POKEMON} ya no está atormentado!",
 	},
 	toxic: {
 		name: "Tóxico",
@@ -7809,8 +7809,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[TEAM:capitalize] está rodeado de púas tóxicas!",
-		end: "  Las púas tóxicas lanzadas a [TEAM] han desaparecido.",
+		start: "  ¡{TEAM:capitalize} está rodeado de púas tóxicas!",
+		end: "  Las púas tóxicas lanzadas a {TEAM} han desaparecido.",
 	},
 	toxicthread: {
 		name: "Hilo Venenoso",
@@ -7843,7 +7843,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		transform: "¡[POKEMON] se ha transformado en [SPECIES]!",
+		transform: "¡{POKEMON} se ha transformado en {SPECIES}!",
 	},
 	triattack: {
 		name: "Triataque",
@@ -7885,7 +7885,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡[POKEMON] ha intercambiado su objeto con el de su objetivo!",
+		activate: "  ¡{POKEMON} ha intercambiado su objeto con el de su objetivo!",
 	},
 	trickortreat: {
 		name: "Halloween",
@@ -8009,11 +8009,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha montado un alboroto!",
-		end: "  ¡[POKEMON] se ha tranquilizado!",
-		upkeep: "  ¡[POKEMON] está alborotado!",
-		block: "  ¡El alboroto ha mantenido despierto a [POKEMON]!",
-		blockSelf: "  ¡[POKEMON] no puede dormirse con tanto alboroto!",
+		start: "  ¡{POKEMON} ha montado un alboroto!",
+		end: "  ¡{POKEMON} se ha tranquilizado!",
+		upkeep: "  ¡{POKEMON} está alborotado!",
+		block: "  ¡El alboroto ha mantenido despierto a {POKEMON}!",
+		blockSelf: "  ¡{POKEMON} no puede dormirse con tanto alboroto!",
 	},
 	uturn: {
 		name: "Ida y Vuelta",
@@ -8027,7 +8027,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		switchOut: "¡[POKEMON] ha vuelto con [TRAINER:definite]!",
+		switchOut: "¡{POKEMON} ha vuelto con {TRAINER:definite}!",
 	},
 	vacuumwave: {
 		name: "Onda Vacío",
@@ -8132,9 +8132,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] está esperando a [TARGET]...",
-		start: "  ¡Ha aparecido un arcoíris sobre [TEAM]!",
-		end: "  El arcoíris sobre [TEAM] ha desaparecido.",
+		activate: "  {POKEMON} está esperando a {TARGET}...",
+		start: "  ¡Ha aparecido un arcoíris sobre {TEAM}!",
+		end: "  El arcoíris sobre {TEAM} ha desaparecido.",
 	},
 	waterpulse: {
 		name: "Hidropulso",
@@ -8195,7 +8195,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "¡Carrera Arrolladora ha cambiado a [MOVE] debido al tiempo!",
+		move: "¡Carrera Arrolladora ha cambiado a {MOVE} debido al tiempo!",
 	},
 	whirlpool: {
 		name: "Torbellino",
@@ -8219,7 +8219,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[POKEMON] ha quedado atrapado dentro del torbellino!",
+		start: "  ¡{POKEMON} ha quedado atrapado dentro del torbellino!",
 	},
 	whirlwind: {
 		name: "Remolino",
@@ -8267,8 +8267,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[TEAM] está protegido por Vasta Guardia!",
-		block: "  ¡[POKEMON] está protegido por Vasta Guardia!",
+		start: "  ¡{TEAM} está protegido por Vasta Guardia!",
+		block: "  ¡{POKEMON} está protegido por Vasta Guardia!",
 	},
 	wildboltstorm: {
 		name: "Electormenta",
@@ -8301,7 +8301,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  ¡El deseo de [NICKNAME] se ha hecho realidad!",
+		heal: "  ¡El deseo de {NICKNAME} se ha hecho realidad!",
 	},
 	withdraw: {
 		name: "Refugio",
@@ -8378,8 +8378,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  ¡[SOURCE] ha atrapado a [POKEMON] con Constricción!",
-		move: "¡[POKEMON] sigue atacando!",
+		start: "  ¡{SOURCE} ha atrapado a {POKEMON} con Constricción!",
+		move: "¡{POKEMON} sigue atacando!",
 	},
 	wringout: {
 		name: "Estrujón",
@@ -8400,7 +8400,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] está somnoliento!",
+		start: "  ¡{POKEMON} está somnoliento!",
 	},
 	zapcannon: {
 		name: "Electrocañón",

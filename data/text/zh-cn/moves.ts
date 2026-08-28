@@ -91,7 +91,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET]接受了对手的好意！",
+		activate: "  {TARGET}接受了对手的好意！",
 	},
 	agility: {
 		name: "高速移动",
@@ -182,8 +182,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]套上了水环！",
-		heal: "  [POKEMON]通过水环回复了体力！",
+		start: "  {POKEMON}套上了水环！",
+		heal: "  {POKEMON}通过水环回复了体力！",
 	},
 	aquastep: {
 		name: "流水旋舞",
@@ -297,12 +297,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]着迷了！",
-		startFromItem: "  [ITEM]让[POKEMON]着迷了！",
-		end: "  [POKEMON]的着迷状态治愈了！",
-		endFromItem: "  [POKEMON]用[ITEM]治愈了着迷状态！",
-		activate: "  [TARGET]让[POKEMON]着迷了！",
-		cant: "[POKEMON]因着迷了而无法使出招式！",
+		start: "  {POKEMON}着迷了！",
+		startFromItem: "  {ITEM}让{POKEMON}着迷了！",
+		end: "  {POKEMON}的着迷状态治愈了！",
+		endFromItem: "  {POKEMON}用{ITEM}治愈了着迷状态！",
+		activate: "  {TARGET}让{POKEMON}着迷了！",
+		cant: "{POKEMON}因着迷了而无法使出招式！",
 	},
 	aurasphere: {
 		name: "波导弹",
@@ -334,8 +334,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  极光幕使[TEAM]的物理和特殊抗性提高了！",
-		end: "  [TEAM]的极光幕消失了！",
+		start: "  极光幕使{TEAM}的物理和特殊抗性提高了！",
+		end: "  {TEAM}的极光幕消失了！",
 	},
 	autotomize: {
 		name: "身体轻量化",
@@ -343,7 +343,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]变得身轻如燕了！",
+		start: "  {POKEMON}变得身轻如燕了！",
 	},
 	avalanche: {
 		name: "雪崩",
@@ -441,7 +441,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]开始给鸟嘴加热了！",
+		start: "  {POKEMON}开始给鸟嘴加热了！",
 	},
 	beatup: {
 		name: "围攻",
@@ -493,7 +493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		boost: "  [POKEMON]削减了体力并释放了全部力量！",
+		boost: "  {POKEMON}削减了体力并释放了全部力量！",
 	},
 	bestow: {
 		name: "传递礼物",
@@ -507,7 +507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		takeItem: "  [POKEMON]从[SOURCE]那里获得了[ITEM]！",
+		takeItem: "  {POKEMON}从{SOURCE}那里获得了{ITEM}！",
 	},
 	bide: {
 		name: "忍耐",
@@ -528,9 +528,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]正在忍耐。",
-		end: "  [POKEMON]的忍耐被解除了！",
-		activate: "  [POKEMON]正在忍耐。",
+		start: "  {POKEMON}正在忍耐。",
+		end: "  {POKEMON}的忍耐被解除了！",
+		activate: "  {POKEMON}正在忍耐。",
 	},
 	bind: {
 		name: "绑紧",
@@ -558,7 +558,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被[SOURCE]紧紧绑住了！",
+		start: "  {POKEMON}被{SOURCE}紧紧绑住了！",
 		move: "#wrap",
 	},
 	bite: {
@@ -740,7 +740,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]高高地跳了起来！",
+		prepare: "{POKEMON}高高地跳了起来！",
 	},
 	bouncybubble: {
 		name: "活活气泡",
@@ -836,7 +836,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE]夺取并吃掉了[ITEM]！",
+		removeItem: "  {SOURCE}夺取并吃掉了{ITEM}！",
 	},
 	bugbuzz: {
 		name: "虫鸣",
@@ -897,7 +897,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  [POKEMON]的火焰燃尽了！",
+		typeChange: "  {POKEMON}的火焰燃尽了！",
 	},
 	buzzybuzz: {
 		name: "麻麻电击",
@@ -950,7 +950,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "庆祝",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  恭喜恭喜！[TRAINER]！！",
+		activate: "  恭喜恭喜！{TRAINER}！！",
 	},
 	charge: {
 		name: "充电",
@@ -966,7 +966,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]开始充电了！",
+		start: "  {POKEMON}开始充电了！",
 	},
 	chargebeam: {
 		name: "充电光束",
@@ -1004,7 +1004,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON]说出了冷笑话！",
+		prepare: "  {POKEMON}说出了冷笑话！",
 	},
 	chipaway: {
 		name: "逐步击破",
@@ -1049,7 +1049,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被[SOURCE]的贝壳夹住了！",
+		start: "  {POKEMON}被{SOURCE}的贝壳夹住了！",
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1240,7 +1240,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  [SOURCE]把[POKEMON]的[ITEM]融化了！",
+		removeItem: "  {SOURCE}把{POKEMON}的{ITEM}融化了！",
 	},
 	cosmicpower: {
 		name: "宇宙力量",
@@ -1288,7 +1288,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]交换了双方的场地效果！",
+		activate: "  {POKEMON}交换了双方的场地效果！",
 	},
 	covet: {
 		name: "渴望",
@@ -1329,8 +1329,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [TEAM]受到了戏法防守的保护！",
-		block: "  [POKEMON]受到了戏法防守的保护！",
+		start: "  {TEAM}受到了戏法防守的保护！",
+		block: "  {POKEMON}受到了戏法防守的保护！",
 	},
 	crosschop: {
 		name: "十字劈",
@@ -1381,8 +1381,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE]削减了自己的体力，并向[POKEMON]施加了咒术！",
-		damage: "  [POKEMON]正受到诅咒！",
+		start: "  {SOURCE}削减了自己的体力，并向{POKEMON}施加了咒术！",
+		damage: "  {POKEMON}正受到诅咒！",
 	},
 	cut: {
 		name: "居合斩",
@@ -1410,8 +1410,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		fail: "但是，[POKEMON]无法使用！",
-		failWrongForme: "但是，现在的[POKEMON]无法使用！",
+		fail: "但是，{POKEMON}无法使用！",
+		failWrongForme: "但是，现在的{POKEMON}无法使用！",
 	},
 	dazzlinggleam: {
 		name: "魔法闪耀",
@@ -1472,8 +1472,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]想和对手同归于尽！",
-		activate: "[POKEMON]和对手同归于尽了！",
+		start: "  {POKEMON}想和对手同归于尽！",
+		activate: "{POKEMON}和对手同归于尽了！",
 	},
 	detect: {
 		name: "看穿",
@@ -1534,7 +1534,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]钻入了地里！",
+		prepare: "{POKEMON}钻入了地里！",
 	},
 	direclaw: {
 		name: "克命爪",
@@ -1573,9 +1573,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  封住了[POKEMON]的[MOVE]！",
-		end: "  [POKEMON]的定身法解除了！",
-		cant: "[POKEMON]因定身法而无法使出[MOVE]！",
+		start: "  封住了{POKEMON}的{MOVE}！",
+		end: "  {POKEMON}的定身法解除了！",
+		cant: "{POKEMON}因定身法而无法使出{MOVE}！",
 	},
 	disarmingvoice: {
 		name: "魅惑之声",
@@ -1601,7 +1601,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]潜入了水中！",
+		prepare: "{POKEMON}潜入了水中！",
 	},
 	dizzypunch: {
 		name: "迷昏拳",
@@ -1627,8 +1627,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]将破灭之愿托付给了未来！",
-		activate: "  [TARGET]受到了破灭之愿的攻击！",
+		start: "  {POKEMON}将破灭之愿托付给了未来！",
+		activate: "  {TARGET}受到了破灭之愿的攻击！",
 	},
 	doubleedge: {
 		name: "舍身冲撞",
@@ -1682,7 +1682,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		typeChange: "  [POKEMON]用尽电力了！",
+		typeChange: "  {POKEMON}用尽电力了！",
 	},
 	doubleslap: {
 		name: "连环巴掌",
@@ -1717,7 +1717,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		megaNoItem: "  [TRAINER]衷心的祈愿传递到了[POKEMON]那里！",
+		megaNoItem: "  {TRAINER}衷心的祈愿传递到了{POKEMON}那里！",
 	},
 	dragonbreath: {
 		name: "龙息",
@@ -1914,7 +1914,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  因为输电，[POKEMON]的招式变成了电属性！",
+		start: "  因为输电，{POKEMON}的招式变成了电属性！",
 	},
 	electroball: {
 		name: "电球",
@@ -1935,7 +1935,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON]吸收了电力！",
+		prepare: "{POKEMON}吸收了电力！",
 	},
 	electroweb: {
 		name: "电网",
@@ -1949,8 +1949,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]无法使用道具了！",
-		end: "  [POKEMON]变得可以使用道具了！",
+		start: "  {POKEMON}无法使用道具了！",
+		end: "  {POKEMON}变得可以使用道具了！",
 	},
 	ember: {
 		name: "火花",
@@ -1984,8 +1984,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]接受了再来一次！",
-		end: "  [POKEMON]的再来一次状态解除了！",
+		start: "  {POKEMON}接受了再来一次！",
+		end: "  {POKEMON}的再来一次状态解除了！",
 	},
 	endeavor: {
 		name: "蛮干",
@@ -2020,8 +2020,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]摆出了挺住攻击的架势！",
-		activate: "  [POKEMON]挺住了攻击！",
+		start: "  {POKEMON}摆出了挺住攻击的架势！",
+		activate: "  {POKEMON}挺住了攻击！",
 	},
 	energyball: {
 		name: "能量球",
@@ -2184,7 +2184,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [TARGET]中了佯攻！",
+		activate: "  {TARGET}中了佯攻！",
 	},
 	feintattack: {
 		name: "出奇一击",
@@ -2204,7 +2204,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "随机光",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]拿出全力了！",
+		activate: "  {POKEMON}拿出全力了！",
 	},
 	fierydance: {
 		name: "火之舞",
@@ -2261,9 +2261,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  [TEAM]周围被火海包围了！",
-		end: "  [TEAM]周围的火海消失不见了！",
-		damage: "  [POKEMON]受到了火海的伤害！",
+		start: "  {TEAM}周围被火海包围了！",
+		end: "  {TEAM}周围的火海消失不见了！",
+		damage: "  {POKEMON}受到了火海的伤害！",
 	},
 	firepunch: {
 		name: "火焰拳",
@@ -2297,7 +2297,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被困在了火焰旋涡之中！",
+		start: "  {POKEMON}被困在了火焰旋涡之中！",
 		move: "#wrap",
 	},
 	firstimpression: {
@@ -2352,7 +2352,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  火花也溅射到了[POKEMON]的身上！",
+		damage: "  火花也溅射到了{POKEMON}的身上！",
 	},
 	flamecharge: {
 		name: "蓄能焰袭",
@@ -2415,7 +2415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON]投掷了[ITEM]！",
+		removeItem: "  {POKEMON}投掷了{ITEM}！",
 	},
 	flipturn: {
 		name: "快速折返",
@@ -2469,7 +2469,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]飞向了高空！",
+		prepare: "{POKEMON}飞向了高空！",
 	},
 	flyingpress: {
 		name: "飞身重压",
@@ -2497,9 +2497,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]现在干劲十足！",
-		startFromItem: "  [POKEMON]使用了[ITEM]，拿出了干劲！",
-		startFromZEffect: "  因为Ｚ力量，[POKEMON]变得容易击中要害了！",
+		start: "  {POKEMON}现在干劲十足！",
+		startFromItem: "  {POKEMON}使用了{ITEM}，拿出了干劲！",
+		startFromZEffect: "  因为Ｚ力量，{POKEMON}变得容易击中要害了！",
 	},
 	focuspunch: {
 		name: "真气拳",
@@ -2510,8 +2510,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]聚精会神了起来！",
-		cant: "[POKEMON]聚气时受到干扰，无法使出招式！",
+		start: "  {POKEMON}聚精会神了起来！",
+		cant: "{POKEMON}聚气时受到干扰，无法使出招式！",
 	},
 	followme: {
 		name: "看我嘛",
@@ -2528,8 +2528,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]变得万众瞩目了！",
-		startFromZEffect: "  [POKEMON]变得万众瞩目了！",
+		start: "  {POKEMON}变得万众瞩目了！",
+		startFromZEffect: "  {POKEMON}变得万众瞩目了！",
 	},
 	forcepalm: {
 		name: "发劲",
@@ -2552,7 +2552,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  识破了[POKEMON]的原形！",
+		start: "  识破了{POKEMON}的原形！",
 	},
 	forestscurse: {
 		name: "森林诅咒",
@@ -2582,7 +2582,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON]被冷光包围了！",
+		prepare: "  {POKEMON}被冷光包围了！",
 	},
 	freezingglare: {
 		name: "冰冷视线",
@@ -2680,8 +2680,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]预知了未来的攻击！",
-		activate: "  [TARGET]受到了预知未来的攻击！",
+		start: "  {POKEMON}预知了未来的攻击！",
+		activate: "  {TARGET}受到了预知未来的攻击！",
 	},
 	gastroacid: {
 		name: "胃液",
@@ -2698,7 +2698,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]的特性变得无效了！",
+		start: "  {POKEMON}的特性变得无效了！",
 	},
 	geargrind: {
 		name: "齿轮飞盘",
@@ -2724,7 +2724,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON]正在积蓄力量！",
+		prepare: "{POKEMON}正在积蓄力量！",
 	},
 	gigadrain: {
 		name: "终极吸取",
@@ -2797,8 +2797,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]被困在水流之中！",
-		damage: "  [POKEMON]被吞没在超极巨水炮轰灭的水流里，痛苦难耐！",
+		start: "  {PARTY}被困在水流之中！",
+		damage: "  {POKEMON}被吞没在超极巨水炮轰灭的水流里，痛苦难耐！",
 	},
 	gmaxcentiferno: {
 		name: "超极巨百火焚野",
@@ -2822,7 +2822,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET]的PP减少了！",
+		activate: "  {TARGET}的PP减少了！",
 	},
 	gmaxdrumsolo: {
 		name: "超极巨狂擂乱打",
@@ -2909,9 +2909,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]周围开始悬浮起尖锐的钢刺！",
-		end: "  [PARTY]周围的钢刺消失了！",
-		damage: "  尖锐的钢刺扎进了[POKEMON]体内！",
+		start: "  {PARTY}周围开始悬浮起尖锐的钢刺！",
+		end: "  {PARTY}周围的钢刺消失了！",
+		damage: "  尖锐的钢刺扎进了{POKEMON}体内！",
 	},
 	gmaxstonesurge: {
 		name: "超极巨岩阵以待",
@@ -2943,16 +2943,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]被困在鞭子的猛击中！",
-		damage: "  [POKEMON]被暴露在超极巨灰飞鞭灭的猛击下，疼痛难忍！",
+		start: "  {PARTY}被困在鞭子的猛击中！",
+		damage: "  {POKEMON}被暴露在超极巨灰飞鞭灭的猛击下，疼痛难忍！",
 	},
 	gmaxvolcalith: {
 		name: "超极巨炎石喷发",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]被困在岩石之中！",
-		damage: "  [POKEMON]被困在超极巨炎石喷发的岩石之中，疼痛难忍！",
+		start: "  {PARTY}被困在岩石之中！",
+		damage: "  {POKEMON}被困在超极巨炎石喷发的岩石之中，疼痛难忍！",
 	},
 	gmaxvoltcrash: {
 		name: "超极巨万雷轰顶",
@@ -2964,8 +2964,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY]被困在火焰之中！",
-		damage: "  [POKEMON]被超极巨地狱灭焰的火焰包围，酷热难耐！",
+		start: "  {PARTY}被困在火焰之中！",
+		damage: "  {POKEMON}被超极巨地狱灭焰的火焰包围，酷热难耐！",
 	},
 	gmaxwindrage: {
 		name: "超极巨旋风袭卷",
@@ -2985,8 +2985,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  在[TEAM]周围延伸出了湿地！",
-		end: "  [TEAM]周围的湿地消失不见了！",
+		start: "  在{TEAM}周围延伸出了湿地！",
+		end: "  {TEAM}周围的湿地消失不见了！",
 	},
 	grasswhistle: {
 		name: "草笛",
@@ -3066,8 +3066,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  因为怨念，[POKEMON]失去了其招式[MOVE]的所有ＰＰ！",
-		start: "[POKEMON]想向对手施放怨念！",
+		activate: "  因为怨念，{POKEMON}失去了其招式{MOVE}的所有ＰＰ！",
+		start: "{POKEMON}想向对手施放怨念！",
 	},
 	guardianofalola: {
 		name: "巨人卫士・阿罗拉",
@@ -3081,7 +3081,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]平分了各自的防守！",
+		activate: "  {POKEMON}平分了各自的防守！",
 	},
 	guardswap: {
 		name: "防守互换",
@@ -3235,8 +3235,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
-			end: "  [POKEMON]的回复封锁的效果消失了！",
-			cant: "[POKEMON]因回复封锁而无法使出[MOVE]！",
+			end: "  {POKEMON}的回复封锁的效果消失了！",
+			cant: "{POKEMON}因回复封锁而无法使出{MOVE}！",
 		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3248,10 +3248,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]的回复行为被封住了！",
-		end: "  [POKEMON]的回复封锁的效果消失了！",
-		cant: "[POKEMON]因回复封锁而无法使出[MOVE]！",
-		fail: "  但是，对于[POKEMON]没有起到效果！",
+		start: "  {POKEMON}的回复行为被封住了！",
+		end: "  {POKEMON}的回复封锁的效果消失了！",
+		cant: "{POKEMON}因回复封锁而无法使出{MOVE}！",
+		fail: "  但是，对于{POKEMON}没有起到效果！",
 	},
 	healingwish: {
 		name: "治愈之愿",
@@ -3266,7 +3266,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  治愈之愿在[POKEMON]身上实现了！",
+		heal: "  治愈之愿在{POKEMON}身上实现了！",
 	},
 	healorder: {
 		name: "回复指令",
@@ -3328,7 +3328,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [SOURCE]摆出了帮助[POKEMON]的架势！",
+		start: "  {SOURCE}摆出了帮助{POKEMON}的架势！",
 	},
 	hex: {
 		name: "祸不单行",
@@ -3581,7 +3581,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON]被冰冻的空气包围了！",
+		prepare: "  {POKEMON}被冰冻的空气包围了！",
 	},
 	icefang: {
 		name: "冰冻牙",
@@ -3657,8 +3657,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]封印了对手的招式！",
-		cant: "[POKEMON]因封印而无法使出[MOVE]！",
+		start: "  {POKEMON}封印了对手的招式！",
+		cant: "{POKEMON}因封印而无法使出{MOVE}！",
 	},
 	incinerate: {
 		name: "烧尽",
@@ -3670,7 +3670,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON]的[ITEM]被烧没了！",
+		removeItem: "  {POKEMON}的{ITEM}被烧没了！",
 	},
 	infernalparade: {
 		name: "群魔乱舞",
@@ -3699,7 +3699,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]受到了[SOURCE]的死缠烂打！",
+		start: "  {POKEMON}受到了{SOURCE}的死缠烂打！",
 	},
 	ingrain: {
 		name: "扎根",
@@ -3720,9 +3720,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]扎下了根！",
-		block: "  [POKEMON]扎下了根，屹立不动！",
-		heal: "  [POKEMON]从根上吸取了养分！",
+		start: "  {POKEMON}扎下了根！",
+		block: "  {POKEMON}扎下了根，屹立不动！",
+		heal: "  {POKEMON}从根上吸取了养分！",
 	},
 	instruct: {
 		name: "号令",
@@ -3736,7 +3736,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  根据[POKEMON]的指示，[TARGET]使出了招式！",
+		activate: "  根据{POKEMON}的指示，{TARGET}使出了招式！",
 	},
 	iondeluge: {
 		name: "等离子浴",
@@ -3877,7 +3877,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE]拍落了[POKEMON]的[ITEM]！",
+		removeItem: "  {SOURCE}拍落了{POKEMON}的{ITEM}！",
 	},
 	kowtowcleave: {
 		name: "仆刀",
@@ -3895,7 +3895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]磨砺了精神！",
+		start: "  {POKEMON}磨砺了精神！",
 	},
 	lashout: {
 		name: "泄愤",
@@ -3970,9 +3970,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  将种子种植在了[POKEMON]身上！",
-		end: "  [POKEMON]摆脱了寄生种子的束缚！",
-		damage: "  寄生植物夺取了[POKEMON]的体力！",
+		start: "  将种子种植在了{POKEMON}身上！",
+		end: "  {POKEMON}摆脱了寄生种子的束缚！",
+		damage: "  寄生植物夺取了{POKEMON}的体力！",
 	},
 	leer: {
 		name: "瞪眼",
@@ -4029,8 +4029,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			start: null, // NEEDS TRANSLATION: predates Chinese support
 		},
 
-		start: "  光墙使[TEAM]的特殊抗性提高了！",
-		end: "  [TEAM]的光墙消失了！",
+		start: "  光墙使{TEAM}的特殊抗性提高了！",
+		end: "  {TEAM}的光墙消失了！",
 	},
 	lightthatburnsthesky: {
 		name: "焚天灭世炽光爆",
@@ -4057,7 +4057,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE]将目标对准了[POKEMON]！",
+		start: "  {SOURCE}将目标对准了{POKEMON}！",
 	},
 	lovelykiss: {
 		name: "恶魔之吻",
@@ -4085,8 +4085,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  因幸运咒语的力量，[TEAM]的要害被隐藏了起来！",
-		end: "  [TEAM]的幸运咒语解除了！",
+		start: "  因幸运咒语的力量，{TEAM}的要害被隐藏了起来！",
+		end: "  {TEAM}的幸运咒语解除了！",
 	},
 	luminacrash: {
 		name: "琉光冲激",
@@ -4111,7 +4111,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [POKEMON]被神秘的月光包围了！",
+		heal: "  {POKEMON}被神秘的月光包围了！",
 	},
 	lunge: {
 		name: "猛扑",
@@ -4155,8 +4155,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]获得了魔法反射的效果！",
-		move: "[POKEMON]将[MOVE]反射了回去！",
+		start: "  {POKEMON}获得了魔法反射的效果！",
+		move: "{POKEMON}将{MOVE}反射了回去！",
 	},
 	magicpowder: {
 		name: "魔法粉",
@@ -4192,7 +4192,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被困在了熔岩旋涡之中！",
+		start: "  {POKEMON}被困在了熔岩旋涡之中！",
 	},
 	magnetbomb: {
 		name: "磁铁炸弹",
@@ -4216,8 +4216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]因电磁力浮了起来！",
-		end: "  [POKEMON]的电磁力消失了！",
+		start: "  {POKEMON}因电磁力浮了起来！",
+		end: "  {POKEMON}的电磁力消失了！",
 	},
 	magnitude: {
 		name: "震级",
@@ -4228,7 +4228,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  震级[NUMBER]！",
+		activate: "  震级{NUMBER}！",
 	},
 	makeitrain: {
 		name: "淘金潮",
@@ -4258,8 +4258,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]正在伺机使出掀榻榻米！",
-		block: "  [MOVE]被掀榻榻米保护住了！",
+		start: "  {POKEMON}正在伺机使出掀榻榻米！",
+		block: "  {MOVE}被掀榻榻米保护住了！",
 	},
 	matchagotcha: {
 		name: "刷刷茶炮",
@@ -4302,7 +4302,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]在攻击中守护住了自己！",
+		activate: "  {POKEMON}在攻击中守护住了自己！",
 	},
 	maxhailstorm: {
 		name: "极巨寒冰",
@@ -4463,7 +4463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  因为Ｚ力量，[POKEMON]的体力回复了！",
+		heal: "  因为Ｚ力量，{POKEMON}的体力回复了！",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "月华飞溅落灵霄",
@@ -4507,7 +4507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON]身上溢出了宇宙之力！",
+		prepare: "{POKEMON}身上溢出了宇宙之力！",
 	},
 	meteormash: {
 		name: "彗星拳",
@@ -4545,7 +4545,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "挥动手指后，使出了[MOVE]！",
+		move: "挥动手指后，使出了{MOVE}！",
 	},
 	mightycleave: {
 		name: "强刃攻击",
@@ -4588,7 +4588,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]学会了[MOVE]！",
+		start: "  {POKEMON}学会了{MOVE}！",
 	},
 	mindblown: {
 		name: "惊爆大头",
@@ -4703,7 +4703,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 			start: null, // NEEDS TRANSLATION: predates Chinese support
-			block: "  [POKEMON]正受到白雾的保护！",
+			block: "  {POKEMON}正受到白雾的保护！",
 		},
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4711,9 +4711,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			block: "  但是，招式失败了！！",
 		},
 
-		start: "  [TEAM]被白雾包围了！",
-		end: "  包围[TEAM]的白雾消失了！",
-		block: "  [POKEMON]正受到白雾的保护！",
+		start: "  {TEAM}被白雾包围了！",
+		end: "  包围{TEAM}的白雾消失了！",
+		block: "  {POKEMON}正受到白雾的保护！",
 	},
 	mistball: {
 		name: "薄雾球",
@@ -4895,7 +4895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "自然之力变成了[MOVE]！",
+		move: "自然之力变成了{MOVE}！",
 	},
 	naturesmadness: {
 		name: "自然之怒",
@@ -4928,8 +4928,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]开始做恶梦了！",
-		damage: "  [POKEMON]正被恶梦缠身！",
+		start: "  {POKEMON}开始做恶梦了！",
+		damage: "  {POKEMON}正被恶梦缠身！",
 	},
 	nightshade: {
 		name: "黑夜魔影",
@@ -4959,7 +4959,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]受到背水一战的效果影响，无法逃走了！",
+		start: "  {POKEMON}受到背水一战的效果影响，无法逃走了！",
 	},
 	noxioustorque: {
 		name: "剧毒暴冲",
@@ -5003,7 +5003,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]受到蛸固的效果影响，变得无法逃走了……",
+		start: "  {POKEMON}受到蛸固的效果影响，变得无法逃走了……",
 	},
 	odorsleuth: {
 		name: "气味侦测",
@@ -5126,7 +5126,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  听过终焉之歌的宝可梦会在3回合后步向终焉！",
-		activate: "  [POKEMON]的灭亡计时变成[NUMBER]了！",
+		activate: "  {POKEMON}的灭亡计时变成{NUMBER}了！",
 	},
 	petalblizzard: {
 		name: "落英缤纷",
@@ -5289,7 +5289,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "灵骚",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]被[ITEM]袭击了！",
+		activate: "  {POKEMON}被{ITEM}袭击了！",
 	},
 	populationbomb: {
 		name: "鼠数儿",
@@ -5314,8 +5314,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  向[POKEMON]抛洒了粉尘！",
-		activate: "  和[MOVE]起了反应，粉尘爆炸了！",
+		start: "  向{POKEMON}抛洒了粉尘！",
+		activate: "  和{MOVE}起了反应，粉尘爆炸了！",
 	},
 	powdersnow: {
 		name: "细雪",
@@ -5336,7 +5336,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]平分了各自的力量！",
+		activate: "  {POKEMON}平分了各自的力量！",
 	},
 	powerswap: {
 		name: "力量互换",
@@ -5349,7 +5349,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]互换了进攻力和防守力！",
+		start: "  {POKEMON}互换了进攻力和防守力！",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5358,7 +5358,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]互换了攻击和防御！",
+		start: "  {POKEMON}互换了攻击和防御！",
 		end: "#.start",
 	},
 	powertrip: {
@@ -5425,8 +5425,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]摆出了防守的架势！",
-		block: "  [POKEMON]在攻击中守护住了自己！",
+		start: "  {POKEMON}摆出了防守的架势！",
+		block: "  {POKEMON}在攻击中守护住了自己！",
 	},
 	psybeam: {
 		name: "幻象光线",
@@ -5579,7 +5579,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  延后了[TARGET]的顺序！",
+		activate: "  延后了{TARGET}的顺序！",
 	},
 	quickattack: {
 		name: "电光一闪",
@@ -5605,8 +5605,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]受到了快速防守的保护！",
-		block: "  [POKEMON]受到了快速防守的保护！",
+		start: "  {TEAM}受到了快速防守的保护！",
+		block: "  {POKEMON}受到了快速防守的保护！",
 	},
 	quiverdance: {
 		name: "蝶舞",
@@ -5728,7 +5728,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  [POKEMON]周围的空气产生了旋涡！",
+		prepare: "  {POKEMON}周围的空气产生了旋涡！",
 	},
 	recover: {
 		name: "自我再生",
@@ -5754,7 +5754,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		addItem: "  [POKEMON]捡来了[ITEM:classified]！",
+		addItem: "  {POKEMON}捡来了{ITEM:classified}！",
 	},
 	reflect: {
 		name: "反射壁",
@@ -5780,8 +5780,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			start: null, // NEEDS TRANSLATION: predates Chinese support
 		},
 
-		start: "  反射壁使[TEAM]的物理抗性提高了！",
-		end: "  [TEAM]的反射壁消失了！",
+		start: "  反射壁使{TEAM}的物理抗性提高了！",
+		end: "  {TEAM}的反射壁消失了！",
 	},
 	reflecttype: {
 		name: "镜面属性",
@@ -5795,7 +5795,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  [POKEMON]变成了和[SOURCE]相同的属性！",
+		typeChange: "  {POKEMON}变成了和{SOURCE}相同的属性！",
 	},
 	refresh: {
 		name: "焕然一新",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		heal: "  [POKEMON]复活并能继续战斗了！",
+		heal: "  {POKEMON}复活并能继续战斗了！",
 	},
 	risingvoltage: {
 		name: "电力上升",
@@ -5988,7 +5988,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  [POKEMON]复制了[SOURCE]的[ABILITY]！",
+		changeAbility: "  {POKEMON}复制了{SOURCE}的{ABILITY}！",
 	},
 	rollingkick: {
 		name: "回旋踢",
@@ -6063,9 +6063,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]被神秘之幕包围了！",
-		end: "  包围[TEAM]的神秘之幕消失了！",
-		block: "  [POKEMON]正受到神秘之幕的保护！",
+		start: "  {TEAM}被神秘之幕包围了！",
+		end: "  包围{TEAM}的神秘之幕消失了！",
+		block: "  {POKEMON}正受到神秘之幕的保护！",
 	},
 	saltcure: {
 		name: "盐腌",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]陷入了盐腌状态！",
-		damage: "  [POKEMON]受到了盐腌的伤害。",
+		start: "  {POKEMON}陷入了盐腌状态！",
+		damage: "  {POKEMON}受到了盐腌的伤害。",
 	},
 	sandattack: {
 		name: "泼沙",
@@ -6128,7 +6128,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]陷入了流沙深渊！",
+		start: "  {POKEMON}陷入了流沙深渊！",
 	},
 	sappyseed: {
 		name: "茁茁轰炸",
@@ -6282,8 +6282,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  打破了[TARGET]的防守！",
-		prepare: "[POKEMON]的身影瞬间消失了！",
+		activate: "  打破了{TARGET}的防守！",
+		prepare: "{POKEMON}的身影瞬间消失了！",
 	},
 	shadowpunch: {
 		name: "暗影拳",
@@ -6315,7 +6315,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]断掉尾巴并将其作为替身了！",
+		start: "  {POKEMON}断掉尾巴并将其作为替身了！",
 		alreadyStarted: "#substitute",
 		fail: "#substitute",
 	},
@@ -6347,9 +6347,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]设置了陷阱甲壳！",
-		prepare: "  [POKEMON]设置了陷阱甲壳！",
-		cant: "[POKEMON]的陷阱甲壳没有被触发！",
+		start: "  {POKEMON}设置了陷阱甲壳！",
+		prepare: "  {POKEMON}设置了陷阱甲壳！",
+		cant: "{POKEMON}的陷阱甲壳没有被触发！",
 	},
 	shelter: {
 		name: "闭关",
@@ -6437,7 +6437,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]对[MOVE]进行了写生！",
+		activate: "  {POKEMON}对{MOVE}进行了写生！",
 	},
 	skillswap: {
 		name: "特性互换",
@@ -6463,7 +6463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]互换了各自的特性！",
+		activate: "  {POKEMON}互换了各自的特性！",
 	},
 	skittersmack: {
 		name: "爬击",
@@ -6484,7 +6484,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]把头缩了进去！",
+		prepare: "{POKEMON}把头缩了进去！",
 	},
 	skyattack: {
 		name: "神鸟猛击",
@@ -6499,7 +6499,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "强光包围了[POKEMON]！",
+		prepare: "强光包围了{POKEMON}！",
 	},
 	skydrop: {
 		name: "自由落体",
@@ -6510,10 +6510,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON]将[TARGET]带上了高空！",
-		end: "  [POKEMON]摆脱了自由落体！",
-		failSelect: "[POKEMON]因自由落体而无法自由行动！",
-		failTooHeavy: "  [POKEMON]太重了，抬不起来！",
+		prepare: "{POKEMON}将{TARGET}带上了高空！",
+		end: "  {POKEMON}摆脱了自由落体！",
+		failSelect: "{POKEMON}因自由落体而无法自由行动！",
+		failTooHeavy: "  {POKEMON}太重了，抬不起来！",
 	},
 	skyuppercut: {
 		name: "冲天拳",
@@ -6603,7 +6603,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]被击落，掉到了地面！",
+		start: "  {POKEMON}被击落，掉到了地面！",
 	},
 	smartstrike: {
 		name: "修长之角",
@@ -6643,7 +6643,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被捕兽夹困住了！",
+		start: "  {POKEMON}被捕兽夹困住了！",
 	},
 	snarl: {
 		name: "大声咆哮",
@@ -6660,8 +6660,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]正在观察对手的动向！",
-		activate: "  [POKEMON]抢夺了[TARGET]的招式！",
+		start: "  {POKEMON}正在观察对手的动向！",
+		activate: "  {POKEMON}抢夺了{TARGET}的招式！",
 	},
 	snipeshot: {
 		name: "狙击",
@@ -6735,7 +6735,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  [POKEMON]吸收了光！",
+		prepare: "  {POKEMON}吸收了光！",
 	},
 	solarblade: {
 		name: "日光刃",
@@ -6794,7 +6794,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		clearBoost: "  [SOURCE]夺取了提高的那部分能力！",
+		clearBoost: "  {SOURCE}夺取了提高的那部分能力！",
 	},
 	speedswap: {
 		name: "速度互换",
@@ -6802,7 +6802,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]互换了各自的速度！",
+		activate: "  {POKEMON}互换了各自的速度！",
 	},
 	spicyextract: {
 		name: "辣椒精华",
@@ -6861,9 +6861,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]脚下散落着撒菱！",
-		end: "  [TEAM]脚下的撒菱消失不见了！",
-		damage: "  [POKEMON]受到了撒菱的伤害！",
+		start: "  {TEAM}脚下散落着撒菱！",
+		end: "  {TEAM}脚下的撒菱消失不见了！",
+		damage: "  {POKEMON}受到了撒菱的伤害！",
 	},
 	spikyshield: {
 		name: "尖刺防守",
@@ -6880,7 +6880,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON]受伤了！",
+		damage: "  {POKEMON}受伤了！",
 	},
 	spinout: {
 		name: "疾速转轮",
@@ -6915,7 +6915,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  削减了[TARGET]的[MOVE][NUMBER]点！",
+		activate: "  削减了{TARGET}的{MOVE}{NUMBER}点！",
 	},
 	spitup: {
 		name: "喷出",
@@ -6977,9 +6977,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]周围开始浮现出尖锐的岩石！",
-		end: "  [TEAM]周围的隐形岩消失不见了！",
-		damage: "  尖锐的岩石扎进了[POKEMON]的体内！",
+		start: "  {TEAM}周围开始浮现出尖锐的岩石！",
+		end: "  {TEAM}周围的隐形岩消失不见了！",
+		damage: "  尖锐的岩石扎进了{POKEMON}的体内！",
 	},
 	steameruption: {
 		name: "蒸汽爆炸",
@@ -7025,9 +7025,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]的脚下延伸出了黏黏网！",
-		end: "  [TEAM]脚下的黏黏网消失不见了！",
-		activate: "  [POKEMON]被黏黏网粘住了！",
+		start: "  {TEAM}的脚下延伸出了黏黏网！",
+		end: "  {TEAM}脚下的黏黏网消失不见了！",
+		activate: "  {POKEMON}被黏黏网粘住了！",
 	},
 	stockpile: {
 		name: "蓄力",
@@ -7039,8 +7039,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]蓄力了[NUMBER]次！",
-		end: "  [POKEMON]蓄力后的效果消失了！",
+		start: "  {POKEMON}蓄力了{NUMBER}次！",
+		end: "  {POKEMON}蓄力后的效果消失了！",
 	},
 	stokedsparksurfer: {
 		name: "驾雷驭电戏冲浪",
@@ -7209,11 +7209,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]的替身出现了！",
-		alreadyStarted: "  但是，[POKEMON]的替身已经出现了。",
-		end: "  [POKEMON]的替身消失了……",
+		start: "  {POKEMON}的替身出现了！",
+		alreadyStarted: "  但是，{POKEMON}的替身已经出现了。",
+		end: "  {POKEMON}的替身消失了……",
 		fail: "  但是，体力已经不够放出替身了！",
-		activate: "  替身代替[POKEMON]承受了攻击！",
+		activate: "  替身代替{POKEMON}承受了攻击！",
 	},
 	subzeroslammer: {
 		name: "激狂大地万里冰",
@@ -7415,7 +7415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]陷入了满身糖状态！",
+		start: "  {POKEMON}陷入了满身糖状态！",
 	},
 	tackle: {
 		name: "撞击",
@@ -7464,8 +7464,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  从[TEAM]身后吹起了顺风！",
-		end: "  [TEAM]的顺风停止了！",
+		start: "  从{TEAM}身后吹起了顺风！",
+		end: "  {TEAM}的顺风停止了！",
 	},
 	takedown: {
 		name: "猛撞",
@@ -7493,7 +7493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]变得怕火了！",
+		start: "  {POKEMON}变得怕火了！",
 	},
 	taunt: {
 		name: "挑衅",
@@ -7518,9 +7518,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]中了挑衅！",
-		end: "  [POKEMON]的挑衅效果解除了！",
-		cant: "[POKEMON]受到了挑衅，无法使出[MOVE]！",
+		start: "  {POKEMON}中了挑衅！",
+		end: "  {POKEMON}的挑衅效果解除了！",
+		cant: "{POKEMON}受到了挑衅，无法使出{MOVE}！",
 	},
 	tearfullook: {
 		name: "泪眼汪汪",
@@ -7565,8 +7565,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  让[POKEMON]浮在了空中！",
-		end: "  [POKEMON]摆脱了意念移物！",
+		start: "  让{POKEMON}浮在了空中！",
+		end: "  {POKEMON}摆脱了意念移物！",
 	},
 	teleport: {
 		name: "瞬间移动",
@@ -7675,7 +7675,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		cant: "[POKEMON]因深渊突刺的效果无法使出招式！",
+		cant: "{POKEMON}因深渊突刺的效果无法使出招式！",
 	},
 	thunder: {
 		name: "打雷",
@@ -7714,7 +7714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被[SOURCE]困住了！",
+		start: "  {POKEMON}被{SOURCE}困住了！",
 	},
 	thunderclap: {
 		name: "迅雷",
@@ -7781,8 +7781,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]遭到了无理取闹！",
-		end: "  [POKEMON]的无理取闹的效果消失了！",
+		start: "  {POKEMON}遭到了无理取闹！",
+		end: "  {POKEMON}的无理取闹的效果消失了！",
 	},
 	toxic: {
 		name: "剧毒",
@@ -7809,8 +7809,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]脚下散落着毒菱！",
-		end: "  [TEAM]脚下的毒菱消失不见了！",
+		start: "  {TEAM}脚下散落着毒菱！",
+		end: "  {TEAM}脚下的毒菱消失不见了！",
 	},
 	toxicthread: {
 		name: "毒丝",
@@ -7843,7 +7843,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		transform: "[POKEMON]变身成了[SPECIES]！",
+		transform: "{POKEMON}变身成了{SPECIES}！",
 	},
 	triattack: {
 		name: "三重攻击",
@@ -7885,7 +7885,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]互换了各自的道具！",
+		activate: "  {POKEMON}互换了各自的道具！",
 	},
 	trickortreat: {
 		name: "万圣夜",
@@ -8009,11 +8009,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]吵闹了起来！",
-		end: "  [POKEMON]平静了下来！",
-		upkeep: "  [POKEMON]吵闹个不停！",
-		block: "  但是，[POKEMON]被吵得无法入睡！",
-		blockSelf: "  但是，[POKEMON]吵闹个不停，无法入睡！",
+		start: "  {POKEMON}吵闹了起来！",
+		end: "  {POKEMON}平静了下来！",
+		upkeep: "  {POKEMON}吵闹个不停！",
+		block: "  但是，{POKEMON}被吵得无法入睡！",
+		blockSelf: "  但是，{POKEMON}吵闹个不停，无法入睡！",
 	},
 	uturn: {
 		name: "急速折返",
@@ -8027,7 +8027,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		switchOut: "[POKEMON]要回到[TRAINER]的身边了！",
+		switchOut: "{POKEMON}要回到{TRAINER}的身边了！",
 	},
 	vacuumwave: {
 		name: "真空波",
@@ -8132,9 +8132,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]正在等待[TARGET]……",
-		start: "  彩虹出现在了[TEAM]上空！",
-		end: "  彩虹从[TEAM]上空消失了！",
+		activate: "  {POKEMON}正在等待{TARGET}……",
+		start: "  彩虹出现在了{TEAM}上空！",
+		end: "  彩虹从{TEAM}上空消失了！",
 	},
 	waterpulse: {
 		name: "水之波动",
@@ -8195,7 +8195,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "究极无敌大冲撞因天气的影响变成了[MOVE]！",
+		move: "究极无敌大冲撞因天气的影响变成了{MOVE}！",
 	},
 	whirlpool: {
 		name: "潮旋",
@@ -8219,7 +8219,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被困在了旋涡之中！",
+		start: "  {POKEMON}被困在了旋涡之中！",
 	},
 	whirlwind: {
 		name: "吹飞",
@@ -8267,8 +8267,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]受到了广域防守的保护！",
-		block: "  [POKEMON]受到了广域防守的保护！",
+		start: "  {TEAM}受到了广域防守的保护！",
+		block: "  {POKEMON}受到了广域防守的保护！",
 	},
 	wildboltstorm: {
 		name: "鸣雷风暴",
@@ -8301,7 +8301,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [NICKNAME]的祈愿实现了！",
+		heal: "  {NICKNAME}的祈愿实现了！",
 	},
 	withdraw: {
 		name: "缩入壳中",
@@ -8378,7 +8378,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]被[SOURCE]紧紧束缚住了！",
+		start: "  {POKEMON}被{SOURCE}紧紧束缚住了！",
 		move: null, // NEEDS TRANSLATION: predates Chinese support
 	},
 	wringout: {
@@ -8400,7 +8400,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  让[POKEMON]产生睡意了！",
+		start: "  让{POKEMON}产生睡意了！",
 	},
 	zapcannon: {
 		name: "电磁炮",

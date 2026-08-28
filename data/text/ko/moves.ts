@@ -91,7 +91,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET:topic] 배려를 받아들이기로 했다!",
+		activate: "  {TARGET:topic} 배려를 받아들이기로 했다!",
 	},
 	agility: {
 		name: "고속이동",
@@ -182,8 +182,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 물의 고리를 둘렀다!",
-		heal: "  [POKEMON:topic] 물의 고리로 체력을 회복했다!",
+		start: "  {POKEMON:topic} 물의 고리를 둘렀다!",
+		heal: "  {POKEMON:topic} 물의 고리로 체력을 회복했다!",
 	},
 	aquastep: {
 		name: "아쿠아스텝",
@@ -297,12 +297,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 헤롱헤롱해졌다!",
-		startFromItem: "  [POKEMON:topic] [ITEM] 때문에 헤롱헤롱해졌다!",
-		end: "  [POKEMON:topic] 헤롱헤롱 상태가 나았다!",
-		endFromItem: "  [POKEMON:topic] [ITEM:directional]로 헤롱헤롱 상태가 나았다!",
-		activate: "  [POKEMON:topic] [TARGET]에게 헤롱헤롱해 있다!",
-		cant: "[POKEMON:topic] 헤롱헤롱해서 기술을 쓸 수 없었다!",
+		start: "  {POKEMON:topic} 헤롱헤롱해졌다!",
+		startFromItem: "  {POKEMON:topic} {ITEM} 때문에 헤롱헤롱해졌다!",
+		end: "  {POKEMON:topic} 헤롱헤롱 상태가 나았다!",
+		endFromItem: "  {POKEMON:topic} {ITEM:directional}로 헤롱헤롱 상태가 나았다!",
+		activate: "  {POKEMON:topic} {TARGET}에게 헤롱헤롱해 있다!",
+		cant: "{POKEMON:topic} 헤롱헤롱해서 기술을 쓸 수 없었다!",
 	},
 	aurasphere: {
 		name: "파동탄",
@@ -334,8 +334,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM:topic] 오로라베일로 물리공격과 특수공격에 강해졌다!",
-		end: "  [TEAM]의 오로라베일이 없어졌다!",
+		start: "  {TEAM:topic} 오로라베일로 물리공격과 특수공격에 강해졌다!",
+		end: "  {TEAM}의 오로라베일이 없어졌다!",
 	},
 	autotomize: {
 		name: "바디퍼지",
@@ -343,7 +343,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]의 몸이 가벼워졌다!",
+		start: "  {POKEMON}의 몸이 가벼워졌다!",
 	},
 	avalanche: {
 		name: "눈사태",
@@ -441,7 +441,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 부리를 가열하기 시작했다!",
+		start: "  {POKEMON:topic} 부리를 가열하기 시작했다!",
 	},
 	beatup: {
 		name: "집단구타",
@@ -458,7 +458,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [NAME]의 공격!",
+		activate: "  {NAME}의 공격!",
 	},
 	behemothbash: {
 		name: "거수탄",
@@ -493,7 +493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		boost: "  [POKEMON:topic] 체력을 깎아서 풀 파워로 만들었다!",
+		boost: "  {POKEMON:topic} 체력을 깎아서 풀 파워로 만들었다!",
 	},
 	bestow: {
 		name: "기프트패스",
@@ -507,7 +507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		takeItem: "  [POKEMON:topic] [SOURCE:directional]로부터 [ITEM:object] 받았다!",
+		takeItem: "  {POKEMON:topic} {SOURCE:directional}로부터 {ITEM:object} 받았다!",
 	},
 	bide: {
 		name: "참기",
@@ -528,9 +528,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 참고 있다.",
-		end: "  [POKEMON]의 참기가 풀렸다!",
-		activate: "  [POKEMON:topic] 참고 있다.",
+		start: "  {POKEMON:topic} 참고 있다.",
+		end: "  {POKEMON}의 참기가 풀렸다!",
+		activate: "  {POKEMON:topic} 참고 있다.",
 	},
 	bind: {
 		name: "조이기",
@@ -558,7 +558,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] [SOURCE]에게 조이기를 당했다!",
+		start: "  {POKEMON:topic} {SOURCE}에게 조이기를 당했다!",
 		move: "#wrap",
 	},
 	bite: {
@@ -740,7 +740,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON:topic] 높이 뛰어올랐다!",
+		prepare: "{POKEMON:topic} 높이 뛰어올랐다!",
 	},
 	bouncybubble: {
 		name: "생생버블",
@@ -836,7 +836,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE:topic] [ITEM:object] 빼앗아 먹었다!",
+		removeItem: "  {SOURCE:topic} {ITEM:object} 빼앗아 먹었다!",
 	},
 	bugbuzz: {
 		name: "벌레의야단법석",
@@ -897,7 +897,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  [POKEMON]의 불꽃은 다 타 버렸다!",
+		typeChange: "  {POKEMON}의 불꽃은 다 타 버렸다!",
 	},
 	buzzybuzz: {
 		name: "찌릿찌릿일렉",
@@ -950,7 +950,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "축하",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  축하해! [TRAINER]!!",
+		activate: "  축하해! {TRAINER}!!",
 	},
 	charge: {
 		name: "충전",
@@ -966,7 +966,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 충전을 시작했다!",
+		start: "  {POKEMON:topic} 충전을 시작했다!",
 	},
 	chargebeam: {
 		name: "차지빔",
@@ -1004,7 +1004,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON:topic] 썰렁한 개그를 선보였다!",
+		prepare: "  {POKEMON:topic} 썰렁한 개그를 선보였다!",
 	},
 	chipaway: {
 		name: "야금야금",
@@ -1049,7 +1049,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] [SOURCE]의 껍질에 꼈다!",
+		start: "  {POKEMON:topic} {SOURCE}의 껍질에 꼈다!",
 		move: "#wrap",
 	},
 	clangingscales: {
@@ -1240,7 +1240,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  [SOURCE:topic] [POKEMON:subject] 지닌 [ITEM:object] 녹여 버렸다!",
+		removeItem: "  {SOURCE:topic} {POKEMON:subject} 지닌 {ITEM:object} 녹여 버렸다!",
 	},
 	cosmicpower: {
 		name: "코스믹파워",
@@ -1288,7 +1288,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 서로의 필드 효과를 교체했다!",
+		activate: "  {POKEMON:topic} 서로의 필드 효과를 교체했다!",
 	},
 	covet: {
 		name: "탐내다",
@@ -1329,8 +1329,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [TEAM:object] 트릭가드가 지켜 줬다!",
-		block: "  [POKEMON:object] 트릭가드가 지켜 줬다!",
+		start: "  {TEAM:object} 트릭가드가 지켜 줬다!",
+		block: "  {POKEMON:object} 트릭가드가 지켜 줬다!",
 	},
 	crosschop: {
 		name: "크로스촙",
@@ -1381,8 +1381,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE:topic] 자신의 체력을 깎아서 [POKEMON]에게 저주를 걸었다!",
-		damage: "  [POKEMON:topic] 저주받고 있다!",
+		start: "  {SOURCE:topic} 자신의 체력을 깎아서 {POKEMON}에게 저주를 걸었다!",
+		damage: "  {POKEMON:topic} 저주받고 있다!",
 	},
 	cut: {
 		name: "풀베기",
@@ -1410,8 +1410,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		fail: "하지만 [POKEMON:topic] 사용할 수 없었다!",
-		failWrongForme: "하지만 지금의 [POKEMON:topic] 사용할 수 없었다!",
+		fail: "하지만 {POKEMON:topic} 사용할 수 없었다!",
+		failWrongForme: "하지만 지금의 {POKEMON:topic} 사용할 수 없었다!",
 	},
 	dazzlinggleam: {
 		name: "매지컬샤인",
@@ -1472,8 +1472,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 상대를 길동무로 삼으려 하고 있다!",
-		activate: "[POKEMON:topic] 상대를 길동무로 삼았다!",
+		start: "  {POKEMON:topic} 상대를 길동무로 삼으려 하고 있다!",
+		activate: "{POKEMON:topic} 상대를 길동무로 삼았다!",
 	},
 	detect: {
 		name: "판별",
@@ -1534,7 +1534,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON:topic] 땅으로 파고들었다!",
+		prepare: "{POKEMON:topic} 땅으로 파고들었다!",
 	},
 	direclaw: {
 		name: "페이탈클로",
@@ -1573,9 +1573,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]의 [MOVE:object] 봉인했다!",
-		end: "  [POKEMON]의 사슬묶기가 풀렸다!",
-		cant: "[POKEMON:topic] 사슬묶기 때문에 [MOVE:object] 쓸 수 없다!",
+		start: "  {POKEMON}의 {MOVE:object} 봉인했다!",
+		end: "  {POKEMON}의 사슬묶기가 풀렸다!",
+		cant: "{POKEMON:topic} 사슬묶기 때문에 {MOVE:object} 쓸 수 없다!",
 	},
 	disarmingvoice: {
 		name: "차밍보이스",
@@ -1601,7 +1601,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON:topic] 물속에 몸을 숨겼다!",
+		prepare: "{POKEMON:topic} 물속에 몸을 숨겼다!",
 	},
 	dizzypunch: {
 		name: "잼잼펀치",
@@ -1627,8 +1627,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 파멸의소원을 미래에 맡겼다!",
-		activate: "  [TARGET:topic] 파멸의소원 공격을 받았다!",
+		start: "  {POKEMON:topic} 파멸의소원을 미래에 맡겼다!",
+		activate: "  {TARGET:topic} 파멸의소원 공격을 받았다!",
 	},
 	doubleedge: {
 		name: "이판사판태클",
@@ -1682,7 +1682,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		typeChange: "  [POKEMON:topic] 전기를 다 써 버렸다!",
+		typeChange: "  {POKEMON:topic} 전기를 다 써 버렸다!",
 	},
 	doubleslap: {
 		name: "연속뺨치기",
@@ -1717,7 +1717,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		megaNoItem: "  [TRAINER]의 강한 기도가 [POKEMON]에게 닿았다!",
+		megaNoItem: "  {TRAINER}의 강한 기도가 {POKEMON}에게 닿았다!",
 	},
 	dragonbreath: {
 		name: "용의숨결",
@@ -1914,7 +1914,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]의 기술이 송전으로 전기타입이 되었다!",
+		start: "  {POKEMON}의 기술이 송전으로 전기타입이 되었다!",
 	},
 	electroball: {
 		name: "일렉트릭볼",
@@ -1935,7 +1935,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON:topic] 전기를 흡수했다!",
+		prepare: "{POKEMON:topic} 전기를 흡수했다!",
 	},
 	electroweb: {
 		name: "일렉트릭네트",
@@ -1949,8 +1949,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 도구를 쓸 수 없게 되었다!",
-		end: "  [POKEMON:topic] 도구를 쓸 수 있게 되었다!",
+		start: "  {POKEMON:topic} 도구를 쓸 수 없게 되었다!",
+		end: "  {POKEMON:topic} 도구를 쓸 수 있게 되었다!",
 	},
 	ember: {
 		name: "불꽃세례",
@@ -1984,8 +1984,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 앙코르를 받았다!",
-		end: "  [POKEMON]의 앵콜 상태가 풀렸다!",
+		start: "  {POKEMON:topic} 앙코르를 받았다!",
+		end: "  {POKEMON}의 앵콜 상태가 풀렸다!",
 	},
 	endeavor: {
 		name: "죽기살기",
@@ -2020,8 +2020,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 버티기 태세에 들어갔다!",
-		activate: "  [POKEMON:topic] 공격을 버텼다!",
+		start: "  {POKEMON:topic} 버티기 태세에 들어갔다!",
+		activate: "  {POKEMON:topic} 공격을 버텼다!",
 	},
 	energyball: {
 		name: "에너지볼",
@@ -2184,7 +2184,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [TARGET:topic] 페인트에 걸렸다!",
+		activate: "  {TARGET:topic} 페인트에 걸렸다!",
 	},
 	feintattack: {
 		name: "속여때리기",
@@ -2204,7 +2204,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "변덕레이저",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 전력을 다하기 시작했다!",
+		activate: "  {POKEMON:topic} 전력을 다하기 시작했다!",
 	},
 	fierydance: {
 		name: "불꽃춤",
@@ -2261,9 +2261,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  [TEAM] 주변이 불바다에 둘러싸였다!",
-		end: "  [TEAM] 주변의 불바다가 사라졌다!",
-		damage: "  [POKEMON:topic] 불바다의 데미지를 입었다!",
+		start: "  {TEAM} 주변이 불바다에 둘러싸였다!",
+		end: "  {TEAM} 주변의 불바다가 사라졌다!",
+		damage: "  {POKEMON:topic} 불바다의 데미지를 입었다!",
 	},
 	firepunch: {
 		name: "불꽃펀치",
@@ -2297,7 +2297,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 불꽃의 소용돌이에 갇혔다!",
+		start: "  {POKEMON:topic} 불꽃의 소용돌이에 갇혔다!",
 		move: "#wrap",
 	},
 	firstimpression: {
@@ -2352,7 +2352,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON]에게도 불티가 튀었다!",
+		damage: "  {POKEMON}에게도 불티가 튀었다!",
 	},
 	flamecharge: {
 		name: "니트로차지",
@@ -2415,7 +2415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON:topic] [ITEM:object] 내던졌다!",
+		removeItem: "  {POKEMON:topic} {ITEM:object} 내던졌다!",
 	},
 	flipturn: {
 		name: "퀵턴",
@@ -2469,7 +2469,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON:topic] 하늘 높이 날아올랐다!",
+		prepare: "{POKEMON:topic} 하늘 높이 날아올랐다!",
 	},
 	flyingpress: {
 		name: "플라잉프레스",
@@ -2497,9 +2497,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 의욕이 넘치고 있다!",
-		startFromItem: "  [POKEMON:topic] [ITEM:object] 써서 의욕이 넘치기 시작했다!",
-		startFromZEffect: "  [POKEMON:topic] Z파워로 급소에 맞기 쉬워졌다!",
+		start: "  {POKEMON:topic} 의욕이 넘치고 있다!",
+		startFromItem: "  {POKEMON:topic} {ITEM:object} 써서 의욕이 넘치기 시작했다!",
+		startFromZEffect: "  {POKEMON:topic} Z파워로 급소에 맞기 쉬워졌다!",
 	},
 	focuspunch: {
 		name: "힘껏펀치",
@@ -2510,8 +2510,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 집중력을 높이고 있다!",
-		cant: "[POKEMON:topic] 집중력이 떨어져서 기술을 쓸 수 없다!",
+		start: "  {POKEMON:topic} 집중력을 높이고 있다!",
+		cant: "{POKEMON:topic} 집중력이 떨어져서 기술을 쓸 수 없다!",
 	},
 	followme: {
 		name: "날따름",
@@ -2528,8 +2528,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 주목의 대상이 되었다!",
-		startFromZEffect: "  [POKEMON:topic] 주목의 대상이 되었다!",
+		start: "  {POKEMON:topic} 주목의 대상이 되었다!",
+		startFromZEffect: "  {POKEMON:topic} 주목의 대상이 되었다!",
 	},
 	forcepalm: {
 		name: "발경",
@@ -2552,7 +2552,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]의 정체를 꿰뚫어 보았다!",
+		start: "  {POKEMON}의 정체를 꿰뚫어 보았다!",
 	},
 	forestscurse: {
 		name: "숲의저주",
@@ -2582,7 +2582,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON:topic] 차가운 빛에 둘러싸였다!",
+		prepare: "  {POKEMON:topic} 차가운 빛에 둘러싸였다!",
 	},
 	freezingglare: {
 		name: "얼어붙는시선",
@@ -2680,8 +2680,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 미래의 공격을 예지했다!",
-		activate: "  [TARGET:topic] 미래예지 공격을 받았다!",
+		start: "  {POKEMON:topic} 미래의 공격을 예지했다!",
+		activate: "  {TARGET:topic} 미래예지 공격을 받았다!",
 	},
 	gastroacid: {
 		name: "위액",
@@ -2698,7 +2698,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]의 특성이 효과를 발휘하지 못하게 되었다!",
+		start: "  {POKEMON}의 특성이 효과를 발휘하지 못하게 되었다!",
 	},
 	geargrind: {
 		name: "기어소서",
@@ -2724,7 +2724,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON:topic] 파워를 모으고 있다!",
+		prepare: "{POKEMON:topic} 파워를 모으고 있다!",
 	},
 	gigadrain: {
 		name: "기가드레인",
@@ -2797,8 +2797,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY:topic] 거친 물살에 휩싸였다!",
-		damage: "  [POKEMON:topic] 거다이포격의 물살에 삼켜져서 괴로워하고 있다!",
+		start: "  {PARTY:topic} 거친 물살에 휩싸였다!",
+		damage: "  {POKEMON:topic} 거다이포격의 물살에 삼켜져서 괴로워하고 있다!",
 	},
 	gmaxcentiferno: {
 		name: "거다이백화",
@@ -2822,7 +2822,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET]의 PP가 줄었다!",
+		activate: "  {TARGET}의 PP가 줄었다!",
 	},
 	gmaxdrumsolo: {
 		name: "거다이난타",
@@ -2909,9 +2909,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY] 주변에 뾰족한 강철이 떠다니기 시작했다!",
-		end: "  [PARTY] 주변의 강철이 사라졌다!",
-		damage: "  [POKEMON]에게 뾰족한 강철이 박혔다!",
+		start: "  {PARTY} 주변에 뾰족한 강철이 떠다니기 시작했다!",
+		end: "  {PARTY} 주변의 강철이 사라졌다!",
+		damage: "  {POKEMON}에게 뾰족한 강철이 박혔다!",
 	},
 	gmaxstonesurge: {
 		name: "거다이암진",
@@ -2943,16 +2943,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY:topic] 채찍의 맹타에 휩싸였다!",
-		damage: "  [POKEMON:topic] 거다이편달이 퍼붓는 맹타에 아파하고 있다!",
+		start: "  {PARTY:topic} 채찍의 맹타에 휩싸였다!",
+		damage: "  {POKEMON:topic} 거다이편달이 퍼붓는 맹타에 아파하고 있다!",
 	},
 	gmaxvolcalith: {
 		name: "거다이분석",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY:topic] 바위에 둘러싸였다!",
-		damage: "  [POKEMON:topic] 거다이분석으로 날아든 바위에 맞아서 아파하고 있다!",
+		start: "  {PARTY:topic} 바위에 둘러싸였다!",
+		damage: "  {POKEMON:topic} 거다이분석으로 날아든 바위에 맞아서 아파하고 있다!",
 	},
 	gmaxvoltcrash: {
 		name: "거다이만뢰",
@@ -2964,8 +2964,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [PARTY:topic] 불꽃에 휩싸였다!",
-		damage: "  [POKEMON:topic] 거다이옥염의 불꽃에 휩싸여서 뜨거워하고 있다!",
+		start: "  {PARTY:topic} 불꽃에 휩싸였다!",
+		damage: "  {POKEMON:topic} 거다이옥염의 불꽃에 휩싸여서 뜨거워하고 있다!",
 	},
 	gmaxwindrage: {
 		name: "거다이풍격",
@@ -2985,8 +2985,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "#waterpledge",
-		start: "  [TEAM] 주변에 습지초원이 펼쳐졌다!",
-		end: "  [TEAM] 주변의 습지초원이 사라졌다!",
+		start: "  {TEAM} 주변에 습지초원이 펼쳐졌다!",
+		end: "  {TEAM} 주변의 습지초원이 사라졌다!",
 	},
 	grasswhistle: {
 		name: "풀피리",
@@ -3066,8 +3066,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]의 [MOVE:topic] 원념으로 PP가 0이 되었다!",
-		start: "[POKEMON:topic] 상대에게 원념을 걸려 하고 있다!",
+		activate: "  {POKEMON}의 {MOVE:topic} 원념으로 PP가 0이 되었다!",
+		start: "{POKEMON:topic} 상대에게 원념을 걸려 하고 있다!",
 	},
 	guardianofalola: {
 		name: "알로라의수호자",
@@ -3081,7 +3081,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 서로의 가드를 셰어했다!",
+		activate: "  {POKEMON:topic} 서로의 가드를 셰어했다!",
 	},
 	guardswap: {
 		name: "가드스왑",
@@ -3235,8 +3235,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		gen8: {
-			end: "  [POKEMON]의 회복봉인 효과가 떨어졌다!",
-			cant: "[POKEMON:topic] 회복봉인 때문에 [MOVE:object] 쓸 수 없다!",
+			end: "  {POKEMON}의 회복봉인 효과가 떨어졌다!",
+			cant: "{POKEMON:topic} 회복봉인 때문에 {MOVE:object} 쓸 수 없다!",
 		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3248,10 +3248,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON] 회복 동작을 봉인당했다!",
-		end: "  [POKEMON]의 회복봉인 효과가 사라졌다!",
-		cant: "[POKEMON:topic] 회복봉인 때문에 [MOVE:object] 쓸 수 없다!",
-		fail: "  그러나 [POKEMON]에게는 실패하고 말았다!",
+		start: "  {POKEMON} 회복 동작을 봉인당했다!",
+		end: "  {POKEMON}의 회복봉인 효과가 사라졌다!",
+		cant: "{POKEMON:topic} 회복봉인 때문에 {MOVE:object} 쓸 수 없다!",
+		fail: "  그러나 {POKEMON}에게는 실패하고 말았다!",
 	},
 	healingwish: {
 		name: "치유소원",
@@ -3266,7 +3266,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  치유소원이 [POKEMON]에게 전해졌다!",
+		heal: "  치유소원이 {POKEMON}에게 전해졌다!",
 	},
 	healorder: {
 		name: "회복지령",
@@ -3328,7 +3328,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [SOURCE:topic] [POKEMON]에게 도우미가 되어 주려 한다!",
+		start: "  {SOURCE:topic} {POKEMON}에게 도우미가 되어 주려 한다!",
 	},
 	hex: {
 		name: "병상첨병",
@@ -3581,7 +3581,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "  [POKEMON:topic] 차디찬 공기에 둘러싸였다!",
+		prepare: "  {POKEMON:topic} 차디찬 공기에 둘러싸였다!",
 	},
 	icefang: {
 		name: "얼음엄니",
@@ -3657,8 +3657,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 상대의 기술을 봉인했다!",
-		cant: "[POKEMON:topic] 봉인 때문에 [MOVE:object] 쓸 수 없다!",
+		start: "  {POKEMON:topic} 상대의 기술을 봉인했다!",
+		cant: "{POKEMON:topic} 봉인 때문에 {MOVE:object} 쓸 수 없다!",
 	},
 	incinerate: {
 		name: "불태우기",
@@ -3670,7 +3670,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [POKEMON]의 [ITEM:topic] 불타 없어졌다!",
+		removeItem: "  {POKEMON}의 {ITEM:topic} 불타 없어졌다!",
 	},
 	infernalparade: {
 		name: "백귀야행",
@@ -3699,7 +3699,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE:topic] [POKEMON]에게 엉겨 붙었다!",
+		start: "  {SOURCE:topic} {POKEMON}에게 엉겨 붙었다!",
 	},
 	ingrain: {
 		name: "뿌리박기",
@@ -3720,9 +3720,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 뿌리를 뻗었다!",
-		block: "  [POKEMON:topic] 뿌리를 뻗어서 움직이지 않는다!",
-		heal: "  [POKEMON:topic] 뿌리로부터 양분을 흡수했다!",
+		start: "  {POKEMON:topic} 뿌리를 뻗었다!",
+		block: "  {POKEMON:topic} 뿌리를 뻗어서 움직이지 않는다!",
+		heal: "  {POKEMON:topic} 뿌리로부터 양분을 흡수했다!",
 	},
 	instruct: {
 		name: "지휘",
@@ -3736,7 +3736,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]의 지시로 [TARGET:topic] 기술을 사용했다!",
+		activate: "  {POKEMON}의 지시로 {TARGET:topic} 기술을 사용했다!",
 	},
 	iondeluge: {
 		name: "플라스마샤워",
@@ -3877,7 +3877,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		removeItem: "  [SOURCE:topic] [POKEMON]의 [ITEM:object] 탁 쳐서 떨구었다!",
+		removeItem: "  {SOURCE:topic} {POKEMON}의 {ITEM:object} 탁 쳐서 떨구었다!",
 	},
 	kowtowcleave: {
 		name: "도각참",
@@ -3895,7 +3895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 정신을 가다듬었다!",
+		start: "  {POKEMON:topic} 정신을 가다듬었다!",
 	},
 	lashout: {
 		name: "분풀이",
@@ -3970,9 +3970,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]에게 씨앗을 심었다!",
-		end: "  [POKEMON:topic] 씨뿌리기로부터 풀려났다!",
-		damage: "  씨뿌리기가 [POKEMON]의 체력을 빼앗는다!",
+		start: "  {POKEMON}에게 씨앗을 심었다!",
+		end: "  {POKEMON:topic} 씨뿌리기로부터 풀려났다!",
+		damage: "  씨뿌리기가 {POKEMON}의 체력을 빼앗는다!",
 	},
 	leer: {
 		name: "째려보기",
@@ -4029,8 +4029,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			start: null, // NEEDS TRANSLATION: predates Chinese support
 		},
 
-		start: "  [TEAM:topic] 빛의장막으로 특수공격에 강해졌다!",
-		end: "  [TEAM]의 빛의장막이 없어졌다!",
+		start: "  {TEAM:topic} 빛의장막으로 특수공격에 강해졌다!",
+		end: "  {TEAM}의 빛의장막이 없어졌다!",
 	},
 	lightthatburnsthesky: {
 		name: "하늘을태우는멸망의빛",
@@ -4057,7 +4057,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE:topic] 목표를 [POKEMON:directional]로 결정했다!",
+		start: "  {SOURCE:topic} 목표를 {POKEMON:directional}로 결정했다!",
 	},
 	lovelykiss: {
 		name: "악마의키스",
@@ -4085,8 +4085,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  주술의 힘으로 [TEAM]의 급소가 숨겨졌다!",
-		end: "  [TEAM]의 주술이 풀렸다!",
+		start: "  주술의 힘으로 {TEAM}의 급소가 숨겨졌다!",
+		end: "  {TEAM}의 주술이 풀렸다!",
 	},
 	luminacrash: {
 		name: "루미나콜리전",
@@ -4111,7 +4111,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [POKEMON:topic] 신비한 달빛에 둘러싸였다!",
+		heal: "  {POKEMON:topic} 신비한 달빛에 둘러싸였다!",
 	},
 	lunge: {
 		name: "덤벼들기",
@@ -4155,8 +4155,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 매직코트에 둘러싸였다!",
-		move: "[POKEMON:topic] [MOVE:object] 되받아쳤다!",
+		start: "  {POKEMON:topic} 매직코트에 둘러싸였다!",
+		move: "{POKEMON:topic} {MOVE:object} 되받아쳤다!",
 	},
 	magicpowder: {
 		name: "마법가루",
@@ -4192,7 +4192,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 마그마의 소용돌이에 갇혔다!",
+		start: "  {POKEMON:topic} 마그마의 소용돌이에 갇혔다!",
 	},
 	magnetbomb: {
 		name: "마그넷봄",
@@ -4216,8 +4216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 전자력으로 떠올랐다!",
-		end: "  [POKEMON]의 전자력이 없어졌다!",
+		start: "  {POKEMON:topic} 전자력으로 떠올랐다!",
+		end: "  {POKEMON}의 전자력이 없어졌다!",
 	},
 	magnitude: {
 		name: "매그니튜드",
@@ -4228,7 +4228,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  매그니튜드 [NUMBER]!!",
+		activate: "  매그니튜드 {NUMBER}!!",
 	},
 	makeitrain: {
 		name: "골드러시",
@@ -4258,8 +4258,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 마룻바닥세워막기를 노리고 있다!",
-		block: "  [MOVE:topic] 마룻바닥세워막기로 막혔다!",
+		start: "  {POKEMON:topic} 마룻바닥세워막기를 노리고 있다!",
+		block: "  {MOVE:topic} 마룻바닥세워막기로 막혔다!",
 	},
 	matchagotcha: {
 		name: "휘적휘적포",
@@ -4302,7 +4302,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] 공격으로부터 몸을 지켰다!",
+		activate: "  {POKEMON} 공격으로부터 몸을 지켰다!",
 	},
 	maxhailstorm: {
 		name: "다이아이스",
@@ -4463,7 +4463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [POKEMON:topic] Z파워로 체력을 회복했다!",
+		heal: "  {POKEMON:topic} Z파워로 체력을 회복했다!",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "문라이트블래스터",
@@ -4507,7 +4507,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		prepare: "[POKEMON]에게서 우주의 힘이 넘쳐난다!",
+		prepare: "{POKEMON}에게서 우주의 힘이 넘쳐난다!",
 	},
 	meteormash: {
 		name: "코멧펀치",
@@ -4545,7 +4545,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "손가락을 흔들었더니 [MOVE:subject] 나왔다!",
+		move: "손가락을 흔들었더니 {MOVE:subject} 나왔다!",
 	},
 	mightycleave: {
 		name: "파워풀에지",
@@ -4588,7 +4588,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] [MOVE:object] 배웠다!",
+		start: "  {POKEMON:topic} {MOVE:object} 배웠다!",
 	},
 	mindblown: {
 		name: "깜짝헤드",
@@ -4702,18 +4702,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen2: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  [POKEMON:topic] 흰안개에 둘러싸였다!",
-			block: "  [POKEMON:topic] 흰안개에 지켜지고 있다",
+			start: "  {POKEMON:topic} 흰안개에 둘러싸였다!",
+			block: "  {POKEMON:topic} 흰안개에 지켜지고 있다",
 		},
 		gen1: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			start: "  [POKEMON:topic] 흰안개에 둘러싸였다!",
+			start: "  {POKEMON:topic} 흰안개에 둘러싸였다!",
 			block: "  그러나 실패하고 말았다!!",
 		},
 
-		start: "  [TEAM:topic] 흰안개에 둘러싸였다!",
-		end: "  [TEAM:object] 감싸던 흰안개가 없어졌다!",
-		block: "  [POKEMON:object] 흰안개가 지켜 주고 있다!",
+		start: "  {TEAM:topic} 흰안개에 둘러싸였다!",
+		end: "  {TEAM:object} 감싸던 흰안개가 없어졌다!",
+		block: "  {POKEMON:object} 흰안개가 지켜 주고 있다!",
 	},
 	mistball: {
 		name: "미스트볼",
@@ -4895,7 +4895,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "자연의힘은 [MOVE:subject] 되었다!",
+		move: "자연의힘은 {MOVE:subject} 되었다!",
 	},
 	naturesmadness: {
 		name: "자연의분노",
@@ -4928,8 +4928,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 악몽을 꾸기 시작했다!",
-		damage: "  [POKEMON:topic] 악몽에 시달리고 있다!",
+		start: "  {POKEMON:topic} 악몽을 꾸기 시작했다!",
+		damage: "  {POKEMON:topic} 악몽에 시달리고 있다!",
 	},
 	nightshade: {
 		name: "나이트헤드",
@@ -4959,7 +4959,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 배수의 진을 쳐서 도망칠 수 없게 되었다!",
+		start: "  {POKEMON:topic} 배수의 진을 쳐서 도망칠 수 없게 되었다!",
 	},
 	noxioustorque: {
 		name: "포이즌액셀",
@@ -5003,7 +5003,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 문어굳히기 때문에 도망칠 수 없게 되었다!",
+		start: "  {POKEMON:topic} 문어굳히기 때문에 도망칠 수 없게 되었다!",
 	},
 	odorsleuth: {
 		name: "냄새구별",
@@ -5126,7 +5126,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		start: "  멸망의노래를 들은 포켓몬은 3턴 후에 쓰러져 버린다!",
-		activate: "  [POKEMON]의 멸망의 카운트가 [NUMBER:subject] 되었다!",
+		activate: "  {POKEMON}의 멸망의 카운트가 {NUMBER:subject} 되었다!",
 	},
 	petalblizzard: {
 		name: "꽃보라",
@@ -5289,7 +5289,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "폴터가이스트",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [ITEM:subject] [POKEMON]에게 덤벼들었다!",
+		activate: "  {ITEM:subject} {POKEMON}에게 덤벼들었다!",
 	},
 	populationbomb: {
 		name: "찍찍베기",
@@ -5314,8 +5314,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]에게 분진을 뒤집어씌웠다!",
-		activate: "  [MOVE]에 반응하여 분진이 폭발했다!",
+		start: "  {POKEMON}에게 분진을 뒤집어씌웠다!",
+		activate: "  {MOVE}에 반응하여 분진이 폭발했다!",
 	},
 	powdersnow: {
 		name: "눈싸라기",
@@ -5336,7 +5336,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 서로의 파워를 셰어했다!",
+		activate: "  {POKEMON:topic} 서로의 파워를 셰어했다!",
 	},
 	powerswap: {
 		name: "파워스왑",
@@ -5349,7 +5349,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]의 공격력과 방어력이 바뀌었다!",
+		start: "  {POKEMON}의 공격력과 방어력이 바뀌었다!",
 		end: "#.start",
 	},
 	powertrick: {
@@ -5358,7 +5358,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 공격과 방어를 바꿨다!",
+		start: "  {POKEMON:topic} 공격과 방어를 바꿨다!",
 		end: "#.start",
 	},
 	powertrip: {
@@ -5425,8 +5425,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON] 방어 태세에 들어갔다!",
-		block: "  [POKEMON] 공격으로부터 몸을 지켰다!",
+		start: "  {POKEMON} 방어 태세에 들어갔다!",
+		block: "  {POKEMON} 공격으로부터 몸을 지켰다!",
 	},
 	psybeam: {
 		name: "환상빔",
@@ -5579,7 +5579,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [TARGET]의 순서를 미뤘다!",
+		activate: "  {TARGET}의 순서를 미뤘다!",
 	},
 	quickattack: {
 		name: "전광석화",
@@ -5605,8 +5605,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM:object] 패스트가드가 지켜 줬다!",
-		block: "  [POKEMON:object] 패스트가드가 지켜 줬다!",
+		start: "  {TEAM:object} 패스트가드가 지켜 줬다!",
+		block: "  {POKEMON:object} 패스트가드가 지켜 줬다!",
 	},
 	quiverdance: {
 		name: "나비춤",
@@ -5728,7 +5728,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  [POKEMON]의 주위에서 공기가 소용돌이친다!",
+		prepare: "  {POKEMON}의 주위에서 공기가 소용돌이친다!",
 	},
 	recover: {
 		name: "HP회복",
@@ -5754,7 +5754,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		addItem: "  [POKEMON:topic] [ITEM:object] 주워 왔다!",
+		addItem: "  {POKEMON:topic} {ITEM:object} 주워 왔다!",
 	},
 	reflect: {
 		name: "리플렉터",
@@ -5780,8 +5780,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			start: null, // NEEDS TRANSLATION: predates Chinese support
 		},
 
-		start: "  [TEAM:topic] 리플렉터로 물리공격에 강해졌다!",
-		end: "  [TEAM]의 리플렉터가 없어졌다!",
+		start: "  {TEAM:topic} 리플렉터로 물리공격에 강해졌다!",
+		end: "  {TEAM}의 리플렉터가 없어졌다!",
 	},
 	reflecttype: {
 		name: "미러타입",
@@ -5795,7 +5795,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		typeChange: "  [POKEMON:topic] [SOURCE:conjunctive] 같은 타입이 되었다!",
+		typeChange: "  {POKEMON:topic} {SOURCE:conjunctive} 같은 타입이 되었다!",
 	},
 	refresh: {
 		name: "리프레시",
@@ -5872,7 +5872,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		heal: "  [POKEMON:topic] 정신을 차려 싸울 수 있게 되었다!",
+		heal: "  {POKEMON:topic} 정신을 차려 싸울 수 있게 되었다!",
 	},
 	risingvoltage: {
 		name: "라이징볼트",
@@ -5988,7 +5988,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  [POKEMON:topic] [SOURCE]의 [ABILITY:object] 복사했다!",
+		changeAbility: "  {POKEMON:topic} {SOURCE}의 {ABILITY:object} 복사했다!",
 	},
 	rollingkick: {
 		name: "돌려차기",
@@ -6063,9 +6063,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM:topic] 신비의 베일에 둘러싸였다!",
-		end: "  [TEAM:object] 감싸던 신비의 베일이 없어졌다!",
-		block: "  [POKEMON:object] 신비의 베일이 지켜 주고 있다!",
+		start: "  {TEAM:topic} 신비의 베일에 둘러싸였다!",
+		end: "  {TEAM:object} 감싸던 신비의 베일이 없어졌다!",
+		block: "  {POKEMON:object} 신비의 베일이 지켜 주고 있다!",
 	},
 	saltcure: {
 		name: "소금절이",
@@ -6076,8 +6076,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 소금에 절여졌다!",
-		damage: "  [POKEMON:topic] 소금절이의 데미지를 입고 있다.",
+		start: "  {POKEMON:topic} 소금에 절여졌다!",
+		damage: "  {POKEMON:topic} 소금절이의 데미지를 입고 있다.",
 	},
 	sandattack: {
 		name: "모래뿌리기",
@@ -6128,7 +6128,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 모래지옥에 붙잡혔다!",
+		start: "  {POKEMON:topic} 모래지옥에 붙잡혔다!",
 	},
 	sappyseed: {
 		name: "쑥쑥봄버",
@@ -6282,8 +6282,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [TARGET]의 방어를 깨뜨렸다!",
-		prepare: "[POKEMON]의 모습이 일순간에 사라졌다!",
+		activate: "  {TARGET}의 방어를 깨뜨렸다!",
+		prepare: "{POKEMON}의 모습이 일순간에 사라졌다!",
 	},
 	shadowpunch: {
 		name: "섀도펀치",
@@ -6315,7 +6315,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 꼬리를 잘라 대타로 삼았다!",
+		start: "  {POKEMON:topic} 꼬리를 잘라 대타로 삼았다!",
 		alreadyStarted: "#substitute",
 		fail: "#substitute",
 	},
@@ -6347,9 +6347,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 트랩셸을 설치했다!",
-		prepare: "  [POKEMON:topic] 트랩셸을 설치했다!",
-		cant: "[POKEMON]의 트랩셸은 불발로 끝났다!",
+		start: "  {POKEMON:topic} 트랩셸을 설치했다!",
+		prepare: "  {POKEMON:topic} 트랩셸을 설치했다!",
+		cant: "{POKEMON}의 트랩셸은 불발로 끝났다!",
 	},
 	shelter: {
 		name: "농성",
@@ -6437,7 +6437,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON:topic] [MOVE:object] 스케치했다!",
+		activate: "  {POKEMON:topic} {MOVE:object} 스케치했다!",
 	},
 	skillswap: {
 		name: "스킬스왑",
@@ -6463,7 +6463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON:topic] 서로의 특성을 교체했다!",
+		activate: "  {POKEMON:topic} 서로의 특성을 교체했다!",
 	},
 	skittersmack: {
 		name: "엄습하는일격",
@@ -6484,7 +6484,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON:topic] 목을 움츠렸다!",
+		prepare: "{POKEMON:topic} 목을 움츠렸다!",
 	},
 	skyattack: {
 		name: "불새",
@@ -6499,7 +6499,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON:object] 강렬한 빛이 감쌌다!",
+		prepare: "{POKEMON:object} 강렬한 빛이 감쌌다!",
 	},
 	skydrop: {
 		name: "프리폴",
@@ -6510,10 +6510,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "[POKEMON:topic] [TARGET:object] 상공으로 데려갔다!",
-		end: "  [POKEMON:topic] 프리폴로부터 풀려났다!",
-		failSelect: "[POKEMON:topic] 프리폴 때문에 자유롭지 못하다!",
-		failTooHeavy: "  [POKEMON:topic] 너무 무거워서 들 수 없다!",
+		prepare: "{POKEMON:topic} {TARGET:object} 상공으로 데려갔다!",
+		end: "  {POKEMON:topic} 프리폴로부터 풀려났다!",
+		failSelect: "{POKEMON:topic} 프리폴 때문에 자유롭지 못하다!",
+		failTooHeavy: "  {POKEMON:topic} 너무 무거워서 들 수 없다!",
 	},
 	skyuppercut: {
 		name: "스카이어퍼",
@@ -6603,7 +6603,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 떨어뜨리기를 당해서 땅에 떨어졌다!",
+		start: "  {POKEMON:topic} 떨어뜨리기를 당해서 땅에 떨어졌다!",
 	},
 	smartstrike: {
 		name: "스마트혼",
@@ -6643,7 +6643,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 집게덫에 붙잡혔다!",
+		start: "  {POKEMON:topic} 집게덫에 붙잡혔다!",
 	},
 	snarl: {
 		name: "바크아웃",
@@ -6660,8 +6660,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 상대의 움직임을 살피고 있다!",
-		activate: "  [POKEMON:topic] [TARGET]의 기술을 가로챘다!",
+		start: "  {POKEMON:topic} 상대의 움직임을 살피고 있다!",
+		activate: "  {POKEMON:topic} {TARGET}의 기술을 가로챘다!",
 	},
 	snipeshot: {
 		name: "노려맞히기",
@@ -6735,7 +6735,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		prepare: "  [POKEMON:topic] 빛을 흡수했다!",
+		prepare: "  {POKEMON:topic} 빛을 흡수했다!",
 	},
 	solarblade: {
 		name: "솔라블레이드",
@@ -6794,7 +6794,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		clearBoost: "  [SOURCE:topic] 올라간 능력을 빼앗았다!",
+		clearBoost: "  {SOURCE:topic} 올라간 능력을 빼앗았다!",
 	},
 	speedswap: {
 		name: "스피드스왑",
@@ -6802,7 +6802,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 서로의 스피드를 교체했다!",
+		activate: "  {POKEMON:topic} 서로의 스피드를 교체했다!",
 	},
 	spicyextract: {
 		name: "하바네로엑기스",
@@ -6861,9 +6861,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]의 발밑에 압정이 뿌려졌다!",
-		end: "  [TEAM] 발밑의 압정이 사라졌다!",
-		damage: "  [POKEMON:topic] 압정뿌리기의 데미지를 입었다!",
+		start: "  {TEAM}의 발밑에 압정이 뿌려졌다!",
+		end: "  {TEAM} 발밑의 압정이 사라졌다!",
+		damage: "  {POKEMON:topic} 압정뿌리기의 데미지를 입었다!",
 	},
 	spikyshield: {
 		name: "니들가드",
@@ -6880,7 +6880,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON:topic] 상처를 입었다!",
+		damage: "  {POKEMON:topic} 상처를 입었다!",
 	},
 	spinout: {
 		name: "휠스핀",
@@ -6915,7 +6915,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [TARGET]의 [MOVE:object] [NUMBER] 깎았다!",
+		activate: "  {TARGET}의 {MOVE:object} {NUMBER} 깎았다!",
 	},
 	spitup: {
 		name: "토해내기",
@@ -6977,9 +6977,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM] 주변에 뾰족한 바위가 떠다니기 시작했다!",
-		end: "  [TEAM] 주변의 스텔스록이 사라졌다!",
-		damage: "  [POKEMON]에게 뾰족한 바위가 박혔다!",
+		start: "  {TEAM} 주변에 뾰족한 바위가 떠다니기 시작했다!",
+		end: "  {TEAM} 주변의 스텔스록이 사라졌다!",
+		damage: "  {POKEMON}에게 뾰족한 바위가 박혔다!",
 	},
 	steameruption: {
 		name: "스팀버스트",
@@ -7025,9 +7025,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM] 발밑에 끈적끈적네트가 펼쳐졌다!",
-		end: "  [TEAM] 발밑의 끈적끈적네트가 사라졌다!",
-		activate: "  [POKEMON:topic] 끈적끈적네트에 걸렸다!",
+		start: "  {TEAM} 발밑에 끈적끈적네트가 펼쳐졌다!",
+		end: "  {TEAM} 발밑의 끈적끈적네트가 사라졌다!",
+		activate: "  {POKEMON:topic} 끈적끈적네트에 걸렸다!",
 	},
 	stockpile: {
 		name: "비축하기",
@@ -7039,8 +7039,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] [NUMBER]개 비축했다!",
-		end: "  [POKEMON:subject] 비축해 두었던 효과가 사라졌다!",
+		start: "  {POKEMON:topic} {NUMBER}개 비축했다!",
+		end: "  {POKEMON:subject} 비축해 두었던 효과가 사라졌다!",
 	},
 	stokedsparksurfer: {
 		name: "라이트닝서프라이드",
@@ -7209,11 +7209,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]의 대타가 나타났다!",
-		alreadyStarted: "  그러나 [POKEMON]의 대타는 이미 나와 있다.",
-		end: "  [POKEMON]의 대타는 사라져 버렸다...",
+		start: "  {POKEMON}의 대타가 나타났다!",
+		alreadyStarted: "  그러나 {POKEMON}의 대타는 이미 나와 있다.",
+		end: "  {POKEMON}의 대타는 사라져 버렸다...",
 		fail: "  그러나 대타를 내보내기에는 체력이 부족했다!",
-		activate: "  [POKEMON:object] 대신하여 대타가 공격을 받았다!",
+		activate: "  {POKEMON:object} 대신하여 대타가 공격을 받았다!",
 	},
 	subzeroslammer: {
 		name: "레이징지오프리즈",
@@ -7415,7 +7415,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 물엿범벅이 되었다!",
+		start: "  {POKEMON:topic} 물엿범벅이 되었다!",
 	},
 	tackle: {
 		name: "몸통박치기",
@@ -7464,8 +7464,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]에게 순풍이 불기 시작했다!",
-		end: "  [TEAM]의 순풍이 멈췄다!",
+		start: "  {TEAM}에게 순풍이 불기 시작했다!",
+		end: "  {TEAM}의 순풍이 멈췄다!",
 	},
 	takedown: {
 		name: "돌진",
@@ -7493,7 +7493,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 불꽃에 약해졌다!",
+		start: "  {POKEMON:topic} 불꽃에 약해졌다!",
 	},
 	taunt: {
 		name: "도발",
@@ -7518,9 +7518,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 도발에 넘어가 버렸다!",
-		end: "  [POKEMON:topic] 도발의 효과가 풀렸다!",
-		cant: "[POKEMON:topic] 도발당한 상태라서 [MOVE:object] 쓸 수 없다!",
+		start: "  {POKEMON:topic} 도발에 넘어가 버렸다!",
+		end: "  {POKEMON:topic} 도발의 효과가 풀렸다!",
+		cant: "{POKEMON:topic} 도발당한 상태라서 {MOVE:object} 쓸 수 없다!",
 	},
 	tearfullook: {
 		name: "눈물그렁그렁",
@@ -7565,8 +7565,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:object] 허공에 띄웠다!",
-		end: "  [POKEMON:topic] 텔레키네시스로부터 풀려났다!",
+		start: "  {POKEMON:object} 허공에 띄웠다!",
+		end: "  {POKEMON:topic} 텔레키네시스로부터 풀려났다!",
 	},
 	teleport: {
 		name: "순간이동",
@@ -7675,7 +7675,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		cant: "[POKEMON:topic] 지옥찌르기 효과로 기술을 쓸 수 없다!",
+		cant: "{POKEMON:topic} 지옥찌르기 효과로 기술을 쓸 수 없다!",
 	},
 	thunder: {
 		name: "번개",
@@ -7714,7 +7714,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [SOURCE:topic] [POKEMON:object] 가두었다!",
+		start: "  {SOURCE:topic} {POKEMON:object} 가두었다!",
 	},
 	thunderclap: {
 		name: "질풍신뢰",
@@ -7781,8 +7781,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 트집을 잡혔다!",
-		end: "  [POKEMON]의 트집 효과가 사라졌다!",
+		start: "  {POKEMON:topic} 트집을 잡혔다!",
+		end: "  {POKEMON}의 트집 효과가 사라졌다!",
 	},
 	toxic: {
 		name: "맹독",
@@ -7809,8 +7809,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM]의 발밑에 독압정이 뿌려졌다!",
-		end: "  [TEAM] 발밑의 독압정이 사라졌다!",
+		start: "  {TEAM}의 발밑에 독압정이 뿌려졌다!",
+		end: "  {TEAM} 발밑의 독압정이 사라졌다!",
 	},
 	toxicthread: {
 		name: "독실",
@@ -7843,7 +7843,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		transform: "[POKEMON:topic] [SPECIES:directional]로 변신했다!",
+		transform: "{POKEMON:topic} {SPECIES:directional}로 변신했다!",
 	},
 	triattack: {
 		name: "트라이어택",
@@ -7885,7 +7885,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON:topic] 서로의 도구를 교체했다!",
+		activate: "  {POKEMON:topic} 서로의 도구를 교체했다!",
 	},
 	trickortreat: {
 		name: "핼러윈",
@@ -8009,11 +8009,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 소란을 피우기 시작했다!",
-		end: "  [POKEMON:topic] 얌전해졌다!",
-		upkeep: "  [POKEMON:topic] 소란을 피우고 있다!",
-		block: "  그러나 [POKEMON:topic] 소란스러워서 잠들 수 없다!",
-		blockSelf: "  그러나 [POKEMON:topic] 소란을 피우고 있어서 잠들지 않는다!",
+		start: "  {POKEMON:topic} 소란을 피우기 시작했다!",
+		end: "  {POKEMON:topic} 얌전해졌다!",
+		upkeep: "  {POKEMON:topic} 소란을 피우고 있다!",
+		block: "  그러나 {POKEMON:topic} 소란스러워서 잠들 수 없다!",
+		blockSelf: "  그러나 {POKEMON:topic} 소란을 피우고 있어서 잠들지 않는다!",
 	},
 	uturn: {
 		name: "유턴",
@@ -8027,7 +8027,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		switchOut: "[POKEMON:topic] [TRAINER]의 곁으로 돌아간다!",
+		switchOut: "{POKEMON:topic} {TRAINER}의 곁으로 돌아간다!",
 	},
 	vacuumwave: {
 		name: "진공파",
@@ -8132,9 +8132,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] [TARGET:object] 기다리고 있다...",
-		start: "  [TEAM] 하늘에 무지개가 걸렸다!",
-		end: "  [TEAM] 하늘에서 무지개가 사라졌다!",
+		activate: "  {POKEMON:topic} {TARGET:object} 기다리고 있다...",
+		start: "  {TEAM} 하늘에 무지개가 걸렸다!",
+		end: "  {TEAM} 하늘에서 무지개가 사라졌다!",
 	},
 	waterpulse: {
 		name: "물의파동",
@@ -8195,7 +8195,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		move: "울트라대시어택은 날씨의 영향으로 [MOVE:subject] 되었다!",
+		move: "울트라대시어택은 날씨의 영향으로 {MOVE:subject} 되었다!",
 	},
 	whirlpool: {
 		name: "바다회오리",
@@ -8219,7 +8219,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] 소용돌이 속에 갇혔다!",
+		start: "  {POKEMON:topic} 소용돌이 속에 갇혔다!",
 	},
 	whirlwind: {
 		name: "날려버리기",
@@ -8267,8 +8267,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [TEAM:object] 와이드가드가 지켜 줬다!",
-		block: "  [POKEMON:object] 와이드가드가 지켜 줬다!",
+		start: "  {TEAM:object} 와이드가드가 지켜 줬다!",
+		block: "  {POKEMON:object} 와이드가드가 지켜 줬다!",
 	},
 	wildboltstorm: {
 		name: "번개폭풍",
@@ -8301,7 +8301,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		heal: "  [NICKNAME]의 희망사항이 이루어졌다!",
+		heal: "  {NICKNAME}의 희망사항이 이루어졌다!",
 	},
 	withdraw: {
 		name: "껍질에숨기",
@@ -8378,7 +8378,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON:topic] [SOURCE]에게 휘감겼다!",
+		start: "  {POKEMON:topic} {SOURCE}에게 휘감겼다!",
 		move: null, // NEEDS TRANSLATION: predates Chinese support
 	},
 	wringout: {
@@ -8400,7 +8400,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]의 졸음을 유도했다!",
+		start: "  {POKEMON}의 졸음을 유도했다!",
 	},
 	zapcannon: {
 		name: "전자포",

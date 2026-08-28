@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "とくせいガード",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]は とくせいガードの効果で 特性が 守られている！",
+		block: "  {POKEMON}は とくせいガードの効果で 特性が 守られている！",
 	},
 	abomasite: {
 		name: "ユキノオナイト",
@@ -55,8 +55,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ふうせん",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]は ふうせんで 浮いている！",
-		end: "  [POKEMON]の ふうせんが 割れた！",
+		start: "  {POKEMON}は ふうせんで 浮いている！",
+		end: "  {POKEMON}の ふうせんが 割れた！",
 	},
 	alakazite: {
 		name: "フーディナイト",
@@ -310,7 +310,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "クリアチャーム",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]は クリアチャームの効果で 能力が 下がらない！",
+		block: "  {POKEMON}は クリアチャームの効果で 能力が 下がらない！",
 	},
 	clefablite: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -357,7 +357,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "イバンのみ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は イバンのみで 行動が はやくなった！",
+		activate: "  {POKEMON}は イバンのみで 行動が はやくなった！",
 	},
 	damprock: {
 		name: "しめったいわ",
@@ -521,13 +521,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "だっしゅつボタン",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]は だっしゅつボタンで 戻っていく！",
+		end: "  {POKEMON}は だっしゅつボタンで 戻っていく！",
 	},
 	ejectpack: {
 		name: "だっしゅつパック",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]は だっしゅつパックで 戻っていく！",
+		end: "  {POKEMON}は だっしゅつパックで 戻っていく！",
 	},
 	electirizer: {
 		name: "エレキブースター",
@@ -1069,7 +1069,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ヒメリのみ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は ヒメリのみで [MOVE]のＰＰを 回復した！",
+		activate: "  {POKEMON}は ヒメリのみで {MOVE}のＰＰを 回復した！",
 	},
 	levelball: {
 		name: "レベルボール",
@@ -1083,7 +1083,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "いのちのたま",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON]は 命が 少し削られた！",
+		damage: "  {POKEMON}は 命が 少し削られた！",
 	},
 	lightball: {
 		name: "でんきだま",
@@ -1325,7 +1325,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ものまねハーブ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は ものまねハーブを 使って 相手の 能力変化を まねした！",
+		activate: "  {POKEMON}は ものまねハーブを 使って 相手の 能力変化を まねした！",
 	},
 	mistyseed: {
 		name: "ミストシード",
@@ -1512,7 +1512,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "パワフルハーブ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]は パワフルハーブで 力が みなぎった！",
+		end: "  {POKEMON}は パワフルハーブで 力が みなぎった！",
 	},
 	powerlens: {
 		name: "パワーレンズ",
@@ -1542,7 +1542,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ぼうごパット",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]は ぼうごパットで 防いだ！",
+		block: "  {POKEMON}は ぼうごパットで 防いだ！",
 	},
 	protector: {
 		name: "プロテクター",
@@ -1590,7 +1590,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]は せんせいのツメで 行動が はやくなった！",
+		activate: "  {POKEMON}は せんせいのツメで 行動が はやくなった！",
 	},
 	quickpowder: {
 		name: "スピードパウダー",
@@ -1640,7 +1640,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "レッドカード",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]は レッドカードを [TARGET]に たたきつけた！",
+		end: "  {POKEMON}は レッドカードを {TARGET}に たたきつけた！",
 	},
 	redorb: {
 		name: "べにいろのたま",
@@ -1685,7 +1685,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ゴツゴツメット",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON]は ゴツゴツメットで ダメージを受けた！",
+		damage: "  {POKEMON}は ゴツゴツメットで ダメージを受けた！",
 	},
 	roomservice: {
 		name: "ルームサービス",
@@ -1731,7 +1731,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ぼうじんゴーグル",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]は ぼうじんゴーグルで [MOVE]を 受けない！",
+		block: "  {POKEMON}は ぼうじんゴーグルで {MOVE}を 受けない！",
 	},
 	sailfossil: {
 		name: "ヒレのカセキ",
@@ -2452,8 +2452,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "ウルトラネクロＺ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "  [POKEMON]から まばゆい 光が あふれだす！",
-		activate: "[POKEMON]が ウルトラバーストで 新たな 姿を 現した！",
+		transform: "  {POKEMON}から まばゆい 光が あふれだす！",
+		activate: "{POKEMON}が ウルトラバーストで 新たな 姿を 現した！",
 	},
 	unremarkableteacup: {
 		name: "ボンサクのちゃわん",
@@ -2612,7 +2612,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]は ふしぎなきのみで [MOVE]のＰＰを 回復した！",
+		activate: "  {POKEMON}は ふしぎなきのみで {MOVE}のＰＰを 回復した！",
 	},
 	pinkbow: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI

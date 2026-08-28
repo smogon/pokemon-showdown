@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Fähigkeitenschild",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  Die Fähigkeit von [POKEMON] ist dank der Wirkung des Items Fähigkeitenschild geschützt!",
+		block: "  Die Fähigkeit von {POKEMON} ist dank der Wirkung des Items Fähigkeitenschild geschützt!",
 	},
 	abomasite: {
 		name: "Rexblisarnit",
@@ -59,8 +59,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Luftballon",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] gerät durch den Luftballon in die Schwebe!",
-		end: "  Der Luftballon von [POKEMON] ist geplatzt!",
+		start: "  {POKEMON} gerät durch den Luftballon in die Schwebe!",
+		end: "  Der Luftballon von {POKEMON} ist geplatzt!",
 	},
 	alakazite: {
 		name: "Simsalanit",
@@ -350,7 +350,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Neutralschmuck",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  Neutralschmuck verhindert, dass die Statuswerte von [POKEMON] gesenkt werden!",
+		block: "  Neutralschmuck verhindert, dass die Statuswerte von {POKEMON} gesenkt werden!",
 	},
 	clefablite: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -401,7 +401,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Eipfelbeere",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  Dank des Items Eipfelbeere kann [POKEMON] schneller handeln als sonst!",
+		activate: "  Dank des Items Eipfelbeere kann {POKEMON} schneller handeln als sonst!",
 	},
 	damprock: {
 		name: "Nassbrocken",
@@ -572,13 +572,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Fluchtknopf",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] kommt dank des Fluchtknopfes zurück!",
+		end: "  {POKEMON} kommt dank des Fluchtknopfes zurück!",
 	},
 	ejectpack: {
 		name: "Fluchttasche",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] wird dank Fluchttasche ausgewechselt!",
+		end: "  {POKEMON} wird dank Fluchttasche ausgewechselt!",
 	},
 	electirizer: {
 		name: "Stromisierer",
@@ -1157,7 +1157,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  Jonagobeere von [POKEMON] füllt AP von [MOVE] auf!",
+		activate: "  Jonagobeere von {POKEMON} füllt AP von {MOVE} auf!",
 	},
 	levelball: {
 		name: "Levelball",
@@ -1172,7 +1172,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "ms",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON] verliert einige KP!",
+		damage: "  {POKEMON} verliert einige KP!",
 	},
 	lightball: {
 		name: "Kugelblitz",
@@ -1443,7 +1443,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Kopierkraut",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] nutzt das Item Kopierkraut, um die gegnerischen Statuswertänderungen zu kopieren.",
+		activate: "  {POKEMON} nutzt das Item Kopierkraut, um die gegnerischen Statuswertänderungen zu kopieren.",
 	},
 	mistyseed: {
 		name: "Nebel-Samen",
@@ -1650,7 +1650,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Energiekraut",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  Dank des Items Energiekraut ist [POKEMON] sofort bereit!",
+		end: "  Dank des Items Energiekraut ist {POKEMON} sofort bereit!",
 	},
 	powerlens: {
 		name: "Machtlinse",
@@ -1680,7 +1680,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Schutzpolster",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON] wurde durch Schutzpolster geschützt!",
+		block: "  {POKEMON} wurde durch Schutzpolster geschützt!",
 	},
 	protector: {
 		name: "Schützer",
@@ -1730,7 +1730,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  Dank des Items Flinkklaue kann [POKEMON] schneller handeln als sonst!",
+		activate: "  Dank des Items Flinkklaue kann {POKEMON} schneller handeln als sonst!",
 	},
 	quickpowder: {
 		name: "Flottstaub",
@@ -1783,7 +1783,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Rote Karte",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON] zeigt [TARGET] die Rote Karte!",
+		end: "  {POKEMON} zeigt {TARGET} die Rote Karte!",
 	},
 	redorb: {
 		name: "Roter Edelstein",
@@ -1829,7 +1829,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Beulenhelm",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON] erleidet durch den Beulenhelm Schaden!",
+		damage: "  {POKEMON} erleidet durch den Beulenhelm Schaden!",
 	},
 	roomservice: {
 		name: "Bizarroservice",
@@ -1877,7 +1877,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Schutzbrille",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  Dank des Items Schutzbrille ist [POKEMON] nicht von [MOVE] betroffen!",
+		block: "  Dank des Items Schutzbrille ist {POKEMON} nicht von {MOVE} betroffen!",
 	},
 	sailfossil: {
 		name: "Flossenfossil",
@@ -2632,8 +2632,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ultranecronium Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "  Ein gleißendes Licht strömt aus [POKEMON]!",
-		activate: "[POKEMON] hat durch den Ultra Burst eine neue Form angenommen!",
+		transform: "  Ein gleißendes Licht strömt aus {POKEMON}!",
+		activate: "{POKEMON} hat durch den Ultra Burst eine neue Form angenommen!",
 	},
 	unremarkableteacup: {
 		name: "Simple Teeschale",
@@ -2804,7 +2804,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  Rätselbeere von [POKEMON] füllt AP von [MOVE] auf!",
+		activate: "  Rätselbeere von {POKEMON} füllt AP von {MOVE} auf!",
 	},
 	pinkbow: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI

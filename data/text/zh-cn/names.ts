@@ -47,16 +47,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	forme: "形态", // NEEDS QC
 	dexnum: "图鉴No.", // NEEDS QC
 	generation: "世代", // NEEDS QC
-	gennum: "[NUMBER]代", // NEEDS QC
+	gennum: "{NUMBER}代", // NEEDS QC
 	evolution: "进化", // NEEDS QC
 	preevolution: "进化前", // NEEDS QC
 	doesnotevolve: "不进化", // NEEDS QC
 	zcrystal: "Ｚ纯晶", // NEEDS QC
 	target: "对象", // NEEDS QC
 	height: "身高",
-	numm: "[NUMBER]m", // NEEDS QC
+	numm: "{NUMBER}m", // NEEDS QC
 	weight: "体重",
-	numkg: "[NUMBER]kg", // NEEDS QC
+	numkg: "{NUMBER}kg", // NEEDS QC
 
 	megaevolution: "超级进化", // NEEDS QC
 	zpower: "Ｚ力量", // NEEDS QC
@@ -74,8 +74,8 @@ export const TermNames: { [id: string]: TranslationString } = {
 	resist: "抵抗", // NEEDS QC: unofficial
 	immune: "免疫", // NEEDS QC: unofficial
 
-	nicknamespecies: "[NICKNAME]（[SPECIES]）", // NEEDS QC
-	speciesforme: "[SPECIES]-[FORME]",
+	nicknamespecies: "{NICKNAME}（{SPECIES}）", // NEEDS QC
+	speciesforme: "{SPECIES}-{FORME}",
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

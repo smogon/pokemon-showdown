@@ -47,16 +47,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	forme: "폼", // NEEDS QC
 	dexnum: "도감 No.", // NEEDS QC
 	generation: "세대", // NEEDS QC
-	gennum: "[NUMBER]세대", // NEEDS QC
+	gennum: "{NUMBER}세대", // NEEDS QC
 	evolution: "진화", // NEEDS QC
 	preevolution: "진화 전", // NEEDS QC
 	doesnotevolve: "진화하지 않음", // NEEDS QC
 	zcrystal: "Z크리스탈", // NEEDS QC
 	target: "대상", // NEEDS QC
 	height: "키",
-	numm: "[NUMBER]m", // NEEDS QC
+	numm: "{NUMBER}m", // NEEDS QC
 	weight: "몸무게",
-	numkg: "[NUMBER]kg", // NEEDS QC
+	numkg: "{NUMBER}kg", // NEEDS QC
 
 	megaevolution: "메가진화", // NEEDS QC
 	zpower: "Z파워", // NEEDS QC
@@ -74,8 +74,8 @@ export const TermNames: { [id: string]: TranslationString } = {
 	resist: "반감", // NEEDS QC: unofficial
 	immune: "무효", // NEEDS QC: unofficial
 
-	nicknamespecies: "[NICKNAME]([SPECIES])", // NEEDS QC
-	speciesforme: "[SPECIES]-[FORME]",
+	nicknamespecies: "{NICKNAME}({SPECIES})", // NEEDS QC
+	speciesforme: "{SPECIES}-{FORME}",
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

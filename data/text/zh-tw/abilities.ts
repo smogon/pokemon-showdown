@@ -25,7 +25,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON]受到了傷害！",
+		damage: "  {POKEMON}受到了傷害！",
 	},
 	airlock: {
 		name: "氣閘",
@@ -49,7 +49,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		boost: "  [POKEMON]的攻擊被提高到了最大！",
+		boost: "  {POKEMON}的攻擊被提高到了最大！",
 	},
 	angershell: {
 		name: "憤怒甲殼",
@@ -68,7 +68,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]發抖了！",
+		activate: "  {POKEMON}發抖了！",
 	},
 	arenatrap: {
 		name: "沙穴",
@@ -101,13 +101,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]正受到芳香幕的保護！",
+		block: "  {POKEMON}正受到芳香幕的保護！",
 	},
 	asone: {
 		name: "人馬一體",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]兼具２種特性！",
+		start: "  {POKEMON}兼具２種特性！",
 	},
 	asoneglastrier: {
 		name: "人馬一體",
@@ -123,7 +123,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]壓制了所有氣場！",
+		start: "  {POKEMON}壓制了所有氣場！",
 	},
 	baddreams: {
 		name: "夢魘",
@@ -139,7 +139,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON]正被惡夢纏身！",
+		damage: "  {POKEMON}正被惡夢纏身！",
 	},
 	ballfetch: {
 		name: "撿球",
@@ -162,14 +162,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
-		activate: "  [POKEMON]渾身充滿了牽絆之力！",
-		transform: "[POKEMON]變身成了小智版甲賀忍蛙！",
+		activate: "  {POKEMON}渾身充滿了牽絆之力！",
+		transform: "{POKEMON}變身成了小智版甲賀忍蛙！",
 	},
 	beadsofruin: {
 		name: "災禍之玉",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  因為[POKEMON]的災禍之玉，周圍的特防減弱了！",
+		start: "  因為{POKEMON}的災禍之玉，周圍的特防減弱了！",
 	},
 	beastboost: {
 		name: "異獸提升",
@@ -250,14 +250,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]處於半夢半醒狀態！",
+		start: "  {POKEMON}處於半夢半醒狀態！",
 	},
 	commander: {
 		name: "發號施令",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]作為發號施令者被[TARGET]吞下去了！",
+		activate: "  {POKEMON}作為發號施令者被{TARGET}吞下去了！",
 	},
 	competitive: {
 		name: "好勝",
@@ -338,7 +338,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		block: "  [SOURCE]無法使用[MOVE]！",
+		block: "  {SOURCE}無法使用{MOVE}！",
 	},
 	dancer: {
 		name: "舞者",
@@ -352,7 +352,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]釋放著暗黑氣場！",
+		start: "  {POKEMON}釋放著暗黑氣場！",
 	},
 	dauntlessshield: {
 		name: "不屈之盾",
@@ -404,7 +404,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		block: "  畫皮變成了替身！",
-		transform: "[POKEMON]的畫皮脫落了！",
+		transform: "{POKEMON}的畫皮脫落了！",
 	},
 	download: {
 		name: "下載",
@@ -438,7 +438,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  ([POKEMON]受到了傷害！)",
+		damage: "  ({POKEMON}受到了傷害！)",
 	},
 	earlybird: {
 		name: "早起",
@@ -475,31 +475,31 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "電力轉換",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]受到[MOVE]而充電了！",
+		start: "  {POKEMON}受到{MOVE}而充電了！",
 	},
 	embodyaspectcornerstone: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON]讓礎之假面綻放光輝，提高了防禦！",
+		boost: "  {POKEMON}讓礎之假面綻放光輝，提高了防禦！",
 	},
 	embodyaspecthearthflame: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON]讓灶之假面綻放光輝，提高了攻擊！",
+		boost: "  {POKEMON}讓灶之假面綻放光輝，提高了攻擊！",
 	},
 	embodyaspectteal: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON]讓碧之假面綻放光輝，提高了速度！",
+		boost: "  {POKEMON}讓碧之假面綻放光輝，提高了速度！",
 	},
 	embodyaspectwellspring: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON]讓井之假面綻放光輝，提高了特防！",
+		boost: "  {POKEMON}讓井之假面綻放光輝，提高了特防！",
 	},
 	emergencyexit: {
 		name: "危險迴避",
@@ -513,7 +513,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]釋放著妖精氣場！",
+		start: "  {POKEMON}釋放著妖精氣場！",
 	},
 	filter: {
 		name: "過濾",
@@ -552,7 +552,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]的火焰威力提高了！",
+		start: "  {POKEMON}的火焰威力提高了！",
 	},
 	flowergift: {
 		name: "花之禮",
@@ -573,7 +573,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]正受到花幕的保護！",
+		block: "  {POKEMON}正受到花幕的保護！",
 	},
 	fluffy: {
 		name: "毛茸茸",
@@ -599,7 +599,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  讀取了[TARGET]的[MOVE]！",
+		activate: "  讀取了{TARGET}的{MOVE}！",
 		activateNoTarget: null, // NEEDS TRANSLATION: predates Chinese support
 	},
 	friendguard: {
@@ -613,7 +613,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]察覺到了[TARGET]的[ITEM]！",
+		activate: "  {POKEMON}察覺到了{TARGET}的{ITEM}！",
 		activateNoTarget: null, // NEEDS TRANSLATION: predates Chinese support
 	},
 	fullmetalbody: {
@@ -692,8 +692,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "強子引擎",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]布下電氣場地，使未來的機關躍動起來！！",
-		activate: "  [POKEMON]透過電氣場地使未來的機關躍動起來！！",
+		start: "  {POKEMON}布下電氣場地，使未來的機關躍動起來！！",
+		activate: "  {POKEMON}透過電氣場地使未來的機關躍動起來！！",
 	},
 	harvest: {
 		name: "收穫",
@@ -701,7 +701,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		addItem: "  [POKEMON]收穫了[ITEM]！",
+		addItem: "  {POKEMON}收穫了{ITEM}！",
 	},
 	healer: {
 		name: "治癒之心",
@@ -741,7 +741,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "款待",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		heal: "  [POKEMON]喝光了[SOURCE]泡的茶！",
+		heal: "  {POKEMON}喝光了{SOURCE}泡的茶！",
 	},
 	hugepower: {
 		name: "大力士",
@@ -812,7 +812,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]造成的幻覺解除了！",
+		end: "  {POKEMON}造成的幻覺解除了！",
 	},
 	immunity: {
 		name: "免疫",
@@ -981,7 +981,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]吸引了攻擊！",
+		activate: "  {POKEMON}吸引了攻擊！",
 	},
 	limber: {
 		name: "柔軟",
@@ -995,7 +995,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  [TARGET]被染上了甩不掉的氣味！",
+		changeAbility: "  {TARGET}被染上了甩不掉的氣味！",
 	},
 	liquidooze: {
 		name: "污泥漿",
@@ -1004,7 +1004,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON]吸到了污泥漿！",
+		damage: "  {POKEMON}吸到了污泥漿！",
 	},
 	liquidvoice: {
 		name: "濕潤之聲",
@@ -1093,7 +1093,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]變回原來的屬性了！",
+		activate: "  {POKEMON}變回原來的屬性了！",
 	},
 	mindseye: {
 		name: "心眼",
@@ -1145,7 +1145,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]打破了常規！",
+		start: "  {POKEMON}打破了常規！",
 	},
 	moody: {
 		name: "心情不定",
@@ -1204,7 +1204,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  [TARGET]的特性變成了木乃伊！",
+		changeAbility: "  {TARGET}的特性變成了木乃伊！",
 	},
 	myceliummight: {
 		name: "菌絲之力",
@@ -1274,8 +1274,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "緋紅脈動",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]加強日照，使古代的脈動狂暴起來！！",
-		activate: "  [POKEMON]受到日照，使古代的脈動狂暴起來！！",
+		start: "  {POKEMON}加強日照，使古代的脈動狂暴起來！！",
+		activate: "  {POKEMON}受到日照，使古代的脈動狂暴起來！！",
 	},
 	overcoat: {
 		name: "防塵",
@@ -1425,7 +1425,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  感受到大量的氣息存在……！",
-		transform: "[POKEMON]變成了完全體形態！",
+		transform: "{POKEMON}變成了完全體形態！",
 	},
 	powerofalchemy: {
 		name: "化學之力",
@@ -1473,7 +1473,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]釋放著壓迫感！",
+		start: "  {POKEMON}釋放著壓迫感！",
 	},
 	primordialsea: {
 		name: "始源之海",
@@ -1504,10 +1504,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]用大晴天發動了古代活性！",
-		activateFromItem: "  [POKEMON]用驅勁能量發動了古代活性！",
-		start: "  [POKEMON]的[STAT]升高了！",
-		end: "  [POKEMON]的古代活性效果消失了！",
+		activate: "  {POKEMON}用大晴天發動了古代活性！",
+		activateFromItem: "  {POKEMON}用驅勁能量發動了古代活性！",
+		start: "  {POKEMON}的{STAT}升高了！",
+		end: "  {POKEMON}的古代活性效果消失了！",
 	},
 	psychicsurge: {
 		name: "精神製造者",
@@ -1533,10 +1533,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]透過電氣場地發動了夸克充能！",
-		activateFromItem: "  [POKEMON]用驅勁能量發動了夸克充能！",
-		start: "  [POKEMON]的[STAT]升高了！",
-		end: "  [POKEMON]的夸克充能效果消失了！",
+		activate: "  {POKEMON}透過電氣場地發動了夸克充能！",
+		activateFromItem: "  {POKEMON}用驅勁能量發動了夸克充能！",
+		start: "  {POKEMON}的{STAT}升高了！",
+		end: "  {POKEMON}的夸克充能效果消失了！",
 	},
 	queenlymajesty: {
 		name: "女王的威嚴",
@@ -1550,7 +1550,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "速擊",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  速擊使[POKEMON]行動變快了！",
+		activate: "  速擊使{POKEMON}行動變快了！",
 	},
 	quickfeet: {
 		name: "飛毛腿",
@@ -1592,7 +1592,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  繼承了[SOURCE]的[ABILITY]！",
+		changeAbility: "  繼承了{SOURCE}的{ABILITY}！",
 	},
 	reckless: {
 		name: "捨身",
@@ -1657,7 +1657,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON]受到了傷害！",
+		damage: "  {POKEMON}受到了傷害！",
 	},
 	runaway: {
 		name: "逃跑",
@@ -1704,8 +1704,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "[POKEMON]的群體聚集起來了！",
-		transformEnd: "[POKEMON]的群體四散而去了！",
+		transform: "{POKEMON}的群體聚集起來了！",
+		transformEnd: "{POKEMON}的群體四散而去了！",
 	},
 	scrappy: {
 		name: "膽量",
@@ -1854,8 +1854,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]無法拿出平時的水準！",
-		end: "  [POKEMON]恢復了平時的水準！",
+		start: "  {POKEMON}無法拿出平時的水準！",
+		end: "  {POKEMON}恢復了平時的水準！",
 	},
 	slushrush: {
 		name: "撥雪",
@@ -2003,7 +2003,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		block: "  無法奪取[POKEMON]的道具！",
+		block: "  無法奪取{POKEMON}的道具！",
 	},
 	stormdrain: {
 		name: "引水",
@@ -2033,13 +2033,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]挺住了攻擊！",
+		activate: "  {POKEMON}挺住了攻擊！",
 	},
 	suctioncups: {
 		name: "吸盤",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]用吸盤吸住了！",
+		block: "  {POKEMON}用吸盤吸住了！",
 	},
 	superluck: {
 		name: "超幸運",
@@ -2049,14 +2049,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "甘露之蜜",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]的蜜散發出甜甜的氣味！",
+		start: "  {POKEMON}的蜜散發出甜甜的氣味！",
 	},
 	supremeoverlord: {
 		name: "大將",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]從被打倒的夥伴那裡得到了力量！",
+		activate: "  {POKEMON}從被打倒的夥伴那裡得到了力量！",
 	},
 	surgesurfer: {
 		name: "衝浪之尾",
@@ -2078,7 +2078,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]因甜幕而不會睡著！",
+		block: "  {POKEMON}因甜幕而不會睡著！",
 	},
 	swiftswim: {
 		name: "悠游自如",
@@ -2093,7 +2093,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "災禍之劍",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  因為[POKEMON]的災禍之劍，周圍的防禦減弱了！",
+		start: "  因為{POKEMON}的災禍之劍，周圍的防禦減弱了！",
 	},
 	symbiosis: {
 		name: "共生",
@@ -2107,7 +2107,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]將[ITEM]交給了[TARGET]！",
+		activate: "  {POKEMON}將{ITEM}交給了{TARGET}！",
 	},
 	synchronize: {
 		name: "同步",
@@ -2122,7 +2122,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "災禍之簡",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  因為[POKEMON]的災禍之簡，周圍的攻擊減弱了！",
+		start: "  因為{POKEMON}的災禍之簡，周圍的攻擊減弱了！",
 	},
 	tangledfeet: {
 		name: "蹣跚",
@@ -2146,7 +2146,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "心靈感應",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]不會受到同伴的攻擊！",
+		block: "  {POKEMON}不會受到同伴的攻擊！",
 	},
 	teraformzero: {
 		name: "歸零化境",
@@ -2157,13 +2157,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]讓甲殼綻放光輝，扭曲了屬性相剋關係！！",
+		activate: "  {POKEMON}讓甲殼綻放光輝，扭曲了屬性相剋關係！！",
 	},
 	terashift: {
 		name: "太晶變形",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "[POKEMON]的樣子發生了變化！",
+		transform: "{POKEMON}的樣子發生了變化！",
 	},
 	teravolt: {
 		name: "兆級電壓",
@@ -2186,7 +2186,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]釋放著濺射氣場！",
+		start: "  {POKEMON}釋放著濺射氣場！",
 	},
 	thermalexchange: {
 		name: "熱交換",
@@ -2264,7 +2264,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  複製了[SOURCE]的[ABILITY]！",
+		changeAbility: "  複製了{SOURCE}的{ABILITY}！",
 	},
 	transistor: {
 		name: "電晶體",
@@ -2284,7 +2284,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		cant: "[POKEMON]正在偷懶。",
+		cant: "{POKEMON}正在偷懶。",
 	},
 	turboblaze: {
 		name: "渦輪火焰",
@@ -2307,7 +2307,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON]釋放著熾焰氣場！",
+		start: "  {POKEMON}釋放著熾焰氣場！",
 	},
 	unaware: {
 		name: "純樸",
@@ -2327,7 +2327,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [TEAM]因太緊張而無法食用樹果！",
+		start: "  {TEAM}因太緊張而無法食用樹果！",
 	},
 	unseenfist: {
 		name: "無形拳",
@@ -2340,7 +2340,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "災禍之鼎",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  因為[POKEMON]的災禍之鼎，周圍的特攻減弱了！",
+		start: "  因為{POKEMON}的災禍之鼎，周圍的特攻減弱了！",
 	},
 	victorystar: {
 		name: "勝利之星",
@@ -2463,7 +2463,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "全能變身",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]在變身之後回來了！",
+		activate: "  {POKEMON}在變身之後回來了！",
 	},
 
 	// CAP

@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Escudo Habilidad",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  ¡El Escudo Habilidad ha protegido la habilidad de [POKEMON]!",
+		block: "  ¡El Escudo Habilidad ha protegido la habilidad de {POKEMON}!",
 	},
 	abomasite: {
 		name: "Abomasnowita",
@@ -59,8 +59,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Globo Helio",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  ¡[POKEMON] está flotando con un Globo Helio!",
-		end: "  ¡Ha explotado el Globo Helio de [POKEMON]!",
+		start: "  ¡{POKEMON} está flotando con un Globo Helio!",
+		end: "  ¡Ha explotado el Globo Helio de {POKEMON}!",
 	},
 	alakazite: {
 		name: "Alakazamita",
@@ -350,7 +350,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Amuleto Puro",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  ¡El Amuleto Puro ha impedido que disminuyan las características de [POKEMON]!",
+		block: "  ¡El Amuleto Puro ha impedido que disminuyan las características de {POKEMON}!",
 	},
 	clefablite: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -401,7 +401,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Baya Chiri",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡Gracias a la Baya Chiri, [POKEMON] puede tener prioridad!",
+		activate: "  ¡Gracias a la Baya Chiri, {POKEMON} puede tener prioridad!",
 	},
 	damprock: {
 		name: "Roca Lluvia",
@@ -572,13 +572,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Botón Escape",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  ¡[POKEMON] regresa gracias al Botón Escape!",
+		end: "  ¡{POKEMON} regresa gracias al Botón Escape!",
 	},
 	ejectpack: {
 		name: "Mochila Escape",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  ¡[POKEMON] regresa gracias a la Mochila Escape!",
+		end: "  ¡{POKEMON} regresa gracias a la Mochila Escape!",
 	},
 	electirizer: {
 		name: "Electrizador",
@@ -1153,7 +1153,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] ha recuperado los PP de [MOVE] gracias a la Baya Zanama!",
+		activate: "  ¡{POKEMON} ha recuperado los PP de {MOVE} gracias a la Baya Zanama!",
 	},
 	levelball: {
 		name: "Nivel Ball",
@@ -1168,7 +1168,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  ¡[POKEMON] ha perdido unos pocos PS!",
+		damage: "  ¡{POKEMON} ha perdido unos pocos PS!",
 	},
 	lightball: {
 		name: "Bola Luminosa",
@@ -1431,7 +1431,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Hierba Copia",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] ha usado una Hierba Copia y ha copiado los cambios en las características del rival!",
+		activate: "  ¡{POKEMON} ha usado una Hierba Copia y ha copiado los cambios en las características del rival!",
 	},
 	mistyseed: {
 		name: "Semilla Bruma",
@@ -1639,7 +1639,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Hierba Única",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  ¡[POKEMON] ya está listo gracias a la Hierba Única!",
+		end: "  ¡{POKEMON} ya está listo gracias a la Hierba Única!",
 	},
 	powerlens: {
 		name: "Lente Recia",
@@ -1669,7 +1669,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Paracontacto",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  ¡[POKEMON] ha neutralizado el efecto gracias al Paracontacto!",
+		block: "  ¡{POKEMON} ha neutralizado el efecto gracias al Paracontacto!",
 	},
 	protector: {
 		name: "Protector",
@@ -1719,7 +1719,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  ¡Gracias a la Garra Rápida, [POKEMON] puede tener prioridad!",
+		activate: "  ¡Gracias a la Garra Rápida, {POKEMON} puede tener prioridad!",
 	},
 	quickpowder: {
 		name: "Polvo Veloz",
@@ -1772,7 +1772,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Tarjeta Roja",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  ¡[POKEMON] le ha sacado una Tarjeta Roja a [TARGET]!",
+		end: "  ¡{POKEMON} le ha sacado una Tarjeta Roja a {TARGET}!",
 	},
 	redorb: {
 		name: "Prisma Rojo",
@@ -1818,7 +1818,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Casco Dentado",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  ¡El Casco Dentado ha dañado a [POKEMON]!",
+		damage: "  ¡El Casco Dentado ha dañado a {POKEMON}!",
 	},
 	roomservice: {
 		name: "Servicio Raro",
@@ -1866,7 +1866,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Gafa Protectora",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  ¡[MOVE] no ha afectado a [POKEMON] gracias a la Gafa Protectora!",
+		block: "  ¡{MOVE} no ha afectado a {POKEMON} gracias a la Gafa Protectora!",
 	},
 	sailfossil: {
 		name: "Fósil Aleta",
@@ -2621,8 +2621,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ultranecrostal Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "  ¡[POKEMON] emite una luz cegadora!",
-		activate: "¡[POKEMON] ha adoptado una nueva forma gracias a la Ultraexplosión!",
+		transform: "  ¡{POKEMON} emite una luz cegadora!",
+		activate: "¡{POKEMON} ha adoptado una nueva forma gracias a la Ultraexplosión!",
 	},
 	unremarkableteacup: {
 		name: "Cuenco Mediocre",
@@ -2789,7 +2789,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  ¡[POKEMON] ha restaurado los PP de [MOVE] con la Baya Misterio!",
+		activate: "  ¡{POKEMON} ha restaurado los PP de {MOVE} con la Baya Misterio!",
 	},
 	pinkbow: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI

@@ -25,7 +25,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON] è ferito!",
+		damage: "  {POKEMON} è ferito!",
 	},
 	airlock: {
 		name: "Riparo",
@@ -49,7 +49,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		boost: "  [POKEMON] aumenta al massimo il suo Attacco!",
+		boost: "  {POKEMON} aumenta al massimo il suo Attacco!",
 	},
 	angershell: {
 		name: "Iraguscio",
@@ -68,7 +68,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] rabbrividisce!",
+		activate: "  {POKEMON} rabbrividisce!",
 	},
 	arenatrap: {
 		name: "Trappoarena",
@@ -101,13 +101,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  Aromavelo protegge [POKEMON]!",
+		block: "  Aromavelo protegge {POKEMON}!",
 	},
 	asone: {
 		name: "Sintonia Equina",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] ha due abilità!",
+		start: "  {POKEMON} ha due abilità!",
 	},
 	asoneglastrier: {
 		name: "Sintonia Equina",
@@ -123,7 +123,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] inverte gli effetti di tutte le aure!",
+		start: "  {POKEMON} inverte gli effetti di tutte le aure!",
 	},
 	baddreams: {
 		name: "Sogniamari",
@@ -139,7 +139,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON] ha il sonno irrequieto!",
+		damage: "  {POKEMON} ha il sonno irrequieto!",
 	},
 	ballfetch: {
 		name: "Raccattapalle",
@@ -162,14 +162,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
-		activate: "  [POKEMON] avverte la forza di un legame profondo!",
-		transform: "[POKEMON] si trasforma in Greninja Forma Ash!",
+		activate: "  {POKEMON} avverte la forza di un legame profondo!",
+		transform: "{POKEMON} si trasforma in Greninja Forma Ash!",
 	},
 	beadsofruin: {
 		name: "Monile Nefasto",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  La Difesa Speciale dei Pokémon intorno si indebolisce a causa dell’abilità Monile Nefasto di [POKEMON]!",
+		start: "  La Difesa Speciale dei Pokémon intorno si indebolisce a causa dell’abilità Monile Nefasto di {POKEMON}!",
 	},
 	beastboost: {
 		name: "Ultraboost",
@@ -250,14 +250,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] è in uno stato di dormiveglia!",
+		start: "  {POKEMON} è in uno stato di dormiveglia!",
 	},
 	commander: {
 		name: "Torre di Comando",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] è stato inghiottito da [TARGET] con la funzione di Torre di Comando!",
+		activate: "  {POKEMON} è stato inghiottito da {TARGET} con la funzione di Torre di Comando!",
 	},
 	competitive: {
 		name: "Tenacia",
@@ -338,7 +338,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		block: "  [SOURCE] non può usare [MOVE]!",
+		block: "  {SOURCE} non può usare {MOVE}!",
 	},
 	dancer: {
 		name: "Sincrodanza",
@@ -352,7 +352,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  L’abilità Auratetra di [POKEMON] è attiva.",
+		start: "  L’abilità Auratetra di {POKEMON} è attiva.",
 	},
 	dauntlessshield: {
 		name: "Scudo Saldo",
@@ -404,7 +404,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		block: "  Il costume ha assorbito l’attacco!",
-		transform: "[POKEMON] è stato smascherato!",
+		transform: "{POKEMON} è stato smascherato!",
 	},
 	download: {
 		name: "Download",
@@ -438,7 +438,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  ([POKEMON] subisce dei danni!)",
+		damage: "  ({POKEMON} subisce dei danni!)",
 	},
 	earlybird: {
 		name: "Sveglialampo",
@@ -475,31 +475,31 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Convertivolt",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] si carica di elettricità grazie alla mossa [MOVE]!",
+		start: "  {POKEMON} si carica di elettricità grazie alla mossa {MOVE}!",
 	},
 	embodyaspectcornerstone: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON] fa brillare la Maschera Fondamenta, e la sua Difesa aumenta!",
+		boost: "  {POKEMON} fa brillare la Maschera Fondamenta, e la sua Difesa aumenta!",
 	},
 	embodyaspecthearthflame: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON] fa brillare la Maschera Focolare, e il suo Attacco aumenta!",
+		boost: "  {POKEMON} fa brillare la Maschera Focolare, e il suo Attacco aumenta!",
 	},
 	embodyaspectteal: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON] fa brillare la Maschera Turchese, e la sua Velocità aumenta!",
+		boost: "  {POKEMON} fa brillare la Maschera Turchese, e la sua Velocità aumenta!",
 	},
 	embodyaspectwellspring: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		boost: "  [POKEMON] fa brillare la Maschera Pozzo, e la sua Difesa Speciale aumenta!",
+		boost: "  {POKEMON} fa brillare la Maschera Pozzo, e la sua Difesa Speciale aumenta!",
 	},
 	emergencyexit: {
 		name: "Passoindietro",
@@ -513,7 +513,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  L’abilità Aurafolletto di [POKEMON] è attiva.",
+		start: "  L’abilità Aurafolletto di {POKEMON} è attiva.",
 	},
 	filter: {
 		name: "Filtro",
@@ -552,7 +552,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  La potenza delle mosse di tipo Fuoco di [POKEMON] aumenta!",
+		start: "  La potenza delle mosse di tipo Fuoco di {POKEMON} aumenta!",
 	},
 	flowergift: {
 		name: "Regalfiore",
@@ -573,7 +573,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  L’abilità Fiorvelo protegge [POKEMON]!",
+		block: "  L’abilità Fiorvelo protegge {POKEMON}!",
 	},
 	fluffy: {
 		name: "Morbidone",
@@ -599,8 +599,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  La mossa [MOVE] di [TARGET] è stata scoperta!",
-		activateNoTarget: "  Premonizione di [POKEMON] lo mette in guardia da [MOVE]!",
+		activate: "  La mossa {MOVE} di {TARGET} è stata scoperta!",
+		activateNoTarget: "  Premonizione di {POKEMON} lo mette in guardia da {MOVE}!",
 	},
 	friendguard: {
 		name: "Amicoscudo",
@@ -613,8 +613,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] perquisisce [TARGET] e trova [ITEM:indefinite:classified]!",
-		activateNoTarget: "  [POKEMON] perquisisce l'avversario e trova [ITEM]!",
+		activate: "  {POKEMON} perquisisce {TARGET} e trova {ITEM:indefinite:classified}!",
+		activateNoTarget: "  {POKEMON} perquisisce l'avversario e trova {ITEM}!",
 	},
 	fullmetalbody: {
 		name: "Metalprotezione",
@@ -692,8 +692,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Motore Adronico",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] genera un Campo Elettrico e dà impulso al motore del futuro!",
-		activate: "  [POKEMON] dà impulso al motore del futuro grazie al Campo Elettrico!",
+		start: "  {POKEMON} genera un Campo Elettrico e dà impulso al motore del futuro!",
+		activate: "  {POKEMON} dà impulso al motore del futuro grazie al Campo Elettrico!",
 	},
 	harvest: {
 		name: "Coglibacche",
@@ -701,7 +701,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		addItem: "  [POKEMON] raccoglie [ITEM:indefinite]!",
+		addItem: "  {POKEMON} raccoglie {ITEM:indefinite}!",
 	},
 	healer: {
 		name: "Curacuore",
@@ -741,7 +741,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Ospitalità",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		heal: "  [POKEMON] beve il tè che [SOURCE] gli ha preparato!",
+		heal: "  {POKEMON} beve il tè che {SOURCE} gli ha preparato!",
 	},
 	hugepower: {
 		name: "Macroforza",
@@ -812,7 +812,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  L’illusione di [POKEMON] si dissolve!",
+		end: "  L’illusione di {POKEMON} si dissolve!",
 	},
 	immunity: {
 		name: "Immunità",
@@ -981,7 +981,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] attira l’attacco su di sé!",
+		activate: "  {POKEMON} attira l’attacco su di sé!",
 	},
 	limber: {
 		name: "Scioltezza",
@@ -995,7 +995,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  [TARGET] ha addosso un odore che non riesce a far andar via!",
+		changeAbility: "  {TARGET} ha addosso un odore che non riesce a far andar via!",
 	},
 	liquidooze: {
 		name: "Melma",
@@ -1004,7 +1004,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON] ha assorbito la melma!",
+		damage: "  {POKEMON} ha assorbito la melma!",
 	},
 	liquidvoice: {
 		name: "Idrovoce",
@@ -1093,7 +1093,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] riacquisisce il suo tipo originario!",
+		activate: "  {POKEMON} riacquisisce il suo tipo originario!",
 	},
 	mindseye: {
 		name: "Occhio Interiore",
@@ -1145,7 +1145,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON] ha l’abilità Rompiforma!",
+		start: "  {POKEMON} ha l’abilità Rompiforma!",
 	},
 	moody: {
 		name: "Altalena",
@@ -1204,7 +1204,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  L’abilità di [TARGET] è diventata Mummia!",
+		changeAbility: "  L’abilità di {TARGET} è diventata Mummia!",
 	},
 	myceliummight: {
 		name: "Micoforza",
@@ -1274,8 +1274,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Ritmo d’Oricalco",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON] intensifica i raggi solari facendo scatenare il ritmo dell’antichità!",
-		activate: "  [POKEMON] si gode i raggi solari facendo scatenare il ritmo dell’antichità!",
+		start: "  {POKEMON} intensifica i raggi solari facendo scatenare il ritmo dell’antichità!",
+		activate: "  {POKEMON} si gode i raggi solari facendo scatenare il ritmo dell’antichità!",
 	},
 	overcoat: {
 		name: "Copricapo",
@@ -1425,7 +1425,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
 		activate: "  Avverti la presenza di una moltitudine di esseri!",
-		transform: "[POKEMON] assume la Forma Perfetta!",
+		transform: "{POKEMON} assume la Forma Perfetta!",
 	},
 	powerofalchemy: {
 		name: "Forza Chimica",
@@ -1473,7 +1473,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON] fa pressione!",
+		start: "  {POKEMON} fa pressione!",
 	},
 	primordialsea: {
 		name: "Mare Primordiale",
@@ -1504,10 +1504,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] ha messo in moto la Paleoattivazione grazie al sole intenso!",
-		activateFromItem: "  [POKEMON] ha messo in moto la Paleoattivazione grazie alla Capsula energetica!",
-		start: "  [STAT:definite:capitalize] di [POKEMON] cresce!",
-		end: "  L’effetto della Paleoattivazione di [POKEMON] è finito!",
+		activate: "  {POKEMON} ha messo in moto la Paleoattivazione grazie al sole intenso!",
+		activateFromItem: "  {POKEMON} ha messo in moto la Paleoattivazione grazie alla Capsula energetica!",
+		start: "  {STAT:definite:capitalize} di {POKEMON} cresce!",
+		end: "  L’effetto della Paleoattivazione di {POKEMON} è finito!",
 	},
 	psychicsurge: {
 		name: "Psicogenesi",
@@ -1533,10 +1533,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] ha attivato la Carica Quark grazie al Campo Elettrico!",
-		activateFromItem: "  [POKEMON] ha attivato la Carica Quark grazie alla Capsula energetica!",
-		start: "  [STAT:definite:capitalize] di [POKEMON] cresce!",
-		end: "  L’effetto della Carica Quark di [POKEMON] è finito!",
+		activate: "  {POKEMON} ha attivato la Carica Quark grazie al Campo Elettrico!",
+		activateFromItem: "  {POKEMON} ha attivato la Carica Quark grazie alla Capsula energetica!",
+		start: "  {STAT:definite:capitalize} di {POKEMON} cresce!",
+		end: "  L’effetto della Carica Quark di {POKEMON} è finito!",
 	},
 	queenlymajesty: {
 		name: "Regalità",
@@ -1550,7 +1550,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Colpolesto",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  L’abilità Colpolesto rende più veloce [POKEMON]!",
+		activate: "  L’abilità Colpolesto rende più veloce {POKEMON}!",
 	},
 	quickfeet: {
 		name: "Piedisvelti",
@@ -1592,7 +1592,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  L’abilità [ABILITY] di [SOURCE] è passata all’alleato!",
+		changeAbility: "  L’abilità {ABILITY} di {SOURCE} è passata all’alleato!",
 	},
 	reckless: {
 		name: "Temerarietà",
@@ -1657,7 +1657,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		damage: "  [POKEMON] è ferito!",
+		damage: "  {POKEMON} è ferito!",
 	},
 	runaway: {
 		name: "Fugafacile",
@@ -1704,8 +1704,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "[POKEMON] ha richiamato un banco!",
-		transformEnd: "Il banco di [POKEMON] si è disperso!",
+		transform: "{POKEMON} ha richiamato un banco!",
+		transformEnd: "Il banco di {POKEMON} si è disperso!",
 	},
 	scrappy: {
 		name: "Nervisaldi",
@@ -1854,8 +1854,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON] non ingrana!",
-		end: "  [POKEMON] ritrova lo slancio!",
+		start: "  {POKEMON} non ingrana!",
+		end: "  {POKEMON} ritrova lo slancio!",
 	},
 	slushrush: {
 		name: "Spalaneve",
@@ -2003,7 +2003,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		block: "  Lo strumento di [POKEMON] non può essere rubato!",
+		block: "  Lo strumento di {POKEMON} non può essere rubato!",
 	},
 	stormdrain: {
 		name: "Acquascolo",
@@ -2033,13 +2033,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] sopporta il colpo!",
+		activate: "  {POKEMON} sopporta il colpo!",
 	},
 	suctioncups: {
 		name: "Ventose",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON] è ancorato al suolo grazie alle ventose!",
+		block: "  {POKEMON} è ancorato al suolo grazie alle ventose!",
 	},
 	superluck: {
 		name: "Supersorte",
@@ -2049,14 +2049,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Sciroppo Sublime",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  Dallo sciroppo di [POKEMON] si leva un dolce profumino!",
+		start: "  Dallo sciroppo di {POKEMON} si leva un dolce profumino!",
 	},
 	supremeoverlord: {
 		name: "Generale Supremo",
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] ha ricevuto vigore dai suoi compagni sconfitti!",
+		activate: "  {POKEMON} ha ricevuto vigore dai suoi compagni sconfitti!",
 	},
 	surgesurfer: {
 		name: "Codasurf",
@@ -2078,7 +2078,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON] resta vigile a causa dell’abilità Dolcevelo!",
+		block: "  {POKEMON} resta vigile a causa dell’abilità Dolcevelo!",
 	},
 	swiftswim: {
 		name: "Nuotovelox",
@@ -2093,7 +2093,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Spada Nefasta",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  La Difesa dei Pokémon intorno si indebolisce a causa dell’abilità Spada Nefasta di [POKEMON]!",
+		start: "  La Difesa dei Pokémon intorno si indebolisce a causa dell’abilità Spada Nefasta di {POKEMON}!",
 	},
 	symbiosis: {
 		name: "Simbiosi",
@@ -2107,7 +2107,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON] dà [ITEM:definite] [TARGET:a]!",
+		activate: "  {POKEMON} dà {ITEM:definite} {TARGET:a}!",
 	},
 	synchronize: {
 		name: "Sincronismo",
@@ -2122,7 +2122,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Amuleto Nefasto",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  L’Attacco dei Pokémon intorno si indebolisce a causa dell’abilità Amuleto Nefasto di [POKEMON]!",
+		start: "  L’Attacco dei Pokémon intorno si indebolisce a causa dell’abilità Amuleto Nefasto di {POKEMON}!",
 	},
 	tangledfeet: {
 		name: "Intricopiedi",
@@ -2146,7 +2146,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Telepatia",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON] non può essere attaccato da un alleato!",
+		block: "  {POKEMON} non può essere attaccato da un alleato!",
 	},
 	teraformzero: {
 		name: "Zeroformazione",
@@ -2157,13 +2157,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] fa risplendere la sua corazza e altera i rapporti tra i tipi!",
+		activate: "  {POKEMON} fa risplendere la sua corazza e altera i rapporti tra i tipi!",
 	},
 	terashift: {
 		name: "Teramorfosi",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "[POKEMON] si è trasformato!",
+		transform: "{POKEMON} si è trasformato!",
 	},
 	teravolt: {
 		name: "Teravolt",
@@ -2186,7 +2186,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON] emana un’aura repulsiva!",
+		start: "  {POKEMON} emana un’aura repulsiva!",
 	},
 	thermalexchange: {
 		name: "Termoscambio",
@@ -2264,7 +2264,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		changeAbility: "  [POKEMON] traccia [ABILITY] di [SOURCE]!",
+		changeAbility: "  {POKEMON} traccia {ABILITY} di {SOURCE}!",
 	},
 	transistor: {
 		name: "Transistor",
@@ -2284,7 +2284,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		cant: "[POKEMON] sta ciondolando!",
+		cant: "{POKEMON} sta ciondolando!",
 	},
 	turboblaze: {
 		name: "Piroturbina",
@@ -2307,7 +2307,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		start: "  [POKEMON] emana un’aura infuocata!",
+		start: "  {POKEMON} emana un’aura infuocata!",
 	},
 	unaware: {
 		name: "Imprudenza",
@@ -2327,7 +2327,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [TEAM:capitalize] non riesce a mangiare le bacche per l’agitazione!",
+		start: "  {TEAM:capitalize} non riesce a mangiare le bacche per l’agitazione!",
 	},
 	unseenfist: {
 		name: "Pugni Invisibili",
@@ -2340,7 +2340,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Vaso Nefasto",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  L’Attacco Speciale dei Pokémon intorno si indebolisce a causa dell’abilità Vaso Nefasto di [POKEMON]!",
+		start: "  L’Attacco Speciale dei Pokémon intorno si indebolisce a causa dell’abilità Vaso Nefasto di {POKEMON}!",
 	},
 	victorystar: {
 		name: "Vittorstella",
@@ -2463,7 +2463,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Supercambio",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON] torna dopo essersi trasformato!",
+		activate: "  {POKEMON} torna dopo essersi trasformato!",
 	},
 
 	// CAP

@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "특성가드",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON:topic] 특성가드의 효과로 특성을 보호받고 있다!",
+		block: "  {POKEMON:topic} 특성가드의 효과로 특성을 보호받고 있다!",
 	},
 	abomasite: {
 		name: "눈설왕나이트",
@@ -55,8 +55,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "풍선",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON:topic] 풍선 때문에 떠 있다!",
-		end: "  [POKEMON]의 풍선이 터졌다!",
+		start: "  {POKEMON:topic} 풍선 때문에 떠 있다!",
+		end: "  {POKEMON}의 풍선이 터졌다!",
 	},
 	alakazite: {
 		name: "후디나이트",
@@ -310,7 +310,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "클리어참",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON:topic] 클리어참의 효과로 능력이 떨어지지 않는다!",
+		block: "  {POKEMON:topic} 클리어참의 효과로 능력이 떨어지지 않는다!",
 	},
 	clefablite: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -357,7 +357,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "애슈열매",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 애슈열매로 행동이 빨라졌다!",
+		activate: "  {POKEMON:topic} 애슈열매로 행동이 빨라졌다!",
 	},
 	damprock: {
 		name: "축축한바위",
@@ -521,13 +521,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "탈출버튼",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON:topic] 탈출버튼 때문에 돌아간다!",
+		end: "  {POKEMON:topic} 탈출버튼 때문에 돌아간다!",
 	},
 	ejectpack: {
 		name: "탈출팩",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON:topic] 탈출팩 때문에 돌아간다!",
+		end: "  {POKEMON:topic} 탈출팩 때문에 돌아간다!",
 	},
 	electirizer: {
 		name: "에레키부스터",
@@ -1069,7 +1069,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "과사열매",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 과사열매로 [MOVE]의 PP를 회복했다!",
+		activate: "  {POKEMON:topic} 과사열매로 {MOVE}의 PP를 회복했다!",
 	},
 	levelball: {
 		name: "레벨볼",
@@ -1083,7 +1083,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "생명의구슬",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON]의 생명이 조금 깎였다!",
+		damage: "  {POKEMON}의 생명이 조금 깎였다!",
 	},
 	lightball: {
 		name: "전기구슬",
@@ -1325,7 +1325,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "흉내허브",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 흉내허브를 써서 상대의 능력 변화를 흉내 냈다!",
+		activate: "  {POKEMON:topic} 흉내허브를 써서 상대의 능력 변화를 흉내 냈다!",
 	},
 	mistyseed: {
 		name: "미스트시드",
@@ -1512,7 +1512,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "파워풀허브",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON:topic] 파워풀허브로 힘이 넘쳐흐른다!",
+		end: "  {POKEMON:topic} 파워풀허브로 힘이 넘쳐흐른다!",
 	},
 	powerlens: {
 		name: "파워렌즈",
@@ -1542,7 +1542,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "방호패드",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON:topic] 방호패드로 막아 냈다!",
+		block: "  {POKEMON:topic} 방호패드로 막아 냈다!",
 	},
 	protector: {
 		name: "프로텍터",
@@ -1590,7 +1590,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON:topic] 선제공격손톱으로 행동이 빨라졌다!",
+		activate: "  {POKEMON:topic} 선제공격손톱으로 행동이 빨라졌다!",
 	},
 	quickpowder: {
 		name: "스피드파우더",
@@ -1640,7 +1640,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "레드카드",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON:topic] 레드카드를 [TARGET]에게 꺼내 들었다!",
+		end: "  {POKEMON:topic} 레드카드를 {TARGET}에게 꺼내 들었다!",
 	},
 	redorb: {
 		name: "주홍구슬",
@@ -1685,7 +1685,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "울퉁불퉁멧",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON:topic] 울퉁불퉁멧 때문에 데미지를 입었다!",
+		damage: "  {POKEMON:topic} 울퉁불퉁멧 때문에 데미지를 입었다!",
 	},
 	roomservice: {
 		name: "룸서비스",
@@ -1731,7 +1731,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "방진고글",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON:topic] 방진고글 때문에 [MOVE]에 당하지 않는다!",
+		block: "  {POKEMON:topic} 방진고글 때문에 {MOVE}에 당하지 않는다!",
 	},
 	sailfossil: {
 		name: "지느러미화석",
@@ -2452,8 +2452,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "울트라네크로Z",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "  [POKEMON:directional]로부터 눈부신 빛이 넘쳐흐른다!",
-		activate: "[POKEMON:topic] 울트라버스트로 인해 새로운 모습을 드러냈다!",
+		transform: "  {POKEMON:directional}로부터 눈부신 빛이 넘쳐흐른다!",
+		activate: "{POKEMON:topic} 울트라버스트로 인해 새로운 모습을 드러냈다!",
 	},
 	unremarkableteacup: {
 		name: "범작찻잔",
@@ -2612,7 +2612,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON:topic] 이상한 나무열매로 [MOVE]의 PP를 회복했다!",
+		activate: "  {POKEMON:topic} 이상한 나무열매로 {MOVE}의 PP를 회복했다!",
 	},
 	pinkbow: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI

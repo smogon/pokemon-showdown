@@ -33,7 +33,7 @@ export const TermNames: { [id: string]: TranslationString } = {
 
 	type: "Type",
 	types: "Types",
-	teratype: "Tera [TYPE]",
+	teratype: "Tera {TYPE}",
 	nature: "Nature",
 	category: "Category",
 	categories: "Categories",
@@ -50,16 +50,16 @@ export const TermNames: { [id: string]: TranslationString } = {
 	forme: "Forme",
 	dexnum: "Dex#",
 	generation: "Generation",
-	gennum: "Gen [NUMBER]",
+	gennum: "Gen {NUMBER}",
 	evolution: "Evolution",
 	preevolution: "Pre-Evolution",
 	doesnotevolve: "Does Not Evolve",
 	zcrystal: "Z-Crystal",
 	target: "Target",
 	height: "Height",
-	numm: "[NUMBER] m",
+	numm: "{NUMBER} m",
 	weight: "Weight",
-	numkg: "[NUMBER] kg",
+	numkg: "{NUMBER} kg",
 
 	megaevolution: "Mega Evolution",
 	zpower: "Z-Power",
@@ -78,9 +78,9 @@ export const TermNames: { [id: string]: TranslationString } = {
 	immune: "Immune",
 
 	// used in switch-in messages in battles
-	nicknamespecies: "[NICKNAME] ([SPECIES])",
+	nicknamespecies: "{NICKNAME} ({SPECIES})",
 	// this one's not used in code; just a reference for how pokedex.ts should be filled
-	speciesforme: "[SPECIES]-[FORME]",
+	speciesforme: "{SPECIES}-{FORME}",
 };
 
 export const StatNames: { [id: string]: TranslationString } = {

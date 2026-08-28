@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "特性護具",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]的特性正受到特性護具的效果保護！",
+		block: "  {POKEMON}的特性正受到特性護具的效果保護！",
 	},
 	abomasite: {
 		name: "暴雪王進化石",
@@ -55,8 +55,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "氣球",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		start: "  [POKEMON]靠著氣球浮在了空中！",
-		end: "  [POKEMON]的氣球破了！",
+		start: "  {POKEMON}靠著氣球浮在了空中！",
+		end: "  {POKEMON}的氣球破了！",
 	},
 	alakazite: {
 		name: "胡地進化石",
@@ -310,7 +310,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "清淨墜飾",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  因為清淨墜飾的效果，無法降低[POKEMON]的能力！",
+		block: "  因為清淨墜飾的效果，無法降低{POKEMON}的能力！",
 	},
 	clefablite: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -357,7 +357,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "釋陀果",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]用了釋陀果後，行動變快了！",
+		activate: "  {POKEMON}用了釋陀果後，行動變快了！",
 	},
 	damprock: {
 		name: "潮濕岩石",
@@ -521,13 +521,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "逃脫按鍵",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]用逃脫按鍵回去了！",
+		end: "  {POKEMON}用逃脫按鍵回去了！",
 	},
 	ejectpack: {
 		name: "避難背包",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]用避難背包回去了！",
+		end: "  {POKEMON}用避難背包回去了！",
 	},
 	electirizer: {
 		name: "電力增幅器",
@@ -1069,7 +1069,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "蘋野果",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]用蘋野果回復了[MOVE]的ＰＰ！",
+		activate: "  {POKEMON}用蘋野果回復了{MOVE}的ＰＰ！",
 	},
 	levelball: {
 		name: "等級球",
@@ -1083,7 +1083,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "生命寶珠",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON]的生命被削減了一些！",
+		damage: "  {POKEMON}的生命被削減了一些！",
 	},
 	lightball: {
 		name: "電氣球",
@@ -1325,7 +1325,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "模仿香草",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		activate: "  [POKEMON]使用模仿香草，模仿了對手的能力變化！",
+		activate: "  {POKEMON}使用模仿香草，模仿了對手的能力變化！",
 	},
 	mistyseed: {
 		name: "薄霧種子",
@@ -1512,7 +1512,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "強力香草",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]用了強力香草後，充滿了力量！",
+		end: "  {POKEMON}用了強力香草後，充滿了力量！",
 	},
 	powerlens: {
 		name: "力量鏡",
@@ -1542,7 +1542,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "部位護具",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]靠著部位護具防住了！",
+		block: "  {POKEMON}靠著部位護具防住了！",
 	},
 	protector: {
 		name: "護具",
@@ -1590,7 +1590,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 
-		activate: "  [POKEMON]用了先制之爪後，行動變快了！",
+		activate: "  {POKEMON}用了先制之爪後，行動變快了！",
 	},
 	quickpowder: {
 		name: "速度粉",
@@ -1640,7 +1640,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "紅牌",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		end: "  [POKEMON]猛地向[TARGET]出示了紅牌！",
+		end: "  {POKEMON}猛地向{TARGET}出示了紅牌！",
 	},
 	redorb: {
 		name: "朱紅色寶珠",
@@ -1685,7 +1685,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "凸凸頭盔",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		damage: "  [POKEMON]因凸凸頭盔而受到了傷害！",
+		damage: "  {POKEMON}因凸凸頭盔而受到了傷害！",
 	},
 	roomservice: {
 		name: "客房服務",
@@ -1731,7 +1731,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "防塵護目鏡",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		block: "  [POKEMON]因防塵護目鏡而不會受到[MOVE]的攻擊！",
+		block: "  {POKEMON}因防塵護目鏡而不會受到{MOVE}的攻擊！",
 	},
 	sailfossil: {
 		name: "鰭之化石",
@@ -2452,8 +2452,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "究極奈克洛Ｚ",
 		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 
-		transform: "  [POKEMON]的身上開始溢出眩目的光芒！",
-		activate: "[POKEMON]透過究極爆發，展現出新的樣子！",
+		transform: "  {POKEMON}的身上開始溢出眩目的光芒！",
+		activate: "{POKEMON}透過究極爆發，展現出新的樣子！",
 	},
 	unremarkableteacup: {
 		name: "凡作茶碗",
