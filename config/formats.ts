@@ -780,38 +780,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: ['Ogerpon-Hearthflame', 'Ursaluna-Bloodmoon', 'Walking Wake', 'Yveltal', 'Urshifu', 'Naganadel'],
 	},
 	{
-		name: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
-		mod: 'gen9mnmlimitedsupply',
-		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause'],
-		team: 'randomMnMLS',
-		desc: 'A Mix and Mega-based Random Battle made by the Pet Mods community.',
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1OS3D5qEMS3peHS2XwIM61AVxw7fktgU_bCWHwsW00Ow/" target="_blank">spreadsheet</a> for all the mons and items, and use \`/mnm pokemon @ item\` to find their stats!</b></div>`);
-			this.add(`raw|Welcome to Mix and Mega: Limited Supply!`);
-			this.add(`raw|This is a Gen 9 Mix and Mega based Random battles format.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3778874" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
-			}
-		},
-		onSwitchIn(pokemon) {
-			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
-			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
-				// Place volatiles on the Pokémon to show its mega-evolved condition and details
-				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
-				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
-				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
-					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: Mix and Mega Limited Supply');
-				}
-			}
-		},
-		onSwitchOut(pokemon) {
-			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
-			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
-				this.add('-end', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
-			}
-		},
-	},
-	{
 		name: "[Gen 9] Deltamon Random Battle",
 		desc: `A Gen 9 metagame where characters from Undertale and Deltarune are Pokemon.`,
 		mod: 'gen9deltamon',
@@ -822,32 +790,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/" target="_blank">spreadsheet</a> for all the custom elements!</b></div>`);
 			this.add(`raw|Welcome to Deltamon Random Battle!`);
 			this.add(`raw|<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3711007/post-11052905" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
-		},
-	},
-	{
-		name: "[Gen 9] CCAPM2025 Random Battle",
-		desc: `A Gen 9 metagame created in the Pet Mods Room featuring Pokemon with new form changes.`,
-		mod: 'ccapm2025',
-		team: 'randomC25',
-		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Terastal Clause', 'CCAPM Form Changes', 'Data Preview'],
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new forms, moves, items, and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1g03dsgmgEIltK9CLZ-GC6Nc5fPiz36_zZ8HPfxzsfvA/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Commuity Create-A-Pet Mod 2025!`);
-			this.add('-message', `This is a Generation 9 Pet Mod where every Pokemon has a new form change!`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3773591/`);
-			this.add('-message', `This metagame was created last year in the Pet Mods Room here on Showdown!`);
-			this.add('-message', `Be sure to swing by to discuss the metagame and participate in events like CCAPM:`);
-			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
-		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
 		},
 	},
 	{
@@ -3746,40 +3688,35 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] CCAPM2025", // roomtours
-		desc: `A Gen 9 metagame created in the Pet Mods Room featuring Pokemon with new form changes.`,
-		mod: 'ccapm2025',
-		searchShow: false,
-		ruleset: ['Standard NatDex', 'Sleep Moves Clause', '!Sleep Clause Mod', 'CCAPM Form Changes', 'Terastal Clause', 'Data Preview'],
-		banlist: [
-			'All Pokemon', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang',
-			'Baton Pass', 'Last Respects', 'Shed Tail', 'Mewtwo', 'Rayquaza',
-		],
-		unbanlist: [
-			'Aegislash', 'Alcremie', 'Aurorus', 'Beartic', 'Blaziken', 'Clawitzer', 'Cofagrigus', 'Crustle',
-			'Darmanitan', 'Diancie', 'Dragapult', 'Drifblim', 'Dudunsparce', 'Electrode', 'Emolga', 'Fearow',
-			'Flygon', 'Genesect', 'Gliscor', 'Iron Valiant', 'Jirachi', 'Kecleon', 'Kommo-o', 'Landorus', 'Landorus-Therian',
-			'Lilligant', 'Lucario', 'Luvdisc', 'Luxray', 'Magcargo', 'Mamoswine', 'Mesprit',
-			'Ogerpon-Pixiedust', 'Parasect', 'Pecharunt', 'Regigigas', 'Rhyperior', 'Samurott',
-			'Shaymin', 'Shedinja', 'Simisear', 'Slowking', 'Stakataka', 'Sudowoodo', 'Sunflora', 'Sylveon', 'Talonflame',
-			'Torterra', 'Trubbish', 'Victini', 'Volcanion', 'Volcarona', 'Weavile', 'Wyrdeer', 'Zarude', 'Zeraora',
-		],
+		name: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
+		mod: 'gen9mnmlimitedsupply',
+		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause'],
+		team: 'randomMnMLS',
+		desc: 'A Mix and Mega-based Random Battle made by the Pet Mods community.',
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the wacky new forms, moves, items, and abilities?<br />Then make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1g03dsgmgEIltK9CLZ-GC6Nc5fPiz36_zZ8HPfxzsfvA/" target="_blank">spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to Commuity Create-A-Pet Mod 2025!`);
-			this.add('-message', `This is a Generation 9 Pet Mod where every Pokemon has a new form change!`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3773591/`);
-			this.add('-message', `This metagame was created last year in the Pet Mods Room here on Showdown!`);
-			this.add('-message', `Be sure to swing by to discuss the metagame and participate in events like CCAPM:`);
-			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
+			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1OS3D5qEMS3peHS2XwIM61AVxw7fktgU_bCWHwsW00Ow/" target="_blank">spreadsheet</a> for all the mons and items, and use \`/mnm pokemon @ item\` to find their stats!</b></div>`);
+			this.add(`raw|Welcome to Mix and Mega: Limited Supply!`);
+			this.add(`raw|This is a Gen 9 Mix and Mega based Random battles format.<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3778874" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+			}
 		},
-		onValidateSet(set) {
-			if (this.ruleTable.has("+tag:cap")) {
-				const { tierSpecies } = this.getValidationSpecies(set);
-				if (tierSpecies.isNonstandard !== "CAP")
-					return [`${set.name || set.species} does not exist in Pet Mods Advent.`];
-			};
+		onSwitchIn(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				// Place volatiles on the Pokémon to show its mega-evolved condition and details
+				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
+					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: Mix and Mega Limited Supply');
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				this.add('-end', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+			}
 		},
 	},
 	{
