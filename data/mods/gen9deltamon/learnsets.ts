@@ -1,5 +1,5 @@
-export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
-rudinn: {
+export const Pokedex: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
+	rudinn: {
 		learnset: {
 			airslash: ["9L1"],
 			dazzlinggleam: ["9L1"],
@@ -1869,7 +1869,7 @@ rudinn: {
 			safeguard: ["9L1"],
 			sheercold: ["9L1"],
 			sleeptalk: ["9L1"],
-			snowgrave: ["9L55"],
+			snowgrave: ["9L1"],
 			snowscape: ["9L1"],
 			storedpower: ["9L1"],
 			substitute: ["9L1"],
@@ -6997,7 +6997,28 @@ rudinn: {
 			trickroom: ["9L1"],
 		},
 	},
-
-
+	
+	friend: {
+		learnset: {
+			crunch: ["9L1"],
+			tailofhell: ["9L1"],
+			psychicfangs: ["9L1"],
+			taunt: ["9L1"],
+			pursuit: ["9L1"],
+			icefang: ["9L1"],
+			firefang: ["9L1"],
+			thunderfang: ["9L1"],
+			egg: ["9L1"],
+		},
+	},
+	normalnpc: {
+		learnset: {
+			bravebird: ["9L1"],
+			doubleedge: ["9L1"],
+			closecombat: ["9L1"],
+			uturn: ["9L1"],
+			chatter: ["9L1"],
+		},
+	},
 
 };

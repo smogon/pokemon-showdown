@@ -488,4 +488,10 @@ export const FormatsData: import('../../../sim/dex-species').SpeciesFormatsDataT
 	asrielhyperdeath: {
 		tier: "Uber",
 	},
+	friend: {
+		tier: "Illegal",
+	},
+	normalnpc: {
+		tier: "Illegal",
+	},
 };

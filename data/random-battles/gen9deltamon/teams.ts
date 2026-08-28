@@ -436,6 +436,8 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'undynemega' && role === 'Bulky Setup') return 'Undynite';
 		if (species.id === 'woshua' && role === 'Setup Sweeper') return 'White Herb';
 		if (species.id === 'yellow' && role === 'Z-Move user') return 'Golden Omega Petal';
+		if (species.id === 'friend') return 'Leftovers';
+		if (species.id === 'normalnpc') return 'Silk Scarf';
 		// fallback
 		return 'Life Orb';
 	}

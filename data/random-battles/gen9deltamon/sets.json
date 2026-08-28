@@ -1706,5 +1706,25 @@
 				"abilities": ["Static"]
 			}
 		]
+	},
+	"friend": {
+		"level": 79,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Egg", "Tail of Hell", "Crunch", "Psychic Fangs"],
+				"abilities": ["Darkspawn"]
+			}
+		]
+	},
+	"normalnpc": {
+		"level": 79,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Brave Bird", "Close Combat", "U-turn", "Double-Edge"],
+				"abilities": ["Normal Ability"]
+			}
+		]
 	}
 }

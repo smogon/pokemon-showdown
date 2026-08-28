@@ -245,6 +245,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			move.ignoreImmunity = true;
 		},
 		onAnyEffectiveness(typeMod, target, type, move) {
+			if (move?.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.dex.getImmunity(move, type)) return 1;
 			return typeMod * -1;
 		},
@@ -581,6 +582,51 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 		name: "Stellar Guard",
 		shortDesc: "This Pokemon takes 0.9x damage from all attacks.",
+	},
+	darkspawn: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Dark') {
+				this.heal(target.baseMaxhp / 4, target, target);
+				if (!this.boost({atk: 1})) {
+						this.add('-immune', target, '[from] ability: Darkspawn');
+					}
+				return null;
+			}
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bite']) {
+				return this.chainModify(1.5);
+			}
+		},
+		flags: { breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1 },
+		name: "Darkspawn",
+		shortDesc: "Immune to and heal 25% from Dark moves. Bite Moves: 1.5x Power.",
+	},
+	normalability: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Normal') {
+				return this.chainModify(1.2);
+			}
+		},
+		onResidualOrder: 13,
+		onResidual(pokemon) {
+			for (const target of pokemon.adjacentFoes()) {
+				if (target.baseSpecies.name !== 'Onionsan' || target.volatiles['substitute'] || target.isSemiInvulnerable()) return;
+				if (this.randomChance(2, 10)) {
+					this.add('-message', `${pokemon.name} bludgeoned ${target.name}!`);
+					this.add('-anim', pokemon, "Close Combat", target);
+					target.faint();
+					this.add('-message', `${target.name} was turned into takoyaki!`);
+					this.heal(pokemon.baseMaxhp);
+					this.add('-message', `${pokemon.name} ate the takoyaki and fully restored its health!`);
+				}
+			}
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1 },
+		name: "Normal Ability",
+		shortDesc: "A normal ability. Does Normal things.",
 	},
 
 	// Vanilla abilities edited to interact with Savage Roar

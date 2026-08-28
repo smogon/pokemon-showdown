@@ -1060,6 +1060,59 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "normal",
 	},
+	egg: {
+		name: "Egg",
+		type: "Normal",
+		category: "Status",
+		basePower: 0,
+		accuracy: true,
+		pp: 5,
+		shortDesc: "Not too important, not too unimportant. Cannot be escaped.",
+		priority: 0,
+		flags: { reflectable: 1, mustpressure: 1 },
+		sideCondition: 'egg',
+		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Mind Blown", target);
+		},
+		condition: {
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Egg');
+			},
+		},
+		target: "foeSide",
+	},
+	tailofhell: {
+		name: "Tail of Hell",
+		type: "Ghost",
+		category: "Physical",
+		basePower: 100,
+		accuracy: 100,
+		pp: 5,
+		shortDesc: "1.5x Power & heals 33% of max HP if target has Egg. Removes Egg hazard.",
+		priority: 0,
+		flags: { contact: 1, protect: 1 },
+		basePowerCallback(pokemon, target, move) {
+			if (target.side.getSideCondition('egg')) {
+				this.debug('egg boost');
+				return move.basePower * 1.5;
+			}
+			return move.basePower;
+		},
+		onHit(target, source, move) {
+			if (!target.side.getSideCondition('egg')) return;
+			this.heal(source.baseMaxhp * 0.33, source);
+			this.add('-message', `${source.name} consumed the Egg!`);
+			target.side.removeSideCondition('egg');
+		},
+		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Malignant Chain", target);
+			this.add('-anim', source, "Poltergeist", target);
+		},
+		target: "normal",
+	},
+
 	// Pollen Puff and Sharpshooter
 	pollenpuff: {
 		inherit: true,
