@@ -1207,7 +1207,7 @@
 		"sets": [
 			{
 				"role": "Wallbreaker",
-				"movepool": ["Gaster Blaster", "Blue Attack", "Bonemerang", "Teleport", "Shadow Ball", "Earth Power", "Taunt", "Knock Off"],
+				"movepool": ["Gaster Blaster", "Blue Attack", "Bonemerang", "Teleport", "Shadow Bone", "Earth Power", "Taunt", "Knock Off"],
 				"abilities": ["Wonder Guard"]
 			}
 		]
