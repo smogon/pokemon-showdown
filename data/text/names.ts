@@ -81,6 +81,8 @@ export const TermNames: { [id: string]: TranslationString } = {
 	zeffect: "Z-Effect",
 	dynamax: "Dynamax",
 	dynamaxlevel: "Dynamax Level",
+	ultraburst: "Ultra Burst",
+	tera: "Tera",
 
 	supereffective: "Super effective",
 	extremelyeffective: "Extremely effective",
