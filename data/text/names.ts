@@ -27,6 +27,7 @@ export const TermNames: { [id: string]: TranslationString } = {
 	ability: "Ability",
 	abilities: "Abilities",
 	hiddenability: "Hidden Ability",
+	possibleabilities: "Possible abilities",
 	team: "Team",
 	teams: "Teams",
 	teamslist: "Teams List",
