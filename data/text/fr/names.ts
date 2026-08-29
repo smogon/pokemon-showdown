@@ -207,62 +207,6 @@ export const EggGroupNames: { [id: string]: TranslationString } = {
 	undiscovered: "Inconnu", // NEEDS QC
 };
 
-export const TagNames: { [id: string]: TranslationString } = {
-	physical: "Physique",
-	special: "Spéciale",
-	status: "Statut",
-	mega: "Méga-Évolution",
-	gigantamax: "Gigamax",
-	mythical: "Pokémon fabuleux",
-	sublegendary: "Semi-Légendaire", // NEEDS QC
-	restrictedlegendary: "Légendaire restreint", // NEEDS QC
-	ultrabeast: "Ultra-Chimère",
-	paradox: "Paradoxe",
-	pokestar: "Pokéwood", // NEEDS QC
-	zmove: "Capacité Z",
-	maxmove: "Capacité Dynamax",
-	contact: "Contact",
-	sound: "Son", // NEEDS QC
-	powder: "Poudre", // NEEDS QC
-	fist: "Poing", // NEEDS QC
-	pulse: "Onde", // NEEDS QC
-	bite: "Morsure", // NEEDS QC
-	bullet: "Projectile", // NEEDS QC
-	dance: "Danse", // NEEDS QC
-	slicing: "Tranchant", // NEEDS QC
-	wind: "Vent", // NEEDS QC
-	bypassprotect: "Ignore la protection", // NEEDS QC
-	nonreflectable: "Non réfléchissable", // NEEDS QC
-	nonmirror: "Non imitable", // NEEDS QC
-	nonsnatchable: "Non saisissable", // NEEDS QC
-	bypasssubstitute: "Ignore le clone", // NEEDS QC
-	gmaxmove: "Capacité Gigamax", // NEEDS QC
-	past: "Passé", // NEEDS QC
-	truepast: "Passé uniquement", // NEEDS QC
-	pastunobtainable: "Passé introuvable", // NEEDS QC
-	future: "Futur", // NEEDS QC
-	lgpe: "LGPE",
-	unobtainable: "Introuvable", // NEEDS QC
-	cap: "CAP",
-	custom: "Personnalisé", // NEEDS QC
-	nonexistent: "Inexistant", // NEEDS QC
-
-	introducedgen: "Génération", // NEEDS QC
-	height: "Taille",
-	weight: "Poids",
-	hp: "PV", // NEEDS QC
-	atk: "Atq", // NEEDS QC
-	def: "Déf", // NEEDS QC
-	spa: "Atq. Spé", // NEEDS QC
-	spd: "Déf. Spé", // NEEDS QC
-	spe: "Vit.", // NEEDS QC
-	bst: "BST",
-	basepower: "Puissance",
-	priority: "Priorité", // NEEDS QC
-	accuracy: "Précision",
-	maxpp: "PP Max", // NEEDS QC
-};
-
 export const ColorNames: { [id: string]: TranslationString } = {
 	black: "Noir",
 	blue: "Bleu",

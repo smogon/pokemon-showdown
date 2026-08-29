@@ -199,62 +199,6 @@ export const EggGroupNames: { [id: string]: TranslationString } = {
 	undiscovered: "未発見", // NEEDS QC
 };
 
-export const TagNames: { [id: string]: TranslationString } = {
-	physical: "ぶつり",
-	special: "とくしゅ",
-	status: "へんか",
-	mega: "メガシンカ",
-	gigantamax: "キョダイマックス",
-	mythical: "幻のポケモン",
-	sublegendary: "準伝説", // NEEDS QC
-	restrictedlegendary: "禁止級伝説", // NEEDS QC
-	ultrabeast: "ウルトラビースト",
-	paradox: "パラドックス",
-	pokestar: "ポケウッド", // NEEDS QC
-	zmove: "Ｚワザ",
-	maxmove: "ダイマックスわざ",
-	contact: "直接攻撃", // NEEDS QC
-	sound: "音", // NEEDS QC
-	powder: "粉", // NEEDS QC
-	fist: "パンチ", // NEEDS QC
-	pulse: "はどう", // NEEDS QC
-	bite: "かみつき", // NEEDS QC
-	bullet: "弾", // NEEDS QC
-	dance: "踊り", // NEEDS QC
-	slicing: "切る技", // NEEDS QC
-	wind: "風", // NEEDS QC
-	bypassprotect: "まもる貫通", // NEEDS QC
-	nonreflectable: "反射不可", // NEEDS QC
-	nonmirror: "オウムがえし不可", // NEEDS QC
-	nonsnatchable: "よこどり不可", // NEEDS QC
-	bypasssubstitute: "みがわり貫通", // NEEDS QC
-	gmaxmove: "キョダイマックスわざ", // NEEDS QC
-	past: "過去作", // NEEDS QC
-	truepast: "完全過去作", // NEEDS QC
-	pastunobtainable: "過去作入手不可", // NEEDS QC
-	future: "未実装", // NEEDS QC
-	lgpe: "ピカブイ", // NEEDS QC
-	unobtainable: "入手不可", // NEEDS QC
-	cap: "CAP",
-	custom: "カスタム", // NEEDS QC
-	nonexistent: "存在しない", // NEEDS QC
-
-	introducedgen: "初登場世代", // NEEDS QC
-	height: "高さ",
-	weight: "重さ",
-	hp: "HP",
-	atk: "Ａ", // NEEDS QC
-	def: "Ｂ", // NEEDS QC
-	spa: "Ｃ", // NEEDS QC
-	spd: "Ｄ", // NEEDS QC
-	spe: "Ｓ", // NEEDS QC
-	bst: "種族値合計", // NEEDS QC
-	basepower: "いりょく",
-	priority: "優先度", // NEEDS QC
-	accuracy: "めいちゅう",
-	maxpp: "最大PP", // NEEDS QC
-};
-
 export const ColorNames: { [id: string]: TranslationString } = {
 	black: "黒",
 	blue: "青",

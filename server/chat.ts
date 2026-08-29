@@ -1828,7 +1828,7 @@ export const Chat = new class {
 					nature: text.NatureNames,
 					gender: text.GenderNames,
 					egggroup: text.EggGroupNames,
-					tag: text.TagNames,
+					tag: Object.fromEntries(Object.entries(text.Tags).map(([id, tag]) => [id, tag.name])),
 					color: text.ColorNames,
 					status: text.StatusNames,
 					target: text.TargetNames,

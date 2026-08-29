@@ -199,62 +199,6 @@ export const EggGroupNames: { [id: string]: TranslationString } = {
 	undiscovered: "미발견", // NEEDS QC
 };
 
-export const TagNames: { [id: string]: TranslationString } = {
-	physical: "물리",
-	special: "특수",
-	status: "변화",
-	mega: "메가진화",
-	gigantamax: "거다이맥스",
-	mythical: "환상의 포켓몬",
-	sublegendary: "준전설", // NEEDS QC
-	restrictedlegendary: "제한 전설", // NEEDS QC
-	ultrabeast: "울트라비스트",
-	paradox: "패러독스",
-	pokestar: "포켓우드", // NEEDS QC
-	zmove: "Z기술",
-	maxmove: "다이맥스기술",
-	contact: "직접 공격", // NEEDS QC
-	sound: "소리", // NEEDS QC
-	powder: "가루", // NEEDS QC
-	fist: "펀치", // NEEDS QC
-	pulse: "파동", // NEEDS QC
-	bite: "물기", // NEEDS QC
-	bullet: "탄환", // NEEDS QC
-	dance: "춤", // NEEDS QC
-	slicing: "베기", // NEEDS QC
-	wind: "바람", // NEEDS QC
-	bypassprotect: "방어 관통", // NEEDS QC
-	nonreflectable: "반사 불가", // NEEDS QC
-	nonmirror: "따라하기 불가", // NEEDS QC
-	nonsnatchable: "가로채기 불가", // NEEDS QC
-	bypasssubstitute: "대타출동 관통", // NEEDS QC
-	gmaxmove: "거다이맥스기술", // NEEDS QC
-	past: "과거작", // NEEDS QC
-	truepast: "완전 과거작", // NEEDS QC
-	pastunobtainable: "과거작 입수 불가", // NEEDS QC
-	future: "미실장", // NEEDS QC
-	lgpe: "LGPE",
-	unobtainable: "입수 불가", // NEEDS QC
-	cap: "CAP",
-	custom: "커스텀", // NEEDS QC
-	nonexistent: "존재하지 않음", // NEEDS QC
-
-	introducedgen: "등장 세대", // NEEDS QC
-	height: "키",
-	weight: "몸무게",
-	hp: "HP",
-	atk: "공", // NEEDS QC
-	def: "방", // NEEDS QC
-	spa: "특공", // NEEDS QC
-	spd: "특방", // NEEDS QC
-	spe: "속", // NEEDS QC
-	bst: "종족값 합계", // NEEDS QC
-	basepower: "위력",
-	priority: "우선도", // NEEDS QC
-	accuracy: "명중",
-	maxpp: "최대 PP", // NEEDS QC
-};
-
 export const ColorNames: { [id: string]: TranslationString } = {
 	black: "검정",
 	blue: "파랑",

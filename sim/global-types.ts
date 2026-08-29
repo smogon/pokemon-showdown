@@ -504,12 +504,19 @@ interface SpeciesText {
 	grammar?: TranslationString;
 }
 type DefaultText = AnyObject;
+interface TagText {
+	name?: TranslationString;
+	/** used in move tooltips */
+	hint?: TranslationString;
+	desc?: TranslationString;
+}
 
 type ResolvedText<T extends BasicTextData> = T & { name: string, desc: string, shortDesc: string };
 type ResolvedAbilityText = ResolvedText<AbilityText>;
 type ResolvedItemText = ResolvedText<ItemText>;
 type ResolvedMoveText = ResolvedText<MoveText>;
 type ResolvedNameText = { name: string };
+type ResolvedTagText = { name: string, hint?: string, desc?: string };
 type ResolvedSpeciesText = { name: string, baseSpecies: string, forme?: string, grammar?: string };
 
 declare namespace RandomTeamsTypes {

@@ -199,62 +199,6 @@ export const EggGroupNames: { [id: string]: TranslationString } = {
 	undiscovered: "未发现", // NEEDS QC
 };
 
-export const TagNames: { [id: string]: TranslationString } = {
-	physical: "物理", // NEEDS QC
-	special: "特殊", // NEEDS QC
-	status: "变化", // NEEDS QC
-	mega: "超级进化",
-	gigantamax: "超极巨化",
-	mythical: "幻之宝可梦",
-	sublegendary: "准传说", // NEEDS QC
-	restrictedlegendary: "限制级传说", // NEEDS QC
-	ultrabeast: "究极异兽",
-	paradox: "悖谬",
-	pokestar: "宝可坞", // NEEDS QC
-	zmove: "Ｚ招式",
-	maxmove: "极巨招式",
-	contact: "接触", // NEEDS QC
-	sound: "声音", // NEEDS QC
-	powder: "粉末", // NEEDS QC
-	fist: "拳", // NEEDS QC
-	pulse: "波动", // NEEDS QC
-	bite: "啃咬", // NEEDS QC
-	bullet: "弹", // NEEDS QC
-	dance: "舞蹈", // NEEDS QC
-	slicing: "切割", // NEEDS QC
-	wind: "风", // NEEDS QC
-	bypassprotect: "无视守住", // NEEDS QC
-	nonreflectable: "不可反射", // NEEDS QC
-	nonmirror: "不可鹦鹉学舌", // NEEDS QC
-	nonsnatchable: "不可抢夺", // NEEDS QC
-	bypasssubstitute: "无视替身", // NEEDS QC
-	gmaxmove: "超极巨招式", // NEEDS QC
-	past: "过去作", // NEEDS QC
-	truepast: "完全过去作", // NEEDS QC
-	pastunobtainable: "过去作不可入手", // NEEDS QC
-	future: "未实装", // NEEDS QC
-	lgpe: "LGPE",
-	unobtainable: "无法入手", // NEEDS QC
-	cap: "CAP",
-	custom: "自定义", // NEEDS QC
-	nonexistent: "不存在", // NEEDS QC
-
-	introducedgen: "登场世代", // NEEDS QC
-	height: "身高",
-	weight: "体重",
-	hp: "HP",
-	atk: "攻", // NEEDS QC
-	def: "防", // NEEDS QC
-	spa: "特攻", // NEEDS QC
-	spd: "特防", // NEEDS QC
-	spe: "速", // NEEDS QC
-	bst: "种族值总和", // NEEDS QC
-	basepower: "威力",
-	priority: "优先度", // NEEDS QC
-	accuracy: "命中",
-	maxpp: "最大PP", // NEEDS QC
-};
-
 export const ColorNames: { [id: string]: TranslationString } = {
 	black: "黑色",
 	blue: "蓝色",

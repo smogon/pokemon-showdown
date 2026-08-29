@@ -34,7 +34,6 @@ describe('Chat', () => {
 			nature: 'NatureNames',
 			gender: 'GenderNames',
 			egggroup: 'EggGroupNames',
-			tag: 'TagNames',
 			color: 'ColorNames',
 			status: 'StatusNames',
 			target: 'TargetNames',
@@ -44,6 +43,8 @@ describe('Chat', () => {
 		})) {
 			assert.equal(TL[property], text[table]);
 		}
+		assert.equal(TL.tag.physical, text.Tags.physical.name);
+		assert.equal(TL.tag.contact, text.Tags.contact.name);
 	});
 
 	it('should localize data HTML', () => {

@@ -90,6 +90,7 @@ interface RawTextTableData extends Record<OtherNameTable, DexTable<TranslationSt
 	Items: DexTable<ItemText>;
 	Moves: DexTable<MoveText>;
 	Pokedex: DexTable<SpeciesText>;
+	Tags: DexTable<TagText>;
 	Default: DexTable<DefaultText>;
 }
 interface TextTableData extends Record<OtherNameTable, DexTable<string>> {
@@ -97,6 +98,7 @@ interface TextTableData extends Record<OtherNameTable, DexTable<string>> {
 	Items: DexTable<ResolvedItemText>;
 	Moves: DexTable<ResolvedMoveText>;
 	Pokedex: DexTable<ResolvedSpeciesText>;
+	Tags: DexTable<ResolvedTagText>;
 	Default: DexTable<DefaultText>;
 }
 
@@ -519,6 +521,7 @@ export class ModdedDex {
 		const localizedData = lang === 'en' ? englishData : this.loadRawTextData(lang);
 		return (dexes['base'].textCache[cacheKey] = {
 			Pokedex: this.resolvePokedexTable(englishData.Pokedex, localizedData.Pokedex),
+			Tags: this.resolveTagsTable(englishData.Tags, localizedData.Tags),
 			Moves: this.resolveTextTable(englishData.Moves, localizedData.Moves),
 			Abilities: this.resolveTextTable(englishData.Abilities, localizedData.Abilities),
 			Items: this.resolveTextTable(englishData.Items, localizedData.Items),
@@ -539,6 +542,7 @@ export class ModdedDex {
 			Pokedex: this.loadTextFile(
 				`${langDir}pokedex`, 'PokedexText', optional
 			) as DexTable<SpeciesText>,
+			Tags: (this.loadTextFile(`${langDir}tags`, 'TagsText', optional) || {}) as DexTable<TagText>,
 			...otherNameTables,
 			Moves: this.loadTextFile(`${langDir}moves`, 'MovesText', optional) as DexTable<MoveText>,
 			Abilities: this.loadTextFile(`${langDir}abilities`, 'AbilitiesText', optional) as DexTable<AbilityText>,
@@ -547,6 +551,22 @@ export class ModdedDex {
 		};
 		if (lang !== 'en') this.validateTranslations(data, lang);
 		return (dexes['base'].rawTextCache[lang] = data);
+	}
+
+	private resolveTagsTable(
+		englishTable: DexTable<TagText>, localizedTable: DexTable<TagText>
+	): DexTable<ResolvedTagText> {
+		const FIELDS = ['name', 'hint', 'desc'] as const;
+		const table: DexTable<ResolvedTagText> = {};
+		for (const id in englishTable) {
+			const entry: Partial<ResolvedTagText> = {};
+			for (const field of FIELDS) {
+				const value = localizedTable[id]?.[field] ?? englishTable[id][field];
+				if (value) entry[field] = value;
+			}
+			table[id] = entry as ResolvedTagText;
+		}
+		return table;
 	}
 
 	private resolvePokedexTable(

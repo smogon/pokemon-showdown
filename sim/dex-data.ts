@@ -47,7 +47,7 @@ export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 
 
 export const OTHER_NAME_TABLES = [
 	'TermNames', 'TypeNames', 'NatureNames', 'GenderNames',
-	'EggGroupNames', 'TagNames', 'ColorNames', 'StatusNames', 'TargetNames',
+	'EggGroupNames', 'ColorNames', 'StatusNames', 'TargetNames',
 	'StatNames', 'StatMediumNames', 'StatShortNames',
 ] as const;
 export type OtherNameTable = typeof OTHER_NAME_TABLES[number];
@@ -79,7 +79,7 @@ export class DexText {
 		effect: TextEffect, lang: TextLanguage = 'en'
 	): EffectText {
 		if (!('effectType' in effect)) {
-			return { name: this.otherName('TagNames', effect.name, lang) };
+			return { name: this.tagName(effect.name, lang) };
 		}
 		let table: EffectTextTable;
 		switch (effect.effectType) {
@@ -127,7 +127,11 @@ export class DexText {
 	}
 
 	categoryName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('TagNames', name, lang);
+		return this.tagName(name, lang);
+	}
+
+	tagName(name: string, lang: TextLanguage = 'en'): string {
+		return this.dex.loadTextData(lang).Tags[toID(name)]?.name || name;
 	}
 
 	genderName(name: string, lang: TextLanguage = 'en'): string {
