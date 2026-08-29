@@ -665,12 +665,12 @@ export const commands: Chat.ChatCommands = {
 					details = {
 						[TL.term.dexnum]: String(pokemon.num),
 						[TL.term.generation]: String(pokemon.gen) || 'CAP',
-						[TL.term.height]: TL.term.numm.replace('[NUMBER]', `${pokemon.heightm}`),
+						[TL.term.height]: TL.term.numm.replace('{NUMBER}', `${pokemon.heightm}`),
 					};
-					details[TL.term.weight] = `${TL.term.numkg.replace('[NUMBER]', `${pokemon.weighthg / 10}`)} <em>(${weighthit} BP)</em>`;
+					details[TL.term.weight] = `${TL.term.numkg.replace('{NUMBER}', `${pokemon.weighthg / 10}`)} <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details[TL.tag.gmaxmove] = gmaxMove;
-					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
+					if (dex.gen === 1) details[TL.term.critrate] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 					if (pokemon.color && dex.gen >= 5) details[TL.term.color] = TL.color[toID(pokemon.color)] || pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) {
 						details[TL.term.egggroups] = pokemon.eggGroups.map(group => TL.egggroup[toID(group)] || group).join(", ");
@@ -731,27 +731,27 @@ export const commands: Chat.ChatCommands = {
 
 					if (dex.gen >= 4) {
 						if (item.fling) {
-							details["Fling Base Power"] = String(item.fling.basePower);
-							if (item.fling.status) details["Fling Effect"] = TL.status[item.fling.status] || item.fling.status;
+							details[TL.term.flingbasepower] = String(item.fling.basePower);
+							if (item.fling.status) details[TL.term.flingeffect] = TL.status[item.fling.status] || item.fling.status;
 							if (item.fling.volatileStatus) {
-								details["Fling Effect"] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
+								details[TL.term.flingeffect] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
 							}
-							if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
-							if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
+							if (item.isBerry) details[TL.term.flingeffect] = TL.ui.flingBerry;
+							if (item.id === 'whiteherb') details[TL.term.flingeffect] = TL.ui.flingWhiteHerb;
 							if (item.id === 'mentalherb') {
-								const flingEffect = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
-								details["Fling Effect"] = flingEffect;
+								const flingEffect = TL.ui.flingMentalHerb;
+								details[TL.term.flingeffect] = flingEffect;
 							}
 						} else {
-							details["Fling"] = "This item cannot be used with Fling.";
+							details[TL(dex.moves.get('fling'))] = TL.ui.cantFling;
 						}
 					}
 					if (item.naturalGift && dex.gen >= 3) {
-						details["Natural Gift Type"] = TL.type[toID(item.naturalGift.type)] || item.naturalGift.type;
-						details["Natural Gift Base Power"] = String(item.naturalGift.basePower);
+						details[TL.term.naturalgifttype] = TL.type[toID(item.naturalGift.type)] || item.naturalGift.type;
+						details[TL.term.naturalgiftbasepower] = String(item.naturalGift.basePower);
 					}
 					if (item.isNonstandard) {
-						details[`Unobtainable in Gen ${dex.gen}`] = "";
+						details[TL.ui.unobtainableInGen.replace('{NUMBER}', String(dex.gen))] = "";
 					}
 				}
 				break;
@@ -768,9 +768,9 @@ export const commands: Chat.ChatCommands = {
 					};
 
 					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
-					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
+					if (pastGensOnly) details[`&#10007; ${TL.term.pastgensonly}`] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
-						details["&#10003; Boosted by Sheer Force"] = "";
+						details[`&#10003; ${TL.tag.boostedbysheerforce}`] = "";
 					}
 					if (move.flags['contact'] && dex.gen >= 3) details[`&#10003; ${TL.tag.contact}`] = "";
 					if (move.flags['sound'] && dex.gen >= 3) details[`&#10003; ${TL.tag.sound}`] = "";
@@ -778,14 +778,17 @@ export const commands: Chat.ChatCommands = {
 					if (move.flags['pulse'] && dex.gen >= 6) details[`&#10003; ${TL.tag.pulse}`] = "";
 					if (!move.flags['protect'] && move.target !== 'self') details[`&#10003; ${TL.tag.bypassprotect}`] = "";
 					if (move.flags['bypasssub']) details[`&#10003; ${TL.tag.bypasssubstitute}`] = "";
-					if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
+					if (move.flags['defrost']) details[`&#10003; ${TL.tag.defrost}`] = "";
 					if (move.flags['bite'] && dex.gen >= 6) details[`&#10003; ${TL.tag.bite}`] = "";
 					if (move.flags['punch'] && dex.gen >= 4) details[`&#10003; ${TL.tag.fist}`] = "";
 					if (move.flags['powder'] && dex.gen >= 6) details[`&#10003; ${TL.tag.powder}`] = "";
-					if (move.flags['reflectable'] && dex.gen >= 3) details["&#10003; Bounceable"] = "";
-					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
-					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
-					if (move.flags['gravity'] && dex.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
+					if (!move.flags['reflectable'] && move.category === 'Status' &&
+						!['self', 'allySide'].includes(move.target) && dex.gen >= 3) {
+						details[`&#10003; ${TL.tag.nonreflectable}`] = "";
+					}
+					if (move.flags['charge']) details[`&#10003; ${TL.tag.twoturnmove}`] = "";
+					if (move.flags['recharge']) details[`&#10003; ${TL.tag.recharge}`] = "";
+					if (move.flags['gravity'] && dex.gen >= 4) details[`&#10007; ${TL.tag.suppressedbygravity}`] = "";
 					if (move.flags['dance'] && dex.gen >= 7) details[`&#10003; ${TL.tag.dance}`] = "";
 					if (move.flags['slicing'] && dex.gen >= 9) details[`&#10003; ${TL.tag.slicing}`] = "";
 					if (move.flags['wind'] && dex.gen >= 9) details[`&#10003; ${TL.tag.wind}`] = "";
@@ -797,54 +800,53 @@ export const commands: Chat.ChatCommands = {
 							details[TL.term.zpower] = String(move.zMove.basePower);
 						} else if (move.zMove?.effect) {
 							const zEffects: { [k: string]: string } = {
-								clearnegativeboost: "Restores negative stat stages to 0",
-								crit2: "Crit ratio +2",
-								heal: "Restores HP 100%",
-								curse: "Restores HP 100% if user is Ghost type, otherwise Attack +1",
-								redirect: "Redirects opposing attacks to user",
-								healreplacement: "Restores replacement's HP 100%",
+								clearnegativeboost: 'zEffectClearNegativeBoost',
+								crit2: 'zEffectCrit2',
+								heal: 'zEffectHeal',
+								curse: 'zEffectCurse',
+								redirect: 'zEffectRedirect',
+								healreplacement: 'zEffectHealReplacement',
 							};
-							details["Z-Effect"] = zEffects[move.zMove.effect];
+							details[TL.term.zeffect] = TL.ui[zEffects[move.zMove.effect]] || move.zMove.effect;
 						} else if (move.zMove?.boost) {
-							details["Z-Effect"] = "";
+							details[TL.term.zeffect] = "";
 							const boost = move.zMove.boost;
-							const stats: { [k in BoostID]: string } = {
-								atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness',
-							};
 							let h: BoostID;
 							for (h in boost) {
-								details["Z-Effect"] += ` ${stats[h]} +${boost[h]}`;
+								details[TL.term.zeffect] += ` ${TL.statMedium[h] || h} +${boost[h]}`;
 							}
 						} else if (move.isZ && typeof move.isZ === 'string') {
 							details[`&#10003; ${TL.tag.zmove}`] = "";
 							const zCrystal = dex.items.get(move.isZ);
 							details[TL.term.zcrystal] = TL(zCrystal);
 							if (zCrystal.itemUser) {
-								details["User"] = zCrystal.itemUser.join(", ");
-								details["Required Move"] = TL(dex.items.get(zCrystal.zMoveFrom));
+								details[TL.term.user] = zCrystal.itemUser.join(", ");
+								details[TL.term.requiredmove] = TL(dex.items.get(zCrystal.zMoveFrom));
 							}
 						} else {
-							details["Z-Effect"] = "None";
+							details[TL.term.zeffect] = TL.term.none;
 						}
 					}
 
 					if (move.isMax) {
 						details[`&#10003; ${TL.tag.maxmove}`] = "";
-						if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
+						if (typeof move.isMax === "string") details[TL.term.user] = `${move.isMax}`;
 					} else if (dex.gen === 8 && move.maxMove?.basePower) {
-						details["Dynamax Power"] = String(move.maxMove.basePower);
+						details[TL.term.dynamaxpower] = String(move.maxMove.basePower);
 					}
 
 					details[TL.term.target] = TL.target[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && dex.gen >= 3) {
-						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">Non-Snatchable Moves</a>`] = '';
+						const nonsnatchableMoves = TL.ui.tagMoves.replace('{TAG}', TL.tag.nonsnatchable);
+						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">${nonsnatchableMoves}</a>`] = '';
 					}
 					if (move.id === 'mirrormove') {
-						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">Non-Mirrorable Moves</a>`] = '';
+						const nonmirrorMoves = TL.ui.tagMoves.replace('{TAG}', TL.tag.nonmirror);
+						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">${nonmirrorMoves}</a>`] = '';
 					}
 					if (move.isNonstandard === 'Unobtainable') {
-						details[`Unobtainable in Gen ${dex.gen}`] = "";
+						details[TL.ui.unobtainableInGen.replace('{NUMBER}', `${dex.gen}`)] = "";
 					}
 				}
 				break;
@@ -861,7 +863,7 @@ export const commands: Chat.ChatCommands = {
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
 					if (ability.isNonstandard) {
-						details[`Unobtainable in Gen ${dex.gen}`] = "";
+						details[TL.ui.unobtainableInGen.replace('{NUMBER}', `${dex.gen}`)] = "";
 					}
 				}
 				break;

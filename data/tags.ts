@@ -109,6 +109,22 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "Wind",
 		moveFilter: move => 'wind' in move.flags,
 	},
+	twoturnmove: {
+		name: "Two-turn move",
+		moveFilter: move => 'charge' in move.flags,
+	},
+	recharge: {
+		name: "Recharge",
+		moveFilter: move => 'recharge' in move.flags,
+	},
+	suppressedbygravity: {
+		name: "Suppressed by Gravity",
+		moveFilter: move => 'gravity' in move.flags,
+	},
+	boostedbysheerforce: {
+		name: "Boosted by Sheer Force",
+		moveFilter: move => !!(move.secondary || move.secondaries || move.hasSheerForceBoost),
+	},
 	bypassprotect: {
 		name: "Bypasses Protect",
 		moveFilter: move => move.target !== 'self' && !('protect' in move.flags),

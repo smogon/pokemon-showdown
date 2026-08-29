@@ -101,6 +101,18 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Recoil",
 		hint: "boosted by Reckless",
 	},
+	twoturnmove: {
+		name: "Two-turn move",
+	},
+	recharge: {
+		name: "Has Recharge Turn",
+	},
+	suppressedbygravity: {
+		name: "Suppressed by Gravity",
+	},
+	boostedbysheerforce: {
+		name: "Boosted by Sheer Force",
+	},
 	bypassprotect: {
 		name: "Bypasses Protect",
 		hint: "and Detect, King's Shield, Spiky Shield",
@@ -301,7 +313,7 @@ export const TagsText: { [id: string]: TagText } = {
 		desc: "Base Stat Total",
 	},
 	basepower: {
-		name: "Base Power",
+		name: "Base power",
 	},
 	priority: {
 		name: "Priority",

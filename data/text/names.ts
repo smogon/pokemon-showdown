@@ -63,6 +63,18 @@ export const TermNames: { [id: string]: TranslationString } = {
 	numm: "{NUMBER} m",
 	weight: "Weight",
 	numkg: "{NUMBER} kg",
+	critrate: "Crit rate",
+	// as in "species capable of making use of this item"
+	user: "User",
+	requiredmove: "Required move",
+	dynamaxpower: "Dynamax power",
+	// as a value, like "Ability: None"
+	none: "None",
+	pastgensonly: "Past gens only",
+	flingbasepower: "Fling base power",
+	flingeffect: "Fling effect",
+	naturalgifttype: "Natural Gift type",
+	naturalgiftbasepower: "Natural Gift base power",
 
 	megaevolution: "Mega Evolution",
 	zpower: "Z-Power",

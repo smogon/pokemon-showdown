@@ -321,6 +321,7 @@ export type Translator = {
 	stat: { [id: string]: string },
 	statShort: { [id: string]: string },
 	statMedium: { [id: string]: string },
+	ui: { [id: string]: string },
 };
 
 // These classes need to be declared here because they aren't hoisted
@@ -1835,6 +1836,7 @@ export const Chat = new class {
 					stat: text.StatNames,
 					statShort: text.StatShortNames,
 					statMedium: text.StatMediumNames,
+					ui: { ...Dex.loadTextData('en').Default.ui, ...text.Default.ui } as { [id: string]: string },
 				}
 			);
 			this.translators.set(lang, translator);

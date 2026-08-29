@@ -71,6 +71,14 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- Wind` - ban moves that activate Wind Power and Wind Rider
 
+`- Two-turn move` - ban two-turn moves (like Solar Beam)
+
+`- Recharge` - ban moves that require a recharge turn (like Hyper Beam)
+
+`- Suppressed by Gravity` - ban moves disabled by Gravity
+
+`- Boosted by Sheer Force` - ban moves boosted by Sheer Force
+
 `- Bypass Protect` - ban moves that bypass Protect, Detect, etc
 
 `- Nonreflectable` - ban moves that bypass Magic Coat and Magic Bounce
