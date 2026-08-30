@@ -673,6 +673,22 @@ export const commands: Chat.ChatCommands = {
 					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
+					if (pokemon.gender && dex.gen >= 2) {
+						switch (pokemon.gender) {
+						case 'M':
+							details['Gender'] = 'Male';
+							break;
+						case 'F':
+							details['Gender'] = "Female";
+							break;
+						case 'N':
+							details['Gender'] = "Unknown";
+							break;
+						};
+					} else if (pokemon.genderRatio && dex.gen >= 2) {
+						const g = pokemon.genderRatio;
+						details['Gender'] = `M: ${g.M * 100}%, F: ${g.F * 100}%`;
+					};
 					const evos: string[] = [];
 					for (const evoName of pokemon.evos) {
 						const evo = dex.species.get(evoName);
