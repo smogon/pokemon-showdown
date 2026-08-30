@@ -514,7 +514,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.teams.size < 2) throw new Chat.ErrorMessage(`The auction needs at least 2 teams to start.`);
 		const problemTeams = [...this.teams.values()].filter(t => t.maxBid() < this.minBid).map(t => t.name);
 		if (problemTeams.length) {
-			throw new Chat.ErrorMessage(`The following teams do not have enough credits to draft the minimum amount of players: ${problemTeams.join(', ')}`);
+			throw new Chat.ErrorMessage(`These teams do not have enough credits to draft the minimum amount of players: ${problemTeams.join(', ')}`);
 		}
 		this.next();
 	}

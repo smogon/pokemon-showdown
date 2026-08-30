@@ -1466,7 +1466,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.settings.aliases) return this.sendReplyBox("This room does not have any aliases.");
-			return this.sendReplyBox(`This room has the following aliases: ${room.settings.aliases.join(", ")}`);
+			return this.sendReplyBox(`This room has these aliases: ${room.settings.aliases.join(", ")}`);
 		}
 		this.checkCan('makeroom');
 		if (target.includes(',')) {
