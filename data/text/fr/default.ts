@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		winBattle: "", // NEEDS TRANSLATION: Showdown custom text
-		tieBattle: "", // NEEDS TRANSLATION: Showdown custom text
+		startBattle: "Le match entre [TRAINER] et [TRAINER] a commencé !",
+		winBattle: "**[TRAINER]** remporte le match !",
+		tieBattle: "Égalité entre [TRAINER] et [TRAINER] !",
 
 		pokemon: "[NICKNAME]",
 		opposingPokemon: "[NICKNAME] ennemi",
@@ -36,7 +36,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "Primo-Résurgence [POKEMON:de] ! Il retrouve son apparence originelle !",
 		zPower: "  [POKEMON] déploie sa Force Z comme une aura !",
 		zBroken: "  [POKEMON] n’arrive pas à parer toute l’attaque et subit des dégâts !",
-		terastallize: "", // NEEDS TRANSLATION: Showdown custom text
+		terastallize: "  ([POKEMON] a téracristallisé en type [TYPE] !)",
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  [EFFECT] du [POKEMON] le transforme en type [TYPE]!",
 		typeAdd: "  [POKEMON] gagne le type [TYPE].",
 
-		start: "", // NEEDS TRANSLATION: Showdown custom text
+		start: "  ([EFFECT] est actif sur [POKEMON] !)",
 		end: "  [POKEMON] est libéré de la capacité [EFFECT] !",
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: "  ([EFFECT] est actif !)",
+		startTeamEffect: "  ([EFFECT] est actif sur [TEAM] !)",
+		endTeamEffect: "  ([EFFECT] n'est plus actif sur [TEAM] !)",
+		startFieldEffect: "  ([EFFECT] est actif !)",
+		endFieldEffect: "  ([EFFECT] n'est plus actif !)",
 
 		changeAbility: "  Le talent [POKEMON:de] devient [ABILITY] !",
 		addItem: "  [POKEMON] obtient [ITEM:indefinite:classified] !",
 		takeItem: "  [POKEMON] vole [ITEM:definite:classified] [SOURCE:de] !",
-		eatItem: "", // NEEDS TRANSLATION: Showdown custom text
+		eatItem: "  ([POKEMON] mange [ITEM:definite:classified] !)",
 		useGem: "  [ITEM:definite:capitalize:classified] renforce[INFLECT:ITEM:s=:p=nt] la capacité [MOVE] !",
 		eatItemWeaken: "  [ITEM:definite:capitalize:classified] rédui[INFLECT:ITEM:s=:p=sen]t les dégâts infligés à [POKEMON] !",
-		removeItem: "", // NEEDS TRANSLATION: Showdown custom text
-		activateItem: "", // NEEDS TRANSLATION: Showdown custom text
+		removeItem: "  [POKEMON] a perdu [ITEM:definite:classified] !",
+		activateItem: "  ([POKEMON] a utilisé [ITEM:definite:classified] !)",
 		activateWeaken: "  [ITEM:definite:capitalize:classified] rédui[INFLECT:ITEM:s=:p=sen]t les dégâts infligés à [POKEMON] !",
 
 		damage: "  ([POKEMON] est blessé !)",
-		damagePercentage: "", // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: "  ([POKEMON] a perdu [PERCENTAGE]% de ses points de vie !)",
 		damageFromPokemon: "  [ITEM:definite:capitalize] [SOURCE:de] blesse[INFLECT:ITEM:s=:p=nt] [POKEMON] !",
 		damageFromItem: "  [POKEMON] est blessé par [ITEM:definite] !",
 		damageFromPartialTrapping: "  [POKEMON] est blessé par la capacité [MOVE] !",
@@ -268,8 +268,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  [POKEMON] ne peut plus s’échapper !",
 	},
 	dynamax: {
-		start: "", // NEEDS TRANSLATION: Showdown custom text
-		end: "", // NEEDS TRANSLATION: Showdown custom text
+		start: "  (Dynamax du [POKEMON:definite] !)",
+		end: "  ([POKEMON:definite] est revenu à la normale !)",
 		block: "  La puissance du Dynamax a bloqué l’attaque !",
 		fail: "  [POKEMON] fait non de la tête. On dirait qu’il ne peut pas utiliser cette capacité...",
 	},
