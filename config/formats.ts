@@ -3278,7 +3278,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Little Cup', 'Sleep Clause Mod', 'Terastal Clause'],
 		banlist: [
-			'Basculin-White-Striped', 'Diglett', 'Dunsparce', 'Duraludon', 'Meditite', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler',
+			'Basculin-White-Striped', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Meditite', 'Rufflet', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler',
 			'Moody', 'Baton Pass', 'Sticky Web',
 			'Absolite Z', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Glimmoranite', 'Kangaskhanite', 'Lucarionite', 'Lucarionite Z', 'Mawilite', 'Medichamite', 'Pidgeotite',
 			'Raichunite Y', 'Scovillainite', 'Staraptite', 'Starminite', 'Victreebelite', 'Zygardite',
