@@ -1610,7 +1610,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	gardevoirmega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	gallade: {
 		tier: "UU",
