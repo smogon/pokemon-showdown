@@ -35,16 +35,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
+				let duration = 5;
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Inverse Room');
-					return 7;
+					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
+					duration = 7;
 				}
-				return 5;
+				if (source?.hasItem('blueprint')) {
+					this.add('-activate', source, 'item: Blueprint', '[move] Trick Room');
+					duration = 8;
+				}
+				return duration;
 			},
 			onFieldStart(target, source) {
-				if (source?.hasAbility('persistent')) {
+				if (source?.hasItem('blueprint')) {
+					this.add('-fieldstart', 'move: Inverse Room', `[of] ${source}`, '[blueprint]', '[silent]');
+				}
+				else if(source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Inverse Room', `[of] ${source}`, '[persistent]', '[silent]');
-				} else {
+				} 
+				else {
 					this.add('-fieldstart', 'move: Inverse Room', `[of] ${source}`, '[silent]');
 				}
 				this.add('-message', 'It created a bizarre area in which all type matchups are reversed!');
@@ -284,42 +293,302 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 65,
 		contributors: ["Bryce G."],
 	},
+	knockoff: {
+		inherit: true,
+		modified: "DigiPen",
+		basePower: 60,
+		contributors: ["Bryce G."],
+	},
+	rockthrow: {
+		inherit: true,
+		modified: "DigiPen",
+		onHitField(target, source) {
+			if (source.side.foe.sideConditions['stealthrock']) return;
+			if (source.side.removeSideCondition('stealthrock')) {
+				source.side.foe.addSideCondition('stealthrock');
+				this.add('-activate', source, 'move: Rock Throw');
+			}
+		},
+		shortDesc: "Transfers Stealth Rock from the user's to the foe's side if the foe does not have it.",
+		contributors: ["Bryce G."],
+	},
+	rocksmash: {
+		inherit: true,
+		modified: "DigiPen",
+		basePower: 50,
+		onAfterHit(target, pokemon, move) {
+			if (!move.hasSheerForce && pokemon.side.removeSideCondition('stealthrock')) {
+				this.add('-sideend', pokemon.side, 'Stealth Rock', '[from] move: Rocksmash', `[of] ${pokemon}`);
+			}
+		},
+		desc: "If this move is successful and the user has not fainted, stealth rock is removed from the user's side of the field. Has a 50% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "Clears Stealth Rock; target: 50% chance -1 Defense.",
+		contributors: ["Bryce G."],
+	},
+	mist: { // Also implementing the logic for Ancient Sundial
+		inherit: true,
+		modified: "DigiPen",
+		condition: {
+			inherit: true,
+			durationCallback(source, effect) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-activate', source, 'item: Ancient Sundial', '[move] Mist');
+					return 8;
+				}
+				return 5;
+			},
+			onSideStart(field, source) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-fieldstart', 'move: Mist', '[ancientsundial]');
+				}
+				else {
+					this.add('-fieldstart', 'move: Mist');
+				}
+			},
+			onTryBoost(boost, target, source, effect) {
+				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
+				if ((source && target !== source) || (effect.effectType === 'Move' && effect.category === 'Status')) {
+					let showMsg = false;
+					let i: BoostID;
+					for (i in boost) {
+						if (boost[i]! < 0) {
+							delete boost[i];
+							showMsg = true;
+						}
+					}
+					if (showMsg && !(effect as ActiveMove).secondaries) {
+						this.add('-activate', target, 'move: Mist');
+					}
+				}
+			},
+			onCriticalHit: false,
+			onModifySecondaries(secondaries) {
+				this.debug('Mist prevents secondary effects');
+				return secondaries.filter(effect => !!effect.self);
+			},	
+		},
+		shortDesc: "For 5 turns, protects user's party from stat drops, crits, and secondary effects.",
+		desc: "For 5 turns, the user and its party members are protected from having \
+			their stat stages lowered by other Pokemon or by their own status moves, \
+			cannot be struck by critical hits, and are not affected by the secondary \
+			effects of other Pokemon's moves. Fails if the effect is already active on \
+			the user's side.",
+		contributors: ["Bryce G."],
+	},
+	luckychant: { // Also implementing the logic for Ancient Sundial; not sure how to do alternate abilities effect
+		inherit: true,
+		modified: "DigiPen",
+		condition: {
+			inherit: true,
+			durationCallback(source, effect) {
+				if (source?.hasItem('ancientsundial')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSideStart(field, source) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-fieldstart', 'move: Lucky Chant', '[ancientsundial]');
+				}
+				else {
+					this.add('-fieldstart', 'move: Lucky Chant');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return critRatio + 1;
+			},
+		},
+		shortDesc: "For 5 turns, user's party immune to crits and crit more often.",
+		desc: "For 5 turns, the user and its party members cannot be struck by a critical hit and have their critical hit ratio increased by 1. Fails if the effect is already active on the user's side.",
+		contributors: ["Bryce G."],
+	},
 
 	/* ----- Other changes ───────────────────────────────────────────── */
 	// Moves changes not related to balance changes but rather for implementing some other change
 	// Use alphabetical ordering
 	// Do NOT add the modified: "DigiPen" flag to these moves
 
-	trickroom: { // implementing the logic for Blueprint
+	gravity: { // Implementing the logic for Ancient Sundial
 		inherit: true,
 		condition: {
-			duration: 5,
+			inherit: true,
 			durationCallback(source, effect) {
-				let duration = 5;
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-activate', source, 'item: Ancient Sundial', '[move] Gravity');
+					return 8;
+				}
 				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
-					duration += 2;
+					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
+					return 7;
 				}
-				if (source?.hasItem('blueprint')) {
-					duration += 3;
-				}
-				return duration;
+				return 5;
 			},
 			onFieldStart(target, source) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-fieldstart', 'move: Gravity', '[ancientsundial]');
+				}
+				else if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Gravity', '[persistent]');
+				} 
+				else {
+					this.add('-fieldstart', 'move: Gravity');
+				}
+				for (const pokemon of this.getAllActive()) {
+					let applies = false;
+					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
+						applies = true;
+						this.queue.cancelMove(pokemon);
+						pokemon.removeVolatile('twoturnmove');
+					}
+					if (pokemon.volatiles['skydrop']) {
+						applies = true;
+						this.queue.cancelMove(pokemon);
+
+						if (pokemon.volatiles['skydrop'].source) {
+							this.add('-end', pokemon.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
+						}
+						pokemon.removeVolatile('skydrop');
+						pokemon.removeVolatile('twoturnmove');
+					}
+					if (pokemon.volatiles['magnetrise']) {
+						applies = true;
+						delete pokemon.volatiles['magnetrise'];
+					}
+					if (pokemon.volatiles['telekinesis']) {
+						applies = true;
+						delete pokemon.volatiles['telekinesis'];
+					}
+					if (applies) this.add('-activate', pokemon, 'move: Gravity');
+				}
+			},
+		},
+	},
+	magicroom: { // Implementing the logic for Blueprint
+		inherit: true,
+		condition: {
+			inherit: true,
+			durationCallback(source, effect) {
+				if (source?.hasItem('blueprint')) {
+					this.add('-activate', source, 'item: Blueprint', '[move] Magic Room');
+					return 8;
+				}
 				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
+					return 7;
+				}
+				return 5;
+			},
+			onFieldStart(target, source) {
+				if (source?.hasItem('blueprint')) {
+					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`, '[blueprint]');
+				}
+				else if(source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`, '[persistent]');
+				} 
+				else {
+					this.add('-fieldstart', 'move: Magic Room', `[of] ${source}`);
+				}
+				for (const mon of this.getAllActive()) {
+					this.singleEvent('End', mon.getItem(), mon.itemState, mon);
+				}
+			},
+		},
+	},
+	mudsport: { // Implementing the logic for Ancient Sundial
+		inherit: true,
+		condition: {
+			inherit: true,
+			durationCallback(source, effect) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-activate', source, 'item: Ancient Sundial', '[move] Mud Sport');
+					return 8;
+				}
+				return 5;
+			},
+			onFieldStart(field, source) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-fieldstart', 'move: Mud Sport', '[ancientsundial]');
+				}
+				else {
+					this.add('-fieldstart', 'move: Mud Sport');
+				}
+			},
+		},
+	},
+	trickroom: { // Implementing the logic for Blueprint
+		inherit: true,
+		condition: {
+			inherit: true,
+			durationCallback(source, effect) {
+				if (source?.hasItem('blueprint')) {
+					this.add('-activate', source, 'item: Blueprint', '[move] Trick Room');
+					return 8;
+				}
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
+					return 7;
+				}
+				return 5;
+			},
+			onFieldStart(target, source) {
+				if (source?.hasItem('blueprint')) {
+					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`, '[blueprint]');
+				}
+				else if(source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`, '[persistent]');
-				} else {
+				} 
+				else {
 					this.add('-fieldstart', 'move: Trick Room', `[of] ${source}`);
 				}
 			},
-			onFieldRestart(target, source) {
-				this.field.removePseudoWeather('trickroom');
+		},
+	},
+	waterport: { // Implementing the logic for Ancient Sundial
+		inherit: true,
+		condition: {
+			inherit: true,
+			durationCallback(source, effect) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-activate', source, 'item: Ancient Sundial', '[move] Water Sport');
+					return 8;
+				}
+				return 5;
 			},
-			// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 1,
-			onFieldEnd() {
-				this.add('-fieldend', 'move: Trick Room');
+			onFieldStart(field, source) {
+				if (source?.hasItem('ancientsundial')) {
+					this.add('-fieldstart', 'move: Water Sport', '[ancientsundial]');
+				}
+				else {
+					this.add('-fieldstart', 'move: Water Sport');
+				}
+			},
+		},
+	},
+	wonderroom: { // Implementing the logic for Blueprint
+		inherit: true,
+		condition: {
+			inherit: true,
+			durationCallback(source, effect) {
+				if (source?.hasItem('blueprint')) {
+					this.add('-activate', source, 'item: Blueprint', '[move] Wonder Room');
+					return 8;
+				}
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');
+					return 7;
+				}
+				return 5;
+			},
+			onFieldStart(field, source) {
+				if (source?.hasItem('blueprint')) {
+					this.add('-fieldstart', 'move: Wonder Room', `[of] ${source}`, '[blueprint]');
+				}
+				else if(source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Wonder Room', `[of] ${source}`, '[persistent]');
+				} 
+				else {
+					this.add('-fieldstart', 'move: Wonder Room', `[of] ${source}`);
+				}
 			},
 		},
 	},

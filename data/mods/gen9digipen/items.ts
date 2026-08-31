@@ -62,14 +62,164 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	blueprint: {
 		name: "Blueprint",
 		spritenum: 0,
-		fling: { basePower: 30 },
-		// battle logic implemented on Trick Room move
-		num: 10001,
+		fling: { basePower: 10 },
+		// battle logic implemented on the Room moves
+		num: 10002,
 		gen: 9,
 		isNonstandard: "DigiPen",
+		shortDesc: "Rooms set by the holder lasts 8 turn instead of 5.",
+		desc: "Holder's use of Trick Room, Magic Room, Inverse Room, and Wonder Room lasts 8 turn instead of 5.",
 		quality: "great",
 		contributors: ["Jared G."],
-		shortDesc: "Holder's use of Trick Room lasts 8 turns instead of 5.",
+	},
+	frightmask: {
+		name: "Fright Mask",
+		spritenum: 0,
+		fling: { basePower: 60 },
+		onStart(pokemon) {
+			let activated = false;
+			if (!pokemon.ignoringItem() && !pokemon.hasAbility('intimidate') && pokemon.useItem()) {
+				for (const target of pokemon.adjacentFoes()) {
+					if (!activated) {
+						this.add('-enditem', pokemon, 'Fright Mask', 'boost');
+						activated = true;
+					}
+					if (target.volatiles['substitute']) {
+						this.add('-immune', target);
+					} else {
+						const intimidate = this.dex.abilities.get('intimidate');
+						this.boost({ atk: -1 }, target, pokemon, intimidate, true);
+					}
+				}
+			}
+		},
+		num: 10003,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "On switch-in, lowers the Attack of opponents by 1 stage. Single use.",
+		desc: "On switch-in, this item lowers the Attack of opposing Pokemon by 1 stage. \
+			This item is consumed after use. This item cannot be used by Pokemon with \
+			Intimidate ability. The effect of this item has the same interaction with \
+			other abilities as Intimidate.",
+		quality: "great",
+		contributors: ["Jared G."],
+	},
+	perfection: {
+		name: "Perfection",
+		spritenum: 0,
+		fling: { basePower: 10 }, // Same as Air Balloon
+		onStart(target) {
+			if (!target.ignoringItem()) {
+				this.add('-item', target, 'Perfection');
+				this.add('-message', `${target.name}'s Perfection increases its luck!`);
+			}
+		},
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance *= 2;
+				}
+			}
+			if (move.self?.chance) move.self.chance *= 2;
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.add('-enditem', target, 'Perfection');
+			target.item = '';
+			this.add('-message', `${target.name}'s Perfection was lost!`);
+			this.clearEffectState(target.itemState);
+			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('perfection'));
+		},
+		onAfterSubDamage(damage, target, source, effect) {
+			this.debug('effect: ' + effect.id);
+			if (effect.effectType === 'Move') {
+				this.add('-enditem', target, 'Perfection');
+				target.item = '';
+				this.add('-message', `${target.name}'s Perfection was lost!`);
+				this.clearEffectState(target.itemState);
+				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('perfection'));
+			}
+		},
+		num: 10004,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "Doubles secondary effect chance of holder's moves. Lost when holder is hit.",
+		quality: "good",
+		contributors: ["Jared G."],
+	},
+	lightshield: {
+		name: "Light Shield",
+		spritenum: 0,
+		fling: { basePower: 30 }, // Same as Ability Shield
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates);
+				if (hitSub) return;
+
+				if (target.useItem()) {
+					this.debug('15% reduction');
+					this.add('-enditem', target, this.effect, '[weaken]');
+					return this.chainModify(0.85);
+				}
+			}
+		},
+		num: 10005,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "The holder takes 0.85x damage from a damaging attack. Single use.",
+		quality: "poor",
+		contributors: ["Bryce G."],
+	},
+	// Skipping Heavy-Duty Jacket for now -- seems difficult to implement
+	ancientsundial: {
+		name: "Ancient Sundial",
+		spritenum: 0,
+		fling: { basePower: 100 }, // Same as fossils
+		// Battle logic implemented on affected moves
+		// Don't forget to implement for Updraft once added
+		num: 10007,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "Extends the duration of certain field effects by 3 turns.",
+		desc: "Holder's use of Gravity, Updraft, Mud Sport, Water Sport, Mist, and Lucky Chant lasts 8 turns instead of 5.",
+		quality: "good",
+		contributors: ["Bryce G."],
+	},
+	shockorb: {
+		name: "Shock Orb",
+		spritenum: 0,
+		fling: { // Same as Flame Orb and Toxic Orb
+			basePower: 30,  
+			status: 'par',
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			pokemon.trySetStatus('par', pokemon);
+		},
+		num: 10008,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "At the end of every turn, this item attempts to burn the holder.",
+		quality: "good",
+		contributors: ["Bryce G."],
+	},
+	runningshoes: {
+		name: "Running Shoes",
+		spritenum: 0,
+		fling: { basePower: 10 }, // Same as other clothing-like items
+		onModifySpe(spe, pokemon) {
+			if (pokemon.species.name !== 'Ditto') {
+				return spe + 1;
+			}
+			return spe;
+		},
+		num: 10009,
+		gen: 9,
+		isNonstandard: "DigiPen",
+		shortDesc: "Increases the holder's Speed stat by 1 if the holder is not a Ditto.",
+		quality: "good",
+		contributors: ["Bryce G."],
 	},
 
 	// ── Mega Stones ──────────────────────────────────────────────────────────

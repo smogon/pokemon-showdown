@@ -609,7 +609,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: {hp: 80, atk: 154, def: 105, spa: 145, spd: 105, spe: 51},
 		contributors: ["Bryce G."],
 	},
-
+	absolmega: {
+		inherit: true,
+		types: ["Dark", "Fairy"],
+		contributors: ["Bryce G."],
+	},
 
 	// ── Champions Mega Evolutions "Leaked" Abilities ────────────────────────────────────────────────────
 	baxcaliburmega: {
