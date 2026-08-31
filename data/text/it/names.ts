@@ -1,8 +1,8 @@
 export const TermNames: { [id: string]: TranslationString } = {
 	shiny: "Cromatico",
-	happiness: "Amicizia", // NEEDS QC
-	level: "Livello", // NEEDS QC
-	nickname: "Soprannome", // NEEDS QC
+	happiness: null, // NEEDS TRANSLATION
+	level: null, // NEEDS TRANSLATION
+	nickname: "Soprannome", // official: SV it_common 4414
 	ev: "EV",
 	evs: "EVs",
 	iv: "IV",
@@ -11,75 +11,92 @@ export const TermNames: { [id: string]: TranslationString } = {
 	dvs: "DVs",
 	av: "AV",
 	avs: "AVs",
-	point: "Punto", // NEEDS QC
-	points: "Punti", // NEEDS QC
+	point: null, // NEEDS TRANSLATION
+	points: null, // NEEDS TRANSLATION
 	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
 	stats: "Statistiche",
 
 	pokemon: "Pokémon",
-	move: "Mossa", // NEEDS QC
-	moves: "Mosse", // NEEDS QC
-	item: "Strumento", // NEEDS QC
-	items: "Strumenti", // NEEDS QC
-	ability: "Abilità", // NEEDS QC
-	abilities: "Abilità", // NEEDS QC
-	hiddenability: "Abilità speciale", // NEEDS QC
-	team: "Squadra", // NEEDS QC
-	teams: "Squadre", // NEEDS QC
-	teamslist: "Elenco squadre", // NEEDS QC
+	move: null, // NEEDS TRANSLATION
+	moves: null, // NEEDS TRANSLATION
+	item: null, // NEEDS TRANSLATION
+	items: null, // NEEDS TRANSLATION
+	ability: null, // NEEDS TRANSLATION
+	abilities: null, // NEEDS TRANSLATION
+	hiddenability: "Abilità speciale", // official: SV it_common 36040 ("con un’abilità speciale")
+	possibleabilities: null, // NEEDS TRANSLATION
+	team: null, // NEEDS TRANSLATION
+	teams: null, // NEEDS TRANSLATION
+	teamslist: null, // NEEDS TRANSLATION
 
 	type: "Tipo",
 	types: "Tipi",
-	teratype: "Teratipo", // NEEDS QC
+	teratype: null, // NEEDS TRANSLATION
 	nature: "Natura",
 	category: "Categoria",
 	categories: "Categorie",
 	gender: "Sesso",
-	egggroup: "Gruppo Uova", // NEEDS QC
-	egggroups: "Gruppi Uova", // NEEDS QC
-	tag: "Etichetta", // NEEDS QC
-	article: "Articolo", // NEEDS QC
-	articles: "Articoli", // NEEDS QC
+	egggroup: null, // NEEDS TRANSLATION
+	egggroups: null, // NEEDS TRANSLATION
+	tag: null, // NEEDS TRANSLATION
+	article: null, // NEEDS TRANSLATION
+	articles: null, // NEEDS TRANSLATION
 	tier: "Tier",
-	tiers: "Tier", // NEEDS QC
+	tiers: null, // NEEDS TRANSLATION
+	format: null, // NEEDS TRANSLATION
+	formats: null, // NEEDS TRANSLATION
 	color: "Colore",
-	form: "Forma", // NEEDS QC
-	forme: "Forma", // NEEDS QC
-	dexnum: "N. Pokédex", // NEEDS QC
-	generation: "Generazione", // NEEDS QC
+	form: null, // NEEDS TRANSLATION
+	forme: null, // NEEDS TRANSLATION
+	dexnum: null, // NEEDS TRANSLATION
+	generation: null, // NEEDS TRANSLATION
 	gennum: "Gen {NUMBER}",
-	evolution: "Evoluzione", // NEEDS QC
-	preevolution: "Preevoluzione", // NEEDS QC
-	doesnotevolve: "Non si evolve", // NEEDS QC
-	zcrystal: "Cristallo Z", // NEEDS QC
-	target: "Bersaglio", // NEEDS QC
+	evolution: null, // NEEDS TRANSLATION
+	preevolution: null, // NEEDS TRANSLATION
+	doesnotevolve: null, // NEEDS TRANSLATION
+	zcrystal: "Cristallo Z", // official: USUM it_common 21919
+	target: null, // NEEDS TRANSLATION
 	height: "Altezza",
 	numm: "{NUMBER} m",
 	weight: "Peso",
 	numkg: "{NUMBER} kg",
+	critrate: null, // NEEDS TRANSLATION
+	user: null, // NEEDS TRANSLATION
+	requiredmove: null, // NEEDS TRANSLATION
+	dynamaxpower: null, // NEEDS TRANSLATION
+	none: null, // NEEDS TRANSLATION
+	pastgensonly: null, // NEEDS TRANSLATION
+	flingbasepower: null, // NEEDS TRANSLATION
+	flingeffect: null, // NEEDS TRANSLATION
+	naturalgifttype: null, // NEEDS TRANSLATION
+	naturalgiftbasepower: null, // NEEDS TRANSLATION
 
-	megaevolution: "Megaevoluzione", // NEEDS QC
-	zpower: "Potere Z", // NEEDS QC
-	dynamax: "Dynamax", // NEEDS QC
-	dynamaxlevel: "Livello Dynamax", // NEEDS QC
+	megaevolution: null, // NEEDS TRANSLATION
+	zpower: null, // NEEDS TRANSLATION
+	zeffect: null, // NEEDS TRANSLATION
+	dynamax: null, // NEEDS TRANSLATION
+	dynamaxlevel: "Livello Dynamax", // official: SwSh it_common 846
+	ultraburst: "Ultraesplosione", // official: USUM it_common 8794
+	tera: null, // NEEDS TRANSLATION
 
-	supereffective: "Superefficace", // NEEDS QC
-	extremelyeffective: "Iperefficace", // NEEDS QC
-	effective: "Effetto normale", // NEEDS QC
-	notveryeffective: "Poco efficace", // NEEDS QC
-	mostlyineffective: "Quasi per niente efficace", // NEEDS QC
-	noeffect: "Nessun effetto", // NEEDS QC
+	supereffective: "Superefficace", // official: SV it_common 8613 ("È superefficace!")
+	extremelyeffective: "Iperefficace", // official: Champions it_ms 1925 ("È iperefficace!!")
+	effective: null, // NEEDS TRANSLATION
+	notveryeffective: null, // NEEDS TRANSLATION
+	mostlyineffective: "Quasi per niente efficace", // official: Champions it_ms 1928
+	noeffect: null, // NEEDS TRANSLATION
 
-	weak: "Debolezza", // NEEDS QC: unofficial
-	resist: "Resistenza", // NEEDS QC: unofficial
-	immune: "Immunità", // NEEDS QC: unofficial
+	weak: null, // NEEDS TRANSLATION
+	resist: null, // NEEDS TRANSLATION
+	immune: null, // NEEDS TRANSLATION
 
 	nicknamespecies: "{NICKNAME} ({SPECIES})",
-	speciesforme: "{SPECIES} {FORME}", // NEEDS QC
+	label: null, // NEEDS TRANSLATION
+	speciesforme: null, // NEEDS TRANSLATION
 };
 
 export const StatNames: { [id: string]: TranslationString } = {
-	hp: "PS",
+	hp: "PS", "hp:grammar": "mp",
 	atk: "Attacco", "atk:grammar": "ms",
 	def: "Difesa", "def:grammar": "fs",
 	spa: "Attacco Speciale", "spa:grammar": "ms",
@@ -101,7 +118,8 @@ export const StatMediumNames: { [id: string]: TranslationString } = {
 };
 
 export const StatShortNames: { [id: string]: TranslationString } = {
-	hp: "PS", atk: "Att", def: "Dif", spa: "ASp", spd: "DSp", spe: "Vel", spc: "Spe",
+	hp: "PS", atk: "Att", def: "Dif", spa: "ASp", spd: "DSp", spe: "Vel",
+	spc: "Spc", // deliberate PS shorthand: avoids clash with English "Spe" (Speed)
 };
 
 export const TypeNames: { [id: string]: TranslationString } = {
@@ -161,50 +179,62 @@ export const GenderNames: { [id: string]: TranslationString } = {
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
-	brn: "Scottato", // NEEDS QC
-	par: "Paralizzato", // NEEDS QC
-	slp: "Addormentato", // NEEDS QC
-	frz: "Congelato", // NEEDS QC
-	psn: "Avvelenato", // NEEDS QC
-	tox: "Iperavvelenato", // NEEDS QC
-	fnt: "KO", // NEEDS QC
-	confusion: "Confusione", // NEEDS QC
+	brn: null, // NEEDS TRANSLATION
+	par: null, // NEEDS TRANSLATION
+	slp: null, // NEEDS TRANSLATION
+	frz: null, // NEEDS TRANSLATION
+	psn: null, // NEEDS TRANSLATION
+	tox: null, // NEEDS TRANSLATION
+	fnt: null, // NEEDS TRANSLATION
+	confusion: null, // NEEDS TRANSLATION
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: "Un Pokémon adiacente", // NEEDS QC
-	self: "Utilizzatore", // NEEDS QC
-	adjacentAlly: "Un alleato", // NEEDS QC
-	adjacentAllyOrSelf: "Utilizzatore o alleato", // NEEDS QC
-	adjacentFoe: "Un nemico adiacente", // NEEDS QC
-	allAdjacentFoes: "Tutti i nemici adiacenti", // NEEDS QC
-	foeSide: "Campo avversario", // NEEDS QC
-	allySide: "Campo dell'utilizzatore", // NEEDS QC
-	allyTeam: "Squadra dell'utilizzatore", // NEEDS QC
-	allAdjacent: "Tutti i Pokémon adiacenti", // NEEDS QC
-	any: "Un Pokémon qualsiasi", // NEEDS QC
-	all: "Tutti i Pokémon", // NEEDS QC
-	scripted: "Scelto automaticamente", // NEEDS QC
-	randomNormal: "Nemico adiacente casuale", // NEEDS QC
-	allies: "Utilizzatore e alleati", // NEEDS QC
+	normal: null, // NEEDS TRANSLATION
+	normalDoubles: null, // NEEDS TRANSLATION
+	normalSingles: null, // NEEDS TRANSLATION
+	normalFFA: null, // NEEDS TRANSLATION
+	self: null, // NEEDS TRANSLATION
+	adjacentAlly: null, // NEEDS TRANSLATION
+	adjacentAllyDoubles: null, // NEEDS TRANSLATION
+	adjacentAllySingles: null, // NEEDS TRANSLATION
+	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
+	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
+	adjacentFoe: null, // NEEDS TRANSLATION
+	allAdjacentFoes: null, // NEEDS TRANSLATION
+	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
+	foeSide: null, // NEEDS TRANSLATION
+	allySide: null, // NEEDS TRANSLATION
+	allyTeam: null, // NEEDS TRANSLATION
+	allAdjacent: null, // NEEDS TRANSLATION
+	allAdjacentDoubles: null, // NEEDS TRANSLATION
+	allAdjacentFFA: null, // NEEDS TRANSLATION
+	any: null, // NEEDS TRANSLATION
+	all: null, // NEEDS TRANSLATION
+	scripted: null, // NEEDS TRANSLATION
+	randomNormal: null, // NEEDS TRANSLATION
+	randomNormalDoubles: null, // NEEDS TRANSLATION
+	allies: null, // NEEDS TRANSLATION
 };
 
+// from veekun/Pokémon Central who presumably got it from Pokédex 3D Pro
+// Stadium 2 names in comments
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: "Mostro", // NEEDS QC
-	water1: "Acqua 1", // NEEDS QC
-	bug: "Insetto", // NEEDS QC
-	flying: "Volante", // NEEDS QC
-	field: "Campo", // NEEDS QC
-	fairy: "Fata", // NEEDS QC
-	grass: "Erba", // NEEDS QC
-	humanlike: "Umanoide", // NEEDS QC
-	water3: "Acqua 3", // NEEDS QC
-	mineral: "Minerale", // NEEDS QC
-	amorphous: "Amorfo", // NEEDS QC
-	water2: "Acqua 2", // NEEDS QC
-	ditto: "Ditto", // NEEDS QC
-	dragon: "Drago", // NEEDS QC
-	undiscovered: "Sconosciuto", // NEEDS QC
+	monster: null, // NEEDS TRANSLATION
+	water1: null, // NEEDS TRANSLATION
+	bug: null, // NEEDS TRANSLATION
+	flying: null, // NEEDS TRANSLATION
+	field: null, // NEEDS TRANSLATION
+	fairy: null, // NEEDS TRANSLATION
+	grass: null, // NEEDS TRANSLATION
+	humanlike: null, // NEEDS TRANSLATION
+	water3: null, // NEEDS TRANSLATION
+	mineral: null, // NEEDS TRANSLATION
+	amorphous: null, // NEEDS TRANSLATION
+	water2: null, // NEEDS TRANSLATION
+	ditto: null, // NEEDS TRANSLATION
+	dragon: null, // NEEDS TRANSLATION
+	undiscovered: null, // NEEDS TRANSLATION
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {

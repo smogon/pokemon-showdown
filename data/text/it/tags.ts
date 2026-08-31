@@ -18,10 +18,10 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Pokémon misterioso",
 	},
 	sublegendary: {
-		name: "Sub-leggendario", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	restrictedlegendary: {
-		name: "Leggendario limitato", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	ultrabeast: {
 		name: "Ultracreatura",
@@ -30,7 +30,7 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Paradosso",
 	},
 	pokestar: {
-		name: "Pokéwood", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	zmove: {
 		name: "Mossa Z",
@@ -39,115 +39,115 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Mossa Dynamax",
 	},
 	contact: {
-		name: "Contatto", // NEEDS QC
-		hint: "attiva Spineferrate, Agodifesa, ecc.", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	sound: {
-		name: "Suono", // NEEDS QC
-		hint: "non ha effetto sui Pokémon con Antisuono", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	powder: {
-		name: "Polvere", // NEEDS QC
-		hint: "non ha effetto su tipo Erba, Copricapo, Visierantisabbia", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	fist: {
-		name: "Pugno", // NEEDS QC
-		hint: "potenziata da Ferropugno", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	pulse: {
-		name: "Pulsar", // NEEDS QC
-		hint: "potenziata da Megalancio", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	bite: {
-		name: "Morso", // NEEDS QC
-		hint: "potenziata da Ferromascella", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	bullet: {
-		name: "Proiettile", // NEEDS QC
-		hint: "non ha effetto sui Pokémon con Antiproiettile", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	dance: {
-		name: "Danza", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	slicing: {
-		name: "Taglio", // NEEDS QC
-		hint: "potenziata da Affilama", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	wind: {
-		name: "Vento", // NEEDS QC
-		hint: "attiva Energia Eolica e Vento Propizio", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	defrost: {
-		name: "Scongelamento", // NEEDS QC
-		hint: "l'utilizzatore si scongela se è congelato", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	recoil: {
-		name: "Contraccolpo", // NEEDS QC
-		hint: "potenziata da Temerarietà", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	twoturnmove: {
-		name: "Mossa in due turni", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	recharge: {
-		name: "Deve ricaricarsi dopo", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	suppressedbygravity: {
-		name: "Bloccata da Gravità", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	boostedbysheerforce: {
-		name: "Potenziata da Forzabruta", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	bypassprotect: {
-		name: "Ignora protezione", // NEEDS QC
-		hint: "e Individua, Scudo Reale, Agodifesa", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	nonreflectable: {
-		name: "Ignora Magispecchio", // NEEDS QC
-		hint: "e Magivelo", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	nonmirror: {
-		name: "Immune a Speculmossa", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	nonsnatchable: {
-		name: "Immune a Scippo", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	bypasssubstitute: {
-		name: "Ignora sostituto", // NEEDS QC
-		hint: "ma non lo distrugge", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
+		hint: null, // NEEDS TRANSLATION
 	},
 	gmaxmove: {
-		name: "Mossa Gigamax", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	past: {
-		name: "Passato", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	truepast: {
-		name: "Solo passato", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	pastunobtainable: {
-		name: "Passato non ottenibile", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	future: {
-		name: "Futuro", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	lgpe: {
 		name: "LGPE",
 	},
 	unobtainable: {
-		name: "Non ottenibile", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	cap: {
 		name: "CAP",
 	},
 	custom: {
-		name: "Personalizzato", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	nonexistent: {
-		name: "Inesistente", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 
 	introducedgen: {
-		name: "Generazione", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	height: {
 		name: "Altezza",
@@ -156,22 +156,22 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Peso",
 	},
 	hp: {
-		name: "PS", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	atk: {
-		name: "Att", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	def: {
-		name: "Dif", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	spa: {
-		name: "Att. Sp.", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	spd: {
-		name: "Dif. Sp.", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	spe: {
-		name: "Vel.", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	bst: {
 		name: "BST",
@@ -180,12 +180,12 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Potenza",
 	},
 	priority: {
-		name: "Priorità", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 	accuracy: {
 		name: "Precisione",
 	},
 	maxpp: {
-		name: "PP max", // NEEDS QC
+		name: null, // NEEDS TRANSLATION
 	},
 };

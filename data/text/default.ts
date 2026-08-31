@@ -302,6 +302,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	unboost: {
 		fail: "  {POKEMON}'s {STAT} {INFLECT:STAT:s=was:p=were} not lowered!",
+		failNoStat: "  {POKEMON}'s stats were not lowered!",
 	},
 	struggle: {
 		activate: "  {POKEMON} has no moves left!",

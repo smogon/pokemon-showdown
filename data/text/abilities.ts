@@ -404,7 +404,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain, and loses 1/8 of its maximum HP, rounded down, if the weather is Sun.",
 		},
 
-		damage: "  ({POKEMON} was hurt by its Dry Skin.)",
+		damage: "#aftermath",
 	},
 	earlybird: {
 		name: "Early Bird",

@@ -1,17 +1,17 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: null, // NEEDS TRANSLATION: Showdown custom text
-		winBattle: null, // NEEDS TRANSLATION: Showdown custom text
-		tieBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		startBattle: null, // NEEDS TRANSLATION
+		winBattle: null, // NEEDS TRANSLATION
+		tieBattle: null, // NEEDS TRANSLATION
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "{NICKNAME} avversario",
 		team: "la tua squadra",
 		opposingTeam: "la squadra avversaria",
 		party: "i Pokémon alleati",
-		opposingParty: "i Pokémon nemici",
+		opposingParty: null, // NEEDS TRANSLATION
 
-		turn: "== {NUMBER} turn{INFLECT:NUMBER:s=o:p=i} ==",
+		turn: null, // NEEDS TRANSLATION
 		switchIn: "{TRAINER:definite:capitalize} manda in campo {FULLNAME}!",
 		switchInOwn: "Avanti, {FULLNAME}!",
 		switchOut: "{TRAINER:definite:capitalize} ritira {NICKNAME} dalla lotta!",
@@ -36,13 +36,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "{POKEMON} si è archeorisvegliato! È tornato alla sua forma originaria!",
 		zPower: "  Il Potere Z circonda {POKEMON} come un’aura!",
 		zBroken: "  La protezione fallisce! {POKEMON} subisce dei danni!",
-		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "{POKEMON} non può usare {MOVE}!",
-		cantNoMove: "{POKEMON} è immobilizzato!",
+		cantNoMove: null, // NEEDS TRANSLATION
 		fail: "  Ma fallisce!",
 
 		// n.b. this is the default message for in-battle forme changes
@@ -52,32 +52,32 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  {EFFECT} di {POKEMON} lo ha reso di tipo {TYPE}!",
 		typeAdd: "  Adesso {POKEMON} è anche di tipo {TYPE}!",
 
-		start: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
 		end: "  {POKEMON} si è liberato da {EFFECT}!",
-		activate: null, // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
+		startTeamEffect: null, // NEEDS TRANSLATION
+		endTeamEffect: null, // NEEDS TRANSLATION
+		startFieldEffect: null, // NEEDS TRANSLATION
+		endFieldEffect: null, // NEEDS TRANSLATION
 
 		changeAbility: "  L’abilità di {POKEMON} è ora {ABILITY}!",
 		addItem: "  {POKEMON} ottiene {ITEM:indefinite:classified}!",
 		takeItem: "  {POKEMON} ruba {ITEM:definite:classified} di {SOURCE}!",
-		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION
 		useGem: "  {ITEM:definite:capitalize:classified} incrementa la potenza di {MOVE}!",
 		eatItemWeaken: "  I danni inflitti {POKEMON:a} vengono ridotti d{ITEM:a:definite:classified}!",
-		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
-		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION
+		activateItem: null, // NEEDS TRANSLATION
 		activateWeaken: "  I danni inflitti {POKEMON:a} vengono ridotti d{ITEM:a:definite:classified}!",
 
 		damage: "  ({POKEMON} è ferito!)",
-		damagePercentage: null, // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: null, // NEEDS TRANSLATION
 		damageFromPokemon: "  {ITEM:definite:capitalize} di {SOURCE} ferisc{INFLECT:ITEM:s=e:p=ono} {POKEMON}!",
 		damageFromItem: "  {POKEMON} subisce dei danni a causa {ITEM:di:definite}!",
 		damageFromPartialTrapping: "  {POKEMON} subisce i danni della mossa {MOVE}!",
 		heal: "  {POKEMON} ha recuperato dei PS!",
 		healFromZEffect: "  Il Potere Z fa recuperare PS {POKEMON:a}!",
-		healFromEffect: "  {POKEMON} ricarica PS usando {EFFECT}!",
+		healFromEffect: null, // NEEDS TRANSLATION
 
 		boost: "  {STAT:definite:capitalize} di {POKEMON} aumenta!",
 		boost2: "  {STAT:definite:capitalize} di {POKEMON} aumenta di molto!",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  {STAT:definite:capitalize} di {POKEMON} diminuisce di molto!",
 		unboost3: "  {STAT:definite:capitalize} di {POKEMON} cala drasticamente!",
 		unboost0: "  {STAT:definite:capitalize} di {POKEMON} non può diminuire di più!",
-		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION
+		unboost2FromItem: null, // NEEDS TRANSLATION
+		unboost3FromItem: null, // NEEDS TRANSLATION
 
 		swapBoost: "  {POKEMON} scambia con il bersaglio le modifiche alle statistiche!",
 		swapOffensiveBoost: "  {POKEMON} scambia con il bersaglio le modifiche ad Attacco e Attacco Speciale!",
@@ -112,8 +112,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		superEffectiveSpread: "  È superefficace su {POKEMON}!",
 		resisted: "  Non è molto efficace...",
 		resistedSpread: "  Non è molto efficace su {POKEMON}...",
+		// this is official text meaning 4x effective. do not QC this
 		extremelyEffective: "  È iperefficace!!",
 		extremelyEffectiveSpread: "  È iperefficace su {POKEMON}!!",
+		// this is official text meaning 1/4x effective. do not QC this
 		mostlyIneffective: "  Non è quasi per niente efficace...",
 		mostlyIneffectiveSpread: "  Non è quasi per niente efficace su {POKEMON}...",
 		crit: "  Brutto colpo!",
@@ -129,6 +131,91 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		ohko: "  È un colpo da KO!",
 		combine: "  Formidabile! Due mosse che diventano una! È una mossa combinata!",
 		hitCount: "  Colpi inflitti: {NUMBER}!",
+	},
+	ui: {
+		whatDo: null, // NEEDS TRANSLATION
+		moveTarget: null, // NEEDS TRANSLATION
+		reviveWho: null, // NEEDS TRANSLATION
+		replaceWho: null, // NEEDS TRANSLATION
+		teamStart: null, // NEEDS TRANSLATION
+		teamRest: null, // NEEDS TRANSLATION
+		chooseLead: null, // NEEDS TRANSLATION
+		chooseSlot: null, // NEEDS TRANSLATION
+		teamSoFar: null, // NEEDS TRANSLATION
+		waitingOpponent: null, // NEEDS TRANSLATION
+		cantSwitchTrapped: null, // NEEDS TRANSLATION
+		usuallyMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesLast: null, // NEEDS TRANSLATION
+		failsIfHP: null, // NEEDS TRANSLATION
+		koSelfIfHP: null, // NEEDS TRANSLATION
+		transformedInto: null, // NEEDS TRANSLATION
+		changedForme: null, // NEEDS TRANSLATION
+		possibleIllusion: null, // NEEDS TRANSLATION
+		pixels: null, // NEEDS TRANSLATION
+		wouldTakeIfAbilityRemoved: null, // NEEDS TRANSLATION
+		nextDamage: null, // NEEDS TRANSLATION
+		turnsAsleep: null, // NEEDS TRANSLATION
+		illusionWarning: null, // NEEDS TRANSLATION
+		pressureGen3Warning: null, // NEEDS TRANSLATION
+		indistinguishableWarning: null, // NEEDS TRANSLATION
+		noConditions: null, // NEEDS TRANSLATION
+		afterStatModifiers: null, // NEEDS TRANSLATION
+		calls: null, // NEEDS TRANSLATION
+		base: null, // NEEDS TRANSLATION
+		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
+		zEffectCrit2: null, // NEEDS TRANSLATION
+		zEffectHeal: null, // NEEDS TRANSLATION
+		zEffectCurse: null, // NEEDS TRANSLATION
+		zEffectRedirect: null, // NEEDS TRANSLATION
+		zEffectHealReplacement: null, // NEEDS TRANSLATION
+		ppRange: null, // NEEDS TRANSLATION
+		revealed: null, // NEEDS TRANSLATION
+		range: null, // NEEDS TRANSLATION
+		beforeStatStages: null, // NEEDS TRANSLATION
+		beforeExternalModifiers: null, // NEEDS TRANSLATION
+		flingBerry: null, // NEEDS TRANSLATION
+		flingWhiteHerb: null, // NEEDS TRANSLATION
+		flingMentalHerb: null, // NEEDS TRANSLATION
+		cantFling: null, // NEEDS TRANSLATION
+		unobtainableInGen: null, // NEEDS TRANSLATION
+		tagMoves: null, // NEEDS TRANSLATION
+		notifyMoveTitle: null, // NEEDS TRANSLATION
+		notifyMove: null, // NEEDS TRANSLATION
+		notifyMoveAgainst: null, // NEEDS TRANSLATION
+		notifySwitchTitle: null, // NEEDS TRANSLATION
+		notifySwitch: null, // NEEDS TRANSLATION
+		notifySwitchAgainst: null, // NEEDS TRANSLATION
+		notifyTeamTitle: null, // NEEDS TRANSLATION
+		notifyTeam: null, // NEEDS TRANSLATION
+		notifyTeamAgainst: null, // NEEDS TRANSLATION
+		mightBeDisabled: null, // NEEDS TRANSLATION
+		mightBeLocked: null, // NEEDS TRANSLATION
+		lockedExplanation: null, // NEEDS TRANSLATION
+		mightBeTrapped: null, // NEEDS TRANSLATION
+		autoChoice: null, // NEEDS TRANSLATION
+		unrecognizedChoice: null, // NEEDS TRANSLATION
+		lockedIntoMove: null, // NEEDS TRANSLATION
+		willUseMove: null, // NEEDS TRANSLATION
+		atTarget: null, // NEEDS TRANSLATION
+		atSlot: null, // NEEDS TRANSLATION
+		atAllyTarget: null, // NEEDS TRANSLATION
+		atAllySlot: null, // NEEDS TRANSLATION
+		actionMegaEvolve: null, // NEEDS TRANSLATION
+		actionMegaEvolveX: null, // NEEDS TRANSLATION
+		actionMegaEvolveY: null, // NEEDS TRANSLATION
+		actionUltraBurst: null, // NEEDS TRANSLATION
+		actionTerastallize: null, // NEEDS TRANSLATION
+		actionDynamax: null, // NEEDS TRANSLATION
+		actionGigantamax: null, // NEEDS TRANSLATION
+		willRevive: null, // NEEDS TRANSLATION
+		willSwitch: null, // NEEDS TRANSLATION
+		willShift: null, // NEEDS TRANSLATION
+		youPicked: null, // NEEDS TRANSLATION
+		listComma: null, // NEEDS TRANSLATION
+		effectivenessVs: null, // NEEDS TRANSLATION
+		basePowerVs: null, // NEEDS TRANSLATION
+		or: null, // NEEDS TRANSLATION
 	},
 
 	// statuses
@@ -211,7 +298,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  {POKEMON} ha subito il contraccolpo!",
 	},
 	unboost: {
-		fail: "  La diminuzione delle statistiche di {POKEMON} è stata evitata!",
+		fail: "  La diminuzione {STAT:di:definite} di {POKEMON} è stata evitata!", // per-stat form; Champions btl_set RankdownFail_ATK "La diminuzione dell’Attacco di X è stata evitata!"
+		failNoStat: "  La diminuzione delle statistiche di {POKEMON} è stata evitata!", // SV it_common:6479
 	},
 	struggle: {
 		activate: "  {POKEMON} non ha più mosse da sferrare!",
@@ -220,8 +308,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON} non può più scappare!",
 	},
 	dynamax: {
-		start: null, // NEEDS TRANSLATION: Showdown custom text
-		end: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
+		end: null, // NEEDS TRANSLATION
 		block: "  La mossa è stata vanificata dalla potenza del fenomeno Dynamax!",
 		fail: "  {POKEMON} scuote il capo. Sembra che non riesca a usare questa mossa...",
 	},

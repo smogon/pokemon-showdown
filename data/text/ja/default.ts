@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "{TRAINER1}と {TRAINER2}の 勝負が 始まった！", // NEEDS QC
-		winBattle: "**{TRAINER}**が 勝負に 勝った！", // NEEDS QC
-		tieBattle: "{TRAINER1}と {TRAINER2}の 勝負は 引き分けだ！", // NEEDS QC
+		startBattle: null, // NEEDS TRANSLATION
+		winBattle: null, // NEEDS TRANSLATION
+		tieBattle: null, // NEEDS TRANSLATION
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "相手の {NICKNAME}",
@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "味方の ポケモン",
 		opposingParty: "相手の ポケモン",
 
-		turn: "== {NUMBER}ターン ==",
+		turn: null, // NEEDS TRANSLATION
 		switchIn: "{TRAINER}は {FULLNAME}を 繰り出した！",
 		switchInOwn: "ゆけっ！ {FULLNAME}！",
 		switchOut: "{TRAINER}は {NICKNAME}を 引っこめた！",
@@ -30,13 +30,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		abilityActivation: "[{POKEMON}の {ABILITY}]",
 
 		mega: "  {POKEMON}の {ITEM}と {TRAINER}の キーストーンが 反応した！",
-		megaNoItem: "  {TRAINER}の キーストーンと {POKEMON}が 反応した！",
+		megaNoItem: null, // NEEDS TRANSLATION
 		megaGen6: "  {POKEMON}の {ITEM}と {TRAINER}の メガバングルが 反応した！",
 		transformMega: "{POKEMON}は メガ{SPECIES}に メガシンカした！",
 		primal: "{POKEMON}の ゲンシカイキ！ 原始の姿を 取り戻した！",
 		zPower: "  {POKEMON}は Ｚパワーを 身体に まとった！",
 		zBroken: "  {POKEMON}は 攻撃を 守りきれずに ダメージを 受けた！",
-		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
@@ -52,39 +52,39 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  {POKEMON}は {EFFECT}で {TYPE}タイプに なった！",
 		typeAdd: "  {POKEMON}に {TYPE}タイプが 追加された！",
 
-		start: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
 		end: "  {POKEMON}は {EFFECT}から 解放された！",
-		activate: null, // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
+		startTeamEffect: null, // NEEDS TRANSLATION
+		endTeamEffect: null, // NEEDS TRANSLATION
+		startFieldEffect: null, // NEEDS TRANSLATION
+		endFieldEffect: null, // NEEDS TRANSLATION
 
 		changeAbility: "  {POKEMON}は {ABILITY}に なった！",
 		addItem: "  {POKEMON}は {ITEM}を 手に入れた！",
 		takeItem: "  {POKEMON}は {SOURCE}から {ITEM}を 奪い取った！",
-		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION
 		useGem: "  {ITEM}は {MOVE}の 威力を 強めた！",
 		eatItemWeaken: "  {POKEMON}への ダメージを {ITEM}が 弱めた！",
-		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
-		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION
+		activateItem: null, // NEEDS TRANSLATION
 		activateWeaken: "  {POKEMON}への ダメージを {ITEM}が 弱めた！",
 
 		damage: "  ({POKEMON}は ダメージを 受けた！)",
-		damagePercentage: "  ({POKEMON}は 体力の {PERCENTAGE}％を 失った！)",
+		damagePercentage: null, // NEEDS TRANSLATION
 		damageFromPokemon: "  {POKEMON}は {SOURCE}の {ITEM}で ダメージを 受けた！",
 		damageFromItem: "  {POKEMON}は {ITEM}で ダメージを 受けた！",
 		damageFromPartialTrapping: "  {POKEMON}は {MOVE}の ダメージを 受けている",
 		heal: "  {POKEMON}の 体力が 回復した！",
 		healFromZEffect: "  {POKEMON}は Ｚパワーで 体力を 回復した！",
-		healFromEffect: "  {POKEMON}は {EFFECT}で かいふくした！",
+		healFromEffect: null, // NEEDS TRANSLATION
 
 		boost: "  {POKEMON}の {STAT}が 上がった！",
 		boost2: "  {POKEMON}の {STAT}が ぐーんと上がった！",
 		boost3: "  {POKEMON}の {STAT}が ぐぐーんと上がった！",
 		boost0: "  {POKEMON}の {STAT}は もう 上がらない！",
-		boostFromItem: "  {POKEMON}は {ITEM}で {STAT}が あがった！",
-		boost2FromItem: "  {POKEMON}は {ITEM}で {STAT}が ぐーんと あがった！",
+		boostFromItem: null, // NEEDS TRANSLATION
+		boost2FromItem: null, // NEEDS TRANSLATION
 		boost3FromItem: "  {POKEMON}は {ITEM}で {STAT}が ぐぐーんと 上がった！",
 		boostFromZEffect: "  {POKEMON}は Ｚパワーで {STAT}が 上がった！",
 		boost2FromZEffect: "  {POKEMON}は Ｚパワーで {STAT}が ぐーんと 上がった！",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  {POKEMON}の {STAT}が がくっと下がった！",
 		unboost3: "  {POKEMON}の {STAT}が がくーんと下がった！",
 		unboost0: "  {POKEMON}の {STAT}は もう 下がらない！",
-		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION
+		unboost2FromItem: null, // NEEDS TRANSLATION
+		unboost3FromItem: null, // NEEDS TRANSLATION
 
 		swapBoost: "  {POKEMON}は 相手と自分の 能力変化を 入れ替えた！",
 		swapOffensiveBoost: "  {POKEMON}は 相手と自分の 攻撃と 特攻の 能力変化を 入れ替えた！",
@@ -112,14 +112,17 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		superEffectiveSpread: "  {POKEMON}に 効果は バツグンだ！",
 		resisted: "  効果は いまひとつだ",
 		resistedSpread: "  {POKEMON}に 効果は いまひとつだ",
+		// this is official text meaning 4x effective. do not QC this
 		extremelyEffective: "  効果は ちょうバツグンだ！！",
 		extremelyEffectiveSpread: "  {POKEMON}に 効果は ちょうバツグンだ！！",
+		// this is official text meaning 1/4x effective. do not QC this
 		mostlyIneffective: "  効果は かなりいまひとつだ",
 		mostlyIneffectiveSpread: "  {POKEMON}に 効果は かなりいまひとつだ",
 		crit: "  急所に 当たった！",
 		critSpread: "  {POKEMON}の 急所に 当たった！",
 		immune: "  {POKEMON}には 効果が ないようだ…",
-		immuneNoPokemon: "  しかし効果がなかった！",
+		// from Emerald: しかし こうかが なかった！ (kana modernized to current kanji standards)
+		immuneNoPokemon: "  しかし 効果が なかった！",
 		immuneOHKO: "  {POKEMON}には 全然 効いてない！",
 		miss: "  {POKEMON}には 当たらなかった！",
 		missNoPokemon: "  しかし {SOURCE}の こうげきは はずれた！",
@@ -127,8 +130,93 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		center: "  リセットムーブ！！",
 		noTarget: "  しかし あいてが いないので うまく きまらなかった！",
 		ohko: "  一撃必殺！",
-		combine: "  2つの技が 1つになった！ コンビネーション技だ！",
+		combine: "  2つの技が 1つになった！ コンビネーション技だ！！", // XY ja_common 22838
 		hitCount: "  {NUMBER}回 当たった！",
+	},
+	ui: {
+		whatDo: null, // NEEDS TRANSLATION
+		moveTarget: null, // NEEDS TRANSLATION
+		reviveWho: null, // NEEDS TRANSLATION
+		replaceWho: null, // NEEDS TRANSLATION
+		teamStart: null, // NEEDS TRANSLATION
+		teamRest: null, // NEEDS TRANSLATION
+		chooseLead: null, // NEEDS TRANSLATION
+		chooseSlot: null, // NEEDS TRANSLATION
+		teamSoFar: null, // NEEDS TRANSLATION
+		waitingOpponent: null, // NEEDS TRANSLATION
+		cantSwitchTrapped: null, // NEEDS TRANSLATION
+		usuallyMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesLast: null, // NEEDS TRANSLATION
+		failsIfHP: null, // NEEDS TRANSLATION
+		koSelfIfHP: null, // NEEDS TRANSLATION
+		transformedInto: null, // NEEDS TRANSLATION
+		changedForme: null, // NEEDS TRANSLATION
+		possibleIllusion: null, // NEEDS TRANSLATION
+		pixels: null, // NEEDS TRANSLATION
+		wouldTakeIfAbilityRemoved: null, // NEEDS TRANSLATION
+		nextDamage: null, // NEEDS TRANSLATION
+		turnsAsleep: null, // NEEDS TRANSLATION
+		illusionWarning: null, // NEEDS TRANSLATION
+		pressureGen3Warning: null, // NEEDS TRANSLATION
+		indistinguishableWarning: null, // NEEDS TRANSLATION
+		noConditions: null, // NEEDS TRANSLATION
+		afterStatModifiers: null, // NEEDS TRANSLATION
+		calls: null, // NEEDS TRANSLATION
+		base: null, // NEEDS TRANSLATION
+		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
+		zEffectCrit2: null, // NEEDS TRANSLATION
+		zEffectHeal: null, // NEEDS TRANSLATION
+		zEffectCurse: null, // NEEDS TRANSLATION
+		zEffectRedirect: null, // NEEDS TRANSLATION
+		zEffectHealReplacement: null, // NEEDS TRANSLATION
+		ppRange: null, // NEEDS TRANSLATION
+		revealed: null, // NEEDS TRANSLATION
+		range: null, // NEEDS TRANSLATION
+		beforeStatStages: null, // NEEDS TRANSLATION
+		beforeExternalModifiers: null, // NEEDS TRANSLATION
+		flingBerry: null, // NEEDS TRANSLATION
+		flingWhiteHerb: null, // NEEDS TRANSLATION
+		flingMentalHerb: null, // NEEDS TRANSLATION
+		cantFling: null, // NEEDS TRANSLATION
+		unobtainableInGen: null, // NEEDS TRANSLATION
+		tagMoves: null, // NEEDS TRANSLATION
+		notifyMoveTitle: null, // NEEDS TRANSLATION
+		notifyMove: null, // NEEDS TRANSLATION
+		notifyMoveAgainst: null, // NEEDS TRANSLATION
+		notifySwitchTitle: null, // NEEDS TRANSLATION
+		notifySwitch: null, // NEEDS TRANSLATION
+		notifySwitchAgainst: null, // NEEDS TRANSLATION
+		notifyTeamTitle: null, // NEEDS TRANSLATION
+		notifyTeam: null, // NEEDS TRANSLATION
+		notifyTeamAgainst: null, // NEEDS TRANSLATION
+		mightBeDisabled: null, // NEEDS TRANSLATION
+		mightBeLocked: null, // NEEDS TRANSLATION
+		lockedExplanation: null, // NEEDS TRANSLATION
+		mightBeTrapped: null, // NEEDS TRANSLATION
+		autoChoice: null, // NEEDS TRANSLATION
+		unrecognizedChoice: null, // NEEDS TRANSLATION
+		lockedIntoMove: null, // NEEDS TRANSLATION
+		willUseMove: null, // NEEDS TRANSLATION
+		atTarget: null, // NEEDS TRANSLATION
+		atSlot: null, // NEEDS TRANSLATION
+		atAllyTarget: null, // NEEDS TRANSLATION
+		atAllySlot: null, // NEEDS TRANSLATION
+		actionMegaEvolve: null, // NEEDS TRANSLATION
+		actionMegaEvolveX: null, // NEEDS TRANSLATION
+		actionMegaEvolveY: null, // NEEDS TRANSLATION
+		actionUltraBurst: null, // NEEDS TRANSLATION
+		actionTerastallize: null, // NEEDS TRANSLATION
+		actionDynamax: null, // NEEDS TRANSLATION
+		actionGigantamax: null, // NEEDS TRANSLATION
+		willRevive: null, // NEEDS TRANSLATION
+		willSwitch: null, // NEEDS TRANSLATION
+		willShift: null, // NEEDS TRANSLATION
+		youPicked: null, // NEEDS TRANSLATION
+		listComma: null, // NEEDS TRANSLATION
+		effectivenessVs: null, // NEEDS TRANSLATION
+		basePowerVs: null, // NEEDS TRANSLATION
+		or: null, // NEEDS TRANSLATION
 	},
 
 	// statuses
@@ -136,7 +224,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON}は やけどを 負った！",
 		startFromItem: "  {POKEMON}は {ITEM}で やけどを 負った！",
 		alreadyStarted: "  {POKEMON}は すでに やけどを 負っている",
-		end: "  {POKEMON}の やけどが治った！",
+		end: "  {POKEMON}の やけどが 治った！", // SV ja_common 6567 / Champions btl_set
 		endFromItem: "  {POKEMON}は {ITEM}で やけどが 治った！",
 		damage: "  {POKEMON}は やけどの ダメージを 受けた！",
 	},
@@ -211,7 +299,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  {POKEMON}は 反動による ダメージを 受けた！",
 	},
 	unboost: {
-		fail: "  {POKEMON}の 能力は 下がらない！",
+		fail: "  {POKEMON}の {STAT}は 下がらない！", // per-stat form; SV ja_common:6483 「{POKEMON}の 攻撃は 下がらない！」
+		failNoStat: "  {POKEMON}の 能力は 下がらない！", // SV ja_common:6479
 	},
 	struggle: {
 		activate: "  {POKEMON}は だすことの できる技が ない！",
@@ -220,28 +309,28 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON}は もう 逃げられない！",
 	},
 	dynamax: {
-		start: null, // NEEDS TRANSLATION: Showdown custom text
-		end: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
+		end: null, // NEEDS TRANSLATION
 		block: "  ダイマックスの ちからで はじかれた！",
 		fail: "  {POKEMON}は 首を 横に振った この技を しかけることが できないようだ……",
 	},
 
 	// weather
 	sandstorm: {
-		weatherName: "すなあらし状態",
+		weatherName: "すなあらし",
 		start: "  砂あらしが 吹き始めた！",
 		end: "  砂あらしが おさまった！",
 		upkeep: "  (砂あらしが 吹きあれる！)",
 		damage: "  砂あらしが {POKEMON}を 襲う！",
 	},
 	sunnyday: {
-		weatherName: "にほんばれ状態",
+		weatherName: "にほんばれ",
 		start: "  日差しが 強くなった！",
 		end: "  日差しが 元に戻った！",
 		upkeep: "  (ひざしが つよい)",
 	},
 	raindance: {
-		weatherName: "あめ状態",
+		weatherName: "あめ",
 		start: "  雨が 降り始めた！",
 		end: "  雨が 上がった！",
 		upkeep: "  (あめが ふりつづいている)",
@@ -254,7 +343,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  あられが {POKEMON}を 襲う！",
 	},
 	snowscape: {
-		weatherName: "ゆき状態",
+		weatherName: "ゆき",
 		start: "  雪が 降り始めた！",
 		end: "  雪が 止んだ！",
 		upkeep: "  (雪が 吹きすさぶ！)",

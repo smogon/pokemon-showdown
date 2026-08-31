@@ -1,95 +1,114 @@
+// Mechanics desc conventions (ja) — keep consistent with ja/abilities.ts and ja/items.ts:
+// Style: plain form (〜する。), no flavor-text spacing, halfwidth numerals (1.5倍, 30%, 2〜5回).
+// Terminology: 追加効果 (secondary effect), ひるみ (flinch), 急所 (crit), 能力ランク (stat stage),
+//   状態異常 (non-volatile status), 直接攻撃 (contact move), 連続攻撃技 (multi-hit move),
+//   優先度 (priority), 設置技 (hazards), 場に出たとき (on switch-in), 切り捨て/切り上げ (rounded down/up),
+//   みがわり (substitute), 相性 (type effectiveness), 天気 (weather), 使用者 (user), 対象 (target).
+// Fixed formulas: 「最大HPの1/4（切り捨て）を回復する」 (restores 1/4 max HP, rounded down);
+//   「ちからずくにより追加効果が消された技では発動しない」 (Sheer Force rider);
+//   「この効果は技のタイプを変える他の効果の後に適用される」 (type-change ordering).
+// Rounding: 四捨五入 (rounded half up), 五捨五超入 (rounded half down), 切り捨て/切り上げ.
+// More fixed formulas: 「急所に当たりやすい（急所ランク+1）」 (higher crit chance); 「必中。」 (no accuracy check);
+//   「追加効果なし。」 (no additional effect); 「X%の確率で相手を〜状態にする」 (secondary status);
+//   partial-trap/protect/multi-hit/max-move boilerplate is shared verbatim across entries — QC one, fix all.
+// CAP (Create-A-Pokemon) entities have no official localized names: leave name null
+//   (English shows via fallback) but translate the desc, using English names inline for
+//   any CAP cross-references.
+// Cross-references use official Japanese names for moves/abilities/items/species;
+//   when a list of names appears in English, generate it from the ja name fields (see scratchpad scripts).
+
 export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "１０００まんボルト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	absorb: {
 		name: "すいとる",
 		// Official flavor text: "養分を 吸い取り 攻撃する。 相手に 与えた ダメージの 半分の ＨＰを 回復できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	accelerock: {
 		name: "アクセルロック",
 		// Official flavor text: "素早い スピードで 相手に ぶつかって 攻撃する。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	acid: {
 		name: "ようかいえき",
 		// Official flavor text: "強い 酸を 相手に かけて 攻撃する。 相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	acidarmor: {
 		name: "とける",
 		// Official flavor text: "細胞の 変化で 液状に なり 自分の 防御を ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aciddownpour: {
 		name: "アシッドポイズンデリート",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	acidspray: {
 		name: "アシッドボム",
 		// Official flavor text: "相手を とかす 液体を 吐きだして 攻撃する。 相手の 特防を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	acrobatics: {
 		name: "アクロバット",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	acupressure: {
 		name: "つぼをつく",
 		// Official flavor text: "つぼおしで 体を 活性化させる。 能力の どれか １つを ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	aerialace: {
 		name: "つばめがえし",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aeroblast: {
 		name: "エアロブラスト",
 		// Official flavor text: "空気の 渦を 発射して 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	afteryou: {
 		name: "おさきにどうぞ",
 		// Official flavor text: "相手の 行動を サポートして 自分の 行動の あとに 続けて 動けるように する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {TARGET}は お言葉に 甘えることにした！",
 	},
@@ -97,130 +116,130 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "こうそくいどう",
 		// Official flavor text: "力を ぬいて 体を 軽くして 高速で 動く。 自分の 素早さを ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aircutter: {
 		name: "エアカッター",
 		// Official flavor text: "鋭い 風で 相手を 切りつけて 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	airslash: {
 		name: "エアスラッシュ",
 		// Official flavor text: "空をも 切り裂く 空気の 刃で 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	alloutpummeling: {
 		name: "ぜんりょくむそうげきれつけん",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	alluringvoice: {
 		name: "みわくのボイス",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	allyswitch: {
 		name: "サイドチェンジ",
 		// Official flavor text: "不思議な 力で テレポートして 自分と 味方の 居場所を 入れ替える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	amnesia: {
 		name: "ドわすれ",
 		// Official flavor text: "頭を からにして 一瞬 なにかを 忘れることで 自分の 特防を ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	anchorshot: {
 		name: "アンカーショット",
 		// Official flavor text: "アンカーを 相手に からませて 攻撃する。 相手は 逃げることが できなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	ancientpower: {
 		name: "げんしのちから",
 		// Official flavor text: "原始の 力で 攻撃する。 自分の すべての 能力が あがることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	appleacid: {
 		name: "りんごさん",
 		// Official flavor text: "すっぱい りんごから つくりだした 酸性の 液体で 攻撃。 相手の 特防を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aquacutter: {
 		name: "アクアカッター",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aquajet: {
 		name: "アクアジェット",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで 相手に つっこむ。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aquaring: {
 		name: "アクアリング",
 		// Official flavor text: "自分の 体の 周りを 水で つくった ベールで おおう。 毎ターン ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は 水のリングを まとった！",
 		heal: "  {POKEMON}は 水のリングで 体力を回復！",
 	},
 	aquastep: {
 		name: "アクアステップ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aquatail: {
 		name: "アクアテール",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	armorcannon: {
 		name: "アーマーキャノン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	armthrust: {
 		name: "つっぱり",
 		// Official flavor text: "ひらいた 両手で 相手を つっぱって 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	aromatherapy: {
 		name: "アロマセラピー",
 		// Official flavor text: "心地好い やすらぐ 香りを かがせて 味方全員の 状態異常を 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  心地よい 香りが 広がった！",
@@ -229,72 +248,72 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "アロマミスト",
 		// Official flavor text: "不思議な アロマの 香りによって 味方の 特防を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	assist: {
 		name: "ねこのて",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	assurance: {
 		name: "ダメおし",
 		// Official flavor text: "そのターンに 相手が すでに ダメージを 受けていたら 技の 威力は ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	astonish: {
 		name: "おどろかす",
 		// Official flavor text: "大きな 声などで 不意に 驚かして 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	astralbarrage: {
 		name: "アストラルビット",
 		// Official flavor text: "たくさんの 小さな 霊体を 相手に ぶつけて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	attackorder: {
 		name: "こうげきしれい",
 		// Official flavor text: "しもべを 呼びだして 相手に むかって 攻撃させる。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	attract: {
 		name: "メロメロ",
 		// Official flavor text: "♂なら♀を ♀なら♂を 誘惑して メロメロに する。 相手は 技が だしにくくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は メロメロに なった！",
@@ -306,32 +325,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurasphere: {
 		name: "はどうだん",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aurawheel: {
 		name: "オーラぐるま",
 		// Official flavor text: "ほほぶくろに 溜めた エネルギーで 攻撃し 自分の 素早さを あげる。 モルペコの 姿で タイプが 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aurorabeam: {
 		name: "オーロラビーム",
 		// Official flavor text: "にじいろの ビームを 相手に 発射して 攻撃する。 攻撃を さげる ことが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	auroraveil: {
 		name: "オーロラベール",
 		// Official flavor text: "５ターンの 間 物理と 特殊の ダメージを 弱める。 あられの 時しか 出すことが できない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}は オーロラベールで 物理と 特殊に 強くなった！",
@@ -341,7 +360,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ボディパージ",
 		// Official flavor text: "体の ムダな 部分を 削る。 自分の 素早さを ぐーんと あげて 体重も 軽くなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は 身軽になった！",
 	},
@@ -349,15 +368,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ゆきなだれ",
 		// Official flavor text: "相手から 技を 受けていると その 相手に 対して 技の 威力が ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	axekick: {
 		name: "かかとおとし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		damage: "#crash",
 	},
@@ -365,81 +384,81 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "つぶらなひとみ",
 		// Official flavor text: "つぶらなひとみで 相手を みつめて 攻撃を さげる。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	baddybad: {
 		name: "わるわるゾーン",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	banefulbunker: {
 		name: "トーチカ",
 		// Official flavor text: "相手の 攻撃を 防ぐと 同時に 触れた 相手に 毒を 与えてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	barbbarrage: {
 		name: "どくばりセンボン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	barrage: {
 		name: "たまなげ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	barrier: {
 		name: "バリアー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	batonpass: {
 		name: "バトンタッチ",
 		// Official flavor text: "控えの ポケモンと 入れ替わる。 能力変化は 替わった ポケモンが そのまま 受けつぐ。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	beakblast: {
 		name: "くちばしキャノン",
 		// Official flavor text: "最初に クチバシを 加熱してから 攻撃を くりだす。 加熱中に さわると やけどする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は クチバシを 加熱し始めた！",
 	},
@@ -447,38 +466,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ふくろだたき",
 		// Official flavor text: "味方 全員で 攻撃する。 仲間の ポケモンが 多いほど 技の 攻撃回数が 増える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {NAME}の こうげき！",
 	},
 	behemothbash: {
 		name: "きょじゅうだん",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	behemothblade: {
 		name: "きょじゅうざん",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	belch: {
 		name: "ゲップ",
 		// Official flavor text: "相手に 向かって ゲップを 浴びせて ダメージを 与える。 きのみを 食べないと だせない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -488,9 +507,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "はらだいこ",
 		// Official flavor text: "自分の ＨＰを 最大ＨＰの 半分 減らして 自分の 攻撃を 最大に あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		boost: "  {POKEMON}は 体力を削って パワー全開！",
@@ -499,12 +518,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ギフトパス",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		takeItem: "  {POKEMON}は {SOURCE}から {ITEM}を 受け取った！",
@@ -513,19 +532,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "がまん",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は がまんしている",
@@ -536,26 +555,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "しめつける",
 		// Official flavor text: "長い 体や つるなどを 使い ４ー５ターンの 間 相手を 締めつけて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は {SOURCE}に 締めつけられた！",
@@ -565,179 +584,179 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "かみつく",
 		// Official flavor text: "鋭く とがった 歯で かみついて 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	bitterblade: {
 		name: "むねんのつるぎ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bittermalice: {
 		name: "うらみつらみ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blackholeeclipse: {
 		name: "ブラックホールイクリプス",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blastburn: {
 		name: "ブラストバーン",
 		// Official flavor text: "爆発の 炎で 相手を 焼きつくして 攻撃する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blazekick: {
 		name: "ブレイズキック",
 		// Official flavor text: "攻撃した 相手を やけど状態に することが ある。 急所にも 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blazingtorque: {
 		name: "バーンアクセル",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bleakwindstorm: {
 		name: "こがらしあらし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blizzard: {
 		name: "ふぶき",
 		// Official flavor text: "激しい 吹雪を 相手に 吹きつけて 攻撃する。 こおり状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	block: {
 		name: "とおせんぼう",
 		// Official flavor text: "両手を ひろげて たちはだかり 相手の 逃げ道を ふさいで 逃げられなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	bloodmoon: {
 		name: "ブラッドムーン",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bloomdoom: {
 		name: "ブルームシャインエクストラ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blueflare: {
 		name: "あおいほのお",
 		// Official flavor text: "美しくも 激しい 青い炎で 相手を 包みこんで 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bodypress: {
 		name: "ボディプレス",
 		// Official flavor text: "体を ぶつけて 攻撃。 防御が 高いほど 与える ダメージが 増える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bodyslam: {
 		name: "のしかかり",
 		// Official flavor text: "全身で 相手に のしかかり 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	boltbeak: {
 		name: "でんげきくちばし",
 		// Official flavor text: "電気を まとった くちばしで 刺す。 相手より 先に 攻撃できると 技の 威力は ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	boltstrike: {
 		name: "らいげき",
 		// Official flavor text: "ぼうだいな 電気を 身に まとって 相手に 突進して 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	boneclub: {
 		name: "ホネこんぼう",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bonemerang: {
 		name: "ホネブーメラン",
 		// Official flavor text: "手に 持った ホネを 相手に 投げつけ 行きと 帰りの ２回連続で ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	bonerush: {
 		name: "ボーンラッシュ",
 		// Official flavor text: "硬い ホネで 相手を なぐりつけて 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	boomburst: {
 		name: "ばくおんぱ",
 		// Official flavor text: "すさまじい 爆音の 破壊力に よって 周りに いるものを 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bounce: {
 		name: "とびはねる",
 		// Official flavor text: "空高く 飛び跳ねて ２ターン目に 相手を 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "{POKEMON}は 高く 飛び跳ねた！",
@@ -746,94 +765,94 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "いきいきバブル",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	branchpoke: {
 		name: "えだづき",
 		// Official flavor text: "するどく とがった 枝で 相手を 突いて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bravebird: {
 		name: "ブレイブバード",
 		// Official flavor text: "はねを おりたたみ 低空飛行で 突撃する。 自分も かなり ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	breakingswipe: {
 		name: "ワイドブレイカー",
 		// Official flavor text: "きょうじんな しっぽを 激しく ふりはらって 相手を 攻撃する。 相手の 攻撃を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	breakneckblitz: {
 		name: "ウルトラダッシュアタック",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	brickbreak: {
 		name: "かわらわり",
 		// Official flavor text: "手刀を 勢いよく 振りおろして 相手を 攻撃する。 ひかりのかべや リフレクター なども 破壊できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
 	},
 	brine: {
 		name: "しおみず",
 		// Official flavor text: "相手が ＨＰの 半分くらい きずを おっていると 技の 威力が ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	brutalswing: {
 		name: "ぶんまわす",
 		// Official flavor text: "自分の 体を ぶんまわして 相手に ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bubble: {
 		name: "あわ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	bubblebeam: {
 		name: "バブルこうせん",
 		// Official flavor text: "泡を 勢いよく 相手に 発射して 攻撃する。 素早さを さげる ことが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	bugbite: {
 		name: "むしくい",
 		// Official flavor text: "かみついて 攻撃する。 相手が きのみを 持っているとき 食べて きのみの 効果を 受けられる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		removeItem: "  {SOURCE}は {ITEM}を 奪って 食べた！",
@@ -842,59 +861,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "むしのさざめき",
 		// Official flavor text: "振動で 音波を おこして 攻撃する。相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bulkup: {
 		name: "ビルドアップ",
 		// Official flavor text: "体に 力を こめて 筋肉を ぶあつく することで 自分の 攻撃と 防御を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bulldoze: {
 		name: "じならし",
 		// Official flavor text: "地面を 踏みならして 自分の 周りに いるものを 攻撃する。 相手の 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bulletpunch: {
 		name: "バレットパンチ",
 		// Official flavor text: "弾丸の ような 速くて 硬い パンチを 相手に くりだす。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bulletseed: {
 		name: "タネマシンガン",
 		// Official flavor text: "タネを 勢いよく 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	burningbulwark: {
 		name: "かえんのまもり",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	burningjealousy: {
 		name: "しっとのほのお",
 		// Official flavor text: "しっとの エネルギーで 相手を 攻撃。 そのターン 能力が あがった ポケモンを やけどの 状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	burnup: {
 		name: "もえつきる",
 		// Official flavor text: "全身の ほのおを すべて 燃やして 大ダメージを 与える。 自分の ほのおタイプが なくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		typeChange: "  {POKEMON}の 炎は 燃え尽きた！",
@@ -903,52 +922,52 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "びりびりエレキ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	calmmind: {
 		name: "めいそう",
 		// Official flavor text: "静かに 精神を 統一し 心を 鎮めることで 自分の 特攻と 特防を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	camouflage: {
 		name: "ほごしょく",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	captivate: {
 		name: "ゆうわく",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	catastropika: {
 		name: "ひっさつのピカチュート",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ceaselessedge: {
 		name: "ひけん・ちえなみ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	celebrate: {
 		name: "おいわい",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  おめでとう！ {TRAINER}！！",
 	},
@@ -956,14 +975,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "じゅうでん",
 		// Official flavor text: "次の ターンに だす でんきタイプの 技の 威力を あげる。 自分の 特防も あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 充電を 始めた！",
@@ -972,37 +991,37 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "チャージビーム",
 		// Official flavor text: "電撃の 束を 相手に 発射する。電気を ためて 自分の 特攻を あげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	charm: {
 		name: "あまえる",
 		// Official flavor text: "かわいく みつめて 油断を 誘い 相手の 攻撃を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chatter: {
 		name: "おしゃべり",
 		// Official flavor text: "とても うるさい おしゃべりの 音波で 相手を 攻撃する。 相手を 混乱させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	chillingwater: {
 		name: "ひやみず",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chillyreception: {
 		name: "さむいギャグ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		prepare: "  {POKEMON}は さむい ギャグを かました！",
 	},
@@ -1010,43 +1029,43 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "なしくずし",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chloroblast: {
 		name: "クロロブラスト",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	circlethrow: {
 		name: "ともえなげ",
 		// Official flavor text: "相手を 投げとばして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	clamp: {
 		name: "からではさむ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は {SOURCE}の からに 挟まれた！",
@@ -1056,122 +1075,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "スケイルノイズ",
 		// Official flavor text: "全身の うろこを こすり 大きな 音を 出して 攻撃する。 攻撃後 自分の 防御が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	clangoroussoul: {
 		name: "ソウルビート",
 		// Official flavor text: "自分の ＨＰを 少し 削って すべての 能力を 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	clangoroussoulblaze: {
 		name: "ブレイジングソウルビート",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	clearsmog: {
 		name: "クリアスモッグ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	closecombat: {
 		name: "インファイト",
 		// Official flavor text: "守りを 捨てて 相手の ふところに 突撃する。 自分の 防御と 特防が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	coaching: {
 		name: "コーチング",
 		// Official flavor text: "的確な 指導を おこなうことで  味方 全員の 攻撃と 防御を 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	coil: {
 		name: "とぐろをまく",
 		// Official flavor text: "とぐろを まいて 集中する。 自分の 攻撃と 防御と 命中率を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	collisioncourse: {
 		name: "アクセルブレイク",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	combattorque: {
 		name: "ファイトアクセル",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cometpunch: {
 		name: "れんぞくパンチ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	comeuppance: {
 		name: "ほうふく",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	confide: {
 		name: "ないしょばなし",
 		// Official flavor text: "ないしょばなしを することで 相手の 集中力を 失わせ 相手の 特攻を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	confuseray: {
 		name: "あやしいひかり",
 		// Official flavor text: "怪しい 光を 相手に みせて まどわせる。 相手を 混乱させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	confusion: {
 		name: "ねんりき",
 		// Official flavor text: "弱い 念力を 相手に 送って 攻撃する。 相手を 混乱させることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	constrict: {
 		name: "からみつく",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	continentalcrush: {
 		name: "ワールズエンドフォール",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	conversion: {
 		name: "テクスチャー",
 		// Official flavor text: "自分の タイプを おぼえている 技で 一番 上の 技と 同じ タイプに する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		typeChange: "  {SOURCE}の ぞくせいを じぶんに はりつけた！",
@@ -1180,63 +1199,63 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "テクスチャー２",
 		// Official flavor text: "相手が 最後に 使った技に 抵抗できる ように 自分の タイプを 変化させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	copycat: {
 		name: "まねっこ",
 		// Official flavor text: "直前に でた 技を まねして 同じ 技を だす。 技が でていないと 失敗する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	coreenforcer: {
 		name: "コアパニッシャー",
 		// Official flavor text: "ダメージを 与えた 相手が すでに 行動を 終えていたら 相手の 特性を 消してしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	corkscrewcrash: {
 		name: "ちょうぜつらせんれんげき",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	corrosivegas: {
 		name: "ふしょくガス",
 		// Official flavor text: "強い 酸性の ガスで 周りに いるものを 包みこみ 持っている 道具を 溶かしてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		fail: "#healblock",
@@ -1246,47 +1265,47 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "コスモパワー",
 		// Official flavor text: "宇宙から 神秘の 力を とりこむ ことで 自分の 防御と 特防を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cottonguard: {
 		name: "コットンガード",
 		// Official flavor text: "フワフワの 綿毛で 自分の 体を 包みこんで 守る。 防御を ぐぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cottonspore: {
 		name: "わたほうし",
 		// Official flavor text: "綿のような フワフワの 胞子を まとわり つかせて 相手の 素早さを がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	counter: {
 		name: "カウンター",
 		// Official flavor text: "相手から 受けた 物理攻撃の ダメージを ２倍に して 同じ 相手に 返す。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	courtchange: {
 		name: "コートチェンジ",
 		// Official flavor text: "不思議な 力で お互いの 場の 効果を 入れ替える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}は おたがいの 場の 効果を 入れ替えた！",
 	},
@@ -1294,40 +1313,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ほしがる",
 		// Official flavor text: "かわいく あまえながら 相手に ちかづき 持っている 道具を うばう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	crabhammer: {
 		name: "クラブハンマー",
 		// Official flavor text: "大きな ハサミを 相手に たたきつけて 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	craftyshield: {
 		name: "トリックガード",
 		// Official flavor text: "不思議な 力を 使って 味方への 変化技を 防ぐ。 ダメージ技は 受けてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {TEAM}は トリックガードで 守られた！",
 		block: "  {POKEMON}は トリックガードで 守られた！",
@@ -1336,49 +1355,49 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "クロスチョップ",
 		// Official flavor text: "両手チョップを 相手に たたきつけて 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	crosspoison: {
 		name: "クロスポイズン",
 		// Official flavor text: "毒の 刃で 相手を 切り裂く。 毒状態に することが あり 急所にも 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	crunch: {
 		name: "かみくだく",
 		// Official flavor text: "鋭い 歯で 相手を かみくだいて 攻撃する。 相手の 防御を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	crushclaw: {
 		name: "ブレイククロー",
 		// Official flavor text: "硬く 鋭い ツメで 切り裂いて 攻撃する。 相手の 防御を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	crushgrip: {
 		name: "にぎりつぶす",
 		// Official flavor text: "すさまじい 力で 相手を にぎりつぶす。 相手の ＨＰが 残っているほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	curse: {
 		name: "のろい",
 		// Official flavor text: "使う ポケモンが ゴーストタイプと それ以外 とでは 効果が 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {SOURCE}は 自分の体力を 削って {POKEMON}に のろいを かけた！",
@@ -1386,28 +1405,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cut: {
 		name: "いあいぎり",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	darkestlariat: {
 		name: "ＤＤラリアット",
 		// Official flavor text: "両腕を 回し 相手に 当てる。 相手の 能力変化に 関係なく ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	darkpulse: {
 		name: "あくのはどう",
 		// Official flavor text: "体から 悪意に みちた 恐ろしい オーラを 発する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	darkvoid: {
 		name: "ダークホール",
 		// Official flavor text: "暗黒の 世界に ひきずり 落として 相手を 眠り状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		fail: "しかし {POKEMON}には 使うことが できなかった！",
@@ -1417,59 +1436,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "マジカルシャイン",
 		// Official flavor text: "強力な 光を 放ち 相手に ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	decorate: {
 		name: "デコレーション",
 		// Official flavor text: "かざりつけを することで 相手の 攻撃と 特攻を ぐーんと 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	defendorder: {
 		name: "ぼうぎょしれい",
 		// Official flavor text: "しもべを 呼びだして 自分の 体に おおい つかせる。防御と 特防を あげることが できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	defensecurl: {
 		name: "まるくなる",
 		// Official flavor text: "体を まるめて ちぢこまり 自分の 防御を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	defog: {
 		name: "きりばらい",
 		// Official flavor text: "強い風で 相手の リフレクターや ひかりのかべ などを はらいのける。 回避率も さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	destinybond: {
 		name: "みちづれ",
 		// Official flavor text: "技のあと 相手の 攻撃で ひんしに なると 攻撃 相手も ひんしにする。 連続して 出すと 失敗する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 相手を 道連れに しようとしている！",
@@ -1479,67 +1498,67 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "みきり",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	devastatingdrake: {
 		name: "アルティメットドラゴンバーン",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	diamondstorm: {
 		name: "ダイヤストーム",
 		// Official flavor text: "ダイヤの 嵐を 巻き起こし ダメージを 与える。 自分の 防御を ぐーんと あげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	dig: {
 		name: "あなをほる",
 		// Official flavor text: "１ターン目に 潜り ２ターン目で 相手を 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "{POKEMON}は 地面に 潜った！",
 	},
 	direclaw: {
 		name: "フェイタルクロー",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1549,28 +1568,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "かなしばり",
 		// Official flavor text: "相手の 動きを とめて 直前に だしていた 技を ４ターンの 間 使えなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}の {MOVE}を 封じこめた！",
@@ -1581,24 +1600,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "チャームボイス",
 		// Official flavor text: "魅惑の 鳴き声を だして 相手に 精神的な ダメージを 与える。 攻撃は 必ず 命中 する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	discharge: {
 		name: "ほうでん",
 		// Official flavor text: "まばゆい 電撃で 自分の 周りに いるものを 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dive: {
 		name: "ダイビング",
 		// Official flavor text: "１ターン目で 潜り ２ターン目に 浮きあがって 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "{POKEMON}は 水中に 身を潜めた！",
@@ -1607,24 +1626,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ピヨピヨパンチ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	doodle: {
 		name: "うつしえ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	doomdesire: {
 		name: "はめつのねがい",
 		// Official flavor text: "技を 使った ２ターン後に 無数の 光の 束で 相手を 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は はめつのねがいを 未来に託した！",
@@ -1634,53 +1653,53 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "すてみタックル",
 		// Official flavor text: "命を 懸けて 相手に 突進して 攻撃する。 自分も かなり ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	doublehit: {
 		name: "ダブルアタック",
 		// Official flavor text: "しっぽなどを 使い 相手を たたいて 攻撃する。 ２回連続で ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	doubleironbash: {
 		name: "ダブルパンツァー",
 		// Official flavor text: "胸の ナットを 軸に 回転して ２回 続けて うでを たたきつける。 相手を ひるませる ことが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	doublekick: {
 		name: "にどげり",
 		// Official flavor text: "２本の 足で 相手を けとばして 攻撃する。 ２回連続で ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	doubleshock: {
 		name: "でんこうそうげき",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		typeChange: "  {POKEMON}は 電気を 使いきった！",
 	},
@@ -1688,34 +1707,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "おうふくビンタ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	doubleteam: {
 		name: "かげぶんしん",
 		// Official flavor text: "素早い 動きで 分身を つくり 相手を まどわせて 回避率を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dracometeor: {
 		name: "りゅうせいぐん",
 		// Official flavor text: "天空から 隕石を 相手に 落とす。使うと 反動で 自分の 特攻が がくっと さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonascent: {
 		name: "ガリョウテンセイ",
 		// Official flavor text: "大空から 急速落下 して 相手を 攻撃する。 自分の 防御と 特防が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		megaNoItem: "  {TRAINER}の 強い祈りが {POKEMON}に 届く――！",
 	},
@@ -1723,196 +1742,196 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "りゅうのいぶき",
 		// Official flavor text: "ものすごい 息を 相手に 吹きつけて 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragoncheer: {
 		name: "ドラゴンエール",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "#focusenergy",
 	},
 	dragonclaw: {
 		name: "ドラゴンクロー",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragondance: {
 		name: "りゅうのまい",
 		// Official flavor text: "神秘的で 力強い 舞を 激しく おどる。 自分の 攻撃と 素早さを あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragondarts: {
 		name: "ドラゴンアロー",
 		// Official flavor text: "ドラメシヤで ２回 攻撃。 相手が ２匹 いるときは それぞれに １回ずつ 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonenergy: {
 		name: "ドラゴンエナジー",
 		// Official flavor text: "生命力を パワーに 変え 相手を 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonhammer: {
 		name: "ドラゴンハンマー",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonpulse: {
 		name: "りゅうのはどう",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonrage: {
 		name: "りゅうのいかり",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonrush: {
 		name: "ドラゴンダイブ",
 		// Official flavor text: "すさまじい 殺気で 威圧しながら 体当たりする。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	dragontail: {
 		name: "ドラゴンテール",
 		// Official flavor text: "相手を はじきとばして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	drainingkiss: {
 		name: "ドレインキッス",
 		// Official flavor text: "キッスによって 相手から ＨＰを 吸い取る。 与えた ダメージの 半分以上 ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	drainpunch: {
 		name: "ドレインパンチ",
 		// Official flavor text: "こぶしから 相手の 力を 吸い取る。 与えた ダメージの 半分の ＨＰを 回復できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	dreameater: {
 		name: "ゆめくい",
 		// Official flavor text: "寝ている 相手の 夢を 食べて 攻撃する。 ダメージの 半分の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	drillpeck: {
 		name: "ドリルくちばし",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	drillrun: {
 		name: "ドリルライナー",
 		// Official flavor text: "ドリルのように 体を 回転しながら 相手に 体当たりする。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	drumbeating: {
 		name: "ドラムアタック",
 		// Official flavor text: "ドラムの 根っこを ドラミングで コントロールして こうげき することで 相手の 素早さを 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dualchop: {
 		name: "ダブルチョップ",
 		// Official flavor text: "体の 硬い部分で 相手を たたいて 攻撃する。 ２回連続で ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dualwingbeat: {
 		name: "ダブルウイング",
 		// Official flavor text: "翼を 相手に ぶつけて 攻撃する。 ２回連続で ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dynamaxcannon: {
 		name: "ダイマックスほう",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	dynamicpunch: {
 		name: "ばくれつパンチ",
 		// Official flavor text: "こん身の 力で パンチを くりだして 攻撃する。 相手を 必ず 混乱させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	earthpower: {
 		name: "だいちのちから",
 		// Official flavor text: "相手の 足下へ 大地の力を 放出する。相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	earthquake: {
 		name: "じしん",
 		// Official flavor text: "地震の 衝撃で 自分の 周りに いるものを 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	echoedvoice: {
 		name: "エコーボイス",
 		// Official flavor text: "響く 声で 相手を 攻撃する。 毎ターン だれかが 技を 使い続けると 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	eerieimpulse: {
 		name: "かいでんぱ",
 		// Official flavor text: "体から かいでんぱを 放ち 相手に 浴びせる ことによって 特攻を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	eeriespell: {
 		name: "ぶきみなじゅもん",
 		// Official flavor text: "強力な サイコパワーで 攻撃。 相手が 最後に 使った技の ＰＰを ３だけ 減らす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "#spite",
 	},
 	eggbomb: {
 		name: "タマゴばくだん",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	electricterrain: {
 		name: "エレキフィールド",
 		// Official flavor text: "５ターンの 間 エレキフィールドにする。 地面にいる ポケモンは 眠らない。 でんきタイプの 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	electrify: {
 		name: "そうでん",
 		// Official flavor text: "相手が 技を だす前に そうでん すると そのターン 相手の 技は でんきタイプになる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は そうでんで 技が でんきタイプになった！",
 	},
@@ -1920,20 +1939,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "エレキボール",
 		// Official flavor text: "電気の 塊を 相手に ぶつける。相手より 素早さが 速いほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	electrodrift: {
 		name: "イナズマドライブ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	electroshot: {
 		name: "エレクトロビーム",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		prepare: "{POKEMON}は 電気を 吸収した！",
 	},
@@ -1941,13 +1960,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "エレキネット",
 		// Official flavor text: "電気の ネットで 相手を 捕まえて 攻撃する。 相手の 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	embargo: {
 		name: "さしおさえ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}には 道具が 使えなくなった！",
 		end: "  {POKEMON}に 道具が 使えるようになった！",
@@ -1956,32 +1975,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ひのこ",
 		// Official flavor text: "小さな 炎を 相手に 発射して 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	encore: {
 		name: "アンコール",
 		// Official flavor text: "相手に アンコールした 技を ３回 続けて 出させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は アンコールを受けた！",
@@ -1991,33 +2010,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "がむしゃら",
 		// Official flavor text: "相手の ＨＰが 自分の ＨＰと 同じくらいに なるように ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	endure: {
 		name: "こらえる",
 		// Official flavor text: "攻撃を 受けても ＨＰを 必ず １だけ 残せる。 連続で だすと 失敗しやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は こらえる 体勢に 入った！",
@@ -2027,121 +2046,121 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "エナジーボール",
 		// Official flavor text: "自然から 集めた 命の力を 発射する。 相手の 特防を さげることがある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	entrainment: {
 		name: "なかまづくり",
 		// Official flavor text: "不思議な リズムで おどる。 動きを まねさせて 自分と 相手の 特性を 同じに する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	eruption: {
 		name: "ふんか",
 		// Official flavor text: "怒りを 爆発させて 相手を 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	esperwing: {
 		name: "オーラウイング",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	eternabeam: {
 		name: "ムゲンダイビーム",
 		// Official flavor text: "本来の 姿と なった ムゲンダイナ 最大の 攻撃。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	expandingforce: {
 		name: "ワイドフォース",
 		// Official flavor text: "サイコパワーで 相手を 攻撃する。 サイコフィールドの時 威力が あがり すべての 相手に ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	explosion: {
 		name: "だいばくはつ",
 		// Official flavor text: "大きな 爆発で 自分の 周りに いるものを 攻撃する。 使ったあとに ひんしに なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	extrasensory: {
 		name: "じんつうりき",
 		// Official flavor text: "みえない 不思議な 力を 送って 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	extremeevoboost: {
 		name: "ナインエボルブースト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	extremespeed: {
 		name: "しんそく",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで 相手に 突進して 攻撃する。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	facade: {
 		name: "からげんき",
 		// Official flavor text: "自分が 毒 まひ やけど 状態のとき 相手に くりだすと 技の 威力が ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	fairylock: {
 		name: "フェアリーロック",
 		// Official flavor text: "ロックを かけることによって 次のターン すべての ポケモンを 逃げられなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  次のターンは 逃げられない！",
 	},
 	fairywind: {
 		name: "ようせいのかぜ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fakeout: {
 		name: "ねこだまし",
 		// Official flavor text: "先制攻撃で 相手を ひるませる。 戦闘に でたら すぐに ださないと 成功しない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2150,59 +2169,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "うそなき",
 		// Official flavor text: "ないた ふりをして 涙を 流す。 こまらせる ことで 相手の 特防を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	falsesurrender: {
 		name: "どげざつき",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	falseswipe: {
 		name: "みねうち",
 		// Official flavor text: "相手の ＨＰが 必ず １だけ 残るように 手加減して 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	featherdance: {
 		name: "フェザーダンス",
 		// Official flavor text: "羽毛を ふりまいて 相手の 体に からませる。 相手の 攻撃を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	feint: {
 		name: "フェイント",
 		// Official flavor text: "まもるや みきり などを している 相手に 攻撃が できる。 守りの 効果を 解除させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {TARGET}は フェイントに 引っかかった！",
 	},
 	feintattack: {
 		name: "だましうち",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fellstinger: {
 		name: "とどめばり",
 		// Official flavor text: "この 技を 使って 相手を 倒すと 攻撃が ぐぐーんと あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	ficklebeam: {
 		name: "きまぐレーザー",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}は 本気を 出した！",
 	},
@@ -2210,55 +2229,55 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ほのおのまい",
 		// Official flavor text: "炎を まとい はばたいて 相手を 攻撃する。自分の 特攻が あがることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fierywrath: {
 		name: "もえあがるいかり",
 		// Official flavor text: "怒りを 炎の ような オーラに 変えて 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	filletaway: {
 		name: "みをけずる",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	finalgambit: {
 		name: "いのちがけ",
 		// Official flavor text: "命懸けで 相手を 攻撃する。 自分は ひんしに なるが 相手に ＨＰ分の ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fireblast: {
 		name: "だいもんじ",
 		// Official flavor text: "大の字の 炎で 相手を 焼きつくす。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	firefang: {
 		name: "ほのおのキバ",
 		// Official flavor text: "炎を まとった キバで かみつく。 相手を ひるませたり やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	firelash: {
 		name: "ほのおのムチ",
 		// Official flavor text: "焼けたムチで 相手を 打ちつける。 攻撃を 受けた 相手は 防御が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	firepledge: {
 		name: "ほのおのちかい",
 		// Official flavor text: "炎の柱で 攻撃する。 くさと 組みあわせると 威力が あがって 周りが 火の海に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "#waterpledge",
 		start: "  {TEAM}の 周りが 火の海に 包まれた！",
@@ -2269,32 +2288,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ほのおのパンチ",
 		// Official flavor text: "炎を こめた パンチで 相手を 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	firespin: {
 		name: "ほのおのうず",
 		// Official flavor text: "激しく 渦をまく 炎の中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 炎の渦に 閉じこめられた！",
@@ -2304,7 +2323,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "であいがしら",
 		// Official flavor text: "威力が 高い 技 だが 戦闘に 出たら すぐに 出さないと 成功 しない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2313,43 +2332,43 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "エラがみ",
 		// Official flavor text: "かたい エラで かみつく。 相手より 先に 攻撃できると 技の 威力は ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fissure: {
 		name: "じわれ",
 		// Official flavor text: "地割れの 裂け目に 相手を 落として 攻撃する。 当たれば 一撃で ひんしに する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	flail: {
 		name: "じたばた",
 		// Official flavor text: "じたばた 暴れて 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	flameburst: {
 		name: "はじけるほのお",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		damage: "  {POKEMON}にも 火花が 降りかかった！",
@@ -2358,61 +2377,61 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ニトロチャージ",
 		// Official flavor text: "炎を まとい 相手を 攻撃する。 力を ためて 自分の 素早さを あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flamethrower: {
 		name: "かえんほうしゃ",
 		// Official flavor text: "激しい 炎を 相手に 発射して 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flamewheel: {
 		name: "かえんぐるま",
 		// Official flavor text: "炎を まとい 相手に 突進して 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flareblitz: {
 		name: "フレアドライブ",
 		// Official flavor text: "炎を まとって 突進する。 自分も かなり ダメージを 受ける。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	flash: {
 		name: "フラッシュ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flashcannon: {
 		name: "ラスターカノン",
 		// Official flavor text: "体の 光を 一点に 集めて 力を 放つ。 相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flatter: {
 		name: "おだてる",
 		// Official flavor text: "相手を おだてて 混乱させる。 同時に 相手の 特攻も あげてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fleurcannon: {
 		name: "フルールカノン",
 		// Official flavor text: "強力な ビームを 放ったあと 自分の 特攻が がくっと さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fling: {
 		name: "なげつける",
 		// Official flavor text: "持たせた 道具を 素早く 投げつけて 攻撃する。 道具で 威力と 効果が 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		removeItem: "  {POKEMON}は {ITEM}を 投げつけた！",
@@ -2421,7 +2440,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "クイックターン",
 		// Official flavor text: "攻撃した あと ものすごい スピードで 戻ってきて 控えの ポケモンと 入れ替わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		switchOut: "#uturn",
 	},
@@ -2429,44 +2448,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ふわふわフォール",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	floralhealing: {
 		name: "フラワーヒール",
 		// Official flavor text: "最大ＨＰの 半分 相手の ＨＰを 回復する。 グラスフィールドの時 効果が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flowershield: {
 		name: "フラワーガード",
 		// Official flavor text: "不思議な 力を 使って 場にいる くさタイプの ポケモン 全員の 防御を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flowertrick: {
 		name: "トリックフラワー",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fly: {
 		name: "そらをとぶ",
 		// Official flavor text: "１ターン目で 空へ 飛び ２ターン目に 相手を 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "{POKEMON}は 空高く 飛びあがった！",
@@ -2475,26 +2494,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "フライングプレス",
 		// Official flavor text: "空中から 相手に ダイブする。 この技は かくとうタイプと 同時に ひこうタイプでも ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	focusblast: {
 		name: "きあいだま",
 		// Official flavor text: "気合を 高めて ありったけの 力を 放出する。 相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	focusenergy: {
 		name: "きあいだめ",
 		// Official flavor text: "深く 息を 吸い 気合を こめる。 自分の 攻撃が 急所に 当たりやすくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 張り切っている！",
@@ -2505,9 +2524,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "きあいパンチ",
 		// Official flavor text: "精神を 高めて パンチを くりだす。 技を だすまでに 攻撃を 受けると 失敗する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 集中力を 高めている！",
@@ -2517,15 +2536,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "このゆびとまれ",
 		// Official flavor text: "自分に 注目させて 相手からの 攻撃を すべて 自分に むけさせる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 注目の的に なった！",
@@ -2535,21 +2554,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "はっけい",
 		// Official flavor text: "相手の 体に 衝撃波を 当てて 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	foresight: {
 		name: "みやぶる",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}の 正体を 見破った！",
@@ -2558,19 +2577,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "もりののろい",
 		// Official flavor text: "相手に 森ののろいを かける。 のろいを かけられた 相手は タイプに くさタイプが 追加される。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	foulplay: {
 		name: "イカサマ",
 		// Official flavor text: "相手の 力を 利用する。 戦っている 相手の 攻撃が 高いほど ダメージが あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	freezedry: {
 		name: "フリーズドライ",
 		// Official flavor text: "相手を 急激に 冷やして こおり 状態に することが ある。 みずタイプにも 効果バツグンになる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2580,7 +2599,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "フリーズボルト",
 		// Official flavor text: "電気を まとった 氷の 塊で ２ターン目に 相手を たたきつける。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		prepare: "  {POKEMON}は 冷たい光に 包まれた！",
 	},
@@ -2588,96 +2607,96 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "いてつくしせん",
 		// Official flavor text: "両目から サイコパワーを 撃ちだして 攻撃する。 こおり状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	freezyfrost: {
 		name: "こちこちフロスト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	frenzyplant: {
 		name: "ハードプラント",
 		// Official flavor text: "大きな 樹木で 相手を たたきつけて 攻撃する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	frostbreath: {
 		name: "こおりのいぶき",
 		// Official flavor text: "冷たい 息を 相手に 吹きつけて 攻撃する。 必ず 急所に 当たる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	frustration: {
 		name: "やつあたり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	furyattack: {
 		name: "みだれづき",
 		// Official flavor text: "つのや くちばしで 相手を つついて 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	furycutter: {
 		name: "れんぞくぎり",
 		// Official flavor text: "カマや ツメなどで 相手を 切りつけて 攻撃する。 連続で 当てると 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	furyswipes: {
 		name: "みだれひっかき",
 		// Official flavor text: "ツメや カマなどで 相手を ひっかいて 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	fusionbolt: {
 		name: "クロスサンダー",
 		// Official flavor text: "巨大な 雷を たたきつける。 巨大な 炎の 影響を受け 技の 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fusionflare: {
 		name: "クロスフレイム",
 		// Official flavor text: "巨大な 炎を たたきつける。 巨大な 雷の 影響を受け 技の 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	futuresight: {
 		name: "みらいよち",
 		// Official flavor text: "技を 使った ２ターン後に 相手に 念力の 塊を 送って 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 未来に 攻撃を予知した！",
@@ -2687,15 +2706,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "いえき",
 		// Official flavor text: "胃液を 相手の 体に 吐きつける。 ついた 胃液は 相手の 特性の 効果を 消す。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}の 特性が 効かなくなった！",
@@ -2704,25 +2723,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ギアソーサー",
 		// Official flavor text: "鋼鉄の ギアを 相手に 投げつけて 攻撃する。 ２回連続で ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gearup: {
 		name: "アシストギア",
 		// Official flavor text: "ギアを 入れる ことによって 特性 プラスと マイナスの 攻撃と 特攻が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	genesissupernova: {
 		name: "オリジンズスーパーノヴァ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	geomancy: {
 		name: "ジオコントロール",
 		// Official flavor text: "１ターン目で エネルギーを 吸収し ２ターン目に 特攻 特防 素早さを ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		prepare: "{POKEMON}は パワーを ためこんでいる！",
 	},
@@ -2730,184 +2749,184 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ギガドレイン",
 		// Official flavor text: "養分を 吸い取り 攻撃する。 与えた ダメージの 半分の ＨＰを 回復できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	gigaimpact: {
 		name: "ギガインパクト",
 		// Official flavor text: "持てる 力を すべて 使って 相手に 突撃する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gigatonhammer: {
 		name: "デカハンマー",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gigavolthavoc: {
 		name: "スパーキングギガボルト",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	glaciallance: {
 		name: "ブリザードランス",
 		// Official flavor text: "吹雪を まとった 氷の 槍を 相手に 投げつけて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	glaciate: {
 		name: "こごえるせかい",
 		// Official flavor text: "凍えるような 冷気を 相手に 吹きつけて 攻撃する。 相手の 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	glaiverush: {
 		name: "きょけんとつげき",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	glare: {
 		name: "へびにらみ",
 		// Official flavor text: "おなかの 模様で おびえさせて 相手を まひの 状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	glitzyglow: {
 		name: "どばどばオーラ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxbefuddle: {
 		name: "キョダイコワク",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxcannonade: {
 		name: "キョダイホウゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {PARTY}が 水の 流れに 包まれた！",
 		damage: "  {POKEMON}は キョダイホウゲキの 流れに 飲みこまれていて 苦しい！",
 	},
 	gmaxcentiferno: {
 		name: "キョダイヒャッカ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxchistrike: {
 		name: "キョダイシンゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
 		name: "キョダイホーヨー",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxdepletion: {
 		name: "キョダイゲンスイ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {TARGET}の ＰＰが へった！",
 	},
 	gmaxdrumsolo: {
 		name: "キョダイコランダ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxfinale: {
 		name: "キョダイダンエン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxfireball: {
 		name: "キョダイカキュウ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxfoamburst: {
 		name: "キョダイホウマツ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxgoldrush: {
 		name: "キョダイコバン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxgravitas: {
 		name: "キョダイテンドウ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxhydrosnipe: {
 		name: "キョダイソゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxmalodor: {
 		name: "キョダイシュウキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxmeltdown: {
 		name: "キョダイユウゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxoneblow: {
 		name: "キョダイイチゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxrapidflow: {
 		name: "キョダイレンゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxreplenish: {
 		name: "キョダイサイセイ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxresonance: {
 		name: "キョダイセンリツ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxsandblast: {
 		name: "キョダイサジン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxsmite: {
 		name: "キョダイテンバツ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxsnooze: {
 		name: "キョダイスイマ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxsteelsurge: {
 		name: "キョダイコウジン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {PARTY}の 周りに とがった はがねが ただよいはじめた！",
 		end: "  {PARTY}の 周りの はがねが 消え去った！",
@@ -2915,74 +2934,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxstonesurge: {
 		name: "キョダイガンジン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxstunshock: {
 		name: "キョダイカンデン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxsweetness: {
 		name: "キョダイカンロ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxtartness: {
 		name: "キョダイサンゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxterror: {
 		name: "キョダイゲンエイ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxvinelash: {
 		name: "キョダイベンタツ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {PARTY}が ムチの 猛打に 包まれた！",
 		damage: "  {POKEMON}は キョダイベンタツの 猛打に さらされていて 痛い！",
 	},
 	gmaxvolcalith: {
 		name: "キョダイフンセキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {PARTY}が 岩に 囲まれた！",
 		damage: "  {POKEMON}は キョダイフンセキの 岩に 囲まれていて 痛い！",
 	},
 	gmaxvoltcrash: {
 		name: "キョダイバンライ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gmaxwildfire: {
 		name: "キョダイゴクエン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {PARTY}が ほのおに 包まれた！",
 		damage: "  {POKEMON}は キョダイゴクエンの 炎に 包まれていて 熱い！",
 	},
 	gmaxwindrage: {
 		name: "キョダイフウゲキ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grassknot: {
 		name: "くさむすび",
 		// Official flavor text: "草を からませて 相手を 転ばせる。相手が 重いほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grasspledge: {
 		name: "くさのちかい",
 		// Official flavor text: "草の柱で 攻撃する。 みずと 組みあわせると 威力が あがって あたりが 湿原に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "#waterpledge",
 		start: "  {TEAM}の 周りに 湿原が 広がった！",
@@ -2990,81 +3009,81 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grasswhistle: {
 		name: "くさぶえ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grassyglide: {
 		name: "グラススライダー",
 		// Official flavor text: "地面を 滑るように 相手を 攻撃。 グラスフィールドの時 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grassyterrain: {
 		name: "グラスフィールド",
 		// Official flavor text: "５ターンの 間 グラスフィールドにする。 地面にいると 毎ターン 回復する。 くさタイプの 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	gravapple: {
 		name: "Ｇのちから",
 		// Official flavor text: "高いところから りんごを 落として ダメージを 与える。 相手の 防御を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gravity: {
 		name: "じゅうりょく",
 		// Official flavor text: "５ターンの間 ふゆうや ひこうタイプに じめんタイプの 技が 当たるようになる。 空中に 飛ぶ 技も 使えない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	growl: {
 		name: "なきごえ",
 		// Official flavor text: "かわいい なきごえを 聞かせて 気を ひき 油断を させて 相手の 攻撃を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	growth: {
 		name: "せいちょう",
 		// Official flavor text: "体を 一気に 大きく 生長させて 攻撃と 特攻を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	grudge: {
 		name: "おんねん",
 		// Official flavor text: "相手の 技で ひんしに されたとき おんねんを かけて その技の ＰＰを ０に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}の {MOVE}は おんねんで ＰＰが０になった！",
 		start: "{POKEMON}は 相手に おんねんを かけようとしている！",
@@ -3073,13 +3092,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ガーディアン・デ・アローラ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	guardsplit: {
 		name: "ガードシェア",
 		// Official flavor text: "超能力で 自分と 相手の 防御と 特防を たして 半分に わける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}は おたがいのガードを シェアした！",
 	},
@@ -3087,75 +3106,75 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ガードスワップ",
 		// Official flavor text: "超能力で 自分と 相手の 防御と 特防の 能力変化を 入れ替える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	guillotine: {
 		name: "ハサミギロチン",
 		// Official flavor text: "大きな ハサミで 相手を 切り裂いて 攻撃する。 当たれば 一撃で ひんしに する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	gunkshot: {
 		name: "ダストシュート",
 		// Official flavor text: "汚い ゴミを 相手に ぶつけて 攻撃する。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gust: {
 		name: "かぜおこし",
 		// Official flavor text: "翼で おこした 激しい 風を 相手に ぶつけて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	gyroball: {
 		name: "ジャイロボール",
 		// Official flavor text: "体を 高速に 回転させて 体当たりする。相手より 素早さが 低いほど 強い。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	hail: {
 		name: "あられ",
 		// Official flavor text: "５ターンの 間 あられを 降らして こおりタイプで ない ポケモン 全員に ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	hammerarm: {
 		name: "アームハンマー",
 		// Official flavor text: "強くて 重い こぶしを ふるって ダメージを 与える。 自分の 素早さが さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	happyhour: {
 		name: "ハッピータイム",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  みんなが ハッピーな気分に 包まれた！",
 	},
@@ -3163,21 +3182,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "かたくなる",
 		// Official flavor text: "全身に 力を こめて 体を 硬くして 自分の 防御を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hardpress: {
 		name: "ハードプレス",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	haze: {
 		name: "くろいきり",
 		// Official flavor text: "黒い霧を だして 戦闘に でている ポケモン 全員の 能力変化を もとに もどす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		// Only used in Gen 1
@@ -3187,44 +3206,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ずつき",
 		// Official flavor text: "頭を 突きだして まっすぐ つっこんで 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	headcharge: {
 		name: "アフロブレイク",
 		// Official flavor text: "すごい アフロの 頭で 相手に 突進して 攻撃する。 自分も 少し ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	headlongrush: {
 		name: "ぶちかまし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	headsmash: {
 		name: "もろはのずつき",
 		// Official flavor text: "命を 懸けて こん身の 力で 相手に ずつきを する。 自分も ものすごい ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	healbell: {
 		name: "いやしのすず",
 		// Official flavor text: "心地好い 鈴の 音色を 聞かせて 味方 全員の 状態異常を 回復 する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  鈴の音が 響きわたった！",
@@ -3233,19 +3252,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "かいふくふうじ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
 			end: "  {POKEMON}の かいふくふうじの 効果が切れた！",
 			cant: "{POKEMON}は かいふくふうじで {MOVE}が だせない！",
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 回復動作を 封じられた！",
@@ -3257,13 +3276,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "いやしのねがい",
 		// Official flavor text: "自分は ひんしに なるが 控えから でてくる ポケモンの 状態異常と ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		heal: "  いやしのねがいが {POKEMON}に 届いた！",
@@ -3272,61 +3291,61 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "かいふくしれい",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	healpulse: {
 		name: "いやしのはどう",
 		// Official flavor text: "いやしのはどうを とばして 最大ＨＰの 半分 相手の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	heartstamp: {
 		name: "ハートスタンプ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heartswap: {
 		name: "ハートスワップ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heatcrash: {
 		name: "ヒートスタンプ",
 		// Official flavor text: "燃える 体で 相手に ぶつかって 攻撃する。 自分が 相手より 重いほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	heatwave: {
 		name: "ねっぷう",
 		// Official flavor text: "熱い 息を 相手に 吹きつけて 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heavyslam: {
 		name: "ヘビーボンバー",
 		// Official flavor text: "重たい 体で 相手に ぶつかって 攻撃する。 自分が 相手より 重いほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	helpinghand: {
 		name: "てだすけ",
 		// Official flavor text: "仲間を 助ける。 てだすけ された ポケモンの 技の 威力は いつもより 大きくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {SOURCE}は {POKEMON}を 手助けする 体勢に入った！",
 	},
@@ -3334,90 +3353,90 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "たたりめ",
 		// Official flavor text: "たたみかける ように 攻撃する。 状態異常の 相手に 大きな ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hiddenpower: {
 		name: "めざめるパワー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	hiddenpowerbug: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerdark: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerdragon: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerelectric: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerfighting: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerfire: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerflying: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerghost: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowergrass: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerground: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerice: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerpoison: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerpsychic: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerrock: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowersteel: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	hiddenpowerwater: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 	},
 	highhorsepower: {
 		name: "１０まんばりき",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	highjumpkick: {
 		name: "とびひざげり",
 		// Official flavor text: "ジャンプからの ひざげりで 相手を 攻撃する。 はずすと 自分が ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		damage: "#crash",
@@ -3426,111 +3445,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "てかげん",
 		// Official flavor text: "手加減 した 攻撃で 相手の ＨＰを 必ず １だけ 残す。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	holdhands: {
 		name: "てをつなぐ",
 		// Official flavor text: "味方の ポケモン 同士が 手をつなぐ。 とっても 幸せな 気持ちに なれる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	honeclaws: {
 		name: "つめとぎ",
 		// Official flavor text: "ツメを 磨いて 鋭く する。 自分の 攻撃と 命中率を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hornattack: {
 		name: "つのでつく",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	horndrill: {
 		name: "つのドリル",
 		// Official flavor text: "回転する つのを 相手に 突き刺して 攻撃する。 当たれば 一撃で ひんしに する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	hornleech: {
 		name: "ウッドホーン",
 		// Official flavor text: "つのを 突き刺して 相手の 養分を 吸い取る。 与えた ダメージの 半分の ＨＰを 回復できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	howl: {
 		name: "とおぼえ",
 		// Official flavor text: "大声で ほえて 気合を 高め 自分と 味方の 攻撃を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	hurricane: {
 		name: "ぼうふう",
 		// Official flavor text: "強烈な 風で 相手を 包みこんで 攻撃する。 相手を 混乱させることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	hydrocannon: {
 		name: "ハイドロカノン",
 		// Official flavor text: "水の 大砲を 相手に 発射して 攻撃する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hydropump: {
 		name: "ハイドロポンプ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hydrosteam: {
 		name: "ハイドロスチーム",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hydrovortex: {
 		name: "スーパーアクアトルネード",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hyperbeam: {
 		name: "はかいこうせん",
 		// Official flavor text: "強い 光線を 相手に 発射して 攻撃する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	hyperdrill: {
 		name: "ハイパードリル",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hyperfang: {
 		name: "ひっさつまえば",
 		// Official flavor text: "鋭い 前歯で 強く かみついて 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hyperspacefury: {
 		name: "いじげんラッシュ",
 		// Official flavor text: "たくさんの 腕で まもるや みきり などを 無視した 連続攻撃。 自分の 防御が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "#shadowforce",
@@ -3540,9 +3559,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "いじげんホール",
 		// Official flavor text: "異次元ホールで 突然 相手の 真横に 現れ 攻撃する。 まもるや みきり なども 無視 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "#shadowforce",
@@ -3551,35 +3570,35 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ハイパーボイス",
 		// Official flavor text: "うるさく 響く 大きな 振動を 相手に 与えて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hypnosis: {
 		name: "さいみんじゅつ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iceball: {
 		name: "アイスボール",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	icebeam: {
 		name: "れいとうビーム",
 		// Official flavor text: "凍える ビームを 相手に 発射して 攻撃する。 こおり状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iceburn: {
 		name: "コールドフレア",
 		// Official flavor text: "すべてを 凍らせる 激しい 冷気で ２ターン目に 相手を 包みこむ。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		prepare: "  {POKEMON}は 凍える空気に 包まれた！",
 	},
@@ -3587,74 +3606,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "こおりのキバ",
 		// Official flavor text: "冷気を ひめた キバで かみつく。 相手を ひるませたり こおり状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	icehammer: {
 		name: "アイスハンマー",
 		// Official flavor text: "強くて 重い こぶしを ふるって ダメージを 与える。 自分の 素早さが さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	icepunch: {
 		name: "れいとうパンチ",
 		// Official flavor text: "冷気を こめた パンチで 相手を 攻撃する。 こおり状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iceshard: {
 		name: "こおりのつぶて",
 		// Official flavor text: "氷の塊を 一瞬で つくり 相手に 素早く 放つ。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	icespinner: {
 		name: "アイススピナー",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iciclecrash: {
 		name: "つららおとし",
 		// Official flavor text: "大きな 氷柱を 激しく ぶつけて 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iciclespear: {
 		name: "つららばり",
 		// Official flavor text: "鋭い 氷柱を 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	icywind: {
 		name: "こごえるかぜ",
 		// Official flavor text: "凍てつく 冷気を 相手に 吹きつけて 攻撃する。 相手の 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	imprison: {
 		name: "ふういん",
 		// Official flavor text: "相手が 自分と 同じ 技を おぼえていたら 相手だけ その技を 使えなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 相手の技を 封印した！",
@@ -3664,39 +3683,39 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "やきつくす",
 		// Official flavor text: "炎で 相手を 攻撃する。 相手が きのみなどを 持っているとき 燃やして 使えなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		removeItem: "  {POKEMON}の {ITEM}は 焼けてなくなった！",
 	},
 	infernalparade: {
 		name: "ひゃっきやこう",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	inferno: {
 		name: "れんごく",
 		// Official flavor text: "激しい 炎で 相手を 包みこみ 攻撃する。 やけど状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	infernooverdrive: {
 		name: "ダイナミックフルフレイム",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	infestation: {
 		name: "まとわりつく",
 		// Official flavor text: "４ー５ターンの 間 相手に まとわりついて 攻撃する。 そのあいだ 相手は 逃げられない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は {SOURCE}に まとわりつかれた！",
@@ -3705,19 +3724,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ねをはる",
 		// Official flavor text: "大地に 根を 張り 毎ターン 自分の ＨＰを 回復する。 根を 張っているので 入れ替えられない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 根を はった！",
@@ -3728,12 +3747,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "さいはい",
 		// Official flavor text: "相手が 出した 技を 指示して もう一度 出させることが できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {POKEMON}の 指示で {TARGET}は 技を 繰り出した！",
@@ -3742,7 +3761,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "プラズマシャワー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  電子のシャワーが 降りそそいだ！",
 	},
@@ -3750,13 +3769,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "てっぺき",
 		// Official flavor text: "皮膚を 鉄のように 硬くする ことで 自分の 防御を ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ironhead: {
 		name: "アイアンヘッド",
 		// Official flavor text: "鋼の ような 硬い 頭で 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3766,50 +3785,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "アイアンテール",
 		// Official flavor text: "硬い しっぽで 相手を たたきつけて 攻撃する。 相手の 防御を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ivycudgel: {
 		name: "ツタこんぼう",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	jawlock: {
 		name: "くらいつく",
 		// Official flavor text: "お互い ひんしに なるまで 交代が できなくなる。 どちらかの ポケモンが いなくなると 効果は消える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	jetpunch: {
 		name: "ジェットパンチ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	judgment: {
 		name: "さばきのつぶて",
 		// Official flavor text: "無数の 光弾を 相手に 放出する。 自分の 持つ プレートに より タイプが 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	jumpkick: {
 		name: "とびげり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		damage: "#crash",
@@ -3818,82 +3837,82 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ジャングルヒール",
 		// Official flavor text: "ジャングルと 一体化して 自分と 場にいる 味方の ＨＰと 状態を 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	karatechop: {
 		name: "からてチョップ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kinesis: {
 		name: "スプーンまげ",
 		// Official flavor text: "スプーンを まげて 注意を ひき 相手の 命中率を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kingsshield: {
 		name: "キングシールド",
 		// Official flavor text: "相手の 攻撃を 防ぐと 同時に 防御態勢になる。 触れた 相手の 攻撃を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	knockoff: {
 		name: "はたきおとす",
 		// Official flavor text: "相手の 持ち物を はたき 落として 戦闘が 終わるまで 使えなくする。 物を持つ 相手には ダメージが増す。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		removeItem: "  {SOURCE}は {POKEMON}の {ITEM}を はたき落とした！",
 	},
 	kowtowcleave: {
 		name: "ドゲザン",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	landswrath: {
 		name: "グランドフォース",
 		// Official flavor text: "大地の パワーを 集め 力を 相手に 集中させて ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	laserfocus: {
 		name: "とぎすます",
 		// Official flavor text: "精神を 集中して 次の 攻撃を 必ず 急所に 当てる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は 精神を 研ぎ澄ました！",
 	},
@@ -3901,73 +3920,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "うっぷんばらし",
 		// Official flavor text: "相手への いらだちを ぶつけて 攻撃。 そのターンに 能力を さげられていると 技の 威力が ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lastresort: {
 		name: "とっておき",
 		// Official flavor text: "戦闘中に おぼえている 技を すべて 使うと はじめて だせる とっておきの 技。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lastrespects: {
 		name: "おはかまいり",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lavaplume: {
 		name: "ふんえん",
 		// Official flavor text: "真っ赤な 炎で 自分の 周りに いるものを 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	leafage: {
 		name: "このは",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	leafblade: {
 		name: "リーフブレード",
 		// Official flavor text: "はっぱを 剣のように あやつり 相手を 切りつけて 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	leafstorm: {
 		name: "リーフストーム",
 		// Official flavor text: "とがった はっぱで 相手に あらしを おこす。使うと 反動で 自分の 特攻が がくっと さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	leaftornado: {
 		name: "グラスミキサー",
 		// Official flavor text: "鋭い はっぱで 相手を 包みこんで 攻撃する。 命中率を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	leechlife: {
 		name: "きゅうけつ",
 		// Official flavor text: "血を 吸い取って 相手を 攻撃する。 与えた ダメージの 半分の ＨＰを 回復できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	leechseed: {
 		name: "やどりぎのタネ",
 		// Official flavor text: "植えつけた 相手の ＨＰを 毎ターン 少しだけ 吸い取り 自分の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}に 種を 植えつけた！",
@@ -3978,54 +3997,54 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "にらみつける",
 		// Official flavor text: "鋭い 目つきで おびえさせて 相手の 防御を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	letssnuggleforever: {
 		name: "ぽかぼかフレンドタイム",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lick: {
 		name: "したでなめる",
 		// Official flavor text: "長い 舌で 相手を なめまわして 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lifedew: {
 		name: "いのちのしずく",
 		// Official flavor text: "不思議な 水を ふりまいて 自分と 場にいる 味方の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lightofruin: {
 		name: "はめつのひかり",
 		// Official flavor text: "永遠の花 の パワーを かりて 強力な 光線を 撃ちだす。 自分も かなりの ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lightscreen: {
 		name: "ひかりのかべ",
 		// Official flavor text: "５ターンの 間 不思議な かべで 相手から 受ける 特殊攻撃の ダメージを 弱める。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 			start: "  {POKEMON}は とくしゅこうげきに つよくなった！",
 		},
 
@@ -4036,79 +4055,79 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "てんこがすめつぼうのひかり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	liquidation: {
 		name: "アクアブレイク",
 		// Official flavor text: "水の 力で 相手に ぶつかって 攻撃する。 相手の 防御を さげる ことがある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lockon: {
 		name: "ロックオン",
 		// Official flavor text: "照準を しっかり あわせて 次の 攻撃が 必ず 相手に 当たるように する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {SOURCE}は {POKEMON}に ねらいを さだめた！",
 	},
 	lovelykiss: {
 		name: "あくまのキッス",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lowkick: {
 		name: "けたぐり",
 		// Official flavor text: "足を 強く けり 相手を 転ばせて 攻撃する。 相手が 重いほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	lowsweep: {
 		name: "ローキック",
 		// Official flavor text: "素早い 動きで 相手の 足を ねらって 攻撃する。 相手の 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	luckychant: {
 		name: "おまじない",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  おまじないの 力で {TEAM}の急所が 隠れた！",
 		end: "  {TEAM}の おまじないが解けた！",
 	},
 	luminacrash: {
 		name: "ルミナコリジョン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lunarblessing: {
 		name: "みかづきのいのり",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lunardance: {
 		name: "みかづきのまい",
 		// Official flavor text: "自分は ひんしに なるが 控えから でてくる ポケモンの すべての 状態を 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		heal: "  {POKEMON}は 神秘的な 月の光に 包まれた！",
@@ -4117,42 +4136,42 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "とびかかる",
 		// Official flavor text: "全力で 相手に 飛びかかって 攻撃。 相手の 攻撃を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lusterpurge: {
 		name: "ラスターパージ",
 		// Official flavor text: "まばゆい 光を 解放して 攻撃する。 相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	machpunch: {
 		name: "マッハパンチ",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで パンチを くりだす。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magicalleaf: {
 		name: "マジカルリーフ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magicaltorque: {
 		name: "マジカルアクセル",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magiccoat: {
 		name: "マジックコート",
 		// Official flavor text: "状態異常に なる 技や やどりぎのタネ などを だされたとき 相手に 跳ね返す。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は マジックコートに 包まれた！",
@@ -4162,58 +4181,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "まほうのこな",
 		// Official flavor text: "まほうのこなを 浴びせて 相手を エスパータイプに 変化させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	magicroom: {
 		name: "マジックルーム",
 		// Official flavor text: "まか不思議な 空間を つくる。 ５ターンの間 すべてのポケモンの 道具の 効果が なくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magmastorm: {
 		name: "マグマストーム",
 		// Official flavor text: "激しく 燃えたぎる 炎の なかに ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は マグマの渦に 閉じこめられた！",
 	},
 	magnetbomb: {
 		name: "マグネットボム",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magneticflux: {
 		name: "じばそうさ",
 		// Official flavor text: "磁場を 操作 することによって 特性 プラスと マイナスの 防御 特防が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magnetrise: {
 		name: "でんじふゆう",
 		// Official flavor text: "電気で つくった 磁力の 力で 宙に 浮かぶ。 ５ターンの 間 浮遊できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 電磁力で 浮かびあがった！",
@@ -4223,17 +4242,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "マグニチュード",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  マグニチュード{NUMBER}！！",
 	},
 	makeitrain: {
 		name: "ゴールドラッシュ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4245,62 +4264,62 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ハイパーダーククラッシャー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	malignantchain: {
 		name: "じゃどくのくさり",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	matblock: {
 		name: "たたみがえし",
 		// Official flavor text: "かえした タタミを 盾にして 自分や 味方への 技の ダメージを 防ぐ。 変化技は 防ぐことが できない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は たたみがえしを ねらっている！",
 		block: "  {MOVE}は たたみがえしで 防がれた！",
 	},
 	matchagotcha: {
 		name: "シャカシャカほう",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxairstream: {
 		name: "ダイジェット",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ひこうタイプの 攻撃。 味方の 素早さを 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxdarkness: {
 		name: "ダイアーク",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす あくタイプの 攻撃。 相手の 特防を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxflare: {
 		name: "ダイバーン",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ほのおタイプの 攻撃。 ５ターンの 間 日差しを 強くする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxflutterby: {
 		name: "ダイワーム",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす むしタイプの 攻撃。 相手の 特攻を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxgeyser: {
 		name: "ダイストリーム",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす みずタイプの 攻撃。 ５ターンの 間 雨を 降らせる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxguard: {
 		name: "ダイウォール",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}は 攻撃から 身を守った！",
 	},
@@ -4308,159 +4327,159 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ダイアイス",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす こおりタイプの 攻撃。 ５ターンの 間 あられを 降らす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxknuckle: {
 		name: "ダイナックル",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす かくとうタイプの 攻撃。 味方の 攻撃を 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxlightning: {
 		name: "ダイサンダー",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす でんきタイプの 攻撃。 ５ターンの 間 エレキフィールドにする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxmindstorm: {
 		name: "ダイサイコ",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす エスパータイプの 攻撃。 ５ターンの 間 サイコフィールドにする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxooze: {
 		name: "ダイアシッド",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす どくタイプの 攻撃。 味方の 特攻を 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxovergrowth: {
 		name: "ダイソウゲン",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす くさタイプの 攻撃。 ５ターンの 間 グラスフィールドにする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxphantasm: {
 		name: "ダイホロウ",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ゴーストタイプの 攻撃。 相手の 防御を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxquake: {
 		name: "ダイアース",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす じめんタイプの 攻撃。 味方の 特防を 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxrockfall: {
 		name: "ダイロック",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす いわタイプの 攻撃。 ５ターンの 間 砂あらしにする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxstarfall: {
 		name: "ダイフェアリー",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす フェアリータイプの 攻撃。 ５ターンの 間 ミストフィールドにする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxsteelspike: {
 		name: "ダイスチル",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす はがねタイプの 攻撃。 味方の 防御を 上げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxstrike: {
 		name: "ダイアタック",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ノーマルタイプの 攻撃。 相手の 素早さを 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maxwyrmwind: {
 		name: "ダイドラグーン",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ドラゴンタイプの 攻撃。 相手の 攻撃を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	meanlook: {
 		name: "くろいまなざし",
 		// Official flavor text: "吸いこまれるような 黒い まなざしで じっと みつめて 相手を 戦闘から 逃げられなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	meditate: {
 		name: "ヨガのポーズ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mefirst: {
 		name: "さきどり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	megadrain: {
 		name: "メガドレイン",
 		// Official flavor text: "養分を 吸い取り 攻撃する。 相手に 与えた ダメージの 半分の ＨＰを 回復できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	megahorn: {
 		name: "メガホーン",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	megakick: {
 		name: "メガトンキック",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	megapunch: {
 		name: "メガトンパンチ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	memento: {
 		name: "おきみやげ",
 		// Official flavor text: "自分は ひんしに なるが そのかわりに 相手の 攻撃と 特攻を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		heal: "  {POKEMON}は Ｚパワーで 体力が 回復した！",
@@ -4469,43 +4488,43 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ムーンライトブラスター",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	metalburst: {
 		name: "メタルバースト",
 		// Official flavor text: "技を だす前に 最後に 受けた 技の ダメージを 大きくして だした 相手に 返す。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	metalclaw: {
 		name: "メタルクロー",
 		// Official flavor text: "鋼鉄の ツメで 相手を 切り裂いて 攻撃する。 自分の 攻撃が あがることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	metalsound: {
 		name: "きんぞくおん",
 		// Official flavor text: "金属を こすって でるような いやな 音を 聞かせる。 相手の 特防を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	meteorassault: {
 		name: "スターアサルト",
 		// Official flavor text: "太い クキを ふりまわして 攻撃。 ただし 自分も よろめいてしまうため 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	meteorbeam: {
 		name: "メテオビーム",
 		// Official flavor text: "１ターン目に 宇宙の 力を 集めることで 特攻が あがり ２ターン目に 相手を 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		prepare: "{POKEMON}に 宇宙の 力が あふれだす！",
 	},
@@ -4513,79 +4532,79 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "コメットパンチ",
 		// Official flavor text: "すい星の ごとく パンチを くりだして 相手を 攻撃する。 自分の 攻撃が あがることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	metronome: {
 		name: "ゆびをふる",
 		// Official flavor text: "指をふり 自分の 脳を 刺激して すべての 技の なかから どれか １つを くりだす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		move: "指を振ったら {MOVE} がでた！",
 	},
 	mightycleave: {
 		name: "パワフルエッジ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	milkdrink: {
 		name: "ミルクのみ",
 		// Official flavor text: "最大ＨＰの 半分 自分の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	mimic: {
 		name: "ものまね",
 		// Official flavor text: "相手が 最後に 使った 技を 戦闘の あいだ 自分の 技に することが できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は {MOVE}を 覚えた！",
@@ -4594,21 +4613,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ビックリヘッド",
 		// Official flavor text: "自分の 頭を 爆発 させて 周りの すべてを 攻撃する。 自分も ダメージを 受けてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		damage: null, // NEEDS TRANSLATION: Showdown custom text
+		damage: null, // NEEDS TRANSLATION
 	},
 	mindreader: {
 		name: "こころのめ",
 		// Official flavor text: "相手の 動きを 心で 感じて 次の 攻撃が 必ず 相手に 当たるように する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "#lockon",
@@ -4617,37 +4636,37 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ちいさくなる",
 		// Official flavor text: "体を ちぢめて 小さく みせて 自分の 回避率を ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	miracleeye: {
 		name: "ミラクルアイ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "#foresight",
@@ -4656,57 +4675,57 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ミラーコート",
 		// Official flavor text: "相手から 受けた 特殊攻撃の ダメージを ２倍に して その相手に 返す。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	mirrormove: {
 		name: "オウムがえし",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	mirrorshot: {
 		name: "ミラーショット",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mist: {
 		name: "しろいきり",
 		// Official flavor text: "白い霧で 体を おおう。 ５ターンの 間 相手に 能力を さげられなく なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 			start: "  {POKEMON}は しろいきりにつつまれた！",
 			block: "  {POKEMON}はしろいきりに まもられている",
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 			start: "  {POKEMON}は しろいきりにつつまれた！",
 			block: "  しかしうまく決まらなかった！！",
 		},
@@ -4719,28 +4738,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ミストボール",
 		// Official flavor text: "霧状の 羽毛で 包みこみ 攻撃する。 相手の 特攻を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mistyexplosion: {
 		name: "ミストバースト",
 		// Official flavor text: "自分の 周りに いる すべてを 攻撃するが 使うと 瀕死になる。 ミストフィールドで 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mistyterrain: {
 		name: "ミストフィールド",
 		// Official flavor text: "５ターンの 間 地面にいると 状態異常に ならず ドラゴン技の ダメージも 半分になる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	moonblast: {
 		name: "ムーンフォース",
 		// Official flavor text: "月の パワーを かりて 相手を 攻撃する。 相手の 特攻を さげる ことがある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4750,149 +4769,149 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "シャドーレイ",
 		// Official flavor text: "怪しい 光線を 放って 攻撃する。相手の 特性を 無視して 攻撃 することが できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	moonlight: {
 		name: "つきのひかり",
 		// Official flavor text: "自分の ＨＰを 回復する。 天気に よって 回復の 量が 変化する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	morningsun: {
 		name: "あさのひざし",
 		// Official flavor text: "自分の ＨＰを 回復する。 天気に よって 回復の 量が 変化する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	mortalspin: {
 		name: "キラースピン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mountaingale: {
 		name: "ひょうざんおろし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mudbomb: {
 		name: "どろばくだん",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	muddywater: {
 		name: "だくりゅう",
 		// Official flavor text: "濁った 水を 相手に 発射して 攻撃する。 命中率を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mudshot: {
 		name: "マッドショット",
 		// Official flavor text: "泥の 塊を 相手に 投げつけて 攻撃する。 同時に 相手の 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mudslap: {
 		name: "どろかけ",
 		// Official flavor text: "相手の 顔などに 泥を 投げつけて 攻撃する。 命中率を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mudsport: {
 		name: "どろあそび",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	multiattack: {
 		name: "マルチアタック",
 		// Official flavor text: "高い エネルギーを まといつつ 相手に ぶつかって 攻撃する。 メモリに より タイプが 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mysticalfire: {
 		name: "マジカルフレイム",
 		// Official flavor text: "口から 吐きだす 特別 熱い 炎で 攻撃する。 相手の 特攻を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mysticalpower: {
 		name: "しんぴのちから",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	nastyplot: {
 		name: "わるだくみ",
 		// Official flavor text: "悪いことを 考えて 頭を 活性化させる。 自分の 特攻を ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	naturalgift: {
 		name: "しぜんのめぐみ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	naturepower: {
 		name: "しぜんのちから",
 		// Official flavor text: "自然の 力で 攻撃する。 使う 場所で でてくる 技が 変化する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		move: "しぜんのちからは {MOVE} になった！",
@@ -4901,32 +4920,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "しぜんのいかり",
 		// Official flavor text: "自然の 怒りを 相手に ぶつける。 相手の ＨＰは 半分に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	needlearm: {
 		name: "ニードルアーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	neverendingnightmare: {
 		name: "むげんあんやへのいざない",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	nightdaze: {
 		name: "ナイトバースト",
 		// Official flavor text: "暗黒の 衝撃波を とばして 相手を 攻撃する。 命中率を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	nightmare: {
 		name: "あくむ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は 悪夢を 見始めた！",
 		damage: "  {POKEMON}は 悪夢に うなされている！",
@@ -4935,73 +4954,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ナイトヘッド",
 		// Official flavor text: "恐ろしい 幻を みせて 自分の レベルと 同じだけの ダメージを 相手に 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	nightslash: {
 		name: "つじぎり",
 		// Official flavor text: "一瞬の すきを ついて 相手を 切りはらう。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	nobleroar: {
 		name: "おたけび",
 		// Official flavor text: "おたけびを あげて 相手を 威嚇し 相手の 攻撃と 特攻を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	noretreat: {
 		name: "はいすいのじん",
 		// Official flavor text: "自分の すべての 能力が 上がるが 交代 したり 逃げることが できなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は はいすいのじんで 逃げることが できなくなった！",
 	},
 	noxioustorque: {
 		name: "ポイズンアクセル",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	nuzzle: {
 		name: "ほっぺすりすり",
 		// Official flavor text: "電気を 帯びた ほっぺを すりつけて 攻撃。 相手を まひ状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	oblivionwing: {
 		name: "デスウイング",
 		// Official flavor text: "ねらいを 定めた 相手から ＨＰを 吸い取る。 与えた ダメージの 半分以上 ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	obstruct: {
 		name: "ブロッキング",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。 触れると 防御が がくっと 下がる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	oceanicoperetta: {
 		name: "わだつみのシンフォニア",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	octazooka: {
 		name: "オクタンほう",
 		// Official flavor text: "相手の 顔などに 墨を 吹きかけて 攻撃する。 命中率を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	octolock: {
 		name: "たこがため",
 		// Official flavor text: "相手を 逃げられなくする。 かためられた 相手は 毎ターン 防御と 特防が 下がる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は たこがためで 逃げられなくなった！",
 	},
@@ -5009,87 +5028,87 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "かぎわける",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	ominouswind: {
 		name: "あやしいかぜ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	orderup: {
 		name: "いっちょうあがり",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	originpulse: {
 		name: "こんげんのはどう",
 		// Official flavor text: "青白く 輝く 無数の 光線で 相手を 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	outrage: {
 		name: "げきりん",
 		// Official flavor text: "２ー３ターンの 間 暴れまくって 攻撃する。 暴れたあとは 混乱する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	overdrive: {
 		name: "オーバードライブ",
 		// Official flavor text: "ギターや ベースを かきならして 激しく 響く 大きな 振動を 相手に 与えて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	overheat: {
 		name: "オーバーヒート",
 		// Official flavor text: "フルパワーで 相手を 攻撃する。 使うと 反動で 自分の 特攻が がくっと さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	painsplit: {
 		name: "いたみわけ",
 		// Official flavor text: "自分の ＨＰと 相手の ＨＰを あわせて それを 自分と 相手で なかよく わける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  おたがいの体力を 分かちあった！",
 	},
 	paleowave: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	paraboliccharge: {
 		name: "パラボラチャージ",
 		// Official flavor text: "周りにいる ポケモン 全員に ダメージ。 与えた ダメージの 半分を 自分が 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	partingshot: {
 		name: "すてゼリフ",
 		// Official flavor text: "すてゼリフで 相手を いかくし 攻撃と 特攻を さげたのち 控えの ポケモンと 入れ替わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		heal: "#memento",
@@ -5099,31 +5118,31 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "しっぺがえし",
 		// Official flavor text: "ためこんで 攻撃する。 相手より あとに 攻撃できると 技の 威力は ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	payday: {
 		name: "ネコにこばん",
 		// Official flavor text: "相手の 体に 小判を 投げつけて 攻撃する。 戦闘の あとで お金が もらえる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  小判が あたりに 散らばった！",
 	},
 	peck: {
 		name: "つつく",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	perishsong: {
 		name: "ほろびのうた",
 		// Official flavor text: "歌を 聴いた ポケモンは ３ターン たつと ひんしに なる。 交代すると 効果は なくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  ほろびのうたを 聴いたポケモンは ３ターン後に 滅びてしまう！",
 		activate: "  {POKEMON}の 滅びのカウントが {NUMBER}になった！",
@@ -5132,37 +5151,37 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "はなふぶき",
 		// Official flavor text: "激しい 花吹雪を 起こし 周りに いるものに 攻撃して ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	petaldance: {
 		name: "はなびらのまい",
 		// Official flavor text: "２ー３ターンの 間 花を まきちらして 相手を 攻撃する。 まきちらした あとは 混乱する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	phantomforce: {
 		name: "ゴーストダイブ",
 		// Official flavor text: "１ターンめで どこかに 消えて ２ターンめに 相手を 攻撃する。 守りを 無視して 攻撃できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "#shadowforce",
@@ -5172,57 +5191,57 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "フォトンゲイザー",
 		// Official flavor text: "光の 柱で 攻撃する。 攻撃と 特攻を 比べて 高いほうで ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pikapapow: {
 		name: "ピカピカサンダー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pinmissile: {
 		name: "ミサイルばり",
 		// Official flavor text: "鋭い ハリを 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	plasmafists: {
 		name: "プラズマフィスト",
 		// Official flavor text: "電気を まとった こぶしで 攻撃。 ノーマルタイプの 技を でんきタイプに してしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	playnice: {
 		name: "なかよくする",
 		// Official flavor text: "相手と なかよくなって 戦う 気力を 失わせ 相手の 攻撃を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	playrough: {
 		name: "じゃれつく",
 		// Official flavor text: "相手に じゃれついて 攻撃する。 相手の 攻撃を さげる ことがある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pluck: {
 		name: "ついばむ",
 		// Official flavor text: "くちばしで 攻撃。 相手が きのみを 持っているとき 食べて きのみの 効果を 受けられる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		removeItem: "#bugbite",
@@ -5231,87 +5250,87 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "どくどくのキバ",
 		// Official flavor text: "毒の ある キバで 相手に かみついて 攻撃する。 猛毒を おわせる ことが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	poisongas: {
 		name: "どくガス",
 		// Official flavor text: "毒ガスを 相手の 顔に 吹きかけて 毒の 状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	poisonjab: {
 		name: "どくづき",
 		// Official flavor text: "毒に そまった 触手や 腕で 相手を 突き刺す。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poisonpowder: {
 		name: "どくのこな",
 		// Official flavor text: "毒の ある 粉を たくさん ふりまいて 相手を 毒状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poisonsting: {
 		name: "どくばり",
 		// Official flavor text: "毒の ある ハリを 相手に 突き刺して 攻撃する。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	poisontail: {
 		name: "ポイズンテール",
 		// Official flavor text: "しっぽで たたく。 毒状態に することが あり 急所にも 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	polarflare: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pollenpuff: {
 		name: "かふんだんご",
 		// Official flavor text: "敵には 爆発する だんごを 使って 攻撃。 味方には 回復する だんごを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poltergeist: {
 		name: "ポルターガイスト",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}に {ITEM}が 襲いかかる！",
 	},
 	populationbomb: {
 		name: "ネズミざん",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pounce: {
 		name: "とびつく",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pound: {
 		name: "はたく",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powder: {
 		name: "ふんじん",
 		// Official flavor text: "ふんじんを 浴びせた 相手が ほのお技を 使うと 爆発して ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}に ふんじんを あびせた！",
@@ -5321,20 +5340,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "こなゆき",
 		// Official flavor text: "冷たい 粉雪を 相手に 吹きつけて 攻撃する。 こおり状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	powergem: {
 		name: "パワージェム",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powersplit: {
 		name: "パワーシェア",
 		// Official flavor text: "超能力で 自分と 相手の 攻撃と 特攻を たして 半分に わける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}は おたがいのパワーを シェアした！",
 	},
@@ -5342,12 +5361,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "パワースワップ",
 		// Official flavor text: "超能力で 自分と 相手の 攻撃と 特攻の 能力変化を 入れ替える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powershift: {
 		name: "パワーシフト",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は 攻めの力と 守りの力を 入れ替えた！",
 		end: "#.start",
@@ -5356,7 +5375,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "パワートリック",
 		// Official flavor text: "超能力で 自分の 攻撃と 防御の 力を 交換する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は 攻撃と 防御を 入れ替えた！",
 		end: "#.start",
@@ -5365,64 +5384,64 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "つけあがる",
 		// Official flavor text: "自分の 強さを 鼻高々に 攻撃する。自分の 能力が あがって いるほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poweruppunch: {
 		name: "グロウパンチ",
 		// Official flavor text: "繰り返し 打つことで だんだん こぶしが 固くなる。 相手に 当てると 攻撃が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powerwhip: {
 		name: "パワーウィップ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	precipiceblades: {
 		name: "だんがいのつるぎ",
 		// Official flavor text: "大地の 力を 刃に 変えて 相手を 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	present: {
 		name: "プレゼント",
 		// Official flavor text: "わなを しかけた 箱を 相手に わたして 攻撃する。ＨＰが 回復して しまうことも ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	prismaticlaser: {
 		name: "プリズムレーザー",
 		// Official flavor text: "プリズムの 力で 強力な 光線を 発射する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	protect: {
 		name: "まもる",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 守りの 体勢に 入った！",
@@ -5432,152 +5451,152 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "サイケこうせん",
 		// Official flavor text: "不思議な 光線を 相手に 発射して 攻撃する。 混乱させることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psyblade: {
 		name: "サイコブレイド",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychic: {
 		name: "サイコキネシス",
 		// Official flavor text: "強い 念力を 相手に 送って 攻撃する。 相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	psychicfangs: {
 		name: "サイコファング",
 		// Official flavor text: "サイコパワーで かみついて 相手を 攻撃する。 ひかりのかべや リフレクター なども 破壊できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychicnoise: {
 		name: "サイコノイズ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychicterrain: {
 		name: "サイコフィールド",
 		// Official flavor text: "５ターンの間 地面にいると 先制技を 受けない。 エスパータイプの 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	psychoboost: {
 		name: "サイコブースト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychocut: {
 		name: "サイコカッター",
 		// Official flavor text: "実体化させた 心の 刃で 相手を 切り裂く。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychoshift: {
 		name: "サイコシフト",
 		// Official flavor text: "超能力で 暗示を かけて 自分の 受けている 状態異常を 相手に うつす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychup: {
 		name: "じこあんじ",
 		// Official flavor text: "自分に 暗示を かけることで 能力変化の 状態を 相手と 同じにする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	psyshieldbash: {
 		name: "バリアーラッシュ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psyshock: {
 		name: "サイコショック",
 		// Official flavor text: "不思議な 念波を 実体化して 相手を 攻撃する。 物理的な ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psystrike: {
 		name: "サイコブレイク",
 		// Official flavor text: "不思議な 念波を 実体化して 相手を 攻撃する。 物理的な ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psywave: {
 		name: "サイコウェーブ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	pulverizingpancake: {
 		name: "ほんきをだす こうげき",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	punishment: {
 		name: "おしおき",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	purify: {
 		name: "じょうか",
 		// Official flavor text: "相手の 状態異常を 治す。 治すと 自分は ＨＰを 回復 することが できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pursuit: {
 		name: "おいうち",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
 	},
 	pyroball: {
 		name: "かえんボール",
 		// Official flavor text: "小石を 燃やした 炎の ボールで 相手を 攻撃する。 やけど 状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	quash: {
 		name: "さきおくり",
 		// Official flavor text: "相手を おさえつけて 行動の 順番を 最後に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {TARGET}の 順番を 先送りした！",
 	},
@@ -5585,24 +5604,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "でんこうせっか",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで 相手に つっこむ。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	quickguard: {
 		name: "ファストガード",
 		// Official flavor text: "自分と 味方を 相手の 先制攻撃から 守る。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}は ファストガードで 守られた！",
@@ -5612,29 +5631,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ちょうのまい",
 		// Official flavor text: "神秘的で 美しい 舞を 軽やかに おどる。 自分の 特攻と 特防と 素早さを あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rage: {
 		name: "いかり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	ragefist: {
 		name: "ふんどのこぶし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5644,9 +5663,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "いかりのこな",
 		// Official flavor text: "イライラさせる 粉を 自分に ふりかけて 注意を ひく。 相手の 攻撃を すべて 自分に むける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "#followme",
@@ -5654,78 +5673,78 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragingbull: {
 		name: "レイジングブル",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: null, // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
 	},
 	ragingfury: {
 		name: "だいふんげき",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	raindance: {
 		name: "あまごい",
 		// Official flavor text: "５ターンの 間 雨を 降らせて みずタイプの 威力を あげる。 ほのおタイプの 威力は さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	rapidspin: {
 		name: "こうそくスピン",
 		// Official flavor text: "回転して 相手を 攻撃する。 しめつける まきつく やどりぎのタネ など 吹きとばす。自分の 素早さも あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	razorleaf: {
 		name: "はっぱカッター",
 		// Official flavor text: "はっぱを とばして 相手を 切りつけて 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	razorshell: {
 		name: "シェルブレード",
 		// Official flavor text: "鋭い 貝殻で 切りつけて 攻撃する。 相手の 防御を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	razorwind: {
 		name: "かまいたち",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "  {POKEMON}の 周りで 空気が 渦を巻く！",
@@ -5734,24 +5753,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "じこさいせい",
 		// Official flavor text: "細胞を 再生させて 自分の 最大ＨＰの 半分の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	recycle: {
 		name: "リサイクル",
 		// Official flavor text: "戦闘中に 使って なくなった 自分の 持ち物を 再生させて 使えるように する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		addItem: "  {POKEMON}は {ITEM}を 拾ってきた！",
@@ -5760,23 +5779,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "リフレクター",
 		// Official flavor text: "５ターンの 間 不思議な かべで 相手から 受ける 物理攻撃の ダメージを 弱める。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 			start: "  {POKEMON}は だげきこうげきに つよくなった！",
 		},
 
@@ -5787,12 +5806,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ミラータイプ",
 		// Official flavor text: "相手の タイプを 反射して 自分も 同じ タイプに なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		typeChange: "  {POKEMON}は {SOURCE}と 同じタイプに なった！",
@@ -5801,76 +5820,76 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "リフレッシュ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	relicsong: {
 		name: "いにしえのうた",
 		// Official flavor text: "いにしえのうたを 相手に 聞かせて 心に うったえて 攻撃する。 眠り状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rest: {
 		name: "ねむる",
 		// Official flavor text: "２ターンの 間 眠り続ける。 自分の ＨＰと 状態異常を すべて 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	retaliate: {
 		name: "かたきうち",
 		// Official flavor text: "倒れた 味方の かたきを 討つ。 前の ターンに 味方が 倒されていると 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	return: {
 		name: "おんがえし",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	revelationdance: {
 		name: "めざめるダンス",
 		// Official flavor text: "全力で 踊って 攻撃する。 この 技の タイプは 自分の タイプと 同じになる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	revenge: {
 		name: "リベンジ",
 		// Official flavor text: "相手から 技を 受けていると その相手に 対して 与える ダメージが ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	reversal: {
 		name: "きしかいせい",
 		// Official flavor text: "力を ふりしぼり 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	revivalblessing: {
 		name: "さいきのいのり",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		heal: "  {POKEMON}は 復活して 戦えるようになった！",
 	},
@@ -5878,114 +5897,114 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ライジングボルト",
 		// Official flavor text: "地面から 立ちのぼる 電撃で 攻撃。 相手が エレキフィールドに いる時 技の 威力が ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	roar: {
 		name: "ほえる",
 		// Official flavor text: "相手を 逃がして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	roaroftime: {
 		name: "ときのほうこう",
 		// Official flavor text: "時間が ゆがむほどの 力を うちだして 相手を 攻撃する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockblast: {
 		name: "ロックブラスト",
 		// Official flavor text: "硬い 岩石を 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	rockclimb: {
 		name: "ロッククライム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockpolish: {
 		name: "ロックカット",
 		// Official flavor text: "自分の 体を 磨いて 空気の 抵抗を 少なくする。素早さを ぐーんと あげることが できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockslide: {
 		name: "いわなだれ",
 		// Official flavor text: "大きな 岩を 激しく ぶつけて 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	rocksmash: {
 		name: "いわくだき",
 		// Official flavor text: "パンチで 攻撃する。相手の 防御を さげる ことが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockthrow: {
 		name: "いわおとし",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rocktomb: {
 		name: "がんせきふうじ",
 		// Official flavor text: "岩石を 投げつけて 攻撃する。 相手の 動きを 封じることで 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockwrecker: {
 		name: "がんせきほう",
 		// Official flavor text: "巨大な 岩を 相手に 発射して 攻撃する。 次の ターンは 動けなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	roleplay: {
 		name: "なりきり",
 		// Official flavor text: "相手に なりきって 自分も 相手と 同じ 特性に 変化する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		changeAbility: "  {POKEMON}は {SOURCE}の {ABILITY}を コピーした！",
@@ -5994,73 +6013,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "まわしげり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rollout: {
 		name: "ころがる",
 		// Official flavor text: "５ターンの 間 転がり続けて 攻撃する。 技が 当たるたびに 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	roost: {
 		name: "はねやすめ",
 		// Official flavor text: "地面に 降りて 体を やすめる。 最大ＨＰの 半分の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		start: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
 	},
 	rototiller: {
 		name: "たがやす",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	round: {
 		name: "りんしょう",
 		// Official flavor text: "歌で 相手を 攻撃する。 みんなで 輪唱すると 続けて だすことが でき 威力も あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ruination: {
 		name: "カタストロフィ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sacredfire: {
 		name: "せいなるほのお",
 		// Official flavor text: "神秘の 炎で 相手を 焼きつくして 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sacredsword: {
 		name: "せいなるつるぎ",
 		// Official flavor text: "長い つので 切りつけ 攻撃する。 相手の 能力変化に 関係なく ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	safeguard: {
 		name: "しんぴのまもり",
 		// Official flavor text: "５ターンの 間 不思議な 力に 守られて 状態異常に ならなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}は 神秘のベールに 包まれた！",
@@ -6069,8 +6088,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	saltcure: {
 		name: "しおづけ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6083,49 +6102,49 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "すなかけ",
 		// Official flavor text: "相手の 顔に 砂を かけて 命中率を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sandsearstorm: {
 		name: "ねっさのあらし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sandstorm: {
 		name: "すなあらし",
 		// Official flavor text: "５ターンの 間 砂あらしで いわ じめん はがねタイプ 以外に ダメージ。 いわタイプの 特防が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	sandtomb: {
 		name: "すなじごく",
 		// Official flavor text: "激しく 吹きあれる 砂あらしの 中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 砂じごくに 捕らわれた！",
@@ -6134,152 +6153,152 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "すくすくボンバー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	savagespinout: {
 		name: "ぜったいほしょくかいてんざん",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scald: {
 		name: "ねっとう",
 		// Official flavor text: "熱く 煮えたぎる 水を 相手に 発射して 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	scaleshot: {
 		name: "スケイルショット",
 		// Official flavor text: "ウロコを 撃ちだして 攻撃する。 ２ー５回の 間 連続で だす。 素早さが あがるが 防御が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scaryface: {
 		name: "こわいかお",
 		// Official flavor text: "恐ろしい 顔で にらみ おびえさせて 相手の 素早さを がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scorchingsands: {
 		name: "ねっさのだいち",
 		// Official flavor text: "熱く 焼けた 砂を 相手に ぶつけて 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scratch: {
 		name: "ひっかく",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	screech: {
 		name: "いやなおと",
 		// Official flavor text: "おもわず 耳を ふさぎたくなる いやなおとを だして 相手の 防御を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	searingshot: {
 		name: "かえんだん",
 		// Official flavor text: "真っ赤な 炎で 自分の 周りに いるものを 攻撃する。 やけど状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	searingsunrazesmash: {
 		name: "サンシャインスマッシャー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	secretpower: {
 		name: "ひみつのちから",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	secretsword: {
 		name: "しんぴのつるぎ",
 		// Official flavor text: "長い つので 切りつけ 攻撃する。 つのが まとった 不思議な 力は 物理的な ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	seedbomb: {
 		name: "タネばくだん",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	seedflare: {
 		name: "シードフレア",
 		// Official flavor text: "体の 中から 衝撃波を 発生させる。相手の 特防を がくっと さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	seismictoss: {
 		name: "ちきゅうなげ",
 		// Official flavor text: "引力を 使い 投げとばす。 自分の レベルと 同じ ダメージを 相手に 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	selfdestruct: {
 		name: "じばく",
 		// Official flavor text: "爆発を おこして 自分の 周りに いるものを 攻撃する。 使ったあとに ひんしに なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	shadowball: {
 		name: "シャドーボール",
 		// Official flavor text: "黒い影の 塊を 投げつけて 攻撃する。 相手の 特防を さげることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shadowbone: {
 		name: "シャドーボーン",
 		// Official flavor text: "魂の 宿った ホネで 相手を なぐりつけて 攻撃する。 相手の 防御を さげる ことがある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shadowclaw: {
 		name: "シャドークロー",
 		// Official flavor text: "影から つくった 鋭い ツメで 相手を 切り裂く。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shadowforce: {
 		name: "シャドーダイブ",
 		// Official flavor text: "１ターン目で 姿を 消して ２ターン目に 相手を 攻撃する。 守っていても 攻撃は 当たる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {TARGET}の 守りを 打ち破った！",
@@ -6287,33 +6306,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowpunch: {
 		name: "シャドーパンチ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shadowsneak: {
 		name: "かげうち",
 		// Official flavor text: "影を のばして 相手の 背後から 攻撃する。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shadowstrike: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sharpen: {
 		name: "かくばる",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shatteredpsyche: {
 		name: "マキシマムサイブレイカー",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shedtail: {
 		name: "しっぽきり",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は しっぽを 切って みがわりにした！",
 		alreadyStarted: "#substitute",
@@ -6323,29 +6342,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ぜったいれいど",
 		// Official flavor text: "相手を 一撃で 瀕死に する。 こおりタイプ 以外の ポケモンが 使うと 当たりにくい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	shellsidearm: {
 		name: "シェルアームズ",
 		// Official flavor text: "物理か 特殊か より多く ダメージを 与えられる 能力で 攻撃する。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shellsmash: {
 		name: "からをやぶる",
 		// Official flavor text: "殻を やぶって 自分の 防御 特防を さげるが 攻撃 特攻 素早さを ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shelltrap: {
 		name: "トラップシェル",
 		// Official flavor text: "こうらの トラップを しかける。 相手が 物理技を 出すと 爆発して ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は トラップシェルを 仕掛けた！",
 		prepare: "  {POKEMON}は トラップシェルを 仕掛けた！",
@@ -6353,88 +6372,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shelter: {
 		name: "たてこもる",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shiftgear: {
 		name: "ギアチェンジ",
 		// Official flavor text: "歯車を 回して 自分の 攻撃を あげる だけでなく 素早さも ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shockwave: {
 		name: "でんげきは",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shoreup: {
 		name: "すなあつめ",
 		// Official flavor text: "最大ＨＰの 半分 自分の ＨＰを 回復する。 すなあらしの時は 多く 回復。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	signalbeam: {
 		name: "シグナルビーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	silktrap: {
 		name: "スレッドトラップ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	silverwind: {
 		name: "ぎんいろのかぜ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	simplebeam: {
 		name: "シンプルビーム",
 		// Official flavor text: "なぞの 念波を 相手に 送る。 念波を 受けとった 相手は 特性が たんじゅんに なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	sing: {
 		name: "うたう",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sinisterarrowraid: {
 		name: "シャドーアローズストライク",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sizzlyslide: {
 		name: "めらめらバーン",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sketch: {
 		name: "スケッチ",
 		// Official flavor text: "相手が 使った 技を 自分の ものに する。 １回 使うと スケッチは 消える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {POKEMON}は {MOVE}を スケッチした！",
@@ -6443,24 +6462,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "スキルスワップ",
 		// Official flavor text: "超能力で 自分の 特性と 相手の 特性を 入れ替える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {POKEMON}は おたがいの 特性を 入れ替えた！",
@@ -6469,19 +6488,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "はいよるいちげき",
 		// Official flavor text: "背後から はいより 攻撃する。 相手の 特攻を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	skullbash: {
 		name: "ロケットずつき",
 		// Official flavor text: "１ターン目に 頭を ひっこめて 防御を あげる。 ２ターン目に 相手を 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "{POKEMON}は 首を 引っこめた！",
@@ -6490,13 +6509,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ゴッドバード",
 		// Official flavor text: "２ターン目に 相手を 攻撃する。 たまに ひるませる。 急所にも 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "{POKEMON}を 激しい光が 包む！",
@@ -6505,9 +6524,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "フリーフォール",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "{POKEMON}は {TARGET}を 上空に 連れ去った！",
@@ -6519,128 +6538,128 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "スカイアッパー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	slackoff: {
 		name: "なまける",
 		// Official flavor text: "怠けて やすむ。 自分の ＨＰを 最大ＨＰの 半分 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	slam: {
 		name: "たたきつける",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	slash: {
 		name: "きりさく",
 		// Official flavor text: "ツメや カマなどで 相手を 切り裂いて 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sleeppowder: {
 		name: "ねむりごな",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sleeptalk: {
 		name: "ねごと",
 		// Official flavor text: "自分が おぼえている 技の うち どれか １つを くりだす。 自分が 寝ているときだけ 使える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	sludge: {
 		name: "ヘドロこうげき",
 		// Official flavor text: "汚い ヘドロを 相手に 投げつけて 攻撃する。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	sludgebomb: {
 		name: "ヘドロばくだん",
 		// Official flavor text: "汚い ヘドロを 相手に 投げつけて 攻撃する。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sludgewave: {
 		name: "ヘドロウェーブ",
 		// Official flavor text: "ヘドロの 波で 自分の 周りに いるものを 攻撃する。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	smackdown: {
 		name: "うちおとす",
 		// Official flavor text: "石や 弾を 投げて 飛んでいる 相手を 攻撃する。 相手は うち落とされて 地面に 落ちる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は 撃ち落とされて 地面に 落ちた！",
 	},
 	smartstrike: {
 		name: "スマートホーン",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	smellingsalts: {
 		name: "きつけ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	smog: {
 		name: "スモッグ",
 		// Official flavor text: "汚れた ガスを 相手に 吹きつけて 攻撃する。 毒状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	smokescreen: {
 		name: "えんまく",
 		// Official flavor text: "煙や 墨などを 吹きかけて 相手の 命中率を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	snaptrap: {
 		name: "トラバサミ",
 		// Official flavor text: "トラバサミで 捕らえて ４－５ターンの 間 相手を はさんで 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は トラバサミに 捕らわれた！",
@@ -6649,15 +6668,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "バークアウト",
 		// Official flavor text: "まくしたてる ように 怒鳴りつけて 相手の 特攻を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	snatch: {
 		name: "よこどり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 相手の でかたを うかがっている！",
@@ -6667,72 +6686,72 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ねらいうち",
 		// Official flavor text: "相手の 技を 引き受ける 特性や 技の 影響を 無視して 選んだ 相手を 攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	snore: {
 		name: "いびき",
 		// Official flavor text: "自分が 寝ているときに 雑音を だして 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	snowscape: {
 		name: "ゆきげしき",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	soak: {
 		name: "みずびたし",
 		// Official flavor text: "たくさんの 水を 浴びせかけて 相手を みずタイプに する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	softboiled: {
 		name: "タマゴうみ",
 		// Official flavor text: "最大ＨＰの 半分 自分の ＨＰを 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	solarbeam: {
 		name: "ソーラービーム",
 		// Official flavor text: "１ターン目に 光を いっぱいに 集め ２ターン目に 光の 束を 発射して 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "  {POKEMON}は 光を 吸収した！",
@@ -6741,12 +6760,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ソーラーブレード",
 		// Official flavor text: "１ターン目に 光を いっぱいに 集め ２ターン目に その 力を 剣に 込めて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		prepare: "#solarbeam",
@@ -6755,44 +6774,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ソニックブーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	soulstealing7starstrike: {
 		name: "しちせいだっこんたい",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spacialrend: {
 		name: "あくうせつだん",
 		// Official flavor text: "周りの 空間ごと 相手を 引き裂き ダメージを 与える。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spark: {
 		name: "スパーク",
 		// Official flavor text: "電気を まとい 相手に 突進して 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sparklingaria: {
 		name: "うたかたのアリア",
 		// Official flavor text: "歌うことによって たくさんの バルーンを 放出する。 技を 受けると やけどが 治る。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sparklyswirl: {
 		name: "きらきらストーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spectralthief: {
 		name: "シャドースチール",
 		// Official flavor text: "相手の 影に 潜り込み 相手の 能力アップを 奪って 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		clearBoost: "  {SOURCE}は 上がった 能力を 奪い取った！",
 	},
@@ -6800,65 +6819,65 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "スピードスワップ",
 		// Official flavor text: "相手の 素早さと 自分の 素早さを 入れ替えてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}は おたがいの スピードを 入れ替えた！",
 	},
 	spicyextract: {
 		name: "ハバネロエキス",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spiderweb: {
 		name: "クモのす",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	spikecannon: {
 		name: "とげキャノン",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	spikes: {
 		name: "まきびし",
 		// Official flavor text: "相手の 足下に まきびしを しかける。交代で でてきた 相手の ポケモンに ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}の 足下に まきびしが 散らばった！",
@@ -6869,50 +6888,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ニードルガード",
 		// Official flavor text: "相手の 攻撃を 防ぐと 同時に 触れた 相手の 体力を 削って しまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		damage: "  {POKEMON}は 傷ついた！",
 	},
 	spinout: {
 		name: "ホイールスピン",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spiritbreak: {
 		name: "ソウルクラッシュ",
 		// Official flavor text: "食らうと くじけるほどの 勢いで 攻撃。 相手の 特攻を 下げる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spiritshackle: {
 		name: "かげぬい",
 		// Official flavor text: "攻撃と 同時に 相手の 影を 縫い付けて 逃げられなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	spite: {
 		name: "うらみ",
 		// Official flavor text: "相手が 最後に 使った技に 恨みを 抱いて その技の ＰＰを ４だけ 減らす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {TARGET}の {MOVE}を {NUMBER}削った！",
@@ -6921,17 +6940,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "はきだす",
 		// Official flavor text: "蓄えた 力を 相手に ぶつけて 攻撃する。 蓄えているほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	splash: {
 		name: "はねる",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  しかし 何も 起こらなかった！",
 	},
@@ -6939,42 +6958,42 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ラジアルエッジストーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	splishysplash: {
 		name: "ざぶざぶサーフ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spore: {
 		name: "キノコのほうし",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spotlight: {
 		name: "スポットライト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "#followme",
 		startFromZEffect: "#followme",
 	},
 	springtidestorm: {
 		name: "はるのあらし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stealthrock: {
 		name: "ステルスロック",
 		// Official flavor text: "相手の 周りに 無数の 岩を 浮かべて 交代で でてきた 相手の ポケモンに ダメージを 与える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}の 周りに とがった岩が ただよい始めた！",
@@ -6985,22 +7004,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "スチームバースト",
 		// Official flavor text: "ものすごく 熱い 蒸気を 相手に 浴びせる。 相手は やけどする ことがある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steamroller: {
 		name: "ハードローラー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	steelbeam: {
 		name: "てっていこうせん",
 		// Official flavor text: "全身から 集めた はがねを ビームとして 激しく 撃ちだす。 自分も ダメージを 受けてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		damage: "#mindblown",
 	},
@@ -7008,21 +7027,21 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "アイアンローラー",
 		// Official flavor text: "フィールドを 破壊しながら 攻撃。 なんらかの フィールド状態に 変わっていないと 技は 失敗する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steelwing: {
 		name: "はがねのつばさ",
 		// Official flavor text: "硬い 翼を 相手に たたきつけて 攻撃する。 自分の 防御が あがることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stickyweb: {
 		name: "ねばねばネット",
 		// Official flavor text: "相手の 周りに ねばねばした ネットを はりめぐらせ 交代で でてきた 相手の 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}の 足下に ねばねばネットが 広がった！",
@@ -7033,10 +7052,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "たくわえる",
 		// Official flavor text: "力を 蓄えて 自分の 防御と 特防を あげる。 最大 ３回まで 蓄えられる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は {NUMBER}つ たくわえた！",
@@ -7046,121 +7065,121 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ライトニングサーフライド",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stomp: {
 		name: "ふみつけ",
 		// Official flavor text: "大きな 足で 相手を 踏みつけて 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	stompingtantrum: {
 		name: "じだんだ",
 		// Official flavor text: "悔しさを バネにして 攻撃する。 前の ターンに 技を 外していると 威力が 倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stoneaxe: {
 		name: "がんせきアックス",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stoneedge: {
 		name: "ストーンエッジ",
 		// Official flavor text: "とがった 岩を 相手に 突き刺して 攻撃する。 急所に 当たりやすい。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	storedpower: {
 		name: "アシストパワー",
 		// Official flavor text: "蓄積された パワーで 相手を 攻撃する。自分の 能力が あがっているほど 威力が あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stormthrow: {
 		name: "やまあらし",
 		// Official flavor text: "強烈な 一撃を 相手に くりだす。攻撃は 必ず 急所に 当たる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	strangesteam: {
 		name: "ワンダースチーム",
 		// Official flavor text: "煙を 噴出して 相手を 攻撃。 混乱 させることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	strength: {
 		name: "かいりき",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	strengthsap: {
 		name: "ちからをすいとる",
 		// Official flavor text: "相手の 攻撃力と 同じだけ 自分の ＨＰを 回復する。 そして 相手の 攻撃を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stringshot: {
 		name: "いとをはく",
 		// Official flavor text: "口から 吹きだした 糸を まきつけて 相手の 素早さを がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	struggle: {
 		name: "わるあがき",
 		// Official flavor text: "自分の ＰＰが なくなると あがいて 相手を 攻撃する。 自分も 少し ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	strugglebug: {
 		name: "むしのていこう",
 		// Official flavor text: "抵抗して 相手を 攻撃する。 相手の 特攻を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stuffcheeks: {
 		name: "ほおばる",
 		// Official flavor text: "持っている きのみを 食べて 防御を ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7170,43 +7189,43 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "しびれごな",
 		// Official flavor text: "しびれる 粉を たくさん ふりまいて 相手を まひ状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	submission: {
 		name: "じごくぐるま",
 		// Official flavor text: "地面に 自分ごと 相手を 投げつけて 攻撃する。 自分も 少し ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	substitute: {
 		name: "みがわり",
 		// Official flavor text: "自分の ＨＰを 少し 削って 分身を だす。 分身は 自分の 身代わりに なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}の 身代わりが 現れた！",
@@ -7217,39 +7236,39 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	subzeroslammer: {
 		name: "レイジングジオフリーズ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	suckerpunch: {
 		name: "ふいうち",
 		// Official flavor text: "相手より 先に 攻撃 できる。 相手が だす技が 攻撃技でないと 失敗する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	sunnyday: {
 		name: "にほんばれ",
 		// Official flavor text: "５ターンの 間 日差しを 強くして ほのおタイプの 威力を あげる。 みずタイプの 威力は さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	sunsteelstrike: {
 		name: "メテオドライブ",
 		// Official flavor text: "流星の ような 勢いで 突進する。 相手の 特性を 無視して 攻撃 することが できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	supercellslam: {
 		name: "サンダーダイブ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		damage: "#crash",
 	},
@@ -7257,122 +7276,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "いかりのまえば",
 		// Official flavor text: "鋭い 前歯で 激しく かみついて 攻撃する。 相手の ＨＰは 半分に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	superpower: {
 		name: "ばかぢから",
 		// Official flavor text: "すごい 力を 発揮して 相手を 攻撃する。自分の 攻撃と 防御が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	supersonic: {
 		name: "ちょうおんぱ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	supersonicskystrike: {
 		name: "ファイナルダイブクラッシュ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	surf: {
 		name: "なみのり",
 		// Official flavor text: "大きな 波で 自分の 周りに いるものを 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	surgingstrikes: {
 		name: "すいりゅうれんだ",
 		// Official flavor text: "みずの型を 極めし 流れるような ３回の 連撃。 必ず 急所に 当たる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	swagger: {
 		name: "いばる",
 		// Official flavor text: "相手を 怒らせて 混乱させる。 怒りで 相手の 攻撃は ぐーんと あがってしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	swallow: {
 		name: "のみこむ",
 		// Official flavor text: "蓄えた 力を のみこんで 自分の ＨＰを 回復する。 蓄えているほど 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	sweetkiss: {
 		name: "てんしのキッス",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sweetscent: {
 		name: "あまいかおり",
 		// Official flavor text: "香りで 相手の 回避率を がくっと さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	swift: {
 		name: "スピードスター",
 		// Official flavor text: "星型の 光を 発射して 相手を 攻撃する。 攻撃は 必ず 命中する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	switcheroo: {
 		name: "すりかえ",
 		// Official flavor text: "目にも とまらぬ 速さで 自分と 相手の 持ち物を 交換する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "#trick",
@@ -7381,87 +7400,87 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "つるぎのまい",
 		// Official flavor text: "戦いの舞を 激しく おどって 気合を 高める。 自分の 攻撃を ぐーんと あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	synchronoise: {
 		name: "シンクロノイズ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	synthesis: {
 		name: "こうごうせい",
 		// Official flavor text: "自分の ＨＰを 回復する。 天気に よって 回復の 量が 変化する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	syrupbomb: {
 		name: "みずあめボム",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は あめまみれに なった！",
 	},
 	tackle: {
 		name: "たいあたり",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tachyoncutter: {
 		name: "タキオンカッター",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tailglow: {
 		name: "ほたるび",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	tailslap: {
 		name: "スイープビンタ",
 		// Official flavor text: "硬い しっぽで 相手を たたいて 攻撃する。 ２ー５回の 間 連続で だす。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	tailwhip: {
 		name: "しっぽをふる",
 		// Official flavor text: "しっぽを 左右に かわいく ふって 油断を 誘う。 相手の 防御を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	tailwind: {
 		name: "おいかぜ",
 		// Official flavor text: "激しく 吹きあれる 風の渦を つくり ４ターンの 間 味方 全員の 素早さを あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}に 追い風が 吹き始めた！",
@@ -7471,27 +7490,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "とっしん",
 		// Official flavor text: "すごい 勢いで 相手に ぶつかって 攻撃する。 自分も 少し ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	takeheart: {
 		name: "ブレイブチャージ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tarshot: {
 		name: "タールショット",
 		// Official flavor text: "ねばねばの タールを 浴びせて 相手の 素早さを 下げる。 相手は ほのおが 弱点に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は ほのおに 弱くなった！",
 	},
@@ -7499,23 +7518,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ちょうはつ",
 		// Official flavor text: "相手を 怒らせる。 ３ターンの 間 相手は ダメージを 与える 技しか だせなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 挑発に 乗ってしまった！",
@@ -7526,13 +7545,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "なみだめ",
 		// Official flavor text: "なみだめに なって 相手の 戦力を 喪失させる。 相手の 攻撃と 特攻が さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	teatime: {
 		name: "おちゃかい",
 		// Official flavor text: "おちゃかいを ひらいて 場にいる ポケモンが それぞれ 持っている きのみを 食べる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  おちゃかいをして みんなで きのみを 食べた！",
 		fail: "  しかし 何も 起こらなかった！",
@@ -7541,28 +7560,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "テクノバスター",
 		// Official flavor text: "光弾を 相手に 放出する。 自分の 持つ カセットにより タイプが 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tectonicrage: {
 		name: "ライジングランドオーバー",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	teeterdance: {
 		name: "フラフラダンス",
 		// Official flavor text: "フラフラと ダンスを おどって 自分の 周りに いるものを 混乱状態に させる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	telekinesis: {
 		name: "テレキネシス",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}を 宙に 浮かせた！",
@@ -7572,107 +7591,107 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "テレポート",
 		// Official flavor text: "ひかえの ポケモンが いるときに 使うと 入れ替わる。 野生の ポケモンは 逃げてしまう。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	temperflare: {
 		name: "やけっぱち",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	terablast: {
 		name: "テラバースト",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	terastarstorm: {
 		name: "テラクラスター",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	terrainpulse: {
 		name: "だいちのはどう",
 		// Official flavor text: "フィールドの力を 借りて 攻撃。 使った時の フィールドの状態に よって 技の タイプと 威力が 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thief: {
 		name: "どろぼう",
 		// Official flavor text: "攻撃と 同時に 道具を 盗む。 自分が 道具を 持っている 場合は 盗めない。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	thousandarrows: {
 		name: "サウザンアロー",
 		// Official flavor text: "浮いている ポケモンにも 当たる。 浮いていた 相手は 撃ち落とされて 地面に 落ちる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thousandwaves: {
 		name: "サウザンウェーブ",
 		// Official flavor text: "地をはう 波によって 攻撃。 波に 巻き込まれた 相手は 戦闘から 逃げられなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	thrash: {
 		name: "あばれる",
 		// Official flavor text: "２ー３ターンの 間 暴れまくって 相手を 攻撃する。 暴れたあとは 混乱する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	throatchop: {
 		name: "じごくづき",
 		// Official flavor text: "この 技を 受けた 相手は 地獄の 苦しみから ２ターンの間 音の 技を 出すことが できなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		cant: "{POKEMON}は じごくづきの 効果で 技が 出せない！",
@@ -7681,86 +7700,86 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "かみなり",
 		// Official flavor text: "激しい 雷を 相手に 落として 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	thunderbolt: {
 		name: "１０まんボルト",
 		// Official flavor text: "強い 電撃を 相手に 浴びせて 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thundercage: {
 		name: "サンダープリズン",
 		// Official flavor text: "ほとばしる 電気の おりの 中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は {SOURCE}に 閉じこめられた！",
 	},
 	thunderclap: {
 		name: "じんらい",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thunderfang: {
 		name: "かみなりのキバ",
 		// Official flavor text: "電気を ためた キバで かみつく。 相手を ひるませたり まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thunderouskick: {
 		name: "らいめいげり",
 		// Official flavor text: "雷の ような 動きで 相手を 翻弄しながら キックする。 相手の 防御を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thunderpunch: {
 		name: "かみなりパンチ",
 		// Official flavor text: "電撃を こめた パンチで 相手を 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thundershock: {
 		name: "でんきショック",
 		// Official flavor text: "電気の 刺激を 相手に 浴びせて 攻撃する。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thunderwave: {
 		name: "でんじは",
 		// Official flavor text: "弱い 電撃を 浴びせることで 相手を まひ状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tickle: {
 		name: "くすぐる",
 		// Official flavor text: "体を くすぐり 笑わせる ことで 相手の 攻撃と 防御を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tidyup: {
 		name: "おかたづけ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  かたづけ おわり！",
 	},
@@ -7768,18 +7787,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ひっくりかえす",
 		// Official flavor text: "相手に かかっている すべての 能力変化を ひっくり返して 逆にする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	torchsong: {
 		name: "フレアソング",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	torment: {
 		name: "いちゃもん",
 		// Official flavor text: "相手に いちゃもんを つけて 同じ 技を ２回連続で だせなくする。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}は いちゃもんを つけられた！",
 		end: "  {POKEMON}の いちゃもんの 効果が切れた！",
@@ -7788,25 +7807,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "どくどく",
 		// Official flavor text: "相手を 猛毒の 状態に する。 ターンが すすむほど 毒の ダメージが 増えていく。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	toxicspikes: {
 		name: "どくびし",
 		// Official flavor text: "相手の 足下に どくびしを しかける。 交代で でてきた 相手の ポケモンに 毒を おわせる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}の 足下に どくびしが 散らばった！",
@@ -7816,7 +7835,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "どくのいと",
 		// Official flavor text: "毒の 混じった 糸を 吹き付ける。 相手を 毒にして 素早さを さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7824,23 +7843,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trailblaze: {
 		name: "くさわけ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	transform: {
 		name: "へんしん",
 		// Official flavor text: "相手の ポケモンに 変身することで 相手と まったく 同じ 技が 使える。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		transform: "{POKEMON}は {SPECIES}に 変身した！",
@@ -7849,40 +7868,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "トライアタック",
 		// Official flavor text: "３つの 光線で 攻撃する。 まひか やけどか こおり状態の どれかに することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	trick: {
 		name: "トリック",
 		// Official flavor text: "相手の すきを ついて 自分と 相手の 持ち物を 交換する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "  {POKEMON}は おたがいの 道具を入れ替えた！",
@@ -7891,122 +7910,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ハロウィン",
 		// Official flavor text: "相手を ハロウィンに 誘う。 相手の タイプに ゴーストタイプが 追加される。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	trickroom: {
 		name: "トリックルーム",
 		// Official flavor text: "まか不思議な 空間を つくる。 ５ターンの 間 遅い ポケモンから 行動できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	triplearrows: {
 		name: "３ぼんのや",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tripleaxel: {
 		name: "トリプルアクセル",
 		// Official flavor text: "３回連続で キックを くりだして 攻撃する。 技が 当たるたびに 威力は あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tripledive: {
 		name: "トリプルダイブ",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	triplekick: {
 		name: "トリプルキック",
 		// Official flavor text: "３回連続で キックを くりだして 攻撃する。 技が 当たるたびに 威力は あがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	tropkick: {
 		name: "トロピカルキック",
 		// Official flavor text: "南国 由来の 熱い キックを 相手に 浴びせる。 相手の 攻撃を さげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	trumpcard: {
 		name: "きりふだ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	twinbeam: {
 		name: "ツインビーム",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	twineedle: {
 		name: "ダブルニードル",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	twinkletackle: {
 		name: "ラブリースターインパクト",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	twister: {
 		name: "たつまき",
 		// Official flavor text: "竜巻を おこして 相手を まきこみ 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	upperhand: {
 		name: "はやてがえし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	uproar: {
 		name: "さわぐ",
 		// Official flavor text: "３ターンの 間 騒いで 相手を 攻撃する。 そのあいだは だれも 眠れなくなる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 騒ぎだした！",
@@ -8019,12 +8038,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "とんぼがえり",
 		// Official flavor text: "攻撃したあと ものすごい スピードで もどってきて 控えの ポケモンと 入れ替わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		switchOut: "{POKEMON}は {TRAINER}の元へ 戻っていく！",
@@ -8033,58 +8052,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "しんくうは",
 		// Official flavor text: "こぶしを ふって 真空の 波を まきおこす。 必ず 先制攻撃できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	vcreate: {
 		name: "Ｖジェネレート",
 		// Official flavor text: "灼熱の 炎を 額から 発生させて 捨て身の 体当たり。 防御 特防 素早さが さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	veeveevolley: {
 		name: "ブイブイブレイク",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	venomdrench: {
 		name: "ベノムトラップ",
 		// Official flavor text: "特殊な 毒液を 浴びせかける。 毒状態の 相手は 攻撃 特攻 素早さが さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	venoshock: {
 		name: "ベノムショック",
 		// Official flavor text: "特殊な 毒液を 浴びせかける。 毒状態の 相手には 威力が ２倍に なる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	victorydance: {
 		name: "しょうりのまい",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	vinewhip: {
 		name: "つるのムチ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	visegrip: {
 		name: "はさむ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	vitalthrow: {
 		name: "あてみなげ",
 		// Official flavor text: "相手より あとに 攻撃する。 そのかわり 自分の 攻撃は 必ず 命中する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	voltswitch: {
 		name: "ボルトチェンジ",
 		// Official flavor text: "攻撃したあと ものすごい スピードで もどってきて 控えポケモンと 入れ替わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		switchOut: "#uturn",
@@ -8093,44 +8112,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ボルテッカー",
 		// Official flavor text: "電気を まとって 突進する。 自分も かなり ダメージを 受ける。 まひ状態に することが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	wakeupslap: {
 		name: "めざましビンタ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	waterfall: {
 		name: "たきのぼり",
 		// Official flavor text: "すごい 勢いで 相手に つっこむ。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	watergun: {
 		name: "みずでっぽう",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	waterpledge: {
 		name: "みずのちかい",
 		// Official flavor text: "水の柱で 攻撃する。 ほのおと 組みあわせると 威力が あがって 空に にじが かかる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  {POKEMON}は {TARGET}を 待っている…",
 		start: "  {TEAM}の空に にじが かかった！",
@@ -8140,59 +8159,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "みずのはどう",
 		// Official flavor text: "水の 振動を 相手に 与えて 攻撃する。 相手を 混乱させることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	watershuriken: {
 		name: "みずしゅりけん",
 		// Official flavor text: "粘液で できた 手裏剣を ２ー５回の 間 連続で だす。 必ず 先制攻撃 できる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	watersport: {
 		name: "みずあそび",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	waterspout: {
 		name: "しおふき",
 		// Official flavor text: "潮を 吹きつけて 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は さがる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wavecrash: {
 		name: "ウェーブタックル",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	weatherball: {
 		name: "ウェザーボール",
 		// Official flavor text: "使ったときの 天気に よって 技の タイプと 威力が 変わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		move: "ウルトラダッシュアタックは 天気によって {MOVE}に なった！",
@@ -8201,22 +8220,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "うずしお",
 		// Official flavor text: "激しく 渦をまく 水の中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は 渦の中に 閉じこめられた！",
@@ -8225,46 +8244,46 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "ふきとばし",
 		// Official flavor text: "相手を 吹きとばして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	wickedblow: {
 		name: "あんこくきょうだ",
 		// Official flavor text: "あくの型を 極めし 強烈な 一撃。 必ず 急所に 当たる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wickedtorque: {
 		name: "ダークアクセル",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wideguard: {
 		name: "ワイドガード",
 		// Official flavor text: "味方全員に 当たる 攻撃を １ターンの 間 防ぐ。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {TEAM}は ワイドガードで 守られた！",
@@ -8272,33 +8291,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildboltstorm: {
 		name: "かみなりあらし",
-		desc: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wildcharge: {
 		name: "ワイルドボルト",
 		// Official flavor text: "電気を まとって 相手に ぶつかって 攻撃する。 自分も 少し ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	willowisp: {
 		name: "おにび",
 		// Official flavor text: "不気味で 怪しい 炎を 放って 相手を やけどの 状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wingattack: {
 		name: "つばさでうつ",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wish: {
 		name: "ねがいごと",
 		// Official flavor text: "次の ターンに 自分 もしくは 入れ替わった ポケモンの ＨＰを 最大ＨＰの 半分 回復する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		heal: "  {NICKNAME}の ねがいごとが かなった！",
@@ -8307,75 +8326,75 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "からにこもる",
 		// Official flavor text: "殻に 潜りこんで 身を守り 自分の 防御を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wonderroom: {
 		name: "ワンダールーム",
 		// Official flavor text: "まか不思議な 空間を つくる。 ５ターンのあいだ すべてのポケモンの 防御と 特防が 入れ替わる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	woodhammer: {
 		name: "ウッドハンマー",
 		// Official flavor text: "硬い 胴体を 相手に たたきつけて 攻撃する。 自分も かなり ダメージを 受ける。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	workup: {
 		name: "ふるいたてる",
 		// Official flavor text: "自分を 奮いたてて 攻撃と 特攻を あげる。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	worryseed: {
 		name: "なやみのタネ",
 		// Official flavor text: "心を なやませる タネを 植えつける。 相手を 眠れなくして 特性を ふみんに する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	wrap: {
 		name: "まきつく",
 		// Official flavor text: "長い 体や つるなどを 使って ４ー５ターンの 間 相手に まきついて 攻撃する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  {POKEMON}は {SOURCE}に 巻きつかれた！",
@@ -8385,20 +8404,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "しぼりとる",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	xscissor: {
 		name: "シザークロス",
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	yawn: {
 		name: "あくび",
 		// Official flavor text: "大きな あくびで 眠気を 誘う。 次の ターンに 相手を 眠り状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  {POKEMON}の 眠気を 誘った！",
 	},
@@ -8406,28 +8425,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "でんじほう",
 		// Official flavor text: "大砲の ような 電気を 発射して 攻撃する。 相手を まひの 状態に する。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zenheadbutt: {
 		name: "しねんのずつき",
 		// Official flavor text: "思念の 力を 額に 集めて 攻撃する。 相手を ひるませることが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zingzap: {
 		name: "びりびりちくちく",
 		// Official flavor text: "相手に ぶつかって 強力な 電気を浴びせ びりびりちくちく させる。 相手を ひるませる ことが ある。"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zippyzap: {
 		name: "ばちばちアクセル",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
 		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: null, // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 };

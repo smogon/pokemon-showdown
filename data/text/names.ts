@@ -236,22 +236,23 @@ export const TargetNames: { [id: string]: TranslationString } = {
 	allies: "Hits user and allies",
 };
 
+// Pokédex 3D Pro names; Stadium 2 variants noted inline.
 export const EggGroupNames: { [id: string]: TranslationString } = {
 	monster: "Monster",
 	water1: "Water 1",
 	bug: "Bug",
 	flying: "Flying",
-	field: "Field",
+	field: "Field", // Stadium 2: "Ground"
 	fairy: "Fairy",
-	grass: "Grass",
-	humanlike: "Human-Like",
+	grass: "Grass", // Stadium 2: "Plant"
+	humanlike: "Human-Like", // Stadium 2: "Humanshape"
 	water3: "Water 3",
 	mineral: "Mineral",
-	amorphous: "Amorphous",
+	amorphous: "Amorphous", // Stadium 2: "Indeterminate"
 	water2: "Water 2",
 	ditto: "Ditto",
 	dragon: "Dragon",
-	undiscovered: "Undiscovered",
+	undiscovered: "Undiscovered", // Stadium 2: "No EGGs"
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {

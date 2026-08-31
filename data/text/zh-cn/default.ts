@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "{TRAINER1}和{TRAINER2}的对战开始了！", // NEEDS QC
-		winBattle: "**{TRAINER}**在对战中获胜了！", // NEEDS QC
-		tieBattle: "{TRAINER1}和{TRAINER2}打成了平局！", // NEEDS QC
+		startBattle: null, // NEEDS TRANSLATION
+		winBattle: null, // NEEDS TRANSLATION
+		tieBattle: null, // NEEDS TRANSLATION
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "对手的{NICKNAME}",
@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "我方宝可梦",
 		opposingParty: "对手的宝可梦",
 
-		turn: "== {NUMBER}回合 ==",
+		turn: "== 第{NUMBER}回合 ==", // PS "==" wrapper; 第……回合 per Champions btl_app msg_ui_btl_info_17
 		switchIn: "{TRAINER}派出了{FULLNAME}！",
 		switchInOwn: "上吧！{FULLNAME}！",
 		switchOut: "{TRAINER}换下了{NICKNAME}！",
@@ -36,13 +36,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "{POKEMON}的原始回归！恢复了原始的样子！",
 		zPower: "  {POKEMON}让Ｚ力量笼罩了全身！",
 		zBroken: "  {POKEMON}没能防住攻击，受到了伤害！",
-		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "{POKEMON}无法使用{MOVE}！",
-		cantNoMove: null, // NEEDS TRANSLATION: predates Chinese support
+		cantNoMove: null, // NEEDS TRANSLATION
 		fail: "  但是，没有起到效果！！",
 
 		// n.b. this is the default message for in-battle forme changes
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  {POKEMON}变成了{TYPE}属性！",
 		typeAdd: "  {POKEMON}增加了{TYPE}属性！",
 
-		start: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
 		end: "  {POKEMON}摆脱了{EFFECT}的束缚！",
-		activate: null, // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
+		startTeamEffect: null, // NEEDS TRANSLATION
+		endTeamEffect: null, // NEEDS TRANSLATION
+		startFieldEffect: null, // NEEDS TRANSLATION
+		endFieldEffect: null, // NEEDS TRANSLATION
 
 		changeAbility: "  {POKEMON}的特性变为{ABILITY}了！",
 		addItem: "  {POKEMON}获得了{ITEM}！",
 		takeItem: "  {POKEMON}从{SOURCE}那里夺取了{ITEM}！",
-		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION
 		useGem: "  {ITEM}加强了{MOVE}的威力！",
 		eatItemWeaken: "  {ITEM}减轻了对{POKEMON}造成的伤害！",
-		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
-		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION
+		activateItem: null, // NEEDS TRANSLATION
 		activateWeaken: "  {ITEM}减轻了对{POKEMON}造成的伤害！",
 
 		damage: "  ({POKEMON}受到了伤害！)",
-		damagePercentage: null, // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: null, // NEEDS TRANSLATION
 		damageFromPokemon: "  {POKEMON}因{SOURCE}的{ITEM}而受到了伤害！",
 		damageFromItem: "  {POKEMON}因{ITEM}而受到了伤害！",
 		damageFromPartialTrapping: "  {POKEMON}受到了{MOVE}的伤害。",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  {POKEMON}的{STAT}大幅降低了！",
 		unboost3: "  {POKEMON}的{STAT}巨幅降低了！",
 		unboost0: "  {POKEMON}的{STAT}已经无法再降低了！",
-		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION
+		unboost2FromItem: null, // NEEDS TRANSLATION
+		unboost3FromItem: null, // NEEDS TRANSLATION
 
 		swapBoost: "  {POKEMON}和对手互换了自己的能力变化！",
 		swapOffensiveBoost: "  {POKEMON}和对手互换了自己的攻击和特攻的能力变化！",
@@ -112,8 +112,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		superEffectiveSpread: "  对{POKEMON}效果绝佳！",
 		resisted: "  效果不好。",
 		resistedSpread: "  对{POKEMON}效果不好。",
+		// this is official text meaning 4x effective. do not QC this
 		extremelyEffective: "  效果无比绝佳！！",
 		extremelyEffectiveSpread: "  对{POKEMON}效果无比绝佳！！",
+		// this is official text meaning 1/4x effective. do not QC this
 		mostlyIneffective: "  效果相当不好。",
 		mostlyIneffectiveSpread: "  对{POKEMON}效果相当不好。",
 		crit: "  击中了要害！",
@@ -122,13 +124,98 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		immuneNoPokemon: "  但是，没有效果！",
 		immuneOHKO: "  对于{POKEMON}，完全没有效果！",
 		miss: "  没有击中{POKEMON}！",
-		missNoPokemon: null, // NEEDS TRANSLATION: predates Chinese support
+		missNoPokemon: null, // NEEDS TRANSLATION
 
 		center: "  复位移动！！",
-		noTarget: null, // NEEDS TRANSLATION: predates Chinese support
+		noTarget: null, // NEEDS TRANSLATION
 		ohko: "  一击必杀！",
 		combine: "  两个招式合二为一！这是合体招式！！",
 		hitCount: "  击中了{NUMBER}次！",
+	},
+	ui: {
+		whatDo: null, // NEEDS TRANSLATION
+		moveTarget: null, // NEEDS TRANSLATION
+		reviveWho: null, // NEEDS TRANSLATION
+		replaceWho: null, // NEEDS TRANSLATION
+		teamStart: null, // NEEDS TRANSLATION
+		teamRest: null, // NEEDS TRANSLATION
+		chooseLead: null, // NEEDS TRANSLATION
+		chooseSlot: null, // NEEDS TRANSLATION
+		teamSoFar: null, // NEEDS TRANSLATION
+		waitingOpponent: null, // NEEDS TRANSLATION
+		cantSwitchTrapped: null, // NEEDS TRANSLATION
+		usuallyMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesLast: null, // NEEDS TRANSLATION
+		failsIfHP: null, // NEEDS TRANSLATION
+		koSelfIfHP: null, // NEEDS TRANSLATION
+		transformedInto: null, // NEEDS TRANSLATION
+		changedForme: null, // NEEDS TRANSLATION
+		possibleIllusion: null, // NEEDS TRANSLATION
+		pixels: null, // NEEDS TRANSLATION
+		wouldTakeIfAbilityRemoved: null, // NEEDS TRANSLATION
+		nextDamage: null, // NEEDS TRANSLATION
+		turnsAsleep: null, // NEEDS TRANSLATION
+		illusionWarning: null, // NEEDS TRANSLATION
+		pressureGen3Warning: null, // NEEDS TRANSLATION
+		indistinguishableWarning: null, // NEEDS TRANSLATION
+		noConditions: null, // NEEDS TRANSLATION
+		afterStatModifiers: null, // NEEDS TRANSLATION
+		calls: null, // NEEDS TRANSLATION
+		base: null, // NEEDS TRANSLATION
+		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
+		zEffectCrit2: null, // NEEDS TRANSLATION
+		zEffectHeal: null, // NEEDS TRANSLATION
+		zEffectCurse: null, // NEEDS TRANSLATION
+		zEffectRedirect: null, // NEEDS TRANSLATION
+		zEffectHealReplacement: null, // NEEDS TRANSLATION
+		ppRange: null, // NEEDS TRANSLATION
+		revealed: null, // NEEDS TRANSLATION
+		range: null, // NEEDS TRANSLATION
+		beforeStatStages: null, // NEEDS TRANSLATION
+		beforeExternalModifiers: null, // NEEDS TRANSLATION
+		flingBerry: null, // NEEDS TRANSLATION
+		flingWhiteHerb: null, // NEEDS TRANSLATION
+		flingMentalHerb: null, // NEEDS TRANSLATION
+		cantFling: null, // NEEDS TRANSLATION
+		unobtainableInGen: null, // NEEDS TRANSLATION
+		tagMoves: null, // NEEDS TRANSLATION
+		notifyMoveTitle: null, // NEEDS TRANSLATION
+		notifyMove: null, // NEEDS TRANSLATION
+		notifyMoveAgainst: null, // NEEDS TRANSLATION
+		notifySwitchTitle: null, // NEEDS TRANSLATION
+		notifySwitch: null, // NEEDS TRANSLATION
+		notifySwitchAgainst: null, // NEEDS TRANSLATION
+		notifyTeamTitle: null, // NEEDS TRANSLATION
+		notifyTeam: null, // NEEDS TRANSLATION
+		notifyTeamAgainst: null, // NEEDS TRANSLATION
+		mightBeDisabled: null, // NEEDS TRANSLATION
+		mightBeLocked: null, // NEEDS TRANSLATION
+		lockedExplanation: null, // NEEDS TRANSLATION
+		mightBeTrapped: null, // NEEDS TRANSLATION
+		autoChoice: null, // NEEDS TRANSLATION
+		unrecognizedChoice: null, // NEEDS TRANSLATION
+		lockedIntoMove: null, // NEEDS TRANSLATION
+		willUseMove: null, // NEEDS TRANSLATION
+		atTarget: null, // NEEDS TRANSLATION
+		atSlot: null, // NEEDS TRANSLATION
+		atAllyTarget: null, // NEEDS TRANSLATION
+		atAllySlot: null, // NEEDS TRANSLATION
+		actionMegaEvolve: null, // NEEDS TRANSLATION
+		actionMegaEvolveX: null, // NEEDS TRANSLATION
+		actionMegaEvolveY: null, // NEEDS TRANSLATION
+		actionUltraBurst: null, // NEEDS TRANSLATION
+		actionTerastallize: null, // NEEDS TRANSLATION
+		actionDynamax: null, // NEEDS TRANSLATION
+		actionGigantamax: null, // NEEDS TRANSLATION
+		willRevive: null, // NEEDS TRANSLATION
+		willSwitch: null, // NEEDS TRANSLATION
+		willShift: null, // NEEDS TRANSLATION
+		youPicked: null, // NEEDS TRANSLATION
+		listComma: null, // NEEDS TRANSLATION
+		effectivenessVs: null, // NEEDS TRANSLATION
+		basePowerVs: null, // NEEDS TRANSLATION
+		or: null, // NEEDS TRANSLATION
 	},
 
 	// statuses
@@ -202,7 +289,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		activate: "  因为Ｚ力量，{POKEMON}将会回复来替换的宝可梦的ＨＰ！",
 	},
 	nopp: {
-		cant: "{POKEMON}使出了**{MOVE}**！\n  但是，招式的剩余点数 已经用完了！",
+		cant: "{POKEMON}使出了**{MOVE}**！\n  但是，招式的剩余点数已经用完了！",
 	},
 	recharge: {
 		cant: "{POKEMON}因攻击的反作用力而无法动弹！",
@@ -211,7 +298,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  {POKEMON}受到了反作用力造成的伤害！",
 	},
 	unboost: {
-		fail: "  {POKEMON}的能力不会降低！",
+		fail: "  {POKEMON}的{STAT}不会降低！", // per-stat form; SV zh-Hans_common:6483 / Champions btl_set RankdownFail_ATK
+		failNoStat: "  {POKEMON}的能力不会降低！", // SV zh-Hans_common:6479
 	},
 	struggle: {
 		activate: "  {POKEMON}没有可用来施展的招式！",
@@ -220,31 +308,31 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON}已经无法逃走了！",
 	},
 	dynamax: {
-		start: null, // NEEDS TRANSLATION: Showdown custom text
-		end: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
+		end: null, // NEEDS TRANSLATION
 		block: "  被极巨化之力弹开了！",
 		fail: "  {POKEMON}摇了摇头，好像无法使出这个招式……",
 	},
 
 	// weather
 	sandstorm: {
-		weatherName: "沙暴状态",
+		weatherName: "沙暴",
 		start: "  开始刮沙暴了！",
 		end: "  沙暴停止了！",
 		upkeep: "  (沙暴肆虐！)",
 		damage: "  沙暴袭击了{POKEMON}！",
 	},
 	sunnyday: {
-		weatherName: "大晴天状态",
+		weatherName: "大晴天",
 		start: "  日照变强了！",
 		end: "  日照复原了！",
-		upkeep: null, // NEEDS TRANSLATION: predates Chinese support
+		upkeep: null, // NEEDS TRANSLATION
 	},
 	raindance: {
-		weatherName: "下雨状态",
+		weatherName: "下雨",
 		start: "  开始下雨了！",
 		end: "  雨停了！",
-		upkeep: null, // NEEDS TRANSLATION: predates Chinese support
+		upkeep: null, // NEEDS TRANSLATION
 	},
 	hail: {
 		weatherName: "冰雹",
@@ -254,7 +342,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  冰雹袭击了{POKEMON}！",
 	},
 	snowscape: {
-		weatherName: "下雪状态",
+		weatherName: "下雪",
 		start: "  开始下雪了！",
 		end: "  雪停了！",
 		upkeep: "  (漫天大雪！)",

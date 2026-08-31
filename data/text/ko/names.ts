@@ -1,81 +1,98 @@
 export const TermNames: { [id: string]: TranslationString } = {
 	shiny: "색이 다른 모습",
-	happiness: "친밀도", // NEEDS QC
-	level: "레벨", // NEEDS QC
-	nickname: "닉네임", // NEEDS QC
-	ev: "노력치", // NEEDS QC
-	evs: "노력치", // NEEDS QC
-	iv: "개체값", // NEEDS QC
-	ivs: "개체값", // NEEDS QC
-	dv: "개체값", // NEEDS QC
-	dvs: "개체값", // NEEDS QC
-	av: "노력치", // NEEDS QC
-	avs: "노력치", // NEEDS QC
-	point: "포인트", // NEEDS QC
-	points: "포인트", // NEEDS QC
+	happiness: null, // NEEDS TRANSLATION
+	level: null, // NEEDS TRANSLATION
+	nickname: null, // NEEDS TRANSLATION
+	ev: null, // NEEDS TRANSLATION
+	evs: null, // NEEDS TRANSLATION
+	iv: null, // NEEDS TRANSLATION
+	ivs: null, // NEEDS TRANSLATION
+	dv: null, // NEEDS TRANSLATION
+	dvs: null, // NEEDS TRANSLATION
+	av: null, // NEEDS TRANSLATION
+	avs: null, // NEEDS TRANSLATION
+	point: null, // NEEDS TRANSLATION
+	points: null, // NEEDS TRANSLATION
 	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
 	stats: "스테이터스",
 
 	pokemon: "포켓몬",
-	move: "기술", // NEEDS QC
-	moves: "기술", // NEEDS QC
-	item: "지닌 물건", // NEEDS QC
-	items: "지닌 물건", // NEEDS QC
-	ability: "특성", // NEEDS QC
-	abilities: "특성", // NEEDS QC
-	hiddenability: "숨겨진 특성", // NEEDS QC
-	team: "팀", // NEEDS QC
-	teams: "팀", // NEEDS QC
-	teamslist: "팀 목록", // NEEDS QC
+	move: null, // NEEDS TRANSLATION
+	moves: null, // NEEDS TRANSLATION
+	item: "지닌 물건", // official: SV "지닌 물건 교체" (poke-corpus ScarletViolet ko_common:387)
+	items: "지닌 물건", // official: SV (poke-corpus ScarletViolet ko_common:387)
+	ability: null, // NEEDS TRANSLATION
+	abilities: null, // NEEDS TRANSLATION
+	hiddenability: null, // NEEDS TRANSLATION
+	possibleabilities: null, // NEEDS TRANSLATION
+	team: null, // NEEDS TRANSLATION
+	teams: null, // NEEDS TRANSLATION
+	teamslist: null, // NEEDS TRANSLATION
 
 	type: "타입",
 	types: "타입",
-	teratype: "테라스탈타입", // NEEDS QC
+	teratype: null, // NEEDS TRANSLATION
 	nature: "성격",
 	category: "분류",
 	categories: "분류",
 	gender: "성별",
-	egggroup: "알그룹", // NEEDS QC
-	egggroups: "알그룹", // NEEDS QC
-	tag: "태그", // NEEDS QC
-	article: "기사", // NEEDS QC
-	articles: "기사", // NEEDS QC
-	tier: "티어", // NEEDS QC
-	tiers: "티어", // NEEDS QC
+	egggroup: null, // NEEDS TRANSLATION
+	egggroups: null, // NEEDS TRANSLATION
+	tag: null, // NEEDS TRANSLATION
+	article: null, // NEEDS TRANSLATION
+	articles: null, // NEEDS TRANSLATION
+	tier: null, // NEEDS TRANSLATION
+	tiers: null, // NEEDS TRANSLATION
+	format: null, // NEEDS TRANSLATION
+	formats: null, // NEEDS TRANSLATION
 	color: "색",
-	form: "모습", // NEEDS QC
-	forme: "폼", // NEEDS QC
-	dexnum: "도감 No.", // NEEDS QC
-	generation: "세대", // NEEDS QC
-	gennum: "{NUMBER}세대", // NEEDS QC
-	evolution: "진화", // NEEDS QC
-	preevolution: "진화 전", // NEEDS QC
-	doesnotevolve: "진화하지 않음", // NEEDS QC
-	zcrystal: "Z크리스탈", // NEEDS QC
-	target: "대상", // NEEDS QC
+	form: null, // NEEDS TRANSLATION
+	forme: null, // NEEDS TRANSLATION
+	dexnum: null, // NEEDS TRANSLATION
+	generation: null, // NEEDS TRANSLATION
+	gennum: null, // NEEDS TRANSLATION
+	evolution: null, // NEEDS TRANSLATION
+	preevolution: null, // NEEDS TRANSLATION
+	doesnotevolve: null, // NEEDS TRANSLATION
+	zcrystal: null, // NEEDS TRANSLATION
+	target: null, // NEEDS TRANSLATION
 	height: "키",
-	numm: "{NUMBER}m", // NEEDS QC
+	numm: null, // NEEDS TRANSLATION
 	weight: "몸무게",
-	numkg: "{NUMBER}kg", // NEEDS QC
+	numkg: null, // NEEDS TRANSLATION
+	critrate: null, // NEEDS TRANSLATION
+	user: null, // NEEDS TRANSLATION
+	requiredmove: null, // NEEDS TRANSLATION
+	dynamaxpower: null, // NEEDS TRANSLATION
+	none: null, // NEEDS TRANSLATION
+	pastgensonly: null, // NEEDS TRANSLATION
+	flingbasepower: null, // NEEDS TRANSLATION
+	flingeffect: null, // NEEDS TRANSLATION
+	naturalgifttype: null, // NEEDS TRANSLATION
+	naturalgiftbasepower: null, // NEEDS TRANSLATION
 
-	megaevolution: "메가진화", // NEEDS QC
-	zpower: "Z파워", // NEEDS QC
-	dynamax: "다이맥스", // NEEDS QC
-	dynamaxlevel: "다이맥스 레벨", // NEEDS QC
+	megaevolution: null, // NEEDS TRANSLATION
+	zpower: null, // NEEDS TRANSLATION
+	zeffect: null, // NEEDS TRANSLATION
+	dynamax: null, // NEEDS TRANSLATION
+	dynamaxlevel: null, // NEEDS TRANSLATION
+	ultraburst: null, // NEEDS TRANSLATION
+	tera: null, // NEEDS TRANSLATION
 
-	supereffective: "효과가 굉장함", // NEEDS QC
-	extremelyeffective: "효과가 매우 굉장함", // NEEDS QC
-	effective: "효과 있음", // NEEDS QC
-	notveryeffective: "효과가 별로", // NEEDS QC
-	mostlyineffective: "효과가 매우 별로", // NEEDS QC
-	noeffect: "효과 없음", // NEEDS QC
+	supereffective: "효과가 굉장함",
+	extremelyeffective: "효과가 매우 굉장함",
+	effective: "효과 있음",
+	notveryeffective: "효과가 별로",
+	mostlyineffective: "효과가 매우 별로",
+	noeffect: "효과 없음",
 
-	weak: "약점", // NEEDS QC: unofficial
-	resist: "반감", // NEEDS QC: unofficial
-	immune: "무효", // NEEDS QC: unofficial
+	weak: null, // NEEDS TRANSLATION
+	resist: null, // NEEDS TRANSLATION
+	immune: null, // NEEDS TRANSLATION
 
-	nicknamespecies: "{NICKNAME}({SPECIES})", // NEEDS QC
-	speciesforme: "{SPECIES}-{FORME}",
+	nicknamespecies: null, // NEEDS TRANSLATION
+	label: null, // NEEDS TRANSLATION
+	speciesforme: null, // NEEDS TRANSLATION
 };
 
 export const StatNames: { [id: string]: TranslationString } = {
@@ -153,50 +170,62 @@ export const GenderNames: { [id: string]: TranslationString } = {
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
-	brn: "화상", // NEEDS QC
-	par: "마비", // NEEDS QC
-	slp: "잠듦", // NEEDS QC
-	frz: "얼음", // NEEDS QC
-	psn: "독", // NEEDS QC
-	tox: "맹독", // NEEDS QC
-	fnt: "기절", // NEEDS QC
-	confusion: "혼란", // NEEDS QC
+	brn: null, // NEEDS TRANSLATION
+	par: null, // NEEDS TRANSLATION
+	slp: null, // NEEDS TRANSLATION
+	frz: null, // NEEDS TRANSLATION
+	psn: null, // NEEDS TRANSLATION
+	tox: null, // NEEDS TRANSLATION
+	fnt: null, // NEEDS TRANSLATION
+	confusion: null, // NEEDS TRANSLATION
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: "인접한 포켓몬 1마리", // NEEDS QC
-	self: "자신", // NEEDS QC
-	adjacentAlly: "아군 1마리", // NEEDS QC
-	adjacentAllyOrSelf: "자신 또는 아군 1마리", // NEEDS QC
-	adjacentFoe: "인접한 상대 1마리", // NEEDS QC
-	allAdjacentFoes: "인접한 상대 전체", // NEEDS QC
-	foeSide: "상대의 필드", // NEEDS QC
-	allySide: "자신의 필드", // NEEDS QC
-	allyTeam: "자신의 지닌 포켓몬 전체", // NEEDS QC
-	allAdjacent: "인접한 포켓몬 전체", // NEEDS QC
-	any: "포켓몬 1마리", // NEEDS QC
-	all: "필드의 포켓몬 전체", // NEEDS QC
-	scripted: "자동으로 선택", // NEEDS QC
-	randomNormal: "무작위 상대 1마리", // NEEDS QC
-	allies: "자신과 아군 전체", // NEEDS QC
+	normal: null, // NEEDS TRANSLATION
+	normalDoubles: null, // NEEDS TRANSLATION
+	normalSingles: null, // NEEDS TRANSLATION
+	normalFFA: null, // NEEDS TRANSLATION
+	self: null, // NEEDS TRANSLATION
+	adjacentAlly: null, // NEEDS TRANSLATION
+	adjacentAllyDoubles: null, // NEEDS TRANSLATION
+	adjacentAllySingles: null, // NEEDS TRANSLATION
+	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
+	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
+	adjacentFoe: null, // NEEDS TRANSLATION
+	allAdjacentFoes: null, // NEEDS TRANSLATION
+	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
+	foeSide: null, // NEEDS TRANSLATION
+	allySide: null, // NEEDS TRANSLATION
+	allyTeam: null, // NEEDS TRANSLATION
+	allAdjacent: null, // NEEDS TRANSLATION
+	allAdjacentDoubles: null, // NEEDS TRANSLATION
+	allAdjacentFFA: null, // NEEDS TRANSLATION
+	any: null, // NEEDS TRANSLATION
+	all: null, // NEEDS TRANSLATION
+	scripted: null, // NEEDS TRANSLATION
+	randomNormal: null, // NEEDS TRANSLATION
+	randomNormalDoubles: null, // NEEDS TRANSLATION
+	allies: null, // NEEDS TRANSLATION
 };
 
+// from veekun/Bulbapedia who presumably got it from Pokédex 3D Pro
+// note spaced 수중 1 and 알미발견.
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: "괴수", // NEEDS QC
-	water1: "수중1", // NEEDS QC
-	bug: "벌레", // NEEDS QC
-	flying: "비행", // NEEDS QC
-	field: "육상", // NEEDS QC
-	fairy: "요정", // NEEDS QC
-	grass: "식물", // NEEDS QC
-	humanlike: "인간형", // NEEDS QC
-	water3: "수중3", // NEEDS QC
-	mineral: "광물", // NEEDS QC
-	amorphous: "부정형", // NEEDS QC
-	water2: "수중2", // NEEDS QC
-	ditto: "메타몽", // NEEDS QC
-	dragon: "드래곤", // NEEDS QC
-	undiscovered: "미발견", // NEEDS QC
+	monster: null, // NEEDS TRANSLATION
+	water1: null, // NEEDS TRANSLATION
+	bug: null, // NEEDS TRANSLATION
+	flying: null, // NEEDS TRANSLATION
+	field: null, // NEEDS TRANSLATION
+	fairy: null, // NEEDS TRANSLATION
+	grass: null, // NEEDS TRANSLATION
+	humanlike: null, // NEEDS TRANSLATION
+	water3: null, // NEEDS TRANSLATION
+	mineral: null, // NEEDS TRANSLATION
+	amorphous: null, // NEEDS TRANSLATION
+	water2: null, // NEEDS TRANSLATION
+	ditto: null, // NEEDS TRANSLATION
+	dragon: null, // NEEDS TRANSLATION
+	undiscovered: null, // NEEDS TRANSLATION
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {

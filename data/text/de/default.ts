@@ -1,17 +1,17 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: null, // NEEDS TRANSLATION: Showdown custom text
-		winBattle: null, // NEEDS TRANSLATION: Showdown custom text
-		tieBattle: null, // NEEDS TRANSLATION: Showdown custom text
+		startBattle: null, // NEEDS TRANSLATION
+		winBattle: null, // NEEDS TRANSLATION
+		tieBattle: null, // NEEDS TRANSLATION
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "{NICKNAME} (Gegner)",
 		team: "die Pokémon auf deiner Seite",
 		opposingTeam: "die gegnerischen Pokémon",
-		party: "die Mitstreiterseite",
-		opposingParty: "Gegner",
+		party: null, // NEEDS TRANSLATION
+		opposingParty: null, // NEEDS TRANSLATION
 
-		turn: "== Zug Nr. {NUMBER} ==",
+		turn: null, // NEEDS TRANSLATION
 		switchIn: "{TRAINER:definite:nominative:capitalize} schickt {FULLNAME} in den Kampf!",
 		switchInOwn: "Los, {FULLNAME}!",
 		switchOut: "{TRAINER:definite:nominative:capitalize} hat {NICKNAME} zurückgerufen!",
@@ -36,13 +36,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "{POKEMON} hat eine Protomorphose durchgeführt und seine urzeitliche Form zurückerlangt!",
 		zPower: "  {POKEMON} hüllt sich in Z-Kraft!",
 		zBroken: "  {POKEMON} konnte den Angriff nicht abwehren und erleidet Schaden!",
-		terastallize: null, // NEEDS TRANSLATION: Showdown custom text
+		terastallize: null, // NEEDS TRANSLATION
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "{POKEMON} kann {MOVE} nicht einsetzen!",
-		cantNoMove: "{POKEMON} ist gelähmt!",
+		cantNoMove: null, // NEEDS TRANSLATION
 		fail: "  Es ist fehlgeschlagen!",
 
 		// n.b. this is the default message for in-battle forme changes
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  {EFFECT} von {POKEMON} macht es zu einem {TYPE}-Typ!",
 		typeAdd: "  {POKEMON} nimmt zusätzlich den Typ {TYPE} an!",
 
-		start: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
 		end: "  {POKEMON} wurde von {EFFECT} befreit!",
-		activate: null, // NEEDS TRANSLATION: Showdown custom text
-		startTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endTeamEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		startFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
-		endFieldEffect: null, // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
+		startTeamEffect: null, // NEEDS TRANSLATION
+		endTeamEffect: null, // NEEDS TRANSLATION
+		startFieldEffect: null, // NEEDS TRANSLATION
+		endFieldEffect: null, // NEEDS TRANSLATION
 
 		changeAbility: "  {POKEMON} nimmt die Fähigkeit {ABILITY} an!",
 		addItem: "  {POKEMON} erhält das Item {ITEM}!",
 		takeItem: "  {POKEMON} hat {SOURCE} das Item {ITEM} geklaut!",
-		eatItem: null, // NEEDS TRANSLATION: Showdown custom text
+		eatItem: null, // NEEDS TRANSLATION
 		useGem: "  {ITEM} erhöht die Stärke von {MOVE}!",
 		eatItemWeaken: "  {ITEM} reduziert den Schaden gegen {POKEMON}!",
-		removeItem: null, // NEEDS TRANSLATION: Showdown custom text
-		activateItem: null, // NEEDS TRANSLATION: Showdown custom text
+		removeItem: null, // NEEDS TRANSLATION
+		activateItem: null, // NEEDS TRANSLATION
 		activateWeaken: "  {ITEM} reduziert den Schaden gegen {POKEMON}!",
 
 		damage: "  ({POKEMON} wurde Schaden zugefügt!)",
-		damagePercentage: null, // NEEDS TRANSLATION: Showdown custom text
+		damagePercentage: null, // NEEDS TRANSLATION
 		damageFromPokemon: "  {POKEMON} wird durch das Item {ITEM} von {SOURCE} verletzt!",
 		damageFromItem: "  {POKEMON} wurde durch das Item {ITEM} verletzt!",
 		damageFromPartialTrapping: "  {POKEMON} wurde durch {MOVE} verletzt!",
@@ -83,8 +83,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boost2: "  {STAT} von {POKEMON} steigt stark!",
 		boost3: "  {STAT} von {POKEMON} steigt drastisch!",
 		boost0: "  {STAT} von {POKEMON} kann nicht weiter steigen!",
-		boostFromItem: "  {ITEM}: {STAT} von {POKEMON} steigt.",
-		boost2FromItem: "  {ITEM}: {STAT} von {POKEMON} steigt stark!",
+		boostFromItem: null, // NEEDS TRANSLATION
+		boost2FromItem: null, // NEEDS TRANSLATION
 		boost3FromItem: "  {ITEM} von {POKEMON} erhöht {STAT:definite:accusative} drastisch!",
 		boostFromZEffect: "  {STAT} von {POKEMON} wurde durch Z-Kraft erhöht!",
 		boost2FromZEffect: "  {STAT} von {POKEMON} wurde durch Z-Kraft stark erhöht!",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  {STAT} von {POKEMON} sinkt stark!",
 		unboost3: "  {STAT} von {POKEMON} sinkt drastisch!",
 		unboost0: "  {STAT} von {POKEMON} kann nicht weiter sinken!",
-		unboostFromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost2FromItem: null, // NEEDS TRANSLATION: Showdown custom text
-		unboost3FromItem: null, // NEEDS TRANSLATION: Showdown custom text
+		unboostFromItem: null, // NEEDS TRANSLATION
+		unboost2FromItem: null, // NEEDS TRANSLATION
+		unboost3FromItem: null, // NEEDS TRANSLATION
 
 		swapBoost: "  {POKEMON} tauscht die Statusveränderungen mit dem Ziel!",
 		swapOffensiveBoost: "  {POKEMON} tauscht Änderungen an Angriff und Spezial-Angriff mit dem Ziel!",
@@ -112,8 +112,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		superEffectiveSpread: "  Das ist sehr effektiv gegen {POKEMON}!",
 		resisted: "  Das ist nicht sehr effektiv...",
 		resistedSpread: "  Das ist nicht sehr effektiv gegen {POKEMON}...",
+		// this is official text meaning 4x effective. do not QC this
 		extremelyEffective: "  Das ist extrem effektiv!!",
 		extremelyEffectiveSpread: "  Das ist extrem effektiv gegen {POKEMON}!!",
+		// this is official text meaning 1/4x effective. do not QC this
 		mostlyIneffective: "  Das ist extrem ineffektiv...",
 		mostlyIneffectiveSpread: "  Das ist extrem ineffektiv gegen {POKEMON}...",
 		crit: "  Ein Volltreffer!",
@@ -129,6 +131,91 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		ohko: "  Ein K.O.-Treffer!",
 		combine: "  Zwei Attacken bilden zusammen eine Kombi-Attacke!",
 		hitCount: "  {NUMBER}-mal getroffen!",
+	},
+	ui: {
+		whatDo: null, // NEEDS TRANSLATION
+		moveTarget: null, // NEEDS TRANSLATION
+		reviveWho: null, // NEEDS TRANSLATION
+		replaceWho: null, // NEEDS TRANSLATION
+		teamStart: null, // NEEDS TRANSLATION
+		teamRest: null, // NEEDS TRANSLATION
+		chooseLead: null, // NEEDS TRANSLATION
+		chooseSlot: null, // NEEDS TRANSLATION
+		teamSoFar: null, // NEEDS TRANSLATION
+		waitingOpponent: null, // NEEDS TRANSLATION
+		cantSwitchTrapped: null, // NEEDS TRANSLATION
+		usuallyMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesFirst: null, // NEEDS TRANSLATION
+		almostAlwaysMovesLast: null, // NEEDS TRANSLATION
+		failsIfHP: null, // NEEDS TRANSLATION
+		koSelfIfHP: null, // NEEDS TRANSLATION
+		transformedInto: null, // NEEDS TRANSLATION
+		changedForme: null, // NEEDS TRANSLATION
+		possibleIllusion: null, // NEEDS TRANSLATION
+		pixels: null, // NEEDS TRANSLATION
+		wouldTakeIfAbilityRemoved: null, // NEEDS TRANSLATION
+		nextDamage: null, // NEEDS TRANSLATION
+		turnsAsleep: null, // NEEDS TRANSLATION
+		illusionWarning: null, // NEEDS TRANSLATION
+		pressureGen3Warning: null, // NEEDS TRANSLATION
+		indistinguishableWarning: null, // NEEDS TRANSLATION
+		noConditions: null, // NEEDS TRANSLATION
+		afterStatModifiers: null, // NEEDS TRANSLATION
+		calls: null, // NEEDS TRANSLATION
+		base: null, // NEEDS TRANSLATION
+		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
+		zEffectCrit2: null, // NEEDS TRANSLATION
+		zEffectHeal: null, // NEEDS TRANSLATION
+		zEffectCurse: null, // NEEDS TRANSLATION
+		zEffectRedirect: null, // NEEDS TRANSLATION
+		zEffectHealReplacement: null, // NEEDS TRANSLATION
+		ppRange: null, // NEEDS TRANSLATION
+		revealed: null, // NEEDS TRANSLATION
+		range: null, // NEEDS TRANSLATION
+		beforeStatStages: null, // NEEDS TRANSLATION
+		beforeExternalModifiers: null, // NEEDS TRANSLATION
+		flingBerry: null, // NEEDS TRANSLATION
+		flingWhiteHerb: null, // NEEDS TRANSLATION
+		flingMentalHerb: null, // NEEDS TRANSLATION
+		cantFling: null, // NEEDS TRANSLATION
+		unobtainableInGen: null, // NEEDS TRANSLATION
+		tagMoves: null, // NEEDS TRANSLATION
+		notifyMoveTitle: null, // NEEDS TRANSLATION
+		notifyMove: null, // NEEDS TRANSLATION
+		notifyMoveAgainst: null, // NEEDS TRANSLATION
+		notifySwitchTitle: null, // NEEDS TRANSLATION
+		notifySwitch: null, // NEEDS TRANSLATION
+		notifySwitchAgainst: null, // NEEDS TRANSLATION
+		notifyTeamTitle: null, // NEEDS TRANSLATION
+		notifyTeam: null, // NEEDS TRANSLATION
+		notifyTeamAgainst: null, // NEEDS TRANSLATION
+		mightBeDisabled: null, // NEEDS TRANSLATION
+		mightBeLocked: null, // NEEDS TRANSLATION
+		lockedExplanation: null, // NEEDS TRANSLATION
+		mightBeTrapped: null, // NEEDS TRANSLATION
+		autoChoice: null, // NEEDS TRANSLATION
+		unrecognizedChoice: null, // NEEDS TRANSLATION
+		lockedIntoMove: null, // NEEDS TRANSLATION
+		willUseMove: null, // NEEDS TRANSLATION
+		atTarget: null, // NEEDS TRANSLATION
+		atSlot: null, // NEEDS TRANSLATION
+		atAllyTarget: null, // NEEDS TRANSLATION
+		atAllySlot: null, // NEEDS TRANSLATION
+		actionMegaEvolve: null, // NEEDS TRANSLATION
+		actionMegaEvolveX: null, // NEEDS TRANSLATION
+		actionMegaEvolveY: null, // NEEDS TRANSLATION
+		actionUltraBurst: null, // NEEDS TRANSLATION
+		actionTerastallize: null, // NEEDS TRANSLATION
+		actionDynamax: null, // NEEDS TRANSLATION
+		actionGigantamax: null, // NEEDS TRANSLATION
+		willRevive: null, // NEEDS TRANSLATION
+		willSwitch: null, // NEEDS TRANSLATION
+		willShift: null, // NEEDS TRANSLATION
+		youPicked: null, // NEEDS TRANSLATION
+		listComma: null, // NEEDS TRANSLATION
+		effectivenessVs: null, // NEEDS TRANSLATION
+		basePowerVs: null, // NEEDS TRANSLATION
+		or: null, // NEEDS TRANSLATION
 	},
 
 	// statuses
@@ -211,7 +298,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  {POKEMON} erleidet Schaden durch Rückstoß!",
 	},
 	unboost: {
-		fail: "  Statuswerte von {POKEMON} sinken nicht!",
+		fail: null, // NEEDS TRANSLATION
+		failNoStat: "  Statuswerte von {POKEMON} sinken nicht!", // SV de_common:6479
 	},
 	struggle: {
 		activate: "  {POKEMON} hat keine Attacken mehr übrig!",
@@ -220,8 +308,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON} kann nicht mehr fliehen!",
 	},
 	dynamax: {
-		start: null, // NEEDS TRANSLATION: Showdown custom text
-		end: null, // NEEDS TRANSLATION: Showdown custom text
+		start: null, // NEEDS TRANSLATION
+		end: null, // NEEDS TRANSLATION
 		block: "  Die Wirkung der Attacke wurde durch die Dynamax-Energie blockiert!",
 		fail: "  {POKEMON} weigert sich. Es kann diese Attacke wohl nicht einsetzen...",
 	},
@@ -235,7 +323,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  Der Sandsturm fügt {POKEMON} Schaden zu!",
 	},
 	sunnyday: {
-		weatherName: "Sonnenschein",
+		weatherName: "Sonne",
 		start: "  Das Sonnenlicht wird stärker!",
 		end: "  Das Sonnenlicht verliert an Intensität!",
 		upkeep: "  (Gleißendes Sonnenlicht!)",
