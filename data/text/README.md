@@ -3,6 +3,12 @@ Showdown text
 
 Descriptions mostly by Marty
 
+Text is official where possible - from the most recent game with that text. That means Champions if possible, falling back to SV, etc.
+
+Egg groups are basically never mentioned by name, unfortunately, so egg group names are sourced from way back to Pokédex 3D Pro in Gen 5.
+
+Unofficial in-battle text is usually surrounded by parentheses, but not always.
+
 Translated names and descriptions sourced from PokeAPI/pokeapi commit c0a9bc75af3a455cdfa27dde21e4ec95aedd3f25
 
 Translated battle messages in Champions sourced from projectpokemon/champout commit 0c1141656e1a66ae304ac3ee1e7126a00914d1f2
