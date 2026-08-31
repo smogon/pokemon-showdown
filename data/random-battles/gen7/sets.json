@@ -439,7 +439,7 @@
         ]
     },
     "persianalola": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -455,7 +455,7 @@
         ]
     },
     "golduck": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1694,7 +1694,7 @@
         ]
     },
     "granbull": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1994,7 +1994,7 @@
         ]
     },
     "raikou": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2010,7 +2010,7 @@
         ]
     },
     "entei": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2090,7 +2090,7 @@
         ]
     },
     "celebi": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2639,7 +2639,7 @@
         ]
     },
     "sharpedomega": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Staller",
@@ -3551,7 +3551,7 @@
         ]
     },
     "bastiodon": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3831,7 +3831,7 @@
         ]
     },
     "garchomp": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Fast Support",
@@ -4043,7 +4043,7 @@
         ]
     },
     "tangrowth": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4931,7 +4931,7 @@
         ]
     },
     "simipour": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -5180,7 +5180,7 @@
         ]
     },
     "krookodile": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5319,7 +5319,7 @@
         ]
     },
     "cinccino": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5855,7 +5855,7 @@
         ]
     },
     "thundurustherian": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -6443,7 +6443,7 @@
         ]
     },
     "klefki": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Support",
