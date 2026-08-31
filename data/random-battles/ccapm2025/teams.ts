@@ -942,8 +942,8 @@ export class RandomC25Teams extends RandomTeams {
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
-		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
-		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
+		const potdName = (ruleTable.has('potd') && global.Config?.potd) || null;
+		const potd = potdName ? this.dex.species.get(potdName) : null;
 
 		const baseFormes: { [k: string]: number } = {};
 
@@ -957,7 +957,7 @@ export class RandomC25Teams extends RandomTeams {
 		let pokemonList = Object.keys(this.randomSets);
 		const CAPTiers = ["CAP", "CAP NFE", "CAP LC"];
 		if (pokemonList.filter(mon => CAPTiers.includes(this.dex.species.get(mon).tier)).length >= 6) {
-			if (ruleTable.tagRules.includes("+pokemontag:cap"))
+			if (ruleTable.has("+tag:cap"))
 				pokemonList = pokemonList.filter(mon => CAPTiers.includes(this.dex.species.get(mon).tier));
 			else
 				pokemonList = pokemonList.filter(mon => !CAPTiers.includes(this.dex.species.get(mon).tier));

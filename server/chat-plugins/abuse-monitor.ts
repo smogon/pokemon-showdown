@@ -2315,7 +2315,7 @@ export const pages: Chat.PageTable = {
 			buf += modlogEntries.results.map(result => {
 				const day = Chat.toTimestamp(new Date(result.time)).split(' ')[0];
 				let innerBuf = Utils.html`<td><small>#${result.entryID}</small> [${day}] `;
-				innerBuf += `${result.action}${result.note ? ` (${result.note.trim()})` : ``}</td>`;
+				innerBuf += Utils.html`${result.action}${result.note ? Utils.html` (${result.note.trim()})` : ``}</td>`;
 				const existingIgnore = metadata.modlogIgnores?.[targetUser];
 				const todayMatch = existingIgnore === day;
 				const entryMatch = (

@@ -64,6 +64,19 @@ export function stripHTML(htmlContent: string) {
 }
 
 /**
+ * Normalize a message for the purposes of searching.
+ */
+export function normalize(message: string) {
+	message = message.replace(/'/g, '').replace(/[^A-Za-z0-9]+/g, ' ').trim();
+	if (!/[A-Za-z][A-Za-z]/.test(message)) {
+		message = message.replace(/ */g, '');
+	} else if (!message.includes(' ')) {
+		message = message.replace(/([A-Z])/g, ' $1').trim();
+	}
+	return ' ' + message.toLowerCase() + ' ';
+}
+
+/**
  * Maps numbers to their ordinal string.
  */
 export function formatOrder(place: number) {
@@ -312,29 +325,6 @@ export function clampIntRange(num: any, min?: number, max?: number): number {
 	return num;
 }
 
-export function clearRequireCache(options: { exclude?: string[] } = {}) {
-	const excludes = options?.exclude || [];
-	excludes.push('/node_modules/');
-
-	for (const path in require.cache) {
-		if (excludes.some(p => path.includes(p))) continue;
-		const mod = require.cache[path]; // have to ref to appease ts
-		if (!mod) continue;
-		uncacheModuleTree(mod, excludes);
-		delete require.cache[path];
-	}
-}
-
-export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
-	if (!mod.children?.length || excludes.some(p => mod.filename.includes(p))) return;
-	for (const [i, child] of mod.children.entries()) {
-		if (excludes.some(p => child.filename.includes(p))) continue;
-		mod.children?.splice(i, 1);
-		uncacheModuleTree(child, excludes);
-	}
-	delete (mod as any).children;
-}
-
 export function deepClone(obj: any): any {
 	if (obj === null || typeof obj !== 'object') return obj;
 	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop));
@@ -459,7 +449,7 @@ export class Multiset<T> extends Map<T, number> {
 export const Utils = {
 	parseExactInt, waitUntil, html, escapeHTML,
 	compare, sortBy, levenshtein,
-	shuffle, deepClone, deepFreeze, clampIntRange, clearRequireCache,
+	shuffle, deepClone, deepFreeze, clampIntRange,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
 	escapeRegex, formatSQLArray,

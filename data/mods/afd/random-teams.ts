@@ -354,7 +354,7 @@ export class RandomAFDTeams extends RandomTeams {
 			NUBL: 85,
 			NU: 86,
 			PUBL: 87,
-			PU: 88, "(PU)": 88, NFE: 88,
+			PU: 88, ZU: 88, NFE: 88,
 		};
 		return tierScale[tier] || 80;
 	}
@@ -575,8 +575,8 @@ export class RandomAFDTeams extends RandomTeams {
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// PotD stuff
-		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
-		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
+		const potdName = (ruleTable.has('potd') && global.Config?.potd) || null;
+		const potd = potdName ? this.dex.species.get(potdName) : null;
 
 		const baseFormes: { [k: string]: number } = {};
 

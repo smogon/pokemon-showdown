@@ -167,19 +167,7 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 			.readIfExistsSync() || '{}'
 	);
 	const data = setsFile[species.id];
-	// Temporarily modified for Mega Invasion randomized spotlight
-	if (!data?.sets?.length) {
-		if (format.mod === 'gen9' && !isDoubles) {
-			const megaSetsFile = JSON.parse(
-				FS(`data/random-battles/${folderName}/sets-megainvasion.json`)
-					.readIfExistsSync() || '{}'
-			);
-			const megaData = megaSetsFile[species.id];
-			if (!megaData?.sets?.length) return null;
-			return megaData;
-		}
-		return null;
-	}
+	if (!data?.sets?.length) return null;
 	return data;
 }
 
@@ -233,7 +221,7 @@ function getLevel(species: string | Species, format: string | Format): number {
 			NUBL: 85,
 			NU: 86,
 			PUBL: 87,
-			PU: 88, "(PU)": 88, NFE: 88,
+			PU: 88, ZU: 88, NFE: 88,
 		};
 		const customScale: { [k: string]: number } = {
 			delibird: 100, dugtrio: 76, glalie: 76, luvdisc: 100, spinda: 100, unown: 100,
@@ -522,21 +510,20 @@ export const commands: Chat.ChatCommands = {
 		let isBaby = cmd === 'babyrandombattle' || cmd === 'babyrands';
 		let isFFA = cmd === 'freeforallrandombattle' || cmd === 'ffarands' || cmd === 'randffats' || cmd === 'randffa';
 		let isNoDMax = cmd.includes('nodmax');
-		let isMegaInvasion = false;
 		if (battle) {
 			if (battle.format.includes('nodmax')) isNoDMax = true;
 			if (battle.gameType === 'doubles') isDoubles = true;
 			if (battle.format.includes('baby')) isBaby = true;
 			if (battle.gameType === 'freeforall') isFFA = true;
-			if (battle.format.includes('megainvasion')) isMegaInvasion = true;
 		}
 
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
 
 		const { dex } = this.splitFormat(target, true);
-		const isLetsGo = (dex.currentMod === 'gen7letsgo');
-		const isBDSP = (dex.currentMod === 'gen8bdsp');
+		const mod = (dex.currentMod === 'base') ? 'gen9' : dex.currentMod;
+		const isLetsGo = (mod === 'gen7letsgo');
+		const isBDSP = (mod === 'gen8bdsp');
 
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
@@ -549,13 +536,12 @@ export const commands: Chat.ChatCommands = {
 			inexactMsg = `No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`;
 		}
 		const species = dex.species.get(searchResults[0].name);
-		if (species.isMega || species.forme === 'Primal') isMegaInvasion = true;
-		const extraFormatModifier = isLetsGo ? 'letsgo' : (isBDSP ? 'bdsp' : '');
 		const babyModifier = isBaby ? 'baby' : '';
-		const doublesModifier = isDoubles ? 'doubles' : '';
-		const freeForAllModifier = isFFA ? (dex.gen !== 9 ? 'doubles' : 'freeforall') : '';
+		// Gen 8 Random Doubles is temporarily using singles sets
+		const doublesModifier = (isDoubles && dex.gen === 9) ? 'doubles' : '';
+		const freeForAllModifier = (isFFA && mod === 'gen9') ? 'freeforall' : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
-		const formatName = `gen${dex.gen}${extraFormatModifier}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
+		const formatName = `${mod}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
 		const format = dex.formats.get(formatName);
 
 		const movesets = [];
@@ -596,11 +582,9 @@ export const commands: Chat.ChatCommands = {
 			}
 		} else {
 			const setsToCheck = [species];
-			if (dex.gen >= 8 && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
+			if (mod === 'gen8' && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
 			for (const pokemon of setsToCheck) {
-				// For Gen 9, only show megas/primals if they were the argument or the command was used in a mega invasion battle room
-				if (dex.gen === 9 && (pokemon.isMega || pokemon.forme === 'Primal') && !isMegaInvasion) continue;
 				const data = getSets(pokemon, format.id);
 				if (!data) continue;
 				const sets = data.sets;
@@ -609,7 +593,7 @@ export const commands: Chat.ChatCommands = {
 				buf += `<b>Level</b>: ${level}`;
 				for (const set of sets) {
 					buf += `<details class="details"><summary>${set.role}</summary>`;
-					if (dex.gen === 9) {
+					if (mod === 'gen9') {
 						buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
 					} else if (set.preferredTypes) {
 						buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
@@ -753,6 +737,7 @@ export const commands: Chat.ChatCommands = {
 			formatOrSpecies = args.shift();
 		}
 		const dex = Dex.forFormat(format);
+		const mod = (dex.currentMod === 'base') ? 'gen9' : dex.currentMod;
 
 		// Species
 		const species = dex.species.get(formatOrSpecies);
@@ -761,14 +746,12 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let setExists: boolean;
-		if ([2, 3, 4, 5, 6, 7, 9].includes(dex.gen)) {
+		if (!['gen1', 'gen7letsgo', 'gen8bdsp'].includes(mod)) {
 			setExists = !!getSets(species, format);
 		} else {
 			const data = getData(species, format);
 			if (!data) {
 				setExists = false;
-			} else if (format.gameType === 'doubles' || format.gameType === 'freeforall') {
-				setExists = !!data.doublesMoves;
 			} else {
 				setExists = !!data.moves;
 			}
@@ -864,7 +847,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				break;
 			case 'tera': case 'teratype':
-				if (dex.gen < 9) throw new Chat.ErrorMessage("Tera Types do not exist in the specified format.");
+				if (mod !== 'gen9') throw new Chat.ErrorMessage("Tera Types do not exist in the specified format.");
 				const type = dex.types.get(value);
 				if (!type.exists) {
 					throw new Chat.ErrorMessage(`"${value}" is not a type in the specified format.`);

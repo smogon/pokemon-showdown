@@ -56,7 +56,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			const handler = handlers[0];
 			handlers.shift();
 			const effect = handler.effect;
-			if ((handler.effectHolder as Pokemon).fainted || (handler.state?.pic as Pokemon)?.fainted) continue;
+			if ((handler.effectHolder as Pokemon).fainted || (handler.state?.pic as Pokemon)?.fainted) {
+				if (!(handler.state?.isSlotCondition)) continue;
+			}
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {

@@ -57,4 +57,22 @@ describe('Rock Head', () => {
 		battle.makeChoices();
 		assert.false.fullHP(battle.p1.active[0]);
 	});
+
+	it('should not block recoil from Mind Blown', () => {
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'rockhead', moves: ['mindblown'] },
+		], [
+			{ species: 'Registeel', ability: 'clearbody', moves: ['rest'] },
+		]]);
+		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move mindblown', 'move rest'));
+	});
+
+	it('should block recoil from Chloroblast', () => {
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'rockhead', moves: ['chloroblast'] },
+		], [
+			{ species: 'Registeel', ability: 'clearbody', moves: ['rest'] },
+		]]);
+		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move chloroblast', 'move rest'));
+	});
 });

@@ -199,16 +199,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart: undefined, // no inherit
 		onSwitchIn(pokemon) {
 			pokemon.truantTurn = this.turn !== 0;
-		},
-		onBeforeMove(pokemon) {
+			// it is unnecessary to keep a volatile, but it helps with cross-gen implementation
 			if (pokemon.truantTurn) {
-				this.add('cant', pokemon, 'ability: Truant');
-				return false;
+				pokemon.addVolatile('truant');
+			} else {
+				pokemon.removeVolatile('truant');
 			}
 		},
 		onResidualOrder: 27,
 		onResidual(pokemon) {
 			pokemon.truantTurn = !pokemon.truantTurn;
+			if (pokemon.truantTurn) {
+				pokemon.addVolatile('truant');
+			} else {
+				pokemon.removeVolatile('truant');
+			}
 		},
 	},
 	voltabsorb: {

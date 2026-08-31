@@ -20,7 +20,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			this.add('rule', 'CCAPM Form Changes: Makes many form changes work');
 		},
 		onSwitchIn(pokemon) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				if (pokemon.species.name === "Samurott" && pokemon.side.totalFainted >= 3) {
 					pokemon.formeChange('Samurott-Overlord', null, true);
 				}
@@ -50,7 +50,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onWeatherChange(target, source, effect) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				const weather = target.effectiveWeather();
 				if (weather === 'sunnyday' || weather === 'desolateland') {
 					if (target.species.name === "Beartic") {
@@ -96,7 +96,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				if (move.type === 'Fire' && target.species.name === "Beartic") {
 					target.formeChange('Beartic-Freshwater', null, true);
 					target.setAbility('drizzle', target);
@@ -150,14 +150,14 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onDamage(damage, target, source, effect) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				if (effect && effect.id === 'stealthrock' && target.species.name === "Kommo-o") {
 					target.formeChange('Kommo-o-Hard-Rock', null, true);
 				}
 			}
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				/* let speedUp = false;
 				let i: BoostID;
 				for (i in boost) {
@@ -195,7 +195,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				if (source.species.name === "Clawitzer" && move.flags['pulse']) {
 					source.formeChange('Clawitzer-Curled', null, true);
 				} else if (source.species.name === "Lilligant" && move.flags['dance']) {
@@ -213,7 +213,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				if (pokemon.activeTurns && pokemon.species.name === "Fearow") {
 					pokemon.formeChange('Fearow-Ferocious', null, true);
 					this.add('-ability', pokemon, 'Wonder Guard');
@@ -232,7 +232,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onAfterFaint(length, target, source, effect) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				if (source?.species.id === 'lucario') {
 					if (this.effectState.auraTriggered) return;
 					if (effect?.effectType !== 'Move') {
@@ -257,7 +257,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onUpdate(pokemon) {
-			if (!this.ruleTable.tagRules.includes("+pokemontag:cap")) {
+			if (!this.ruleTable.has("+tag:cap")) {
 				if (pokemon.species.baseSpecies === "Beartic") {
 					this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 				}

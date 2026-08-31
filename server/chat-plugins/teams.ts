@@ -9,7 +9,9 @@ import { FS, Utils } from '../../lib';
 import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
-const MAX_TEAMS = 200;
+const MAX_TEAMS = 2000;
+const MAX_TEAMS_VIEW = 200;
+const MAX_SETS = 300; // 50 teams, 6 sets each
 /** Max teams that can be viewed in a search */
 const MAX_SEARCH = 3000;
 const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
@@ -171,8 +173,8 @@ export const TeamsHandler = new class {
 			connection.popup('Invalid team:\n\n' + team.packedTeam);
 			return null;
 		}
-		if (sets.length > 50) {
-			connection.popup("Your team has too many Pokemon (max 50).");
+		if (sets.length > MAX_SETS) {
+			connection.popup(`Your team has too many Pokemon (max ${MAX_SETS}).`);
 		}
 		let unownWord = '';
 		for (const set of sets) {
@@ -317,21 +319,17 @@ export const TeamsHandler = new class {
 			Monitor.crashlog(new Error(`Malformed team drawn from database`), 'A teams chat page', teamData);
 			throw new Chat.ErrorMessage("Oops! Something went wrong. Try again later.");
 		}
-		let link = `view-team-${teamData.teamid}`;
-		if (teamData.private) {
-			link += `-${teamData.private}`;
-		}
-		buf += `<br /><a class="subtle" href="/${link}">`;
-		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
-		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a><br />`;
 		const url = `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}`;
-		buf += ` <small>(you can also copy/paste <code>&lt;&lt;view-team-${url}&gt;&gt;</code> on-site `;
-		const fullUrl = `https://psim.us/t/${url}`;
-		buf += `or share <code><a href="${fullUrl}">${fullUrl}</a></code> off-site!)</small>`;
+		buf += `<br /><a class="subtle" href="/view-team-${url}">`;
+		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
+		buf += `</a><br /><a href="https://psim.us/t/${url}">${!isFull ? 'View full team' : 'Shareable link to team'}</a>`;
+		buf += ` <small>(https://psim.us/t/${url})</small>`;
+		buf += `<br />`;
+		buf += ` <small>(you can also copy/paste <code>&lt;&lt;view-team-${url}&gt;&gt;</code> to share on-site)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
-			buf += `<details class="readmore"><summary>Manage (edit/delete/etc)</summary>`;
+			buf += `<details class="readmore"><summary>Manage (edit/delete/change privacy/etc)</summary>`;
 			buf += `<button class="button" name="send" value="/teams setprivacy ${teamData.teamid},${teamData.private ? 'no' : 'yes'}">`;
 			buf += teamData.private ? `Make public` : `Make private`;
 			buf += `</button><br />`;
@@ -560,7 +558,7 @@ export const pages: Chat.PageTable = {
 			TeamsHandler.validateAccess(connection);
 			const targetUserid = toID(query.shift()) || user.id;
 			let count = Number(query.shift()) || 10;
-			if (count > MAX_TEAMS) count = MAX_TEAMS;
+			if (count > MAX_TEAMS_VIEW) count = MAX_TEAMS_VIEW;
 			this.title = `[Teams] ${targetUserid}`;
 			const teams = await TeamsHandler.list(targetUserid, count, user.id !== targetUserid);
 			let buf = `<div class="ladder pad"><h2>${targetUserid}'s last ${Chat.count(count, "teams")}</h2>`;
@@ -588,7 +586,7 @@ export const pages: Chat.PageTable = {
 			const type = query.shift() || "";
 			TeamsHandler.validateAccess(connection);
 			let count = Number(query.shift()) || 50;
-			if (count > MAX_TEAMS) count = MAX_TEAMS;
+			if (count > MAX_TEAMS_VIEW) count = MAX_TEAMS_VIEW;
 			let teams: StoredTeam[] = [], title = '';
 			const buttons: { [k: string]: string } = {
 				views: `<button class="button" name="send" value="/teams mostviews">Sort by most views</button>`,

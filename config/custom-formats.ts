@@ -3,6 +3,27 @@
 
 export const Formats: import('../sim/dex-formats').FormatList = [
 
+	// Formats removed from the main formats.ts file
+	///////////////////////////////////////////////////////////////////
+	{
+		name: "[Gen 9] VGC 2026 Reg F",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		searchShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
+	},
+	{
+		name: "[Gen 9] VGC 2026 Reg I", // Change back to 2025 after removing the ladder
+		mod: 'gen9',
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted'],
+		restricted: ['Restricted Legendary'],
+	},
+
+
 	// DigiPen S/V Singles
 	///////////////////////////////////////////////////////////////////
 	// Each format inherits from its standard Gen 9 counterpart, then

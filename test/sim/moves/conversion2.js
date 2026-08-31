@@ -79,4 +79,26 @@ describe('Conversion2', () => {
 			assert.equal(battle.p1.active[0].getTypes()[0], 'Steel');
 		});
 	});
+
+	describe('[Gen 2]', () => {
+		it('should not succeed after moves that clear the last move used', () => {
+			battle = common.gen(2).createBattle({ seed: [0, 0, 0, 0] }, [[
+				{ species: 'forretress', moves: ['conversion2'] },
+			], [
+				{ species: 'salamence', moves: ['metronome', 'tackle'] },
+			]]);
+			const forretress = battle.p1.active[0];
+			battle.makeChoices();
+			assert(battle.log.some(line => line === '|move|p2a: Salamence|Scratch|p1a: Forretress|[from] Metronome'));
+			assert.false.fullHP(forretress);
+			let types = forretress.getTypes();
+			assert.equal(types[0], 'Bug');
+			assert.equal(types[1], 'Steel');
+
+			battle.makeChoices('move conversion2', 'move tackle');
+			types = forretress.getTypes();
+			assert.equal(types.length, 1);
+			assert(['Ghost', 'Rock', 'Steel'].includes(types[0]), 'should change to a type that resists Tackle');
+		});
+	});
 });

@@ -193,13 +193,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onMoveAborted(pokemon) {
 			delete pokemon.volatiles['lockedmove'];
 		},
-		onBeforeTurn(pokemon) {
-			const move = this.dex.moves.get(this.effectState.move);
-			if (move.id) {
-				this.debug('Forcing into ' + move.id);
-				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
-			}
-		},
 	},
 	futuremove: {
 		inherit: true,

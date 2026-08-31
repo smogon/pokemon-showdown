@@ -3,6 +3,27 @@
 const assert = require('assert').strict;
 
 describe('Chat', () => {
+	it('should convert interface language preferences to game text language codes', () => {
+		assert.equal(Chat.getDexLanguage('japanese'), 'ja');
+		assert.equal(Chat.getDexLanguage('simplifiedchinese'), 'zh-cn');
+		assert.equal(Chat.getDexLanguage('portuguese'), 'en');
+	});
+
+	it('should display both English and native language names', () => {
+		assert.equal(Chat.getLanguageName('japanese'), '日本語 (Japanese)');
+		assert.equal(Chat.getLanguageName('english'), 'English');
+	});
+
+	it('should localize data HTML', () => {
+		const html = Chat.getDataMoveHTML(Dex.moves.get('Close Combat'), { language: 'japanese' });
+		assert(html.includes('インファイト'));
+		assert(html.includes("Lowers the user's Defense and Sp. Def by 1."));
+		const detailsHTML = Chat.getDataMoveHTML(Dex.moves.get('Close Combat'), {
+			language: 'japanese', hideShortDescription: true,
+		});
+		assert(!detailsHTML.includes("Lowers the user's Defense"));
+	});
+
 	it('should not infinite loop formatText', () => {
 		assert.equal(
 			Chat.formatText(`<\\\\||^^**~~\`\`https://a/Olaaaseusbobalhos\`\`~~**^^||\\\\`),

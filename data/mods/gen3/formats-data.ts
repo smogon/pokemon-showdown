@@ -732,7 +732,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	raikou: {
-		tier: "(OU)",
+		tier: "OU",
 	},
 	entei: {
 		tier: "UUBL",
@@ -930,7 +930,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	manectric: {
-		tier: "RU",
+		tier: "RUBL",
 	},
 	plusle: {
 		tier: "NU",
@@ -1140,7 +1140,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "(OU)",
 	},
 	registeel: {
-		tier: "UUBL",
+		tier: "OU",
 	},
 	latias: {
 		tier: "Uber",

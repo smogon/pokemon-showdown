@@ -8,6 +8,12 @@ Especially if you want to use the lists in `Dex.moves.all()`, `Dex.items.all()`,
 Filtering out `effect.isNonstandard` will filter out most of what you don't want, but there are a lot of subtleties, so please read on for sure.
 
 
+Tagging
+-------
+
+When this says "Pichu-Spiky-Eared" is tagged True Past, it means `Dex.isTagged(species, 'True Past')` is true.
+
+
 CAP
 ---
 
@@ -19,7 +25,7 @@ Examples include:
 - move: Paleo Wave
 - ability: Mountaineer
 
-These have `thing.isNonstandard === 'CAP'`.
+These are tagged `CAP`.
 
 
 Things from other games
@@ -30,10 +36,15 @@ All of our data for specific games also contains Pokémon, items, etc from every
 Examples include:
 
 - pokemon: Pichu-Spiky-eared (only exists in Gen 4 games)
+- Totem pokemon (only exist in Gen 7 games)
 - item: Berserk Gene (only exists in Gen 2 games)
 - move: Hidden Power (only exists in Gen 2-7 games)
 
-These have `thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future' || thing.isNonstandard === 'LGPE'`.
+These are tagged `Nonexistent`, and also `Past`, `Future`, or `LGPE`, depending on the game.
+
+Things that only existed in Gen 5 and earlier no longer exist in future games' game data at all. In those future gens, these are tagged `Past` and `True Past`.
+
+Things that existed in Gen 7 (other than Totems) and then stopped existing in Gen 8 or later are "Dexited". In those future gens, they partially exist in game data (frequently, they will have stats but not graphics), and attempting to hack them in will be buggy. These will only be tagged `Past`.
 
 
 Pokéstar Pokémon
@@ -46,20 +57,21 @@ Examples include:
 - Pokestar Giant
 - Pokestar Smeargle (NOT considered the same species as a real Smeargle)
 
-These have `species.isNonstandard === 'Pokestar'`.
+These are tagged `Pokestar` and `Unobtainable`. Outside of Gen 5, they're also tagged `Nonexistent`, `Past Unobtainable`, and `Future`, as appropriate.
 
 
 Unobtainable things
 -------------------
 
-Sometimes, Game Freak adds game data, clearly planning for something to be released later, but then never releases it. They can still be obtained by hacking, or by trading with someone who's hacked their game.
+Sometimes, Game Freak adds game data, perhaps planning for something to be released later, but then never releases it. They can still be obtained by hacking, or by trading with someone who's hacked their game.
 
 Examples include:
 
-- Floette-Eternal
+- Floette-Eternal (in Gen 6)
+- Eternatus-Eternamax
 - Fire Gem (in Gen 6)
 
-These have `thing.isNonstandard === 'Unobtainable'` in the game whose code they appear in. They're marked as `Past` or `Future` as appropriate, in other games.
+These are tagged `Unobtainable` in the game whose code they appear in. In other games, they're tagged as `Past` or `Future` as appropriate. If they were never obtainable in any game and were introduced in a past generation, they're also tagged `Past Unobtainable`.
 
 
 Unobtainable Hidden Abilities
@@ -75,23 +87,15 @@ Typed Hidden Powers
 
 The data contains information for moves named "Hidden Power Fire", "Hidden Power Ice", etc. These are provided for convenience: when building teams (to set the move to "Hidden Power" and change IVs), when running damage calculations, and when exporting or sending movesets.
 
-These are matched with `move.realMove === "Hidden Power"`. Since no other move has this feature, you can also check `move.realMove` for existence.
+These are matched with `move.placeholderFor === "Hidden Power"`. Since no other move has this feature, you can also check `move.placeholderFor` for existence.
 
 
-Max moves
----------
+Max moves and G-Max moves
+-------------------------
 
-Max moves cannot be learned normally, and behave weirdly if hacked into a Pokémon's moveset.
+Max and G-Max moves cannot be learned normally, and behave weirdly (sometimes have 0 base power, dealing exactly 2 damage) if hacked into a Pokémon's moveset.
 
-They are matched with `move.isMax`. `move.isNonstandard === null` for Max moves.
-
-
-G-Max moves
------------
-
-Unlike Max moves, G-Max moves aren't "real" moves, and don't even have an entry in the in-game moves database, meaning they can't be hacked onto Pokémon at all.
-
-They are matched with `move.isNonstandard === 'Gigantamax'`.
+They are matched with `move.isMax`. `move.isNonstandard === null` for Max moves. `isMax` will be `true` for Max moves and a string for G-Max moves.
 
 
 Z-moves
@@ -105,7 +109,7 @@ Damaging and Pokémon-specific Z moves are matched with `move.isZ`. `move.isNons
 Z-status moves
 --------------
 
-Unlike regular Z-moves, Z-status moves aren't considered "real" moves, and don't even have an entry in the in-game moves database, meaning they can't be hacked onto Pokémon at all.
+Unlike regular Z-moves, Z-status moves aren't considered "real" moves, and don't even have an entry in the in-game moves database, meaning they can't be hacked onto Pokémon at all. (Extreme Evoboost is an exception, and works like damaging Z-moves.)
 
 They do not appear in `Dex.moves.all()`. Information about them is available in `move.zMove` for the underlying status move.
 
@@ -123,7 +127,7 @@ Gigantamax and other "questionable" formes
 
 Gigantamax sprites are not considered actual Pokémon formes by the game data. For ease of selection and sprite viewing, we treat them as formes.
 
-Filter them out with `species.forme === 'Gmax'`.
+Filter them out with `species.placeholderFor`.
 
 For more information on formes whose status as "real" is controversial, see [data/FORMES.md](./../data/FORMES.md)
 
@@ -135,7 +139,7 @@ There is an Ability named "-" in Gen 8, and "No Ability" in some older games, wh
 
 Pokémon Showdown always calls it "No Ability".
 
-No Ability has `ability.isNonstandard === 'Past'` in Gen 3+. In Gen 1-2, No Ability is considered the only legal ability, and will have `ability.isNonstandard === null`.
+No Ability is tagged `Past` in Gen 3+. In Gen 1-2, No Ability is considered the only legal ability, and will have `ability.isNonstandard === null`.
 
 
 Items with no competitive effect

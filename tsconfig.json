@@ -28,7 +28,7 @@
     "include": [
         "./config/*.ts",
         "./data/*",
-        "./data/text/*",
+        "./data/text/**/*",
         "./data/random-battles/**/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
