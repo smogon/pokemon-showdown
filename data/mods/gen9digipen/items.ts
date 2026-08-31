@@ -64,6 +64,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		spritenum: 0,
 		fling: { basePower: 10 },
 		// battle logic implemented on the Room moves
+		// Need to fix parenthetical on battle counting down from 5 instead of 8
 		num: 10002,
 		gen: 9,
 		isNonstandard: "DigiPen",

@@ -27,7 +27,7 @@ const { clientDir, dexDir } = loadConfig();
 
 const PID_FILE = path.join(serverDir, ".start-dev.pids.json");
 
-const CLIENT_URL = "http://localhost:8081/play.pokemonshowdown.com/testclient?~~localhost:8000";
+const CLIENT_URL = "http://localhost:8081/play.pokemonshowdown.com/testclient-old?~~localhost:8000";
 const DEX_URL = "https://localhost:8083/";
 
 const SSL_PROXY_ARGS = ["--source", "8083", "--target", "8082"];
