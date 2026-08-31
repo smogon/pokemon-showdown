@@ -614,47 +614,4 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		types: ["Dark", "Fairy"],
 		contributors: ["Bryce G."],
 	},
-
-	// ── Champions Mega Evolutions "Leaked" Abilities ────────────────────────────────────────────────────
-	baxcaliburmega: {
-		inherit: true,
-		modified: "DigiPen",
-		abilities: { 0: "Thermal Exchange" },
-	},
-	darkraimega: {
-		inherit: true,
-		modified: "DigiPen",
-		digipenSprite: true,
-		abilities: { 0: "Nightmares" },
-	},
-	golisopodmega: {
-		inherit: true,
-		modified: "DigiPen",
-		abilities: { 0: "Tough Claws" },
-	},
-	lucariomegaz: {
-		inherit: true,
-		modified: "DigiPen",
-		abilities: { 0: "Prankster" },
-	},
-	pyroarmega: {
-		inherit: true,
-		modified: "DigiPen",
-		abilities: { 0: "Thermal Boost" },
-	},
-	raichumegax: {
-		inherit: true,
-		modified: "DigiPen",
-		abilities: { 0: "Electric Surge" },
-	},
-	staraptormega: {
-		inherit: true,
-		modified: "DigiPen",
-		abilities: { 0: "Contrary" },
-	},
-	zeraoramega: {
-		inherit: true,
-		modified: "DigiPen",
-		abilities: { 0: "Speed Boost" },
-	},
 };

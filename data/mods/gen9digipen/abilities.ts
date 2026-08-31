@@ -159,52 +159,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		contributors: ["Bryce G."],
 	},
 
-	// ── Champions "Leaked" Abilities ─────────────────────────────────────────────────────────
-	nightmares: {
-		isNonstandard: "DigiPen",
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			if (!pokemon.hp) return;
-			for (const target of pokemon.foes()) {
-				if (target.status === 'slp' || target.hasAbility('comatose')) {
-					this.add('-anim', pokemon, 'Nightmare', target);
-					this.add('-message', `The opposing ${target.name} is tormented!`);
-					this.damage(target.baseMaxhp / 4, target, pokemon);
-				}
-			}
-		},
-		flags: {},
-		name: "Nightmares",
-		rating: 2,
-		num: 3001,
-		shortDesc: "Causes sleeping foes to lose 1/4 of their max HP at the end of each turn.",
-		desc: "Causes opposing Pokemon to lose 1/4 of their maximum HP, rounded down, at the end of each turn if they are asleep.",
-
-	},
-	thermalboost: {
-		isNonstandard: "DigiPen",
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
-				this.debug('Thermal Boost boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
-				this.debug('Thermal Boost boost');
-				return this.chainModify(1.5);
-			}
-		},
-		flags: {},
-		name: "Thermal Boost",
-		rating: 3.5,
-		num: 3002,
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Fire-type attack.",
-	},	
-
 	/* ----- Other changes ───────────────────────────────────────────── */
 	// Ability changes not related to balance changes but rather needed to implement new features
 	// Don't add modified: "DigiPen" flag to these abilities unless change is significant
