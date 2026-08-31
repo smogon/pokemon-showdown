@@ -311,7 +311,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.flags['contact']) return this.chainModify(0.5);
 		},
-		flags: {}, // TODO check breakable
+		flags: { breakable: 1 }, // TODO check breakable
 		name: "Aura Guard",
 		rating: 3.5,
 		num: 319,
