@@ -96,9 +96,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	lcotm: "[Gen 9] Fortemons",
 	ommotm: "[Gen 9] Tier Shift AAA",
 	ommspotlight: "[Gen 9] Tier Shift AAA",
-	pmotm: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
+	pmotm: "[Gen 9] Deltamon Random Battle",
 	mnmls: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
-	ccapm: "[Gen 9] CCAPM2025 Random Battle",
 
 	// mega evos --- 1st ordered alphabetically by species, 2nd by alias
 	megasnow: "Abomasnow-Mega",

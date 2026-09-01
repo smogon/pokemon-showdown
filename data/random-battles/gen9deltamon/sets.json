@@ -1,0 +1,1730 @@
+{
+	"aaron": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Wave Crash", "Close Combat", "Flip Turn", "Ice Punch", "Aqua Jet"],
+				"abilities": ["Swift Swim"]
+			}
+		]
+	},
+	"abberant": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "AV Pivot",
+				"movepool": ["U-turn", "Ceaseless Edge", "Knock Off", "Bullet Punch", "First Impression"],
+				"abilities": ["Dauntless Shield"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["U-turn", "Ceaseless Edge", "Knock Off", "First Impression", "Bullet Punch"],
+				"abilities": ["Dauntless Shield"]
+			}
+		]
+	},
+	"alphys": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Draco Meteor", "Volt Switch", "Thunder Cage", "Heat Wave", "Earth Power"],
+				"abilities": ["Analytic"]
+			}
+		]
+	},
+	"ambyulance": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Wish", "U-turn", "Drain Punch", "Protect", "Recover", "Knock Off"],
+				"abilities": ["Antivirus", "Regenerator"]
+			},
+			{
+				"role": "AV Pivot",
+				"movepool": ["Drain Punch", "U-turn", "Knock Off", "Ice Punch"],
+				"abilities": ["Regenerator"]
+			}
+		]
+	},
+	"aqua": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Bedazzling Blade", "Night Slash", "Trick", "U-turn"],
+				"abilities": ["Swordplay"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Bedazzling Blade", "Night Slash", "Sacred Sword"],
+				"abilities": ["Swordplay"]
+			},
+			{
+				"role": "Z-Move user",
+				"movepool": ["Petal Dance", "Bedazzling Blade", "Night Slash", "U-turn"],
+				"abilities": ["Swordplay"]
+			}
+		]
+	},
+	"asgore": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Flaming Trident", "Horn Leech", "Knock Off"],
+				"abilities": ["Grassy Surge"]
+			},
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Horn Leech", "Flaming Trident", "Knock Off", "High Horsepower", "Play Rough"],
+				"abilities": ["Grassy Surge"]
+			}
+		]
+	},
+	"asriel": {
+		"level": 77,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Star Blazing", "Doom Desire", "Moonblast", "Thunderbolt", "Calm Mind"],
+				"abilities": ["Stellar Guard"]
+			}
+		]
+	},
+	"asrielhyperdeath": {
+		"level": 76,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Star Blazing", "Doom Desire", "Moonblast", "Thunderbolt"],
+				"abilities": ["Stellar Guard"]
+			}
+		]
+	},
+	"astigmatism": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Double-Edge", "Psychic Fangs", "Knock Off", "Temper Flare"],
+				"abilities": ["Defiant", "Mind's Eye"]
+			}
+		]
+	},
+	"balthizard": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Morning Sun", "Lava Plume", "Will-O-Wisp", "Dragon Tail"],
+				"abilities": ["Flame Body"]
+			}
+		]
+	},
+	"berdly": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Hurricane", "Psyshock", "Thunderbolt", "Nasty Plot", "Psychic", "Aura Sphere"],
+				"abilities": ["Neuroforce"]
+			},
+			{
+				"role": "Z-Move user",
+				"movepool": ["Hurricane", "Psyshock", "Thunderbolt", "Nasty Plot", "Psychic", "Aura Sphere"],
+				"abilities": ["Neuroforce"]
+			}
+		]
+	},
+	"bibliox": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Energy Ball", "Psyshock", "Aura Sphere", "Flamethrower", "Hurricane", "Thunderbolt"],
+				"abilities": ["Magic Guard"]
+			}
+		]
+	},
+	"bloxer": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Superpower", "Power Trip", "Ice Punch", "Mach Punch"],
+				"abilities": ["Contrary"]
+			}
+		]
+	},
+	"blue": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Substitute", "Quiver Dance", "Revelation Dance", "Draining Kiss", "Hurricane"],
+				"abilities": ["Loving Dances"]
+			},
+			{
+				"role": "Z-Move user",
+				"movepool": ["Quiver Dance", "Revelation Dance", "Moonblast", "Petal Dance"],
+				"abilities": ["Loving Dances"]
+			}
+		]
+	},
+	"capn": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Rising Voltage", "Volt Switch", "Flamethrower", "Aura Sphere"],
+				"abilities": ["Surge Surfer"]
+			}
+		]
+	},
+	"carol": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Freeze-Dry", "Dark Pulse", "Ice Beam", "Burning Jealousy", "Freezing Glare"],
+				"abilities": ["Cold Gaze"]
+			}
+		]
+	},
+	"catmike": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Fake Out", "Mic Check", "U-turn", "Knock Off", "Sucker Punch"],
+				"abilities": ["Technician"]
+			}
+		]
+	},
+	"chaosking": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Sucker Punch", "Anchor Shot", "Knock Off", "Parting Shot"],
+				"abilities": ["Supreme Overlord", "Intimidate"]
+			}
+		]
+	},
+	"chilldrake": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Draco Meteor", "Freeze-Dry", "Ice Beam", "Air Slash", "Knock Off"],
+				"abilities": ["Competitive"]
+			}
+		]
+	},
+	"clover": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Dragon Dance", "Scale Shot", "Earthquake", "Thunder Fang"],
+				"abilities": ["Intimidate"]
+			}
+		]
+	},
+	"cowboymike": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Close Combat", "Mach Punch", "U-turn", "Ice Punch"],
+				"abilities": ["Technician"]
+			}
+		]
+	},
+	"crystal": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Strength Sap", "Freeze-Dry", "Toxic", "Haze", "Leech Seed", "Wish"],
+				"abilities": ["Amalgamation"]
+			}
+		]
+	},
+	"cuptain": {
+		"level": 81,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Population Bomb", "Knock Off", "U-turn", "Liquidation", "Triple Axel"],
+				"abilities": ["Water Absorb"]
+			}
+		]
+	},
+	"dogamy": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Close Combat", "Ice Spinner", "Return", "Crunch", "Play Rough"],
+				"abilities": ["Guard Dog"]
+			}
+		]
+	},
+	"dogaressa": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Close Combat", "Ice Spinner", "Return", "Crunch", "Play Rough"],
+				"abilities": ["Guard Dog"]
+			}
+		]
+	},
+	"doggo": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Double-Edge", "Knock Off", "Parting Shot", "Sucker Punch", "Fire Fang"],
+				"abilities": ["Stakeout"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Double-Edge", "Knock Off", "Parting Shot", "Sucker Punch", "Fire Fang"],
+				"abilities": ["Stakeout"]
+			}
+		]
+	},
+	"elnina": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Hydro Steam", "U-turn", "Defog", "Ice Beam", "Earth Power"],
+				"abilities": ["Drizzle"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Hydro Steam", "Weather Ball", "U-turn", "Earth Power", "Ice Beam"],
+				"abilities": ["Storm Drain"]
+			}
+		]
+	},
+	"endogeny": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Shadow Ball", "Toxic", "U-turn", "Protect", "Hyper Voice"],
+				"abilities": ["Amalgamation"]
+			}
+		]
+	},
+	"finalfroggit": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Stealth Rock", "Flip Turn", "Double-Edge", "Aqua Jet", "Return", "Superpower"],
+				"abilities": ["Intimidate"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Double-Edge", "Flip Turn", "Superpower", "Liquidation"],
+				"abilities": ["Quick Feet"]
+			}
+		]
+	},
+	"floradinn": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Slack Off", "Spikes", "Barb Barrage", "Leaf Blade", "Leech Seed", "Toxic Spikes"],
+				"abilities": ["Iron Barbs"]
+			}
+		]
+	},
+	"flowery": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Jarona", "Close Combat", "Extreme Speed", "Thunder Punch", "Zen Headbutt"],
+				"abilities": ["Blossom Boost"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Bulk Up", "Jarona", "Close Combat", "Thunder Punch", "Zen Headbutt"],
+				"abilities": ["Blossom Boost"]
+			}
+		]
+	},
+	"flowey": {
+		"level": 90,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Knock Off", "Synthesis", "Protect", "Leech Seed"],
+				"abilities": ["Pressure"]
+			}
+		]
+	},
+	"floweymega": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Knock Off", "Tainted Vines", "Synthesis", "Earthquake", "Leech Seed"],
+				"abilities": ["Pressure"]
+			}
+		]
+	},
+	"gerson": {
+		"level": 90,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Earthquake", "Stealth Rock", "Knock Off", "Taunt", "Ice Hammer"],
+				"abilities": ["Justified"]
+			}
+		]
+	},
+	"gersonmega": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Gigaton Hammer", "Earthquake", "Knock Off", "Taunt", "Ice Hammer", "Wood Hammer", "Knock Off"],
+				"abilities": ["Justified"]
+			}
+		]
+	},
+	"glyde": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Extreme Speed", "Body Slam", "Flip Turn", "Ice Spinner", "Liquidation"],
+				"abilities": ["Aerilate"]
+			},
+			{
+				"role": "Fast Support",
+				"movepool": ["Extreme Speed", "Encore", "Flip Turn", "Ice Spinner", "Liquidation"],
+				"abilities": ["Aerilate"]
+			}
+		]
+	},
+	"greaterdog": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Swords Dance", "Facade", "Heavy Slam", "Sacred Sword"],
+				"abilities": ["Guts"]
+			}
+		]
+	},
+	"green": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Reflect", "Light Screen", "Thunder Wave", "U-turn"],
+				"abilities": ["Fast Food"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Synthesis", "U-turn", "Knock Off", "Thunder Wave", "Leech Seed", "Giga Drain"],
+				"abilities": ["Fast Food"]
+			}
+		]
+	},
+	"guei": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Flamethrower", "Infernal Parade", "U-turn", "Sludge Bomb", "Will-O-Wisp"],
+				"abilities": ["Flash Fire", "Cursed Body"],
+        		"teraTypes": ["Stellar"]
+			}
+		]
+	},
+	"gyftrot": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Horn Leech", "Icicle Crash", "High Horsepower", "Power Whip"],
+				"abilities": ["Unburden"]
+			}
+		]
+	},
+	"hacker": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Knock Off", "Volt Switch", "Spikes", "Wild Charge", "Taunt", "Thunder Wave"],
+				"abilities": ["Infiltrator"]
+			}
+		]
+	},
+	"headhathy": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Wish", "Protect", "Moonblast", "Thunder Wave"],
+				"abilities": ["Regenerator"]
+			}
+		]
+	},
+	"icecap": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Double-Edge", "Aqua Cutter", "Sucker Punch", "Spikes"],
+				"abilities": ["Refrigerate"]
+			}
+		]
+	},
+	"icewolf": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Close Combat", "Icicle Crash", "Headlong Rush", "Crunch", "Play Rough"],
+				"abilities": ["Sheer Force"]
+			}
+		]
+	},
+	"jackenstein": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Staller",
+				"movepool": ["Substitute", "Moonlight", "Glare", "Poltergeist"],
+				"abilities": ["YOUR TAKING TOO LONG"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Protect", "Moonlight", "Glare", "Knock Off", "Leech Seed"],
+				"abilities": ["YOUR TAKING TOO LONG"]
+			}
+		]
+	},
+	"jerry": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Staller",
+				"movepool": ["Slack Off", "Knock Off", "Seismic Toss", "Stealth Rock"],
+				"abilities": ["Unaware"]
+			}
+		]
+	},
+	"jevil": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Z-Move user",
+				"movepool": ["Nasty Plot", "Shadow Ball", "Moonblast", "Mystical Fire", "Chaos Bomb"],
+				"abilities": ["Cursed Body"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Moonblast", "Shadow Ball", "Mystical Fire", "U-turn"],
+				"abilities": ["Cursed Body"]
+			},
+			{
+				"role": "Fast Support",
+				"movepool": ["Stealth Rock", "Rapid Spin", "Moonblast", "U-turn", "Will-O-Wisp", "Hex", "Knock Off", "Spikes"],
+				"abilities": ["Cursed Body"]
+			}
+		]
+	},
+	"jigsawjoe": {
+		"level": 90,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Facade", "U-turn", "Encore", "Protect", "Hyper Voice", "Vacuum Wave"],
+				"abilities": ["Quick Feet"]
+			}
+		]
+	},
+	"kawkaw": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Roost", "Earth Power", "U-turn", "Hurricane"],
+				"abilities": ["Natural Cure", "Gooey", "Gale Wings"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Hurricane", "Earth Power", "U-turn", "Air Slash"],
+				"abilities": ["Gale Wings"]
+			}
+		]
+	},
+	"kk": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Milk Drink", "Stealth Rock", "Knock Off", "Volt Switch"],
+				"abilities": ["Soundproof"]
+			}
+		]
+	},
+	"knightknight": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Good Morningstar", "Moonlight", "Bulk Up", "Earthquake", "Spirit Break"],
+				"abilities": ["Comatose"]
+			}
+		]
+	},
+	"kris": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Sacred Sword", "Night Slash", "Cross Poison", "Smart Strike", "Taunt"],
+				"abilities": ["Sharpness"]
+			},
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Secret Sword", "Dark Pulse", "Ice Punch", "Aura Sphere", "Luster Purge", "Dazzling Gleam", "Trick"],
+				"abilities": ["Soul-Heart"]
+			}
+		]
+	},
+	"kround": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["High Jump Kick", "U-turn", "Triple Axel", "Body Slam"],
+				"abilities": ["Hustle"]
+			},
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Milk Drink", "Bulk Up", "High Jump Kick", "Triple Axel"],
+				"abilities": ["Inner Focus"]
+			}
+		]
+	},
+	"lancer": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Spikes", "Taunt", "Rapid Spin", "Spade Blast", "U-turn"],
+				"abilities": ["Prankster"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Spade Blast", "Blazing Torque", "U-turn", "Pursuit", "Spikes", "Rapid Spin"],
+				"abilities": ["Adaptability"]
+			}
+		]
+	},
+	"lanino": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Weather Ball", "U-turn", "Defog", "Earth Power"],
+				"abilities": ["Drought"],
+				"teraTypes": ["Stellar"]
+			}
+		]
+	},
+	"leafling": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Growth", "Acrobatics", "Heat Wave", "Leaf Blade", "Rapid Spin"],
+				"abilities": ["Unburden"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Hurricane", "Leaf Storm", "Earth Power", "Weather Ball", "Tailwind"],
+				"abilities": ["Wind Rider"]
+			}
+		]
+	},
+	"lemonbread": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Hydro Pump", "Superpower", "Gunk Shot", "Psychic Noise"],
+				"abilities": ["Amalgamation"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Liquidation", "Superpower", "Crunch", "Gunk Shot"],
+				"abilities": ["Amalgamation"]
+			}
+		]
+	},
+	"lesserdog": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Hone Claws", "Body Slam", "Triple Axel", "Play Rough"],
+				"abilities": ["Guard Dog"]
+			}
+		]
+	},
+	"maddummy": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Close Combat", "Poltergeist", "Switcheroo", "Night Slash"],
+				"abilities": ["Fury"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Close Combat", "Sacred Sword", "Agility", "Swords Dance", "Poltergeist", "Night Slash"],
+				"abilities": ["Fury"]
+			}
+		]
+	},
+	"madjick": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Z-Move user",
+				"movepool": ["Nasty Plot", "Expel Spell", "Dark Pulse", "Focus Blast"],
+				"abilities": ["Magic Bounce"]
+			}
+		]
+	},
+	"mauswheel": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Earthquake", "Zing Zap", "Rapid Spin", "U-turn"],
+				"abilities": ["Electric Surge", "Speed Boost", "Trace"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Earthquake", "Zing Zap", "Ice Spinner", "U-turn", "Steel Roller"],
+				"abilities": ["Electric Surge"]
+			}
+		]
+	},
+	"memoryhead": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Dark Pulse", "Sludge Bomb", "Volt Switch", "Switcheroo"],
+				"abilities": ["Amalgamation"]
+			}
+		]
+	},
+	"mettaton": {
+		"level": 90,
+		"sets": [
+			{
+				"role": "Fast Bulky Setup",
+				"movepool": ["Victory Dance", "Thunder Punch", "High Jump Kick", "Blaze Kick"],
+				"abilities": ["Full Metal Body"]
+			}
+		]
+	},
+	"mettatonmegax": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Victory Dance", "Thunder Punch", "Triple Axel", "Blaze Kick", "High Jump Kick", "Supercell Slam"],
+				"abilities": ["Full Metal Body"]
+			}
+		]
+	},
+	"mettatonmegay": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Fiery Dance", "Thunderbolt", "Psychic", "Encore", "Overheat", "Dazzling Gleam"],
+				"abilities": ["Full Metal Body"]
+			}
+		]
+	},
+	"migospel": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Attack Order", "Play Rough", "Thunder Fang", "Encore"],
+				"abilities": ["Swarm"]
+			},
+			{
+				"role": "Fast Support",
+				"movepool": ["Moonblast", "Substitute", "Encore", "Disable", "U-turn"],
+				"abilities": ["Prankster"]
+			}
+		]
+	},
+	"missmizzle": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "AV Pivot",
+				"movepool": ["Psychic Noise", "Flip Turn", "Moonblast", "Draining Kiss", "Surf"],
+				"abilities": ["Liquid Voice", "Misty Surge"]
+			}
+		]
+	},
+	"moldbygg": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Recover", "Scald", "Toxic", "Clear Smog"],
+				"abilities": ["Gooey", "Sticky Hold"]
+			}
+		]
+	},
+	"moldessa": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Leaf Storm", "Hydro Pump", "Earth Power", "Sludge Bomb"],
+				"abilities": ["Gooey"]
+			}
+		]
+	},
+	"motormouthmike": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Nasty Plot", "Mic Check", "Flash Cannon", "Thunderbolt"],
+				"abilities": ["Technician"]
+			}
+		]
+	},
+	"mrelegance": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Close Combat", "Return", "U-turn", "Stealth Rock", "High Horsepower"],
+				"abilities": ["Scrappy"]
+			}
+		]
+	},
+	"mrsociety": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Psyshock", "Thunderbolt", "Aura Sphere", "Trick Room", "Calm Mind", "Focus Blast"],
+				"abilities": ["Analytic"]
+			}
+		]
+	},
+	"mrsunshine": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Overheat", "Flamethrower", "Photon Geyser", "Aura Sphere"],
+				"abilities": ["Protosynthesis"]
+			},
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Overheat", "Flamethrower", "Photon Geyser", "Aura Sphere"],
+				"abilities": ["Protosynthesis"]
+			},
+			{
+				"role": "Z-Move user",
+				"movepool": ["Dragon Dance", "Flare Blitz", "Photon Geyser", "Sunsteel Strike"],
+				"abilities": ["Protosynthesis"]
+			}
+		]
+	},
+	"muffet": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Sticky Web", "Taunt", "Beat Up", "Bug Buzz", "U-turn", "Toxic Spikes", "Sludge Bomb"],
+				"abilities": ["Toxic Chain"]
+			}
+		]
+	},
+	"napstablook": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Psychic Noise", "Moonblast", "Dark Pulse", "Sludge Bomb"],
+				"abilities": ["Ghostly Groove"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Psychic Noise", "Will-O-Wisp", "Perish Song", "Sludge Bomb", "Protect"],
+				"abilities": ["Ghostly Groove"]
+			}
+		]
+	},
+	"netskie": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Nasty Plot", "Moonblast", "Giga Drain", "Focus Blast", "Dark Pulse"],
+				"abilities": ["Illusion"]
+			},
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Moonblast", "Energy Ball", "U-turn", "Trick", "Dark Pulse", "Focus Blast", "Shadow Ball"],
+				"abilities": ["Illusion"]
+			}
+		]
+	},
+	"noelle": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Aurora Veil", "Freeze-Dry", "Snowgrave", "Blizzard"],
+				"abilities": ["Snow Warning"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Calm Mind", "Blizzard", "Moonblast", "Hidden Power [Ground]", "Snowgrave"],
+				"abilities": ["Snow Warning"]
+			}
+		]
+	},
+	"nubert": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Earthquake", "Volt Switch", "Supercell Slam", "Double-Edge"],
+				"abilities": ["Huge Power"]
+			}
+		]
+	},
+	"onionsan": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Wish", "Scald", "Flip Turn", "Protect"],
+				"abilities": ["Water Compaction"]
+			}
+		]
+	},
+	"orange": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Bulk Up", "Drain Punch", "Knock Off", "Earthquake", "Substitute", "Facade", "Thunder Punch"],
+				"abilities": ["Full Belly"]
+			}
+		]
+	},
+	"organikk": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Psyshock", "Power Gem", "Thunderbolt", "Moonblast"],
+				"abilities": ["Psychic Surge"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Stealth Rock", "Meteor Beam", "Psychic Noise", "Calm Mind"],
+				"abilities": ["Psychic Surge"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Wish", "Protect", "Stealth Rock", "Psyshock"],
+				"abilities": ["Psychic Surge"]
+			}
+		]
+	},
+	"papyrus": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Bulk Up", "Bonemerang", "Blue Attack", "Drain Punch"],
+				"abilities": ["Technician"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Bonemerang", "Close Combat", "Blue Attack", "Ice Punch"],
+				"abilities": ["Technician"]
+			}
+		]
+	},
+	"parsnik": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Growth", "Energy Ball", "Gorgon's Gaze", "Weather Ball", "Power Gem"],
+				"abilities": ["Chlorophyll"]
+			}
+		]
+	},
+	"pink": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Calm Mind", "Protect", "Draining Kiss", "Mew Mew Wand"],
+				"abilities": ["Split Personality"]
+			}
+		]
+	},
+	"pipis": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Staller",
+				"movepool": ["Recover", "Toxic", "Soak", "Taunt"],
+				"abilities": ["Unaware"]
+			},
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Recover", "Toxic", "Soak", "Explosion"],
+				"abilities": ["Unaware"]
+			}
+		]
+	},
+	"pippins": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Stone Edge", "Tri Attack", "U-turn", "Thunderbolt", "Return", "Trick"],
+				"abilities": ["Serene Grace"]
+			}
+		]
+	},
+	"poppup": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Reflect", "Light Screen", "Taunt", "U-turn"],
+				"abilities": ["Prankster"]
+			}
+		]
+	},
+	"pyrope": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Flare Blitz", "Earthquake", "Power Whip", "Play Rough", "Stone Edge"],
+				"abilities": ["Sand Rush", "Flash Fire"],
+        		"teraTypes": ["Stellar"]
+			}
+		]
+	},
+	"queendelta": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Calm Mind", "Thunderbolt", "Sludge Bomb", "Overheat"],
+				"abilities": ["Levitate", "Download", "Queenly Majesty"]
+			}
+		]
+	},
+	"queenmega": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Bulk Up", "Drain Punch", "Thunder Punch", "Ice Punch"],
+				"abilities": ["Download"]
+			}
+		]
+	},
+	"rabbick": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Shore Up", "Earth Power", "Whirlwind", "Toxic"],
+				"abilities": ["Earth Eater"]
+			}
+		]
+	},
+	"ralsei": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Wish", "Protect", "Dark Pulse", "Moonblast", "Mystical Fire", "Ice Beam"],
+				"abilities": ["Dark Aura"]
+			},
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Wish", "Dark Pulse", "Moonblast", "Calm Mind"],
+				"abilities": ["Dark Aura"]
+			}
+		]
+	},
+	"ramb": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Fake Out", "Nuzzle", "Knock Off", "Volt Switch", "Thunder Wave", "Encore"],
+				"abilities": ["Electromorphosis"]
+			}
+		]
+	},
+	"reaperbird": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Z-Move user",
+				"movepool": ["Swords Dance", "Brave Bird", "Phantom Force", "Sucker Punch", "Shadow Sneak"],
+				"abilities": ["Amalgamation"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Brave Bird", "Shadow Claw", "Shadow Sneak", "Steel Wing", "Double-Edge", "Psychic Fangs", "Sucker Punch"],
+				"abilities": ["Amalgamation"]
+			}
+		]
+	},
+	"ribbick": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Shore Up", "Earthquake", "Whirlwind", "Toxic"],
+				"abilities": ["Sand Stream"]
+			}
+		]
+	},
+	"roaringknight": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Z-Move user",
+				"movepool": ["Swords Dance", "Black Knife", "Close Combat", "Iron Head"],
+				"abilities": ["Savage Roar"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Brave Bird", "Black Knife", "Close Combat", "Iron Head", "U-turn", "Pursuit", "Ice Punch", "Cross Poison"],
+				"abilities": ["Savage Roar"]
+			}
+		]
+	},
+	"rouxlskaard": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Teleport", "Psyshock", "Surf", "Dark Pulse", "Trick"],
+				"abilities": ["Maketh the Rules"]
+			}
+		]
+	},
+	"rouxlskaardmega": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Calm Mind", "Psyshock", "Surf", "Dark Pulse"],
+				"abilities": ["Maketh the Rules"]
+			}
+		]
+	},
+	"royalguard1": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Earthquake", "Knock Off", "U-turn", "Iron Head"],
+				"abilities": ["Heatproof"]
+			},
+			{
+				"role": "AV Pivot",
+				"movepool": ["Earthquake", "Knock Off", "U-turn", "Iron Head"],
+				"abilities": ["Heatproof"]
+			}
+		]
+	},
+	"royalguard2": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Outrage", "Iron Head", "Flare Blitz", "Earthquake", "Stone Edge"],
+				"abilities": ["Weak Armor"]
+			}
+		]
+	},
+	"rudinnranger": {
+		"level": 88,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Spikes", "Diamond Storm", "Taunt", "Knock Off"],
+				"abilities": ["Magic Bounce"]
+			}
+		]
+	},
+	"sans": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Gaster Blaster", "Blue Attack", "Bonemerang", "Teleport", "Shadow Ball", "Earth Power", "Taunt", "Knock Off"],
+				"abilities": ["Wonder Guard"]
+			}
+		]
+	},
+	"seam": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Toxic", "Hex", "Haze", "Protect"],
+				"abilities": ["Fluffy"]
+			},
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Calm Mind", "Shadow Ball", "Dark Pulse", "Psyshock", "Psychic"],
+				"abilities": ["Fluffy"]
+			}
+		]
+	},
+	"seth": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Z-Move user",
+				"movepool": ["Nasty Plot", "Petal Dance", "Psychic", "Earth Power", "Psyshock"],
+				"abilities": ["Tactical Dodge"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Leaf Storm", "Psychic", "Earth Power", "Hidden Power [Fire]", "Psyshock", "Dazzling Gleam"],
+				"abilities": ["Tactical Dodge"]
+			}
+		]
+	},
+	"shadowguy": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Boomburst", "Knock Off", "Volt Switch", "Shadow Ball", "Dark Pulse"],
+				"abilities": ["Punk Rock"]
+			}
+		]
+	},
+	"shadowmantle": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Nasty Plot", "Psyshock", "Flamethrower", "Dark Pulse", "Overheat", "Will-O-Wisp", "Flame Charge"],
+				"abilities": ["Shadow Shield"]
+			}
+		]
+	},
+	"sheary": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Swords Dance", "Leaf Blade", "Sacred Sword", "Rapid Spin", "Night Slash"],
+				"abilities": ["Sharpness"]
+			}
+		]
+	},
+	"shi": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Close Combat", "Earthquake", "Knock Off", "Ice Punch", "Spirit Break"],
+				"abilities": ["Intimidate", "Scrappy"]
+			}
+		]
+	},
+	"shinobeetle": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["First Impression", "Close Combat", "U-turn", "Thunder Punch", "Rock Blast"],
+				"abilities": ["Mold Breaker", "Skill Link"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["First Impression", "Close Combat", "U-turn", "Thunder Punch", "Rock Blast", "Swords Dance", "Sucker Punch", "Megahorn", "Earthquake"],
+				"abilities": ["Mold Breaker", "Skill Link"]
+			}
+		]
+	},
+	"shuttah": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Hyper Voice", "Volt Switch", "Thunderbolt", "Energy Ball", "Glare", "Extrasensory"],
+				"abilities": ["Pixilate"]
+			}
+		]
+	},
+	"shyren": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Trick Room", "Hyper Voice", "Shadow Ball", "Psychic", "Psychic Noise"],
+				"abilities": ["Liquid Voice"]
+			}
+		]
+	},
+	"snowdrake": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Roost", "Chilly Reception", "Freeze-Dry", "Draco Meteor"],
+				"abilities": ["Ice Scales"]
+			}
+		]
+	},
+	"soundofjustice": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Poltergeist", "Stone Edge", "Earthquake", "Knock Off"],
+				"abilities": ["Demoralize"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Swords Dance", "Autotomize", "Poltergeist", "Stone Edge", "Earthquake", "Knock Off"],
+				"abilities": ["Demoralize"]
+			}
+		]
+	},
+	"spamton": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Z-Move user",
+				"movepool": ["Nasty Plot", "Make It Rain", "Thunderbolt", "Dark Pulse"],
+				"abilities": ["Opportunist"]
+			}
+		]
+	},
+	"spamtonmega": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["BIG SHOT", "Thunderbolt", "Dark Pulse", "Aura Sphere", "Armor Cannon", "Water Pulse", "Nasty Plot"],
+				"abilities": ["Opportunist"]
+			}
+		]
+	},
+	"starwalker": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Tera Starstorm", "Flash Cannon", "Thunderbolt", "Parting Shot", "Dazzling Gleam"],
+				"abilities": ["Dazzling"]
+			}
+		]
+	},
+	"susie": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Dragon Dance", "Rude Buster", "Crunch", "Stone Axe", "Parting Shot", "Taunt", "Sucker Punch"],
+				"abilities": ["Intimidate", "Defiant"]
+			}
+		]
+	},
+	"swatch": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Thunderbolt", "Ice Beam", "Prismatic Laser", "Hidden Power [Ground]", "Flamethrower", "Thunderbolt", "Energy Ball", "Hurricane"],
+				"abilities": ["Protean"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Dazzling Gleam", "Roost", "Flamethrower", "Defog", "Ice Beam", "Hurricane"],
+				"abilities": ["Prism Armor"]
+			}
+		]
+	},
+	"sweet": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Stealth Rock", "Knock Off", "Volt Switch", "Return"],
+				"abilities": ["Galvanize"]
+			}
+		]
+	},
+	"tasquemanager": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Tidy Up", "Zen Headbutt", "Close Combat", "Play Rough", "Encore"],
+				"abilities": ["Screen Cleaner", "Clear Body"]
+			}
+		]
+	},
+	"temmie": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Soft-Boiled", "Thunder Wave", "Play Rough", "U-turn"],
+				"abilities": ["Tem Outta Tem"]
+			}
+		]
+	},
+	"tenna": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Thunderclap", "Volt Switch", "Knock Off", "Ice Punch", "Earthquake", "Fake Out", "Thunderbolt", "Supercell Slam"],
+				"abilities": ["Transistor"]
+			}
+		]
+	},
+	"terakota": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Earthquake", "Synthesis", "Whirlwind", "Power Whip", "Knock Off"],
+				"abilities": ["Water Absorb"]
+			}
+		]
+	},
+	"thrashmachine": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Close Combat", "Iron Head", "Ice Punch", "Thunder Punch"],
+				"abilities": ["Intrepid Sword"]
+			}
+		]
+	},
+	"thrashmachineduck": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Wave Crash", "Close Combat", "U-turn", "Ice Punch"],
+				"abilities": ["Iron Fist", "Torrent"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Bulk Up", "Sucky Punch", "Ice Punch", "Close Combat"],
+				"abilities": ["Iron Fist"]
+			}
+		]
+	},
+	"thrashmachineflame": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Flare Blitz", "Close Combat", "U-turn", "Ice Punch"],
+				"abilities": ["Flame Body"]
+			}
+		]
+	},
+	"thrashmachinelaser": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Close Combat", "Supercell Slam", "U-turn", "Extreme Speed", "Ice Punch"],
+				"abilities": ["No Guard"]
+			}
+		]
+	},
+	"titan": {
+		"level": 78,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Umbral Laser", "Oblivion Wing", "Recover", "Toxic", "Protect"],
+				"abilities": ["Constricting Darkness"]
+			}
+		]
+	},
+	"titanspawn": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Recover", "Toxic", "Ruination", "Dark Pulse"],
+				"abilities": ["Demoralize"]
+			},
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Trick Room", "Teleport", "Recover", "Dark Pulse", "Shadow Ball", "Ruination", "Bug Buzz"],
+				"abilities": ["Demoralize"]
+			}
+		]
+	},
+	"topchef": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Spikes", "Rapid Spin", "U-turn", "Iron Head", "Spin Out", "Ice Spinner"],
+				"abilities": ["Clear Body"]
+			}
+		]
+	},
+	"toriel": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Wish", "Protect", "Cleansing Flame", "Moonblast", "Will-O-Wisp"],
+				"abilities": ["Pyromancy"]
+			}
+		]
+	},
+	"trashy": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Spikes", "Pain Split", "Clear Smog", "Toxic Spikes", "Sludge Bomb"],
+				"abilities": ["Filter"]
+			}
+		]
+	},
+	"tsunderplane": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Brave Bird", "Extreme Speed", "Flare Blitz", "U-turn", "Double-Edge", "Explosion"],
+				"abilities": ["Reckless"]
+			}
+		]
+	},
+	"undyne": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Swords Dance", "Spear Barrage", "Iron Head", "Thousand Arrows", "Close Combat"],
+				"abilities": ["Dry Skin"]
+			}
+		]
+	},
+	"undynemega": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Swords Dance", "Spear Barrage", "Iron Head", "Thousand Arrows", "Close Combat"],
+				"abilities": ["Dry Skin"]
+			}
+		]
+	},
+	"virovirokun": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Knock Off", "U-turn", "Thunder Wave", "Spikes", "Toxic", "Poison Jab"],
+				"abilities": ["Toxic Debris", "Corrosion"]
+			}
+		]
+	},
+	"vulkin": {
+		"level": 87,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Overheat", "Flamethrower", "Power Gem", "Earth Power"],
+				"abilities": ["Solar Power"]
+			}
+		]
+	},
+	"watercooler": {
+		"level": 85,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Buble", "Ice Beam", "Focus Blast", "Surf", "Destiny Bond"],
+				"abilities": ["Water Bubble"]
+			}
+		]
+	},
+	"werewerewire": {
+		"level": 82,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Plasma Fists", "Close Combat", "Shocking Snare", "Knock Off", "Fire Punch", "Hone Claws"],
+				"abilities": ["Quark Drive"]
+			},
+			{
+				"role": "Choice Item user",
+				"movepool": ["Plasma Fists", "Close Combat", "Shocking Snare", "Knock Off", "Fire Punch"],
+				"abilities": ["Quark Drive", "Motor Drive", "Volt Absorb"]
+			}
+		]
+	},
+	"whimsalot": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Z-Move user",
+				"movepool": ["Quiver Dance", "Hurricane", "Flash Cannon", "Focus Blast"],
+				"abilities": ["Bulletproof"]
+			}
+		]
+	},
+	"whitecloak": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Wallbreaker",
+				"movepool": ["Icicle Crash", "Poltergeist", "Liquidation", "Swords Dance", "Calm Mind", "Ice Beam", "Shadow Ball"],
+				"abilities": ["Slush Rush"]
+			}
+		]
+	},
+	"wicabel": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Hyper Voice", "Bell Chime", "Psychic Noise", "Moonblast"],
+				"abilities": ["Reverberate"]
+			},
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Hyper Voice", "Bell Chime", "Perish Song", "Protect", "Moonblast"],
+				"abilities": ["Reverberate", "Levitate"]
+			}
+		]
+	},
+	"winglade": {
+		"level": 84,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Roost", "Rapid Spin", "U-turn", "Aerial Ace"],
+				"abilities": ["Sharpness"]
+			},
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Swords Dance", "Aerial Ace", "Night Slash", "Sacred Sword", "Roost"],
+				"abilities": ["Sharpness"]
+			}
+		]
+	},
+	"woshua": {
+		"level": 83,
+		"sets": [
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Shell Smash", "Surf", "Ice Beam", "Energy Ball", "Dazzling Gleam"],
+				"abilities": ["Clear Body"]
+			}
+		]
+	},
+	"yellow": {
+		"level": 86,
+		"sets": [
+			{
+				"role": "Choice Item user",
+				"movepool": ["Aura Sphere", "Shadow Ball", "Ice Beam", "Volt Switch", "Flash Cannon"],
+				"abilities": ["Sharpshooter"]
+			},
+			{
+				"role": "Z-Move user",
+				"movepool": ["Aura Sphere", "Flash Cannon", "Petal Dance", "Volt Switch"],
+				"abilities": ["Sharpshooter"]
+			}
+		]
+	},
+	"zapper": {
+		"level": 89,
+		"sets": [
+			{
+				"role": "Bulky Setup",
+				"movepool": ["Belly Drum", "Drain Punch", "Thunder Punch", "Ice Punch"],
+				"abilities": ["Static"]
+			}
+		]
+	},
+	"friend": {
+		"level": 79,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Egg", "Tail of Hell", "Crunch", "Psychic Fangs"],
+				"abilities": ["Darkspawn"]
+			}
+		]
+	},
+	"normalnpc": {
+		"level": 79,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Brave Bird", "Close Combat", "U-turn", "Double-Edge"],
+				"abilities": ["Normal Ability"]
+			}
+		]
+	}
+}
