@@ -101,7 +101,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes?.length) throw new Chat.ErrorMessage(`This room has no quotes.`);
-		const [num, showAuthor] = Utils.splitFirst(target, ',');
+		const [num, showAuthor] = Utils.splitFirst(target, ',').map(part => part.trim());
 		const index = num === 'last' ? roomQuotes.length - 1 : parseInt(num) - 1;
 		if (isNaN(index)) {
 			throw new Chat.ErrorMessage(`Invalid index.`);
@@ -117,6 +117,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	viewquotehelp: [
 		`/viewquote [index][, params] - View the quote from the room's quotes.`,
+		`Use 'last' as the [index] argument to view the most recently added quote.`,
 		`If 'showauthor' is used for the [params] argument, it shows who added the quote and when.`,
 	],
 
