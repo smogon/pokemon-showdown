@@ -1,245 +1,226 @@
-// Mechanics desc conventions (ja) — keep consistent with ja/abilities.ts and ja/items.ts:
-// Style: plain form (〜する。), no flavor-text spacing, halfwidth numerals (1.5倍, 30%, 2〜5回).
-// Terminology: 追加効果 (secondary effect), ひるみ (flinch), 急所 (crit), 能力ランク (stat stage),
-//   状態異常 (non-volatile status), 直接攻撃 (contact move), 連続攻撃技 (multi-hit move),
-//   優先度 (priority), 設置技 (hazards), 場に出たとき (on switch-in), 切り捨て/切り上げ (rounded down/up),
-//   みがわり (substitute), 相性 (type effectiveness), 天気 (weather), 使用者 (user), 対象 (target).
-// Fixed formulas: 「最大HPの1/4（切り捨て）を回復する」 (restores 1/4 max HP, rounded down);
-//   「ちからずくにより追加効果が消された技では発動しない」 (Sheer Force rider);
-//   「この効果は技のタイプを変える他の効果の後に適用される」 (type-change ordering).
-// Rounding: 四捨五入 (rounded half up), 五捨五超入 (rounded half down), 切り捨て/切り上げ.
-// More fixed formulas: 「急所に当たりやすい（急所ランク+1）」 (higher crit chance); 「必中。」 (no accuracy check);
-//   「追加効果なし。」 (no additional effect); 「X%の確率で相手を〜状態にする」 (secondary status);
-//   partial-trap/protect/multi-hit/max-move boilerplate is shared verbatim across entries — QC one, fix all.
-// CAP (Create-A-Pokemon) entities have no official localized names: leave name null
-//   (English shows via fallback) but translate the desc, using English names inline for
-//   any CAP cross-references.
-// Cross-references use official Japanese names for moves/abilities/items/species;
-//   when a list of names appears in English, generate it from the ja name fields (see scratchpad scripts).
-
 export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "１０００まんボルト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に非常に当たりやすい（急所ランク+2）。", // NEEDS QC
+		shortDesc: "急所に非常に当たりやすい。", // NEEDS QC
 	},
 	absorb: {
 		name: "すいとる",
 		// Official flavor text: "養分を 吸い取り 攻撃する。 相手に 与えた ダメージの 半分の ＨＰを 回復できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（切り捨て）になる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。相手がみがわり状態の場合、この技は外れる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。この技で相手のみがわりを壊した場合、HPは回復しない。", // NEEDS QC
 		},
 	},
 	accelerock: {
 		name: "アクセルロック",
 		// Official flavor text: "素早い スピードで 相手に ぶつかって 攻撃する。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	acid: {
 		name: "ようかいえき",
 		// Official flavor text: "強い 酸を 相手に かけて 攻撃する。 相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手のぼうぎょを1段階下げる。", // NEEDS QC
+			shortDesc: "10%の確率で相手の防御を1段階下げる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%の確率で相手のぼうぎょを1段階下げる。", // NEEDS QC
+			shortDesc: "33%の確率で相手の防御を1段階下げる。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%の確率で相手の防御を1段階下げる。", // NEEDS QC
 		},
 	},
 	acidarmor: {
 		name: "とける",
 		// Official flavor text: "細胞の 変化で 液状に なり 自分の 防御を ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を2段階上げる。", // NEEDS QC
+		shortDesc: "自分の防御が2段階上がる。", // NEEDS QC
 	},
 	aciddownpour: {
 		name: "アシッドポイズンデリート",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	acidspray: {
 		name: "アシッドボム",
 		// Official flavor text: "相手を とかす 液体を 吐きだして 攻撃する。 相手の 特防を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特防を2段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特防を2段階下げる。", // NEEDS QC
 	},
 	acrobatics: {
 		name: "アクロバット",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "道具を持っていないと威力2倍。", // NEEDS QC
 	},
 	acupressure: {
 		name: "つぼをつく",
 		// Official flavor text: "つぼおしで 体を 活性化させる。 能力の どれか １つを ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "まだ+6になっていない能力のうち、いずれか1つをランダムに2段階上げる。自分または隣接する味方を対象にできる。上げられる能力がない場合や、みがわり状態の味方に使った場合は失敗する。", // NEEDS QC
+		shortDesc: "自分か味方のランダムな能力が2段階上がる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "まだ+6になっていない能力のうち、いずれか1つをランダムに2段階上げる。自分または味方を対象にできる。上げられる能力がない場合や、自分か味方がみがわり状態の場合は失敗する。", // NEEDS QC
 		},
 	},
 	aerialace: {
 		name: "つばめがえし",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	aeroblast: {
 		name: "エアロブラスト",
 		// Official flavor text: "空気の 渦を 発射して 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	afteryou: {
 		name: "おさきにどうぞ",
 		// Official flavor text: "相手の 行動を サポートして 自分の 行動の あとに 続けて 動けるように する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、対象は選択した技の優先度にかかわらず、自分の直後に行動する。対象がもともと次に行動する予定だった場合や、すでにこのターンに行動していた場合は失敗する。", // NEEDS QC
+		shortDesc: "相手を自分の直後に行動させる。", // NEEDS QC
 
 		activate: "  {TARGET}は お言葉に 甘えることにした！",
 	},
 	agility: {
 		name: "こうそくいどう",
 		// Official flavor text: "力を ぬいて 体を 軽くして 高速で 動く。 自分の 素早さを ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さを2段階上げる。", // NEEDS QC
+		shortDesc: "自分の素早さが2段階上がる。", // NEEDS QC
 	},
 	aircutter: {
 		name: "エアカッター",
 		// Official flavor text: "鋭い 風で 相手を 切りつけて 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。相手全体攻撃。", // NEEDS QC
 	},
 	airslash: {
 		name: "エアスラッシュ",
 		// Official flavor text: "空をも 切り裂く 空気の 刃で 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	alloutpummeling: {
 		name: "ぜんりょくむそうげきれつけん",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	alluringvoice: {
 		name: "みわくのボイス",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに能力ランクが上がった相手に当てた場合、100%の確率でこんらん状態にする。", // NEEDS QC
+		shortDesc: "このターン能力が上がった相手を100%こんらんに。", // NEEDS QC
 	},
 	allyswitch: {
 		name: "サイドチェンジ",
 		// Official flavor text: "不思議な 力で テレポートして 自分と 味方の 居場所を 入れ替える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "味方と位置を入れ替える。自分の側に自分しかいない場合は失敗する。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がサイドチェンジ以外だった場合、Xは1に戻る。", // NEEDS QC
+		shortDesc: "味方と位置を入れ替える。連続使用は失敗しやすい。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "味方と位置を入れ替える。自分の側に自分しかいない場合は失敗する。", // NEEDS QC
+			shortDesc: "味方と位置を入れ替える。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "反対側の端にいる味方と位置を入れ替える。その位置にポケモンがいない場合、自分の側に自分しかいない場合、自分が真ん中にいる場合は失敗する。", // NEEDS QC
+			shortDesc: "反対側の端の味方と位置を入れ替える。", // NEEDS QC
 		},
 	},
 	amnesia: {
 		name: "ドわすれ",
 		// Official flavor text: "頭を からにして 一瞬 なにかを 忘れることで 自分の 特防を ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特防を2段階上げる。", // NEEDS QC
+		shortDesc: "自分の特防が2段階上がる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のとくしゅを2段階上げる。", // NEEDS QC
+			shortDesc: "自分のとくしゅを2段階上げる。", // NEEDS QC
 		},
 	},
 	anchorshot: {
 		name: "アンカーショット",
 		// Official flavor text: "アンカーを 相手に からませて 攻撃する。 相手は 逃げることが できなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手を交代できなくする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 	},
 	ancientpower: {
 		name: "げんしのちから",
 		// Official flavor text: "原始の 力で 攻撃する。 自分の すべての 能力が あがることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で自分の攻撃・防御・特攻・特防・素早さを1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "10%の確率で全能力が1段階上がる。", // NEEDS QC
 	},
 	appleacid: {
 		name: "りんごさん",
 		// Official flavor text: "すっぱい りんごから つくりだした 酸性の 液体で 攻撃。 相手の 特防を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	aquacutter: {
 		name: "アクアカッター",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	aquajet: {
 		name: "アクアジェット",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで 相手に つっこむ。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	aquaring: {
 		name: "アクアリング",
 		// Official flavor text: "自分の 体の 周りを 水で つくった ベールで おおう。 毎ターン ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいる間、毎ターン終了時に最大HPの1/16（切り捨て）を回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。バトンタッチを使うと、この効果は交代先に引き継がれる。", // NEEDS QC
+		shortDesc: "毎ターン最大HPの1/16を回復する。", // NEEDS QC
 
 		start: "  {POKEMON}は 水のリングを まとった！",
 		heal: "  {POKEMON}は 水のリングで 体力を回復！",
 	},
 	aquastep: {
 		name: "アクアステップ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の素早さを1段階上げる。", // NEEDS QC
+		shortDesc: "100%の確率で自分の素早さが1段階上がる。", // NEEDS QC
 	},
 	aquatail: {
 		name: "アクアテール",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	armorcannon: {
 		name: "アーマーキャノン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "自分の防御・特防を1段階下げる。", // NEEDS QC
 	},
 	armthrust: {
 		name: "つっぱり",
 		// Official flavor text: "ひらいた 両手で 相手を つっぱって 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 	},
 	aromatherapy: {
 		name: "アロマセラピー",
 		// Official flavor text: "心地好い やすらぐ 香りを かがせて 味方全員の 状態異常を 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のパーティ全員の状態異常を治す。場に出ている特性そうしょくのポケモンは、自分以外は治らない。", // NEEDS QC
+		shortDesc: "手持ち全員の状態異常を治す。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のパーティ全員の状態異常を治す。", // NEEDS QC
 		},
 
 		activate: "  心地よい 香りが 広がった！",
@@ -247,73 +228,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	aromaticmist: {
 		name: "アロマミスト",
 		// Official flavor text: "不思議な アロマの 香りによって 味方の 特防を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対象の味方の特防を1段階上げる。隣接する味方がいない場合は失敗する。", // NEEDS QC
+		shortDesc: "味方の特防を1段階上げる。", // NEEDS QC
 	},
 	assist: {
 		name: "ねこのて",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分以外のパーティのポケモンが覚えている技の中から、ランダムに1つが選ばれて使われる。ただし、ねこのて・トーチカ・くちばしキャノン・ゲップ・ギフトパス・バーンアクセル・とびはねる・おいわい・おしゃべり・ともえなげ・ファイトアクセル・まねっこ・カウンター・ほしがる・みちづれ・みきり・あなをほる・ダイビング・ドラゴンテール・こらえる・フェイント・そらをとぶ・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・マジカルアクセル・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・ポイズンアクセル・ゴーストダイブ・まもる・いかりのこな・ほえる・シャドーダイブ・トラップシェル・スケッチ・フリーフォール・ねごと・よこどり・ニードルガード・スポットライト・わるあがき・すりかえ・テラクラスター・どろぼう・へんしん・トリック・ふきとばし・ダークアクセルは選ばれない。", // NEEDS QC
+		shortDesc: "味方が覚えている技をランダムに使う。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分以外のパーティのポケモンが覚えている技の中から、ランダムに1つが選ばれて使われる。ただし、ねこのて・トーチカ・くちばしキャノン・ゲップ・ギフトパス・とびはねる・おいわい・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・あなをほる・ダイビング・ドラゴンテール・こらえる・フェイント・そらをとぶ・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・ゴーストダイブ・まもる・いかりのこな・ほえる・シャドーダイブ・トラップシェル・スケッチ・フリーフォール・ねごと・よこどり・ニードルガード・スポットライト・わるあがき・すりかえ・どろぼう・へんしん・トリック・ふきとばしは選ばれない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分以外のパーティのポケモンが覚えている技の中から、ランダムに1つが選ばれて使われる。ただし、ねこのて・トーチカ・くちばしキャノン・ゲップ・ギフトパス・とびはねる・おいわい・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・あなをほる・ダイビング・ドラゴンテール・こらえる・フェイント・そらをとぶ・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・ゴーストダイブ・まもる・いかりのこな・ほえる・シャドーダイブ・トラップシェル・スケッチ・フリーフォール・ねごと・よこどり・ニードルガード・スポットライト・わるあがき・すりかえ・どろぼう・へんしん・トリック・ふきとばし、およびZワザは選ばれない。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分以外のパーティのポケモンが覚えている技の中から、ランダムに1つが選ばれて使われる。ただし、ねこのて・ゲップ・ギフトパス・とびはねる・おいわい・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・あなをほる・ダイビング・ドラゴンテール・こらえる・フェイント・そらをとぶ・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・ゴーストダイブ・まもる・いかりのこな・ほえる・シャドーダイブ・スケッチ・フリーフォール・ねごと・よこどり・ニードルガード・わるあがき・すりかえ・どろぼう・へんしん・トリック・ふきとばしは選ばれない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分以外のパーティのポケモンが覚えている技の中から、ランダムに1つが選ばれて使われる。ただし、ねこのて・ギフトパス・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・ドラゴンテール・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・まもる・いかりのこな・スケッチ・ねごと・よこどり・わるあがき・すりかえ・どろぼう・へんしん・トリックは選ばれない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分以外のパーティのポケモンが覚えている技の中から、ランダムに1つが選ばれて使われる。ただし、ねこのて・おしゃべり・まねっこ・カウンター・ほしがる・みちづれ・みきり・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・まもる・スケッチ・ねごと・よこどり・わるあがき・すりかえ・どろぼう・トリックは選ばれない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分以外のパーティのポケモンが覚えている技の中から、ランダムに1つが選ばれて使われる。ただし、ねこのて・カウンター・ほしがる・みちづれ・みきり・こらえる・きあいパンチ・このゆびとまれ・てだすけ・ゆびをふる・ものまね・ミラーコート・オウムがえし・まもる・スケッチ・ねごと・よこどり・わるあがき・どろぼう・トリックは選ばれない。", // NEEDS QC
 		},
 	},
 	assurance: {
 		name: "ダメおし",
 		// Official flavor text: "そのターンに 相手が すでに ダメージを 受けていたら 技の 威力は ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンにすでにダメージを受けている相手には、威力が2倍になる。ただし、はらだいこ・こんらん・のろい・いたみわけによる直接のダメージは含まれない。", // NEEDS QC
+		shortDesc: "このターンにダメージを受けた相手には威力2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンにすでにダメージを受けている相手には、威力が2倍になる。", // NEEDS QC
 		},
 	},
 	astonish: {
 		name: "おどろかす",
 		// Official flavor text: "大きな 声などで 不意に 驚かして 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、ダメージが2倍になる。", // NEEDS QC
 		},
 	},
 	astralbarrage: {
 		name: "アストラルビット",
 		// Official flavor text: "たくさんの 小さな 霊体を 相手に ぶつけて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	attackorder: {
 		name: "こうげきしれい",
 		// Official flavor text: "しもべを 呼びだして 相手に むかって 攻撃させる。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	attract: {
 		name: "メロメロ",
 		// Official flavor text: "♂なら♀を ♀なら♂を 誘惑して メロメロに する。 相手は 技が だしにくくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をメロメロ状態にし、50%の確率で攻撃できなくする。自分と相手の性別が同じ場合、どちらかが性別不明の場合、相手がすでにメロメロ状態の場合は失敗する。自分または相手が場を離れると効果は終わる。特性がどんかんのポケモンや、アロマベールで守られているポケモンには効かない。", // NEEDS QC
+		shortDesc: "異性の相手をメロメロにする。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をメロメロ状態にし、50%の確率で攻撃できなくする。自分と相手の性別が同じ場合、どちらかが性別不明の場合、相手がすでにメロメロ状態の場合は失敗する。自分または相手が場を離れると効果は終わる。特性がどんかんのポケモンには効かない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をメロメロ状態にし、50%の確率で攻撃できなくする。自分と相手の性別が同じ場合、どちらかが性別不明の場合、相手がすでにメロメロ状態の場合は失敗する。自分または相手が場を離れると効果は終わる。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は メロメロに なった！",
@@ -325,32 +306,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurasphere: {
 		name: "はどうだん",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	aurawheel: {
 		name: "オーラぐるま",
 		// Official flavor text: "ほほぶくろに 溜めた エネルギーで 攻撃し 自分の 素早さを あげる。 モルペコの 姿で タイプが 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の素早さを1段階上げる。自分がまんぷくもようのモルペコの場合はでんきタイプ、はらぺこもようのモルペコの場合はあくタイプの技になる。（へんしんも考慮した）現在の姿がまんぷくもよう・はらぺこもようのモルペコでなければ使えない。", // NEEDS QC
+		shortDesc: "モルペコの模様でタイプが変化。素早さ+1。", // NEEDS QC
 	},
 	aurorabeam: {
 		name: "オーロラビーム",
 		// Official flavor text: "にじいろの ビームを 相手に 発射して 攻撃する。 攻撃を さげる ことが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%の確率で相手のこうげきを1段階下げる。", // NEEDS QC
+			shortDesc: "33%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 		},
 	},
 	auroraveil: {
 		name: "オーロラベール",
 		// Official flavor text: "５ターンの 間 物理と 特殊の ダメージを 弱める。 あられの 時しか 出すことが できない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、自分と味方が受ける物理技と特殊技のダメージが0.5倍（ダブルバトルでは0.66倍）になる。リフレクター・ひかりのかべと重複してさらに軽減されることはない。急所に当たった場合は軽減されない。自分または味方がかわらわり・サイコファング・きりばらいを受けると、自分の側の効果が消える。かわらわりとサイコファングはダメージ計算の前に効果を消す。ひかりのねんどを持っていると8ターン続く。天気がゆきでなければ失敗する。", // NEEDS QC
+		shortDesc: "5ターン味方へのダメージ半減。ゆき限定。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方が受ける物理技と特殊技のダメージが0.5倍（ダブルバトルでは0.66倍）になる。リフレクター・ひかりのかべと重複してさらに軽減されることはない。急所に当たった場合は軽減されない。自分または味方がかわらわり・サイコファング・きりばらいを受けると、自分の側の効果が消える。かわらわりとサイコファングはダメージ計算の前に効果を消す。ひかりのねんどを持っていると8ターン続く。天気があられでなければ失敗する。", // NEEDS QC
+			shortDesc: "5ターン、味方へのダメージ半減。あられ時のみ。", // NEEDS QC
 		},
 
 		start: "  {TEAM}は オーロラベールで 物理と 特殊に 強くなった！",
@@ -359,145 +340,145 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	autotomize: {
 		name: "ボディパージ",
 		// Official flavor text: "体の ムダな 部分を 削る。 自分の 素早さを ぐーんと あげて 体重も 軽くなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さを2段階上げる。素早さが変化した場合、場にいる間、自分の重さが100kg軽くなる。この効果は重複するが、重さは0.1kg未満にはならない。", // NEEDS QC
+		shortDesc: "素早さが2段階上がり、体重が100kg減る。", // NEEDS QC
 
 		start: "  {POKEMON}は 身軽になった！",
 	},
 	avalanche: {
 		name: "ゆきなだれ",
 		// Official flavor text: "相手から 技を 受けていると その 相手に 対して 技の 威力が ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに相手から攻撃を受けていた場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "そのターン相手から攻撃されていたら威力2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに相手の位置のポケモンから攻撃を受けていた場合、威力が2倍になる。", // NEEDS QC
 		},
 	},
 	axekick: {
 		name: "かかとおとし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をこんらん状態にする。攻撃が外れた場合、自分は最大HPの1/2（切り捨て）のダメージを受ける。特性がマジックガードのポケモンはこのダメージを受けない。", // NEEDS QC
+		shortDesc: "30%でこんらん。外すと最大HPの半分を失う。", // NEEDS QC
 
 		damage: "#crash",
 	},
 	babydolleyes: {
 		name: "つぶらなひとみ",
 		// Official flavor text: "つぶらなひとみで 相手を みつめて 攻撃を さげる。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	baddybad: {
 		name: "わるわるゾーン",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用すると、自分の側に5ターンの間リフレクターの効果が発生する。", // NEEDS QC
+		shortDesc: "リフレクターの効果を発生させる。", // NEEDS QC
 	},
 	banefulbunker: {
 		name: "トーチカ",
 		// Official flavor text: "相手の 攻撃を 防ぐと 同時に 触れた 相手に 毒を 与えてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をした相手をどく状態にする。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "技を防ぎ、接触してきた相手をどくにする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をした相手をどく状態にする。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をした相手をどく状態にする。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 	},
 	barbbarrage: {
 		name: "どくばりセンボン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手をどく状態にする。相手がすでにどく状態の場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "50%でどく。どく状態の相手には威力2倍。", // NEEDS QC
 	},
 	barrage: {
 		name: "たまなげ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。ダメージは最初の攻撃で1回だけ計算され、すべての攻撃に適用される。途中の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	barrier: {
 		name: "バリアー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を2段階上げる。", // NEEDS QC
+		shortDesc: "自分の防御が2段階上がる。", // NEEDS QC
 	},
 	batonpass: {
 		name: "バトンタッチ",
 		// Official flavor text: "控えの ポケモンと 入れ替わる。 能力変化は 替わった ポケモンが そのまま 受けつぐ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "パーティの別のポケモンと交代する。交代先のポケモンは、自分の能力ランクの変化のほか、こんらん、アクアリング・のろい・ドラゴンエール・さしおさえ・きあいだめ・いえき・かいふくふうじ・ねをはる・やどりぎのタネ・ロックオン・こころのめ・でんじふゆう・ほろびのうた・パワートリック・テレキネシスの効果と、残りHPを保ったみがわりを引き継ぐ。交代先の特性が無効化されない特性の場合、いえきの効果は引き継がれない。", // NEEDS QC
+		shortDesc: "能力変化などを引き継いで交代する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "パーティの別のポケモンと交代する。交代先のポケモンは、自分の能力ランクの変化のほか、こんらん、アクアリング・のろい・さしおさえ・きあいだめ・いえき・かいふくふうじ・ねをはる・やどりぎのタネ・ロックオン・こころのめ・でんじふゆう・ほろびのうた・パワートリック・テレキネシスの効果と、残りHPを保ったみがわりを引き継ぐ。交代先の特性が無効化されない特性の場合、いえきの効果は引き継がれない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "パーティの別のポケモンと交代する。交代先のポケモンは、自分の能力ランクの変化のほか、こんらん、アクアリング・のろい・さしおさえ・きあいだめ・いえき・かいふくふうじ・ねをはる・やどりぎのタネ・ロックオン・こころのめ・でんじふゆう・ほろびのうた・パワートリック・テレキネシスの効果、くろいまなざし（とおせんぼう・クモのす）で交代できなくなった効果の効果と、残りHPを保ったみがわりを引き継ぐ。交代先の特性が無効化されない特性の場合、いえきの効果は引き継がれない。交代先がメガゲンガーの場合、テレキネシスの効果は引き継がれない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "パーティの別のポケモンと交代する。交代先のポケモンは、自分の能力ランクの変化のほか、こんらん、アクアリング・のろい・さしおさえ・きあいだめ・いえき・かいふくふうじ・ねをはる・やどりぎのタネ・ロックオン・こころのめ・でんじふゆう・ほろびのうた・パワートリック・テレキネシスの効果、くろいまなざし（とおせんぼう・クモのす）で交代できなくなった効果の効果と、残りHPを保ったみがわりを引き継ぐ。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "パーティの別のポケモンと交代する。交代先のポケモンは、自分の能力ランクの変化のほか、こんらん、アクアリング・のろい・さしおさえ・きあいだめ・いえき・かいふくふうじ・ねをはる・やどりぎのタネ・ロックオン・こころのめ・でんじふゆう・どろあそび・ほろびのうた・パワートリック・みずあそびの効果、くろいまなざし（とおせんぼう・クモのす）で相手を交代できなくしている効果と自分が交代できない効果の効果と、残りHPを保ったみがわりを引き継ぐ。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "パーティの別のポケモンと交代する。交代先のポケモンは、自分の能力ランクの変化のほか、こんらん、のろい・きあいだめ・ねをはる・やどりぎのタネ・ロックオン・こころのめ・どろあそび・ほろびのうた・みずあそびの効果、くろいまなざし（とおせんぼう・クモのす）で相手を交代できなくしている効果と自分が交代できない効果の効果と、残りHPを保ったみがわりを引き継ぐ。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "パーティの別のポケモンと交代する。交代先のポケモンは、自分の能力ランクの変化のほか、こんらん、のろい・まるくなる・きあいだめ・みやぶる・やどりぎのタネ・ロックオン・こころのめ・ちいさくなる・しろいきり・ほろびのうたの効果、くろいまなざし（クモのす）で相手を交代できなくしている効果と自分が交代できない効果の効果と、残りHPを保ったみがわりを引き継ぐ。", // NEEDS QC
 		},
 	},
 	beakblast: {
 		name: "くちばしキャノン",
 		// Official flavor text: "最初に クチバシを 加熱してから 攻撃を くりだす。 加熱中に さわると やけどする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、この技を出す前に直接攻撃を受けた場合、攻撃してきた相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "行動前に接触されるとやけどにする。", // NEEDS QC
 
 		start: "  {POKEMON}は クチバシを 加熱し始めた！",
 	},
 	beatup: {
 		name: "ふくろだたき",
 		// Official flavor text: "味方 全員で 攻撃する。 仲間の ポケモンが 多いほど 技の 攻撃回数が 増える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と、パーティにいるひんし・状態異常でないポケモン1匹につき1回ずつ攻撃する。各攻撃の威力は5+(X/10)（Xは参加するポケモンの攻撃種族値）。すべての攻撃は自分が行ったものとして扱われる。", // NEEDS QC
+		shortDesc: "元気な手持ち全員で攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "タイプなしのダメージを与える。自分と、パーティにいるひんし・状態異常でないポケモン1匹につき1回ずつ攻撃する。各攻撃のダメージ計算では、参加するポケモンの攻撃種族値を攻撃、相手のぼうぎょ種族値を防御として使い、能力ランクなど攻撃や防御を補正する効果は無視する。すべての攻撃は自分が行ったものとして扱われる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "タイプなしのダメージを与える。パーティにいるひんし・状態異常でないポケモン1匹につき1回ずつ攻撃し、条件を満たすポケモンがいない場合は失敗する。各攻撃のダメージ計算では、参加するポケモンの攻撃種族値を攻撃、相手のぼうぎょ種族値を防御として使い、能力ランクなど攻撃や防御を補正する効果は無視する。すべての攻撃は自分が行ったものとして扱われる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "タイプなしのダメージを与える。パーティにいるひんし・状態異常でないポケモン1匹につき1回ずつ攻撃する。各攻撃のダメージ計算では、参加するポケモンのレベルと攻撃種族値、相手のぼうぎょ種族値を使い、能力ランクなど攻撃や防御を補正する効果は無視する。参加できるポケモンがいない場合は失敗する。", // NEEDS QC
 		},
 
 		activate: "  {NAME}の こうげき！",
 	},
 	behemothbash: {
 		name: "きょじゅうだん",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手がダイマックス中ならダメージ2倍。", // NEEDS QC
 		},
 	},
 	behemothblade: {
 		name: "きょじゅうざん",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手がダイマックス中ならダメージ2倍。", // NEEDS QC
 		},
 	},
 	belch: {
 		name: "ゲップ",
 		// Official flavor text: "相手に 向かって ゲップを 浴びせて ダメージを 与える。 きのみを 食べないと だせない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がきのみを食べるまで選択できない。持たせたきのみを食べるか、むしくい・ついばむで相手のきのみを奪って食べるか、なげつけるで投げつけられたきのみを食べると条件を満たす。一度条件を満たすと、他の道具を持ったり使ったり交代したりしても、その対戦の間はずっと選択できる。しぜんのめぐみできのみを消費しても、食べたことにはならない。", // NEEDS QC
+		shortDesc: "きのみを食べていないと選択できない。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -506,10 +487,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bellydrum: {
 		name: "はらだいこ",
 		// Official flavor text: "自分の ＨＰを 最大ＨＰの 半分 減らして 自分の 攻撃を 最大に あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "最大HPの1/2（切り捨て）を失う代わりに、自分の攻撃を12段階上げる。HPが足りない場合や、攻撃のランクがすでに+6の場合は失敗する。", // NEEDS QC
+		shortDesc: "最大HPの半分を失い、攻撃を最大まで上げる。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ひんしになる場合や、こうげきがすでに+6の場合を除き、最大HPの1/2（切り捨て）を失う。HPが足りなかった場合は、こうげきが2段階上がる。そうでない場合、こうげきのランクが+6未満の間は2段階ずつ上げ、この処理の前のこうげきの実数値が999だった場合はランクを1段階下げて繰り返しを終える。", // NEEDS QC
 		},
 
 		boost: "  {POKEMON}は 体力を削って パワー全開！",
@@ -517,13 +498,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bestow: {
 		name: "ギフトパス",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の持ち物を相手に渡す。自分が道具を持っていない場合やZクリスタルを持っている場合、相手がすでに道具を持っている場合は失敗する。また、道具がメガストーンで自分か相手がそれでメガシンカできる種族の場合や、道具があいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリで自分か相手がそれぞれカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディの場合も失敗する。", // NEEDS QC
+		shortDesc: "自分の持ち物を相手に渡す。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の持ち物を相手に渡す。自分が道具を持っていない場合や、相手がすでに道具を持っている場合は失敗する。また、道具がメガストーンで自分か相手がそれでメガシンカできる種族の場合や、道具があいいろのたま・べにいろのたま・はっきんだま・プレート・カセットで自分か相手がそれぞれカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクトの場合も失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の持ち物を相手に渡す。自分が道具を持っていない場合やメールを持っている場合、相手がすでに道具を持っている場合は失敗する。また、道具がはっきんだま・プレート・カセットで自分か相手がそれぞれギラティナ・アルセウス・ゲノセクトの場合も失敗する。", // NEEDS QC
 		},
 
 		takeItem: "  {POKEMON}は {SOURCE}から {ITEM}を 受け取った！",
@@ -531,20 +512,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bide: {
 		name: "がまん",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2ターンの間この技に固定され、2ターン後、その間に攻撃で受けたダメージの2倍を、最後に自分を攻撃したポケモンに与える。最後に攻撃したポケモンが場にいない場合は、相手のポケモンからランダムに選んで攻撃する。この技の使用中に行動できなくなると、効果は終わる。命中判定を行わないが、タイプ相性による無効は貫通しない。", // NEEDS QC
+		shortDesc: "2ターン耐えて、受けたダメージの2倍を返す。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2ターンの間この技に固定され、2ターン後、その間に攻撃で受けたダメージの2倍を、最後に自分を攻撃したポケモンに与える。最後に攻撃したポケモンが場にいない場合は、相手のポケモンからランダムに選んで攻撃する。この技の使用中に行動できなくなると、効果は終わる。命中判定を行わず、タイプ相性による無効も貫通する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2ターンの間この技に固定され、2ターン後、その間に受けたダメージの2倍を、最後に自分を攻撃したポケモンに与える。最後に攻撃したポケモンが場にいない場合は、相手のポケモンからランダムに選んで攻撃する。この技の使用中に行動できなくなると、効果は終わる。タイプ相性による無効は貫通しない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、2〜3ターン後、その間に受けたダメージの2倍を相手に与える。この技の使用中に行動できなくなると、効果は終わる。タイプ相性による無効は貫通しない。", // NEEDS QC
+			shortDesc: "2〜3ターン待ち、受けたダメージの2倍を返す。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、2〜3ターン後、その間に受けたダメージの2倍を相手に与える。タイプ相性による無効を貫通し、相手があなをほるやそらをとぶを使っていても必ず当たる。効果中も自分は交代できる。交代するか行動できなくなると、効果は終わる。効果中に相手が交代するか、あやしいひかり・テクスチャー・きあいだめ・へびにらみ・くろいきり・やどりぎのタネ・ひかりのかべ・ものまね・しろいきり・どくガス・どくのこな・じこさいせい・リフレクター・ねむる・タマゴうみ・はねる・しびれごな・みがわり・ちょうおんぱ・テレポート・でんじは・どくどく・へんしんを使うと、それまでに受けたダメージが合計に加算される。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は がまんしている",
@@ -554,27 +535,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bind: {
 		name: "しめつける",
 		// Official flavor text: "長い 体や つるなどを 使い ４ー５ターンの 間 相手を 締めつけて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（しめつけバンドを持っている場合は1/8、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間（ねばりのかぎづめを持っている場合は常に5ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手を捕らえてダメージ。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、バトンタッチを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間この技を使う。2〜3ターン続く確率は各3/8、4〜5ターン続く確率は各1/8。最初のターンに計算したダメージが毎ターンそのまま使われる。効果中、自分は技を選べず、相手は技を実行できないが、どちらも交代はできる。自分が交代した場合、相手はそのターンも技を実行できない。相手が交代した場合、自分は自動的にこの技を再度使い、そのときPPが0だった場合は63になる。自分か相手が交代するか、自分が行動できなくなると効果は終わる。この技はタイプ相性で無効な相手の行動も封じられるが、ダメージは与えない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手は行動できない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は {SOURCE}に 締めつけられた！",
@@ -583,180 +564,180 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bite: {
 		name: "かみつく",
 		// Official flavor text: "鋭く とがった 歯で かみついて 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をひるませる。", // NEEDS QC
+			shortDesc: "10%の確率で相手をひるませる。", // NEEDS QC
 		},
 	},
 	bitterblade: {
 		name: "むねんのつるぎ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 	},
 	bittermalice: {
 		name: "うらみつらみ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	blackholeeclipse: {
 		name: "ブラックホールイクリプス",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	blastburn: {
 		name: "ブラストバーン",
 		// Official flavor text: "爆発の 炎で 相手を 焼きつくして 攻撃する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	blazekick: {
 		name: "ブレイズキック",
 		// Official flavor text: "攻撃した 相手を やけど状態に することが ある。 急所にも 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。10%でやけどにする。", // NEEDS QC
 	},
 	blazingtorque: {
 		name: "バーンアクセル",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	bleakwindstorm: {
 		name: "こがらしあらし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手の素早さを1段階下げる。天気があめ・おおあめの場合、必中になる。ばんのうがさを持っている相手に対しては、命中率は80%のまま。", // NEEDS QC
+		shortDesc: "30%で相手の素早さ-1。雨なら必中。", // NEEDS QC
 	},
 	blizzard: {
 		name: "ふぶき",
 		// Official flavor text: "激しい 吹雪を 相手に 吹きつけて 攻撃する。 こおり状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。天気がゆきの場合、必中になる。", // NEEDS QC
+		shortDesc: "10%でこおりにする。ゆきなら必中。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をこおり状態にする。天気があられの場合、命中判定を行わない。", // NEEDS QC
+			shortDesc: "10%でこおりにする。あられなら必中。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
+			shortDesc: "10%の確率で相手をこおりにする。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
 		},
 	},
 	block: {
 		name: "とおせんぼう",
 		// Official flavor text: "両手を ひろげて たちはだかり 相手の 逃げ道を ふさいで 逃げられなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手を交代できなくする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わるが、バトンタッチで離れた場合は相手が交代できないままになる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、バトンタッチを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わるが、バトンタッチで離れた場合は相手が交代できないままになる。", // NEEDS QC
 		},
 	},
 	bloodmoon: {
 		name: "ブラッドムーン",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "連続では選択できない。", // NEEDS QC
 	},
 	bloomdoom: {
 		name: "ブルームシャインエクストラ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	blueflare: {
 		name: "あおいほのお",
 		// Official flavor text: "美しくも 激しい 青い炎で 相手を 包みこんで 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "20%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	bodypress: {
 		name: "ボディプレス",
 		// Official flavor text: "体を ぶつけて 攻撃。 防御が 高いほど 与える ダメージが 増える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃の代わりに防御の数値（能力ランクの変化を含む）を使ってダメージを計算する。攻撃を変化させる他の効果は通常どおり適用される。", // NEEDS QC
+		shortDesc: "攻撃でなく防御の数値でダメージ計算。", // NEEDS QC
 	},
 	bodyslam: {
 		name: "のしかかり",
 		// Official flavor text: "全身で 相手に のしかかり 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 		},
 	},
 	boltbeak: {
 		name: "でんげきくちばし",
 		// Official flavor text: "電気を まとった くちばしで 刺す。 相手より 先に 攻撃できると 技の 威力は ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手より先に行動した場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "相手より先に行動すると威力2倍。", // NEEDS QC
 	},
 	boltstrike: {
 		name: "らいげき",
 		// Official flavor text: "ぼうだいな 電気を 身に まとって 相手に 突進して 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "20%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	boneclub: {
 		name: "ホネこんぼう",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "10%の確率で相手をひるませる。", // NEEDS QC
 	},
 	bonemerang: {
 		name: "ホネブーメラン",
 		// Official flavor text: "手に 持った ホネを 相手に 投げつけ 行きと 帰りの ２回連続で ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "1ターンに2回攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃する。最初の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃する。最初の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	bonerush: {
 		name: "ボーンラッシュ",
 		// Official flavor text: "硬い ホネで 相手を なぐりつけて 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 	},
 	boomburst: {
 		name: "ばくおんぱ",
 		// Official flavor text: "すさまじい 爆音の 破壊力に よって 周りに いるものを 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。周囲全体攻撃。", // NEEDS QC
 	},
 	bounce: {
 		name: "とびはねる",
 		// Official flavor text: "空高く 飛び跳ねて ２ターン目に 相手を 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・ぼうふう・スカイアッパー・うちおとす・サウザンアロー・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に飛び、2ターン目に攻撃。30%でまひ。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・ぼうふう・スカイアッパー・うちおとす・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・スカイアッパー・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・スカイアッパー・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}は 高く 飛び跳ねた！",
@@ -764,95 +745,95 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bouncybubble: {
 		name: "いきいきバブル",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 	},
 	branchpoke: {
 		name: "えだづき",
 		// Official flavor text: "するどく とがった 枝で 相手を 突いて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	bravebird: {
 		name: "ブレイブバード",
 		// Official flavor text: "はねを おりたたみ 低空飛行で 突撃する。 自分も かなり ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの33%（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの33%の反動を受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/3（切り捨て、最低1）の反動ダメージを自分が受ける。", // NEEDS QC
+			shortDesc: "1/3の反動ダメージを受ける。", // NEEDS QC
 		},
 	},
 	breakingswipe: {
 		name: "ワイドブレイカー",
 		// Official flavor text: "きょうじんな しっぽを 激しく ふりはらって 相手を 攻撃する。 相手の 攻撃を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	breakneckblitz: {
 		name: "ウルトラダッシュアタック",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	brickbreak: {
 		name: "かわらわり",
 		// Official flavor text: "手刀を 勢いよく 振りおろして 相手を 攻撃する。 ひかりのかべや リフレクター なども 破壊できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が外れなかった場合、ダメージ計算の前に、相手側のリフレクター・ひかりのかべ・オーロラベールの効果を消す。", // NEEDS QC
+		shortDesc: "攻撃前に相手側の壁を壊す。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が外れなかった場合、ダメージ計算の前に、相手側のリフレクター・ひかりのかべの効果を消す。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が外れなかった場合、相手に効果があるかどうかに関わらず、ダメージ計算の前に、相手側のリフレクター・ひかりのかべの効果を消す。", // NEEDS QC
+			shortDesc: "壁を壊す。相手に無効でも壊す。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が外れなかった場合、相手に効果があるかどうかに関わらず、ダメージ計算の前に、相手側のリフレクター・ひかりのかべの効果を消す。", // NEEDS QC
 		},
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  {POKEMON}は {TEAM}の 壁を こわした！", // NEEDS QC
 	},
 	brine: {
 		name: "しおみず",
 		// Official flavor text: "相手が ＨＰの 半分くらい きずを おっていると 技の 威力が ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の残りHPが最大HPの1/2以下の場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "相手のHPが半分以下なら威力2倍。", // NEEDS QC
 	},
 	brutalswing: {
 		name: "ぶんまわす",
 		// Official flavor text: "自分の 体を ぶんまわして 相手に ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。周囲全体攻撃。", // NEEDS QC
 	},
 	bubble: {
 		name: "あわ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%の確率で相手のすばやさを1段階下げる。", // NEEDS QC
+			shortDesc: "33%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		},
 	},
 	bubblebeam: {
 		name: "バブルこうせん",
 		// Official flavor text: "泡を 勢いよく 相手に 発射して 攻撃する。 素早さを さげる ことが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%の確率で相手のすばやさを1段階下げる。", // NEEDS QC
+			shortDesc: "33%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		},
 	},
 	bugbite: {
 		name: "むしくい",
 		// Official flavor text: "かみついて 攻撃する。 相手が きのみを 持っているとき 食べて きのみの 効果を 受けられる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、相手の持っているきのみを奪ってその場で食べ、（自分の道具が無効化されていても）その効果を受ける。この技で失われたきのみは、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+		shortDesc: "相手のきのみを奪って食べる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の持っているきのみを奪ってその場で食べ、自分の道具が無効化されていなければその効果を受ける。この技で失われたきのみは、リサイクルで取り戻せる。", // NEEDS QC
 		},
 
 		removeItem: "  {SOURCE}は {ITEM}を 奪って 食べた！",
@@ -860,60 +841,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bugbuzz: {
 		name: "むしのさざめき",
 		// Official flavor text: "振動で 音波を おこして 攻撃する。相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	bulkup: {
 		name: "ビルドアップ",
 		// Official flavor text: "体に 力を こめて 筋肉を ぶあつく することで 自分の 攻撃と 防御を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と防御を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃・防御が1段階上がる。", // NEEDS QC
 	},
 	bulldoze: {
 		name: "じならし",
 		// Official flavor text: "地面を 踏みならして 自分の 周りに いるものを 攻撃する。 相手の 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で周囲の素早さを1段階下げる。", // NEEDS QC
 	},
 	bulletpunch: {
 		name: "バレットパンチ",
 		// Official flavor text: "弾丸の ような 速くて 硬い パンチを 相手に くりだす。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	bulletseed: {
 		name: "タネマシンガン",
 		// Official flavor text: "タネを 勢いよく 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 	},
 	burningbulwark: {
 		name: "かえんのまもり",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手をやけど状態にする。ダメージを与えない技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "攻撃技を防ぎ、接触してきた相手をやけどに。", // NEEDS QC
 	},
 	burningjealousy: {
 		name: "しっとのほのお",
 		// Official flavor text: "しっとの エネルギーで 相手を 攻撃。 そのターン 能力が あがった ポケモンを やけどの 状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに能力ランクが上がった相手に当てた場合、100%の確率でやけど状態にする。", // NEEDS QC
+		shortDesc: "このターン能力が上がった相手を100%やけどに。", // NEEDS QC
 	},
 	burnup: {
 		name: "もえつきる",
 		// Official flavor text: "全身の ほのおを すべて 燃やして 大ダメージを 与える。 自分の ほのおタイプが なくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がほのおタイプでなければ失敗する。攻撃が成功すると、テラスタルしていない場合、場にいる間、自分のほのおタイプがタイプなしになる。", // NEEDS QC
+		shortDesc: "ほのおタイプ限定。使用後ほのおタイプを失う。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分がほのおタイプでない場合は失敗する。この技が成功すると、場にいる間、自分のほのおタイプがなくなる。", // NEEDS QC
 		},
 
 		typeChange: "  {POKEMON}の 炎は 燃え尽きた！",
@@ -921,68 +902,68 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	buzzybuzz: {
 		name: "びりびりエレキ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	calmmind: {
 		name: "めいそう",
 		// Official flavor text: "静かに 精神を 統一し 心を 鎮めることで 自分の 特攻と 特防を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻と特防を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の特攻・特防が1段階上がる。", // NEEDS QC
 	},
 	camouflage: {
 		name: "ほごしょく",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドに応じて自分のタイプが変わる。通常はノーマルタイプ、エレキフィールドではでんきタイプ、ミストフィールドではフェアリータイプ、グラスフィールドではくさタイプ、サイコフィールドではエスパータイプになる。自分のタイプを変えられない場合や、すでにそのタイプのみの場合は失敗する。", // NEEDS QC
+		shortDesc: "フィールドに応じて自分のタイプが変わる。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて自分のタイプが変わる。通常はノーマルタイプ、エレキフィールドではでんきタイプ、ミストフィールドではフェアリータイプ、グラスフィールドではくさタイプになる。自分のタイプを変えられない場合や、すでにそのタイプのみの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて自分のタイプが変わる。通常はじめんタイプになる。自分のタイプを変えられない場合や、すでにそのタイプのみの場合は失敗する。", // NEEDS QC
+			shortDesc: "フィールドに応じてタイプ変化。（じめん）", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて自分のタイプが変わる。通常はノーマルタイプになる。自分の特性がマルチタイプの場合や、そのタイプがすでに自分のタイプに含まれる場合は失敗する。", // NEEDS QC
+			shortDesc: "フィールドに応じてタイプ変化。（ノーマル）", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて自分のタイプが変わる。通常はノーマルタイプになる。そのタイプがすでに自分のタイプに含まれる場合は失敗する。", // NEEDS QC
 		},
 	},
 	captivate: {
 		name: "ゆうわく",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特攻を2段階下げる。自分と相手の性別が同じ場合や、どちらかが性別不明の場合は効果がない。特性がどんかんのポケモンには効かない。", // NEEDS QC
+		shortDesc: "異性の相手の特攻を2段階下げる。", // NEEDS QC
 	},
 	catastropika: {
 		name: "ひっさつのピカチュート",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	ceaselessedge: {
 		name: "ひけん・ちえなみ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ひこうタイプや特性がふゆうのポケモンには効果がない。最大3回まで重ねて仕掛けられ、ダメージは1回で最大HPの1/8、2回で1/6、3回で1/4（いずれも切り捨て）。いずれかのポケモンがおかたづけを使うか、相手側のポケモンがキラースピン・こうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
+		shortDesc: "相手側の場にまきびしをまく。", // NEEDS QC
 	},
 	celebrate: {
 		name: "おいわい",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "対戦での効果はない。", // NEEDS QC
 
 		activate: "  おめでとう！ {TRAINER}！！",
 	},
 	charge: {
 		name: "じゅうでん",
 		// Official flavor text: "次の ターンに だす でんきタイプの 技の 威力を あげる。 自分の 特防も あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特防を1段階上げる。自分の次のでんきタイプの攻撃技の威力が2倍になる。この効果は、場を離れるか、じゅうでん以外のでんきタイプの技を（失敗しても）使おうとすると終わる。", // NEEDS QC
+		shortDesc: "特防+1。次のでんき技の威力2倍。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分の特防を1段階上げる。次のターンにでんきタイプの攻撃技を使うと、威力が2倍になる。", // NEEDS QC
+			shortDesc: "特防+1。次のターンのでんき技の威力2倍。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "次のターンにでんきタイプの攻撃技を使うと、威力が2倍になる。", // NEEDS QC
+			shortDesc: "次のターンのでんき技の威力が2倍。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 充電を 始めた！",
@@ -990,82 +971,82 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	chargebeam: {
 		name: "チャージビーム",
 		// Official flavor text: "電撃の 束を 相手に 発射する。電気を ためて 自分の 特攻を あげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "70%の確率で自分の特攻を1段階上げる。", // NEEDS QC
+		shortDesc: "70%の確率で自分の特攻が1段階上がる。", // NEEDS QC
 	},
 	charm: {
 		name: "あまえる",
 		// Official flavor text: "かわいく みつめて 油断を 誘い 相手の 攻撃を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃を2段階下げる。", // NEEDS QC
 	},
 	chatter: {
 		name: "おしゃべり",
 		// Official flavor text: "とても うるさい おしゃべりの 音波で 相手を 攻撃する。 相手を 混乱させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をこんらん状態にする。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "X%の確率で相手をこんらん状態にする。Xは、自分が変身していないペラップでなければ0。ペラップの場合、録音された鳴き声の音量によってXは0か10になる。音量が小さい場合や録音がない場合は0、中くらいから大きい場合は10。", // NEEDS QC
+			shortDesc: "ペラップなら10%でこんらん。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "X%の確率で相手をこんらん状態にする。Xは、自分が変身していないペラップでなければ0。ペラップの場合、録音された鳴き声の音量によってXは1・11・31のいずれかになる。録音がない場合や音量が小さい場合は1、中くらいの場合は11、大きい場合は31。", // NEEDS QC
+			shortDesc: "ペラップなら31%でこんらん。", // NEEDS QC
 		},
 	},
 	chillingwater: {
 		name: "ひやみず",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	chillyreception: {
 		name: "さむいギャグ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、天気をゆきにする。自分は交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合は交代しない。", // NEEDS QC
+		shortDesc: "ゆきを降らせて控えと交代する。", // NEEDS QC
 
 		prepare: "  {POKEMON}は さむい ギャグを かました！",
 	},
 	chipaway: {
 		name: "なしくずし",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の能力ランクの変化（回避率を含む）を無視して攻撃する。", // NEEDS QC
+		shortDesc: "相手の能力変化を無視して攻撃。", // NEEDS QC
 	},
 	chloroblast: {
 		name: "クロロブラスト",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、自分は最大HPの1/2（切り上げ）のダメージを受ける。特性がマジックガード・いしあたまの場合は受けない。", // NEEDS QC
+		shortDesc: "自分の最大HPの1/2を失う。", // NEEDS QC
 	},
 	circlethrow: {
 		name: "ともえなげ",
 		// Official flavor text: "相手を 投げとばして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手がどちらもひんしになっていない場合、相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がねをはるの効果を受けている場合や、特性がきゅうばんの場合、みがわりに当たった場合、この効果は失敗する。", // NEEDS QC
+		shortDesc: "相手をランダムな控えと強制交代させる。", // NEEDS QC
 	},
 	clamp: {
 		name: "からではさむ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（しめつけバンドを持っている場合は1/8、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間（ねばりのかぎづめを持っている場合は常に5ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手を捕らえてダメージ。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、バトンタッチを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間この技を使う。2〜3ターン続く確率は各3/8、4〜5ターン続く確率は各1/8。最初のターンに計算したダメージが毎ターンそのまま使われる。効果中、自分は技を選べず、相手は技を実行できないが、どちらも交代はできる。自分が交代した場合、相手はそのターンも技を実行できない。相手が交代した場合、自分は自動的にこの技を再度使い、そのときPPが0だった場合は63になる。自分か相手が交代するか、自分が行動できなくなると効果は終わる。この技はタイプ相性で無効な相手の行動も封じられるが、ダメージは与えない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手は行動できない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は {SOURCE}の からに 挟まれた！",
@@ -1074,123 +1055,123 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	clangingscales: {
 		name: "スケイルノイズ",
 		// Official flavor text: "全身の うろこを こすり 大きな 音を 出して 攻撃する。 攻撃後 自分の 防御が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "自分の防御を1段階下げる。", // NEEDS QC
 	},
 	clangoroussoul: {
 		name: "ソウルビート",
 		// Official flavor text: "自分の ＨＰを 少し 削って すべての 能力を 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "最大HPの33%（切り捨て）を失う代わりに、自分の攻撃・防御・特攻・特防・素早さを1段階ずつ上げる。HPが足りない場合や、攻撃・防御・特攻・特防・素早さのランクがいずれも変化しない場合は失敗する。", // NEEDS QC
+		shortDesc: "最大HPの33%を失い、全能力が1段階上がる。", // NEEDS QC
 	},
 	clangoroussoulblaze: {
 		name: "ブレイジングソウルビート",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃・防御・特攻・特防・素早さを1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の全能力が1段階上がる。", // NEEDS QC
 	},
 	clearsmog: {
 		name: "クリアスモッグ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手の能力変化を元に戻す。", // NEEDS QC
 	},
 	closecombat: {
 		name: "インファイト",
 		// Official flavor text: "守りを 捨てて 相手の ふところに 突撃する。 自分の 防御と 特防が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "自分の防御・特防を1段階下げる。", // NEEDS QC
 	},
 	coaching: {
 		name: "コーチング",
 		// Official flavor text: "的確な 指導を おこなうことで  味方 全員の 攻撃と 防御を 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対象の味方の攻撃と防御を1段階ずつ上げる。隣接する味方がいない場合は失敗する。", // NEEDS QC
+		shortDesc: "味方の攻撃と防御を1段階上げる。", // NEEDS QC
 	},
 	coil: {
 		name: "とぐろをまく",
 		// Official flavor text: "とぐろを まいて 集中する。 自分の 攻撃と 防御と 命中率を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃・防御・命中率を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "攻撃・防御・命中率が1段階上がる。", // NEEDS QC
 	},
 	collisioncourse: {
 		name: "アクセルブレイク",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に対して効果ばつぐんの場合、ダメージが1.3333倍になる。", // NEEDS QC
+		shortDesc: "効果ばつぐんならダメージ1.3333倍。", // NEEDS QC
 	},
 	combattorque: {
 		name: "ファイトアクセル",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	cometpunch: {
 		name: "れんぞくパンチ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。ダメージは最初の攻撃で1回だけ計算され、すべての攻撃に適用される。途中の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	comeuppance: {
 		name: "ほうふく",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに最後に自分へ物理技または特殊技でダメージを与えた相手に、そのダメージの1.5倍（切り捨て）のダメージを与える。そのダメージが0の場合は1ダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技・特殊技を受けていない場合は失敗する。", // NEEDS QC
+		shortDesc: "受けたダメージの1.5倍を返す。", // NEEDS QC
 	},
 	confide: {
 		name: "ないしょばなし",
 		// Official flavor text: "ないしょばなしを することで 相手の 集中力を 失わせ 相手の 特攻を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の特攻を1段階下げる。", // NEEDS QC
 	},
 	confuseray: {
 		name: "あやしいひかり",
 		// Official flavor text: "怪しい 光を 相手に みせて まどわせる。 相手を 混乱させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "相手をこんらん状態にする。", // NEEDS QC
 	},
 	confusion: {
 		name: "ねんりき",
 		// Official flavor text: "弱い 念力を 相手に 送って 攻撃する。 相手を 混乱させることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	constrict: {
 		name: "からみつく",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%の確率で相手のすばやさを1段階下げる。", // NEEDS QC
+			shortDesc: "33%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		},
 	},
 	continentalcrush: {
 		name: "ワールズエンドフォール",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	conversion: {
 		name: "テクスチャー",
 		// Official flavor text: "自分の タイプを おぼえている 技で 一番 上の 技と 同じ タイプに する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のタイプが、自分の1番目の技の（変化する前の）タイプに変わる。自分のタイプを変えられない場合や、そのタイプがすでに自分のタイプに含まれる場合は失敗する。", // NEEDS QC
+		shortDesc: "自分のタイプが最初の技のタイプになる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、この技以外の自分が覚えている技の（変化する前の）タイプのいずれかにランダムに変わる。現在の自分のタイプには変わらない。自分のタイプを変えられない場合や、現在の自分のタイプしか選べない場合は失敗する。", // NEEDS QC
+			shortDesc: "覚えている技に合わせてタイプ変化。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、この技とのろい以外の自分が覚えている技の（変化する前の）タイプのいずれかにランダムに変わる。現在の自分のタイプには変わらない。自分のタイプを変えられない場合や、現在の自分のタイプしか選べない場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、のろい以外の自分が覚えている技の（変化する前の）タイプのいずれかにランダムに変わる。現在の自分のタイプには変わらない。自分のタイプを変えられない場合や、現在の自分のタイプしか選べない場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、相手の現在のタイプと同じになる。", // NEEDS QC
+			shortDesc: "自分のタイプが相手と同じになる。", // NEEDS QC
 		},
 
 		typeChange: "  {SOURCE}の ぞくせいを じぶんに はりつけた！",
@@ -1198,64 +1179,64 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	conversion2: {
 		name: "テクスチャー２",
 		// Official flavor text: "相手が 最後に 使った技に 抵抗できる ように 自分の タイプを 変化させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のタイプが、相手が最後に使った技のタイプを半減または無効にできるタイプ（現在の自分のタイプを除く）のいずれかに変わる。技のタイプは、変化した後のタイプで判定する。相手がまだ技を使っていない場合、自分のタイプを変えられない場合、現在の自分のタイプしか選べない場合は失敗する。", // NEEDS QC
+		shortDesc: "相手の最後の技に強いタイプに変化する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、自分に最後に使われた技のタイプを半減または無効にできるタイプ（現在の自分のタイプを除く）のいずれかに変わる。その技が自分に成功していた場合のみ発動する。技のタイプは、変化した後のタイプで判定する。自分に最後に使われた技が成功していなかった場合、自分の特性がマルチタイプの場合、現在の自分のタイプしか選べない場合は失敗する。", // NEEDS QC
+			shortDesc: "最後に受けた技に強いタイプに変化。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、自分に最後に使われた技のタイプを半減または無効にできるタイプ（現在の自分のタイプを除く）のいずれかに変わる。その技が自分に成功していた場合のみ発動する。技のタイプは変化した後のタイプで判定するが、わるあがきはノーマルタイプとして扱う。自分に最後に使われた技が成功していなかった場合や、現在の自分のタイプしか選べない場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、相手が最後に使った技のタイプを半減または無効にできるタイプのいずれかに変わる。現在の自分のタイプにも変わりうる。技のタイプは、変化した後ではなく元のタイプで判定する。相手がまだ技を使っていない場合は失敗する。", // NEEDS QC
+			shortDesc: "相手の最後の技に強いタイプに変化。", // NEEDS QC
 		},
 	},
 	copycat: {
 		name: "まねっこ",
 		// Official flavor text: "直前に でた 技を まねして 同じ 技を だす。 技が でていないと 失敗する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "（自分を含む）いずれかのポケモンが最後に使った技を使う。まだ技が使われていない場合や、最後に使われた技がねこのて・トーチカ・くちばしキャノン・きょじゅうだん・きょじゅうざん・ゲップ・ギフトパス・バーンアクセル・おいわい・おしゃべり・ともえなげ・ファイトアクセル・まねっこ・カウンター・ほしがる・みちづれ・みきり・ドラゴンテール・ダイマックスほう・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・マジカルアクセル・たたみがえし・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・ポイズンアクセル・まもる・いかりのこな・ほえる・トラップシェル・スケッチ・ねごと・よこどり・ニードルガード・スポットライト・わるあがき・すりかえ・テラクラスター・どろぼう・へんしん・トリック・ふきとばし・ダークアクセルの場合は失敗する。", // NEEDS QC
+		shortDesc: "最後に使われた技を使う。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "（自分を含む）いずれかのポケモンが最後に使った技を使う。ダイマックス技・キョダイマックス技は元の技で判定する。まだ技が使われていない場合や、最後に使われた技がねこのて・トーチカ・くちばしキャノン・きょじゅうだん・きょじゅうざん・ゲップ・ギフトパス・おいわい・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・ドラゴンテール・ダイマックスほう・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・まもる・いかりのこな・ほえる・トラップシェル・スケッチ・ねごと・よこどり・ニードルガード・スポットライト・わるあがき・すりかえ・どろぼう・へんしん・トリック・ふきとばしの場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "（自分を含む）いずれかのポケモンが最後に使った技を使う。まだ技が使われていない場合や、最後に使われた技がねこのて・トーチカ・くちばしキャノン・ゲップ・ギフトパス・おいわい・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・ドラゴンテール・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・まもる・いかりのこな・ほえる・トラップシェル・スケッチ・ねごと・よこどり・ニードルガード・スポットライト・わるあがき・すりかえ・どろぼう・へんしん・トリック・ふきとばし、またはZワザの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "（自分を含む）いずれかのポケモンが最後に使った技を使う。まだ技が使われていない場合や、最後に使われた技がねこのて・ゲップ・ギフトパス・おいわい・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・ドラゴンテール・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・てをつなぐ・キングシールド・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・まもる・いかりのこな・ほえる・スケッチ・ねごと・よこどり・ニードルガード・わるあがき・すりかえ・どろぼう・へんしん・トリック・ふきとばしの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "（自分を含む）いずれかのポケモンが最後に使った技を使う。まだ技が使われていない場合や、最後に使われた技がねこのて・ギフトパス・おしゃべり・ともえなげ・まねっこ・カウンター・ほしがる・みちづれ・みきり・ドラゴンテール・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・まもる・いかりのこな・スケッチ・ねごと・よこどり・わるあがき・すりかえ・どろぼう・へんしん・トリックの場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "（自分を含む）いずれかのポケモンが最後に使った技を使う。まだ技が使われていない場合や、最後に使われた技がねこのて・おしゃべり・まねっこ・カウンター・ほしがる・みちづれ・みきり・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・まもる・スケッチ・ねごと・よこどり・わるあがき・すりかえ・どろぼう・トリックの場合は失敗する。", // NEEDS QC
 		},
 	},
 	coreenforcer: {
 		name: "コアパニッシャー",
 		// Official flavor text: "ダメージを 与えた 相手が すでに 行動を 終えていたら 相手の 特性を 消してしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手より後に行動した場合、相手が場にいる間、相手の特性を無効化する。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスチェンジ・ダルマモード・マイティチェンジの場合はこの効果は発生せず、バトンタッチで受け継いだ場合は効果がすぐに終わる。", // NEEDS QC
+		shortDesc: "後攻なら相手の特性を無効化する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手より後に行動した場合、相手が場にいる間、相手の特性を無効化する。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ダルマモードの場合はこの効果は発生せず、バトンタッチで受け継いだ場合は効果がすぐに終わる。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手より後に行動した場合、相手が場にいる間、相手の特性を無効化する。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手の特性がきずなへんげ・ぜったいねむり・ばけのかわ・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ダルマモードの場合はこの効果は発生せず、バトンタッチで受け継いだ場合は効果がすぐに終わる。", // NEEDS QC
 		},
 	},
 	corkscrewcrash: {
 		name: "ちょうぜつらせんれんげき",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	corrosivegas: {
 		name: "ふしょくガス",
 		// Official flavor text: "強い 酸性の ガスで 周りに いるものを 包みこみ 持っている 道具を 溶かしてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の持ち物を失わせる。特性がねんちゃくのポケモンの道具は失わせられない。ただし、カイオーガ・グラードン・ディアルガ・パルキア・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタ・パラドックスポケモン・オーガポンが持つ、それぞれあいいろのたま・べにいろのたま・だいこんごうだま・だいしらたま・だいはっきんだま・プレート・カセット・メモリ・くちたけん・くちたたて・ブーストエナジー・おめんも失わせられない。ここでのパラドックスポケモンは、特性がこだいかっせい・クォークチャージの全種族（ウガツホムラ・タケルライコ・テツノイワオ・テツノカシラを除く）を指す。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+		shortDesc: "周囲のポケモンの道具を失わせる。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の持ち物を失わせる。特性がねんちゃくのポケモンの道具は失わせられない。ただし、カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリ・くちたけん・くちたたても失わせられない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 
 		fail: "#healblock",
@@ -1264,89 +1245,89 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	cosmicpower: {
 		name: "コスモパワー",
 		// Official flavor text: "宇宙から 神秘の 力を とりこむ ことで 自分の 防御と 特防を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の防御・特防が1段階上がる。", // NEEDS QC
 	},
 	cottonguard: {
 		name: "コットンガード",
 		// Official flavor text: "フワフワの 綿毛で 自分の 体を 包みこんで 守る。 防御を ぐぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を3段階上げる。", // NEEDS QC
+		shortDesc: "自分の防御が3段階上がる。", // NEEDS QC
 	},
 	cottonspore: {
 		name: "わたほうし",
 		// Official flavor text: "綿のような フワフワの 胞子を まとわり つかせて 相手の 素早さを がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の素早さを2段階下げる。", // NEEDS QC
+		shortDesc: "相手の素早さを2段階下げる。", // NEEDS QC
 	},
 	counter: {
 		name: "カウンター",
 		// Official flavor text: "相手から 受けた 物理攻撃の ダメージを ２倍に して 同じ 相手に 返す。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに最後に自分へ物理技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。そのダメージが0の場合は1ダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技を受けていない場合は失敗する。", // NEEDS QC
+		shortDesc: "受けた物理攻撃の2倍のダメージを返す。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ物理技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。そのダメージが0の場合は威力1でダメージを与える。その相手の位置が空いている場合は、範囲内の相手ポケモンからランダムに選んでダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技を受けていない場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ物理技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技を受けていない場合や、ダメージを受けていない場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ物理技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。めざめるパワーはノーマルタイプとして扱い、連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技を受けていない場合や、ダメージを受けていない場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに物理技で受けたダメージの2倍のダメージを相手に与える。めざめるパワーはノーマルタイプとして扱い、連続攻撃技は最後の1発分のみ数える。自分が先に行動した場合、このターンに物理技を受けていない場合、ダメージを受けていない場合は失敗する。相手がじわれかつのドリルを使って外していた場合、この技は65535のダメージを与える。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "バトルで最後に使われた技が与えたダメージの2倍を相手に与える。タイプ相性による無効を貫通する。自分が先に行動した場合や、相手側の最後の技がカウンターだった場合、威力0だった場合、ノーマル・かくとうタイプでなかった場合は失敗する。どちらかの側の最後の技がダメージを与えておらず、その技があやしいひかり・テクスチャー・きあいだめ・へびにらみ・くろいきり・やどりぎのタネ・ひかりのかべ・ものまね・しろいきり・どくガス・どくのこな・じこさいせい・リフレクター・ねむる・タマゴうみ・はねる・しびれごな・みがわり・ちょうおんぱ・テレポート・でんじは・どくどく・へんしんでもなかった場合は失敗する。", // NEEDS QC
+			shortDesc: "ノーマル・かくとう技を受けたら2倍返し。", // NEEDS QC
 		},
 	},
 	courtchange: {
 		name: "コートチェンジ",
 		// Official flavor text: "不思議な 力で お互いの 場の 効果を 入れ替える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "しろいきり・ひかりのかべ・リフレクター・まきびし・しんぴのまもり・おいかぜ・どくびし・ステルスロック・みずのちかい・ほのおのちかい・くさのちかい・ねばねばネット・オーロラベール・キョダイコウジン・キョダイホウゲキ・キョダイベンタツ・キョダイゴクエンの効果を、自分側と相手側で入れ替える。", // NEEDS QC
+		shortDesc: "両陣地の場の効果を入れ替える。", // NEEDS QC
 
 		activate: "  {POKEMON}は おたがいの 場の 効果を 入れ替えた！",
 	},
 	covet: {
 		name: "ほしがる",
 		// Official flavor text: "かわいく あまえながら 相手に ちかづき 持っている 道具を うばう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、自分が道具を持っていなければ相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしになっていなければ道具を失わない。ただし、カイオーガ・グラードン・ディアルガ・パルキア・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタ・パラドックスポケモン・オーガポンが持つ、それぞれあいいろのたま・べにいろのたま・だいこんごうだま・だいしらたま・だいはっきんだま・プレート・カセット・メモリ・くちたけん・くちたたて・ブーストエナジー・おめんは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。ここでのパラドックスポケモンは、特性がこだいかっせい・クォークチャージの全種族（ウガツホムラ・タケルライコ・テツノイワオ・テツノカシラを除く）を指す。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+		shortDesc: "道具を持っていなければ相手から奪う。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリ・くちたけん・くちたたては奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。Zクリスタル、メガシンカできる種族が持つメガストーン、およびカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。メガシンカできる種族が持つメガストーン、およびカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクトが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセットは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。メール、およびギラティナ・アルセウス・ゲノセクトが持つ、それぞれはっきんだま・プレート・カセットは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分が道具を持っていない場合、相手の持ち物を奪う。道具がメールかはっきんだまの場合や、相手の特性がマルチタイプかねんちゃくの場合は奪えない。この技で失われた道具は、リサイクルでは取り戻せない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分が道具を持っていない場合、相手の持ち物を奪う。道具がメールかナゾのみの場合や、相手の特性がねんちゃくの場合は奪えない。この技で失われた道具は、リサイクルでは取り戻せない。", // NEEDS QC
 		},
 	},
 	crabhammer: {
 		name: "クラブハンマー",
 		// Official flavor text: "大きな ハサミを 相手に たたきつけて 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	craftyshield: {
 		name: "トリックガード",
 		// Official flavor text: "不思議な 力を 使って 味方への 変化技を 防ぐ。 ダメージ技は 受けてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからのダメージを与えない技を防ぐ。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "このターン味方への変化技を防ぐ。", // NEEDS QC
 
 		start: "  {TEAM}は トリックガードで 守られた！",
 		block: "  {POKEMON}は トリックガードで 守られた！",
@@ -1354,50 +1335,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	crosschop: {
 		name: "クロスチョップ",
 		// Official flavor text: "両手チョップを 相手に たたきつけて 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	crosspoison: {
 		name: "クロスポイズン",
 		// Official flavor text: "毒の 刃で 相手を 切り裂く。 毒状態に することが あり 急所にも 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をどく状態にする。急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。10%でどくにする。", // NEEDS QC
 	},
 	crunch: {
 		name: "かみくだく",
 		// Official flavor text: "鋭い 歯で 相手を かみくだいて 攻撃する。 相手の 防御を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "20%の確率で相手の防御を1段階下げる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "20%の確率で相手の特防を1段階下げる。", // NEEDS QC
+			shortDesc: "20%の確率で相手の特防を1段階下げる。", // NEEDS QC
 		},
 	},
 	crushclaw: {
 		name: "ブレイククロー",
 		// Official flavor text: "硬く 鋭い ツメで 切り裂いて 攻撃する。 相手の 防御を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	crushgrip: {
 		name: "にぎりつぶす",
 		// Official flavor text: "すさまじい 力で 相手を にぎりつぶす。 相手の ＨＰが 残っているほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は120×（相手の残りHP÷相手の最大HP）（五捨五超入、最低1）。", // NEEDS QC
+		shortDesc: "相手の残りHPが多いほど威力が上がる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、120×（相手の現在のHP÷相手の最大HP）+1（切り捨て）。", // NEEDS QC
 		},
 	},
 	curse: {
 		name: "のろい",
 		// Official flavor text: "使う ポケモンが ゴーストタイプと それ以外 とでは 効果が 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がゴーストタイプでない場合、自分の素早さを1段階下げ、攻撃と防御を1段階ずつ上げる。自分がゴーストタイプの場合、最大HPの1/2（切り捨て、ひんしになる場合でも）を失う代わりに、相手が場にいる間、毎ターン終了時に相手の最大HPの1/4（切り捨て）を失わせる。相手がバトンタッチを使った場合、交代先も効果を受け続ける。対象がいない場合や、相手がすでにこの効果を受けている場合は失敗する。", // NEEDS QC
+		shortDesc: "ゴーストならのろい。他は素早さ-1、攻撃・防御+1。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分がゴーストタイプでない場合、自分のすばやさを1段階下げ、こうげきとぼうぎょを1段階ずつ上げる。ゴーストタイプの場合、（ひんしになっても）最大HPの1/2（切り捨て）を失う代わりに、相手が場にいる間、毎ターン終了時に相手の最大HPの1/4（切り捨て）を失わせる。相手がバトンタッチを使った場合、交代先も効果を受け続ける。対象がいない場合や、相手がすでに効果を受けている場合、みがわり状態の場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分がゴーストタイプでない場合、こうげきとぼうぎょが両方+6の場合を除き、自分のすばやさを1段階下げ、こうげきとぼうぎょを1段階ずつ上げる。ゴーストタイプの場合、（ひんしになっても）最大HPの1/2（切り捨て）を失う代わりに、相手が場にいる間、毎ターン終了時に相手の最大HPの1/4（切り捨て）を失わせる。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手がすでに効果を受けている場合や、みがわり状態の場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {SOURCE}は 自分の体力を 削って {POKEMON}に のろいを かけた！",
@@ -1405,28 +1386,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cut: {
 		name: "いあいぎり",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	darkestlariat: {
 		name: "ＤＤラリアット",
 		// Official flavor text: "両腕を 回し 相手に 当てる。 相手の 能力変化に 関係なく ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の能力ランクの変化（回避率を含む）を無視して攻撃する。", // NEEDS QC
+		shortDesc: "相手の能力変化を無視して攻撃。", // NEEDS QC
 	},
 	darkpulse: {
 		name: "あくのはどう",
 		// Official flavor text: "体から 悪意に みちた 恐ろしい オーラを 発する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "20%の確率で相手をひるませる。", // NEEDS QC
 	},
 	darkvoid: {
 		name: "ダークホール",
 		// Official flavor text: "暗黒の 世界に ひきずり 落として 相手を 眠り状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をねむり状態にする。（へんしんも考慮した）現在の姿がダークライでなければ使えない。", // NEEDS QC
+		shortDesc: "ダークライ専用。相手をねむらせる。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手をねむり状態にする。", // NEEDS QC
+			shortDesc: "相手をねむり状態にする。", // NEEDS QC
 		},
 
 		fail: "しかし {POKEMON}には 使うことが できなかった！",
@@ -1435,60 +1416,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dazzlinggleam: {
 		name: "マジカルシャイン",
 		// Official flavor text: "強力な 光を 放ち 相手に ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	decorate: {
 		name: "デコレーション",
 		// Official flavor text: "かざりつけを することで 相手の 攻撃と 特攻を ぐーんと 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対象の攻撃と特攻を2段階ずつ上げる。", // NEEDS QC
+		shortDesc: "相手の攻撃・特攻が2段階上がる。", // NEEDS QC
 	},
 	defendorder: {
 		name: "ぼうぎょしれい",
 		// Official flavor text: "しもべを 呼びだして 自分の 体に おおい つかせる。防御と 特防を あげることが できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の防御・特防が1段階上がる。", // NEEDS QC
 	},
 	defensecurl: {
 		name: "まるくなる",
 		// Official flavor text: "体を まるめて ちぢこまり 自分の 防御を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を1段階上げる。場にいる間、自分のアイスボールところがるの威力が2倍になる（この効果は重複しない）。", // NEEDS QC
+		shortDesc: "自分の防御が1段階上がる。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のぼうぎょを1段階上げる。場にいる間、自分のころがるの威力が2倍になる（重複しない）。この効果はバトンタッチで引き継げる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の防御を1段階上げる。", // NEEDS QC
 		},
 	},
 	defog: {
 		name: "きりばらい",
 		// Official flavor text: "強い風で 相手の リフレクターや ひかりのかべ などを はらいのける。 回避率も さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の回避率を1段階下げる。攻撃が成功すると、回避率が下がったかどうかにかかわらず、相手側のリフレクター・ひかりのかべ・オーロラベール・しんぴのまもり・しろいきり・まきびし・どくびし・ステルスロック・ねばねばネットの効果と、自分側のまきびし・どくびし・ステルスロック・ねばねばネットの効果が消える。みがわりを貫通するが、回避率の低下はみがわりに防がれる。フィールドが発生している場合、フィールドも消す。", // NEEDS QC
+		shortDesc: "回避-1。両側の設置技とフィールドを消す。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の回避率を1段階下げる。この技が成功すると、回避率が下がったかどうかに関わらず、相手側のリフレクター・ひかりのかべ・オーロラベール・しんぴのまもり・しろいきり・まきびし・どくびし・ステルスロック・ねばねばネットの効果と、自分側のまきびし・どくびし・ステルスロック・ねばねばネットの効果が消える。相手のみがわりを無視するが、回避率の低下はみがわりに防がれる。", // NEEDS QC
+			shortDesc: "回避率-1。両側の設置技を取り除く。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の回避率を1段階下げる。この技が成功すると、回避率が下がったかどうかに関わらず、相手側のリフレクター・ひかりのかべ・しんぴのまもり・しろいきり・まきびし・どくびし・ステルスロック・ねばねばネットの効果と、自分側のまきびし・どくびし・ステルスロック・ねばねばネットの効果が消える。相手のみがわりを無視するが、回避率の低下はみがわりに防がれる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の回避率を1段階下げる。この技が成功すると、回避率が下がったかどうかに関わらず、相手側のリフレクター・ひかりのかべ・しんぴのまもり・しろいきり・まきびし・どくびし・ステルスロックの効果が消える。相手のみがわりを無視するが、回避率の低下はみがわりに防がれる。", // NEEDS QC
+			shortDesc: "回避率-1。相手側の設置技と壁を除去。", // NEEDS QC
 		},
 	},
 	destinybond: {
 		name: "みちづれ",
 		// Official flavor text: "技のあと 相手の 攻撃で ひんしに なると 攻撃 相手も ひんしにする。 連続して 出すと 失敗する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の次の行動までの間に、相手の攻撃で自分がひんしになった場合、その相手もひんしにする。ただし、はめつのねがい・みらいよちによるダメージでは発動しない。（特性おどりこによる使用を除いて）最後に使った技がこの技で、それが成功していた場合は失敗する。", // NEEDS QC
+		shortDesc: "相手に倒されるとその相手も道連れにする。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が次に行動するまでの間、相手の攻撃でひんしになると、その相手も道連れにする。ただし、はめつのねがい・みらいよちでは発動しない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が次に行動するまでの間、相手の攻撃でひんしになると、その相手も道連れにする。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 相手を 道連れに しようとしている！",
@@ -1497,68 +1478,68 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	detect: {
 		name: "みきり",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "このターン相手の技を防ぐ。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がみきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる・ファストガード・ワイドガード以外だった場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる（最大8）。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率はX/65536で、Xは65535から始まり、成功するたびに半分（切り捨て）になる。4回連続で成功するとXは118になり、以降の成功ではほぼランダムな0〜65535の値をとる。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは65535に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、相手からの技を防ぐ。この技の成功率はX/255で、Xは255から始まり、成功するたびに半分（切り捨て）になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは255に戻る。自分がみがわり状態の場合や、このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 	},
 	devastatingdrake: {
 		name: "アルティメットドラゴンバーン",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	diamondstorm: {
 		name: "ダイヤストーム",
 		// Official flavor text: "ダイヤの 嵐を 巻き起こし ダメージを 与える。 自分の 防御を ぐーんと あげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で自分の防御を2段階上げる。", // NEEDS QC
+		shortDesc: "50%の確率で自分の防御が2段階上がる。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃ごとに50%の確率で自分のぼうぎょが1段階上がる。", // NEEDS QC
+			shortDesc: "攻撃ごとに50%で自分の防御+1。", // NEEDS QC
 		},
 	},
 	dig: {
 		name: "あなをほる",
 		// Official flavor text: "１ターン目に 潜り ２ターン目で 相手を 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目に地中に潜り、2ターン目に攻撃する。潜っている間は、じしん・マグニチュード以外の攻撃を受けず、これらはダメージ2倍で当たる。また、天気の影響を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に潜り、2ターン目に攻撃。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に地中に潜り、2ターン目に攻撃する。潜っている間は、じしん・マグニチュード以外の攻撃を受けないが、その2つの技は威力2倍で当たる。また、天気の影響を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に地中に潜り、2ターン目に攻撃する。潜っている間は、じしん・マグニチュード以外の攻撃を受けないが、その2つの技は威力2倍で当たる。また、天気の影響を受けない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に地中に潜り、2ターン目に攻撃する。潜っている間は、じしん・じわれ・マグニチュード以外の攻撃を受けず、天気の影響を受けない。じしんとマグニチュードは威力2倍で当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に地中に潜り、2ターン目に攻撃する。潜っている間は、がまん・スピードスター・へんしん以外の攻撃を受けない。2ターン目にまひで動けなかった場合、交代するか、この技またはそらをとぶの2ターン目を成功させるまで攻撃を受けないままになる。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}は 地面に 潜った！",
 	},
 	direclaw: {
 		name: "フェイタルクロー",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手をねむり・どく・まひのいずれかの状態にする。", // NEEDS QC
+		shortDesc: "50%でねむり・どく・まひのいずれかにする。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1567,29 +1548,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disable: {
 		name: "かなしばり",
 		// Official flavor text: "相手の 動きを とめて 直前に だしていた 技を ４ターンの 間 使えなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4ターンの間、相手が最後に使った技を使えなくする。相手の技がすでにこの効果を受けている場合、相手がまだ技を使っていない場合、相手がその技を覚えていない場合、その技がダイマックス技・キョダイマックス技だった場合は失敗する。", // NEEDS QC
+		shortDesc: "4ターン相手が最後に使った技を封じる。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4ターンの間、相手が最後に使った技をかなしばり状態にする。相手の技がすでにかなしばり状態の場合、相手がまだ技を使っていない場合、その技を覚えていない場合、その技がZワザだった場合は失敗する。効果中もZパワーで強化された技は選択して使える。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4ターンの間、相手が最後に使った技をかなしばり状態にする。相手の技がすでにかなしばり状態の場合、相手がまだ技を使っていない場合、その技を覚えていない場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "4〜7ターンの間、相手が最後に使った技をかなしばり状態にする。相手の技がすでにかなしばり状態の場合、相手がまだ技を使っていない場合、その技を覚えていない場合、その技のPPが0の場合は失敗する。", // NEEDS QC
+			shortDesc: "4〜7ターン、相手の最後の技を封じる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間、相手が最後に使った技をかなしばり状態にする。相手の技がすでにかなしばり状態の場合、相手がまだ技を使っていない場合、その技を覚えていない場合、その技のPPが0の場合は失敗する。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手の最後の技を封じる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1〜7ターンの間、相手が最後に使った技をかなしばり状態にする。相手の技がすでにかなしばり状態の場合、相手がまだ技を使っていない場合、その技を覚えていない場合、その技のPPが0の場合は失敗する。", // NEEDS QC
+			shortDesc: "1〜7ターン、相手の最後の技を封じる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "0〜7ターンの間、相手が覚えている、PPが1以上残っている技のうち1つをランダムにかなしばり状態にする。相手の技がすでにかなしばり状態の場合や、PPが残っている技がない場合は失敗する。いずれかのポケモンがくろいきりを使うと効果は終わる。この技は、成功したかどうかに関わらず、相手のいかりに対しては攻撃を受けたものとして扱われる。", // NEEDS QC
+			shortDesc: "0〜7ターン、相手の技を1つ封じる。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}の {MOVE}を 封じこめた！",
@@ -1599,25 +1580,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disarmingvoice: {
 		name: "チャームボイス",
 		// Official flavor text: "魅惑の 鳴き声を だして 相手に 精神的な ダメージを 与える。 攻撃は 必ず 命中 する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必中。", // NEEDS QC
+		shortDesc: "必中。相手全体攻撃。", // NEEDS QC
 	},
 	discharge: {
 		name: "ほうでん",
 		// Official flavor text: "まばゆい 電撃で 自分の 周りに いるものを 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で周囲をまひ状態にする。", // NEEDS QC
 	},
 	dive: {
 		name: "ダイビング",
 		// Official flavor text: "１ターン目で 潜り ２ターン目に 浮きあがって 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目に水中に潜り、2ターン目に攻撃する。潜っている間は、なみのり・うずしお以外の攻撃を受けず、これらはダメージ2倍で当たる。また、天気の影響を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に潜水し、2ターン目に攻撃。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に水中に潜り、2ターン目に攻撃する。潜っている間は、なみのり・うずしお以外の攻撃を受けないが、その2つの技は威力2倍で当たる。また、天気の影響を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に水中に潜り、2ターン目に攻撃する。潜っている間は、なみのり・うずしお以外の攻撃を受けないが、その2つの技は威力2倍で当たる。また、天気の影響を受けない。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}は 水中に 身を潜めた！",
@@ -1625,25 +1606,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dizzypunch: {
 		name: "ピヨピヨパンチ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "追加効果なし。", // NEEDS QC
+			shortDesc: "追加効果なし。", // NEEDS QC
 		},
 	},
 	doodle: {
 		name: "うつしえ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と味方の特性が、相手と同じ特性に変わる。自分または味方の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスチェンジ・ダルマモード・マイティチェンジの場合や、すでに相手と同じ場合は変わらない。自分と味方の特性がどちらもすでに相手と同じ場合や、相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・しれいとう・ばけのかわ・おもかげやどし・フラワーギフト・てんきや・はらぺこスイッチ・アイスフェイス・イリュージョン・かわりもの・マルチタイプ・かがくへんかガス・どくくぐつ・スワームチェンジ・かがくのちから・こだいかっせい・クォークチャージ・レシーバー・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスシェル・テラスチェンジ・ゼロフォーミング・トレース・ふしぎなまもり・ダルマモード・マイティチェンジの場合は失敗する。", // NEEDS QC
+		shortDesc: "自分と味方の特性が相手と同じになる。", // NEEDS QC
 	},
 	doomdesire: {
 		name: "はめつのねがい",
 		// Official flavor text: "技を 使った ２ターン後に 無数の 光の 束で 相手を 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用してから2ターン後にダメージを与える。そのターンの終了時にダメージを計算し、技を使ったときに相手がいた位置のポケモンに与える。そのとき自分が場にいない場合、持ち物や特性による強化なしで、自分の本来の特攻・タイプ・レベルからダメージを計算する。この技やみらいよちがすでに相手の位置に発動予定の場合は失敗する。", // NEEDS QC
+		shortDesc: "2ターン後に攻撃が発動する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った2ターン後に、急所に当たらないタイプなしのダメージを与える。ダメージは使用時に相手に対して計算し、最後のターンの終了時に、元の相手の位置にいるポケモンに与える。その位置にすでにこの技かみらいよちが発動中の場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は はめつのねがいを 未来に託した！",
@@ -1652,321 +1633,321 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleedge: {
 		name: "すてみタックル",
 		// Official flavor text: "命を 懸けて 相手に 突進して 攻撃する。 自分も かなり ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの33%（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの33%の反動を受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/3（切り捨て、最低1）の反動ダメージを自分が受ける。", // NEEDS QC
+			shortDesc: "1/3の反動ダメージを受ける。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/4（切り捨て、最低1）の反動ダメージを自分が受ける。この技がみがわりに当たった場合、反動ダメージは常に1になる。", // NEEDS QC
+			shortDesc: "与えたダメージの1/4の反動を受ける。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/4（切り捨て、最低1）の反動ダメージを自分が受ける。この技で相手のみがわりを壊した場合、反動ダメージは受けない。", // NEEDS QC
 		},
 	},
 	doublehit: {
 		name: "ダブルアタック",
 		// Official flavor text: "しっぽなどを 使い 相手を たたいて 攻撃する。 ２回連続で ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "1ターンに2回攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃する。最初の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 	},
 	doubleironbash: {
 		name: "ダブルパンツァー",
 		// Official flavor text: "胸の ナットを 軸に 回転して ２回 続けて うでを たたきつける。 相手を ひるませる ことが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。攻撃ごとに30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "2回攻撃。30%の確率でひるませる。", // NEEDS QC
 	},
 	doublekick: {
 		name: "にどげり",
 		// Official flavor text: "２本の 足で 相手を けとばして 攻撃する。 ２回連続で ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "1ターンに2回攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃する。最初の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃する。ダメージは最初の攻撃で1回だけ計算され、両方の攻撃に適用される。最初の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	doubleshock: {
 		name: "でんこうそうげき",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がでんきタイプでなければ失敗する。攻撃が成功すると、テラスタルしていない場合、場にいる間、自分のでんきタイプがタイプなしになる。", // NEEDS QC
+		shortDesc: "でんきタイプ限定。使用後でんきタイプを失う。", // NEEDS QC
 
 		typeChange: "  {POKEMON}は 電気を 使いきった！",
 	},
 	doubleslap: {
 		name: "おうふくビンタ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。ダメージは最初の攻撃で1回だけ計算され、すべての攻撃に適用される。途中の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	doubleteam: {
 		name: "かげぶんしん",
 		// Official flavor text: "素早い 動きで 分身を つくり 相手を まどわせて 回避率を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の回避率を1段階上げる。", // NEEDS QC
+		shortDesc: "自分の回避率が1段階上がる。", // NEEDS QC
 	},
 	dracometeor: {
 		name: "りゅうせいぐん",
 		// Official flavor text: "天空から 隕石を 相手に 落とす。使うと 反動で 自分の 特攻が がくっと さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を2段階下げる。", // NEEDS QC
+		shortDesc: "自分の特攻を2段階下げる。", // NEEDS QC
 	},
 	dragonascent: {
 		name: "ガリョウテンセイ",
 		// Official flavor text: "大空から 急速落下 して 相手を 攻撃する。 自分の 防御と 特防が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "自分の防御・特防を1段階下げる。", // NEEDS QC
 
 		megaNoItem: "  {TRAINER}の 強い祈りが {POKEMON}に 届く――！",
 	},
 	dragonbreath: {
 		name: "りゅうのいぶき",
 		// Official flavor text: "ものすごい 息を 相手に 吹きつけて 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	dragoncheer: {
 		name: "ドラゴンエール",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対象の味方の急所ランクを1段階（対象がドラゴンタイプの場合は2段階）上げる。隣接する味方がいない場合や、対象がすでにこの効果かきあいだめの効果を受けている場合は失敗する。バトンタッチでこの効果を引き継げる。", // NEEDS QC
+		shortDesc: "味方の急所ランク+1（ドラゴンなら+2）。", // NEEDS QC
 
 		start: "#focusenergy",
 	},
 	dragonclaw: {
 		name: "ドラゴンクロー",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	dragondance: {
 		name: "りゅうのまい",
 		// Official flavor text: "神秘的で 力強い 舞を 激しく おどる。 自分の 攻撃と 素早さを あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と素早さを1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃・素早さが1段階上がる。", // NEEDS QC
 	},
 	dragondarts: {
 		name: "ドラゴンアロー",
 		// Official flavor text: "ドラメシヤで ２回 攻撃。 相手が ２匹 いるときは それぞれに １回ずつ 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。ダブルバトルでは、対象とその味方に1回ずつ攻撃する。一方への攻撃がタイプ相性による無効・まもる系の技・場を離れている状態・特性・命中で防がれる場合、代わりにもう一方に2回攻撃する。この技の対象が変更された場合、その対象に2回攻撃する。", // NEEDS QC
+		shortDesc: "2回攻撃。ダブルでは1回ずつ両方の相手に。", // NEEDS QC
 	},
 	dragonenergy: {
 		name: "ドラゴンエナジー",
 		// Official flavor text: "生命力を パワーに 変え 相手を 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分の残りHP×150÷自分の最大HP）（切り捨て、最低1）。", // NEEDS QC
+		shortDesc: "自分のHPが減るほど威力低下。相手全体攻撃。", // NEEDS QC
 	},
 	dragonhammer: {
 		name: "ドラゴンハンマー",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	dragonpulse: {
 		name: "りゅうのはどう",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	dragonrage: {
 		name: "りゅうのいかり",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手に40の固定ダメージを与える。", // NEEDS QC
 	},
 	dragonrush: {
 		name: "ドラゴンダイブ",
 		// Official flavor text: "すさまじい 殺気で 威圧しながら 体当たりする。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "20%の確率で相手をひるませる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "20%の確率で相手をひるませる。", // NEEDS QC
 		},
 	},
 	dragontail: {
 		name: "ドラゴンテール",
 		// Official flavor text: "相手を はじきとばして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手がどちらもひんしになっていない場合、相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がねをはるを使っていた場合や、特性がきゅうばんの場合、みがわりに当たった場合、この効果は失敗する。", // NEEDS QC
+		shortDesc: "相手をランダムな控えと強制交代させる。", // NEEDS QC
 	},
 	drainingkiss: {
 		name: "ドレインキッス",
 		// Official flavor text: "キッスによって 相手から ＨＰを 吸い取る。 与えた ダメージの 半分以上 ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの3/4（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの3/4を回復する。", // NEEDS QC
 	},
 	drainpunch: {
 		name: "ドレインパンチ",
 		// Official flavor text: "こぶしから 相手の 力を 吸い取る。 与えた ダメージの 半分の ＨＰを 回復できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（切り捨て）になる。", // NEEDS QC
 		},
 	},
 	dreameater: {
 		name: "ゆめくい",
 		// Official flavor text: "寝ている 相手の 夢を 食べて 攻撃する。 ダメージの 半分の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ねむり状態の相手にしか効果がない。相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "ねむり状態の相手限定。ダメージの半分回復。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がねむり状態で、みがわり状態でない場合のみ効果がある。相手に与えたダメージの1/2（切り捨て、最低1）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（切り捨て）になる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がねむり状態で、みがわり状態でない場合のみ効果がある。相手に与えたダメージの1/2（切り捨て、最低1）のHPを回復する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がねむり状態の場合のみ効果がある。相手に与えたダメージの1/2（切り捨て、最低1）のHPを回復する。この技で相手のみがわりを壊した場合、HPは回復しない。", // NEEDS QC
 		},
 	},
 	drillpeck: {
 		name: "ドリルくちばし",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	drillrun: {
 		name: "ドリルライナー",
 		// Official flavor text: "ドリルのように 体を 回転しながら 相手に 体当たりする。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	drumbeating: {
 		name: "ドラムアタック",
 		// Official flavor text: "ドラムの 根っこを ドラミングで コントロールして こうげき することで 相手の 素早さを 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 	},
 	dualchop: {
 		name: "ダブルチョップ",
 		// Official flavor text: "体の 硬い部分で 相手を たたいて 攻撃する。 ２回連続で ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "1ターンに2回攻撃する。", // NEEDS QC
 	},
 	dualwingbeat: {
 		name: "ダブルウイング",
 		// Official flavor text: "翼を 相手に ぶつけて 攻撃する。 ２回連続で ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "1ターンに2回攻撃する。", // NEEDS QC
 	},
 	dynamaxcannon: {
 		name: "ダイマックスほう",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手がダイマックス中ならダメージ2倍。", // NEEDS QC
 		},
 	},
 	dynamicpunch: {
 		name: "ばくれつパンチ",
 		// Official flavor text: "こん身の 力で パンチを くりだして 攻撃する。 相手を 必ず 混乱させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	earthpower: {
 		name: "だいちのちから",
 		// Official flavor text: "相手の 足下へ 大地の力を 放出する。相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	earthquake: {
 		name: "じしん",
 		// Official flavor text: "地震の 衝撃で 自分の 周りに いるものを 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "あなをほるで地中に潜っている相手には、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "周囲全体を攻撃。あなをほる中の相手に2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手があなをほるを使っている場合、威力が2倍になる。", // NEEDS QC
+			shortDesc: "周囲全体に当たる。あなをほる中は威力2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "追加効果なし。", // NEEDS QC
+			shortDesc: "追加効果なし。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "あなをほる中の相手に威力2倍。", // NEEDS QC
 		},
 	},
 	echoedvoice: {
 		name: "エコーボイス",
 		// Official flavor text: "響く 声で 相手を 攻撃する。 毎ターン だれかが 技を 使い続けると 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "いずれかのポケモンがこの技を使ったターンが連続するごとに、威力が経過ターン数倍になる（最大5倍）。", // NEEDS QC
+		shortDesc: "連続で使われるたびに威力が上がる。", // NEEDS QC
 	},
 	eerieimpulse: {
 		name: "かいでんぱ",
 		// Official flavor text: "体から かいでんぱを 放ち 相手に 浴びせる ことによって 特攻を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特攻を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の特攻を2段階下げる。", // NEEDS QC
 	},
 	eeriespell: {
 		name: "ぶきみなじゅもん",
 		// Official flavor text: "強力な サイコパワーで 攻撃。 相手が 最後に 使った技の ＰＰを ３だけ 減らす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、相手が最後に使った技のPPを3減らす。", // NEEDS QC
+		shortDesc: "相手が最後に使った技のPPを3減らす。", // NEEDS QC
 
 		activate: "#spite",
 	},
 	eggbomb: {
 		name: "タマゴばくだん",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	electricterrain: {
 		name: "エレキフィールド",
 		// Official flavor text: "５ターンの 間 エレキフィールドにする。 地面にいる ポケモンは 眠らない。 でんきタイプの 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、フィールドがエレキフィールドになる。その間、地面にいるポケモンのでんきタイプの攻撃技の威力が1.3倍になり、地面にいるポケモンはねむり状態にならない（すでにねむり状態のポケモンは起きない）。地面にいるポケモンはあくびを受けず、その効果でねむることもない。ほごしょくを使うとでんきタイプになり、しぜんのちからは１０まんボルトになり、ひみつのちからは30%の確率でまひ状態にするようになる。すでにエレキフィールドの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、エレキフィールドにする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、エレキフィールドになる。効果中、地面にいるポケモンのでんきタイプの攻撃技の威力が1.5倍になり、地面にいるポケモンはねむり状態にならない。すでにねむっているポケモンは起きない。地面にいるポケモンはあくびの効果を受けず、その効果でねむることもない。ほごしょくを使うとでんきタイプになり、しぜんのちからは１０まんボルトになり、ひみつのちからは30%の確率でまひ状態にする。すでにエレキフィールドの場合は失敗する。", // NEEDS QC
 		},
 	},
 	electrify: {
 		name: "そうでん",
 		// Official flavor text: "相手が 技を だす前に そうでん すると そのターン 相手の 技は でんきタイプになる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、相手の技がでんきタイプになる。技のタイプを変える効果の中で、この効果は最後に適用される。相手がすでにこのターンに行動していた場合は失敗する。", // NEEDS QC
+		shortDesc: "このターン、相手の技をでんきタイプにする。", // NEEDS QC
 
 		start: "  {POKEMON}は そうでんで 技が でんきタイプになった！",
 	},
 	electroball: {
 		name: "エレキボール",
 		// Official flavor text: "電気の 塊を 相手に ぶつける。相手より 素早さが 速いほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分の現在の素早さ÷相手の現在の素早さ）（切り捨て）で決まる。結果が4以上なら150、3なら120、2なら80、1なら60、1未満なら40。相手の現在の素早さが0の場合、威力は40。", // NEEDS QC
+		shortDesc: "相手より速いほど威力が上がる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（自分の現在のすばやさ÷相手の現在のすばやさ）（切り捨て）によって決まる。4以上なら150、3なら120、2なら80、1なら60、1未満なら40。相手の現在のすばやさが0の場合は1として扱う。", // NEEDS QC
 		},
 	},
 	electrodrift: {
 		name: "イナズマドライブ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に対して効果ばつぐんの場合、ダメージが1.3333倍になる。", // NEEDS QC
+		shortDesc: "効果ばつぐんならダメージ1.3333倍。", // NEEDS QC
 	},
 	electroshot: {
 		name: "エレクトロビーム",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目にため、2ターン目に攻撃する。1ターン目に自分の特攻を1段階上げる。パワフルハーブを持っている場合や、天気があめ・おおあめの場合、1ターンで攻撃する。ただし、ばんのうがさを持っている場合は、天気があめ・おおあめでもためのターンが必要。", // NEEDS QC
+		shortDesc: "1ターン目に特攻+1、2ターン目攻撃。雨なら即時。", // NEEDS QC
 
 		prepare: "{POKEMON}は 電気を 吸収した！",
 	},
 	electroweb: {
 		name: "エレキネット",
 		// Official flavor text: "電気の ネットで 相手を 捕まえて 攻撃する。 相手の 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 	},
 	embargo: {
 		name: "さしおさえ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、相手の持ち物の効果がなくなる。フォルムチェンジを起こす道具の効果は残るが、その道具の他の効果は無効になる。効果の間、相手はなげつけるとしぜんのめぐみを使えない。なげつけるで相手に投げつけられた道具は効果を発揮する。相手がバトンタッチを使った場合、交代先も道具を使えないままになる。", // NEEDS QC
+		shortDesc: "5ターン相手の道具を無効にする。", // NEEDS QC
 
 		start: "  {POKEMON}には 道具が 使えなくなった！",
 		end: "  {POKEMON}に 道具が 使えるようになった！",
@@ -1974,33 +1955,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ember: {
 		name: "ひのこ",
 		// Official flavor text: "小さな 炎を 相手に 発射して 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	encore: {
 		name: "アンコール",
 		// Official flavor text: "相手に アンコールした 技を ３回 続けて 出させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3ターンの間、相手は最後に使った技を繰り返すことしかできなくなる。その技のPPがなくなると効果は終わる。相手がすでにこの効果を受けている場合、まだ技を使っていない場合、その技のPPが0の場合、その技がねこのて・バーンアクセル・ファイトアクセル・まねっこ・ダイマックスほう・アンコール・マジカルアクセル・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・ポイズンアクセル・スケッチ・ねごと・わるあがき・へんしん・ダークアクセルの場合は失敗する。", // NEEDS QC
+		shortDesc: "3ターン相手に最後の技を繰り返させる。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "次の3ターンの間、相手は最後に使った技を繰り返し使う。その技のPPがなくなると効果は終わる。相手がすでにこの効果を受けている場合、まだ技を使っていない場合、その技のPPが0の場合、相手がダイマックスしている場合、その技がねこのて・まねっこ・ダイマックスほう・アンコール・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・スケッチ・ねごと・わるあがき・へんしんの場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "次の3ターンの間、相手は最後に使った技を繰り返し使う。その技のPPがなくなると効果は終わる。相手がすでにこの効果を受けている場合、まだ技を使っていない場合、その技のPPが0の場合、その技がねこのて・まねっこ・アンコール・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・スケッチ・ねごと・わるあがき・へんしんまたはZワザの場合は失敗する。効果中もZパワーで強化された技は選択して使える。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3ターンの間、相手は最後に使った技を繰り返し使う。その技のPPがなくなると効果は終わる。相手がすでにこの効果を受けている場合、まだ技を使っていない場合、その技のPPが0の場合、その技がアンコール・ものまね・オウムがえし・スケッチ・わるあがき・へんしんの場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "4〜8ターンの間、相手は最後に使った技を繰り返し使う。その技のPPがなくなると効果は終わる。相手がすでにこの効果を受けている場合、まだ技を使っていない場合、その技のPPが0の場合、その技がアンコール・ものまね・オウムがえし・スケッチ・わるあがき・へんしんの場合は失敗する。", // NEEDS QC
+			shortDesc: "相手は4〜8ターン、最後の技を繰り返す。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3〜6ターンの間、相手は最後に使った技を繰り返し使う。その技のPPがなくなると効果は終わる。相手がすでにこの効果を受けている場合、まだ技を使っていない場合、その技のPPが0の場合、その技がアンコール・ものまね・オウムがえし・スケッチ・わるあがき・へんしんの場合は失敗する。", // NEEDS QC
+			shortDesc: "相手は3〜6ターン、最後の技を繰り返す。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3〜6ターンの間、相手は最後に使った技を繰り返し使う。その技のPPがなくなると効果は終わる。相手がすでにこの効果を受けている場合、まだ技を使っていない場合、その技のPPが0の場合、その技がアンコール・ゆびをふる・ものまね・オウムがえし・スケッチ・ねごと・わるあがき・へんしんの場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は アンコールを受けた！",
@@ -2009,34 +1990,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	endeavor: {
 		name: "がむしゃら",
 		// Official flavor text: "相手の ＨＰが 自分の ＨＰと 同じくらいに なるように ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手のHPが（相手の残りHP−自分の残りHP）だけ減る。相手の残りHPが自分の残りHP以下の場合は効果がない。", // NEEDS QC
+		shortDesc: "相手のHPを自分と同じまで減らす。", // NEEDS QC
 	},
 	endure: {
 		name: "こらえる",
 		// Official flavor text: "攻撃を 受けても ＨＰを 必ず １だけ 残せる。 連続で だすと 失敗しやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンの攻撃を受けてもHPが必ず1残る。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "このターン必ずHP1で攻撃を耐える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンの攻撃を受けてもHPが必ず1残る。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンの攻撃を受けてもHPが必ず1残る。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンの攻撃を受けてもHPが必ず1残る。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がみきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンの攻撃を受けてもHPが必ず1残る。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる・ファストガード・ワイドガード以外だった場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンの攻撃を受けてもHPが必ず1残る。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる（最大8）。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンの攻撃を受けてもHPが必ず1残る。この技の成功率はX/65536で、Xは65535から始まり、成功するたびに半分（切り捨て）になる。4回連続で成功するとXは118になり、以降の成功ではほぼランダムな0〜65535の値をとる。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは65535に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、相手の攻撃を受けてもHPが必ず1残る。この技の成功率はX/255で、Xは255から始まり、成功するたびに半分（切り捨て）になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは255に戻る。自分がみがわり状態の場合や、このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は こらえる 体勢に 入った！",
@@ -2045,122 +2026,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	energyball: {
 		name: "エナジーボール",
 		// Official flavor text: "自然から 集めた 命の力を 発射する。 相手の 特防を さげることがある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	entrainment: {
 		name: "なかまづくり",
 		// Official flavor text: "不思議な リズムで おどる。 動きを まねさせて 自分と 相手の 特性を 同じに する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特性を自分と同じ特性にする。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスチェンジ・ダルマモード・マイティチェンジ・なまけの場合や自分と同じ特性の場合、自分の特性がじんばいったい・きずなへんげ・ぜったいねむり・しれいとう・ばけのかわ・おもかげやどし・フラワーギフト・てんきや・はらぺこスイッチ・アイスフェイス・イリュージョン・かわりもの・マルチタイプ・かがくへんかガス・どくくぐつ・スワームチェンジ・かがくのちから・こだいかっせい・クォークチャージ・レシーバー・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスシェル・テラスチェンジ・ゼロフォーミング・トレース・ふしぎなまもり・ダルマモード・マイティチェンジの場合は失敗する。", // NEEDS QC
+		shortDesc: "相手の特性を自分と同じにする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性が自分の特性と同じになる。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・なまけ・ダルマモードの場合や自分と同じ場合、または自分の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・フラワーギフト・てんきや・うのミサイル・はらぺこスイッチ・アイスフェイス・イリュージョン・かわりもの・マルチタイプ・かがくへんかガス・スワームチェンジ・かがくのちから・レシーバー・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・トレース・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性が自分の特性と同じになる。相手の特性がきずなへんげ・ぜったいねむり・ばけのかわ・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・なまけ・ダルマモードの場合や自分と同じ場合、または自分の特性がきずなへんげ・ぜったいねむり・ばけのかわ・フラワーギフト・てんきや・イリュージョン・かわりもの・マルチタイプ・スワームチェンジ・かがくのちから・レシーバー・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・トレース・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性が自分の特性と同じになる。相手の特性がマルチタイプ・バトルスイッチ・なまけの場合や自分と同じ場合、または自分の特性がフラワーギフト・てんきや・イリュージョン・かわりもの・マルチタイプ・バトルスイッチ・トレース・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性が自分の特性と同じになる。相手の特性がマルチタイプ・なまけの場合や自分と同じ場合、または自分の特性がフラワーギフト・てんきや・イリュージョン・かわりもの・マルチタイプ・トレース・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 	},
 	eruption: {
 		name: "ふんか",
 		// Official flavor text: "怒りを 爆発させて 相手を 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分の残りHP×150÷自分の最大HP）（切り捨て、最低1）。", // NEEDS QC
+		shortDesc: "自分のHPが減るほど威力低下。相手全体攻撃。", // NEEDS QC
 	},
 	esperwing: {
 		name: "オーラウイング",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の素早さを1段階上げる。急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "100%で素早さ+1。急所に当たりやすい。", // NEEDS QC
 	},
 	eternabeam: {
 		name: "ムゲンダイビーム",
 		// Official flavor text: "本来の 姿と なった ムゲンダイナ 最大の 攻撃。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	expandingforce: {
 		name: "ワイドフォース",
 		// Official flavor text: "サイコパワーで 相手を 攻撃する。 サイコフィールドの時 威力が あがり すべての 相手に ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドがサイコフィールドで自分が地面にいる場合、相手全体を攻撃し、威力が1.5倍になる。", // NEEDS QC
+		shortDesc: "サイコフィールドで威力1.5倍・全体攻撃。", // NEEDS QC
 	},
 	explosion: {
 		name: "だいばくはつ",
 		// Official flavor text: "大きな 爆発で 自分の 周りに いるものを 攻撃する。 使ったあとに ひんしに なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用した後、自分はひんしになる（対象がいなくて失敗した場合も同様）。場に特性しめりけのポケモンがいると使えない。", // NEEDS QC
+		shortDesc: "周囲全体を攻撃して自分はひんしになる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "技を使った後、自分はひんしになる。ただし、対象がいない場合はひんしにならない。ダメージ計算時、相手のぼうぎょを半分として計算する。特性がしめりけのポケモンが場にいると、この技は実行されない。", // NEEDS QC
+			shortDesc: "計算時、相手の防御半分。自分はひんし。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った後、自分はひんしになる。ダメージ計算時、相手のぼうぎょを半分として計算する。特性がしめりけのポケモンが場にいると、この技は実行されない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った後、自分はひんしになる。ダメージ計算時、相手のぼうぎょを半分として計算する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った後、自分はひんしになる。ただし、この技で相手のみがわりを壊した場合はひんしにならない。ダメージ計算時、相手のぼうぎょを半分として計算する。", // NEEDS QC
 		},
 	},
 	extrasensory: {
 		name: "じんつうりき",
 		// Official flavor text: "みえない 不思議な 力を 送って 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "10%の確率で相手をひるませる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、ダメージが2倍になる。", // NEEDS QC
 		},
 	},
 	extremeevoboost: {
 		name: "ナインエボルブースト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃・防御・特攻・特防・素早さを2段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の全能力が2段階上がる。", // NEEDS QC
 	},
 	extremespeed: {
 		name: "しんそく",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで 相手に 突進して 攻撃する。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "かなり優先度の高い先制技（+2）。", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 		},
 	},
 	facade: {
 		name: "からげんき",
 		// Official flavor text: "自分が 毒 まひ やけど 状態のとき 相手に くりだすと 技の 威力が ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がやけど・まひ・どく状態のとき、威力が2倍になる。やけどによる物理技のダメージ半減も無視される。", // NEEDS QC
+		shortDesc: "状態異常のとき威力2倍。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分がやけど・まひ・どく状態の場合、威力が2倍になる。", // NEEDS QC
 		},
 	},
 	fairylock: {
 		name: "フェアリーロック",
 		// Official flavor text: "ロックを かけることによって 次のターン すべての ポケモンを 逃げられなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "次のターン、場にいるすべてのポケモンは交代できなくなる。ただし、きれいなぬけがらを持っているポケモンや、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使ったポケモンは交代できる。すでにこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "次のターン全ポケモンの交代を封じる。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "次のターン、場にいるすべてのポケモンが交代できなくなる。ただし、きれいなぬけがらを持っているポケモンや、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使ったポケモンは交代できる。すでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 
 		activate: "  次のターンは 逃げられない！",
 	},
 	fairywind: {
 		name: "ようせいのかぜ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	fakeout: {
 		name: "ねこだまし",
 		// Official flavor text: "先制攻撃で 相手を ひるませる。 戦闘に でたら すぐに ださないと 成功しない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をひるませる。自分が場に出た最初のターンでなければ失敗する。", // NEEDS QC
+		shortDesc: "先制で100%ひるませる。出た最初のターン限定。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2168,116 +2149,116 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	faketears: {
 		name: "うそなき",
 		// Official flavor text: "ないた ふりをして 涙を 流す。 こまらせる ことで 相手の 特防を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特防を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の特防を2段階下げる。", // NEEDS QC
 	},
 	falsesurrender: {
 		name: "どげざつき",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	falseswipe: {
 		name: "みねうち",
 		// Official flavor text: "相手の ＨＰが 必ず １だけ 残るように 手加減して 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手のHPを必ず1以上残す。", // NEEDS QC
+		shortDesc: "相手のHPを必ず1以上残す。", // NEEDS QC
 	},
 	featherdance: {
 		name: "フェザーダンス",
 		// Official flavor text: "羽毛を ふりまいて 相手の 体に からませる。 相手の 攻撃を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃を2段階下げる。", // NEEDS QC
 	},
 	feint: {
 		name: "フェイント",
 		// Official flavor text: "まもるや みきり などを している 相手に 攻撃が できる。 守りの 効果を 解除させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、このターンの間、相手のトーチカ・みきり・キングシールド・まもる・ニードルガードの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。", // NEEDS QC
+		shortDesc: "まもる系の守りを破って攻撃する。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が成功すると、このターンの間、相手のみきり・キングシールド・まもる・ニードルガードを破り、他のポケモンも相手を普通に攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が成功すると、このターンの間、相手のみきり・まもるを破り、他のポケモンも相手を普通に攻撃できるようになる。相手が敵で、その側がファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がみきりかまもるを使っていなければ失敗する。この技が成功すると、このターンの間その守りを破り、他のポケモンも相手を普通に攻撃できるようになる。", // NEEDS QC
+			shortDesc: "まもりを破る。相手がまもっていないと失敗。", // NEEDS QC
 		},
 
 		activate: "  {TARGET}は フェイントに 引っかかった！",
 	},
 	feintattack: {
 		name: "だましうち",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	fellstinger: {
 		name: "とどめばり",
 		// Official flavor text: "この 技を 使って 相手を 倒すと 攻撃が ぐぐーんと あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技で相手をひんしにした場合、自分の攻撃が3段階上がる。", // NEEDS QC
+		shortDesc: "この技で倒すと攻撃が3段階上がる。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "この技で相手をひんしにすると、自分のこうげきが2段階上がる。", // NEEDS QC
+			shortDesc: "この技で倒すと自分の攻撃+2。", // NEEDS QC
 		},
 	},
 	ficklebeam: {
 		name: "きまぐレーザー",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "30%の確率で威力が2倍になる。", // NEEDS QC
 
 		activate: "  {POKEMON}は 本気を 出した！",
 	},
 	fierydance: {
 		name: "ほのおのまい",
 		// Official flavor text: "炎を まとい はばたいて 相手を 攻撃する。自分の 特攻が あがることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で自分の特攻を1段階上げる。", // NEEDS QC
+		shortDesc: "50%の確率で自分の特攻が1段階上がる。", // NEEDS QC
 	},
 	fierywrath: {
 		name: "もえあがるいかり",
 		// Official flavor text: "怒りを 炎の ような オーラに 変えて 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "20%の確率で相手をひるませる。", // NEEDS QC
 	},
 	filletaway: {
 		name: "みをけずる",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "最大HPの1/2（切り捨て）を失う代わりに、自分の攻撃・特攻・素早さを2段階ずつ上げる。HPが足りない場合や、攻撃・特攻・素早さのランクがいずれも変化しない場合は失敗する。", // NEEDS QC
+		shortDesc: "最大HPの半分を失い攻撃・特攻・素早さ+2。", // NEEDS QC
 	},
 	finalgambit: {
 		name: "いのちがけ",
 		// Official flavor text: "命懸けで 相手を 攻撃する。 自分は ひんしに なるが 相手に ＨＰ分の ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の残りHPと同じダメージを相手に与える。攻撃が成功すると、自分はひんしになる。", // NEEDS QC
+		shortDesc: "自分のHP分のダメージを与えてひんしになる。", // NEEDS QC
 	},
 	fireblast: {
 		name: "だいもんじ",
 		// Official flavor text: "大の字の 炎で 相手を 焼きつくす。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
+			shortDesc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
 		},
 	},
 	firefang: {
 		name: "ほのおのキバ",
 		// Official flavor text: "炎を まとった キバで かみつく。 相手を ひるませたり やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。10%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "10%でやけど。10%でひるませる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をやけど状態にし、10%の確率でひるませる。この技は、タイプに関わらず特性がふしぎなまもりのポケモンに当たる。", // NEEDS QC
 		},
 	},
 	firelash: {
 		name: "ほのおのムチ",
 		// Official flavor text: "焼けたムチで 相手を 打ちつける。 攻撃を 受けた 相手は 防御が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	firepledge: {
 		name: "ほのおのちかい",
 		// Official flavor text: "炎の柱で 攻撃する。 くさと 組みあわせると 威力が あがって 周りが 火の海に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "味方がこのターンにくさのちかいまたはみずのちかいを選んでいてまだ行動していない場合、味方は自分の直後に行動し、自分の技は何もしない。くさのちかいと組み合わせた場合、味方が威力150のほのおのちかいを使い、相手側の場が4ターンの間火の海になり、ほのおタイプ以外のポケモンは毎ターン終了時（最終ターンを含む）に最大HPの1/8（切り捨て）のダメージを受ける。みずのちかいと組み合わせた場合、味方が威力150のみずのちかいを使い、自分側の場に4ターンの間虹がかかり、技の追加効果の発動率が2倍になる（特性てんのめぐみと重複するが、ひるみの効果の発動率は1回しか2倍にならない）。組み合わせて使った場合、自分のタイプにかかわらずタイプ一致補正を受ける。この技ではほのおのジュエルは消費されない。", // NEEDS QC
+		shortDesc: "くさ・みずのちかいと組み合わせ効果。", // NEEDS QC
 
 		activate: "#waterpledge",
 		start: "  {TEAM}の 周りが 火の海に 包まれた！",
@@ -2287,33 +2268,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firepunch: {
 		name: "ほのおのパンチ",
 		// Official flavor text: "炎を こめた パンチで 相手を 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	firespin: {
 		name: "ほのおのうず",
 		// Official flavor text: "激しく 渦をまく 炎の中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（しめつけバンドを持っている場合は1/8、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間（ねばりのかぎづめを持っている場合は常に5ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手を捕らえてダメージ。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、バトンタッチを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間この技を使う。2〜3ターン続く確率は各3/8、4〜5ターン続く確率は各1/8。最初のターンに計算したダメージが毎ターンそのまま使われる。効果中、自分は技を選べず、相手は技を実行できないが、どちらも交代はできる。自分が交代した場合、相手はそのターンも技を実行できない。相手が交代した場合、自分は自動的にこの技を再度使い、そのときPPが0だった場合は63になる。自分か相手が交代するか、自分が行動できなくなると効果は終わる。この技はタイプ相性で無効な相手の行動も封じられるが、ダメージは与えない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手は行動できない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 炎の渦に 閉じこめられた！",
@@ -2322,8 +2303,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firstimpression: {
 		name: "であいがしら",
 		// Official flavor text: "威力が 高い 技 だが 戦闘に 出たら すぐに 出さないと 成功 しない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分が場に出た最初のターンでなければ失敗する。", // NEEDS QC
+		shortDesc: "優先度の高い先制技。出た最初のターン限定。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2331,44 +2312,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fishiousrend: {
 		name: "エラがみ",
 		// Official flavor text: "かたい エラで かみつく。 相手より 先に 攻撃できると 技の 威力は ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手より先に行動した場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "相手より先に行動すると威力2倍。", // NEEDS QC
 	},
 	fissure: {
 		name: "じわれ",
 		// Official flavor text: "地割れの 裂け目に 相手を 落として 攻撃する。 当たれば 一撃で ひんしに する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の最大HPと同じダメージを与える。命中率と回避率の変化を無視する。この技の命中率は（自分のレベル−相手のレベル+30）%で、相手のレベルが自分より高い場合は失敗する。特性ががんじょうのポケモンには効かない。", // NEEDS QC
+		shortDesc: "一撃必殺。相手のレベルが高いと失敗。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に65535のダメージを与える。この技の256分率の命中率は、（2×（自分のレベル−相手のレベル）+76）と255の小さい方で、その後に命中率・回避率の補正が適用される。相手のレベルの方が高い場合は失敗する。あなをほるを使っている相手にも当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手に65535のダメージを与える。相手のすばやさが自分より高い場合は失敗する。", // NEEDS QC
+			shortDesc: "65535ダメージ。相手が速いと失敗。", // NEEDS QC
 		},
 	},
 	flail: {
 		name: "じたばた",
 		// Official flavor text: "じたばた 暴れて 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は、X=（自分の残りHP×48÷自分の最大HP）（切り捨て）として、Xが33〜48なら20、17〜32なら40、10〜16なら80、5〜9なら100、2〜4なら150、0〜1なら200。", // NEEDS QC
+		shortDesc: "自分の残りHPが少ないほど威力が上がる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（自分の現在のHP×64÷自分の最大HP）（切り捨て）をXとすると、Xが43〜48なら20、22〜42なら40、13〜21なら80、6〜12なら100、2〜5なら150、0か1なら200。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、X=（自分の残りHP×48÷自分の最大HP）（切り捨て）として、Xが33〜48なら20、17〜32なら40、10〜16なら80、5〜9なら100、2〜4なら150、0〜1なら200。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（自分の現在のHP×48÷自分の最大HP）（切り捨て）をXとすると、Xが33〜48なら20、17〜32なら40、10〜16なら80、5〜9なら100、2〜4なら150、0か1なら200。この技はダメージの乱数幅がなく、急所に当たらない。", // NEEDS QC
 		},
 	},
 	flameburst: {
 		name: "はじけるほのお",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、相手の隣の味方も最大HPの1/16（切り捨て）のダメージを受ける。特性がマジックガードの場合は受けない。", // NEEDS QC
+		shortDesc: "相手の隣のポケモンにもダメージ。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が成功すると、相手に隣接する味方は、特性がマジックガードでなければ最大HPの1/16（切り捨て）を失う。", // NEEDS QC
 		},
 
 		damage: "  {POKEMON}にも 火花が 降りかかった！",
@@ -2376,62 +2357,62 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flamecharge: {
 		name: "ニトロチャージ",
 		// Official flavor text: "炎を まとい 相手を 攻撃する。 力を ためて 自分の 素早さを あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の素早さを1段階上げる。", // NEEDS QC
+		shortDesc: "100%の確率で自分の素早さが1段階上がる。", // NEEDS QC
 	},
 	flamethrower: {
 		name: "かえんほうしゃ",
 		// Official flavor text: "激しい 炎を 相手に 発射して 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	flamewheel: {
 		name: "かえんぐるま",
 		// Official flavor text: "炎を まとい 相手に 突進して 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "10%でやけどにする。自分のこおりが治る。", // NEEDS QC
 	},
 	flareblitz: {
 		name: "フレアドライブ",
 		// Official flavor text: "炎を まとって 突進する。 自分も かなり ダメージを 受ける。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。相手にダメージを与えた場合、自分は与えたダメージの33%（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "33%の反動。10%でやけど。自分のこおりが治る。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をやけど状態にする。相手がHPを失った場合、失ったHPの1/3（切り捨て、最低1）の反動ダメージを自分が受ける。", // NEEDS QC
+			shortDesc: "反動1/3。10%でやけど。こおりが治る。", // NEEDS QC
 		},
 	},
 	flash: {
 		name: "フラッシュ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	flashcannon: {
 		name: "ラスターカノン",
 		// Official flavor text: "体の 光を 一点に 集めて 力を 放つ。 相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	flatter: {
 		name: "おだてる",
 		// Official flavor text: "相手を おだてて 混乱させる。 同時に 相手の 特攻も あげてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特攻を1段階上げ、こんらん状態にする。", // NEEDS QC
+		shortDesc: "相手の特攻を1段階上げてこんらんさせる。", // NEEDS QC
 	},
 	fleurcannon: {
 		name: "フルールカノン",
 		// Official flavor text: "強力な ビームを 放ったあと 自分の 特攻が がくっと さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を2段階下げる。", // NEEDS QC
+		shortDesc: "自分の特攻を2段階下げる。", // NEEDS QC
 	},
 	fling: {
 		name: "なげつける",
 		// Official flavor text: "持たせた 道具を 素早く 投げつけて 攻撃する。 道具で 威力と 効果が 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は自分の持ち物によって決まる。持ち物は失われ、効果のある道具なら相手に効果が発動する。対象がいない場合や、相手がまもる系の技で防いだ場合も、持ち物は失われる。投げた道具はリサイクルや特性しゅうかくで取り戻せる。道具を持っていない場合、投げられない道具の場合、自分がさしおさえやマジックルームの効果を受けている場合、自分の特性がぶきようの場合は失敗する。", // NEEDS QC
+		shortDesc: "持ち物を投げつける。威力は道具による。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は自分の持ち物によって決まる。持ち物は失われ、発動できる道具なら相手に発動する。相手がまもるなどでこの技を避けても道具は失われる。投げた道具はリサイクルで取り戻せる。道具を持っていない場合、投げられない道具の場合、自分がさしおさえの効果を受けている場合は失敗する。", // NEEDS QC
 		},
 
 		removeItem: "  {POKEMON}は {ITEM}を 投げつけた！",
@@ -2439,53 +2420,53 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flipturn: {
 		name: "クイックターン",
 		// Official flavor text: "攻撃した あと ものすごい スピードで 戻ってきて 控えの ポケモンと 入れ替わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合や、相手がだっしゅつボタンや特性ききかいひ・にげごしで交代した場合は交代しない。", // NEEDS QC
+		shortDesc: "攻撃した後、控えと交代する。", // NEEDS QC
 
 		switchOut: "#uturn",
 	},
 	floatyfall: {
 		name: "ふわふわフォール",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	floralhealing: {
 		name: "フラワーヒール",
 		// Official flavor text: "最大ＨＰの 半分 相手の ＨＰを 回復する。 グラスフィールドの時 効果が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対象の最大HPの1/2（四捨五入）を回復する。フィールドがグラスフィールドの場合、代わりに最大HPの2/3（五捨五超入）を回復する。", // NEEDS QC
+		shortDesc: "相手の最大HPの1/2を回復する。", // NEEDS QC
 	},
 	flowershield: {
 		name: "フラワーガード",
 		// Official flavor text: "不思議な 力を 使って 場にいる くさタイプの ポケモン 全員の 防御を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいるくさタイプのポケモン全員の防御を1段階上げる。場にくさタイプのポケモンがいない場合は失敗する。", // NEEDS QC
+		shortDesc: "場のくさタイプ全員の防御が1段階上がる。", // NEEDS QC
 	},
 	flowertrick: {
 		name: "トリックフラワー",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必ず急所に当たる。ただし、相手がおまじないの効果を受けている場合や、特性がカブトアーマー・シェルアーマーの場合は急所に当たらない。必中。", // NEEDS QC
+		shortDesc: "必ず急所に当たる。必中。", // NEEDS QC
 	},
 	fly: {
 		name: "そらをとぶ",
 		// Official flavor text: "１ターン目で 空へ 飛び ２ターン目に 相手を 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・ぼうふう・スカイアッパー・うちおとす・サウザンアロー・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきはダメージ2倍で当たる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に飛び上がり、2ターン目に攻撃。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・ぼうふう・スカイアッパー・うちおとす・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・スカイアッパー・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・スカイアッパー・かみなり・たつまき以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、かぜおこし・かみなり・たつまき・ふきとばし以外の攻撃を受けず、かぜおこしとたつまきは威力2倍で当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に飛び上がり、2ターン目に攻撃する。飛び上がっている間は、がまん・スピードスター・へんしん以外の攻撃を受けない。2ターン目にまひで動けなかった場合、交代するか、この技またはあなをほるの2ターン目を成功させるまで攻撃を受けないままになる。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}は 空高く 飛びあがった！",
@@ -2493,27 +2474,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flyingpress: {
 		name: "フライングプレス",
 		// Official flavor text: "空中から 相手に ダイブする。 この技は かくとうタイプと 同時に ひこうタイプでも ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手とのタイプ相性の計算に、この技のタイプに加えてひこうタイプも含める。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "ひこうタイプも合わせた相性で攻撃。", // NEEDS QC
 	},
 	focusblast: {
 		name: "きあいだま",
 		// Official flavor text: "気合を 高めて ありったけの 力を 放出する。 相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	focusenergy: {
 		name: "きあいだめ",
 		// Official flavor text: "深く 息を 吸い 気合を こめる。 自分の 攻撃が 急所に 当たりやすくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の急所ランクを2段階上げる。すでにこの効果を受けている場合は失敗する。バトンタッチでこの効果を引き継げる。", // NEEDS QC
+		shortDesc: "自分の急所ランクが2段階上がる。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分の急所率を1段階上げる。すでに効果を受けている場合は失敗する。この効果はバトンタッチで引き継げる。", // NEEDS QC
+			shortDesc: "自分の急所ランクを1段階上げる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、自分の急所率が1/4になる。すでに効果を受けている場合は失敗する。いずれかのポケモンがくろいきりを使うと効果は終わる。", // NEEDS QC
+			shortDesc: "自分の急所率が1/4になる。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 張り切っている！",
@@ -2523,10 +2504,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	focuspunch: {
 		name: "きあいパンチ",
 		// Official flavor text: "精神を 高めて パンチを くりだす。 技を だすまでに 攻撃を 受けると 失敗する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、この技を出す前にダメージを与える攻撃を受けると、集中が途切れて失敗する。", // NEEDS QC
+		shortDesc: "攻撃前にダメージを受けると失敗する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技を出す前に、このターンに攻撃技でダメージを受けると、集中が途切れて何もできないが、PPは消費する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 集中力を 高めている！",
@@ -2535,16 +2516,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	followme: {
 		name: "このゆびとまれ",
 		// Official flavor text: "自分に 注目させて 相手からの 攻撃を すべて 自分に むけさせる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ターン終了までの間、相手側からの単体対象の技をすべて自分に向けさせる。マジックコートや特性マジックミラーによる跳ね返しや、特性ひらいしん・よびみずによる引き寄せよりも先に、自分に向けられる。ダブルバトルまたはバトルロイヤルでなければ失敗する。自分がフリーフォールの効果を受けている間、この効果は無視される。", // NEEDS QC
+		shortDesc: "このターン相手の技を自分に向けさせる。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ターン終了まで、相手側の単体攻撃は、範囲内であればすべて自分に向けられる。この誘導は、マジックコートや特性マジックミラーで跳ね返されたり、特性ひらいしん・よびみずで引き寄せられたりする前に適用される。ダブルバトル・トリプルバトルでなければ失敗する。自分がフリーフォールの効果を受けている間は無視される。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ターン終了まで、相手側の単体攻撃はすべて自分に向けられる。この誘導は、マジックコートで跳ね返されたり、特性ひらいしん・よびみずで引き寄せられたりする前に適用される。自分が場を離れても効果は続く。ダブルバトルでなければ失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ターン終了まで、相手側の単体攻撃はすべて自分に向けられる。この誘導は、マジックコートで跳ね返されたり、特性ひらいしんで引き寄せられたりする前に適用される。自分が場を離れても効果は続く。ダブルバトルでなければ失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 注目の的に なった！",
@@ -2553,22 +2534,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forcepalm: {
 		name: "はっけい",
 		// Official flavor text: "相手の 体に 衝撃波を 当てて 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	foresight: {
 		name: "みやぶる",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が場にいる間、相手の回避率のランクが+1以上の場合は命中判定で無視され、相手がゴーストタイプでもノーマル・かくとうタイプの攻撃が当たるようになる。相手がすでにこの効果か、ミラクルアイ・かぎわけるの効果を受けている場合は失敗する。", // NEEDS QC
+		shortDesc: "ノーマル・かくとうがゴーストに当たる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の回避率ランクが0より高ければ命中判定で無視され、ゴーストタイプでもノーマル・かくとうタイプの攻撃が当たるようになる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の回避率ランクは命中判定で無視され、ゴーストタイプでもノーマル・かくとうタイプの攻撃が当たるようになる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の回避率ランクが攻撃側の命中率ランクより高い場合、命中判定で両方無視され、ゴーストタイプでもノーマル・かくとうタイプの攻撃が当たるようになる。相手がバトンタッチで場を離れた場合、交代先も効果を受け続ける。相手がすでに効果を受けている場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}の 正体を 見破った！",
@@ -2576,20 +2557,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forestscurse: {
 		name: "もりののろい",
 		// Official flavor text: "相手に 森ののろいを かける。 のろいを かけられた 相手は タイプに くさタイプが 追加される。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にくさタイプを追加し、2〜3つのタイプを持たせる。相手がすでにくさタイプの場合は失敗する。ハロウィンでタイプが追加されると、この技で追加されたタイプは置き換えられる（逆も同様）。", // NEEDS QC
+		shortDesc: "相手にくさタイプを追加する。", // NEEDS QC
 	},
 	foulplay: {
 		name: "イカサマ",
 		// Official flavor text: "相手の 力を 利用する。 戦っている 相手の 攻撃が 高いほど ダメージが あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃の代わりに、相手の攻撃の数値（能力ランクの変化を含む）を使ってダメージを計算する。自分の特性・道具・やけどは通常どおり適用される。", // NEEDS QC
+		shortDesc: "相手の攻撃の数値でダメージ計算。", // NEEDS QC
 	},
 	freezedry: {
 		name: "フリーズドライ",
 		// Official flavor text: "相手を 急激に 冷やして こおり 状態に することが ある。 みずタイプにも 効果バツグンになる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。この技のタイプにかかわらず、みずタイプに対する相性が効果ばつぐんになる。", // NEEDS QC
+		shortDesc: "10%でこおり。みずタイプに効果ばつぐん。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2598,105 +2579,105 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	freezeshock: {
 		name: "フリーズボルト",
 		// Official flavor text: "電気を まとった 氷の 塊で ２ターン目に 相手を たたきつける。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。1ターン目にため、2ターン目に攻撃する。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目にため、2ターン目攻撃。30%まひ。", // NEEDS QC
 
 		prepare: "  {POKEMON}は 冷たい光に 包まれた！",
 	},
 	freezingglare: {
 		name: "いてつくしせん",
 		// Official flavor text: "両目から サイコパワーを 撃ちだして 攻撃する。 こおり状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
 	},
 	freezyfrost: {
 		name: "こちこちフロスト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいるすべてのポケモンの能力ランクの変化を0に戻す。", // NEEDS QC
+		shortDesc: "全ポケモンの能力変化を元に戻す。", // NEEDS QC
 	},
 	frenzyplant: {
 		name: "ハードプラント",
 		// Official flavor text: "大きな 樹木で 相手を たたきつけて 攻撃する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	frostbreath: {
 		name: "こおりのいぶき",
 		// Official flavor text: "冷たい 息を 相手に 吹きつけて 攻撃する。 必ず 急所に 当たる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必ず急所に当たる。ただし、相手がおまじないの効果を受けている場合や、特性がカブトアーマー・シェルアーマーの場合は急所に当たらない。", // NEEDS QC
+		shortDesc: "必ず急所に当たる。", // NEEDS QC
 	},
 	frustration: {
 		name: "やつあたり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（（255−自分のなつき度）×2/5）（切り捨て、最低1）。", // NEEDS QC
+		shortDesc: "なつき度が低いほど威力が上がる（最大102）。", // NEEDS QC
 	},
 	furyattack: {
 		name: "みだれづき",
 		// Official flavor text: "つのや くちばしで 相手を つついて 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。ダメージは最初の攻撃で1回だけ計算され、すべての攻撃に適用される。途中の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	furycutter: {
 		name: "れんぞくぎり",
 		// Official flavor text: "カマや ツメなどで 相手を 切りつけて 攻撃する。 連続で 当てると 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "当たるたびに威力が2倍になる（最大160）。外れるか、他の技を使うと威力は元に戻る。", // NEEDS QC
+		shortDesc: "当たるたび威力2倍（最大160）。", // NEEDS QC
 	},
 	furyswipes: {
 		name: "みだれひっかき",
 		// Official flavor text: "ツメや カマなどで 相手を ひっかいて 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。ダメージは最初の攻撃で1回だけ計算され、すべての攻撃に適用される。途中の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	fusionbolt: {
 		name: "クロスサンダー",
 		// Official flavor text: "巨大な 雷を たたきつける。 巨大な 炎の 影響を受け 技の 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに（いずれかのポケモンが）最後に使った技がクロスフレイムだった場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "クロスフレイムの後に使うと威力2倍。", // NEEDS QC
 	},
 	fusionflare: {
 		name: "クロスフレイム",
 		// Official flavor text: "巨大な 炎を たたきつける。 巨大な 雷の 影響を受け 技の 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに（いずれかのポケモンが）最後に使った技がクロスサンダーだった場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "クロスサンダーの後に使うと威力2倍。", // NEEDS QC
 	},
 	futuresight: {
 		name: "みらいよち",
 		// Official flavor text: "技を 使った ２ターン後に 相手に 念力の 塊を 送って 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用してから2ターン後にダメージを与える。そのターンの終了時にダメージを計算し、技を使ったときに相手がいた位置のポケモンに与える。そのとき自分が場にいない場合、持ち物や特性による強化なしで、自分の本来の特攻・タイプ・レベルからダメージを計算する。この技やはめつのねがいがすでに相手の位置に発動予定の場合は失敗する。", // NEEDS QC
+		shortDesc: "2ターン後に攻撃が発動する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った2ターン後に、急所に当たらないタイプなしのダメージを与える。ダメージは使用時に相手に対して計算し、最後のターンの終了時に、元の相手の位置にいるポケモンに与える。その位置にすでにこの技かはめつのねがいが発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った2ターン後に、急所に当たらないタイプなしのダメージを与える。ダメージは使用時に相手に対して計算し、最後のターンの終了時に、元の相手の位置にいるポケモンに与える。その位置にすでにこの技が発動中の場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 未来に 攻撃を予知した！",
@@ -2705,16 +2686,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gastroacid: {
 		name: "いえき",
 		// Official flavor text: "胃液を 相手の 体に 吐きつける。 ついた 胃液は 相手の 特性の 効果を 消す。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が場にいる間、相手の特性を無効化する。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスチェンジ・ダルマモード・マイティチェンジの場合は失敗し、バトンタッチで受け継いだ場合は効果がすぐに終わる。", // NEEDS QC
+		shortDesc: "相手の特性を無効化する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の特性を無効化する。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ダルマモードの場合は失敗し、バトンタッチで受け継いだ場合は効果がすぐに終わる。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の特性を無効化する。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手の特性がきずなへんげ・ぜったいねむり・ばけのかわ・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ダルマモードの場合は失敗し、バトンタッチで受け継いだ場合は効果がすぐに終わる。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の特性を無効化する。相手がバトンタッチを使った場合、交代先も効果を受け続ける。相手の特性がマルチタイプ・バトルスイッチの場合は失敗し、バトンタッチで受け継いだ場合は効果がすぐに終わる。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}の 特性が 効かなくなった！",
@@ -2722,211 +2703,211 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	geargrind: {
 		name: "ギアソーサー",
 		// Official flavor text: "鋼鉄の ギアを 相手に 投げつけて 攻撃する。 ２回連続で ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "1ターンに2回攻撃する。", // NEEDS QC
 	},
 	gearup: {
 		name: "アシストギア",
 		// Official flavor text: "ギアを 入れる ことによって 特性 プラスと マイナスの 攻撃と 特攻が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分側の、特性がプラス・マイナスのポケモンの攻撃と特攻を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "プラス・マイナスの味方の攻撃・特攻+1。", // NEEDS QC
 	},
 	genesissupernova: {
 		name: "オリジンズスーパーノヴァ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、フィールドがサイコフィールドになる。", // NEEDS QC
+		shortDesc: "サイコフィールドを張る。", // NEEDS QC
 	},
 	geomancy: {
 		name: "ジオコントロール",
 		// Official flavor text: "１ターン目で エネルギーを 吸収し ２ターン目に 特攻 特防 素早さを ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻・特防・素早さを2段階ずつ上げる。1ターン目にため、2ターン目に発動する。パワフルハーブを持っている場合、1ターンで発動する。", // NEEDS QC
+		shortDesc: "1ターンためて特攻・特防・素早さ+2。", // NEEDS QC
 
 		prepare: "{POKEMON}は パワーを ためこんでいる！",
 	},
 	gigadrain: {
 		name: "ギガドレイン",
 		// Official flavor text: "養分を 吸い取り 攻撃する。 与えた ダメージの 半分の ＨＰを 回復できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（切り捨て）になる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。", // NEEDS QC
 		},
 	},
 	gigaimpact: {
 		name: "ギガインパクト",
 		// Official flavor text: "持てる 力を すべて 使って 相手に 突撃する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	gigatonhammer: {
 		name: "デカハンマー",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "連続では選択できない。", // NEEDS QC
 	},
 	gigavolthavoc: {
 		name: "スパーキングギガボルト",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	glaciallance: {
 		name: "ブリザードランス",
 		// Official flavor text: "吹雪を まとった 氷の 槍を 相手に 投げつけて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	glaciate: {
 		name: "こごえるせかい",
 		// Official flavor text: "凍えるような 冷気を 相手に 吹きつけて 攻撃する。 相手の 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 	},
 	glaiverush: {
 		name: "きょけんとつげき",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、自分の次の行動までの間、自分を対象とする技が必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "次の行動まで受ける攻撃が必中・2倍に。", // NEEDS QC
 	},
 	glare: {
 		name: "へびにらみ",
 		// Official flavor text: "おなかの 模様で おびえさせて 相手を まひの 状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "相手をまひ状態にする。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をまひ状態にする。タイプ相性による無効は貫通しない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をまひ状態にする。", // NEEDS QC
 		},
 	},
 	glitzyglow: {
 		name: "どばどばオーラ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用すると、自分の側に5ターンの間ひかりのかべの効果が発生する。", // NEEDS QC
+		shortDesc: "ひかりのかべの効果を発生させる。", // NEEDS QC
 	},
 	gmaxbefuddle: {
 		name: "キョダイコワク",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンをそれぞれねむり・どく・まひのいずれかの状態にする（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をねむり・どく・まひに。", // NEEDS QC
 	},
 	gmaxcannonade: {
 		name: "キョダイホウゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、4ターンの間、相手側のみずタイプ以外のポケモンは、毎ターン終了時（最終ターンを含む）に最大HPの1/6（切り捨て）のダメージを受ける。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側は4ターン毎回1/6ダメージ。", // NEEDS QC
 
 		start: "  {PARTY}が 水の 流れに 包まれた！",
 		damage: "  {POKEMON}は キョダイホウゲキの 流れに 飲みこまれていて 苦しい！",
 	},
 	gmaxcentiferno: {
 		name: "キョダイヒャッカ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手側のポケモンを交代できなくし（みがわり状態でも効果を受ける）、毎ターン終了時にそれぞれの最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っているポケモンや、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使ったポケモンは交代できる。対象が場を離れるか、こうそくスピン・みがわりを成功させると、そのポケモンへの効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側を4〜5ターンしめつける。", // NEEDS QC
 	},
 	gmaxchistrike: {
 		name: "キョダイシンゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員の急所ランクが1段階上がる（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方の急所ランク+1。", // NEEDS QC
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
 		name: "キョダイホーヨー",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンをメロメロ状態にする（みがわり状態でも効果を受ける）。対象と自分の性別が同じ場合、どちらかが性別不明の場合、対象がすでにメロメロ状態の場合、そのポケモンには効果がない。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をメロメロにする。", // NEEDS QC
 	},
 	gmaxdepletion: {
 		name: "キョダイゲンスイ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンそれぞれの最後に使った技のPPを2減らす（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の最後の技のPP-2。", // NEEDS QC
 
 		activate: "  {TARGET}の ＰＰが へった！",
 	},
 	gmaxdrumsolo: {
 		name: "キョダイコランダ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "元の技のダイマックス技の威力にかかわらず、威力は160。この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "威力は常に160。特性を無視する。", // NEEDS QC
 	},
 	gmaxfinale: {
 		name: "キョダイダンエン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員が最大HPの1/6を回復する（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方のHPを1/6回復。", // NEEDS QC
 	},
 	gmaxfireball: {
 		name: "キョダイカキュウ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "元の技のダイマックス技の威力にかかわらず、威力は160。この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "威力は常に160。特性を無視する。", // NEEDS QC
 	},
 	gmaxfoamburst: {
 		name: "キョダイホウマツ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモン全員の素早さが2段階下がる（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の素早さ-2。", // NEEDS QC
 	},
 	gmaxgoldrush: {
 		name: "キョダイコバン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンをこんらん状態にする（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をこんらんさせる。", // NEEDS QC
 	},
 	gmaxgravitas: {
 		name: "キョダイテンドウ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、じゅうりょくの効果が発生する。", // NEEDS QC
+		shortDesc: "威力は元の技による。じゅうりょくが発生。", // NEEDS QC
 	},
 	gmaxhydrosnipe: {
 		name: "キョダイソゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "元の技のダイマックス技の威力にかかわらず、威力は160。この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "威力は常に160。特性を無視する。", // NEEDS QC
 	},
 	gmaxmalodor: {
 		name: "キョダイシュウキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンをどく状態にする（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をどく状態に。", // NEEDS QC
 	},
 	gmaxmeltdown: {
 		name: "キョダイユウゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンそれぞれにいちゃもんの効果が発生する（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をいちゃもん状態に。", // NEEDS QC
 	},
 	gmaxoneblow: {
 		name: "キョダイイチゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。この技は、ダイウォールを含むすべてのまもる系の技を貫通する。", // NEEDS QC
+		shortDesc: "威力は元の技による。ダイウォールを貫通。", // NEEDS QC
 	},
 	gmaxrapidflow: {
 		name: "キョダイレンゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。この技は、ダイウォールを含むすべてのまもる系の技を貫通する。", // NEEDS QC
+		shortDesc: "威力は元の技による。ダイウォールを貫通。", // NEEDS QC
 	},
 	gmaxreplenish: {
 		name: "キョダイサイセイ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、50%の確率で、自分側のポケモン全員のきのみが復活する（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。50%できのみ復活。", // NEEDS QC
 	},
 	gmaxresonance: {
 		name: "キョダイセンリツ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分の側にオーロラベールの効果が発生する。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方にオーロラベール。", // NEEDS QC
 	},
 	gmaxsandblast: {
 		name: "キョダイサジン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手側のポケモンを交代できなくし（みがわり状態でも効果を受ける）、毎ターン終了時にそれぞれの最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っているポケモンや、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使ったポケモンは交代できる。対象が場を離れるか、こうそくスピン・みがわりを成功させると、そのポケモンへの効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側を4〜5ターンしめつける。", // NEEDS QC
 	},
 	gmaxsmite: {
 		name: "キョダイテンバツ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンをこんらん状態にする（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をこんらんさせる。", // NEEDS QC
 	},
 	gmaxsnooze: {
 		name: "キョダイスイマ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、50%の確率で、相手にあくびの効果が発生する（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。50%で相手をあくび状態に。", // NEEDS QC
 	},
 	gmaxsteelsurge: {
 		name: "キョダイコウジン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ダメージは相手のはがねタイプに対する相性で決まり、0.25倍・0.5倍・等倍・2倍・4倍に対してそれぞれ最大HPの1/32・1/16・1/8・1/4・1/2（切り捨て）。相手側のポケモンがこうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
+		shortDesc: "威力は元の技による。はがねの設置技をまく。", // NEEDS QC
 
 		start: "  {PARTY}の 周りに とがった はがねが ただよいはじめた！",
 		end: "  {PARTY}の 周りの はがねが 消え去った！",
@@ -2934,74 +2915,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxstonesurge: {
 		name: "キョダイガンジン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ダメージは相手のいわタイプに対する相性で決まり、0.25倍・0.5倍・等倍・2倍・4倍に対してそれぞれ最大HPの1/32・1/16・1/8・1/4・1/2（切り捨て）。相手側のポケモンがこうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
+		shortDesc: "威力は元の技による。ステルスロックをまく。", // NEEDS QC
 	},
 	gmaxstunshock: {
 		name: "キョダイカンデン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンをそれぞれどくまたはまひ状態にする（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をどくかまひに。", // NEEDS QC
 	},
 	gmaxsweetness: {
 		name: "キョダイカンロ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員の状態異常を治す（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方の状態異常を治す。", // NEEDS QC
 	},
 	gmaxtartness: {
 		name: "キョダイサンゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモン全員の回避率が1段階下がる（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の回避率-1。", // NEEDS QC
 	},
 	gmaxterror: {
 		name: "キョダイゲンエイ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンを交代できなくする（みがわり状態でも効果を受ける）。ただし、きれいなぬけがらを持っているポケモンや、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使ったポケモンは交代できる。自分または対象が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側を交代不能に。", // NEEDS QC
 	},
 	gmaxvinelash: {
 		name: "キョダイベンタツ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、4ターンの間、相手側のくさタイプ以外のポケモンは、毎ターン終了時（最終ターンを含む）に最大HPの1/6（切り捨て）のダメージを受ける。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側は4ターン毎回1/6ダメージ。", // NEEDS QC
 
 		start: "  {PARTY}が ムチの 猛打に 包まれた！",
 		damage: "  {POKEMON}は キョダイベンタツの 猛打に さらされていて 痛い！",
 	},
 	gmaxvolcalith: {
 		name: "キョダイフンセキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、4ターンの間、相手側のいわタイプ以外のポケモンは、毎ターン終了時（最終ターンを含む）に最大HPの1/6（切り捨て）のダメージを受ける。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側は4ターン毎回1/6ダメージ。", // NEEDS QC
 
 		start: "  {PARTY}が 岩に 囲まれた！",
 		damage: "  {POKEMON}は キョダイフンセキの 岩に 囲まれていて 痛い！",
 	},
 	gmaxvoltcrash: {
 		name: "キョダイバンライ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモンをまひ状態にする（みがわり状態でも効果を受ける）。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側をまひ状態に。", // NEEDS QC
 	},
 	gmaxwildfire: {
 		name: "キョダイゴクエン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、4ターンの間、相手側のほのおタイプ以外のポケモンは、毎ターン終了時（最終ターンを含む）に最大HPの1/6（切り捨て）のダメージを受ける。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側は4ターン毎回1/6ダメージ。", // NEEDS QC
 
 		start: "  {PARTY}が ほのおに 包まれた！",
 		damage: "  {POKEMON}は キョダイゴクエンの 炎に 包まれていて 熱い！",
 	},
 	gmaxwindrage: {
 		name: "キョダイフウゲキ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、エレキフィールド・グラスフィールド・ミストフィールド・サイコフィールドの効果と、相手側のリフレクター・ひかりのかべ・オーロラベール・しんぴのまもり・しろいきり・キョダイコウジン・まきびし・どくびし・ステルスロック・ねばねばネットの効果、および自分側のキョダイコウジン・まきびし・どくびし・ステルスロック・ねばねばネットの効果が消える。", // NEEDS QC
+		shortDesc: "威力は元の技による。フィールドや設置技を消す。", // NEEDS QC
 	},
 	grassknot: {
 		name: "くさむすび",
 		// Official flavor text: "草を からませて 相手を 転ばせる。相手が 重いほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は相手の重さで決まる。10kg未満なら20、25kg未満なら40、50kg未満なら60、100kg未満なら80、200kg未満なら100、200kg以上なら120。", // NEEDS QC
+		shortDesc: "相手が重いほど威力が上がる。", // NEEDS QC
 	},
 	grasspledge: {
 		name: "くさのちかい",
 		// Official flavor text: "草の柱で 攻撃する。 みずと 組みあわせると 威力が あがって あたりが 湿原に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "味方がこのターンにほのおのちかいまたはみずのちかいを選んでいてまだ行動していない場合、味方は自分の直後に行動し、自分の技は何もしない。ほのおのちかいと組み合わせた場合、味方が威力150のほのおのちかいを使い、相手側の場が4ターンの間火の海になり、ほのおタイプ以外のポケモンは毎ターン終了時（最終ターンを含む）に最大HPの1/8（切り捨て）のダメージを受ける。みずのちかいと組み合わせた場合、味方が威力150のくさのちかいを使い、相手側の場が4ターンの間湿原になり、その側のポケモンの素早さが1/4になる。組み合わせて使った場合、自分のタイプにかかわらずタイプ一致補正を受ける。この技ではくさのジュエルは消費されない。", // NEEDS QC
+		shortDesc: "ほのお・みずのちかいと組み合わせ効果。", // NEEDS QC
 
 		activate: "#waterpledge",
 		start: "  {TEAM}の 周りに 湿原が 広がった！",
@@ -3009,81 +2990,81 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grasswhistle: {
 		name: "くさぶえ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をねむり状態にする。", // NEEDS QC
 	},
 	grassyglide: {
 		name: "グラススライダー",
 		// Official flavor text: "地面を 滑るように 相手を 攻撃。 グラスフィールドの時 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドがグラスフィールドで自分が地面にいる場合、優先度が+1される。", // NEEDS QC
+		shortDesc: "グラスフィールドで優先度+1。", // NEEDS QC
 	},
 	grassyterrain: {
 		name: "グラスフィールド",
 		// Official flavor text: "５ターンの 間 グラスフィールドにする。 地面にいると 毎ターン 回復する。 くさタイプの 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、フィールドがグラスフィールドになる。その間、地面にいるポケモンのくさタイプの攻撃技の威力が1.3倍になり、地面にいるポケモンに対するじならし・じしん・マグニチュードの威力が0.5倍になり、地面にいるポケモンは毎ターン終了時（最終ターンを含む）に最大HPの1/16（切り捨て）を回復する。ほごしょくを使うとくさタイプになり、しぜんのちからはエナジーボールになり、ひみつのちからは30%の確率でねむり状態にするようになる。すでにグラスフィールドの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、グラスフィールドにする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、グラスフィールドになる。効果中、地面にいるポケモンのくさタイプの攻撃技の威力が1.5倍になり、地面にいるポケモンへのじならし・じしん・マグニチュードの威力が0.5倍になり、地面にいるポケモンは毎ターン終了時（最後のターンを含む）に最大HPの1/16（切り捨て）を回復する。ほごしょくを使うとくさタイプになり、しぜんのちからはエナジーボールになり、ひみつのちからは30%の確率でねむり状態にする。すでにグラスフィールドの場合は失敗する。", // NEEDS QC
 		},
 	},
 	gravapple: {
 		name: "Ｇのちから",
 		// Official flavor text: "高いところから りんごを 落として ダメージを 与える。 相手の 防御を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の防御を1段階下げる。じゅうりょくの効果の間、威力が1.5倍になる。", // NEEDS QC
+		shortDesc: "100%で防御-1。じゅうりょく中は威力1.5倍。", // NEEDS QC
 	},
 	gravity: {
 		name: "じゅうりょく",
 		// Official flavor text: "５ターンの間 ふゆうや ひこうタイプに じめんタイプの 技が 当たるようになる。 空中に 飛ぶ 技も 使えない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、場にいるすべてのポケモンの回避率が0.6倍になる。使用時、場にいるすべてのポケモンのとびはねる・そらをとぶ・でんじふゆう・フリーフォール・テレキネシスの効果がすぐに終わる。効果の間、場にいるすべてのポケモンはとびはねる・そらをとぶ・フライングプレス・とびひざげり・とびげり・でんじふゆう・フリーフォール・はねる・テレキネシスを使えない。じめんタイプの攻撃やまきびし・どくびし・ねばねばネット、特性ありじごくが、ひこうタイプや特性ふゆうのポケモンにも効くようになる。すでにこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、じめん無効がなくなり命中1.67倍。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、場にいるすべてのポケモンの回避率が0.6倍になる。使用時、すべてのポケモンのとびはねる・そらをとぶ・でんじふゆう・フリーフォール・テレキネシスがすぐに終わる。効果中、すべてのポケモンはとびはねる・そらをとぶ・フライングプレス・とびひざげり・とびげり・でんじふゆう・フリーフォール・はねる・テレキネシスを使えない。じめんタイプの攻撃、まきびし・どくびし・ねばねばネット・特性ありじごくが、ひこうタイプや特性ふゆうのポケモンにも効果を発揮する。すでに効果が発動中の場合は失敗する。該当するZパワーで強化された技は選択できるが、効果中は実行時に防がれる。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、場にいるすべてのポケモンの回避率が0.6倍になる。使用時、場にいるすべてのポケモンのとびはねる・そらをとぶ・でんじふゆう・フリーフォール・テレキネシスの効果がすぐに終わる。効果の間、場にいるすべてのポケモンはとびはねる・そらをとぶ・フライングプレス・とびひざげり・とびげり・でんじふゆう・フリーフォール・はねる・テレキネシスを使えない。じめんタイプの攻撃やまきびし・どくびし・ねばねばネット、特性ありじごくが、ひこうタイプや特性ふゆうのポケモンにも効くようになる。すでにこの効果がある場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、場にいるすべてのポケモンの回避率が0.6倍になる。使用時、すべてのポケモンのとびはねる・そらをとぶ・でんじふゆう・フリーフォール・テレキネシスがすぐに終わる。効果中、すべてのポケモンはとびはねる・そらをとぶ・とびひざげり・とびげり・でんじふゆう・フリーフォール・はねる・テレキネシスを使えない。じめんタイプの攻撃、まきびし・どくびし・特性ありじごくが、ひこうタイプや特性ふゆうのポケモンにも効果を発揮する。すでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、場にいるすべてのポケモンの回避率が0.6倍になる。使用時、すべてのポケモンのとびはねる・そらをとぶ・でんじふゆうがすぐに終わる。効果中、すべてのポケモンはとびはねる・そらをとぶ・とびひざげり・とびげり・でんじふゆう・はねるを使えない。じめんタイプの攻撃、まきびし・どくびし・特性ありじごくが、ひこうタイプや特性ふゆうのポケモンにも効果を発揮する。すでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 	},
 	growl: {
 		name: "なきごえ",
 		// Official flavor text: "かわいい なきごえを 聞かせて 気を ひき 油断を させて 相手の 攻撃を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃を1段階下げる。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手の攻撃を1段階下げる。", // NEEDS QC
 		},
 	},
 	growth: {
 		name: "せいちょう",
 		// Official flavor text: "体を 一気に 大きく 生長させて 攻撃と 特攻を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と特攻を1段階ずつ上げる。天気がにほんばれ・おおひでりの場合、2段階ずつ上げる。ただし、ばんのうがさを持っている場合は、天気がにほんばれ・おおひでりでも1段階ずつしか上がらない。", // NEEDS QC
+		shortDesc: "攻撃と特攻が1段階上がる。晴れなら2段階。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のこうげきととくこうを1段階ずつ上げる。天気がにほんばれ・おおひでりのときは2段階ずつ上げる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のこうげきととくこうを1段階ずつ上げる。天気がにほんばれのときは2段階ずつ上げる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のとくこうを1段階上げる。", // NEEDS QC
+			shortDesc: "自分の特攻を1段階上げる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のとくしゅを1段階上げる。", // NEEDS QC
+			shortDesc: "自分のとくしゅを1段階上げる。", // NEEDS QC
 		},
 	},
 	grudge: {
 		name: "おんねん",
 		// Official flavor text: "相手の 技で ひんしに されたとき おんねんを かけて その技の ＰＰを ０に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の次の行動までの間に、相手の攻撃で自分がひんしになった場合、その技の残りPPをすべてなくす。", // NEEDS QC
+		shortDesc: "倒されると相手の技のPPを0にする。", // NEEDS QC
 
 		activate: "  {POKEMON}の {MOVE}は おんねんで ＰＰが０になった！",
 		start: "{POKEMON}は 相手に おんねんを かけようとしている！",
@@ -3091,112 +3072,112 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	guardianofalola: {
 		name: "ガーディアン・デ・アローラ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の残りHPの3/4（切り捨て、最低1）のダメージを与える。", // NEEDS QC
+		shortDesc: "相手の残りHPの3/4のダメージを与える。", // NEEDS QC
 	},
 	guardsplit: {
 		name: "ガードシェア",
 		// Official flavor text: "超能力で 自分と 相手の 防御と 特防を たして 半分に わける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の防御をそれぞれ両者の防御の平均値（切り捨て）に、特防をそれぞれ両者の特防の平均値（切り捨て）にする。能力ランクの変化は影響を受けない。", // NEEDS QC
+		shortDesc: "相手と防御・特防を平均化する。", // NEEDS QC
 
 		activate: "  {POKEMON}は おたがいのガードを シェアした！",
 	},
 	guardswap: {
 		name: "ガードスワップ",
 		// Official flavor text: "超能力で 自分と 相手の 防御と 特防の 能力変化を 入れ替える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の、防御と特防の能力ランクの変化を入れ替える。", // NEEDS QC
+		shortDesc: "相手と防御・特防の能力変化を入れ替える。", // NEEDS QC
 	},
 	guillotine: {
 		name: "ハサミギロチン",
 		// Official flavor text: "大きな ハサミで 相手を 切り裂いて 攻撃する。 当たれば 一撃で ひんしに する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の最大HPと同じダメージを与える。命中率と回避率の変化を無視する。この技の命中率は（自分のレベル−相手のレベル+30）%で、相手のレベルが自分より高い場合は失敗する。特性ががんじょうのポケモンには効かない。", // NEEDS QC
+		shortDesc: "一撃必殺。相手のレベルが高いと失敗。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に65535のダメージを与える。この技の256分率の命中率は、（2×（自分のレベル−相手のレベル）+76）と255の小さい方で、その後に命中率・回避率の補正が適用される。相手のレベルの方が高い場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手に65535のダメージを与える。相手のすばやさが自分より高い場合は失敗する。", // NEEDS QC
+			shortDesc: "65535ダメージ。相手が速いと失敗。", // NEEDS QC
 		},
 	},
 	gunkshot: {
 		name: "ダストシュート",
 		// Official flavor text: "汚い ゴミを 相手に ぶつけて 攻撃する。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をどく状態にする。", // NEEDS QC
 	},
 	gust: {
 		name: "かぜおこし",
 		// Official flavor text: "翼で おこした 激しい 風を 相手に ぶつけて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がとびはねる・そらをとぶ・フリーフォールで飛び上がっている間や、フリーフォールの効果を受けている間は、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "そらをとぶ中などの相手に威力2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がとびはねるかそらをとぶを使っている場合、威力が2倍になる。", // NEEDS QC
+			shortDesc: "とびはねる・そらをとぶ中は威力2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がそらをとぶを使っている場合、威力が2倍になる。", // NEEDS QC
+			shortDesc: "そらをとぶ中の相手に威力2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "追加効果なし。", // NEEDS QC
+			shortDesc: "追加効果なし。", // NEEDS QC
 		},
 	},
 	gyroball: {
 		name: "ジャイロボール",
 		// Official flavor text: "体を 高速に 回転させて 体当たりする。相手より 素早さが 低いほど 強い。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（25×相手の現在の素早さ÷自分の現在の素早さ）+1（切り捨て、最大150）。自分の現在の素早さが0の場合、威力は1。", // NEEDS QC
+		shortDesc: "相手より遅いほど威力が上がる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（25×相手の現在のすばやさ÷自分の現在のすばやさ）+1（切り捨て、最大150）。自分の現在のすばやさが0の場合は1として扱う。", // NEEDS QC
 		},
 	},
 	hail: {
 		name: "あられ",
 		// Official flavor text: "５ターンの 間 あられを 降らして こおりタイプで ない ポケモン 全員に ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、天気があられになる。最終ターンを除く毎ターン終了時に、場にいるすべてのポケモンは最大HPの1/16（切り捨て）のダメージを受ける。こおりタイプや、特性がアイスボディ・マジックガード・ぼうじん・ゆきがくれのポケモンは受けない。つめたいいわを持っていると8ターン続く。すでにあられの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、あられを降らせる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、天気があられになる。最後のターンを除く毎ターン終了時、こおりタイプか、特性がアイスボディ・マジックガード・ゆきがくれのポケモン以外は、最大HPの1/16（切り捨て）を失う。つめたいいわを持っていると8ターン続く。すでにあられの場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、天気があられになる。最後のターンを除く毎ターン終了時、こおりタイプ以外のポケモンは最大HPの1/16（切り捨て）を失う。すでにあられの場合は失敗する。", // NEEDS QC
 		},
 	},
 	hammerarm: {
 		name: "アームハンマー",
 		// Official flavor text: "強くて 重い こぶしを ふるって ダメージを 与える。 自分の 素早さが さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "自分の素早さを1段階下げる。", // NEEDS QC
 	},
 	happyhour: {
 		name: "ハッピータイム",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "対戦での効果はない。", // NEEDS QC
 
 		activate: "  みんなが ハッピーな気分に 包まれた！",
 	},
 	harden: {
 		name: "かたくなる",
 		// Official flavor text: "全身に 力を こめて 体を 硬くして 自分の 防御を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を1段階上げる。", // NEEDS QC
+		shortDesc: "自分の防御が1段階上がる。", // NEEDS QC
 	},
 	hardpress: {
 		name: "ハードプレス",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は100×（相手の残りHP÷相手の最大HP）（五捨五超入、最低1）。", // NEEDS QC
+		shortDesc: "相手の残りHPが多いほど威力が上がる。", // NEEDS QC
 	},
 	haze: {
 		name: "くろいきり",
 		// Official flavor text: "黒い霧を だして 戦闘に でている ポケモン 全員の 能力変化を もとに もどす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいるすべてのポケモンの能力ランクの変化を0に戻す。", // NEEDS QC
+		shortDesc: "全ポケモンの能力変化を元に戻す。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "両方のポケモンの能力ランクを0に戻し、やけど・まひによる能力低下を取り除く。もうどくのカウントを0に戻し、両方のポケモンからこんらんとあやしいひかり・かなしばり・きあいだめ・やどりぎのタネ・ひかりのかべ・しろいきり・リフレクターの効果を取り除く。相手の状態異常を取り除く。", // NEEDS QC
+			shortDesc: "全ランク変化をリセット。相手の状態異常も治す。", // NEEDS QC
 		},
 
 		// Only used in Gen 1
@@ -3205,45 +3186,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	headbutt: {
 		name: "ずつき",
 		// Official flavor text: "頭を 突きだして まっすぐ つっこんで 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	headcharge: {
 		name: "アフロブレイク",
 		// Official flavor text: "すごい アフロの 頭で 相手に 突進して 攻撃する。 自分も 少し ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの1/4の反動を受ける。", // NEEDS QC
 	},
 	headlongrush: {
 		name: "ぶちかまし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "自分の防御・特防を1段階下げる。", // NEEDS QC
 	},
 	headsmash: {
 		name: "もろはのずつき",
 		// Official flavor text: "命を 懸けて こん身の 力で 相手に ずつきを する。 自分も ものすごい ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの1/2（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2の反動を受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/2（切り捨て、最低1）の反動ダメージを自分が受ける。", // NEEDS QC
 		},
 	},
 	healbell: {
 		name: "いやしのすず",
 		// Official flavor text: "心地好い 鈴の 音色を 聞かせて 味方 全員の 状態異常を 回復 する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のパーティ全員の状態異常を治す。場に出ている特性ぼうおんのポケモンは、自分以外は治らない。", // NEEDS QC
+		shortDesc: "手持ち全員の状態異常を治す。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分を含むパーティ全員の状態異常を治す。場にいる特性ぼうおんのポケモンは治らない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分を含むパーティ全員の状態異常を治す。場にいる特性ぼうおんのポケモンも治る。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分を含むパーティ全員の状態異常を治す。特性ぼうおんのポケモンは治らない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のパーティ全員の状態異常を治す。", // NEEDS QC
 		},
 
 		activate: "  鈴の音が 響きわたった！",
@@ -3251,20 +3232,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healblock: {
 		name: "かいふくふうじ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、相手は場にいる間HPを回復できなくなる。効果の間、回復技とHP吸収技は使えず、回復効果のある特性や道具でも回復しない。効果を受けているポケモンがバトンタッチを使った場合、交代先も回復できないままになる。いたみわけと特性さいせいりょくは影響を受けない。", // NEEDS QC
+		shortDesc: "5ターン、相手のHP回復を封じる。", // NEEDS QC
 		gen8: {
 			end: "  {POKEMON}の かいふくふうじの 効果が切れた！",
 			cant: "{POKEMON}は かいふくふうじで {MOVE}が だせない！",
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、相手は場にいる限りHPを回復できない。効果中、回復技と吸収技は使えず、回復効果のある特性や道具も発動しない。効果を受けたポケモンがバトンタッチを使うと、交代先も回復できないままになる。いたみわけと特性さいせいりょくは影響を受けない。該当するZパワーで強化された技は効果中も選択して使える。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、相手は場にいる間HPを回復できなくなる。効果の間、回復技とHP吸収技は使えず、回復効果のある特性や道具でも回復しない。効果を受けているポケモンがバトンタッチを使った場合、交代先も回復できないままになる。いたみわけと特性さいせいりょくは影響を受けない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、相手は場にいる限りHPを回復できない。効果中、回復技は使えず、技による回復効果も発動しないが、特性や道具は引き続き回復する。効果を受けたポケモンがバトンタッチを使うと、交代先も効果を受け続ける。いたみわけは影響を受けない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 回復動作を 封じられた！",
@@ -3275,14 +3256,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healingwish: {
 		name: "いやしのねがい",
 		// Official flavor text: "自分は ひんしに なるが 控えから でてくる ポケモンの 状態異常と ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分はひんしになり、代わりに出てきたポケモンのHPが満タンでないか状態異常の場合、そのHPを全回復し、状態異常も治す。交代はターン終了時に行われ、回復は設置技の効果より先に発動する。この効果は、条件を満たすポケモンが自分の位置に交代で出てくるか、サイドチェンジでその位置に移動するまで続く。自分がパーティの最後のひんしでないポケモンの場合は失敗する。", // NEEDS QC
+		shortDesc: "ひんしになり、次に出るポケモンを全回復。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分はひんしになり、代わりに出てきたポケモンのHPを全回復し、状態異常も治す。新しいポケモンはターン終了時に出て、回復は設置技の効果より先に行われる。自分がパーティで最後のひんしでないポケモンの場合は失敗する。", // NEEDS QC
+			shortDesc: "自分はひんし。交代先は全回復。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分はひんしになり、代わりに出てきたポケモンのHPを全回復し、状態異常も治す。新しいポケモンはすぐに出て、回復は設置技の効果より後に行われる。自分がパーティで最後のひんしでないポケモンの場合は失敗する。", // NEEDS QC
 		},
 
 		heal: "  いやしのねがいが {POKEMON}に 届いた！",
@@ -3290,153 +3271,153 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healorder: {
 		name: "かいふくしれい",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（四捨五入）を回復する。", // NEEDS QC
+		shortDesc: "最大HPの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。", // NEEDS QC
 		},
 	},
 	healpulse: {
 		name: "いやしのはどう",
 		// Official flavor text: "いやしのはどうを とばして 最大ＨＰの 半分 相手の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対象の最大HPの1/2（四捨五入）を回復する。自分の特性がメガランチャーの場合、代わりに最大HPの3/4（五捨五超入）を回復する。", // NEEDS QC
+		shortDesc: "相手の最大HPの1/2を回復する。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の最大HPの1/2（四捨五入）を回復させる。", // NEEDS QC
 		},
 	},
 	heartstamp: {
 		name: "ハートスタンプ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	heartswap: {
 		name: "ハートスワップ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の能力ランクの変化をすべて入れ替える。", // NEEDS QC
+		shortDesc: "相手と全ての能力変化を入れ替える。", // NEEDS QC
 	},
 	heatcrash: {
 		name: "ヒートスタンプ",
 		// Official flavor text: "燃える 体で 相手に ぶつかって 攻撃する。 自分が 相手より 重いほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分の重さ÷相手の重さ）（切り捨て）で決まる。結果が5以上なら120、4なら100、3なら80、2なら60、1以下なら40。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "相手より重いほど威力が上がる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（自分の重さ÷相手の重さ）（切り捨て）によって決まる。5以上なら120、4なら100、3なら80、2なら60、1以下なら40。", // NEEDS QC
 		},
 	},
 	heatwave: {
 		name: "ねっぷう",
 		// Official flavor text: "熱い 息を 相手に 吹きつけて 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	heavyslam: {
 		name: "ヘビーボンバー",
 		// Official flavor text: "重たい 体で 相手に ぶつかって 攻撃する。 自分が 相手より 重いほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分の重さ÷相手の重さ）（切り捨て）で決まる。結果が5以上なら120、4なら100、3なら80、2なら60、1以下なら40。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "相手より重いほど威力が上がる。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（自分の重さ÷相手の重さ）（切り捨て）によって決まる。5以上なら120、4なら100、3なら80、2なら60、1以下なら40。", // NEEDS QC
 		},
 	},
 	helpinghand: {
 		name: "てだすけ",
 		// Official flavor text: "仲間を 助ける。 てだすけ された ポケモンの 技の 威力は いつもより 大きくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、対象の味方の攻撃技の威力が1.5倍になる（この効果は重複する）。隣接する味方がいない場合や、味方がすでに行動していた場合は失敗する。ただし、味方が2ターン技を使用中の場合は失敗しない。", // NEEDS QC
+		shortDesc: "このターン味方の技の威力を1.5倍にする。", // NEEDS QC
 
 		start: "  {SOURCE}は {POKEMON}を 手助けする 体勢に入った！",
 	},
 	hex: {
 		name: "たたりめ",
 		// Official flavor text: "たたみかける ように 攻撃する。 状態異常の 相手に 大きな ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が状態異常の場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "状態異常の相手には威力2倍。", // NEEDS QC
 	},
 	hiddenpower: {
 		name: "めざめるパワー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技のタイプは自分の個体値によって決まり、フェアリー・ノーマル以外のいずれかのタイプになる。", // NEEDS QC
+		shortDesc: "タイプが個体値によって変わる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "この技のタイプと威力は自分の個体値によって決まる。威力は30〜70の間で変わり、タイプはノーマル以外のすべてになりうる。", // NEEDS QC
+			shortDesc: "個体値によって威力とタイプが変わる。", // NEEDS QC
 		},
 	},
 	hiddenpowerbug: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（むし）", // NEEDS QC
 	},
 	hiddenpowerdark: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（あく）", // NEEDS QC
 	},
 	hiddenpowerdragon: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（ドラゴン）", // NEEDS QC
 	},
 	hiddenpowerelectric: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（でんき）", // NEEDS QC
 	},
 	hiddenpowerfighting: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（かくとう）", // NEEDS QC
 	},
 	hiddenpowerfire: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（ほのお）", // NEEDS QC
 	},
 	hiddenpowerflying: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（ひこう）", // NEEDS QC
 	},
 	hiddenpowerghost: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（ゴースト）", // NEEDS QC
 	},
 	hiddenpowergrass: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（くさ）", // NEEDS QC
 	},
 	hiddenpowerground: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（じめん）", // NEEDS QC
 	},
 	hiddenpowerice: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（こおり）", // NEEDS QC
 	},
 	hiddenpowerpoison: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（どく）", // NEEDS QC
 	},
 	hiddenpowerpsychic: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（エスパー）", // NEEDS QC
 	},
 	hiddenpowerrock: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（いわ）", // NEEDS QC
 	},
 	hiddenpowersteel: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（はがね）", // NEEDS QC
 	},
 	hiddenpowerwater: {
-		name: null, // NEEDS TRANSLATION
+		name: "めざめるパワー（みず）", // NEEDS QC
 	},
 	highhorsepower: {
 		name: "１０まんばりき",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	highjumpkick: {
 		name: "とびひざげり",
 		// Official flavor text: "ジャンプからの ひざげりで 相手を 攻撃する。 はずすと 自分が ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が外れた場合、自分は最大HPの1/2（切り捨て）のダメージを受ける。特性がマジックガードのポケモンはこのダメージを受けない。", // NEEDS QC
+		shortDesc: "外すと最大HPの1/2のダメージを受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が失敗した場合、相手が無効だったなら相手の最大HPの半分（切り捨て）、そうでなければ相手が受けるはずだったダメージの半分（切り捨て、最低1、最大で相手の最大HPの半分）を、自分がダメージとして受ける。特性がマジックガードのポケモンはこのダメージを受けない。", // NEEDS QC
+			shortDesc: "外すと与えるはずのダメージの半分を受ける。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が失敗して相手が無効でなかった場合、相手が受けるはずだったダメージの半分（切り捨て、最低1、最大で相手の最大HPの半分）を、自分がダメージとして受ける。", // NEEDS QC
+			shortDesc: "外すと与えるはずのダメージの半分を受ける。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が失敗して相手が無効でなかった場合、相手が受けるはずだったダメージの1/8（切り捨て、最低1）を、自分がダメージとして受ける。", // NEEDS QC
+			shortDesc: "外すと与えるはずのダメージの1/8を受ける。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が外れた場合、自分は1のダメージを受ける。自分がみがわり状態の場合、相手にみがわりがいればそちらがこのダメージを受け、いなければダメージは発生しない。", // NEEDS QC
+			shortDesc: "外すと自分が1ダメージを受ける。", // NEEDS QC
 		},
 
 		damage: "#crash",
@@ -3444,112 +3425,112 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	holdback: {
 		name: "てかげん",
 		// Official flavor text: "手加減 した 攻撃で 相手の ＨＰを 必ず １だけ 残す。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手のHPを必ず1以上残す。", // NEEDS QC
+		shortDesc: "相手のHPを必ず1以上残す。", // NEEDS QC
 	},
 	holdhands: {
 		name: "てをつなぐ",
 		// Official flavor text: "味方の ポケモン 同士が 手をつなぐ。 とっても 幸せな 気持ちに なれる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対戦上の効果はない。隣接する味方がいない場合は失敗する。", // NEEDS QC
+		shortDesc: "対戦での効果はない。", // NEEDS QC
 	},
 	honeclaws: {
 		name: "つめとぎ",
 		// Official flavor text: "ツメを 磨いて 鋭く する。 自分の 攻撃と 命中率を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と命中率を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃・命中率が1段階上がる。", // NEEDS QC
 	},
 	hornattack: {
 		name: "つのでつく",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	horndrill: {
 		name: "つのドリル",
 		// Official flavor text: "回転する つのを 相手に 突き刺して 攻撃する。 当たれば 一撃で ひんしに する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の最大HPと同じダメージを与える。命中率と回避率の変化を無視する。この技の命中率は（自分のレベル−相手のレベル+30）%で、相手のレベルが自分より高い場合は失敗する。特性ががんじょうのポケモンには効かない。", // NEEDS QC
+		shortDesc: "一撃必殺。相手のレベルが高いと失敗。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に65535のダメージを与える。この技の256分率の命中率は、（2×（自分のレベル−相手のレベル）+76）と255の小さい方で、その後に命中率・回避率の補正が適用される。相手のレベルの方が高い場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手に65535のダメージを与える。相手のすばやさが自分より高い場合は失敗する。", // NEEDS QC
+			shortDesc: "65535ダメージ。相手が速いと失敗。", // NEEDS QC
 		},
 	},
 	hornleech: {
 		name: "ウッドホーン",
 		// Official flavor text: "つのを 突き刺して 相手の 養分を 吸い取る。 与えた ダメージの 半分の ＨＰを 回復できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 	},
 	howl: {
 		name: "とおぼえ",
 		// Official flavor text: "大声で ほえて 気合を 高め 自分と 味方の 攻撃を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と味方全員の攻撃を1段階上げる。", // NEEDS QC
+		shortDesc: "自分と味方の攻撃が1段階上がる。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分の攻撃を1段階上げる。", // NEEDS QC
+			shortDesc: "自分の攻撃が1段階上がる。", // NEEDS QC
 		},
 	},
 	hurricane: {
 		name: "ぼうふう",
 		// Official flavor text: "強烈な 風で 相手を 包みこんで 攻撃する。 相手を 混乱させることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をこんらん状態にする。とびはねる・そらをとぶ・フリーフォールで飛び上がっている相手や、フリーフォールの効果を受けている相手にも当たる。天気があめ・おおあめの場合、必中になる。天気がにほんばれ・おおひでりの場合、命中率が50%になる。ばんのうがさを持っている相手に対しては、命中率は70%のまま。", // NEEDS QC
+		shortDesc: "30%でこんらんにする。雨なら必中。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をこんらん状態にする。とびはねる・そらをとぶ・フリーフォールを使っている相手や、フリーフォールの効果を受けている相手にも当たる。天気がおおあめかあめの場合、命中判定を行わない。おおひでりかにほんばれの場合、命中率は50%になる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をこんらん状態にする。とびはねる・そらをとぶ・フリーフォールを使っている相手や、フリーフォールの効果を受けている相手にも当たる。天気があめの場合、命中判定を行わない。にほんばれの場合、命中率は50%になる。", // NEEDS QC
 		},
 	},
 	hydrocannon: {
 		name: "ハイドロカノン",
 		// Official flavor text: "水の 大砲を 相手に 発射して 攻撃する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	hydropump: {
 		name: "ハイドロポンプ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	hydrosteam: {
 		name: "ハイドロスチーム",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天気がにほんばれで自分がばんのうがさを持っていない場合、みずタイプとしてダメージが半減される代わりに、ダメージが1.5倍になる。", // NEEDS QC
+		shortDesc: "晴れのとき威力半減せず1.5倍になる。", // NEEDS QC
 	},
 	hydrovortex: {
 		name: "スーパーアクアトルネード",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	hyperbeam: {
 		name: "はかいこうせん",
 		// Official flavor text: "強い 光線を 相手に 発射して 攻撃する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "この技が成功すると、次のターンは反動で動けない。ただし、この技で相手か相手のみがわりを倒した場合、反動はない。", // NEEDS QC
+			shortDesc: "倒せなかった場合、次のターン動けない。", // NEEDS QC
 		},
 	},
 	hyperdrill: {
 		name: "ハイパードリル",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "まもる系を（壊さずに）貫通する。", // NEEDS QC
 	},
 	hyperfang: {
 		name: "ひっさつまえば",
 		// Official flavor text: "鋭い 前歯で 強く かみついて 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "10%の確率で相手をひるませる。", // NEEDS QC
 	},
 	hyperspacefury: {
 		name: "いじげんラッシュ",
 		// Official flavor text: "たくさんの 腕で まもるや みきり などを 無視した 連続攻撃。 自分の 防御が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を1段階下げる。（へんしんも考慮した）現在の姿がいましめられしフーパでなければ使えない。攻撃が成功すると、このターンの間、相手のトーチカ・みきり・キングシールド・まもる・ニードルガードの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。", // NEEDS QC
+		shortDesc: "フーパ（解放）専用。防御-1。守り貫通。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のぼうぎょを1段階下げる。（へんしんを含めて）現在の姿がときはなたれしフーパでない場合は使えない。この技が成功すると、このターンの間、相手のみきり・キングシールド・まもる・ニードルガードを破り、他のポケモンも相手を普通に攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られる。", // NEEDS QC
 		},
 
 		activate: "#shadowforce",
@@ -3558,10 +3539,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hyperspacehole: {
 		name: "いじげんホール",
 		// Official flavor text: "異次元ホールで 突然 相手の 真横に 現れ 攻撃する。 まもるや みきり なども 無視 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、このターンの間、相手のトーチカ・みきり・キングシールド・まもる・ニードルガードの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。", // NEEDS QC
+		shortDesc: "このターン相手の守りを破って攻撃。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が成功すると、このターンの間、相手のみきり・キングシールド・まもる・ニードルガードを破り、他のポケモンも相手を普通に攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られる。", // NEEDS QC
 		},
 
 		activate: "#shadowforce",
@@ -3569,111 +3550,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hypervoice: {
 		name: "ハイパーボイス",
 		// Official flavor text: "うるさく 響く 大きな 振動を 相手に 与えて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	hypnosis: {
 		name: "さいみんじゅつ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をねむり状態にする。", // NEEDS QC
 	},
 	iceball: {
 		name: "アイスボール",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、この技に固定され、外れるか、5ターン経過するか、使えなくなるまで他の技を選択できない。当たるたびに威力が2倍になり、以前にまるくなるを使っていた場合はさらに2倍になる。ねごとでこの技が選ばれた場合、1ターンだけ使う。", // NEEDS QC
+		shortDesc: "5ターン連続で使い、当たるたび威力2倍。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が成功すると、外れるか、5ターン経つか、攻撃が使えなくなるまでこの技に固定され、他の行動ができない。命中するたびに威力が2倍になり、以前にまるくなるを使っていた場合はさらに2倍になる。ねごとでこの技を使った場合、1ターンだけ使う。効果中にこの技が発動中のばけのかわに当たった場合、威力の倍率は止まるがターンのカウントは進むため、効果終了後の次の技に倍率が適用されることがある。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、この技に固定され、外れるか、5ターン経過するか、使えなくなるまで他の技を選択できない。当たるたびに威力が2倍になり、以前にまるくなるを使っていた場合はさらに2倍になる。ねごとでこの技が選ばれた場合、1ターンだけ使う。", // NEEDS QC
 		},
 	},
 	icebeam: {
 		name: "れいとうビーム",
 		// Official flavor text: "凍える ビームを 相手に 発射して 攻撃する。 こおり状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
 	},
 	iceburn: {
 		name: "コールドフレア",
 		// Official flavor text: "すべてを 凍らせる 激しい 冷気で ２ターン目に 相手を 包みこむ。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。1ターン目にため、2ターン目に攻撃する。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目にため、2ターン目攻撃。30%やけど。", // NEEDS QC
 
 		prepare: "  {POKEMON}は 凍える空気に 包まれた！",
 	},
 	icefang: {
 		name: "こおりのキバ",
 		// Official flavor text: "冷気を ひめた キバで かみつく。 相手を ひるませたり こおり状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。10%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "10%でこおり。10%でひるませる。", // NEEDS QC
 	},
 	icehammer: {
 		name: "アイスハンマー",
 		// Official flavor text: "強くて 重い こぶしを ふるって ダメージを 与える。 自分の 素早さが さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "自分の素早さを1段階下げる。", // NEEDS QC
 	},
 	icepunch: {
 		name: "れいとうパンチ",
 		// Official flavor text: "冷気を こめた パンチで 相手を 攻撃する。 こおり状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
 	},
 	iceshard: {
 		name: "こおりのつぶて",
 		// Official flavor text: "氷の塊を 一瞬で つくり 相手に 素早く 放つ。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	icespinner: {
 		name: "アイススピナー",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "エレキフィールド・グラスフィールド・ミストフィールド・サイコフィールドの効果を消す。", // NEEDS QC
+		shortDesc: "フィールドの効果を消す。", // NEEDS QC
 	},
 	iciclecrash: {
 		name: "つららおとし",
 		// Official flavor text: "大きな 氷柱を 激しく ぶつけて 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	iciclespear: {
 		name: "つららばり",
 		// Official flavor text: "鋭い 氷柱を 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 	},
 	icywind: {
 		name: "こごえるかぜ",
 		// Official flavor text: "凍てつく 冷気を 相手に 吹きつけて 攻撃する。 相手の 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 		},
 	},
 	imprison: {
 		name: "ふういん",
 		// Official flavor text: "相手が 自分と 同じ 技を おぼえていたら 相手だけ その技を 使えなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分が場にいる間、相手はすべて、自分も覚えている技を使えなくなる。", // NEEDS QC
+		shortDesc: "自分も覚えている技を相手が使えなくなる。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、自分も覚えている技を相手は使えない。効果中もZパワーで強化された技は選択して使える。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、相手はすべて、自分も覚えている技を使えなくなる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、自分も覚えている技を相手は使えない。自分の技を覚えている相手がいない場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 相手の技を 封印した！",
@@ -3682,40 +3663,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	incinerate: {
 		name: "やきつくす",
 		// Official flavor text: "炎で 相手を 攻撃する。 相手が きのみなどを 持っているとき 燃やして 使えなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の持ち物がきのみまたはジュエルの場合、それを失わせる。特性がねんちゃくのポケモンの道具は失わせられない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+		shortDesc: "相手のきのみ・ジュエルを焼き尽くす。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の持ち物がきのみの場合、失わせる。特性がねんちゃくのポケモンの道具は失わせられない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+			shortDesc: "相手のきのみを壊す。", // NEEDS QC
 		},
 
 		removeItem: "  {POKEMON}の {ITEM}は 焼けてなくなった！",
 	},
 	infernalparade: {
 		name: "ひゃっきやこう",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。相手が状態異常の場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "30%でやけど。状態異常の相手に威力2倍。", // NEEDS QC
 	},
 	inferno: {
 		name: "れんごく",
 		// Official flavor text: "激しい 炎で 相手を 包みこみ 攻撃する。 やけど状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	infernooverdrive: {
 		name: "ダイナミックフルフレイム",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	infestation: {
 		name: "まとわりつく",
 		// Official flavor text: "４ー５ターンの 間 相手に まとわりついて 攻撃する。 そのあいだ 相手は 逃げられない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は {SOURCE}に まとわりつかれた！",
@@ -3723,20 +3704,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ingrain: {
 		name: "ねをはる",
 		// Official flavor text: "大地に 根を 張り 毎ターン 自分の ＨＰを 回復する。 根を 張っているので 入れ替えられない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "毎ターン終了時に最大HPの1/16を回復するが、自分は交代できなくなり、他のポケモンに強制交代させられることもなくなる。バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使えば交代できる。バトンタッチで場を離れた場合、交代先も交代できないままになり、回復効果も受け続ける。効果の間、自分がひこうタイプや特性ふゆうでも、じめんタイプの攻撃が普通に当たり、まきびし・どくびし・ねばねばネットの効果も受ける。", // NEEDS QC
+		shortDesc: "根を張り毎ターンHP1/16回復。交代不可に。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "毎ターン終了時に最大HPの1/16を回復するが、交代できなくなり、他のポケモンも自分を強制的に交代させられなくなる。バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使えば交代できる。バトンタッチで場を離れた場合、交代先も交代できないまま回復効果を受け継ぐ。効果中、自分がひこうタイプや特性ふゆうでも、じめんタイプの攻撃が当たり、まきびし・どくびし・ねばねばネットの効果を受ける。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "毎ターン終了時に最大HPの1/16を回復するが、交代できなくなり、他のポケモンも自分を強制的に交代させられなくなる。バトンタッチ・とんぼがえり・ボルトチェンジを使えば交代できる。バトンタッチで場を離れた場合、交代先も交代できないまま回復効果を受け継ぐ。効果中、自分がひこうタイプや特性ふゆうでも、じめんタイプの攻撃が当たり、まきびし・どくびしの効果を受ける。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "毎ターン終了時に最大HPの1/16を回復するが、交代できなくなり、他のポケモンも自分を強制的に交代させられなくなる。バトンタッチ・とんぼがえりを使えば交代できる。バトンタッチで場を離れた場合、交代先も交代できないまま回復効果を受け継ぐ。効果中、自分がひこうタイプや特性ふゆうでも、じめんタイプの攻撃が当たり、まきびし・どくびしの効果を受ける。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "毎ターン終了時に最大HPの1/16を回復するが、交代できなくなり、他のポケモンも自分を強制的に交代させられなくなる。バトンタッチを使えば交代でき、交代先も交代できないまま回復効果を受け継ぐ。", // NEEDS QC
+			shortDesc: "毎ターン1/16回復。自分は交代不可。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 根を はった！",
@@ -3746,13 +3727,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	instruct: {
 		name: "さいはい",
 		// Official flavor text: "相手が 出した 技を 指示して もう一度 出させることが できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手はすぐに、最後に使った技をもう一度使う。相手がまだ技を使っていない場合、その技のPPが0の場合、相手がくちばしキャノン・きあいパンチ・トラップシェルの準備中の場合、その技がねこのて・くちばしキャノン・ゲップ・がまん・バーンアクセル・おいわい・おしゃべり・ファイトアクセル・まねっこ・ダイマックスほう・きあいパンチ・てをつなぐ・アイスボール・さいはい・キングシールド・マジカルアクセル・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・ポイズンアクセル・ブロッキング・げきりん・はなびらのまい・ころがる・トラップシェル・スケッチ・ねごと・わるあがき・あばれる・へんしん・さわぐ・ダークアクセル・2ターン技・反動で動けなくなる技の場合は失敗する。", // NEEDS QC
+		shortDesc: "相手に最後に使った技をもう一度使わせる。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手は最後に使った技をすぐにもう一度使う。相手がまだ技を使っていない場合、その技のPPが0の場合、相手がダイマックスしている場合、相手がくちばしキャノン・きあいパンチ・トラップシェルを準備中の場合、その技がねこのて・くちばしキャノン・ゲップ・がまん・おいわい・おしゃべり・まねっこ・ダイマックスほう・きあいパンチ・てをつなぐ・アイスボール・さいはい・キングシールド・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・ブロッキング・げきりん・はなびらのまい・ころがる・トラップシェル・スケッチ・ねごと・わるあがき・あばれる・へんしん・さわぐ、2ターン技、反動で動けなくなる技、ダイマックス技・キョダイマックス技の場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手は最後に使った技をすぐにもう一度使う。相手がまだ技を使っていない場合、その技のPPが0の場合、相手がくちばしキャノン・きあいパンチ・トラップシェルを準備中の場合、その技がねこのて・くちばしキャノン・ゲップ・がまん・おいわい・おしゃべり・まねっこ・きあいパンチ・てをつなぐ・アイスボール・さいはい・キングシールド・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・げきりん・はなびらのまい・ころがる・トラップシェル・スケッチ・ねごと・わるあがき・あばれる・へんしん・さわぐ、2ターン技、反動で動けなくなる技、Zワザの場合は失敗する。", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}の 指示で {TARGET}は 技を 繰り出した！",
@@ -3760,22 +3741,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	iondeluge: {
 		name: "プラズマシャワー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、ノーマルタイプの技がでんきタイプになる。この効果は、技のタイプを変える他の効果の後に適用される。", // NEEDS QC
+		shortDesc: "このターン、ノーマル技がでんきタイプに。", // NEEDS QC
 
 		activate: "  電子のシャワーが 降りそそいだ！",
 	},
 	irondefense: {
 		name: "てっぺき",
 		// Official flavor text: "皮膚を 鉄のように 硬くする ことで 自分の 防御を ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を2段階上げる。", // NEEDS QC
+		shortDesc: "自分の防御が2段階上がる。", // NEEDS QC
 	},
 	ironhead: {
 		name: "アイアンヘッド",
 		// Official flavor text: "鋼の ような 硬い 頭で 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3784,51 +3765,51 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	irontail: {
 		name: "アイアンテール",
 		// Official flavor text: "硬い しっぽで 相手を たたきつけて 攻撃する。 相手の 防御を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "30%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	ivycudgel: {
 		name: "ツタこんぼう",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。自分がオーガポンの場合、姿に応じてこの技のタイプが変わる。いどのめんならみずタイプ、かまどのめんならほのおタイプ、いしずえのめんならいわタイプになる。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。姿でタイプが変わる。", // NEEDS QC
 	},
 	jawlock: {
 		name: "くらいつく",
 		// Official flavor text: "お互い ひんしに なるまで 交代が できなくなる。 どちらかの ポケモンが いなくなると 効果は消える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手を交代できなくする。ただし、きれいなぬけがらを持っている場合や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った場合は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "自分と相手の両方が交代できなくなる。", // NEEDS QC
 	},
 	jetpunch: {
 		name: "ジェットパンチ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	judgment: {
 		name: "さばきのつぶて",
 		// Official flavor text: "無数の 光弾を 相手に 放出する。 自分の 持つ プレートに より タイプが 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技のタイプは、自分が持っているプレートによって決まる。", // NEEDS QC
+		shortDesc: "持っているプレートでタイプが変わる。", // NEEDS QC
 	},
 	jumpkick: {
 		name: "とびげり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が外れた場合、自分は最大HPの1/2（切り捨て）のダメージを受ける。特性がマジックガードのポケモンはこのダメージを受けない。", // NEEDS QC
+		shortDesc: "外すと最大HPの1/2のダメージを受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が失敗した場合、相手が無効だったなら相手の最大HPの半分（切り捨て）、そうでなければ相手が受けるはずだったダメージの半分（切り捨て、最低1、最大で相手の最大HPの半分）を、自分がダメージとして受ける。特性がマジックガードのポケモンはこのダメージを受けない。", // NEEDS QC
+			shortDesc: "外すと与えるはずのダメージの半分を受ける。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が失敗して相手が無効でなかった場合、相手が受けるはずだったダメージの半分（切り捨て、最低1、最大で相手の最大HPの半分）を、自分がダメージとして受ける。", // NEEDS QC
+			shortDesc: "外すと与えるはずのダメージの半分を受ける。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が失敗して相手が無効でなかった場合、相手が受けるはずだったダメージの1/8（切り捨て、最低1）を、自分がダメージとして受ける。", // NEEDS QC
+			shortDesc: "外すと与えるはずのダメージの1/8を受ける。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が外れた場合、自分は1のダメージを受ける。自分がみがわり状態の場合、相手にみがわりがいればそちらがこのダメージを受け、いなければダメージは発生しない。", // NEEDS QC
+			shortDesc: "外すと自分が1ダメージを受ける。", // NEEDS QC
 		},
 
 		damage: "#crash",
@@ -3836,157 +3817,157 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	junglehealing: {
 		name: "ジャングルヒール",
 		// Official flavor text: "ジャングルと 一体化して 自分と 場にいる 味方の ＨＰと 状態を 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分側の場にいるポケモンそれぞれの最大HPの1/4（四捨五入）を回復し、状態異常を治す。", // NEEDS QC
+		shortDesc: "自分と味方のHP1/4回復、状態異常も治す。", // NEEDS QC
 	},
 	karatechop: {
 		name: "からてチョップ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	kinesis: {
 		name: "スプーンまげ",
 		// Official flavor text: "スプーンを まげて 注意を ひき 相手の 命中率を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	kingsshield: {
 		name: "キングシールド",
 		// Official flavor text: "相手の 攻撃を 防ぐと 同時に 防御態勢になる。 触れた 相手の 攻撃を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手の攻撃を1段階下げる。ダメージを与えない技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "攻撃技を防ぎ、接触してきた相手の攻撃-1。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手のこうげきを1段階下げる。変化技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手のこうげきを2段階下げる。変化技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+			shortDesc: "攻撃技を防ぐ。接触した相手の攻撃-2。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手のこうげきを2段階下げる。変化技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がみきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 	},
 	knockoff: {
 		name: "はたきおとす",
 		// Official flavor text: "相手の 持ち物を はたき 落として 戦闘が 終わるまで 使えなくする。 物を持つ 相手には ダメージが増す。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が道具を持っている場合、威力が1.5倍になり、自分がひんしになっていなければ相手の持ち物をはたき落とす。特性がねんちゃくの相手は、ひんしになっていなければ道具を失わない。カイオーガ・グラードン・ディアルガ・パルキア・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタ・パラドックスポケモン・オーガポンが持つ、それぞれあいいろのたま・べにいろのたま・だいこんごうだま・だいしらたま・だいはっきんだま・プレート・カセット・メモリ・くちたけん・くちたたて・ブーストエナジー・おめんの場合や、自分がそれらの種族で相手が対応する道具を持っている場合は、威力は上がらず道具も失わせない。ここでのパラドックスポケモンは、特性がこだいかっせい・クォークチャージの全種族（ウガツホムラ・タケルライコ・テツノイワオ・テツノカシラを除く）を指す。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+		shortDesc: "道具持ちに威力1.5倍。道具をはたき落とす。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が道具を持っている場合、この技の威力は1.5倍になり、自分がひんしになっていなければ相手はその道具を失う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリ・くちたけん・くちたたてに対しては威力が上がらず、道具も失わせられない。自分がそれらの種族で相手が対応する道具を持っている場合も同様。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が道具を持っている場合、この技の威力は1.5倍になり、自分がひんしになっていなければ相手はその道具を失う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。Zクリスタル、メガシンカできる種族が持つメガストーン、およびカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリに対しては威力が上がらず、道具も失わせられない。自分がそれらの種族で相手が対応する道具を持っている場合も同様。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が道具を持っている場合、この技の威力は1.5倍になり、自分がひんしになっていなければ相手はその道具を失う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。メガシンカできる種族が持つメガストーン、およびカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクトが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセットに対しては威力が上がらず、道具も失わせられない。自分がそれらの種族で相手が対応する道具を持っている場合も同様。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分がひんしになっていなければ、相手は持ち物を失う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。ギラティナ・アルセウス・ゲノセクトが持つ、それぞれはっきんだま・プレート・カセットは失わせられず、自分がそれらの種族で相手が対応する道具を持っている場合も同様。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+			shortDesc: "相手の持ち物を失わせる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手はバトルが終わるまで持ち物を失う。道具がはっきんだまの場合や、相手の特性がマルチタイプかねんちゃくの場合は失わない。効果中、相手はどんな方法でも新しい道具を得られない。", // NEEDS QC
+			shortDesc: "相手は道具を失い、新たに持てない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手はバトルが終わるまで持ち物を失う。特性がねんちゃくの場合は失わない。効果中、相手はどんな方法でも新しい道具を得られない。", // NEEDS QC
 		},
 
 		removeItem: "  {SOURCE}は {POKEMON}の {ITEM}を はたき落とした！",
 	},
 	kowtowcleave: {
 		name: "ドゲザン",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	landswrath: {
 		name: "グランドフォース",
 		// Official flavor text: "大地の パワーを 集め 力を 相手に 集中させて ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	laserfocus: {
 		name: "とぎすます",
 		// Official flavor text: "精神を 集中して 次の 攻撃を 必ず 急所に 当てる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "次のターン終了までの間、自分の攻撃が必ず急所に当たる。", // NEEDS QC
+		shortDesc: "次のターンまで攻撃が必ず急所に当たる。", // NEEDS QC
 
 		start: "  {POKEMON}は 精神を 研ぎ澄ました！",
 	},
 	lashout: {
 		name: "うっぷんばらし",
 		// Official flavor text: "相手への いらだちを ぶつけて 攻撃。 そのターンに 能力を さげられていると 技の 威力が ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに自分の能力ランクが下がっていた場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "このターン能力を下げられていたら威力2倍。", // NEEDS QC
 	},
 	lastresort: {
 		name: "とっておき",
 		// Official flavor text: "戦闘中に おぼえている 技を すべて 使うと はじめて だせる とっておきの 技。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技と他の技を1つ以上覚えていて、場に出てから（またはへんしんしてから）他の技をすべて1回以上使っていなければ失敗する。", // NEEDS QC
+		shortDesc: "他の技を全て使った後でないと失敗する。", // NEEDS QC
 	},
 	lastrespects: {
 		name: "おはかまいり",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は50+(X×50)。Xは自分側でポケモンがひんしになった延べ回数（最大100）。", // NEEDS QC
+		shortDesc: "倒れた味方1匹につき威力+50。", // NEEDS QC
 	},
 	lavaplume: {
 		name: "ふんえん",
 		// Official flavor text: "真っ赤な 炎で 自分の 周りに いるものを 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で周囲をやけどにする。", // NEEDS QC
 	},
 	leafage: {
 		name: "このは",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	leafblade: {
 		name: "リーフブレード",
 		// Official flavor text: "はっぱを 剣のように あやつり 相手を 切りつけて 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	leafstorm: {
 		name: "リーフストーム",
 		// Official flavor text: "とがった はっぱで 相手に あらしを おこす。使うと 反動で 自分の 特攻が がくっと さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を2段階下げる。", // NEEDS QC
+		shortDesc: "自分の特攻を2段階下げる。", // NEEDS QC
 	},
 	leaftornado: {
 		name: "グラスミキサー",
 		// Official flavor text: "鋭い はっぱで 相手を 包みこんで 攻撃する。 命中率を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	leechlife: {
 		name: "きゅうけつ",
 		// Official flavor text: "血を 吸い取って 相手を 攻撃する。 与えた ダメージの 半分の ＨＰを 回復できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（切り捨て）になる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。", // NEEDS QC
 		},
 	},
 	leechseed: {
 		name: "やどりぎのタネ",
 		// Official flavor text: "植えつけた 相手の ＨＰを 毎ターン 少しだけ 吸い取り 自分の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "毎ターン終了時に、自分の位置にいるポケモンが相手の最大HPの1/8（切り捨て）を吸い取る。吸い取る側がおおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。相手がバトンタッチを使った場合、交代先も吸われ続ける。相手が交代するか、キラースピン・こうそくスピンを成功させると効果は終わる。くさタイプのポケモンにはこの技は効かないが、効果自体は受ける。", // NEEDS QC
+		shortDesc: "毎ターン相手のHPの1/8を吸い取る。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の位置のポケモンが、毎ターン終了時に相手の最大HPの1/8（切り捨て）を奪う。受け取る側がおおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。相手がバトンタッチを使った場合、交代先も吸われ続ける。相手が交代するかこうそくスピンを成功させると効果は終わる。くさタイプのポケモンにはこの技は効かないが、すでにかかった効果は受ける。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の位置のポケモンが、毎ターン終了時に相手の最大HPの1/8（切り捨て）を奪う。相手がバトンタッチを使った場合、交代先も吸われ続ける。相手が交代するかこうそくスピンを使うと効果は終わる。くさタイプのポケモンにはこの技は効かないが、すでにかかった効果は受ける。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の毎ターン終了時、自分の位置のポケモンが相手の最大HPの1/16（切り捨て、相手にもうどくのカウントがあればその分掛けた量）を奪う。相手の残りHPがそれより少なくても奪う。相手が交代するか、いずれかのポケモンがくろいきりを使うと効果は終わる。くさタイプのポケモンにはこの技は効かない。", // NEEDS QC
+			shortDesc: "毎ターン相手のHPの1/16を奪う。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}に 種を 植えつけた！",
@@ -3996,55 +3977,55 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	leer: {
 		name: "にらみつける",
 		// Official flavor text: "鋭い 目つきで おびえさせて 相手の 防御を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の防御を1段階下げる。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手の防御を1段階下げる。", // NEEDS QC
 		},
 	},
 	letssnuggleforever: {
 		name: "ぽかぼかフレンドタイム",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	lick: {
 		name: "したでなめる",
 		// Official flavor text: "長い 舌で 相手を なめまわして 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	lifedew: {
 		name: "いのちのしずく",
 		// Official flavor text: "不思議な 水を ふりまいて 自分と 場にいる 味方の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分側の場にいるポケモンそれぞれの最大HPの1/4（四捨五入）を回復する。", // NEEDS QC
+		shortDesc: "自分と味方のHPを最大の1/4回復する。", // NEEDS QC
 	},
 	lightofruin: {
 		name: "はめつのひかり",
 		// Official flavor text: "永遠の花 の パワーを かりて 強力な 光線を 撃ちだす。 自分も かなりの ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの1/2（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2の反動を受ける。", // NEEDS QC
 	},
 	lightscreen: {
 		name: "ひかりのかべ",
 		// Official flavor text: "５ターンの 間 不思議な かべで 相手から 受ける 特殊攻撃の ダメージを 弱める。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、自分と味方が受ける特殊技のダメージが0.5倍（ダブルバトルでは0.66倍）になる。オーロラベールと重複してさらに軽減されることはない。急所に当たった場合は軽減されない。自分または味方がかわらわり・サイコファング・きりばらいを受けると、自分の側の効果が消える。ひかりのねんどを持っていると8ターン続く。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、味方への特殊ダメージを半減。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方が受ける特殊技のダメージが0.5倍（ダブルバトル・トリプルバトルでは0.66倍）になる。急所に当たった場合は軽減されない。自分または味方がかわらわりかきりばらいを受けると、自分の側の効果が消える。ひかりのねんどを持っていると8ターン続く。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方が受ける特殊技のダメージが1/2（自分の側に複数のポケモンがいる場合は2/3）になる。急所に当たった場合は軽減されない。自分または味方がかわらわりかきりばらいを受けると、自分の側の効果が消える。ひかりのねんどを持っていると8ターン続く。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方が受ける特殊技のダメージが1/2（自分の側に複数のポケモンがいる場合は2/3）になる。急所に当たった場合は軽減されない。自分または味方がかわらわりを受けると、自分の側の効果が消える。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方のとくぼうが2倍になる。急所に当たった場合は軽減されない。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
+			shortDesc: "5ターン、味方の特防が2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、ダメージを受けるときのとくしゅが2倍になる。急所に当たった場合は軽減されない。いずれかのポケモンがくろいきりを使うと効果は終わる。", // NEEDS QC
+			shortDesc: "場にいる間、被弾時のとくしゅ2倍。", // NEEDS QC
 			start: "  {POKEMON}は とくしゅこうげきに つよくなった！",
 		},
 
@@ -4054,80 +4035,80 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lightthatburnsthesky: {
 		name: "てんこがすめつぼうのひかり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "（能力ランクの変化を含めて）自分の攻撃が特攻より高い場合、物理技になる。この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "攻撃＞特攻なら物理技に。特性無視。", // NEEDS QC
 	},
 	liquidation: {
 		name: "アクアブレイク",
 		// Official flavor text: "水の 力で 相手に ぶつかって 攻撃する。 相手の 防御を さげる ことがある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "20%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	lockon: {
 		name: "ロックオン",
 		// Official flavor text: "照準を しっかり あわせて 次の 攻撃が 必ず 相手に 当たるように する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "次のターン終了までの間、自分の技が相手に必ず当たるようになる（相手が2ターン技の最中でも当たる）。自分または相手が場を離れると効果は終わる。自分にすでにこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "次の技が相手に必ず当たる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "次のターンが終わるまで、相手は2ターン技の途中でも自分の技を避けられない。この効果が相手に対して始まると、その相手に対する他のすべてのポケモンのこの技とこころのめの効果は終わる。相手がバトンタッチで場を離れた場合、交代先も効果を受け続ける。自分がバトンタッチで場を離れた場合、交代先に同じ相手への効果が改めて始まる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手への次の命中判定が必ず成功する。相手がそらをとぶを使っている場合、じしん・じわれ・マグニチュードは依然として避けられる。相手がバトンタッチで場を離れた場合、交代先も効果を受け続ける。相手が場を離れるか、相手への命中判定が行われると効果は終わる。", // NEEDS QC
+			shortDesc: "次の技は相手に必ず当たる。", // NEEDS QC
 		},
 
 		start: "  {SOURCE}は {POKEMON}に ねらいを さだめた！",
 	},
 	lovelykiss: {
 		name: "あくまのキッス",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をねむり状態にする。", // NEEDS QC
 	},
 	lowkick: {
 		name: "けたぐり",
 		// Official flavor text: "足を 強く けり 相手を 転ばせて 攻撃する。 相手が 重いほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は相手の重さで決まる。10kg未満なら20、25kg未満なら40、50kg未満なら60、100kg未満なら80、200kg未満なら100、200kg以上なら120。", // NEEDS QC
+		shortDesc: "相手が重いほど威力が上がる。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。", // NEEDS QC
+			shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		},
 	},
 	lowsweep: {
 		name: "ローキック",
 		// Official flavor text: "素早い 動きで 相手の 足を ねらって 攻撃する。 相手の 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 	},
 	luckychant: {
 		name: "おまじない",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、自分と味方は急所に当たらなくなる。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、味方は急所に当たらない。", // NEEDS QC
 
 		start: "  おまじないの 力で {TEAM}の急所が 隠れた！",
 		end: "  {TEAM}の おまじないが解けた！",
 	},
 	luminacrash: {
 		name: "ルミナコリジョン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特防を2段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特防を2段階下げる。", // NEEDS QC
 	},
 	lunarblessing: {
 		name: "みかづきのいのり",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分側の場にいるポケモンそれぞれの最大HPの1/4（四捨五入）を回復し、状態異常を治す。", // NEEDS QC
+		shortDesc: "自分と味方のHP1/4回復、状態異常も治す。", // NEEDS QC
 	},
 	lunardance: {
 		name: "みかづきのまい",
 		// Official flavor text: "自分は ひんしに なるが 控えから でてくる ポケモンの すべての 状態を 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分はひんしになり、代わりに出てきたポケモンのHPかPPが満タンでないか状態異常の場合、そのHPとPPを全回復し、状態異常も治す。交代はターン終了時に行われ、回復は設置技の効果より先に発動する。この効果は、条件を満たすポケモンが自分の位置に交代で出てくるか、サイドチェンジでその位置に移動するまで続く。自分がパーティの最後のひんしでないポケモンの場合は失敗する。", // NEEDS QC
+		shortDesc: "ひんしになり、次のポケモンをHP・PP全回復。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分はひんしになり、代わりに出てきたポケモンのHPとPPを全回復し、状態異常も治す。新しいポケモンはターン終了時に出て、回復は設置技の効果より先に行われる。自分がパーティで最後のひんしでないポケモンの場合は失敗する。", // NEEDS QC
+			shortDesc: "自分はひんし。交代先はPPまで全回復。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分はひんしになり、代わりに出てきたポケモンのHPとPPを全回復し、状態異常も治す。新しいポケモンはすぐに出て、回復は設置技の効果より後に行われる。自分がパーティで最後のひんしでないポケモンの場合は失敗する。", // NEEDS QC
 		},
 
 		heal: "  {POKEMON}は 神秘的な 月の光に 包まれた！",
@@ -4135,43 +4116,43 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lunge: {
 		name: "とびかかる",
 		// Official flavor text: "全力で 相手に 飛びかかって 攻撃。 相手の 攻撃を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	lusterpurge: {
 		name: "ラスターパージ",
 		// Official flavor text: "まばゆい 光を 解放して 攻撃する。 相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	machpunch: {
 		name: "マッハパンチ",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで パンチを くりだす。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	magicalleaf: {
 		name: "マジカルリーフ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	magicaltorque: {
 		name: "マジカルアクセル",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	magiccoat: {
 		name: "マジックコート",
 		// Official flavor text: "状態異常に なる 技や やどりぎのタネ などを だされたとき 相手に 跳ね返す。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ターン終了までの間、自分に向けられた一部のダメージを与えない技を受けず、代わりにその技を使った相手に跳ね返す。跳ね返された技は、この技や特性マジックミラーで再び跳ね返されることはない。まきびし・ステルスロック・ねばねばネット・どくびしは、この技か特性マジックミラーの効果を受けている最も左のポケモンによって、各側1回だけ跳ね返される。特性ひらいしん・よびみずによる引き寄せは、この技の効果より先に発動する。", // NEEDS QC
+		shortDesc: "変化技を相手に跳ね返す。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ターン終了まで、自分を狙う一部の変化技の効果を受けず、使ったポケモンに跳ね返す。跳ね返された技は、この効果や特性マジックミラーの効果で再び跳ね返せない。まきびし・ステルスロック・どくびしは、この効果か特性マジックミラーの効果を受けている一番左のポケモンによって、陣営ごとに1回だけ跳ね返される。特性ひらいしん・よびみずは、この技が働く前にそれぞれの技を引き寄せる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分を狙う一部の変化技の効果を受けず、使ったポケモンに跳ね返す。その技が相手2匹を狙う技の場合、この効果を受けているポケモンは元の使用者だけを狙って跳ね返す。技を1回跳ね返すか、ターンが終わると効果は消える。特性ひらいしん・よびみずは、この技が働く前にそれぞれの技を引き寄せる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分を狙う一部の変化技の効果を受けず、使ったポケモンに跳ね返す。その技が相手2匹を狙う技の場合、この効果を受けているポケモンが左側にいれば相手2匹を狙ったまま跳ね返し、味方は元の技の効果を受けない。右側にいれば味方は元の技の効果を受け、自分は元の使用者だけを狙って跳ね返す。技を1回跳ね返すか、ターンが終わると効果は消える。こうして跳ね返された技は、この効果を受けている別のポケモンが再び跳ね返せる。自分の特性がぼうおんの場合、この効果より先に音技を無効にする。特性ひらいしんは、この技が働く前にでんきタイプの技を引き寄せる。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は マジックコートに 包まれた！",
@@ -4180,59 +4161,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magicpowder: {
 		name: "まほうのこな",
 		// Official flavor text: "まほうのこなを 浴びせて 相手を エスパータイプに 変化させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をエスパータイプにする。相手がアルセウス・シルヴァディの場合、すでにエスパータイプのみの場合、テラスタルしている場合は失敗する。", // NEEDS QC
+		shortDesc: "相手をエスパータイプにする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をエスパータイプにする。相手がアルセウス・シルヴァディの場合、すでにエスパータイプのみの場合は失敗する。", // NEEDS QC
 		},
 	},
 	magicroom: {
 		name: "マジックルーム",
 		// Official flavor text: "まか不思議な 空間を つくる。 ５ターンの間 すべてのポケモンの 道具の 効果が なくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、場にいるすべてのポケモンの持ち物の効果がなくなる。フォルムチェンジを起こす道具の効果は残るが、その道具の他の効果は無効になる。効果の間、場にいるすべてのポケモンはなげつけるとしぜんのめぐみを使えない。効果の間にこの技を使うと、効果は終わる。", // NEEDS QC
+		shortDesc: "5ターン、全ての持ち物を無効にする。", // NEEDS QC
 	},
 	magmastorm: {
 		name: "マグマストーム",
 		// Official flavor text: "激しく 燃えたぎる 炎の なかに ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（しめつけバンドを持っている場合は1/8、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピンを使うと効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間（ねばりのかぎづめを持っている場合は常に5ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手を捕らえてダメージ。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は マグマの渦に 閉じこめられた！",
 	},
 	magnetbomb: {
 		name: "マグネットボム",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	magneticflux: {
 		name: "じばそうさ",
 		// Official flavor text: "磁場を 操作 することによって 特性 プラスと マイナスの 防御 特防が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分側の、特性がプラス・マイナスのポケモンの防御と特防を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "プラス・マイナスの味方の防御・特防+1。", // NEEDS QC
 	},
 	magnetrise: {
 		name: "でんじふゆう",
 		// Official flavor text: "電気で つくった 磁力の 力で 宙に 浮かぶ。 ５ターンの 間 浮遊できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、場にいる限り、じめんタイプの攻撃とまきびし・どくびし・ねばねばネット、特性ありじごくの効果を受けなくなる。バトンタッチを使うと、交代先が効果を引き継ぐ。ねをはる・うちおとす・サウザンアロー・くろいてっきゅうの効果を受けている場合、そちらが優先される。すでにこの効果か、ねをはる・うちおとす・サウザンアローの効果を受けている場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、じめん技を受けなくなる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、場にいる限り、じめんタイプの攻撃とまきびし・どくびし、特性ありじごくの効果を受けなくなる。バトンタッチを使うと、交代先が効果を引き継ぐ。ねをはる・うちおとす・くろいてっきゅうの効果を受けている場合、そちらが優先される。すでにこの効果か、ねをはる・うちおとすの効果を受けている場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、場にいる限り、じめんタイプの攻撃とまきびし・どくびし、特性ありじごくの効果を受けなくなる。バトンタッチを使うと、交代先が効果を引き継ぐ。ねをはる・くろいてっきゅうの効果を受けている場合、そちらが優先される。すでにこの効果か、ねをはるの効果を受けている場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 電磁力で 浮かびあがった！",
@@ -4241,18 +4222,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magnitude: {
 		name: "マグニチュード",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力はランダムに変わる。10と150は各5%、30と110は各10%、50と90は各20%、70は30%の確率。あなをほるで地中に潜っている相手には、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "周囲全体攻撃。威力は変動、あなをほるに2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力はランダムに変わる。10と150は各5%、30と110は各10%、50と90は各20%、70は30%の確率。相手があなをほるを使っている場合、威力が2倍になる。", // NEEDS QC
 		},
 
 		activate: "  マグニチュード{NUMBER}！！",
 	},
 	makeitrain: {
 		name: "ゴールドラッシュ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "自分の特攻-1。相手全体攻撃。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4263,223 +4244,223 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	maliciousmoonsault: {
 		name: "ハイパーダーククラッシャー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "ちいさくなる使用後の相手にダメージ2倍。", // NEEDS QC
 	},
 	malignantchain: {
 		name: "じゃどくのくさり",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手をもうどく状態にする。", // NEEDS QC
+		shortDesc: "50%の確率で相手をもうどく状態にする。", // NEEDS QC
 	},
 	matblock: {
 		name: "たたみがえし",
 		// Official flavor text: "かえした タタミを 盾にして 自分や 味方への 技の ダメージを 防ぐ。 変化技は 防ぐことが できない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからのダメージを与える技を防ぐ。自分が場に出た最初のターンでない場合、このターンの最後に行動する場合、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "味方への攻撃技を防ぐ。出た最初のターン限定。", // NEEDS QC
 
 		start: "  {POKEMON}は たたみがえしを ねらっている！",
 		block: "  {MOVE}は たたみがえしで 防がれた！",
 	},
 	matchagotcha: {
 		name: "シャカシャカほう",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をやけど状態にする。相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。こおり状態の相手のこおりを治す。", // NEEDS QC
+		shortDesc: "20%やけど。半分回復。相手のこおりを治す。", // NEEDS QC
 	},
 	maxairstream: {
 		name: "ダイジェット",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ひこうタイプの 攻撃。 味方の 素早さを 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員の素早さが1段階上がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方の素早さ+1。", // NEEDS QC
 	},
 	maxdarkness: {
 		name: "ダイアーク",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす あくタイプの 攻撃。 相手の 特防を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモン全員の特防が1段階下がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の特防-1。", // NEEDS QC
 	},
 	maxflare: {
 		name: "ダイバーン",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ほのおタイプの 攻撃。 ５ターンの 間 日差しを 強くする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、にほんばれの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。晴れにする。", // NEEDS QC
 	},
 	maxflutterby: {
 		name: "ダイワーム",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす むしタイプの 攻撃。 相手の 特攻を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモン全員の特攻が1段階下がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の特攻-1。", // NEEDS QC
 	},
 	maxgeyser: {
 		name: "ダイストリーム",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす みずタイプの 攻撃。 ５ターンの 間 雨を 降らせる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、あめの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。雨を降らせる。", // NEEDS QC
 	},
 	maxguard: {
 		name: "ダイウォール",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、ダイマックス技・キョダイマックス技を含む、他のポケモンからのほぼすべての技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "ダイマックス技も含めて技を防ぐ。", // NEEDS QC
 
 		activate: "  {POKEMON}は 攻撃から 身を守った！",
 	},
 	maxhailstorm: {
 		name: "ダイアイス",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす こおりタイプの 攻撃。 ５ターンの 間 あられを 降らす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、あられの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。あられを降らせる。", // NEEDS QC
 	},
 	maxknuckle: {
 		name: "ダイナックル",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす かくとうタイプの 攻撃。 味方の 攻撃を 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員の攻撃が1段階上がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方の攻撃+1。", // NEEDS QC
 	},
 	maxlightning: {
 		name: "ダイサンダー",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす でんきタイプの 攻撃。 ５ターンの 間 エレキフィールドにする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、エレキフィールドの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。エレキフィールドに。", // NEEDS QC
 	},
 	maxmindstorm: {
 		name: "ダイサイコ",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす エスパータイプの 攻撃。 ５ターンの 間 サイコフィールドにする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、サイコフィールドの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。サイコフィールドに。", // NEEDS QC
 	},
 	maxooze: {
 		name: "ダイアシッド",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす どくタイプの 攻撃。 味方の 特攻を 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員の特攻が1段階上がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方の特攻+1。", // NEEDS QC
 	},
 	maxovergrowth: {
 		name: "ダイソウゲン",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす くさタイプの 攻撃。 ５ターンの 間 グラスフィールドにする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、グラスフィールドの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。グラスフィールドに。", // NEEDS QC
 	},
 	maxphantasm: {
 		name: "ダイホロウ",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ゴーストタイプの 攻撃。 相手の 防御を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモン全員の防御が1段階下がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の防御-1。", // NEEDS QC
 	},
 	maxquake: {
 		name: "ダイアース",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす じめんタイプの 攻撃。 味方の 特防を 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員の特防が1段階上がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方の特防+1。", // NEEDS QC
 	},
 	maxrockfall: {
 		name: "ダイロック",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす いわタイプの 攻撃。 ５ターンの 間 砂あらしにする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、すなあらしの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。砂あらしにする。", // NEEDS QC
 	},
 	maxstarfall: {
 		name: "ダイフェアリー",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす フェアリータイプの 攻撃。 ５ターンの 間 ミストフィールドにする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、ミストフィールドの効果が発生する。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。ミストフィールドに。", // NEEDS QC
 	},
 	maxsteelspike: {
 		name: "ダイスチル",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす はがねタイプの 攻撃。 味方の 防御を 上げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、自分側のポケモン全員の防御が1段階上がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。味方の防御+1。", // NEEDS QC
 	},
 	maxstrike: {
 		name: "ダイアタック",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ノーマルタイプの 攻撃。 相手の 素早さを 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモン全員の素早さが1段階下がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の素早さ-1。", // NEEDS QC
 	},
 	maxwyrmwind: {
 		name: "ダイドラグーン",
 		// Official flavor text: "ダイマックスした ポケモンが 繰りだす ドラゴンタイプの 攻撃。 相手の 攻撃を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は元の技のダイマックス技の威力に等しい。攻撃が成功すると、相手側のポケモン全員の攻撃が1段階下がる（みがわり状態でも効果を受ける）。自分がダイマックスしていない場合、この効果は発生しない。元の技として使われた場合、威力0でダメージを与える。", // NEEDS QC
+		shortDesc: "威力は元の技による。相手側の攻撃-1。", // NEEDS QC
 	},
 	meanlook: {
 		name: "くろいまなざし",
 		// Official flavor text: "吸いこまれるような 黒い まなざしで じっと みつめて 相手を 戦闘から 逃げられなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手を交代できなくする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わるが、バトンタッチで離れた場合は相手が交代できないままになる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、バトンタッチを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わるが、バトンタッチで離れた場合は相手が交代できないままになる。", // NEEDS QC
 		},
 	},
 	meditate: {
 		name: "ヨガのポーズ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃を1段階上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃が1段階上がる。", // NEEDS QC
 	},
 	mefirst: {
 		name: "さきどり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がこのターンに選んだ技を、可能であれば威力1.5倍で先取りして使う。対象にできるのは、くちばしキャノン・ゲップ・バーンアクセル・ファイトアクセル・ほうふく・カウンター・ほしがる・きあいパンチ・マジカルアクセル・さきどり・メタルバースト・ミラーコート・ポイズンアクセル・トラップシェル・わるあがき・どろぼう・ダークアクセル以外の攻撃技のみ。相手が自分より先に行動する場合は失敗する。技のコピーにおいて、相手のみがわりを無視する。", // NEEDS QC
+		shortDesc: "相手の技を1.5倍の威力で先取りする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がこのターンに選んだ技を、可能であれば威力1.5倍で先取りして使う。対象にできるのは、くちばしキャノン・ゲップ・おしゃべり・カウンター・ほしがる・きあいパンチ・さきどり・メタルバースト・ミラーコート・トラップシェル・わるあがき・どろぼう以外の攻撃技のみ。相手が自分より先に行動する場合は失敗する。技のコピーにおいて、相手のみがわりを無視する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がこのターンに選んだ技を、可能であれば威力1.5倍で先取りして使う。対象にできるのは、くちばしキャノン・ゲップ・おしゃべり・カウンター・ほしがる・きあいパンチ・さきどり・メタルバースト・ミラーコート・トラップシェル・わるあがき・どろぼうとZワザ以外の攻撃技のみ。相手が自分より先に行動する場合は失敗する。技のコピーにおいて、相手のみがわりを無視する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がこのターンに選んだ技を、可能であれば威力1.5倍で先取りして使う。対象にできるのは、ゲップ・おしゃべり・カウンター・ほしがる・きあいパンチ・さきどり・メタルバースト・ミラーコート・わるあがき・どろぼう以外の攻撃技のみ。相手が自分より先に行動する場合は失敗する。技のコピーにおいて、相手のみがわりを無視する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がこのターンに選んだ技を、可能であれば威力1.5倍で先取りして使う。対象にできるのは、おしゃべり・カウンター・ほしがる・きあいパンチ・さきどり・メタルバースト・ミラーコート・わるあがき・どろぼう以外の攻撃技のみ。相手が自分より先に行動する場合は失敗する。技のコピーにおいて、相手のみがわりを無視する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がこのターンに選んだ技を、可能であれば威力1.5倍で先取りして使う。対象にできるのは、おしゃべり・カウンター・ほしがる・きあいパンチ・さきどり・ミラーコート・わるあがき・どろぼう以外の攻撃技のみ。相手が自分より先に行動する場合は失敗する。技のコピーにおいて、相手のみがわりを無視する。", // NEEDS QC
 		},
 	},
 	megadrain: {
 		name: "メガドレイン",
 		// Official flavor text: "養分を 吸い取り 攻撃する。 相手に 与えた ダメージの 半分の ＨＰを 回復できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（切り捨て）になる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に与えたダメージの1/2（切り捨て）のHPを回復する。", // NEEDS QC
 		},
 	},
 	megahorn: {
 		name: "メガホーン",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	megakick: {
 		name: "メガトンキック",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	megapunch: {
 		name: "メガトンパンチ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	memento: {
 		name: "おきみやげ",
 		// Official flavor text: "自分は ひんしに なるが そのかわりに 相手の 攻撃と 特攻を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃と特攻を2段階ずつ下げる。外れた場合や対象がいない場合を除き、自分はひんしになる。みがわりに当たった場合は完全に失敗するが、相手の能力を変化させられない場合は失敗しない。", // NEEDS QC
+		shortDesc: "相手の攻撃・特攻-2。自分はひんしになる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の攻撃と特攻を2段階ずつ下げる。この技が外れても自分はひんしになる。この技は2ターン技の途中の相手にも当てられる。対象がいない場合は完全に失敗するが、相手の能力を変化させられない場合は失敗しない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の攻撃と特攻を2段階ずつ下げる。自分はひんしになる。この技は命中判定を行わず、2ターン技の途中の相手にも当てられる。相手の攻撃と特攻のランクがどちらも-6の場合は完全に失敗する。", // NEEDS QC
 		},
 
 		heal: "  {POKEMON}は Ｚパワーで 体力が 回復した！",
@@ -4487,124 +4468,124 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	menacingmoonrazemaelstrom: {
 		name: "ムーンライトブラスター",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "他のポケモンの特性を無視する。", // NEEDS QC
 	},
 	metalburst: {
 		name: "メタルバースト",
 		// Official flavor text: "技を だす前に 最後に 受けた 技の ダメージを 大きくして だした 相手に 返す。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに最後に自分へ物理技または特殊技でダメージを与えた相手に、そのダメージの1.5倍（切り捨て）のダメージを与える。そのダメージが0の場合は1ダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技・特殊技を受けていない場合は失敗する。", // NEEDS QC
+		shortDesc: "受けたダメージの1.5倍を返す。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ物理技または特殊技でダメージを与えた相手に、そのダメージの1.5倍（切り捨て）のダメージを与える。そのダメージが0の場合は、代わりに威力1でダメージを与える。その相手の位置が空いている場合は、範囲内のランダムな相手にダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技・特殊技を受けていない場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ物理技または特殊技でダメージを与えた相手に、そのダメージの1.5倍（切り捨て）のダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の物理技・特殊技を受けていない場合や、その攻撃でHPを失っていない場合は失敗する。", // NEEDS QC
 		},
 	},
 	metalclaw: {
 		name: "メタルクロー",
 		// Official flavor text: "鋼鉄の ツメで 相手を 切り裂いて 攻撃する。 自分の 攻撃が あがることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で自分の攻撃を1段階上げる。", // NEEDS QC
+		shortDesc: "10%の確率で自分の攻撃が1段階上がる。", // NEEDS QC
 	},
 	metalsound: {
 		name: "きんぞくおん",
 		// Official flavor text: "金属を こすって でるような いやな 音を 聞かせる。 相手の 特防を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特防を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の特防を2段階下げる。", // NEEDS QC
 	},
 	meteorassault: {
 		name: "スターアサルト",
 		// Official flavor text: "太い クキを ふりまわして 攻撃。 ただし 自分も よろめいてしまうため 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	meteorbeam: {
 		name: "メテオビーム",
 		// Official flavor text: "１ターン目に 宇宙の 力を 集めることで 特攻が あがり ２ターン目に 相手を 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目にため、2ターン目に攻撃する。1ターン目に自分の特攻を1段階上げる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に特攻+1、2ターン目に攻撃。", // NEEDS QC
 
 		prepare: "{POKEMON}に 宇宙の 力が あふれだす！",
 	},
 	meteormash: {
 		name: "コメットパンチ",
 		// Official flavor text: "すい星の ごとく パンチを くりだして 相手を 攻撃する。 自分の 攻撃が あがることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で自分の攻撃を1段階上げる。", // NEEDS QC
+		shortDesc: "20%の確率で自分の攻撃が1段階上がる。", // NEEDS QC
 	},
 	metronome: {
 		name: "ゆびをふる",
 		// Official flavor text: "指をふり 自分の 脳を 刺激して すべての 技の なかから どれか １つを くりだす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "おさきにどうぞ・りんごさん・アーマーキャノン・ねこのて・アストラルビット・オーラぐるま・トーチカ・くちばしキャノン・きょじゅうだん・きょじゅうざん・ゲップ・ギフトパス・バーンアクセル・ボディプレス・えだづき・ワイドブレイカー・おいわい・おしゃべり・ひやみず・さむいギャグ・ソウルビート・アクセルブレイク・ファイトアクセル・ほうふく・まねっこ・カウンター・ほしがる・トリックガード・デコレーション・みちづれ・みきり・ダイヤストーム・うつしえ・ダブルパンツァー・でんこうそうげき・ガリョウテンセイ・ドラゴンエナジー・ドラムアタック・ダイマックスほう・イナズマドライブ・こらえる・ムゲンダイビーム・どげざつき・フェイント・もえあがるいかり・みをけずる・フルールカノン・きあいパンチ・このゆびとまれ・フリーズボルト・いてつくしせん・ブリザードランス・Ｇのちから・てだすけ・てをつなぐ・ハイパードリル・いじげんラッシュ・いじげんホール・コールドフレア・さいはい・ジェットパンチ・ジャングルヒール・キングシールド・いのちのしずく・はめつのひかり・マジカルアクセル・ゴールドラッシュ・たたみがえし・さきどり・スターアサルト・ゆびをふる・ものまね・ビックリヘッド・ミラーコート・オウムがえし・シャドーレイ・しぜんのちから・しぜんのいかり・ポイズンアクセル・ブロッキング・いっちょうあがり・こんげんのはどう・オーバードライブ・フォトンゲイザー・プラズマフィスト・ネズミざん・とびつく・パワーシフト・だんがいのつるぎ・まもる・かえんボール・さきおくり・ファストガード・ふんどのこぶし・いかりのこな・レイジングブル・だいふんげき・いにしえのうた・さいきのいのり・カタストロフィ・しおづけ・しんぴのつるぎ・しっぽきり・トラップシェル・スレッドトラップ・スケッチ・ねごと・トラバサミ・バークアウト・よこどり・いびき・ゆき・シャドースチール・ハバネロエキス・ニードルガード・ソウルクラッシュ・スポットライト・はるのあらし・スチームバースト・てっていこうせん・ワンダースチーム・わるあがき・メテオドライブ・すいりゅうれんだ・すりかえ・テクノバスター・テラクラスター・どろぼう・サウザンアロー・サウザンウェーブ・サンダープリズン・らいめいげり・おかたづけ・くさわけ・へんしん・トリック・ツインビーム・Ｖジェネレート・あんこくきょうだ・ダークアクセル・ワイドガード以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
+		shortDesc: "ランダムな技を使う。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "おさきにどうぞ・りんごさん・ねこのて・アストラルビット・オーラぐるま・トーチカ・くちばしキャノン・きょじゅうだん・きょじゅうざん・ゲップ・ギフトパス・ボディプレス・えだづき・ワイドブレイカー・おいわい・おしゃべり・ソウルビート・まねっこ・カウンター・ほしがる・トリックガード・デコレーション・みちづれ・みきり・ダイヤストーム・ダブルパンツァー・ガリョウテンセイ・ドラゴンエナジー・ドラゴンハンマー・ドラムアタック・ダイマックスほう・こらえる・ムゲンダイビーム・どげざつき・フェイント・もえあがるいかり・フルールカノン・きあいパンチ・このゆびとまれ・フリーズボルト・いてつくしせん・ブリザードランス・Ｇのちから・てだすけ・てをつなぐ・いじげんラッシュ・いじげんホール・コールドフレア・さいはい・ジャングルヒール・キングシールド・いのちのしずく・はめつのひかり・たたみがえし・さきどり・スターアサルト・ゆびをふる・ものまね・ビックリヘッド・ミラーコート・オウムがえし・シャドーレイ・しぜんのちから・しぜんのいかり・ブロッキング・こんげんのはどう・オーバードライブ・フォトンゲイザー・プラズマフィスト・だんがいのつるぎ・まもる・かえんボール・さきおくり・ファストガード・いかりのこな・いにしえのうた・しんぴのつるぎ・トラップシェル・スケッチ・ねごと・トラバサミ・バークアウト・よこどり・いびき・シャドースチール・ニードルガード・ソウルクラッシュ・スポットライト・スチームバースト・てっていこうせん・ワンダースチーム・わるあがき・メテオドライブ・すいりゅうれんだ・すりかえ・テクノバスター・どろぼう・サウザンアロー・サウザンウェーブ・サンダープリズン・らいめいげり・へんしん・トリック・Ｖジェネレート・あんこくきょうだ・ワイドガード以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "おさきにどうぞ・ねこのて・トーチカ・くちばしキャノン・ゲップ・ギフトパス・おいわい・おしゃべり・まねっこ・カウンター・ほしがる・トリックガード・みちづれ・みきり・ダイヤストーム・ガリョウテンセイ・こらえる・フェイント・フルールカノン・きあいパンチ・このゆびとまれ・フリーズボルト・てだすけ・てをつなぐ・いじげんラッシュ・いじげんホール・コールドフレア・さいはい・キングシールド・はめつのひかり・たたみがえし・さきどり・ゆびをふる・ものまね・ビックリヘッド・ミラーコート・オウムがえし・しぜんのちから・こんげんのはどう・フォトンゲイザー・プラズマフィスト・だんがいのつるぎ・まもる・さきおくり・ファストガード・いかりのこな・いにしえのうた・しんぴのつるぎ・トラップシェル・スケッチ・ねごと・バークアウト・よこどり・いびき・シャドースチール・ニードルガード・スポットライト・スチームバースト・わるあがき・すりかえ・テクノバスター・どろぼう・サウザンアロー・サウザンウェーブ・へんしん・トリック・Ｖジェネレート・ワイドガード以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "おさきにどうぞ・ねこのて・ゲップ・ギフトパス・おいわい・おしゃべり・まねっこ・カウンター・ほしがる・トリックガード・みちづれ・みきり・ダイヤストーム・ガリョウテンセイ・こらえる・フェイント・きあいパンチ・このゆびとまれ・フリーズボルト・てだすけ・てをつなぐ・いじげんラッシュ・いじげんホール・コールドフレア・キングシールド・はめつのひかり・たたみがえし・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・こんげんのはどう・だんがいのつるぎ・まもる・さきおくり・ファストガード・いかりのこな・いにしえのうた・しんぴのつるぎ・スケッチ・ねごと・バークアウト・よこどり・いびき・ニードルガード・スチームバースト・わるあがき・すりかえ・テクノバスター・どろぼう・サウザンアロー・サウザンウェーブ・へんしん・トリック・Ｖジェネレート・ワイドガード以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "おさきにどうぞ・ねこのて・ギフトパス・おしゃべり・まねっこ・カウンター・ほしがる・みちづれ・みきり・こらえる・フェイント・きあいパンチ・このゆびとまれ・フリーズボルト・てだすけ・コールドフレア・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・しぜんのちから・まもる・さきおくり・ファストガード・いかりのこな・いにしえのうた・しんぴのつるぎ・スケッチ・ねごと・バークアウト・よこどり・いびき・わるあがき・すりかえ・テクノバスター・どろぼう・へんしん・トリック・Ｖジェネレート・ワイドガード以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ねこのて・おしゃべり・まねっこ・カウンター・ほしがる・みちづれ・みきり・こらえる・フェイント・きあいパンチ・このゆびとまれ・てだすけ・さきどり・ゆびをふる・ものまね・ミラーコート・オウムがえし・まもる・スケッチ・ねごと・よこどり・わるあがき・すりかえ・どろぼう・トリックと、自分がすでに覚えている技以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "カウンター・ほしがる・みちづれ・みきり・こらえる・きあいパンチ・このゆびとまれ・てだすけ・ゆびをふる・ものまね・ミラーコート・まもる・スケッチ・ねごと・よこどり・わるあがき・どろぼう・トリック以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "カウンター・みちづれ・みきり・こらえる・ゆびをふる・ものまね・ミラーコート・まもる・スケッチ・ねごと・わるあがき・どろぼうと、自分がすでに覚えている技以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ゆびをふる・わるあがき以外の技から、ランダムに1つが選ばれて使われる。", // NEEDS QC
 		},
 
 		move: "指を振ったら {MOVE} がでた！",
 	},
 	mightycleave: {
 		name: "パワフルエッジ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "まもる系を（壊さずに）貫通する。", // NEEDS QC
 	},
 	milkdrink: {
 		name: "ミルクのみ",
 		// Official flavor text: "最大ＨＰの 半分 自分の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（四捨五入）を回復する。", // NEEDS QC
+		shortDesc: "最大HPの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。", // NEEDS QC
 		},
 	},
 	mimic: {
 		name: "ものまね",
 		// Official flavor text: "相手が 最後に 使った 技を 戦闘の あいだ 自分の 技に することが できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいる間、この技が相手の最後に使った技に置き換わる。コピーした技のPPはその技の最大値になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、自分がすでにその技を覚えている場合、その技がねこのて・きょじゅうだん・きょじゅうざん・ゲップ・バーンアクセル・おいわい・おしゃべり・ファイトアクセル・まねっこ・ダイマックスほう・てをつなぐ・マジカルアクセル・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・ポイズンアクセル・スケッチ・ねごと・わるあがき・テラクラスター・へんしん・ダークアクセルの場合は失敗する。", // NEEDS QC
+		shortDesc: "相手が最後に使った技をこの技と置き換える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、この技が相手の最後に使った技に置き換わる。コピーした技のPPはその技の最大値になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、自分がすでにその技を覚えている場合、その技がきょじゅうだん・きょじゅうざん・おしゃべり・ダイマックスほう・ものまね・スケッチ・わるあがき・へんしん、ダイマックス技・キョダイマックス技の場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、この技が相手の最後に使った技に置き換わる。コピーした技のPPはその技の最大値になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、自分がすでにその技を覚えている場合、その技がおしゃべり・ものまね・スケッチ・わるあがき・へんしん、Zワザの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、この技が相手の最後に使った技に置き換わる。コピーした技のPPはその技の最大値になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、自分がすでにその技を覚えている場合、その技がおしゃべり・ものまね・スケッチ・わるあがき・へんしんの場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、この技が相手の最後に使った技に置き換わる。コピーした技のPPは5になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、自分がすでにその技を覚えている場合、その技がおしゃべり・ゆびをふる・ものまね・スケッチ・わるあがきの場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、この技が相手の最後に使った技に置き換わる。コピーした技のPPは5になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、自分がすでにその技を覚えている場合、その技がゆびをふる・ものまね・スケッチ・わるあがきの場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、この技が相手の最後に使った技に置き換わる。コピーした技のPPは5になる。相手がまだ技を使っていない場合、自分がすでにその技を覚えている場合、その技がわるあがきの場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "場にいる間、この技が相手の覚えているランダムな技に置き換わる。自分がすでにその技を覚えていても置き換わる。コピーした技は、その技の最大PPに関係なく、この技の残りPPを引き継ぐ。コピーした技のPPを1消費するたびに、この技のPPも1消費される。", // NEEDS QC
+			shortDesc: "相手のランダムな技に置き換わる。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は {MOVE}を 覚えた！",
@@ -4612,22 +4593,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mindblown: {
 		name: "ビックリヘッド",
 		// Official flavor text: "自分の 頭を 爆発 させて 周りの すべてを 攻撃する。 自分も ダメージを 受けてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "成功したかどうかにかかわらず、自分は最大HPの1/2（切り上げ）を失う（ひんしになる場合でも）。特性がマジックガードの場合は失わない。場に特性しめりけのポケモンがいる場合や、この技がほのおタイプで自分がふんじんの効果を受けているか天気がおおあめの場合、この技は不発になり、HPも失わない。", // NEEDS QC
+		shortDesc: "最大HPの半分を失う。周囲全体攻撃。", // NEEDS QC
 
-		damage: null, // NEEDS TRANSLATION
+		damage: "  ({POKEMON}は 自分の HPを けずって 技を 放った！)", // NEEDS QC
 	},
 	mindreader: {
 		name: "こころのめ",
 		// Official flavor text: "相手の 動きを 心で 感じて 次の 攻撃が 必ず 相手に 当たるように する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "次のターン終了までの間、自分の技が相手に必ず当たるようになる（相手が2ターン技の最中でも当たる）。自分または相手が場を離れると効果は終わる。自分にすでにこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "次の技が相手に必ず当たる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "次のターンが終わるまで、相手は2ターン技の途中でも自分の技を避けられない。この効果が相手に対して始まると、その相手に対する他のすべてのポケモンのこの技とロックオンの効果は終わる。相手がバトンタッチで場を離れた場合、交代先も効果を受け続ける。自分がバトンタッチで場を離れた場合、交代先に同じ相手への効果が改めて始まる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手への次の命中判定が必ず成功する。相手がそらをとぶを使っている場合、じしん・じわれ・マグニチュードは依然として避けられる。相手がバトンタッチで場を離れた場合、交代先も効果を受け続ける。相手が場を離れるか、相手への命中判定が行われると効果は終わる。", // NEEDS QC
+			shortDesc: "次の技は相手に必ず当たる。", // NEEDS QC
 		},
 
 		start: "#lockon",
@@ -4635,38 +4616,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	minimize: {
 		name: "ちいさくなる",
 		// Official flavor text: "体を ちぢめて 小さく みせて 自分の 回避率を ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の回避率を2段階上げる。回避率が変化したかどうかにかかわらず、場にいる間、のしかかり・ドラゴンダイブ・フライングプレス・ヒートスタンプ・ヘビーボンバー・ハイパーダーククラッシャー・ハードローラー・ふみつけ・サンダーダイブを受けると必中でダメージ2倍になる。", // NEEDS QC
+		shortDesc: "自分の回避率が2段階上がる。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の回避率を2段階上げる。回避率が変化したかどうかにかかわらず、場にいる間、のしかかり・ドラゴンダイブ・フライングプレス・ヒートスタンプ・ヘビーボンバー・ハイパーダーククラッシャー・ハードローラー・ふみつけを受けると必中でダメージ2倍になる。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の回避率を2段階上げる。回避率が変化したかどうかにかかわらず、場にいる間、のしかかり・ドラゴンダイブ・フライングプレス・ヒートスタンプ・ゴーストダイブ・シャドーダイブ・ハードローラー・ふみつけを受けると必中でダメージ2倍になる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の回避率を2段階上げる。回避率が変化したかどうかにかかわらず、場にいる間、ふみつけ・ハードローラーを受けるとダメージ2倍になる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分の回避率を1段階上げる。回避率が変化したかどうかにかかわらず、場にいる間、ふみつけを受けると威力が2倍になる。", // NEEDS QC
+			shortDesc: "自分の回避率が1段階上がる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の回避率を1段階上げる。回避率が変化したかどうかにかかわらず、場にいる間、おどろかす・じんつうりき・ニードルアーム・ふみつけを受けるとダメージ2倍になる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の回避率を1段階上げる。回避率が変化したかどうかにかかわらず、場にいる間、ふみつけを受けると威力が2倍になる。バトンタッチでこの効果を味方に引き継げる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の回避率を1段階上げる。", // NEEDS QC
 		},
 	},
 	miracleeye: {
 		name: "ミラクルアイ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が場にいる間、相手の回避率のランクが+1以上の場合は命中判定で無視され、相手があくタイプでもエスパータイプの攻撃が当たるようになる。相手がすでにこの効果か、みやぶる・かぎわけるの効果を受けている場合は失敗する。", // NEEDS QC
+		shortDesc: "エスパー技があくタイプに当たる。回避無視。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の回避率のランクが+1以上の場合は命中判定で無視され、相手があくタイプでもエスパータイプの攻撃が当たるようになる。", // NEEDS QC
 		},
 
 		start: "#foresight",
@@ -4674,58 +4655,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mirrorcoat: {
 		name: "ミラーコート",
 		// Official flavor text: "相手から 受けた 特殊攻撃の ダメージを ２倍に して その相手に 返す。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに最後に自分へ特殊技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。そのダメージが0の場合は1ダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の特殊技を受けていない場合は失敗する。", // NEEDS QC
+		shortDesc: "受けた特殊攻撃の2倍のダメージを返す。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ特殊技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。そのダメージが0の場合は、代わりに威力1でダメージを与える。その相手の位置が空いている場合は、範囲内のランダムな相手にダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の特殊技を受けていない場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ特殊技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。連続攻撃技は最後の1発分のみ数える。このターンに相手の特殊技を受けていない場合や、その攻撃でHPを失っていない場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに最後に自分へ特殊技でダメージを与えた相手に、そのダメージの2倍のダメージを与える。その相手の位置が空いていて、他の相手ポケモンが場にいる場合は、そちらにダメージを与える。この技はめざめるパワーをノーマルタイプとして扱い、連続攻撃技は最後の1発分のみ数える。このターンに相手の特殊技を受けていない場合や、その攻撃でHPを失っていない場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに特殊技で失ったHPの2倍のダメージを相手に与える。この技はめざめるパワーをノーマルタイプとして扱い、連続攻撃技は最後の1発分のみ数える。自分が先に行動した場合、このターンに特殊技を受けていない場合、その攻撃でHPを失っていない場合は失敗する。", // NEEDS QC
 		},
 	},
 	mirrormove: {
 		name: "オウムがえし",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が最後に使った技を、可能であればその相手に向けて使う。相手がまだ技を使っていない場合や、最後に使った技がこの技でコピーできない技の場合は失敗する。", // NEEDS QC
+		shortDesc: "相手が最後に使った技をその相手に使う。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分を最後に狙って成功した技を使う。コピーした技は特定の対象なしで使う。自分を狙った技がない場合、その技が他の技によって呼び出された場合、その技がアンコールの場合、この技でコピーできない技の場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分を最後に狙って成功した技を使う。コピーした技は特定の対象なしで使う。自分を狙った技がない場合、その技が外れた・失敗した・自分に効果がなかった場合、この技でコピーできない技の場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が最後に使った技を使う。自分が場に出てから相手が技を使っていない場合や、最後に使った技がゆびをふる・ものまね・オウムがえし・スケッチ・ねごと・へんしん、または自分が覚えている技の場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が最後に使った技を使う。自分が場に出てから相手が技を使っていない場合や、最後に使った技がオウムがえしの場合は失敗する。", // NEEDS QC
 		},
 	},
 	mirrorshot: {
 		name: "ミラーショット",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "30%の確率で相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	mist: {
 		name: "しろいきり",
 		// Official flavor text: "白い霧で 体を おおう。 ５ターンの 間 相手に 能力を さげられなく なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、自分と味方は、他のポケモンに能力ランクを下げられなくなる。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、味方の能力を下げられなくする。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、他のポケモンに能力ランクを下げられなくなる。すでにこの効果がある場合は失敗する。バトンタッチでこの効果を味方に引き継げる。", // NEEDS QC
+			shortDesc: "場にいる間、能力を下げられない。", // NEEDS QC
 			start: "  {POKEMON}は しろいきりにつつまれた！",
 			block: "  {POKEMON}はしろいきりに まもられている",
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、技の追加効果による場合を除き、他のポケモンに能力ランクを下げられなくなる。すでにこの効果がある場合は失敗する。いずれかのポケモンがくろいきりを使うと効果は終わる。", // NEEDS QC
 			start: "  {POKEMON}は しろいきりにつつまれた！",
 			block: "  しかしうまく決まらなかった！！",
 		},
@@ -4737,29 +4718,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mistball: {
 		name: "ミストボール",
 		// Official flavor text: "霧状の 羽毛で 包みこみ 攻撃する。 相手の 特攻を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の特攻を1段階下げる。", // NEEDS QC
 	},
 	mistyexplosion: {
 		name: "ミストバースト",
 		// Official flavor text: "自分の 周りに いる すべてを 攻撃するが 使うと 瀕死になる。 ミストフィールドで 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドがミストフィールドで自分が地面にいる場合、威力が1.5倍になる。使用した後、自分はひんしになる（対象がいなくて失敗した場合も同様）。場に特性しめりけのポケモンがいると使えない。", // NEEDS QC
+		shortDesc: "自分はひんしに。ミストフィールドで1.5倍。", // NEEDS QC
 	},
 	mistyterrain: {
 		name: "ミストフィールド",
 		// Official flavor text: "５ターンの 間 地面にいると 状態異常に ならず ドラゴン技の ダメージも 半分になる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、フィールドがミストフィールドになる。その間、地面にいるポケモンに対するドラゴンタイプの攻撃技の威力が0.5倍になり、地面にいるポケモンは状態異常やこんらん状態にならない。地面にいるポケモンはあくびを受けるが、その効果でねむることはない。ほごしょくを使うとフェアリータイプになり、しぜんのちからはムーンフォースになり、ひみつのちからは30%の確率で特攻を1段階下げるようになる。すでにミストフィールドの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、ミストフィールドにする。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、フィールドがミストフィールドになる。その間、地面にいるポケモンに対するドラゴンタイプの攻撃技の威力が0.5倍になり、地面にいるポケモンは状態異常にならない。地面にいるポケモンはあくびを受けるが、その効果でねむることはない。ほごしょくを使うとフェアリータイプになり、しぜんのちからはムーンフォースになり、ひみつのちからは30%の確率で特攻を1段階下げるようになる。すでにミストフィールドの場合は失敗する。", // NEEDS QC
 		},
 	},
 	moonblast: {
 		name: "ムーンフォース",
 		// Official flavor text: "月の パワーを かりて 相手を 攻撃する。 相手の 特攻を さげる ことがある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "30%の確率で相手の特攻を1段階下げる。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4768,150 +4749,150 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	moongeistbeam: {
 		name: "シャドーレイ",
 		// Official flavor text: "怪しい 光線を 放って 攻撃する。相手の 特性を 無視して 攻撃 することが できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "他のポケモンの特性を無視する。", // NEEDS QC
 	},
 	moonlight: {
 		name: "つきのひかり",
 		// Official flavor text: "自分の ＨＰを 回復する。 天気に よって 回復の 量が 変化する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天気がなし・らんきりゅうの場合やばんのうがさを持っている場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あめ・おおあめ・すなあらし・ゆきの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
+		shortDesc: "天気に応じた量のHPを回復する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなし・らんきりゅうの場合やばんのうがさを持っている場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あられ・おおあめ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなし・らんきりゅうの場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あられ・おおあめ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合は2/3、あられ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合は2/3、あられ・あめ・すなあらしの場合は1/4を回復する（いずれも切り捨て）。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合はHPをすべて、あめ・すなあらしの場合は1/4を回復する（いずれも切り捨て）。", // NEEDS QC
 		},
 	},
 	morningsun: {
 		name: "あさのひざし",
 		// Official flavor text: "自分の ＨＰを 回復する。 天気に よって 回復の 量が 変化する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天気がなし・らんきりゅうの場合やばんのうがさを持っている場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あめ・おおあめ・すなあらし・ゆきの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
+		shortDesc: "天気に応じた量のHPを回復する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなし・らんきりゅうの場合やばんのうがさを持っている場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あられ・おおあめ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなし・らんきりゅうの場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あられ・おおあめ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合は2/3、あられ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合は2/3、あられ・あめ・すなあらしの場合は1/4を回復する（いずれも切り捨て）。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合はHPをすべて、あめ・すなあらしの場合は1/4を回復する（いずれも切り捨て）。", // NEEDS QC
 		},
 	},
 	mortalspin: {
 		name: "キラースピン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、自分が受けているやどりぎのタネとしめつけ技の効果が終わり、自分側の場の設置技がすべて取り除かれる。100%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "相手をどくにし、設置技などから解放される。", // NEEDS QC
 	},
 	mountaingale: {
 		name: "ひょうざんおろし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	mudbomb: {
 		name: "どろばくだん",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "30%の確率で相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	muddywater: {
 		name: "だくりゅう",
 		// Official flavor text: "濁った 水を 相手に 発射して 攻撃する。 命中率を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "30%の確率で相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	mudshot: {
 		name: "マッドショット",
 		// Official flavor text: "泥の 塊を 相手に 投げつけて 攻撃する。 同時に 相手の 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 	},
 	mudslap: {
 		name: "どろかけ",
 		// Official flavor text: "相手の 顔などに 泥を 投げつけて 攻撃する。 命中率を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	mudsport: {
 		name: "どろあそび",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、場にいるすべてのポケモンのでんきタイプの攻撃技の威力が0.33倍になる。すでにこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、でんき技の威力を1/3にする。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、場にいるすべてのポケモンのでんきタイプの攻撃技の威力が0.33倍になる。すでにいずれかのポケモンにこの効果がある場合は失敗する。", // NEEDS QC
+			shortDesc: "でんき技の威力を1/3にする。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、場にいるすべてのポケモンのでんきタイプの攻撃技の威力が半分になる。すでに自分にこの効果がある場合は失敗する。バトンタッチでこの効果を味方に引き継げる。", // NEEDS QC
+			shortDesc: "でんき技の威力を半分にする。", // NEEDS QC
 		},
 	},
 	multiattack: {
 		name: "マルチアタック",
 		// Official flavor text: "高い エネルギーを まといつつ 相手に ぶつかって 攻撃する。 メモリに より タイプが 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技のタイプは、自分が持っているメモリによって決まる。", // NEEDS QC
+		shortDesc: "持っているメモリでタイプが変わる。", // NEEDS QC
 	},
 	mysticalfire: {
 		name: "マジカルフレイム",
 		// Official flavor text: "口から 吐きだす 特別 熱い 炎で 攻撃する。 相手の 特攻を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
 	},
 	mysticalpower: {
 		name: "しんぴのちから",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の特攻を1段階上げる。", // NEEDS QC
+		shortDesc: "100%の確率で自分の特攻が1段階上がる。", // NEEDS QC
 	},
 	nastyplot: {
 		name: "わるだくみ",
 		// Official flavor text: "悪いことを 考えて 頭を 活性化させる。 自分の 特攻を ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を2段階上げる。", // NEEDS QC
+		shortDesc: "自分の特攻が2段階上がる。", // NEEDS QC
 	},
 	naturalgift: {
 		name: "しぜんのめぐみ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技のタイプと威力は自分の持っているきのみによって決まり、そのきのみは失われる。きのみを持っていない場合、自分の特性がぶきようの場合、自分がさしおさえやマジックルームの効果を受けている場合は失敗する。", // NEEDS QC
+		shortDesc: "持っているきのみで威力とタイプが変わる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技のタイプと威力は自分の持っているきのみによって決まり、そのきのみは失われる。きのみを持っていない場合、自分の特性がぶきようの場合、自分がさしおさえの効果を受けている場合は失敗する。", // NEEDS QC
 		},
 	},
 	naturepower: {
 		name: "しぜんのちから",
 		// Official flavor text: "自然の 力で 攻撃する。 使う 場所で でてくる 技が 変化する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドに応じて別の技を呼び出して使う。通常はトライアタック、エレキフィールドでは１０まんボルト、ミストフィールドではムーンフォース、グラスフィールドではエナジーボール、サイコフィールドではサイコキネシスになる。", // NEEDS QC
+		shortDesc: "フィールドに応じた技を使う。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて別の技を呼び出して使う。通常のWi-Fiフィールドではトライアタック、エレキフィールドでは１０まんボルト、ミストフィールドではムーンフォース、グラスフィールドではエナジーボールになる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて別の技を呼び出して使う。通常のWi-Fiフィールドではじしんになる。", // NEEDS QC
+			shortDesc: "フィールドで技が変わる。（じしん）", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて別の技を呼び出して使う。Wi-Fiバトルではトライアタックになる。", // NEEDS QC
+			shortDesc: "フィールドで技が変わる。（トライアタック）", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "フィールドに応じて別の技を呼び出して使う。Wi-Fiバトルではスピードスターになる。", // NEEDS QC
+			shortDesc: "フィールドで技が変わる。（スピードスター）", // NEEDS QC
 		},
 
 		move: "しぜんのちからは {MOVE} になった！",
@@ -4919,33 +4900,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	naturesmadness: {
 		name: "しぜんのいかり",
 		// Official flavor text: "自然の 怒りを 相手に ぶつける。 相手の ＨＰは 半分に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の残りHPの1/2（切り捨て、最低1）のダメージを与える。", // NEEDS QC
+		shortDesc: "相手の残りHPの1/2のダメージを与える。", // NEEDS QC
 	},
 	needlearm: {
 		name: "ニードルアーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、ダメージが2倍になる。", // NEEDS QC
 		},
 	},
 	neverendingnightmare: {
 		name: "むげんあんやへのいざない",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	nightdaze: {
 		name: "ナイトバースト",
 		// Official flavor text: "暗黒の 衝撃波を とばして 相手を 攻撃する。 命中率を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "40%の確率で相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "40%の確率で相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	nightmare: {
 		name: "あくむ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がねむっている間、毎ターン終了時に相手の最大HPの1/4（切り捨て）を失わせる。ねむり状態の相手にしか効果がない。相手が目を覚ますと（同じターンに再びねむっても）効果は終わる。", // NEEDS QC
+		shortDesc: "ねむり状態の相手は毎ターンHPを1/4失う。", // NEEDS QC
 
 		start: "  {POKEMON}は 悪夢を 見始めた！",
 		damage: "  {POKEMON}は 悪夢に うなされている！",
@@ -4953,162 +4934,162 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	nightshade: {
 		name: "ナイトヘッド",
 		// Official flavor text: "恐ろしい 幻を みせて 自分の レベルと 同じだけの ダメージを 相手に 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のレベルと同じダメージを相手に与える。", // NEEDS QC
+		shortDesc: "自分のレベルと同じダメージを与える。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のレベルと同じダメージを相手に与える。この技はタイプ相性による無効を無視する。", // NEEDS QC
+			shortDesc: "ダメージ=自分のレベル。ノーマルにも当たる。", // NEEDS QC
 		},
 	},
 	nightslash: {
 		name: "つじぎり",
 		// Official flavor text: "一瞬の すきを ついて 相手を 切りはらう。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	nobleroar: {
 		name: "おたけび",
 		// Official flavor text: "おたけびを あげて 相手を 威嚇し 相手の 攻撃と 特攻を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃と特攻を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃・特攻を1段階下げる。", // NEEDS QC
 	},
 	noretreat: {
 		name: "はいすいのじん",
 		// Official flavor text: "自分の すべての 能力が 上がるが 交代 したり 逃げることが できなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃・防御・特攻・特防・素早さを1段階ずつ上げるが、自分は交代できなくなる。バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使えば交代できる。すでにこの効果で交代できなくなっている場合は失敗する。", // NEEDS QC
+		shortDesc: "全能力が1段階上がるが交代できなくなる。", // NEEDS QC
 
 		start: "  {POKEMON}は はいすいのじんで 逃げることが できなくなった！",
 	},
 	noxioustorque: {
 		name: "ポイズンアクセル",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をどく状態にする。", // NEEDS QC
 	},
 	nuzzle: {
 		name: "ほっぺすりすり",
 		// Official flavor text: "電気を 帯びた ほっぺを すりつけて 攻撃。 相手を まひ状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	oblivionwing: {
 		name: "デスウイング",
 		// Official flavor text: "ねらいを 定めた 相手から ＨＰを 吸い取る。 与えた ダメージの 半分以上 ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの3/4（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの3/4を回復する。", // NEEDS QC
 	},
 	obstruct: {
 		name: "ブロッキング",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。 触れると 防御が がくっと 下がる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手の防御を2段階下げる。ダメージを与えない技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "攻撃技を防ぎ、接触してきた相手の防御-2。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手の防御を2段階下げる。ダメージを与えない技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 	},
 	oceanicoperetta: {
 		name: "わだつみのシンフォニア",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	octazooka: {
 		name: "オクタンほう",
 		// Official flavor text: "相手の 顔などに 墨を 吹きかけて 攻撃する。 命中率を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	octolock: {
 		name: "たこがため",
 		// Official flavor text: "相手を 逃げられなくする。 かためられた 相手は 毎ターン 防御と 特防が 下がる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を交代できなくし、毎ターン終了時に相手の防御と特防を1段階ずつ下げる。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手を捕らえ、毎ターン防御・特防-1。", // NEEDS QC
 
 		start: "  {POKEMON}は たこがためで 逃げられなくなった！",
 	},
 	odorsleuth: {
 		name: "かぎわける",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が場にいる間、相手の回避率のランクが+1以上の場合は命中判定で無視され、相手がゴーストタイプでもノーマル・かくとうタイプの攻撃が当たるようになる。相手がすでにこの効果か、みやぶる・ミラクルアイの効果を受けている場合は失敗する。", // NEEDS QC
+		shortDesc: "ノーマル・かくとうがゴーストに当たる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の回避率ランクが0より高ければ命中判定で無視され、ゴーストタイプでもノーマル・かくとうタイプの攻撃が当たるようになる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が場にいる間、相手の回避率ランクは命中判定で無視され、ゴーストタイプでもノーマル・かくとうタイプの攻撃が当たるようになる。", // NEEDS QC
 		},
 	},
 	ominouswind: {
 		name: "あやしいかぜ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で自分の攻撃・防御・特攻・特防・素早さを1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "10%の確率で全能力が1段階上がる。", // NEEDS QC
 	},
 	orderup: {
 		name: "いっちょうあがり",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "味方のシャリタツの特性しれいとうが発動している場合、そのシャリタツがそったすがたなら自分の攻撃、たれたすがたなら防御、のびたすがたなら素早さを1段階上げる。発動したシャリタツがその後ひんしになっていても効果は発生する。", // NEEDS QC
+		shortDesc: "シャリタツの姿に応じて能力が1段階上がる。", // NEEDS QC
 	},
 	originpulse: {
 		name: "こんげんのはどう",
 		// Official flavor text: "青白く 輝く 無数の 光線で 相手を 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	outrage: {
 		name: "げきりん",
 		// Official flavor text: "２ー３ターンの 間 暴れまくって 攻撃する。 暴れたあとは 混乱する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜3ターンの間この技に固定され、最終ターンの行動直後に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、効果の1ターン目（3ターンの場合は2ターン目も）に攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれてねむったまま使った場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
+		shortDesc: "2〜3ターン暴れて、その後こんらんする。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの行動直後に（まだそうでなければ）こんらん状態になる。この技は毎ターン、隣接する相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、効果の1ターン目（3ターンの場合は2ターン目も）に攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの終了時に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの終了時に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ねむった場合、こおり状態になった場合、攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技の成否にかかわらず、2〜3ターンの間この技に固定され、最終ターンの行動直後に、すでにこんらんしていてもこんらん状態になる。行動できなかった場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 	},
 	overdrive: {
 		name: "オーバードライブ",
 		// Official flavor text: "ギターや ベースを かきならして 激しく 響く 大きな 振動を 相手に 与えて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	overheat: {
 		name: "オーバーヒート",
 		// Official flavor text: "フルパワーで 相手を 攻撃する。 使うと 反動で 自分の 特攻が がくっと さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を2段階下げる。", // NEEDS QC
+		shortDesc: "自分の特攻を2段階下げる。", // NEEDS QC
 	},
 	painsplit: {
 		name: "いたみわけ",
 		// Official flavor text: "自分の ＨＰと 相手の ＨＰを あわせて それを 自分と 相手で なかよく わける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手のHPを、両者の残りHPの平均値（切り捨て）にする。ただし、それぞれの最大HPは超えない。", // NEEDS QC
+		shortDesc: "相手とHPを平均になるよう分け合う。", // NEEDS QC
 
 		activate: "  おたがいの体力を 分かちあった！",
 	},
 	paleowave: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "20%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	paraboliccharge: {
 		name: "パラボラチャージ",
 		// Official flavor text: "周りにいる ポケモン 全員に ダメージ。 与えた ダメージの 半分を 自分が 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に与えたダメージの1/2（四捨五入）のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。", // NEEDS QC
+		shortDesc: "与えたダメージの1/2を回復する。", // NEEDS QC
 	},
 	partingshot: {
 		name: "すてゼリフ",
 		// Official flavor text: "すてゼリフで 相手を いかくし 攻撃と 特攻を さげたのち 控えの ポケモンと 入れ替わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃と特攻を1段階ずつ下げる。成功すると、自分は交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。相手の攻撃と特攻のランクがどちらも変化しなかった場合や、控えにひんしでないポケモンがいない場合は交代しない。", // NEEDS QC
+		shortDesc: "相手の攻撃・特攻-1。自分は控えと交代。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の攻撃と特攻を1段階ずつ下げる。成功すると、自分は交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合は交代しない。", // NEEDS QC
 		},
 
 		heal: "#memento",
@@ -5117,32 +5098,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	payback: {
 		name: "しっぺがえし",
 		// Official flavor text: "ためこんで 攻撃する。 相手より あとに 攻撃できると 技の 威力は ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに相手より後に行動した場合、威力が2倍になる（さいはいや特性おどりこによる行動も含む）。交代で場に出ることは行動に数えない。", // NEEDS QC
+		shortDesc: "相手より後に行動すると威力2倍。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに相手より後に行動した場合、威力が2倍になる。交代で場に出ることは行動に数えない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに相手より後に行動した場合、威力が2倍になる。交代で場に出ることも行動に数える。", // NEEDS QC
 		},
 	},
 	payday: {
 		name: "ネコにこばん",
 		// Official flavor text: "相手の 体に 小判を 投げつけて 攻撃する。 戦闘の あとで お金が もらえる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "小判をまき散らして攻撃する。", // NEEDS QC
 
 		activate: "  小判が あたりに 散らばった！",
 	},
 	peck: {
 		name: "つつく",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	perishsong: {
 		name: "ほろびのうた",
 		// Official flavor text: "歌を 聴いた ポケモンは ３ターン たつと ひんしに なる。 交代すると 効果は なくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいる各ポケモンに、（まだ持っていなければ）ほろびのカウント4を与える。使用したターンを含む毎ターン終了時に、場にいるすべてのポケモンのカウントが1減り、0になったポケモンはひんしになる。交代するとカウントは消える。カウントを持ったポケモンがバトンタッチを使うと、交代先がカウントを引き継いで数え続ける。", // NEEDS QC
+		shortDesc: "場の全ポケモンが3ターン後にひんしになる。", // NEEDS QC
 
 		start: "  ほろびのうたを 聴いたポケモンは ３ターン後に 滅びてしまう！",
 		activate: "  {POKEMON}の 滅びのカウントが {NUMBER}になった！",
@@ -5150,38 +5131,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	petalblizzard: {
 		name: "はなふぶき",
 		// Official flavor text: "激しい 花吹雪を 起こし 周りに いるものに 攻撃して ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。周囲全体攻撃。", // NEEDS QC
 	},
 	petaldance: {
 		name: "はなびらのまい",
 		// Official flavor text: "２ー３ターンの 間 花を まきちらして 相手を 攻撃する。 まきちらした あとは 混乱する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜3ターンの間この技に固定され、最終ターンの行動直後に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、効果の1ターン目（3ターンの場合は2ターン目も）に攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれてねむったまま使った場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
+		shortDesc: "2〜3ターン暴れて、その後こんらんする。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの行動直後に（まだそうでなければ）こんらん状態になる。この技は毎ターン、隣接する相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、効果の1ターン目（3ターンの場合は2ターン目も）に攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの終了時に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの終了時に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ねむった場合、こおり状態になった場合、攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技の成否にかかわらず、2〜3ターンの間この技に固定され、最終ターンの行動直後に、すでにこんらんしていてもこんらん状態になる。行動できなかった場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "この技の成否にかかわらず、3〜4ターンの間この技に固定され、最終ターンの行動直後に、すでにこんらんしていてもこんらん状態になる。行動できなかった場合、こんらんせずに効果は終わる。効果中、この技の命中率は毎ターン、ランク変化を含めて計算した現在の命中率で上書きされるが、1/256未満や255/256超にはならない。", // NEEDS QC
+			shortDesc: "3〜4ターン続き、その後こんらんする。", // NEEDS QC
 		},
 	},
 	phantomforce: {
 		name: "ゴーストダイブ",
 		// Official flavor text: "１ターンめで どこかに 消えて ２ターンめに 相手を 攻撃する。 守りを 無視して 攻撃できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、このターンの間、相手のトーチカ・みきり・キングシールド・まもる・ニードルガードの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。1ターン目に姿を消し、2ターン目に攻撃する。姿を消している間は、すべての攻撃を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に消え、2ターン目に攻撃。守り貫通。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、このターンの間、相手のみきり・キングシールド・まもる・ニードルガードの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。1ターン目に姿を消し、2ターン目に攻撃する。姿を消している間は、すべての攻撃を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。相手が場に出てからちいさくなるを使っていた場合、必中になりダメージが2倍になる。", // NEEDS QC
 		},
 
 		prepare: "#shadowforce",
@@ -5190,58 +5171,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	photongeyser: {
 		name: "フォトンゲイザー",
 		// Official flavor text: "光の 柱で 攻撃する。 攻撃と 特攻を 比べて 高いほうで ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "（能力ランクの変化を含めて）自分の攻撃が特攻より高い場合、物理技になる。この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "攻撃＞特攻なら物理技に。特性無視。", // NEEDS QC
 	},
 	pikapapow: {
 		name: "ピカピカサンダー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分のなつき度×2/5）（切り捨て、最低1）。", // NEEDS QC
+		shortDesc: "なつき度最大で威力102。必中。", // NEEDS QC
 	},
 	pinmissile: {
 		name: "ミサイルばり",
 		// Official flavor text: "鋭い ハリを 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。ダメージは最初の攻撃で1回だけ計算され、すべての攻撃に適用される。途中の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	plasmafists: {
 		name: "プラズマフィスト",
 		// Official flavor text: "電気を まとった こぶしで 攻撃。 ノーマルタイプの 技を でんきタイプに してしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、このターン、ノーマルタイプの技がでんきタイプになる。", // NEEDS QC
+		shortDesc: "このターン、ノーマル技がでんきタイプに。", // NEEDS QC
 	},
 	playnice: {
 		name: "なかよくする",
 		// Official flavor text: "相手と なかよくなって 戦う 気力を 失わせ 相手の 攻撃を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	playrough: {
 		name: "じゃれつく",
 		// Official flavor text: "相手に じゃれついて 攻撃する。 相手の 攻撃を さげる ことがある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	pluck: {
 		name: "ついばむ",
 		// Official flavor text: "くちばしで 攻撃。 相手が きのみを 持っているとき 食べて きのみの 効果を 受けられる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、相手の持っているきのみを奪ってその場で食べ、（自分の道具が無効化されていても）その効果を受ける。この技で失われたきのみは、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+		shortDesc: "相手のきのみを奪って食べる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の持っているきのみを奪ってその場で食べ、自分の道具が無効化されていなければその効果を受ける。この技で失われたきのみは、リサイクルで取り戻せる。", // NEEDS QC
 		},
 
 		removeItem: "#bugbite",
@@ -5249,88 +5230,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	poisonfang: {
 		name: "どくどくのキバ",
 		// Official flavor text: "毒の ある キバで 相手に かみついて 攻撃する。 猛毒を おわせる ことが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手をもうどく状態にする。", // NEEDS QC
+		shortDesc: "50%の確率で相手をもうどく状態にする。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をもうどく状態にする。", // NEEDS QC
+			shortDesc: "30%の確率で相手をもうどくにする。", // NEEDS QC
 		},
 	},
 	poisongas: {
 		name: "どくガス",
 		// Official flavor text: "毒ガスを 相手の 顔に 吹きかけて 毒の 状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をどく状態にする。", // NEEDS QC
+		shortDesc: "相手をどく状態にする。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手をどく状態にする。", // NEEDS QC
 		},
 	},
 	poisonjab: {
 		name: "どくづき",
 		// Official flavor text: "毒に そまった 触手や 腕で 相手を 突き刺す。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をどく状態にする。", // NEEDS QC
 	},
 	poisonpowder: {
 		name: "どくのこな",
 		// Official flavor text: "毒の ある 粉を たくさん ふりまいて 相手を 毒状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をどく状態にする。", // NEEDS QC
+		shortDesc: "相手をどく状態にする。", // NEEDS QC
 	},
 	poisonsting: {
 		name: "どくばり",
 		// Official flavor text: "毒の ある ハリを 相手に 突き刺して 攻撃する。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をどく状態にする。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "20%の確率で相手をどく状態にする。", // NEEDS QC
+			shortDesc: "20%の確率で相手をどくにする。", // NEEDS QC
 		},
 	},
 	poisontail: {
 		name: "ポイズンテール",
 		// Official flavor text: "しっぽで たたく。 毒状態に することが あり 急所にも 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をどく状態にする。急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。10%でどくにする。", // NEEDS QC
 	},
 	polarflare: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。この技ではこおり状態の相手のこおりは治らない。1体以上に攻撃が成功して自分がRamnarokの場合、Dormant FormeならRadiant Formeに、Radiant FormeならDormant Formeに変わる。特性がちからずくのRamnarokはフォルムチェンジしない。Radiant Formeは場を離れるとDormant Formeに戻る。", // NEEDS QC
+		shortDesc: "10%でこおりにする。Ramnarokはフォルムチェンジ。", // NEEDS QC
 	},
 	pollenpuff: {
 		name: "かふんだんご",
 		// Official flavor text: "敵には 爆発する だんごを 使って 攻撃。 味方には 回復する だんごを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "対象が味方の場合、ダメージを与える代わりに、その最大HPの1/2（切り捨て）を回復する。", // NEEDS QC
+		shortDesc: "味方に使うと最大HPの1/2を回復させる。", // NEEDS QC
 	},
 	poltergeist: {
 		name: "ポルターガイスト",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手が道具を持っていないと失敗する。", // NEEDS QC
 
 		activate: "  {POKEMON}に {ITEM}が 襲いかかる！",
 	},
 	populationbomb: {
 		name: "ネズミざん",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10回連続で攻撃する。1回ごとに命中判定を行い、外れると攻撃は終わる。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず10回当たる。いかさまダイスを持っている場合は、攻撃ごとの命中判定なしでランダムに4〜10回当たる。", // NEEDS QC
+		shortDesc: "10回攻撃する。各回命中判定あり。", // NEEDS QC
 	},
 	pounce: {
 		name: "とびつく",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 	},
 	pound: {
 		name: "はたく",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	powder: {
 		name: "ふんじん",
 		// Official flavor text: "ふんじんを 浴びせた 相手が ほのお技を 使うと 爆発して ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに相手がほのおタイプの技を使おうとすると、その技は不発になり、相手は最大HPの1/4（四捨五入）のダメージを受ける。ほのおタイプの技がおおあめによって不発になった場合、この効果は発生しない。", // NEEDS QC
+		shortDesc: "相手がほのお技を使うと最大HPの1/4を失う。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに相手がほのおタイプの技を使おうとすると、その技は不発になり、相手は最大HPの1/4（四捨五入）のダメージを受ける。この効果は、ほのおタイプの技がおおあめによって不発になる前に発生する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}に ふんじんを あびせた！",
@@ -5339,34 +5320,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powdersnow: {
 		name: "こなゆき",
 		// Official flavor text: "冷たい 粉雪を 相手に 吹きつけて 攻撃する。 こおり状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%の確率で相手をこおり状態にする。", // NEEDS QC
 		},
 	},
 	powergem: {
 		name: "パワージェム",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	powersplit: {
 		name: "パワーシェア",
 		// Official flavor text: "超能力で 自分と 相手の 攻撃と 特攻を たして 半分に わける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の攻撃をそれぞれ両者の攻撃の平均値（切り捨て）に、特攻をそれぞれ両者の特攻の平均値（切り捨て）にする。能力ランクの変化は影響を受けない。", // NEEDS QC
+		shortDesc: "相手と攻撃・特攻を平均化する。", // NEEDS QC
 
 		activate: "  {POKEMON}は おたがいのパワーを シェアした！",
 	},
 	powerswap: {
 		name: "パワースワップ",
 		// Official flavor text: "超能力で 自分と 相手の 攻撃と 特攻の 能力変化を 入れ替える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の、攻撃と特攻の能力ランクの変化を入れ替える。", // NEEDS QC
+		shortDesc: "相手と攻撃・特攻の能力変化を入れ替える。", // NEEDS QC
 	},
 	powershift: {
 		name: "パワーシフト",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と防御の数値を入れ替える（能力ランクの変化はそれぞれの能力に残る）。もう一度使うと元に戻る。バトンタッチを使うと、効果が続いている場合、交代先も攻撃と防御が入れ替わる。入れ替わったままフォルムチェンジなどで能力が再計算されると、この効果は無視されるが、バトンタッチに対しては引き続き有効。", // NEEDS QC
+		shortDesc: "自分の攻撃と防御を入れ替える。", // NEEDS QC
 
 		start: "  {POKEMON}は 攻めの力と 守りの力を 入れ替えた！",
 		end: "#.start",
@@ -5374,8 +5355,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrick: {
 		name: "パワートリック",
 		// Official flavor text: "超能力で 自分の 攻撃と 防御の 力を 交換する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と防御の数値を入れ替える（能力ランクの変化はそれぞれの能力に残る）。もう一度使うと元に戻る。バトンタッチを使うと、効果が続いている場合、交代先も攻撃と防御が入れ替わる。入れ替わったままフォルムチェンジなどで能力が再計算されると、この効果は無視されるが、バトンタッチに対しては引き続き有効。", // NEEDS QC
+		shortDesc: "自分の攻撃と防御を入れ替える。", // NEEDS QC
 
 		start: "  {POKEMON}は 攻撃と 防御を 入れ替えた！",
 		end: "#.start",
@@ -5383,65 +5364,65 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrip: {
 		name: "つけあがる",
 		// Official flavor text: "自分の 強さを 鼻高々に 攻撃する。自分の 能力が あがって いるほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は20+(X×20)。Xは自分の+1以上の能力ランクの合計。", // NEEDS QC
+		shortDesc: "能力上昇1つごとに威力+20。", // NEEDS QC
 	},
 	poweruppunch: {
 		name: "グロウパンチ",
 		// Official flavor text: "繰り返し 打つことで だんだん こぶしが 固くなる。 相手に 当てると 攻撃が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の攻撃を1段階上げる。", // NEEDS QC
+		shortDesc: "100%の確率で自分の攻撃が1段階上がる。", // NEEDS QC
 	},
 	powerwhip: {
 		name: "パワーウィップ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	precipiceblades: {
 		name: "だんがいのつるぎ",
 		// Official flavor text: "大地の 力を 刃に 変えて 相手を 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "追加効果なし。相手全体攻撃。", // NEEDS QC
 	},
 	present: {
 		name: "プレゼント",
 		// Official flavor text: "わなを しかけた 箱を 相手に わたして 攻撃する。ＨＰが 回復して しまうことも ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、ダメージを与えるか、相手を回復する。40%の確率で威力40、30%の確率で威力80、10%の確率で威力120、20%の確率で相手の最大HPの1/4（切り捨て）を回復する。", // NEEDS QC
+		shortDesc: "威力40・80・120か、相手のHPを1/4回復。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、ダメージを与えるか、相手を回復する。102/256の確率で威力40、76/256の確率で威力80、26/256の確率で威力120、52/256の確率で相手の最大HPの1/4（切り捨て）を回復する。ダメージを与える場合、ダメージ計算式の一部の値を置き換えた特殊な式を使う。自分の攻撃はこの技の相手への相性倍率の10倍に、相手の防御は自分の2番目のタイプのインデックス番号に、自分のレベルは相手の2番目のタイプのインデックス番号に置き換えられる。2番目のタイプがないポケモンは1番目のタイプを使う。タイプのインデックス番号は、ノーマル: 0、かくとう: 1、ひこう: 2、どく: 3、じめん: 4、いわ: 5、むし: 7、ゴースト: 8、はがね: 9、ほのお: 20、みず: 21、くさ: 22、でんき: 23、エスパー: 24、こおり: 25、ドラゴン: 26、あく: 27。計算式で0で割ることになる場合は、代わりに1で割る。", // NEEDS QC
 		},
 	},
 	prismaticlaser: {
 		name: "プリズムレーザー",
 		// Official flavor text: "プリズムの 力で 強力な 光線を 発射する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	protect: {
 		name: "まもる",
 		// Official flavor text: "相手の 攻撃を まったく 受けない。 連続で だすと 失敗しやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "このターン相手の技を防ぐ。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がみきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる・ファストガード・ワイドガード以外だった場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる（最大8）。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぐ。この技の成功率はX/65536で、Xは65535から始まり、成功するたびに半分（切り捨て）になる。4回連続で成功するとXは118になり、以降の成功ではほぼランダムな0〜65535の値をとる。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは65535に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、相手からの技を防ぐ。この技の成功率はX/255で、Xは255から始まり、成功するたびに半分（切り捨て）になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる以外だった場合、Xは255に戻る。自分がみがわり状態の場合や、このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 守りの 体勢に 入った！",
@@ -5450,178 +5431,178 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psybeam: {
 		name: "サイケこうせん",
 		// Official flavor text: "不思議な 光線を 相手に 発射して 攻撃する。 混乱させることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	psyblade: {
 		name: "サイコブレイド",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドがエレキフィールドの場合、威力が1.5倍になる。", // NEEDS QC
+		shortDesc: "エレキフィールドで威力1.5倍。", // NEEDS QC
 	},
 	psychic: {
 		name: "サイコキネシス",
 		// Official flavor text: "強い 念力を 相手に 送って 攻撃する。 相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "10%の確率で相手の特防を1段階下げる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%の確率で相手のとくしゅを1段階下げる。", // NEEDS QC
+			shortDesc: "33%の確率で相手のとくしゅを1段階下げる。", // NEEDS QC
 		},
 	},
 	psychicfangs: {
 		name: "サイコファング",
 		// Official flavor text: "サイコパワーで かみついて 相手を 攻撃する。 ひかりのかべや リフレクター なども 破壊できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が外れなかった場合、ダメージ計算の前に、相手側のリフレクター・ひかりのかべ・オーロラベールの効果を消す。", // NEEDS QC
+		shortDesc: "攻撃前に相手側の壁を壊す。", // NEEDS QC
 	},
 	psychicnoise: {
 		name: "サイコノイズ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2ターンの間、相手は場にいる間HPを回復できなくなる。効果の間、回復技とHP吸収技は使えず、回復効果のある特性や道具でも回復しない。効果を受けているポケモンがバトンタッチを使った場合、交代先も回復できないままになる。いたみわけと特性さいせいりょくは影響を受けない。", // NEEDS QC
+		shortDesc: "2ターン、相手のHP回復を封じる。", // NEEDS QC
 	},
 	psychicterrain: {
 		name: "サイコフィールド",
 		// Official flavor text: "５ターンの間 地面にいると 先制技を 受けない。 エスパータイプの 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、フィールドがサイコフィールドになる。その間、地面にいるポケモンのエスパータイプの攻撃技の威力が1.3倍になり、地面にいるポケモンは優先度+1以上の技を受けなくなる（味方からの技を除く）。ほごしょくを使うとエスパータイプになり、しぜんのちからはサイコキネシスになり、ひみつのちからは30%の確率で素早さを1段階下げるようになる。すでにサイコフィールドの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、サイコフィールドにする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、フィールドがサイコフィールドになる。その間、地面にいるポケモンのエスパータイプの攻撃技の威力が1.5倍になり、地面にいるポケモンは優先度+1以上の技を受けなくなる（味方からの技を除く）。ほごしょくを使うとエスパータイプになり、しぜんのちからはサイコキネシスになり、ひみつのちからは30%の確率で素早さを1段階下げるようになる。すでにサイコフィールドの場合は失敗する。", // NEEDS QC
 		},
 	},
 	psychoboost: {
 		name: "サイコブースト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を2段階下げる。", // NEEDS QC
+		shortDesc: "自分の特攻を2段階下げる。", // NEEDS QC
 	},
 	psychocut: {
 		name: "サイコカッター",
 		// Official flavor text: "実体化させた 心の 刃で 相手を 切り裂く。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	psychoshift: {
 		name: "サイコシフト",
 		// Official flavor text: "超能力で 暗示を かけて 自分の 受けている 状態異常を 相手に うつす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の状態異常を相手にうつし、自分は治る。自分が状態異常でない場合や、相手がすでに状態異常の場合は失敗する。", // NEEDS QC
+		shortDesc: "自分の状態異常を相手にうつす。", // NEEDS QC
 	},
 	psychup: {
 		name: "じこあんじ",
 		// Official flavor text: "自分に 暗示を かけることで 能力変化の 状態を 相手と 同じにする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の現在の能力ランクの変化をすべてコピーする。", // NEEDS QC
+		shortDesc: "相手の能力変化をコピーする。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の現在の能力ランクの変化をすべてコピーする。相手の能力ランクがすべて0の場合は失敗する。", // NEEDS QC
 		},
 	},
 	psyshieldbash: {
 		name: "バリアーラッシュ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の防御を1段階上げる。", // NEEDS QC
+		shortDesc: "100%の確率で自分の防御が1段階上がる。", // NEEDS QC
 	},
 	psyshock: {
 		name: "サイコショック",
 		// Official flavor text: "不思議な 念波を 実体化して 相手を 攻撃する。 物理的な ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特防の代わりに防御を使ってダメージを計算する。", // NEEDS QC
+		shortDesc: "相手の特防でなく防御でダメージ計算。", // NEEDS QC
 	},
 	psystrike: {
 		name: "サイコブレイク",
 		// Official flavor text: "不思議な 念波を 実体化して 相手を 攻撃する。 物理的な ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特防の代わりに防御を使ってダメージを計算する。", // NEEDS QC
+		shortDesc: "相手の特防でなく防御でダメージ計算。", // NEEDS QC
 	},
 	psywave: {
 		name: "サイコウェーブ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "（自分のレベル）×(X+50)÷100（Xは0〜100のランダムな数、切り捨て、最低1）のダメージを相手に与える。", // NEEDS QC
+		shortDesc: "レベルの0.5〜1.5倍のランダムなダメージ。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "（自分のレベル）×(X×10+50)÷100（Xは0〜10のランダムな数、切り捨て、最低1）のダメージを相手に与える。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1〜（自分のレベル×1.5−1）のランダムな数（切り捨て、最低1）のダメージを相手に与える。", // NEEDS QC
+			shortDesc: "1〜(レベル×1.5-1)のランダムダメージ。", // NEEDS QC
 		},
 	},
 	pulverizingpancake: {
 		name: "ほんきをだす こうげき",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	punishment: {
 		name: "おしおき",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は60+(X×20)（最大200）。Xは相手の+1以上の能力ランクの合計。", // NEEDS QC
+		shortDesc: "威力60+相手の能力上昇1つごとに+20。", // NEEDS QC
 	},
 	purify: {
 		name: "じょうか",
 		// Official flavor text: "相手の 状態異常を 治す。 治すと 自分は ＨＰを 回復 することが できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が状態異常の場合、それを治す。治した場合、自分の最大HPの1/2（切り捨て）を回復する。", // NEEDS QC
+		shortDesc: "相手の状態異常を治すと自分のHPが半分回復。", // NEEDS QC
 	},
 	pursuit: {
 		name: "おいうち",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに相手のポケモンが交代する場合、（本来の対象でなくても）その相手が場を離れる前に攻撃する。クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジ（バトンタッチを除く）を使った相手より後に行動する場合も、その相手が場を離れる前に攻撃する。交代しようとする相手に当てた場合、必中になり威力が2倍になり、自分のそのターンの行動は終わる。これで相手がひんしになった場合、交代先はターン終了時まで場に出ない。", // NEEDS QC
+		shortDesc: "交代しようとする相手に2倍の威力で攻撃。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに隣接する相手のポケモンが交代する場合、（本来の対象でなくても）その相手が場を離れる前に攻撃する。すてゼリフ・とんぼがえり・ボルトチェンジ（バトンタッチを除く）を使った相手より後に行動する場合も、その相手が場を離れる前に攻撃する。交代しようとする相手に当てた場合、必中になり威力が2倍になり、自分のそのターンの行動は終わる。これで相手がひんしになった場合、交代先はターン終了時まで場に出ない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに隣接する相手のポケモンが交代する場合、（本来の対象でなくても）その相手が場を離れる前に攻撃する。とんぼがえり・ボルトチェンジ（バトンタッチを除く）を使った相手より後に行動する場合も、その相手が場を離れる前に攻撃する。交代しようとする相手に当てた場合、必中になり威力が2倍になり、自分のそのターンの行動は終わる。これで相手がひんしになった場合、交代先はターン終了時まで場に出ない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに相手のポケモンが交代する場合、（本来の対象でなくても）その相手が場を離れる前に攻撃する。とんぼがえり（バトンタッチを除く）を使った相手より後に行動する場合も、その相手が場を離れる前に攻撃する。交代しようとする相手に当てた場合、必中になり威力が2倍になり、自分のそのターンの行動は終わる。これで相手がひんしになった場合、交代先はすぐに場に出る。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "対象が相手のポケモンで、このターンに交代する場合、その相手が場を離れる前に攻撃する。交代しようとする相手に当てた場合、必中になり威力が2倍になり、自分のそのターンの行動は終わる。これで相手がひんしになった場合、交代先はすぐに場に出る。", // NEEDS QC
+			shortDesc: "対象の相手が交代するとき威力2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がこのターンに交代する場合、その相手が場を離れる前に威力2倍で攻撃し、自分のそのターンの行動は終わる。", // NEEDS QC
+			shortDesc: "相手が交代するとき威力2倍。", // NEEDS QC
 		},
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  ({TARGET}は もどろうと している……)", // NEEDS QC
 	},
 	pyroball: {
 		name: "かえんボール",
 		// Official flavor text: "小石を 燃やした 炎の ボールで 相手を 攻撃する。 やけど 状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "10%でやけどにする。自分のこおりが治る。", // NEEDS QC
 	},
 	quash: {
 		name: "さきおくり",
 		// Official flavor text: "相手を おさえつけて 行動の 順番を 最後に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、対象は選択した技の優先度にかかわらず、他のすべてのポケモンの後に行動する。対象がすでに行動していた場合は失敗する。", // NEEDS QC
+		shortDesc: "相手をこのターン最後に行動させる。", // NEEDS QC
 
 		activate: "  {TARGET}の 順番を 先送りした！",
 	},
 	quickattack: {
 		name: "でんこうせっか",
 		// Official flavor text: "目にも 留まらぬ ものすごい 速さで 相手に つっこむ。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	quickguard: {
 		name: "ファストガード",
 		// Official flavor text: "自分と 味方を 相手の 先制攻撃から 守る。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、（元々または変更されて）優先度+1以上の技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "このターン味方への先制技を防ぐ。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、（元々または変更されて）優先度+1以上の技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、（元々または変更されて）優先度+1以上の技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、（元々または変更されて）優先度+1以上の技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がみきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、元々の優先度+1以上の技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる・ファストガード・ワイドガード以外だった場合、Xは1に戻る。Xが256以上の場合、この技の成功率は1/(2^32)になる。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {TEAM}は ファストガードで 守られた！",
@@ -5630,30 +5611,30 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	quiverdance: {
 		name: "ちょうのまい",
 		// Official flavor text: "神秘的で 美しい 舞を 軽やかに おどる。 自分の 特攻と 特防と 素早さを あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻・特防・素早さを1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の特攻・特防・素早さが1段階上がる。", // NEEDS QC
 	},
 	rage: {
 		name: "いかり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功した後、この技を選択し続けている間、他のポケモンの攻撃を受けるたびに自分の攻撃が1段階上がる。", // NEEDS QC
+		shortDesc: "使用中に攻撃されると攻撃が1段階上がる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技を使った後、相手がまもっていない限り、この技を選択し続けている間、他のポケモンの攻撃を受けるたびに自分の攻撃が1段階上がる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、Xが1から始まる。この技のダメージはX倍になり、自分が相手の攻撃を受けるたびにXが1増える（最大255）。自分が場を離れるか、この技を選択しなかった場合、Xは1に戻る。", // NEEDS QC
+			shortDesc: "使用中に被弾すると次のいかりが強化。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、自分は毎ターン自動的にこの技を使い、交代できなくなる。効果中、相手の攻撃を受けるたびに自分の攻撃が1段階上がり、この技の命中率は毎ターン、ランク変化を含めて計算した現在の命中率で上書きされるが、1/256未満や255/256超にはならない。", // NEEDS QC
+			shortDesc: "ずっと続く。被弾するたび攻撃+1。", // NEEDS QC
 		},
 	},
 	ragefist: {
 		name: "ふんどのこぶし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は50+(X×50)。Xはこの対戦で自分がダメージを与える攻撃を受けた延べ回数（HPが減らなかった場合も数える、最大6）。交代やひんしになってもリセットされない。連続攻撃技は1発ごとに数えるが、こんらんによる自傷ダメージは数えない。", // NEEDS QC
+		shortDesc: "攻撃された回数×50威力が上がる（最大6回）。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5662,10 +5643,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ragepowder: {
 		name: "いかりのこな",
 		// Official flavor text: "イライラさせる 粉を 自分に ふりかけて 注意を ひく。 相手の 攻撃を すべて 自分に むける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ターン終了までの間、相手側からの単体対象の技をすべて自分に向けさせる。マジックコートや特性マジックミラーによる跳ね返しや、特性ひらいしん・よびみずによる引き寄せよりも先に、自分に向けられる。ダブルバトルまたはバトルロイヤルでなければ失敗する。自分がフリーフォールの効果を受けている間、この効果は無視される。", // NEEDS QC
+		shortDesc: "このターン相手の技を自分に向けさせる。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ターン終了まで、相手側の単体攻撃は、範囲内であればすべて自分に向けられる。この誘導は、マジックコートや特性マジックミラーで跳ね返されたり、特性ひらいしん・よびみずで引き寄せられたりする前に適用される。ダブルバトル・トリプルバトルでなければ失敗する。自分がフリーフォールの効果を受けている間は無視される。", // NEEDS QC
 		},
 
 		start: "#followme",
@@ -5673,78 +5654,78 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragingbull: {
 		name: "レイジングブル",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が外れなかった場合、ダメージ計算の前に、相手側のリフレクター・ひかりのかべ・オーロラベールの効果を消す。自分がパルデアの姿のケンタロスの場合、その姿に応じてこの技のタイプが変わる。コンバットしゅならかくとうタイプ、ブレイズしゅならほのおタイプ、ウォーターしゅならみずタイプになる。", // NEEDS QC
+		shortDesc: "壁を壊す。姿でタイプが変わる。", // NEEDS QC
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  {POKEMON}は {TEAM}の 壁を こわした！", // NEEDS QC
 	},
 	ragingfury: {
 		name: "だいふんげき",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜3ターンの間この技に固定され、最終ターンの行動直後に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、効果の1ターン目（3ターンの場合は2ターン目も）に攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれてねむったまま使った場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
+		shortDesc: "2〜3ターン暴れて、その後こんらんする。", // NEEDS QC
 	},
 	raindance: {
 		name: "あまごい",
 		// Official flavor text: "５ターンの 間 雨を 降らせて みずタイプの 威力を あげる。 ほのおタイプの 威力は さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、天気があめ（雨）になる。その間、みずタイプの攻撃技のダメージが1.5倍、ほのおタイプの攻撃技のダメージが0.5倍になる。しめったいわを持っていると8ターン続く。すでに雨の場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、雨を降らせる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、天気があめ（雨）になる。その間、みずタイプの攻撃技のダメージが1.5倍、ほのおタイプの攻撃技のダメージが0.5倍になる。すでに雨の場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "すでに雨でも、5ターンの間、天気があめ（雨）になる。その間、みずタイプの攻撃技のダメージが1.5倍、ほのおタイプの攻撃技のダメージが0.5倍になる。", // NEEDS QC
 		},
 	},
 	rapidspin: {
 		name: "こうそくスピン",
 		// Official flavor text: "回転して 相手を 攻撃する。 しめつける まきつく やどりぎのタネ など 吹きとばす。自分の 素早さも あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、自分が受けているやどりぎのタネとしめつけ技の効果が終わり、自分側の場の設置技がすべて取り除かれる。100%の確率で自分の素早さを1段階上げる。", // NEEDS QC
+		shortDesc: "設置技などから解放され、素早さ+1。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっていない場合、自分が受けているやどりぎのタネとしめつけ技の効果が終わり、自分側の場の設置技がすべて取り除かれる。", // NEEDS QC
+			shortDesc: "設置技・しめつけ・やどりぎのタネを解除。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、自分が受けているやどりぎのタネとしめつけ技の効果が終わり、自分側の場の設置技がすべて取り除かれる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、自分が受けているやどりぎのタネとしめつけ技の効果が終わり、自分側の場のまきびしが取り除かれる。", // NEEDS QC
 		},
 	},
 	razorleaf: {
 		name: "はっぱカッター",
 		// Official flavor text: "はっぱを とばして 相手を 切りつけて 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。相手全体攻撃。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "急所に当たりやすい。", // NEEDS QC
 		},
 	},
 	razorshell: {
 		name: "シェルブレード",
 		// Official flavor text: "鋭い 貝殻で 切りつけて 攻撃する。 相手の 防御を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	razorwind: {
 		name: "かまいたち",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。1ターン目にため、2ターン目に攻撃する。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターンためて2ターン目に攻撃。急所率高。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "急所に当たりやすい（急所ランク+1）。1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
+			shortDesc: "1ターンため、2ターン目に相手を攻撃。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "急所に当たりやすい（急所ランク+1）。1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
+			shortDesc: "ため→2ターン目攻撃。急所に当たりやすい。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
+			shortDesc: "1ターン目にため、2ターン目に攻撃。", // NEEDS QC
 		},
 
 		prepare: "  {POKEMON}の 周りで 空気が 渦を巻く！",
@@ -5752,25 +5733,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	recover: {
 		name: "じこさいせい",
 		// Official flavor text: "細胞を 再生させて 自分の 最大ＨＰの 半分の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（四捨五入）を回復する。", // NEEDS QC
+		shortDesc: "最大HPの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。（自分の最大HP − 現在のHP + 1）が256で割り切れる場合は失敗する。", // NEEDS QC
 		},
 	},
 	recycle: {
 		name: "リサイクル",
 		// Official flavor text: "戦闘中に 使って なくなった 自分の 持ち物を 再生させて 使えるように する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分が最後に使った道具を取り戻す。道具を持っている場合、まだ道具を持ったことがない場合、道具が割れたふうせんの場合、特性ものひろいのポケモンに拾われた場合、むしくい・ふしょくガス・ほしがる・やきつくす・はたきおとす・ついばむ・どろぼうで失われた場合は失敗する。なげつけるで投げた道具は取り戻せる。", // NEEDS QC
+		shortDesc: "最後に使った道具を取り戻す。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が最後に使った道具を取り戻す。道具を持っている場合、まだ道具を持ったことがない場合、道具が割れたふうせんの場合、特性ものひろいのポケモンに拾われた場合、むしくい・ほしがる・やきつくす・はたきおとす・ついばむ・どろぼうで失われた場合は失敗する。なげつけるで投げた道具は取り戻せる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の現在の位置で最後に使われた道具を取り戻す。その道具を使ったのが自分でなくてもよい。道具を持っている場合、自分の位置で道具が使われていない場合、道具がほしがる・はたきおとす・どろぼうで失われた場合は失敗する。なげつけるで投げた道具は取り戻せる。", // NEEDS QC
 		},
 
 		addItem: "  {POKEMON}は {ITEM}を 拾ってきた！",
@@ -5778,24 +5759,24 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflect: {
 		name: "リフレクター",
 		// Official flavor text: "５ターンの 間 不思議な かべで 相手から 受ける 物理攻撃の ダメージを 弱める。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、自分と味方が受ける物理技のダメージが0.5倍（ダブルバトルでは0.66倍）になる。オーロラベールと重複してさらに軽減されることはない。急所に当たった場合は軽減されない。自分または味方がかわらわり・サイコファング・きりばらいを受けると、自分の側の効果が消える。ひかりのねんどを持っていると8ターン続く。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、味方への物理ダメージを半減。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方が受ける物理技のダメージが0.5倍（ダブルバトル・トリプルバトルでは0.66倍）になる。急所に当たった場合は軽減されない。自分または味方がかわらわりかきりばらいを受けると、自分の側の効果が消える。ひかりのねんどを持っていると8ターン続く。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方が受ける物理技のダメージが1/2（自分の側に複数のポケモンがいる場合は2/3）になる。急所に当たった場合は軽減されない。自分または味方がかわらわりかきりばらいを受けると、自分の側の効果が消える。ひかりのねんどを持っていると8ターン続く。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方が受ける物理技のダメージが1/2（自分の側に複数のポケモンがいる場合は2/3）になる。急所に当たった場合は軽減されない。自分または味方がかわらわりを受けると、自分の側の効果が消える。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方のぼうぎょが2倍になる。急所に当たった場合は軽減されない。自分の側ですでに効果が発動中の場合は失敗する。", // NEEDS QC
+			shortDesc: "5ターン、味方の防御が2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、ダメージを受けるときのぼうぎょが2倍になる。急所に当たった場合は軽減されない。この効果はくろいきりで消される。", // NEEDS QC
+			shortDesc: "場にいる間、自分の防御が2倍。", // NEEDS QC
 			start: "  {POKEMON}は だげきこうげきに つよくなった！",
 		},
 
@@ -5805,13 +5786,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflecttype: {
 		name: "ミラータイプ",
 		// Official flavor text: "相手の タイプを 反射して 自分も 同じ タイプに なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のタイプが、相手の現在のタイプと同じになる。相手のタイプにタイプなしと通常のタイプが含まれる場合、タイプなしは無視される。相手のタイプにタイプなしともりののろい・ハロウィンで追加されたタイプが含まれる場合、タイプなしはノーマルタイプとしてコピーされる。自分がアルセウス・シルヴァディの場合、テラスタルしている場合、相手のタイプがタイプなしのみの場合は失敗する。", // NEEDS QC
+		shortDesc: "自分のタイプが相手と同じになる。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、相手の現在のタイプと同じになる。相手のタイプにタイプなしと通常のタイプが含まれる場合、タイプなしは無視される。相手のタイプにタイプなしともりののろい・ハロウィンで追加されたタイプが含まれる場合、タイプなしはノーマルタイプとしてコピーされる。自分がアルセウス・シルヴァディの場合、相手のタイプがタイプなしのみの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のタイプが、相手の現在のタイプと同じになる。自分がアルセウスの場合は失敗する。", // NEEDS QC
 		},
 
 		typeChange: "  {POKEMON}は {SOURCE}と 同じタイプに なった！",
@@ -5819,192 +5800,192 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	refresh: {
 		name: "リフレッシュ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のやけど・どく・まひを治す。自分がやけど・どく・まひ状態でなければ失敗する。", // NEEDS QC
+		shortDesc: "自分のやけど・どく・まひを治す。", // NEEDS QC
 	},
 	relicsong: {
 		name: "いにしえのうた",
 		// Official flavor text: "いにしえのうたを 相手に 聞かせて 心に うったえて 攻撃する。 眠り状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をねむり状態にする。1体以上に攻撃が成功して自分がメロエッタの場合、ボイスフォルムならステップフォルムに、ステップフォルムならボイスフォルムに変わる。特性がちからずくのメロエッタはフォルムチェンジしない。ステップフォルムは場を離れるとボイスフォルムに戻る。", // NEEDS QC
+		shortDesc: "10%でねむらせる。メロエッタは姿が変わる。", // NEEDS QC
 	},
 	rest: {
 		name: "ねむる",
 		// Official flavor text: "２ターンの 間 眠り続ける。 自分の ＨＰと 状態異常を すべて 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2ターンの間ねむり状態になり、HPをすべて回復し、状態異常も治す。HPが満タンの場合、すでにねむり状態の場合、他の効果でねむれない場合は失敗する。", // NEEDS QC
+		shortDesc: "2ターンねむってHPと状態異常を全回復。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2ターンの間ねむり状態になり、HPをすべて回復し、状態異常も治す。すでにねむり状態でも発動する。HPが満タンの場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2ターンの間ねむり状態になり、HPをすべて回復し、状態異常も治す。やけどやまひによる能力低下は元に戻らない。HPが満タンの場合は失敗する。", // NEEDS QC
 		},
 	},
 	retaliate: {
 		name: "かたきうち",
 		// Official flavor text: "倒れた 味方の かたきを 討つ。 前の ターンに 味方が 倒されていると 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "前のターンに味方がひんしになっていた場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "前のターンに味方が倒れていたら威力2倍。", // NEEDS QC
 	},
 	return: {
 		name: "おんがえし",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分のなつき度×2/5）（切り捨て、最低1）。", // NEEDS QC
+		shortDesc: "なつき度が高いほど威力が上がる（最大102）。", // NEEDS QC
 	},
 	revelationdance: {
 		name: "めざめるダンス",
 		// Official flavor text: "全力で 踊って 攻撃する。 この 技の タイプは 自分の タイプと 同じになる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技のタイプは自分の第1タイプと同じになる。第1タイプがタイプなしの場合、第2タイプがあればそのタイプ、なければもりののろい・ハロウィンで追加されたタイプになる。自分のタイプがタイプなしのみの場合、この技はタイプなしになる。", // NEEDS QC
+		shortDesc: "自分の第1タイプと同じタイプで攻撃。", // NEEDS QC
 	},
 	revenge: {
 		name: "リベンジ",
 		// Official flavor text: "相手から 技を 受けていると その相手に 対して 与える ダメージが ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに相手から攻撃を受けていた場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "そのターン相手から攻撃されていたら威力2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに相手の現在の位置のポケモンから攻撃を受けていた場合、威力が2倍になる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "このターンに相手の現在の位置のポケモンから攻撃を受け、そのポケモンが最後に自分を攻撃していた場合、ダメージが2倍になる。", // NEEDS QC
+			shortDesc: "相手から攻撃されているとダメージ2倍。", // NEEDS QC
 		},
 	},
 	reversal: {
 		name: "きしかいせい",
 		// Official flavor text: "力を ふりしぼり 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は、X=（自分の残りHP×48÷自分の最大HP）（切り捨て）として、Xが33〜48なら20、17〜32なら40、10〜16なら80、5〜9なら100、2〜4なら150、0〜1なら200。", // NEEDS QC
+		shortDesc: "自分の残りHPが少ないほど威力が上がる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（自分の現在のHP×64÷自分の最大HP）（切り捨て）をXとすると、Xが43〜48なら20、22〜42なら40、13〜21なら80、6〜12なら100、2〜5なら150、0か1なら200。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、X=（自分の残りHP×48÷自分の最大HP）（切り捨て）として、Xが33〜48なら20、17〜32なら40、10〜16なら80、5〜9なら100、2〜4なら150、0〜1なら200。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、（自分の現在のHP×48÷自分の最大HP）（切り捨て）をXとすると、Xが33〜48なら20、17〜32なら40、10〜16なら80、5〜9なら100、2〜4なら150、0か1なら200。この技はダメージの乱数幅がなく、急所に当たらない。", // NEEDS QC
 		},
 	},
 	revivalblessing: {
 		name: "さいきのいのり",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ひんしになっている控えのポケモンを1匹選び、最大HPの1/2（切り捨て）のHPで復活させる。ひんしのポケモンがいない場合は失敗する。", // NEEDS QC
+		shortDesc: "ひんしの味方をHP半分で復活させる。", // NEEDS QC
 
 		heal: "  {POKEMON}は 復活して 戦えるようになった！",
 	},
 	risingvoltage: {
 		name: "ライジングボルト",
 		// Official flavor text: "地面から 立ちのぼる 電撃で 攻撃。 相手が エレキフィールドに いる時 技の 威力が ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドがエレキフィールドで相手が地面にいる場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "エレキフィールドの相手に威力2倍。", // NEEDS QC
 	},
 	roar: {
 		name: "ほえる",
 		// Official flavor text: "相手を 逃がして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がパーティの最後のひんしでないポケモンの場合や、相手がねをはるを使っていた場合、特性がきゅうばんの場合は失敗する。", // NEEDS QC
+		shortDesc: "相手をランダムな控えと強制交代させる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がパーティの最後のひんしでないポケモンの場合、ねをはるを使っていた場合、特性がきゅうばんの場合は失敗する。また、自分のレベルが相手より低く、0〜255のランダムな数Xについて X×(自分のレベル+相手のレベル)÷256+1（切り捨て）が（相手のレベル÷4）（切り捨て）以下の場合も失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がパーティの最後のひんしでないポケモンの場合や、自分が相手より先に行動した場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "対戦での効果はない。", // NEEDS QC
+			shortDesc: "対戦での効果はない。", // NEEDS QC
 		},
 	},
 	roaroftime: {
 		name: "ときのほうこう",
 		// Official flavor text: "時間が ゆがむほどの 力を うちだして 相手を 攻撃する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	rockblast: {
 		name: "ロックブラスト",
 		// Official flavor text: "硬い 岩石を 相手に 発射して 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 	},
 	rockclimb: {
 		name: "ロッククライム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	rockpolish: {
 		name: "ロックカット",
 		// Official flavor text: "自分の 体を 磨いて 空気の 抵抗を 少なくする。素早さを ぐーんと あげることが できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さを2段階上げる。", // NEEDS QC
+		shortDesc: "自分の素早さが2段階上がる。", // NEEDS QC
 	},
 	rockslide: {
 		name: "いわなだれ",
 		// Official flavor text: "大きな 岩を 激しく ぶつけて 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "追加効果なし。", // NEEDS QC
+			shortDesc: "追加効果なし。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		},
 	},
 	rocksmash: {
 		name: "いわくだき",
 		// Official flavor text: "パンチで 攻撃する。相手の 防御を さげる ことが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	rockthrow: {
 		name: "いわおとし",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	rocktomb: {
 		name: "がんせきふうじ",
 		// Official flavor text: "岩石を 投げつけて 攻撃する。 相手の 動きを 封じることで 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の素早さを1段階下げる。", // NEEDS QC
 	},
 	rockwrecker: {
 		name: "がんせきほう",
 		// Official flavor text: "巨大な 岩を 相手に 発射して 攻撃する。 次の ターンは 動けなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、次のターンは反動で行動できず、技を選択できない。", // NEEDS QC
+		shortDesc: "次のターンは行動できない。", // NEEDS QC
 	},
 	roleplay: {
 		name: "なりきり",
 		// Official flavor text: "相手に なりきって 自分も 相手と 同じ 特性に 変化する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特性が、相手と同じ特性に変わる。自分の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスチェンジ・ダルマモード・マイティチェンジの場合やすでに相手と同じ場合、相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・しれいとう・ばけのかわ・おもかげやどし・フラワーギフト・てんきや・はらぺこスイッチ・アイスフェイス・イリュージョン・かわりもの・マルチタイプ・かがくへんかガス・どくくぐつ・スワームチェンジ・かがくのちから・こだいかっせい・クォークチャージ・レシーバー・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスシェル・テラスチェンジ・ゼロフォーミング・トレース・ふしぎなまもり・ダルマモード・マイティチェンジの場合は失敗する。", // NEEDS QC
+		shortDesc: "自分の特性を相手と同じにする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の特性が、相手と同じ特性に変わる。自分の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ダルマモードの場合やすでに相手と同じ場合、相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・フラワーギフト・てんきや・うのミサイル・はらぺこスイッチ・アイスフェイス・イリュージョン・かわりもの・マルチタイプ・かがくへんかガス・スワームチェンジ・かがくのちから・レシーバー・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・トレース・ふしぎなまもり・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の特性が、相手と同じ特性に変わる。自分の特性がきずなへんげ・ぜったいねむり・ばけのかわ・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ダルマモードの場合やすでに相手と同じ場合、相手の特性がきずなへんげ・ぜったいねむり・ばけのかわ・フラワーギフト・てんきや・イリュージョン・かわりもの・マルチタイプ・スワームチェンジ・かがくのちから・レシーバー・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・トレース・ふしぎなまもり・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の特性が、相手と同じ特性に変わる。自分の特性がマルチタイプ・バトルスイッチの場合やすでに相手と同じ場合、相手の特性がフラワーギフト・てんきや・イリュージョン・かわりもの・マルチタイプ・バトルスイッチ・トレース・ふしぎなまもり・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の特性が、相手と同じ特性に変わる。自分の特性がマルチタイプの場合やすでに相手と同じ場合、相手の特性がフラワーギフト・てんきや・イリュージョン・かわりもの・マルチタイプ・トレース・ふしぎなまもり・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の特性が、相手と同じ特性に変わる。自分の特性がマルチタイプの場合やすでに相手と同じ場合、相手の特性がマルチタイプ・ふしぎなまもりの場合、自分がはっきんだまを持っている場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の特性が、相手と同じ特性に変わる。相手の特性がふしぎなまもりの場合は失敗する。", // NEEDS QC
 		},
 
 		changeAbility: "  {POKEMON}は {SOURCE}の {ABILITY}を コピーした！",
@@ -6012,74 +5993,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rollingkick: {
 		name: "まわしげり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	rollout: {
 		name: "ころがる",
 		// Official flavor text: "５ターンの 間 転がり続けて 攻撃する。 技が 当たるたびに 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、この技に固定され、外れるか、5ターン経過するか、使えなくなるまで他の技を選択できない。当たるたびに威力が2倍になり、以前にまるくなるを使っていた場合はさらに2倍になる。ねごとでこの技が選ばれた場合、1ターンだけ使う。", // NEEDS QC
+		shortDesc: "5ターン連続で使い、当たるたび威力2倍。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が成功すると、外れるか、5ターン経つか、攻撃が使えなくなるまでこの技に固定され、他の行動ができない。命中するたびに威力が2倍になり、以前にまるくなるを使っていた場合はさらに2倍になる。ねごとでこの技を使った場合、1ターンだけ使う。効果中にこの技が発動中のばけのかわに当たった場合、威力の倍率は止まるがターンのカウントは進むため、効果終了後の次の技に倍率が適用されることがある。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、この技に固定され、外れるか、5ターン経過するか、使えなくなるまで他の技を選択できない。当たるたびに威力が2倍になり、以前にまるくなるを使っていた場合はさらに2倍になる。ねごとでこの技が選ばれた場合、1ターンだけ使う。", // NEEDS QC
 		},
 	},
 	roost: {
 		name: "はねやすめ",
 		// Official flavor text: "地面に 降りて 体を やすめる。 最大ＨＰの 半分の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（四捨五入）を回復する。テラスタルしていない場合、ターン終了までの間、ひこうタイプの自分はひこうタイプを失い、ひこうタイプのみの場合はノーマルタイプになる。HPが満タンの場合は何も起こらない。", // NEEDS QC
+		shortDesc: "HPを半分回復。ターン中ひこうタイプを失う。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（四捨五入）を回復する。ターン終了までの間、ひこうタイプの自分はひこうタイプを失い、ひこうタイプのみの場合はノーマルタイプになる。HPが満タンの場合は何も起こらない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。ターン終了までの間、ひこうタイプの自分はひこうタイプを失い、ひこうタイプのみの場合はタイプなしになる。HPが満タンの場合は何も起こらない。", // NEEDS QC
 		},
 
-		start: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON}は このターン ひこうタイプを 失った。)", // NEEDS QC
 	},
 	rototiller: {
 		name: "たがやす",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいる、地面にいるくさタイプのポケモン全員の攻撃と特攻を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "地面のくさタイプ全員の攻撃・特攻+1。", // NEEDS QC
 	},
 	round: {
 		name: "りんしょう",
 		// Official flavor text: "歌で 相手を 攻撃する。 みんなで 輪唱すると 続けて だすことが でき 威力も あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンにこの技を選んだ他のポケモンがいる場合、そのポケモンは素早さ順に自分の直後に行動し、2番目以降の使用者の威力は120になる。", // NEEDS QC
+		shortDesc: "他のポケモンが先に使うと威力2倍。", // NEEDS QC
 	},
 	ruination: {
 		name: "カタストロフィ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の残りHPの1/2（切り捨て、最低1）のダメージを与える。", // NEEDS QC
+		shortDesc: "相手の残りHPの1/2のダメージを与える。", // NEEDS QC
 	},
 	sacredfire: {
 		name: "せいなるほのお",
 		// Official flavor text: "神秘の 炎で 相手を 焼きつくして 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "50%でやけどにする。自分のこおりが治る。", // NEEDS QC
 	},
 	sacredsword: {
 		name: "せいなるつるぎ",
 		// Official flavor text: "長い つので 切りつけ 攻撃する。 相手の 能力変化に 関係なく ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の能力ランクの変化（回避率を含む）を無視して攻撃する。", // NEEDS QC
+		shortDesc: "相手の能力変化を無視して攻撃。", // NEEDS QC
 	},
 	safeguard: {
 		name: "しんぴのまもり",
 		// Official flavor text: "５ターンの 間 不思議な 力に 守られて 状態異常に ならなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、自分と味方は、他のポケモンに状態異常やこんらん状態にされなくなる。自分側のポケモンはあくびを受けないが、すでに受けた効果ではねむる。自分または味方がきりばらいを受けると、自分の側の効果が消える。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、味方を状態異常から守る。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方は、他のポケモンに状態異常やこんらん状態にされなくなる。自分側のポケモンはあくびを受けないが、すでに受けた効果ではねむる。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、自分と味方は、他のポケモンに状態異常やこんらん状態にされなくなる。効果中、げきりん・あばれる・はなびらのまいで自分はこんらんしなくなる。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {TEAM}は 神秘のベールに 包まれた！",
@@ -6088,8 +6069,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	saltcure: {
 		name: "しおづけ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "効果の間、毎ターン終了時に相手の最大HPの1/8（はがね・みずタイプの場合は1/4、切り捨て）のダメージを与える。相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "毎ターン最大HPの1/8（はがね・みずは1/4）減。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6101,50 +6082,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandattack: {
 		name: "すなかけ",
 		// Official flavor text: "相手の 顔に 砂を かけて 命中率を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	sandsearstorm: {
 		name: "ねっさのあらし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をやけど状態にする。天気があめ・おおあめの場合、必中になる。ばんのうがさを持っている相手に対しては、命中率は80%のまま。", // NEEDS QC
+		shortDesc: "20%でやけどにする。雨なら必中。", // NEEDS QC
 	},
 	sandstorm: {
 		name: "すなあらし",
 		// Official flavor text: "５ターンの 間 砂あらしで いわ じめん はがねタイプ 以外に ダメージ。 いわタイプの 特防が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、天気がすなあらしになる。最終ターンを除く毎ターン終了時に、場にいるすべてのポケモンは最大HPの1/16（切り捨て）のダメージを受ける。じめん・いわ・はがねタイプや、特性がマジックガード・ぼうじん・すなのちから・すなかき・すながくれのポケモンは受けない。効果の間、いわタイプのポケモンが特殊技を受けるときの特防が1.5倍になる。さらさらいわを持っていると8ターン続く。すでにすなあらしの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、砂あらしにする。いわの特防1.5倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、天気がすなあらしになる。最終ターンを除く毎ターン終了時に、場にいるすべてのポケモンは最大HPの1/16（切り捨て）のダメージを受ける。じめん・いわ・はがねタイプや、特性がマジックガード・すながくれのポケモンは受けない。効果の間、いわタイプのポケモンが特殊技を受けるときの特防が1.5倍になる。さらさらいわを持っていると8ターン続く。すでにすなあらしの場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、天気がすなあらしになる。最終ターンを除く毎ターン終了時に、場にいるすべてのポケモンは最大HPの1/16（切り捨て）のダメージを受ける。じめん・いわ・はがねタイプや、特性がすながくれのポケモンは受けない。すでにすなあらしの場合は失敗する。", // NEEDS QC
+			shortDesc: "5ターン、すなあらしになる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、天気がすなあらしになる。最終ターンを除く毎ターン終了時に、場にいるすべてのポケモンは最大HPの1/8（切り捨て）のダメージを受ける。じめん・いわ・はがねタイプのポケモンは受けない。すでにすなあらしの場合は失敗する。", // NEEDS QC
 		},
 	},
 	sandtomb: {
 		name: "すなじごく",
 		// Official flavor text: "激しく 吹きあれる 砂あらしの 中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（しめつけバンドを持っている場合は1/8、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピンを使うと効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間（ねばりのかぎづめを持っている場合は常に5ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手を捕らえてダメージ。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、バトンタッチを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 砂じごくに 捕らわれた！",
@@ -6152,153 +6133,153 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sappyseed: {
 		name: "すくすくボンバー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にやどりぎのタネの効果を発生させる。", // NEEDS QC
+		shortDesc: "やどりぎのタネの効果を発生させる。", // NEEDS QC
 	},
 	savagespinout: {
 		name: "ぜったいほしょくかいてんざん",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	scald: {
 		name: "ねっとう",
 		// Official flavor text: "熱く 煮えたぎる 水を 相手に 発射して 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。こおり状態の相手のこおりを治す。", // NEEDS QC
+		shortDesc: "30%でやけどにする。相手のこおりを治す。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
+			shortDesc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
 		},
 	},
 	scaleshot: {
 		name: "スケイルショット",
 		// Official flavor text: "ウロコを 撃ちだして 攻撃する。 ２ー５回の 間 連続で だす。 素早さが あがるが 防御が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。最後の攻撃の後、自分の防御が1段階下がり、素早さが1段階上がる。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "2〜5回攻撃。最後に防御-1、素早さ+1。", // NEEDS QC
 	},
 	scaryface: {
 		name: "こわいかお",
 		// Official flavor text: "恐ろしい 顔で にらみ おびえさせて 相手の 素早さを がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の素早さを2段階下げる。", // NEEDS QC
+		shortDesc: "相手の素早さを2段階下げる。", // NEEDS QC
 	},
 	scorchingsands: {
 		name: "ねっさのだいち",
 		// Official flavor text: "熱く 焼けた 砂を 相手に ぶつけて 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。こおり状態の相手のこおりを治す。", // NEEDS QC
+		shortDesc: "30%でやけどにする。相手のこおりを治す。", // NEEDS QC
 	},
 	scratch: {
 		name: "ひっかく",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	screech: {
 		name: "いやなおと",
 		// Official flavor text: "おもわず 耳を ふさぎたくなる いやなおとを だして 相手の 防御を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の防御を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の防御を2段階下げる。", // NEEDS QC
 	},
 	searingshot: {
 		name: "かえんだん",
 		// Official flavor text: "真っ赤な 炎で 自分の 周りに いるものを 攻撃する。 やけど状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で周囲をやけどにする。", // NEEDS QC
 	},
 	searingsunrazesmash: {
 		name: "サンシャインスマッシャー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "他のポケモンの特性を無視する。", // NEEDS QC
 	},
 	secretpower: {
 		name: "ひみつのちから",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で、フィールドに応じた追加効果を相手に与える。通常はまひ状態、エレキフィールドではまひ状態、ミストフィールドでは特攻を1段階下げ、グラスフィールドではねむり状態、サイコフィールドでは素早さを1段階下げる。", // NEEDS QC
+		shortDesc: "フィールドに応じた追加効果（通常30%まひ）。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で、フィールドに応じた追加効果を相手に与える。通常のWi-Fiフィールドではまひ状態、エレキフィールドではまひ状態、ミストフィールドでは特攻を1段階下げ、グラスフィールドではねむり状態にする。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で、フィールドに応じた追加効果を相手に与える。通常のWi-Fiフィールドでは命中率を1段階下げる。追加効果の確率は特性てんのめぐみの影響を受けない。", // NEEDS QC
+			shortDesc: "フィールドで効果が変わる。（30%で命中-1）", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で、フィールドに応じた追加効果を相手に与える。通常のWi-Fiフィールドではまひ状態にする。", // NEEDS QC
+			shortDesc: "フィールドに応じた追加効果（通常30%まひ）。", // NEEDS QC
 		},
 	},
 	secretsword: {
 		name: "しんぴのつるぎ",
 		// Official flavor text: "長い つので 切りつけ 攻撃する。 つのが まとった 不思議な 力は 物理的な ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特防の代わりに防御を使ってダメージを計算する。", // NEEDS QC
+		shortDesc: "相手の特防でなく防御でダメージ計算。", // NEEDS QC
 	},
 	seedbomb: {
 		name: "タネばくだん",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	seedflare: {
 		name: "シードフレア",
 		// Official flavor text: "体の 中から 衝撃波を 発生させる。相手の 特防を がくっと さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "40%の確率で相手の特防を2段階下げる。", // NEEDS QC
+		shortDesc: "40%の確率で相手の特防を2段階下げる。", // NEEDS QC
 	},
 	seismictoss: {
 		name: "ちきゅうなげ",
 		// Official flavor text: "引力を 使い 投げとばす。 自分の レベルと 同じ ダメージを 相手に 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のレベルと同じダメージを相手に与える。", // NEEDS QC
+		shortDesc: "自分のレベルと同じダメージを与える。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のレベルと同じダメージを相手に与える。この技はタイプ相性による無効を無視する。", // NEEDS QC
+			shortDesc: "ダメージ=自分のレベル。ゴーストにも当たる。", // NEEDS QC
 		},
 	},
 	selfdestruct: {
 		name: "じばく",
 		// Official flavor text: "爆発を おこして 自分の 周りに いるものを 攻撃する。 使ったあとに ひんしに なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用した後、自分はひんしになる（対象がいなくて失敗した場合も同様）。場に特性しめりけのポケモンがいると使えない。", // NEEDS QC
+		shortDesc: "周囲全体を攻撃して自分はひんしになる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "技を使った後、自分はひんしになる。ただし、対象がいない場合はひんしにならない。ダメージ計算時、相手のぼうぎょを半分として計算する。特性がしめりけのポケモンが場にいると、この技は実行されない。", // NEEDS QC
+			shortDesc: "計算時、相手の防御半分。自分はひんし。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った後、自分はひんしになる。ダメージ計算時、相手のぼうぎょを半分として計算する。特性がしめりけのポケモンが場にいると、この技は実行されない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "技を使った後、自分はひんしになる。ダメージ計算時、相手のぼうぎょを半分として計算する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用した後、自分はひんしになる。ただし、相手のみがわりがこのダメージで壊れた場合はひんしにならない。ダメージ計算時、相手のぼうぎょが半分になる。", // NEEDS QC
 		},
 	},
 	shadowball: {
 		name: "シャドーボール",
 		// Official flavor text: "黒い影の 塊を 投げつけて 攻撃する。 相手の 特防を さげることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手の特防を1段階下げる。", // NEEDS QC
+		shortDesc: "20%の確率で相手の特防を1段階下げる。", // NEEDS QC
 	},
 	shadowbone: {
 		name: "シャドーボーン",
 		// Official flavor text: "魂の 宿った ホネで 相手を なぐりつけて 攻撃する。 相手の 防御を さげる ことがある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "20%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	shadowclaw: {
 		name: "シャドークロー",
 		// Official flavor text: "影から つくった 鋭い ツメで 相手を 切り裂く。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	shadowforce: {
 		name: "シャドーダイブ",
 		// Official flavor text: "１ターン目で 姿を 消して ２ターン目に 相手を 攻撃する。 守っていても 攻撃は 当たる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、このターンの間、相手のトーチカ・みきり・キングシールド・まもる・ニードルガードの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。1ターン目に姿を消し、2ターン目に攻撃する。姿を消している間は、すべての攻撃を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に消え、2ターン目に攻撃。守り貫通。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、このターンの間、相手のみきり・キングシールド・まもる・ニードルガードの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手側がトリックガード・たたみがえし・ファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。1ターン目に姿を消し、2ターン目に攻撃する。姿を消している間は、すべての攻撃を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。相手が場に出てからちいさくなるを使っていた場合、必中になりダメージが2倍になる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功すると、このターンの間、相手のみきり・まもるの守りを破り、他のポケモンも相手を通常どおり攻撃できるようになる。相手が相手側のポケモンで、その側がファストガード・ワイドガードで守られている場合、その守りもこのターンの間破られ、他のポケモンも相手側を通常どおり攻撃できる。1ターン目に姿を消し、2ターン目に攻撃する。姿を消している間は、すべての攻撃を受けない。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
 		},
 
 		activate: "  {TARGET}の 守りを 打ち破った！",
@@ -6306,33 +6287,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowpunch: {
 		name: "シャドーパンチ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	shadowsneak: {
 		name: "かげうち",
 		// Official flavor text: "影を のばして 相手の 背後から 攻撃する。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	shadowstrike: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "50%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	sharpen: {
 		name: "かくばる",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃を1段階上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃が1段階上がる。", // NEEDS QC
 	},
 	shatteredpsyche: {
 		name: "マキシマムサイブレイカー",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	shedtail: {
 		name: "しっぽきり",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（切り上げ）を消費して、自分の最大HPの1/4（切り捨て）のHPを持つみがわりを作る。その後、パーティの別のポケモンと交代し、みがわりは交代先に引き継がれる。HPが足りない場合や、控えにひんしでないポケモンがいない場合は失敗する。", // NEEDS QC
+		shortDesc: "最大HPの半分を消費してみがわりを残し交代。", // NEEDS QC
 
 		start: "  {POKEMON}は しっぽを 切って みがわりにした！",
 		alreadyStarted: "#substitute",
@@ -6341,30 +6322,30 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sheercold: {
 		name: "ぜったいれいど",
 		// Official flavor text: "相手を 一撃で 瀕死に する。 こおりタイプ 以外の ポケモンが 使うと 当たりにくい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の最大HPと同じダメージを与える。命中率と回避率の変化を無視する。この技の命中率は（自分のレベル−相手のレベル+X）%（自分がこおりタイプならX=30、それ以外ならX=20）で、相手のレベルが自分より高い場合は失敗する。こおりタイプや特性ががんじょうのポケモンには効かない。", // NEEDS QC
+		shortDesc: "一撃必殺。こおりタイプには無効。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の最大HPと同じダメージを与える。命中率と回避率の変化を無視する。この技の命中率は（自分のレベル−相手のレベル+30）%で、相手のレベルが自分より高い場合は失敗する。特性ががんじょうのポケモンには効かない。", // NEEDS QC
+			shortDesc: "一撃必殺。相手のレベルが高いと失敗。", // NEEDS QC
 		},
 	},
 	shellsidearm: {
 		name: "シェルアームズ",
 		// Official flavor text: "物理か 特殊か より多く ダメージを 与えられる 能力で 攻撃する。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をどく状態にする。((((2×自分のレベル÷5+2)×90×X)÷Y)÷50)の値を、Xを自分の攻撃・Yを相手の防御とした場合と、Xを自分の特攻・Yを相手の特防とした場合で比べ、前者が大きい場合は直接攻撃の物理技になる。この比較では、能力ランクの変化以外の能力補正は考慮されない。両者が等しい場合は、ランダムに物理か特殊になる。", // NEEDS QC
+		shortDesc: "20%でどく。強い方の分類で攻撃する。", // NEEDS QC
 	},
 	shellsmash: {
 		name: "からをやぶる",
 		// Official flavor text: "殻を やぶって 自分の 防御 特防を さげるが 攻撃 特攻 素早さを ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ下げ、攻撃・特攻・素早さを2段階ずつ上げる。", // NEEDS QC
+		shortDesc: "防御・特防-1。攻撃・特攻・素早さ+2。", // NEEDS QC
 	},
 	shelltrap: {
 		name: "トラップシェル",
 		// Official flavor text: "こうらの トラップを しかける。 相手が 物理技を 出すと 爆発して ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターン、この技を出す前に相手から物理技を受けなければ失敗する。物理技を受けて自分がひんしになっていない場合、受けた直後に攻撃し、効果は終わる。相手の物理技の追加効果が特性ちからずくで消されていた場合、この効果の条件を満たさない。", // NEEDS QC
+		shortDesc: "物理技を受けてから攻撃する。", // NEEDS QC
 
 		start: "  {POKEMON}は トラップシェルを 仕掛けた！",
 		prepare: "  {POKEMON}は トラップシェルを 仕掛けた！",
@@ -6372,88 +6353,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shelter: {
 		name: "たてこもる",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を2段階上げる。", // NEEDS QC
+		shortDesc: "自分の防御が2段階上がる。", // NEEDS QC
 	},
 	shiftgear: {
 		name: "ギアチェンジ",
 		// Official flavor text: "歯車を 回して 自分の 攻撃を あげる だけでなく 素早さも ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さを2段階、攻撃を1段階上げる。", // NEEDS QC
+		shortDesc: "素早さが2段階、攻撃が1段階上がる。", // NEEDS QC
 	},
 	shockwave: {
 		name: "でんげきは",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	shoreup: {
 		name: "すなあつめ",
 		// Official flavor text: "最大ＨＰの 半分 自分の ＨＰを 回復する。 すなあらしの時は 多く 回復。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（五捨五超入）を回復する。天気がすなあらしの場合、代わりに最大HPの2/3（五捨五超入）を回復する。", // NEEDS QC
+		shortDesc: "HPを半分回復。砂あらしなら2/3回復。", // NEEDS QC
 	},
 	signalbeam: {
 		name: "シグナルビーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	silktrap: {
 		name: "スレッドトラップ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をしようとした相手の素早さを1段階下げる。ダメージを与えない技は防げない。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "攻撃技を防ぎ、接触してきた相手の素早さ-1。", // NEEDS QC
 	},
 	silverwind: {
 		name: "ぎんいろのかぜ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で自分の攻撃・防御・特攻・特防・素早さを1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "10%の確率で全能力が1段階上がる。", // NEEDS QC
 	},
 	simplebeam: {
 		name: "シンプルビーム",
 		// Official flavor text: "なぞの 念波を 相手に 送る。 念波を 受けとった 相手は 特性が たんじゅんに なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特性をたんじゅんにする。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・たんじゅん・バトルスイッチ・テラスチェンジ・なまけ・ダルマモード・マイティチェンジの場合は失敗する。", // NEEDS QC
+		shortDesc: "相手の特性をたんじゅんにする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をたんじゅんにする。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・たんじゅん・バトルスイッチ・なまけ・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をたんじゅんにする。相手の特性がきずなへんげ・ぜったいねむり・ばけのかわ・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・たんじゅん・バトルスイッチ・なまけ・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をたんじゅんにする。相手の特性がマルチタイプ・たんじゅん・バトルスイッチ・なまけの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をたんじゅんにする。相手の特性がマルチタイプ・たんじゅん・なまけの場合は失敗する。", // NEEDS QC
 		},
 	},
 	sing: {
 		name: "うたう",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をねむり状態にする。", // NEEDS QC
 	},
 	sinisterarrowraid: {
 		name: "シャドーアローズストライク",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	sizzlyslide: {
 		name: "めらめらバーン",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をやけど状態にする。", // NEEDS QC
 	},
 	sketch: {
 		name: "スケッチ",
 		// Official flavor text: "相手が 使った 技を 自分の ものに する。 １回 使うと スケッチは 消える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技が、相手の最後に使った技に永久に置き換わる。コピーした技のPPはその技の最大値になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、その技がバーンアクセル・ファイトアクセル・ダークホール・いじげんラッシュ・マジカルアクセル・ポイズンアクセル・さいきのいのり・スケッチ・わるあがき・テラクラスター・ダークアクセルか自分がすでに覚えている技の場合は失敗する。", // NEEDS QC
+		shortDesc: "相手が最後に使った技を永久にコピーする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が、相手の最後に使った技に永久に置き換わる。コピーした技のPPはその技の最大値になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、その技がおしゃべり・スケッチ・わるあがきか自分がすでに覚えている技の場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技が、相手の最後に使った技に永久に置き換わる。コピーした技のPPはその技の最大値になる。相手がまだ技を使っていない場合、自分がへんしんしている場合、その技がスケッチ・わるあがきか自分がすでに覚えている技の場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "通信対戦で使うと失敗する。", // NEEDS QC
+			shortDesc: "通信対戦で使うと失敗する。", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}は {MOVE}を スケッチした！",
@@ -6461,25 +6442,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skillswap: {
 		name: "スキルスワップ",
 		// Official flavor text: "超能力で 自分の 特性と 相手の 特性を 入れ替える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の特性を入れ替える。自分または相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・しれいとう・ばけのかわ・おもかげやどし・はらぺこスイッチ・アイスフェイス・イリュージョン・マルチタイプ・かがくへんかガス・どくくぐつ・スワームチェンジ・こだいかっせい・クォークチャージ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスシェル・テラスチェンジ・ゼロフォーミング・ふしぎなまもり・ダルマモード・マイティチェンジの場合は失敗する。", // NEEDS QC
+		shortDesc: "相手と特性を入れ替える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の特性を入れ替える。自分または相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・はらぺこスイッチ・アイスフェイス・イリュージョン・マルチタイプ・かがくへんかガス・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ふしぎなまもり・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の特性を入れ替える。自分または相手の特性がきずなへんげ・ぜったいねむり・ばけのかわ・イリュージョン・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・ふしぎなまもり・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の特性を入れ替える。自分または相手の特性がイリュージョン・マルチタイプ・バトルスイッチ・ふしぎなまもりの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の特性を入れ替える。自分または相手の特性がイリュージョン・マルチタイプ・ふしぎなまもりの場合や、両方の特性が同じ場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の特性を入れ替える。自分または相手の特性がマルチタイプ・ふしぎなまもりの場合、両方の特性が同じ場合、どちらかがはっきんだまを持っている場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の特性を入れ替える。自分または相手の特性がふしぎなまもりの場合は失敗する。", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}は おたがいの 特性を 入れ替えた！",
@@ -6487,20 +6468,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skittersmack: {
 		name: "はいよるいちげき",
 		// Official flavor text: "背後から はいより 攻撃する。 相手の 特攻を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
 	},
 	skullbash: {
 		name: "ロケットずつき",
 		// Official flavor text: "１ターン目に 頭を ひっこめて 防御を あげる。 ２ターン目に 相手を 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目にため、2ターン目に攻撃する。1ターン目に自分の防御を1段階上げる。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターン目に防御+1、2ターン目に攻撃。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。1ターン目に自分のぼうぎょが1段階上がる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
+			shortDesc: "1ターン目にため、2ターン目に攻撃。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}は 首を 引っこめた！",
@@ -6508,14 +6489,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyattack: {
 		name: "ゴッドバード",
 		// Official flavor text: "２ターン目に 相手を 攻撃する。 たまに ひるませる。 急所にも 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。急所に当たりやすい（急所ランク+1）。1ターン目にため、2ターン目に攻撃する。パワフルハーブを持っている場合、1ターンで攻撃する。", // NEEDS QC
+		shortDesc: "1ターンためて攻撃。30%ひるみ。急所率高。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。急所に当たりやすい。1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
+			shortDesc: "1ターン目にため、2ターン目に攻撃。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}を 激しい光が 包む！",
@@ -6523,10 +6504,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skydrop: {
 		name: "フリーフォール",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目に相手を連れて空中に飛び上がり、2ターン目に攻撃する。重さ200kg以上のポケモンは持ち上げられない。飛び上がっている間、自分と相手はかぜおこし・ぼうふう・スカイアッパー・うちおとす・サウザンアロー・かみなり・たつまき以外の攻撃を受けない。その間、自分と相手は行動できないが、相手は技を選択できる。この技はひこうタイプのポケモンにダメージを与えられない。相手が味方の場合、みがわり状態の場合、とびはねる・あなをほる・ダイビング・そらをとぶ・ゴーストダイブ・シャドーダイブ・フリーフォールを使用中の場合、1ターン目に失敗する。", // NEEDS QC
+		shortDesc: "相手を連れて飛び、2ターン目に落とす。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目に相手を連れて空中に飛び上がり、2ターン目に攻撃する。飛び上がっている間、自分と相手はかぜおこし・ぼうふう・スカイアッパー・うちおとす・かみなり・たつまき以外の攻撃を受けない。その間、自分と相手は行動できないが、相手は技を選択できる。この技はひこうタイプのポケモンにダメージを与えられない。相手が味方の場合、みがわり状態の場合、とびはねる・あなをほる・ダイビング・そらをとぶ・シャドーダイブ・フリーフォールを使用中の場合、1ターン目に失敗する。じゅうりょくの効果で2ターン目の前にこの効果が終わった場合、自分と相手は地上に戻る。そうでない場合、自分が場を離れるか、いずれかの2ターン技の2ターン目を成功させるまで、相手はこの効果を受け続ける。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}は {TARGET}を 上空に 連れ去った！",
@@ -6537,129 +6518,129 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyuppercut: {
 		name: "スカイアッパー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "とびはねる・そらをとぶ・フリーフォールで飛び上がっている相手や、フリーフォールの効果を受けている相手にも当たる。", // NEEDS QC
+		shortDesc: "そらをとぶ中などの相手にも当たる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "この技はとびはねる・そらをとぶを使用中の相手にも当てられる。", // NEEDS QC
+			shortDesc: "とびはねる・そらをとぶ中でも当たる。", // NEEDS QC
 		},
 	},
 	slackoff: {
 		name: "なまける",
 		// Official flavor text: "怠けて やすむ。 自分の ＨＰを 最大ＨＰの 半分 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（四捨五入）を回復する。", // NEEDS QC
+		shortDesc: "最大HPの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。", // NEEDS QC
 		},
 	},
 	slam: {
 		name: "たたきつける",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	slash: {
 		name: "きりさく",
 		// Official flavor text: "ツメや カマなどで 相手を 切り裂いて 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	sleeppowder: {
 		name: "ねむりごな",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をねむり状態にする。", // NEEDS QC
 	},
 	sleeptalk: {
 		name: "ねごと",
 		// Official flavor text: "自分が おぼえている 技の うち どれか １つを くりだす。 自分が 寝ているときだけ 使える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されず、PPが0の技も選ばれる。ねこのて・くちばしキャノン・ゲップ・がまん・バーンアクセル・おいわい・おしゃべり・ファイトアクセル・まねっこ・ダイマックスほう・きあいパンチ・てをつなぐ・マジカルアクセル・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・ポイズンアクセル・トラップシェル・スケッチ・ねごと・わるあがき・さわぐ・ダークアクセルと2ターン技は選ばれない。", // NEEDS QC
+		shortDesc: "ねむり中に他の技をランダムに使う。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されず、PPが0の技も選ばれる。ねこのて・くちばしキャノン・ゲップ・がまん・おいわい・おしゃべり・まねっこ・ダイマックスほう・きあいパンチ・てをつなぐ・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・トラップシェル・スケッチ・ねごと・わるあがき・さわぐと2ターン技・ダイマックス技は選ばれない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されず、PPが0の技も選ばれる。ねこのて・くちばしキャノン・ゲップ・がまん・おいわい・おしゃべり・まねっこ・きあいパンチ・てをつなぐ・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・トラップシェル・スケッチ・ねごと・わるあがき・さわぐと2ターン技・Zワザは選ばれない。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されず、PPが0の技も選ばれる。ねこのて・ゲップ・がまん・おいわい・おしゃべり・まねっこ・きあいパンチ・てをつなぐ・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・スケッチ・ねごと・わるあがき・さわぐと2ターン技は選ばれない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されず、PPが0の技も選ばれる。ねこのて・がまん・おしゃべり・まねっこ・きあいパンチ・さきどり・ゆびをふる・ものまね・オウムがえし・しぜんのちから・スケッチ・ねごと・わるあがき・さわぐと2ターン技は選ばれない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されず、PPが0の技も選ばれる。ねこのて・がまん・おしゃべり・まねっこ・きあいパンチ・さきどり・ゆびをふる・オウムがえし・ねごと・さわぐと2ターン技は選ばれない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されないが、PPが0の場合その技は失敗する。ねこのて・がまん・きあいパンチ・ゆびをふる・オウムがえし・ねごと・さわぐと2ターン技は選ばれない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技以外の自分が覚えている技から、ランダムに1つが選ばれて使われる。自分がねむり状態でなければ失敗する。選ばれた技のPPは消費されず、PPが0の技も選ばれる。がまん・ねごとと2ターン技は選ばれない。", // NEEDS QC
 		},
 	},
 	sludge: {
 		name: "ヘドロこうげき",
 		// Official flavor text: "汚い ヘドロを 相手に 投げつけて 攻撃する。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をどく状態にする。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "40%の確率で相手をどく状態にする。", // NEEDS QC
+			shortDesc: "40%の確率で相手をどく状態にする。", // NEEDS QC
 		},
 	},
 	sludgebomb: {
 		name: "ヘドロばくだん",
 		// Official flavor text: "汚い ヘドロを 相手に 投げつけて 攻撃する。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をどく状態にする。", // NEEDS QC
 	},
 	sludgewave: {
 		name: "ヘドロウェーブ",
 		// Official flavor text: "ヘドロの 波で 自分の 周りに いるものを 攻撃する。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で周囲をどく状態にする。", // NEEDS QC
 	},
 	smackdown: {
 		name: "うちおとす",
 		// Official flavor text: "石や 弾を 投げて 飛んでいる 相手を 攻撃する。 相手は うち落とされて 地面に 落ちる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "とびはねる・そらをとぶ・フリーフォールで飛び上がっている相手や、フリーフォールの効果を受けている相手にも当たる。とびはねる・そらをとぶ・でんじふゆう・テレキネシスの効果を受けている相手に当てると、その効果は終わる。相手が（このターンにはねやすめを使っていない）ひこうタイプか特性ふゆうのポケモンの場合、場にいる間、じめんタイプの攻撃と特性ありじごくへの免疫を失う。効果の間、相手はでんじふゆうを使えず、相手へのテレキネシスも失敗する。", // NEEDS QC
+		shortDesc: "相手を落とし、じめん技が当たるようにする。", // NEEDS QC
 
 		start: "  {POKEMON}は 撃ち落とされて 地面に 落ちた！",
 	},
 	smartstrike: {
 		name: "スマートホーン",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必中。", // NEEDS QC
 	},
 	smellingsalts: {
 		name: "きつけ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がまひ状態の場合、威力が2倍になる。自分がひんしになっていなければ、相手のまひを治す。", // NEEDS QC
+		shortDesc: "まひの相手に威力2倍。そのまひを治す。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がまひ状態の場合、威力が2倍になる。この技が成功すると、相手のまひを治す。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がまひ状態の場合、ダメージが2倍になる。この技が成功すると、相手のまひを治す。", // NEEDS QC
+			shortDesc: "まひの相手にダメージ2倍。まひを治す。", // NEEDS QC
 		},
 	},
 	smog: {
 		name: "スモッグ",
 		// Official flavor text: "汚れた ガスを 相手に 吹きつけて 攻撃する。 毒状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "40%の確率で相手をどく状態にする。", // NEEDS QC
+		shortDesc: "40%の確率で相手をどく状態にする。", // NEEDS QC
 	},
 	smokescreen: {
 		name: "えんまく",
 		// Official flavor text: "煙や 墨などを 吹きかけて 相手の 命中率を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の命中率を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の命中率を1段階下げる。", // NEEDS QC
 	},
 	snaptrap: {
 		name: "トラバサミ",
 		// Official flavor text: "トラバサミで 捕らえて ４－５ターンの 間 相手を はさんで 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は トラバサミに 捕らわれた！",
@@ -6667,16 +6648,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snarl: {
 		name: "バークアウト",
 		// Official flavor text: "まくしたてる ように 怒鳴りつけて 相手の 特攻を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
 	},
 	snatch: {
 		name: "よこどり",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンに他のポケモンが一部のダメージを与えない技を使うと、その技を横取りして自分が使う。このターンに複数のポケモンがそれらの技を使う場合、このターンにこの技を使った行動順が最初のポケモンが、該当する技をすべて横取りする。自分がフリーフォールの効果を受けている間、この効果は無視される。", // NEEDS QC
+		shortDesc: "相手の回復技などを横取りして使う。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンに他のポケモンが一部のダメージを与えない技を使うと、その技を横取りして自分が使う。このターンに複数のポケモンがこの技を使う場合、該当する技は行動順にそれぞれのポケモンに横取りされ、行動順が最後のポケモンだけが効果を得る。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 相手の でかたを うかがっている！",
@@ -6685,73 +6666,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snipeshot: {
 		name: "ねらいうち",
 		// Official flavor text: "相手の 技を 引き受ける 特性や 技の 影響を 無視して 選んだ 相手を 攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。この技は、いかなる効果でも対象を変更されない。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。対象を変更されない。", // NEEDS QC
 	},
 	snore: {
 		name: "いびき",
 		// Official flavor text: "自分が 寝ているときに 雑音を だして 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。自分がねむり状態でなければ失敗する。", // NEEDS QC
+		shortDesc: "ねむり中のみ使用可能。30%でひるませる。", // NEEDS QC
 	},
 	snowscape: {
 		name: "ゆきげしき",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、天気がゆきになる。その間、こおりタイプのポケモンが物理技を受けるときの防御が1.5倍になる。つめたいいわを持っていると8ターン続く。すでにゆきの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、ゆきにする。こおりの防御1.5倍。", // NEEDS QC
 	},
 	soak: {
 		name: "みずびたし",
 		// Official flavor text: "たくさんの 水を 浴びせかけて 相手を みずタイプに する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をみずタイプにする。相手がアルセウス・シルヴァディの場合、すでにみずタイプのみの場合、テラスタルしている場合は失敗する。", // NEEDS QC
+		shortDesc: "相手をみずタイプにする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をみずタイプにする。相手がアルセウス・シルヴァディの場合、すでにみずタイプのみの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をみずタイプにする。相手がアルセウスの場合、すでにみずタイプのみの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をみずタイプにする。相手がアルセウスの場合は失敗する。", // NEEDS QC
 		},
 	},
 	softboiled: {
 		name: "タマゴうみ",
 		// Official flavor text: "最大ＨＰの 半分 自分の ＨＰを 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/2（四捨五入）を回復する。", // NEEDS QC
+		shortDesc: "最大HPの1/2を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/2（切り捨て）を回復する。（自分の最大HP − 現在のHP + 1）が256で割り切れる場合は失敗する。", // NEEDS QC
 		},
 	},
 	solarbeam: {
 		name: "ソーラービーム",
 		// Official flavor text: "１ターン目に 光を いっぱいに 集め ２ターン目に 光の 束を 発射して 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目にため、2ターン目に攻撃する。天気があめ・おおあめ・すなあらし・ゆきで自分がばんのうがさを持っていない場合、威力が半減する。パワフルハーブを持っている場合や、天気がにほんばれ・おおひでりの場合、1ターンで攻撃する。ただし、ばんのうがさを持っている場合は、天気がにほんばれ・おおひでりでもためのターンが必要。", // NEEDS QC
+		shortDesc: "1ターン目にため、2ターン目攻撃。晴れなら即時。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があられ・あめ・おおあめ・すなあらしで自分がばんのうがさを持っていない場合、威力が半減する。パワフルハーブを持っている場合や、天気がにほんばれ・おおひでりの場合、1ターンで攻撃する。ただし、ばんのうがさを持っている場合は、天気がにほんばれ・おおひでりでもためのターンが必要。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があられ・おおあめ・あめ・すなあらしの場合、威力が半減する。パワフルハーブを持っている場合や、天気がにほんばれ・おおひでりの場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があられ・あめ・すなあらしの場合、威力が半減する。パワフルハーブを持っている場合や、天気がにほんばれの場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があられ・あめ・すなあらしの場合、ダメージが半減する。パワフルハーブを持っている場合や、天気がにほんばれの場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があられ・あめ・すなあらしの場合、ダメージが半減する。天気がにほんばれの場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があめの場合、ダメージが半減する。天気がにほんばれの場合、1ターンで攻撃する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。", // NEEDS QC
+			shortDesc: "1ターン目にため、2ターン目に攻撃。", // NEEDS QC
 		},
 
 		prepare: "  {POKEMON}は 光を 吸収した！",
@@ -6759,13 +6740,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	solarblade: {
 		name: "ソーラーブレード",
 		// Official flavor text: "１ターン目に 光を いっぱいに 集め ２ターン目に その 力を 剣に 込めて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1ターン目にため、2ターン目に攻撃する。天気があられ・あめ・おおあめ・すなあらしで自分がばんのうがさを持っていない場合、威力が半減する。パワフルハーブを持っている場合や、天気がにほんばれ・おおひでりの場合、1ターンで攻撃する。ただし、ばんのうがさを持っている場合は、天気がにほんばれ・おおひでりでもためのターンが必要。", // NEEDS QC
+		shortDesc: "1ターン目にため、2ターン目攻撃。晴れなら即時。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があめ・おおあめ・すなあらし・ゆきで自分がばんのうがさを持っていない場合、威力が半減する。パワフルハーブを持っている場合や、天気がにほんばれ・おおひでりの場合、1ターンで攻撃する。ただし、ばんのうがさを持っている場合は、天気がにほんばれ・おおひでりでもためのターンが必要。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1ターン目にため、2ターン目に攻撃する。天気があられ・おおあめ・あめ・すなあらしの場合、威力が半減する。パワフルハーブを持っている場合や、天気がにほんばれ・おおひでりの場合、1ターンで攻撃する。", // NEEDS QC
 		},
 
 		prepare: "#solarbeam",
@@ -6773,111 +6754,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sonicboom: {
 		name: "ソニックブーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手に20の固定ダメージを与える。", // NEEDS QC
+		shortDesc: "常に20の固定ダメージを与える。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手に20の固定ダメージを与える。この技はタイプ相性による無効を無視する。", // NEEDS QC
 		},
 	},
 	soulstealing7starstrike: {
 		name: "しちせいだっこんたい",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	spacialrend: {
 		name: "あくうせつだん",
 		// Official flavor text: "周りの 空間ごと 相手を 引き裂き ダメージを 与える。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	spark: {
 		name: "スパーク",
 		// Official flavor text: "電気を まとい 相手に 突進して 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	sparklingaria: {
 		name: "うたかたのアリア",
 		// Official flavor text: "歌うことによって たくさんの バルーンを 放出する。 技を 受けると やけどが 治る。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がひんしになっていなければ、相手のやけどを治す。", // NEEDS QC
+		shortDesc: "相手のやけどを治す。", // NEEDS QC
 	},
 	sparklyswirl: {
 		name: "きらきらストーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のパーティ全員の状態異常を治す。", // NEEDS QC
+		shortDesc: "手持ち全員の状態異常を治す。", // NEEDS QC
 	},
 	spectralthief: {
 		name: "シャドースチール",
 		// Official flavor text: "相手の 影に 潜り込み 相手の 能力アップを 奪って 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ダメージを与える前に、相手の+1以上の能力ランクの変化を奪い、自分のものにする。", // NEEDS QC
+		shortDesc: "相手の能力上昇を奪ってから攻撃する。", // NEEDS QC
 
 		clearBoost: "  {SOURCE}は 上がった 能力を 奪い取った！",
 	},
 	speedswap: {
 		name: "スピードスワップ",
 		// Official flavor text: "相手の 素早さと 自分の 素早さを 入れ替えてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の素早さの数値を入れ替える。能力ランクの変化は影響を受けない。", // NEEDS QC
+		shortDesc: "相手と素早さの数値を入れ替える。", // NEEDS QC
 
 		activate: "  {POKEMON}は おたがいの スピードを 入れ替えた！",
 	},
 	spicyextract: {
 		name: "ハバネロエキス",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を2段階上げ、防御を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃+2、防御-2。", // NEEDS QC
 	},
 	spiderweb: {
 		name: "クモのす",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手を交代できなくする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わるが、バトンタッチで離れた場合は相手が交代できないままになる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、バトンタッチを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わるが、バトンタッチで離れた場合は相手が交代できないままになる。", // NEEDS QC
 		},
 	},
 	spikecannon: {
 		name: "とげキャノン",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。相手がきあいのタスキを持っていて、この技が始まったときHPが満タンだった場合、何回当たってもひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各3/8、4回・5回当たる確率は各1/8。ダメージは最初の攻撃で1回だけ計算され、すべての攻撃に適用される。途中の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	spikes: {
 		name: "まきびし",
 		// Official flavor text: "相手の 足下に まきびしを しかける。交代で でてきた 相手の ポケモンに ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ひこうタイプや特性がふゆうのポケモンには効果がない。最大3回まで重ねて仕掛けられ、ダメージは1回で最大HPの1/8、2回で1/6、3回で1/4（いずれも切り捨て）。いずれかのポケモンがおかたづけを使うか、相手側のポケモンがキラースピン・こうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
+		shortDesc: "交代で出た地面の相手にダメージ。最大3回。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ひこうタイプや特性がふゆうのポケモンには効果がない。最大3回まで重ねて仕掛けられ、ダメージは1回で最大HPの1/8、2回で1/6、3回で1/4（いずれも切り捨て）。相手側のポケモンがこうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ひこうタイプや特性がふゆうのポケモンには効果がない。最大3回まで重ねて仕掛けられ、ダメージは1回で最大HPの1/8、2回で1/6、3回で1/4（いずれも切り捨て）。相手側のポケモンがこうそくスピンを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ひこうタイプや特性がふゆうのポケモンには効果がない。最大3回まで重ねて仕掛けられ、ダメージは1回で最大HPの1/8、2回で1/6、3回で1/4（いずれも切り捨て）。相手側のポケモンがこうそくスピンを成功させると、取り除かれる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンは最大HPの1/8（切り捨て）を失う。ひこうタイプのポケモンには効果がない。すでに相手側にこの効果がある場合は失敗する。相手側のポケモンがこうそくスピンを成功させると、取り除かれる。", // NEEDS QC
+			shortDesc: "交代で出た相手にダメージ。最大1回。", // NEEDS QC
 		},
 
 		start: "  {TEAM}の 足下に まきびしが 散らばった！",
@@ -6887,51 +6868,51 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spikyshield: {
 		name: "ニードルガード",
 		// Official flavor text: "相手の 攻撃を 防ぐと 同時に 触れた 相手の 体力を 削って しまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をした相手は最大HPの1/8（切り捨て）を失う。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "技を防ぎ、接触した相手のHPを1/8減らす。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をした相手は最大HPの1/8（切り捨て）を失う。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をした相手は最大HPの1/8（切り捨て）を失う。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、他のポケモンからのほとんどの技を防ぎ、自分に直接攻撃をした相手は最大HPの1/8（切り捨て）を失う。この技の成功率は1/Xで、Xは1から始まり、成功するたびに3倍になる。失敗した場合や、最後に使った技がみきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合は失敗する。", // NEEDS QC
 		},
 
 		damage: "  {POKEMON}は 傷ついた！",
 	},
 	spinout: {
 		name: "ホイールスピン",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さを2段階下げる。", // NEEDS QC
+		shortDesc: "自分の素早さを2段階下げる。", // NEEDS QC
 	},
 	spiritbreak: {
 		name: "ソウルクラッシュ",
 		// Official flavor text: "食らうと くじけるほどの 勢いで 攻撃。 相手の 特攻を 下げる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
 	},
 	spiritshackle: {
 		name: "かげぬい",
 		// Official flavor text: "攻撃と 同時に 相手の 影を 縫い付けて 逃げられなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手を交代できなくする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 	},
 	spite: {
 		name: "うらみ",
 		// Official flavor text: "相手が 最後に 使った技に 恨みを 抱いて その技の ＰＰを ４だけ 減らす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手が最後に使った技のPPを4減らす。相手がまだ技を使っていない場合、その技のPPが0の場合、相手がその技を覚えていない場合は失敗する。", // NEEDS QC
+		shortDesc: "相手が最後に使った技のPPを4減らす。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手が最後に使った技のPPをランダムに2〜5減らす。相手がまだ技を使っていない場合、その技のPPが0か1の場合、相手がその技を覚えていない場合は失敗する。", // NEEDS QC
+			shortDesc: "相手の最後の技のPPを2〜5減らす。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手が最後に使った技のPPをランダムに2〜5減らす。相手がまだ技を使っていない場合や、その技のPPが0の場合は失敗する。", // NEEDS QC
 		},
 
 		activate: "  {TARGET}の {MOVE}を {NUMBER}削った！",
@@ -6939,61 +6920,61 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spitup: {
 		name: "はきだす",
 		// Official flavor text: "蓄えた 力を 相手に ぶつけて 攻撃する。 蓄えているほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は自分のたくわえるの回数×100。たくわえるの回数が0の場合は失敗する。成功したかどうかにかかわらず、たくわえるで上がった分だけ自分の防御と特防が下がり、回数は0に戻る。", // NEEDS QC
+		shortDesc: "たくわえた回数が多いほど威力が上がる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は自分のたくわえるの回数×100。この技はダメージの乱数幅がない。たくわえるの回数が0の場合は失敗する。対象がいない場合を除き、成功したかどうかにかかわらず、たくわえるで上がった分だけ自分の防御と特防が下がり、回数は0に戻る。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "ダメージが自分のたくわえるの回数倍になる。この技はダメージの乱数幅がなく、急所にも当たらない。たくわえるの回数が0の場合は失敗する。この技が外れない限り、回数は0に戻る。", // NEEDS QC
 		},
 	},
 	splash: {
 		name: "はねる",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "対戦での効果はない。", // NEEDS QC
 
 		activate: "  しかし 何も 起こらなかった！",
 	},
 	splinteredstormshards: {
 		name: "ラジアルエッジストーム",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "エレキフィールド・グラスフィールド・ミストフィールド・サイコフィールドの効果を消す。", // NEEDS QC
+		shortDesc: "フィールドの効果を消す。", // NEEDS QC
 	},
 	splishysplash: {
 		name: "ざぶざぶサーフ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "30%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	spore: {
 		name: "キノコのほうし",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をねむり状態にする。", // NEEDS QC
 	},
 	spotlight: {
 		name: "スポットライト",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ターン終了までの間、対象の相手からの単体対象の技をすべて対象に向けさせる。マジックコートや特性マジックミラーによる跳ね返しや、特性ひらいしん・よびみずによる引き寄せよりも先に、対象に向けられる。ダブルバトルまたはバトルロイヤルでなければ失敗する。", // NEEDS QC
+		shortDesc: "このターン相手の技を対象に集中させる。", // NEEDS QC
 
 		start: "#followme",
 		startFromZEffect: "#followme",
 	},
 	springtidestorm: {
 		name: "はるのあらし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "30%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	stealthrock: {
 		name: "ステルスロック",
 		// Official flavor text: "相手の 周りに 無数の 岩を 浮かべて 交代で でてきた 相手の ポケモンに ダメージを 与える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。すでに相手側にこの効果がある場合は失敗する。ダメージは相手のいわタイプに対する相性で決まり、0.25倍・0.5倍・等倍・2倍・4倍に対してそれぞれ最大HPの1/32・1/16・1/8・1/4・1/2（切り捨て）。いずれかのポケモンがおかたづけを使うか、相手側のポケモンがキラースピン・こうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
+		shortDesc: "交代で出た相手にいわ相性のダメージ。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。すでに相手側にこの効果がある場合は失敗する。ダメージは相手のいわタイプに対する相性で決まり、0.25倍・0.5倍・等倍・2倍・4倍に対してそれぞれ最大HPの1/32・1/16・1/8・1/4・1/2（切り捨て）。相手側のポケモンがこうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。すでに相手側にこの効果がある場合は失敗する。ダメージは相手のいわタイプに対する相性で決まり、0.25倍・0.5倍・等倍・2倍・4倍に対してそれぞれ最大HPの1/32・1/16・1/8・1/4・1/2（切り捨て）。相手側のポケモンがこうそくスピンを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
 		},
 
 		start: "  {TEAM}の 周りに とがった岩が ただよい始めた！",
@@ -7003,45 +6984,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	steameruption: {
 		name: "スチームバースト",
 		// Official flavor text: "ものすごく 熱い 蒸気を 相手に 浴びせる。 相手は やけどする ことがある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をやけど状態にする。こおり状態の相手のこおりを治す。", // NEEDS QC
+		shortDesc: "30%でやけどにする。相手のこおりを治す。", // NEEDS QC
 	},
 	steamroller: {
 		name: "ハードローラー",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、ダメージが2倍になる。", // NEEDS QC
 		},
 	},
 	steelbeam: {
 		name: "てっていこうせん",
 		// Official flavor text: "全身から 集めた はがねを ビームとして 激しく 撃ちだす。 自分も ダメージを 受けてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "成功したかどうかにかかわらず、自分は最大HPの1/2（切り上げ）を失う（ひんしになる場合でも）。特性がマジックガードの場合は失わない。", // NEEDS QC
+		shortDesc: "自分の最大HPの1/2を失う。", // NEEDS QC
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "アイアンローラー",
 		// Official flavor text: "フィールドを 破壊しながら 攻撃。 なんらかの フィールド状態に 変わっていないと 技は 失敗する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "フィールドが発生していなければ失敗する。エレキフィールド・グラスフィールド・ミストフィールド・サイコフィールドの効果を消す。", // NEEDS QC
+		shortDesc: "フィールドがないと失敗。フィールドを消す。", // NEEDS QC
 	},
 	steelwing: {
 		name: "はがねのつばさ",
 		// Official flavor text: "硬い 翼を 相手に たたきつけて 攻撃する。 自分の 防御が あがることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で自分の防御を1段階上げる。", // NEEDS QC
+		shortDesc: "10%の確率で自分の防御が1段階上がる。", // NEEDS QC
 	},
 	stickyweb: {
 		name: "ねばねばネット",
 		// Official flavor text: "相手の 周りに ねばねばした ネットを はりめぐらせ 交代で でてきた 相手の 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンの素早さを1段階下げる。ひこうタイプや特性がふゆうのポケモンには効果がない。すでに相手側にこの効果がある場合は失敗する。いずれかのポケモンがおかたづけを使うか、相手側のポケモンがキラースピン・こうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
+		shortDesc: "交代で出た地面の相手の素早さ-1。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンの素早さを1段階下げる。ひこうタイプや特性がふゆうのポケモンには効果がない。すでに相手側にこの効果がある場合は失敗する。相手側のポケモンがこうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
 		},
 
 		start: "  {TEAM}の 足下に ねばねばネットが 広がった！",
@@ -7051,11 +7032,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stockpile: {
 		name: "たくわえる",
 		// Official flavor text: "力を 蓄えて 自分の 防御と 特防を あげる。 最大 ３回まで 蓄えられる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御と特防を1段階ずつ上げる。自分のたくわえた回数が1増える。たくわえた回数が3の場合は失敗する。場を離れると回数は0に戻る。", // NEEDS QC
+		shortDesc: "防御・特防+1。最大3回までたくわえる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分のたくわえるの回数が1増える。回数が3の場合は失敗する。場を離れると回数は0に戻る。", // NEEDS QC
+			shortDesc: "たくわえるの回数+1。最大3回。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は {NUMBER}つ たくわえた！",
@@ -7064,122 +7045,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stokedsparksurfer: {
 		name: "ライトニングサーフライド",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	stomp: {
 		name: "ふみつけ",
 		// Official flavor text: "大きな 足で 相手を 踏みつけて 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、ダメージが2倍になる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、威力が2倍になる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。相手が場に出てからちいさくなるを使っていた場合、ダメージが2倍になる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。相手がちいさくなるの効果を受けている場合、威力が2倍になる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をひるませる。", // NEEDS QC
 		},
 	},
 	stompingtantrum: {
 		name: "じだんだ",
 		// Official flavor text: "悔しさを バネにして 攻撃する。 前の ターンに 技を 外していると 威力が 倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "前のターンの自分の最後の技（他の技から呼び出された技や、さいはい・マジックコート・よこどり・特性おどりこ・マジックミラーによる技を含む）が、本来の効果を何も発揮できずに失敗していた場合（失敗したとびひざげり・とびげり・ビックリヘッドの自傷ダメージは除く）、または反動とフリーフォール以外の効果で行動できなかった場合、威力が2倍になる。トーチカ・みきり・キングシールド・まもる・ニードルガード・トリックガード・たたみがえし・ファストガード・ワイドガードに防がれた場合や、じゅうりょく・うちおとす・サウザンアローの効果でとびはねる・そらをとぶが中断された場合は、威力は2倍にならない。", // NEEDS QC
+		shortDesc: "前のターンに技が失敗していたら威力2倍。", // NEEDS QC
 	},
 	stoneaxe: {
 		name: "がんせきアックス",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンにダメージを与える。ダメージは相手のいわタイプに対する相性で決まり、0.25倍・0.5倍・等倍・2倍・4倍に対してそれぞれ最大HPの1/32・1/16・1/8・1/4・1/2（切り捨て）。いずれかのポケモンがおかたづけを使うか、相手側のポケモンがキラースピン・こうそくスピン・きりばらいを成功させるかきりばらいを受けると、取り除かれる。", // NEEDS QC
+		shortDesc: "相手側にステルスロックをまく。", // NEEDS QC
 	},
 	stoneedge: {
 		name: "ストーンエッジ",
 		// Official flavor text: "とがった 岩を 相手に 突き刺して 攻撃する。 急所に 当たりやすい。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所に当たりやすい。", // NEEDS QC
 	},
 	storedpower: {
 		name: "アシストパワー",
 		// Official flavor text: "蓄積された パワーで 相手を 攻撃する。自分の 能力が あがっているほど 威力が あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は20+(X×20)。Xは自分の+1以上の能力ランクの合計。", // NEEDS QC
+		shortDesc: "能力上昇1つごとに威力+20。", // NEEDS QC
 	},
 	stormthrow: {
 		name: "やまあらし",
 		// Official flavor text: "強烈な 一撃を 相手に くりだす。攻撃は 必ず 急所に 当たる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必ず急所に当たる。ただし、相手がおまじないの効果を受けている場合や、特性がカブトアーマー・シェルアーマーの場合は急所に当たらない。", // NEEDS QC
+		shortDesc: "必ず急所に当たる。", // NEEDS QC
 	},
 	strangesteam: {
 		name: "ワンダースチーム",
 		// Official flavor text: "煙を 噴出して 相手を 攻撃。 混乱 させることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	strength: {
 		name: "かいりき",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	strengthsap: {
 		name: "ちからをすいとる",
 		// Official flavor text: "相手の 攻撃力と 同じだけ 自分の ＨＰを 回復する。 そして 相手の 攻撃を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を1段階下げ、この技を使う前の相手の能力ランクで計算した攻撃の数値と同じだけ自分のHPを回復する。おおきなねっこを持っていると、回復量が1.3倍（五捨五超入）になる。相手の攻撃のランクが−6の場合は失敗する。", // NEEDS QC
+		shortDesc: "相手の攻撃分回復し、その攻撃を1下げる。", // NEEDS QC
 	},
 	stringshot: {
 		name: "いとをはく",
 		// Official flavor text: "口から 吹きだした 糸を まきつけて 相手の 素早さを がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の素早さを2段階下げる。", // NEEDS QC
+		shortDesc: "相手の素早さを2段階下げる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の素早さを1段階下げる。", // NEEDS QC
+			shortDesc: "相手の素早さを1段階下げる。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手の素早さを1段階下げる。", // NEEDS QC
 		},
 	},
 	struggle: {
 		name: "わるあがき",
 		// Official flavor text: "自分の ＰＰが なくなると あがいて 相手を 攻撃する。 自分も 少し ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手のポケモンからランダムに選び、タイプなしのダメージを与える。攻撃が成功すると、自分は最大HPの1/4（四捨五入）を失う（特性いしあたまでも防げない）。覚えている技をどれも選択できないとき、自動的にこの技を使う。", // NEEDS QC
+		shortDesc: "自分も最大HPの1/4のダメージを受ける。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "隣接する相手のポケモンからランダムに選び、タイプなしのダメージを与える。攻撃が成功すると、自分は最大HPの1/4（四捨五入）を失う（特性いしあたまでも防げない）。覚えている技をどれも選択できないとき、自動的にこの技を使う。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手のポケモンからランダムに選び、タイプなしのダメージを与える。攻撃が成功すると、自分は最大HPの1/4（切り捨て）を失う（特性いしあたまでも防げない）。覚えている技をどれも選択できないとき、自動的にこの技を使う。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手のポケモンからランダムに選び、タイプなしのダメージを与える。攻撃が成功すると、自分は相手に与えたダメージの1/4（切り捨て、最低1）のダメージを受ける（特性いしあたまでも防げない）。覚えている技をどれも選択できないとき、自動的にこの技を使う。", // NEEDS QC
+			shortDesc: "与えたダメージの1/4を自分も受ける。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "タイプなしのダメージを与える。攻撃が成功すると、自分は相手に与えたダメージの1/4（切り捨て、最低1）のダメージを受ける。覚えている技をどれも選択できないとき、自動的にこの技を使う。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "ノーマルタイプのダメージを与える。攻撃が成功すると、自分は相手に与えたダメージの1/2（切り捨て、最低1）のダメージを受ける。覚えている技をどれも選択できないとき、自動的にこの技を使う。", // NEEDS QC
+			shortDesc: "与えたダメージの1/2を自分も受ける。", // NEEDS QC
 		},
 	},
 	strugglebug: {
 		name: "むしのていこう",
 		// Official flavor text: "抵抗して 相手を 攻撃する。 相手の 特攻を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の特攻を1段階下げる。", // NEEDS QC
 	},
 	stuffcheeks: {
 		name: "ほおばる",
 		// Official flavor text: "持っている きのみを 食べて 防御を ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がきのみを持っていなければ選択できない。持っているきのみを食べ、自分の防御を2段階上げる。この効果は、特性ぶきよう・きんちょうかんや、さしおさえ・マジックルームの効果でも防がれない。きのみを持っていない場合は失敗する。", // NEEDS QC
+		shortDesc: "きのみを食べて防御が2段階上がる。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7188,44 +7169,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stunspore: {
 		name: "しびれごな",
 		// Official flavor text: "しびれる 粉を たくさん ふりまいて 相手を まひ状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "相手をまひ状態にする。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をまひ状態にする。タイプ相性による無効は貫通しない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手をまひ状態にする。", // NEEDS QC
 		},
 	},
 	submission: {
 		name: "じごくぐるま",
 		// Official flavor text: "地面に 自分ごと 相手を 投げつけて 攻撃する。 自分も 少し ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの1/4の反動を受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（切り捨て、最低1）の反動ダメージを受ける。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（四捨五入、最低1）の反動ダメージを受ける。この技がみがわりに当たった場合、反動ダメージは常に1になる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/4（切り捨て、最低1）の反動ダメージを自分が受ける。この技で相手のみがわりを壊した場合、反動ダメージは受けない。", // NEEDS QC
 		},
 	},
 	substitute: {
 		name: "みがわり",
 		// Official flavor text: "自分の ＨＰを 少し 削って 分身を だす。 分身は 自分の 身代わりに なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の最大HPの1/4（切り捨て）を消費して、自分の身代わりとなるみがわりを作る。みがわりは、十分なダメージを受けるか、自分が交代・ひんしになるか、いずれかのポケモンがおかたづけを使うと消える。バトンタッチで残りHPを保ったまま交代先に引き継げる。みがわりが壊れるまで、他のポケモンからのすべての攻撃のダメージはみがわりが受け、他のポケモンによる状態変化や能力ランクの変化からも自分を守る。音の技と特性すりぬけのポケモンは、みがわりを無視する。みがわりの陰にいる間も、天気や状態異常のダメージは通常どおり受ける。連続攻撃技の途中でみがわりが壊れた場合、残りの攻撃は自分が受ける。しめつけ技で捕らわれている間にみがわりを作ると、その効果はすぐに終わる。ひんしにならずにみがわりを作れるだけのHPがない場合や、すでにみがわりがある場合は失敗する。", // NEEDS QC
+		shortDesc: "最大HPの1/4を使ってみがわりを作る。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/4（切り捨て）を消費して、自分の身代わりとなるみがわりを作る。みがわりは、十分なダメージを受けるか、自分が交代・ひんしになると消える。バトンタッチで残りHPを保ったまま交代先に引き継げる。みがわりが壊れるまで、他のポケモンからのすべての攻撃のダメージはみがわりが受け、他のポケモンによる状態変化や能力ランクの変化からも自分を守る。音の技と特性すりぬけのポケモンは、みがわりを無視する。みがわりの陰にいる間も、天気や状態異常のダメージは通常どおり受ける。連続攻撃技の途中でみがわりが壊れた場合、残りの攻撃は自分が受ける。しめつけ技で捕らわれている間にみがわりを作ると、その効果はすぐに終わる。ひんしにならずにみがわりを作れるだけのHPがない場合や、すでにみがわりがある場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/4（切り捨て）を消費して、自分の身代わりとなるみがわりを作る。みがわりは、十分なダメージを受けるか、自分が交代・ひんしになると消える。バトンタッチで残りHPを保ったまま交代先に引き継げる。みがわりが壊れるまで、他のポケモンからのすべての攻撃のダメージはみがわりが受け、他のポケモンによる状態変化や能力ランクの変化からも自分を守る。みがわりの陰にいる間も、天気や状態異常のダメージは通常どおり受ける。連続攻撃技の途中でみがわりが壊れた場合、残りの攻撃は自分が受ける。しめつけ技で捕らわれている間にみがわりを作ると、その効果はすぐに終わる。ひんしにならずにみがわりを作れるだけのHPがない場合や、すでにみがわりがある場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分の最大HPの1/4（切り捨て）を消費して、自分の身代わりとなるみがわりを作る。みがわりのHPは作るのに使ったHP+1で、十分なダメージを受けるか、一度に255のダメージを受けるか、自分が交代・ひんしになると消える。みがわりが壊れるまで、相手のすべての攻撃のダメージはみがわりが受け、相手による状態異常や能力ランクの変化からも自分を守る。ただし、その効果がかなしばり・やどりぎのタネ・ねむり・主効果のまひ・追加効果のこんらんで、みがわりが壊れなかった場合は防げない。みがわりの陰にいる間も状態異常のダメージは通常どおり受けるが、こんらんによるダメージは代わりに相手のみがわりに与えられる。連続攻撃技の途中でみがわりが壊れた場合、攻撃は終わる。みがわりを作るだけのHPがない場合や、すでにみがわりがある場合は失敗する。現在のHPがちょうど最大HPの1/4の場合、みがわりを作った後ひんしになる。", // NEEDS QC
+			shortDesc: "最大HPの1/4を使ってみがわりを作る。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}の 身代わりが 現れた！",
@@ -7236,162 +7217,162 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	subzeroslammer: {
 		name: "レイジングジオフリーズ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	suckerpunch: {
 		name: "ふいうち",
 		// Official flavor text: "相手より 先に 攻撃 できる。 相手が だす技が 攻撃技でないと 失敗する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がこのターンに物理技・特殊技・さきどりのいずれも選んでいなかった場合や、相手が自分より先に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "先制技。相手が攻撃技以外なら失敗。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がこのターンに物理技・特殊技のいずれも選んでいなかった場合や、相手が自分より先に行動する場合は失敗する。", // NEEDS QC
 		},
 	},
 	sunnyday: {
 		name: "にほんばれ",
 		// Official flavor text: "５ターンの 間 日差しを 強くして ほのおタイプの 威力を あげる。 みずタイプの 威力は さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、天気がにほんばれ（晴れ）になる。その間、ほのおタイプの攻撃技のダメージが1.5倍、みずタイプの攻撃技のダメージが0.5倍になる。あついいわを持っていると8ターン続く。すでに晴れの場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、日差しを強くする。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、天気がにほんばれ（晴れ）になる。その間、ほのおタイプの攻撃技のダメージが1.5倍、みずタイプの攻撃技のダメージが0.5倍になる。すでに晴れの場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "すでに晴れでも、5ターンの間、天気がにほんばれ（晴れ）になる。その間、ほのおタイプの攻撃技のダメージが1.5倍、みずタイプの攻撃技のダメージが0.5倍になる。", // NEEDS QC
 		},
 	},
 	sunsteelstrike: {
 		name: "メテオドライブ",
 		// Official flavor text: "流星の ような 勢いで 突進する。 相手の 特性を 無視して 攻撃 することが できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技とその効果は、他のポケモンの特性を無視する。", // NEEDS QC
+		shortDesc: "他のポケモンの特性を無視する。", // NEEDS QC
 	},
 	supercellslam: {
 		name: "サンダーダイブ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が外れた場合、自分は最大HPの1/2（切り捨て）のダメージを受ける。特性がマジックガードのポケモンはこのダメージを受けない。相手が場に出てからちいさくなるを使っていた場合、必中になり、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "外すと最大HPの1/2のダメージを受ける。", // NEEDS QC
 
 		damage: "#crash",
 	},
 	superfang: {
 		name: "いかりのまえば",
 		// Official flavor text: "鋭い 前歯で 激しく かみついて 攻撃する。 相手の ＨＰは 半分に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の残りHPの1/2（切り捨て、最低1）のダメージを与える。", // NEEDS QC
+		shortDesc: "相手の残りHPの1/2のダメージを与える。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の残りHPの1/2（切り捨て、最低1）のダメージを与える。この技はタイプ相性による無効を無視する。", // NEEDS QC
+			shortDesc: "ダメージ=残りHPの半分。ゴーストにも有効。", // NEEDS QC
 		},
 	},
 	superpower: {
 		name: "ばかぢから",
 		// Official flavor text: "すごい 力を 発揮して 相手を 攻撃する。自分の 攻撃と 防御が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と防御を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "自分の攻撃・防御を1段階下げる。", // NEEDS QC
 	},
 	supersonic: {
 		name: "ちょうおんぱ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をこんらん状態にする。", // NEEDS QC
 	},
 	supersonicskystrike: {
 		name: "ファイナルダイブクラッシュ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	surf: {
 		name: "なみのり",
 		// Official flavor text: "大きな 波で 自分の 周りに いるものを 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "ダイビングで水中に潜っている相手には、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "周囲全体攻撃。ダイビング中の相手に2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "ダイビングで水中に潜っている相手には、威力が2倍になる。", // NEEDS QC
+			shortDesc: "周囲全体に当たる。ダイビング中は威力2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "追加効果なし。", // NEEDS QC
+			shortDesc: "追加効果なし。", // NEEDS QC
 		},
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手全体に当たる。ダイビングに威力2倍。", // NEEDS QC
 		},
 	},
 	surgingstrikes: {
 		name: "すいりゅうれんだ",
 		// Official flavor text: "みずの型を 極めし 流れるような ３回の 連撃。 必ず 急所に 当たる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3回連続で攻撃する。必ず急所に当たる。ただし、相手がおまじないの効果を受けている場合や、特性がカブトアーマー・シェルアーマーの場合は急所に当たらない。", // NEEDS QC
+		shortDesc: "3回攻撃。必ず急所に当たる。", // NEEDS QC
 	},
 	swagger: {
 		name: "いばる",
 		// Official flavor text: "相手を 怒らせて 混乱させる。 怒りで 相手の 攻撃は ぐーんと あがってしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃を2段階上げ、こんらん状態にする。", // NEEDS QC
+		shortDesc: "相手の攻撃を2段階上げてこんらんさせる。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の攻撃を2段階上げ、こんらん状態にする。相手の攻撃が上がらない状態の場合、この技は外れる。", // NEEDS QC
 		},
 	},
 	swallow: {
 		name: "のみこむ",
 		// Official flavor text: "蓄えた 力を のみこんで 自分の ＨＰを 回復する。 蓄えているほど 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分のたくわえた回数に応じてHPを回復する。1なら最大HPの1/4、2なら1/2（いずれも五捨五超入）、3なら全回復する。たくわえた回数が0の場合は失敗する。たくわえるで上がった分だけ自分の防御と特防が下がり、回数は0に戻る。", // NEEDS QC
+		shortDesc: "たくわえた回数に応じてHPを回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のたくわえるの回数に応じてHPを回復する。1なら最大HPの1/4、2なら1/2（いずれも切り捨て）、3なら全回復する。回数が0の場合は失敗する。たくわえるで上がった分だけ自分の防御と特防が下がり、回数は0に戻る。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分のたくわえるの回数に応じてHPを回復する。1なら最大HPの1/4、2なら1/2（いずれも五捨五超入）、3なら全回復する。回数が0の場合は失敗する。回数は0に戻る。", // NEEDS QC
 		},
 	},
 	sweetkiss: {
 		name: "てんしのキッス",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "相手をこんらん状態にする。", // NEEDS QC
 	},
 	sweetscent: {
 		name: "あまいかおり",
 		// Official flavor text: "香りで 相手の 回避率を がくっと さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の回避率を2段階下げる。", // NEEDS QC
+		shortDesc: "相手の回避率を2段階下げる。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手の回避率を1段階下げる。", // NEEDS QC
+			shortDesc: "相手の回避率を1段階下げる。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手の回避率を1段階下げる。", // NEEDS QC
 		},
 	},
 	swift: {
 		name: "スピードスター",
 		// Official flavor text: "星型の 光を 発射して 相手を 攻撃する。 攻撃は 必ず 命中する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必中。", // NEEDS QC
+		shortDesc: "必中。相手全体攻撃。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "必中。相手があなをほる・そらをとぶを使用中でも当たる。", // NEEDS QC
+			shortDesc: "あなをほる・そらをとぶ中でも必中。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "必中。", // NEEDS QC
 		},
 	},
 	switcheroo: {
 		name: "すりかえ",
 		// Official flavor text: "目にも とまらぬ 速さで 自分と 相手の 持ち物を 交換する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合は失敗する。また、カイオーガ・グラードン・ディアルガ・パルキア・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタ・パラドックスポケモン・オーガポンと、それぞれあいいろのたま・べにいろのたま・だいこんごうだま・だいしらたま・だいはっきんだま・プレート・カセット・メモリ・くちたけん・くちたたて・ブーストエナジー・おめんの組み合わせで道具を渡そうとしたり奪おうとした場合も失敗する。ここでのパラドックスポケモンは、特性がこだいかっせい・クォークチャージの全種族（ウガツホムラ・タケルライコ・テツノイワオ・テツノカシラを除く）を指す。特性がねんちゃくの相手には効かない。", // NEEDS QC
+		shortDesc: "相手と持ち物を入れ替える。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合や、カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタと、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリ・くちたけん・くちたたての組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、どちらかがZクリスタルを持っている場合、メガストーンをそれでメガシンカできる種族に渡そうとしたり奪おうとした場合、カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディと、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリの組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、メガストーンをそれでメガシンカできる種族に渡そうとしたり奪おうとした場合、カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクトと、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセットの組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、どちらかがメールを持っている場合、ギラティナ・アルセウス・ゲノセクトと、それぞれはっきんだま・プレート・カセットの組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、どちらかがメールかはっきんだまを持っている場合、どちらかの特性がマルチタイプの場合、どちらかがはたきおとすの効果を受けている場合、相手の特性がねんちゃくの場合は失敗する。", // NEEDS QC
 		},
 
 		activate: "#trick",
@@ -7399,88 +7380,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	swordsdance: {
 		name: "つるぎのまい",
 		// Official flavor text: "戦いの舞を 激しく おどって 気合を 高める。 自分の 攻撃を ぐーんと あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃を2段階上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃が2段階上がる。", // NEEDS QC
 	},
 	synchronoise: {
 		name: "シンクロノイズ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分とタイプが1つも一致しない相手には効果がない。", // NEEDS QC
+		shortDesc: "自分と同じタイプの周囲のポケモンに攻撃。", // NEEDS QC
 	},
 	synthesis: {
 		name: "こうごうせい",
 		// Official flavor text: "自分の ＨＰを 回復する。 天気に よって 回復の 量が 変化する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天気がなし・らんきりゅうの場合やばんのうがさを持っている場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あめ・おおあめ・すなあらし・ゆきの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
+		shortDesc: "天気に応じた量のHPを回復する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなし・らんきりゅうの場合やばんのうがさを持っている場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あられ・おおあめ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなし・らんきりゅうの場合は最大HPの1/2、天気がにほんばれ・おおひでりの場合は2/3、あられ・おおあめ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合は2/3、あられ・あめ・すなあらしの場合は1/4を回復する（いずれも五捨五超入）。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合は2/3、あられ・あめ・すなあらしの場合は1/4を回復する（いずれも切り捨て）。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気がなしの場合は最大HPの1/2、天気がにほんばれの場合はHPをすべて、あめ・すなあらしの場合は1/4を回復する（いずれも切り捨て）。", // NEEDS QC
 		},
 	},
 	syrupbomb: {
 		name: "みずあめボム",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功すると、3ターンの間、毎ターン終了時に相手の素早さが1段階下がる。", // NEEDS QC
+		shortDesc: "3ターンの間、相手の素早さが毎ターン-1。", // NEEDS QC
 
 		start: "  {POKEMON}は あめまみれに なった！",
 	},
 	tackle: {
 		name: "たいあたり",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	tachyoncutter: {
 		name: "タキオンカッター",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。必中。", // NEEDS QC
+		shortDesc: "2回攻撃する。必中。", // NEEDS QC
 	},
 	tailglow: {
 		name: "ほたるび",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の特攻を3段階上げる。", // NEEDS QC
+		shortDesc: "自分の特攻が3段階上がる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分の特攻を2段階上げる。", // NEEDS QC
+			shortDesc: "自分の特攻が2段階上がる。", // NEEDS QC
 		},
 	},
 	tailslap: {
 		name: "スイープビンタ",
 		// Official flavor text: "硬い しっぽで 相手を たたいて 攻撃する。 ２ー５回の 間 連続で だす。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 	},
 	tailwhip: {
 		name: "しっぽをふる",
 		// Official flavor text: "しっぽを 左右に かわいく ふって 油断を 誘う。 相手の 防御を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "相手の防御を1段階下げる。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "相手の防御を1段階下げる。", // NEEDS QC
 		},
 	},
 	tailwind: {
 		name: "おいかぜ",
 		// Official flavor text: "激しく 吹きあれる 風の渦を つくり ４ターンの 間 味方 全員の 素早さを あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4ターンの間、自分と味方の素早さが2倍になる。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "4ターン、味方の素早さが2倍になる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3ターンの間、自分と味方の素早さが2倍になる。すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+			shortDesc: "3ターン、味方の素早さが2倍になる。", // NEEDS QC
 		},
 
 		start: "  {TEAM}に 追い風が 吹き始めた！",
@@ -7489,52 +7470,52 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	takedown: {
 		name: "とっしん",
 		// Official flavor text: "すごい 勢いで 相手に ぶつかって 攻撃する。 自分も 少し ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの1/4の反動を受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（切り捨て、最低1）の反動ダメージを受ける。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（四捨五入、最低1）の反動ダメージを受ける。この技がみがわりに当たった場合、反動ダメージは常に1になる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/4（切り捨て、最低1）の反動ダメージを自分が受ける。この技で相手のみがわりを壊した場合、反動ダメージは受けない。", // NEEDS QC
 		},
 	},
 	takeheart: {
 		name: "ブレイブチャージ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の状態異常を治し、特攻と特防を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "状態異常を治し、特攻・特防+1。", // NEEDS QC
 	},
 	tarshot: {
 		name: "タールショット",
 		// Official flavor text: "ねばねばの タールを 浴びせて 相手の 素早さを 下げる。 相手は ほのおが 弱点に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の素早さを1段階下げる。相手が交代するまでの間、相手に対するほのおタイプの技の相性が2倍になる。", // NEEDS QC
+		shortDesc: "相手の素早さ-1。ほのおが弱点になる。", // NEEDS QC
 
 		start: "  {POKEMON}は ほのおに 弱くなった！",
 	},
 	taunt: {
 		name: "ちょうはつ",
 		// Official flavor text: "相手を 怒らせる。 ３ターンの 間 相手は ダメージを 与える 技しか だせなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手は次の3ターンの間、ダメージを与えない技を使えなくなる。特性がどんかんのポケモンや、アロマベールで守られているポケモンには効かない。", // NEEDS QC
+		shortDesc: "3ターン、相手は変化技を使えない。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手は次の3ターンの間、ダメージを与えない技を使えなくなる。特性がどんかんのポケモンや、アロマベールで守られているポケモンには効かない。効果中もZパワーで強化された技は選択して使える。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手は次の3ターンの間、ダメージを与えない技を使えなくなる。特性がどんかんのポケモンや、アロマベールで守られているポケモンには効かない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手は次の3ターンの間、ダメージを与えない技を使えなくなる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3〜5ターンの間、相手はダメージを与えない技を使えなくなる。", // NEEDS QC
+			shortDesc: "3〜5ターン、相手は変化技を使えない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2ターンの間、相手はダメージを与えない技を使えなくなる。", // NEEDS QC
+			shortDesc: "2ターン、相手は変化技を使えない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 挑発に 乗ってしまった！",
@@ -7544,14 +7525,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tearfullook: {
 		name: "なみだめ",
 		// Official flavor text: "なみだめに なって 相手の 戦力を 喪失させる。 相手の 攻撃と 特攻が さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃と特攻を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃・特攻を1段階下げる。", // NEEDS QC
 	},
 	teatime: {
 		name: "おちゃかい",
 		// Official flavor text: "おちゃかいを ひらいて 場にいる ポケモンが それぞれ 持っている きのみを 食べる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場にいるすべてのポケモンは、持っているきのみを食べる。この効果は、みがわりや、特性ぶきよう・きんちょうかん、さしおさえ・マジックルームの効果でも防がれない。場のどのポケモンもきのみを持っていない場合は失敗する。", // NEEDS QC
+		shortDesc: "場の全ポケモンがきのみを食べる。", // NEEDS QC
 
 		activate: "  おちゃかいをして みんなで きのみを 食べた！",
 		fail: "  しかし 何も 起こらなかった！",
@@ -7559,29 +7540,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	technoblast: {
 		name: "テクノバスター",
 		// Official flavor text: "光弾を 相手に 放出する。 自分の 持つ カセットにより タイプが 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "この技のタイプは、自分が持っているカセットによって決まる。", // NEEDS QC
+		shortDesc: "持っているカセットでタイプが変わる。", // NEEDS QC
 	},
 	tectonicrage: {
 		name: "ライジングランドオーバー",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	teeterdance: {
 		name: "フラフラダンス",
 		// Official flavor text: "フラフラと ダンスを おどって 自分の 周りに いるものを 混乱状態に させる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "周囲のポケモンをこんらんさせる。", // NEEDS QC
 	},
 	telekinesis: {
 		name: "テレキネシス",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3ターンの間、相手は場にいる限り、一撃必殺技以外のすべての攻撃を避けられなくなる。効果の間、相手は場にいる限り、じめんタイプの攻撃とまきびし・どくびし・ねばねばネット、特性ありじごくの効果を受けない。相手がバトンタッチを使うと、交代先が効果を引き継ぐ。相手がねをはる・うちおとす・サウザンアロー・くろいてっきゅうの効果を受けている場合、そちらが優先される。相手がすでにこの効果か、ねをはる・うちおとす・サウザンアローの効果を受けている場合は失敗する。相手がディグダ・ダグトリオ・ディグダ（アローラのすがた）・ダグトリオ（アローラのすがた）・スナバァ・シロデスナや、メガシンカしたゲンガーの場合は効かない。メガゲンガーはいかなる方法でもこの効果を受けない。", // NEEDS QC
+		shortDesc: "3ターン相手を浮かせて技を必中にする。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3ターンの間、相手は場にいる限り、一撃必殺技以外のすべての攻撃を避けられなくなる。効果の間、相手は場にいる限り、じめんタイプの攻撃とまきびし・どくびし・ねばねばネット、特性ありじごくの効果を受けない。相手がバトンタッチを使うと、交代先が効果を引き継ぐ。相手がねをはる・うちおとす・サウザンアロー・くろいてっきゅうの効果を受けている場合、そちらが優先される。相手がすでにこの効果か、ねをはる・うちおとす・サウザンアローの効果を受けている場合は失敗する。相手がディグダ・ダグトリオや、メガシンカしたゲンガーの場合は効かない。メガゲンガーはいかなる方法でもこの効果を受けない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3ターンの間、相手は場にいる限り、一撃必殺技以外のすべての攻撃を避けられなくなる。効果の間、相手は場にいる限り、じめんタイプの攻撃とまきびし・どくびし、特性ありじごくの効果を受けない。相手がバトンタッチを使うと、交代先が効果を引き継ぐ。相手がねをはる・うちおとす・くろいてっきゅうの効果を受けている場合、そちらが優先される。相手がすでにこの効果か、ねをはる・うちおとすの効果を受けている場合は失敗する。相手がディグダ・ダグトリオの場合は効かない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}を 宙に 浮かせた！",
@@ -7590,108 +7571,108 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	teleport: {
 		name: "テレポート",
 		// Official flavor text: "ひかえの ポケモンが いるときに 使うと 入れ替わる。 野生の ポケモンは 逃げてしまう。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合は交代しない。", // NEEDS QC
+		shortDesc: "控えのポケモンと交代する。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使うと失敗する。", // NEEDS QC
+			shortDesc: "使うと失敗する。", // NEEDS QC
 		},
 	},
 	temperflare: {
 		name: "やけっぱち",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "前のターンの自分の最後の技（他の技から呼び出された技や、さいはい・マジックコート・よこどり・特性おどりこ・マジックミラーによる技を含む）が、本来の効果を何も発揮できずに失敗していた場合（失敗したとびひざげり・とびげり・ビックリヘッドの自傷ダメージは除く）、または反動とフリーフォール以外の効果で行動できなかった場合、威力が2倍になる。トーチカ・みきり・キングシールド・まもる・ニードルガード・トリックガード・たたみがえし・ファストガード・ワイドガードに防がれた場合や、じゅうりょく・うちおとす・サウザンアローの効果でとびはねる・そらをとぶが中断された場合は、威力は2倍にならない。", // NEEDS QC
+		shortDesc: "前のターンに技が失敗していたら威力2倍。", // NEEDS QC
 	},
 	terablast: {
 		name: "テラバースト",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "テラスタルしている場合、（能力ランクの変化を含めて）自分の攻撃が特攻より高ければ物理技になり、この技のタイプは自分のテラスタイプと同じになる。さらに、テラスタイプがステラの場合、威力100になり、テラスタルしている相手には効果ばつぐん、それ以外の相手には等倍になり、自分の攻撃と特攻が1段階ずつ下がる。", // NEEDS QC
+		shortDesc: "テラスタル時、タイプと分類が変化する。", // NEEDS QC
 	},
 	terastarstorm: {
 		name: "テラクラスター",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分がステラフォルムのテラパゴスの場合、この技のタイプはステラになり、相手全体を攻撃し、（能力ランクの変化を含めて）自分の攻撃が特攻より高ければ物理技になる。", // NEEDS QC
+		shortDesc: "テラパゴス（ステラ）はステラで全体攻撃。", // NEEDS QC
 	},
 	terrainpulse: {
 		name: "だいちのはどう",
 		// Official flavor text: "フィールドの力を 借りて 攻撃。 使った時の フィールドの状態に よって 技の タイプと 威力が 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分が地面にいてフィールドが発生している場合、威力が2倍になり、この技のタイプがフィールドに応じて変わる。エレキフィールドではでんきタイプ、グラスフィールドではくさタイプ、ミストフィールドではフェアリータイプ、サイコフィールドではエスパータイプになる。", // NEEDS QC
+		shortDesc: "フィールドで威力2倍・タイプ変化。", // NEEDS QC
 	},
 	thief: {
 		name: "どろぼう",
 		// Official flavor text: "攻撃と 同時に 道具を 盗む。 自分が 道具を 持っている 場合は 盗めない。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、自分が道具を持っていなければ相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしになっていなければ道具を失わない。カイオーガ・グラードン・ディアルガ・パルキア・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタ・パラドックスポケモン・オーガポンが持つ、それぞれあいいろのたま・べにいろのたま・だいこんごうだま・だいしらたま・だいはっきんだま・プレート・カセット・メモリ・くちたけん・くちたたて・ブーストエナジー・おめんは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。ここでのパラドックスポケモンは、特性がこだいかっせい・クォークチャージの全種族（ウガツホムラ・タケルライコ・テツノイワオ・テツノカシラを除く）を指す。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
+		shortDesc: "道具を持っていなければ相手から奪う。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリ・くちたけん・くちたたては奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。Zクリスタル、メガシンカできる種族が持つメガストーン、およびカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。メガシンカできる種族が持つメガストーン、およびカイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクトが持つ、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセットは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっておらず、自分が道具を持っていない場合、相手の持ち物を奪う。特性がねんちゃくの相手は、ひんしにならない限り道具を失わない。メール、およびギラティナ・アルセウス・ゲノセクトが持つ、それぞれはっきんだま・プレート・カセットは奪えず、自分がそれらの種族で相手が対応する道具を持っている場合も奪えない。この技で失われた道具は、リサイクルや特性しゅうかくでは取り戻せない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分が道具を持っていない場合、相手の持ち物を奪う。道具がメールかはっきんだまの場合や、相手の特性がマルチタイプかねんちゃくの場合は奪えない。この技で失われた道具は、リサイクルでは取り戻せない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分が道具を持っていない場合、相手の持ち物を奪う。道具がメールかナゾのみの場合や、相手の特性がねんちゃくの場合は奪えない。この技で失われた道具は、リサイクルでは取り戻せない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分が道具を持っていない場合、100%の確率で相手の持ち物を奪う。相手の道具がメールの場合は奪えない。", // NEEDS QC
 		},
 	},
 	thousandarrows: {
 		name: "サウザンアロー",
 		// Official flavor text: "浮いている ポケモンにも 当たる。 浮いていた 相手は 撃ち落とされて 地面に 落ちる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "空中にいるポケモン（ひこうタイプ、特性ふゆうのポケモン、ふうせんを持っているポケモン、でんじふゆう・テレキネシスの効果を受けているポケモン）にも当たる。相手が地面にいないひこうタイプの場合、他のタイプにかかわらず等倍のダメージを与える。とびはねる・そらをとぶ・フリーフォールで飛び上がっている相手にも当たる。とびはねる・そらをとぶ・でんじふゆう・テレキネシスの効果を受けている相手に当てると、その効果は終わる。相手が（このターンにはねやすめを使っていない）ひこうタイプか特性ふゆうのポケモンの場合、場にいる間、じめんタイプの攻撃と特性ありじごくへの免疫を失う。効果の間、相手はでんじふゆうを使えず、相手へのテレキネシスも失敗する。", // NEEDS QC
+		shortDesc: "空中の相手も落として当てる。", // NEEDS QC
 	},
 	thousandwaves: {
 		name: "サウザンウェーブ",
 		// Official flavor text: "地をはう 波によって 攻撃。 波に 巻き込まれた 相手は 戦闘から 逃げられなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手全体を攻撃し、交代できなくする。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を交代できなくする。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。相手がバトンタッチで場を離れた場合、交代先も交代できないままになる。自分が場を離れると効果は終わる。", // NEEDS QC
 		},
 	},
 	thrash: {
 		name: "あばれる",
 		// Official flavor text: "２ー３ターンの 間 暴れまくって 相手を 攻撃する。 暴れたあとは 混乱する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜3ターンの間この技に固定され、最終ターンの行動直後に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、効果の1ターン目（3ターンの場合は2ターン目も）に攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれてねむったまま使った場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
+		shortDesc: "2〜3ターン暴れて、その後こんらんする。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの行動直後に（まだそうでなければ）こんらん状態になる。この技は毎ターン、隣接する相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、効果の1ターン目（3ターンの場合は2ターン目も）に攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの終了時に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ターン開始時にねむっていた場合、攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜3ターンの間この技に固定され、最終ターンの終了時に（まだそうでなければ）こんらん状態になる。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。行動できなかった場合、ねむった場合、こおり状態になった場合、攻撃が失敗した場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "この技の成否にかかわらず、2〜3ターンの間この技に固定され、最終ターンの行動直後に、すでにこんらんしていてもこんらん状態になる。行動できなかった場合、こんらんせずに効果は終わる。ねごとでこの技が選ばれた場合、1ターンだけ使い、こんらんしない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "この技の成否にかかわらず、3〜4ターンの間この技に固定され、最終ターンの行動直後に、すでにこんらんしていてもこんらん状態になる。行動できなかった場合、こんらんせずに効果は終わる。効果中、この技の命中率は毎ターン、ランク変化を含めて計算した現在の命中率で上書きされるが、1/256未満や255/256超にはならない。", // NEEDS QC
+			shortDesc: "3〜4ターン続き、その後こんらんする。", // NEEDS QC
 		},
 	},
 	throatchop: {
 		name: "じごくづき",
 		// Official flavor text: "この 技を 受けた 相手は 地獄の 苦しみから ２ターンの間 音の 技を 出すことが できなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2ターンの間、相手は音の技を使えなくなる。", // NEEDS QC
+		shortDesc: "2ターン、相手は音の技を使えなくなる。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2ターンの間、相手は音の技を使えなくなる。効果中もZパワーで強化された音の技は選択して使える。", // NEEDS QC
 		},
 
 		cant: "{POKEMON}は じごくづきの 効果で 技が 出せない！",
@@ -7699,106 +7680,106 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thunder: {
 		name: "かみなり",
 		// Official flavor text: "激しい 雷を 相手に 落として 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をまひ状態にする。とびはねる・そらをとぶ・フリーフォールで飛び上がっている相手や、フリーフォールの効果を受けている相手にも当たる。天気があめ・おおあめの場合、必中になる。天気がにほんばれ・おおひでりの場合、命中率が50%になる。ばんのうがさを持っている相手に対しては、命中率は70%のまま。", // NEEDS QC
+		shortDesc: "30%でまひにする。雨なら必中。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。とびはねる・そらをとぶ・フリーフォールで飛び上がっている相手や、フリーフォールの効果を受けている相手にも当たる。天気があめ・おおあめの場合、必中になる。天気がにほんばれ・おおひでりの場合、命中率が50%になる。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。とびはねる・そらをとぶ・フリーフォールで飛び上がっている相手や、フリーフォールの効果を受けている相手にも当たる。天気があめの場合、必中になる。天気がにほんばれの場合、命中率が50%になる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。とびはねる・そらをとぶを使用中の相手にも当たる。天気があめの場合、必中になる。天気がにほんばれの場合、命中率が50%になる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%の確率で相手をまひ状態にする。そらをとぶを使用中の相手にも当たる。天気があめの場合、必中になる。天気がにほんばれの場合、命中率が50%になる。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
+			shortDesc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
 		},
 	},
 	thunderbolt: {
 		name: "１０まんボルト",
 		// Official flavor text: "強い 電撃を 相手に 浴びせて 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	thundercage: {
 		name: "サンダープリズン",
 		// Official flavor text: "ほとばしる 電気の おりの 中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は {SOURCE}に 閉じこめられた！",
 	},
 	thunderclap: {
 		name: "じんらい",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がこのターンに物理技・特殊技・さきどりのいずれも選んでいなかった場合や、相手が自分より先に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "先制技。相手が攻撃技以外なら失敗。", // NEEDS QC
 	},
 	thunderfang: {
 		name: "かみなりのキバ",
 		// Official flavor text: "電気を ためた キバで かみつく。 相手を ひるませたり まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をまひ状態にする。10%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "10%でまひ。10%でひるませる。", // NEEDS QC
 	},
 	thunderouskick: {
 		name: "らいめいげり",
 		// Official flavor text: "雷の ような 動きで 相手を 翻弄しながら キックする。 相手の 防御を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の防御を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の防御を1段階下げる。", // NEEDS QC
 	},
 	thunderpunch: {
 		name: "かみなりパンチ",
 		// Official flavor text: "電撃を こめた パンチで 相手を 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	thundershock: {
 		name: "でんきショック",
 		// Official flavor text: "電気の 刺激を 相手に 浴びせて 攻撃する。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	thunderwave: {
 		name: "でんじは",
 		// Official flavor text: "弱い 電撃を 浴びせることで 相手を まひ状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をまひ状態にする。タイプ相性による無効は貫通しない。", // NEEDS QC
+		shortDesc: "相手をまひ状態にする。", // NEEDS QC
 	},
 	tickle: {
 		name: "くすぐる",
 		// Official flavor text: "体を くすぐり 笑わせる ことで 相手の 攻撃と 防御を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の攻撃と防御を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "相手の攻撃・防御を1段階下げる。", // NEEDS QC
 	},
 	tidyup: {
 		name: "おかたづけ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と素早さを1段階ずつ上げる。場にいるすべてのポケモンのみがわりを消し、両側のまきびし・ステルスロック・ねばねばネット・どくびしの効果を消す。", // NEEDS QC
+		shortDesc: "攻撃・素早さ+1。みがわりと設置技を消す。", // NEEDS QC
 
 		activate: "  かたづけ おわり！",
 	},
 	topsyturvy: {
 		name: "ひっくりかえす",
 		// Official flavor text: "相手に かかっている すべての 能力変化を ひっくり返して 逆にする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の能力ランクの変化のプラスとマイナスを逆にする。相手の能力ランクがすべて0の場合は失敗する。", // NEEDS QC
+		shortDesc: "相手の能力変化を逆にする。", // NEEDS QC
 	},
 	torchsong: {
 		name: "フレアソング",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の特攻を1段階上げる。", // NEEDS QC
+		shortDesc: "100%の確率で自分の特攻が1段階上がる。", // NEEDS QC
 	},
 	torment: {
 		name: "いちゃもん",
 		// Official flavor text: "相手に いちゃもんを つけて 同じ 技を ２回連続で だせなくする。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手は同じ技を2ターン連続で選択できなくなる。相手が場を離れると効果は終わる。", // NEEDS QC
+		shortDesc: "相手は同じ技を連続で出せなくなる。", // NEEDS QC
 
 		start: "  {POKEMON}は いちゃもんを つけられた！",
 		end: "  {POKEMON}の いちゃもんの 効果が切れた！",
@@ -7806,26 +7787,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxic: {
 		name: "どくどく",
 		// Official flavor text: "相手を 猛毒の 状態に する。 ターンが すすむほど 毒の ダメージが 増えていく。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をもうどく状態にする。どくタイプのポケモンが使うと、相手は（2ターン技の最中でも）この技を避けられない。", // NEEDS QC
+		shortDesc: "相手をもうどくにする。どくタイプなら必中。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手をもうどく状態にする。", // NEEDS QC
+			shortDesc: "相手をもうどく状態にする。", // NEEDS QC
 		},
 	},
 	toxicspikes: {
 		name: "どくびし",
 		// Official flavor text: "相手の 足下に どくびしを しかける。 交代で でてきた 相手の ポケモンに 毒を おわせる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンをどく状態にする。ひこうタイプや特性がふゆうのポケモンには効果がない。最大2回まで重ねて仕掛けられ、1回でどく状態、2回でもうどく状態にする。いずれかのポケモンがおかたづけを使うか、相手側のポケモンがキラースピン・こうそくスピン・きりばらいを成功させるかきりばらいを受けるか、地面にいるどくタイプのポケモンが交代で出てくると、取り除かれる。しんぴのまもりは交代時のどくを防ぐが、みがわりは防がない。", // NEEDS QC
+		shortDesc: "交代で出た地面の相手をどくにする。最大2回。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンをどく状態にする。ひこうタイプや特性がふゆうのポケモンには効果がない。最大2回まで重ねて仕掛けられ、1回でどく状態、2回でもうどく状態にする。相手側のポケモンがこうそくスピン・きりばらいを成功させるかきりばらいを受けるか、地面にいるどくタイプのポケモンが交代で出てくると、取り除かれる。しんぴのまもりは交代時のどくを防ぐが、みがわりは防がない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンをどく状態にする。ひこうタイプや特性がふゆうのポケモンには効果がない。最大2回まで重ねて仕掛けられ、1回でどく状態、2回でもうどく状態にする。相手側のポケモンがこうそくスピンを成功させるかきりばらいを受けるか、地面にいるどくタイプのポケモンが交代で出てくると、取り除かれる。しんぴのまもりは交代時のどくを防ぐが、みがわりは防がない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手側の場に設置技の効果を仕掛け、交代で出てきた相手のポケモンをどく状態にする。ひこうタイプや特性がふゆうのポケモンには効果がない。最大2回まで重ねて仕掛けられ、1回でどく状態、2回でもうどく状態にする。相手側のポケモンがこうそくスピンを成功させるかきりばらいを受けるか、地面にいるどくタイプのポケモンが交代で出てくると、取り除かれる。しんぴのまもりは交代時のどくを防ぎ、みがわりを出したまま交代で出てきた場合も防がれる。", // NEEDS QC
 		},
 
 		start: "  {TEAM}の 足下に どくびしが 散らばった！",
@@ -7834,8 +7815,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxicthread: {
 		name: "どくのいと",
 		// Official flavor text: "毒の 混じった 糸を 吹き付ける。 相手を 毒にして 素早さを さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の素早さを1段階下げ、どく状態にする。", // NEEDS QC
+		shortDesc: "相手の素早さを1段階下げ、どくにする。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7843,23 +7824,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trailblaze: {
 		name: "くさわけ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の素早さを1段階上げる。", // NEEDS QC
+		shortDesc: "100%の確率で自分の素早さが1段階上がる。", // NEEDS QC
 	},
 	transform: {
 		name: "へんしん",
 		// Official flavor text: "相手の ポケモンに 変身することで 相手と まったく 同じ 技が 使える。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にへんしんする。相手の現在の能力・能力ランク・タイプ・技・特性・重さ・性別・見た目をコピーする。自分のレベルとHPはそのままで、コピーした各技のPPは最大5になる。フォルムチェンジできるポケモンでも、へんしん中はできなくなる。みがわりに当たった場合、自分または相手がすでにへんしんしている場合、どちらかがイリュージョンで化けている場合は失敗する。", // NEEDS QC
+		shortDesc: "相手の能力・技・タイプ・特性をコピー。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手にへんしんする。相手の現在の能力・能力ランク・タイプ・技・特性・重さ・個体値・種族・見た目をコピーする。自分のレベルとHPはそのままで、コピーした各技のPPは5になる。相手がへんしんしている場合は失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手にへんしんする。相手の現在の能力・能力ランク・タイプ・技・個体値・種族・見た目をコピーする。自分のレベルとHPはそのままで、コピーした各技のPPは5になる。相手がへんしんしている場合は失敗する。", // NEEDS QC
+			shortDesc: "相手の能力・技・タイプ・種族をコピー。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手にへんしんする。相手の現在の能力・能力ランク・タイプ・技・個体値・種族・見た目をコピーする。自分のレベルとHPはそのままで、コピーした各技のPPは5になる。この技はあなをほる・そらをとぶを使用中の相手にも当てられる。", // NEEDS QC
 		},
 
 		transform: "{POKEMON}は {SPECIES}に 変身した！",
@@ -7867,41 +7848,41 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	triattack: {
 		name: "トライアタック",
 		// Official flavor text: "３つの 光線で 攻撃する。 まひか やけどか こおり状態の どれかに することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をやけど・こおり・まひのいずれかの状態にする。", // NEEDS QC
+		shortDesc: "20%でまひ・やけど・こおりのいずれかに。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "やけど・こおり・まひのいずれかがランダムに選ばれ、20%の確率で相手をその状態にする。相手がこおり状態でやけどが選ばれた場合、こおりが溶ける。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "追加効果なし。", // NEEDS QC
+			shortDesc: "追加効果なし。", // NEEDS QC
 		},
 	},
 	trick: {
 		name: "トリック",
 		// Official flavor text: "相手の すきを ついて 自分と 相手の 持ち物を 交換する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合は失敗する。また、カイオーガ・グラードン・ディアルガ・パルキア・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタ・パラドックスポケモン・オーガポンと、それぞれあいいろのたま・べにいろのたま・だいこんごうだま・だいしらたま・だいはっきんだま・プレート・カセット・メモリ・くちたけん・くちたたて・ブーストエナジー・おめんの組み合わせで道具を渡そうとしたり奪おうとした場合も失敗する。ここでのパラドックスポケモンは、特性がこだいかっせい・クォークチャージの全種族（ウガツホムラ・タケルライコ・テツノイワオ・テツノカシラを除く）を指す。特性がねんちゃくの相手には効かない。", // NEEDS QC
+		shortDesc: "相手と持ち物を入れ替える。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合や、カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディ・ザシアン・ザマゼンタと、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリ・くちたけん・くちたたての組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、どちらかがZクリスタルを持っている場合、メガストーンをそれでメガシンカできる種族に渡そうとしたり奪おうとした場合、カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクト・シルヴァディと、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセット・メモリの組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、メガストーンをそれでメガシンカできる種族に渡そうとしたり奪おうとした場合、カイオーガ・グラードン・ギラティナ・アルセウス・ゲノセクトと、それぞれあいいろのたま・べにいろのたま・はっきんだま・プレート・カセットの組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、どちらかがメールを持っている場合、ギラティナ・アルセウス・ゲノセクトと、それぞれはっきんだま・プレート・カセットの組み合わせで道具を渡そうとしたり奪おうとした場合は失敗する。特性がねんちゃくの相手には効かない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、どちらかがメールかはっきんだまを持っている場合、どちらかの特性がマルチタイプの場合、どちらかがはたきおとすの効果を受けている場合、相手の特性がねんちゃくの場合は失敗する。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "自分と相手の持ち物を入れ替える。自分も相手も道具を持っていない場合、どちらかがメールを持っている場合、どちらかがはたきおとすの効果を受けている場合、相手の特性がねんちゃくの場合は失敗する。", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}は おたがいの 道具を入れ替えた！",
@@ -7909,123 +7890,123 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	trickortreat: {
 		name: "ハロウィン",
 		// Official flavor text: "相手を ハロウィンに 誘う。 相手の タイプに ゴーストタイプが 追加される。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にゴーストタイプを追加し、2〜3つのタイプを持たせる。相手がすでにゴーストタイプの場合は失敗する。もりののろいでタイプが追加されると、この技で追加されたタイプは置き換えられる（逆も同様）。", // NEEDS QC
+		shortDesc: "相手にゴーストタイプを追加する。", // NEEDS QC
 	},
 	trickroom: {
 		name: "トリックルーム",
 		// Official flavor text: "まか不思議な 空間を つくる。 ５ターンの 間 遅い ポケモンから 行動できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、行動順の判定に使われる素早さがすべてのポケモンで再計算される。効果の間、各ポケモンの素早さは（10000−本来の素早さ）として扱われ、この値が8191を超える場合は8192を引く。効果の間にこの技を使うと、効果は終わる。", // NEEDS QC
+		shortDesc: "5ターン、行動順が遅い順になる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5ターンの間、同じ優先度の技の中では、素早さが低いポケモンが素早さが高いポケモンより先に行動する。効果の間にこの技を使うと、効果は終わる。", // NEEDS QC
 		},
 	},
 	triplearrows: {
 		name: "３ぼんのや",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%の確率で相手の防御を1段階下げる。30%の確率で相手をひるませる。急所に当たりやすい（急所ランク+1）。", // NEEDS QC
+		shortDesc: "急所率高。50%で防御-1、30%でひるみ。", // NEEDS QC
 	},
 	tripleaxel: {
 		name: "トリプルアクセル",
 		// Official flavor text: "３回連続で キックを くりだして 攻撃する。 技が 当たるたびに 威力は あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3回連続で攻撃する。威力は2回目が40、3回目が60に上がる。1回ごとに命中判定を行い、外れると攻撃は終わる。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず3回当たる。", // NEEDS QC
+		shortDesc: "3回攻撃。各回命中判定あり、威力上昇。", // NEEDS QC
 	},
 	tripledive: {
 		name: "トリプルダイブ",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3回連続で攻撃する。", // NEEDS QC
+		shortDesc: "3回攻撃する。", // NEEDS QC
 	},
 	triplekick: {
 		name: "トリプルキック",
 		// Official flavor text: "３回連続で キックを くりだして 攻撃する。 技が 当たるたびに 威力は あがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3回連続で攻撃する。威力は2回目が20、3回目が30に上がる。1回ごとに命中判定を行い、外れると攻撃は終わる。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず3回当たる。", // NEEDS QC
+		shortDesc: "3回攻撃。各回命中判定あり、威力上昇。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3回連続で攻撃する。威力は2回目が20、3回目が30に上がる。1回ごとに命中判定を行い、外れると攻撃は終わる。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。相手がきあいのタスキを持っていて、この技が始まったときにHPが満タンだった場合、攻撃回数にかかわらずひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3回連続で攻撃する。威力は2回目が20、3回目が30に上がる。1回ごとに命中判定を行い、外れると攻撃は終わる。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "ランダムに1〜3回連続で攻撃する。威力は2回目が20、3回目が30に上がる。", // NEEDS QC
+			shortDesc: "1〜3回攻撃。回ごとに威力が上がる。", // NEEDS QC
 		},
 	},
 	tropkick: {
 		name: "トロピカルキック",
 		// Official flavor text: "南国 由来の 熱い キックを 相手に 浴びせる。 相手の 攻撃を さげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
+		shortDesc: "100%の確率で相手の攻撃を1段階下げる。", // NEEDS QC
 	},
 	trumpcard: {
 		name: "きりふだ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は、通常のPP消費と特性プレッシャーの効果を適用した後の残りPPで決まる。0なら200、1なら80、2なら60、3なら50、4以上なら40。", // NEEDS QC
+		shortDesc: "残りPPが少ないほど威力が上がる。", // NEEDS QC
 	},
 	twinbeam: {
 		name: "ツインビーム",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃する。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "1ターンに2回攻撃する。", // NEEDS QC
 	},
 	twineedle: {
 		name: "ダブルニードル",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回連続で攻撃し、攻撃ごとに20%の確率で相手をどく状態にする。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
+		shortDesc: "2回攻撃。各回20%の確率でどくにする。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃し、攻撃ごとに20%の確率で相手をどく状態にする。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。相手がきあいのタスキを持っていて、この技が始まったときにHPが満タンだった場合、攻撃回数にかかわらずひんしにならない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃し、攻撃ごとに20%の確率で相手をどく状態にする。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃し、2回目の攻撃は20%の確率で相手をどく状態にする。1回目の攻撃で相手のみがわりを壊した場合、2回目の攻撃は本体に当たるが、その攻撃ではどく状態にならない。", // NEEDS QC
+			shortDesc: "2回攻撃。2回目は20%でどく。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回連続で攻撃し、2回目の攻撃は20%の確率で相手をどく状態にする。1回目の攻撃で相手のみがわりを壊した場合、技は終わる。", // NEEDS QC
 		},
 	},
 	twinkletackle: {
 		name: "ラブリースターインパクト",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力は元の技のＺパワーによる。", // NEEDS QC
 	},
 	twister: {
 		name: "たつまき",
 		// Official flavor text: "竜巻を おこして 相手を まきこみ 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をひるませる。相手がとびはねる・そらをとぶ・フリーフォールで飛び上がっている間や、フリーフォールの効果を受けている間は、ダメージが2倍になる。", // NEEDS QC
+		shortDesc: "20%の確率で相手をひるませる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "20%の確率で相手をひるませる。相手がとびはねる・そらをとぶを使用中の場合、威力が2倍になる。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "20%の確率で相手をひるませる。相手がそらをとぶを使用中の場合、威力が2倍になる。", // NEEDS QC
+			shortDesc: "20%の確率で相手をひるませる。", // NEEDS QC
 		},
 	},
 	upperhand: {
 		name: "はやてがえし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をひるませる。相手がこのターンに、優先度が+1以上に変更された物理技・特殊技を選んでいなかった場合や、相手が自分より先に行動する場合は失敗する。", // NEEDS QC
+		shortDesc: "100%ひるみ。相手が先制攻撃以外なら失敗。", // NEEDS QC
 	},
 	uproar: {
 		name: "さわぐ",
 		// Official flavor text: "３ターンの 間 騒いで 相手を 攻撃する。 そのあいだは だれも 眠れなくなる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3ターンの間この技に固定される。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。最初のターンに、場にいるねむり状態のポケモンはすべて目を覚ます。3ターンの間、場にいるポケモンはいかなる方法でもねむり状態にならず、効果の間に交代で出てきたポケモンも目を覚まさない。行動できなかった場合や攻撃が失敗した場合、効果は終わる。", // NEEDS QC
+		shortDesc: "3ターン暴れ、その間誰もねむれない。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3ターンの間この技に固定される。この技は毎ターン、隣接する相手のポケモンからランダムに対象を選ぶ。最初のターンに、場にいるねむり状態のポケモンはすべて目を覚ます。3ターンの間、場にいるポケモンはいかなる方法でもねむり状態にならず、効果の間に交代で出てきたポケモンも目を覚まさない。行動できなかった場合や攻撃が失敗した場合、効果は終わる。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3〜6ターンの間この技に固定される。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。効果の間、場にいるポケモンはいかなる方法でもねむり状態にならず、すでにねむっているポケモンは自分の番の開始時か、最終ターンを含む毎ターン終了時に目を覚ます。行動できなかった場合や攻撃が失敗した場合、効果は終わる。", // NEEDS QC
+			shortDesc: "3〜6ターン続く。その間だれも眠れない。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間この技に固定される。この技は毎ターン、相手のポケモンからランダムに対象を選ぶ。効果の間、場にいるポケモンはいかなる方法でもねむり状態にならず、すでにねむっているポケモンは自分の番の開始時か、最終ターンを含む毎ターン終了時に目を覚ます。行動できなかった場合や攻撃が失敗した場合、効果は終わる。", // NEEDS QC
+			shortDesc: "2〜5ターン続く。その間だれも眠れない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 騒ぎだした！",
@@ -8037,13 +8018,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	uturn: {
 		name: "とんぼがえり",
 		// Official flavor text: "攻撃したあと ものすごい スピードで もどってきて 控えの ポケモンと 入れ替わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合や、相手がだっしゅつボタンや特性ききかいひ・にげごしで交代した場合は交代しない。", // NEEDS QC
+		shortDesc: "攻撃した後、控えと交代する。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっていない場合、交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合や、相手がだっしゅつボタンで交代した場合は交代しない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっていない場合、交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合は交代しない。", // NEEDS QC
 		},
 
 		switchOut: "{POKEMON}は {TRAINER}の元へ 戻っていく！",
@@ -8051,59 +8032,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	vacuumwave: {
 		name: "しんくうは",
 		// Official flavor text: "こぶしを ふって 真空の 波を まきおこす。 必ず 先制攻撃できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "追加効果なし。", // NEEDS QC
+		shortDesc: "先制で攻撃できる（優先度+1）。", // NEEDS QC
 	},
 	vcreate: {
 		name: "Ｖジェネレート",
 		// Official flavor text: "灼熱の 炎を 額から 発生させて 捨て身の 体当たり。 防御 特防 素早さが さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の素早さ・防御・特防を1段階ずつ下げる。", // NEEDS QC
+		shortDesc: "自分の防御・特防・素早さを1段階下げる。", // NEEDS QC
 	},
 	veeveevolley: {
 		name: "ブイブイブレイク",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分のなつき度×2/5）（切り捨て、最低1）。", // NEEDS QC
+		shortDesc: "なつき度最大で威力102。必中。", // NEEDS QC
 	},
 	venomdrench: {
 		name: "ベノムトラップ",
 		// Official flavor text: "特殊な 毒液を 浴びせかける。 毒状態の 相手は 攻撃 特攻 素早さが さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "どく状態の相手の攻撃・特攻・素早さを1段階ずつ下げる。相手がどく状態でなければ失敗する。", // NEEDS QC
+		shortDesc: "どく状態の相手の攻撃・特攻・素早さ-1。", // NEEDS QC
 	},
 	venoshock: {
 		name: "ベノムショック",
 		// Official flavor text: "特殊な 毒液を 浴びせかける。 毒状態の 相手には 威力が ２倍に なる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がどく状態の場合、威力が2倍になる。", // NEEDS QC
+		shortDesc: "どく状態の相手には威力2倍。", // NEEDS QC
 	},
 	victorydance: {
 		name: "しょうりのまい",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃・防御・素早さを1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃・防御・素早さが1段階上がる。", // NEEDS QC
 	},
 	vinewhip: {
 		name: "つるのムチ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	visegrip: {
 		name: "はさむ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	vitalthrow: {
 		name: "あてみなげ",
 		// Official flavor text: "相手より あとに 攻撃する。 そのかわり 自分の 攻撃は 必ず 命中する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必中。", // NEEDS QC
+		shortDesc: "必中だが、後攻になる。", // NEEDS QC
 	},
 	voltswitch: {
 		name: "ボルトチェンジ",
 		// Official flavor text: "攻撃したあと ものすごい スピードで もどってきて 控えポケモンと 入れ替わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻撃が成功して自分がひんしになっていない場合、交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合や、相手がだっしゅつボタンや特性ききかいひ・にげごしで交代した場合は交代しない。", // NEEDS QC
+		shortDesc: "攻撃した後、控えと交代する。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻撃が成功して自分がひんしになっていない場合、交代できない状態でも必ず交代し、選んだ控えのポケモンとすぐに入れ替わる。控えにひんしでないポケモンがいない場合や、相手がだっしゅつボタンで交代した場合は交代しない。", // NEEDS QC
 		},
 
 		switchOut: "#uturn",
@@ -8111,45 +8092,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	volttackle: {
 		name: "ボルテッカー",
 		// Official flavor text: "電気を まとって 突進する。 自分も かなり ダメージを 受ける。 まひ状態に することが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をまひ状態にする。相手にダメージを与えた場合、自分は与えたダメージの33%（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "33%の反動。10%でまひにする。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%の確率で相手をまひ状態にする。相手にダメージを与えた場合、自分は与えたダメージの1/3（切り捨て、最低1）の反動ダメージを受ける。", // NEEDS QC
+			shortDesc: "反動1/3。10%でまひにする。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/3（切り捨て、最低1）の反動ダメージを自分が受ける。", // NEEDS QC
+			shortDesc: "1/3の反動ダメージを受ける。", // NEEDS QC
 		},
 	},
 	wakeupslap: {
 		name: "めざましビンタ",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手がねむり状態の場合、威力が2倍になる。自分がひんしになっていなければ、相手のねむりを治す。", // NEEDS QC
+		shortDesc: "ねむりの相手に威力2倍。そのねむりを治す。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手がねむり状態の場合、威力が2倍になる。この技が成功すると、相手のねむりを治す。", // NEEDS QC
 		},
 	},
 	waterfall: {
 		name: "たきのぼり",
 		// Official flavor text: "すごい 勢いで 相手に つっこむ。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "20%の確率で相手をひるませる。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "追加効果なし。", // NEEDS QC
+			shortDesc: "追加効果なし。", // NEEDS QC
 		},
 	},
 	watergun: {
 		name: "みずでっぽう",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	waterpledge: {
 		name: "みずのちかい",
 		// Official flavor text: "水の柱で 攻撃する。 ほのおと 組みあわせると 威力が あがって 空に にじが かかる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "味方がこのターンにほのおのちかいまたはくさのちかいを選んでいてまだ行動していない場合、味方は自分の直後に行動し、自分の技は何もしない。ほのおのちかいと組み合わせた場合、味方が威力150のみずのちかいを使い、自分側の場に4ターンの間虹がかかり、技の追加効果の発動率が2倍になる（特性てんのめぐみと重複するが、ひるみの効果の発動率は1回しか2倍にならない）。くさのちかいと組み合わせた場合、味方が威力150のくさのちかいを使い、相手側の場が4ターンの間湿原になり、その側のポケモンの素早さが1/4になる。組み合わせて使った場合、自分のタイプにかかわらずタイプ一致補正を受ける。この技ではみずのジュエルは消費されず、特性よびみずによる対象変更も受けない。", // NEEDS QC
+		shortDesc: "くさ・ほのおのちかいと組み合わせ効果。", // NEEDS QC
 
 		activate: "  {POKEMON}は {TARGET}を 待っている…",
 		start: "  {TEAM}の空に にじが かかった！",
@@ -8158,60 +8139,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	waterpulse: {
 		name: "みずのはどう",
 		// Official flavor text: "水の 振動を 相手に 与えて 攻撃する。 相手を 混乱させることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
+		shortDesc: "20%の確率で相手をこんらん状態にする。", // NEEDS QC
 	},
 	watershuriken: {
 		name: "みずしゅりけん",
 		// Official flavor text: "粘液で できた 手裏剣を ２ー５回の 間 連続で だす。 必ず 先制攻撃 できる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。自分が特性きずなへんげのサトシゲッコウガの場合、威力20で必ず3回当たる。いかさまダイスを持っている場合は必ず4回か5回当たる。", // NEEDS QC
+		shortDesc: "先制技。1ターンに2〜5回攻撃する。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5回連続で攻撃する。2回・3回当たる確率は各35%、4回・5回当たる確率は各15%。途中の攻撃で相手のみがわりを壊した場合、残りの攻撃は本体に当たる。自分の特性がスキルリンクの場合は必ず5回当たる。", // NEEDS QC
 		},
 	},
 	watersport: {
 		name: "みずあそび",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、場にいるすべてのポケモンのほのおタイプの攻撃技の威力が0.33倍になる。すでにこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "5ターン、ほのお技の威力を1/3にする。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、場にいるすべてのポケモンのほのおタイプの攻撃技の威力が0.33倍になる。すでにいずれかのポケモンにこの効果がある場合は失敗する。", // NEEDS QC
+			shortDesc: "ほのお技の威力を1/3にする。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "自分が場にいる間、場にいるすべてのポケモンのほのおタイプの攻撃技の威力が半分になる。すでに自分にこの効果がある場合は失敗する。バトンタッチでこの効果を味方に引き継げる。", // NEEDS QC
+			shortDesc: "ほのお技の威力を半分にする。", // NEEDS QC
 		},
 	},
 	waterspout: {
 		name: "しおふき",
 		// Official flavor text: "潮を 吹きつけて 攻撃する。 自分の ＨＰが 少ないほど 技の 威力は さがる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は（自分の残りHP×150÷自分の最大HP）（切り捨て、最低1）。", // NEEDS QC
+		shortDesc: "自分のHPが減るほど威力低下。相手全体攻撃。", // NEEDS QC
 	},
 	wavecrash: {
 		name: "ウェーブタックル",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの33%（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの33%の反動を受ける。", // NEEDS QC
 	},
 	weatherball: {
 		name: "ウェザーボール",
 		// Official flavor text: "使ったときの 天気に よって 技の タイプと 威力が 変わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天気が（らんきりゅう以外で）発生している場合、威力が2倍になり、この技のタイプが天気に応じて変わる。ゆきならこおりタイプ、あめ・おおあめならみずタイプ、すなあらしならいわタイプ、にほんばれ・おおひでりならほのおタイプになる。ばんのうがさを持ってあめ・おおあめ・にほんばれ・おおひでりの中で使った場合、ノーマルタイプのままで威力も2倍にならない。", // NEEDS QC
+		shortDesc: "天気に応じて威力2倍・タイプ変化。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気が（らんきりゅう以外で）発生している場合、威力が2倍になり、この技のタイプが天気に応じて変わる。あられならこおりタイプ、あめ・おおあめならみずタイプ、すなあらしならいわタイプ、にほんばれ・おおひでりならほのおタイプになる。ばんのうがさを持ってあめ・おおあめ・にほんばれ・おおひでりの中で使った場合、ノーマルタイプのままで威力も2倍にならない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天気が発生している場合、威力が2倍になり、この技のタイプが天気に応じて変わる。あられならこおりタイプ、あめならみずタイプ、すなあらしならいわタイプ、にほんばれならほのおタイプになる。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "天気が発生している場合、ダメージが2倍になり、この技のタイプが天気に応じて変わる。あられならこおりタイプ、あめならみずタイプ、すなあらしならいわタイプ、にほんばれならほのおタイプになる。", // NEEDS QC
+			shortDesc: "天気があるとダメージ2倍・タイプ変化。", // NEEDS QC
 		},
 
 		move: "ウルトラダッシュアタックは 天気によって {MOVE}に なった！",
@@ -8219,23 +8200,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlpool: {
 		name: "うずしお",
 		// Official flavor text: "激しく 渦をまく 水の中に ４ー５ターンの 間 相手を 閉じこめて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（しめつけバンドを持っている場合は1/8、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間（ねばりのかぎづめを持っている場合は常に5ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手を捕らえてダメージ。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、バトンタッチを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は 渦の中に 閉じこめられた！",
@@ -8243,47 +8224,47 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlwind: {
 		name: "ふきとばし",
 		// Official flavor text: "相手を 吹きとばして 控えの ポケモンを ひきずりだす。 野生の 場合は 戦闘が 終わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がパーティの最後のひんしでないポケモンの場合や、相手がねをはるを使っていた場合、特性がきゅうばんの場合は失敗する。", // NEEDS QC
+		shortDesc: "相手をランダムな控えと強制交代させる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がパーティの最後のひんしでないポケモンの場合、ねをはるを使っていた場合、特性がきゅうばんの場合は失敗する。また、自分のレベルが相手より低く、0〜255のランダムな数Xについて X×(自分のレベル+相手のレベル)÷256+1（切り捨て）が（相手のレベル÷4）（切り捨て）以下の場合も失敗する。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手を強制的に交代させ、ひんしでない控えのポケモンからランダムに選んで出させる。相手がパーティの最後のひんしでないポケモンの場合や、自分が相手より先に行動した場合は失敗する。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "対戦での効果はない。", // NEEDS QC
+			shortDesc: "対戦での効果はない。", // NEEDS QC
 		},
 	},
 	wickedblow: {
 		name: "あんこくきょうだ",
 		// Official flavor text: "あくの型を 極めし 強烈な 一撃。 必ず 急所に 当たる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必ず急所に当たる。ただし、相手がおまじないの効果を受けている場合や、特性がカブトアーマー・シェルアーマーの場合は急所に当たらない。", // NEEDS QC
+		shortDesc: "必ず急所に当たる。", // NEEDS QC
 	},
 	wickedtorque: {
 		name: "ダークアクセル",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%の確率で相手をねむり状態にする。", // NEEDS QC
+		shortDesc: "10%の確率で相手をねむり状態にする。", // NEEDS QC
 	},
 	wideguard: {
 		name: "ワイドガード",
 		// Official flavor text: "味方全員に 当たる 攻撃を １ターンの 間 防ぐ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、相手全体または周囲全体を対象とする技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がトーチカ・かえんのまもり・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・スレッドトラップ・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "このターン味方への全体技を防ぐ。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、相手全体または周囲全体を対象とする技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・ダイウォール・ブロッキング・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、相手全体または周囲全体を対象とする技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がトーチカ・みきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、相手全体または周囲全体を対象とするダメージを与える技を防ぐ。この技は、他のまもる系の技と共通の成功率1/X（Xは1から始まり、成功するたびに3倍）を変動させるが、自身の成否判定にはその確率を使わない。失敗した場合や、最後に使った技がみきり・こらえる・キングシールド・まもる・ファストガード・ニードルガード・ワイドガード以外だった場合、またはそれらの技を使って守りが破られた場合、Xは1に戻る。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
+			shortDesc: "このターン、全体攻撃から味方を守る。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "このターンの間、自分とその場の味方は、（味方を含む）他のポケモンからの、相手全体または周囲全体を対象とするダメージを与える技を防ぐ。この技の成功率は1/Xで、Xは1から始まり、成功するたびに2倍になる。失敗した場合や、最後に使った技がみきり・こらえる・まもる・ファストガード・ワイドガード以外だった場合、Xは1に戻る。Xが256以上の場合、この技の成功率は1/(2^32)になる。このターンの最後に行動する場合や、すでに自分の側にこの効果がある場合は失敗する。", // NEEDS QC
 		},
 
 		start: "  {TEAM}は ワイドガードで 守られた！",
@@ -8291,33 +8272,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildboltstorm: {
 		name: "かみなりあらし",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をまひ状態にする。天気があめ・おおあめの場合、必中になる。ばんのうがさを持っている相手に対しては、命中率は80%のまま。", // NEEDS QC
+		shortDesc: "20%でまひにする。雨なら必中。", // NEEDS QC
 	},
 	wildcharge: {
 		name: "ワイルドボルト",
 		// Official flavor text: "電気を まとって 相手に ぶつかって 攻撃する。 自分も 少し ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの1/4（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの1/4の反動を受ける。", // NEEDS QC
 	},
 	willowisp: {
 		name: "おにび",
 		// Official flavor text: "不気味で 怪しい 炎を 放って 相手を やけどの 状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手をやけど状態にする。", // NEEDS QC
+		shortDesc: "相手をやけど状態にする。", // NEEDS QC
 	},
 	wingattack: {
 		name: "つばさでうつ",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	wish: {
 		name: "ねがいごと",
 		// Official flavor text: "次の ターンに 自分 もしくは 入れ替わった ポケモンの ＨＰを 最大ＨＰの 半分 回復する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "次のターンの終了時に、自分の位置にいるポケモンのHPを、自分の最大HPの1/2（切り捨て）だけ回復する。すでに自分の位置にこの効果がある場合は失敗する。", // NEEDS QC
+		shortDesc: "次のターン、最大HPの半分を回復する。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "次のターンの終了時に、自分の位置にいるポケモンのHPを、そのポケモンの最大HPの1/2（切り捨て）だけ回復する。すでに自分の位置にこの効果がある場合は失敗する。", // NEEDS QC
+			shortDesc: "次のターン、受け手の最大HPの半分回復。", // NEEDS QC
 		},
 
 		heal: "  {NICKNAME}の ねがいごとが かなった！",
@@ -8325,76 +8306,76 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	withdraw: {
 		name: "からにこもる",
 		// Official flavor text: "殻に 潜りこんで 身を守り 自分の 防御を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の防御を1段階上げる。", // NEEDS QC
+		shortDesc: "自分の防御が1段階上がる。", // NEEDS QC
 	},
 	wonderroom: {
 		name: "ワンダールーム",
 		// Official flavor text: "まか不思議な 空間を つくる。 ５ターンのあいだ すべてのポケモンの 防御と 特防が 入れ替わる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5ターンの間、場にいるすべてのポケモンの防御と特防の数値が入れ替わる。能力ランクの変化は影響を受けない。効果の間にこの技を使うと、効果は終わる。", // NEEDS QC
+		shortDesc: "5ターン、全員の防御と特防が入れ替わる。", // NEEDS QC
 	},
 	woodhammer: {
 		name: "ウッドハンマー",
 		// Official flavor text: "硬い 胴体を 相手に たたきつけて 攻撃する。 自分も かなり ダメージを 受ける。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手にダメージを与えた場合、自分は与えたダメージの33%（四捨五入、最低1）の反動ダメージを受ける。", // NEEDS QC
+		shortDesc: "与えたダメージの33%の反動を受ける。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "相手がHPを失った場合、失ったHPの1/3（切り捨て、最低1）の反動ダメージを自分が受ける。", // NEEDS QC
+			shortDesc: "1/3の反動ダメージを受ける。", // NEEDS QC
 		},
 	},
 	workup: {
 		name: "ふるいたてる",
 		// Official flavor text: "自分を 奮いたてて 攻撃と 特攻を あげる。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "自分の攻撃と特攻を1段階ずつ上げる。", // NEEDS QC
+		shortDesc: "自分の攻撃・特攻が1段階上がる。", // NEEDS QC
 	},
 	worryseed: {
 		name: "なやみのタネ",
 		// Official flavor text: "心を なやませる タネを 植えつける。 相手を 眠れなくして 特性を ふみんに する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "相手の特性をふみんにする。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・ふみん・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・テラスチェンジ・なまけ・ダルマモード・マイティチェンジの場合は失敗する。", // NEEDS QC
+		shortDesc: "相手の特性をふみんにする。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をふみんにする。相手の特性がじんばいったい・きずなへんげ・ぜったいねむり・ばけのかわ・うのミサイル・アイスフェイス・ふみん・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・なまけ・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をふみんにする。相手の特性がきずなへんげ・ぜったいねむり・ばけのかわ・ふみん・マルチタイプ・スワームチェンジ・ＡＲシステム・ぎょぐん・リミットシールド・バトルスイッチ・なまけ・ダルマモードの場合は失敗する。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をふみんにする。相手の特性がふみん・マルチタイプ・バトルスイッチ・なまけの場合は失敗する。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をふみんにする。相手の特性がふみん・マルチタイプ・なまけの場合は失敗する。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "相手の特性をふみんにする。相手の特性がマルチタイプ・なまけの場合や、相手がはっきんだまを持っている場合は失敗する。", // NEEDS QC
 		},
 	},
 	wrap: {
 		name: "まきつく",
 		// Official flavor text: "長い 体や つるなどを 使って ４ー５ターンの 間 相手に まきついて 攻撃する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・しっぽきり・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がキラースピン・こうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+		shortDesc: "4〜5ターンしめつけてダメージを与える。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・クイックターン・すてゼリフ・テレポート・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/8（しめつけバンドを持っている場合は1/6、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・すてゼリフ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4〜5ターンの間（ねばりのかぎづめを持っている場合は7ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（しめつけバンドを持っている場合は1/8、切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえり・ボルトチェンジを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間（ねばりのかぎづめを持っている場合は常に5ターン）、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、きれいなぬけがらを持っている相手や、バトンタッチ・とんぼがえりを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手を捕らえてダメージ。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間、相手を交代できなくし、毎ターン終了時に相手の最大HPの1/16（切り捨て）のダメージを与える。ただし、バトンタッチを使った相手は交代できる。自分または相手が場を離れるか、相手がこうそくスピン・みがわりを成功させると効果は終わる。この効果は重複せず、この技や他のしめつけ技を再度使ってもターン数はリセットされない。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2〜5ターンの間この技を使う。2〜3ターン続く確率は各3/8、4〜5ターン続く確率は各1/8。最初のターンに計算したダメージが毎ターンそのまま使われる。効果中、自分は技を選べず、相手は技を実行できないが、どちらも交代はできる。自分が交代した場合、相手はそのターンも技を実行できない。相手が交代した場合、自分は自動的にこの技を再度使い、そのときPPが0だった場合は63になる。自分か相手が交代するか、自分が行動できなくなると効果は終わる。この技はタイプ相性で無効な相手の行動も封じられるが、ダメージは与えない。", // NEEDS QC
+			shortDesc: "2〜5ターン、相手は行動できない。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}は {SOURCE}に 巻きつかれた！",
@@ -8403,50 +8384,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wringout: {
 		name: "しぼりとる",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力は120×（相手の残りHP÷相手の最大HP）（五捨五超入、最低1）。", // NEEDS QC
+		shortDesc: "相手の残りHPが多いほど威力が上がる。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力は、120×（相手の現在のHP÷相手の最大HP）+1（切り捨て）。", // NEEDS QC
 		},
 	},
 	xscissor: {
 		name: "シザークロス",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "追加効果なし。", // NEEDS QC
 	},
 	yawn: {
 		name: "あくび",
 		// Official flavor text: "大きな あくびで 眠気を 誘う。 次の ターンに 相手を 眠り状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "次のターンの終了時に、相手をねむり状態にする。使用時に相手がねむれない状態の場合や、すでに状態異常の場合は失敗する。次のターン終了時に、相手がまだ場にいて、状態異常でなく、ねむれる状態であれば、ねむり状態になる。相手がねむけ状態になった後は、しんぴのまもりやみがわりでは防げず、効果の間にねむって目を覚ましても防げない。", // NEEDS QC
+		shortDesc: "次のターンの終わりに相手をねむらせる。", // NEEDS QC
 
 		start: "  {POKEMON}の 眠気を 誘った！",
 	},
 	zapcannon: {
 		name: "でんじほう",
 		// Official flavor text: "大砲の ような 電気を 発射して 攻撃する。 相手を まひの 状態に する。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
+		shortDesc: "100%の確率で相手をまひ状態にする。", // NEEDS QC
 	},
 	zenheadbutt: {
 		name: "しねんのずつき",
 		// Official flavor text: "思念の 力を 額に 集めて 攻撃する。 相手を ひるませることが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "20%の確率で相手をひるませる。", // NEEDS QC
 	},
 	zingzap: {
 		name: "びりびりちくちく",
 		// Official flavor text: "相手に ぶつかって 強力な 電気を浴びせ びりびりちくちく させる。 相手を ひるませる ことが ある。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%の確率で相手をひるませる。", // NEEDS QC
+		shortDesc: "30%の確率で相手をひるませる。", // NEEDS QC
 	},
 	zippyzap: {
 		name: "ばちばちアクセル",
 		// Official flavor text: "この技は 使えません 思い出すことが できなくなりますが 技を 忘れることを おすすめします"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%の確率で自分の回避率を1段階上げる。", // NEEDS QC
+		shortDesc: "先制技。自分の回避率が1段階上がる。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "必ず急所に当たる。", // NEEDS QC
+			shortDesc: "ほぼ必ず先制。必ず急所に当たる。", // NEEDS QC
 		},
 	},
 };

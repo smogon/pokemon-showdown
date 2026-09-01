@@ -18,10 +18,10 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "幻のポケモン",
 	},
 	sublegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "準伝説", // NEEDS QC
 	},
 	restrictedlegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "禁止級伝説", // NEEDS QC
 	},
 	ultrabeast: {
 		name: "ウルトラビースト",
@@ -30,7 +30,7 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "パラドックス",
 	},
 	pokestar: {
-		name: null, // NEEDS TRANSLATION
+		name: "ポケウッド", // NEEDS QC
 	},
 	zmove: {
 		name: "Ｚワザ",
@@ -39,115 +39,115 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "ダイマックスわざ",
 	},
 	contact: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "直接攻撃", // NEEDS QC
+		hint: "てつのトゲやニードルガードなどが発動する", // NEEDS QC
 	},
 	sound: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "音", // NEEDS QC
+		hint: "ぼうおんのポケモンには効かない", // NEEDS QC
 	},
 	powder: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "粉", // NEEDS QC
+		hint: "くさタイプ・ぼうじん・ぼうじんゴーグルには効かない", // NEEDS QC
 	},
 	fist: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "パンチ", // NEEDS QC
+		hint: "てつのこぶしで強化される", // NEEDS QC
 	},
 	pulse: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "はどう", // NEEDS QC
+		hint: "メガランチャーで強化される", // NEEDS QC
 	},
 	bite: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "かみつき", // NEEDS QC
+		hint: "がんじょうあごで強化される", // NEEDS QC
 	},
 	bullet: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "弾", // NEEDS QC
+		hint: "ぼうだんのポケモンには効かない", // NEEDS QC
 	},
 	dance: {
-		name: null, // NEEDS TRANSLATION
+		name: "踊り", // NEEDS QC
 	},
 	slicing: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "切る技", // NEEDS QC
+		hint: "きれあじで強化される", // NEEDS QC
 	},
 	wind: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "風", // NEEDS QC
+		hint: "ふうりょくでんきとかぜのりが発動する", // NEEDS QC
 	},
 	defrost: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "解凍", // NEEDS QC
+		hint: "使うとこおり状態が治る", // NEEDS QC
 	},
 	recoil: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "反動", // NEEDS QC
+		hint: "すてみで強化される", // NEEDS QC
 	},
 	twoturnmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "2ターン技", // NEEDS QC
 	},
 	recharge: {
-		name: null, // NEEDS TRANSLATION
+		name: "次のターンは動けない", // NEEDS QC
 	},
 	suppressedbygravity: {
-		name: null, // NEEDS TRANSLATION
+		name: "じゅうりょく下では使えない", // NEEDS QC
 	},
 	boostedbysheerforce: {
-		name: null, // NEEDS TRANSLATION
+		name: "ちからずくで強化される", // NEEDS QC
 	},
 	bypassprotect: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "まもる貫通", // NEEDS QC
+		hint: "みきり・キングシールド・ニードルガードも", // NEEDS QC
 	},
 	nonreflectable: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "マジックミラー貫通", // NEEDS QC
+		hint: "マジックコートも", // NEEDS QC
 	},
 	nonmirror: {
-		name: null, // NEEDS TRANSLATION
+		name: "オウムがえし不可", // NEEDS QC
 	},
 	nonsnatchable: {
-		name: null, // NEEDS TRANSLATION
+		name: "よこどり不可", // NEEDS QC
 	},
 	bypasssubstitute: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "みがわり貫通", // NEEDS QC
+		hint: "みがわりは壊れない", // NEEDS QC
 	},
 	gmaxmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "キョダイマックスわざ", // NEEDS QC
 	},
 	past: {
-		name: null, // NEEDS TRANSLATION
+		name: "過去作", // NEEDS QC
 	},
 	truepast: {
-		name: null, // NEEDS TRANSLATION
+		name: "完全過去作", // NEEDS QC
 	},
 	pastunobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "過去作入手不可", // NEEDS QC
 	},
 	future: {
-		name: null, // NEEDS TRANSLATION
+		name: "未実装", // NEEDS QC
 	},
 	lgpe: {
-		name: null, // NEEDS TRANSLATION
+		name: "ピカブイ", // NEEDS QC
 	},
 	unobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "入手不可", // NEEDS QC
 	},
 	cap: {
 		name: "CAP",
 	},
 	custom: {
-		name: null, // NEEDS TRANSLATION
+		name: "カスタム", // NEEDS QC
 	},
 	nonexistent: {
-		name: null, // NEEDS TRANSLATION
+		name: "存在しない", // NEEDS QC
 	},
 
 	introducedgen: {
-		name: null, // NEEDS TRANSLATION
+		name: "初登場世代", // NEEDS QC
 	},
 	height: {
 		name: "高さ",
@@ -159,33 +159,33 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "HP",
 	},
 	atk: {
-		name: null, // NEEDS TRANSLATION
+		name: "Ａ", // NEEDS QC
 	},
 	def: {
-		name: null, // NEEDS TRANSLATION
+		name: "Ｂ", // NEEDS QC
 	},
 	spa: {
-		name: null, // NEEDS TRANSLATION
+		name: "Ｃ", // NEEDS QC
 	},
 	spd: {
-		name: null, // NEEDS TRANSLATION
+		name: "Ｄ", // NEEDS QC
 	},
 	spe: {
-		name: null, // NEEDS TRANSLATION
+		name: "Ｓ", // NEEDS QC
 	},
 	bst: {
-		name: null, // NEEDS TRANSLATION
+		name: "種族値合計", // NEEDS QC
 	},
 	basepower: {
 		name: "いりょく",
 	},
 	priority: {
-		name: null, // NEEDS TRANSLATION
+		name: "優先度", // NEEDS QC
 	},
 	accuracy: {
 		name: "めいちゅう",
 	},
 	maxpp: {
-		name: null, // NEEDS TRANSLATION
+		name: "最大PP", // NEEDS QC
 	},
 };

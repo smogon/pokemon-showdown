@@ -1,17 +1,17 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: null, // NEEDS TRANSLATION
-		winBattle: null, // NEEDS TRANSLATION
-		tieBattle: null, // NEEDS TRANSLATION
+		startBattle: "Der Kampf zwischen {TRAINER1} und {TRAINER2} beginnt!", // NEEDS QC
+		winBattle: "**{TRAINER}** hat den Kampf gewonnen!", // NEEDS QC
+		tieBattle: "Der Kampf zwischen {TRAINER1} und {TRAINER2} endet unentschieden!", // NEEDS QC
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "{NICKNAME} (Gegner)",
 		team: "die Pokémon auf deiner Seite",
 		opposingTeam: "die gegnerischen Pokémon",
-		party: null, // NEEDS TRANSLATION
-		opposingParty: null, // NEEDS TRANSLATION
+		party: "die Mitstreiter", // NEEDS QC
+		opposingParty: "die gegnerischen Pokémon", // NEEDS QC
 
-		turn: null, // NEEDS TRANSLATION
+		turn: "== Runde {NUMBER} ==", // NEEDS QC
 		switchIn: "{TRAINER:definite:nominative:capitalize} schickt {FULLNAME} in den Kampf!",
 		switchInOwn: "Los, {FULLNAME}!",
 		switchOut: "{TRAINER:definite:nominative:capitalize} hat {NICKNAME} zurückgerufen!",
@@ -36,13 +36,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "{POKEMON} hat eine Protomorphose durchgeführt und seine urzeitliche Form zurückerlangt!",
 		zPower: "  {POKEMON} hüllt sich in Z-Kraft!",
 		zBroken: "  {POKEMON} konnte den Angriff nicht abwehren und erleidet Schaden!",
-		terastallize: null, // NEEDS TRANSLATION
+		terastallize: "  ({POKEMON} ist terakristallisiert und hat den Typ {TYPE} angenommen!)", // NEEDS QC
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "{POKEMON} kann {MOVE} nicht einsetzen!",
-		cantNoMove: null, // NEEDS TRANSLATION
+		cantNoMove: "{POKEMON} kann nicht handeln!", // NEEDS QC: old text "ist gelähmt!" was RBY de_msg:1573 (gen-1, paralysis-specific)
 		fail: "  Es ist fehlgeschlagen!",
 
 		// n.b. this is the default message for in-battle forme changes
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  {EFFECT} von {POKEMON} macht es zu einem {TYPE}-Typ!",
 		typeAdd: "  {POKEMON} nimmt zusätzlich den Typ {TYPE} an!",
 
-		start: null, // NEEDS TRANSLATION
+		start: "  ({EFFECT} wirkt jetzt auf {POKEMON}!)", // NEEDS QC
 		end: "  {POKEMON} wurde von {EFFECT} befreit!",
-		activate: null, // NEEDS TRANSLATION
-		startTeamEffect: null, // NEEDS TRANSLATION
-		endTeamEffect: null, // NEEDS TRANSLATION
-		startFieldEffect: null, // NEEDS TRANSLATION
-		endFieldEffect: null, // NEEDS TRANSLATION
+		activate: "  ({EFFECT} wurde ausgelöst!)", // NEEDS QC
+		startTeamEffect: "  ({EFFECT} wirkt jetzt auf {TEAM}!)", // NEEDS QC
+		endTeamEffect: "  ({EFFECT} wirkt nicht mehr auf {TEAM}!)", // NEEDS QC
+		startFieldEffect: "  ({EFFECT} beginnt!)", // NEEDS QC
+		endFieldEffect: "  ({EFFECT} endet!)", // NEEDS QC
 
 		changeAbility: "  {POKEMON} nimmt die Fähigkeit {ABILITY} an!",
 		addItem: "  {POKEMON} erhält das Item {ITEM}!",
 		takeItem: "  {POKEMON} hat {SOURCE} das Item {ITEM} geklaut!",
-		eatItem: null, // NEEDS TRANSLATION
+		eatItem: "  ({POKEMON} hat das Item {ITEM} verzehrt!)", // NEEDS QC
 		useGem: "  {ITEM} erhöht die Stärke von {MOVE}!",
 		eatItemWeaken: "  {ITEM} reduziert den Schaden gegen {POKEMON}!",
-		removeItem: null, // NEEDS TRANSLATION
-		activateItem: null, // NEEDS TRANSLATION
+		removeItem: "  {POKEMON} hat das Item {ITEM} verloren!", // NEEDS QC
+		activateItem: "  ({POKEMON} hat das Item {ITEM} eingesetzt!)", // NEEDS QC
 		activateWeaken: "  {ITEM} reduziert den Schaden gegen {POKEMON}!",
 
 		damage: "  ({POKEMON} wurde Schaden zugefügt!)",
-		damagePercentage: null, // NEEDS TRANSLATION
+		damagePercentage: "  ({POKEMON} hat {PERCENTAGE} % seiner KP verloren!)", // NEEDS QC
 		damageFromPokemon: "  {POKEMON} wird durch das Item {ITEM} von {SOURCE} verletzt!",
 		damageFromItem: "  {POKEMON} wurde durch das Item {ITEM} verletzt!",
 		damageFromPartialTrapping: "  {POKEMON} wurde durch {MOVE} verletzt!",
@@ -83,8 +83,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		boost2: "  {STAT} von {POKEMON} steigt stark!",
 		boost3: "  {STAT} von {POKEMON} steigt drastisch!",
 		boost0: "  {STAT} von {POKEMON} kann nicht weiter steigen!",
-		boostFromItem: null, // NEEDS TRANSLATION
-		boost2FromItem: null, // NEEDS TRANSLATION
+		boostFromItem: "  {ITEM} von {POKEMON} erhöht {STAT:definite:accusative}!", // NEEDS QC: adapted from SwSh de_common:6460
+		boost2FromItem: "  {ITEM} von {POKEMON} erhöht {STAT:definite:accusative} stark!", // NEEDS QC: adapted from SwSh de_common:6488
 		boost3FromItem: "  {ITEM} von {POKEMON} erhöht {STAT:definite:accusative} drastisch!",
 		boostFromZEffect: "  {STAT} von {POKEMON} wurde durch Z-Kraft erhöht!",
 		boost2FromZEffect: "  {STAT} von {POKEMON} wurde durch Z-Kraft stark erhöht!",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  {STAT} von {POKEMON} sinkt stark!",
 		unboost3: "  {STAT} von {POKEMON} sinkt drastisch!",
 		unboost0: "  {STAT} von {POKEMON} kann nicht weiter sinken!",
-		unboostFromItem: null, // NEEDS TRANSLATION
-		unboost2FromItem: null, // NEEDS TRANSLATION
-		unboost3FromItem: null, // NEEDS TRANSLATION
+		unboostFromItem: "  {ITEM} von {POKEMON} senkt {STAT:definite:accusative}!", // NEEDS QC
+		unboost2FromItem: "  {ITEM} von {POKEMON} senkt {STAT:definite:accusative} stark!", // NEEDS QC
+		unboost3FromItem: "  {ITEM} von {POKEMON} senkt {STAT:definite:accusative} drastisch!", // NEEDS QC
 
 		swapBoost: "  {POKEMON} tauscht die Statusveränderungen mit dem Ziel!",
 		swapOffensiveBoost: "  {POKEMON} tauscht Änderungen an Angriff und Spezial-Angriff mit dem Ziel!",
@@ -133,91 +133,91 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		hitCount: "  {NUMBER}-mal getroffen!",
 	},
 	ui: {
-		whatDo: null, // NEEDS TRANSLATION
-		moveTarget: null, // NEEDS TRANSLATION
-		reviveWho: null, // NEEDS TRANSLATION
-		replaceWho: null, // NEEDS TRANSLATION
-		teamStart: null, // NEEDS TRANSLATION
-		teamRest: null, // NEEDS TRANSLATION
-		chooseLead: null, // NEEDS TRANSLATION
-		chooseSlot: null, // NEEDS TRANSLATION
-		teamSoFar: null, // NEEDS TRANSLATION
-		waitingOpponent: null, // NEEDS TRANSLATION
-		cantSwitchTrapped: null, // NEEDS TRANSLATION
-		usuallyMovesFirst: null, // NEEDS TRANSLATION
-		almostAlwaysMovesFirst: null, // NEEDS TRANSLATION
-		almostAlwaysMovesLast: null, // NEEDS TRANSLATION
-		failsIfHP: null, // NEEDS TRANSLATION
-		koSelfIfHP: null, // NEEDS TRANSLATION
-		transformedInto: null, // NEEDS TRANSLATION
-		changedForme: null, // NEEDS TRANSLATION
-		possibleIllusion: null, // NEEDS TRANSLATION
-		pixels: null, // NEEDS TRANSLATION
-		wouldTakeIfAbilityRemoved: null, // NEEDS TRANSLATION
-		nextDamage: null, // NEEDS TRANSLATION
-		turnsAsleep: null, // NEEDS TRANSLATION
-		illusionWarning: null, // NEEDS TRANSLATION
-		pressureGen3Warning: null, // NEEDS TRANSLATION
-		indistinguishableWarning: null, // NEEDS TRANSLATION
-		noConditions: null, // NEEDS TRANSLATION
-		turn: null, // NEEDS TRANSLATION
-		turns: null, // NEEDS TRANSLATION
-		afterStatModifiers: null, // NEEDS TRANSLATION
-		calls: null, // NEEDS TRANSLATION
-		base: null, // NEEDS TRANSLATION
-		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
-		zEffectCrit2: null, // NEEDS TRANSLATION
-		zEffectHeal: null, // NEEDS TRANSLATION
-		zEffectCurse: null, // NEEDS TRANSLATION
-		zEffectRedirect: null, // NEEDS TRANSLATION
-		zEffectHealReplacement: null, // NEEDS TRANSLATION
-		ppRange: null, // NEEDS TRANSLATION
-		revealed: null, // NEEDS TRANSLATION
-		range: null, // NEEDS TRANSLATION
-		beforeStatStages: null, // NEEDS TRANSLATION
-		beforeExternalModifiers: null, // NEEDS TRANSLATION
-		flingBerry: null, // NEEDS TRANSLATION
-		flingWhiteHerb: null, // NEEDS TRANSLATION
-		flingMentalHerb: null, // NEEDS TRANSLATION
-		cantFling: null, // NEEDS TRANSLATION
-		unobtainableInGen: null, // NEEDS TRANSLATION
-		tagMoves: null, // NEEDS TRANSLATION
-		notifyMoveTitle: null, // NEEDS TRANSLATION
-		notifyMove: null, // NEEDS TRANSLATION
-		notifyMoveAgainst: null, // NEEDS TRANSLATION
-		notifySwitchTitle: null, // NEEDS TRANSLATION
-		notifySwitch: null, // NEEDS TRANSLATION
-		notifySwitchAgainst: null, // NEEDS TRANSLATION
-		notifyTeamTitle: null, // NEEDS TRANSLATION
-		notifyTeam: null, // NEEDS TRANSLATION
-		notifyTeamAgainst: null, // NEEDS TRANSLATION
-		mightBeDisabled: null, // NEEDS TRANSLATION
-		mightBeLocked: null, // NEEDS TRANSLATION
-		lockedExplanation: null, // NEEDS TRANSLATION
-		mightBeTrapped: null, // NEEDS TRANSLATION
-		autoChoice: null, // NEEDS TRANSLATION
-		unrecognizedChoice: null, // NEEDS TRANSLATION
-		lockedIntoMove: null, // NEEDS TRANSLATION
-		willUseMove: null, // NEEDS TRANSLATION
-		atTarget: null, // NEEDS TRANSLATION
-		atSlot: null, // NEEDS TRANSLATION
-		atAllyTarget: null, // NEEDS TRANSLATION
-		atAllySlot: null, // NEEDS TRANSLATION
-		actionMegaEvolve: null, // NEEDS TRANSLATION
-		actionMegaEvolveX: null, // NEEDS TRANSLATION
-		actionMegaEvolveY: null, // NEEDS TRANSLATION
-		actionUltraBurst: null, // NEEDS TRANSLATION
-		actionTerastallize: null, // NEEDS TRANSLATION
-		actionDynamax: null, // NEEDS TRANSLATION
-		actionGigantamax: null, // NEEDS TRANSLATION
-		willRevive: null, // NEEDS TRANSLATION
-		willSwitch: null, // NEEDS TRANSLATION
-		willShift: null, // NEEDS TRANSLATION
-		youPicked: null, // NEEDS TRANSLATION
-		listComma: null, // NEEDS TRANSLATION
-		effectivenessVs: null, // NEEDS TRANSLATION
-		basePowerVs: null, // NEEDS TRANSLATION
-		or: null, // NEEDS TRANSLATION
+		whatDo: "Was soll **{POKEMON}** tun?", // NEEDS QC
+		moveTarget: "Worauf soll {POKEMON} **{MOVE}** einsetzen?", // NEEDS QC
+		reviveWho: "Wen soll **{POKEMON}** wiederbeleben?", // NEEDS QC
+		replaceWho: "Wer soll **{POKEMON}** ersetzen?", // NEEDS QC
+		teamStart: "Wie startest du in den Kampf?", // NEEDS QC
+		teamRest: "Reihenfolge der übrigen Pokémon?", // NEEDS QC
+		chooseLead: "Startpokémon wählen", // NEEDS QC
+		chooseSlot: "Platz {NUMBER} wählen", // NEEDS QC
+		teamSoFar: "Bisheriges Team", // NEEDS QC
+		waitingOpponent: "Warte auf Gegner...", // NEEDS QC
+		cantSwitchTrapped: "Du sitzt **in der Falle** und kannst nicht wechseln!", // NEEDS QC
+		usuallyMovesFirst: "Handelt meist zuerst (Priorität +{PRIORITY}).", // NEEDS QC
+		almostAlwaysMovesFirst: "Handelt fast immer zuerst (Priorität +{PRIORITY}).", // NEEDS QC
+		almostAlwaysMovesLast: "Handelt fast immer zuletzt (Priorität −{PRIORITY}).", // NEEDS QC
+		failsIfHP: "Schlägt fehl, wenn die aktuellen KP {HP} betragen.", // NEEDS QC
+		koSelfIfHP: "Besiegt den Anwender, wenn die aktuellen KP genau {HP} betragen.", // NEEDS QC
+		transformedInto: "(Verwandelt in {SPECIES})", // NEEDS QC
+		changedForme: "(Formwechsel: {SPECIES})", // NEEDS QC
+		possibleIllusion: "Mögliches Trugbild #{NUMBER}", // NEEDS QC
+		pixels: "({HP}/{MAXHP} Pixel)", // NEEDS QC
+		wouldTakeIfAbilityRemoved: "Schaden ohne Fähigkeit: {PERCENT}%", // NEEDS QC
+		nextDamage: "Nächster Schaden: {PERCENT}%", // NEEDS QC
+		turnsAsleep: "Schlafrunden: {NUMBER}", // NEEDS QC
+		illusionWarning: "(Mehr als 4 Attacken deuten meist auf das Trugbild von Zoroark/Zorua hin.)", // NEEDS QC
+		pressureGen3Warning: "(Erzwinger ist in Gen 3 nicht sichtbar, daher ist der genaue AP-Verbrauch manchmal unbekannt.)", // NEEDS QC
+		indistinguishableWarning: "(Der Gegner hat zwei ununterscheidbare Pokémon, daher lässt sich nicht sagen, welches welche Attacken/Fähigkeit/Item hat.)", // NEEDS QC
+		noConditions: "(keine Zustände)", // NEEDS QC
+		turn: "({NUMBER} Runde)", // NEEDS QC
+		turns: "({NUMBER} Runden)", // NEEDS QC
+		afterStatModifiers: "(Nach Statuswert-Modifikatoren:)", // NEEDS QC
+		calls: "Ruft {MOVE} auf", // NEEDS QC
+		base: "(Basis: {VALUE})", // NEEDS QC
+		zEffectClearNegativeBoost: "Setzt gesenkte Statuswerte zurück", // NEEDS QC
+		zEffectCrit2: "Volltrefferquote +2", // NEEDS QC
+		zEffectHeal: "Stellt 100 % der KP wieder her", // NEEDS QC
+		zEffectCurse: "Stellt bei Geist-Pokémon 100 % der KP wieder her, sonst Angriff +1", // NEEDS QC
+		zEffectRedirect: "Lenkt gegnerische Angriffe auf den Anwender", // NEEDS QC
+		zEffectHealReplacement: "Stellt 100 % der KP des eingewechselten Pokémon wieder her", // NEEDS QC
+		ppRange: "({LOW} bis {HIGH})", // NEEDS QC
+		revealed: "(bekannt)", // NEEDS QC
+		range: "{LOW} bis {HIGH}", // NEEDS QC
+		beforeStatStages: "(vor Statuswert-Änderungen)", // NEEDS QC
+		beforeExternalModifiers: "(vor externen Modifikatoren)", // NEEDS QC
+		flingBerry: "Löst den Effekt der Beere beim Ziel aus.", // NEEDS QC
+		flingWhiteHerb: "Setzt gesenkte Statuswerte des Ziels zurück.", // NEEDS QC
+		flingMentalHerb: "Hebt die Effekte von Anziehung, Aussetzer, Zugabe, Heilblockade, Verhöhner und Folterknecht beim Ziel auf.", // NEEDS QC
+		cantFling: "Dieses Item kann nicht mit Schleuder eingesetzt werden.", // NEEDS QC
+		unobtainableInGen: "In Gen {NUMBER} nicht erhältlich", // NEEDS QC
+		tagMoves: "Attacken: {TAG}", // NEEDS QC
+		notifyMoveTitle: "Dein Zug!", // NEEDS QC
+		notifyMove: "Wähle eine Attacke in deinem Kampf", // NEEDS QC
+		notifyMoveAgainst: "Wähle eine Attacke in deinem Kampf gegen {OPPONENT}", // NEEDS QC
+		notifySwitchTitle: "Dein Wechsel!", // NEEDS QC
+		notifySwitch: "Wechsle in deinem Kampf", // NEEDS QC
+		notifySwitchAgainst: "Wechsle in deinem Kampf gegen {OPPONENT}", // NEEDS QC
+		notifyTeamTitle: "Teamvorschau!", // NEEDS QC
+		notifyTeam: "Wähle deine Teamreihenfolge in deinem Kampf", // NEEDS QC
+		notifyTeamAgainst: "Wähle deine Teamreihenfolge in deinem Kampf gegen {OPPONENT}", // NEEDS QC
+		mightBeDisabled: "Einige deiner Attacken sind **möglicherweise** blockiert, daher kannst du die Attackenwahl nicht abbrechen!", // NEEDS QC
+		mightBeLocked: "Du bist **möglicherweise** auf eine Attacke festgelegt.", // NEEDS QC
+		lockedExplanation: "(verhindert das Wechseln, falls du festgelegt bist)", // NEEDS QC
+		mightBeTrapped: "Du bist **möglicherweise** gefangen, daher kannst du einen Wechsel nicht abbrechen!", // NEEDS QC
+		autoChoice: "Automatische Wahl", // NEEDS QC
+		unrecognizedChoice: "Unbekannte Wahl vom Server:", // NEEDS QC
+		lockedIntoMove: "{POKEMON} ist auf eine Attacke festgelegt.", // NEEDS QC
+		willUseMove: "{POKEMON} wird {ACTIONS}**{MOVE}**{AT} einsetzen.", // NEEDS QC
+		atTarget: " auf {TARGET}", // NEEDS QC
+		atSlot: " auf Position {NUMBER}", // NEEDS QC
+		atAllyTarget: " auf Mitstreiter {TARGET}", // NEEDS QC
+		atAllySlot: " auf Mitstreiter-Position {NUMBER}", // NEEDS QC
+		actionMegaEvolve: "sich **Mega**-entwickeln und ", // NEEDS QC
+		actionMegaEvolveX: "sich **Mega**-entwickeln (X) und ", // NEEDS QC
+		actionMegaEvolveY: "sich **Mega**-entwickeln (Y) und ", // NEEDS QC
+		actionUltraBurst: "einen **Ultra**-Burst durchführen und ", // NEEDS QC
+		actionTerastallize: "terakristallisieren (**{TYPE}**) und ", // NEEDS QC
+		actionDynamax: "sich **dynamaximieren** und ", // NEEDS QC
+		actionGigantamax: "sich **gigadynamaximieren** und ", // NEEDS QC
+		willRevive: "{POKEMON} wird **{TARGET}** wiederbeleben.", // NEEDS QC
+		willSwitch: "{POKEMON} wird zu **{TARGET}** wechseln.", // NEEDS QC
+		willShift: "{POKEMON} wird in die **Mitte** rücken.", // NEEDS QC
+		youPicked: "Du hast {POKEMON} gewählt.", // NEEDS QC
+		listComma: ", ", // NEEDS QC
+		effectivenessVs: "{EFFECT} gegen {POKEMON}", // NEEDS QC
+		basePowerVs: "{LABEL} gegen {POKEMON}", // NEEDS QC
+		or: " oder ", // NEEDS QC
 	},
 
 	// statuses
@@ -300,7 +300,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		damage: "  {POKEMON} erleidet Schaden durch Rückstoß!",
 	},
 	unboost: {
-		fail: null, // NEEDS TRANSLATION
+		fail: "  {STAT:capitalize} von {POKEMON} {INFLECT:STAT:s=sinkt:p=sinken} nicht!", // NEEDS QC: per-stat form; cf. SV de_common:6483 "Angriff von X sinkt nicht!"
 		failNoStat: "  Statuswerte von {POKEMON} sinken nicht!", // SV de_common:6479
 	},
 	struggle: {
@@ -310,8 +310,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON} kann nicht mehr fliehen!",
 	},
 	dynamax: {
-		start: null, // NEEDS TRANSLATION
-		end: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON} dynamaximiert sich!)", // NEEDS QC
+		end: "  ({POKEMON} nimmt wieder seine normale Gestalt an!)", // NEEDS QC
 		block: "  Die Wirkung der Attacke wurde durch die Dynamax-Energie blockiert!",
 		fail: "  {POKEMON} weigert sich. Es kann diese Attacke wohl nicht einsetzen...",
 	},

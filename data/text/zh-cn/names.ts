@@ -3,81 +3,81 @@ export const TermNames: { [id: string]: TranslationString } = {
 	happiness: "亲密度", // official (SV zh-Hans_common 115)
 	level: "等级", // official (SV zh-Hans_common 48221)
 	nickname: "昵称", // official (SV zh-Hans_common 4414)
-	ev: null, // NEEDS TRANSLATION
-	evs: null, // NEEDS TRANSLATION
-	iv: null, // NEEDS TRANSLATION
-	ivs: null, // NEEDS TRANSLATION
-	dv: null, // NEEDS TRANSLATION
-	dvs: null, // NEEDS TRANSLATION
-	av: null, // NEEDS TRANSLATION
-	avs: null, // NEEDS TRANSLATION
-	point: null, // NEEDS TRANSLATION
-	points: null, // NEEDS TRANSLATION
+	ev: "努力值", // NEEDS QC
+	evs: "努力值", // NEEDS QC
+	iv: "个体值", // NEEDS QC
+	ivs: "个体值", // NEEDS QC
+	dv: "个体值", // NEEDS QC
+	dvs: "个体值", // NEEDS QC
+	av: "觉醒值", // NEEDS QC
+	avs: "觉醒值", // NEEDS QC
+	point: "点数", // NEEDS QC
+	points: "点数", // NEEDS QC
 	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
 	stats: "状态",
 
 	pokemon: "宝可梦",
-	move: null, // NEEDS TRANSLATION
-	moves: null, // NEEDS TRANSLATION
-	item: null, // NEEDS TRANSLATION
-	items: null, // NEEDS TRANSLATION
-	ability: null, // NEEDS TRANSLATION
-	abilities: null, // NEEDS TRANSLATION
-	hiddenability: null, // NEEDS TRANSLATION
-	possibleabilities: null, // NEEDS TRANSLATION
-	team: null, // NEEDS TRANSLATION
-	teams: null, // NEEDS TRANSLATION
-	teamslist: null, // NEEDS TRANSLATION
+	move: "招式", // NEEDS QC
+	moves: "招式", // NEEDS QC
+	item: "道具", // NEEDS QC
+	items: "道具", // NEEDS QC
+	ability: "特性", // NEEDS QC
+	abilities: "特性", // NEEDS QC
+	hiddenability: "隐藏特性", // NEEDS QC
+	possibleabilities: "可能的特性", // NEEDS QC
+	team: "队伍", // NEEDS QC
+	teams: "队伍", // NEEDS QC
+	teamslist: "队伍列表", // NEEDS QC
 
 	type: "属性",
 	types: "属性",
-	teratype: null, // NEEDS TRANSLATION
+	teratype: "太晶{TYPE}", // NEEDS QC
 	nature: "性格",
 	category: "分类",
 	categories: "分类",
 	gender: "性别",
-	egggroup: null, // NEEDS TRANSLATION
-	egggroups: null, // NEEDS TRANSLATION
-	tag: null, // NEEDS TRANSLATION
-	article: null, // NEEDS TRANSLATION
-	articles: null, // NEEDS TRANSLATION
-	tier: null, // NEEDS TRANSLATION
-	tiers: null, // NEEDS TRANSLATION
-	format: null, // NEEDS TRANSLATION
-	formats: null, // NEEDS TRANSLATION
+	egggroup: "蛋组", // NEEDS QC
+	egggroups: "蛋组", // NEEDS QC
+	tag: "标签", // NEEDS QC
+	article: "文章", // NEEDS QC
+	articles: "文章", // NEEDS QC
+	tier: "分级", // NEEDS QC
+	tiers: "分级", // NEEDS QC
+	format: "对战模式", // NEEDS QC
+	formats: "对战模式", // NEEDS QC
 	color: "颜色",
-	form: null, // NEEDS TRANSLATION
-	forme: null, // NEEDS TRANSLATION
-	dexnum: null, // NEEDS TRANSLATION
-	generation: null, // NEEDS TRANSLATION
-	gennum: null, // NEEDS TRANSLATION
-	evolution: null, // NEEDS TRANSLATION
-	preevolution: null, // NEEDS TRANSLATION
-	doesnotevolve: null, // NEEDS TRANSLATION
-	zcrystal: null, // NEEDS TRANSLATION
-	target: null, // NEEDS TRANSLATION
+	form: "样子", // NEEDS QC
+	forme: "形态", // NEEDS QC
+	dexnum: "图鉴No.", // NEEDS QC
+	generation: "世代", // NEEDS QC
+	gennum: "第{NUMBER}世代", // NEEDS QC
+	evolution: "进化", // NEEDS QC
+	preevolution: "进化前", // NEEDS QC
+	doesnotevolve: "不进化", // NEEDS QC
+	zcrystal: "Ｚ纯晶", // NEEDS QC
+	target: "对象", // NEEDS QC
 	height: "身高",
-	numm: null, // NEEDS TRANSLATION
+	numm: "{NUMBER}m", // NEEDS QC
 	weight: "体重",
-	numkg: null, // NEEDS TRANSLATION
-	critrate: null, // NEEDS TRANSLATION
-	user: null, // NEEDS TRANSLATION
-	requiredmove: null, // NEEDS TRANSLATION
-	dynamaxpower: null, // NEEDS TRANSLATION
-	none: null, // NEEDS TRANSLATION
-	pastgensonly: null, // NEEDS TRANSLATION
-	flingbasepower: null, // NEEDS TRANSLATION
-	flingeffect: null, // NEEDS TRANSLATION
-	naturalgifttype: null, // NEEDS TRANSLATION
-	naturalgiftbasepower: null, // NEEDS TRANSLATION
+	numkg: "{NUMBER}kg", // NEEDS QC
+	critrate: "击中要害率", // NEEDS QC
+	user: "可使用的宝可梦", // NEEDS QC
+	requiredmove: "所需招式", // NEEDS QC
+	dynamaxpower: "极巨招式威力", // NEEDS QC
+	none: "无", // NEEDS QC
+	pastgensonly: "仅限过去世代", // NEEDS QC
+	flingbasepower: "投掷威力", // NEEDS QC
+	flingeffect: "投掷效果", // NEEDS QC
+	naturalgifttype: "自然之恩属性", // NEEDS QC
+	naturalgiftbasepower: "自然之恩威力", // NEEDS QC
 
-	megaevolution: null, // NEEDS TRANSLATION
-	zpower: null, // NEEDS TRANSLATION
-	zeffect: null, // NEEDS TRANSLATION
-	dynamax: null, // NEEDS TRANSLATION
-	dynamaxlevel: null, // NEEDS TRANSLATION
-	ultraburst: null, // NEEDS TRANSLATION
-	tera: null, // NEEDS TRANSLATION
+	megaevolution: "超级进化", // NEEDS QC
+	zpower: "Ｚ力量", // NEEDS QC
+	zeffect: "Ｚ效果", // NEEDS QC
+	dynamax: "极巨化", // NEEDS QC
+	dynamaxlevel: "极巨化等级", // NEEDS QC
+	ultraburst: "究极爆发", // NEEDS QC
+	tera: "太晶", // NEEDS QC
 
 	supereffective: "效果绝佳",
 	extremelyeffective: "效果无比绝佳",
@@ -86,17 +86,17 @@ export const TermNames: { [id: string]: TranslationString } = {
 	mostlyineffective: "效果相当不好",
 	noeffect: "没有效果",
 
-	weak: null, // NEEDS TRANSLATION
-	resist: null, // NEEDS TRANSLATION
-	immune: null, // NEEDS TRANSLATION
+	weak: "弱点", // NEEDS QC: unofficial
+	resist: "抵抗", // NEEDS QC: unofficial
+	immune: "免疫", // NEEDS QC: unofficial
 
-	nicknamespecies: null, // NEEDS TRANSLATION
-	label: null, // NEEDS TRANSLATION
-	noweather: null, // NEEDS TRANSLATION
-	noitem: null, // NEEDS TRANSLATION
-	noability: null, // NEEDS TRANSLATION
-	foescondition: null, // NEEDS TRANSLATION
-	speciesforme: null, // NEEDS TRANSLATION
+	nicknamespecies: "{NICKNAME}（{SPECIES}）", // NEEDS QC
+	label: "{LABEL}：", // NEEDS QC
+	noweather: "（无天气）", // NEEDS QC
+	noitem: "（无携带物品）", // NEEDS QC
+	noability: "（无特性）", // NEEDS QC
+	foescondition: "对手的{CONDITION}", // NEEDS QC
+	speciesforme: "{SPECIES}・{FORME}", // NEEDS QC
 };
 
 export const StatNames: { [id: string]: TranslationString } = {
@@ -170,7 +170,7 @@ export const NatureNames: { [id: string]: TranslationString } = {
 export const GenderNames: { [id: string]: TranslationString } = {
 	male: "雄性",
 	female: "雌性",
-	genderless: null, // NEEDS TRANSLATION
+	genderless: "无性别", // NEEDS QC
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
@@ -185,51 +185,51 @@ export const StatusNames: { [id: string]: TranslationString } = {
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "可以瞄准相邻的同伴或对手", // NEEDS QC
+	normalDoubles: "可以瞄准同伴或任意对手", // NEEDS QC
+	normalSingles: "命中对手", // NEEDS QC
+	normalFFA: "可以瞄准任意对手", // NEEDS QC
+	self: "以自己为对象", // NEEDS QC
+	adjacentAlly: "可以瞄准相邻的同伴", // NEEDS QC
+	adjacentAllyDoubles: "命中我方同伴", // NEEDS QC
+	adjacentAllySingles: "单打对战中必定失败", // NEEDS QC
+	adjacentAllyOrSelf: "可以瞄准自己或相邻的同伴", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "可以瞄准自己或同伴", // NEEDS QC
+	adjacentFoe: "可以瞄准相邻的对手", // NEEDS QC
+	allAdjacentFoes: "命中相邻的对手", // NEEDS QC
+	allAdjacentFoesDoubles: "命中两只对手", // NEEDS QC
+	foeSide: "以对手的场地为对象", // NEEDS QC
+	allySide: "以我方的场地为对象", // NEEDS QC
+	allyTeam: "以我方全队为对象", // NEEDS QC
+	allAdjacent: "命中相邻的同伴和对手", // NEEDS QC
+	allAdjacentDoubles: "命中我方同伴和两只对手", // NEEDS QC
+	allAdjacentFFA: "命中所有对手", // NEEDS QC
+	any: "三打对战中可以瞄准较远的宝可梦", // NEEDS QC
+	all: "命中场上所有宝可梦", // NEEDS QC
+	scripted: "自动选择对象", // NEEDS QC
+	randomNormal: "随机命中相邻的对手", // NEEDS QC
+	randomNormalDoubles: "随机命中对手", // NEEDS QC
+	allies: "以自己和同伴为对象", // NEEDS QC
 };
 
 // no official Chinese egg group names exist (Pokédex 3D Pro predates official Chinese)
 // names from 52poke
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	monster: "怪兽", // NEEDS QC
+	water1: "水中1", // NEEDS QC
+	bug: "虫", // NEEDS QC
+	flying: "飞行", // NEEDS QC
+	field: "陆上", // NEEDS QC
+	fairy: "妖精", // NEEDS QC
+	grass: "植物", // NEEDS QC
+	humanlike: "人型", // NEEDS QC
+	water3: "水中3", // NEEDS QC
+	mineral: "矿物", // NEEDS QC
+	amorphous: "不定形", // NEEDS QC
+	water2: "水中2", // NEEDS QC
+	ditto: "百变怪", // NEEDS QC
+	dragon: "龙", // NEEDS QC
+	undiscovered: "蛋未发现", // NEEDS QC
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
