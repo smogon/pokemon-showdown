@@ -1,5 +1,5 @@
 export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
-	freddy: {
+	freddyfazbear: {
 		learnset: {
 			astonish: ["9M"],
 			bite: ["9M"],

@@ -192,7 +192,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 
 	// Hit effects
 	// -----------
-	ohko?: boolean | 'Ice';
+	ohko?: boolean | 'Ice' | 'Dark' | 'Steel';
 	thawsTarget?: boolean;
 	heal?: number[];
 	forceSwitch?: boolean;
