@@ -161,6 +161,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		pressureGen3Warning: null, // NEEDS TRANSLATION
 		indistinguishableWarning: null, // NEEDS TRANSLATION
 		noConditions: null, // NEEDS TRANSLATION
+		turn: null, // NEEDS TRANSLATION
+		turns: null, // NEEDS TRANSLATION
 		afterStatModifiers: null, // NEEDS TRANSLATION
 		calls: null, // NEEDS TRANSLATION
 		base: null, // NEEDS TRANSLATION

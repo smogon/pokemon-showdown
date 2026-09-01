@@ -196,6 +196,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		pressureGen3Warning: "(Pressure is not visible in Gen 3, so in certain situations, the exact amount of PP used may be unknown.)",
 		indistinguishableWarning: "(Your opponent has two indistinguishable Pokémon, making it impossible for you to tell which one has which moves/ability/item.)",
 		noConditions: "(no conditions)",
+		turn: "({NUMBER} turn)",
+		turns: "({NUMBER} turns)",
 		afterStatModifiers: "(After stat modifiers:)",
 		calls: "Calls {MOVE}",
 		base: "(base: {VALUE})",

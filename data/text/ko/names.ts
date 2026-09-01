@@ -92,6 +92,10 @@ export const TermNames: { [id: string]: TranslationString } = {
 
 	nicknamespecies: null, // NEEDS TRANSLATION
 	label: null, // NEEDS TRANSLATION
+	noweather: null, // NEEDS TRANSLATION
+	noitem: null, // NEEDS TRANSLATION
+	noability: null, // NEEDS TRANSLATION
+	foescondition: null, // NEEDS TRANSLATION
 	speciesforme: null, // NEEDS TRANSLATION
 };
 

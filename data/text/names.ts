@@ -99,6 +99,10 @@ export const TermNames: { [id: string]: TranslationString } = {
 	nicknamespecies: "{NICKNAME} ({SPECIES})",
 	// puts a label on a value, e.g. "Ability: Intimidate"
 	label: "{LABEL}: ",
+	noweather: "(no weather)",
+	noitem: "(no item)",
+	noability: "(no ability)",
+	foescondition: "Foe's {CONDITION}",
 	// this one's not used in code; just a reference for how pokedex.ts should be filled
 	speciesforme: "{SPECIES}-{FORME}",
 };
