@@ -308,6 +308,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 188,
 	},
 	auraguard: {
+		isNonstandard: "Future",
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.flags['contact']) return this.chainModify(0.5);
 		},
