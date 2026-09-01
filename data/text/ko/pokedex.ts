@@ -9,12 +9,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "이상해꽃",
 	},
 	venusaurgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "이상해꽃 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	venusaurmega: {
 		name: "메가이상해꽃",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가이상해꽃", // NEEDS QC
 	},
 	charmander: {
 		name: "파이리",
@@ -26,16 +26,16 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "리자몽",
 	},
 	charizardgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "리자몽 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	charizardmegax: {
 		name: "메가리자몽X",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가리자몽X", // NEEDS QC
 	},
 	charizardmegay: {
 		name: "메가리자몽Y",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가리자몽Y", // NEEDS QC
 	},
 	squirtle: {
 		name: "꼬부기",
@@ -47,12 +47,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "거북왕",
 	},
 	blastoisegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "거북왕 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	blastoisemega: {
 		name: "메가거북왕",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가거북왕", // NEEDS QC
 	},
 	caterpie: {
 		name: "캐터피",
@@ -64,8 +64,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "버터플",
 	},
 	butterfreegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "버터플 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	weedle: {
 		name: "뿔충이",
@@ -78,7 +78,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	beedrillmega: {
 		name: "메가독침붕",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가독침붕", // NEEDS QC
 	},
 	pidgey: {
 		name: "구구",
@@ -91,25 +91,25 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	pidgeotmega: {
 		name: "메가피죤투",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가피죤투", // NEEDS QC
 	},
 	rattata: {
 		name: "꼬렛",
 	},
 	rattataalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라꼬렛", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	raticate: {
 		name: "레트라",
 	},
 	raticatealolatotem: {
-		name: null, // NEEDS TRANSLATION
+		name: "주인 알로라레트라", // NEEDS QC
 		forme: "주인（알로라의 모습）",
 	},
 	raticatealola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라레트라", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	spearow: {
 		name: "깨비참",
@@ -127,97 +127,97 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "피카츄",
 	},
 	pikachulibre: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마스크드 피카츄", // NEEDS QC
+		forme: "마스크드 피카츄", // NEEDS QC
 	},
 	pikachuphd: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "닥터 피카츄", // NEEDS QC
+		forme: "닥터 피카츄", // NEEDS QC
 	},
 	pikachupopstar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아이돌 피카츄", // NEEDS QC
+		forme: "아이돌 피카츄", // NEEDS QC
 	},
 	pikachubelle: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마담 피카츄", // NEEDS QC
+		forme: "마담 피카츄", // NEEDS QC
 	},
 	pikachurockstar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "하드록 피카츄", // NEEDS QC
+		forme: "하드록 피카츄", // NEEDS QC
 	},
 	pikachucosplay: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "옷갈아입기 피카츄", // NEEDS QC
+		forme: "옷갈아입기 피카츄", // NEEDS QC
 	},
 	pikachustarter: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "파트너 피카츄", // NEEDS QC: unofficial (LGPE marketing name)
+		forme: "파트너 피카츄", // NEEDS QC: unofficial (LGPE marketing name)
 	},
 	pikachugmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	pikachuoriginal: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 오리지널", // NEEDS QC
+		forme: "오리지널캡", // NEEDS QC
 	},
 	pikachuhoenn: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 호연", // NEEDS QC
+		forme: "호연캡", // NEEDS QC
 	},
 	pikachusinnoh: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 신오", // NEEDS QC
+		forme: "신오캡", // NEEDS QC
 	},
 	pikachuunova: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 하나", // NEEDS QC
+		forme: "하나캡", // NEEDS QC
 	},
 	pikachukalos: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 칼로스", // NEEDS QC
+		forme: "칼로스캡", // NEEDS QC
 	},
 	pikachualola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 알로라", // NEEDS QC
+		forme: "알로라캡", // NEEDS QC
 	},
 	pikachupartner: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 너로정했다", // NEEDS QC
+		forme: "너로정했다캡", // NEEDS QC
 	},
 	pikachuworld: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "피카츄 월드", // NEEDS QC
+		forme: "월드캡", // NEEDS QC
 	},
 	raichu: {
 		name: "라이츄",
 	},
 	raichumegax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가라이츄X", // NEEDS QC
+		forme: "메가라이츄X", // NEEDS QC
 	},
 	raichumegay: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가라이츄Y", // NEEDS QC
+		forme: "메가라이츄Y", // NEEDS QC
 	},
 	raichualola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라라이츄", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	sandshrew: {
 		name: "모래두지",
 	},
 	sandshrewalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라모래두지", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	sandslash: {
 		name: "고지",
 	},
 	sandslashalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라고지", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	nidoranf: {
 		name: "니드런♀",
@@ -244,22 +244,22 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "픽시",
 	},
 	clefablemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가픽시", // NEEDS QC
+		forme: "메가픽시", // NEEDS QC
 	},
 	vulpix: {
 		name: "식스테일",
 	},
 	vulpixalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라식스테일", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	ninetales: {
 		name: "나인테일",
 	},
 	ninetalesalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라나인테일", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	jigglypuff: {
 		name: "푸린",
@@ -298,37 +298,37 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "디그다",
 	},
 	diglettalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라디그다", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	dugtrio: {
 		name: "닥트리오",
 	},
 	dugtrioalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라닥트리오", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	meowth: {
 		name: "나옹",
 	},
 	meowthgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "나옹 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	meowthalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라나옹", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	meowthgalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르나옹", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	persian: {
 		name: "페르시온",
 	},
 	persianalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라페르시온", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	psyduck: {
 		name: "고라파덕",
@@ -346,15 +346,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "가디",
 	},
 	growlithehisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이가디", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	arcanine: {
 		name: "윈디",
 	},
 	arcaninehisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이윈디", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	poliwag: {
 		name: "발챙이",
@@ -376,7 +376,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	alakazammega: {
 		name: "메가후딘",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가후딘", // NEEDS QC
 	},
 	machop: {
 		name: "알통몬",
@@ -388,8 +388,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "괴력몬",
 	},
 	machampgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "괴력몬 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	bellsprout: {
 		name: "모다피",
@@ -401,8 +401,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "우츠보트",
 	},
 	victreebelmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가우츠보트", // NEEDS QC
+		forme: "메가우츠보트", // NEEDS QC
 	},
 	tentacool: {
 		name: "왕눈해",
@@ -414,54 +414,54 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "꼬마돌",
 	},
 	geodudealola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라꼬마돌", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	graveler: {
 		name: "데구리",
 	},
 	graveleralola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라데구리", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	golem: {
 		name: "딱구리",
 	},
 	golemalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라딱구리", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	ponyta: {
 		name: "포니타",
 	},
 	ponytagalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르포니타", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	rapidash: {
 		name: "날쌩마",
 	},
 	rapidashgalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르날쌩마", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	slowpoke: {
 		name: "야돈",
 	},
 	slowpokegalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르야돈", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	slowbro: {
 		name: "야도란",
 	},
 	slowbromega: {
 		name: "메가야도란",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가야도란", // NEEDS QC
 	},
 	slowbrogalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르야도란", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	magnemite: {
 		name: "코일",
@@ -473,8 +473,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "파오리",
 	},
 	farfetchdgalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르파오리", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	doduo: {
 		name: "두두",
@@ -492,15 +492,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "질퍽이",
 	},
 	grimeralola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라질퍽이", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	muk: {
 		name: "질뻐기",
 	},
 	mukalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라질뻐기", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	shellder: {
 		name: "셀러",
@@ -518,12 +518,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "팬텀",
 	},
 	gengargmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "팬텀 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	gengarmega: {
 		name: "메가팬텀",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가팬텀", // NEEDS QC
 	},
 	onix: {
 		name: "롱스톤",
@@ -541,22 +541,22 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "킹크랩",
 	},
 	kinglergmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "킹크랩 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	voltorb: {
 		name: "찌리리공",
 	},
 	voltorbhisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이찌리리공", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	electrode: {
 		name: "붐볼",
 	},
 	electrodehisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이붐볼", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	exeggcute: {
 		name: "아라리",
@@ -565,8 +565,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "나시",
 	},
 	exeggutoralola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라나시", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	cubone: {
 		name: "탕구리",
@@ -575,12 +575,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "텅구리",
 	},
 	marowakalolatotem: {
-		name: null, // NEEDS TRANSLATION
+		name: "주인 알로라텅구리", // NEEDS QC
 		forme: "주인（알로라의 모습）",
 	},
 	marowakalola: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "알로라텅구리", // NEEDS QC
+		forme: "알로라의 모습", // NEEDS QC
 	},
 	hitmonlee: {
 		name: "시라소몬",
@@ -598,8 +598,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "또도가스",
 	},
 	weezinggalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르또도가스", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	rhyhorn: {
 		name: "뿔카노",
@@ -618,7 +618,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	kangaskhanmega: {
 		name: "메가캥카",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가캥카", // NEEDS QC
 	},
 	horsea: {
 		name: "쏘드라",
@@ -639,15 +639,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "아쿠스타",
 	},
 	starmiemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가아쿠스타", // NEEDS QC
+		forme: "메가아쿠스타", // NEEDS QC
 	},
 	mrmime: {
 		name: "마임맨",
 	},
 	mrmimegalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르마임맨", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	scyther: {
 		name: "스라크",
@@ -666,21 +666,21 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	pinsirmega: {
 		name: "메가쁘사이저",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가쁘사이저", // NEEDS QC
 	},
 	tauros: {
 		name: "켄타로스",
 	},
 	taurospaldeacombat: {
-		name: null, // NEEDS TRANSLATION
+		name: "팔데아켄타로스 컴뱃", // NEEDS QC: unofficial
 		forme: "컴뱃종（팔데아의 모습）",
 	},
 	taurospaldeablaze: {
-		name: null, // NEEDS TRANSLATION
+		name: "팔데아켄타로스 블레이즈", // NEEDS QC: unofficial
 		forme: "블레이즈종（팔데아의 모습）",
 	},
 	taurospaldeaaqua: {
-		name: null, // NEEDS TRANSLATION
+		name: "팔데아켄타로스 워터", // NEEDS QC: unofficial
 		forme: "워터종（팔데아의 모습）",
 	},
 	magikarp: {
@@ -691,14 +691,14 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	gyaradosmega: {
 		name: "메가갸라도스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가갸라도스", // NEEDS QC
 	},
 	lapras: {
 		name: "라프라스",
 	},
 	laprasgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "라프라스 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	ditto: {
 		name: "메타몽",
@@ -707,12 +707,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "이브이",
 	},
 	eeveestarter: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "파트너 이브이", // NEEDS QC: unofficial (LGPE marketing name)
+		forme: "파트너 이브이", // NEEDS QC: unofficial (LGPE marketing name)
 	},
 	eeveegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "이브이 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	vaporeon: {
 		name: "샤미드",
@@ -743,35 +743,35 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	aerodactylmega: {
 		name: "메가프테라",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가프테라", // NEEDS QC
 	},
 	snorlax: {
 		name: "잠만보",
 	},
 	snorlaxgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "잠만보 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	articuno: {
 		name: "프리져",
 	},
 	articunogalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르프리져", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	zapdos: {
 		name: "썬더",
 	},
 	zapdosgalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르썬더", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	moltres: {
 		name: "파이어",
 	},
 	moltresgalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르파이어", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	dratini: {
 		name: "미뇽",
@@ -783,19 +783,19 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "망나뇽",
 	},
 	dragonitemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가망나뇽", // NEEDS QC
+		forme: "메가망나뇽", // NEEDS QC
 	},
 	mewtwo: {
 		name: "뮤츠",
 	},
 	mewtwomegax: {
 		name: "메가뮤츠X",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가뮤츠X", // NEEDS QC
 	},
 	mewtwomegay: {
 		name: "메가뮤츠Y",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가뮤츠Y", // NEEDS QC
 	},
 	mew: {
 		name: "뮤",
@@ -810,8 +810,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "메가니움",
 	},
 	meganiummega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가메가니움", // NEEDS QC
+		forme: "메가메가니움", // NEEDS QC
 	},
 	cyndaquil: {
 		name: "브케인",
@@ -823,8 +823,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "블레이범",
 	},
 	typhlosionhisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이블레이범", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	totodile: {
 		name: "리아코",
@@ -836,8 +836,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "장크로다일",
 	},
 	feraligatrmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가장크로다일", // NEEDS QC
+		forme: "메가장크로다일", // NEEDS QC
 	},
 	sentret: {
 		name: "꼬리선",
@@ -876,8 +876,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "피츄",
 	},
 	pichuspikyeared: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "삐쭉귀 피츄", // NEEDS QC
+		forme: "삐쭉귀 피츄", // NEEDS QC
 	},
 	cleffa: {
 		name: "삐",
@@ -908,7 +908,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	ampharosmega: {
 		name: "메가전룡",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가전룡", // NEEDS QC
 	},
 	bellossom: {
 		name: "아르코",
@@ -950,8 +950,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "우파",
 	},
 	wooperpaldea: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "팔데아우파", // NEEDS QC
+		forme: "팔데아의 모습", // NEEDS QC
 	},
 	quagsire: {
 		name: "누오",
@@ -969,14 +969,14 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "야도킹",
 	},
 	slowkinggalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르야도킹", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	misdreavus: {
 		name: "무우마",
 	},
 	unown: {
-		name: null, // NEEDS TRANSLATION
+		name: "안농-A", // NEEDS QC
 		baseSpecies: "안농",
 	},
 	unownb: {
@@ -1083,7 +1083,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	steelixmega: {
 		name: "메가강철톤",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가강철톤", // NEEDS QC
 	},
 	snubbull: {
 		name: "블루",
@@ -1095,15 +1095,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "침바루",
 	},
 	qwilfishhisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이침바루", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	scizor: {
 		name: "핫삼",
 	},
 	scizormega: {
 		name: "메가핫삼",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가핫삼", // NEEDS QC
 	},
 	shuckle: {
 		name: "단단지",
@@ -1113,14 +1113,14 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	heracrossmega: {
 		name: "메가헤라크로스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가헤라크로스", // NEEDS QC
 	},
 	sneasel: {
 		name: "포푸니",
 	},
 	sneaselhisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이포푸니", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	teddiursa: {
 		name: "깜지곰",
@@ -1144,8 +1144,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "코산호",
 	},
 	corsolagalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르코산호", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	remoraid: {
 		name: "총어",
@@ -1163,8 +1163,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "무장조",
 	},
 	skarmorymega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가무장조", // NEEDS QC
+		forme: "메가무장조", // NEEDS QC
 	},
 	houndour: {
 		name: "델빌",
@@ -1174,7 +1174,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	houndoommega: {
 		name: "메가헬가",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가헬가", // NEEDS QC
 	},
 	kingdra: {
 		name: "킹드라",
@@ -1235,7 +1235,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	tyranitarmega: {
 		name: "메가마기라스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가마기라스", // NEEDS QC
 	},
 	lugia: {
 		name: "루기아",
@@ -1257,7 +1257,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	sceptilemega: {
 		name: "메가나무킹",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가나무킹", // NEEDS QC
 	},
 	torchic: {
 		name: "아차모",
@@ -1270,7 +1270,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	blazikenmega: {
 		name: "메가번치코",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가번치코", // NEEDS QC
 	},
 	mudkip: {
 		name: "물짱이",
@@ -1283,7 +1283,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	swampertmega: {
 		name: "메가대짱이",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가대짱이", // NEEDS QC
 	},
 	poochyena: {
 		name: "포챠나",
@@ -1295,15 +1295,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "지그제구리",
 	},
 	zigzagoongalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르지그제구리", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	linoone: {
 		name: "직구리",
 	},
 	linoonegalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르직구리", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	wurmple: {
 		name: "개무소",
@@ -1361,7 +1361,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	gardevoirmega: {
 		name: "메가가디안",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가가디안", // NEEDS QC
 	},
 	surskit: {
 		name: "비구술",
@@ -1425,14 +1425,14 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	sableyemega: {
 		name: "메가깜까미",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가깜까미", // NEEDS QC
 	},
 	mawile: {
 		name: "입치트",
 	},
 	mawilemega: {
 		name: "메가입치트",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가입치트", // NEEDS QC
 	},
 	aron: {
 		name: "가보리",
@@ -1445,7 +1445,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	aggronmega: {
 		name: "메가보스로라",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가보스로라", // NEEDS QC
 	},
 	meditite: {
 		name: "요가랑",
@@ -1455,7 +1455,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	medichammega: {
 		name: "메가요가램",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가요가램", // NEEDS QC
 	},
 	electrike: {
 		name: "썬더라이",
@@ -1465,7 +1465,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	manectricmega: {
 		name: "메가썬더볼트",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가썬더볼트", // NEEDS QC
 	},
 	plusle: {
 		name: "플러시",
@@ -1496,7 +1496,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	sharpedomega: {
 		name: "메가샤크니아",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가샤크니아", // NEEDS QC
 	},
 	wailmer: {
 		name: "고래왕자",
@@ -1512,7 +1512,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	cameruptmega: {
 		name: "메가폭타",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가폭타", // NEEDS QC
 	},
 	torkoal: {
 		name: "코터스",
@@ -1549,7 +1549,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	altariamega: {
 		name: "메가파비코리",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가파비코리", // NEEDS QC
 	},
 	zangoose: {
 		name: "쟝고",
@@ -1603,16 +1603,16 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "캐스퐁",
 	},
 	castformsunny: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "캐스퐁 태양", // NEEDS QC
+		forme: "태양의 모습", // NEEDS QC
 	},
 	castformrainy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "캐스퐁 빗방울", // NEEDS QC
+		forme: "빗방울의 모습", // NEEDS QC
 	},
 	castformsnowy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "캐스퐁 설운", // NEEDS QC
+		forme: "설운의 모습", // NEEDS QC
 	},
 	kecleon: {
 		name: "켈리몬",
@@ -1625,7 +1625,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	banettemega: {
 		name: "메가다크펫",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가다크펫", // NEEDS QC
 	},
 	duskull: {
 		name: "해골몽",
@@ -1640,19 +1640,19 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "치렁",
 	},
 	chimechomega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가치렁", // NEEDS QC
+		forme: "메가치렁", // NEEDS QC
 	},
 	absol: {
 		name: "앱솔",
 	},
 	absolmegaz: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가앱솔Z", // NEEDS QC
+		forme: "메가앱솔Z", // NEEDS QC
 	},
 	absolmega: {
 		name: "메가앱솔",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가앱솔", // NEEDS QC
 	},
 	wynaut: {
 		name: "마자",
@@ -1665,7 +1665,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	glaliemega: {
 		name: "메가얼음귀신",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가얼음귀신", // NEEDS QC
 	},
 	spheal: {
 		name: "대굴레오",
@@ -1702,7 +1702,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	salamencemega: {
 		name: "메가보만다",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가보만다", // NEEDS QC
 	},
 	beldum: {
 		name: "메탕",
@@ -1715,7 +1715,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	metagrossmega: {
 		name: "메가메타그로스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가메타그로스", // NEEDS QC
 	},
 	regirock: {
 		name: "레지락",
@@ -1731,54 +1731,54 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	latiasmega: {
 		name: "메가라티아스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가라티아스", // NEEDS QC
 	},
 	latios: {
 		name: "라티오스",
 	},
 	latiosmega: {
 		name: "메가라티오스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가라티오스", // NEEDS QC
 	},
 	kyogre: {
 		name: "가이오가",
 	},
 	kyogreprimal: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "원시가이오가", // NEEDS QC
+		forme: "원시회귀의 모습", // NEEDS QC
 	},
 	groudon: {
 		name: "그란돈",
 	},
 	groudonprimal: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "원시그란돈", // NEEDS QC
+		forme: "원시회귀의 모습", // NEEDS QC
 	},
 	rayquaza: {
 		name: "레쿠쟈",
 	},
 	rayquazamega: {
 		name: "메가레쿠쟈",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가레쿠쟈", // NEEDS QC
 	},
 	jirachi: {
 		name: "지라치",
 	},
 	deoxys: {
 		name: "테오키스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "노말폼", // NEEDS QC
 	},
 	deoxysattack: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "테오키스 어택", // NEEDS QC
+		forme: "어택폼", // NEEDS QC
 	},
 	deoxysdefense: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "테오키스 디펜스", // NEEDS QC
+		forme: "디펜스폼", // NEEDS QC
 	},
 	deoxysspeed: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "테오키스 스피드", // NEEDS QC
+		forme: "스피드폼", // NEEDS QC
 	},
 	turtwig: {
 		name: "모부기",
@@ -1817,8 +1817,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "찌르호크",
 	},
 	staraptormega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가찌르호크", // NEEDS QC
+		forme: "메가찌르호크", // NEEDS QC
 	},
 	bidoof: {
 		name: "비버니",
@@ -1860,30 +1860,30 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "바리톱스",
 	},
 	burmy: {
-		name: null, // NEEDS TRANSLATION
+		name: "도롱충이 초목", // NEEDS QC
 		baseSpecies: "도롱충이",
-		forme: null, // NEEDS TRANSLATION
+		forme: "초목도롱", // NEEDS QC
 	},
 	burmysandy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "도롱충이 모래땅", // NEEDS QC
+		forme: "모래땅도롱", // NEEDS QC
 	},
 	burmytrash: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "도롱충이 슈레", // NEEDS QC
+		forme: "슈레도롱", // NEEDS QC
 	},
 	wormadam: {
-		name: null, // NEEDS TRANSLATION
+		name: "도롱마담 초목", // NEEDS QC
 		baseSpecies: "도롱마담",
-		forme: null, // NEEDS TRANSLATION
+		forme: "초목도롱", // NEEDS QC
 	},
 	wormadamsandy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "도롱마담 모래땅", // NEEDS QC
+		forme: "모래땅도롱", // NEEDS QC
 	},
 	wormadamtrash: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "도롱마담 슈레", // NEEDS QC
+		forme: "슈레도롱", // NEEDS QC
 	},
 	mothim: {
 		name: "나메일",
@@ -1908,29 +1908,29 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	cherrim: {
 		name: "체리꼬",
-		forme: null, // NEEDS TRANSLATION
+		forme: "네거폼", // NEEDS QC
 	},
 	cherrimsunshine: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "체리꼬 포지", // NEEDS QC
+		forme: "포지폼", // NEEDS QC
 	},
 	shellos: {
-		name: null, // NEEDS TRANSLATION
+		name: "깝질무 서쪽", // NEEDS QC
 		baseSpecies: "깝질무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "서쪽바다", // NEEDS QC
 	},
 	shelloseast: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "깝질무 동쪽", // NEEDS QC
+		forme: "동쪽바다", // NEEDS QC
 	},
 	gastrodon: {
-		name: null, // NEEDS TRANSLATION
+		name: "트리토돈 서쪽", // NEEDS QC
 		baseSpecies: "트리토돈",
-		forme: null, // NEEDS TRANSLATION
+		forme: "서쪽바다", // NEEDS QC
 	},
 	gastrodoneast: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리토돈 동쪽", // NEEDS QC
+		forme: "동쪽바다", // NEEDS QC
 	},
 	ambipom: {
 		name: "겟핸보숭",
@@ -1949,7 +1949,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	lopunnymega: {
 		name: "메가이어롭",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가이어롭", // NEEDS QC
 	},
 	mismagius: {
 		name: "무우마직",
@@ -2003,12 +2003,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "한카리아스",
 	},
 	garchompmegaz: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가한카리아스Z", // NEEDS QC
+		forme: "메가한카리아스Z", // NEEDS QC
 	},
 	garchompmega: {
 		name: "메가한카리아스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가한카리아스", // NEEDS QC
 	},
 	munchlax: {
 		name: "먹고자",
@@ -2020,12 +2020,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "루카리오",
 	},
 	lucariomegaz: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가루카리오Z", // NEEDS QC
+		forme: "메가루카리오Z", // NEEDS QC
 	},
 	lucariomega: {
 		name: "메가루카리오",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가루카리오", // NEEDS QC
 	},
 	hippopotas: {
 		name: "히포포타스",
@@ -2065,7 +2065,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	abomasnowmega: {
 		name: "메가눈설왕",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가눈설왕", // NEEDS QC
 	},
 	weavile: {
 		name: "포푸니라",
@@ -2114,7 +2114,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	gallademega: {
 		name: "메가엘레이드",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가엘레이드", // NEEDS QC
 	},
 	probopass: {
 		name: "대코파스",
@@ -2126,31 +2126,31 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "눈여아",
 	},
 	froslassmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가눈여아", // NEEDS QC
+		forme: "메가눈여아", // NEEDS QC
 	},
 	rotom: {
 		name: "로토무",
 	},
 	rotomheat: {
 		name: "히트로토무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "히트로토무", // NEEDS QC
 	},
 	rotomwash: {
 		name: "워시로토무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "워시로토무", // NEEDS QC
 	},
 	rotomfrost: {
 		name: "프로스트로토무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "프로스트로토무", // NEEDS QC
 	},
 	rotomfan: {
 		name: "스핀로토무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "스핀로토무", // NEEDS QC
 	},
 	rotommow: {
 		name: "커트로토무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "커트로토무", // NEEDS QC
 	},
 	uxie: {
 		name: "유크시",
@@ -2165,34 +2165,34 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "디아루가",
 	},
 	dialgaorigin: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "디아루가 오리진", // NEEDS QC
+		forme: "오리진폼", // NEEDS QC
 	},
 	palkia: {
 		name: "펄기아",
 	},
 	palkiaorigin: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "펄기아 오리진", // NEEDS QC
+		forme: "오리진폼", // NEEDS QC
 	},
 	heatran: {
 		name: "히드런",
 	},
 	heatranmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가히드런", // NEEDS QC
+		forme: "메가히드런", // NEEDS QC
 	},
 	regigigas: {
 		name: "레지기가스",
 	},
 	giratina: {
-		name: null, // NEEDS TRANSLATION
+		name: "기라티나 어나더", // NEEDS QC
 		baseSpecies: "기라티나",
-		forme: null, // NEEDS TRANSLATION
+		forme: "어나더폼", // NEEDS QC
 	},
 	giratinaorigin: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "기라티나 오리진", // NEEDS QC
+		forme: "오리진폼", // NEEDS QC
 	},
 	cresselia: {
 		name: "크레세리아",
@@ -2207,88 +2207,88 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "다크라이",
 	},
 	darkraimega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가다크라이", // NEEDS QC
+		forme: "메가다크라이", // NEEDS QC
 	},
 	shaymin: {
-		name: null, // NEEDS TRANSLATION
+		name: "쉐이미 랜드", // NEEDS QC
 		baseSpecies: "쉐이미",
-		forme: null, // NEEDS TRANSLATION
+		forme: "랜드폼", // NEEDS QC
 	},
 	shayminsky: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "쉐이미 스카이", // NEEDS QC
+		forme: "스카이폼", // NEEDS QC
 	},
 	arceus: {
 		name: "아르세우스",
 	},
 	arceusfighting: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 격투", // NEEDS QC
+		forme: "격투", // NEEDS QC
 	},
 	arceusflying: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 비행", // NEEDS QC
+		forme: "비행", // NEEDS QC
 	},
 	arceuspoison: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 독", // NEEDS QC
+		forme: "독", // NEEDS QC
 	},
 	arceusground: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 땅", // NEEDS QC
+		forme: "땅", // NEEDS QC
 	},
 	arceusrock: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 바위", // NEEDS QC
+		forme: "바위", // NEEDS QC
 	},
 	arceusbug: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 벌레", // NEEDS QC
+		forme: "벌레", // NEEDS QC
 	},
 	arceusghost: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 고스트", // NEEDS QC
+		forme: "고스트", // NEEDS QC
 	},
 	arceussteel: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 강철", // NEEDS QC
+		forme: "강철", // NEEDS QC
 	},
 	arceusfire: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 불꽃", // NEEDS QC
+		forme: "불꽃", // NEEDS QC
 	},
 	arceuswater: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 물", // NEEDS QC
+		forme: "물", // NEEDS QC
 	},
 	arceusgrass: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 풀", // NEEDS QC
+		forme: "풀", // NEEDS QC
 	},
 	arceuselectric: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 전기", // NEEDS QC
+		forme: "전기", // NEEDS QC
 	},
 	arceuspsychic: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 에스퍼", // NEEDS QC
+		forme: "에스퍼", // NEEDS QC
 	},
 	arceusice: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 얼음", // NEEDS QC
+		forme: "얼음", // NEEDS QC
 	},
 	arceusdragon: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 드래곤", // NEEDS QC
+		forme: "드래곤", // NEEDS QC
 	},
 	arceusdark: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 악", // NEEDS QC
+		forme: "악", // NEEDS QC
 	},
 	arceusfairy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아르세우스 페어리", // NEEDS QC
+		forme: "페어리", // NEEDS QC
 	},
 	victini: {
 		name: "비크티니",
@@ -2312,8 +2312,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "염무왕",
 	},
 	emboarmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가염무왕", // NEEDS QC
+		forme: "메가염무왕", // NEEDS QC
 	},
 	oshawott: {
 		name: "수댕이",
@@ -2325,8 +2325,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "대검귀",
 	},
 	samurotthisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이대검귀", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	patrat: {
 		name: "보르쥐",
@@ -2410,15 +2410,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "몰드류",
 	},
 	excadrillmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가몰드류", // NEEDS QC
+		forme: "메가몰드류", // NEEDS QC
 	},
 	audino: {
 		name: "다부니",
 	},
 	audinomega: {
 		name: "메가다부니",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가다부니", // NEEDS QC
 	},
 	timburr: {
 		name: "으랏차",
@@ -2463,8 +2463,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "펜드라",
 	},
 	scolipedemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가펜드라", // NEEDS QC
+		forme: "메가펜드라", // NEEDS QC
 	},
 	cottonee: {
 		name: "소미안",
@@ -2479,21 +2479,21 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "드레디어",
 	},
 	lilliganthisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이드레디어", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	basculin: {
-		name: null, // NEEDS TRANSLATION
+		name: "배쓰나이 적색근", // NEEDS QC
 		baseSpecies: "배쓰나이",
-		forme: null, // NEEDS TRANSLATION
+		forme: "적색근의 모습", // NEEDS QC
 	},
 	basculinwhitestriped: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "배쓰나이 백색근", // NEEDS QC
+		forme: "백색근의 모습", // NEEDS QC
 	},
 	basculinbluestriped: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "배쓰나이 청색근", // NEEDS QC
+		forme: "청색근의 모습", // NEEDS QC
 	},
 	sandile: {
 		name: "깜눈크",
@@ -2508,23 +2508,23 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "달막화",
 	},
 	darumakagalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르달막화", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	darmanitan: {
 		name: "불비달마",
-		forme: null, // NEEDS TRANSLATION
+		forme: "노말모드", // NEEDS QC
 	},
 	darmanitangalar: {
-		name: null, // NEEDS TRANSLATION
+		name: "가라르불비달마", // NEEDS QC
 		forme: "노말모드（가라르의 모습）",
 	},
 	darmanitanzen: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "불비달마 달마", // NEEDS QC
+		forme: "달마모드", // NEEDS QC
 	},
 	darmanitangalarzen: {
-		name: null, // NEEDS TRANSLATION
+		name: "가라르불비달마 달마", // NEEDS QC
 		forme: "달마모드（가라르의 모습）",
 	},
 	maractus: {
@@ -2543,8 +2543,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "곤율거니",
 	},
 	scraftymega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가곤율거니", // NEEDS QC
+		forme: "메가곤율거니", // NEEDS QC
 	},
 	sigilyph: {
 		name: "심보러",
@@ -2553,8 +2553,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "데스마스",
 	},
 	yamaskgalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르데스마스", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	cofagrigus: {
 		name: "데스니칸",
@@ -2578,22 +2578,22 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "더스트나",
 	},
 	garbodorgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "더스트나 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	zorua: {
 		name: "조로아",
 	},
 	zoruahisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이조로아", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	zoroark: {
 		name: "조로아크",
 	},
 	zoroarkhisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이조로아크", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	minccino: {
 		name: "치라미",
@@ -2635,38 +2635,38 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "배바닐라",
 	},
 	deerling: {
-		name: null, // NEEDS TRANSLATION
+		name: "사철록 봄", // NEEDS QC
 		baseSpecies: "사철록",
-		forme: null, // NEEDS TRANSLATION
+		forme: "봄의 모습", // NEEDS QC
 	},
 	deerlingsummer: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "사철록 여름", // NEEDS QC
+		forme: "여름의 모습", // NEEDS QC
 	},
 	deerlingautumn: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "사철록 가을", // NEEDS QC
+		forme: "가을의 모습", // NEEDS QC
 	},
 	deerlingwinter: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "사철록 겨울", // NEEDS QC
+		forme: "겨울의 모습", // NEEDS QC
 	},
 	sawsbuck: {
-		name: null, // NEEDS TRANSLATION
+		name: "바라철록 봄", // NEEDS QC
 		baseSpecies: "바라철록",
-		forme: null, // NEEDS TRANSLATION
+		forme: "봄의 모습", // NEEDS QC
 	},
 	sawsbucksummer: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "바라철록 여름", // NEEDS QC
+		forme: "여름의 모습", // NEEDS QC
 	},
 	sawsbuckautumn: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "바라철록 가을", // NEEDS QC
+		forme: "가을의 모습", // NEEDS QC
 	},
 	sawsbuckwinter: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "바라철록 겨울", // NEEDS QC
+		forme: "겨울의 모습", // NEEDS QC
 	},
 	emolga: {
 		name: "에몽가",
@@ -2723,8 +2723,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "저리더프",
 	},
 	eelektrossmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가저리더프", // NEEDS QC
+		forme: "메가저리더프", // NEEDS QC
 	},
 	elgyem: {
 		name: "리그레",
@@ -2742,8 +2742,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "샹델라",
 	},
 	chandeluremega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가샹델라", // NEEDS QC
+		forme: "메가샹델라", // NEEDS QC
 	},
 	axew: {
 		name: "터검니",
@@ -2773,8 +2773,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "메더",
 	},
 	stunfiskgalar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "가라르메더", // NEEDS QC
+		forme: "가라르의 모습", // NEEDS QC
 	},
 	mienfoo: {
 		name: "비조푸",
@@ -2792,8 +2792,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "골루그",
 	},
 	golurkmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가골루그", // NEEDS QC
+		forme: "메가골루그", // NEEDS QC
 	},
 	pawniard: {
 		name: "자망칼",
@@ -2811,8 +2811,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "워글",
 	},
 	braviaryhisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이워글", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	vullaby: {
 		name: "벌차이",
@@ -2851,22 +2851,22 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "비리디온",
 	},
 	tornadus: {
-		name: null, // NEEDS TRANSLATION
+		name: "토네로스 화신", // NEEDS QC
 		baseSpecies: "토네로스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "화신폼", // NEEDS QC
 	},
 	tornadustherian: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "토네로스 영물", // NEEDS QC
+		forme: "영물폼", // NEEDS QC
 	},
 	thundurus: {
-		name: null, // NEEDS TRANSLATION
+		name: "볼트로스 화신", // NEEDS QC
 		baseSpecies: "볼트로스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "화신폼", // NEEDS QC
 	},
 	thundurustherian: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "볼트로스 영물", // NEEDS QC
+		forme: "영물폼", // NEEDS QC
 	},
 	reshiram: {
 		name: "레시라무",
@@ -2875,59 +2875,59 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "제크로무",
 	},
 	landorus: {
-		name: null, // NEEDS TRANSLATION
+		name: "랜드로스 화신", // NEEDS QC
 		baseSpecies: "랜드로스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "화신폼", // NEEDS QC
 	},
 	landorustherian: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "랜드로스 영물", // NEEDS QC
+		forme: "영물폼", // NEEDS QC
 	},
 	kyurem: {
 		name: "큐레무",
 	},
 	kyuremblack: {
 		name: "블랙큐레무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "블랙큐레무", // NEEDS QC
 	},
 	kyuremwhite: {
 		name: "화이트큐레무",
-		forme: null, // NEEDS TRANSLATION
+		forme: "화이트큐레무", // NEEDS QC
 	},
 	keldeo: {
 		name: "케르디오",
-		forme: null, // NEEDS TRANSLATION
+		forme: "평상시 모습", // NEEDS QC
 	},
 	keldeoresolute: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "케르디오 각오", // NEEDS QC
+		forme: "각오의 모습", // NEEDS QC
 	},
 	meloetta: {
 		name: "메로엣타",
-		forme: null, // NEEDS TRANSLATION
+		forme: "보이스폼", // NEEDS QC
 	},
 	meloettapirouette: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메로엣타 스텝", // NEEDS QC
+		forme: "스텝폼", // NEEDS QC
 	},
 	genesect: {
 		name: "게노세크트",
 	},
 	genesectdouse: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "게노세크트 아쿠아", // NEEDS QC: unofficial (from drive item name)
+		forme: "아쿠아카세트", // NEEDS QC: unofficial (from drive item name)
 	},
 	genesectshock: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "게노세크트 번개", // NEEDS QC: unofficial (from drive item name)
+		forme: "번개카세트", // NEEDS QC: unofficial (from drive item name)
 	},
 	genesectburn: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "게노세크트 블레이즈", // NEEDS QC: unofficial (from drive item name)
+		forme: "블레이즈카세트", // NEEDS QC: unofficial (from drive item name)
 	},
 	genesectchill: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "게노세크트 프리즈", // NEEDS QC: unofficial (from drive item name)
+		forme: "프리즈카세트", // NEEDS QC: unofficial (from drive item name)
 	},
 	chespin: {
 		name: "도치마론",
@@ -2939,8 +2939,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "브리가론",
 	},
 	chesnaughtmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가브리가론", // NEEDS QC
+		forme: "메가브리가론", // NEEDS QC
 	},
 	fennekin: {
 		name: "푸호꼬",
@@ -2952,8 +2952,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "마폭시",
 	},
 	delphoxmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가마폭시", // NEEDS QC
+		forme: "메가마폭시", // NEEDS QC
 	},
 	froakie: {
 		name: "개구마르",
@@ -2965,16 +2965,16 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "개굴닌자",
 	},
 	greninjabond: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "개굴닌자 유대", // NEEDS QC: unofficial
+		forme: "유대변화", // NEEDS QC: unofficial
 	},
 	greninjamega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가개굴닌자", // NEEDS QC
+		forme: "메가개굴닌자", // NEEDS QC
 	},
 	greninjaash: {
 		name: "지우개굴닌자",
-		forme: null, // NEEDS TRANSLATION
+		forme: "지우개굴닌자", // NEEDS QC
 	},
 	bunnelby: {
 		name: "파르빗",
@@ -2998,85 +2998,85 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "분떠도리",
 	},
 	vivillon: {
-		name: null, // NEEDS TRANSLATION
+		name: "비비용 화원", // NEEDS QC
 		baseSpecies: "비비용",
-		forme: null, // NEEDS TRANSLATION
+		forme: "화원의 모양", // NEEDS QC
 	},
 	vivillonfancy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 팬시", // NEEDS QC
+		forme: "팬시한 모양", // NEEDS QC
 	},
 	vivillonpokeball: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 볼", // NEEDS QC
+		forme: "볼의 모양", // NEEDS QC
 	},
 	vivillonarchipelago: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 군도", // NEEDS QC
+		forme: "군도의 모양", // NEEDS QC
 	},
 	vivilloncontinental: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 대륙", // NEEDS QC
+		forme: "대륙의 모양", // NEEDS QC
 	},
 	vivillonelegant: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 우아한 모양", // NEEDS QC
+		forme: "우아한 모양", // NEEDS QC
 	},
 	vivillongarden: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 정원", // NEEDS QC
+		forme: "정원의 모양", // NEEDS QC
 	},
 	vivillonhighplains: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 황야", // NEEDS QC
+		forme: "황야의 모양", // NEEDS QC
 	},
 	vivillonicysnow: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 빙설", // NEEDS QC
+		forme: "빙설의 모양", // NEEDS QC
 	},
 	vivillonjungle: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 정글", // NEEDS QC
+		forme: "정글의 모양", // NEEDS QC
 	},
 	vivillonmarine: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 마린", // NEEDS QC
+		forme: "마린의 모양", // NEEDS QC
 	},
 	vivillonmodern: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 모던", // NEEDS QC
+		forme: "모던한 모양", // NEEDS QC
 	},
 	vivillonmonsoon: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 스콜", // NEEDS QC
+		forme: "스콜의 모양", // NEEDS QC
 	},
 	vivillonocean: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 오션", // NEEDS QC
+		forme: "오션의 모양", // NEEDS QC
 	},
 	vivillonpolar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 설국", // NEEDS QC
+		forme: "설국의 모양", // NEEDS QC
 	},
 	vivillonriver: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 대하", // NEEDS QC
+		forme: "대하의 모양", // NEEDS QC
 	},
 	vivillonsandstorm: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 사진", // NEEDS QC
+		forme: "사진의 모양", // NEEDS QC
 	},
 	vivillonsavanna: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 사바나", // NEEDS QC
+		forme: "사바나의 모양", // NEEDS QC
 	},
 	vivillonsun: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 태양", // NEEDS QC
+		forme: "태양의 모양", // NEEDS QC
 	},
 	vivillontundra: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "비비용 설원", // NEEDS QC
+		forme: "설원의 모양", // NEEDS QC
 	},
 	litleo: {
 		name: "레오꼬",
@@ -3085,79 +3085,79 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "화염레오",
 	},
 	pyroarmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가화염레오", // NEEDS QC
+		forme: "메가화염레오", // NEEDS QC
 	},
 	flabebe: {
-		name: null, // NEEDS TRANSLATION
+		name: "플라베베 빨간 꽃", // NEEDS QC
 		baseSpecies: "플라베베",
-		forme: null, // NEEDS TRANSLATION
+		forme: "빨간 꽃", // NEEDS QC
 	},
 	flabebeblue: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라베베 파란 꽃", // NEEDS QC
+		forme: "파란 꽃", // NEEDS QC
 	},
 	flabebeorange: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라베베 오렌지색 꽃", // NEEDS QC
+		forme: "오렌지색 꽃", // NEEDS QC
 	},
 	flabebewhite: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라베베 하얀 꽃", // NEEDS QC
+		forme: "하얀 꽃", // NEEDS QC
 	},
 	flabebeyellow: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라베베 노란 꽃", // NEEDS QC
+		forme: "노란 꽃", // NEEDS QC
 	},
 	floette: {
-		name: null, // NEEDS TRANSLATION
-		baseSpecies: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라엣테 빨간 꽃", // NEEDS QC
+		baseSpecies: "플라엣테", // NEEDS QC
+		forme: "빨간 꽃", // NEEDS QC
 	},
 	floetteblue: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라엣테 파란 꽃", // NEEDS QC
+		forme: "파란 꽃", // NEEDS QC
 	},
 	floetteorange: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라엣테 오렌지색 꽃", // NEEDS QC
+		forme: "오렌지색 꽃", // NEEDS QC
 	},
 	floettewhite: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라엣테 하얀 꽃", // NEEDS QC
+		forme: "하얀 꽃", // NEEDS QC
 	},
 	floetteyellow: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라엣테 노란 꽃", // NEEDS QC
+		forme: "노란 꽃", // NEEDS QC
 	},
 	floettemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가플라엣테", // NEEDS QC
+		forme: "메가플라엣테", // NEEDS QC
 	},
 	floetteeternal: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라엣테 영원의 꽃", // NEEDS QC
+		forme: "영원의 꽃", // NEEDS QC
 	},
 	florges: {
-		name: null, // NEEDS TRANSLATION
+		name: "플라제스 빨간 꽃", // NEEDS QC
 		baseSpecies: "플라제스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "빨간 꽃", // NEEDS QC
 	},
 	florgesblue: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라제스 파란 꽃", // NEEDS QC
+		forme: "파란 꽃", // NEEDS QC
 	},
 	florgesorange: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라제스 오렌지색 꽃", // NEEDS QC
+		forme: "오렌지색 꽃", // NEEDS QC
 	},
 	florgeswhite: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라제스 하얀 꽃", // NEEDS QC
+		forme: "하얀 꽃", // NEEDS QC
 	},
 	florgesyellow: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "플라제스 노란 꽃", // NEEDS QC
+		forme: "노란 꽃", // NEEDS QC
 	},
 	skiddo: {
 		name: "메이클",
@@ -3173,62 +3173,62 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	furfrou: {
 		name: "트리미앙",
-		forme: null, // NEEDS TRANSLATION
+		forme: "야생의 모습", // NEEDS QC
 	},
 	furfroudandy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 젠틀", // NEEDS QC
+		forme: "젠틀컷", // NEEDS QC
 	},
 	furfroudebutante: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 레이디", // NEEDS QC
+		forme: "레이디컷", // NEEDS QC
 	},
 	furfroudiamond: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 다이아", // NEEDS QC
+		forme: "다이아컷", // NEEDS QC
 	},
 	furfrouheart: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 하트", // NEEDS QC
+		forme: "하트컷", // NEEDS QC
 	},
 	furfroukabuki: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 가부키", // NEEDS QC
+		forme: "가부키컷", // NEEDS QC
 	},
 	furfroulareine: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 퀸", // NEEDS QC
+		forme: "퀸컷", // NEEDS QC
 	},
 	furfroumatron: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 마담", // NEEDS QC
+		forme: "마담컷", // NEEDS QC
 	},
 	furfroupharaoh: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 킹덤", // NEEDS QC
+		forme: "킹덤컷", // NEEDS QC
 	},
 	furfroustar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "트리미앙 스타", // NEEDS QC
+		forme: "스타컷", // NEEDS QC
 	},
 	espurr: {
 		name: "냐스퍼",
 	},
 	meowstic: {
-		name: null, // NEEDS TRANSLATION
+		name: "냐오닉스 수컷", // NEEDS QC
 		baseSpecies: "냐오닉스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "수컷의 모습", // NEEDS QC
 	},
 	meowsticf: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "냐오닉스 암컷", // NEEDS QC
+		forme: "암컷의 모습", // NEEDS QC
 	},
 	meowsticmmega: {
-		name: null, // NEEDS TRANSLATION
+		name: "메가냐오닉스 수컷", // NEEDS QC: unofficial
 		forme: "메가냐오닉스（수컷의 모습）",
 	},
 	meowsticfmega: {
-		name: null, // NEEDS TRANSLATION
+		name: "메가냐오닉스 암컷", // NEEDS QC: unofficial
 		forme: "메가냐오닉스（암컷의 모습）",
 	},
 	honedge: {
@@ -3239,11 +3239,11 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	aegislash: {
 		name: "킬가르도",
-		forme: null, // NEEDS TRANSLATION
+		forme: "실드폼", // NEEDS QC
 	},
 	aegislashblade: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "킬가르도 블레이드", // NEEDS QC
+		forme: "블레이드폼", // NEEDS QC
 	},
 	spritzee: {
 		name: "슈쁘",
@@ -3264,8 +3264,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "칼라마네로",
 	},
 	malamarmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가칼라마네로", // NEEDS QC
+		forme: "메가칼라마네로", // NEEDS QC
 	},
 	binacle: {
 		name: "거북손손",
@@ -3274,8 +3274,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "거북손데스",
 	},
 	barbaraclemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가거북손데스", // NEEDS QC
+		forme: "메가거북손데스", // NEEDS QC
 	},
 	skrelp: {
 		name: "수레기",
@@ -3284,8 +3284,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "드래캄",
 	},
 	dragalgemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가드래캄", // NEEDS QC
+		forme: "메가드래캄", // NEEDS QC
 	},
 	clauncher: {
 		name: "완철포",
@@ -3318,8 +3318,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "루차불",
 	},
 	hawluchamega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가루차불", // NEEDS QC
+		forme: "메가루차불", // NEEDS QC
 	},
 	dedenne: {
 		name: "데덴네",
@@ -3334,15 +3334,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "미끄네일",
 	},
 	sliggoohisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이미끄네일", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	goodra: {
 		name: "미끄래곤",
 	},
 	goodrahisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이미끄래곤", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	klefki: {
 		name: "클레피",
@@ -3355,35 +3355,35 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	pumpkaboo: {
 		name: "호바귀",
-		forme: null, // NEEDS TRANSLATION
+		forme: "중과종", // NEEDS QC
 	},
 	pumpkaboosmall: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "호바귀 소과종", // NEEDS QC
+		forme: "소과종", // NEEDS QC
 	},
 	pumpkaboolarge: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "호바귀 대과종", // NEEDS QC
+		forme: "대과종", // NEEDS QC
 	},
 	pumpkaboosuper: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "호바귀 특대과종", // NEEDS QC
+		forme: "특대과종", // NEEDS QC
 	},
 	gourgeist: {
 		name: "펌킨인",
-		forme: null, // NEEDS TRANSLATION
+		forme: "중과종", // NEEDS QC
 	},
 	gourgeistsmall: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "펌킨인 소과종", // NEEDS QC
+		forme: "소과종", // NEEDS QC
 	},
 	gourgeistlarge: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "펌킨인 대과종", // NEEDS QC
+		forme: "대과종", // NEEDS QC
 	},
 	gourgeistsuper: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "펌킨인 특대과종", // NEEDS QC
+		forme: "특대과종", // NEEDS QC
 	},
 	bergmite: {
 		name: "꽁어름",
@@ -3392,8 +3392,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "크레베이스",
 	},
 	avalugghisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이크레베이스", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	noibat: {
 		name: "음뱃",
@@ -3403,47 +3403,47 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	xerneas: {
 		name: "제르네아스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "액티브모드", // NEEDS QC
 	},
 	xerneasneutral: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "제르네아스 릴랙스", // NEEDS QC
+		forme: "릴랙스모드", // NEEDS QC
 	},
 	yveltal: {
 		name: "이벨타르",
 	},
 	zygarde: {
-		name: null, // NEEDS TRANSLATION
-		baseSpecies: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "지가르데 50%", // NEEDS QC
+		baseSpecies: "지가르데", // NEEDS QC
+		forme: "50%폼", // NEEDS QC
 	},
 	zygardemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가지가르데", // NEEDS QC
+		forme: "메가지가르데", // NEEDS QC
 	},
 	zygarde10: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "지가르데 10%", // NEEDS QC
+		forme: "10%폼", // NEEDS QC
 	},
 	zygardecomplete: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "지가르데 퍼펙트", // NEEDS QC
+		forme: "퍼펙트폼", // NEEDS QC
 	},
 	diancie: {
 		name: "디안시",
 	},
 	dianciemega: {
 		name: "메가디안시",
-		forme: null, // NEEDS TRANSLATION
+		forme: "메가디안시", // NEEDS QC
 	},
 	hoopa: {
-		name: null, // NEEDS TRANSLATION
+		name: "굴레에 빠진 후파", // NEEDS QC
 		baseSpecies: "후파",
-		forme: null, // NEEDS TRANSLATION
+		forme: "굴레에 빠진 후파", // NEEDS QC
 	},
 	hoopaunbound: {
 		name: "굴레를 벗어난 후파",
-		forme: null, // NEEDS TRANSLATION
+		forme: "굴레를 벗어난 후파", // NEEDS QC
 	},
 	volcanion: {
 		name: "볼케니온",
@@ -3458,8 +3458,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "모크나이퍼",
 	},
 	decidueyehisui: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "히스이모크나이퍼", // NEEDS QC
+		forme: "히스이의 모습", // NEEDS QC
 	},
 	litten: {
 		name: "냐오불",
@@ -3495,8 +3495,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "형사구스",
 	},
 	gumshoostotem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 형사구스", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	grubbin: {
 		name: "턱지충이",
@@ -3508,8 +3508,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "투구뿌논",
 	},
 	vikavolttotem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 투구뿌논", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	crabrawler: {
 		name: "오기지게",
@@ -3518,25 +3518,25 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "모단단게",
 	},
 	crabominablemega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가모단단게", // NEEDS QC
+		forme: "메가모단단게", // NEEDS QC
 	},
 	oricorio: {
-		name: null, // NEEDS TRANSLATION
+		name: "춤추새 이글이글", // NEEDS QC
 		baseSpecies: "춤추새",
-		forme: null, // NEEDS TRANSLATION
+		forme: "이글이글스타일", // NEEDS QC
 	},
 	oricoriopompom: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "춤추새 파칙파칙", // NEEDS QC
+		forme: "파칙파칙스타일", // NEEDS QC
 	},
 	oricoriopau: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "춤추새 훌라훌라", // NEEDS QC
+		forme: "훌라훌라스타일", // NEEDS QC
 	},
 	oricoriosensu: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "춤추새 하늘하늘", // NEEDS QC
+		forme: "하늘하늘스타일", // NEEDS QC
 	},
 	cutiefly: {
 		name: "에블리",
@@ -3545,36 +3545,36 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "에리본",
 	},
 	ribombeetotem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 에리본", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	rockruff: {
 		name: "암멍이",
 	},
 	rockruffdusk: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "암멍이 마이페이스", // NEEDS QC: unofficial
+		forme: "마이페이스", // NEEDS QC: unofficial
 	},
 	lycanroc: {
-		name: null, // NEEDS TRANSLATION
+		name: "루가루암 한낮", // NEEDS QC
 		baseSpecies: "루가루암",
-		forme: null, // NEEDS TRANSLATION
+		forme: "한낮의 모습", // NEEDS QC
 	},
 	lycanrocmidnight: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "루가루암 한밤중", // NEEDS QC
+		forme: "한밤중의 모습", // NEEDS QC
 	},
 	lycanrocdusk: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "루가루암 황혼", // NEEDS QC
+		forme: "황혼의 모습", // NEEDS QC
 	},
 	wishiwashi: {
 		name: "약어리",
-		forme: null, // NEEDS TRANSLATION
+		forme: "단독의 모습", // NEEDS QC
 	},
 	wishiwashischool: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "약어리 군집", // NEEDS QC
+		forme: "군집의 모습", // NEEDS QC
 	},
 	mareanie: {
 		name: "시마사리",
@@ -3595,8 +3595,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "깨비물거미",
 	},
 	araquanidtotem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 깨비물거미", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	fomantis: {
 		name: "짜랑랑",
@@ -3605,8 +3605,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "라란티스",
 	},
 	lurantistotem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 라란티스", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	morelull: {
 		name: "자마슈",
@@ -3621,8 +3621,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "염뉴트",
 	},
 	salazzletotem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 염뉴트", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	stufful: {
 		name: "포곰곰",
@@ -3655,8 +3655,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "갑주무사",
 	},
 	golisopodmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가갑주무사", // NEEDS QC
+		forme: "메가갑주무사", // NEEDS QC
 	},
 	sandygast: {
 		name: "모래꿍",
@@ -3672,108 +3672,108 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	silvally: {
 		name: "실버디",
-		forme: null, // NEEDS TRANSLATION
+		forme: "타입:노말", // NEEDS QC
 	},
 	silvallyfighting: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 파이팅", // NEEDS QC
+		forme: "타입:파이팅", // NEEDS QC
 	},
 	silvallyflying: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 플라잉", // NEEDS QC
+		forme: "타입:플라잉", // NEEDS QC
 	},
 	silvallypoison: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 포이즌", // NEEDS QC
+		forme: "타입:포이즌", // NEEDS QC
 	},
 	silvallyground: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 그라운드", // NEEDS QC
+		forme: "타입:그라운드", // NEEDS QC
 	},
 	silvallyrock: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 록", // NEEDS QC
+		forme: "타입:록", // NEEDS QC
 	},
 	silvallybug: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 버그", // NEEDS QC
+		forme: "타입:버그", // NEEDS QC
 	},
 	silvallyghost: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 고스트", // NEEDS QC
+		forme: "타입:고스트", // NEEDS QC
 	},
 	silvallysteel: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 스틸", // NEEDS QC
+		forme: "타입:스틸", // NEEDS QC
 	},
 	silvallyfire: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 파이어", // NEEDS QC
+		forme: "타입:파이어", // NEEDS QC
 	},
 	silvallywater: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 워터", // NEEDS QC
+		forme: "타입:워터", // NEEDS QC
 	},
 	silvallygrass: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 그래스", // NEEDS QC
+		forme: "타입:그래스", // NEEDS QC
 	},
 	silvallyelectric: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 일렉트릭", // NEEDS QC
+		forme: "타입:일렉트릭", // NEEDS QC
 	},
 	silvallypsychic: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 사이킥", // NEEDS QC
+		forme: "타입:사이킥", // NEEDS QC
 	},
 	silvallyice: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 아이스", // NEEDS QC
+		forme: "타입:아이스", // NEEDS QC
 	},
 	silvallydragon: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 드래곤", // NEEDS QC
+		forme: "타입:드래곤", // NEEDS QC
 	},
 	silvallydark: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 다크", // NEEDS QC
+		forme: "타입:다크", // NEEDS QC
 	},
 	silvallyfairy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "실버디 페어리", // NEEDS QC
+		forme: "타입:페어리", // NEEDS QC
 	},
 	minior: {
-		name: null, // NEEDS TRANSLATION
+		name: "메테노 빨간색", // NEEDS QC
 		baseSpecies: "메테노",
-		forme: null, // NEEDS TRANSLATION
+		forme: "빨간색 코어", // NEEDS QC
 	},
 	miniormeteor: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메테노 유성", // NEEDS QC
+		forme: "유성의 모습", // NEEDS QC
 	},
 	miniororange: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메테노 주황색", // NEEDS QC
+		forme: "주황색 코어", // NEEDS QC
 	},
 	minioryellow: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메테노 노란색", // NEEDS QC
+		forme: "노란색 코어", // NEEDS QC
 	},
 	miniorgreen: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메테노 초록색", // NEEDS QC
+		forme: "초록색 코어", // NEEDS QC
 	},
 	miniorblue: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메테노 옥색", // NEEDS QC
+		forme: "옥색 코어", // NEEDS QC
 	},
 	miniorindigo: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메테노 파란색", // NEEDS QC
+		forme: "파란색 코어", // NEEDS QC
 	},
 	miniorviolet: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메테노 보라색", // NEEDS QC
+		forme: "보라색 코어", // NEEDS QC
 	},
 	komala: {
 		name: "자말라",
@@ -3785,24 +3785,24 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "토게데마루",
 	},
 	togedemarutotem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 토게데마루", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	mimikyu: {
 		name: "따라큐",
-		forme: null, // NEEDS TRANSLATION
+		forme: "둔갑한 모습", // NEEDS QC
 	},
 	mimikyubustedtotem: {
-		name: null, // NEEDS TRANSLATION
+		name: "주인 따라큐 들킨 모습", // NEEDS QC
 		forme: "주인（들킨 모습）",
 	},
 	mimikyutotem: {
-		name: null, // NEEDS TRANSLATION
+		name: "주인 따라큐", // NEEDS QC
 		forme: "주인（둔갑한 모습）",
 	},
 	mimikyubusted: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "따라큐 들킨 모습", // NEEDS QC
+		forme: "들킨 모습", // NEEDS QC
 	},
 	bruxish: {
 		name: "치갈기",
@@ -3811,8 +3811,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "할비롱",
 	},
 	drampamega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가할비롱", // NEEDS QC
+		forme: "메가할비롱", // NEEDS QC
 	},
 	dhelmise: {
 		name: "타타륜",
@@ -3827,8 +3827,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "짜랑고우거",
 	},
 	kommoototem: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "주인 짜랑고우거", // NEEDS QC
+		forme: "주인", // NEEDS QC
 	},
 	tapukoko: {
 		name: "카푸꼬꼬꼭",
@@ -3879,31 +3879,31 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "네크로즈마",
 	},
 	necrozmaduskmane: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "네크로즈마 황혼", // NEEDS QC
+		forme: "황혼의 갈기", // NEEDS QC
 	},
 	necrozmadawnwings: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "네크로즈마 새벽", // NEEDS QC
+		forme: "새벽의 날개", // NEEDS QC
 	},
 	necrozmaultra: {
 		name: "울트라네크로즈마",
-		forme: null, // NEEDS TRANSLATION
+		forme: "울트라네크로즈마", // NEEDS QC
 	},
 	magearna: {
 		name: "마기아나",
 	},
 	magearnamega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가마기아나", // NEEDS QC
+		forme: "메가마기아나", // NEEDS QC
 	},
 	magearnaoriginalmega: {
-		name: null, // NEEDS TRANSLATION
+		name: "메가마기아나 500년", // NEEDS QC: unofficial
 		forme: "메가마기아나（500년 전의 색）",
 	},
 	magearnaoriginal: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마기아나 500년", // NEEDS QC
+		forme: "500년 전의 색", // NEEDS QC
 	},
 	marshadow: {
 		name: "마샤도",
@@ -3924,8 +3924,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "제라오라",
 	},
 	zeraoramega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가제라오라", // NEEDS QC
+		forme: "메가제라오라", // NEEDS QC
 	},
 	meltan: {
 		name: "멜탄",
@@ -3934,8 +3934,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "멜메탈",
 	},
 	melmetalgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "멜메탈 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	grookey: {
 		name: "흥나숭",
@@ -3947,8 +3947,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "고릴타",
 	},
 	rillaboomgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "고릴타 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	scorbunny: {
 		name: "염버니",
@@ -3960,8 +3960,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "에이스번",
 	},
 	cinderacegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "에이스번 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	sobble: {
 		name: "울머기",
@@ -3973,8 +3973,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "인텔리레온",
 	},
 	inteleongmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "인텔리레온 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	skwovet: {
 		name: "탐리스",
@@ -3992,8 +3992,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "아머까오",
 	},
 	corviknightgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "아머까오 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	blipbug: {
 		name: "두루지벌레",
@@ -4005,8 +4005,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "이올브",
 	},
 	orbeetlegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "이올브 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	nickit: {
 		name: "훔처우",
@@ -4033,8 +4033,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "갈가부기",
 	},
 	drednawgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "갈가부기 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	yamper: {
 		name: "멍파치",
@@ -4052,8 +4052,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "석탄산",
 	},
 	coalossalgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "석탄산 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	applin: {
 		name: "과사삭벌레",
@@ -4062,15 +4062,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "애프룡",
 	},
 	flapplegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "애프룡 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	appletun: {
 		name: "단지래플",
 	},
 	appletungmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "단지래플 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	silicobra: {
 		name: "모래뱀",
@@ -4079,19 +4079,19 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "사다이사",
 	},
 	sandacondagmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "사다이사 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	cramorant: {
 		name: "윽우지",
 	},
 	cramorantgulping: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "윽우지 그대로 삼킨 모습", // NEEDS QC
+		forme: "그대로 삼킨 모습", // NEEDS QC
 	},
 	cramorantgorging: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "윽우지 통째로 삼킨 모습", // NEEDS QC
+		forme: "통째로 삼킨 모습", // NEEDS QC
 	},
 	arrokuda: {
 		name: "찌로꼬치",
@@ -4103,20 +4103,20 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "일레즌",
 	},
 	toxtricity: {
-		name: null, // NEEDS TRANSLATION
-		baseSpecies: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "스트린더 하이", // NEEDS QC
+		baseSpecies: "스트린더", // NEEDS QC
+		forme: "하이한 모습", // NEEDS QC
 	},
 	toxtricitygmax: {
-		name: null, // NEEDS TRANSLATION
+		name: "스트린더 거다이", // NEEDS QC
 		forme: "거다이맥스（하이한 모습）",
 	},
 	toxtricitylowkey: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "스트린더 로우", // NEEDS QC
+		forme: "로우한 모습", // NEEDS QC
 	},
 	toxtricitylowkeygmax: {
-		name: null, // NEEDS TRANSLATION
+		name: "스트린더 로우 거다이", // NEEDS QC
 		forme: "거다이맥스（로우한 모습）",
 	},
 	sizzlipede: {
@@ -4126,8 +4126,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "다태우지네",
 	},
 	centiskorchgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "다태우지네 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	clobbopus: {
 		name: "때때무노",
@@ -4137,19 +4137,19 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	sinistea: {
 		name: "데인차",
-		forme: null, // NEEDS TRANSLATION
+		forme: "위작폼", // NEEDS QC
 	},
 	sinisteaantique: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "데인차 진작", // NEEDS QC
+		forme: "진작폼", // NEEDS QC
 	},
 	polteageist: {
 		name: "포트데스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "위작폼", // NEEDS QC
 	},
 	polteageistantique: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "포트데스 진작", // NEEDS QC
+		forme: "진작폼", // NEEDS QC
 	},
 	hatenna: {
 		name: "몸지브림",
@@ -4161,8 +4161,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "브리무음",
 	},
 	hatterenegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "브리무음 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	impidimp: {
 		name: "메롱꿍",
@@ -4174,8 +4174,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "오롱털",
 	},
 	grimmsnarlgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "오롱털 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	obstagoon: {
 		name: "가로막구리",
@@ -4199,52 +4199,52 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "마빌크",
 	},
 	alcremie: {
-		name: null, // NEEDS TRANSLATION
-		baseSpecies: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 바닐라", // NEEDS QC: unofficial
+		baseSpecies: "마휘핑", // NEEDS QC
+		forme: "밀키바닐라", // NEEDS QC
 	},
 	alcremiegmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	alcremierubycream: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 루비", // NEEDS QC: unofficial
+		forme: "밀키루비", // NEEDS QC
 	},
 	alcremiematchacream: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 말차", // NEEDS QC: unofficial
+		forme: "밀키말차", // NEEDS QC
 	},
 	alcremiemintcream: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 민트", // NEEDS QC: unofficial
+		forme: "밀키민트", // NEEDS QC
 	},
 	alcremielemoncream: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 레몬", // NEEDS QC: unofficial
+		forme: "밀키레몬", // NEEDS QC
 	},
 	alcremiesaltedcream: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 솔트", // NEEDS QC: unofficial
+		forme: "밀키솔트", // NEEDS QC
 	},
 	alcremierubyswirl: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 루비믹스", // NEEDS QC
+		forme: "루비믹스", // NEEDS QC
 	},
 	alcremiecaramelswirl: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 캐러멜믹스", // NEEDS QC
+		forme: "캐러멜믹스", // NEEDS QC
 	},
 	alcremierainbowswirl: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "마휘핑 트리플믹스", // NEEDS QC
+		forme: "트리플믹스", // NEEDS QC
 	},
 	falinks: {
 		name: "대여르",
 	},
 	falinksmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가대여르", // NEEDS QC
+		forme: "메가대여르", // NEEDS QC
 	},
 	pincurchin: {
 		name: "찌르성게",
@@ -4260,28 +4260,28 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	eiscue: {
 		name: "빙큐보",
-		forme: null, // NEEDS TRANSLATION
+		forme: "아이스페이스", // NEEDS QC
 	},
 	eiscuenoice: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "빙큐보 나이스", // NEEDS QC
+		forme: "나이스페이스", // NEEDS QC
 	},
 	indeedee: {
-		name: null, // NEEDS TRANSLATION
+		name: "에써르 수컷", // NEEDS QC
 		baseSpecies: "에써르",
-		forme: null, // NEEDS TRANSLATION
+		forme: "수컷의 모습", // NEEDS QC
 	},
 	indeedeef: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "에써르 암컷", // NEEDS QC
+		forme: "암컷의 모습", // NEEDS QC
 	},
 	morpeko: {
 		name: "모르페코",
-		forme: null, // NEEDS TRANSLATION
+		forme: "배부른 모양", // NEEDS QC
 	},
 	morpekohangry: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "모르페코 배고픈", // NEEDS QC
+		forme: "배고픈 모양", // NEEDS QC
 	},
 	cufant: {
 		name: "끼리동",
@@ -4290,8 +4290,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "대왕끼리동",
 	},
 	copperajahgmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "대왕끼리동 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	dracozolt: {
 		name: "파치래곤",
@@ -4309,8 +4309,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "두랄루돈",
 	},
 	duraludongmax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "두랄루돈 거다이", // NEEDS QC
+		forme: "거다이맥스", // NEEDS QC
 	},
 	dreepy: {
 		name: "드라꼰",
@@ -4323,53 +4323,53 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	zacian: {
 		name: "자시안",
-		forme: null, // NEEDS TRANSLATION
+		forme: "역전의 용사", // NEEDS QC
 	},
 	zaciancrowned: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "자시안 검왕", // NEEDS QC
+		forme: "검왕", // NEEDS QC
 	},
 	zamazenta: {
 		name: "자마젠타",
-		forme: null, // NEEDS TRANSLATION
+		forme: "역전의 용사", // NEEDS QC
 	},
 	zamazentacrowned: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "자마젠타 방패왕", // NEEDS QC
+		forme: "방패왕", // NEEDS QC
 	},
 	eternatus: {
 		name: "무한다이노",
 	},
 	eternatuseternamax: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "무한다이노 무한다이", // NEEDS QC
+		forme: "무한다이맥스", // NEEDS QC
 	},
 	kubfu: {
 		name: "치고마",
 	},
 	urshifu: {
-		name: null, // NEEDS TRANSLATION
-		baseSpecies: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "우라오스 일격", // NEEDS QC: unofficial
+		baseSpecies: "우라오스", // NEEDS QC
+		forme: "일격의 태세", // NEEDS QC
 	},
 	urshifugmax: {
-		name: null, // NEEDS TRANSLATION
+		name: "우라오스 거다이", // NEEDS QC
 		forme: "거다이맥스（일격의 태세）",
 	},
 	urshifurapidstrike: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "우라오스 연격", // NEEDS QC: unofficial
+		forme: "연격의 태세", // NEEDS QC
 	},
 	urshifurapidstrikegmax: {
-		name: null, // NEEDS TRANSLATION
+		name: "우라오스 연격 거다이", // NEEDS QC: unofficial
 		forme: "거다이맥스（연격의 태세）",
 	},
 	zarude: {
 		name: "자루도",
 	},
 	zarudedada: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "자루도 아빠", // NEEDS QC
+		forme: "아빠", // NEEDS QC
 	},
 	regieleki: {
 		name: "레지에레키",
@@ -4387,12 +4387,12 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "버드렉스",
 	},
 	calyrexice: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "버드렉스 백마", // NEEDS QC
+		forme: "백마 탄 모습", // NEEDS QC
 	},
 	calyrexshadow: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "버드렉스 흑마", // NEEDS QC
+		forme: "흑마 탄 모습", // NEEDS QC
 	},
 	wyrdeer: {
 		name: "신비록",
@@ -4404,17 +4404,17 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "다투곰",
 	},
 	ursalunabloodmoon: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "다투곰 붉은 달", // NEEDS QC
+		forme: "붉은 달", // NEEDS QC
 	},
 	basculegion: {
-		name: null, // NEEDS TRANSLATION
+		name: "대쓰여너 수컷", // NEEDS QC
 		baseSpecies: "대쓰여너",
-		forme: null, // NEEDS TRANSLATION
+		forme: "수컷의 모습", // NEEDS QC
 	},
 	basculegionf: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "대쓰여너 암컷", // NEEDS QC
+		forme: "암컷의 모습", // NEEDS QC
 	},
 	sneasler: {
 		name: "포푸니크",
@@ -4423,13 +4423,13 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "장침바루",
 	},
 	enamorus: {
-		name: null, // NEEDS TRANSLATION
+		name: "러브로스 화신", // NEEDS QC
 		baseSpecies: "러브로스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "화신폼", // NEEDS QC
 	},
 	enamorustherian: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "러브로스 영물", // NEEDS QC
+		forme: "영물폼", // NEEDS QC
 	},
 	sprigatito: {
 		name: "나오하",
@@ -4462,13 +4462,13 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "맛보돈",
 	},
 	oinkologne: {
-		name: null, // NEEDS TRANSLATION
+		name: "퍼퓨돈 수컷", // NEEDS QC
 		baseSpecies: "퍼퓨돈",
-		forme: null, // NEEDS TRANSLATION
+		forme: "수컷의 모습", // NEEDS QC
 	},
 	oinkolognef: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "퍼퓨돈 암컷", // NEEDS QC
+		forme: "암컷의 모습", // NEEDS QC
 	},
 	tarountula: {
 		name: "타랜툴라",
@@ -4495,13 +4495,13 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "두리쥐",
 	},
 	maushold: {
-		name: null, // NEEDS TRANSLATION
+		name: "파밀리쥐 세 식구", // NEEDS QC
 		baseSpecies: "파밀리쥐",
-		forme: null, // NEEDS TRANSLATION
+		forme: "세 식구", // NEEDS QC
 	},
 	mausholdfour: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "파밀리쥐 네 식구", // NEEDS QC
+		forme: "네 식구", // NEEDS QC
 	},
 	fidough: {
 		name: "쫀도기",
@@ -4519,21 +4519,21 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "올리르바",
 	},
 	squawkabilly: {
-		name: null, // NEEDS TRANSLATION
+		name: "시비꼬 그린", // NEEDS QC
 		baseSpecies: "시비꼬",
-		forme: null, // NEEDS TRANSLATION
+		forme: "그린 페더", // NEEDS QC
 	},
 	squawkabillyyellow: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "시비꼬 옐로", // NEEDS QC
+		forme: "옐로 페더", // NEEDS QC
 	},
 	squawkabillywhite: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "시비꼬 화이트", // NEEDS QC
+		forme: "화이트 페더", // NEEDS QC
 	},
 	squawkabillyblue: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "시비꼬 블루", // NEEDS QC
+		forme: "블루 페더", // NEEDS QC
 	},
 	nacli: {
 		name: "베베솔트",
@@ -4599,8 +4599,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "스코빌런",
 	},
 	scovillainmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가스코빌런", // NEEDS QC
+		forme: "메가스코빌런", // NEEDS QC
 	},
 	rellor: {
 		name: "구르데",
@@ -4637,11 +4637,11 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	palafin: {
 		name: "돌핀맨",
-		forme: null, // NEEDS TRANSLATION
+		forme: "나이브폼", // NEEDS QC
 	},
 	palafinhero: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "돌핀맨 마이티", // NEEDS QC
+		forme: "마이티폼", // NEEDS QC
 	},
 	varoom: {
 		name: "부르롱",
@@ -4662,8 +4662,8 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "킬라플로르",
 	},
 	glimmoramega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가킬라플로르", // NEEDS QC
+		forme: "메가킬라플로르", // NEEDS QC
 	},
 	greavard: {
 		name: "망망이",
@@ -4687,29 +4687,29 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "어써러셔",
 	},
 	tatsugiri: {
-		name: null, // NEEDS TRANSLATION
+		name: "싸리용 젖힌 모습", // NEEDS QC
 		baseSpecies: "싸리용",
-		forme: null, // NEEDS TRANSLATION
+		forme: "젖힌 모습", // NEEDS QC
 	},
 	tatsugiricurlymega: {
-		name: null, // NEEDS TRANSLATION
+		name: "메가싸리용 젖힌", // NEEDS QC: unofficial
 		forme: "메가싸리용（젖힌 모습）",
 	},
 	tatsugiridroopymega: {
-		name: null, // NEEDS TRANSLATION
+		name: "메가싸리용 늘어진", // NEEDS QC: unofficial
 		forme: "메가싸리용（늘어진 모습）",
 	},
 	tatsugiristretchymega: {
-		name: null, // NEEDS TRANSLATION
+		name: "메가싸리용 뻗은", // NEEDS QC: unofficial
 		forme: "메가싸리용（뻗은 모습）",
 	},
 	tatsugiridroopy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "싸리용 늘어진 모습", // NEEDS QC
+		forme: "늘어진 모습", // NEEDS QC
 	},
 	tatsugiristretchy: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "싸리용 뻗은 모습", // NEEDS QC
+		forme: "뻗은 모습", // NEEDS QC
 	},
 	annihilape: {
 		name: "저승갓숭",
@@ -4721,13 +4721,13 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "키키링",
 	},
 	dudunsparce: {
-		name: null, // NEEDS TRANSLATION
-		baseSpecies: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "노고고치 두 마디", // NEEDS QC: unofficial
+		baseSpecies: "노고고치", // NEEDS QC
+		forme: "두 마디폼", // NEEDS QC
 	},
 	dudunsparcethreesegment: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "노고고치 세 마디", // NEEDS QC
+		forme: "세 마디폼", // NEEDS QC
 	},
 	kingambit: {
 		name: "대도각참",
@@ -4778,16 +4778,16 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "드닐레이브",
 	},
 	baxcaliburmega: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "메가드닐레이브", // NEEDS QC
+		forme: "메가드닐레이브", // NEEDS QC
 	},
 	gimmighoul: {
 		name: "모으령",
-		forme: null, // NEEDS TRANSLATION
+		forme: "상자폼", // NEEDS QC
 	},
 	gimmighoulroaming: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "모으령 도보", // NEEDS QC
+		forme: "도보폼", // NEEDS QC
 	},
 	gholdengo: {
 		name: "타부자고",
@@ -4827,19 +4827,19 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	poltchageist: {
 		name: "차데스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "가짜배기의 모습", // NEEDS QC
 	},
 	poltchageistartisan: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "차데스 알짜배기", // NEEDS QC
+		forme: "알짜배기의 모습", // NEEDS QC
 	},
 	sinistcha: {
 		name: "그우린차",
-		forme: null, // NEEDS TRANSLATION
+		forme: "범작의 모습", // NEEDS QC
 	},
 	sinistchamasterpiece: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "그우린차 걸작", // NEEDS QC
+		forme: "걸작의 모습", // NEEDS QC
 	},
 	okidogi: {
 		name: "조타구",
@@ -4851,37 +4851,37 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "기로치",
 	},
 	ogerpon: {
-		name: null, // NEEDS TRANSLATION
+		name: "오거폰 벽록의 가면", // NEEDS QC
 		baseSpecies: "오거폰",
-		forme: null, // NEEDS TRANSLATION
+		forme: "벽록의 가면", // NEEDS QC
 	},
 	ogerponcornerstonetera: {
-		name: null, // NEEDS TRANSLATION
+		name: "오거폰 주춧돌의 가면 테라스탈", // NEEDS QC: unofficial
 		forme: "테라스탈（주춧돌의 가면）",
 	},
 	ogerponhearthflametera: {
-		name: null, // NEEDS TRANSLATION
+		name: "오거폰 화덕의 가면 테라스탈", // NEEDS QC: unofficial
 		forme: "테라스탈（화덕의 가면）",
 	},
 	ogerponwellspringtera: {
-		name: null, // NEEDS TRANSLATION
+		name: "오거폰 우물의 가면 테라스탈", // NEEDS QC: unofficial
 		forme: "테라스탈（우물의 가면）",
 	},
 	ogerpontealtera: {
-		name: null, // NEEDS TRANSLATION
+		name: "오거폰 벽록의 가면 테라스탈", // NEEDS QC: unofficial
 		forme: "테라스탈（벽록의 가면）",
 	},
 	ogerponwellspring: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "오거폰 우물의 가면", // NEEDS QC
+		forme: "우물의 가면", // NEEDS QC
 	},
 	ogerponhearthflame: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "오거폰 화덕의 가면", // NEEDS QC
+		forme: "화덕의 가면", // NEEDS QC
 	},
 	ogerponcornerstone: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "오거폰 주춧돌의 가면", // NEEDS QC
+		forme: "주춧돌의 가면", // NEEDS QC
 	},
 	archaludon: {
 		name: "브리두라스",
@@ -4903,15 +4903,15 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 	},
 	terapagos: {
 		name: "테라파고스",
-		forme: null, // NEEDS TRANSLATION
+		forme: "노말폼", // NEEDS QC
 	},
 	terapagosterastal: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "테라파고스 테라스탈", // NEEDS QC
+		forme: "테라스탈폼", // NEEDS QC
 	},
 	terapagosstellar: {
-		name: null, // NEEDS TRANSLATION
-		forme: null, // NEEDS TRANSLATION
+		name: "테라파고스 스텔라", // NEEDS QC
+		forme: "스텔라폼", // NEEDS QC
 	},
 	pecharunt: {
 		name: "복숭악동",

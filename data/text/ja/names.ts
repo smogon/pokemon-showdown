@@ -1,33 +1,33 @@
 export const TermNames: { [id: string]: TranslationString } = {
 	shiny: "いろちがい",
-	happiness: null, // NEEDS TRANSLATION
-	level: null, // NEEDS TRANSLATION
-	nickname: null, // NEEDS TRANSLATION
-	ev: null, // NEEDS TRANSLATION
-	evs: null, // NEEDS TRANSLATION
-	iv: null, // NEEDS TRANSLATION
-	ivs: null, // NEEDS TRANSLATION
-	dv: null, // NEEDS TRANSLATION
-	dvs: null, // NEEDS TRANSLATION
+	happiness: "なつき度", // NEEDS QC
+	level: "レベル", // NEEDS QC
+	nickname: "ニックネーム", // NEEDS QC
+	ev: "努力値", // NEEDS QC
+	evs: "努力値", // NEEDS QC
+	iv: "個体値", // NEEDS QC
+	ivs: "個体値", // NEEDS QC
+	dv: "個体値", // NEEDS QC
+	dvs: "個体値", // NEEDS QC
 	av: "覚醒値", // community term
 	avs: "覚醒値", // community term
-	point: null, // NEEDS TRANSLATION
-	points: null, // NEEDS TRANSLATION
+	point: "ポイント", // NEEDS QC
+	points: "ポイント", // NEEDS QC
 	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
 	stats: "ステータス",
 
 	pokemon: "ポケモン",
-	move: null, // NEEDS TRANSLATION
-	moves: null, // NEEDS TRANSLATION
-	item: null, // NEEDS TRANSLATION
-	items: null, // NEEDS TRANSLATION
-	ability: null, // NEEDS TRANSLATION
-	abilities: null, // NEEDS TRANSLATION
-	hiddenability: null, // NEEDS TRANSLATION
-	possibleabilities: null, // NEEDS TRANSLATION
-	team: null, // NEEDS TRANSLATION
-	teams: null, // NEEDS TRANSLATION
-	teamslist: null, // NEEDS TRANSLATION
+	move: "技", // NEEDS QC
+	moves: "技", // NEEDS QC
+	item: "持ち物", // NEEDS QC
+	items: "持ち物", // NEEDS QC
+	ability: "特性", // NEEDS QC
+	abilities: "特性", // NEEDS QC
+	hiddenability: "隠れ特性", // NEEDS QC
+	possibleabilities: "特性の候補", // NEEDS QC
+	team: "チーム", // NEEDS QC
+	teams: "チーム", // NEEDS QC
+	teamslist: "チーム一覧", // NEEDS QC
 
 	type: "タイプ",
 	types: "タイプ",
@@ -36,67 +36,67 @@ export const TermNames: { [id: string]: TranslationString } = {
 	category: "ぶんるい",
 	categories: "ぶんるい",
 	gender: "せいべつ",
-	egggroup: null, // NEEDS TRANSLATION
-	egggroups: null, // NEEDS TRANSLATION
-	tag: null, // NEEDS TRANSLATION
-	article: null, // NEEDS TRANSLATION
-	articles: null, // NEEDS TRANSLATION
-	tier: null, // NEEDS TRANSLATION
-	tiers: null, // NEEDS TRANSLATION
-	format: null, // NEEDS TRANSLATION
-	formats: null, // NEEDS TRANSLATION
+	egggroup: "タマゴグループ", // NEEDS QC
+	egggroups: "タマゴグループ", // NEEDS QC
+	tag: "タグ", // NEEDS QC
+	article: "記事", // NEEDS QC
+	articles: "記事", // NEEDS QC
+	tier: "ティア", // NEEDS QC
+	tiers: "ティア", // NEEDS QC
+	format: "フォーマット", // NEEDS QC
+	formats: "フォーマット", // NEEDS QC
 	color: "色",
-	form: null, // NEEDS TRANSLATION
-	forme: null, // NEEDS TRANSLATION
-	dexnum: null, // NEEDS TRANSLATION
-	generation: null, // NEEDS TRANSLATION
-	gennum: null, // NEEDS TRANSLATION
-	evolution: null, // NEEDS TRANSLATION
-	preevolution: null, // NEEDS TRANSLATION
-	doesnotevolve: null, // NEEDS TRANSLATION
-	zcrystal: null, // NEEDS TRANSLATION
-	target: null, // NEEDS TRANSLATION
+	form: "すがた", // NEEDS QC
+	forme: "フォルム", // NEEDS QC
+	dexnum: "図鑑No.", // NEEDS QC
+	generation: "世代", // NEEDS QC
+	gennum: "第{NUMBER}世代", // NEEDS QC
+	evolution: "進化", // NEEDS QC
+	preevolution: "進化前", // NEEDS QC
+	doesnotevolve: "進化しない", // NEEDS QC
+	zcrystal: "Ｚクリスタル", // NEEDS QC
+	target: "対象", // NEEDS QC
 	height: "高さ",
-	numm: null, // NEEDS TRANSLATION
+	numm: "{NUMBER}m", // NEEDS QC
 	weight: "重さ",
-	numkg: null, // NEEDS TRANSLATION
-	critrate: null, // NEEDS TRANSLATION
-	user: null, // NEEDS TRANSLATION
-	requiredmove: null, // NEEDS TRANSLATION
-	dynamaxpower: null, // NEEDS TRANSLATION
-	none: null, // NEEDS TRANSLATION
-	pastgensonly: null, // NEEDS TRANSLATION
-	flingbasepower: null, // NEEDS TRANSLATION
-	flingeffect: null, // NEEDS TRANSLATION
-	naturalgifttype: null, // NEEDS TRANSLATION
-	naturalgiftbasepower: null, // NEEDS TRANSLATION
+	numkg: "{NUMBER}kg", // NEEDS QC
+	critrate: "急所率", // NEEDS QC
+	user: "使用できるポケモン", // NEEDS QC
+	requiredmove: "必要な技", // NEEDS QC
+	dynamaxpower: "ダイマックス技の威力", // NEEDS QC
+	none: "なし", // NEEDS QC
+	pastgensonly: "過去世代のみ", // NEEDS QC
+	flingbasepower: "なげつけるの威力", // NEEDS QC
+	flingeffect: "なげつけるの効果", // NEEDS QC
+	naturalgifttype: "しぜんのめぐみのタイプ", // NEEDS QC
+	naturalgiftbasepower: "しぜんのめぐみの威力", // NEEDS QC
 
 	megaevolution: "メガシンカ", // official term (XY)
 	zpower: "Ｚパワー", // official term (SM ja_common 8430)
-	zeffect: null, // NEEDS TRANSLATION
+	zeffect: "Ｚ効果", // NEEDS QC
 	dynamax: "ダイマックス", // official term (SwSh)
-	dynamaxlevel: null, // NEEDS TRANSLATION
-	ultraburst: null, // NEEDS TRANSLATION
+	dynamaxlevel: "ダイマックスレベル", // NEEDS QC
+	ultraburst: "ウルトラバースト", // NEEDS QC
 	tera: "テラスタル", // official term (SV)
 
 	supereffective: "ばつぐん",
 	extremelyeffective: "ちょうばつぐん",
-	effective: null, // NEEDS TRANSLATION
+	effective: "こうかあり", // NEEDS QC
 	notveryeffective: "いまひとつ",
 	mostlyineffective: "かなりいまひとつ",
-	noeffect: null, // NEEDS TRANSLATION
+	noeffect: "こうかなし", // NEEDS QC
 
-	weak: null, // NEEDS TRANSLATION
-	resist: null, // NEEDS TRANSLATION
-	immune: null, // NEEDS TRANSLATION
+	weak: "弱点", // NEEDS QC: unofficial
+	resist: "耐性", // NEEDS QC: unofficial
+	immune: "無効", // NEEDS QC: unofficial
 
-	nicknamespecies: null, // NEEDS TRANSLATION
-	label: null, // NEEDS TRANSLATION
-	noweather: null, // NEEDS TRANSLATION
-	noitem: null, // NEEDS TRANSLATION
-	noability: null, // NEEDS TRANSLATION
-	foescondition: null, // NEEDS TRANSLATION
-	speciesforme: null, // NEEDS TRANSLATION
+	nicknamespecies: "{NICKNAME}（{SPECIES}）", // NEEDS QC
+	label: "{LABEL}：", // NEEDS QC
+	noweather: "（天候なし）", // NEEDS QC
+	noitem: "（もちものなし）", // NEEDS QC
+	noability: "（とくせいなし）", // NEEDS QC
+	foescondition: "相手の{CONDITION}", // NEEDS QC
+	speciesforme: "{SPECIES}・{FORME}", // NEEDS QC
 };
 
 export const StatNames: { [id: string]: TranslationString } = {
@@ -186,51 +186,51 @@ export const StatusNames: { [id: string]: TranslationString } = {
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "隣接する味方や相手を狙える", // NEEDS QC
+	normalDoubles: "味方やどちらの相手も狙える", // NEEDS QC
+	normalSingles: "相手に当たる", // NEEDS QC
+	normalFFA: "どの相手も狙える", // NEEDS QC
+	self: "自分が対象", // NEEDS QC
+	adjacentAlly: "隣接する味方を狙える", // NEEDS QC
+	adjacentAllyDoubles: "味方に当たる", // NEEDS QC
+	adjacentAllySingles: "シングルバトルでは必ず失敗する", // NEEDS QC
+	adjacentAllyOrSelf: "自分か隣接する味方を狙える", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "自分か味方を狙える", // NEEDS QC
+	adjacentFoe: "隣接する相手を狙える", // NEEDS QC
+	allAdjacentFoes: "隣接する相手全体に当たる", // NEEDS QC
+	allAdjacentFoesDoubles: "相手2体に当たる", // NEEDS QC
+	foeSide: "相手の場が対象", // NEEDS QC
+	allySide: "自分の場が対象", // NEEDS QC
+	allyTeam: "自分の手持ち全体が対象", // NEEDS QC
+	allAdjacent: "隣接する味方と相手全体に当たる", // NEEDS QC
+	allAdjacentDoubles: "味方と相手2体に当たる", // NEEDS QC
+	allAdjacentFFA: "相手全員に当たる", // NEEDS QC
+	any: "トリプルバトルでは離れたポケモンも狙える", // NEEDS QC
+	all: "場の全員に当たる", // NEEDS QC
+	scripted: "対象は自動で決まる", // NEEDS QC
+	randomNormal: "隣接する相手にランダムで当たる", // NEEDS QC
+	randomNormalDoubles: "相手にランダムで当たる", // NEEDS QC
+	allies: "自分と味方全体が対象", // NEEDS QC
 };
 
 // veekun (presumably from Pokédex 3D Pro) uses kana (かいじゅう, タマゴみはっけん, ...)
 // these are Kanji forms, presumably from guidebooks
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	monster: "怪獣", // NEEDS QC
+	water1: "水中1", // NEEDS QC
+	bug: "虫", // NEEDS QC
+	flying: "飛行", // NEEDS QC
+	field: "陸上", // NEEDS QC
+	fairy: "妖精", // NEEDS QC
+	grass: "植物", // NEEDS QC
+	humanlike: "人型", // NEEDS QC
+	water3: "水中3", // NEEDS QC
+	mineral: "鉱物", // NEEDS QC
+	amorphous: "不定形", // NEEDS QC
+	water2: "水中2", // NEEDS QC
+	ditto: "メタモン", // NEEDS QC
+	dragon: "ドラゴン", // NEEDS QC
+	undiscovered: "タマゴ未発見", // NEEDS QC
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {

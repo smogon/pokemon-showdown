@@ -2,225 +2,225 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "1000만볼트",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 매우 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 매우 높다.", // NEEDS QC
 	},
 	absorb: {
 		name: "흡수",
 		// Official flavor text: "양분을 흡수하여 공격한다. 상대에게 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(버림)가 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다. 상대가 대타를 내세우고 있으면 이 기술은 빗나간다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다. 이 기술로 상대의 대타가 부서지면 HP를 회복하지 못한다.", // NEEDS QC
 		},
 	},
 	accelerock: {
 		name: "액셀록",
 		// Official flavor text: "재빠른 스피드로 상대에게 부딪쳐서 공격한다. 반드시 선제공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	acid: {
 		name: "용해액",
 		// Official flavor text: "강한 산을 상대에게 끼얹어 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 특방을 1단계 떨어뜨린다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "10%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "33%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	acidarmor: {
 		name: "녹기",
 		// Official flavor text: "세포의 변화로 액체가 되어 자신의 방어를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 2단계 올린다.", // NEEDS QC
 	},
 	aciddownpour: {
 		name: "애시드포이즌딜리트",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	acidspray: {
 		name: "애시드봄",
 		// Official flavor text: "상대를 녹이는 액체를 토해내서 공격한다. 상대의 특수방어를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	acrobatics: {
 		name: "애크러뱃",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "도구를 지니고 있지 않으면 위력이 2배가 된다.", // NEEDS QC
 	},
 	acupressure: {
 		name: "경혈찌르기",
 		// Official flavor text: "경혈을 눌러 몸을 활성화시킨다. 능력 중 하나를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "아직 6단계가 아닌 능력 중 하나를 무작위로 2단계 올린다. 자신 또는 이웃한 아군을 대상으로 쓸 수 있다. 올릴 수 있는 능력이 없거나 대타를 내세운 아군에게 쓰면 실패한다.", // NEEDS QC
+		shortDesc: "자신이나 아군의 능력 하나를 2단계 올린다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "아직 6단계가 아닌 능력 중 하나를 무작위로 2단계 올린다. 자신 또는 아군을 대상으로 쓸 수 있다. 올릴 수 있는 능력이 없거나 자신이나 아군이 대타를 내세우고 있으면 실패한다.", // NEEDS QC
 		},
 	},
 	aerialace: {
 		name: "제비반환",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	aeroblast: {
 		name: "에어로블라스트",
 		// Official flavor text: "공기의 소용돌이를 발사하여 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	afteryou: {
 		name: "당신먼저",
 		// Official flavor text: "상대의 행동을 도와서 자신이 행동한 뒤에 바로 움직일 수 있도록 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 선택한 기술의 우선도와 관계없이, 이 턴에 자신 바로 다음에 행동하게 한다. 상대가 어차피 다음에 행동할 차례거나 이미 행동했다면 실패한다.", // NEEDS QC
+		shortDesc: "상대가 자신 바로 다음에 행동하게 한다.", // NEEDS QC
 
 		activate: "  {TARGET:topic} 배려를 받아들이기로 했다!",
 	},
 	agility: {
 		name: "고속이동",
 		// Official flavor text: "힘을 빼고 몸을 가볍게 해서 고속으로 움직인다. 자신의 스피드를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드를 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 스피드를 2단계 올린다.", // NEEDS QC
 	},
 	aircutter: {
 		name: "에어커터",
 		// Official flavor text: "날카로운 바람으로 상대를 베어 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다. 이웃한 상대를 공격.", // NEEDS QC
 	},
 	airslash: {
 		name: "에어슬래시",
 		// Official flavor text: "하늘까지 베어 가르는 공기의 칼날로 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	alloutpummeling: {
 		name: "전력무쌍격렬권",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	alluringvoice: {
 		name: "매혹의보이스",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 능력이 올라갔다면 100%의 확률로 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "이 턴에 능력이 오른 상대를 100% 혼란시킨다.", // NEEDS QC
 	},
 	allyswitch: {
 		name: "사이드체인지",
 		// Official flavor text: "이상한 힘으로 순간이동하여 자신과 같은 편의 위치를 바꾼다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "아군과 위치를 바꾼다. 자신 편에 자신밖에 없으면 실패한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 이 기술이 아니면 X는 1로 돌아간다.", // NEEDS QC
+		shortDesc: "아군과 위치를 바꾼다. 연속 사용은 실패할 수 있다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "아군과 위치를 바꾼다. 자신 편에 자신밖에 없으면 실패한다.", // NEEDS QC
+			shortDesc: "아군과 자리를 바꾼다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "반대쪽 끝에 있는 아군과 위치를 바꾼다. 그 자리에 포켓몬이 없거나, 자신 편에 자신밖에 없거나, 자신이 가운데에 있으면 실패한다.", // NEEDS QC
+			shortDesc: "반대쪽 끝의 아군과 자리를 바꾼다.", // NEEDS QC
 		},
 	},
 	amnesia: {
 		name: "망각술",
 		// Official flavor text: "머리를 비워서 순간적으로 무언가를 잊어버림으로써 자신의 특수방어를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수방어를 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 특수방어를 2단계 올린다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 스페셜을 2단계 올린다.", // NEEDS QC
+			shortDesc: "자신의 스페셜을 2단계 올린다.", // NEEDS QC
 		},
 	},
 	anchorshot: {
 		name: "앵커샷",
 		// Official flavor text: "앵커를 상대에게 휘감아서 공격한다. 상대는 도망칠 수 없게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대를 교체할 수 없게 만든다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 	},
 	ancientpower: {
 		name: "원시의힘",
 		// Official flavor text: "원시의 힘으로 공격한다. 자신의 모든 능력이 오를 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 자신의 공격, 방어, 특수공격, 특수방어, 스피드를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 모든 능력이 1단계 올라간다.", // NEEDS QC
 	},
 	appleacid: {
 		name: "사과산",
 		// Official flavor text: "새콤한 사과에서 만들어 낸 산성 액체로 공격한다. 상대의 특수방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	aquacutter: {
 		name: "아쿠아커터",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	aquajet: {
 		name: "아쿠아제트",
 		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진한다. 반드시 선제공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	aquaring: {
 		name: "아쿠아링",
 		// Official flavor text: "자신의 몸 주변을 물로 만든 베일로 덮는다. 매 턴 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 동안 매 턴 종료 시 최대 HP의 1/16(버림)을 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다. 배턴터치를 쓰면 교체해 나온 포켓몬이 회복 효과를 이어받는다.", // NEEDS QC
+		shortDesc: "매 턴 최대 HP의 1/16을 회복한다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 물의 고리를 둘렀다!",
 		heal: "  {POKEMON:topic} 물의 고리로 체력을 회복했다!",
 	},
 	aquastep: {
 		name: "아쿠아스텝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 스피드를 1단계 올린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 자신의 스피드를 1단계 올린다.", // NEEDS QC
 	},
 	aquatail: {
 		name: "아쿠아테일",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	armorcannon: {
 		name: "아머캐논",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 방어, 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	armthrust: {
 		name: "손바닥치기",
 		// Official flavor text: "펼친 양손으로 상대를 번갈아 쳐서 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 	},
 	aromatherapy: {
 		name: "아로마테라피",
 		// Official flavor text: "기분 좋은 평온한 향기를 맡게 하여 같은 편 모두의 상태 이상을 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다. 배틀에 나와 있는 특성이 초식인 포켓몬은 자신이 아니라면 회복되지 않는다.", // NEEDS QC
+		shortDesc: "파티 전원의 상태 이상을 회복한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다.", // NEEDS QC
 		},
 
 		activate: "  기분 좋은 향기가 퍼졌다!",
@@ -228,73 +228,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	aromaticmist: {
 		name: "아로마미스트",
 		// Official flavor text: "신비한 아로마 향으로 같은 편의 특수방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대(아군)의 특수방어를 1단계 올린다. 이웃한 아군이 없으면 실패한다.", // NEEDS QC
+		shortDesc: "아군의 특수방어를 1단계 올린다.", // NEEDS QC
 	},
 	assist: {
 		name: "조수",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "파티의 다른 포켓몬이 지닌 기술 중 하나를 무작위로 골라 쓴다. 조수, 토치카, 부리캐논, 트림, 기프트패스, 번액셀, 뛰어오르기, 축하, 수다, 배대뒤치기, 파이트액셀, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 구멍파기, 다이빙, 드래곤테일, 버티기, 페인트, 공중날기, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 매지컬액셀, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 포이즌액셀, 고스트다이브, 방어, 분노가루, 울부짖기, 섀도다이브, 트랩셸, 스케치, 프리폴, 잠꼬대, 가로채기, 니들가드, 스포트라이트, 발버둥, 바꿔치기, 테라클러스터, 도둑질, 변신, 트릭, 날려버리기, 다크액셀은 고르지 않는다.", // NEEDS QC
+		shortDesc: "파티의 다른 포켓몬의 기술을 무작위로 쓴다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬이 지닌 기술 중 하나를 무작위로 골라 쓴다. 조수, 토치카, 부리캐논, 트림, 기프트패스, 뛰어오르기, 축하, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 구멍파기, 다이빙, 드래곤테일, 버티기, 페인트, 공중날기, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 고스트다이브, 방어, 분노가루, 울부짖기, 섀도다이브, 트랩셸, 스케치, 프리폴, 잠꼬대, 가로채기, 니들가드, 스포트라이트, 발버둥, 바꿔치기, 도둑질, 변신, 트릭, 날려버리기는 고르지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬이 지닌 기술 중 하나를 무작위로 골라 쓴다. 조수, 토치카, 부리캐논, 트림, 기프트패스, 뛰어오르기, 축하, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 구멍파기, 다이빙, 드래곤테일, 버티기, 페인트, 공중날기, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 고스트다이브, 방어, 분노가루, 울부짖기, 섀도다이브, 트랩셸, 스케치, 프리폴, 잠꼬대, 가로채기, 니들가드, 스포트라이트, 발버둥, 바꿔치기, 도둑질, 변신, 트릭, 날려버리기, 그리고 Z기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬이 지닌 기술 중 하나를 무작위로 골라 쓴다. 조수, 트림, 기프트패스, 뛰어오르기, 축하, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 구멍파기, 다이빙, 드래곤테일, 버티기, 페인트, 공중날기, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 고스트다이브, 방어, 분노가루, 울부짖기, 섀도다이브, 스케치, 프리폴, 잠꼬대, 가로채기, 니들가드, 발버둥, 바꿔치기, 도둑질, 변신, 트릭, 날려버리기는 고르지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬이 지닌 기술 중 하나를 무작위로 골라 쓴다. 조수, 기프트패스, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 드래곤테일, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 방어, 분노가루, 스케치, 잠꼬대, 가로채기, 발버둥, 바꿔치기, 도둑질, 변신, 트릭은 고르지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬이 지닌 기술 중 하나를 무작위로 골라 쓴다. 조수, 수다, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 방어, 스케치, 잠꼬대, 가로채기, 발버둥, 바꿔치기, 도둑질, 트릭은 고르지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬이 지닌 기술 중 하나를 무작위로 골라 쓴다. 조수, 카운터, 탐내다, 길동무, 판별, 버티기, 힘껏펀치, 날따름, 도우미, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 방어, 스케치, 잠꼬대, 가로채기, 발버둥, 도둑질, 트릭은 고르지 않는다.", // NEEDS QC
 		},
 	},
 	assurance: {
 		name: "승부굳히기",
 		// Official flavor text: "그 턴에 상대가 이미 데미지를 입었다면 기술의 위력은 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 이미 데미지를 받았다면 위력이 2배가 된다. 배북, 혼란, 저주, 아픔나누기에 의한 직접적인 데미지는 포함하지 않는다.", // NEEDS QC
+		shortDesc: "이 턴에 데미지를 받은 상대에게 위력 2배.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 상대가 이미 데미지를 받았다면 위력이 2배가 된다.", // NEEDS QC
 		},
 	},
 	astonish: {
 		name: "놀래키기",
 		// Official flavor text: "큰 소리 등으로 불시에 놀래켜서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 된다.", // NEEDS QC
 		},
 	},
 	astralbarrage: {
 		name: "아스트랄비트",
 		// Official flavor text: "수많은 작은 영체를 상대에게 부딪쳐서 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 상대를 공격한다.", // NEEDS QC
 	},
 	attackorder: {
 		name: "공격지령",
 		// Official flavor text: "부하를 불러내어 상대를 향해서 공격시킨다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	attract: {
 		name: "헤롱헤롱",
 		// Official flavor text: "수컷은 암컷을 암컷은 수컷을 유혹하여 헤롱헤롱하게 만든다. 상대가 기술을 쓰기 어려워진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 헤롱헤롱 상태로 만들어 50%의 확률로 공격하지 못하게 한다. 자신과 상대의 성별이 같거나 어느 한쪽이 성별이 없으면, 또는 상대가 이미 헤롱헤롱 상태라면 실패한다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다. 특성이 둔감인 포켓몬이나 특성 아로마베일로 보호받는 포켓몬에게는 효과가 없다.", // NEEDS QC
+		shortDesc: "다른 성별의 상대를 헤롱헤롱 상태로 만든다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 헤롱헤롱 상태로 만들어 50%의 확률로 공격하지 못하게 한다. 자신과 상대의 성별이 같거나 어느 한쪽이 성별이 없으면, 또는 상대가 이미 헤롱헤롱 상태라면 실패한다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다. 특성이 둔감인 포켓몬에게는 효과가 없다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 헤롱헤롱 상태로 만들어 50%의 확률로 공격하지 못하게 한다. 자신과 상대의 성별이 같거나 어느 한쪽이 성별이 없으면, 또는 상대가 이미 헤롱헤롱 상태라면 실패한다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 헤롱헤롱해졌다!",
@@ -306,32 +306,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurasphere: {
 		name: "파동탄",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	aurawheel: {
 		name: "오라휠",
 		// Official flavor text: "볼주머니에 저장해둔 에너지로 공격하고 자신의 스피드를 올린다. 모르페코의 모습에 따라 타입이 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 스피드를 1단계 올린다. 자신이 배부른 모양의 모르페코라면 전기타입, 배고픈 모양의 모르페코라면 악타입 기술이 된다. 변신을 포함해 현재 모습이 배부른 모양 또는 배고픈 모양의 모르페코가 아니면 쓸 수 없다.", // NEEDS QC
+		shortDesc: "배부름: 전기 / 배고픔: 악. 100% 스피드 +1.", // NEEDS QC
 	},
 	aurorabeam: {
 		name: "오로라빔",
 		// Official flavor text: "무지개색의 빔을 상대에게 발사하여 공격한다. 공격을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "33%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	auroraveil: {
 		name: "오로라베일",
 		// Official flavor text: "5턴 동안 물리와 특수 기술의 데미지를 약하게 한다. 싸라기눈일 때만 쓸 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 자신과 파티 전원이 물리와 특수 공격으로 받는 데미지가 0.5배(더블배틀에서는 0.66배)가 된다. 리플렉터와 빛의장막으로 데미지가 더 줄어들지는 않는다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다, 사이코팽, 안개제거에 맞으면 효과가 사라진다. 깨뜨리다와 사이코팽은 데미지 계산 전에 효과를 없앤다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 날씨가 눈이 아니면 실패한다.", // NEEDS QC
+		shortDesc: "5턴간 받는 데미지 절반. 눈일 때만 쓸 수 있다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원이 물리와 특수 공격으로 받는 데미지가 0.5배(더블배틀에서는 0.66배)가 된다. 리플렉터와 빛의장막으로 데미지가 더 줄어들지는 않는다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다, 사이코팽, 안개제거에 맞으면 효과가 사라진다. 깨뜨리다와 사이코팽은 데미지 계산 전에 효과를 없앤다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 날씨가 싸라기눈이 아니면 실패한다.", // NEEDS QC
+			shortDesc: "5턴 동안 아군이 받는 데미지 절반. 싸라기눈만.", // NEEDS QC
 		},
 
 		start: "  {TEAM:topic} 오로라베일로 물리공격과 특수공격에 강해졌다!",
@@ -340,145 +340,145 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	autotomize: {
 		name: "바디퍼지",
 		// Official flavor text: "몸의 쓸모없는 부분을 깎는다. 자신의 스피드를 크게 올리고 체중도 가벼워진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드를 2단계 올린다. 스피드가 변했다면 배틀에 나와 있는 동안 무게가 100kg 가벼워진다. 이 효과는 중복되지만 무게는 0.1kg 미만이 되지 않는다.", // NEEDS QC
+		shortDesc: "스피드를 2단계 올리고 몸이 100kg 가벼워진다.", // NEEDS QC
 
 		start: "  {POKEMON}의 몸이 가벼워졌다!",
 	},
 	avalanche: {
 		name: "눈사태",
 		// Official flavor text: "상대로부터 기술을 받으면 그 상대에 대해서 기술의 위력이 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 상대에게 공격받았다면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "이 턴에 공격받았다면 위력이 2배가 된다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 상대 자리의 포켓몬에게 공격받았다면 위력이 2배가 된다.", // NEEDS QC
 		},
 	},
 	axekick: {
 		name: "발꿈치찍기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 혼란 상태로 만든다. 공격이 실패하면 자신이 최대 HP의 1/2(버림)만큼 데미지를 받는다. 특성이 매직가드인 포켓몬은 이 데미지를 받지 않는다.", // NEEDS QC
+		shortDesc: "30% 혼란. 빗나가면 최대 HP의 절반을 잃는다.", // NEEDS QC
 
 		damage: "#crash",
 	},
 	babydolleyes: {
 		name: "초롱초롱눈동자",
 		// Official flavor text: "초롱초롱한 눈동자로 상대를 바라보며 공격을 떨어뜨린다. 반드시 선제공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	baddybad: {
 		name: "아그아그존",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "사용하면 5턴 동안 리플렉터의 효과가 발동한다.", // NEEDS QC
+		shortDesc: "리플렉터의 효과가 발동한다.", // NEEDS QC
 	},
 	banefulbunker: {
 		name: "토치카",
 		// Official flavor text: "상대의 공격을 막음과 동시에 접촉한 상대에게 독을 퍼뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉한 포켓몬을 독 상태로 만든다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "기술로부터 자신을 지킨다. 접촉하면 독.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉한 포켓몬을 독 상태로 만든다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉한 포켓몬을 독 상태로 만든다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 	},
 	barbbarrage: {
 		name: "독침천발",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대를 독 상태로 만든다. 상대가 이미 독 상태라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "50% 독. 독 상태인 상대에게 위력 2배.", // NEEDS QC
 	},
 	barrage: {
 		name: "구슬던지기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 데미지는 첫 공격에서 한 번만 계산해 모든 공격에 적용한다. 공격 도중 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	barrier: {
 		name: "배리어",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 2단계 올린다.", // NEEDS QC
 	},
 	batonpass: {
 		name: "배턴터치",
 		// Official flavor text: "교대 포켓몬과 바뀐다. 능력 변화는 바뀐 포켓몬이 그대로 이어받는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "파티의 다른 포켓몬과 교체한다. 교체해 나온 포켓몬은 자신의 능력 랭크 변화와 혼란, 아쿠아링, 저주, 드래곤옐, 금제, 기충전, 위액, 회복봉인, 뿌리박기, 씨뿌리기, 록온(마음의눈), 전자부유, 멸망의노래, 파워트릭, 텔레키네시스의 효과, 그리고 남은 HP 그대로의 대타를 이어받는다. 이어받는 포켓몬의 특성이 영향을 받지 않는 특성이라면 위액의 효과는 이어받지 않는다.", // NEEDS QC
+		shortDesc: "능력 변화 등을 넘겨주고 교체한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬과 교체한다. 교체해 나온 포켓몬은 자신의 능력 랭크 변화와 혼란, 아쿠아링, 저주, 금제, 기충전, 위액, 회복봉인, 뿌리박기, 씨뿌리기, 록온(마음의눈), 전자부유, 멸망의노래, 파워트릭, 텔레키네시스의 효과, 그리고 남은 HP 그대로의 대타를 이어받는다. 이어받는 포켓몬의 특성이 영향을 받지 않는 특성이라면 위액의 효과는 이어받지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬과 교체한다. 교체해 나온 포켓몬은 자신의 능력 랭크 변화와 혼란, 아쿠아링, 저주, 금제, 기충전, 위액, 회복봉인, 뿌리박기, 씨뿌리기, 록온(마음의눈), 전자부유, 멸망의노래, 파워트릭, 텔레키네시스의 효과, 검은눈빛(블록, 거미집)에 의해 교체할 수 없게 된 효과, 그리고 남은 HP 그대로의 대타를 이어받는다. 이어받는 포켓몬의 특성이 영향을 받지 않는 특성이라면 위액의 효과는 이어받지 않는다. 이어받는 포켓몬이 메가진화한 팬텀라면 텔레키네시스의 효과는 이어받지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬과 교체한다. 교체해 나온 포켓몬은 자신의 능력 랭크 변화와 혼란, 아쿠아링, 저주, 금제, 기충전, 위액, 회복봉인, 뿌리박기, 씨뿌리기, 록온(마음의눈), 전자부유, 멸망의노래, 파워트릭, 텔레키네시스의 효과, 검은눈빛(블록, 거미집)에 의해 교체할 수 없게 된 효과, 그리고 남은 HP 그대로의 대타를 이어받는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬과 교체한다. 교체해 나온 포켓몬은 자신의 능력 랭크 변화와 혼란, 아쿠아링, 저주, 금제, 기충전, 위액, 회복봉인, 뿌리박기, 씨뿌리기, 록온(마음의눈), 전자부유, 흙놀이, 멸망의노래, 파워트릭, 물놀이의 효과, 검은눈빛(블록, 거미집)에 의해 가두거나 갇힌 효과, 그리고 남은 HP 그대로의 대타를 이어받는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬과 교체한다. 교체해 나온 포켓몬은 자신의 능력 랭크 변화와 혼란, 저주, 기충전, 뿌리박기, 씨뿌리기, 록온(마음의눈), 흙놀이, 멸망의노래, 물놀이의 효과, 검은눈빛(블록, 거미집)에 의해 가두거나 갇힌 효과, 그리고 남은 HP 그대로의 대타를 이어받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "파티의 다른 포켓몬과 교체한다. 교체해 나온 포켓몬은 자신의 능력 랭크 변화와 혼란, 저주, 웅크리기, 기충전, 꿰뚫어보기, 씨뿌리기, 록온(마음의눈), 작아지기, 흰안개, 멸망의노래의 효과, 검은눈빛(거미집)에 의해 가두거나 갇힌 효과, 그리고 남은 HP 그대로의 대타를 이어받는다.", // NEEDS QC
 		},
 	},
 	beakblast: {
 		name: "부리캐논",
 		// Official flavor text: "먼저 부리를 가열시킨 다음 공격을 날린다. 가열 중에 만지면 화상을 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술을 쓰기 전에 이 턴에 직접 공격으로 접촉한 포켓몬은 화상 상태가 된다.", // NEEDS QC
+		shortDesc: "행동 전에 접촉한 포켓몬을 화상시킨다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 부리를 가열하기 시작했다!",
 	},
 	beatup: {
 		name: "집단구타",
 		// Official flavor text: "같은 편 전원이 공격한다. 동료 포켓몬이 많을수록 기술의 공격 횟수가 증가한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과, 파티에서 기절하지 않고 상태 이상도 아닌 포켓몬의 수만큼 공격한다. 각 공격의 위력은 참가하는 포켓몬의 종족값 공격을 X라 할 때 5+(X/10)이며, 모든 공격은 자신의 공격으로 취급한다.", // NEEDS QC
+		shortDesc: "건강한 파티 전원이 함께 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무타입 데미지를 준다. 자신과, 파티에서 기절하지 않고 상태 이상도 아닌 포켓몬의 수만큼 공격한다. 각 공격의 데미지 계산에는 참가하는 포켓몬의 종족값 공격과 상대의 종족값 방어를 사용하며, 랭크 변화 등 공격과 방어를 보정하는 효과는 무시한다. 모든 공격은 자신의 공격으로 취급한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무타입 데미지를 준다. 파티에서 기절하지 않고 상태 이상도 아닌 포켓몬의 수만큼 공격하며, 조건에 맞는 포켓몬이 없으면 실패한다. 각 공격의 데미지 계산에는 참가하는 포켓몬의 종족값 공격과 상대의 종족값 방어를 사용하며, 랭크 변화 등 공격과 방어를 보정하는 효과는 무시한다. 모든 공격은 자신의 공격으로 취급한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무타입 데미지를 준다. 파티에서 기절하지 않고 상태 이상도 아닌 포켓몬의 수만큼 공격한다. 각 공격의 데미지 계산에는 참가하는 포켓몬의 레벨과 종족값 공격, 상대의 종족값 방어를 사용하며, 랭크 변화 등 공격과 방어를 보정하는 효과는 무시한다. 참가할 수 있는 포켓몬이 없으면 실패한다.", // NEEDS QC
 		},
 
 		activate: "  {NAME}의 공격!",
 	},
 	behemothbash: {
 		name: "거수탄",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대가 다이맥스 상태라면 데미지가 2배.", // NEEDS QC
 		},
 	},
 	behemothblade: {
 		name: "거수참",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대가 다이맥스 상태라면 데미지가 2배.", // NEEDS QC
 		},
 	},
 	belch: {
 		name: "트림",
 		// Official flavor text: "상대를 향해 트림을 하여 데미지를 준다. 나무열매를 먹지 않으면 쓸 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "나무열매를 먹기 전에는 선택할 수 없다. 지닌 나무열매를 먹거나, 벌레먹기와 쪼아대기로 다른 포켓몬의 나무열매를 빼앗아 먹거나, 내던지기로 던져진 나무열매를 먹으면 조건이 충족된다. 한번 조건이 충족되면 다른 도구를 얻거나 사용하거나 교체하더라도 배틀이 끝날 때까지 쓸 수 있다. 자연의은혜로 소모한 나무열매는 먹은 것으로 치지 않는다.", // NEEDS QC
+		shortDesc: "나무열매를 먹어야 선택할 수 있다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -487,10 +487,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bellydrum: {
 		name: "배북",
 		// Official flavor text: "자신의 HP를 최대 HP의 절반만큼 감소시켜 자신의 공격을 최대로 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "최대 HP의 1/2(버림)을 잃는 대신 자신의 공격을 12단계 올린다. HP가 부족하거나 공격이 이미 6단계라면 실패한다.", // NEEDS QC
+		shortDesc: "최대 HP의 절반을 잃고 공격을 최대로 올린다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기절하게 되거나 공격이 이미 6단계인 경우가 아니라면 최대 HP의 1/2(버림)을 잃는다. HP가 부족했다면 공격이 2단계 올라간다. 그렇지 않으면 공격이 6단계가 될 때까지 2단계씩 올리며, 이 과정 전의 공격 수치가 999였다면 랭크를 1단계 내리고 반복을 끝낸다.", // NEEDS QC
 		},
 
 		boost: "  {POKEMON:topic} 체력을 깎아서 풀 파워로 만들었다!",
@@ -498,13 +498,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bestow: {
 		name: "기프트패스",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대는 자신이 지닌 도구를 받는다. 자신이 도구를 지니고 있지 않거나 Z크리스탈을 지니고 있으면, 상대가 이미 도구를 지니고 있으면 실패한다. 도구가 메가스톤이고 자신이나 상대가 그것으로 메가진화할 수 있는 포켓몬이라면, 또는 도구가 쪽빛구슬, 주홍구슬, 백금옥, 플레이트, 카세트, 메모리이고 자신이나 상대가 각각 가이오가, 그란돈, 기라티나, 아르세우스, 게노세크트, 실버디라면 실패한다.", // NEEDS QC
+		shortDesc: "자신이 지닌 도구를 상대에게 건네준다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 자신이 지닌 도구를 받는다. 자신이 도구를 지니고 있지 않거나 상대가 이미 도구를 지니고 있으면 실패한다. 도구가 메가스톤이고 자신이나 상대가 그것으로 메가진화할 수 있는 포켓몬이라면, 또는 도구가 쪽빛구슬, 주홍구슬, 백금옥, 플레이트, 카세트이고 자신이나 상대가 각각 가이오가, 그란돈, 기라티나, 아르세우스, 게노세크트라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 자신이 지닌 도구를 받는다. 자신이 도구를 지니고 있지 않거나 메일을 지니고 있으면, 상대가 이미 도구를 지니고 있으면 실패한다. 도구가 백금옥, 플레이트, 카세트이고 자신이나 상대가 각각 기라티나, 아르세우스, 게노세크트라면 실패한다.", // NEEDS QC
 		},
 
 		takeItem: "  {POKEMON:topic} {SOURCE:directional}로부터 {ITEM:object} 받았다!",
@@ -512,20 +512,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bide: {
 		name: "참기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2턴 동안 이 기술에 속박되어, 기술을 쓴 뒤 두 번째 턴에 그동안 공격으로 잃은 HP의 2배의 데미지를 마지막으로 자신을 공격한 포켓몬에게 준다. 그 포켓몬이 배틀에서 벗어나 있으면 무작위 상대를 공격한다. 이 기술을 쓰는 도중 움직일 수 없게 되면 효과가 사라진다. 명중 판정을 하지 않지만 타입 상성에 의한 무효는 무시하지 못한다.", // NEEDS QC
+		shortDesc: "2턴 기다렸다가 받은 데미지의 2배를 되갚는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2턴 동안 이 기술에 속박되어, 기술을 쓴 뒤 두 번째 턴에 그동안 공격으로 잃은 HP의 2배의 데미지를 마지막으로 자신을 공격한 포켓몬에게 준다. 그 포켓몬이 배틀에서 벗어나 있으면 무작위 상대를 공격한다. 이 기술을 쓰는 도중 움직일 수 없게 되면 효과가 사라진다. 명중 판정을 하지 않으며 타입 상성에 의한 무효도 무시한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2턴 동안 이 기술에 속박되어, 기술을 쓴 뒤 두 번째 턴에 그동안 잃은 HP의 2배의 데미지를 마지막으로 자신을 공격한 포켓몬에게 준다. 그 포켓몬이 배틀에서 벗어나 있으면 무작위 상대를 공격한다. 이 기술을 쓰는 도중 움직일 수 없게 되면 효과가 사라진다. 타입 상성에 의한 무효는 무시하지 못한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되어, 기술을 쓴 뒤 두 번째 또는 세 번째 턴에 그동안 잃은 HP의 2배의 데미지를 상대에게 준다. 이 기술을 쓰는 도중 움직일 수 없게 되면 효과가 사라진다. 타입 상성에 의한 무효는 무시하지 못한다.", // NEEDS QC
+			shortDesc: "2~3턴 기다린 뒤 받은 데미지의 2배를 준다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되어, 기술을 쓴 뒤 두 번째 또는 세 번째 턴에 그동안 잃은 HP의 2배의 데미지를 상대에게 준다. 타입 상성에 의한 무효를 무시하며, 상대가 구멍파기가나 공중날기를 쓰는 중이라도 피할 수 없다. 효과 도중 자신은 교체할 수 있다. 교체하거나 움직일 수 없게 되면 효과가 사라진다. 효과 도중 상대가 교체하거나 이상한빛, 텍스처, 기충전, 뱀눈초리, 흑안개, 씨뿌리기, 빛의장막, 흉내내기, 흰안개, 독가스, 독가루, HP회복, 리플렉터, 잠자기, 알낳기, 튀어오르기, 저리가루, 대타출동, 초음파, 순간이동, 전기자석파, 맹독, 변신을 쓰면, 이전에 자신이 받은 데미지가 합계에 더해진다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 참고 있다.",
@@ -535,27 +535,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bind: {
 		name: "조이기",
 		// Official flavor text: "긴 몸이나 덩굴 등을 써서 4-5턴 동안 상대를 조여 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(자신이 조임밴드를 지니고 있으면 1/8)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴(끈기갈고리손톱을 지니고 있으면 항상 5턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5턴동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 배턴터치를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴 동안 이 기술을 쓴다. 3/8의 확률로 2~3턴, 1/8의 확률로 4~5턴 지속된다. 첫 턴에 계산한 데미지를 매 턴 그대로 적용한다. 효과가 지속되는 동안 자신은 기술을 선택할 수 없고 상대는 기술을 실행할 수 없지만, 양쪽 모두 교체할 수는 있다. 자신이 교체하면 상대는 그 턴에도 기술을 실행할 수 없다. 상대가 교체하면 자신은 자동으로 이 기술을 다시 쓰며, 그때 PP가 0이었다면 63이 된다. 자신이나 상대가 교체하거나 자신이 움직일 수 없게 되면 효과가 사라진다. 이 기술은 타입 상성으로 무효인 상대의 행동도 막을 수 있지만, 데미지는 주지 못한다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대는 움직일 수 없다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} {SOURCE}에게 조이기를 당했다!",
@@ -564,180 +564,180 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bite: {
 		name: "물기",
 		// Official flavor text: "날카롭고 뾰족한 이빨로 물어서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+			shortDesc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		},
 	},
 	bitterblade: {
 		name: "원념의칼",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 	},
 	bittermalice: {
 		name: "천추지한",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	blackholeeclipse: {
 		name: "블랙홀이클립스",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	blastburn: {
 		name: "블라스트번",
 		// Official flavor text: "폭발하는 불꽃으로 상대를 태워서 공격한다. 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	blazekick: {
 		name: "블레이즈킥",
 		// Official flavor text: "공격한 상대를 화상 상태로 만들 때가 있다. 급소에도 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다. 급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다. 10%의 확률로 화상.", // NEEDS QC
 	},
 	blazingtorque: {
 		name: "번액셀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	bleakwindstorm: {
 		name: "찬바람폭풍",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대의 스피드를 1단계 떨어뜨린다. 날씨가 폭우 또는 비가 되어 있으면 명중 판정을 하지 않는다. 만능우산을 지닌 포켓몬에게는 명중률이 80%로 유지된다.", // NEEDS QC
+		shortDesc: "30% 스피드 -1. 비가 오면 반드시 명중한다.", // NEEDS QC
 	},
 	blizzard: {
 		name: "눈보라",
 		// Official flavor text: "세찬 눈보라를 상대에게 내뿜어 공격한다. 얼음 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만든다. 날씨가 눈이면 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "10%의 확률로 얼음. 눈일 때 반드시 명중한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 얼음 상태로 만든다. 날씨가 싸라기눈이면 명중 판정을 하지 않는다.", // NEEDS QC
+			shortDesc: "10%의 확률로 얼음. 싸라기눈일 때 반드시 명중.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
+			shortDesc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
 		},
 	},
 	block: {
 		name: "블록",
 		// Official flavor text: "양팔을 벌려 막아서서 상대의 도주로를 가로막아 도망칠 수 없게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대를 교체할 수 없게 만든다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라지지만, 배턴터치로 물러난 경우에는 상대가 계속 교체할 수 없다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 배턴터치를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라지지만, 배턴터치로 물러난 경우에는 상대가 계속 교체할 수 없다.", // NEEDS QC
 		},
 	},
 	bloodmoon: {
 		name: "블러드문",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "2턴 연속으로 선택할 수 없다.", // NEEDS QC
 	},
 	bloomdoom: {
 		name: "블룸샤인엑스트라",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	blueflare: {
 		name: "푸른불꽃",
 		// Official flavor text: "아름다우면서도 격렬한 푸른불꽃으로 상대를 둘러싸서 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	bodypress: {
 		name: "바디프레스",
 		// Official flavor text: "몸을 부딪쳐서 공격한다. 방어가 높을수록 주는 데미지가 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "랭크 변화를 포함해 자신의 공격 대신 방어를 사용해 데미지를 계산한다. 공격을 보정하는 그 외의 효과는 그대로 적용된다.", // NEEDS QC
+		shortDesc: "공격 대신 자신의 방어로 데미지를 계산한다.", // NEEDS QC
 	},
 	bodyslam: {
 		name: "누르기",
 		// Official flavor text: "몸 전체로 상대를 덮쳐눌러 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 		},
 	},
 	boltbeak: {
 		name: "전격부리",
 		// Official flavor text: "전기를 두른 부리로 찌른다. 상대보다 먼저 공격하면 기술의 위력은 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대보다 먼저 행동하면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "상대보다 먼저 행동하면 위력이 2배가 된다.", // NEEDS QC
 	},
 	boltstrike: {
 		name: "뇌격",
 		// Official flavor text: "방대한 전기를 몸에 둘러 상대에게 돌진해서 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	boneclub: {
 		name: "뼈다귀치기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	bonemerang: {
 		name: "뼈다귀부메랑",
 		// Official flavor text: "손에 들고 있는 뼈를 상대에게 날려서 날아갈 때와 돌아올 때 2회 연속 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "한 턴에 2회 연속으로 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	bonerush: {
 		name: "본러시",
 		// Official flavor text: "단단한 뼈로 상대를 세게 때려서 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 	},
 	boomburst: {
 		name: "폭음파",
 		// Official flavor text: "무시무시한 폭음의 파괴력으로 주위에 있는 포켓몬을 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 포켓몬을 공격한다.", // NEEDS QC
 	},
 	bounce: {
 		name: "뛰어오르기",
 		// Official flavor text: "하늘 높이 뛰어올라 2턴째에 상대를 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다. 1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 폭풍, 스카이어퍼, 떨어뜨리기, 사우전드애로, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 날아올라 2턴째에 공격. 30% 마비.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다. 1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 폭풍, 스카이어퍼, 떨어뜨리기, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다. 1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 스카이어퍼, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다. 1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 스카이어퍼, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다.", // NEEDS QC
 		},
 
 		prepare: "{POKEMON:topic} 높이 뛰어올랐다!",
@@ -745,95 +745,95 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bouncybubble: {
 		name: "생생버블",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 	},
 	branchpoke: {
 		name: "가지찌르기",
 		// Official flavor text: "날카롭고 뾰족한 가지로 상대를 찔러서 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	bravebird: {
 		name: "브레이브버드",
 		// Official flavor text: "날개를 접어 저공비행으로 돌격한다. 자신도 상당한 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 33%(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "33%의 반동 데미지를 받는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/3(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+			shortDesc: "1/3의 반동 데미지를 받는다.", // NEEDS QC
 		},
 	},
 	breakingswipe: {
 		name: "와이드브레이커",
 		// Official flavor text: "강인한 꼬리를 세차게 휘둘러서 상대를 공격한다. 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	breakneckblitz: {
 		name: "울트라대시어택",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	brickbreak: {
 		name: "깨뜨리다",
 		// Official flavor text: "수도로 기세 좋게 내려쳐서 상대를 공격한다. 빛의장막이나 리플렉터 등도 파괴할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "공격이 빗나가지 않았다면 데미지 계산 전에 상대 진영의 리플렉터, 빛의장막, 오로라베일의 효과를 없앤다.", // NEEDS QC
+		shortDesc: "기술이 통하는 상대라면 장벽을 부순다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "공격이 빗나가지 않았다면 데미지 계산 전에 상대 진영의 리플렉터와 빛의장막의 효과를 없앤다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 빗나가지 않았다면, 상대에게 통하는지와 관계없이 데미지 계산 전에 상대 진영의 리플렉터와 빛의장막의 효과를 없앤다.", // NEEDS QC
+			shortDesc: "장벽을 부순다. 상대에게 무효라도 부순다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "공격이 빗나가지 않았다면, 상대에게 통하는지와 관계없이 데미지 계산 전에 상대 진영의 리플렉터와 빛의장막의 효과를 없앤다.", // NEEDS QC
 		},
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  {POKEMON:topic} {TEAM}의 벽을 부쉈다!", // NEEDS QC
 	},
 	brine: {
 		name: "소금물",
 		// Official flavor text: "상대가 HP의 절반 정도 상처를 입고 있으면 기술의 위력이 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 남은 HP가 최대 HP의 1/2 이하라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "상대의 HP가 절반 이하라면 위력이 2배가 된다.", // NEEDS QC
 	},
 	brutalswing: {
 		name: "세차게휘두르기",
 		// Official flavor text: "자신의 몸을 세차게 휘둘러서 상대에게 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 포켓몬을 공격한다.", // NEEDS QC
 	},
 	bubble: {
 		name: "거품",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "33%의 확률로 상대의 스피드를 1단계 하락.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	bubblebeam: {
 		name: "거품광선",
 		// Official flavor text: "거품을 기세 좋게 상대에게 발사하여 공격한다. 스피드를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "33%의 확률로 상대의 스피드를 1단계 하락.", // NEEDS QC
 		},
 	},
 	bugbite: {
 		name: "벌레먹기",
 		// Official flavor text: "물어서 공격한다. 상대가 나무열매를 지니고 있을 때 먹어서 나무열매의 효과를 받을 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 상대가 지닌 나무열매를 빼앗아 바로 먹는다. 자신의 도구가 무시되는 상태라도 나무열매의 효과를 얻는다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+		shortDesc: "상대의 나무열매를 빼앗아 먹는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 지닌 나무열매를 빼앗아 바로 먹는다. 자신의 도구가 무시되는 상태가 아니라면 나무열매의 효과를 얻는다. 이 기술로 잃은 도구는 리사이클로 되찾을 수 있다.", // NEEDS QC
 		},
 
 		removeItem: "  {SOURCE:topic} {ITEM:object} 빼앗아 먹었다!",
@@ -841,60 +841,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bugbuzz: {
 		name: "벌레의야단법석",
 		// Official flavor text: "진동으로 음파를 일으켜서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	bulkup: {
 		name: "벌크업",
 		// Official flavor text: "몸에 힘을 담아 근육을 두껍게 해서 자신의 공격과 방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 방어를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격, 방어를 1단계씩 올린다.", // NEEDS QC
 	},
 	bulldoze: {
 		name: "땅고르기",
 		// Official flavor text: "땅을 힘껏 밟아 자신의 주위에 있는 포켓몬을 공격한다. 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 이웃한 포켓몬의 스피드 -1.", // NEEDS QC
 	},
 	bulletpunch: {
 		name: "불릿펀치",
 		// Official flavor text: "탄환처럼 빠르고 단단한 펀치를 상대에게 날린다. 반드시 선제공격을 할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	bulletseed: {
 		name: "씨기관총",
 		// Official flavor text: "씨앗을 기세 좋게 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 	},
 	burningbulwark: {
 		name: "화염의수호",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬을 화상 상태로 만든다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "공격으로부터 자신을 지킨다. 접촉하면 화상.", // NEEDS QC
 	},
 	burningjealousy: {
 		name: "질투의불꽃",
 		// Official flavor text: "질투의 에너지로 상대를 공격한다. 그 턴에 능력이 올라간 포켓몬을 화상 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 능력이 올라갔다면 100%의 확률로 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "이 턴에 능력이 오른 상대를 100% 화상시킨다.", // NEEDS QC
 	},
 	burnup: {
 		name: "불사르기",
 		// Official flavor text: "전신의 불꽃을 모두 태워서 큰 데미지를 준다. 자신의 불꽃타입이 없어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 불꽃타입이 아니면 실패한다. 이 기술이 성공하고 테라스탈 상태가 아니라면, 배틀에 나와 있는 동안 자신의 불꽃타입이 사라져 무타입이 된다.", // NEEDS QC
+		shortDesc: "자신의 불꽃타입이 사라진다. 불꽃타입 전용.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 불꽃타입이 아니면 실패한다. 이 기술이 성공하면 배틀에 나와 있는 동안 자신의 불꽃타입이 사라져 무타입이 된다.", // NEEDS QC
 		},
 
 		typeChange: "  {POKEMON}의 불꽃은 다 타 버렸다!",
@@ -902,68 +902,68 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	buzzybuzz: {
 		name: "찌릿찌릿일렉",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	calmmind: {
 		name: "명상",
 		// Official flavor text: "조용히 정신을 통일하고 마음을 가라앉혀서 자신의 특수공격과 특수방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격과 특수방어를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격, 특수방어를 1단계씩 올린다.", // NEEDS QC
 	},
 	camouflage: {
 		name: "보호색",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀 환경에 따라 자신의 타입이 변한다. 일반적인 환경에서는 노말타입, 일렉트릭필드는 전기타입, 미스트필드는 페어리타입, 그래스필드는 풀타입, 사이코필드는 에스퍼타입이 된다. 타입을 바꿀 수 없거나 이미 그 단일 타입이라면 실패한다.", // NEEDS QC
+		shortDesc: "필드에 따라 타입이 변한다(기본은 노말).", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 자신의 타입이 변한다. 일반적인 환경에서는 노말타입, 일렉트릭필드는 전기타입, 미스트필드는 페어리타입, 그래스필드는 풀타입이 된다. 타입을 바꿀 수 없거나 이미 그 단일 타입이라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 자신의 타입이 변한다. 일반적인 환경에서는 땅타입이 된다. 타입을 바꿀 수 없거나 이미 그 단일 타입이라면 실패한다.", // NEEDS QC
+			shortDesc: "환경에 따라 자신의 타입 변화. (땅)", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 자신의 타입이 변한다. 일반적인 환경에서는 노말타입이 된다. 특성이 멀티타입이거나 그 타입이 이미 자신의 타입에 포함되어 있으면 실패한다.", // NEEDS QC
+			shortDesc: "환경에 따라 자신의 타입 변화. (노말)", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 자신의 타입이 변한다. 일반적인 환경에서는 노말타입이 된다. 그 타입이 이미 자신의 타입에 포함되어 있으면 실패한다.", // NEEDS QC
 		},
 	},
 	captivate: {
 		name: "유혹",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수공격을 2단계 떨어뜨린다. 자신과 상대의 성별이 같거나 어느 한쪽이 성별이 없으면 효과가 없다. 특성이 둔감인 포켓몬에게도 효과가 없다.", // NEEDS QC
+		shortDesc: "다른 성별의 상대의 특공을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	catastropika: {
 		name: "필살피카슛",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	ceaselessedge: {
 		name: "비검천중파",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 데미지를 준다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 최대 3겹까지 깔 수 있으며 1겹이면 최대 HP의 1/8, 2겹이면 1/6, 3겹이면 1/4(모두 버림)의 데미지를 준다. 아무 포켓몬이 정리정돈을 쓰거나, 상대가 킬러스핀, 고속스핀, 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
+		shortDesc: "상대 진영에 압정뿌리기를 1겹 깐다.", // NEEDS QC
 	},
 	celebrate: {
 		name: "축하",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "배틀에서는 효과가 없다.", // NEEDS QC
 
 		activate: "  축하해! {TRAINER}!!",
 	},
 	charge: {
 		name: "충전",
 		// Official flavor text: "다음 턴에 쓸 전기타입 기술의 위력을 올린다. 자신의 특수방어도 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수방어를 1단계 올린다. 자신의 다음 전기타입 공격 기술의 위력이 2배가 된다. 배틀에서 벗어나거나, 충전을 제외한 전기타입 기술을 (실패하더라도) 쓰려고 하면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "특방 +1. 다음 전기타입 기술의 위력 2배.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 특수방어를 1단계 올린다. 다음 턴에 전기타입 공격 기술을 쓰면 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "특방 +1. 다음 턴 전기 기술 위력 2배.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "다음 턴에 전기타입 공격 기술을 쓰면 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "다음 턴 자신의 전기 기술 위력이 2배.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 충전을 시작했다!",
@@ -971,82 +971,82 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	chargebeam: {
 		name: "차지빔",
 		// Official flavor text: "전격의 다발을 상대에게 발사한다. 전기를 모아서 자신의 특수공격을 올릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "70%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "70%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
 	},
 	charm: {
 		name: "애교부리기",
 		// Official flavor text: "귀엽게 바라보고 방심을 유도하여 상대의 공격을 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	chatter: {
 		name: "수다",
 		// Official flavor text: "매우 시끄럽고 수다스러운 음파로 상대를 공격한다. 상대를 혼란시킨다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "X%의 확률로 상대를 혼란 상태로 만든다. X는 자신이 변신하지 않은 페라페가 아니면 0이다. 페라페라면 녹음된 울음소리의 음량에 따라 X는 0 또는 10이 된다. 음량이 작거나 녹음이 없으면 0, 중간 이상이면 10이다.", // NEEDS QC
+			shortDesc: "페라페가 쓰면 10%의 확률로 혼란.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "X%의 확률로 상대를 혼란 상태로 만든다. X는 자신이 변신하지 않은 페라페가 아니면 0이다. 페라페라면 녹음된 울음소리의 음량에 따라 X는 1, 11 또는 31이 된다. 녹음이 없거나 음량이 작으면 1, 중간이면 11, 크면 31이다.", // NEEDS QC
+			shortDesc: "페라페가 쓰면 31%의 확률로 혼란.", // NEEDS QC
 		},
 	},
 	chillingwater: {
 		name: "찬물끼얹기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	chillyreception: {
 		name: "썰렁개그",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 날씨가 눈이 된다. 자신은 교체할 수 없는 상태라도 배틀에서 물러나고, 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없으면 교체하지 않는다.", // NEEDS QC
+		shortDesc: "날씨를 눈으로 만들고 자신은 교체한다.", // NEEDS QC
 
 		prepare: "  {POKEMON:topic} 썰렁한 개그를 선보였다!",
 	},
 	chipaway: {
 		name: "야금야금",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "회피율을 포함한 상대의 랭크 변화를 무시하고 공격한다.", // NEEDS QC
+		shortDesc: "상대의 랭크 변화를 무시하고 공격한다.", // NEEDS QC
 	},
 	chloroblast: {
 		name: "클로로블라스트",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 특성이 매직가드나 돌머리가 아닌 한 자신이 최대 HP의 1/2(올림)을 잃는다.", // NEEDS QC
+		shortDesc: "자신이 최대 HP의 1/2을 잃는다.", // NEEDS QC
 	},
 	circlethrow: {
 		name: "배대뒤치기",
 		// Official flavor text: "상대를 내던져서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대가 모두 기절하지 않았다면, 상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 뿌리박기의 효과를 받고 있거나 특성이 흡반이라면, 또는 이 기술이 대타에 맞았다면 교체시키지 못한다.", // NEEDS QC
+		shortDesc: "상대를 무작위 포켓몬과 강제로 교체시킨다.", // NEEDS QC
 	},
 	clamp: {
 		name: "껍질끼우기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(자신이 조임밴드를 지니고 있으면 1/8)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴(끈기갈고리손톱을 지니고 있으면 항상 5턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5턴동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 배턴터치를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴 동안 이 기술을 쓴다. 3/8의 확률로 2~3턴, 1/8의 확률로 4~5턴 지속된다. 첫 턴에 계산한 데미지를 매 턴 그대로 적용한다. 효과가 지속되는 동안 자신은 기술을 선택할 수 없고 상대는 기술을 실행할 수 없지만, 양쪽 모두 교체할 수는 있다. 자신이 교체하면 상대는 그 턴에도 기술을 실행할 수 없다. 상대가 교체하면 자신은 자동으로 이 기술을 다시 쓰며, 그때 PP가 0이었다면 63이 된다. 자신이나 상대가 교체하거나 자신이 움직일 수 없게 되면 효과가 사라진다. 이 기술은 타입 상성으로 무효인 상대의 행동도 막을 수 있지만, 데미지는 주지 못한다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대는 움직일 수 없다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} {SOURCE}의 껍질에 꼈다!",
@@ -1055,188 +1055,188 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	clangingscales: {
 		name: "스케일노이즈",
 		// Official flavor text: "전신의 비늘을 비벼서 큰 소리를 내 공격한다. 공격 후 자신의 방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	clangoroussoul: {
 		name: "소울비트",
 		// Official flavor text: "자신의 HP를 조금 깎아서 모든 능력을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "최대 HP의 33%(버림)를 잃는 대신 자신의 공격, 방어, 특수공격, 특수방어, 스피드를 1단계씩 올린다. HP가 부족하거나 어느 능력도 변하지 않는다면 실패한다.", // NEEDS QC
+		shortDesc: "최대 HP의 33%를 잃고 모든 능력이 1단계 상승.", // NEEDS QC
 	},
 	clangoroussoulblaze: {
 		name: "브레이징소울비트",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격, 방어, 특수공격, 특수방어, 스피드를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 모든 능력을 1단계씩 올린다.", // NEEDS QC
 	},
 	clearsmog: {
 		name: "클리어스모그",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대의 랭크 변화를 모두 0으로 되돌린다.", // NEEDS QC
 	},
 	closecombat: {
 		name: "인파이트",
 		// Official flavor text: "방어를 포기하고 상대 쪽으로 깊숙이 돌격한다. 자신의 방어와 특수방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 방어, 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	coaching: {
 		name: "코칭",
 		// Official flavor text: "적절한 지도를 통해서 같은 편 전원의 공격과 방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대(아군)의 공격과 방어를 1단계씩 올린다. 이웃한 아군이 없으면 실패한다.", // NEEDS QC
+		shortDesc: "아군의 공격과 방어를 1단계씩 올린다.", // NEEDS QC
 	},
 	coil: {
 		name: "똬리틀기",
 		// Official flavor text: "똬리를 틀어서 집중한다. 자신의 공격과 방어와 명중률을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격, 방어, 명중률을 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격, 방어, 명중률을 1단계씩 올린다.", // NEEDS QC
 	},
 	collisioncourse: {
 		name: "엑셀브레이크",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 효과가 뛰어나면 데미지가 1.3333배가 된다.", // NEEDS QC
+		shortDesc: "효과가 뛰어나면 데미지가 1.3333배가 된다.", // NEEDS QC
 	},
 	combattorque: {
 		name: "파이트액셀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	cometpunch: {
 		name: "연속펀치",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 데미지는 첫 공격에서 한 번만 계산해 모든 공격에 적용한다. 공격 도중 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	comeuppance: {
 		name: "앙갚음",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 마지막으로 자신을 물리 또는 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 1.5배(버림)의 데미지를 준다. 그 공격으로 HP를 잃지 않았다면 1의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리나 특수 공격을 받지 않았다면 실패한다.", // NEEDS QC
+		shortDesc: "공격을 받으면 1.5배로 되갚는다.", // NEEDS QC
 	},
 	confide: {
 		name: "비밀이야기",
 		// Official flavor text: "비밀 이야기를 해서 상대의 집중력을 잃게 하여 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	confuseray: {
 		name: "이상한빛",
 		// Official flavor text: "이상한 빛을 상대에게 비춰 당황하게 한다. 상대를 혼란시킨다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	confusion: {
 		name: "염동력",
 		// Official flavor text: "약한 염동력을 상대에게 보내어 공격한다. 상대를 혼란시킬 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	constrict: {
 		name: "휘감기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "33%의 확률로 상대의 스피드를 1단계 하락.", // NEEDS QC
 		},
 	},
 	continentalcrush: {
 		name: "월즈엔드폴",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	conversion: {
 		name: "텍스처",
 		// Official flavor text: "자신의 타입을 배운 기술 중 가장 위에 있는 기술과 같은 타입으로 바꾼다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 타입이 첫 번째 기술의 원래 타입으로 변한다. 타입을 바꿀 수 없거나 이미 그 타입이라면 실패한다.", // NEEDS QC
+		shortDesc: "첫 번째 기술의 타입으로 자신의 타입이 변한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 이 기술을 제외한 자신이 지닌 기술 중 하나의 원래 타입으로 무작위로 변한다. 현재 자신의 타입으로는 변하지 않는다. 타입을 바꿀 수 없거나 자신의 현재 타입밖에 고를 수 없다면 실패한다.", // NEEDS QC
+			shortDesc: "지닌 기술에 맞춰 자신의 타입이 변한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 이 기술과 저주를 제외한 자신이 지닌 기술 중 하나의 원래 타입으로 무작위로 변한다. 현재 자신의 타입으로는 변하지 않는다. 타입을 바꿀 수 없거나 자신의 현재 타입밖에 고를 수 없다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 저주를 제외한 자신이 지닌 기술 중 하나의 원래 타입으로 무작위로 변한다. 현재 자신의 타입으로는 변하지 않는다. 타입을 바꿀 수 없거나 자신의 현재 타입밖에 고를 수 없다면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 상대의 현재 타입과 같아진다.", // NEEDS QC
+			shortDesc: "자신의 타입이 상대와 같아진다.", // NEEDS QC
 		},
 
-		typeChange: null, // NEEDS TRANSLATION
+		typeChange: "  {SOURCE}의 타입과 같은 타입이 되었다!", // NEEDS QC
 	},
 	conversion2: {
 		name: "텍스처2",
 		// Official flavor text: "상대가 마지막으로 쓴 기술에 저항할 수 있도록 자신의 타입을 변화시킨다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 타입이 상대가 마지막으로 쓴 기술의 타입에 저항하거나 그 타입을 받지 않는 타입으로 변한다. 현재 자신의 타입으로는 변하지 않는다. 기술의 원래 타입이 아닌 판정된 타입을 기준으로 한다. 상대가 아직 기술을 쓰지 않았거나, 타입을 바꿀 수 없거나, 자신의 현재 타입밖에 고를 수 없다면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 마지막 기술에 강한 타입으로 변한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 자신이 마지막으로 받은 기술의 타입에 저항하거나 그 타입을 받지 않는 타입으로 변한다. 그 기술이 자신에게 성공했을 때만 발동하며, 현재 자신의 타입으로는 변하지 않는다. 기술의 원래 타입이 아닌 판정된 타입을 기준으로 한다. 자신이 마지막으로 받은 기술이 성공하지 않았거나, 특성이 멀티타입이거나, 자신의 현재 타입밖에 고를 수 없다면 실패한다.", // NEEDS QC
+			shortDesc: "자신을 노린 마지막 기술에 강한 타입으로.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 자신이 마지막으로 받은 기술의 타입에 저항하거나 그 타입을 받지 않는 타입으로 변한다. 그 기술이 자신에게 성공했을 때만 발동하며, 현재 자신의 타입으로는 변하지 않는다. 기술의 원래 타입이 아닌 판정된 타입을 기준으로 하지만, 발버둥은 노말타입으로 취급한다. 자신이 마지막으로 받은 기술이 성공하지 않았거나 자신의 현재 타입밖에 고를 수 없다면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 상대가 마지막으로 쓴 기술의 타입에 저항하거나 그 타입을 받지 않는 타입으로 변한다. 현재 자신의 타입으로도 변할 수 있다. 판정된 타입이 아닌 기술의 원래 타입을 기준으로 한다. 상대가 아직 기술을 쓰지 않았다면 실패한다.", // NEEDS QC
+			shortDesc: "상대의 마지막 기술에 강한 타입으로 변화.", // NEEDS QC
 		},
 	},
 	copycat: {
 		name: "흉내쟁이",
 		// Official flavor text: "직전에 나온 기술을 흉내 내어 같은 기술을 쓴다. 기술이 나오지 않았으면 실패한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신을 포함해 어떤 포켓몬이든 마지막으로 쓴 기술을 따라 쓴다. 아직 아무 기술도 쓰이지 않았거나, 마지막 기술이 조수, 토치카, 부리캐논, 거수탄, 거수참, 트림, 기프트패스, 번액셀, 축하, 수다, 배대뒤치기, 파이트액셀, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 드래곤테일, 다이맥스포, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 매지컬액셀, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 포이즌액셀, 방어, 분노가루, 울부짖기, 트랩셸, 스케치, 잠꼬대, 가로채기, 니들가드, 스포트라이트, 발버둥, 바꿔치기, 테라클러스터, 도둑질, 변신, 트릭, 날려버리기, 다크액셀였다면 실패한다.", // NEEDS QC
+		shortDesc: "배틀에서 마지막으로 쓰인 기술을 따라 쓴다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함해 어떤 포켓몬이든 마지막으로 쓴 기술을 따라 쓴다. 다이맥스 기술은 원래 기술을 기준으로 판정한다. 아직 아무 기술도 쓰이지 않았거나, 마지막 기술이 조수, 토치카, 부리캐논, 거수탄, 거수참, 트림, 기프트패스, 축하, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 드래곤테일, 다이맥스포, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 방어, 분노가루, 울부짖기, 트랩셸, 스케치, 잠꼬대, 가로채기, 니들가드, 스포트라이트, 발버둥, 바꿔치기, 도둑질, 변신, 트릭, 날려버리기이었다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함해 어떤 포켓몬이든 마지막으로 쓴 기술을 따라 쓴다. 아직 아무 기술도 쓰이지 않았거나, 마지막 기술이 조수, 토치카, 부리캐논, 트림, 기프트패스, 축하, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 드래곤테일, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 방어, 분노가루, 울부짖기, 트랩셸, 스케치, 잠꼬대, 가로채기, 니들가드, 스포트라이트, 발버둥, 바꿔치기, 도둑질, 변신, 트릭, 날려버리기 또는 Z기술이었다면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함해 어떤 포켓몬이든 마지막으로 쓴 기술을 따라 쓴다. 아직 아무 기술도 쓰이지 않았거나, 마지막 기술이 조수, 트림, 기프트패스, 축하, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 드래곤테일, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 손에손잡기, 킹실드, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 방어, 분노가루, 울부짖기, 스케치, 잠꼬대, 가로채기, 니들가드, 발버둥, 바꿔치기, 도둑질, 변신, 트릭, 날려버리기이었다면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함해 어떤 포켓몬이든 마지막으로 쓴 기술을 따라 쓴다. 아직 아무 기술도 쓰이지 않았거나, 마지막 기술이 조수, 기프트패스, 수다, 배대뒤치기, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 드래곤테일, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 방어, 분노가루, 스케치, 잠꼬대, 가로채기, 발버둥, 바꿔치기, 도둑질, 변신, 트릭이었다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함해 어떤 포켓몬이든 마지막으로 쓴 기술을 따라 쓴다. 아직 아무 기술도 쓰이지 않았거나, 마지막 기술이 조수, 수다, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 방어, 스케치, 잠꼬대, 가로채기, 발버둥, 바꿔치기, 도둑질, 트릭이었다면 실패한다.", // NEEDS QC
 		},
 	},
 	coreenforcer: {
 		name: "코어퍼니셔",
 		// Official flavor text: "데미지를 준 상대가 이미 행동을 끝냈다면 상대의 특성을 없애버린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대보다 나중에 행동하면 상대가 배틀에 나와 있는 동안 특성을 무효로 만든다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 테라체인지, 달마모드, 마이티체인지라면 발동하지 않으며, 배턴터치로 이 효과를 이어받은 경우에는 효과가 바로 사라진다.", // NEEDS QC
+		shortDesc: "나중에 행동한 상대의 특성을 무효로 만든다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대보다 나중에 행동하면 상대가 배틀에 나와 있는 동안 특성을 무효로 만든다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 달마모드라면 발동하지 않으며, 배턴터치로 이 효과를 이어받은 경우에는 효과가 바로 사라진다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대보다 나중에 행동하면 상대가 배틀에 나와 있는 동안 특성을 무효로 만든다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대의 특성이 유대변화, 절대안깸, 탈, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 달마모드라면 발동하지 않으며, 배턴터치로 이 효과를 이어받은 경우에는 효과가 바로 사라진다.", // NEEDS QC
 		},
 	},
 	corkscrewcrash: {
 		name: "초월나선연격",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	corrosivegas: {
 		name: "부식가스",
 		// Official flavor text: "주위에 있는 모든 것을 강력한 산성 가스로 뒤덮어서 지니고 있는 도구를 녹여버린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 지닌 도구를 잃게 한다. 특성이 점착인 포켓몬이나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 디아루가와 큰금강옥, 펄기아와 큰백옥, 기라티나와 큰백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패, 패러독스 포켓몬과 부스트에너지, 오거폰과 가면에는 효과가 없다. 여기서 패러독스 포켓몬은 꿰뚫는화염, 날뛰는우레, 무쇠암석, 무쇠감투를 제외한, 특성이 고대활성이나 쿼크차지가 될 수 있는 모든 포켓몬을 가리킨다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+		shortDesc: "이웃한 포켓몬이 지닌 도구를 없앤다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 지닌 도구를 잃게 한다. 특성이 점착인 포켓몬이나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패에는 효과가 없다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 
 		fail: "#healblock",
@@ -1245,89 +1245,89 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	cosmicpower: {
 		name: "코스믹파워",
 		// Official flavor text: "우주로부터 신비한 힘을 손에 넣음으로써 자신의 방어와 특수방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어, 특수방어를 1단계씩 올린다.", // NEEDS QC
 	},
 	cottonguard: {
 		name: "코튼가드",
 		// Official flavor text: "푹신푹신한 솜털로 자신의 몸을 둘러싸서 지킨다. 방어를 매우 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 3단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 3단계 올린다.", // NEEDS QC
 	},
 	cottonspore: {
 		name: "목화포자",
 		// Official flavor text: "솜처럼 폭신폭신한 포자를 착 달라붙게 해서 상대의 스피드를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	counter: {
 		name: "카운터",
 		// Official flavor text: "상대로부터 받은 물리공격의 데미지를 2배로 만들어 같은 상대에게 돌려준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 마지막으로 자신을 물리 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 공격으로 HP를 잃지 않았다면 1의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리 공격을 받지 않았다면 실패한다.", // NEEDS QC
+		shortDesc: "물리 공격을 받으면 데미지의 2배를 되갚는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 물리 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 공격으로 HP를 잃지 않았다면 위력 1로 데미지를 준다. 그 상대의 자리가 비어 있다면 범위 안의 무작위 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리 공격을 받지 않았다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 물리 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리 공격을 받지 않았거나 그 공격으로 HP를 잃지 않았다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 물리 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 잠재파워는 노말타입으로 취급하며, 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리 공격을 받지 않았거나 그 공격으로 HP를 잃지 않았다면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 물리 공격으로 잃은 HP의 2배의 데미지를 상대에게 준다. 잠재파워는 노말타입으로 취급하며, 연속 공격 기술은 마지막 공격만 계산한다. 자신이 먼저 행동하거나, 이 턴에 물리 공격을 받지 않았거나, 그 공격으로 HP를 잃지 않았다면 실패한다. 상대가 땅가르기가나 뿔드릴을 쓰고 빗나갔다면 이 기술은 65535의 데미지를 준다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀에서 마지막으로 쓰인 기술이 준 데미지의 2배를 상대에게 준다. 타입 상성에 의한 무효를 무시한다. 자신이 먼저 행동하거나, 상대 쪽의 마지막 기술이 카운터가거나, 위력이 0이거나, 노말 또는 격투타입이 아니라면 실패한다. 어느 한쪽의 마지막 기술이 데미지를 주지 않았고 그 기술이 이상한빛, 텍스처, 기충전, 뱀눈초리, 흑안개, 씨뿌리기, 빛의장막, 흉내내기, 흰안개, 독가스, 독가루, HP회복, 리플렉터, 잠자기, 알낳기, 튀어오르기, 저리가루, 대타출동, 초음파, 순간이동, 전기자석파, 맹독, 변신이 아니라면 실패한다.", // NEEDS QC
+			shortDesc: "노말/격투 기술에 맞으면 2배로 되갚는다.", // NEEDS QC
 		},
 	},
 	courtchange: {
 		name: "코트체인지",
 		// Official flavor text: "이상한 힘으로 서로의 필드 효과를 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "흰안개, 빛의장막, 리플렉터, 압정뿌리기, 신비의부적, 순풍, 독압정, 스텔스록, 물의맹세, 불꽃의맹세, 풀의맹세, 끈적끈적네트, 오로라베일, 거다이강철진, 거다이포격, 거다이편달, 거다이옥염의 효과를 자신 진영과 상대 진영 사이에서 맞바꾼다.", // NEEDS QC
+		shortDesc: "양쪽 진영의 필드 효과를 맞바꾼다.", // NEEDS QC
 
 		activate: "  {POKEMON:topic} 서로의 필드 효과를 교체했다!",
 	},
 	covet: {
 		name: "탐내다",
 		// Official flavor text: "귀엽게 애교 부리며 상대에게 다가가 지니고 있는 도구를 뺏는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 디아루가와 큰금강옥, 펄기아와 큰백옥, 기라티나와 큰백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패, 패러독스 포켓몬과 부스트에너지, 오거폰과 가면이 각각의 포켓몬이 지닌 경우, 또는 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우에는 빼앗지 못한다. 여기서 패러독스 포켓몬은 꿰뚫는화염, 날뛰는우레, 무쇠암석, 무쇠감투를 제외한, 특성이 고대활성이나 쿼크차지가 될 수 있는 모든 포켓몬을 가리킨다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+		shortDesc: "도구가 없다면 상대의 도구를 빼앗는다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패은 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. Z크리스탈, 그것으로 메가진화할 수 있는 포켓몬이 지닌 메가스톤, 그리고 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리는 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 그것으로 메가진화할 수 있는 포켓몬이 지닌 메가스톤, 그리고 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트는 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 메일과, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트는 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 도구를 지니고 있지 않다면 상대가 지닌 도구를 빼앗는다. 도구가 메일이나 백금옥이거나, 상대의 특성이 멀티타입이나 점착라면 빼앗지 못한다. 이 기술로 잃은 도구는 리사이클로 되찾을 수 없다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 도구를 지니고 있지 않다면 상대가 지닌 도구를 빼앗는다. 도구가 메일이나 의문열매가거나, 상대의 특성이 점착라면 빼앗지 못한다. 이 기술로 잃은 도구는 리사이클로 되찾을 수 없다.", // NEEDS QC
 		},
 	},
 	crabhammer: {
 		name: "집게해머",
 		// Official flavor text: "큰 집게를 상대에게 내리쳐서 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	craftyshield: {
 		name: "트릭가드",
 		// Official flavor text: "이상한 힘을 사용하여 같은 편을 공격하는 변화 기술을 막는다. 데미지 기술은 받는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 아군을 포함한 다른 포켓몬의 변화 기술로부터 자신과 파티 전원을 지킨다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴 동안 변화 기술로부터 아군을 지킨다.", // NEEDS QC
 
 		start: "  {TEAM:object} 트릭가드가 지켜 줬다!",
 		block: "  {POKEMON:object} 트릭가드가 지켜 줬다!",
@@ -1335,50 +1335,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	crosschop: {
 		name: "크로스촙",
 		// Official flavor text: "양손으로 당수를 상대에게 힘껏 쳐서 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	crosspoison: {
 		name: "크로스포이즌",
 		// Official flavor text: "독 칼날로 상대를 베어 가른다. 독 상태로 만들 때가 있고 급소에도 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 독 상태로 만든다. 급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다. 10%의 확률로 독.", // NEEDS QC
 	},
 	crunch: {
 		name: "깨물어부수기",
 		// Official flavor text: "날카로운 이빨로 상대를 깨물어 부숴서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "20%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "20%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	crushclaw: {
 		name: "브레이크클로",
 		// Official flavor text: "단단하고 날카로운 손톱으로 베어 갈라서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	crushgrip: {
 		name: "묵사발",
 		// Official flavor text: "굉장한 힘으로 상대를 묵사발로 만든다. 상대의 HP가 남아 있을수록 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 120×(상대의 남은 HP÷상대의 최대 HP)(0.5는 버림, 최소 1)이다.", // NEEDS QC
+		shortDesc: "상대의 남은 HP가 많을수록 강하다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 120×(상대의 남은 HP÷상대의 최대 HP)+1(버림)이다.", // NEEDS QC
 		},
 	},
 	curse: {
 		name: "저주",
 		// Official flavor text: "기술을 쓰는 포켓몬이 고스트타입일 때와 그 이외의 타입일 때는 효과가 다르다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 고스트타입이 아니라면 자신의 스피드를 1단계 떨어뜨리고 공격과 방어를 1단계씩 올린다. 고스트타입이라면 (기절하게 되더라도) 최대 HP의 1/2(버림)을 잃는 대신, 상대가 배틀에 나와 있는 동안 매 턴 종료 시 최대 HP의 1/4(버림)을 잃게 한다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 대상이 없거나 이미 효과를 받고 있다면 실패한다.", // NEEDS QC
+		shortDesc: "고스트: 저주 / 그 외: 스피드 -1, 공격·방어 +1.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 고스트타입이 아니라면 자신의 스피드를 1단계 떨어뜨리고 공격과 방어를 1단계씩 올린다. 고스트타입이라면 (기절하게 되더라도) 최대 HP의 1/2(버림)을 잃는 대신, 상대가 배틀에 나와 있는 동안 매 턴 종료 시 최대 HP의 1/4(버림)을 잃게 한다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 대상이 없거나, 상대가 이미 효과를 받고 있거나 대타를 내세우고 있으면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 고스트타입이 아니라면, 공격과 방어가 모두 6단계인 경우를 제외하고 자신의 스피드를 1단계 떨어뜨리고 공격과 방어를 1단계씩 올린다. 고스트타입이라면 (기절하게 되더라도) 최대 HP의 1/2(버림)을 잃는 대신, 상대가 배틀에 나와 있는 동안 매 턴 종료 시 최대 HP의 1/4(버림)을 잃게 한다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 상대가 이미 효과를 받고 있거나 대타를 내세우고 있으면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {SOURCE:topic} 자신의 체력을 깎아서 {POKEMON}에게 저주를 걸었다!",
@@ -1386,28 +1386,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cut: {
 		name: "풀베기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	darkestlariat: {
 		name: "DD래리어트",
 		// Official flavor text: "양팔을 돌려 상대에게 부딪친다. 상대의 능력 변화에 상관없이 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "회피율을 포함한 상대의 랭크 변화를 무시하고 공격한다.", // NEEDS QC
+		shortDesc: "상대의 랭크 변화를 무시하고 공격한다.", // NEEDS QC
 	},
 	darkpulse: {
 		name: "악의파동",
 		// Official flavor text: "몸에서 악의로 가득한 무서운 오라를 발한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	darkvoid: {
 		name: "다크홀",
 		// Official flavor text: "암흑의 세계로 끌고 가서 떨어뜨려 상대를 잠듦 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 잠듦 상태로 만든다. 변신을 포함해 현재 모습이 다크라이가 아니면 쓸 수 없다.", // NEEDS QC
+		shortDesc: "다크라이 전용: 상대를 잠듦 상태로 만든다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대를 잠듦 상태로 만든다.", // NEEDS QC
+			shortDesc: "상대를 잠들게 한다.", // NEEDS QC
 		},
 
 		fail: "하지만 {POKEMON:topic} 사용할 수 없었다!",
@@ -1416,60 +1416,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dazzlinggleam: {
 		name: "매지컬샤인",
 		// Official flavor text: "강력한 빛을 내어 상대에게 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 상대를 공격한다.", // NEEDS QC
 	},
 	decorate: {
 		name: "데코레이션",
 		// Official flavor text: "데코레이션을 해서 상대의 공격과 특수공격을 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격과 특수공격을 2단계씩 올린다.", // NEEDS QC
+		shortDesc: "상대의 공격, 특수공격을 2단계씩 올린다.", // NEEDS QC
 	},
 	defendorder: {
 		name: "방어지령",
 		// Official flavor text: "부하를 불러내어 자신의 몸을 뒤덮게 한다. 방어와 특수방어를 올릴 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어, 특수방어를 1단계씩 올린다.", // NEEDS QC
 	},
 	defensecurl: {
 		name: "웅크리기",
 		// Official flavor text: "몸을 둥글게 웅크려서 자신의 방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 1단계 올린다. 배틀에 나와 있는 동안 자신의 아이스볼과 구르기의 위력이 2배가 된다(중복되지 않는다).", // NEEDS QC
+		shortDesc: "자신의 방어를 1단계 올린다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 방어를 1단계 올린다. 배틀에 나와 있는 동안 자신의 구르기의 위력이 2배가 된다(중복되지 않는다). 배턴터치로 이 효과를 다른 포켓몬에게 넘길 수 있다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 방어를 1단계 올린다.", // NEEDS QC
 		},
 	},
 	defog: {
 		name: "안개제거",
 		// Official flavor text: "강한 바람으로 상대의 리플렉터나 빛의장막 등을 제거한다. 회피율도 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 회피율을 1단계 떨어뜨린다. 이 기술이 성공하면 회피율이 떨어졌는지와 관계없이 상대 진영의 리플렉터, 빛의장막, 오로라베일, 신비의부적, 흰안개, 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과와 자신 진영의 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과가 사라진다. 상대의 대타를 무시하지만 회피율 하락은 대타가 막는다. 필드가 펼쳐져 있을 때 이 기술이 성공하면 필드도 사라진다.", // NEEDS QC
+		shortDesc: "회피율 -1. 양쪽의 설치물과 필드를 없앤다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대의 회피율을 1단계 떨어뜨린다. 이 기술이 성공하면 회피율이 떨어졌는지와 관계없이 상대 진영의 리플렉터, 빛의장막, 오로라베일, 신비의부적, 흰안개, 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과와 자신 진영의 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과가 사라진다. 상대의 대타를 무시하지만 회피율 하락은 대타가 막는다.", // NEEDS QC
+			shortDesc: "회피율 -1. 양쪽 진영의 설치물 제거.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 회피율을 1단계 떨어뜨린다. 이 기술이 성공하면 회피율이 떨어졌는지와 관계없이 상대 진영의 리플렉터, 빛의장막, 신비의부적, 흰안개, 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과와 자신 진영의 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과가 사라진다. 상대의 대타를 무시하지만 회피율 하락은 대타가 막는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대의 회피율을 1단계 떨어뜨린다. 이 기술이 성공하면 회피율이 떨어졌는지와 관계없이 상대 진영의 리플렉터, 빛의장막, 신비의부적, 흰안개, 압정뿌리기, 독압정, 스텔스록의 효과가 사라진다. 상대의 대타를 무시하지만 회피율 하락은 대타가 막는다.", // NEEDS QC
+			shortDesc: "회피율 -1. 상대 진영의 설치물/장벽 제거.", // NEEDS QC
 		},
 	},
 	destinybond: {
 		name: "길동무",
 		// Official flavor text: "기술을 쓴 뒤 상대의 공격으로 기절했을 때 공격 상대도 기절하게 한다. 연속으로 쓰면 실패한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 다음에 행동할 때까지, 상대의 공격으로 기절하면 그 상대도 함께 기절시킨다. 파멸의소원과 미래예지에는 발동하지 않는다. 특성 무희로 쓴 기술을 제외하고, 마지막으로 쓴 기술이 성공한 이 기술이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 공격으로 기절하면 상대도 기절시킨다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 다음에 행동할 때까지, 상대의 공격으로 기절하면 그 상대도 함께 기절시킨다. 파멸의소원과 미래예지에는 발동하지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 다음에 행동할 때까지, 상대의 공격으로 기절하면 그 상대도 함께 기절시킨다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 상대를 길동무로 삼으려 하고 있다!",
@@ -1478,68 +1478,68 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	detect: {
 		name: "판별",
 		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴 동안 기술로부터 자신을 지킨다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어, 패스트가드, 와이드가드가 아니면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 되며, 최대 8이다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 X/65536의 확률로 성공한다. X는 65535에서 시작해 이 기술이 성공할 때마다 절반(버림)이 된다. 4번 연속으로 성공하면 X는 118이 되고, 이후 성공할 때마다 0~65535 사이의 무작위에 가까운 값이 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 65535로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 상대의 공격으로부터 자신을 지킨다. 이 기술은 X/255의 확률로 성공한다. X는 255에서 시작해 이 기술이 성공할 때마다 절반(버림)이 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 255로 돌아간다. 자신이 대타를 내세우고 있거나 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 	},
 	devastatingdrake: {
 		name: "얼티메이트드래곤번",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	diamondstorm: {
 		name: "다이아스톰",
 		// Official flavor text: "다이아 폭풍을 일으켜 데미지를 준다. 자신의 방어를 크게 올릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 자신의 방어를 2단계 올린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 자신의 방어가 2단계 올라간다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격마다 50%의 확률로 자신의 방어가 1단계 올라간다.", // NEEDS QC
+			shortDesc: "공격마다 50%의 확률로 자신의 방어 +1.", // NEEDS QC
 		},
 	},
 	dig: {
 		name: "구멍파기",
 		// Official flavor text: "1턴째에 파고들어 2턴째에 상대를 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 땅속으로 파고들어 2턴째에 공격한다. 1턴째에는 지진과 매그니튜드를 제외한 모든 공격을 피하지만 그 두 기술의 데미지는 2배로 받으며, 날씨의 영향도 받지 않는다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 땅속으로 파고들어 2턴째에 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 땅속으로 파고들어 2턴째에 공격한다. 1턴째에는 지진과 매그니튜드를 제외한 모든 공격을 피하지만 그 두 기술의 데미지는 2배로 받으며, 날씨의 영향도 받지 않는다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 땅속으로 파고들어 2턴째에 공격한다. 1턴째에는 지진과 매그니튜드를 제외한 모든 공격을 피하지만 그 두 기술의 데미지는 2배로 받으며, 날씨의 영향도 받지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 땅속으로 파고들어 2턴째에 공격한다. 1턴째에는 지진, 땅가르기, 매그니튜드를 제외한 모든 공격을 피하고 날씨의 영향을 받지 않으며, 지진과 매그니튜드의 데미지는 2배로 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 땅속으로 파고들어 2턴째에 공격한다. 1턴째에는 참기, 스피드스타, 변신을 제외한 모든 공격을 피한다. 2턴째에 마비로 움직이지 못하면, 교체하거나 이 기술 또는 공중날기의 2턴째를 성공시킬 때까지 계속 공격을 피한다.", // NEEDS QC
 		},
 
 		prepare: "{POKEMON:topic} 땅으로 파고들었다!",
 	},
 	direclaw: {
 		name: "페이탈클로",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대를 잠듦, 독 또는 마비 상태 중 하나로 만든다.", // NEEDS QC
+		shortDesc: "50%의 확률로 잠듦, 독 또는 마비로 만든다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1548,29 +1548,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disable: {
 		name: "사슬묶기",
 		// Official flavor text: "상대의 움직임을 막아 바로 전에 쓴 기술을 4턴 동안 사용할 수 없게 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4턴 동안 상대가 마지막으로 쓴 기술을 쓸 수 없게 만든다. 상대의 기술이 이미 이 효과를 받고 있거나, 상대가 아직 기술을 쓰지 않았거나, 그 기술을 더는 지니고 있지 않거나, 그 기술이 다이맥스 기술이었다면 실패한다.", // NEEDS QC
+		shortDesc: "4턴 동안 상대의 마지막 기술을 봉인한다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4턴 동안 상대가 마지막으로 쓴 기술을 쓸 수 없게 만든다. 상대의 기술이 이미 이 효과를 받고 있거나, 상대가 아직 기술을 쓰지 않았거나, 그 기술을 더는 지니고 있지 않거나, 그 기술이 Z기술이었다면 실패한다. 효과가 지속되는 동안에도 Z파워 기술은 선택해서 쓸 수 있다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4턴 동안 상대가 마지막으로 쓴 기술을 쓸 수 없게 만든다. 상대의 기술이 이미 이 효과를 받고 있거나, 상대가 아직 기술을 쓰지 않았거나, 그 기술을 더는 지니고 있지 않다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "4~7턴 동안 상대가 마지막으로 쓴 기술을 쓸 수 없게 만든다. 상대의 기술이 이미 이 효과를 받고 있거나, 상대가 아직 기술을 쓰지 않았거나, 그 기술을 더는 지니고 있지 않거나, 그 기술의 PP가 0이라면 실패한다.", // NEEDS QC
+			shortDesc: "4~7턴 동안 상대의 마지막 기술을 봉인.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴 동안 상대가 마지막으로 쓴 기술을 쓸 수 없게 만든다. 상대의 기술이 이미 이 효과를 받고 있거나, 상대가 아직 기술을 쓰지 않았거나, 그 기술을 더는 지니고 있지 않거나, 그 기술의 PP가 0이라면 실패한다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대의 마지막 기술을 봉인.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1~7턴 동안 상대가 마지막으로 쓴 기술을 쓸 수 없게 만든다. 상대의 기술이 이미 이 효과를 받고 있거나, 상대가 아직 기술을 쓰지 않았거나, 그 기술을 더는 지니고 있지 않거나, 그 기술의 PP가 0이라면 실패한다.", // NEEDS QC
+			shortDesc: "1~7턴 동안 상대의 마지막 기술을 봉인.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "0~7턴 동안 상대가 지닌 기술 중 PP가 1 이상 남은 기술 하나를 무작위로 쓸 수 없게 만든다. 상대의 기술이 이미 이 효과를 받고 있거나, PP가 남은 기술이 없으면 실패한다. 어떤 포켓몬이든 흑안개를 쓰면 효과가 사라진다. 이 기술은 성공 여부와 관계없이 상대의 분노에 대해서는 맞은 것으로 취급된다.", // NEEDS QC
+			shortDesc: "0~7턴 동안 상대의 기술 하나를 봉인.", // NEEDS QC
 		},
 
 		start: "  {POKEMON}의 {MOVE:object} 봉인했다!",
@@ -1580,25 +1580,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disarmingvoice: {
 		name: "차밍보이스",
 		// Official flavor text: "매혹적인 울음소리를 내어 상대에게 정신적 데미지를 준다. 공격은 반드시 명중한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "명중 판정을 하지 않는다. 상대를 공격한다.", // NEEDS QC
 	},
 	discharge: {
 		name: "방전",
 		// Official flavor text: "눈부신 전격으로 자신의 주위에 있는 포켓몬을 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 이웃한 포켓몬을 마비시킨다.", // NEEDS QC
 	},
 	dive: {
 		name: "다이빙",
 		// Official flavor text: "1턴째에 잠수했다가 2턴째에 떠올라 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 물속으로 잠수해 2턴째에 공격한다. 1턴째에는 파도타기와 바다회오리를 제외한 모든 공격을 피하지만 그 두 기술의 데미지는 2배로 받으며, 날씨의 영향도 받지 않는다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 물속으로 잠수해 2턴째에 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 물속으로 잠수해 2턴째에 공격한다. 1턴째에는 파도타기와 바다회오리를 제외한 모든 공격을 피하지만 그 두 기술의 데미지는 2배로 받으며, 날씨의 영향도 받지 않는다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 물속으로 잠수해 2턴째에 공격한다. 1턴째에는 파도타기와 바다회오리를 제외한 모든 공격을 피하지만 그 두 기술의 데미지는 2배로 받으며, 날씨의 영향도 받지 않는다.", // NEEDS QC
 		},
 
 		prepare: "{POKEMON:topic} 물속에 몸을 숨겼다!",
@@ -1606,25 +1606,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dizzypunch: {
 		name: "잼잼펀치",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "추가 효과가 없다.", // NEEDS QC
+			shortDesc: "추가 효과가 없다.", // NEEDS QC
 		},
 	},
 	doodle: {
 		name: "배껴그리기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 아군의 특성이 상대의 특성으로 변한다. 자신이나 아군의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 테라체인지, 달마모드, 마이티체인지거나 이미 상대와 같다면 그 포켓몬은 변하지 않는다. 자신과 아군의 특성이 모두 이미 상대와 같거나, 상대의 특성이 혼연일체, 유대변화, 절대안깸, 사령탑, 탈, 초상투영, 플라워기프트, 기분파, 꼬르륵스위치, 아이스페이스, 일루전, 괴짜, 멀티타입, 화학변화가스, 독조종, 스웜체인지, 과학의힘, 고대활성, 쿼크차지, 리시버, AR시스템, 어군, 리밋실드, 배틀스위치, 테라셸, 테라체인지, 제로포밍, 트레이스, 불가사의부적, 달마모드, 마이티체인지라면 실패한다.", // NEEDS QC
+		shortDesc: "자신과 아군의 특성이 상대의 특성이 된다.", // NEEDS QC
 	},
 	doomdesire: {
 		name: "파멸의소원",
 		// Official flavor text: "기술을 사용한 2턴 뒤에 무수한 빛의 다발이 상대를 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "기술을 쓰고 2턴 뒤에 데미지를 준다. 그 턴의 종료 시, 기술을 썼을 때 상대가 있던 자리의 포켓몬에게 그 시점에 계산한 데미지를 준다. 자신이 그때 배틀에서 벗어나 있다면 도구나 특성의 보정 없이 원래의 특수공격, 타입, 레벨로 계산한다. 그 자리에 이미 이 기술이나 미래예지가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "기술을 쓰고 2턴 뒤에 공격이 명중한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓰고 2턴 뒤에 급소에 맞지 않는 무타입 데미지를 준다. 데미지는 사용 시 상대를 기준으로 계산하며, 마지막 턴의 종료 시 원래 상대가 있던 자리의 포켓몬에게 준다. 그 자리에 이미 이 기술이나 미래예지가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 파멸의소원을 미래에 맡겼다!",
@@ -1633,321 +1633,321 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleedge: {
 		name: "이판사판태클",
 		// Official flavor text: "목숨을 걸고 상대에게 돌진하여 공격을 한다. 자신도 상당한 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 33%(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "33%의 반동 데미지를 받는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/3(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+			shortDesc: "1/3의 반동 데미지를 받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 반동 데미지를 받는다. 이 기술이 대타에 맞으면 반동 데미지는 항상 1이다.", // NEEDS QC
+			shortDesc: "1/4의 반동 데미지를 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 반동 데미지를 받는다. 이 기술로 상대의 대타가 부서지면 반동 데미지를 받지 않는다.", // NEEDS QC
 		},
 	},
 	doublehit: {
 		name: "더블어택",
 		// Official flavor text: "꼬리 등을 써서 상대를 때려 공격한다. 2회 연속으로 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "한 턴에 2회 연속으로 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 	},
 	doubleironbash: {
 		name: "더블펀처",
 		// Official flavor text: "가슴의 너트를 축으로 회전시켜 2번 연속 팔로 힘껏 친다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다. 30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "2회 공격한다. 30%의 확률로 풀죽게 한다.", // NEEDS QC
 	},
 	doublekick: {
 		name: "두번차기",
 		// Official flavor text: "2개의 다리로 상대를 걷어차서 공격한다. 2회 연속으로 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "한 턴에 2회 연속으로 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격한다. 데미지는 첫 공격에서 한 번만 계산해 두 공격 모두에 적용한다. 첫 공격으로 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	doubleshock: {
 		name: "전광쌍격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 전기타입이 아니면 실패한다. 이 기술이 성공하고 테라스탈 상태가 아니라면, 배틀에 나와 있는 동안 자신의 전기타입이 사라져 무타입이 된다.", // NEEDS QC
+		shortDesc: "자신의 전기타입이 사라진다. 전기타입 전용.", // NEEDS QC
 
 		typeChange: "  {POKEMON:topic} 전기를 다 써 버렸다!",
 	},
 	doubleslap: {
 		name: "연속뺨치기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 데미지는 첫 공격에서 한 번만 계산해 모든 공격에 적용한다. 공격 도중 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	doubleteam: {
 		name: "그림자분신",
 		// Official flavor text: "재빠른 움직임으로 분신을 만들어 상대를 혼란시켜 회피율을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 회피율을 1단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 회피율을 1단계 올린다.", // NEEDS QC
 	},
 	dracometeor: {
 		name: "용성군",
 		// Official flavor text: "천공에서 운석을 상대에게 떨어뜨린다. 사용하면 반동으로 자신의 특수공격이 크게 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	dragonascent: {
 		name: "화룡점정",
 		// Official flavor text: "넓은 하늘에서 급속으로 강하하여 상대를 공격한다. 자신의 방어와 특수방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 방어, 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
 
 		megaNoItem: "  {TRAINER}의 강한 기도가 {POKEMON}에게 닿았다!",
 	},
 	dragonbreath: {
 		name: "용의숨결",
 		// Official flavor text: "굉장한 숨결을 상대에게 내뿜어 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	dragoncheer: {
 		name: "드래곤옐",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대(아군)의 급소에 맞힐 확률을 1단계, 아군이 드래곤타입이라면 2단계 올린다. 이웃한 아군이 없거나, 아군이 이미 이 효과나 기충전의 효과를 받고 있다면 실패한다. 배턴터치로 이 효과를 다른 포켓몬에게 넘길 수 있다.", // NEEDS QC
+		shortDesc: "아군의 급소율 +1(드래곤타입이라면 +2).", // NEEDS QC
 
 		start: "#focusenergy",
 	},
 	dragonclaw: {
 		name: "드래곤클로",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	dragondance: {
 		name: "용의춤",
 		// Official flavor text: "신비롭고 힘센 춤을 격렬하게 춘다. 자신의 공격과 스피드를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 스피드를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격, 스피드를 1단계씩 올린다.", // NEEDS QC
 	},
 	dragondarts: {
 		name: "드래곤애로",
 		// Official flavor text: "드라꼰으로 2번 공격한다. 상대가 2마리일 때는 각각 1번씩 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다. 더블배틀에서는 대상과 그 아군을 1회씩 공격한다. 타입 상성, 방어, 반무적 상태, 특성, 명중 판정으로 한쪽을 공격할 수 없다면 대신 다른 한쪽을 2회 공격한다. 이 기술이 다른 대상으로 유도되면 그 대상을 2회 공격한다.", // NEEDS QC
+		shortDesc: "2회 공격. 더블배틀에서는 상대를 1회씩.", // NEEDS QC
 	},
 	dragonenergy: {
 		name: "드래곤에너지",
 		// Official flavor text: "생명력을 파워로 바꿔서 상대를 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 남은 HP×150÷자신의 최대 HP)(버림, 최소 1)이다.", // NEEDS QC
+		shortDesc: "자신의 HP가 적을수록 약해진다. 상대를 공격.", // NEEDS QC
 	},
 	dragonhammer: {
 		name: "드래곤해머",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	dragonpulse: {
 		name: "용의파동",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	dragonrage: {
 		name: "용의분노",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대에게 40의 데미지를 준다.", // NEEDS QC
 	},
 	dragonrush: {
 		name: "드래곤다이브",
 		// Official flavor text: "굉장한 살기로 위압하면서 몸통박치기한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		},
 	},
 	dragontail: {
 		name: "드래곤테일",
 		// Official flavor text: "상대를 튕겨내서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대가 모두 기절하지 않았다면, 상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 뿌리박기를 썼거나 특성이 흡반이라면, 또는 이 기술이 대타에 맞았다면 교체시키지 못한다.", // NEEDS QC
+		shortDesc: "상대를 무작위 포켓몬과 강제로 교체시킨다.", // NEEDS QC
 	},
 	drainingkiss: {
 		name: "드레인키스",
 		// Official flavor text: "키스로 상대의 HP를 흡수한다. 준 데미지의 반 이상 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 3/4(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 75%만큼 HP를 회복한다.", // NEEDS QC
 	},
 	drainpunch: {
 		name: "드레인펀치",
 		// Official flavor text: "주먹으로 상대의 힘을 흡수한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(버림)가 된다.", // NEEDS QC
 		},
 	},
 	dreameater: {
 		name: "꿈먹기",
 		// Official flavor text: "잠자고 있는 상대의 꿈을 먹어 공격한다. 데미지의 절반을 HP로 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 잠들어 있지 않으면 효과가 없다. 상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 절반을 회복. 잠든 상대 전용.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 잠들어 있지 않거나 대타를 내세우고 있으면 효과가 없다. 상대에게 준 데미지의 1/2(버림, 최소 1)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(버림)가 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 잠들어 있지 않거나 대타를 내세우고 있으면 효과가 없다. 상대에게 준 데미지의 1/2(버림, 최소 1)만큼 HP를 회복한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 잠들어 있지 않으면 효과가 없다. 상대에게 준 데미지의 1/2(버림, 최소 1)만큼 HP를 회복한다. 이 기술로 상대의 대타가 부서지면 HP를 회복하지 못한다.", // NEEDS QC
 		},
 	},
 	drillpeck: {
 		name: "회전부리",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	drillrun: {
 		name: "드릴라이너",
 		// Official flavor text: "드릴처럼 몸을 회전시켜서 상대에게 몸통박치기한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	drumbeating: {
 		name: "드럼어택",
 		// Official flavor text: "드럼의 뿌리를 연주로 조종해서 공격하는 것으로 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	dualchop: {
 		name: "더블촙",
 		// Official flavor text: "몸의 단단한 부분으로 상대를 때려 공격한다. 2회 연속으로 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "한 턴에 2회 연속으로 공격한다.", // NEEDS QC
 	},
 	dualwingbeat: {
 		name: "더블윙",
 		// Official flavor text: "날개를 상대에게 부딪쳐서 공격한다. 2회 연속으로 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "한 턴에 2회 연속으로 공격한다.", // NEEDS QC
 	},
 	dynamaxcannon: {
 		name: "다이맥스포",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대가 다이맥스 상태라면 데미지가 2배.", // NEEDS QC
 		},
 	},
 	dynamicpunch: {
 		name: "폭발펀치",
 		// Official flavor text: "혼신의 힘으로 펀치를 날려서 공격한다. 상대를 반드시 혼란시킨다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	earthpower: {
 		name: "대지의힘",
 		// Official flavor text: "상대의 발밑에 대지의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	earthquake: {
 		name: "지진",
 		// Official flavor text: "지진의 충격으로 자신의 주위에 있는 포켓몬을 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 구멍파기를 쓰는 중이라면 데미지가 2배가 된다.", // NEEDS QC
+		shortDesc: "이웃을 공격. 구멍파기 중인 상대에게 2배.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 구멍파기를 쓰는 중이라면 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "이웃한 포켓몬 전체. 구멍파기에 위력 2배.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "추가 효과가 없다.", // NEEDS QC
+			shortDesc: "추가 효과가 없다.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "구멍파기 중인 상대에게 위력 2배.", // NEEDS QC
 		},
 	},
 	echoedvoice: {
 		name: "에코보이스",
 		// Official flavor text: "울리는 목소리로 상대를 공격한다. 매 턴 누군가 이 기술을 계속해서 쓰면 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "어느 포켓몬이든 이 기술을 연속된 턴에 쓰면 지난 턴 수만큼 위력이 배가 된다(최대 5배).", // NEEDS QC
+		shortDesc: "연속된 턴에 쓰이면 위력이 점점 올라간다.", // NEEDS QC
 	},
 	eerieimpulse: {
 		name: "괴전파",
 		// Official flavor text: "몸에서 발생시킨 괴전파를 상대에게 쏘아 특수공격을 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	eeriespell: {
 		name: "섬뜩한주문",
 		// Official flavor text: "강력한 사이코 파워로 공격한다. 상대가 마지막으로 사용한 기술의 PP를 3만큼 줄인다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면 상대가 마지막으로 쓴 기술의 PP를 3 줄인다.", // NEEDS QC
+		shortDesc: "상대가 마지막으로 쓴 기술의 PP를 3 줄인다.", // NEEDS QC
 
 		activate: "#spite",
 	},
 	eggbomb: {
 		name: "알폭탄",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	electricterrain: {
 		name: "일렉트릭필드",
 		// Official flavor text: "5턴 동안 일렉트릭필드로 만든다. 땅에 있는 포켓몬은 잠들지 않는다. 전기타입의 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 일렉트릭필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬의 전기타입 공격 기술의 위력이 1.3배가 되고, 땅에 있는 포켓몬은 잠들지 않는다. 이미 잠들어 있는 포켓몬이 깨어나지는 않는다. 땅에 있는 포켓몬은 하품의 효과를 받지 않으며 그 효과로 잠들지도 않는다. 보호색을 쓰면 전기타입이 되고, 자연의힘은 10만볼트가 되며, 비밀의힘은 30%의 확률로 마비 상태로 만든다. 이미 일렉트릭필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
+		shortDesc: "5턴간 전기 기술 강화, 땅에 있으면 잠들지 않음.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 일렉트릭필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬의 전기타입 공격 기술의 위력이 1.5배가 되고, 땅에 있는 포켓몬은 잠들지 않는다. 이미 잠들어 있는 포켓몬이 깨어나지는 않는다. 땅에 있는 포켓몬은 하품의 효과를 받지 않으며 그 효과로 잠들지도 않는다. 보호색을 쓰면 전기타입이 되고, 자연의힘은 10만볼트가 되며, 비밀의힘은 30%의 확률로 마비 상태로 만든다. 이미 일렉트릭필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
 		},
 	},
 	electrify: {
 		name: "송전",
 		// Official flavor text: "상대가 기술을 쓰기 전에 송전하면 그 턴에 상대가 사용하는 기술은 전기타입이 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 상대의 기술이 전기타입이 된다. 기술의 타입을 바꾸는 효과 중 가장 마지막에 적용된다. 상대가 이미 행동했다면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴 동안 상대의 기술이 전기타입이 된다.", // NEEDS QC
 
 		start: "  {POKEMON}의 기술이 송전으로 전기타입이 되었다!",
 	},
 	electroball: {
 		name: "일렉트릭볼",
 		// Official flavor text: "전기 덩어리를 상대에게 부딪쳐서 공격한다. 상대보다 스피드가 빠를수록 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 현재 스피드÷상대의 현재 스피드)(버림)에 따라 정해진다. 4 이상이면 150, 3이면 120, 2면 80, 1이면 60, 1 미만이면 40이다. 상대의 현재 스피드가 0이라면 위력은 40이다.", // NEEDS QC
+		shortDesc: "상대보다 빠를수록 위력이 올라간다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 현재 스피드÷상대의 현재 스피드)(버림)에 따라 정해진다. 4 이상이면 150, 3이면 120, 2면 80, 1이면 60, 1 미만이면 40이다. 상대의 현재 스피드가 0이라면 1로 취급한다.", // NEEDS QC
 		},
 	},
 	electrodrift: {
 		name: "라이트닝드라이브",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 효과가 뛰어나면 데미지가 1.3333배가 된다.", // NEEDS QC
+		shortDesc: "효과가 뛰어나면 데미지가 1.3333배가 된다.", // NEEDS QC
 	},
 	electroshot: {
 		name: "일렉트로빔",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 힘을 모아 2턴째에 공격한다. 1턴째에 자신의 특수공격을 1단계 올린다. 파워풀허브를 지니고 있거나 날씨가 폭우 또는 비가 되어 있으면 1턴 만에 공격한다. 만능우산을 지니고 있으면 폭우나 비가 되어 있어도 힘을 모으는 턴이 필요하다.", // NEEDS QC
+		shortDesc: "특공 +1, 2턴째에 공격. 비가 오면 즉시 공격.", // NEEDS QC
 
 		prepare: "{POKEMON:topic} 전기를 흡수했다!",
 	},
 	electroweb: {
 		name: "일렉트릭네트",
 		// Official flavor text: "전기 네트로 상대를 붙잡아서 공격한다. 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	embargo: {
 		name: "금제",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 상대가 지닌 도구가 효과를 잃는다. 폼체인지를 일으키는 도구의 그 효과는 유지되지만 그 외의 효과는 무효가 된다. 효과가 지속되는 동안 상대는 내던지기와 자연의은혜를 쓸 수 없다. 내던지기로 상대에게 던져진 도구는 발동한다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 도구를 쓸 수 없다.", // NEEDS QC
+		shortDesc: "5턴 동안 상대의 도구가 효과를 잃는다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 도구를 쓸 수 없게 되었다!",
 		end: "  {POKEMON:topic} 도구를 쓸 수 있게 되었다!",
@@ -1955,33 +1955,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ember: {
 		name: "불꽃세례",
 		// Official flavor text: "작은 불꽃을 상대에게 발사하여 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	encore: {
 		name: "앙코르",
 		// Official flavor text: "상대에게 앵콜시킨 기술을 3번 연속으로 쓰게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 3턴 동안 상대는 마지막으로 쓴 기술을 반복해서 쓴다. 그 기술의 PP가 다 떨어지면 효과가 사라진다. 상대가 이미 이 효과를 받고 있거나, 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 그 기술이 조수, 번액셀, 파이트액셀, 흉내쟁이, 다이맥스포, 앙코르, 매지컬액셀, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 포이즌액셀, 스케치, 잠꼬대, 발버둥, 변신, 다크액셀이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대는 3턴 동안 마지막 기술만 반복한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "다음 3턴 동안 상대는 마지막으로 쓴 기술을 반복해서 쓴다. 그 기술의 PP가 다 떨어지면 효과가 사라진다. 상대가 이미 이 효과를 받고 있거나, 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 상대가 다이맥스 상태거나, 그 기술이 조수, 흉내쟁이, 다이맥스포, 앙코르, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 스케치, 잠꼬대, 발버둥, 변신이라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "다음 3턴 동안 상대는 마지막으로 쓴 기술을 반복해서 쓴다. 그 기술의 PP가 다 떨어지면 효과가 사라진다. 상대가 이미 이 효과를 받고 있거나, 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 그 기술이 조수, 흉내쟁이, 앙코르, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 스케치, 잠꼬대, 발버둥, 변신 또는 Z기술이라면 실패한다. 효과가 지속되는 동안에도 Z파워 기술은 선택해서 쓸 수 있다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3턴 동안 상대는 마지막으로 쓴 기술을 반복해서 쓴다. 그 기술의 PP가 다 떨어지면 효과가 사라진다. 상대가 이미 이 효과를 받고 있거나, 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 그 기술이 앙코르, 흉내내기, 따라하기, 스케치, 발버둥, 변신이라면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "4~8턴 동안 상대는 마지막으로 쓴 기술을 반복해서 쓴다. 그 기술의 PP가 다 떨어지면 효과가 사라진다. 상대가 이미 이 효과를 받고 있거나, 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 그 기술이 앙코르, 흉내내기, 따라하기, 스케치, 발버둥, 변신이라면 실패한다.", // NEEDS QC
+			shortDesc: "상대는 4~8턴 동안 마지막 기술만 쓴다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3~6턴 동안 상대는 마지막으로 쓴 기술을 반복해서 쓴다. 그 기술의 PP가 다 떨어지면 효과가 사라진다. 상대가 이미 이 효과를 받고 있거나, 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 그 기술이 앙코르, 흉내내기, 따라하기, 스케치, 발버둥, 변신이라면 실패한다.", // NEEDS QC
+			shortDesc: "상대는 3~6턴 동안 마지막 기술만 쓴다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3~6턴 동안 상대는 마지막으로 쓴 기술을 반복해서 쓴다. 그 기술의 PP가 다 떨어지면 효과가 사라진다. 상대가 이미 이 효과를 받고 있거나, 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 그 기술이 앙코르, 손가락흔들기, 흉내내기, 따라하기, 스케치, 잠꼬대, 발버둥, 변신이라면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 앙코르를 받았다!",
@@ -1990,34 +1990,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	endeavor: {
 		name: "죽기살기",
 		// Official flavor text: "상대의 HP가 자신의 HP와 같아지도록 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 (상대의 남은 HP-자신의 남은 HP)만큼의 데미지를 준다. 상대의 남은 HP가 자신의 남은 HP 이하라면 효과가 없다.", // NEEDS QC
+		shortDesc: "상대의 HP를 자신의 HP와 같게 만든다.", // NEEDS QC
 	},
 	endure: {
 		name: "버티기",
 		// Official flavor text: "공격을 받아도 HP를 반드시 1만큼은 남긴다. 연속으로 쓰면 실패하기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴 동안 공격받아도 HP가 반드시 1 남는다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어, 패스트가드, 와이드가드가 아니면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 되며, 최대 8이다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 X/65536의 확률로 성공한다. X는 65535에서 시작해 이 기술이 성공할 때마다 절반(버림)이 된다. 4번 연속으로 성공하면 X는 118이 되고, 이후 성공할 때마다 0~65535 사이의 무작위에 가까운 값이 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 65535로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 상대의 공격을 받아도 HP가 반드시 1 남는다. 이 기술은 X/255의 확률로 성공한다. X는 255에서 시작해 이 기술이 성공할 때마다 절반(버림)이 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 255로 돌아간다. 자신이 대타를 내세우고 있거나 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 버티기 태세에 들어갔다!",
@@ -2026,122 +2026,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	energyball: {
 		name: "에너지볼",
 		// Official flavor text: "자연으로부터 모은 생명의 힘을 발사한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	entrainment: {
 		name: "동료만들기",
 		// Official flavor text: "이상한 리듬으로 춤춘다. 움직임을 흉내 내게 해서 자신과 상대의 특성을 똑같게 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특성이 자신의 특성과 같아진다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 테라체인지, 게으름, 달마모드, 마이티체인지거나 자신과 같다면, 또는 자신의 특성이 혼연일체, 유대변화, 절대안깸, 사령탑, 탈, 초상투영, 플라워기프트, 기분파, 꼬르륵스위치, 아이스페이스, 일루전, 괴짜, 멀티타입, 화학변화가스, 독조종, 스웜체인지, 과학의힘, 고대활성, 쿼크차지, 리시버, AR시스템, 어군, 리밋실드, 배틀스위치, 테라셸, 테라체인지, 제로포밍, 트레이스, 불가사의부적, 달마모드, 마이티체인지라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 특성이 자신의 특성과 같아진다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 자신의 특성과 같아진다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 게으름, 달마모드이거나 자신과 같다면, 또는 자신의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 플라워기프트, 기분파, 그대로꿀꺽미사일, 꼬르륵스위치, 아이스페이스, 일루전, 괴짜, 멀티타입, 화학변화가스, 스웜체인지, 과학의힘, 리시버, AR시스템, 어군, 리밋실드, 배틀스위치, 트레이스, 달마모드가라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 자신의 특성과 같아진다. 상대의 특성이 유대변화, 절대안깸, 탈, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 게으름, 달마모드이거나 자신과 같다면, 또는 자신의 특성이 유대변화, 절대안깸, 탈, 플라워기프트, 기분파, 일루전, 괴짜, 멀티타입, 스웜체인지, 과학의힘, 리시버, AR시스템, 어군, 리밋실드, 배틀스위치, 트레이스, 달마모드가라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 자신의 특성과 같아진다. 상대의 특성이 멀티타입, 배틀스위치, 게으름이거나 자신과 같다면, 또는 자신의 특성이 플라워기프트, 기분파, 일루전, 괴짜, 멀티타입, 배틀스위치, 트레이스, 달마모드가라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 자신의 특성과 같아진다. 상대의 특성이 멀티타입, 게으름이거나 자신과 같다면, 또는 자신의 특성이 플라워기프트, 기분파, 일루전, 괴짜, 멀티타입, 트레이스, 달마모드가라면 실패한다.", // NEEDS QC
 		},
 	},
 	eruption: {
 		name: "분화",
 		// Official flavor text: "분노를 폭발시켜 상대를 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 남은 HP×150÷자신의 최대 HP)(버림, 최소 1)이다.", // NEEDS QC
+		shortDesc: "자신의 HP가 적을수록 약해진다. 상대를 공격.", // NEEDS QC
 	},
 	esperwing: {
 		name: "오라윙",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 스피드를 1단계 올린다. 급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "100% 자신의 스피드 +1. 급소율이 높다.", // NEEDS QC
 	},
 	eternabeam: {
 		name: "무한다이빔",
 		// Official flavor text: "본래의 모습이 된 무한다이노 최대의 공격. 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	expandingforce: {
 		name: "와이드포스",
 		// Official flavor text: "사이코 파워로 상대를 공격한다. 사이코필드일 때는 위력이 오르며 모든 상대에게 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "사이코필드가 펼쳐져 있고 자신이 땅에 있다면 모든 상대를 공격하며 위력이 1.5배가 된다.", // NEEDS QC
+		shortDesc: "사이코필드에서 1.5배가 되고 상대 전체 공격.", // NEEDS QC
 	},
 	explosion: {
 		name: "대폭발",
 		// Official flavor text: "큰 폭발로 자신의 주위에 있는 포켓몬을 공격한다. 쓰고 나서는 기절한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "기술을 쓴 뒤 자신이 기절한다. 대상이 없어 실패해도 기절한다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있으면 쓸 수 없다.", // NEEDS QC
+		shortDesc: "이웃한 포켓몬을 공격하고 자신은 기절한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 대상이 없으면 기절하지 않는다. 데미지 계산 시 상대의 방어를 절반으로 계산한다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있으면 쓸 수 없다.", // NEEDS QC
+			shortDesc: "계산 시 상대 방어 절반. 자신은 기절.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 데미지 계산 시 상대의 방어를 절반으로 계산한다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있으면 쓸 수 없다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 데미지 계산 시 상대의 방어를 절반으로 계산한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 이 기술로 상대의 대타를 부쉈다면 기절하지 않는다. 데미지 계산 시 상대의 방어를 절반으로 계산한다.", // NEEDS QC
 		},
 	},
 	extrasensory: {
 		name: "신통력",
 		// Official flavor text: "보이지 않는 이상한 힘을 보내어 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 된다.", // NEEDS QC
 		},
 	},
 	extremeevoboost: {
 		name: "나인이볼부스트",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격, 방어, 특수공격, 특수방어, 스피드를 2단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 모든 능력을 2단계씩 올린다.", // NEEDS QC
 	},
 	extremespeed: {
 		name: "신속",
 		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진하여 공격한다. 반드시 선제공격을 할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "거의 항상 먼저 행동한다(우선도 +2).", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 		},
 	},
 	facade: {
 		name: "객기",
 		// Official flavor text: "자신이 독, 마비, 화상 상태일 때 날리면 기술의 위력이 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 화상, 마비 또는 독 상태라면 위력이 2배가 된다. 화상에 의한 물리 데미지 반감 효과도 무시한다.", // NEEDS QC
+		shortDesc: "화상·독·마비 상태라면 위력이 2배가 된다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 화상, 마비 또는 독 상태라면 위력이 2배가 된다.", // NEEDS QC
 		},
 	},
 	fairylock: {
 		name: "페어리록",
 		// Official flavor text: "록을 걸어 다음 턴의 모든 포켓몬을 도망가지 못하게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 턴에 배틀에 나와 있는 모든 포켓몬이 교체할 수 없게 된다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "다음 턴에 모든 포켓몬이 교체할 수 없다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "다음 턴에 배틀에 나와 있는 모든 포켓몬이 교체할 수 없게 된다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 
 		activate: "  다음 턴은 도망갈 수 없다!",
 	},
 	fairywind: {
 		name: "요정의바람",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	fakeout: {
 		name: "속이기",
 		// Official flavor text: "선제공격으로 상대를 풀죽게 한다. 배틀에 나가서 바로 쓰지 않으면 성공할 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 풀죽게 한다. 배틀에 나온 첫 턴이 아니면 실패한다.", // NEEDS QC
+		shortDesc: "선제 공격. 첫 턴 전용. 100% 풀죽게 한다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2149,116 +2149,116 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	faketears: {
 		name: "거짓울음",
 		// Official flavor text: "우는 척을 하며 눈물을 흘린다. 난처하게 만들어 상대의 특수방어를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	falsesurrender: {
 		name: "사죄의찌르기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	falseswipe: {
 		name: "칼등치기",
 		// Official flavor text: "상대의 HP가 반드시 1만 남도록 조절하여 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 HP를 반드시 1 이상 남긴다.", // NEEDS QC
+		shortDesc: "상대의 HP를 반드시 1 이상 남긴다.", // NEEDS QC
 	},
 	featherdance: {
 		name: "깃털댄스",
 		// Official flavor text: "깃털을 흩뿌려 상대의 몸에 휘감는다. 상대의 공격을 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	feint: {
 		name: "페인트",
 		// Official flavor text: "방어나 판별 등을 하고 있는 상대에게 공격할 수 있다. 방어 효과를 해제시킨다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 이 턴 동안 상대의 토치카, 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다.", // NEEDS QC
+		shortDesc: "방어와 가드 기술의 효과를 뚫는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 이 턴 동안 상대의 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 이 턴 동안 상대의 판별이나 방어의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대가 적이고 그 진영이 패스트가드가나 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 판별이나 방어를 쓰고 있지 않으면 실패한다. 이 기술이 성공하면 이 턴 동안 그 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다.", // NEEDS QC
+			shortDesc: "방어를 뚫는다. 상대가 방어 중이 아니면 실패.", // NEEDS QC
 		},
 
 		activate: "  {TARGET:topic} 페인트에 걸렸다!",
 	},
 	feintattack: {
 		name: "속여때리기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	fellstinger: {
 		name: "마지막일침",
 		// Official flavor text: "이 기술을 사용하여 상대를 쓰러뜨리면 공격이 매우 크게 오른다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술로 상대를 기절시키면 자신의 공격이 3단계 올라간다.", // NEEDS QC
+		shortDesc: "이 기술로 상대를 쓰러뜨리면 공격 +3.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술로 상대를 기절시키면 자신의 공격이 2단계 올라간다.", // NEEDS QC
+			shortDesc: "이 기술로 상대를 쓰러뜨리면 공격 +2.", // NEEDS QC
 		},
 	},
 	ficklebeam: {
 		name: "변덕레이저",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "30%의 확률로 위력이 2배가 된다.", // NEEDS QC
 
 		activate: "  {POKEMON:topic} 전력을 다하기 시작했다!",
 	},
 	fierydance: {
 		name: "불꽃춤",
 		// Official flavor text: "불꽃을 두른 날개를 쳐서 공격한다. 자신의 특수공격이 오를 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
 	},
 	fierywrath: {
 		name: "타오르는분노",
 		// Official flavor text: "분노를 불꽃 같은 오라로 바꿔서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	filletaway: {
 		name: "제살깎기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "최대 HP의 1/2(버림)을 잃는 대신 자신의 공격, 특수공격, 스피드를 2단계씩 올린다. HP가 부족하거나 어느 능력도 변하지 않는다면 실패한다.", // NEEDS QC
+		shortDesc: "최대 HP의 절반을 잃고 공격·특공·스피드 +2.", // NEEDS QC
 	},
 	finalgambit: {
 		name: "목숨걸기",
 		// Official flavor text: "목숨을 걸고 상대를 공격한다. 자신은 기절하게 되지만 상대에게 HP만큼의 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 자신의 남은 HP만큼의 데미지를 준다. 이 기술이 성공하면 자신은 기절한다.", // NEEDS QC
+		shortDesc: "자신의 HP만큼 데미지를 주고 기절한다.", // NEEDS QC
 	},
 	fireblast: {
 		name: "불대문자",
 		// Official flavor text: "큰 대자의 불꽃으로 상대를 불태운다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+			shortDesc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 		},
 	},
 	firefang: {
 		name: "불꽃엄니",
 		// Official flavor text: "불꽃을 두른 이빨로 문다. 상대를 풀죽게 하거나 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만들고, 10%의 확률로 풀죽게 한다.", // NEEDS QC
+		shortDesc: "10%의 확률로 화상. 10%의 확률로 풀죽음.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 화상 상태로 만들고, 10%의 확률로 풀죽게 한다. 타입과 관계없이 특성이 불가사의부적인 포켓몬에게 명중한다.", // NEEDS QC
 		},
 	},
 	firelash: {
 		name: "불꽃채찍",
 		// Official flavor text: "불타는 채찍으로 상대를 친다. 공격을 받은 상대는 방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	firepledge: {
 		name: "불꽃의맹세",
 		// Official flavor text: "불꽃기둥으로 공격한다. 풀과 조합하면 위력이 올라가고 주위가 불바다가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "아군이 이 턴에 풀의맹세나 물의맹세를 선택했고 아직 행동하지 않았다면, 그 아군은 자신 바로 다음에 행동하고 자신의 기술은 아무 일도 일으키지 않는다. 풀의맹세와 조합하면 아군이 위력 150의 불꽃의맹세를 쓰고, 4턴 동안 상대 진영이 불바다가 되어 매 턴 종료 시(마지막 턴 포함) 불꽃타입이 아닌 포켓몬이 최대 HP의 1/8(버림)의 데미지를 받는다. 물의맹세와 조합하면 아군이 위력 150의 물의맹세를 쓰고, 4턴 동안 자신 진영에 무지개가 걸려 추가 효과의 확률이 2배가 된다. 이 효과는 특성 하늘의은총과 중복되지만 풀죽게 하는 효과의 확률은 1번만 2배가 된다. 조합해서 쓰면 자신의 타입과 관계없이 타입 일치 보정을 받는다. 불꽃주얼은 소모하지 않는다.", // NEEDS QC
+		shortDesc: "풀·물의맹세와 조합하면 추가 효과.", // NEEDS QC
 
 		activate: "#waterpledge",
 		start: "  {TEAM} 주변이 불바다에 둘러싸였다!",
@@ -2268,33 +2268,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firepunch: {
 		name: "불꽃펀치",
 		// Official flavor text: "불꽃을 담은 펀치로 상대를 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	firespin: {
 		name: "회오리불꽃",
 		// Official flavor text: "세차게 소용돌이치는 불꽃 속에 4-5턴 동안 상대를 가두어 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(자신이 조임밴드를 지니고 있으면 1/8)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴(끈기갈고리손톱을 지니고 있으면 항상 5턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5턴동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 배턴터치를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴 동안 이 기술을 쓴다. 3/8의 확률로 2~3턴, 1/8의 확률로 4~5턴 지속된다. 첫 턴에 계산한 데미지를 매 턴 그대로 적용한다. 효과가 지속되는 동안 자신은 기술을 선택할 수 없고 상대는 기술을 실행할 수 없지만, 양쪽 모두 교체할 수는 있다. 자신이 교체하면 상대는 그 턴에도 기술을 실행할 수 없다. 상대가 교체하면 자신은 자동으로 이 기술을 다시 쓰며, 그때 PP가 0이었다면 63이 된다. 자신이나 상대가 교체하거나 자신이 움직일 수 없게 되면 효과가 사라진다. 이 기술은 타입 상성으로 무효인 상대의 행동도 막을 수 있지만, 데미지는 주지 못한다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대는 움직일 수 없다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 불꽃의 소용돌이에 갇혔다!",
@@ -2303,8 +2303,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firstimpression: {
 		name: "만나자마자",
 		// Official flavor text: "위력이 높은 기술이지만 배틀에 나가서 바로 쓰지 않으면 성공할 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나온 첫 턴이 아니면 실패한다.", // NEEDS QC
+		shortDesc: "거의 항상 먼저 행동한다. 첫 턴 전용.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2312,44 +2312,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fishiousrend: {
 		name: "아가미물기",
 		// Official flavor text: "단단한 아가미로 문다. 상대보다 먼저 공격하면 기술의 위력은 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대보다 먼저 행동하면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "상대보다 먼저 행동하면 위력이 2배가 된다.", // NEEDS QC
 	},
 	fissure: {
 		name: "땅가르기",
 		// Official flavor text: "땅이 갈라진 곳에 상대를 떨어뜨려 공격한다. 맞으면 일격에 기절한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 최대 HP만큼의 데미지를 준다. 명중률과 회피율 보정을 무시한다. 이 기술의 명중률은 (자신의 레벨-상대의 레벨+30)%이며, 상대의 레벨이 더 높으면 실패한다. 특성이 옹골참인 포켓몬에게는 효과가 없다.", // NEEDS QC
+		shortDesc: "일격필살. 상대의 레벨이 더 높으면 실패한다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 65535의 데미지를 준다. 이 기술의 256분율 명중률은 (2×(자신의 레벨-상대의 레벨)+76)과 255 중 작은 쪽이며, 그 후 명중률과 회피율 보정이 적용된다. 상대의 레벨이 더 높으면 실패한다. 구멍파기를 쓰는 상대에게도 명중할 수 있다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대에게 65535의 데미지를 준다. 상대의 스피드가 자신보다 빠르면 실패한다.", // NEEDS QC
+			shortDesc: "65535의 데미지. 상대가 빠르면 실패.", // NEEDS QC
 		},
 	},
 	flail: {
 		name: "바둥바둥",
 		// Official flavor text: "바둥바둥 난동 부려서 공격한다. 자신의 HP가 적을수록 기술의 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 남은 HP×48÷자신의 최대 HP)(버림)를 X라 할 때, X가 33~48이면 20, 17~32면 40, 10~16이면 80, 5~9면 100, 2~4면 150, 0 또는 1이면 200이다.", // NEEDS QC
+		shortDesc: "자신의 남은 HP가 적을수록 강하다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 남은 HP×64÷자신의 최대 HP)(버림)를 X라 할 때, X가 43~48이면 20, 22~42면 40, 13~21이면 80, 6~12면 100, 2~5면 150, 0 또는 1이면 200이다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 남은 HP×48÷자신의 최대 HP)(버림)를 X라 할 때, X가 33~48이면 20, 17~32면 40, 10~16이면 80, 5~9면 100, 2~4면 150, 0 또는 1이면 200이다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 남은 HP×48÷자신의 최대 HP)(버림)를 X라 할 때, X가 33~48이면 20, 17~32면 40, 10~16이면 80, 5~9면 100, 2~4면 150, 0 또는 1이면 200이다. 이 기술은 데미지 편차가 없으며 급소에 맞지 않는다.", // NEEDS QC
 		},
 	},
 	flameburst: {
 		name: "불꽃튀기기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 상대의 아군은 특성이 매직가드가 아닌 한 최대 HP의 1/16(버림)을 잃는다.", // NEEDS QC
+		shortDesc: "상대의 이웃에게도 데미지를 준다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 상대의 이웃한 아군은 특성이 매직가드가 아닌 한 최대 HP의 1/16(버림)을 잃는다.", // NEEDS QC
 		},
 
 		damage: "  {POKEMON}에게도 불티가 튀었다!",
@@ -2357,62 +2357,62 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flamecharge: {
 		name: "니트로차지",
 		// Official flavor text: "불꽃을 둘러 상대를 공격한다. 힘을 모아서 자신의 스피드를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 스피드를 1단계 올린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 자신의 스피드를 1단계 올린다.", // NEEDS QC
 	},
 	flamethrower: {
 		name: "화염방사",
 		// Official flavor text: "세찬 불꽃을 상대에게 발사하여 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	flamewheel: {
 		name: "화염바퀴",
 		// Official flavor text: "불꽃을 둘러 상대에게 돌진하여 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 화상. 자신의 얼음을 녹인다.", // NEEDS QC
 	},
 	flareblitz: {
 		name: "플레어드라이브",
 		// Official flavor text: "불꽃을 두르고 돌진한다. 자신도 상당한 데미지를 입는다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다. 상대가 HP를 잃었다면 잃은 HP의 33%(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "반동 33%. 10%의 확률로 화상. 얼음을 녹인다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 화상 상태로 만든다. 상대가 HP를 잃었다면 잃은 HP의 1/3(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+			shortDesc: "반동 1/3. 10% 화상. 자신의 얼음이 녹는다.", // NEEDS QC
 		},
 	},
 	flash: {
 		name: "플래시",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	flashcannon: {
 		name: "러스터캐논",
 		// Official flavor text: "몸의 빛을 한곳에 모아서 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	flatter: {
 		name: "부추기기",
 		// Official flavor text: "상대를 부추겨서 혼란시킨다. 동시에 상대의 특수공격도 올라가 버린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수공격을 1단계 올리지만 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대의 특공을 1단계 올리지만 혼란시킨다.", // NEEDS QC
 	},
 	fleurcannon: {
 		name: "플뢰르캐논",
 		// Official flavor text: "강력한 빔을 발산한 후 자신의 특수공격이 크게 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	fling: {
 		name: "내던지기",
 		// Official flavor text: "지니게 한 도구를 재빠르게 내던져서 공격한다. 도구에 따라 위력과 효과가 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 자신이 지닌 도구에 따라 정해진다. 지닌 도구를 잃으며, 도구가 발동할 수 있는 것이라면 상대에게 발동한다. 대상이 없거나 상대가 방어로 피해도 도구는 잃는다. 던진 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 있다. 도구를 지니고 있지 않거나, 던질 수 없는 도구이거나, 자신이 금제나 매직룸의 효과를 받고 있거나, 특성이 서투름이라면 실패한다.", // NEEDS QC
+		shortDesc: "지닌 도구를 던진다. 위력은 도구에 따라 다르다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 자신이 지닌 도구에 따라 정해진다. 지닌 도구를 잃으며, 도구가 발동할 수 있는 것이라면 상대에게 발동한다. 상대가 방어로 피해도 도구는 잃는다. 던진 도구는 리사이클로 되찾을 수 있다. 도구를 지니고 있지 않거나, 던질 수 없는 도구이거나, 자신이 금제의 효과를 받고 있다면 실패한다.", // NEEDS QC
 		},
 
 		removeItem: "  {POKEMON:topic} {ITEM:object} 내던졌다!",
@@ -2420,53 +2420,53 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flipturn: {
 		name: "퀵턴",
 		// Official flavor text: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없거나, 상대가 탈출버튼으로 또는 특성 위기회피나 도망태세로 교체해 나갔다면 교체하지 않는다.", // NEEDS QC
+		shortDesc: "공격한 뒤 자신은 교체해 돌아온다.", // NEEDS QC
 
 		switchOut: "#uturn",
 	},
 	floatyfall: {
 		name: "둥실둥실폴",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	floralhealing: {
 		name: "플라워힐",
 		// Official flavor text: "최대 HP의 절반만큼 상대의 HP를 회복한다. 그래스필드일 때 효과가 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 최대 HP의 1/2(0.5는 올림)을 회복시킨다. 그래스필드가 펼쳐져 있으면 대신 2/3(0.5는 버림)을 회복시킨다.", // NEEDS QC
+		shortDesc: "상대의 최대 HP의 1/2을 회복시킨다.", // NEEDS QC
 	},
 	flowershield: {
 		name: "플라워가드",
 		// Official flavor text: "이상한 힘을 사용하여 배틀에 나와 있는 모든 풀타입 포켓몬의 방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 모든 풀타입 포켓몬의 방어를 1단계 올린다. 풀타입 포켓몬이 나와 있지 않으면 실패한다.", // NEEDS QC
+		shortDesc: "모든 풀타입 포켓몬의 방어를 1단계 올린다.", // NEEDS QC
 	},
 	flowertrick: {
 		name: "트릭플라워",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 주술의 효과를 받고 있거나 특성이 전투무장이나 조가비갑옷이 아닌 한 반드시 급소에 맞는다. 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "반드시 급소에 맞으며 반드시 명중한다.", // NEEDS QC
 	},
 	fly: {
 		name: "공중날기",
 		// Official flavor text: "1턴째에 하늘을 날아 2턴째에 상대를 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 폭풍, 스카이어퍼, 떨어뜨리기, 사우전드애로, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 날아올라 2턴째에 공격한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 폭풍, 스카이어퍼, 떨어뜨리기, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 스카이어퍼, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 스카이어퍼, 번개, 회오리를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 바람일으키기, 번개, 회오리, 날려버리기를 제외한 모든 공격을 피하며, 바람일으키기와 회오리는 위력이 2배가 되어 명중한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에는 참기, 스피드스타, 변신을 제외한 모든 공격을 피한다. 2턴째에 마비로 움직이지 못하면, 교체하거나 이 기술 또는 구멍파기의 2턴째를 성공시킬 때까지 계속 공격을 피한다.", // NEEDS QC
 		},
 
 		prepare: "{POKEMON:topic} 하늘 높이 날아올랐다!",
@@ -2474,27 +2474,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flyingpress: {
 		name: "플라잉프레스",
 		// Official flavor text: "공중에서 상대에게 다이브한다. 이 기술은 격투타입임과 동시에 비행타입이기도 하다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "타입 상성에 비행타입을 조합해 판정한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "타입 상성에 비행타입을 조합해 판정한다.", // NEEDS QC
 	},
 	focusblast: {
 		name: "기합구슬",
 		// Official flavor text: "기합을 높여서 혼신의 힘을 방출한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	focusenergy: {
 		name: "기충전",
 		// Official flavor text: "깊게 숨을 들이마셔 기합을 넣는다. 자신의 공격이 급소에 맞기 쉬워진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 급소에 맞힐 확률을 2단계 올린다. 이미 효과를 받고 있다면 실패한다. 배턴터치로 이 효과를 다른 포켓몬에게 넘길 수 있다.", // NEEDS QC
+		shortDesc: "자신의 급소에 맞힐 확률을 2단계 올린다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 급소에 맞힐 확률을 1단계 올린다. 이미 효과를 받고 있다면 실패한다. 배턴터치로 이 효과를 다른 포켓몬에게 넘길 수 있다.", // NEEDS QC
+			shortDesc: "자신의 급소율을 1단계 올린다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀에 나와 있는 동안 자신의 급소에 맞힐 확률이 1/4이 된다. 이미 효과를 받고 있다면 실패한다. 어떤 포켓몬이든 흑안개를 쓰면 효과가 사라진다.", // NEEDS QC
+			shortDesc: "자신의 급소율이 1/4이 된다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 의욕이 넘치고 있다!",
@@ -2504,10 +2504,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	focuspunch: {
 		name: "힘껏펀치",
 		// Official flavor text: "정신력을 높여 펀치를 날린다. 기술을 쓰기 전에 공격을 받으면 실패한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술을 쓰기 전에 이 턴에 공격 기술로 데미지를 받으면 집중이 풀려 아무것도 하지 못한다.", // NEEDS QC
+		shortDesc: "행동 전에 데미지를 받으면 실패한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 쓰기 전에 이 턴에 공격 기술로 데미지를 받으면 집중이 풀려 아무것도 하지 못하지만, PP는 소모한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 집중력을 높이고 있다!",
@@ -2516,16 +2516,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	followme: {
 		name: "날따름",
 		// Official flavor text: "자신에게 주목시켜 상대로부터의 공격을 모두 자신에게 향하게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴이 끝날 때까지 상대 진영의 단일 대상 공격이 모두 자신에게 유도된다. 이 유도는 매직코트나 특성 매직미러로 되받아치거나 특성 피뢰침이나 마중물이 끌어당기기 전에 적용된다. 더블배틀이나 배틀로얄이 아니면 실패한다. 자신이 프리폴의 효과를 받는 동안에는 무시된다.", // NEEDS QC
+		shortDesc: "이 턴에 상대의 기술이 자신에게 유도된다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴이 끝날 때까지 상대 진영의 단일 대상 공격이 범위 안이라면 모두 자신에게 유도된다. 이 유도는 매직코트가나 특성 매직미러로 되받아치거나 특성 피뢰침이나 마중물이 끌어당기기 전에 적용된다. 더블배틀이나 트리플배틀이 아니면 실패한다. 자신이 프리폴의 효과를 받는 동안에는 무시된다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴이 끝날 때까지 상대 진영의 단일 대상 공격이 모두 자신에게 유도된다. 이 유도는 매직코트로 되받아치거나 특성 피뢰침이나 마중물이 끌어당기기 전에 적용된다. 자신이 배틀에서 벗어나도 효과는 유지된다. 더블배틀이 아니면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴이 끝날 때까지 상대 진영의 단일 대상 공격이 모두 자신에게 유도된다. 이 유도는 매직코트로 되받아치거나 특성 피뢰침이 끌어당기기 전에 적용된다. 자신이 배틀에서 벗어나도 효과는 유지된다. 더블배틀이 아니면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 주목의 대상이 되었다!",
@@ -2534,22 +2534,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forcepalm: {
 		name: "발경",
 		// Official flavor text: "상대의 몸에 충격파를 부딪쳐 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	foresight: {
 		name: "꿰뚫어보기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크가 0보다 높다면 이를 무시하고 명중 판정을 하며, 고스트타입이라도 노말타입과 격투타입 공격이 명중하게 된다. 상대가 이미 이 효과나 미라클아이, 냄새구별의 효과를 받고 있으면 실패한다.", // NEEDS QC
+		shortDesc: "노말·격투가 고스트에 명중. 회피율 무시.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크가 0보다 높다면 이를 무시하고 명중 판정을 하며, 고스트타입이라도 노말타입과 격투타입 공격이 명중하게 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크를 무시하고 명중 판정을 하며, 고스트타입이라도 노말타입과 격투타입 공격이 명중하게 된다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안, 상대의 회피율 랭크가 공격하는 쪽의 명중률 랭크보다 높다면 명중 판정에서 둘 다 무시하며, 고스트타입이라도 노말타입과 격투타입 공격이 명중하게 된다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대가 이미 효과를 받고 있으면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON}의 정체를 꿰뚫어 보았다!",
@@ -2557,20 +2557,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forestscurse: {
 		name: "숲의저주",
 		// Official flavor text: "상대에게 숲의 저주를 건다. 저주에 걸린 상대는 타입에 풀타입이 추가된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 풀타입을 추가해 2~3개의 타입을 지니게 한다. 상대가 이미 풀타입이라면 실패한다. 핼러윈이 상대에게 타입을 추가하면 이 기술로 추가한 타입을 대체하며, 그 반대도 마찬가지다.", // NEEDS QC
+		shortDesc: "상대에게 풀타입을 추가한다.", // NEEDS QC
 	},
 	foulplay: {
 		name: "속임수",
 		// Official flavor text: "상대의 힘을 이용한다. 싸우고 있는 상대의 공격이 높을수록 데미지가 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "랭크 변화를 포함해 상대의 공격을 사용해 데미지를 계산한다. 자신의 특성, 도구, 화상은 그대로 적용된다.", // NEEDS QC
+		shortDesc: "상대의 공격 수치로 데미지를 계산한다.", // NEEDS QC
 	},
 	freezedry: {
 		name: "프리즈드라이",
 		// Official flavor text: "상대를 급격히 차갑게 하여 얼음 상태로 만들 때가 있다. 물타입 포켓몬에게도 효과가 굉장해진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만든다. 이 기술의 타입과 관계없이 물타입에게 효과가 뛰어나다.", // NEEDS QC
+		shortDesc: "10% 얼음. 물타입에게 효과가 뛰어나다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2579,105 +2579,105 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	freezeshock: {
 		name: "프리즈볼트",
 		// Official flavor text: "전기를 두른 얼음덩어리로 2턴째에 상대를 내리친다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다. 1턴째에 힘을 모아 2턴째에 공격한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 모아 2턴째에 공격. 30% 마비.", // NEEDS QC
 
 		prepare: "  {POKEMON:topic} 차가운 빛에 둘러싸였다!",
 	},
 	freezingglare: {
 		name: "얼어붙는시선",
 		// Official flavor text: "두 눈에서 사이코 파워를 발사해서 공격한다. 얼음 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
 	},
 	freezyfrost: {
 		name: "꽁꽁프로스트",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 모든 포켓몬의 랭크 변화를 0으로 되돌린다.", // NEEDS QC
+		shortDesc: "모든 랭크 변화를 없앤다.", // NEEDS QC
 	},
 	frenzyplant: {
 		name: "하드플랜트",
 		// Official flavor text: "큰 나무로 상대를 힘껏 쳐서 공격한다. 다음 턴은 움직일 수 없게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	frostbreath: {
 		name: "얼음숨결",
 		// Official flavor text: "차가운 숨결을 상대에게 내뿜어 공격한다. 반드시 급소에 맞는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 주술의 효과를 받고 있거나 특성이 전투무장이나 조가비갑옷이 아닌 한 반드시 급소에 맞는다.", // NEEDS QC
+		shortDesc: "반드시 급소에 맞는다.", // NEEDS QC
 	},
 	frustration: {
 		name: "화풀이",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 ((255-자신의 친밀도)×2/5)(버림)와 1 중 큰 쪽이다.", // NEEDS QC
+		shortDesc: "친밀도가 낮을수록 강하다(최대 102).", // NEEDS QC
 	},
 	furyattack: {
 		name: "마구찌르기",
 		// Official flavor text: "뿔이나 부리로 상대를 찔러서 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 데미지는 첫 공격에서 한 번만 계산해 모든 공격에 적용한다. 공격 도중 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	furycutter: {
 		name: "연속자르기",
 		// Official flavor text: "낫이나 발톱 등으로 상대를 베어 공격한다. 연속으로 맞히면 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "명중할 때마다 위력이 2배가 된다(최대 160). 빗나가거나 다른 기술을 쓰면 위력이 돌아온다.", // NEEDS QC
+		shortDesc: "명중할 때마다 위력 2배(최대 160).", // NEEDS QC
 	},
 	furyswipes: {
 		name: "마구할퀴기",
 		// Official flavor text: "손톱이나 낫 등으로 상대를 할퀴어서 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 데미지는 첫 공격에서 한 번만 계산해 모든 공격에 적용한다. 공격 도중 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	fusionbolt: {
 		name: "크로스썬더",
 		// Official flavor text: "거대한 천둥을 내리친다. 거대한 불꽃의 영향을 받아 기술의 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 마지막으로 쓰인 기술이 크로스플레임이라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "이 턴에 크로스플레임 뒤에 쓰면 위력 2배.", // NEEDS QC
 	},
 	fusionflare: {
 		name: "크로스플레임",
 		// Official flavor text: "거대한 불꽃을 내리친다. 거대한 천둥의 영향을 받아 기술의 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 마지막으로 쓰인 기술이 크로스썬더라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "이 턴에 크로스썬더 뒤에 쓰면 위력 2배.", // NEEDS QC
 	},
 	futuresight: {
 		name: "미래예지",
 		// Official flavor text: "기술을 사용한 2턴 뒤에 상대에게 염동력의 덩어리를 보내어 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "기술을 쓰고 2턴 뒤에 데미지를 준다. 그 턴의 종료 시, 기술을 썼을 때 상대가 있던 자리의 포켓몬에게 그 시점에 계산한 데미지를 준다. 자신이 그때 배틀에서 벗어나 있다면 도구나 특성의 보정 없이 원래의 특수공격, 타입, 레벨로 계산한다. 그 자리에 이미 이 기술이나 파멸의소원이 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "기술을 쓰고 2턴 뒤에 공격이 명중한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓰고 2턴 뒤에 급소에 맞지 않는 무타입 데미지를 준다. 데미지는 사용 시 상대를 기준으로 계산하며, 마지막 턴의 종료 시 원래 상대가 있던 자리의 포켓몬에게 준다. 그 자리에 이미 이 기술이나 파멸의소원이 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓰고 2턴 뒤에 급소에 맞지 않는 무타입 데미지를 준다. 데미지는 사용 시 상대를 기준으로 계산하며, 마지막 턴의 종료 시 원래 상대가 있던 자리의 포켓몬에게 준다. 그 자리에 이미 이 기술이 발동 중이라면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 미래의 공격을 예지했다!",
@@ -2686,16 +2686,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gastroacid: {
 		name: "위액",
 		// Official flavor text: "상대의 몸에 위액을 내뱉는다. 달라붙은 위액은 상대의 특성 효과를 지운다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 배틀에 나와 있는 동안 특성을 무효로 만든다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 테라체인지, 달마모드, 마이티체인지라면 실패하며, 배턴터치로 이 효과를 이어받은 경우에는 효과가 바로 사라진다.", // NEEDS QC
+		shortDesc: "상대의 특성을 무효로 만든다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안 특성을 무효로 만든다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 달마모드라면 실패하며, 배턴터치로 이 효과를 이어받은 경우에는 효과가 바로 사라진다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안 특성을 무효로 만든다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대의 특성이 유대변화, 절대안깸, 탈, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 달마모드라면 실패하며, 배턴터치로 이 효과를 이어받은 경우에는 효과가 바로 사라진다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안 특성을 무효로 만든다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬도 이 효과를 이어받는다. 상대의 특성이 멀티타입, 배틀스위치라면 실패하며, 배턴터치로 이 효과를 이어받은 경우에는 효과가 바로 사라진다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON}의 특성이 효과를 발휘하지 못하게 되었다!",
@@ -2703,211 +2703,211 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	geargrind: {
 		name: "기어소서",
 		// Official flavor text: "강철의 기어를 상대에게 던져서 공격한다. 2회 연속으로 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "한 턴에 2회 연속으로 공격한다.", // NEEDS QC
 	},
 	gearup: {
 		name: "어시스트기어",
 		// Official flavor text: "기어를 넣는 것으로 특성 플러스와 마이너스의 공격과 특수공격이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신 진영의 특성이 플러스나 마이너스인 포켓몬의 공격과 특수공격을 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "플러스·마이너스 아군의 공격·특공 +1.", // NEEDS QC
 	},
 	genesissupernova: {
 		name: "오리진즈슈퍼노바",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 사이코필드가 펼쳐진다.", // NEEDS QC
+		shortDesc: "사이코필드를 펼친다.", // NEEDS QC
 	},
 	geomancy: {
 		name: "지오컨트롤",
 		// Official flavor text: "1턴째에 에너지를 흡수하여 2턴째에 특수공격, 특수방어, 스피드를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격, 특수방어, 스피드를 2단계씩 올린다. 1턴째에 힘을 모아 2턴째에 발동한다. 파워풀허브를 지니고 있으면 1턴 만에 발동한다.", // NEEDS QC
+		shortDesc: "1턴 모은 뒤 특공·특방·스피드가 2단계 상승.", // NEEDS QC
 
 		prepare: "{POKEMON:topic} 파워를 모으고 있다!",
 	},
 	gigadrain: {
 		name: "기가드레인",
 		// Official flavor text: "양분을 흡수하여 공격한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(버림)가 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다.", // NEEDS QC
 		},
 	},
 	gigaimpact: {
 		name: "기가임팩트",
 		// Official flavor text: "가진 힘을 모두 사용해서 상대에게 돌격한다. 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	gigatonhammer: {
 		name: "거대해머",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "2턴 연속으로 선택할 수 없다.", // NEEDS QC
 	},
 	gigavolthavoc: {
 		name: "스파킹기가볼트",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	glaciallance: {
 		name: "블리자드랜스",
 		// Official flavor text: "눈보라를 두른 얼음의 창을 상대에게 던져서 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 상대를 공격한다.", // NEEDS QC
 	},
 	glaciate: {
 		name: "얼어붙은세계",
 		// Official flavor text: "차가운 냉기를 상대에게 내뿜어 공격한다. 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	glaiverush: {
 		name: "대검돌격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 자신의 다음 행동까지 자신을 노리는 기술의 데미지가 2배가 되고 명중 판정을 하지 않게 된다.", // NEEDS QC
+		shortDesc: "다음 행동까지 받는 공격이 2배로 반드시 명중.", // NEEDS QC
 	},
 	glare: {
 		name: "뱀눈초리",
 		// Official flavor text: "배의 무늬로 겁을 주어 상대를 마비 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대를 마비 상태로 만든다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 마비 상태로 만든다. 타입 상성에 의한 무효는 무시하지 못한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 마비 상태로 만든다.", // NEEDS QC
 		},
 	},
 	glitzyglow: {
 		name: "콸콸오라",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "사용하면 5턴 동안 빛의장막의 효과가 발동한다.", // NEEDS QC
+		shortDesc: "빛의장막의 효과가 발동한다.", // NEEDS QC
 	},
 	gmaxbefuddle: {
 		name: "거다이고혹",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 각각 잠듦, 독 또는 마비 상태 중 하나가 된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 잠듦·독·마비.", // NEEDS QC
 	},
 	gmaxcannonade: {
 		name: "거다이포격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 4턴 동안 상대 진영의 물타입이 아닌 포켓몬은 매 턴 종료 시(마지막 턴 포함) 최대 HP의 1/6(버림)의 데미지를 받는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 4턴간 -1/6.", // NEEDS QC
 
 		start: "  {PARTY:topic} 거친 물살에 휩싸였다!",
 		damage: "  {POKEMON:topic} 거다이포격의 물살에 삼켜져서 괴로워하고 있다!",
 	},
 	gmaxcentiferno: {
 		name: "거다이백화",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 4~5턴(자신이 끈기갈고리손톱을 지니고 있으면 7턴) 동안 교체할 수 없게 된다. 효과가 지속되는 동안 매 턴 종료 시 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 배틀에서 벗어나거나 고속스핀이나 대타출동에 성공하면 그 포켓몬은 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대를 4~5턴 가둔다.", // NEEDS QC
 	},
 	gmaxchistrike: {
 		name: "거다이회심격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 급소에 맞힐 확률이 1단계 올라간다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 급소율 +1.", // NEEDS QC
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
 		name: "거다이포옹",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 헤롱헤롱 상태가 된다. 자신과 성별이 같거나 어느 한쪽이 성별이 없으면, 또는 이미 헤롱헤롱 상태라면 그 포켓몬에게는 발동하지 않는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 헤롱헤롱.", // NEEDS QC
 	},
 	gmaxdepletion: {
 		name: "거다이감쇠",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 각각 마지막으로 쓴 기술의 PP가 2 줄어든다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 마지막 기술 -2 PP.", // NEEDS QC
 
 		activate: "  {TARGET}의 PP가 줄었다!",
 	},
 	gmaxdrumsolo: {
 		name: "거다이난타",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "원래 기술과 관계없이 위력은 160이다. 이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "위력은 항상 160. 특성을 무시한다.", // NEEDS QC
 	},
 	gmaxfinale: {
 		name: "거다이단원",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 최대 HP의 1/6을 회복한다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: HP 1/6 회복.", // NEEDS QC
 	},
 	gmaxfireball: {
 		name: "거다이화염구",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "원래 기술과 관계없이 위력은 160이다. 이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "위력은 항상 160. 특성을 무시한다.", // NEEDS QC
 	},
 	gmaxfoamburst: {
 		name: "거다이포말",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 스피드가 2단계 떨어진다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 스피드 -2.", // NEEDS QC
 	},
 	gmaxgoldrush: {
 		name: "거다이금화",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 혼란 상태가 된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 혼란.", // NEEDS QC
 	},
 	gmaxgravitas: {
 		name: "거다이천도",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 중력의 효과가 발동한다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 중력이 발동한다.", // NEEDS QC
 	},
 	gmaxhydrosnipe: {
 		name: "거다이저격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "원래 기술과 관계없이 위력은 160이다. 이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "위력은 항상 160. 특성을 무시한다.", // NEEDS QC
 	},
 	gmaxmalodor: {
 		name: "거다이악취",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 독 상태가 된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 독.", // NEEDS QC
 	},
 	gmaxmeltdown: {
 		name: "거다이융격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 트집의 효과를 받는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 트집 효과.", // NEEDS QC
 	},
 	gmaxoneblow: {
 		name: "거다이일격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술은 다이월을 포함한 모든 방어 효과를 뚫는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 다이월도 뚫는다.", // NEEDS QC
 	},
 	gmaxrapidflow: {
 		name: "거다이연격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술은 다이월을 포함한 모든 방어 효과를 뚫는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 다이월도 뚫는다.", // NEEDS QC
 	},
 	gmaxreplenish: {
 		name: "거다이재생",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 50%의 확률로 자신 진영의 포켓몬은 대타를 내세우고 있어도 먹은 나무열매를 되찾는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 50% 나무열매 되찾음.", // NEEDS QC
 	},
 	gmaxresonance: {
 		name: "거다이선율",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영에 오로라베일의 효과가 발동한다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 오로라베일.", // NEEDS QC
 	},
 	gmaxsandblast: {
 		name: "거다이사진",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 4~5턴(자신이 끈기갈고리손톱을 지니고 있으면 7턴) 동안 교체할 수 없게 된다. 효과가 지속되는 동안 매 턴 종료 시 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 배틀에서 벗어나거나 고속스핀이나 대타출동에 성공하면 그 포켓몬은 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대를 4~5턴 가둔다.", // NEEDS QC
 	},
 	gmaxsmite: {
 		name: "거다이천벌",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 혼란 상태가 된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 혼란.", // NEEDS QC
 	},
 	gmaxsnooze: {
 		name: "거다이수마",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 50%의 확률로 상대는 대타를 내세우고 있어도 하품의 효과를 받는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 50% 하품.", // NEEDS QC
 	},
 	gmaxsteelsurge: {
 		name: "거다이강철진",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 강철타입 상성에 따라 데미지를 준다. 0.25배, 0.5배, 등배, 2배, 4배일 때 각각 최대 HP의 1/32, 1/16, 1/8, 1/4, 1/2(버림)을 잃는다. 상대가 고속스핀이나 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 강철 설치물.", // NEEDS QC
 
 		start: "  {PARTY} 주변에 뾰족한 강철이 떠다니기 시작했다!",
 		end: "  {PARTY} 주변의 강철이 사라졌다!",
@@ -2915,74 +2915,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxstonesurge: {
 		name: "거다이암진",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 바위타입 상성에 따라 데미지를 준다. 0.25배, 0.5배, 등배, 2배, 4배일 때 각각 최대 HP의 1/32, 1/16, 1/8, 1/4, 1/2(버림)을 잃는다. 상대가 고속스핀이나 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 스텔스록.", // NEEDS QC
 	},
 	gmaxstunshock: {
 		name: "거다이감전",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 각각 독 또는 마비 상태가 된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 독 또는 마비.", // NEEDS QC
 	},
 	gmaxsweetness: {
 		name: "거다이감로",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 상태 이상이 회복된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 상태 이상 회복.", // NEEDS QC
 	},
 	gmaxtartness: {
 		name: "거다이산격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 회피율이 1단계 떨어진다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 회피율 -1.", // NEEDS QC
 	},
 	gmaxterror: {
 		name: "거다이환영",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 교체할 수 없게 된다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 교체 불가.", // NEEDS QC
 	},
 	gmaxvinelash: {
 		name: "거다이편달",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 4턴 동안 상대 진영의 풀타입이 아닌 포켓몬은 매 턴 종료 시(마지막 턴 포함) 최대 HP의 1/6(버림)의 데미지를 받는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 4턴간 -1/6.", // NEEDS QC
 
 		start: "  {PARTY:topic} 채찍의 맹타에 휩싸였다!",
 		damage: "  {POKEMON:topic} 거다이편달이 퍼붓는 맹타에 아파하고 있다!",
 	},
 	gmaxvolcalith: {
 		name: "거다이분석",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 4턴 동안 상대 진영의 바위타입이 아닌 포켓몬은 매 턴 종료 시(마지막 턴 포함) 최대 HP의 1/6(버림)의 데미지를 받는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 4턴간 -1/6.", // NEEDS QC
 
 		start: "  {PARTY:topic} 바위에 둘러싸였다!",
 		damage: "  {POKEMON:topic} 거다이분석으로 날아든 바위에 맞아서 아파하고 있다!",
 	},
 	gmaxvoltcrash: {
 		name: "거다이만뢰",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 마비 상태가 된다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 마비.", // NEEDS QC
 	},
 	gmaxwildfire: {
 		name: "거다이옥염",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 4턴 동안 상대 진영의 불꽃타입이 아닌 포켓몬은 매 턴 종료 시(마지막 턴 포함) 최대 HP의 1/6(버림)의 데미지를 받는다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 4턴간 -1/6.", // NEEDS QC
 
 		start: "  {PARTY:topic} 불꽃에 휩싸였다!",
 		damage: "  {POKEMON:topic} 거다이옥염의 불꽃에 휩싸여서 뜨거워하고 있다!",
 	},
 	gmaxwindrage: {
 		name: "거다이풍격",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 일렉트릭필드, 그래스필드, 미스트필드, 사이코필드의 효과가 사라지고, 상대 진영의 리플렉터, 빛의장막, 오로라베일, 신비의부적, 흰안개, 거다이강철진, 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과와 자신 진영의 거다이강철진, 압정뿌리기, 독압정, 스텔스록, 끈적끈적네트의 효과가 사라진다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 필드와 설치물 제거.", // NEEDS QC
 	},
 	grassknot: {
 		name: "풀묶기",
 		// Official flavor text: "풀을 휘감아서 상대를 쓰러뜨린다. 상대가 무거울수록 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 상대의 무게가 10kg 미만이면 20, 25kg 미만이면 40, 50kg 미만이면 60, 100kg 미만이면 80, 200kg 미만이면 100, 200kg 이상이면 120이다.", // NEEDS QC
+		shortDesc: "상대가 무거울수록 강하다.", // NEEDS QC
 	},
 	grasspledge: {
 		name: "풀의맹세",
 		// Official flavor text: "풀기둥으로 공격한다. 물과 조합하면 위력이 올라가고 주변이 습지초원이 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "아군이 이 턴에 불꽃의맹세나 물의맹세를 선택했고 아직 행동하지 않았다면, 그 아군은 자신 바로 다음에 행동하고 자신의 기술은 아무 일도 일으키지 않는다. 불꽃의맹세와 조합하면 아군이 위력 150의 불꽃의맹세를 쓰고, 4턴 동안 상대 진영이 불바다가 되어 매 턴 종료 시(마지막 턴 포함) 불꽃타입이 아닌 포켓몬이 최대 HP의 1/8(버림)의 데미지를 받는다. 물의맹세와 조합하면 아군이 위력 150의 풀의맹세를 쓰고, 4턴 동안 상대 진영이 습지가 되어 그 진영의 포켓몬의 스피드가 1/4이 된다. 조합해서 쓰면 자신의 타입과 관계없이 타입 일치 보정을 받는다. 풀주얼은 소모하지 않는다.", // NEEDS QC
+		shortDesc: "불꽃·물의맹세와 조합하면 추가 효과.", // NEEDS QC
 
 		activate: "#waterpledge",
 		start: "  {TEAM} 주변에 습지초원이 펼쳐졌다!",
@@ -2990,81 +2990,81 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grasswhistle: {
 		name: "풀피리",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 잠듦 상태로 만든다.", // NEEDS QC
 	},
 	grassyglide: {
 		name: "그래스슬라이더",
 		// Official flavor text: "지면에 미끄러지듯 상대를 공격한다. 그래스필드일 때 반드시 선제공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "그래스필드가 펼쳐져 있고 자신이 땅에 있다면 우선도가 1 올라간다.", // NEEDS QC
+		shortDesc: "그래스필드에서 우선도 +1.", // NEEDS QC
 	},
 	grassyterrain: {
 		name: "그래스필드",
 		// Official flavor text: "5턴 동안 그래스필드로 만든다. 땅에 있으면 매 턴 회복한다. 풀타입의 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 그래스필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬의 풀타입 공격 기술의 위력이 1.3배가 되고, 땅에 있는 포켓몬을 노리는 땅고르기, 지진, 매그니튜드의 위력이 0.5배가 되며, 땅에 있는 포켓몬은 매 턴 종료 시(마지막 턴 포함) 최대 HP의 1/16(버림)을 회복한다. 보호색을 쓰면 풀타입이 되고, 자연의힘은 에너지볼이 되며, 비밀의힘은 30%의 확률로 잠듦 상태로 만든다. 이미 그래스필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
+		shortDesc: "5턴간 풀 기술 강화, 땅에 있으면 HP 1/16 회복.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 그래스필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬의 풀타입 공격 기술의 위력이 1.5배가 되고, 땅에 있는 포켓몬을 노리는 땅고르기, 지진, 매그니튜드의 위력이 0.5배가 되며, 땅에 있는 포켓몬은 매 턴 종료 시(마지막 턴 포함) 최대 HP의 1/16(버림)을 회복한다. 보호색을 쓰면 풀타입이 되고, 자연의힘은 에너지볼이 되며, 비밀의힘은 30%의 확률로 잠듦 상태로 만든다. 이미 그래스필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
 		},
 	},
 	gravapple: {
 		name: "G의힘",
 		// Official flavor text: "높은 곳에서 사과를 떨어뜨려서 데미지를 준다. 상대의 방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 방어를 1단계 떨어뜨린다. 중력의 효과가 지속되는 동안 위력이 1.5배가 된다.", // NEEDS QC
+		shortDesc: "100% 방어 -1. 중력 중에는 1.5배.", // NEEDS QC
 	},
 	gravity: {
 		name: "중력",
 		// Official flavor text: "5턴 동안 부유나 비행타입에 땅타입의 기술이 맞게 된다. 공중으로 나는 기술도 사용할 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 회피율이 0.6배가 된다. 사용 시 모든 포켓몬의 뛰어오르기, 공중날기, 전자부유, 프리폴, 텔레키네시스가 바로 끝난다. 효과가 지속되는 동안 모든 포켓몬은 뛰어오르기, 공중날기, 플라잉프레스, 무릎차기, 점프킥, 전자부유, 프리폴, 튀어오르기, 텔레키네시스를 쓸 수 없다. 땅타입 공격과 압정뿌리기, 독압정, 끈적끈적네트, 특성 개미지옥이 비행타입이나 특성이 부유인 포켓몬에게도 효과를 발휘한다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴간 땅 무효 해제, 명중률 1.67배.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 회피율이 0.6배가 된다. 사용 시 모든 포켓몬의 뛰어오르기, 공중날기, 전자부유, 프리폴, 텔레키네시스가 바로 끝난다. 효과가 지속되는 동안 모든 포켓몬은 뛰어오르기, 공중날기, 플라잉프레스, 무릎차기, 점프킥, 전자부유, 프리폴, 튀어오르기, 텔레키네시스를 쓸 수 없다. 땅타입 공격과 압정뿌리기, 독압정, 끈적끈적네트, 특성 개미지옥이 비행타입이나 특성이 부유인 포켓몬에게도 효과를 발휘한다. 이미 효과가 발동 중이라면 실패한다. 해당하는 Z파워 기술은 선택할 수 있지만 실행 시에 막힌다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 회피율이 0.6배가 된다. 사용 시 모든 포켓몬의 뛰어오르기, 공중날기, 전자부유, 프리폴, 텔레키네시스가 바로 끝난다. 효과가 지속되는 동안 모든 포켓몬은 뛰어오르기, 공중날기, 플라잉프레스, 무릎차기, 점프킥, 전자부유, 프리폴, 튀어오르기, 텔레키네시스를 쓸 수 없다. 땅타입 공격과 압정뿌리기, 독압정, 끈적끈적네트, 특성 개미지옥이 비행타입이나 특성이 부유인 포켓몬에게도 효과를 발휘한다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 회피율이 0.6배가 된다. 사용 시 모든 포켓몬의 뛰어오르기, 공중날기, 전자부유, 프리폴, 텔레키네시스가 바로 끝난다. 효과가 지속되는 동안 모든 포켓몬은 뛰어오르기, 공중날기, 무릎차기, 점프킥, 전자부유, 프리폴, 튀어오르기, 텔레키네시스를 쓸 수 없다. 땅타입 공격과 압정뿌리기, 독압정, 특성 개미지옥이 비행타입이나 특성이 부유인 포켓몬에게도 효과를 발휘한다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 회피율이 0.6배가 된다. 사용 시 모든 포켓몬의 뛰어오르기, 공중날기, 전자부유가 바로 끝난다. 효과가 지속되는 동안 모든 포켓몬은 뛰어오르기, 공중날기, 무릎차기, 점프킥, 전자부유, 튀어오르기를 쓸 수 없다. 땅타입 공격과 압정뿌리기, 독압정, 특성 개미지옥이 비행타입이나 특성이 부유인 포켓몬에게도 효과를 발휘한다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 	},
 	growl: {
 		name: "울음소리",
 		// Official flavor text: "귀여운 울음소리를 들려주고 관심을 끌어 방심한 사이에 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	growth: {
 		name: "성장",
 		// Official flavor text: "몸을 일시에 크게 성장시켜 공격과 특수공격을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 특수공격을 1단계씩 올린다. 날씨가 큰가뭄 또는 쾌청이 되어 있으면 2단계씩 올린다. 만능우산을 지니고 있으면 그 날씨라도 1단계씩만 올린다.", // NEEDS QC
+		shortDesc: "공격과 특공 +1(햇살에서는 +2).", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 공격과 특수공격을 1단계씩 올린다. 날씨가 큰가뭄 또는 쾌청이 되어 있으면 2단계씩 올린다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 공격과 특수공격을 1단계씩 올린다. 날씨가 쾌청이 되어 있으면 2단계씩 올린다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 특수공격을 1단계 올린다.", // NEEDS QC
+			shortDesc: "자신의 특수공격을 1단계 올린다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 스페셜을 1단계 올린다.", // NEEDS QC
+			shortDesc: "자신의 스페셜을 1단계 올린다.", // NEEDS QC
 		},
 	},
 	grudge: {
 		name: "원념",
 		// Official flavor text: "상대의 기술로 기절하면 원념을 담아 그 기술의 PP를 0으로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 다음 턴까지, 상대의 공격으로 기절하면 그 기술의 남은 PP를 모두 없앤다.", // NEEDS QC
+		shortDesc: "기절하면 그 공격 기술의 PP를 모두 없앤다.", // NEEDS QC
 
 		activate: "  {POKEMON}의 {MOVE:topic} 원념으로 PP가 0이 되었다!",
 		start: "{POKEMON:topic} 상대에게 원념을 걸려 하고 있다!",
@@ -3072,112 +3072,112 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	guardianofalola: {
 		name: "알로라의수호자",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 남은 HP의 3/4(버림, 최소 1)만큼의 데미지를 준다.", // NEEDS QC
+		shortDesc: "상대의 남은 HP의 3/4만큼 데미지를 준다.", // NEEDS QC
 	},
 	guardsplit: {
 		name: "가드셰어",
 		// Official flavor text: "초능력으로 자신과 상대의 방어와 특수방어를 더해서 반으로 나눈다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 방어끼리, 특수방어끼리 각각 평균(버림)을 내어 그 값으로 만든다. 랭크 변화는 영향을 받지 않는다.", // NEEDS QC
+		shortDesc: "방어·특방을 상대와 평균 낸다.", // NEEDS QC
 
 		activate: "  {POKEMON:topic} 서로의 가드를 셰어했다!",
 	},
 	guardswap: {
 		name: "가드스왑",
 		// Official flavor text: "초능력으로 자신과 상대의 방어와 특수방어의 능력 변화를 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 방어와 특수방어 랭크 변화를 맞바꾼다.", // NEEDS QC
+		shortDesc: "방어·특방 랭크 변화를 상대와 맞바꾼다.", // NEEDS QC
 	},
 	guillotine: {
 		name: "가위자르기",
 		// Official flavor text: "큰 집게로 상대를 베어 갈라 공격한다. 맞으면 일격에 기절한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 최대 HP만큼의 데미지를 준다. 명중률과 회피율 보정을 무시한다. 이 기술의 명중률은 (자신의 레벨-상대의 레벨+30)%이며, 상대의 레벨이 더 높으면 실패한다. 특성이 옹골참인 포켓몬에게는 효과가 없다.", // NEEDS QC
+		shortDesc: "일격필살. 상대의 레벨이 더 높으면 실패한다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 65535의 데미지를 준다. 이 기술의 256분율 명중률은 (2×(자신의 레벨-상대의 레벨)+76)과 255 중 작은 쪽이며, 그 후 명중률과 회피율 보정이 적용된다. 상대의 레벨이 더 높으면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대에게 65535의 데미지를 준다. 상대의 스피드가 자신보다 빠르면 실패한다.", // NEEDS QC
+			shortDesc: "65535의 데미지. 상대가 빠르면 실패.", // NEEDS QC
 		},
 	},
 	gunkshot: {
 		name: "더스트슈트",
 		// Official flavor text: "더러운 쓰레기를 상대에게 부딪쳐서 공격한다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 	},
 	gust: {
 		name: "바람일으키기",
 		// Official flavor text: "날개로 일으킨 격한 바람을 상대에게 부딪쳐서 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "공중에 뜬 상대(공중날기 등)에게 위력 2배.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 뛰어오르기가나 공중날기를 쓰는 중이라면 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "뛰어오르기/공중날기 중에 위력 2배.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 공중날기를 쓰는 중이라면 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "공중날기 중인 상대에게 위력 2배.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "추가 효과가 없다.", // NEEDS QC
+			shortDesc: "추가 효과가 없다.", // NEEDS QC
 		},
 	},
 	gyroball: {
 		name: "자이로볼",
 		// Official flavor text: "몸을 고속으로 회전시켜 몸통박치기한다. 상대보다 스피드가 낮을수록 위력은 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (25×상대의 현재 스피드÷자신의 현재 스피드)+1(버림, 최대 150)이다. 자신의 현재 스피드가 0이라면 위력은 1이다.", // NEEDS QC
+		shortDesc: "상대보다 느릴수록 위력이 올라간다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (25×상대의 현재 스피드÷자신의 현재 스피드)+1(버림, 최대 150)이다. 자신의 현재 스피드가 0이라면 1로 취급한다.", // NEEDS QC
 		},
 	},
 	hail: {
 		name: "싸라기눈",
 		// Official flavor text: "5턴 동안 싸라기눈을 내리게 해서 얼음타입이 아닌 포켓몬 모두에게 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 날씨가 싸라기눈이 된다. 마지막 턴을 제외한 매 턴 종료 시, 얼음타입이거나 특성이 아이스바디, 매직가드, 방진, 눈숨기가 아닌 모든 포켓몬은 최대 HP의 1/16(버림)을 잃는다. 차가운바위를 지니고 있으면 8턴 동안 지속된다. 날씨가 이미 싸라기눈이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 싸라기눈이 내린다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 날씨가 싸라기눈이 된다. 마지막 턴을 제외한 매 턴 종료 시, 얼음타입이거나 특성이 아이스바디, 매직가드, 눈숨기가 아닌 모든 포켓몬은 최대 HP의 1/16(버림)을 잃는다. 차가운바위를 지니고 있으면 8턴 동안 지속된다. 날씨가 이미 싸라기눈이라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 날씨가 싸라기눈이 된다. 마지막 턴을 제외한 매 턴 종료 시, 얼음타입이 아닌 모든 포켓몬은 최대 HP의 1/16(버림)을 잃는다. 날씨가 이미 싸라기눈이라면 실패한다.", // NEEDS QC
 		},
 	},
 	hammerarm: {
 		name: "암해머",
 		// Official flavor text: "강하고 무거운 주먹을 휘둘러 데미지를 준다. 자신의 스피드가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	happyhour: {
 		name: "해피타임",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "배틀에서는 효과가 없다.", // NEEDS QC
 
 		activate: "  모두 행복한 기분에 휩싸였다!",
 	},
 	harden: {
 		name: "단단해지기",
 		// Official flavor text: "전신에 힘을 담아 몸을 단단하게 해서 자신의 방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 1단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 1단계 올린다.", // NEEDS QC
 	},
 	hardpress: {
 		name: "하드프레스",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 100×(상대의 남은 HP÷상대의 최대 HP)(0.5는 버림, 최소 1)이다.", // NEEDS QC
+		shortDesc: "상대의 남은 HP가 많을수록 강하다.", // NEEDS QC
 	},
 	haze: {
 		name: "흑안개",
 		// Official flavor text: "흑안개를 뿜어 배틀에 참가 중인 포켓몬 전원의 능력 변화를 원래대로 돌린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 모든 포켓몬의 랭크 변화를 0으로 되돌린다.", // NEEDS QC
+		shortDesc: "모든 랭크 변화를 없앤다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "양쪽 포켓몬의 랭크 변화를 0으로 되돌리고, 화상과 마비에 의한 능력 감소를 없앤다. 맹독 카운트를 0으로 되돌리고, 양쪽 포켓몬의 혼란과 이상한빛, 사슬묶기, 기충전, 씨뿌리기, 빛의장막, 흰안개, 리플렉터의 효과를 없앤다. 상대의 상태 이상을 없앤다.", // NEEDS QC
+			shortDesc: "모든 랭크 변화 초기화. 상대의 상태 이상 제거.", // NEEDS QC
 		},
 
 		// Only used in Gen 1
@@ -3186,45 +3186,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	headbutt: {
 		name: "박치기",
 		// Official flavor text: "머리를 내밀어 곧장 돌진하여 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	headcharge: {
 		name: "아프로브레이크",
 		// Official flavor text: "굉장한 아프로 머리로 상대에게 돌진하여 공격한다. 자신도 조금 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "1/4의 반동 데미지를 받는다.", // NEEDS QC
 	},
 	headlongrush: {
 		name: "들이받기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 방어, 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	headsmash: {
 		name: "양날박치기",
 		// Official flavor text: "목숨을 걸고 혼신의 힘으로 상대에게 박치기를 한다. 자신도 굉장한 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 1/2(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "1/2의 반동 데미지를 받는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/2(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
 		},
 	},
 	healbell: {
 		name: "치료방울",
 		// Official flavor text: "기분 좋은 방울소리를 들려주어 같은 편 전원의 상태 이상을 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다. 배틀에 나와 있는 특성이 방음인 포켓몬은 자신이 아니라면 회복되지 않는다.", // NEEDS QC
+		shortDesc: "파티 전원의 상태 이상을 회복한다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다. 배틀에 나와 있는 특성이 방음인 포켓몬은 회복되지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다. 배틀에 나와 있는 특성이 방음인 포켓몬도 회복된다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다. 특성이 방음인 포켓몬은 회복되지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다.", // NEEDS QC
 		},
 
 		activate: "  방울소리가 울려 퍼졌다!",
@@ -3232,20 +3232,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healblock: {
 		name: "회복봉인",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 상대는 배틀에 나와 있는 한 HP를 회복할 수 없다. 효과가 지속되는 동안 회복 기술과 흡수 기술을 쓸 수 없으며, 회복 효과가 있는 특성과 도구도 발동하지 않는다. 효과를 받은 포켓몬이 배턴터치를 쓰면 교체해 나온 포켓몬도 회복할 수 없다. 아픔나누기와 특성 재생력은 영향을 받지 않는다.", // NEEDS QC
+		shortDesc: "5턴 동안 상대는 HP를 회복할 수 없다.", // NEEDS QC
 		gen8: {
 			end: "  {POKEMON}의 회복봉인 효과가 떨어졌다!",
 			cant: "{POKEMON:topic} 회복봉인 때문에 {MOVE:object} 쓸 수 없다!",
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 상대는 배틀에 나와 있는 한 HP를 회복할 수 없다. 효과가 지속되는 동안 회복 기술과 흡수 기술을 쓸 수 없으며, 회복 효과가 있는 특성과 도구도 발동하지 않는다. 효과를 받은 포켓몬이 배턴터치를 쓰면 교체해 나온 포켓몬도 회복할 수 없다. 아픔나누기와 특성 재생력은 영향을 받지 않는다. 해당하는 Z파워 기술은 효과가 지속되는 동안에도 선택해서 쓸 수 있다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 상대는 배틀에 나와 있는 한 HP를 회복할 수 없다. 효과가 지속되는 동안 회복 기술과 흡수 기술을 쓸 수 없으며, 회복 효과가 있는 특성과 도구도 발동하지 않는다. 효과를 받은 포켓몬이 배턴터치를 쓰면 교체해 나온 포켓몬도 회복할 수 없다. 아픔나누기와 특성 재생력은 영향을 받지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 상대는 배틀에 나와 있는 한 HP를 회복할 수 없다. 효과가 지속되는 동안 회복 기술을 쓸 수 없고 기술에 의한 회복 효과도 발동하지 않지만, 특성과 도구는 계속 회복시킨다. 효과를 받은 포켓몬이 배턴터치를 쓰면 교체해 나온 포켓몬도 효과를 이어받는다. 아픔나누기는 영향을 받지 않는다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON} 회복 동작을 봉인당했다!",
@@ -3256,14 +3256,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healingwish: {
 		name: "치유소원",
 		// Official flavor text: "자신은 기절하지만 교대하여 나오는 포켓몬의 상태 이상과 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 기절하는 대신, 교체해 나온 포켓몬의 HP가 가득 차 있지 않거나 상태 이상이라면 HP를 모두 회복시키고 상태 이상도 회복시킨다. 교체는 턴 종료 시에 이루어지며, 회복은 설치 기술의 효과보다 먼저 적용된다. 이 효과는 조건에 맞는 포켓몬이 그 자리에 교체해 나오거나 사이드체인지로 그 자리에 올 때까지 지속된다. 자신이 파티에서 기절하지 않은 마지막 포켓몬이라면 실패한다.", // NEEDS QC
+		shortDesc: "기절하고 다음 포켓몬의 HP·상태를 회복시킨다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 기절하는 대신, 교체해 나온 포켓몬의 HP를 모두 회복시키고 상태 이상도 회복시킨다. 교체는 턴 종료 시에 이루어지며, 회복은 설치 기술의 효과보다 먼저 적용된다. 자신이 파티에서 기절하지 않은 마지막 포켓몬이라면 실패한다.", // NEEDS QC
+			shortDesc: "자신은 기절. 교체된 포켓몬은 완전 회복.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 기절하는 대신, 교체해 나온 포켓몬의 HP를 모두 회복시키고 상태 이상도 회복시킨다. 교체는 즉시 이루어지며, 회복은 설치 기술의 효과보다 나중에 적용된다. 자신이 파티에서 기절하지 않은 마지막 포켓몬이라면 실패한다.", // NEEDS QC
 		},
 
 		heal: "  치유소원이 {POKEMON}에게 전해졌다!",
@@ -3271,153 +3271,153 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healorder: {
 		name: "회복지령",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 최대 HP의 1/2(0.5는 올림)을 회복한다.", // NEEDS QC
+		shortDesc: "자신의 최대 HP의 1/2을 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다.", // NEEDS QC
 		},
 	},
 	healpulse: {
 		name: "치유파동",
 		// Official flavor text: "치유파동을 날려서 최대 HP의 절반만큼 상대의 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 최대 HP의 1/2(0.5는 올림)을 회복시킨다. 자신의 특성이 메가런처라면 대신 3/4(0.5는 버림)을 회복시킨다.", // NEEDS QC
+		shortDesc: "상대의 최대 HP의 1/2을 회복시킨다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 최대 HP의 1/2(0.5는 올림)을 회복시킨다.", // NEEDS QC
 		},
 	},
 	heartstamp: {
 		name: "하트스탬프",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	heartswap: {
 		name: "하트스왑",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 모든 랭크 변화를 맞바꾼다.", // NEEDS QC
+		shortDesc: "모든 랭크 변화를 상대와 맞바꾼다.", // NEEDS QC
 	},
 	heatcrash: {
 		name: "히트스탬프",
 		// Official flavor text: "불타는 몸으로 상대에게 부딪쳐서 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 무게÷상대의 무게)(버림)에 따라 정해진다. 5 이상이면 120, 4면 100, 3이면 80, 2면 60, 1 이하면 40이다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "상대보다 무거울수록 강하다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 무게÷상대의 무게)(버림)에 따라 정해진다. 5 이상이면 120, 4면 100, 3이면 80, 2면 60, 1 이하면 40이다.", // NEEDS QC
 		},
 	},
 	heatwave: {
 		name: "열풍",
 		// Official flavor text: "뜨거운 숨결을 상대에게 내뿜어 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	heavyslam: {
 		name: "헤비봄버",
 		// Official flavor text: "무거운 몸으로 상대에게 부딪쳐 공격한다. 자신이 상대보다 무거울수록 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 무게÷상대의 무게)(버림)에 따라 정해진다. 5 이상이면 120, 4면 100, 3이면 80, 2면 60, 1 이하면 40이다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "상대보다 무거울수록 강하다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 무게÷상대의 무게)(버림)에 따라 정해진다. 5 이상이면 120, 4면 100, 3이면 80, 2면 60, 1 이하면 40이다.", // NEEDS QC
 		},
 	},
 	helpinghand: {
 		name: "도우미",
 		// Official flavor text: "동료를 돕는다. 도움받은 포켓몬이 쓰는 기술의 위력은 여느 때보다 커진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 상대(아군)의 공격 기술의 위력이 1.5배가 된다(중복된다). 이웃한 아군이 없거나 아군이 이미 행동했다면 실패하지만, 아군이 2턴 기술을 쓰는 중이라면 실패하지 않는다.", // NEEDS QC
+		shortDesc: "이 턴에 아군 기술의 위력이 1.5배가 된다.", // NEEDS QC
 
 		start: "  {SOURCE:topic} {POKEMON}에게 도우미가 되어 주려 한다!",
 	},
 	hex: {
 		name: "병상첨병",
 		// Official flavor text: "엎친 데 덮친 격으로 공격한다. 상태 이상인 상대에게 큰 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 상태 이상이라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "상태 이상인 상대에게 위력이 2배가 된다.", // NEEDS QC
 	},
 	hiddenpower: {
 		name: "잠재파워",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 타입은 자신의 개체값에 따라 정해지며, 페어리타입과 노말타입을 제외한 모든 타입이 될 수 있다.", // NEEDS QC
+		shortDesc: "자신의 개체값에 따라 타입이 변한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술의 타입과 위력은 자신의 개체값에 따라 정해진다. 위력은 30~70 사이에서 변하며, 타입은 노말을 제외한 모든 타입이 될 수 있다.", // NEEDS QC
+			shortDesc: "개체값에 따라 위력과 타입이 변한다.", // NEEDS QC
 		},
 	},
 	hiddenpowerbug: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(벌레)", // NEEDS QC
 	},
 	hiddenpowerdark: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(악)", // NEEDS QC
 	},
 	hiddenpowerdragon: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(드래곤)", // NEEDS QC
 	},
 	hiddenpowerelectric: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(전기)", // NEEDS QC
 	},
 	hiddenpowerfighting: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(격투)", // NEEDS QC
 	},
 	hiddenpowerfire: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(불꽃)", // NEEDS QC
 	},
 	hiddenpowerflying: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(비행)", // NEEDS QC
 	},
 	hiddenpowerghost: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(고스트)", // NEEDS QC
 	},
 	hiddenpowergrass: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(풀)", // NEEDS QC
 	},
 	hiddenpowerground: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(땅)", // NEEDS QC
 	},
 	hiddenpowerice: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(얼음)", // NEEDS QC
 	},
 	hiddenpowerpoison: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(독)", // NEEDS QC
 	},
 	hiddenpowerpsychic: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(에스퍼)", // NEEDS QC
 	},
 	hiddenpowerrock: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(바위)", // NEEDS QC
 	},
 	hiddenpowersteel: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(강철)", // NEEDS QC
 	},
 	hiddenpowerwater: {
-		name: null, // NEEDS TRANSLATION
+		name: "잠재파워(물)", // NEEDS QC
 	},
 	highhorsepower: {
 		name: "10만마력",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	highjumpkick: {
 		name: "무릎차기",
 		// Official flavor text: "점프해서 무릎차기로 상대를 공격한다. 빗나가면 자신이 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "공격이 실패하면 자신이 최대 HP의 1/2(버림)만큼 데미지를 받는다. 특성이 매직가드인 포켓몬은 이 데미지를 받지 않는다.", // NEEDS QC
+		shortDesc: "빗나가면 자신이 최대 HP의 1/2을 잃는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 실패하면, 상대가 무효였다면 상대의 최대 HP의 절반(버림)을, 그렇지 않다면 상대가 받았을 데미지의 절반(버림, 최소 1, 최대 상대의 최대 HP의 절반)을 자신이 데미지로 받는다. 특성이 매직가드인 포켓몬은 이 데미지를 받지 않는다.", // NEEDS QC
+			shortDesc: "빗나가면 줄 데미지의 절반을 자신이 받는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 실패하고 상대가 무효가 아니었다면, 상대가 받았을 데미지의 절반(버림, 최소 1, 최대 상대의 최대 HP의 절반)을 자신이 데미지로 받는다.", // NEEDS QC
+			shortDesc: "빗나가면 줄 데미지의 절반을 자신이 받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 실패하고 상대가 무효가 아니었다면, 상대가 받았을 데미지의 1/8(버림, 최소 1)을 자신이 데미지로 받는다.", // NEEDS QC
+			shortDesc: "빗나가면 줄 데미지의 1/8을 자신이 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 빗나가면 자신이 1의 데미지를 받는다. 자신이 대타를 내세우고 있다면, 상대의 대타가 있으면 그쪽이 이 데미지를 받고, 없으면 데미지를 받지 않는다.", // NEEDS QC
+			shortDesc: "빗나가면 자신이 1의 데미지를 받는다.", // NEEDS QC
 		},
 
 		damage: "#crash",
@@ -3425,112 +3425,112 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	holdback: {
 		name: "적당히손봐주기",
 		// Official flavor text: "적당히 공격하여 상대의 HP를 반드시 1은 남긴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 HP를 반드시 1 이상 남긴다.", // NEEDS QC
+		shortDesc: "상대의 HP를 반드시 1 이상 남긴다.", // NEEDS QC
 	},
 	holdhands: {
 		name: "손에손잡기",
 		// Official flavor text: "같은 편 포켓몬끼리 손에 손을 잡는다. 굉장히 행복한 기분이 들게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에서는 효과가 없다. 이웃한 아군이 없으면 실패한다.", // NEEDS QC
+		shortDesc: "배틀에서는 효과가 없다.", // NEEDS QC
 	},
 	honeclaws: {
 		name: "손톱갈기",
 		// Official flavor text: "손톱을 갈아 날카롭게 한다. 자신의 공격과 명중률을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 명중률을 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격, 명중률을 1단계씩 올린다.", // NEEDS QC
 	},
 	hornattack: {
 		name: "뿔찌르기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	horndrill: {
 		name: "뿔드릴",
 		// Official flavor text: "회전하는 뿔을 상대에게 꿰찔러서 공격한다. 맞으면 일격에 기절한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 최대 HP만큼의 데미지를 준다. 명중률과 회피율 보정을 무시한다. 이 기술의 명중률은 (자신의 레벨-상대의 레벨+30)%이며, 상대의 레벨이 더 높으면 실패한다. 특성이 옹골참인 포켓몬에게는 효과가 없다.", // NEEDS QC
+		shortDesc: "일격필살. 상대의 레벨이 더 높으면 실패한다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 65535의 데미지를 준다. 이 기술의 256분율 명중률은 (2×(자신의 레벨-상대의 레벨)+76)과 255 중 작은 쪽이며, 그 후 명중률과 회피율 보정이 적용된다. 상대의 레벨이 더 높으면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대에게 65535의 데미지를 준다. 상대의 스피드가 자신보다 빠르면 실패한다.", // NEEDS QC
+			shortDesc: "65535의 데미지. 상대가 빠르면 실패.", // NEEDS QC
 		},
 	},
 	hornleech: {
 		name: "우드혼",
 		// Official flavor text: "뿔을 꿰찔러서 상대의 양분을 흡수한다. 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 	},
 	howl: {
 		name: "멀리짖기",
 		// Official flavor text: "큰 소리로 짖고 기합을 높여 자신과 같은 편의 공격을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 아군 전원의 공격을 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신과 아군의 공격을 1단계씩 올린다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 공격을 1단계 올린다.", // NEEDS QC
+			shortDesc: "자신의 공격을 1단계 올린다.", // NEEDS QC
 		},
 	},
 	hurricane: {
 		name: "폭풍",
 		// Official flavor text: "강렬한 바람으로 상대를 둘러싸서 공격한다. 상대를 혼란시킬 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 혼란 상태로 만든다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다. 날씨가 폭우 또는 비가 되어 있으면 명중 판정을 하지 않는다. 큰가뭄 또는 쾌청이 되어 있으면 명중률이 50%가 된다. 만능우산을 지닌 포켓몬에게는 명중률이 70%로 유지된다.", // NEEDS QC
+		shortDesc: "30% 혼란. 비가 오면 반드시 명중한다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 혼란 상태로 만든다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다. 날씨가 폭우 또는 비가 되어 있으면 명중 판정을 하지 않는다. 큰가뭄 또는 쾌청이 되어 있으면 명중률이 50%가 된다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 혼란 상태로 만든다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다. 날씨가 비가 되어 있으면 명중 판정을 하지 않는다. 쾌청이 되어 있으면 명중률이 50%가 된다.", // NEEDS QC
 		},
 	},
 	hydrocannon: {
 		name: "하이드로캐논",
 		// Official flavor text: "물의 대포를 상대에게 발사해서 공격한다. 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	hydropump: {
 		name: "하이드로펌프",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	hydrosteam: {
 		name: "하이드로스팀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "날씨가 쾌청이 되어 있고 자신이 만능우산을 지니고 있지 않다면, 물타입이라 데미지가 절반이 되는 대신 1.5배가 된다.", // NEEDS QC
+		shortDesc: "쾌청에서 반감 대신 1.5배가 된다.", // NEEDS QC
 	},
 	hydrovortex: {
 		name: "슈퍼아쿠아토네이도",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	hyperbeam: {
 		name: "파괴광선",
 		// Official flavor text: "강한 광선을 상대에게 발사하여 공격한다. 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다. 이 기술로 상대나 상대의 대타를 쓰러뜨렸다면 반동이 없다.", // NEEDS QC
+			shortDesc: "쓰러뜨리지 못하면 다음 턴에 움직일 수 없다.", // NEEDS QC
 		},
 	},
 	hyperdrill: {
 		name: "하이퍼드릴",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "방어 효과를 부수지 않고 뚫는다.", // NEEDS QC
 	},
 	hyperfang: {
 		name: "필살앞니",
 		// Official flavor text: "날카로운 앞니로 강하게 물어서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	hyperspacefury: {
 		name: "이차원러시",
 		// Official flavor text: "많은 팔로 방어와 판별 등을 무시하는 연속 공격이다. 자신의 방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 1단계 떨어뜨린다. 변신을 포함해 현재 모습이 굴레를 벗어난 후파가 아니면 쓸 수 없다. 이 기술이 성공하면 이 턴 동안 상대의 토치카, 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다.", // NEEDS QC
+		shortDesc: "굴레를 벗어난 후파 전용. 방어 -1. 방어를 뚫는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 방어를 1단계 떨어뜨린다. 변신을 포함해 현재 모습이 굴레를 벗어난 후파가 아니면 쓸 수 없다. 이 기술이 성공하면 이 턴 동안 상대의 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다.", // NEEDS QC
 		},
 
 		activate: "#shadowforce",
@@ -3539,10 +3539,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hyperspacehole: {
 		name: "이차원홀",
 		// Official flavor text: "다른차원홀로 갑자기 상대 바로 옆에 나타나 공격한다. 방어나 판별 등도 무시할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 이 턴 동안 상대의 토치카, 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다.", // NEEDS QC
+		shortDesc: "이 턴 동안 상대의 방어 효과를 뚫는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 이 턴 동안 상대의 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다.", // NEEDS QC
 		},
 
 		activate: "#shadowforce",
@@ -3550,111 +3550,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hypervoice: {
 		name: "하이퍼보이스",
 		// Official flavor text: "시끄럽게 울리는 큰 진동을 상대에게 전달하여 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 상대를 공격한다.", // NEEDS QC
 	},
 	hypnosis: {
 		name: "최면술",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 잠듦 상태로 만든다.", // NEEDS QC
 	},
 	iceball: {
 		name: "아이스볼",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 빗나가거나 5턴이 지나거나 쓸 수 없게 될 때까지 이 기술에 속박되어 다른 행동을 할 수 없다. 명중할 때마다 위력이 2배가 되며, 이전에 웅크리기를 썼다면 다시 2배가 된다. 잠꼬대로 이 기술을 쓰면 1턴만 쓴다.", // NEEDS QC
+		shortDesc: "명중할 때마다 위력 2배. 5턴 동안 반복.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 빗나가거나 5턴이 지나거나 쓸 수 없게 될 때까지 이 기술에 속박되어 다른 행동을 할 수 없다. 명중할 때마다 위력이 2배가 되며, 이전에 웅크리기를 썼다면 다시 2배가 된다. 잠꼬대로 이 기술을 쓰면 1턴만 쓴다. 효과 도중 이 기술이 발동 중인 탈에 맞으면 위력 배율은 멈추지만 턴 카운트는 진행되어, 효과가 끝난 뒤 다음 기술에 배율이 적용될 수 있다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 빗나가거나 5턴이 지나거나 쓸 수 없게 될 때까지 이 기술에 속박되어 다른 행동을 할 수 없다. 명중할 때마다 위력이 2배가 되며, 이전에 웅크리기를 썼다면 다시 2배가 된다. 잠꼬대로 이 기술을 쓰면 1턴만 쓴다.", // NEEDS QC
 		},
 	},
 	icebeam: {
 		name: "냉동빔",
 		// Official flavor text: "냉동빔을 상대에게 발사하여 공격한다. 얼음 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
 	},
 	iceburn: {
 		name: "콜드플레어",
 		// Official flavor text: "모든 것을 얼려버리는 격렬한 냉기로 2턴째에 상대를 둘러싼다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다. 1턴째에 힘을 모아 2턴째에 공격한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 모아 2턴째에 공격. 30% 화상.", // NEEDS QC
 
 		prepare: "  {POKEMON:topic} 차디찬 공기에 둘러싸였다!",
 	},
 	icefang: {
 		name: "얼음엄니",
 		// Official flavor text: "냉기를 품은 이빨로 문다. 상대를 풀죽게 하거나 얼음 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만들고, 10%의 확률로 풀죽게 한다.", // NEEDS QC
+		shortDesc: "10%의 확률로 얼음. 10%의 확률로 풀죽음.", // NEEDS QC
 	},
 	icehammer: {
 		name: "아이스해머",
 		// Official flavor text: "강하고 무거운 주먹을 휘둘러 데미지를 준다. 자신의 스피드가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	icepunch: {
 		name: "냉동펀치",
 		// Official flavor text: "냉기를 담은 펀치로 상대를 공격한다. 얼음 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
 	},
 	iceshard: {
 		name: "얼음뭉치",
 		// Official flavor text: "얼음덩어리를 순식간에 만들어 상대에게 빠르게 쏜다. 반드시 선제공격을 할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	icespinner: {
 		name: "아이스스피너",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "일렉트릭필드, 그래스필드, 미스트필드, 사이코필드의 효과를 없앤다.", // NEEDS QC
+		shortDesc: "필드의 효과를 없앤다.", // NEEDS QC
 	},
 	iciclecrash: {
 		name: "고드름떨구기",
 		// Official flavor text: "큰 고드름을 격렬하게 부딪쳐서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	iciclespear: {
 		name: "고드름침",
 		// Official flavor text: "날카로운 고드름을 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 	},
 	icywind: {
 		name: "얼어붙은바람",
 		// Official flavor text: "차가운 냉기를 상대에게 내뿜어 공격한다. 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	imprison: {
 		name: "봉인",
 		// Official flavor text: "상대가 자신과 같은 기술을 배웠다면 상대만 그 기술을 사용할 수 없게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 배틀에 나와 있는 동안, 자신도 지닌 기술을 상대가 쓸 수 없게 만든다.", // NEEDS QC
+		shortDesc: "자신도 지닌 기술을 상대가 쓸 수 없게 한다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 자신도 지닌 기술을 상대가 쓸 수 없게 만든다. 효과가 지속되는 동안에도 Z파워 기술은 선택해서 쓸 수 있다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 자신도 지닌 기술을 상대가 쓸 수 없게 만든다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 자신도 지닌 기술을 상대가 쓸 수 없게 만든다. 자신의 기술을 지닌 상대가 없으면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 상대의 기술을 봉인했다!",
@@ -3663,40 +3663,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	incinerate: {
 		name: "불태우기",
 		// Official flavor text: "불꽃으로 상대를 공격한다. 상대가 나무열매 등을 지니고 있을 때 불태워서 쓸 수 없게 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 지닌 도구가 나무열매나 주얼이라면 잃게 한다. 특성이 점착인 포켓몬은 도구를 잃지 않는다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+		shortDesc: "상대의 나무열매·주얼을 태워 없앤다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 지닌 도구가 나무열매라면 잃게 한다. 특성이 점착인 포켓몬은 도구를 잃지 않는다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+			shortDesc: "상대의 나무열매를 없앤다.", // NEEDS QC
 		},
 
 		removeItem: "  {POKEMON}의 {ITEM:topic} 불타 없어졌다!",
 	},
 	infernalparade: {
 		name: "백귀야행",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다. 상대가 상태 이상이라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "30% 화상. 상태 이상인 상대에게 위력 2배.", // NEEDS QC
 	},
 	inferno: {
 		name: "연옥",
 		// Official flavor text: "격렬한 불꽃으로 상대를 둘러싸 공격한다. 화상 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	infernooverdrive: {
 		name: "다이내믹풀플레임",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	infestation: {
 		name: "엉겨붙기",
 		// Official flavor text: "4-5턴 동안 상대에게 엉겨 붙어서 공격한다. 그동안 상대는 도망갈 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 
 		start: "  {SOURCE:topic} {POKEMON}에게 엉겨 붙었다!",
@@ -3704,20 +3704,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ingrain: {
 		name: "뿌리박기",
 		// Official flavor text: "대지에 뿌리를 박아 매 턴마다 자신의 HP를 회복한다. 뿌리 박고 있으므로 교체할 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "매 턴 종료 시 최대 HP의 1/16을 회복하지만, 교체할 수 없게 되고 다른 포켓몬도 자신을 강제로 교체시킬 수 없다. 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없는 채로 회복 효과를 이어받는다. 효과가 지속되는 동안 자신이 비행타입이거나 특성이 부유라도 땅타입 공격이 명중하고 압정뿌리기, 독압정, 끈적끈적네트의 효과를 받는다.", // NEEDS QC
+		shortDesc: "매 턴 HP 1/16 회복. 교체할 수 없게 된다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "매 턴 종료 시 최대 HP의 1/16을 회복하지만, 교체할 수 없게 되고 다른 포켓몬도 자신을 강제로 교체시킬 수 없다. 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없는 채로 회복 효과를 이어받는다. 효과가 지속되는 동안 자신이 비행타입이거나 특성이 부유라도 땅타입 공격이 명중하고 압정뿌리기, 독압정, 끈적끈적네트의 효과를 받는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "매 턴 종료 시 최대 HP의 1/16을 회복하지만, 교체할 수 없게 되고 다른 포켓몬도 자신을 강제로 교체시킬 수 없다. 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없는 채로 회복 효과를 이어받는다. 효과가 지속되는 동안 자신이 비행타입이거나 특성이 부유라도 땅타입 공격이 명중하고 압정뿌리기와 독압정의 효과를 받는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "매 턴 종료 시 최대 HP의 1/16을 회복하지만, 교체할 수 없게 되고 다른 포켓몬도 자신을 강제로 교체시킬 수 없다. 배턴터치, 유턴을 쓰면 교체할 수 있다. 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없는 채로 회복 효과를 이어받는다. 효과가 지속되는 동안 자신이 비행타입이거나 특성이 부유라도 땅타입 공격이 명중하고 압정뿌리기와 독압정의 효과를 받는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "매 턴 종료 시 최대 HP의 1/16을 회복하지만, 교체할 수 없게 되고 다른 포켓몬도 자신을 강제로 교체시킬 수 없다. 배턴터치를 쓰면 교체할 수 있으며, 교체해 나온 포켓몬도 교체할 수 없는 채로 회복 효과를 이어받는다.", // NEEDS QC
+			shortDesc: "매 턴 1/16 회복. 자신은 교체 불가.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 뿌리를 뻗었다!",
@@ -3727,13 +3727,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	instruct: {
 		name: "지휘",
 		// Official flavor text: "상대에게 지시하여 상대가 쓴 기술을 다시 한번 쓰게 할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대는 마지막으로 쓴 기술을 즉시 다시 쓴다. 상대가 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 상대가 부리캐논, 힘껏펀치, 트랩셸을 준비하는 중이거나, 그 기술이 조수, 부리캐논, 트림, 참기, 번액셀, 축하, 수다, 파이트액셀, 흉내쟁이, 다이맥스포, 힘껏펀치, 손에손잡기, 아이스볼, 지휘, 킹실드, 매지컬액셀, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 포이즌액셀, 블로킹, 역린, 꽃잎댄스, 구르기, 트랩셸, 스케치, 잠꼬대, 발버둥, 난동부리기, 변신, 소란피기, 다크액셀, 2턴 기술, 반동으로 움직일 수 없게 되는 기술이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대가 마지막 기술을 즉시 다시 쓰게 한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 마지막으로 쓴 기술을 즉시 다시 쓴다. 상대가 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 상대가 다이맥스 상태거나, 상대가 부리캐논, 힘껏펀치, 트랩셸을 준비하는 중이거나, 그 기술이 조수, 부리캐논, 트림, 참기, 축하, 수다, 흉내쟁이, 다이맥스포, 힘껏펀치, 손에손잡기, 아이스볼, 지휘, 킹실드, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 블로킹, 역린, 꽃잎댄스, 구르기, 트랩셸, 스케치, 잠꼬대, 발버둥, 난동부리기, 변신, 소란피기, 2턴 기술, 반동으로 움직일 수 없게 되는 기술, 다이맥스 기술이라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 마지막으로 쓴 기술을 즉시 다시 쓴다. 상대가 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 상대가 부리캐논, 힘껏펀치, 트랩셸을 준비하는 중이거나, 그 기술이 조수, 부리캐논, 트림, 참기, 축하, 수다, 흉내쟁이, 힘껏펀치, 손에손잡기, 아이스볼, 지휘, 킹실드, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 역린, 꽃잎댄스, 구르기, 트랩셸, 스케치, 잠꼬대, 발버둥, 난동부리기, 변신, 소란피기, 2턴 기술, 반동으로 움직일 수 없게 되는 기술, Z기술이라면 실패한다.", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}의 지시로 {TARGET:topic} 기술을 사용했다!",
@@ -3741,22 +3741,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	iondeluge: {
 		name: "플라스마샤워",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 노말타입 기술이 전기타입이 된다. 이 효과는 기술의 타입을 바꾸는 다른 효과보다 뒤에 적용된다.", // NEEDS QC
+		shortDesc: "이 턴 동안 노말타입 기술이 전기타입이 된다.", // NEEDS QC
 
 		activate: "  전기 입자가 쏟아졌다!",
 	},
 	irondefense: {
 		name: "철벽",
 		// Official flavor text: "피부를 쇠처럼 단단하게 만듦으로써 자신의 방어를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 2단계 올린다.", // NEEDS QC
 	},
 	ironhead: {
 		name: "아이언헤드",
 		// Official flavor text: "강철과 같은 단단한 머리로 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3765,51 +3765,51 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	irontail: {
 		name: "아이언테일",
 		// Official flavor text: "단단한 꼬리로 상대를 힘껏 쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	ivycudgel: {
 		name: "덩굴방망이",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다. 자신이 오거폰이라면 모습에 따라 타입이 변한다. 우물의가면이라면 물타입, 화덕의가면이라면 불꽃타입, 주춧돌의가면이라면 바위타입이 된다.", // NEEDS QC
+		shortDesc: "급소율이 높다. 모습에 따라 타입이 변한다.", // NEEDS QC
 	},
 	jawlock: {
 		name: "물고버티기",
 		// Official flavor text: "어느 한쪽이 기절할 때까지 교체할 수 없게 된다. 한쪽의 포켓몬이 없어지면 효과가 사라진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대가 모두 교체할 수 없게 된다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 어느 한쪽이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "자신과 상대 모두 교체할 수 없게 된다.", // NEEDS QC
 	},
 	jetpunch: {
 		name: "제트펀치",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	judgment: {
 		name: "심판의뭉치",
 		// Official flavor text: "무수한 광탄을 상대에게 방출한다. 자신이 가지고 있는 플레이트에 따라 타입이 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 타입은 자신이 지닌 플레이트에 따라 정해진다.", // NEEDS QC
+		shortDesc: "지닌 플레이트에 따라 타입이 변한다.", // NEEDS QC
 	},
 	jumpkick: {
 		name: "점프킥",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "공격이 실패하면 자신이 최대 HP의 1/2(버림)만큼 데미지를 받는다. 특성이 매직가드인 포켓몬은 이 데미지를 받지 않는다.", // NEEDS QC
+		shortDesc: "빗나가면 자신이 최대 HP의 1/2을 잃는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 실패하면, 상대가 무효였다면 상대의 최대 HP의 절반(버림)을, 그렇지 않다면 상대가 받았을 데미지의 절반(버림, 최소 1, 최대 상대의 최대 HP의 절반)을 자신이 데미지로 받는다. 특성이 매직가드인 포켓몬은 이 데미지를 받지 않는다.", // NEEDS QC
+			shortDesc: "빗나가면 줄 데미지의 절반을 자신이 받는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 실패하고 상대가 무효가 아니었다면, 상대가 받았을 데미지의 절반(버림, 최소 1, 최대 상대의 최대 HP의 절반)을 자신이 데미지로 받는다.", // NEEDS QC
+			shortDesc: "빗나가면 줄 데미지의 절반을 자신이 받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 실패하고 상대가 무효가 아니었다면, 상대가 받았을 데미지의 1/8(버림, 최소 1)을 자신이 데미지로 받는다.", // NEEDS QC
+			shortDesc: "빗나가면 줄 데미지의 1/8을 자신이 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "공격이 빗나가면 자신이 1의 데미지를 받는다. 자신이 대타를 내세우고 있다면, 상대의 대타가 있으면 그쪽이 이 데미지를 받고, 없으면 데미지를 받지 않는다.", // NEEDS QC
+			shortDesc: "빗나가면 자신이 1의 데미지를 받는다.", // NEEDS QC
 		},
 
 		damage: "#crash",
@@ -3817,157 +3817,157 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	junglehealing: {
 		name: "정글힐",
 		// Official flavor text: "정글과 하나가 되어 자신과 배틀에 나와 있는 같은 편의 HP와 모든 상태를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신 진영의 포켓몬은 각각 최대 HP의 1/4(0.5는 올림)을 회복하고 상태 이상이 회복된다.", // NEEDS QC
+		shortDesc: "아군 전체: HP 1/4 회복, 상태 이상 회복.", // NEEDS QC
 	},
 	karatechop: {
 		name: "태권당수",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	kinesis: {
 		name: "숟가락휘기",
 		// Official flavor text: "숟가락을 휘어서 주의를 끌어 상대의 명중률을 낮춘다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	kingsshield: {
 		name: "킹실드",
 		// Official flavor text: "상대의 공격을 막음과 동시에 방어 태세를 갖춘다. 접촉한 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬의 공격을 1단계 떨어뜨린다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "공격으로부터 자신을 지킨다. 접촉하면 공격 -1.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬의 공격을 1단계 떨어뜨린다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬의 공격을 2단계 떨어뜨린다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+			shortDesc: "공격 기술을 방어. 접촉한 상대는 공격 -2.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬의 공격을 2단계 떨어뜨린다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 	},
 	knockoff: {
 		name: "탁쳐서떨구기",
 		// Official flavor text: "상대의 지닌 물건을 탁 쳐서 떨어뜨려 배틀이 끝날 때까지 사용할 수 없게 한다. 물건을 가진 상대에게는 데미지를 더 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 도구를 지니고 있다면 위력이 1.5배가 되며, 자신이 기절하지 않았다면 상대는 그 도구를 잃는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 디아루가와 큰금강옥, 펄기아와 큰백옥, 기라티나와 큰백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패, 패러독스 포켓몬과 부스트에너지, 오거폰과 가면은 해당 포켓몬이 지닌 경우 위력이 오르지 않고 도구도 잃게 하지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 여기서 패러독스 포켓몬은 꿰뚫는화염, 날뛰는우레, 무쇠암석, 무쇠감투를 제외한, 특성이 고대활성이나 쿼크차지가 될 수 있는 모든 포켓몬을 가리킨다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+		shortDesc: "도구를 지닌 상대에게 1.5배. 도구를 없앤다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 도구를 지니고 있다면 위력이 1.5배가 되며, 자신이 기절하지 않았다면 상대는 그 도구를 잃는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패은 해당 포켓몬이 지닌 경우 위력이 오르지 않고 도구도 잃게 하지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 도구를 지니고 있다면 위력이 1.5배가 되며, 자신이 기절하지 않았다면 상대는 그 도구를 잃는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. Z크리스탈, 그것으로 메가진화할 수 있는 포켓몬이 지닌 메가스톤, 그리고 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리는 해당 포켓몬이 지닌 경우 위력이 오르지 않고 도구도 잃게 하지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 도구를 지니고 있다면 위력이 1.5배가 되며, 자신이 기절하지 않았다면 상대는 그 도구를 잃는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 그것으로 메가진화할 수 있는 포켓몬이 지닌 메가스톤, 그리고 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트는 해당 포켓몬이 지닌 경우 위력이 오르지 않고 도구도 잃게 하지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 기절하지 않았다면 상대는 지닌 도구를 잃는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트는 해당 포켓몬이 지닌 경우 잃게 하지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+			shortDesc: "상대의 지닌 도구를 없앤다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대는 배틀이 끝날 때까지 지닌 도구를 잃는다. 도구가 백금옥이거나 상대의 특성이 멀티타입이나 점착라면 잃지 않는다. 효과가 지속되는 동안 상대는 어떤 방법으로도 새 도구를 얻을 수 없다.", // NEEDS QC
+			shortDesc: "상대는 도구를 잃고 새로 얻지 못한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 배틀이 끝날 때까지 지닌 도구를 잃는다. 특성이 점착라면 잃지 않는다. 효과가 지속되는 동안 상대는 어떤 방법으로도 새 도구를 얻을 수 없다.", // NEEDS QC
 		},
 
 		removeItem: "  {SOURCE:topic} {POKEMON}의 {ITEM:object} 탁 쳐서 떨구었다!",
 	},
 	kowtowcleave: {
 		name: "도각참",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	landswrath: {
 		name: "그라운드포스",
 		// Official flavor text: "대지의 힘을 모으고 그 힘을 상대에게 집중시켜서 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 상대를 공격한다.", // NEEDS QC
 	},
 	laserfocus: {
 		name: "예민해지기",
 		// Official flavor text: "정신을 집중해서 다음 공격을 반드시 급소에 맞춘다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 턴이 끝날 때까지 자신의 공격이 반드시 급소에 맞는다.", // NEEDS QC
+		shortDesc: "다음 턴이 끝날 때까지 반드시 급소에 맞힌다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 정신을 가다듬었다!",
 	},
 	lashout: {
 		name: "분풀이",
 		// Official flavor text: "상대에 대한 울분이 담긴 공격을 한다. 그 턴에 능력이 떨어져 있으면 기술의 위력이 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 이 턴에 능력이 떨어졌다면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "이 턴에 능력이 떨어졌다면 위력이 2배가 된다.", // NEEDS QC
 	},
 	lastresort: {
 		name: "비장의무기",
 		// Official flavor text: "배틀 중에 기억하고 있는 기술을 모두 사용하면 그때부터 쓸 수 있는 필살기이다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술과 다른 기술을 1개 이상 지니고 있고, 배틀에 나오거나 변신한 뒤 다른 모든 기술을 1번 이상 썼어야 성공한다.", // NEEDS QC
+		shortDesc: "다른 기술을 모두 써야 성공한다.", // NEEDS QC
 	},
 	lastrespects: {
 		name: "성묘",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 자신 진영에서 포켓몬이 기절한 총횟수(최대 100)를 X라 할 때 50+(X×50)이다.", // NEEDS QC
+		shortDesc: "아군이 기절한 횟수마다 위력 +50.", // NEEDS QC
 	},
 	lavaplume: {
 		name: "분연",
 		// Official flavor text: "새빨간 불꽃으로 자신의 주위에 있는 포켓몬을 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 이웃한 포켓몬을 화상으로.", // NEEDS QC
 	},
 	leafage: {
 		name: "나뭇잎",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	leafblade: {
 		name: "리프블레이드",
 		// Official flavor text: "잎사귀를 칼처럼 이용해 상대를 베어 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	leafstorm: {
 		name: "리프스톰",
 		// Official flavor text: "뾰족한 잎사귀로 상대에게 돌풍을 일으킨다. 사용하면 반동으로 자신의 특수공격이 크게 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	leaftornado: {
 		name: "그래스믹서",
 		// Official flavor text: "날카로운 잎사귀로 상대를 둘러싸서 공격한다. 명중률을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	leechlife: {
 		name: "흡혈",
 		// Official flavor text: "피를 빨아서 상대를 공격한다. 준 데미지의 절반을 HP로 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(버림)가 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다.", // NEEDS QC
 		},
 	},
 	leechseed: {
 		name: "씨뿌리기",
 		// Official flavor text: "씨가 뿌려진 상대의 HP를 매 턴 조금씩 흡수하여 자신의 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신 자리의 포켓몬이 매 턴 종료 시 상대의 최대 HP의 1/8(버림)을 빼앗는다. 빼앗는 포켓몬이 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 계속 빼앗긴다. 상대가 교체하거나 킬러스핀이나 고속스핀에 성공하면 효과가 사라진다. 풀타입 포켓몬에게는 이 기술이 통하지 않지만, 이미 걸린 효과는 받는다.", // NEEDS QC
+		shortDesc: "매 턴 상대의 HP 1/8을 빼앗아 회복한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신 자리의 포켓몬이 매 턴 종료 시 상대의 최대 HP의 1/8(버림)을 빼앗는다. 빼앗는 포켓몬이 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 계속 빼앗긴다. 상대가 교체하거나 고속스핀에 성공하면 효과가 사라진다. 풀타입 포켓몬에게는 이 기술이 통하지 않지만, 이미 걸린 효과는 받는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신 자리의 포켓몬이 매 턴 종료 시 상대의 최대 HP의 1/8(버림)을 빼앗는다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 계속 빼앗긴다. 상대가 교체하거나 고속스핀을 쓰면 효과가 사라진다. 풀타입 포켓몬에게는 이 기술이 통하지 않지만, 이미 걸린 효과는 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대의 매 턴 종료 시, 자신 자리의 포켓몬이 상대의 최대 HP의 1/16(버림, 상대에게 맹독 카운트가 있다면 그만큼 곱한 양)을 빼앗는다. 상대의 남은 HP가 그보다 적어도 빼앗는다. 상대가 교체하거나 어떤 포켓몬이든 흑안개를 쓰면 효과가 사라진다. 풀타입 포켓몬에게는 이 기술이 통하지 않는다.", // NEEDS QC
+			shortDesc: "매 턴 상대 HP의 1/16을 빼앗는다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON}에게 씨앗을 심었다!",
@@ -3977,56 +3977,56 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	leer: {
 		name: "째려보기",
 		// Official flavor text: "날카로운 눈초리로 겁을 주어 상대의 방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	letssnuggleforever: {
 		name: "투닥투닥프렌드타임",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	lick: {
 		name: "핥기",
 		// Official flavor text: "긴 혀로 상대를 핥아서 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	lifedew: {
 		name: "생명의물방울",
 		// Official flavor text: "신비한 물을 흩뿌려서 자신과 배틀에 나와 있는 같은 편의 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신 진영의 포켓몬은 각각 최대 HP의 1/4(0.5는 올림)을 회복한다.", // NEEDS QC
+		shortDesc: "자신과 아군의 최대 HP의 1/4을 회복한다.", // NEEDS QC
 	},
 	lightofruin: {
 		name: "파멸의빛",
 		// Official flavor text: "영원의 꽃의 파워를 빌려서 강력한 광선을 쏜다. 자신도 상당한 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 1/2(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "1/2의 반동 데미지를 받는다.", // NEEDS QC
 	},
 	lightscreen: {
 		name: "빛의장막",
 		// Official flavor text: "5턴 동안 이상한 장막을 쳐서 상대로부터 받는 특수공격의 데미지를 약하게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 자신과 파티 전원이 특수 공격으로 받는 데미지가 0.5배(더블배틀에서는 0.66배)가 된다. 오로라베일로 데미지가 더 줄어들지는 않는다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다, 사이코팽, 안개제거에 맞으면 효과가 사라진다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 받는 특수 데미지가 절반이 된다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원이 특수 공격으로 받는 데미지가 0.5배(더블배틀이나 트리플배틀에서는 0.66배)가 된다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다가나 안개제거에 맞으면 효과가 사라진다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원이 특수 공격으로 받는 데미지가 1/2(자신 진영에 여러 포켓몬이 나와 있으면 2/3)이 된다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다가나 안개제거에 맞으면 효과가 사라진다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원이 특수 공격으로 받는 데미지가 1/2(자신 진영에 여러 포켓몬이 나와 있으면 2/3)이 된다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다에 맞으면 효과가 사라진다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원의 특수방어가 2배가 된다. 급소에 맞으면 이 효과를 무시한다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+			shortDesc: "5턴 동안 아군의 특수방어가 2배.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
-			start: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 데미지를 받을 때 스페셜이 2배가 된다. 급소에 맞으면 이 효과를 무시한다. 어떤 포켓몬이든 흑안개를 쓰면 효과가 사라진다.", // NEEDS QC
+			shortDesc: "배틀에 있는 동안 피격 시 스페셜 2배.", // NEEDS QC
+			start: "  {POKEMON:topic} 특수 공격에 강해졌다!", // NEEDS QC
 		},
 
 		start: "  {TEAM:topic} 빛의장막으로 특수공격에 강해졌다!",
@@ -4035,80 +4035,80 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lightthatburnsthesky: {
 		name: "하늘을태우는멸망의빛",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "랭크 변화를 포함해 자신의 공격이 특수공격보다 높다면 물리 공격이 된다. 이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "공격이 특공보다 높으면 물리. 특성 무시.", // NEEDS QC
 	},
 	liquidation: {
 		name: "아쿠아브레이크",
 		// Official flavor text: "물의 힘으로 상대에게 부딪쳐서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	lockon: {
 		name: "록온",
 		// Official flavor text: "조준을 잘 맞춰 다음 공격이 반드시 상대에게 명중하도록 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 턴이 끝날 때까지 상대는 2턴 기술의 도중이라도 자신의 기술을 피할 수 없다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다. 자신에게 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "자신의 다음 기술이 반드시 명중하게 된다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "다음 턴이 끝날 때까지 상대는 2턴 기술의 도중이라도 자신의 기술을 피할 수 없다. 이 효과가 상대에게 발동하면, 그 상대에 대한 다른 모든 포켓몬의 이 기술과 마음의눈의 효과가 사라진다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬이 효과를 이어받는다. 자신이 배턴터치로 물러나면 교체해 나온 포켓몬에게 같은 상대에 대한 효과가 다시 발동한다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대에 대한 다음 명중 판정이 반드시 성공한다. 상대가 공중날기를 쓰는 중이라면 지진, 땅가르기, 매그니튜드는 여전히 피한다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬이 효과를 이어받는다. 상대가 배틀에서 벗어나거나 상대에 대한 명중 판정이 이루어지면 효과가 사라진다.", // NEEDS QC
+			shortDesc: "다음 기술은 상대에게 빗나가지 않는다.", // NEEDS QC
 		},
 
 		start: "  {SOURCE:topic} 목표를 {POKEMON:directional}로 결정했다!",
 	},
 	lovelykiss: {
 		name: "악마의키스",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 잠듦 상태로 만든다.", // NEEDS QC
 	},
 	lowkick: {
 		name: "안다리걸기",
 		// Official flavor text: "발을 강하게 걸고 상대를 넘어뜨려 공격한다. 상대가 무거울수록 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 상대의 무게가 10kg 미만이면 20, 25kg 미만이면 40, 50kg 미만이면 60, 100kg 미만이면 80, 200kg 미만이면 100, 200kg 이상이면 120이다.", // NEEDS QC
+		shortDesc: "상대가 무거울수록 강하다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+			shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		},
 	},
 	lowsweep: {
 		name: "로킥",
 		// Official flavor text: "재빠른 움직임으로 상대의 다리를 노려 공격한다. 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	luckychant: {
 		name: "주술",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 자신과 파티 전원이 급소에 맞지 않는다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 아군은 급소에 맞지 않는다.", // NEEDS QC
 
 		start: "  주술의 힘으로 {TEAM}의 급소가 숨겨졌다!",
 		end: "  {TEAM}의 주술이 풀렸다!",
 	},
 	luminacrash: {
 		name: "루미나콜리전",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	lunarblessing: {
 		name: "초승달의기도",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신 진영의 포켓몬은 각각 최대 HP의 1/4(0.5는 올림)을 회복하고 상태 이상이 회복된다.", // NEEDS QC
+		shortDesc: "아군 전체: HP 1/4 회복, 상태 이상 회복.", // NEEDS QC
 	},
 	lunardance: {
 		name: "초승달춤",
 		// Official flavor text: "자신은 기절하지만 교대하여 나오는 포켓몬의 모든 상태를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 기절하는 대신, 교체해 나온 포켓몬의 HP나 PP가 가득 차 있지 않거나 상태 이상이라면 HP와 PP를 모두 회복시키고 상태 이상도 회복시킨다. 교체는 턴 종료 시에 이루어지며, 회복은 설치 기술의 효과보다 먼저 적용된다. 이 효과는 조건에 맞는 포켓몬이 그 자리에 교체해 나오거나 사이드체인지로 그 자리에 올 때까지 지속된다. 자신이 파티에서 기절하지 않은 마지막 포켓몬이라면 실패한다.", // NEEDS QC
+		shortDesc: "기절하고 다음 포켓몬의 HP·PP·상태를 회복시킨다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 기절하는 대신, 교체해 나온 포켓몬의 HP와 PP를 모두 회복시키고 상태 이상도 회복시킨다. 교체는 턴 종료 시에 이루어지며, 회복은 설치 기술의 효과보다 먼저 적용된다. 자신이 파티에서 기절하지 않은 마지막 포켓몬이라면 실패한다.", // NEEDS QC
+			shortDesc: "자신은 기절. 교체된 포켓몬은 PP까지 회복.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 기절하는 대신, 교체해 나온 포켓몬의 HP와 PP를 모두 회복시키고 상태 이상도 회복시킨다. 교체는 즉시 이루어지며, 회복은 설치 기술의 효과보다 나중에 적용된다. 자신이 파티에서 기절하지 않은 마지막 포켓몬이라면 실패한다.", // NEEDS QC
 		},
 
 		heal: "  {POKEMON:topic} 신비한 달빛에 둘러싸였다!",
@@ -4116,43 +4116,43 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lunge: {
 		name: "덤벼들기",
 		// Official flavor text: "전력으로 상대에게 덤벼들며 공격한다. 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	lusterpurge: {
 		name: "러스터퍼지",
 		// Official flavor text: "눈부신 빛을 발산하여 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	machpunch: {
 		name: "마하펀치",
 		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 펀치를 날린다. 반드시 선제공격을 할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	magicalleaf: {
 		name: "매지컬리프",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	magicaltorque: {
 		name: "매지컬액셀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	magiccoat: {
 		name: "매직코트",
 		// Official flavor text: "상대가 상태 이상이 되는 기술이나 씨뿌리기 등을 썼을 때 되받아친다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴이 끝날 때까지, 자신을 노리는 일부 변화 기술의 효과를 받지 않고 쓴 포켓몬에게 되받아친다. 되받아친 기술은 이 기술이나 특성 매직미러의 효과로 다시 되받아칠 수 없다. 압정뿌리기, 스텔스록, 끈적끈적네트, 독압정은 진영당 1번만, 이 기술이나 특성 매직미러의 효과를 받는 가장 왼쪽 포켓몬이 되받아친다. 특성 피뢰침과 마중물은 이 기술보다 먼저 각각의 기술을 끌어당긴다.", // NEEDS QC
+		shortDesc: "일부 변화 기술을 되받아친다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴이 끝날 때까지, 자신을 노리는 일부 변화 기술의 효과를 받지 않고 쓴 포켓몬에게 되받아친다. 되받아친 기술은 이 기술이나 특성 매직미러의 효과로 다시 되받아칠 수 없다. 압정뿌리기, 스텔스록, 독압정은 진영당 1번만, 이 기술이나 특성 매직미러의 효과를 받는 가장 왼쪽 포켓몬이 되받아친다. 특성 피뢰침과 마중물은 이 기술보다 먼저 각각의 기술을 끌어당긴다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 노리는 일부 변화 기술의 효과를 받지 않고 쓴 포켓몬에게 되받아친다. 그 기술이 양쪽 상대를 노리는 기술이라면, 이 효과를 받는 포켓몬은 원래 쓴 포켓몬만을 노려 되받아친다. 기술을 한 번 되받아치거나 턴이 끝나면 효과가 사라진다. 특성 피뢰침과 마중물은 이 기술보다 먼저 각각의 기술을 끌어당긴다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 노리는 일부 변화 기술의 효과를 받지 않고 쓴 포켓몬에게 되받아친다. 그 기술이 양쪽 상대를 노리는 기술일 때, 이 효과를 받는 포켓몬이 왼쪽에 있다면 양쪽 상대를 노리는 채로 되받아쳐 자신의 아군은 원래 기술의 효과를 받지 않고, 오른쪽에 있다면 아군은 원래 기술의 효과를 받으며 자신은 원래 쓴 포켓몬만을 노려 되받아친다. 기술을 한 번 되받아치거나 턴이 끝나면 효과가 사라진다. 이렇게 되받아친 기술은 이 효과를 받는 다른 포켓몬이 다시 되받아칠 수 있다. 자신의 특성이 방음이라면 이 효과보다 먼저 소리 기술을 무효로 한다. 특성 피뢰침은 이 기술보다 먼저 전기타입 기술을 끌어당긴다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 매직코트에 둘러싸였다!",
@@ -4161,59 +4161,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magicpowder: {
 		name: "마법가루",
 		// Official flavor text: "마법가루를 날려서 상대를 에스퍼타입으로 바꾼다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 에스퍼타입으로 만든다. 상대가 아르세우스나 실버디거나, 이미 에스퍼 단일 타입이거나, 테라스탈 상태라면 실패한다.", // NEEDS QC
+		shortDesc: "상대를 에스퍼타입으로 만든다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 에스퍼타입으로 만든다. 상대가 아르세우스나 실버디거나, 이미 에스퍼 단일 타입이라면 실패한다.", // NEEDS QC
 		},
 	},
 	magicroom: {
 		name: "매직룸",
 		// Official flavor text: "이상한 공간을 만든다. 5턴 동안 모든 포켓몬의 도구의 효과가 사라진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬이 지닌 도구가 효과를 잃는다. 폼체인지를 일으키는 도구의 그 효과는 유지되지만 그 외의 효과는 무효가 된다. 효과가 지속되는 동안 모든 포켓몬은 내던지기와 자연의은혜를 쓸 수 없다. 효과가 지속되는 동안 이 기술을 다시 쓰면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "5턴 동안 모든 도구가 효과를 잃는다.", // NEEDS QC
 	},
 	magmastorm: {
 		name: "마그마스톰",
 		// Official flavor text: "세차게 타오르는 불꽃 속에 4-5턴 동안 상대를 가두어 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(자신이 조임밴드를 지니고 있으면 1/8)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀을 쓰면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴(끈기갈고리손톱을 지니고 있으면 항상 5턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 마그마의 소용돌이에 갇혔다!",
 	},
 	magnetbomb: {
 		name: "마그넷봄",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	magneticflux: {
 		name: "자기장조작",
 		// Official flavor text: "자기장 조작으로 인해 특성 플러스와 마이너스의 방어, 특수방어가 오른다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신 진영의 특성이 플러스나 마이너스인 포켓몬의 방어와 특수방어를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "플러스·마이너스 아군의 방어·특방 +1.", // NEEDS QC
 	},
 	magnetrise: {
 		name: "전자부유",
 		// Official flavor text: "전기로 만든 자력의 힘으로 허공에 뜬다. 5턴 동안 부유할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 자신은 배틀에 나와 있는 한 땅타입 기술과 압정뿌리기, 독압정, 끈적끈적네트, 특성 개미지옥의 효과를 받지 않는다. 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 뿌리박기, 떨어뜨리기, 사우전드애로, 검은철구의 효과를 받으면 이 효과보다 우선된다. 이미 이 효과나 뿌리박기, 떨어뜨리기, 사우전드애로의 효과를 받고 있다면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 땅타입 기술을 받지 않는다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신은 배틀에 나와 있는 한 땅타입 기술과 압정뿌리기, 독압정, 특성 개미지옥의 효과를 받지 않는다. 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 뿌리박기, 떨어뜨리기, 검은철구의 효과를 받으면 이 효과보다 우선된다. 이미 이 효과나 뿌리박기, 떨어뜨리기의 효과를 받고 있다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신은 배틀에 나와 있는 한 땅타입 기술과 압정뿌리기, 독압정, 특성 개미지옥의 효과를 받지 않는다. 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 뿌리박기와 검은철구의 효과를 받으면 이 효과보다 우선된다. 이미 이 효과나 뿌리박기의 효과를 받고 있다면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 전자력으로 떠올랐다!",
@@ -4222,18 +4222,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magnitude: {
 		name: "매그니튜드",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력이 무작위로 변한다. 5%의 확률로 10 또는 150, 10%의 확률로 30 또는 110, 20%의 확률로 50 또는 90, 30%의 확률로 70이다. 상대가 구멍파기를 쓰는 중이라면 데미지가 2배가 된다.", // NEEDS QC
+		shortDesc: "이웃을 공격. 위력 무작위. 구멍파기 중에는 2배.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력이 무작위로 변한다. 5%의 확률로 10 또는 150, 10%의 확률로 30 또는 110, 20%의 확률로 50 또는 90, 30%의 확률로 70이다. 상대가 구멍파기를 쓰는 중이라면 위력이 2배가 된다.", // NEEDS QC
 		},
 
 		activate: "  매그니튜드 {NUMBER}!!",
 	},
 	makeitrain: {
 		name: "골드러시",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 특공 -1. 상대 전체를 공격한다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4244,223 +4244,223 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	maliciousmoonsault: {
 		name: "하이퍼다크크러셔",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "작아지기를 쓴 상대에게 데미지 2배.", // NEEDS QC
 	},
 	malignantchain: {
 		name: "악독사슬",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대를 맹독 상태로 만든다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대를 맹독 상태로 만든다.", // NEEDS QC
 	},
 	matblock: {
 		name: "마룻바닥세워막기",
 		// Official flavor text: "뒤집어 세운 마룻바닥을 방패로 하여 자신과 같은 편으로 향하는 기술 데미지를 막는다. 변화 기술은 막을 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 아군을 포함한 다른 포켓몬의 공격 기술로부터 자신과 파티 전원을 지킨다. 배틀에 나온 첫 턴이 아니거나, 이 턴의 마지막에 행동하거나, 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
+		shortDesc: "아군을 공격으로부터 지킨다. 첫 턴 전용.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 마룻바닥세워막기를 노리고 있다!",
 		block: "  {MOVE:topic} 마룻바닥세워막기로 막혔다!",
 	},
 	matchagotcha: {
 		name: "휘적휘적포",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 화상 상태로 만든다. 상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다. 상대가 얼음 상태라면 녹인다.", // NEEDS QC
+		shortDesc: "20% 화상. 데미지의 절반 회복. 얼음을 녹인다.", // NEEDS QC
 	},
 	maxairstream: {
 		name: "다이제트",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 비행타입의 공격. 같은 편의 스피드를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 스피드가 1단계 올라간다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 스피드 +1.", // NEEDS QC
 	},
 	maxdarkness: {
 		name: "다이아크",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 악타입의 공격. 상대의 특수방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 특수방어가 1단계 떨어진다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 특방 -1.", // NEEDS QC
 	},
 	maxflare: {
 		name: "다이번",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 불꽃타입의 공격. 5턴 동안 햇살을 강하게 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 쾌청의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 날씨: 맑음.", // NEEDS QC
 	},
 	maxflutterby: {
 		name: "다이웜",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 벌레타입의 공격. 상대의 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 특수공격이 1단계 떨어진다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 특공 -1.", // NEEDS QC
 	},
 	maxgeyser: {
 		name: "다이스트림",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 물타입의 공격. 5턴 동안 비를 내리게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 비의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 날씨: 비.", // NEEDS QC
 	},
 	maxguard: {
 		name: "다이월",
 		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다이맥스 기술을 포함한 다른 포켓몬의 거의 모든 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "다이맥스 기술을 포함한 공격에서 자신을 지킨다.", // NEEDS QC
 
 		activate: "  {POKEMON} 공격으로부터 몸을 지켰다!",
 	},
 	maxhailstorm: {
 		name: "다이아이스",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 얼음타입의 공격. 5턴 동안 싸라기눈을 내리게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 싸라기눈의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 날씨: 싸라기눈.", // NEEDS QC
 	},
 	maxknuckle: {
 		name: "다이너클",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 격투타입의 공격. 같은 편의 공격을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 공격이 1단계 올라간다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 공격 +1.", // NEEDS QC
 	},
 	maxlightning: {
 		name: "다이썬더",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 전기타입의 공격. 5턴 동안 일렉트릭필드로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 일렉트릭필드의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 일렉트릭필드 발동.", // NEEDS QC
 	},
 	maxmindstorm: {
 		name: "다이사이코",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 에스퍼타입의 공격. 5턴 동안 사이코필드로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 사이코필드의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 사이코필드 발동.", // NEEDS QC
 	},
 	maxooze: {
 		name: "다이애시드",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 독타입의 공격. 같은 편의 특수공격을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 특수공격이 1단계 올라간다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 특공 +1.", // NEEDS QC
 	},
 	maxovergrowth: {
 		name: "다이그래스",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 풀타입의 공격. 5턴 동안 그래스필드로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 그래스필드의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 그래스필드 발동.", // NEEDS QC
 	},
 	maxphantasm: {
 		name: "다이할로우",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 고스트타입의 공격. 상대의 방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 방어가 1단계 떨어진다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 방어 -1.", // NEEDS QC
 	},
 	maxquake: {
 		name: "다이어스",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 땅타입의 공격. 같은 편의 특수방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 특수방어가 1단계 올라간다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 특방 +1.", // NEEDS QC
 	},
 	maxrockfall: {
 		name: "다이록",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 바위타입의 공격. 5턴 동안 날씨를 모래바람으로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 모래바람의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 날씨: 모래바람.", // NEEDS QC
 	},
 	maxstarfall: {
 		name: "다이페어리",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 페어리타입의 공격. 5턴 동안 미스트필드로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 미스트필드의 효과가 발동한다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 미스트필드 발동.", // NEEDS QC
 	},
 	maxsteelspike: {
 		name: "다이스틸",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 강철타입의 공격. 같은 편의 방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 자신 진영의 포켓몬은 대타를 내세우고 있어도 방어가 1단계 올라간다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 아군: 방어 +1.", // NEEDS QC
 	},
 	maxstrike: {
 		name: "다이어택",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 노말타입의 공격. 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 스피드가 1단계 떨어진다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 스피드 -1.", // NEEDS QC
 	},
 	maxwyrmwind: {
 		name: "다이드라군",
 		// Official flavor text: "다이맥스한 포켓몬이 날리는 드래곤타입의 공격. 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 원래 기술의 다이맥스 기술 위력과 같다. 이 기술이 성공하면 상대 진영의 포켓몬은 대타를 내세우고 있어도 공격이 1단계 떨어진다. 자신이 다이맥스 상태가 아니면 이 효과는 발동하지 않는다. 이 기술을 원래 기술로 쓰면 위력 0으로 데미지를 준다.", // NEEDS QC
+		shortDesc: "위력은 원래 기술에 따른다. 상대: 공격 -1.", // NEEDS QC
 	},
 	meanlook: {
 		name: "검은눈빛",
 		// Official flavor text: "빨려 들어갈 것 같은 까만 눈빛으로 가만히 응시하여 상대를 배틀에서 도망갈 수 없게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대를 교체할 수 없게 만든다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라지지만, 배턴터치로 물러난 경우에는 상대가 계속 교체할 수 없다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 배턴터치를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라지지만, 배턴터치로 물러난 경우에는 상대가 계속 교체할 수 없다.", // NEEDS QC
 		},
 	},
 	meditate: {
 		name: "요가포즈",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격을 1단계 올린다.", // NEEDS QC
 	},
 	mefirst: {
 		name: "선취",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 쓰려고 선택한 기술을 위력 1.5배로 먼저 쓴다. 그 기술은 부리캐논, 트림, 번액셀, 파이트액셀, 앙갚음, 카운터, 탐내다, 힘껏펀치, 매지컬액셀, 선취, 메탈버스트, 미러코트, 포이즌액셀, 트랩셸, 발버둥, 도둑질, 다크액셀이 아닌 공격 기술이어야 한다. 상대가 자신보다 먼저 행동하면 실패한다. 기술을 복사할 때 상대의 대타는 무시한다.", // NEEDS QC
+		shortDesc: "상대의 기술을 1.5배로 먼저 쓴다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 쓰려고 선택한 기술을 위력 1.5배로 먼저 쓴다. 그 기술은 부리캐논, 트림, 수다, 카운터, 탐내다, 힘껏펀치, 선취, 메탈버스트, 미러코트, 트랩셸, 발버둥, 도둑질이 아닌 공격 기술이어야 한다. 상대가 자신보다 먼저 행동하면 실패한다. 기술을 복사할 때 상대의 대타는 무시한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 쓰려고 선택한 기술을 위력 1.5배로 먼저 쓴다. 그 기술은 부리캐논, 트림, 수다, 카운터, 탐내다, 힘껏펀치, 선취, 메탈버스트, 미러코트, 트랩셸, 발버둥, 도둑질, Z기술이 아닌 공격 기술이어야 한다. 상대가 자신보다 먼저 행동하면 실패한다. 기술을 복사할 때 상대의 대타는 무시한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 쓰려고 선택한 기술을 위력 1.5배로 먼저 쓴다. 그 기술은 트림, 수다, 카운터, 탐내다, 힘껏펀치, 선취, 메탈버스트, 미러코트, 발버둥, 도둑질이 아닌 공격 기술이어야 한다. 상대가 자신보다 먼저 행동하면 실패한다. 기술을 복사할 때 상대의 대타는 무시한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 쓰려고 선택한 기술을 위력 1.5배로 먼저 쓴다. 그 기술은 수다, 카운터, 탐내다, 힘껏펀치, 선취, 메탈버스트, 미러코트, 발버둥, 도둑질이 아닌 공격 기술이어야 한다. 상대가 자신보다 먼저 행동하면 실패한다. 기술을 복사할 때 상대의 대타는 무시한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 쓰려고 선택한 기술을 위력 1.5배로 먼저 쓴다. 그 기술은 수다, 카운터, 탐내다, 힘껏펀치, 선취, 미러코트, 발버둥, 도둑질이 아닌 공격 기술이어야 한다. 상대가 자신보다 먼저 행동하면 실패한다. 기술을 복사할 때 상대의 대타는 무시한다.", // NEEDS QC
 		},
 	},
 	megadrain: {
 		name: "메가드레인",
 		// Official flavor text: "양분을 흡수하여 공격한다. 상대에게 입힌 데미지의 절반에 해당하는 HP를 회복할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(버림)가 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 준 데미지의 1/2(버림)만큼 HP를 회복한다.", // NEEDS QC
 		},
 	},
 	megahorn: {
 		name: "메가혼",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	megakick: {
 		name: "메가톤킥",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	megapunch: {
 		name: "메가톤펀치",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	memento: {
 		name: "추억의선물",
 		// Official flavor text: "자신은 기절하게 되지만 그 대신 상대의 공격과 특수공격을 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격과 특수공격을 2단계씩 떨어뜨린다. 빗나가거나 대상이 없는 경우가 아니면 자신은 기절한다. 대타에 맞으면 완전히 실패하지만, 상대의 능력이 변하지 않는 경우에는 실패하지 않는다.", // NEEDS QC
+		shortDesc: "상대의 공격·특공 -2. 자신은 기절한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 공격과 특수공격을 2단계씩 떨어뜨린다. 이 기술이 빗나가도 자신은 기절한다. 이 기술은 2턴 기술의 도중인 상대도 맞힐 수 있다. 대상이 없으면 완전히 실패하지만, 상대의 능력이 변하지 않는 경우에는 실패하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 공격과 특수공격을 2단계씩 떨어뜨린다. 자신은 기절한다. 이 기술은 명중 판정을 하지 않으며, 2턴 기술의 도중인 상대도 맞힐 수 있다. 상대의 공격과 특수공격 랭크가 모두 -6이라면 완전히 실패한다.", // NEEDS QC
 		},
 
 		heal: "  {POKEMON:topic} Z파워로 체력을 회복했다!",
@@ -4468,124 +4468,124 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	menacingmoonrazemaelstrom: {
 		name: "문라이트블래스터",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "다른 포켓몬의 특성을 무시한다.", // NEEDS QC
 	},
 	metalburst: {
 		name: "메탈버스트",
 		// Official flavor text: "기술을 쓰기 전에 마지막으로 받은 기술의 데미지를 늘려서 기술을 쓴 상대에게 돌려준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 마지막으로 자신을 물리 또는 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 1.5배(버림)의 데미지를 준다. 그 공격으로 HP를 잃지 않았다면 1의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리나 특수 공격을 받지 않았다면 실패한다.", // NEEDS QC
+		shortDesc: "공격을 받으면 1.5배로 되갚는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 물리 또는 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 1.5배(버림)의 데미지를 준다. 그 공격으로 HP를 잃지 않았다면 대신 위력 1로 데미지를 준다. 그 상대의 자리가 비어 있다면 범위 내의 무작위 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리나 특수 공격을 받지 않았다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 물리 또는 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 1.5배(버림)의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 물리나 특수 공격을 받지 않았거나 그 공격으로 HP를 잃지 않았다면 실패한다.", // NEEDS QC
 		},
 	},
 	metalclaw: {
 		name: "메탈클로",
 		// Official flavor text: "강철의 발톱으로 상대를 베어 갈라 공격한다. 자신의 공격이 올라갈 때도 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 자신의 공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 자신의 공격을 1단계 올린다.", // NEEDS QC
 	},
 	metalsound: {
 		name: "금속음",
 		// Official flavor text: "금속을 긁을 때 나는 듯한 싫은 소리를 들려준다. 상대의 특수방어를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	meteorassault: {
 		name: "스타어설트",
 		// Official flavor text: "굵은 줄기를 휘둘러서 공격한다. 단 자신도 비틀거리기 때문에 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	meteorbeam: {
 		name: "메테오빔",
 		// Official flavor text: "1턴째에 우주의 힘을 모아서 특수공격을 올리고 2턴째에 상대를 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 힘을 모아 2턴째에 공격한다. 1턴째에 자신의 특수공격을 1단계 올린다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 특공 +1, 2턴째에 공격한다.", // NEEDS QC
 
 		prepare: "{POKEMON}에게서 우주의 힘이 넘쳐난다!",
 	},
 	meteormash: {
 		name: "코멧펀치",
 		// Official flavor text: "혜성과 같은 펀치를 날려서 상대를 공격한다. 자신의 공격이 올라갈 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 자신의 공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "20%의 확률로 자신의 공격을 1단계 올린다.", // NEEDS QC
 	},
 	metronome: {
 		name: "손가락흔들기",
 		// Official flavor text: "손가락을 흔들어 자신의 뇌를 자극해서 모든 기술 중 어느 하나를 날린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "무작위 기술을 골라 쓴다. 당신먼저, 사과산, 아머캐논, 조수, 아스트랄비트, 오라휠, 토치카, 부리캐논, 거수탄, 거수참, 트림, 기프트패스, 번액셀, 바디프레스, 가지찌르기, 와이드브레이커, 축하, 수다, 찬물끼얹기, 썰렁개그, 소울비트, 엑셀브레이크, 파이트액셀, 앙갚음, 흉내쟁이, 카운터, 탐내다, 트릭가드, 데코레이션, 길동무, 판별, 다이아스톰, 배껴그리기, 더블펀처, 전광쌍격, 화룡점정, 드래곤에너지, 드럼어택, 다이맥스포, 라이트닝드라이브, 버티기, 무한다이빔, 사죄의찌르기, 페인트, 타오르는분노, 제살깎기, 플뢰르캐논, 힘껏펀치, 날따름, 프리즈볼트, 얼어붙는시선, 블리자드랜스, G의힘, 도우미, 손에손잡기, 하이퍼드릴, 이차원러시, 이차원홀, 콜드플레어, 지휘, 제트펀치, 정글힐, 킹실드, 생명의물방울, 파멸의빛, 매지컬액셀, 골드러시, 마룻바닥세워막기, 선취, 스타어설트, 손가락흔들기, 흉내내기, 깜짝헤드, 미러코트, 따라하기, 섀도레이, 자연의힘, 자연의분노, 포이즌액셀, 블로킹, 한판내기, 근원의파동, 오버드라이브, 포톤가이저, 플라스마피스트, 찍찍베기, 달려들기, 파워시프트, 단애의칼, 방어, 화염볼, 순서미루기, 패스트가드, 분노의주먹, 분노가루, 레이징불, 대격분, 옛노래, 회생의기도, 카타스트로피, 소금절이, 신비의칼, 꼬리자르기, 트랩셸, 스레드트랩, 스케치, 잠꼬대, 집게덫, 바크아웃, 가로채기, 코골기, 눈, 섀도스틸, 하바네로엑기스, 니들가드, 소울크래시, 스포트라이트, 봄의폭풍, 스팀버스트, 철제광선, 원더스팀, 발버둥, 메테오드라이브, 수류연타, 바꿔치기, 테크노버스터, 테라클러스터, 도둑질, 사우전드애로, 사우전드웨이브, 썬더프리즌, 천둥차기, 정리정돈, 개척하기, 변신, 트릭, 트윈빔, V제너레이트, 암흑강타, 다크액셀, 와이드가드는 고르지 않는다.", // NEEDS QC
+		shortDesc: "무작위 기술을 쓴다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 당신먼저, 사과산, 조수, 아스트랄비트, 오라휠, 토치카, 부리캐논, 거수탄, 거수참, 트림, 기프트패스, 바디프레스, 가지찌르기, 와이드브레이커, 축하, 수다, 소울비트, 흉내쟁이, 카운터, 탐내다, 트릭가드, 데코레이션, 길동무, 판별, 다이아스톰, 더블펀처, 화룡점정, 드래곤에너지, 드래곤해머, 드럼어택, 다이맥스포, 버티기, 무한다이빔, 사죄의찌르기, 페인트, 타오르는분노, 플뢰르캐논, 힘껏펀치, 날따름, 프리즈볼트, 얼어붙는시선, 블리자드랜스, G의힘, 도우미, 손에손잡기, 이차원러시, 이차원홀, 콜드플레어, 지휘, 정글힐, 킹실드, 생명의물방울, 파멸의빛, 마룻바닥세워막기, 선취, 스타어설트, 손가락흔들기, 흉내내기, 깜짝헤드, 미러코트, 따라하기, 섀도레이, 자연의힘, 자연의분노, 블로킹, 근원의파동, 오버드라이브, 포톤가이저, 플라스마피스트, 단애의칼, 방어, 화염볼, 순서미루기, 패스트가드, 분노가루, 옛노래, 신비의칼, 트랩셸, 스케치, 잠꼬대, 집게덫, 바크아웃, 가로채기, 코골기, 섀도스틸, 니들가드, 소울크래시, 스포트라이트, 스팀버스트, 철제광선, 원더스팀, 발버둥, 메테오드라이브, 수류연타, 바꿔치기, 테크노버스터, 도둑질, 사우전드애로, 사우전드웨이브, 썬더프리즌, 천둥차기, 변신, 트릭, V제너레이트, 암흑강타, 와이드가드는 고르지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 당신먼저, 조수, 토치카, 부리캐논, 트림, 기프트패스, 축하, 수다, 흉내쟁이, 카운터, 탐내다, 트릭가드, 길동무, 판별, 다이아스톰, 화룡점정, 버티기, 페인트, 플뢰르캐논, 힘껏펀치, 날따름, 프리즈볼트, 도우미, 손에손잡기, 이차원러시, 이차원홀, 콜드플레어, 지휘, 킹실드, 파멸의빛, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 깜짝헤드, 미러코트, 따라하기, 자연의힘, 근원의파동, 포톤가이저, 플라스마피스트, 단애의칼, 방어, 순서미루기, 패스트가드, 분노가루, 옛노래, 신비의칼, 트랩셸, 스케치, 잠꼬대, 바크아웃, 가로채기, 코골기, 섀도스틸, 니들가드, 스포트라이트, 스팀버스트, 발버둥, 바꿔치기, 테크노버스터, 도둑질, 사우전드애로, 사우전드웨이브, 변신, 트릭, V제너레이트, 와이드가드는 고르지 않는다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 당신먼저, 조수, 트림, 기프트패스, 축하, 수다, 흉내쟁이, 카운터, 탐내다, 트릭가드, 길동무, 판별, 다이아스톰, 화룡점정, 버티기, 페인트, 힘껏펀치, 날따름, 프리즈볼트, 도우미, 손에손잡기, 이차원러시, 이차원홀, 콜드플레어, 킹실드, 파멸의빛, 마룻바닥세워막기, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 근원의파동, 단애의칼, 방어, 순서미루기, 패스트가드, 분노가루, 옛노래, 신비의칼, 스케치, 잠꼬대, 바크아웃, 가로채기, 코골기, 니들가드, 스팀버스트, 발버둥, 바꿔치기, 테크노버스터, 도둑질, 사우전드애로, 사우전드웨이브, 변신, 트릭, V제너레이트, 와이드가드는 고르지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 당신먼저, 조수, 기프트패스, 수다, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 버티기, 페인트, 힘껏펀치, 날따름, 프리즈볼트, 도우미, 콜드플레어, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 자연의힘, 방어, 순서미루기, 패스트가드, 분노가루, 옛노래, 신비의칼, 스케치, 잠꼬대, 바크아웃, 가로채기, 코골기, 발버둥, 바꿔치기, 테크노버스터, 도둑질, 변신, 트릭, V제너레이트, 와이드가드는 고르지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 조수, 수다, 흉내쟁이, 카운터, 탐내다, 길동무, 판별, 버티기, 페인트, 힘껏펀치, 날따름, 도우미, 선취, 손가락흔들기, 흉내내기, 미러코트, 따라하기, 방어, 스케치, 잠꼬대, 가로채기, 발버둥, 바꿔치기, 도둑질, 트릭과 이미 지니고 있는 기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 카운터, 탐내다, 길동무, 판별, 버티기, 힘껏펀치, 날따름, 도우미, 손가락흔들기, 흉내내기, 미러코트, 방어, 스케치, 잠꼬대, 가로채기, 발버둥, 도둑질, 트릭은 고르지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 카운터, 길동무, 판별, 버티기, 손가락흔들기, 흉내내기, 미러코트, 방어, 스케치, 잠꼬대, 발버둥, 도둑질과 이미 지니고 있는 기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 기술을 골라 쓴다. 손가락흔들기와 발버둥은 고르지 않는다.", // NEEDS QC
 		},
 
 		move: "손가락을 흔들었더니 {MOVE:subject} 나왔다!",
 	},
 	mightycleave: {
 		name: "파워풀에지",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "방어 효과를 부수지 않고 뚫는다.", // NEEDS QC
 	},
 	milkdrink: {
 		name: "우유마시기",
 		// Official flavor text: "자신의 최대 HP 절반을 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 최대 HP의 1/2(0.5는 올림)을 회복한다.", // NEEDS QC
+		shortDesc: "자신의 최대 HP의 1/2을 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다.", // NEEDS QC
 		},
 	},
 	mimic: {
 		name: "흉내내기",
 		// Official flavor text: "상대가 마지막에 사용한 기술을 배틀을 하는 동안 자신의 기술로 만들 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 배틀에 나와 있는 동안 이 기술이 상대가 마지막으로 쓴 기술로 바뀐다. 복사한 기술의 PP는 그 기술의 최대치가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 이미 그 기술을 지니고 있거나, 그 기술이 조수, 거수탄, 거수참, 트림, 번액셀, 축하, 수다, 파이트액셀, 흉내쟁이, 다이맥스포, 손에손잡기, 매지컬액셀, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 포이즌액셀, 스케치, 잠꼬대, 발버둥, 테라클러스터, 변신, 다크액셀이라면 실패한다.", // NEEDS QC
+		shortDesc: "이 기술이 상대의 마지막 기술로 바뀐다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안 이 기술이 상대가 마지막으로 쓴 기술로 바뀐다. 복사한 기술의 PP는 그 기술의 최대치가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 이미 그 기술을 지니고 있거나, 그 기술이 거수탄, 거수참, 수다, 다이맥스포, 흉내내기, 스케치, 발버둥, 변신, 다이맥스 기술이라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안 이 기술이 상대가 마지막으로 쓴 기술로 바뀐다. 복사한 기술의 PP는 그 기술의 최대치가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 이미 그 기술을 지니고 있거나, 그 기술이 수다, 흉내내기, 스케치, 발버둥, 변신, Z기술이라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안 이 기술이 상대가 마지막으로 쓴 기술로 바뀐다. 복사한 기술의 PP는 그 기술의 최대치가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 이미 그 기술을 지니고 있거나, 그 기술이 수다, 흉내내기, 스케치, 발버둥, 변신이라면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안 이 기술이 상대가 마지막으로 쓴 기술로 바뀐다. 복사한 기술의 PP는 5가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 이미 그 기술을 지니고 있거나, 그 기술이 수다, 손가락흔들기, 흉내내기, 스케치, 발버둥이라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안 이 기술이 상대가 마지막으로 쓴 기술로 바뀐다. 복사한 기술의 PP는 5가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 이미 그 기술을 지니고 있거나, 그 기술이 손가락흔들기, 흉내내기, 스케치, 발버둥이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안 이 기술이 상대가 마지막으로 쓴 기술로 바뀐다. 복사한 기술의 PP는 5가 된다. 상대가 아직 기술을 쓰지 않았거나, 이미 그 기술을 지니고 있거나, 그 기술이 발버둥이라면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 이 기술이 상대가 지닌 무작위 기술로 바뀐다. 이미 그 기술을 지니고 있어도 바뀐다. 복사한 기술은 복사한 기술의 최대 PP와 관계없이 이 기술의 남은 PP를 이어받는다. 복사한 기술의 PP를 1 쓸 때마다 이 기술의 PP도 1 쓴다.", // NEEDS QC
+			shortDesc: "상대의 무작위 기술로 이 기술이 바뀐다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} {MOVE:object} 배웠다!",
@@ -4593,22 +4593,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mindblown: {
 		name: "깜짝헤드",
 		// Official flavor text: "자신의 머리를 폭발시켜 주위의 모든 것을 공격한다. 자신도 데미지를 받는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 성공 여부와 관계없이, 기절하게 되더라도 특성이 매직가드가 아닌 한 자신이 최대 HP의 1/2(올림)을 잃는다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있거나, 이 기술이 불꽃타입이고 자신이 분진의 효과를 받고 있거나 날씨가 폭우라면 기술이 실행되지 않고 HP도 잃지 않는다.", // NEEDS QC
+		shortDesc: "최대 HP의 절반을 잃고 이웃을 공격한다.", // NEEDS QC
 
-		damage: null, // NEEDS TRANSLATION
+		damage: "  ({POKEMON:topic} 자신의 HP를 깎아서 기술을 사용했다!)", // NEEDS QC
 	},
 	mindreader: {
 		name: "마음의눈",
 		// Official flavor text: "상대의 움직임을 마음으로 읽고 다음 공격이 반드시 상대에게 명중되게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 턴이 끝날 때까지 상대는 2턴 기술의 도중이라도 자신의 기술을 피할 수 없다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다. 자신에게 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "자신의 다음 기술이 반드시 명중하게 된다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "다음 턴이 끝날 때까지 상대는 2턴 기술의 도중이라도 자신의 기술을 피할 수 없다. 이 효과가 상대에게 발동하면, 그 상대에 대한 다른 모든 포켓몬의 이 기술과 록온의 효과가 사라진다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬이 효과를 이어받는다. 자신이 배턴터치로 물러나면 교체해 나온 포켓몬에게 같은 상대에 대한 효과가 다시 발동한다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대에 대한 다음 명중 판정이 반드시 성공한다. 상대가 공중날기를 쓰는 중이라면 지진, 땅가르기, 매그니튜드는 여전히 피한다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬이 효과를 이어받는다. 상대가 배틀에서 벗어나거나 상대에 대한 명중 판정이 이루어지면 효과가 사라진다.", // NEEDS QC
+			shortDesc: "다음 기술은 상대에게 빗나가지 않는다.", // NEEDS QC
 		},
 
 		start: "#lockon",
@@ -4616,38 +4616,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	minimize: {
 		name: "작아지기",
 		// Official flavor text: "몸을 축소하여 작게 보임으로써 자신의 회피율을 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 회피율을 2단계 올린다. 회피율이 변했는지와 관계없이, 배틀에 나와 있는 동안 자신을 노리는 누르기, 드래곤다이브, 플라잉프레스, 히트스탬프, 헤비봄버, 하이퍼다크크러셔, 하드롤러, 짓밟기, 썬더다이브는 명중 판정을 하지 않고 데미지가 2배가 된다.", // NEEDS QC
+		shortDesc: "자신의 회피율을 2단계 올린다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 회피율을 2단계 올린다. 회피율이 변했는지와 관계없이, 배틀에 나와 있는 동안 자신을 노리는 누르기, 드래곤다이브, 플라잉프레스, 히트스탬프, 헤비봄버, 하이퍼다크크러셔, 하드롤러, 짓밟기는 명중 판정을 하지 않고 데미지가 2배가 된다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 회피율을 2단계 올린다. 회피율이 변했는지와 관계없이, 배틀에 나와 있는 동안 자신을 노리는 누르기, 드래곤다이브, 플라잉프레스, 히트스탬프, 고스트다이브, 섀도다이브, 하드롤러, 짓밟기는 명중 판정을 하지 않고 데미지가 2배가 된다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 회피율을 2단계 올린다. 회피율이 변했는지와 관계없이, 배틀에 나와 있는 동안 자신을 노리는 짓밟기와 하드롤러는 데미지가 2배가 된다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 회피율을 1단계 올린다. 회피율이 변했는지와 관계없이, 배틀에 나와 있는 동안 자신을 노리는 짓밟기는 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "자신의 회피율을 1단계 올린다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 회피율을 1단계 올린다. 회피율이 변했는지와 관계없이, 배틀에 나와 있는 동안 자신을 노리는 놀래키기, 신통력, 바늘팔, 짓밟기는 데미지가 2배가 된다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 회피율을 1단계 올린다. 회피율이 변했는지와 관계없이, 배틀에 나와 있는 동안 자신을 노리는 짓밟기는 위력이 2배가 된다. 배턴터치로 이 효과를 아군에게 넘겨줄 수 있다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 회피율을 1단계 올린다.", // NEEDS QC
 		},
 	},
 	miracleeye: {
 		name: "미라클아이",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크가 0보다 높다면 이를 무시하고 명중 판정을 하며, 악타입이라도 에스퍼타입 공격이 명중하게 된다. 상대가 이미 이 효과나 꿰뚫어보기, 냄새구별의 효과를 받고 있으면 실패한다.", // NEEDS QC
+		shortDesc: "에스퍼가 악에 명중. 회피율 무시.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크가 0보다 높다면 이를 무시하고 명중 판정을 하며, 악타입이라도 에스퍼타입 공격이 명중하게 된다.", // NEEDS QC
 		},
 
 		start: "#foresight",
@@ -4655,58 +4655,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mirrorcoat: {
 		name: "미러코트",
 		// Official flavor text: "상대에게 받은 특수공격의 데미지를 2배로 만들어 그 상대에게 돌려준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 마지막으로 자신을 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 공격으로 HP를 잃지 않았다면 1의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 특수 공격을 받지 않았다면 실패한다.", // NEEDS QC
+		shortDesc: "특수 공격을 받으면 데미지의 2배를 되갚는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 공격으로 HP를 잃지 않았다면 대신 위력 1로 데미지를 준다. 그 상대의 자리가 비어 있다면 범위 내의 무작위 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 특수 공격을 받지 않았다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 특수 공격을 받지 않았거나 그 공격으로 HP를 잃지 않았다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 마지막으로 자신을 특수 공격으로 공격한 상대에게, 그 공격으로 잃은 HP의 2배의 데미지를 준다. 그 상대의 자리가 비어 있고 다른 상대가 배틀에 나와 있다면 대신 그 상대에게 데미지를 준다. 이 기술은 잠재파워를 노말타입으로 취급하며, 연속 공격 기술은 마지막 공격만 계산한다. 이 턴에 상대의 특수 공격을 받지 않았거나 그 공격으로 HP를 잃지 않았다면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 특수 공격으로 잃은 HP의 2배의 데미지를 상대에게 준다. 이 기술은 잠재파워를 노말타입으로 취급하며, 연속 공격 기술은 마지막 공격만 계산한다. 자신이 먼저 행동하거나, 이 턴에 특수 공격을 받지 않았거나, 그 공격으로 HP를 잃지 않았다면 실패한다.", // NEEDS QC
 		},
 	},
 	mirrormove: {
 		name: "따라하기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 마지막으로 쓴 기술을 가능하다면 그 상대에게 쓴다. 상대가 아직 기술을 쓰지 않았거나 마지막 기술을 이 기술로 복사할 수 없다면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 마지막 기술을 상대에게 쓴다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 마지막으로 성공적으로 노린 기술을 쓴다. 복사한 기술은 특정 대상 없이 쓴다. 자신을 노린 기술이 없거나, 그 기술이 다른 기술로 불러내졌거나, 이 기술로 복사할 수 없는 기술이거나, 앙코르라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신을 마지막으로 성공적으로 노린 기술을 쓴다. 복사한 기술은 특정 대상 없이 쓴다. 자신을 노린 기술이 없거나, 그 기술이 빗나갔거나 실패했거나 자신에게 효과가 없었거나, 이 기술로 복사할 수 없는 기술이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 마지막으로 쓴 기술을 쓴다. 자신이 교체해 나온 뒤로 상대가 기술을 쓰지 않았거나, 마지막으로 쓴 기술이 손가락흔들기, 흉내내기, 따라하기, 스케치, 잠꼬대, 변신, 또는 자신이 지닌 기술이라면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 마지막으로 쓴 기술을 쓴다. 자신이 교체해 나온 뒤로 상대가 기술을 쓰지 않았거나, 마지막으로 쓴 기술이 따라하기라면 실패한다.", // NEEDS QC
 		},
 	},
 	mirrorshot: {
 		name: "미러샷",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	mist: {
 		name: "흰안개",
 		// Official flavor text: "하얀 안개로 몸을 덮는다. 5턴 동안 상대에 의해 능력이 떨어지지 않게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 자신과 파티 전원은 다른 포켓몬에 의해 능력이 떨어지지 않는다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 아군의 능력이 떨어지지 않는다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 다른 포켓몬에 의해 능력이 떨어지지 않는다. 이미 이 효과를 받고 있다면 실패한다. 배턴터치로 이 효과를 아군에게 넘겨줄 수 있다.", // NEEDS QC
+			shortDesc: "배틀에 있는 동안 능력이 떨어지지 않는다.", // NEEDS QC
 			start: "  {POKEMON:topic} 흰안개에 둘러싸였다!",
 			block: "  {POKEMON:topic} 흰안개에 지켜지고 있다",
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 기술의 추가 효과에 의한 경우를 제외하고 다른 포켓몬에 의해 능력이 떨어지지 않는다. 이미 이 효과를 받고 있다면 실패한다. 어떤 포켓몬이든 흑안개를 쓰면 효과가 사라진다.", // NEEDS QC
 			start: "  {POKEMON:topic} 흰안개에 둘러싸였다!",
 			block: "  그러나 실패하고 말았다!!",
 		},
@@ -4718,29 +4718,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mistball: {
 		name: "미스트볼",
 		// Official flavor text: "안개의 깃털로 둘러싸 공격한다. 상대의 특수공격을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	mistyexplosion: {
 		name: "미스트버스트",
 		// Official flavor text: "자신의 주위에 있는 모두를 공격하지만 사용하면 기절한다. 미스트필드일 때 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "미스트필드가 펼쳐져 있고 자신이 땅에 있다면 위력이 1.5배가 된다. 기술을 쓴 뒤 자신이 기절한다. 대상이 없어 실패해도 기절한다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있으면 쓸 수 없다.", // NEEDS QC
+		shortDesc: "자신은 기절. 미스트필드에서 위력 1.5배.", // NEEDS QC
 	},
 	mistyterrain: {
 		name: "미스트필드",
 		// Official flavor text: "5턴 동안 땅에 있으면 상태 이상이 되지 않고 드래곤타입 기술의 데미지도 절반이 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 미스트필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬을 노리는 드래곤타입 공격 기술의 위력이 0.5배가 되고, 땅에 있는 포켓몬은 상태 이상이나 혼란 상태가 되지 않는다. 땅에 있는 포켓몬은 하품의 효과를 받지만 그 효과로 잠들지는 않는다. 보호색을 쓰면 페어리타입이 되고, 자연의힘은 문포스가 되며, 비밀의힘은 30%의 확률로 특수공격을 1단계 떨어뜨린다. 이미 미스트필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
+		shortDesc: "5턴간 상태 이상 방지, 드래곤 기술 약화.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 미스트필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬을 노리는 드래곤타입 공격 기술의 위력이 0.5배가 되고, 땅에 있는 포켓몬은 상태 이상이 되지 않는다. 땅에 있는 포켓몬은 하품의 효과를 받지만 그 효과로 잠들지는 않는다. 보호색을 쓰면 페어리타입이 되고, 자연의힘은 문포스가 되며, 비밀의힘은 30%의 확률로 특수공격을 1단계 떨어뜨린다. 이미 미스트필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
 		},
 	},
 	moonblast: {
 		name: "문포스",
 		// Official flavor text: "달의 파워를 빌려서 상대를 공격한다. 상대의 특수공격을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4749,150 +4749,150 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	moongeistbeam: {
 		name: "섀도레이",
 		// Official flavor text: "괴상한 광선을 쏘아 공격한다. 상대의 특성을 무시하고 공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "다른 포켓몬의 특성을 무시한다.", // NEEDS QC
 	},
 	moonlight: {
 		name: "달빛",
 		// Official flavor text: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "날씨가 난기류거나 날씨가 없거나 자신이 만능우산을 지니고 있다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 폭우, 비, 모래바람 또는 눈이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
+		shortDesc: "날씨에 따른 양만큼 자신의 HP를 회복한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 난기류거나 날씨가 없거나 자신이 만능우산을 지니고 있다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 싸라기눈, 폭우, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 난기류거나 날씨가 없다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 싸라기눈, 폭우, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 2/3를, 싸라기눈, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 2/3를, 싸라기눈, 비 또는 모래바람이라면 1/4(모두 버림)을 회복한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 HP 전부를, 비나 모래바람이라면 1/4(모두 버림)을 회복한다.", // NEEDS QC
 		},
 	},
 	morningsun: {
 		name: "아침햇살",
 		// Official flavor text: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "날씨가 난기류거나 날씨가 없거나 자신이 만능우산을 지니고 있다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 폭우, 비, 모래바람 또는 눈이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
+		shortDesc: "날씨에 따른 양만큼 자신의 HP를 회복한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 난기류거나 날씨가 없거나 자신이 만능우산을 지니고 있다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 싸라기눈, 폭우, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 난기류거나 날씨가 없다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 싸라기눈, 폭우, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 2/3를, 싸라기눈, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 2/3를, 싸라기눈, 비 또는 모래바람이라면 1/4(모두 버림)을 회복한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 HP 전부를, 비나 모래바람이라면 1/4(모두 버림)을 회복한다.", // NEEDS QC
 		},
 	},
 	mortalspin: {
 		name: "킬러스핀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면 자신에게 걸린 씨뿌리기와 조이기 계열 기술의 효과가 사라지고, 자신 진영의 설치물이 모두 제거된다. 100%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대를 독으로. 설치물·조임 등에서 벗어난다.", // NEEDS QC
 	},
 	mountaingale: {
 		name: "빙산바람",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	mudbomb: {
 		name: "진흙폭탄",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	muddywater: {
 		name: "탁류",
 		// Official flavor text: "탁해진 물을 상대에게 발사하여 공격한다. 명중률을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	mudshot: {
 		name: "머드샷",
 		// Official flavor text: "진흙 덩어리를 상대에게 내던져서 공격한다. 동시에 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	mudslap: {
 		name: "진흙뿌리기",
 		// Official flavor text: "상대의 얼굴 등에 진흙을 내던져서 공격한다. 명중률을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	mudsport: {
 		name: "흙놀이",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 전기타입 공격 기술의 위력이 0.33배가 된다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 전기타입 기술의 위력이 1/3이 된다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 배틀에 나와 있는 모든 포켓몬의 전기타입 공격 기술의 위력이 0.33배가 된다. 이미 어느 포켓몬에게든 이 효과가 발동 중이라면 실패한다.", // NEEDS QC
+			shortDesc: "전기타입 공격의 위력이 1/3이 된다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 배틀에 나와 있는 모든 포켓몬의 전기타입 공격 기술의 위력이 절반이 된다. 자신에게 이미 이 효과가 발동 중이라면 실패한다. 배턴터치로 이 효과를 아군에게 넘겨줄 수 있다.", // NEEDS QC
+			shortDesc: "전기타입 공격의 위력이 절반이 된다.", // NEEDS QC
 		},
 	},
 	multiattack: {
 		name: "멀티어택",
 		// Official flavor text: "높은 에너지를 둘러싸 상대에게 부딪쳐 공격한다. 메모리에 따라 타입이 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 타입은 자신이 지닌 메모리에 따라 정해진다.", // NEEDS QC
+		shortDesc: "지닌 메모리에 따라 타입이 변한다.", // NEEDS QC
 	},
 	mysticalfire: {
 		name: "매지컬플레임",
 		// Official flavor text: "입에서 내뱉는 아주 뜨거운 불꽃으로 공격한다. 상대의 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	mysticalpower: {
 		name: "신비의힘",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
 	},
 	nastyplot: {
 		name: "나쁜음모",
 		// Official flavor text: "나쁜 일을 생각해서 머리를 활성화시킨다. 자신의 특수공격을 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격을 2단계 올린다.", // NEEDS QC
 	},
 	naturalgift: {
 		name: "자연의은혜",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 타입과 위력은 자신이 지닌 나무열매에 따라 정해지며, 그 나무열매를 잃는다. 나무열매를 지니고 있지 않거나, 특성이 서투름이거나, 자신이 금제나 매직룸의 효과를 받고 있다면 실패한다.", // NEEDS QC
+		shortDesc: "지닌 나무열매에 따라 위력과 타입이 변한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술의 타입과 위력은 자신이 지닌 나무열매에 따라 정해지며, 그 나무열매를 잃는다. 나무열매를 지니고 있지 않거나, 특성이 서투름이거나, 자신이 금제의 효과를 받고 있다면 실패한다.", // NEEDS QC
 		},
 	},
 	naturepower: {
 		name: "자연의힘",
 		// Official flavor text: "자연의 힘으로 공격한다. 사용하는 장소에 따라 나오는 기술이 변화한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀 환경에 따라 다른 기술을 불러내 쓴다. 일반적인 환경에서는 트라이어택, 일렉트릭필드는 10만볼트, 미스트필드는 문포스, 그래스필드는 에너지볼, 사이코필드는 사이코키네시스를 쓴다.", // NEEDS QC
+		shortDesc: "필드에 따른 기술을 쓴다(기본: 트라이어택).", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 다른 기술을 불러내 쓴다. 일반적인 Wi-Fi 환경에서는 트라이어택, 일렉트릭필드는 10만볼트, 미스트필드는 문포스, 그래스필드는 에너지볼을 쓴다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 다른 기술을 불러내 쓴다. 일반적인 Wi-Fi 환경에서는 지진을 쓴다.", // NEEDS QC
+			shortDesc: "환경에 따라 기술 변화. (지진)", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 다른 기술을 불러내 쓴다. Wi-Fi 배틀에서는 트라이어택을 쓴다.", // NEEDS QC
+			shortDesc: "환경에 따라 기술 변화. (트라이어택)", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀 환경에 따라 다른 기술을 불러내 쓴다. Wi-Fi 배틀에서는 스피드스타를 쓴다.", // NEEDS QC
+			shortDesc: "환경에 따라 기술 변화. (스피드스타)", // NEEDS QC
 		},
 
 		move: "자연의힘은 {MOVE:subject} 되었다!",
@@ -4900,33 +4900,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	naturesmadness: {
 		name: "자연의분노",
 		// Official flavor text: "자연의 분노를 상대에게 부딪친다. 상대의 HP는 절반이 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 남은 HP의 1/2(버림, 최소 1)만큼의 데미지를 준다.", // NEEDS QC
+		shortDesc: "상대의 남은 HP의 1/2만큼 데미지를 준다.", // NEEDS QC
 	},
 	needlearm: {
 		name: "바늘팔",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 된다.", // NEEDS QC
 		},
 	},
 	neverendingnightmare: {
 		name: "무한암야로의유인",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	nightdaze: {
 		name: "나이트버스트",
 		// Official flavor text: "암흑의 충격파를 날려서 상대를 공격한다. 명중률을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "40%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "40%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	nightmare: {
 		name: "악몽",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 잠들어 있는 동안 매 턴 종료 시 최대 HP의 1/4(버림)을 잃게 한다. 상대가 잠들어 있지 않으면 효과가 없다. 상대가 깨어나면 같은 턴에 다시 잠들더라도 효과가 사라진다.", // NEEDS QC
+		shortDesc: "잠든 상대는 매 턴 최대 HP의 1/4을 잃는다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 악몽을 꾸기 시작했다!",
 		damage: "  {POKEMON:topic} 악몽에 시달리고 있다!",
@@ -4934,162 +4934,162 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	nightshade: {
 		name: "나이트헤드",
 		// Official flavor text: "무시무시한 환상을 보게 해서 자신의 레벨과 똑같은 만큼의 데미지를 상대에게 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 레벨만큼의 데미지를 준다.", // NEEDS QC
+		shortDesc: "자신의 레벨만큼의 데미지를 준다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 레벨만큼의 데미지를 준다. 이 기술은 타입 상성에 의한 무효를 무시한다.", // NEEDS QC
+			shortDesc: "데미지 = 자신의 레벨. 노말에도 명중.", // NEEDS QC
 		},
 	},
 	nightslash: {
 		name: "깜짝베기",
 		// Official flavor text: "순간적으로 틈을 노려 상대를 베어 버린다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	nobleroar: {
 		name: "부르짖기",
 		// Official flavor text: "우렁차게 부르짖어서 상대를 위협하여 상대의 공격과 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격과 특수공격을 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격, 특수공격을 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	noretreat: {
 		name: "배수의진",
 		// Official flavor text: "자신의 모든 능력이 올라가지만 교체하거나 도망칠 수 없게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격, 방어, 특수공격, 특수방어, 스피드를 1단계씩 올리지만 교체할 수 없게 된다. 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 이미 이 효과로 교체할 수 없는 상태라면 실패한다.", // NEEDS QC
+		shortDesc: "모든 능력 +1. 교체할 수 없게 된다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 배수의 진을 쳐서 도망칠 수 없게 되었다!",
 	},
 	noxioustorque: {
 		name: "포이즌액셀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 	},
 	nuzzle: {
 		name: "볼부비부비",
 		// Official flavor text: "전기가 흐르는 볼을 비벼서 공격한다. 상대를 마비 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	oblivionwing: {
 		name: "데스윙",
 		// Official flavor text: "조준한 상대로부터 HP를 흡수한다. 준 데미지의 반 이상 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 3/4(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 75%만큼 HP를 회복한다.", // NEEDS QC
 	},
 	obstruct: {
 		name: "블로킹",
 		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다. 접촉한 상대의 방어를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬의 방어를 2단계 떨어뜨린다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "공격으로부터 자신을 지킨다. 접촉하면 방어 -2.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬의 방어를 2단계 떨어뜨린다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 	},
 	oceanicoperetta: {
 		name: "바다의심포니",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	octazooka: {
 		name: "대포무노포",
 		// Official flavor text: "상대의 얼굴 등에 먹물을 내뿜어 공격한다. 명중률을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	octolock: {
 		name: "문어굳히기",
 		// Official flavor text: "상대를 도망칠 수 없게 한다. 굳히기에 당한 상대는 매 턴 방어와 특수방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대의 방어와 특수방어가 1단계씩 떨어진다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대를 가두고 매 턴 방어·특방을 1단계씩 낮춘다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 문어굳히기 때문에 도망칠 수 없게 되었다!",
 	},
 	odorsleuth: {
 		name: "냄새구별",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크가 0보다 높다면 이를 무시하고 명중 판정을 하며, 고스트타입이라도 노말타입과 격투타입 공격이 명중하게 된다. 상대가 이미 이 효과나 꿰뚫어보기, 미라클아이의 효과를 받고 있으면 실패한다.", // NEEDS QC
+		shortDesc: "노말·격투가 고스트에 명중. 회피율 무시.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크가 0보다 높다면 이를 무시하고 명중 판정을 하며, 고스트타입이라도 노말타입과 격투타입 공격이 명중하게 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 배틀에 나와 있는 동안, 회피율 랭크를 무시하고 명중 판정을 하며, 고스트타입이라도 노말타입과 격투타입 공격이 명중하게 된다.", // NEEDS QC
 		},
 	},
 	ominouswind: {
 		name: "괴상한바람",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 자신의 공격, 방어, 특수공격, 특수방어, 스피드를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 모든 능력이 1단계 올라간다.", // NEEDS QC
 	},
 	orderup: {
 		name: "한판내기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "아군 싸리용이 특성 사령탑을 발동한 상태라면, 싸리용이 젖힌 모습이면 자신의 공격을, 늘어진 모습이면 방어를, 뻗은 모습이면 스피드를 1단계 올린다. 효과를 발동시킨 싸리용이 그 후 기절했더라도 발동한다.", // NEEDS QC
+		shortDesc: "젖힌·늘어진·뻗은 모습에 따라 공·방·스피드 +1.", // NEEDS QC
 	},
 	originpulse: {
 		name: "근원의파동",
 		// Official flavor text: "파랗게 빛나는 무수한 광선으로 상대를 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 상대를 공격한다.", // NEEDS QC
 	},
 	outrage: {
 		name: "역린",
 		// Official flavor text: "2-3턴 동안 마구 난동 부려서 공격한다. 난동 부린 뒤에는 혼란에 빠진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 효과의 첫 턴 또는 3턴 효과의 두 번째 턴에 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
+		shortDesc: "2~3턴 지속. 그 후 자신이 혼란해진다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 인접한 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 효과의 첫 턴 또는 3턴 효과의 두 번째 턴에 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴이 끝날 때 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴이 끝날 때 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 잠들거나, 얼음 상태가 되거나, 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술의 성공 여부와 관계없이 2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 이미 혼란 상태라도 혼란 상태가 된다. 움직일 수 없게 되면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 	},
 	overdrive: {
 		name: "오버드라이브",
 		// Official flavor text: "기타나 베이스를 쳐서 큰 울림과 강한 진동을 상대에게 전달하여 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 상대 전체를 공격한다.", // NEEDS QC
 	},
 	overheat: {
 		name: "오버히트",
 		// Official flavor text: "풀 파워로 상대를 공격한다. 쓰면 반동으로 자신의 특수공격이 크게 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	painsplit: {
 		name: "아픔나누기",
 		// Official flavor text: "자신의 HP와 상대의 HP를 합친 것을 자신과 상대가 사이좋게 나눈다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 HP가 남은 HP의 평균(버림)이 된다. 각자의 최대 HP는 넘지 않는다.", // NEEDS QC
+		shortDesc: "자신과 상대의 HP를 똑같이 나눈다.", // NEEDS QC
 
 		activate: "  서로의 체력을 나누어 가졌다!",
 	},
 	paleowave: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	paraboliccharge: {
 		name: "파라볼라차지",
 		// Official flavor text: "주위에 있는 모든 포켓몬에게 데미지를 준다. 준 데미지의 절반을 자신이 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 준 데미지의 1/2(0.5는 올림)만큼 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다.", // NEEDS QC
+		shortDesc: "준 데미지의 50%만큼 HP를 회복한다.", // NEEDS QC
 	},
 	partingshot: {
 		name: "막말내뱉기",
 		// Official flavor text: "막말을 내뱉어 상대를 위협하여 공격과 특수공격을 떨어뜨린 후 교대 포켓몬과 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격과 특수공격을 1단계씩 떨어뜨린다. 이 기술이 성공하면 자신은 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 상대의 공격과 특수공격이 모두 변하지 않았거나 기절하지 않은 파티의 포켓몬이 없으면 교체하지 않는다.", // NEEDS QC
+		shortDesc: "상대의 공격·특공 -1. 자신은 교체한다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 공격과 특수공격을 1단계씩 떨어뜨린다. 이 기술이 성공하면 자신은 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없으면 교체하지 않는다.", // NEEDS QC
 		},
 
 		heal: "#memento",
@@ -5098,32 +5098,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	payback: {
 		name: "보복",
 		// Official flavor text: "모아서 공격한다. 상대보다 나중에 공격할 수 있으면 기술의 위력은 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "지휘나 특성 무희로 한 행동을 포함해, 이 턴에 상대보다 나중에 행동하면 위력이 2배가 된다. 교체해 나오는 것은 행동으로 치지 않는다.", // NEEDS QC
+		shortDesc: "상대보다 나중에 행동하면 위력이 2배가 된다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 상대보다 나중에 행동하면 위력이 2배가 된다. 교체해 나오는 것은 행동으로 치지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 상대보다 나중에 행동하면 위력이 2배가 된다. 교체해 나오는 것도 행동으로 친다.", // NEEDS QC
 		},
 	},
 	payday: {
 		name: "고양이돈받기",
 		// Official flavor text: "상대의 몸에 돈을 세게 던져서 공격한다. 배틀 후에 돈을 받을 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "돈을 뿌리며 공격한다. 배틀 후 회수한다.", // NEEDS QC
 
 		activate: "  돈이 주위에 흩어졌다!",
 	},
 	peck: {
 		name: "쪼기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	perishsong: {
 		name: "멸망의노래",
 		// Official flavor text: "노래를 들은 포켓몬은 3턴이 지나면 기절한다. 교체되면 효과가 없어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 모든 포켓몬은 멸망의 카운트가 없다면 4의 카운트를 받는다. 기술을 쓴 턴을 포함해 매 턴 종료 시 모든 포켓몬의 카운트가 1씩 줄어들며, 0이 되면 기절한다. 교체하면 카운트가 사라진다. 카운트가 있는 포켓몬이 배턴터치를 쓰면 교체해 나온 포켓몬이 카운트를 이어받아 계속 줄어든다.", // NEEDS QC
+		shortDesc: "모든 포켓몬이 3턴 뒤에 기절한다.", // NEEDS QC
 
 		start: "  멸망의노래를 들은 포켓몬은 3턴 후에 쓰러져 버린다!",
 		activate: "  {POKEMON}의 멸망의 카운트가 {NUMBER:subject} 되었다!",
@@ -5131,38 +5131,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	petalblizzard: {
 		name: "꽃보라",
 		// Official flavor text: "세찬 꽃보라를 일으켜서 주위에 있는 포켓몬을 공격하여 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 포켓몬을 공격한다.", // NEEDS QC
 	},
 	petaldance: {
 		name: "꽃잎댄스",
 		// Official flavor text: "2-3턴 동안 꽃을 흩뿌려서 상대를 공격한다. 흩뿌린 뒤에는 혼란에 빠진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 효과의 첫 턴 또는 3턴 효과의 두 번째 턴에 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
+		shortDesc: "2~3턴 지속. 그 후 자신이 혼란해진다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 인접한 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 효과의 첫 턴 또는 3턴 효과의 두 번째 턴에 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴이 끝날 때 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴이 끝날 때 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 잠들거나, 얼음 상태가 되거나, 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술의 성공 여부와 관계없이 2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 이미 혼란 상태라도 혼란 상태가 된다. 움직일 수 없게 되면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술의 성공 여부와 관계없이 3~4턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 이미 혼란 상태라도 혼란 상태가 된다. 움직일 수 없게 되면 혼란 없이 효과가 사라진다. 효과가 지속되는 동안 이 기술의 명중률은 매 턴 랭크 변화를 포함해 계산한 현재 명중률로 덮어써지며, 1/256보다 낮아지거나 255/256보다 높아지지는 않는다.", // NEEDS QC
+			shortDesc: "3~4턴 지속. 그 후 자신은 혼란.", // NEEDS QC
 		},
 	},
 	phantomforce: {
 		name: "고스트다이브",
 		// Official flavor text: "1턴째에 어디론가 사라져서 2턴째에 상대를 공격한다. 기술 방어를 무시하고 공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 이 턴 동안 상대의 토치카, 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다. 1턴째에 모습을 감추고 2턴째에 공격한다. 1턴째에는 모든 공격을 피한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 사라져 2턴째에 공격. 방어를 뚫는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 이 턴 동안 상대의 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫려, 다른 포켓몬도 상대 진영을 공격할 수 있게 된다. 1턴째에 모습을 감추고 2턴째에 공격한다. 1턴째에는 모든 공격을 피한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다. 상대가 배틀에 나와 있는 동안 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
 		},
 
 		prepare: "#shadowforce",
@@ -5171,58 +5171,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	photongeyser: {
 		name: "포톤가이저",
 		// Official flavor text: "빛의 기둥으로 공격한다. 공격과 특수공격을 비교해서 높은 쪽으로 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "랭크 변화를 포함해 자신의 공격이 특수공격보다 높다면 물리 공격이 된다. 이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "공격이 특공보다 높으면 물리. 특성 무시.", // NEEDS QC
 	},
 	pikapapow: {
 		name: "피카피카썬더",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 친밀도×2/5)(버림)와 1 중 큰 쪽이다.", // NEEDS QC
+		shortDesc: "최대 친밀도에서 위력 102. 반드시 명중한다.", // NEEDS QC
 	},
 	pinmissile: {
 		name: "바늘미사일",
 		// Official flavor text: "날카로운 침을 상대에게 발사해서 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 데미지는 첫 공격에서 한 번만 계산해 모든 공격에 적용한다. 공격 도중 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	plasmafists: {
 		name: "플라스마피스트",
 		// Official flavor text: "전기를 두른 주먹으로 공격한다. 노말타입 기술을 전기타입으로 바꿔버린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 이 턴 동안 노말타입 기술이 전기타입이 된다.", // NEEDS QC
+		shortDesc: "이 턴 동안 노말타입 기술이 전기타입이 된다.", // NEEDS QC
 	},
 	playnice: {
 		name: "친해지기",
 		// Official flavor text: "상대와 친해져서 싸울 마음을 잃게 하여 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	playrough: {
 		name: "치근거리기",
 		// Official flavor text: "상대에게 치근거리며 공격한다. 상대의 공격을 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	pluck: {
 		name: "쪼아대기",
 		// Official flavor text: "부리로 공격한다. 상대가 나무열매를 지니고 있을 때 먹어서 나무열매의 효과를 받을 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 상대가 지닌 나무열매를 빼앗아 바로 먹는다. 자신의 도구가 무시되는 상태라도 나무열매의 효과를 얻는다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+		shortDesc: "상대의 나무열매를 빼앗아 먹는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 지닌 나무열매를 빼앗아 바로 먹는다. 자신의 도구가 무시되는 상태가 아니라면 나무열매의 효과를 얻는다. 이 기술로 잃은 도구는 리사이클로 되찾을 수 있다.", // NEEDS QC
 		},
 
 		removeItem: "#bugbite",
@@ -5230,88 +5230,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	poisonfang: {
 		name: "맹독엄니",
 		// Official flavor text: "독이 있는 이빨로 상대를 물어서 공격한다. 맹독을 주입할 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대를 맹독 상태로 만든다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대를 맹독 상태로 만든다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 맹독 상태로 만든다.", // NEEDS QC
+			shortDesc: "30%의 확률로 상대를 맹독 상태로.", // NEEDS QC
 		},
 	},
 	poisongas: {
 		name: "독가스",
 		// Official flavor text: "독가스를 상대의 얼굴에 내뿜어 독 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대를 독 상태로 만든다.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대를 독 상태로 만든다.", // NEEDS QC
 		},
 	},
 	poisonjab: {
 		name: "독찌르기",
 		// Official flavor text: "독에 물든 촉수나 팔로 상대를 꿰찌른다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 	},
 	poisonpowder: {
 		name: "독가루",
 		// Official flavor text: "독이 있는 가루를 많이 흩뿌려서 상대를 독 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대를 독 상태로 만든다.", // NEEDS QC
 	},
 	poisonsting: {
 		name: "독침",
 		// Official flavor text: "독이 있는 침을 상대에게 꿰찔러서 공격한다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "20%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+			shortDesc: "20%의 확률로 상대를 독 상태로.", // NEEDS QC
 		},
 	},
 	poisontail: {
 		name: "포이즌테일",
 		// Official flavor text: "꼬리로 때린다. 독 상태로 만들 때가 있고 급소에도 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 독 상태로 만든다. 급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다. 10%의 확률로 독.", // NEEDS QC
 	},
 	polarflare: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만든다. 얼어 있는 상대를 녹이지 못한다. 이 기술이 1개 이상의 대상에게 성공하고 자신이 Ramnarok이라면, Dormant Forme일 때는 Radiant Forme으로, Radiant Forme일 때는 Dormant Forme으로 변한다. 특성이 우격다짐이라면 이 폼체인지는 일어나지 않는다. Radiant Forme은 배틀에서 벗어나면 Dormant Forme으로 돌아온다.", // NEEDS QC
+		shortDesc: "10%의 확률로 얼음. Ramnarok이 폼체인지한다.", // NEEDS QC
 	},
 	pollenpuff: {
 		name: "꽃가루경단",
 		// Official flavor text: "상대에게는 폭발하는 경단을 사용하여 공격한다. 같은 편에게는 회복하는 경단을 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 아군이라면 데미지를 주는 대신 최대 HP의 1/2(버림)을 회복시킨다.", // NEEDS QC
+		shortDesc: "아군에게 쓰면 최대 HP의 절반을 회복시킨다.", // NEEDS QC
 	},
 	poltergeist: {
 		name: "폴터가이스트",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대가 도구를 지니고 있지 않으면 실패한다.", // NEEDS QC
 
 		activate: "  {ITEM:subject} {POKEMON}에게 덤벼들었다!",
 	},
 	populationbomb: {
 		name: "찍찍베기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10회 연속으로 공격한다. 공격마다 명중 판정을 하며 상대가 피하면 공격이 끝난다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 10회 공격한다. 속임수주사위를 지니고 있으면 공격 사이에 명중 판정을 하지 않고 무작위로 4~10회 공격한다.", // NEEDS QC
+		shortDesc: "10회 공격. 매 공격 빗나갈 수 있다.", // NEEDS QC
 	},
 	pounce: {
 		name: "달려들기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	pound: {
 		name: "막치기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	powder: {
 		name: "분진",
 		// Official flavor text: "분진을 뒤집어쓴 상대가 불꽃 기술을 쓰면 폭발하여 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 불꽃타입 기술을 쓰면 그 기술은 실행되지 않고 상대는 최대 HP의 1/4(0.5는 올림)을 잃는다. 불꽃타입 기술이 폭우로 막힌 경우에는 발동하지 않는다.", // NEEDS QC
+		shortDesc: "상대가 불꽃 기술을 쓰면 최대 HP의 1/4을 잃는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 불꽃타입 기술을 쓰면 그 기술은 실행되지 않고 상대는 최대 HP의 1/4(0.5는 올림)을 잃는다. 이 효과는 불꽃타입 기술이 폭우로 막히기 전에 발동한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON}에게 분진을 뒤집어씌웠다!",
@@ -5320,34 +5320,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powdersnow: {
 		name: "눈싸라기",
 		// Official flavor text: "차가운 가랑눈을 상대에게 내뿜어 공격한다. 얼음 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "10%의 확률로 상대를 얼음 상태로 만든다.", // NEEDS QC
 		},
 	},
 	powergem: {
 		name: "파워젬",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	powersplit: {
 		name: "파워셰어",
 		// Official flavor text: "초능력으로 자신과 상대의 공격과 특수공격을 더해서 반으로 나눈다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 공격끼리, 특수공격끼리 각각 평균(버림)을 내어 그 값으로 만든다. 랭크 변화는 영향을 받지 않는다.", // NEEDS QC
+		shortDesc: "공격·특공을 상대와 평균 낸다.", // NEEDS QC
 
 		activate: "  {POKEMON:topic} 서로의 파워를 셰어했다!",
 	},
 	powerswap: {
 		name: "파워스왑",
 		// Official flavor text: "초능력으로 자신과 상대의 공격과 특수공격의 능력 변화를 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 공격과 특수공격 랭크 변화를 맞바꾼다.", // NEEDS QC
+		shortDesc: "공격·특공 랭크 변화를 상대와 맞바꾼다.", // NEEDS QC
 	},
 	powershift: {
 		name: "파워시프트",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 방어 수치를 맞바꾼다. 랭크 변화는 각 능력에 그대로 남는다. 다시 쓰면 원래대로 돌아온다. 배턴터치를 쓰면 효과가 지속 중일 때 교체해 나온 포켓몬의 공격과 방어가 맞바꿔진다. 능력이 맞바꿔진 동안 폼체인지로 능력이 다시 계산되면 이 효과는 무시되지만 배턴터치에 대해서는 유지된다.", // NEEDS QC
+		shortDesc: "자신의 공격과 방어 수치를 맞바꾼다.", // NEEDS QC
 
 		start: "  {POKEMON}의 공격력과 방어력이 바뀌었다!",
 		end: "#.start",
@@ -5355,8 +5355,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrick: {
 		name: "파워트릭",
 		// Official flavor text: "초능력으로 자신의 공격과 방어의 힘을 교환한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 방어 수치를 맞바꾼다. 랭크 변화는 각 능력에 그대로 남는다. 다시 쓰면 원래대로 돌아온다. 배턴터치를 쓰면 효과가 지속 중일 때 교체해 나온 포켓몬의 공격과 방어가 맞바꿔진다. 능력이 맞바꿔진 동안 폼체인지로 능력이 다시 계산되면 이 효과는 무시되지만 배턴터치에 대해서는 유지된다.", // NEEDS QC
+		shortDesc: "자신의 공격과 방어 수치를 맞바꾼다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 공격과 방어를 바꿨다!",
 		end: "#.start",
@@ -5364,65 +5364,65 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrip: {
 		name: "기어오르기",
 		// Official flavor text: "자신의 강함을 뻐기고 공격한다. 자신의 능력이 올라가 있는 만큼 위력이 오른다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 자신의 0보다 큰 랭크 변화의 합을 X라 할 때 20+(X×20)이다.", // NEEDS QC
+		shortDesc: "자신의 능력 상승 1개당 위력 +20.", // NEEDS QC
 	},
 	poweruppunch: {
 		name: "그로우펀치",
 		// Official flavor text: "반복하여 때리면 점점 주먹이 단단해진다. 상대를 때리면 공격이 오른다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 자신의 공격을 1단계 올린다.", // NEEDS QC
 	},
 	powerwhip: {
 		name: "파워휩",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	precipiceblades: {
 		name: "단애의칼",
 		// Official flavor text: "대지의 힘을 칼날로 바꿔 상대를 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "추가 효과가 없다. 이웃한 상대를 공격한다.", // NEEDS QC
 	},
 	present: {
 		name: "프레젠트",
 		// Official flavor text: "덫을 설치한 상자를 상대에게 건네어 공격한다. HP가 회복돼버릴 때도 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 상대에게 데미지를 주거나 상대를 회복시킨다. 40%의 확률로 위력 40, 30%의 확률로 위력 80, 10%의 확률로 위력 120이며, 20%의 확률로 상대의 최대 HP의 1/4(버림)을 회복시킨다.", // NEEDS QC
+		shortDesc: "위력 40·80·120 또는 상대의 HP 1/4 회복.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 상대에게 데미지를 주거나 상대를 회복시킨다. 102/256의 확률로 위력 40, 76/256의 확률로 위력 80, 26/256의 확률로 위력 120이며, 52/256의 확률로 상대의 최대 HP의 1/4(버림)을 회복시킨다. 데미지를 주는 경우, 데미지 계산식의 일부 값을 바꾼 비정상적인 식을 쓴다. 자신의 공격은 상대에 대한 이 기술의 상성 배율의 10배로, 상대의 방어는 자신의 두 번째 타입의 인덱스 번호로, 자신의 레벨은 상대의 두 번째 타입의 인덱스 번호로 대체된다. 두 번째 타입이 없는 포켓몬은 첫 번째 타입을 쓴다. 타입별 인덱스 번호는 노말: 0, 격투: 1, 비행: 2, 독: 3, 땅: 4, 바위: 5, 벌레: 7, 고스트: 8, 강철: 9, 불꽃: 20, 물: 21, 풀: 22, 전기: 23, 에스퍼: 24, 얼음: 25, 드래곤: 26, 악: 27이다. 계산식에서 0으로 나누게 되는 경우에는 1로 나눈다.", // NEEDS QC
 		},
 	},
 	prismaticlaser: {
 		name: "프리즘레이저",
 		// Official flavor text: "프리즘의 힘으로 강력한 광선을 발사한다. 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	protect: {
 		name: "방어",
 		// Official flavor text: "상대의 공격을 전혀 받지 않는다. 연속으로 쓰면 실패하기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴 동안 기술로부터 자신을 지킨다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어, 패스트가드, 와이드가드가 아니면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 되며, 최대 8이다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지킨다. 이 기술은 X/65536의 확률로 성공한다. X는 65535에서 시작해 이 기술이 성공할 때마다 절반(버림)이 된다. 4번 연속으로 성공하면 X는 118이 되고, 이후 성공할 때마다 0~65535 사이의 무작위에 가까운 값이 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 65535로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 상대의 공격으로부터 자신을 지킨다. 이 기술은 X/255의 확률로 성공한다. X는 255에서 시작해 이 기술이 성공할 때마다 절반(버림)이 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어가 아니면 X는 255로 돌아간다. 자신이 대타를 내세우고 있거나 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON} 방어 태세에 들어갔다!",
@@ -5431,178 +5431,178 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psybeam: {
 		name: "환상빔",
 		// Official flavor text: "이상한 광선을 상대에게 발사하여 공격한다. 혼란시킬 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	psyblade: {
 		name: "사이코블레이드",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "일렉트릭필드가 펼쳐져 있으면 위력이 1.5배가 된다.", // NEEDS QC
+		shortDesc: "일렉트릭필드에서 위력이 1.5배가 된다.", // NEEDS QC
 	},
 	psychic: {
 		name: "사이코키네시스",
 		// Official flavor text: "강한 염동력을 상대에게 보내어 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "33%의 확률로 상대의 스페셜을 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "33%의 확률로 상대의 스페셜을 1단계 하락.", // NEEDS QC
 		},
 	},
 	psychicfangs: {
 		name: "사이코팽",
 		// Official flavor text: "사이코 파워로 물어서 상대를 공격한다. 빛의장막이나 리플렉터도 파괴할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "공격이 빗나가지 않았다면 데미지 계산 전에 상대 진영의 리플렉터, 빛의장막, 오로라베일의 효과를 없앤다.", // NEEDS QC
+		shortDesc: "기술이 통하는 상대라면 장벽을 부순다.", // NEEDS QC
 	},
 	psychicnoise: {
 		name: "사이코노이즈",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2턴 동안 상대는 배틀에 나와 있는 한 HP를 회복할 수 없다. 효과가 지속되는 동안 회복 기술과 흡수 기술을 쓸 수 없으며, 회복 효과가 있는 특성과 도구도 발동하지 않는다. 효과를 받은 포켓몬이 배턴터치를 쓰면 교체해 나온 포켓몬도 회복할 수 없다. 아픔나누기와 특성 재생력은 영향을 받지 않는다.", // NEEDS QC
+		shortDesc: "2턴 동안 상대는 HP를 회복할 수 없다.", // NEEDS QC
 	},
 	psychicterrain: {
 		name: "사이코필드",
 		// Official flavor text: "5턴 동안 땅에 있으면 선제공격을 받지 않는다. 에스퍼타입의 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 사이코필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬의 에스퍼타입 공격 기술의 위력이 1.3배가 되고, 땅에 있는 포켓몬은 아군이 쓴 경우를 제외하고 우선도가 0보다 높은 기술에 맞지 않는다. 보호색을 쓰면 에스퍼타입이 되고, 자연의힘은 사이코키네시스가 되며, 비밀의힘은 30%의 확률로 상대의 스피드를 1단계 떨어뜨린다. 이미 사이코필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
+		shortDesc: "5턴간 에스퍼 기술 강화, 선제 기술 방지.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 사이코필드가 펼쳐진다. 효과가 지속되는 동안 땅에 있는 포켓몬의 에스퍼타입 공격 기술의 위력이 1.5배가 되고, 땅에 있는 포켓몬은 아군이 쓴 경우를 제외하고 우선도가 0보다 높은 기술에 맞지 않는다. 보호색을 쓰면 에스퍼타입이 되고, 자연의힘은 사이코키네시스가 되며, 비밀의힘은 30%의 확률로 상대의 스피드를 1단계 떨어뜨린다. 이미 사이코필드가 펼쳐져 있으면 실패한다.", // NEEDS QC
 		},
 	},
 	psychoboost: {
 		name: "사이코부스트",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격을 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	psychocut: {
 		name: "사이코커터",
 		// Official flavor text: "실체화시킨 마음의 칼날로 상대를 베어 가른다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	psychoshift: {
 		name: "사이코시프트",
 		// Official flavor text: "초능력으로 암시를 걸어서 자신에게 걸려 있는 상태 이상을 상대에게 옮긴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 상태 이상을 상대에게 옮기고 자신은 회복한다. 자신이 상태 이상이 아니거나 상대가 이미 상태 이상이라면 실패한다.", // NEEDS QC
+		shortDesc: "자신의 상태 이상을 상대에게 옮긴다.", // NEEDS QC
 	},
 	psychup: {
 		name: "자기암시",
 		// Official flavor text: "자신에게 암시를 걸어서 능력 변화 상태를 상대와 똑같은 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 현재 랭크 변화를 모두 복사한다.", // NEEDS QC
+		shortDesc: "상대의 랭크 변화를 복사한다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 현재 랭크 변화를 모두 복사한다. 상대의 랭크가 모두 0이라면 실패한다.", // NEEDS QC
 		},
 	},
 	psyshieldbash: {
 		name: "배리어러시",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 방어를 1단계 올린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 자신의 방어를 1단계 올린다.", // NEEDS QC
 	},
 	psyshock: {
 		name: "사이코쇼크",
 		// Official flavor text: "이상한 염력파를 실체화하여 상대를 공격한다. 물리적인 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수방어 대신 방어로 데미지를 계산한다.", // NEEDS QC
+		shortDesc: "상대의 특수방어 대신 방어로 계산한다.", // NEEDS QC
 	},
 	psystrike: {
 		name: "사이코브레이크",
 		// Official flavor text: "이상한 염력파를 실체화하여 상대를 공격한다. 물리적인 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수방어 대신 방어로 데미지를 계산한다.", // NEEDS QC
+		shortDesc: "상대의 특수방어 대신 방어로 계산한다.", // NEEDS QC
 	},
 	psywave: {
 		name: "사이코웨이브",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "0~100의 무작위 수를 X라 할 때, (자신의 레벨)×(X+50)÷100(버림, 최소 1)만큼의 데미지를 준다.", // NEEDS QC
+		shortDesc: "자신의 레벨의 0.5~1.5배의 무작위 데미지.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "0~10의 무작위 수를 X라 할 때, (자신의 레벨)×(X×10+50)÷100(버림, 최소 1)만큼의 데미지를 준다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1부터 (자신의 레벨×1.5-1)까지의 무작위 수(버림, 최소 1)만큼의 데미지를 준다.", // NEEDS QC
+			shortDesc: "1~(레벨×1.5-1)의 무작위 데미지.", // NEEDS QC
 		},
 	},
 	pulverizingpancake: {
 		name: "진심의공격",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	punishment: {
 		name: "혼내기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 상대의 0보다 큰 랭크 변화의 합을 X라 할 때 60+(X×20)(최대 200)이다.", // NEEDS QC
+		shortDesc: "위력 60. 상대의 능력 상승 1개당 +20.", // NEEDS QC
 	},
 	purify: {
 		name: "정화",
 		// Official flavor text: "상대의 상태 이상을 회복한다. 회복하면 자신은 HP를 회복할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 상태 이상이라면 회복시킨다. 회복시켰다면 자신도 최대 HP의 1/2(버림)을 회복한다.", // NEEDS QC
+		shortDesc: "상대의 상태 이상을 회복시키면 자신의 HP 절반 회복.", // NEEDS QC
 	},
 	pursuit: {
 		name: "따라가때리기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 교체하면 원래 대상이 아니었더라도 그 상대가 물러나기 전에 공격한다. 상대가 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를(배턴터치는 제외) 쓰고 자신이 그보다 나중에 행동한다면 그 상대가 물러나기 전에 공격한다. 교체하는 상대를 공격하면 위력이 2배가 되고 명중 판정을 하지 않으며 자신의 턴은 끝난다. 이때 상대가 기절하면 다음 포켓몬은 턴 종료 시에 나온다.", // NEEDS QC
+		shortDesc: "교체하는 상대에게 위력 2배로 명중한다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "인접한 상대가 이 턴에 교체하면 원래 대상이 아니었더라도 그 상대가 물러나기 전에 공격한다. 상대가 막말내뱉기, 유턴, 볼트체인지를(배턴터치는 제외) 쓰고 자신이 그보다 나중에 행동한다면 그 상대가 물러나기 전에 공격한다. 교체하는 상대를 공격하면 위력이 2배가 되고 명중 판정을 하지 않으며 자신의 턴은 끝난다. 이때 상대가 기절하면 다음 포켓몬은 턴 종료 시에 나온다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "인접한 상대가 이 턴에 교체하면 원래 대상이 아니었더라도 그 상대가 물러나기 전에 공격한다. 상대가 유턴이나 볼트체인지를(배턴터치는 제외) 쓰고 자신이 그보다 나중에 행동한다면 그 상대가 물러나기 전에 공격한다. 교체하는 상대를 공격하면 위력이 2배가 되고 명중 판정을 하지 않으며 자신의 턴은 끝난다. 이때 상대가 기절하면 다음 포켓몬은 턴 종료 시에 나온다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 교체하면 원래 대상이 아니었더라도 그 상대가 물러나기 전에 공격한다. 상대가 유턴을(배턴터치는 제외) 쓰고 자신이 그보다 나중에 행동한다면 그 상대가 물러나기 전에 공격한다. 교체하는 상대를 공격하면 위력이 2배가 되고 명중 판정을 하지 않으며 자신의 턴은 끝난다. 이때 상대가 기절하면 다음 포켓몬이 바로 나온다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "대상이 상대 포켓몬이고 이 턴에 교체하면 그 상대가 물러나기 전에 공격한다. 교체하는 상대를 공격하면 위력이 2배가 되고 명중 판정을 하지 않으며 자신의 턴은 끝난다. 이때 상대가 기절하면 다음 포켓몬이 바로 나온다.", // NEEDS QC
+			shortDesc: "노린 상대가 교체 중이면 위력 2배.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 교체하면 그 상대가 물러나기 전에 위력 2배로 공격하며 자신의 턴은 끝난다.", // NEEDS QC
+			shortDesc: "상대가 교체 중이면 위력 2배.", // NEEDS QC
 		},
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  ({TARGET:topic} 돌아가려 하고 있다……)", // NEEDS QC
 	},
 	pyroball: {
 		name: "화염볼",
 		// Official flavor text: "작은 돌을 태운 불꽃의 공으로 상대를 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 화상. 자신의 얼음을 녹인다.", // NEEDS QC
 	},
 	quash: {
 		name: "순서미루기",
 		// Official flavor text: "상대를 억눌러서 행동의 순서를 마지막으로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 선택한 기술의 우선도와 관계없이, 이 턴에 다른 모든 포켓몬보다 나중에 행동하게 한다. 상대가 이미 행동했다면 실패한다.", // NEEDS QC
+		shortDesc: "상대를 이 턴의 마지막에 행동하게 한다.", // NEEDS QC
 
 		activate: "  {TARGET}의 순서를 미뤘다!",
 	},
 	quickattack: {
 		name: "전광석화",
 		// Official flavor text: "눈에 보이지 않는 굉장한 속도로 상대에게 돌진한다. 반드시 선제공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	quickguard: {
 		name: "패스트가드",
 		// Official flavor text: "자신과 같은 편을 상대의 선제공격으로부터 지킨다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 아군을 포함한 다른 포켓몬의 원래 또는 변경된 우선도가 0보다 높은 공격으로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴 동안 선제 기술로부터 아군을 지킨다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의 원래 또는 변경된 우선도가 0보다 높은 공격으로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의 원래 또는 변경된 우선도가 0보다 높은 공격으로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의 원래 또는 변경된 우선도가 0보다 높은 공격으로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의 원래 우선도가 0보다 높은 공격으로부터 자신과 파티 전원을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어, 패스트가드, 와이드가드가 아니면 X는 1로 돌아간다. X가 256 이상이면 이 기술의 성공률은 1/(2^32)이 된다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {TEAM:object} 패스트가드가 지켜 줬다!",
@@ -5611,30 +5611,30 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	quiverdance: {
 		name: "나비춤",
 		// Official flavor text: "신비롭고 아름다운 춤을 경쾌하게 춘다. 자신의 특수공격과 특수방어와 스피드를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격, 특수방어, 스피드를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격, 특수방어, 스피드를 1단계씩 올린다.", // NEEDS QC
 	},
 	rage: {
 		name: "분노",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면, 이 기술을 계속 선택하는 동안 다른 포켓몬의 공격에 맞을 때마다 자신의 공격이 1단계 올라간다.", // NEEDS QC
+		shortDesc: "사용 중 공격받으면 공격이 1단계 올라간다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 사용되면, 상대가 방어하지 않은 한 이 기술을 계속 선택하는 동안 다른 포켓몬의 공격에 맞을 때마다 자신의 공격이 1단계 올라간다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 X가 1에서 시작한다. 이 기술의 데미지는 X배가 되며, 자신이 상대의 공격에 맞을 때마다 X가 1씩 올라간다(최대 255). 자신이 배틀에서 벗어나거나 이 기술을 선택하지 않으면 X는 1로 돌아간다.", // NEEDS QC
+			shortDesc: "사용 중 맞으면 다음 분노의 데미지 증가.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 자신은 매 턴 자동으로 이 기술을 쓰며 교체할 수 없게 된다. 효과가 지속되는 동안 상대의 공격에 맞을 때마다 자신의 공격이 1단계 올라가고, 이 기술의 명중률은 매 턴 랭크 변화를 포함해 계산한 현재 명중률로 덮어써지며, 1/256보다 낮아지거나 255/256보다 높아지지는 않는다.", // NEEDS QC
+			shortDesc: "계속 지속. 맞을 때마다 공격 +1.", // NEEDS QC
 		},
 	},
 	ragefist: {
 		name: "분노의주먹",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 배틀에서 자신이 공격 기술에 맞은 총횟수(HP를 잃지 않았더라도)를 X라 할 때 50+(X×50)이다. X는 6을 넘지 않으며 교체하거나 기절해도 초기화되지 않는다. 연속 공격 기술은 매 공격을 세지만 혼란에 의한 데미지는 세지 않는다.", // NEEDS QC
+		shortDesc: "맞은 횟수마다 위력 +50(최대 6회).", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5643,10 +5643,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ragepowder: {
 		name: "분노가루",
 		// Official flavor text: "안절부절못하게 하는 가루를 자신에게 뿌려서 주의를 끈다. 상대의 공격은 모두 자신에게 향한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴이 끝날 때까지 상대 진영의 단일 대상 공격이 모두 자신에게 유도된다. 이 유도는 매직코트나 특성 매직미러로 되받아치거나 특성 피뢰침이나 마중물이 끌어당기기 전에 적용된다. 더블배틀이나 배틀로얄이 아니면 실패한다. 자신이 프리폴의 효과를 받는 동안에는 무시된다.", // NEEDS QC
+		shortDesc: "이 턴에 상대의 기술이 자신에게 유도된다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴이 끝날 때까지 상대 진영의 단일 대상 공격이 범위 안이라면 모두 자신에게 유도된다. 이 유도는 매직코트가나 특성 매직미러로 되받아치거나 특성 피뢰침이나 마중물이 끌어당기기 전에 적용된다. 더블배틀이나 트리플배틀이 아니면 실패한다. 자신이 프리폴의 효과를 받는 동안에는 무시된다.", // NEEDS QC
 		},
 
 		start: "#followme",
@@ -5654,78 +5654,78 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragingbull: {
 		name: "레이징불",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "공격이 빗나가지 않았다면 데미지 계산 전에 상대 진영의 리플렉터, 빛의장막, 오로라베일의 효과를 없앤다. 자신이 팔데아 켄타로스라면 모습에 따라 타입이 변한다. 컴뱃종이라면 격투타입, 블레이즈종이라면 불꽃타입, 워터종이라면 물타입이 된다.", // NEEDS QC
+		shortDesc: "장벽을 부순다. 모습에 따라 타입이 변한다.", // NEEDS QC
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  {POKEMON:topic} {TEAM}의 벽을 부쉈다!", // NEEDS QC
 	},
 	ragingfury: {
 		name: "대격분",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 효과의 첫 턴 또는 3턴 효과의 두 번째 턴에 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
+		shortDesc: "2~3턴 지속. 그 후 자신이 혼란해진다.", // NEEDS QC
 	},
 	raindance: {
 		name: "비바라기",
 		// Official flavor text: "5턴 동안 비를 내리게 해서 물타입 기술의 위력을 올린다. 불꽃타입의 위력은 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 날씨가 비가 된다. 효과가 지속되는 동안 물타입 공격의 데미지가 1.5배, 불꽃타입 공격의 데미지가 0.5배가 된다. 축축한바위를 지니고 있으면 8턴 동안 지속된다. 날씨가 이미 비라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 비를 내려 물타입 기술을 강화한다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 날씨가 비가 된다. 효과가 지속되는 동안 물타입 공격의 데미지가 1.5배, 불꽃타입 공격의 데미지가 0.5배가 된다. 날씨가 이미 비라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 이미 비라도 5턴 동안 날씨가 비가 된다. 효과가 지속되는 동안 물타입 공격의 데미지가 1.5배, 불꽃타입 공격의 데미지가 0.5배가 된다.", // NEEDS QC
 		},
 	},
 	rapidspin: {
 		name: "고속스핀",
 		// Official flavor text: "회전해서 상대를 공격한다. 조이기, 김밥말이, 씨뿌리기 등을 날려버린다. 자신의 스피드도 오른다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면 자신에게 걸린 씨뿌리기와 조이기 계열 기술의 효과가 사라지고, 자신 진영의 설치물이 모두 제거된다. 100%의 확률로 자신의 스피드가 1단계 올라간다.", // NEEDS QC
+		shortDesc: "설치물·조임 등에서 벗어난다. 스피드 +1.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하고 자신이 기절하지 않았다면 자신에게 걸린 씨뿌리기와 조이기 계열 기술의 효과가 사라지고, 자신 진영의 설치물이 모두 제거된다.", // NEEDS QC
+			shortDesc: "설치물, 조이기, 씨뿌리기에서 벗어난다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 자신에게 걸린 씨뿌리기와 조이기 계열 기술의 효과가 사라지고, 자신 진영의 설치물이 모두 제거된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 자신에게 걸린 씨뿌리기와 조이기 계열 기술의 효과가 사라지고, 자신 진영의 압정뿌리기가 제거된다.", // NEEDS QC
 		},
 	},
 	razorleaf: {
 		name: "잎날가르기",
 		// Official flavor text: "잎사귀를 날려 상대를 베어 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다. 이웃한 상대를 공격.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 		},
 	},
 	razorshell: {
 		name: "셸블레이드",
 		// Official flavor text: "날카로운 조개껍질로 베어 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	razorwind: {
 		name: "칼바람",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다. 1턴째에 힘을 모아 2턴째에 공격한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴 모은 뒤 2턴째에 공격. 급소율이 높다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "급소에 맞을 확률이 높다. 1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
+			shortDesc: "1턴째 모으고 2턴째에 상대를 공격.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "급소에 맞을 확률이 높다. 1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
+			shortDesc: "1턴째 모으고 2턴째 공격. 급소율 높음.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
+			shortDesc: "1턴째에 모으고 2턴째에 공격한다.", // NEEDS QC
 		},
 
 		prepare: "  {POKEMON}의 주위에서 공기가 소용돌이친다!",
@@ -5733,25 +5733,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	recover: {
 		name: "HP회복",
 		// Official flavor text: "세포를 재생시켜 자신의 최대 HP의 절반만큼 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 최대 HP의 1/2(0.5는 올림)을 회복한다.", // NEEDS QC
+		shortDesc: "자신의 최대 HP의 1/2을 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다. (자신의 최대 HP - 현재 HP + 1)이 256으로 나누어떨어지면 실패한다.", // NEEDS QC
 		},
 	},
 	recycle: {
 		name: "리사이클",
 		// Official flavor text: "배틀 중에 사용하여 없어진 자신의 지닌 물건을 재생시켜 사용할 수 있게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "마지막으로 사용한 도구를 되찾는다. 도구를 지니고 있거나, 도구를 지닌 적이 없거나, 도구가 터진 풍선이거나, 특성이 픽업인 포켓몬이 주워 갔거나, 벌레먹기, 부식가스, 탐내다, 불태우기, 탁쳐서떨구기, 쪼아대기, 도둑질로 잃었다면 실패한다. 내던지기로 던진 도구는 되찾을 수 있다.", // NEEDS QC
+		shortDesc: "마지막으로 사용한 도구를 되찾는다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "마지막으로 사용한 도구를 되찾는다. 도구를 지니고 있거나, 도구를 지닌 적이 없거나, 도구가 터진 풍선이거나, 특성이 픽업인 포켓몬이 주워 갔거나, 벌레먹기, 탐내다, 불태우기, 탁쳐서떨구기, 쪼아대기, 도둑질로 잃었다면 실패한다. 내던지기로 던진 도구는 되찾을 수 있다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신 자리에서 마지막으로 사용된 도구를 되찾는다. 그 도구를 사용한 포켓몬이 자신이 아니어도 된다. 도구를 지니고 있거나, 자신 자리에서 사용된 도구가 없거나, 도구가 탐내다, 탁쳐서떨구기, 도둑질로 잃은 것이라면 실패한다. 내던지기로 던진 도구는 되찾을 수 있다.", // NEEDS QC
 		},
 
 		addItem: "  {POKEMON:topic} {ITEM:object} 주워 왔다!",
@@ -5759,25 +5759,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflect: {
 		name: "리플렉터",
 		// Official flavor text: "5턴 동안 이상한 장막을 쳐서 상대로부터 받는 물리공격의 데미지를 약하게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 자신과 파티 전원이 물리 공격으로 받는 데미지가 0.5배(더블배틀에서는 0.66배)가 된다. 오로라베일로 데미지가 더 줄어들지는 않는다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다, 사이코팽, 안개제거에 맞으면 효과가 사라진다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 받는 물리 데미지가 절반이 된다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원이 물리 공격으로 받는 데미지가 0.5배(더블배틀이나 트리플배틀에서는 0.66배)가 된다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다가나 안개제거에 맞으면 효과가 사라진다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원이 물리 공격으로 받는 데미지가 1/2(자신 진영에 여러 포켓몬이 나와 있으면 2/3)이 된다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다가나 안개제거에 맞으면 효과가 사라진다. 빛의점토를 지니고 있으면 8턴 동안 지속된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원이 물리 공격으로 받는 데미지가 1/2(자신 진영에 여러 포켓몬이 나와 있으면 2/3)이 된다. 급소에 맞으면 이 효과를 무시한다. 자신이나 아군이 깨뜨리다에 맞으면 효과가 사라진다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원의 방어가 2배가 된다. 급소에 맞으면 이 효과를 무시한다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+			shortDesc: "5턴 동안 아군의 방어가 2배.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
-			start: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 데미지를 받을 때 방어가 2배가 된다. 급소에 맞으면 이 효과를 무시한다. 어떤 포켓몬이든 흑안개를 쓰면 효과가 사라진다.", // NEEDS QC
+			shortDesc: "배틀에 있는 동안 자신의 방어 2배.", // NEEDS QC
+			start: "  {POKEMON:topic} 물리 공격에 강해졌다!", // NEEDS QC
 		},
 
 		start: "  {TEAM:topic} 리플렉터로 물리공격에 강해졌다!",
@@ -5786,13 +5786,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflecttype: {
 		name: "미러타입",
 		// Official flavor text: "상대의 타입을 반사해서 자신도 똑같은 타입이 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 타입이 상대의 현재 타입과 같아진다. 상대의 타입에 무타입과 다른 타입이 있다면 무타입은 무시한다. 무타입과 숲의저주나 핼러윈으로 추가된 타입이 있다면 무타입은 노말타입으로 복사된다. 자신이 아르세우스나 실버디거나, 테라스탈 상태거나, 상대가 무타입뿐이라면 실패한다.", // NEEDS QC
+		shortDesc: "자신의 타입이 상대와 같아진다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 상대의 현재 타입과 같아진다. 상대의 타입에 무타입과 다른 타입이 있다면 무타입은 무시한다. 무타입과 숲의저주가나 핼러윈으로 추가된 타입이 있다면 무타입은 노말타입으로 복사된다. 자신이 아르세우스나 실버디거나, 상대가 무타입뿐이라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 타입이 상대의 현재 타입과 같아진다. 자신이 아르세우스라면 실패한다.", // NEEDS QC
 		},
 
 		typeChange: "  {POKEMON:topic} {SOURCE:conjunctive} 같은 타입이 되었다!",
@@ -5800,192 +5800,192 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	refresh: {
 		name: "리프레시",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 화상, 독 또는 마비를 회복한다. 자신이 화상, 독, 마비 상태가 아니라면 실패한다.", // NEEDS QC
+		shortDesc: "자신의 화상·독·마비를 회복한다.", // NEEDS QC
 	},
 	relicsong: {
 		name: "옛노래",
 		// Official flavor text: "옛 노래를 상대에게 들려주고 마음에 호소하여 공격한다. 잠듦 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 잠듦 상태로 만든다. 이 기술이 1개 이상의 대상에게 성공하고 자신이 메로엣타라면, 보이스폼일 때는 스텝폼으로, 스텝폼일 때는 보이스폼으로 변한다. 특성이 우격다짐이라면 이 폼체인지는 일어나지 않는다. 스텝폼은 배틀에서 벗어나면 보이스폼으로 돌아온다.", // NEEDS QC
+		shortDesc: "10% 잠듦. 메로엣타가 폼체인지한다.", // NEEDS QC
 	},
 	rest: {
 		name: "잠자기",
 		// Official flavor text: "2턴 동안 계속 잠잔다. 자신의 HP와 상태 이상을 모두 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 2턴 동안 잠드는 대신 HP를 모두 회복하고 상태 이상도 회복한다. HP가 가득 차 있거나, 이미 잠들어 있거나, 다른 효과가 잠듦을 막고 있다면 실패한다.", // NEEDS QC
+		shortDesc: "2턴 잠들어 HP와 상태 이상을 모두 회복한다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "다음 2턴 동안 잠드는 대신 HP를 모두 회복하고 상태 이상도 회복한다. 이미 잠들어 있어도 발동한다. HP가 가득 차 있으면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "다음 2턴 동안 잠드는 대신 HP를 모두 회복하고 상태 이상도 회복한다. 화상이나 마비에 의한 능력 감소는 없어지지 않는다. HP가 가득 차 있으면 실패한다.", // NEEDS QC
 		},
 	},
 	retaliate: {
 		name: "원수갚기",
 		// Official flavor text: "쓰러진 같은 편의 원수를 갚는다. 앞 턴에서 같은 편이 쓰러지면 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "지난 턴에 자신 파티의 포켓몬이 기절했다면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "지난 턴에 아군이 기절했다면 위력 2배.", // NEEDS QC
 	},
 	return: {
 		name: "은혜갚기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 친밀도×2/5)(버림)와 1 중 큰 쪽이다.", // NEEDS QC
+		shortDesc: "친밀도가 높을수록 강하다(최대 102).", // NEEDS QC
 	},
 	revelationdance: {
 		name: "잠재댄스",
 		// Official flavor text: "전력으로 춤추며 공격한다. 이 기술의 타입은 자신의 타입과 같아진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 타입은 자신의 첫 번째 타입에 따라 정해진다. 첫 번째 타입이 무타입이라면 두 번째 타입이, 그것도 없다면 숲의저주나 핼러윈으로 추가된 타입이 된다. 자신이 무타입뿐이라면 이 기술도 무타입이 된다.", // NEEDS QC
+		shortDesc: "자신의 첫 번째 타입과 같은 타입이 된다.", // NEEDS QC
 	},
 	revenge: {
 		name: "리벤지",
 		// Official flavor text: "상대에게 기술을 받으면 그 상대에게 주는 데미지가 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 상대에게 공격받았다면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "이 턴에 공격받았다면 위력이 2배가 된다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 상대 자리의 포켓몬에게 공격받았다면 위력이 2배가 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 상대 자리의 포켓몬에게 공격받았고 그 포켓몬이 자신을 마지막으로 공격했다면 데미지가 2배가 된다.", // NEEDS QC
+			shortDesc: "상대에게 맞았다면 데미지 2배.", // NEEDS QC
 		},
 	},
 	reversal: {
 		name: "기사회생",
 		// Official flavor text: "힘을 쥐어짜서 공격한다. 자신의 HP가 적을수록 기술의 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 남은 HP×48÷자신의 최대 HP)(버림)를 X라 할 때, X가 33~48이면 20, 17~32면 40, 10~16이면 80, 5~9면 100, 2~4면 150, 0 또는 1이면 200이다.", // NEEDS QC
+		shortDesc: "자신의 남은 HP가 적을수록 강하다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 남은 HP×64÷자신의 최대 HP)(버림)를 X라 할 때, X가 43~48이면 20, 22~42면 40, 13~21이면 80, 6~12면 100, 2~5면 150, 0 또는 1이면 200이다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 남은 HP×48÷자신의 최대 HP)(버림)를 X라 할 때, X가 33~48이면 20, 17~32면 40, 10~16이면 80, 5~9면 100, 2~4면 150, 0 또는 1이면 200이다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 (자신의 남은 HP×48÷자신의 최대 HP)(버림)를 X라 할 때, X가 33~48이면 20, 17~32면 40, 10~16이면 80, 5~9면 100, 2~4면 150, 0 또는 1이면 200이다. 이 기술은 데미지 편차가 없으며 급소에 맞지 않는다.", // NEEDS QC
 		},
 	},
 	revivalblessing: {
 		name: "회생의기도",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "기절한 파티의 포켓몬 하나를 골라 최대 HP의 1/2(버림)로 되살린다. 기절한 파티의 포켓몬이 없으면 실패한다.", // NEEDS QC
+		shortDesc: "기절한 포켓몬을 HP 절반으로 되살린다.", // NEEDS QC
 
 		heal: "  {POKEMON:topic} 정신을 차려 싸울 수 있게 되었다!",
 	},
 	risingvoltage: {
 		name: "라이징볼트",
 		// Official flavor text: "지면에서 올라오는 전격으로 공격한다. 상대가 일렉트릭필드 위에 있을 때 기술의 위력이 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "일렉트릭필드가 펼쳐져 있고 상대가 땅에 있다면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "일렉트릭필드의 땅 위 상대에게 위력 2배.", // NEEDS QC
 	},
 	roar: {
 		name: "울부짖기",
 		// Official flavor text: "상대를 도망가게 해서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 파티에서 기절하지 않은 마지막 포켓몬이거나, 뿌리박기를 썼거나, 특성이 흡반이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대를 무작위 포켓몬과 강제로 교체시킨다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 파티에서 기절하지 않은 마지막 포켓몬이거나, 뿌리박기를 썼거나, 특성이 흡반이라면 실패한다. 또한 자신의 레벨이 상대보다 낮고, 0~255의 무작위 수 X에 대해 X×(자신의 레벨+상대의 레벨)÷256+1(버림)이 (상대의 레벨÷4)(버림) 이하라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 파티에서 기절하지 않은 마지막 포켓몬이거나, 자신이 상대보다 먼저 행동하면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀에서는 효과가 없다.", // NEEDS QC
+			shortDesc: "배틀에서는 효과가 없다.", // NEEDS QC
 		},
 	},
 	roaroftime: {
 		name: "시간의포효",
 		// Official flavor text: "시간이 뒤틀릴 정도의 힘을 사용해서 상대를 공격한다. 다음 턴은 움직일 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	rockblast: {
 		name: "록블라스트",
 		// Official flavor text: "단단한 암석을 상대에게 발사하여 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 	},
 	rockclimb: {
 		name: "록클라임",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	rockpolish: {
 		name: "록커트",
 		// Official flavor text: "자신의 몸을 갈아 공기의 저항을 적게 한다. 스피드를 크게 올릴 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드를 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 스피드를 2단계 올린다.", // NEEDS QC
 	},
 	rockslide: {
 		name: "스톤샤워",
 		// Official flavor text: "큰 바위를 세차게 부딪쳐서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "추가 효과가 없다.", // NEEDS QC
+			shortDesc: "추가 효과가 없다.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		},
 	},
 	rocksmash: {
 		name: "바위깨기",
 		// Official flavor text: "펀치로 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	rockthrow: {
 		name: "돌떨구기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	rocktomb: {
 		name: "암석봉인",
 		// Official flavor text: "암석을 내던져서 공격한다. 상대의 움직임을 봉인함으로써 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	rockwrecker: {
 		name: "암석포",
 		// Official flavor text: "거대한 바위를 상대에게 발사하여 공격한다. 다음 턴은 움직일 수 없게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 다음 턴에 반동으로 움직일 수 없다.", // NEEDS QC
+		shortDesc: "다음 턴에 움직일 수 없다.", // NEEDS QC
 	},
 	roleplay: {
 		name: "역할",
 		// Official flavor text: "상대의 역할을 하여 자신도 상대와 같은 특성으로 변화한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특성이 상대의 특성으로 변한다. 자신의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 테라체인지, 달마모드, 마이티체인지거나 이미 상대와 같다면, 또는 상대의 특성이 혼연일체, 유대변화, 절대안깸, 사령탑, 탈, 초상투영, 플라워기프트, 기분파, 꼬르륵스위치, 아이스페이스, 일루전, 괴짜, 멀티타입, 화학변화가스, 독조종, 스웜체인지, 과학의힘, 고대활성, 쿼크차지, 리시버, AR시스템, 어군, 리밋실드, 배틀스위치, 테라셸, 테라체인지, 제로포밍, 트레이스, 불가사의부적, 달마모드, 마이티체인지라면 실패한다.", // NEEDS QC
+		shortDesc: "자신의 특성이 상대의 특성으로 변한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 특성이 상대의 특성으로 변한다. 자신의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 달마모드거나 이미 상대와 같다면, 또는 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 플라워기프트, 기분파, 그대로꿀꺽미사일, 꼬르륵스위치, 아이스페이스, 일루전, 괴짜, 멀티타입, 화학변화가스, 스웜체인지, 과학의힘, 리시버, AR시스템, 어군, 리밋실드, 배틀스위치, 트레이스, 불가사의부적, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 특성이 상대의 특성으로 변한다. 자신의 특성이 유대변화, 절대안깸, 탈, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 달마모드거나 이미 상대와 같다면, 또는 상대의 특성이 유대변화, 절대안깸, 탈, 플라워기프트, 기분파, 일루전, 괴짜, 멀티타입, 스웜체인지, 과학의힘, 리시버, AR시스템, 어군, 리밋실드, 배틀스위치, 트레이스, 불가사의부적, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 특성이 상대의 특성으로 변한다. 자신의 특성이 멀티타입, 배틀스위치거나 이미 상대와 같다면, 또는 상대의 특성이 플라워기프트, 기분파, 일루전, 괴짜, 멀티타입, 배틀스위치, 트레이스, 불가사의부적, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 특성이 상대의 특성으로 변한다. 자신의 특성이 멀티타입거나 이미 상대와 같다면, 또는 상대의 특성이 플라워기프트, 기분파, 일루전, 괴짜, 멀티타입, 트레이스, 불가사의부적, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 특성이 상대의 특성으로 변한다. 자신의 특성이 멀티타입이거나 이미 상대와 같다면, 상대의 특성이 멀티타입나 불가사의부적이라면, 또는 자신이 백금옥을 지니고 있다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 특성이 상대의 특성으로 변한다. 상대의 특성이 불가사의부적이라면 실패한다.", // NEEDS QC
 		},
 
 		changeAbility: "  {POKEMON:topic} {SOURCE}의 {ABILITY:object} 복사했다!",
@@ -5993,74 +5993,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rollingkick: {
 		name: "돌려차기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	rollout: {
 		name: "구르기",
 		// Official flavor text: "5턴 동안 구르기를 반복하여 공격한다. 기술이 맞을 때마다 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 빗나가거나 5턴이 지나거나 쓸 수 없게 될 때까지 이 기술에 속박되어 다른 행동을 할 수 없다. 명중할 때마다 위력이 2배가 되며, 이전에 웅크리기를 썼다면 다시 2배가 된다. 잠꼬대로 이 기술을 쓰면 1턴만 쓴다.", // NEEDS QC
+		shortDesc: "명중할 때마다 위력 2배. 5턴 동안 반복.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 빗나가거나 5턴이 지나거나 쓸 수 없게 될 때까지 이 기술에 속박되어 다른 행동을 할 수 없다. 명중할 때마다 위력이 2배가 되며, 이전에 웅크리기를 썼다면 다시 2배가 된다. 잠꼬대로 이 기술을 쓰면 1턴만 쓴다. 효과 도중 이 기술이 발동 중인 탈에 맞으면 위력 배율은 멈추지만 턴 카운트는 진행되어, 효과가 끝난 뒤 다음 기술에 배율이 적용될 수 있다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 빗나가거나 5턴이 지나거나 쓸 수 없게 될 때까지 이 기술에 속박되어 다른 행동을 할 수 없다. 명중할 때마다 위력이 2배가 되며, 이전에 웅크리기를 썼다면 다시 2배가 된다. 잠꼬대로 이 기술을 쓰면 1턴만 쓴다.", // NEEDS QC
 		},
 	},
 	roost: {
 		name: "날개쉬기",
 		// Official flavor text: "땅에 내려와 몸을 쉬게 한다. 최대 HP의 절반만큼 HP를 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 최대 HP의 1/2(0.5는 올림)을 회복한다. 테라스탈 상태가 아니라면 이 턴이 끝날 때까지 비행타입을 잃으며, 비행 단일 타입이라면 노말타입이 된다. HP가 가득 차 있으면 아무 일도 일어나지 않는다.", // NEEDS QC
+		shortDesc: "HP 절반 회복. 이 턴 동안 비행타입이 사라진다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(0.5는 올림)을 회복한다. 이 턴이 끝날 때까지 비행타입을 잃으며, 비행 단일 타입이라면 노말타입이 된다. HP가 가득 차 있으면 아무 일도 일어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다. 이 턴이 끝날 때까지 비행타입을 잃으며, 비행 단일 타입이라면 무타입이 된다. HP가 가득 차 있으면 아무 일도 일어나지 않는다.", // NEEDS QC
 		},
 
-		start: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON:topic} 이 턴 동안 비행타입이 아니게 된다.)", // NEEDS QC
 	},
 	rototiller: {
 		name: "일구기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 땅에 있는 모든 풀타입 포켓몬의 공격과 특수공격을 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "땅에 있는 풀타입의 공격·특공 +1.", // NEEDS QC
 	},
 	round: {
 		name: "돌림노래",
 		// Official flavor text: "노래로 상대를 공격한다. 함께 돌림노래를 하면 계속해서 쓸 수 있고 위력도 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 다른 포켓몬도 이 턴에 이 기술을 선택했다면, 그 포켓몬들은 스피드 순으로 자신 바로 다음에 행동하며, 다른 포켓몬이 먼저 썼다면 이 기술의 위력이 120이 된다.", // NEEDS QC
+		shortDesc: "다른 포켓몬이 먼저 썼다면 위력이 2배가 된다.", // NEEDS QC
 	},
 	ruination: {
 		name: "카타스트로피",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 남은 HP의 1/2(버림, 최소 1)만큼의 데미지를 준다.", // NEEDS QC
+		shortDesc: "상대의 남은 HP의 1/2만큼 데미지를 준다.", // NEEDS QC
 	},
 	sacredfire: {
 		name: "성스러운불꽃",
 		// Official flavor text: "신비한 불꽃으로 상대를 태워서 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "50%의 확률로 화상. 자신의 얼음을 녹인다.", // NEEDS QC
 	},
 	sacredsword: {
 		name: "성스러운칼",
 		// Official flavor text: "긴 뿔로 베어 공격한다. 상대의 능력 변화에 관계없이 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "회피율을 포함한 상대의 랭크 변화를 무시하고 공격한다.", // NEEDS QC
+		shortDesc: "상대의 랭크 변화를 무시하고 공격한다.", // NEEDS QC
 	},
 	safeguard: {
 		name: "신비의부적",
 		// Official flavor text: "5턴 동안 이상한 힘의 보호를 받아 상태 이상이 되지 않는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 자신과 파티 전원은 다른 포켓몬에 의해 상태 이상이나 혼란 상태가 되지 않는다. 자신 진영의 포켓몬은 하품의 효과를 받지 않지만 이미 받은 효과로는 잠들 수 있다. 자신이나 아군이 안개제거에 맞으면 효과가 사라진다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 아군은 상태 이상이 되지 않는다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원은 다른 포켓몬에 의해 상태 이상이나 혼란 상태가 되지 않는다. 자신 진영의 포켓몬은 하품의 효과를 받지 않지만 이미 받은 효과로는 잠들 수 있다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 자신과 파티 전원은 다른 포켓몬에 의해 상태 이상이나 혼란 상태가 되지 않는다. 효과가 지속되는 동안 역린, 난동부리기, 꽃잎댄스는 자신을 혼란 상태로 만들지 않는다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {TEAM:topic} 신비의 베일에 둘러싸였다!",
@@ -6069,8 +6069,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	saltcure: {
 		name: "소금절이",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(강철타입이나 물타입이라면 1/4)(버림)의 데미지를 받는다. 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "매 턴 HP 1/8(강철·물타입은 1/4)의 데미지.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6082,50 +6082,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandattack: {
 		name: "모래뿌리기",
 		// Official flavor text: "상대의 얼굴에 모래를 뿌려서 명중률을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	sandsearstorm: {
 		name: "열사의폭풍",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 화상 상태로 만든다. 날씨가 폭우 또는 비가 되어 있으면 명중 판정을 하지 않는다. 만능우산을 지닌 포켓몬에게는 명중률이 80%로 유지된다.", // NEEDS QC
+		shortDesc: "20% 화상. 비가 오면 반드시 명중한다.", // NEEDS QC
 	},
 	sandstorm: {
 		name: "모래바람",
 		// Official flavor text: "5턴 동안 모래바람을 일으켜 바위 땅, 강철타입 이외의 상대에게 데미지를 준다. 바위타입의 특수방어가 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 날씨가 모래바람이 된다. 마지막 턴을 제외한 매 턴 종료 시, 땅·바위·강철타입이거나 특성이 매직가드, 방진, 모래의힘, 모래헤치기, 모래숨기가 아닌 모든 포켓몬은 최대 HP의 1/16(버림)을 잃는다. 효과가 지속되는 동안 바위타입 포켓몬이 특수 공격으로 데미지를 받을 때 특수방어가 1.5배가 된다. 보송보송바위를 지니고 있으면 8턴 동안 지속된다. 날씨가 이미 모래바람이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 모래바람. 바위타입: 특방 1.5배.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 날씨가 모래바람이 된다. 마지막 턴을 제외한 매 턴 종료 시, 땅·바위·강철타입이거나 특성이 매직가드, 모래숨기가 아닌 모든 포켓몬은 최대 HP의 1/16(버림)을 잃는다. 효과가 지속되는 동안 바위타입 포켓몬이 특수 공격으로 데미지를 받을 때 특수방어가 1.5배가 된다. 보송보송바위를 지니고 있으면 8턴 동안 지속된다. 날씨가 이미 모래바람이라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 날씨가 모래바람이 된다. 마지막 턴을 제외한 매 턴 종료 시, 땅·바위·강철타입이거나 특성이 모래숨기가 아닌 모든 포켓몬은 최대 HP의 1/16(버림)을 잃는다. 날씨가 이미 모래바람이라면 실패한다.", // NEEDS QC
+			shortDesc: "5턴 동안 모래바람이 분다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 날씨가 모래바람이 된다. 마지막 턴을 제외한 매 턴 종료 시, 땅·바위·강철타입이 아닌 모든 포켓몬은 최대 HP의 1/8(버림)을 잃는다. 날씨가 이미 모래바람이라면 실패한다.", // NEEDS QC
 		},
 	},
 	sandtomb: {
 		name: "모래지옥",
 		// Official flavor text: "세차게 불어대는 모래바람 속에 4-5턴 동안 상대를 가두어 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(자신이 조임밴드를 지니고 있으면 1/8)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀을 쓰면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴(끈기갈고리손톱을 지니고 있으면 항상 5턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5턴동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 배턴터치를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 모래지옥에 붙잡혔다!",
@@ -6133,153 +6133,153 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sappyseed: {
 		name: "쑥쑥봄버",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 씨뿌리기의 효과를 발동한다.", // NEEDS QC
+		shortDesc: "씨뿌리기의 효과를 발동한다.", // NEEDS QC
 	},
 	savagespinout: {
 		name: "절대포식회전참",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	scald: {
 		name: "열탕",
 		// Official flavor text: "뜨겁게 끓어오르는 물을 상대에게 발사해서 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다. 상대가 얼음 상태라면 녹인다.", // NEEDS QC
+		shortDesc: "30%의 확률로 화상. 얼어 있는 상대를 녹인다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+			shortDesc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 		},
 	},
 	scaleshot: {
 		name: "스케일샷",
 		// Official flavor text: "비늘을 쏘아서 공격한다. 2-5회 동안 연속으로 쓴다. 스피드가 올라가지만 방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 마지막 공격 후 자신의 방어가 1단계 떨어지고 스피드가 1단계 올라간다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "2~5회 공격. 그 후 방어 -1, 스피드 +1.", // NEEDS QC
 	},
 	scaryface: {
 		name: "겁나는얼굴",
 		// Official flavor text: "무서운 얼굴로 노려보고 겁주어 상대의 스피드를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	scorchingsands: {
 		name: "열사의대지",
 		// Official flavor text: "뜨겁게 달궈진 모래를 상대에게 부딪쳐서 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다. 상대가 얼음 상태라면 녹인다.", // NEEDS QC
+		shortDesc: "30%의 확률로 화상. 얼어 있는 상대를 녹인다.", // NEEDS QC
 	},
 	scratch: {
 		name: "할퀴기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	screech: {
 		name: "싫은소리",
 		// Official flavor text: "그만 귀를 막아버리고 싶은 싫은 소리를 내어 상대의 방어를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 방어를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 방어를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	searingshot: {
 		name: "화염탄",
 		// Official flavor text: "새빨간 불꽃으로 자신의 주위에 있는 포켓몬을 공격한다. 화상 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 이웃한 포켓몬을 화상으로.", // NEEDS QC
 	},
 	searingsunrazesmash: {
 		name: "선샤인스매셔",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "다른 포켓몬의 특성을 무시한다.", // NEEDS QC
 	},
 	secretpower: {
 		name: "비밀의힘",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 배틀 환경에 따른 추가 효과를 일으킨다. 일반적인 환경에서는 마비, 일렉트릭필드는 마비, 미스트필드는 특수공격 1단계 하락, 그래스필드는 잠듦, 사이코필드는 스피드 1단계 하락을 일으킨다.", // NEEDS QC
+		shortDesc: "필드에 따라 효과가 변한다(기본: 30% 마비).", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 배틀 환경에 따른 추가 효과를 일으킨다. 일반적인 Wi-Fi 환경에서는 마비, 일렉트릭필드는 마비, 미스트필드는 특수공격 1단계 하락, 그래스필드는 잠듦을 일으킨다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 배틀 환경에 따른 추가 효과를 일으킨다. 일반적인 Wi-Fi 환경에서는 명중률을 1단계 떨어뜨린다. 추가 효과의 확률은 특성 하늘의은총의 영향을 받지 않는다.", // NEEDS QC
+			shortDesc: "환경에 따라 효과 변화. (30% 명중률 -1)", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 배틀 환경에 따른 추가 효과를 일으킨다. 일반적인 Wi-Fi 환경에서는 마비를 일으킨다.", // NEEDS QC
+			shortDesc: "필드에 따라 효과가 변한다(기본: 30% 마비).", // NEEDS QC
 		},
 	},
 	secretsword: {
 		name: "신비의칼",
 		// Official flavor text: "긴 뿔로 베어 공격한다. 뿔이 머금은 이상한 힘은 물리적인 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특수방어 대신 방어로 데미지를 계산한다.", // NEEDS QC
+		shortDesc: "상대의 특수방어 대신 방어로 계산한다.", // NEEDS QC
 	},
 	seedbomb: {
 		name: "씨폭탄",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	seedflare: {
 		name: "시드플레어",
 		// Official flavor text: "몸속에서 충격파를 발생시킨다. 상대의 특수방어를 크게 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "40%의 확률로 상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "40%의 확률로 상대의 특수방어를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	seismictoss: {
 		name: "지구던지기",
 		// Official flavor text: "인력을 사용해 내던진다. 자신의 레벨과 똑같은 데미지를 상대에게 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 레벨만큼의 데미지를 준다.", // NEEDS QC
+		shortDesc: "자신의 레벨만큼의 데미지를 준다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 레벨만큼의 데미지를 준다. 이 기술은 타입 상성에 의한 무효를 무시한다.", // NEEDS QC
+			shortDesc: "데미지 = 자신의 레벨. 고스트에도 명중.", // NEEDS QC
 		},
 	},
 	selfdestruct: {
 		name: "자폭",
 		// Official flavor text: "폭발을 일으켜서 자신의 주위에 있는 포켓몬을 공격한다. 쓰고 나서 기절하게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "기술을 쓴 뒤 자신이 기절한다. 대상이 없어 실패해도 기절한다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있으면 쓸 수 없다.", // NEEDS QC
+		shortDesc: "이웃한 포켓몬을 공격하고 자신은 기절한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 대상이 없으면 기절하지 않는다. 데미지 계산 시 상대의 방어를 절반으로 계산한다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있으면 쓸 수 없다.", // NEEDS QC
+			shortDesc: "계산 시 상대 방어 절반. 자신은 기절.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 데미지 계산 시 상대의 방어를 절반으로 계산한다. 배틀에 나와 있는 포켓몬 중에 특성이 습기인 포켓몬이 있으면 쓸 수 없다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 데미지 계산 시 상대의 방어를 절반으로 계산한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "기술을 쓴 뒤 자신이 기절한다. 단, 상대의 대타가 이 데미지로 부서졌다면 기절하지 않는다. 데미지 계산 시 상대의 방어가 절반이 된다.", // NEEDS QC
 		},
 	},
 	shadowball: {
 		name: "섀도볼",
 		// Official flavor text: "까만 그림자의 덩어리를 내던져서 공격한다. 상대의 특수방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대의 특수방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	shadowbone: {
 		name: "섀도본",
 		// Official flavor text: "영혼이 머물고 있는 뼈로 상대를 세게 때려서 공격한다. 상대의 방어를 떨어뜨릴 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	shadowclaw: {
 		name: "섀도클로",
 		// Official flavor text: "그림자로 만든 날카로운 발톱으로 상대를 베어 가른다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	shadowforce: {
 		name: "섀도다이브",
 		// Official flavor text: "1턴째에 모습을 감춰 2턴째에 상대를 공격한다. 방어하고 있어도 공격은 맞는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 이 턴 동안 상대의 토치카, 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫린다. 1턴째에 모습을 감추고 2턴째에 공격한다. 1턴째에는 모든 공격을 피한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 사라져 2턴째에 공격. 방어를 뚫는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 이 턴 동안 상대의 판별, 킹실드, 방어, 니들가드의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대 진영이 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫려, 다른 포켓몬도 상대 진영을 공격할 수 있게 된다. 1턴째에 모습을 감추고 2턴째에 공격한다. 1턴째에는 모든 공격을 피한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다. 상대가 배틀에 나와 있는 동안 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하면 이 턴 동안 상대의 판별과 방어의 효과를 뚫어, 다른 포켓몬도 상대를 공격할 수 있게 된다. 상대가 상대 진영의 포켓몬이고 그 진영이 패스트가드가나 와이드가드로 보호받고 있다면 그 효과도 이 턴 동안 뚫려, 다른 포켓몬도 상대 진영을 공격할 수 있게 된다. 1턴째에 모습을 감추고 2턴째에 공격한다. 1턴째에는 모든 공격을 피한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 
 		activate: "  {TARGET}의 방어를 깨뜨렸다!",
@@ -6287,33 +6287,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowpunch: {
 		name: "섀도펀치",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	shadowsneak: {
 		name: "야습",
 		// Official flavor text: "그림자를 늘려 상대의 배후에서 공격한다. 반드시 선제공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	shadowstrike: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "50%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	sharpen: {
 		name: "각지기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격을 1단계 올린다.", // NEEDS QC
 	},
 	shatteredpsyche: {
 		name: "맥시멈사이브레이커",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	shedtail: {
 		name: "꼬리자르기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "최대 HP의 1/2(올림)을 잃고 최대 HP의 1/4(버림)의 HP를 가진 대타를 만든다. 자신은 파티의 다른 포켓몬과 교체되며 선택한 포켓몬이 대타를 이어받는다. HP가 부족하거나 기절하지 않은 파티의 포켓몬이 없으면 실패한다.", // NEEDS QC
+		shortDesc: "최대 HP의 절반을 잃고 대타를 넘기며 교체한다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 꼬리를 잘라 대타로 삼았다!",
 		alreadyStarted: "#substitute",
@@ -6322,30 +6322,30 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sheercold: {
 		name: "절대영도",
 		// Official flavor text: "상대를 일격에 기절시킨다. 얼음타입 이외의 포켓몬이 사용하면 잘 맞지 않는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 최대 HP만큼의 데미지를 준다. 명중률과 회피율 보정을 무시한다. 이 기술의 명중률은 자신이 얼음타입이면 (자신의 레벨-상대의 레벨+30)%, 아니면 (자신의 레벨-상대의 레벨+20)%이며, 상대의 레벨이 더 높으면 실패한다. 얼음타입 포켓몬과 특성이 옹골참인 포켓몬에게는 효과가 없다.", // NEEDS QC
+		shortDesc: "일격필살. 얼음타입에게는 통하지 않는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대의 최대 HP만큼의 데미지를 준다. 명중률과 회피율 보정을 무시한다. 이 기술의 명중률은 (자신의 레벨-상대의 레벨+30)%이며, 상대의 레벨이 더 높으면 실패한다. 특성이 옹골참인 포켓몬에게는 효과가 없다.", // NEEDS QC
+			shortDesc: "일격필살. 상대의 레벨이 더 높으면 실패한다.", // NEEDS QC
 		},
 	},
 	shellsidearm: {
 		name: "셸암즈",
 		// Official flavor text: "물리와 특수 중 더 많은 데미지를 줄 수 있는 능력으로 공격한다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 독 상태로 만든다. 자신의 공격을 X, 상대의 방어를 Y라 할 때 ((((2×자신의 레벨÷5+2)×90×X)÷Y)÷50)의 값이, X를 특수공격, Y를 특수방어로 계산한 값보다 크다면 접촉하는 물리 공격이 된다. 이 계산에는 랭크 변화 외의 능력 보정을 고려하지 않는다. 두 값이 같다면 분류를 무작위로 고른다.", // NEEDS QC
+		shortDesc: "20% 독. 더 강한 쪽이면 접촉 물리가 된다.", // NEEDS QC
 	},
 	shellsmash: {
 		name: "껍질깨기",
 		// Official flavor text: "껍질을 깨서 자신의 방어와 특수방어를 떨어뜨리지만 공격과 특수공격, 스피드를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 떨어뜨리고, 공격, 특수공격, 스피드를 2단계씩 올린다.", // NEEDS QC
+		shortDesc: "방어·특방 -1. 공격·특공·스피드 +2.", // NEEDS QC
 	},
 	shelltrap: {
 		name: "트랩셸",
 		// Official flavor text: "껍질의 트랩을 설치한다. 상대가 물리 기술을 쓰면 폭발해서 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술을 쓰기 전에 이 턴에 상대의 물리 공격에 맞아야 성공한다. 맞았고 자신이 기절하지 않았다면 맞은 직후 공격하며 효과가 사라진다. 상대의 물리 공격이 특성 우격다짐으로 추가 효과가 사라진 기술이라면 이 효과의 조건으로 치지 않는다.", // NEEDS QC
+		shortDesc: "물리 공격을 받아야 발동한다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 트랩셸을 설치했다!",
 		prepare: "  {POKEMON:topic} 트랩셸을 설치했다!",
@@ -6353,88 +6353,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shelter: {
 		name: "농성",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 2단계 올린다.", // NEEDS QC
 	},
 	shiftgear: {
 		name: "기어체인지",
 		// Official flavor text: "톱니바퀴를 돌려서 자신의 공격을 올리는 것뿐만 아니라 스피드도 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드를 2단계, 공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 스피드를 2단계, 공격을 1단계 올린다.", // NEEDS QC
 	},
 	shockwave: {
 		name: "전격파",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	shoreup: {
 		name: "모래모으기",
 		// Official flavor text: "자신의 최대 HP 절반을 회복한다. 모래바람일 때는 많이 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 최대 HP의 1/2(0.5는 버림)을 회복한다. 날씨가 모래바람이라면 대신 2/3(0.5는 버림)를 회복한다.", // NEEDS QC
+		shortDesc: "HP 절반 회복. 모래바람에서는 2/3 회복.", // NEEDS QC
 	},
 	signalbeam: {
 		name: "시그널빔",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	silktrap: {
 		name: "스레드트랩",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉하려 한 포켓몬의 스피드를 1단계 떨어뜨린다. 변화 기술은 막지 못한다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "공격으로부터 자신을 지킨다. 접촉하면 스피드 -1.", // NEEDS QC
 	},
 	silverwind: {
 		name: "은빛바람",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 자신의 공격, 방어, 특수공격, 특수방어, 스피드를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 모든 능력이 1단계 올라간다.", // NEEDS QC
 	},
 	simplebeam: {
 		name: "심플빔",
 		// Official flavor text: "수수께끼의 염력파를 상대에게 보낸다. 염력파를 받은 상대는 특성이 단순으로 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특성이 단순으로 변한다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 단순, 배틀스위치, 테라체인지, 게으름, 달마모드, 마이티체인지라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 특성이 단순으로 변한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 단순으로 변한다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 단순, 배틀스위치, 게으름, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 단순으로 변한다. 상대의 특성이 유대변화, 절대안깸, 탈, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 단순, 배틀스위치, 게으름, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 단순으로 변한다. 상대의 특성이 멀티타입, 단순, 배틀스위치, 게으름라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 단순으로 변한다. 상대의 특성이 멀티타입, 단순, 게으름라면 실패한다.", // NEEDS QC
 		},
 	},
 	sing: {
 		name: "노래하기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 잠듦 상태로 만든다.", // NEEDS QC
 	},
 	sinisterarrowraid: {
 		name: "섀도애로우즈스트라이크",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	sizzlyslide: {
 		name: "이글이글번",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	sketch: {
 		name: "스케치",
 		// Official flavor text: "상대가 쓴 기술을 자신의 것으로 만든다. 한 번 사용하면 스케치는 사라진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 상대가 마지막으로 쓴 기술로 영구히 바뀐다. 복사한 기술의 PP는 그 기술의 최대치가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 그 기술이 번액셀, 파이트액셀, 다크홀, 이차원러시, 매지컬액셀, 포이즌액셀, 회생의기도, 스케치, 발버둥, 테라클러스터, 다크액셀 또는 자신이 이미 지닌 기술이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 마지막 기술을 영구히 복사한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 상대가 마지막으로 쓴 기술로 영구히 바뀐다. 복사한 기술의 PP는 그 기술의 최대치가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 그 기술이 수다, 스케치, 발버둥 또는 자신이 이미 지닌 기술이라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 상대가 마지막으로 쓴 기술로 영구히 바뀐다. 복사한 기술의 PP는 그 기술의 최대치가 된다. 상대가 아직 기술을 쓰지 않았거나, 자신이 변신한 상태거나, 그 기술이 스케치, 발버둥 또는 자신이 이미 지닌 기술이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "통신 대전에서 쓰면 실패한다.", // NEEDS QC
+			shortDesc: "통신 대전에서 쓰면 실패한다.", // NEEDS QC
 		},
 
 		activate: "  {POKEMON:topic} {MOVE:object} 스케치했다!",
@@ -6442,25 +6442,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skillswap: {
 		name: "스킬스왑",
 		// Official flavor text: "초능력으로 자신의 특성과 상대의 특성을 바꾼다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 특성을 맞바꾼다. 어느 한쪽의 특성이 혼연일체, 유대변화, 절대안깸, 사령탑, 탈, 초상투영, 꼬르륵스위치, 아이스페이스, 일루전, 멀티타입, 화학변화가스, 독조종, 스웜체인지, 고대활성, 쿼크차지, AR시스템, 어군, 리밋실드, 배틀스위치, 테라셸, 테라체인지, 제로포밍, 불가사의부적, 달마모드, 마이티체인지라면 실패한다.", // NEEDS QC
+		shortDesc: "자신과 상대의 특성을 맞바꾼다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대의 특성을 맞바꾼다. 어느 한쪽의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 꼬르륵스위치, 아이스페이스, 일루전, 멀티타입, 화학변화가스, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 불가사의부적, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대의 특성을 맞바꾼다. 어느 한쪽의 특성이 유대변화, 절대안깸, 탈, 일루전, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 불가사의부적, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대의 특성을 맞바꾼다. 어느 한쪽의 특성이 일루전, 멀티타입, 배틀스위치, 불가사의부적라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대의 특성을 맞바꾼다. 어느 한쪽의 특성이 일루전, 멀티타입, 불가사의부적라면, 또는 양쪽의 특성이 같다면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대의 특성을 맞바꾼다. 어느 한쪽의 특성이 멀티타입나 불가사의부적이라면, 양쪽의 특성이 같다면, 또는 어느 한쪽이 백금옥을 지니고 있다면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대의 특성을 맞바꾼다. 어느 한쪽의 특성이 불가사의부적이라면 실패한다.", // NEEDS QC
 		},
 
 		activate: "  {POKEMON:topic} 서로의 특성을 교체했다!",
@@ -6468,20 +6468,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skittersmack: {
 		name: "엄습하는일격",
 		// Official flavor text: "배후에서 엄습해서 공격한다. 상대의 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특공을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	skullbash: {
 		name: "로켓박치기",
 		// Official flavor text: "1턴째에 머리를 움츠려 방어를 올린다. 2턴째에 상대를 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 힘을 모아 2턴째에 공격한다. 1턴째에 자신의 방어를 1단계 올린다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴째에 방어 +1, 2턴째에 공격한다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 1턴째에 자신의 방어가 1단계 올라간다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
+			shortDesc: "1턴째에 모으고 2턴째에 공격한다.", // NEEDS QC
 		},
 
 		prepare: "{POKEMON:topic} 목을 움츠렸다!",
@@ -6489,14 +6489,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyattack: {
 		name: "불새",
 		// Official flavor text: "2턴째에 상대를 공격한다. 가끔 풀죽게 만든다. 급소에도 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다. 급소에 맞을 확률이 높다. 1턴째에 힘을 모아 2턴째에 공격한다. 파워풀허브를 지니고 있으면 1턴 만에 공격한다.", // NEEDS QC
+		shortDesc: "1턴 모은 뒤 공격. 30% 풀죽음. 급소율이 높다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 만들고, 급소에 맞을 확률이 높다. 1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
+			shortDesc: "1턴째에 모으고 2턴째에 공격한다.", // NEEDS QC
 		},
 
 		prepare: "{POKEMON:object} 강렬한 빛이 감쌌다!",
@@ -6504,10 +6504,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skydrop: {
 		name: "프리폴",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 상대를 데리고 하늘 높이 날아올라 2턴째에 공격한다. 무게가 200kg 이상인 포켓몬은 들어 올릴 수 없다. 1턴째에 자신과 상대는 바람일으키기, 폭풍, 스카이어퍼, 떨어뜨리기, 사우전드애로, 번개, 회오리를 제외한 모든 공격을 피한다. 그동안 자신과 상대는 행동할 수 없지만 상대는 기술을 선택할 수는 있다. 비행타입 포켓몬에게는 데미지를 주지 못한다. 상대가 아군이거나, 대타를 내세우고 있거나, 뛰어오르기, 구멍파기, 다이빙, 공중날기, 고스트다이브, 섀도다이브, 프리폴을 쓰는 중이라면 1턴째에 실패한다.", // NEEDS QC
+		shortDesc: "상대를 데리고 날아올라 2턴째에 공격한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 상대를 데리고 하늘 높이 날아올라 2턴째에 공격한다. 1턴째에 자신과 상대는 바람일으키기, 폭풍, 스카이어퍼, 떨어뜨리기, 번개, 회오리를 제외한 모든 공격을 피한다. 그동안 자신과 상대는 행동할 수 없지만 상대는 기술을 선택할 수는 있다. 비행타입 포켓몬에게는 데미지를 주지 못한다. 상대가 아군이거나, 대타를 내세우고 있거나, 뛰어오르기, 구멍파기, 다이빙, 공중날기, 섀도다이브, 프리폴을 쓰는 중이라면 1턴째에 실패한다. 중력의 효과로 2턴째가 되기 전에 이 효과가 끝나면 자신과 상대 모두 땅으로 돌아오지만, 그렇지 않다면 자신이 배틀에서 벗어나거나 어떤 2턴 기술의 2턴째를 성공시킬 때까지 상대는 이 효과를 계속 받는다.", // NEEDS QC
 		},
 
 		prepare: "{POKEMON:topic} {TARGET:object} 상공으로 데려갔다!",
@@ -6518,129 +6518,129 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyuppercut: {
 		name: "스카이어퍼",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다.", // NEEDS QC
+		shortDesc: "공중에 뜬 상대(공중날기 등)에게도 명중한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술은 뛰어오르기가나 공중날기를 쓰는 중인 상대도 맞힐 수 있다.", // NEEDS QC
+			shortDesc: "뛰어오르기/공중날기 중인 상대도 명중.", // NEEDS QC
 		},
 	},
 	slackoff: {
 		name: "게으름피우기",
 		// Official flavor text: "게으름 피우며 쉰다. 자신의 HP를 최대 HP의 절반만큼 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 최대 HP의 1/2(0.5는 올림)을 회복한다.", // NEEDS QC
+		shortDesc: "자신의 최대 HP의 1/2을 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다.", // NEEDS QC
 		},
 	},
 	slam: {
 		name: "힘껏치기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	slash: {
 		name: "베어가르기",
 		// Official flavor text: "발톱이나 낫 등으로 상대를 베어 갈라서 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	sleeppowder: {
 		name: "수면가루",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 잠듦 상태로 만든다.", // NEEDS QC
 	},
 	sleeptalk: {
 		name: "잠꼬대",
 		// Official flavor text: "자신이 배운 기술 중 하나를 무작위로 날린다. 자신이 잠들어 있을 때만 쓸 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않으며 PP가 0이어도 쓸 수 있다. 조수, 부리캐논, 트림, 참기, 번액셀, 축하, 수다, 파이트액셀, 흉내쟁이, 다이맥스포, 힘껏펀치, 손에손잡기, 매지컬액셀, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 포이즌액셀, 트랩셸, 스케치, 잠꼬대, 발버둥, 소란피기, 다크액셀, 2턴 기술은 고르지 않는다.", // NEEDS QC
+		shortDesc: "잠든 상태에서 다른 기술을 무작위로 쓴다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않으며 PP가 0이어도 쓸 수 있다. 조수, 부리캐논, 트림, 참기, 축하, 수다, 흉내쟁이, 다이맥스포, 힘껏펀치, 손에손잡기, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 트랩셸, 스케치, 잠꼬대, 발버둥, 소란피기, 2턴 기술, 다이맥스 기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않으며 PP가 0이어도 쓸 수 있다. 조수, 부리캐논, 트림, 참기, 축하, 수다, 흉내쟁이, 힘껏펀치, 손에손잡기, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 트랩셸, 스케치, 잠꼬대, 발버둥, 소란피기, 2턴 기술, Z기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않으며 PP가 0이어도 쓸 수 있다. 조수, 트림, 참기, 축하, 수다, 흉내쟁이, 힘껏펀치, 손에손잡기, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 스케치, 잠꼬대, 발버둥, 소란피기, 2턴 기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않으며 PP가 0이어도 쓸 수 있다. 조수, 참기, 수다, 흉내쟁이, 힘껏펀치, 선취, 손가락흔들기, 흉내내기, 따라하기, 자연의힘, 스케치, 잠꼬대, 발버둥, 소란피기, 2턴 기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않으며 PP가 0이어도 쓸 수 있다. 조수, 참기, 수다, 흉내쟁이, 힘껏펀치, 선취, 손가락흔들기, 따라하기, 잠꼬대, 소란피기, 2턴 기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않지만, PP가 0이라면 그 기술은 실패한다. 조수, 참기, 힘껏펀치, 손가락흔들기, 따라하기, 잠꼬대, 소란피기, 2턴 기술은 고르지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술을 제외하고 자신이 지닌 기술 중 하나를 무작위로 골라 쓴다. 자신이 잠들어 있지 않으면 실패한다. 고른 기술은 PP를 소모하지 않으며 PP가 0이어도 쓸 수 있다. 참기, 잠꼬대, 2턴 기술은 고르지 않는다.", // NEEDS QC
 		},
 	},
 	sludge: {
 		name: "오물공격",
 		// Official flavor text: "더러운 오물을 상대에게 내던져서 공격한다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "40%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+			shortDesc: "40%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 		},
 	},
 	sludgebomb: {
 		name: "오물폭탄",
 		// Official flavor text: "더러운 오물을 상대에게 내던져서 공격한다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 	},
 	sludgewave: {
 		name: "오물웨이브",
 		// Official flavor text: "오물 파도로 자신의 주위에 있는 포켓몬을 공격한다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 이웃한 포켓몬을 독으로 만든다.", // NEEDS QC
 	},
 	smackdown: {
 		name: "떨어뜨리기",
 		// Official flavor text: "돌이나 구슬을 던져서 날고 있는 상대를 공격한다. 맞은 상대는 땅에 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다. 뛰어오르기, 공중날기, 전자부유, 텔레키네시스의 효과를 받는 상대에게 명중하면 그 효과가 사라진다. 상대가 이 턴에 날개쉬기를 쓰지 않은 비행타입이거나 특성이 부유라면, 배틀에 나와 있는 동안 땅타입 공격과 특성 개미지옥에 대한 면역을 잃는다. 효과가 지속되는 동안 상대의 전자부유는 실패하고 상대를 노리는 텔레키네시스도 실패한다.", // NEEDS QC
+		shortDesc: "상대의 땅타입 무효를 없애 땅에 떨어뜨린다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 떨어뜨리기를 당해서 땅에 떨어졌다!",
 	},
 	smartstrike: {
 		name: "스마트혼",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 	},
 	smellingsalts: {
 		name: "정신차리기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 마비 상태라면 위력이 2배가 된다. 자신이 기절하지 않았다면 상대의 마비를 회복시킨다.", // NEEDS QC
+		shortDesc: "마비 상태인 상대에게 2배. 마비를 회복시킨다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 마비 상태라면 위력이 2배가 된다. 이 기술이 성공하면 상대의 마비를 회복시킨다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 마비 상태라면 데미지가 2배가 된다. 이 기술이 성공하면 상대의 마비를 회복시킨다.", // NEEDS QC
+			shortDesc: "마비 상대에게 데미지 2배. 마비를 고친다.", // NEEDS QC
 		},
 	},
 	smog: {
 		name: "스모그",
 		// Official flavor text: "더러운 가스를 상대에게 내뿜어 공격한다. 독 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "40%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "40%의 확률로 상대를 독 상태로 만든다.", // NEEDS QC
 	},
 	smokescreen: {
 		name: "연막",
 		// Official flavor text: "연기나 먹물을 내뿜어 상대의 명중률을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 명중률을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	snaptrap: {
 		name: "집게덫",
 		// Official flavor text: "집게덫으로 붙잡은 뒤 4-5턴 동안 상대를 끼워서 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 집게덫에 붙잡혔다!",
@@ -6648,16 +6648,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snarl: {
 		name: "바크아웃",
 		// Official flavor text: "호되게 호통을 쳐서 상대의 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특공을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	snatch: {
 		name: "가로채기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴에 다른 포켓몬이 일부 변화 기술을 쓰면 그 기술을 빼앗아 자신이 쓴다. 여러 포켓몬이 그런 기술을 쓴다면 이 턴에 이 기술을 쓴 포켓몬 중 행동 순서가 가장 빠른 포켓몬이 모두 빼앗는다. 자신이 프리폴의 효과를 받는 동안에는 무시된다.", // NEEDS QC
+		shortDesc: "다른 포켓몬의 일부 변화 기술을 빼앗아 쓴다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴에 다른 포켓몬이 일부 변화 기술을 쓰면 그 기술을 빼앗아 자신이 쓴다. 여러 포켓몬이 이 턴에 이 기술을 쓴다면 해당 기술을 행동 순서대로 각자 빼앗으며, 행동 순서가 가장 마지막인 포켓몬만 효과를 얻는다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 상대의 움직임을 살피고 있다!",
@@ -6666,73 +6666,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snipeshot: {
 		name: "노려맞히기",
 		// Official flavor text: "상대의 기술을 끌어모으는 특성이나 기술의 영향을 무시하고 선택한 상대를 공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다. 이 기술은 어떤 효과로도 다른 대상으로 유도되지 않는다.", // NEEDS QC
+		shortDesc: "급소율이 높다. 유도되지 않는다.", // NEEDS QC
 	},
 	snore: {
 		name: "코골기",
 		// Official flavor text: "자신이 잠들어 있을 때 소음을 내어 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다. 자신이 잠들어 있지 않으면 실패한다.", // NEEDS QC
+		shortDesc: "잠든 상태 전용. 30%의 확률로 풀죽게 한다.", // NEEDS QC
 	},
 	snowscape: {
 		name: "설경",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 날씨가 눈이 된다. 효과가 지속되는 동안 얼음타입 포켓몬이 물리 공격으로 데미지를 받을 때 방어가 1.5배가 된다. 차가운바위를 지니고 있으면 8턴 동안 지속된다. 날씨가 이미 눈이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 눈이 내린다. 얼음타입: 방어 1.5배.", // NEEDS QC
 	},
 	soak: {
 		name: "물붓기",
 		// Official flavor text: "많은 물을 끼얹어서 상대를 물타입으로 바꾼다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 물타입으로 만든다. 상대가 아르세우스나 실버디거나, 이미 물 단일 타입이거나, 테라스탈 상태라면 실패한다.", // NEEDS QC
+		shortDesc: "상대를 물타입으로 만든다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 물타입으로 만든다. 상대가 아르세우스나 실버디거나, 이미 물 단일 타입이라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 물타입으로 만든다. 상대가 아르세우스거나, 이미 물 단일 타입이라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 물타입으로 만든다. 상대가 아르세우스라면 실패한다.", // NEEDS QC
 		},
 	},
 	softboiled: {
 		name: "알낳기",
 		// Official flavor text: "자신의 최대 HP 절반을 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 최대 HP의 1/2(0.5는 올림)을 회복한다.", // NEEDS QC
+		shortDesc: "자신의 최대 HP의 1/2을 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신의 최대 HP의 1/2(버림)을 회복한다. (자신의 최대 HP - 현재 HP + 1)이 256으로 나누어떨어지면 실패한다.", // NEEDS QC
 		},
 	},
 	solarbeam: {
 		name: "솔라빔",
 		// Official flavor text: "1턴째에 빛을 가득 모아 2턴째에 빛의 다발을 발사하여 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 폭우, 비, 모래바람 또는 눈이고 자신이 만능우산을 지니고 있지 않다면 위력이 절반이 된다. 파워풀허브를 지니고 있거나 날씨가 큰가뭄 또는 쾌청이 되어 있으면 1턴 만에 공격한다. 만능우산을 지니고 있으면 큰가뭄이나 쾌청이 되어 있어도 힘을 모으는 턴이 필요하다.", // NEEDS QC
+		shortDesc: "1턴째에 모아 2턴째에 공격. 햇살에서는 즉시.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 싸라기눈, 폭우, 비 또는 모래바람이고 자신이 만능우산을 지니고 있지 않다면 위력이 절반이 된다. 파워풀허브를 지니고 있거나 날씨가 큰가뭄 또는 쾌청이 되어 있으면 1턴 만에 공격한다. 만능우산을 지니고 있으면 큰가뭄이나 쾌청이 되어 있어도 힘을 모으는 턴이 필요하다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 싸라기눈, 폭우, 비 또는 모래바람이라면 위력이 절반이 된다. 파워풀허브를 지니고 있거나 날씨가 큰가뭄 또는 쾌청이 되어 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 싸라기눈, 비 또는 모래바람이라면 위력이 절반이 된다. 파워풀허브를 지니고 있거나 쾌청이 되어 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 싸라기눈, 비 또는 모래바람이라면 데미지가 절반이 된다. 파워풀허브를 지니고 있거나 쾌청이 되어 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 싸라기눈, 비 또는 모래바람이라면 데미지가 절반이 된다. 쾌청이 되어 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 비라면 데미지가 절반이 된다. 쾌청이 되어 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다.", // NEEDS QC
+			shortDesc: "1턴째에 모으고 2턴째에 공격한다.", // NEEDS QC
 		},
 
 		prepare: "  {POKEMON:topic} 빛을 흡수했다!",
@@ -6740,13 +6740,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	solarblade: {
 		name: "솔라블레이드",
 		// Official flavor text: "1턴째에 빛을 가득 모아 2턴째에 그 힘을 검에 담아 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 싸라기눈, 폭우, 비 또는 모래바람이고 자신이 만능우산을 지니고 있지 않다면 위력이 절반이 된다. 파워풀허브를 지니고 있거나 날씨가 큰가뭄 또는 쾌청이 되어 있으면 1턴 만에 공격한다. 만능우산을 지니고 있으면 큰가뭄이나 쾌청이 되어 있어도 힘을 모으는 턴이 필요하다.", // NEEDS QC
+		shortDesc: "1턴째에 모아 2턴째에 공격. 햇살에서는 즉시.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 폭우, 비, 모래바람 또는 눈이고 자신이 만능우산을 지니고 있지 않다면 위력이 절반이 된다. 파워풀허브를 지니고 있거나 날씨가 큰가뭄 또는 쾌청이 되어 있으면 1턴 만에 공격한다. 만능우산을 지니고 있으면 큰가뭄이나 쾌청이 되어 있어도 힘을 모으는 턴이 필요하다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "1턴째에 힘을 모아 2턴째에 공격한다. 날씨가 싸라기눈, 폭우, 비 또는 모래바람이라면 위력이 절반이 된다. 파워풀허브를 지니고 있거나 날씨가 큰가뭄 또는 쾌청이 되어 있으면 1턴 만에 공격한다.", // NEEDS QC
 		},
 
 		prepare: "#solarbeam",
@@ -6754,111 +6754,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sonicboom: {
 		name: "소닉붐",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 20의 데미지를 준다.", // NEEDS QC
+		shortDesc: "상대에게 반드시 20의 데미지를 준다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대에게 20의 데미지를 준다. 이 기술은 타입 상성에 의한 무효를 무시한다.", // NEEDS QC
 		},
 	},
 	soulstealing7starstrike: {
 		name: "칠성탈혼퇴",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	spacialrend: {
 		name: "공간절단",
 		// Official flavor text: "주위의 공간과 더불어 상대를 찢어서 데미지를 준다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	spark: {
 		name: "스파크",
 		// Official flavor text: "전기를 둘러 상대에게 돌진하여 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	sparklingaria: {
 		name: "물거품아리아",
 		// Official flavor text: "노래 부르는 것으로 많은 벌룬을 방출한다. 기술에 맞으면 화상이 낫는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 기절하지 않았다면 상대의 화상을 회복시킨다.", // NEEDS QC
+		shortDesc: "상대의 화상을 회복시킨다.", // NEEDS QC
 	},
 	sparklyswirl: {
 		name: "반짝반짝스톰",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신을 포함한 파티 전원의 상태 이상을 회복한다.", // NEEDS QC
+		shortDesc: "파티 전원의 상태 이상을 회복한다.", // NEEDS QC
 	},
 	spectralthief: {
 		name: "섀도스틸",
 		// Official flavor text: "상대의 그림자에 숨어들어 상대의 능력이 올라가는 것을 뺏어 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "데미지를 주기 전에 상대의 0보다 큰 랭크 변화를 빼앗아 자신에게 적용한다.", // NEEDS QC
+		shortDesc: "상대의 능력 상승을 빼앗은 뒤 공격한다.", // NEEDS QC
 
 		clearBoost: "  {SOURCE:topic} 올라간 능력을 빼앗았다!",
 	},
 	speedswap: {
 		name: "스피드스왑",
 		// Official flavor text: "상대의 스피드와 자신의 스피드를 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대의 스피드 수치를 맞바꾼다. 랭크 변화는 영향을 받지 않는다.", // NEEDS QC
+		shortDesc: "스피드 수치를 상대와 맞바꾼다.", // NEEDS QC
 
 		activate: "  {POKEMON:topic} 서로의 스피드를 교체했다!",
 	},
 	spicyextract: {
 		name: "하바네로엑기스",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 2단계 올리고 방어를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격 +2, 방어 -2.", // NEEDS QC
 	},
 	spiderweb: {
 		name: "거미집",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대를 교체할 수 없게 만든다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라지지만, 배턴터치로 물러난 경우에는 상대가 계속 교체할 수 없다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 배턴터치를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라지지만, 배턴터치로 물러난 경우에는 상대가 계속 교체할 수 없다.", // NEEDS QC
 		},
 	},
 	spikecannon: {
 		name: "가시대포",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 상대가 기합의띠를 지니고 HP가 가득 찬 상태에서 이 기술을 받으면 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 3/8의 확률로 2회 또는 3회, 1/8의 확률로 4회 또는 5회 공격한다. 데미지는 첫 공격에서 한 번만 계산해 모든 공격에 적용한다. 공격 도중 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	spikes: {
 		name: "압정뿌리기",
 		// Official flavor text: "상대의 발밑에 압정을 뿌린다. 교체된 상대 포켓몬에게 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 데미지를 준다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 3번까지 겹쳐 깔 수 있다. 1겹이면 최대 HP의 1/8, 2겹이면 1/6, 3겹이면 1/4(모두 버림)의 데미지를 준다. 아무 포켓몬이 정리정돈을 쓰거나, 상대가 킬러스핀, 고속스핀, 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
+		shortDesc: "교체해 나오는 상대에게 데미지. 최대 3겹.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 데미지를 준다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 3번까지 겹쳐 깔 수 있다. 1겹이면 최대 HP의 1/8, 2겹이면 1/6, 3겹이면 1/4(모두 버림)의 데미지를 준다. 상대가 고속스핀이나 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 데미지를 준다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 3번까지 겹쳐 깔 수 있다. 1겹이면 최대 HP의 1/8, 2겹이면 1/6, 3겹이면 1/4(모두 버림)의 데미지를 준다. 상대가 고속스핀에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 데미지를 준다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 3번까지 겹쳐 깔 수 있다. 1겹이면 최대 HP의 1/8, 2겹이면 1/6, 3겹이면 1/4(모두 버림)의 데미지를 준다. 상대가 고속스핀에 성공하면 제거된다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 최대 HP의 1/8(버림)의 데미지를 준다. 비행타입 포켓몬은 받지 않는다. 상대 진영에 이미 효과가 발동 중이라면 실패한다. 상대가 고속스핀에 성공하면 제거된다.", // NEEDS QC
+			shortDesc: "교체해 나온 상대에게 데미지. 최대 1겹.", // NEEDS QC
 		},
 
 		start: "  {TEAM}의 발밑에 압정이 뿌려졌다!",
@@ -6868,51 +6868,51 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spikyshield: {
 		name: "니들가드",
 		// Official flavor text: "상대의 공격을 막음과 동시에 접촉한 상대의 체력을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉한 포켓몬은 최대 HP의 1/8(버림)을 잃는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
+		shortDesc: "기술로부터 자신을 지킨다. 접촉하면 HP 1/8 손실.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉한 포켓몬은 최대 HP의 1/8(버림)을 잃는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉한 포켓몬은 최대 HP의 1/8(버림)을 잃는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 다른 포켓몬의 대부분의 공격으로부터 자신을 지키며, 직접 공격으로 접촉한 포켓몬은 최대 HP의 1/8(버림)을 잃는다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동한다면 실패한다.", // NEEDS QC
 		},
 
 		damage: "  {POKEMON:topic} 상처를 입었다!",
 	},
 	spinout: {
 		name: "휠스핀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
 	},
 	spiritbreak: {
 		name: "소울크래시",
 		// Official flavor text: "맞으면 기가 꺾여버릴 것 같은 기세로 공격한다. 상대의 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	spiritshackle: {
 		name: "그림자꿰매기",
 		// Official flavor text: "공격과 동시에 상대의 그림자를 꿰매 도망칠 수 없게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대를 교체할 수 없게 만든다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 	},
 	spite: {
 		name: "원한",
 		// Official flavor text: "상대가 마지막으로 사용한 기술에 원한을 품어 그 기술의 PP를 4만큼 줄인다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 마지막으로 쓴 기술의 PP를 4 줄인다. 상대가 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이거나, 그 기술을 더는 지니고 있지 않다면 실패한다.", // NEEDS QC
+		shortDesc: "상대가 마지막으로 쓴 기술의 PP를 4 줄인다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 마지막으로 쓴 기술의 PP를 무작위로 2~5 줄인다. 상대가 아직 기술을 쓰지 않았거나, 그 기술의 PP가 0이나 1이거나, 그 기술을 더는 지니고 있지 않다면 실패한다.", // NEEDS QC
+			shortDesc: "상대의 마지막 기술 PP를 2~5 줄인다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 마지막으로 쓴 기술의 PP를 무작위로 2~5 줄인다. 상대가 아직 기술을 쓰지 않았거나 그 기술의 PP가 0이라면 실패한다.", // NEEDS QC
 		},
 
 		activate: "  {TARGET}의 {MOVE:object} {NUMBER} 깎았다!",
@@ -6920,61 +6920,61 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spitup: {
 		name: "토해내기",
 		// Official flavor text: "비축된 힘을 상대에게 부딪쳐서 공격한다. 비축된 만큼 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 자신의 비축하기 횟수×100이다. 비축하기 횟수가 0이라면 실패한다. 이 기술의 성공 여부와 관계없이 비축하기로 올라간 만큼 방어와 특수방어가 떨어지며 횟수는 0으로 돌아간다.", // NEEDS QC
+		shortDesc: "비축하기 횟수가 많을수록 강하다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 자신의 비축하기 횟수×100이다. 이 기술은 데미지 편차가 적용되지 않는다. 비축하기 횟수가 0이라면 실패한다. 대상이 없는 경우를 제외하고, 이 기술의 성공 여부와 관계없이 비축하기로 올라간 만큼 방어와 특수방어가 떨어지며 횟수는 0으로 돌아간다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "데미지가 자신의 비축하기 횟수만큼 곱해진다. 이 기술은 데미지 편차가 적용되지 않으며 급소에 맞지 않는다. 비축하기 횟수가 0이라면 실패한다. 이 기술이 빗나가지 않는 한 횟수는 0으로 돌아간다.", // NEEDS QC
 		},
 	},
 	splash: {
 		name: "튀어오르기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "배틀에서는 효과가 없다.", // NEEDS QC
 
 		activate: "  그러나 아무 일도 일어나지 않았다!",
 	},
 	splinteredstormshards: {
 		name: "레이디얼에지스톰",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "일렉트릭필드, 그래스필드, 미스트필드, 사이코필드의 효과를 없앤다.", // NEEDS QC
+		shortDesc: "필드의 효과를 없앤다.", // NEEDS QC
 	},
 	splishysplash: {
 		name: "참방참방서핑",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	spore: {
 		name: "버섯포자",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 잠듦 상태로 만든다.", // NEEDS QC
 	},
 	spotlight: {
 		name: "스포트라이트",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴이 끝날 때까지 상대를 노리는 단일 대상 공격이 모두 그 상대에게 유도된다. 이 유도는 매직코트나 특성 매직미러로 되받아치거나 특성 피뢰침이나 마중물이 끌어당기기 전에 적용된다. 더블배틀이나 배틀로얄이 아니면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴에 공격이 그 상대에게 유도된다.", // NEEDS QC
 
 		start: "#followme",
 		startFromZEffect: "#followme",
 	},
 	springtidestorm: {
 		name: "봄의폭풍",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	stealthrock: {
 		name: "스텔스록",
 		// Official flavor text: "상대의 주위에 무수한 바위를 띄워 교체해서 나온 상대 포켓몬에게 데미지를 준다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 바위타입 상성에 따라 데미지를 준다. 0.25배, 0.5배, 등배, 2배, 4배일 때 각각 최대 HP의 1/32, 1/16, 1/8, 1/4, 1/2(버림)을 잃는다. 아무 포켓몬이 정리정돈을 쓰거나, 상대가 킬러스핀, 고속스핀, 안개제거에 성공하거나 안개제거에 맞으면 제거된다. 상대 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "교체해 나오는 상대에게 바위 상성 데미지.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 바위타입 상성에 따라 데미지를 준다. 0.25배, 0.5배, 등배, 2배, 4배일 때 각각 최대 HP의 1/32, 1/16, 1/8, 1/4, 1/2(버림)을 잃는다. 상대가 고속스핀이나 안개제거에 성공하거나 안개제거에 맞으면 제거된다. 상대 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 바위타입 상성에 따라 데미지를 준다. 0.25배, 0.5배, 등배, 2배, 4배일 때 각각 최대 HP의 1/32, 1/16, 1/8, 1/4, 1/2(버림)을 잃는다. 상대가 고속스핀에 성공하거나 안개제거에 맞으면 제거된다. 상대 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {TEAM} 주변에 뾰족한 바위가 떠다니기 시작했다!",
@@ -6984,45 +6984,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	steameruption: {
 		name: "스팀버스트",
 		// Official flavor text: "상대에게 굉장히 뜨거운 증기를 뿜는다. 상대는 화상을 입기도 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 화상 상태로 만든다. 상대가 얼음 상태라면 녹인다.", // NEEDS QC
+		shortDesc: "30%의 확률로 화상. 얼어 있는 상대를 녹인다.", // NEEDS QC
 	},
 	steamroller: {
 		name: "하드롤러",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 된다.", // NEEDS QC
 		},
 	},
 	steelbeam: {
 		name: "철제광선",
 		// Official flavor text: "전신에서 끌어모은 강철을 빔으로 바꿔 세차게 발사한다. 자신도 데미지를 받는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 성공 여부와 관계없이, 기절하게 되더라도 특성이 매직가드가 아닌 한 자신이 최대 HP의 1/2(올림)을 잃는다.", // NEEDS QC
+		shortDesc: "자신이 최대 HP의 1/2을 잃는다.", // NEEDS QC
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "아이언롤러",
 		// Official flavor text: "필드를 파괴하면서 공격한다. 필드가 어떤 상태로든 변해 있지 않은 경우 기술은 실패한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "필드가 펼쳐져 있지 않으면 실패한다. 일렉트릭필드, 그래스필드, 미스트필드, 사이코필드의 효과를 없앤다.", // NEEDS QC
+		shortDesc: "필드가 없으면 실패한다. 필드를 없앤다.", // NEEDS QC
 	},
 	steelwing: {
 		name: "강철날개",
 		// Official flavor text: "단단한 날개를 상대에게 부딪쳐서 공격한다. 자신의 방어가 올라갈 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 자신의 방어를 1단계 올린다.", // NEEDS QC
+		shortDesc: "10%의 확률로 자신의 방어를 1단계 올린다.", // NEEDS QC
 	},
 	stickyweb: {
 		name: "끈적끈적네트",
 		// Official flavor text: "상대의 주위에 끈적끈적한 네트를 둘러 펼쳐 교체되어 나온 상대의 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대의 스피드를 1단계 떨어뜨린다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 상대 진영에 이미 효과가 발동 중이라면 실패한다. 아무 포켓몬이 정리정돈을 쓰거나, 상대가 킬러스핀, 고속스핀, 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
+		shortDesc: "교체해 나오는 땅 위의 상대의 스피드 -1.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대의 스피드를 1단계 떨어뜨린다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 상대 진영에 이미 효과가 발동 중이라면 실패한다. 상대가 고속스핀이나 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
 		},
 
 		start: "  {TEAM} 발밑에 끈적끈적네트가 펼쳐졌다!",
@@ -7032,11 +7032,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stockpile: {
 		name: "비축하기",
 		// Official flavor text: "힘을 비축해서 자신의 방어와 특수방어를 올린다. 최대 3회까지 비축할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어와 특수방어를 1단계씩 올린다. 비축하기 횟수가 1 늘어난다. 횟수가 3이라면 실패한다. 배틀에서 벗어나면 횟수는 0으로 돌아간다.", // NEEDS QC
+		shortDesc: "자신의 방어·특방 +1. 최대 3번 모은다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 비축하기 횟수가 1 늘어난다. 횟수가 3이라면 실패한다. 배틀에서 벗어나면 횟수는 0으로 돌아간다.", // NEEDS QC
+			shortDesc: "비축하기 횟수 +1. 최대 3회.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} {NUMBER}개 비축했다!",
@@ -7045,122 +7045,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stokedsparksurfer: {
 		name: "라이트닝서프라이드",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	stomp: {
 		name: "짓밟기",
 		// Official flavor text: "큰 발로 상대를 짓밟아서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 된다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 위력이 2배가 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 된다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다. 상대가 작아지기의 효과를 받고 있다면 위력이 2배가 된다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		},
 	},
 	stompingtantrum: {
 		name: "분함의발구르기",
 		// Official flavor text: "분함을 발판 삼아 공격한다. 앞 턴에서 기술이 빗나갔다면 위력이 배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "지난 턴에 자신의 마지막 기술(다른 기술이 불러낸 기술이나 지휘, 매직코트, 가로채기, 특성 무희나 매직미러로 쓴 기술 포함)이 원래 효과를 전혀 내지 못했거나(실패한 무릎차기, 점프킥, 깜짝헤드의 데미지는 제외), 반동이나 프리폴 이외의 효과로 움직일 수 없었다면 위력이 2배가 된다. 토치카, 판별, 킹실드, 방어, 니들가드, 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 막힌 기술이나, 중력, 떨어뜨리기, 사우전드애로의 효과로 일찍 끝난 뛰어오르기와 공중날기는 위력을 2배로 만들지 않는다.", // NEEDS QC
+		shortDesc: "지난 턴에 기술이 실패했다면 위력이 2배.", // NEEDS QC
 	},
 	stoneaxe: {
 		name: "암석액스",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대에게 바위타입 상성에 따라 데미지를 준다. 0.25배, 0.5배, 등배, 2배, 4배일 때 각각 최대 HP의 1/32, 1/16, 1/8, 1/4, 1/2(버림)을 잃는다. 아무 포켓몬이 정리정돈을 쓰거나, 상대가 킬러스핀, 고속스핀, 안개제거에 성공하거나 안개제거에 맞으면 제거된다.", // NEEDS QC
+		shortDesc: "상대 진영에 스텔스록을 깐다.", // NEEDS QC
 	},
 	stoneedge: {
 		name: "스톤에지",
 		// Official flavor text: "뾰족한 바위를 상대에게 꿰찔러서 공격한다. 급소에 맞기 쉽다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소에 맞을 확률이 높다.", // NEEDS QC
 	},
 	storedpower: {
 		name: "어시스트파워",
 		// Official flavor text: "축적된 파워로 상대를 공격한다. 자신의 능력이 올라가 있는 만큼 위력이 오른다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 자신의 0보다 큰 랭크 변화의 합을 X라 할 때 20+(X×20)이다.", // NEEDS QC
+		shortDesc: "자신의 능력 상승 1개당 위력 +20.", // NEEDS QC
 	},
 	stormthrow: {
 		name: "업어후리기",
 		// Official flavor text: "강렬한 일격을 상대에게 날린다. 공격은 반드시 급소에 맞는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 주술의 효과를 받고 있거나 특성이 전투무장이나 조가비갑옷이 아닌 한 반드시 급소에 맞는다.", // NEEDS QC
+		shortDesc: "반드시 급소에 맞는다.", // NEEDS QC
 	},
 	strangesteam: {
 		name: "원더스팀",
 		// Official flavor text: "연기를 분출해서 상대를 공격한다. 혼란시킬 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	strength: {
 		name: "괴력",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	strengthsap: {
 		name: "힘흡수",
 		// Official flavor text: "상대 공격력과 동일하게 자신의 HP를 회복한다. 그리고 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 1단계 떨어뜨린다. 이 기술을 쓰기 전의 랭크로 계산한 상대의 공격 수치만큼 자신의 HP를 회복한다. 큰뿌리를 지니고 있으면 회복량이 1.3배(0.5는 버림)가 된다. 상대의 공격이 이미 -6단계라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 공격 수치만큼 회복하고 공격 -1.", // NEEDS QC
 	},
 	stringshot: {
 		name: "실뿜기",
 		// Official flavor text: "입에서 뿜어낸 실을 휘감아서 상대의 스피드를 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 스피드를 2단계 떨어뜨린다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대의 스피드를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	struggle: {
 		name: "발버둥",
 		// Official flavor text: "자신의 PP가 떨어지면 발버둥 쳐 상대를 공격한다. 자신도 조금 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "무작위 상대에게 무타입 데미지를 준다. 이 기술이 성공하면 자신이 최대 HP의 1/4(0.5는 올림)을 잃으며, 특성 돌머리로 막을 수 없다. 지닌 기술을 하나도 선택할 수 없을 때 자동으로 쓴다.", // NEEDS QC
+		shortDesc: "자신이 최대 HP의 1/4을 잃는다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "인접한 무작위 상대에게 무타입 데미지를 준다. 이 기술이 성공하면 자신이 최대 HP의 1/4(0.5는 올림)을 잃으며, 특성 돌머리로 막을 수 없다. 지닌 기술을 하나도 선택할 수 없을 때 자동으로 쓴다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무작위 상대에게 무타입 데미지를 준다. 이 기술이 성공하면 자신이 최대 HP의 1/4(버림)을 잃으며, 특성 돌머리로 막을 수 없다. 지닌 기술을 하나도 선택할 수 없을 때 자동으로 쓴다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "무작위 상대에게 무타입 데미지를 준다. 이 기술이 성공하면 상대가 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 데미지를 받으며, 특성 돌머리로 막을 수 없다. 지닌 기술을 하나도 선택할 수 없을 때 자동으로 쓴다.", // NEEDS QC
+			shortDesc: "상대가 잃은 HP의 1/4을 자신도 잃는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "무타입 데미지를 준다. 이 기술이 성공하면 상대가 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 데미지를 받는다. 지닌 기술을 하나도 선택할 수 없을 때 자동으로 쓴다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "노말타입 데미지를 준다. 이 기술이 성공하면 상대가 잃은 HP의 1/2(버림, 최소 1)만큼 자신이 데미지를 받는다. 지닌 기술을 하나도 선택할 수 없을 때 자동으로 쓴다.", // NEEDS QC
+			shortDesc: "상대가 잃은 HP의 1/2을 자신도 잃는다.", // NEEDS QC
 		},
 	},
 	strugglebug: {
 		name: "벌레의저항",
 		// Official flavor text: "저항해서 상대를 공격한다. 상대의 특수공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 특수공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 특공을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	stuffcheeks: {
 		name: "볼가득넣기",
 		// Official flavor text: "지니고 있는 나무열매를 먹고 방어를 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "나무열매를 지니고 있지 않으면 선택할 수 없다. 지닌 나무열매를 먹고 자신의 방어를 2단계 올린다. 특성 서투름이나 긴장감, 금제나 매직룸의 효과로도 막을 수 없다. 나무열매를 지니고 있지 않으면 실패한다.", // NEEDS QC
+		shortDesc: "지닌 나무열매를 먹고 방어를 2단계 올린다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7169,44 +7169,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stunspore: {
 		name: "저리가루",
 		// Official flavor text: "저리가루를 많이 흩뿌려서 상대를 마비 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대를 마비 상태로 만든다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 마비 상태로 만든다. 타입 상성에 의한 무효는 무시하지 못한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 마비 상태로 만든다.", // NEEDS QC
 		},
 	},
 	submission: {
 		name: "지옥의바퀴",
 		// Official flavor text: "땅에 자신과 함께 상대를 내던져 공격한다. 자신도 조금 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "1/4의 반동 데미지를 받는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다. 이 기술이 대타에 맞으면 반동 데미지는 항상 1이다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 반동 데미지를 받는다. 이 기술로 상대의 대타가 부서지면 반동 데미지를 받지 않는다.", // NEEDS QC
 		},
 	},
 	substitute: {
 		name: "대타출동",
 		// Official flavor text: "자신의 HP를 조금 깎아서 분신을 만든다. 분신은 자신의 대타가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "최대 HP의 1/4(버림)을 들여 자신 대신 배틀에 내세울 대타를 만든다. 대타는 충분한 데미지를 받거나, 자신이 교체하거나 기절하거나, 아무 포켓몬이 정리정돈을 쓰면 사라진다. 배턴터치로 남은 HP 그대로 대타를 넘길 수 있다. 대타가 부서질 때까지 다른 포켓몬의 모든 공격을 대타가 받으며, 다른 포켓몬에 의한 상태 이상과 랭크 하락도 막는다. 소리 기술과 특성이 틈새포착인 포켓몬은 대타를 무시한다. 대타 뒤에 있어도 날씨와 상태 이상의 데미지는 그대로 받는다. 연속 공격 도중 대타가 부서지면 남은 공격은 본체가 받는다. 조이기 계열 기술에 잡힌 상태에서 대타를 만들면 그 효과가 바로 사라진다. 대타를 만들면 기절할 만큼 HP가 부족하거나 이미 대타가 있으면 실패한다.", // NEEDS QC
+		shortDesc: "최대 HP의 1/4을 들여 대타를 내세운다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "최대 HP의 1/4(버림)을 들여 자신 대신 배틀에 내세울 대타를 만든다. 대타는 충분한 데미지를 받거나, 자신이 교체하거나 기절하면 사라진다. 배턴터치로 남은 HP 그대로 대타를 넘길 수 있다. 대타가 부서질 때까지 다른 포켓몬의 모든 공격을 대타가 받으며, 다른 포켓몬에 의한 상태 이상과 랭크 하락도 막는다. 소리 기술과 특성이 틈새포착인 포켓몬은 대타를 무시한다. 대타 뒤에 있어도 날씨와 상태 이상의 데미지는 그대로 받는다. 연속 공격 도중 대타가 부서지면 남은 공격은 본체가 받는다. 조이기 계열 기술에 잡힌 상태에서 대타를 만들면 그 효과가 바로 사라진다. 대타를 만들면 기절할 만큼 HP가 부족하거나 이미 대타가 있으면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "최대 HP의 1/4(버림)을 들여 자신 대신 배틀에 내세울 대타를 만든다. 대타는 충분한 데미지를 받거나, 자신이 교체하거나 기절하면 사라진다. 배턴터치로 남은 HP 그대로 대타를 넘길 수 있다. 대타가 부서질 때까지 다른 포켓몬의 모든 공격을 대타가 받으며, 다른 포켓몬에 의한 상태 이상과 랭크 하락도 막는다. 대타 뒤에 있어도 날씨와 상태 이상의 데미지는 그대로 받는다. 연속 공격 도중 대타가 부서지면 남은 공격은 본체가 받는다. 조이기 계열 기술에 잡힌 상태에서 대타를 만들면 그 효과가 바로 사라진다. 대타를 만들면 기절할 만큼 HP가 부족하거나 이미 대타가 있으면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "최대 HP의 1/4(버림)을 들여 자신 대신 배틀에 내세울 대타를 만든다. 대타의 HP는 만들 때 쓴 HP+1이며, 충분한 데미지를 받거나 한 번에 255의 데미지를 받거나, 자신이 교체하거나 기절하면 사라진다. 대타가 부서질 때까지 상대의 모든 공격을 대타가 받으며, 상대에 의한 상태 이상과 랭크 변화도 막는다. 단, 그 효과가 사슬묶기, 씨뿌리기, 잠듦, 주 효과로서의 마비, 추가 효과로서의 혼란이고 대타가 부서지지 않았다면 막지 못한다. 대타 뒤에 있어도 상태 이상의 데미지는 그대로 받지만, 혼란에 의한 데미지는 대신 상대의 대타에게 간다. 연속 공격 도중 대타가 부서지면 공격이 끝난다. 대타를 만들 HP가 부족하거나 이미 대타가 있으면 실패한다. 현재 HP가 정확히 최대 HP의 1/4이라면 대타를 만든 뒤 기절한다.", // NEEDS QC
+			shortDesc: "최대 HP의 1/4을 들여 대타를 만든다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON}의 대타가 나타났다!",
@@ -7217,162 +7217,162 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	subzeroslammer: {
 		name: "레이징지오프리즈",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	suckerpunch: {
 		name: "기습",
 		// Official flavor text: "상대보다 먼저 공격할 수 있다. 상대가 쓴 기술이 공격기술이 아니면 실패한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 물리 공격, 특수 공격 또는 선취를 선택하지 않았거나, 상대가 자신보다 먼저 행동하면 실패한다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동. 상대가 공격하지 않으면 실패.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 이 턴에 물리 공격이나 특수 공격을 선택하지 않았거나, 상대가 자신보다 먼저 행동하면 실패한다.", // NEEDS QC
 		},
 	},
 	sunnyday: {
 		name: "쾌청",
 		// Official flavor text: "5턴 동안 햇살을 강하게 해서 불꽃타입 기술의 위력을 올린다. 물타입의 위력은 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 날씨가 맑음이 된다. 효과가 지속되는 동안 불꽃타입 공격의 데미지가 1.5배, 물타입 공격의 데미지가 0.5배가 된다. 뜨거운바위를 지니고 있으면 8턴 동안 지속된다. 날씨가 이미 맑음이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 햇살을 강하게 해 불꽃 기술을 강화.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 날씨가 맑음이 된다. 효과가 지속되는 동안 불꽃타입 공격의 데미지가 1.5배, 물타입 공격의 데미지가 0.5배가 된다. 날씨가 이미 맑음이라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 이미 맑음이라도 5턴 동안 날씨가 맑음이 된다. 효과가 지속되는 동안 불꽃타입 공격의 데미지가 1.5배, 물타입 공격의 데미지가 0.5배가 된다.", // NEEDS QC
 		},
 	},
 	sunsteelstrike: {
 		name: "메테오드라이브",
 		// Official flavor text: "유성 같은 기세로 돌진한다. 상대의 특성을 무시하고 공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술과 그 효과는 다른 포켓몬의 특성을 무시한다.", // NEEDS QC
+		shortDesc: "다른 포켓몬의 특성을 무시한다.", // NEEDS QC
 	},
 	supercellslam: {
 		name: "썬더다이브",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "공격이 실패하면 자신이 최대 HP의 1/2(버림)만큼 데미지를 받는다. 특성이 매직가드인 포켓몬은 이 데미지를 받지 않는다. 상대가 배틀에 나와서 작아지기를 썼다면 데미지가 2배가 되고 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "빗나가면 자신이 최대 HP의 1/2을 잃는다.", // NEEDS QC
 
 		damage: "#crash",
 	},
 	superfang: {
 		name: "분노의앞니",
 		// Official flavor text: "날카로운 앞니로 강하게 물어서 공격한다. 상대의 HP는 절반이 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 남은 HP의 1/2(버림, 최소 1)만큼의 데미지를 준다.", // NEEDS QC
+		shortDesc: "상대의 남은 HP의 1/2만큼 데미지를 준다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대의 남은 HP의 1/2(버림, 최소 1)만큼의 데미지를 준다. 이 기술은 타입 상성에 의한 무효를 무시한다.", // NEEDS QC
+			shortDesc: "데미지 = 남은 HP의 절반. 고스트에도 명중.", // NEEDS QC
 		},
 	},
 	superpower: {
 		name: "엄청난힘",
 		// Official flavor text: "엄청난 힘을 발휘하여 상대를 공격한다. 자신의 공격과 방어가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 방어를 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 공격, 방어를 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	supersonic: {
 		name: "초음파",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	supersonicskystrike: {
 		name: "파이널다이브클래시",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	surf: {
 		name: "파도타기",
 		// Official flavor text: "큰 파도로 자신의 주위에 있는 포켓몬을 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 다이빙을 쓰는 중이라면 데미지가 2배가 된다.", // NEEDS QC
+		shortDesc: "이웃을 공격. 다이빙 중인 상대에게 2배.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 다이빙을 쓰는 중이라면 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "이웃한 포켓몬 전체. 다이빙에 위력 2배.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "추가 효과가 없다.", // NEEDS QC
+			shortDesc: "추가 효과가 없다.", // NEEDS QC
 		},
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대 전체 공격. 다이빙에 위력 2배.", // NEEDS QC
 		},
 	},
 	surgingstrikes: {
 		name: "수류연타",
 		// Official flavor text: "물의 태세가 극에 달하여 물 흐르듯 3회의 연격을 날린다. 반드시 급소에 맞는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3회 연속으로 공격한다. 상대가 주술의 효과를 받고 있거나 특성이 전투무장이나 조가비갑옷이 아닌 한 반드시 급소에 맞는다.", // NEEDS QC
+		shortDesc: "3회 공격하며 반드시 급소에 맞는다.", // NEEDS QC
 	},
 	swagger: {
 		name: "뽐내기",
 		// Official flavor text: "상대를 화내게 해서 혼란시킨다. 분노로 상대의 공격은 크게 올라가 버린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격을 2단계 올리지만 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대의 공격을 2단계 올리지만 혼란시킨다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 공격을 2단계 올리지만 혼란 상태로 만든다. 상대의 공격이 올라갈 수 없는 상태라면 이 기술은 빗나간다.", // NEEDS QC
 		},
 	},
 	swallow: {
 		name: "꿀꺽",
 		// Official flavor text: "비축된 힘을 꿀꺽해서 자신의 HP를 회복한다. 비축된 만큼 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "비축하기 횟수에 따라 자신의 HP를 회복한다. 1이라면 최대 HP의 1/4, 2라면 1/2(모두 0.5는 버림), 3이라면 전부 회복한다. 횟수가 0이라면 실패한다. 비축하기로 올라간 만큼 방어와 특수방어가 떨어지며 횟수는 0으로 돌아간다.", // NEEDS QC
+		shortDesc: "비축하기 횟수에 따라 HP를 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "비축하기 횟수에 따라 자신의 HP를 회복한다. 1이라면 최대 HP의 1/4, 2라면 1/2(모두 버림), 3이라면 전부 회복한다. 횟수가 0이라면 실패한다. 비축하기로 올라간 만큼 방어와 특수방어가 떨어지며 횟수는 0으로 돌아간다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "비축하기 횟수에 따라 자신의 HP를 회복한다. 1이라면 최대 HP의 1/4, 2라면 1/2(모두 0.5는 버림), 3이라면 전부 회복한다. 횟수가 0이라면 실패한다. 횟수는 0으로 돌아간다.", // NEEDS QC
 		},
 	},
 	sweetkiss: {
 		name: "천사의키스",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	sweetscent: {
 		name: "달콤한향기",
 		// Official flavor text: "향기로 상대의 회피율을 크게 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 회피율을 2단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 회피율을 2단계 떨어뜨린다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대의 회피율을 1단계 떨어뜨린다.", // NEEDS QC
+			shortDesc: "상대의 회피율을 1단계 떨어뜨린다.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대의 회피율을 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	swift: {
 		name: "스피드스타",
 		// Official flavor text: "별 모양의 빛을 발사해서 상대를 공격한다. 공격은 반드시 명중한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "명중 판정을 하지 않는다. 상대를 공격한다.", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "명중 판정을 하지 않으며, 상대가 구멍파기가나 공중날기를 쓰는 중이라도 명중한다.", // NEEDS QC
+			shortDesc: "구멍파기/공중날기 중이라도 반드시 명중.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "명중 판정을 하지 않는다.", // NEEDS QC
 		},
 	},
 	switcheroo: {
 		name: "바꿔치기",
 		// Official flavor text: "눈에 보이지 않는 속도로 자신과 상대가 지닌 물건을 교환한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 디아루가와 큰금강옥, 펄기아와 큰백옥, 기라티나와 큰백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패, 패러독스 포켓몬과 부스트에너지, 오거폰과 가면을 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 여기서 패러독스 포켓몬은 꿰뚫는화염, 날뛰는우레, 무쇠암석, 무쇠감투를 제외한, 특성이 고대활성이나 쿼크차지가 될 수 있는 모든 포켓몬을 가리킨다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
+		shortDesc: "상대와 지닌 도구를 맞바꾼다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 어느 한쪽이 Z크리스탈을 지니고 있거나, 메가스톤을 그것으로 메가진화할 수 있는 포켓몬에게 건네거나 빼앗으려 하거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 메가스톤을 그것으로 메가진화할 수 있는 포켓몬에게 건네거나 빼앗으려 하거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 어느 한쪽이 메일을 지니고 있거나, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 어느 한쪽이 메일이나 백금옥을 지니고 있거나, 어느 한쪽의 특성이 멀티타입이거나, 어느 한쪽이 탁쳐서떨구기의 효과를 받고 있거나, 상대의 특성이 점착이라면 실패한다.", // NEEDS QC
 		},
 
 		activate: "#trick",
@@ -7380,88 +7380,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	swordsdance: {
 		name: "칼춤",
 		// Official flavor text: "싸움의 춤을 격렬하게 춰서 기세를 높인다. 자신의 공격을 크게 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격을 2단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격을 2단계 올린다.", // NEEDS QC
 	},
 	synchronoise: {
 		name: "싱크로노이즈",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 같은 타입이 없는 상대에게는 효과가 없다.", // NEEDS QC
+		shortDesc: "자신과 같은 타입의 이웃 포켓몬을 공격한다.", // NEEDS QC
 	},
 	synthesis: {
 		name: "광합성",
 		// Official flavor text: "자신의 HP를 회복한다. 날씨에 따라 회복량이 변한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "날씨가 난기류거나 날씨가 없거나 자신이 만능우산을 지니고 있다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 폭우, 비, 모래바람 또는 눈이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
+		shortDesc: "날씨에 따른 양만큼 자신의 HP를 회복한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 난기류거나 날씨가 없거나 자신이 만능우산을 지니고 있다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 싸라기눈, 폭우, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 난기류거나 날씨가 없다면 최대 HP의 1/2을, 큰가뭄 또는 쾌청이 되어 있다면 2/3를, 싸라기눈, 폭우, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 2/3를, 싸라기눈, 비 또는 모래바람이라면 1/4(모두 0.5는 버림)을 회복한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 2/3를, 싸라기눈, 비 또는 모래바람이라면 1/4(모두 버림)을 회복한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 없다면 최대 HP의 1/2을, 쾌청이 되어 있다면 HP 전부를, 비나 모래바람이라면 1/4(모두 버림)을 회복한다.", // NEEDS QC
 		},
 	},
 	syrupbomb: {
 		name: "시럽봄",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하면 3턴 동안 매 턴 종료 시 상대의 스피드가 1단계씩 떨어진다.", // NEEDS QC
+		shortDesc: "3턴 동안 상대의 스피드가 1단계씩 떨어진다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 물엿범벅이 되었다!",
 	},
 	tackle: {
 		name: "몸통박치기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	tachyoncutter: {
 		name: "타키온커터",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다. 명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "2회 공격하며 반드시 명중한다.", // NEEDS QC
 	},
 	tailglow: {
 		name: "반딧불",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 특수공격을 3단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 특수공격을 3단계 올린다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신의 특수공격을 2단계 올린다.", // NEEDS QC
+			shortDesc: "자신의 특수공격을 2단계 올린다.", // NEEDS QC
 		},
 	},
 	tailslap: {
 		name: "스위프뺨치기",
 		// Official flavor text: "단단한 꼬리로 상대를 때려서 공격한다. 2-5회 동안 연속으로 쓴다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "한 턴에 2~5회 연속으로 공격한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 	},
 	tailwhip: {
 		name: "꼬리흔들기",
 		// Official flavor text: "꼬리를 좌우로 귀엽게 흔들어 방심을 유도한다. 상대의 방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 		},
 	},
 	tailwind: {
 		name: "순풍",
 		// Official flavor text: "세차게 불어대는 바람의 소용돌이를 만들어 4턴 동안 같은 편 모두의 스피드를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4턴 동안 자신과 파티 전원의 스피드가 2배가 된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "4턴 동안 아군의 스피드가 2배가 된다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3턴 동안 자신과 파티 전원의 스피드가 2배가 된다. 자신 진영에 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+			shortDesc: "3턴 동안 아군의 스피드가 2배가 된다.", // NEEDS QC
 		},
 
 		start: "  {TEAM}에게 순풍이 불기 시작했다!",
@@ -7470,52 +7470,52 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	takedown: {
 		name: "돌진",
 		// Official flavor text: "굉장한 기세로 상대에게 부딪쳐 공격한다. 자신도 조금 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "1/4의 반동 데미지를 받는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다. 이 기술이 대타에 맞으면 반동 데미지는 항상 1이다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(버림, 최소 1)만큼 자신이 반동 데미지를 받는다. 이 기술로 상대의 대타가 부서지면 반동 데미지를 받지 않는다.", // NEEDS QC
 		},
 	},
 	takeheart: {
 		name: "브레이브차지",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 상태 이상을 회복한다. 자신의 특수공격과 특수방어를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "상태 이상을 회복하고 특공·특방 +1.", // NEEDS QC
 	},
 	tarshot: {
 		name: "타르샷",
 		// Official flavor text: "끈적끈적한 타르를 날려서 상대의 스피드를 떨어뜨린다. 상대는 불꽃이 약점이 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 스피드를 1단계 떨어뜨린다. 상대가 교체할 때까지 불꽃타입 기술이 상대에게 2배의 효과를 발휘한다.", // NEEDS QC
+		shortDesc: "상대의 스피드 -1. 불꽃에 약해지게 만든다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 불꽃에 약해졌다!",
 	},
 	taunt: {
 		name: "도발",
 		// Official flavor text: "상대를 화나게 한다. 3턴 동안 상대는 데미지를 주는 기술밖에 쓸 수 없게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대는 다음 3턴 동안 공격 기술이 아닌 기술을 쓸 수 없다. 특성이 둔감인 포켓몬이나 특성 아로마베일로 보호받는 포켓몬에게는 효과가 없다.", // NEEDS QC
+		shortDesc: "상대는 3턴 동안 변화 기술을 쓸 수 없다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 다음 3턴 동안 공격 기술이 아닌 기술을 쓸 수 없다. 특성이 둔감인 포켓몬이나 특성 아로마베일로 보호받는 포켓몬에게는 효과가 없다. 효과가 지속되는 동안에도 Z파워 기술은 선택해서 쓸 수 있다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 다음 3턴 동안 공격 기술이 아닌 기술을 쓸 수 없다. 특성이 둔감인 포켓몬이나 특성 아로마베일로 보호받는 포켓몬에게는 효과가 없다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 다음 3턴 동안 공격 기술이 아닌 기술을 쓸 수 없다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3~5턴 동안 상대는 공격 기술이 아닌 기술을 쓸 수 없다.", // NEEDS QC
+			shortDesc: "상대는 3~5턴 동안 변화 기술을 쓸 수 없다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2턴 동안 상대는 공격 기술이 아닌 기술을 쓸 수 없다.", // NEEDS QC
+			shortDesc: "상대는 2턴 동안 변화 기술을 쓸 수 없다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 도발에 넘어가 버렸다!",
@@ -7525,14 +7525,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tearfullook: {
 		name: "눈물그렁그렁",
 		// Official flavor text: "눈물을 그렁그렁거려 상대의 전의를 상실하게 한다. 상대의 공격과 특수공격이 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격과 특수공격을 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격, 특수공격을 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	teatime: {
 		name: "다과회",
 		// Official flavor text: "다과회를 열어서 배틀에 나와 있는 포켓몬이 각각 지니고 있는 나무열매를 먹는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "배틀에 나와 있는 모든 포켓몬이 지닌 나무열매를 먹는다. 대타, 특성 서투름이나 긴장감, 금제나 매직룸의 효과로도 막을 수 없다. 나무열매를 지닌 포켓몬이 없으면 실패한다.", // NEEDS QC
+		shortDesc: "모든 포켓몬이 지닌 나무열매를 먹는다.", // NEEDS QC
 
 		activate: "  다과회를 열어서 다 같이 나무열매를 먹었다!",
 		fail: "  그러나 아무 일도 일어나지 않았다!",
@@ -7540,29 +7540,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	technoblast: {
 		name: "테크노버스터",
 		// Official flavor text: "광탄을 상대에게 방출한다. 자신이 지니고 있는 카세트에 의해 타입이 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술의 타입은 자신이 지닌 카세트에 따라 정해진다.", // NEEDS QC
+		shortDesc: "지닌 카세트에 따라 타입이 변한다.", // NEEDS QC
 	},
 	tectonicrage: {
 		name: "라이징랜드오버",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	teeterdance: {
 		name: "흔들흔들댄스",
 		// Official flavor text: "흔들흔들 댄스를 춰서 주위에 있는 포켓몬을 혼란 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "이웃한 포켓몬을 혼란 상태로 만든다.", // NEEDS QC
 	},
 	telekinesis: {
 		name: "텔레키네시스",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3턴 동안 상대는 배틀에 나와 있는 한 일격필살 기술을 제외한 자신의 모든 공격을 피할 수 없게 된다. 효과가 지속되는 동안 상대는 땅타입 기술과 압정뿌리기, 독압정, 끈적끈적네트, 특성 개미지옥의 효과를 받지 않는다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 뿌리박기, 떨어뜨리기, 사우전드애로, 검은철구의 효과를 받으면 그쪽이 우선된다. 상대가 이미 이 효과나 뿌리박기, 떨어뜨리기, 사우전드애로의 효과를 받고 있다면 실패한다. 상대가 디그다, 닥트리오, 디그다（알로라의 모습）, 닥트리오（알로라의 모습）, 모래꿍, 모래성이당이거나 메가진화한 팬텀이라면 이 기술이 통하지 않는다. 메가진화한 팬텀은 어떤 방법으로도 이 효과를 받지 않는다.", // NEEDS QC
+		shortDesc: "3턴 동안 상대는 뜨지만 반드시 맞게 된다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3턴 동안 상대는 배틀에 나와 있는 한 일격필살 기술을 제외한 자신의 모든 공격을 피할 수 없게 된다. 효과가 지속되는 동안 상대는 땅타입 기술과 압정뿌리기, 독압정, 끈적끈적네트, 특성 개미지옥의 효과를 받지 않는다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 뿌리박기, 떨어뜨리기, 사우전드애로, 검은철구의 효과를 받으면 그쪽이 우선된다. 상대가 이미 이 효과나 뿌리박기, 떨어뜨리기, 사우전드애로의 효과를 받고 있다면 실패한다. 상대가 디그다나 닥트리오거나 메가진화한 팬텀이라면 이 기술이 통하지 않는다. 메가진화한 팬텀은 어떤 방법으로도 이 효과를 받지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3턴 동안 상대는 배틀에 나와 있는 한 일격필살 기술을 제외한 자신의 모든 공격을 피할 수 없게 된다. 효과가 지속되는 동안 상대는 땅타입 기술과 압정뿌리기, 독압정, 특성 개미지옥의 효과를 받지 않는다. 상대가 배턴터치를 쓰면 교체해 나온 포켓몬이 효과를 이어받는다. 뿌리박기, 떨어뜨리기, 검은철구의 효과를 받으면 그쪽이 우선된다. 상대가 이미 이 효과나 뿌리박기, 떨어뜨리기의 효과를 받고 있다면 실패한다. 상대가 디그다나 닥트리오라면 이 기술이 통하지 않는다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:object} 허공에 띄웠다!",
@@ -7571,108 +7571,108 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	teleport: {
 		name: "순간이동",
 		// Official flavor text: "교대할 포켓몬이 있을 때 사용하면 교체한다. 야생 포켓몬은 도망가 버린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없으면 교체하지 않는다.", // NEEDS QC
+		shortDesc: "자신은 교체해 돌아온다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "쓰면 실패한다.", // NEEDS QC
+			shortDesc: "쓰면 실패한다.", // NEEDS QC
 		},
 	},
 	temperflare: {
 		name: "열불내기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "지난 턴에 자신의 마지막 기술(다른 기술이 불러낸 기술이나 지휘, 매직코트, 가로채기, 특성 무희나 매직미러로 쓴 기술 포함)이 원래 효과를 전혀 내지 못했거나(실패한 무릎차기, 점프킥, 깜짝헤드의 데미지는 제외), 반동이나 프리폴 이외의 효과로 움직일 수 없었다면 위력이 2배가 된다. 토치카, 판별, 킹실드, 방어, 니들가드, 트릭가드, 마룻바닥세워막기, 패스트가드, 와이드가드로 막힌 기술이나, 중력, 떨어뜨리기, 사우전드애로의 효과로 일찍 끝난 뛰어오르기와 공중날기는 위력을 2배로 만들지 않는다.", // NEEDS QC
+		shortDesc: "지난 턴에 기술이 실패했다면 위력이 2배.", // NEEDS QC
 	},
 	terablast: {
 		name: "테라버스트",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 테라스탈 상태라면 랭크 변화를 포함해 공격이 특수공격보다 높을 때 물리 공격이 되며, 타입이 자신의 테라스탈 타입과 같아진다. 또한 테라스탈 타입이 스텔라라면 위력이 100이 되고, 테라스탈한 상대에게는 효과가 뛰어나며 그 외에는 등배가 되고, 자신의 공격과 특수공격이 1단계씩 떨어진다.", // NEEDS QC
+		shortDesc: "테라스탈 시: 테라 타입이 되고 물리도 가능.", // NEEDS QC
 	},
 	terastarstorm: {
 		name: "테라클러스터",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 스텔라폼 테라파고스라면 이 기술의 타입이 스텔라가 되고, 모든 상대를 공격하며, 랭크 변화를 포함해 공격이 특수공격보다 높다면 물리 공격이 된다.", // NEEDS QC
+		shortDesc: "스텔라폼 테라파고스: 스텔라타입, 상대 전체 공격.", // NEEDS QC
 	},
 	terrainpulse: {
 		name: "대지의파동",
 		// Official flavor text: "필드의 힘을 빌려서 공격한다. 사용했을 때의 필드 상태에 따라서 기술 타입과 위력이 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신이 땅에 있고 필드가 펼쳐져 있다면 위력이 2배가 되고 타입이 필드에 맞춰 변한다. 일렉트릭필드는 전기타입, 그래스필드는 풀타입, 미스트필드는 페어리타입, 사이코필드는 에스퍼타입이 된다.", // NEEDS QC
+		shortDesc: "필드 위에서 위력 2배, 타입도 변한다.", // NEEDS QC
 	},
 	thief: {
 		name: "도둑질",
 		// Official flavor text: "공격과 동시에 도구를 훔친다. 자신이 도구를 지니고 있을 경우에는 훔칠 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 디아루가와 큰금강옥, 펄기아와 큰백옥, 기라티나와 큰백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패, 패러독스 포켓몬과 부스트에너지, 오거폰과 가면은 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 여기서 패러독스 포켓몬은 꿰뚫는화염, 날뛰는우레, 무쇠암석, 무쇠감투를 제외한, 특성이 고대활성이나 쿼크차지가 될 수 있는 모든 포켓몬을 가리킨다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
+		shortDesc: "도구가 없다면 상대의 도구를 빼앗는다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패은 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. Z크리스탈, 그것으로 메가진화할 수 있는 포켓몬이 지닌 메가스톤, 그리고 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리는 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 그것으로 메가진화할 수 있는 포켓몬이 지닌 메가스톤, 그리고 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트는 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 기절하지 않았다면, 자신이 도구를 지니고 있지 않을 때 상대가 지닌 도구를 빼앗는다. 특성이 점착인 상대는 기절하지 않는 한 도구를 잃지 않는다. 메일과, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트는 해당 포켓몬이 지닌 경우 빼앗지 못하며, 자신이 그 포켓몬이고 상대가 해당 도구를 지닌 경우도 마찬가지다. 이 기술로 잃은 도구는 리사이클로 되찾거나 특성 수확으로 되살릴 수 없다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 도구를 지니고 있지 않다면 상대가 지닌 도구를 빼앗는다. 도구가 메일이나 백금옥이거나, 상대의 특성이 멀티타입이나 점착라면 빼앗지 못한다. 이 기술로 잃은 도구는 리사이클로 되찾을 수 없다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 공격이 성공하고 자신이 도구를 지니고 있지 않다면 상대가 지닌 도구를 빼앗는다. 도구가 메일이나 의문열매가거나, 상대의 특성이 점착라면 빼앗지 못한다. 이 기술로 잃은 도구는 리사이클로 되찾을 수 없다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신이 도구를 지니고 있지 않다면 100%의 확률로 상대가 지닌 도구를 빼앗는다. 상대의 도구가 메일이라면 빼앗지 못한다.", // NEEDS QC
 		},
 	},
 	thousandarrows: {
 		name: "사우전드애로",
 		// Official flavor text: "떠 있는 포켓몬도 맞힐 수 있다. 떠 있던 상대는 맞아서 땅에 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "비행타입, 특성이 부유인 포켓몬, 풍선을 지닌 포켓몬, 전자부유나 텔레키네시스의 효과를 받는 포켓몬 등 떠 있는 포켓몬에게도 명중한다. 상대가 아직 땅에 내려오지 않은 비행타입이라면 다른 타입과 관계없이 등배의 데미지를 준다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이라도 명중한다. 뛰어오르기, 공중날기, 전자부유, 텔레키네시스의 효과를 받는 상대에게 명중하면 그 효과가 사라진다. 상대가 이 턴에 날개쉬기를 쓰지 않은 비행타입이거나 특성이 부유라면, 배틀에 나와 있는 동안 땅타입 공격과 특성 개미지옥에 대한 면역을 잃는다. 효과가 지속되는 동안 상대의 전자부유는 실패하고 상대를 노리는 텔레키네시스도 실패한다.", // NEEDS QC
+		shortDesc: "공중의 상대에게도 명중해 땅에 떨어뜨린다.", // NEEDS QC
 	},
 	thousandwaves: {
 		name: "사우전드웨이브",
 		// Official flavor text: "땅 위를 뻗어 나가는 파도로 공격한다. 파도에 휩쓸린 상대는 전투에서 도망칠 수 없게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대 전체 공격. 교체할 수 없게 만든다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대를 교체할 수 없게 만든다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 상대가 배턴터치로 물러나면 교체해 나온 포켓몬도 교체할 수 없다. 자신이 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
 		},
 	},
 	thrash: {
 		name: "난동부리기",
 		// Official flavor text: "2-3턴 동안 마구 난동 부려서 상대를 공격한다. 난동 부린 뒤에는 혼란에 빠진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 효과의 첫 턴 또는 3턴 효과의 두 번째 턴에 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
+		shortDesc: "2~3턴 지속. 그 후 자신이 혼란해진다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 인접한 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 효과의 첫 턴 또는 3턴 효과의 두 번째 턴에 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴이 끝날 때 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 턴 시작 시 잠들어 있거나, 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴이 끝날 때 혼란 상태가 아니라면 혼란 상태가 된다. 매 턴 무작위 상대를 노린다. 움직일 수 없게 되거나, 잠들거나, 얼음 상태가 되거나, 공격이 실패하면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술의 성공 여부와 관계없이 2~3턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 이미 혼란 상태라도 혼란 상태가 된다. 움직일 수 없게 되면 혼란 없이 효과가 사라진다. 잠꼬대로 이 기술을 쓰면 1턴만 쓰고 혼란 상태가 되지 않는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 기술의 성공 여부와 관계없이 3~4턴 동안 이 기술에 속박되며, 효과의 마지막 턴에 기술을 쓴 직후 이미 혼란 상태라도 혼란 상태가 된다. 움직일 수 없게 되면 혼란 없이 효과가 사라진다. 효과가 지속되는 동안 이 기술의 명중률은 매 턴 랭크 변화를 포함해 계산한 현재 명중률로 덮어써지며, 1/256보다 낮아지거나 255/256보다 높아지지는 않는다.", // NEEDS QC
+			shortDesc: "3~4턴 지속. 그 후 자신은 혼란.", // NEEDS QC
 		},
 	},
 	throatchop: {
 		name: "지옥찌르기",
 		// Official flavor text: "이 기술에 맞은 상대는 지옥의 고통 때문에 2턴 동안 소리 기술을 낼 수 없다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2턴 동안 상대는 소리 기술을 쓸 수 없다.", // NEEDS QC
+		shortDesc: "2턴 동안 상대는 소리 기술을 쓸 수 없다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2턴 동안 상대는 소리 기술을 쓸 수 없다. 효과가 지속되는 동안에도 Z파워 소리 기술은 선택해서 쓸 수 있다.", // NEEDS QC
 		},
 
 		cant: "{POKEMON:topic} 지옥찌르기 효과로 기술을 쓸 수 없다!",
@@ -7680,106 +7680,106 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thunder: {
 		name: "번개",
 		// Official flavor text: "강한 번개를 상대에게 떨어뜨려 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 마비 상태로 만든다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다. 날씨가 폭우 또는 비가 되어 있으면 명중 판정을 하지 않는다. 큰가뭄 또는 쾌청이 되어 있으면 명중률이 50%가 된다. 만능우산을 지닌 포켓몬에게는 명중률이 70%로 유지된다.", // NEEDS QC
+		shortDesc: "30% 마비. 비가 오면 반드시 명중한다.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다. 날씨가 폭우 또는 비가 되어 있으면 명중 판정을 하지 않는다. 큰가뭄 또는 쾌청이 되어 있으면 명중률이 50%가 된다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라도 명중한다. 날씨가 비가 되어 있으면 명중 판정을 하지 않는다. 쾌청이 되어 있으면 명중률이 50%가 된다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다. 상대가 뛰어오르기가나 공중날기를 쓰는 중이라도 명중한다. 날씨가 비가 되어 있으면 명중 판정을 하지 않는다. 쾌청이 되어 있으면 명중률이 50%가 된다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "30%의 확률로 상대를 마비 상태로 만든다. 상대가 공중날기를 쓰는 중이라도 명중한다. 날씨가 비가 되어 있으면 명중 판정을 하지 않는다. 쾌청이 되어 있으면 명중률이 50%가 된다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+			shortDesc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 		},
 	},
 	thunderbolt: {
 		name: "10만볼트",
 		// Official flavor text: "강한 전격을 상대에게 날려서 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	thundercage: {
 		name: "썬더프리즌",
 		// Official flavor text: "전기가 흐르는 우리 안에 4-5턴 동안 상대를 가두어 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 
 		start: "  {SOURCE:topic} {POKEMON:object} 가두었다!",
 	},
 	thunderclap: {
 		name: "질풍신뢰",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 이 턴에 물리 공격, 특수 공격 또는 선취를 선택하지 않았거나, 상대가 자신보다 먼저 행동하면 실패한다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동. 상대가 공격하지 않으면 실패.", // NEEDS QC
 	},
 	thunderfang: {
 		name: "번개엄니",
 		// Official flavor text: "전기를 모은 이빨로 문다. 상대를 풀죽게 하거나 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 마비 상태로 만들고, 10%의 확률로 풀죽게 한다.", // NEEDS QC
+		shortDesc: "10%의 확률로 마비. 10%의 확률로 풀죽음.", // NEEDS QC
 	},
 	thunderouskick: {
 		name: "천둥차기",
 		// Official flavor text: "번개 같은 움직임으로 상대를 농락하며 킥을 날린다. 상대의 방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 방어를 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	thunderpunch: {
 		name: "번개펀치",
 		// Official flavor text: "전격을 담은 펀치로 상대를 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	thundershock: {
 		name: "전기쇼크",
 		// Official flavor text: "전기 자극을 상대에게 날려서 공격한다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	thunderwave: {
 		name: "전기자석파",
 		// Official flavor text: "약한 전격을 날려서 상대를 마비 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 마비 상태로 만든다. 타입 상성에 의한 무효는 무시하지 못한다.", // NEEDS QC
+		shortDesc: "상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	tickle: {
 		name: "간지르기",
 		// Official flavor text: "몸을 간질여 웃게 만들어서 상대의 공격과 방어를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 공격과 방어를 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "상대의 공격, 방어를 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	tidyup: {
 		name: "정리정돈",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 스피드를 1단계씩 올린다. 배틀에 나와 있는 모든 포켓몬의 대타를 없애고, 양쪽 진영의 압정뿌리기, 스텔스록, 끈적끈적네트, 독압정의 효과를 없앤다.", // NEEDS QC
+		shortDesc: "공격·스피드 +1. 대타와 설치물을 없앤다.", // NEEDS QC
 
 		activate: "  정리정돈 끝!",
 	},
 	topsyturvy: {
 		name: "뒤집어엎기",
 		// Official flavor text: "상대에게 걸려 있는 모든 능력 변화를 뒤집어서 반대로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 랭크 변화의 플러스와 마이너스를 뒤집는다. 상대의 랭크 변화가 모두 0이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 랭크 변화를 반대로 뒤집는다.", // NEEDS QC
 	},
 	torchsong: {
 		name: "플레어송",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 자신의 특수공격을 1단계 올린다.", // NEEDS QC
 	},
 	torment: {
 		name: "트집",
 		// Official flavor text: "상대에게 트집을 잡아서 똑같은 기술을 2회 연속으로 쓸 수 없게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대는 같은 기술을 2턴 연속으로 선택할 수 없게 된다. 상대가 배틀에서 벗어나면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "상대는 같은 기술을 연속으로 쓸 수 없다.", // NEEDS QC
 
 		start: "  {POKEMON:topic} 트집을 잡혔다!",
 		end: "  {POKEMON}의 트집 효과가 사라졌다!",
@@ -7787,26 +7787,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxic: {
 		name: "맹독",
 		// Official flavor text: "상대를 맹독의 상태로 만든다. 턴이 진행될수록 독의 데미지가 증가한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 맹독 상태로 만든다. 독타입 포켓몬이 쓰면 상대가 2턴 기술의 도중이라도 피할 수 없다.", // NEEDS QC
+		shortDesc: "상대를 맹독으로. 독타입이 쓰면 반드시 명중.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대를 맹독 상태로 만든다.", // NEEDS QC
+			shortDesc: "상대를 맹독 상태로 만든다.", // NEEDS QC
 		},
 	},
 	toxicspikes: {
 		name: "독압정",
 		// Official flavor text: "상대의 발밑에 독 압정을 뿌린다. 교체로 나온 상대 포켓몬에게 독을 퍼지게 한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대를 독 상태로 만든다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 2번까지 겹쳐 깔 수 있다. 1겹이면 독, 2겹이면 맹독 상태로 만든다. 아무 포켓몬이 정리정돈을 쓰거나, 상대가 킬러스핀, 고속스핀, 안개제거에 성공하거나 안개제거에 맞거나, 땅에 있는 독타입 포켓몬이 교체해 나오면 제거된다. 신비의부적은 교체 시의 독을 막지만 대타는 막지 못한다.", // NEEDS QC
+		shortDesc: "교체해 나오는 상대를 독으로. 최대 2겹.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대를 독 상태로 만든다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 2번까지 겹쳐 깔 수 있다. 1겹이면 독, 2겹이면 맹독 상태로 만든다. 상대가 고속스핀이나 안개제거에 성공하거나 안개제거에 맞거나, 땅에 있는 독타입 포켓몬이 교체해 나오면 제거된다. 신비의부적은 교체 시의 독을 막지만 대타는 막지 못한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대를 독 상태로 만든다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 2번까지 겹쳐 깔 수 있다. 1겹이면 독, 2겹이면 맹독 상태로 만든다. 상대가 고속스핀에 성공하거나 안개제거에 맞거나, 땅에 있는 독타입 포켓몬이 교체해 나오면 제거된다. 신비의부적은 교체 시의 독을 막지만 대타는 막지 못한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대 진영에 설치물을 깐다. 설치물은 교체해 나오는 상대를 독 상태로 만든다. 비행타입이나 특성이 부유인 포켓몬은 받지 않는다. 2번까지 겹쳐 깔 수 있다. 1겹이면 독, 2겹이면 맹독 상태로 만든다. 상대가 고속스핀에 성공하거나 안개제거에 맞거나, 땅에 있는 독타입 포켓몬이 교체해 나오면 제거된다. 신비의부적은 교체 시의 독을 막으며, 대타를 내세운 채 교체해 나와도 막을 수 있다.", // NEEDS QC
 		},
 
 		start: "  {TEAM}의 발밑에 독압정이 뿌려졌다!",
@@ -7815,8 +7815,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxicthread: {
 		name: "독실",
 		// Official flavor text: "독이 섞인 실을 뿜어낸다. 상대를 독 상태로 만들고 스피드를 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 스피드를 1단계 떨어뜨리고 독 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대의 스피드를 1단계 낮추고 독으로 만든다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7824,23 +7824,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trailblaze: {
 		name: "개척하기",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 스피드를 1단계 올린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 자신의 스피드를 1단계 올린다.", // NEEDS QC
 	},
 	transform: {
 		name: "변신",
 		// Official flavor text: "상대 포켓몬으로 변신하여 상대와 완전히 똑같은 기술을 사용할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대로 변신한다. 상대의 현재 능력치, 랭크 변화, 타입, 기술, 특성, 무게, 성별, 모습을 복사한다. 자신의 레벨과 HP는 그대로 유지되며 복사한 기술의 PP는 각각 최대 5가 된다. 폼체인지할 수 있는 포켓몬이라도 변신 중에는 할 수 없다. 대타에 맞거나, 자신이나 상대가 이미 변신한 상태거나, 어느 한쪽이 일루전의 효과를 받는 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 능력치·기술·타입·특성을 복사한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대로 변신한다. 상대의 현재 능력치, 랭크 변화, 타입, 기술, 특성, 무게, 개체값, 종족, 모습을 복사한다. 자신의 레벨과 HP는 그대로 유지되며 복사한 기술의 PP는 각각 5가 된다. 상대가 변신한 상태라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대로 변신한다. 상대의 현재 능력치, 랭크 변화, 타입, 기술, 개체값, 종족, 모습을 복사한다. 자신의 레벨과 HP는 그대로 유지되며 복사한 기술의 PP는 각각 5가 된다. 상대가 변신한 상태라면 실패한다.", // NEEDS QC
+			shortDesc: "상대의 능력, 기술, 타입, 종족을 복사.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대로 변신한다. 상대의 현재 능력치, 랭크 변화, 타입, 기술, 개체값, 종족, 모습을 복사한다. 자신의 레벨과 HP는 그대로 유지되며 복사한 기술의 PP는 각각 5가 된다. 이 기술은 구멍파기가나 공중날기를 쓰는 중인 상대도 맞힐 수 있다.", // NEEDS QC
 		},
 
 		transform: "{POKEMON:topic} {SPECIES:directional}로 변신했다!",
@@ -7848,41 +7848,41 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	triattack: {
 		name: "트라이어택",
 		// Official flavor text: "3개의 광선으로 공격한다. 마비, 화상 또는 얼음 상태 중 어느 하나로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 화상, 얼음 또는 마비 상태 중 하나로 만든다.", // NEEDS QC
+		shortDesc: "20%의 확률로 마비, 화상 또는 얼음으로 만든다.", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "화상, 얼음, 마비 중 하나를 무작위로 골라 20%의 확률로 상대를 그 상태로 만든다. 상대가 얼음 상태이고 화상이 골라졌다면 얼음이 녹는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "추가 효과가 없다.", // NEEDS QC
+			shortDesc: "추가 효과가 없다.", // NEEDS QC
 		},
 	},
 	trick: {
 		name: "트릭",
 		// Official flavor text: "상대의 빈틈을 노려 자신과 상대가 지닌 물건을 바꿔치기한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 디아루가와 큰금강옥, 펄기아와 큰백옥, 기라티나와 큰백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패, 패러독스 포켓몬과 부스트에너지, 오거폰과 가면을 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 여기서 패러독스 포켓몬은 꿰뚫는화염, 날뛰는우레, 무쇠암석, 무쇠감투를 제외한, 특성이 고대활성이나 쿼크차지가 될 수 있는 모든 포켓몬을 가리킨다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
+		shortDesc: "상대와 지닌 도구를 맞바꾼다.", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리, 자시안과 녹슨검, 자마젠타와 녹슨방패를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 어느 한쪽이 Z크리스탈을 지니고 있거나, 메가스톤을 그것으로 메가진화할 수 있는 포켓몬에게 건네거나 빼앗으려 하거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트, 실버디와 메모리를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 메가스톤을 그것으로 메가진화할 수 있는 포켓몬에게 건네거나 빼앗으려 하거나, 가이오가와 쪽빛구슬, 그란돈과 주홍구슬, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 어느 한쪽이 메일을 지니고 있거나, 기라티나와 백금옥, 아르세우스와 플레이트, 게노세크트와 카세트를 해당 포켓몬에게 건네거나 빼앗으려 하면 실패한다. 상대의 특성이 점착이라면 효과가 없다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 어느 한쪽이 메일이나 백금옥을 지니고 있거나, 어느 한쪽의 특성이 멀티타입이거나, 어느 한쪽이 탁쳐서떨구기의 효과를 받고 있거나, 상대의 특성이 점착이라면 실패한다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "자신과 상대가 지닌 도구를 맞바꾼다. 양쪽 모두 도구를 지니고 있지 않거나, 어느 한쪽이 메일을 지니고 있거나, 어느 한쪽이 탁쳐서떨구기의 효과를 받고 있거나, 상대의 특성이 점착이라면 실패한다.", // NEEDS QC
 		},
 
 		activate: "  {POKEMON:topic} 서로의 도구를 교체했다!",
@@ -7890,123 +7890,123 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	trickortreat: {
 		name: "핼러윈",
 		// Official flavor text: "상대를 핼러윈으로 초대한다. 상대 타입에 고스트타입이 추가된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대에게 고스트타입을 추가해 2~3개의 타입을 지니게 한다. 상대가 이미 고스트타입이라면 실패한다. 숲의저주가 상대에게 타입을 추가하면 이 기술로 추가한 타입을 대체하며, 그 반대도 마찬가지다.", // NEEDS QC
+		shortDesc: "상대에게 고스트타입을 추가한다.", // NEEDS QC
 	},
 	trickroom: {
 		name: "트릭룸",
 		// Official flavor text: "이상한 공간을 만든다. 5턴 동안 느린 포켓몬부터 행동할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 행동 순서를 정할 때 모든 포켓몬의 스피드를 다시 계산한다. 효과가 지속되는 동안 각 포켓몬의 스피드는 (10000-원래 스피드)로 취급하며, 이 값이 8191보다 크면 8192를 뺀다. 효과가 지속되는 동안 이 기술을 다시 쓰면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "마지막에 행동. 5턴간 행동 순서가 뒤집힌다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5턴 동안 우선도가 같은 기술 사이에서는 스피드가 낮은 포켓몬이 스피드가 높은 포켓몬보다 먼저 행동한다. 효과가 지속되는 동안 이 기술을 다시 쓰면 효과가 사라진다.", // NEEDS QC
 		},
 	},
 	triplearrows: {
 		name: "3연화살",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "50%의 확률로 상대의 방어를 1단계 떨어뜨리고, 30%의 확률로 풀죽게 한다. 급소에 맞을 확률이 높다.", // NEEDS QC
+		shortDesc: "급소율 높음. 50% 방어 -1, 30% 풀죽음.", // NEEDS QC
 	},
 	tripleaxel: {
 		name: "트리플악셀",
 		// Official flavor text: "3회 연속으로 킥을 날려 공격한다. 기술이 맞을 때마다 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3회 연속으로 공격한다. 위력은 두 번째 공격에서 40, 세 번째 공격에서 60으로 올라간다. 공격마다 명중 판정을 하며 상대가 피하면 공격이 끝난다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 3회 공격한다.", // NEEDS QC
+		shortDesc: "3회 공격. 빗나갈 수 있지만 점점 강해진다.", // NEEDS QC
 	},
 	tripledive: {
 		name: "트리플다이브",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3회 연속으로 공격한다.", // NEEDS QC
+		shortDesc: "3회 연속으로 공격한다.", // NEEDS QC
 	},
 	triplekick: {
 		name: "트리플킥",
 		// Official flavor text: "3회 연속으로 킥을 날려 공격한다. 기술이 맞을 때마다 위력이 올라간다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3회 연속으로 공격한다. 위력은 두 번째 공격에서 20, 세 번째 공격에서 30으로 올라간다. 공격마다 명중 판정을 하며 상대가 피하면 공격이 끝난다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 3회 공격한다.", // NEEDS QC
+		shortDesc: "3회 공격. 빗나갈 수 있지만 점점 강해진다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3회 연속으로 공격한다. 위력은 두 번째 공격에서 20, 세 번째 공격에서 30으로 올라간다. 공격마다 명중 판정을 하며 상대가 피하면 공격이 끝난다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 상대가 기합의띠를 지니고 있고 이 기술이 시작될 때 HP가 가득 차 있었다면, 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3회 연속으로 공격한다. 위력은 두 번째 공격에서 20, 세 번째 공격에서 30으로 올라간다. 공격마다 명중 판정을 하며 상대가 피하면 공격이 끝난다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "무작위로 1~3회 연속으로 공격한다. 위력은 두 번째 공격에서 20, 세 번째 공격에서 30으로 올라간다.", // NEEDS QC
+			shortDesc: "1~3회 공격. 공격마다 위력 상승.", // NEEDS QC
 		},
 	},
 	tropkick: {
 		name: "트로피컬킥",
 		// Official flavor text: "남쪽 나라에서 유래된 뜨거운 킥을 상대에게 날린다. 상대의 공격을 떨어뜨린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대의 공격을 1단계 떨어뜨린다.", // NEEDS QC
 	},
 	trumpcard: {
 		name: "마지막수단",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 통상의 PP 소모와 특성 프레셔의 처리 후 남은 PP에 따라 정해진다. 0이면 200, 1이면 80, 2면 60, 3이면 50, 4 이상이면 40이다.", // NEEDS QC
+		shortDesc: "남은 PP가 적을수록 위력이 올라간다.", // NEEDS QC
 	},
 	twinbeam: {
 		name: "트윈빔",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격한다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "한 턴에 2회 연속으로 공격한다.", // NEEDS QC
 	},
 	twineedle: {
 		name: "더블니들",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2회 연속으로 공격하며, 공격마다 20%의 확률로 상대를 독 상태로 만든다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
+		shortDesc: "2회 공격. 매 공격 20%의 확률로 독.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격하며, 공격마다 20%의 확률로 상대를 독 상태로 만든다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다. 상대가 기합의띠를 지니고 있고 이 기술이 시작될 때 HP가 가득 차 있었다면, 공격 횟수와 관계없이 기절하지 않는다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격하며, 공격마다 20%의 확률로 상대를 독 상태로 만든다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받는다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격하며, 두 번째 공격은 20%의 확률로 상대를 독 상태로 만든다. 첫 공격으로 상대의 대타가 부서지면 두 번째 공격은 본체가 받지만, 그 공격으로는 독 상태가 되지 않는다.", // NEEDS QC
+			shortDesc: "2회 공격. 마지막 공격은 20%로 독.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2회 연속으로 공격하며, 두 번째 공격은 20%의 확률로 상대를 독 상태로 만든다. 첫 공격으로 상대의 대타가 부서지면 기술이 끝난다.", // NEEDS QC
 		},
 	},
 	twinkletackle: {
 		name: "러블리스타임팩트",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "위력은 원래 기술의 Z파워에 따라 정해진다.", // NEEDS QC
 	},
 	twister: {
 		name: "회오리",
 		// Official flavor text: "회오리를 일으켜 상대를 끌어들여 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 풀죽게 한다. 상대가 뛰어오르기, 공중날기, 프리폴을 쓰는 중이거나 프리폴의 효과를 받는 중이라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "20%의 확률로 상대를 풀죽게 한다. 상대가 뛰어오르기가나 공중날기를 쓰는 중이라면 위력이 2배가 된다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "20%의 확률로 상대를 풀죽게 한다. 상대가 공중날기를 쓰는 중이라면 위력이 2배가 된다.", // NEEDS QC
+			shortDesc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		},
 	},
 	upperhand: {
 		name: "기선제압",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 풀죽게 한다. 상대가 이 턴에 우선도가 0보다 높아진 물리 또는 특수 공격을 선택하지 않았거나, 상대가 자신보다 먼저 행동하면 실패한다.", // NEEDS QC
+		shortDesc: "100% 풀죽음. 선제 공격하는 상대에게만 성공.", // NEEDS QC
 	},
 	uproar: {
 		name: "소란피기",
 		// Official flavor text: "3턴 동안 소란 피워 공격한다. 그동안은 아무도 잠들지 않게 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3턴 동안 이 기술에 속박된다. 매 턴 무작위 상대를 노린다. 첫 턴에 배틀에 나와 있는 잠든 포켓몬이 모두 깨어난다. 3턴 동안 어떤 방법으로도 포켓몬이 잠들 수 없으며, 도중에 교체해 나온 포켓몬은 깨어나지 않는다. 움직일 수 없게 되거나 공격이 실패하면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "3턴 동안 소란을 피워 아무도 잠들 수 없다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3턴 동안 이 기술에 속박된다. 매 턴 인접한 무작위 상대를 노린다. 첫 턴에 배틀에 나와 있는 잠든 포켓몬이 모두 깨어난다. 3턴 동안 어떤 방법으로도 포켓몬이 잠들 수 없으며, 도중에 교체해 나온 포켓몬은 깨어나지 않는다. 움직일 수 없게 되거나 공격이 실패하면 효과가 사라진다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3~6턴 동안 이 기술에 속박된다. 매 턴 무작위 상대를 노린다. 효과가 지속되는 동안 어떤 방법으로도 포켓몬이 잠들 수 없으며, 이미 잠든 포켓몬은 자신의 차례가 시작될 때나 마지막 턴을 포함한 매 턴 종료 시에 깨어난다. 움직일 수 없게 되거나 공격이 실패하면 효과가 사라진다.", // NEEDS QC
+			shortDesc: "3~6턴 지속. 그동안 아무도 잠들 수 없다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴 동안 이 기술에 속박된다. 매 턴 무작위 상대를 노린다. 효과가 지속되는 동안 어떤 방법으로도 포켓몬이 잠들 수 없으며, 이미 잠든 포켓몬은 자신의 차례가 시작될 때나 마지막 턴을 포함한 매 턴 종료 시에 깨어난다. 움직일 수 없게 되거나 공격이 실패하면 효과가 사라진다.", // NEEDS QC
+			shortDesc: "2~5턴 지속. 그동안 아무도 잠들 수 없다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 소란을 피우기 시작했다!",
@@ -8018,13 +8018,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	uturn: {
 		name: "유턴",
 		// Official flavor text: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없거나, 상대가 탈출버튼으로 또는 특성 위기회피나 도망태세로 교체해 나갔다면 교체하지 않는다.", // NEEDS QC
+		shortDesc: "공격한 뒤 자신은 교체해 돌아온다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없거나, 상대가 탈출버튼으로 교체해 나갔다면 교체하지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없으면 교체하지 않는다.", // NEEDS QC
 		},
 
 		switchOut: "{POKEMON:topic} {TRAINER}의 곁으로 돌아간다!",
@@ -8032,59 +8032,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	vacuumwave: {
 		name: "진공파",
 		// Official flavor text: "주먹을 흔들어 진공의 파도를 일으킨다. 반드시 선제공격을 할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "추가 효과가 없다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다(우선도 +1).", // NEEDS QC
 	},
 	vcreate: {
 		name: "V제너레이트",
 		// Official flavor text: "작열하는 불꽃을 이마에서 발생시켜 이판사판으로 몸통박치기한다. 방어, 특수방어, 스피드가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 스피드, 방어, 특수방어를 1단계씩 떨어뜨린다.", // NEEDS QC
+		shortDesc: "자신의 방어, 특수방어, 스피드를 1단계씩 떨어뜨린다.", // NEEDS QC
 	},
 	veeveevolley: {
 		name: "브이브이브레이크",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 친밀도×2/5)(버림)와 1 중 큰 쪽이다.", // NEEDS QC
+		shortDesc: "최대 친밀도에서 위력 102. 반드시 명중한다.", // NEEDS QC
 	},
 	venomdrench: {
 		name: "베놈트랩",
 		// Official flavor text: "특수한 독액을 끼얹는다. 독 상태인 상대는 공격, 특수공격, 스피드가 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 독 상태라면 공격, 특수공격, 스피드를 1단계씩 떨어뜨린다. 상대가 독 상태가 아니라면 실패한다.", // NEEDS QC
+		shortDesc: "독 상태인 상대의 공격·특공·스피드 -1.", // NEEDS QC
 	},
 	venoshock: {
 		name: "베놈쇼크",
 		// Official flavor text: "특수한 독액을 끼얹는다. 독 상태의 상대에게는 위력이 2배가 된다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 독 상태라면 위력이 2배가 된다.", // NEEDS QC
+		shortDesc: "독 상태인 상대에게 위력이 2배가 된다.", // NEEDS QC
 	},
 	victorydance: {
 		name: "승리의춤",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격, 방어, 스피드를 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격, 방어, 스피드를 1단계씩 올린다.", // NEEDS QC
 	},
 	vinewhip: {
 		name: "덩굴채찍",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	visegrip: {
 		name: "찝기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	vitalthrow: {
 		name: "받아던지기",
 		// Official flavor text: "상대보다 나중에 공격한다. 그 대신 자신의 공격은 반드시 명중한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "명중 판정을 하지 않는다.", // NEEDS QC
+		shortDesc: "마지막에 행동하지만 반드시 명중한다.", // NEEDS QC
 	},
 	voltswitch: {
 		name: "볼트체인지",
 		// Official flavor text: "공격한 뒤 굉장한 스피드로 돌아와서 교대 포켓몬과 교체한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없거나, 상대가 탈출버튼으로 또는 특성 위기회피나 도망태세로 교체해 나갔다면 교체하지 않는다.", // NEEDS QC
+		shortDesc: "공격한 뒤 자신은 교체해 돌아온다.", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 기술이 성공하고 자신이 기절하지 않았다면, 교체할 수 없는 상태라도 배틀에서 물러나고 선택한 파티의 포켓몬이 바로 교체해 나온다. 기절하지 않은 파티의 포켓몬이 없거나, 상대가 탈출버튼으로 교체해 나갔다면 교체하지 않는다.", // NEEDS QC
 		},
 
 		switchOut: "#uturn",
@@ -8092,45 +8092,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	volttackle: {
 		name: "볼트태클",
 		// Official flavor text: "전기를 한데 모아 돌진한다. 자신도 상당한 데미지를 입는다. 마비 상태로 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 마비 상태로 만든다. 상대가 HP를 잃었다면 잃은 HP의 33%(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "반동 33%. 10%의 확률로 마비시킨다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "10%의 확률로 상대를 마비 상태로 만든다. 상대가 HP를 잃었다면 잃은 HP의 1/3(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+			shortDesc: "반동 1/3. 10%의 확률로 마비.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/3(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+			shortDesc: "1/3의 반동 데미지를 받는다.", // NEEDS QC
 		},
 	},
 	wakeupslap: {
 		name: "잠깨움뺨치기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 잠들어 있다면 위력이 2배가 된다. 자신이 기절하지 않았다면 상대를 깨운다.", // NEEDS QC
+		shortDesc: "잠든 상대에게 2배. 상대를 깨운다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대가 잠들어 있다면 위력이 2배가 된다. 이 기술이 성공하면 상대를 깨운다.", // NEEDS QC
 		},
 	},
 	waterfall: {
 		name: "폭포오르기",
 		// Official flavor text: "굉장한 기세로 상대에게 돌진한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "추가 효과가 없다.", // NEEDS QC
+			shortDesc: "추가 효과가 없다.", // NEEDS QC
 		},
 	},
 	watergun: {
 		name: "물대포",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	waterpledge: {
 		name: "물의맹세",
 		// Official flavor text: "물기둥으로 공격한다. 불꽃과 조합하면 위력이 올라가고 하늘에 무지개가 걸린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "아군이 이 턴에 불꽃의맹세나 풀의맹세를 선택했고 아직 행동하지 않았다면, 그 아군은 자신 바로 다음에 행동하고 자신의 기술은 아무 일도 일으키지 않는다. 불꽃의맹세와 조합하면 아군이 위력 150의 물의맹세를 쓰고, 4턴 동안 자신 진영에 무지개가 걸려 추가 효과의 확률이 2배가 된다. 이 효과는 특성 하늘의은총과 중복되지만 풀죽게 하는 효과의 확률은 1번만 2배가 된다. 풀의맹세와 조합하면 아군이 위력 150의 풀의맹세를 쓰고, 4턴 동안 상대 진영이 습지가 되어 그 진영의 포켓몬의 스피드가 1/4이 된다. 조합해서 쓰면 자신의 타입과 관계없이 타입 일치 보정을 받는다. 물주얼은 소모하지 않으며, 특성 마중물로 유도되지 않는다.", // NEEDS QC
+		shortDesc: "풀·불꽃의맹세와 조합하면 추가 효과.", // NEEDS QC
 
 		activate: "  {POKEMON:topic} {TARGET:object} 기다리고 있다...",
 		start: "  {TEAM} 하늘에 무지개가 걸렸다!",
@@ -8139,60 +8139,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	waterpulse: {
 		name: "물의파동",
 		// Official flavor text: "물의 진동을 상대에게 가하여 공격한다. 상대를 혼란시킬 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 혼란 상태로 만든다.", // NEEDS QC
 	},
 	watershuriken: {
 		name: "물수리검",
 		// Official flavor text: "점액으로 만든 수리검을 2-5회 동안 연속으로 던진다. 반드시 선제공격할 수 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다. 자신이 특성 유대변화가 있는 지우개굴닌자라면 위력 20으로 항상 3회 공격한다. 속임수주사위를 지니고 있으면 4~5회 공격한다.", // NEEDS QC
+		shortDesc: "보통 먼저 행동한다. 2~5회 연속 공격.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5회 연속으로 공격한다. 35%의 확률로 2회 또는 3회, 15%의 확률로 4회 또는 5회 공격한다. 공격 도중 상대의 대타가 부서지면 남은 공격은 본체가 받는다. 특성이 스킬링크라면 항상 5회 공격한다.", // NEEDS QC
 		},
 	},
 	watersport: {
 		name: "물놀이",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 불꽃타입 공격 기술의 위력이 0.33배가 된다. 이미 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "5턴 동안 불꽃타입 기술의 위력이 1/3이 된다.", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 배틀에 나와 있는 모든 포켓몬의 불꽃타입 공격 기술의 위력이 0.33배가 된다. 이미 어느 포켓몬에게든 이 효과가 발동 중이라면 실패한다.", // NEEDS QC
+			shortDesc: "불꽃타입 공격의 위력이 1/3이 된다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "자신이 배틀에 나와 있는 동안, 배틀에 나와 있는 모든 포켓몬의 불꽃타입 공격 기술의 위력이 절반이 된다. 자신에게 이미 이 효과가 발동 중이라면 실패한다. 배턴터치로 이 효과를 아군에게 넘겨줄 수 있다.", // NEEDS QC
+			shortDesc: "불꽃타입 공격의 위력이 절반이 된다.", // NEEDS QC
 		},
 	},
 	waterspout: {
 		name: "해수스파우팅",
 		// Official flavor text: "바닷물을 내뿜어 공격한다. 자신의 HP가 적을수록 기술의 위력이 떨어진다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 (자신의 남은 HP×150÷자신의 최대 HP)(버림, 최소 1)이다.", // NEEDS QC
+		shortDesc: "자신의 HP가 적을수록 약해진다. 상대를 공격.", // NEEDS QC
 	},
 	wavecrash: {
 		name: "웨이브태클",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 33%(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "33%의 반동 데미지를 받는다.", // NEEDS QC
 	},
 	weatherball: {
 		name: "웨더볼",
 		// Official flavor text: "사용했을 때의 날씨에 따라서 기술 타입과 위력이 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "난기류를 제외한 날씨가 있다면 위력이 2배가 되고 타입이 날씨에 맞춰 변한다. 눈이라면 얼음타입, 폭우나 비라면 물타입, 모래바람이라면 바위타입, 큰가뭄이나 쾌청이라면 불꽃타입이 된다. 만능우산을 지니고 폭우, 비, 큰가뭄 또는 쾌청이 되어 있을 때 쓰면 노말타입 그대로이며 위력도 오르지 않는다.", // NEEDS QC
+		shortDesc: "날씨에 따라 위력 2배, 타입도 변한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "난기류를 제외한 날씨가 있다면 위력이 2배가 되고 타입이 날씨에 맞춰 변한다. 싸라기눈이라면 얼음타입, 폭우나 비라면 물타입, 모래바람이라면 바위타입, 큰가뭄이나 쾌청이라면 불꽃타입이 된다. 만능우산을 지니고 폭우, 비, 큰가뭄 또는 쾌청이 되어 있을 때 쓰면 노말타입 그대로이며 위력도 오르지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "날씨가 있다면 위력이 2배가 되고 타입이 날씨에 맞춰 변한다. 싸라기눈이라면 얼음타입, 비라면 물타입, 모래바람이라면 바위타입, 쾌청이라면 불꽃타입이 된다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "날씨가 있다면 데미지가 2배가 되고 타입이 날씨에 맞춰 변한다. 싸라기눈이라면 얼음타입, 비라면 물타입, 모래바람이라면 바위타입, 쾌청이라면 불꽃타입이 된다.", // NEEDS QC
+			shortDesc: "날씨가 있으면 데미지 2배, 타입 변화.", // NEEDS QC
 		},
 
 		move: "울트라대시어택은 날씨의 영향으로 {MOVE:subject} 되었다!",
@@ -8200,23 +8200,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlpool: {
 		name: "바다회오리",
 		// Official flavor text: "세차게 소용돌이치는 물속에 4-5턴 동안 상대를 가두어 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(자신이 조임밴드를 지니고 있으면 1/8)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴(끈기갈고리손톱을 지니고 있으면 항상 5턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5턴동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 배턴터치를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} 소용돌이 속에 갇혔다!",
@@ -8224,47 +8224,47 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlwind: {
 		name: "날려버리기",
 		// Official flavor text: "상대를 날려버려서 교대할 포켓몬을 끌어낸다. 야생의 경우에는 배틀이 끝난다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 파티에서 기절하지 않은 마지막 포켓몬이거나, 뿌리박기를 썼거나, 특성이 흡반이라면 실패한다.", // NEEDS QC
+		shortDesc: "상대를 무작위 포켓몬과 강제로 교체시킨다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 파티에서 기절하지 않은 마지막 포켓몬이거나, 뿌리박기를 썼거나, 특성이 흡반이라면 실패한다. 또한 자신의 레벨이 상대보다 낮고, 0~255의 무작위 수 X에 대해 X×(자신의 레벨+상대의 레벨)÷256+1(버림)이 (상대의 레벨÷4)(버림) 이하라면 실패한다.", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대는 강제로 교체되어 기절하지 않은 파티의 포켓몬이 무작위로 나온다. 상대가 파티에서 기절하지 않은 마지막 포켓몬이거나, 자신이 상대보다 먼저 행동하면 실패한다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "배틀에서는 효과가 없다.", // NEEDS QC
+			shortDesc: "배틀에서는 효과가 없다.", // NEEDS QC
 		},
 	},
 	wickedblow: {
 		name: "암흑강타",
 		// Official flavor text: "악의 태세가 극에 달하여 강렬한 일격을 날린다. 반드시 급소에 맞는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 주술의 효과를 받고 있거나 특성이 전투무장이나 조가비갑옷이 아닌 한 반드시 급소에 맞는다.", // NEEDS QC
+		shortDesc: "반드시 급소에 맞는다.", // NEEDS QC
 	},
 	wickedtorque: {
 		name: "다크액셀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "10%의 확률로 상대를 잠듦 상태로 만든다.", // NEEDS QC
+		shortDesc: "10%의 확률로 상대를 잠듦 상태로 만든다.", // NEEDS QC
 	},
 	wideguard: {
 		name: "와이드가드",
 		// Official flavor text: "같은 편 전원에게 향하는 공격을 1턴 동안 막는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "이 턴 동안 아군을 포함한 다른 포켓몬의, 이웃한 상대 전체나 이웃한 포켓몬 전체를 노리는 기술로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 화염의수호, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 스레드트랩, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
+		shortDesc: "이 턴 동안 전체 공격 기술로부터 아군을 지킨다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의, 이웃한 상대 전체나 이웃한 포켓몬 전체를 노리는 기술로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 다이월, 블로킹, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의, 이웃한 상대 전체나 이웃한 포켓몬 전체를 노리는 기술로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 토치카, 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의, 이웃한 상대 전체나 이웃한 포켓몬 전체를 노리는 공격 기술로부터 자신과 파티 전원을 지킨다. 이 기술은 다른 방어 기술과 같은 1/X 확률 카운트를 변화시키지만, 그 확률로 실패 판정을 하지는 않는다. X는 1에서 시작해 이 기술이 성공할 때마다 3배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 킹실드, 방어, 패스트가드, 니들가드, 와이드가드가 아니면, 또는 그중 하나였지만 방어가 뚫렸다면 X는 1로 돌아간다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
+			shortDesc: "이 턴 동안 광역 공격에서 아군을 지킨다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "이 턴 동안 아군을 포함한 다른 포켓몬의, 이웃한 상대 전체나 이웃한 포켓몬 전체를 노리는 공격 기술로부터 자신과 파티 전원을 지킨다. 이 기술은 1/X의 확률로 성공한다. X는 1에서 시작해 이 기술이 성공할 때마다 2배가 된다. 이 기술이 실패하거나 마지막으로 쓴 기술이 판별, 버티기, 방어, 패스트가드, 와이드가드가 아니면 X는 1로 돌아간다. X가 256 이상이면 이 기술의 성공률은 1/(2^32)이 된다. 이 턴의 마지막에 행동하거나 자신 진영에 이미 이 효과가 있다면 실패한다.", // NEEDS QC
 		},
 
 		start: "  {TEAM:object} 와이드가드가 지켜 줬다!",
@@ -8272,33 +8272,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildboltstorm: {
 		name: "번개폭풍",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 마비 상태로 만든다. 날씨가 폭우 또는 비가 되어 있으면 명중 판정을 하지 않는다. 만능우산을 지닌 포켓몬에게는 명중률이 80%로 유지된다.", // NEEDS QC
+		shortDesc: "20% 마비. 비가 오면 반드시 명중한다.", // NEEDS QC
 	},
 	wildcharge: {
 		name: "와일드볼트",
 		// Official flavor text: "전기를 두르고 상대에게 부딪쳐 공격한다. 자신도 조금 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 1/4(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "1/4의 반동 데미지를 받는다.", // NEEDS QC
 	},
 	willowisp: {
 		name: "도깨비불",
 		// Official flavor text: "으스스하고 괴상한 불꽃을 쏘아 상대를 화상 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대를 화상 상태로 만든다.", // NEEDS QC
+		shortDesc: "상대를 화상 상태로 만든다.", // NEEDS QC
 	},
 	wingattack: {
 		name: "날개치기",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	wish: {
 		name: "희망사항",
 		// Official flavor text: "다음 턴에 자신 또는 교체한 포켓몬의 HP를 최대 HP의 절반만큼 회복한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 턴 종료 시, 자신 자리의 포켓몬이 자신의 최대 HP의 1/2(버림)을 회복한다. 그 자리에 이미 이 효과가 발동 중이라면 실패한다.", // NEEDS QC
+		shortDesc: "다음 턴에 최대 HP의 절반을 회복한다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "다음 턴 종료 시, 자신 자리의 포켓몬이 그 포켓몬의 최대 HP의 1/2(버림)을 회복한다. 그 자리에 이미 이 효과가 발동 중이라면 실패한다.", // NEEDS QC
+			shortDesc: "다음 턴, 받는 포켓몬의 최대 HP 절반 회복.", // NEEDS QC
 		},
 
 		heal: "  {NICKNAME}의 희망사항이 이루어졌다!",
@@ -8306,128 +8306,128 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	withdraw: {
 		name: "껍질에숨기",
 		// Official flavor text: "껍질에 숨어 몸을 보호하여 자신의 방어를 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 방어를 1단계 올린다.", // NEEDS QC
+		shortDesc: "자신의 방어를 1단계 올린다.", // NEEDS QC
 	},
 	wonderroom: {
 		name: "원더룸",
 		// Official flavor text: "이상한 공간을 만든다. 5턴 동안 모든 포켓몬의 방어와 특수방어가 바뀐다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5턴 동안 배틀에 나와 있는 모든 포켓몬의 방어와 특수방어 수치가 맞바꿔진다. 랭크 변화는 영향을 받지 않는다. 효과가 지속되는 동안 이 기술을 다시 쓰면 효과가 사라진다.", // NEEDS QC
+		shortDesc: "5턴 동안 모든 포켓몬의 방어·특방이 맞바뀐다.", // NEEDS QC
 	},
 	woodhammer: {
 		name: "우드해머",
 		// Official flavor text: "단단한 몸통을 상대에게 부딪쳐서 공격한다. 자신도 상당한 데미지를 입는다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대가 HP를 잃었다면 잃은 HP의 33%(0.5는 올림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+		shortDesc: "33%의 반동 데미지를 받는다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "상대가 HP를 잃었다면 잃은 HP의 1/3(버림, 최소 1)만큼 자신이 반동 데미지를 받는다.", // NEEDS QC
+			shortDesc: "1/3의 반동 데미지를 받는다.", // NEEDS QC
 		},
 	},
 	workup: {
 		name: "분발",
 		// Official flavor text: "스스로 분발해서 공격과 특수공격을 올린다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "자신의 공격과 특수공격을 1단계씩 올린다.", // NEEDS QC
+		shortDesc: "자신의 공격, 특수공격을 1단계씩 올린다.", // NEEDS QC
 	},
 	worryseed: {
 		name: "고민씨",
 		// Official flavor text: "마음을 괴롭히는 씨앗을 심는다. 상대를 잠잘 수 없게 해서 특성을 불면으로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "상대의 특성이 불면으로 변한다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 불면, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 테라체인지, 게으름, 달마모드, 마이티체인지라면 실패한다.", // NEEDS QC
+		shortDesc: "상대의 특성이 불면으로 변한다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 불면으로 변한다. 상대의 특성이 혼연일체, 유대변화, 절대안깸, 탈, 그대로꿀꺽미사일, 아이스페이스, 불면, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 게으름, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 불면으로 변한다. 상대의 특성이 유대변화, 절대안깸, 탈, 불면, 멀티타입, 스웜체인지, AR시스템, 어군, 리밋실드, 배틀스위치, 게으름, 달마모드라면 실패한다.", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 불면으로 변한다. 상대의 특성이 불면, 멀티타입, 배틀스위치, 게으름라면 실패한다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 불면으로 변한다. 상대의 특성이 불면, 멀티타입, 게으름라면 실패한다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "상대의 특성이 불면으로 변한다. 상대의 특성이 멀티타입나 게으름이라면, 또는 상대가 백금옥을 지니고 있다면 실패한다.", // NEEDS QC
 		},
 	},
 	wrap: {
 		name: "김밥말이",
 		// Official flavor text: "긴 몸이나 덩굴 등을 사용해 4-5턴 동안 상대를 휘감아 공격한다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 꼬리자르기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 킬러스핀, 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+		shortDesc: "4~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 퀵턴, 막말내뱉기, 순간이동, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/8(자신이 조임밴드를 지니고 있으면 1/6)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 막말내뱉기, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4~5턴(끈기갈고리손톱을 지니고 있으면 7턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(자신이 조임밴드를 지니고 있으면 1/8)(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴, 볼트체인지를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴(끈기갈고리손톱을 지니고 있으면 항상 5턴) 동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 아름다운허물을 지니고 있거나 배턴터치, 유턴을 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대를 가두고 데미지를 준다.", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2~5턴동안 상대를 교체할 수 없게 만든다. 효과가 지속되는 동안 매 턴 종료 시 상대는 최대 HP의 1/16(버림)의 데미지를 받는다. 배턴터치를 쓰면 교체할 수 있다. 자신이나 상대가 배틀에서 벗어나거나 상대가 고속스핀, 대타출동에 성공하면 효과가 사라진다. 이 효과는 중복되지 않으며, 같은 계열의 기술을 다시 써도 지속 시간이 늘어나지 않는다.", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2~5턴 동안 이 기술을 쓴다. 3/8의 확률로 2~3턴, 1/8의 확률로 4~5턴 지속된다. 첫 턴에 계산한 데미지를 매 턴 그대로 적용한다. 효과가 지속되는 동안 자신은 기술을 선택할 수 없고 상대는 기술을 실행할 수 없지만, 양쪽 모두 교체할 수는 있다. 자신이 교체하면 상대는 그 턴에도 기술을 실행할 수 없다. 상대가 교체하면 자신은 자동으로 이 기술을 다시 쓰며, 그때 PP가 0이었다면 63이 된다. 자신이나 상대가 교체하거나 자신이 움직일 수 없게 되면 효과가 사라진다. 이 기술은 타입 상성으로 무효인 상대의 행동도 막을 수 있지만, 데미지는 주지 못한다.", // NEEDS QC
+			shortDesc: "2~5턴 동안 상대는 움직일 수 없다.", // NEEDS QC
 		},
 
 		start: "  {POKEMON:topic} {SOURCE}에게 휘감겼다!",
-		move: null, // NEEDS TRANSLATION
+		move: "{POKEMON}의 공격은 계속되고 있다!", // NEEDS QC
 	},
 	wringout: {
 		name: "쥐어짜기",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "위력은 120×(상대의 남은 HP÷상대의 최대 HP)(0.5는 버림, 최소 1)이다.", // NEEDS QC
+		shortDesc: "상대의 남은 HP가 많을수록 강하다.", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "위력은 120×(상대의 남은 HP÷상대의 최대 HP)+1(버림)이다.", // NEEDS QC
 		},
 	},
 	xscissor: {
 		name: "시저크로스",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "추가 효과가 없다.", // NEEDS QC
 	},
 	yawn: {
 		name: "하품",
 		// Official flavor text: "큰 하품으로 졸음을 유도한다. 다음 턴에 상대를 잠듦 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "다음 턴 종료 시 상대를 잠듦 상태로 만든다. 상대가 잠들 수 없는 상태거나 이미 상태 이상이라면 실패한다. 다음 턴 종료 시 상대가 배틀에 나와 있고 상태 이상이 아니며 잠들 수 있다면 잠든다. 일단 효과를 받으면 신비의부적이나 대타로도, 효과 도중 잠들었다 깨어나도 막을 수 없다.", // NEEDS QC
+		shortDesc: "1턴 뒤에 상대를 잠듦 상태로 만든다.", // NEEDS QC
 
 		start: "  {POKEMON}의 졸음을 유도했다!",
 	},
 	zapcannon: {
 		name: "전자포",
 		// Official flavor text: "대포처럼 전기를 발사해서 공격한다. 상대를 마비 상태로 만든다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
+		shortDesc: "100%의 확률로 상대를 마비 상태로 만든다.", // NEEDS QC
 	},
 	zenheadbutt: {
 		name: "사념의박치기",
 		// Official flavor text: "사념의 힘을 이마에 모아서 공격한다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "20%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	zingzap: {
 		name: "찌리리따끔따끔",
 		// Official flavor text: "상대에게 부딪쳐 강력한 전기를 날려서 찌리리따끔따끔하게 만든다. 상대를 풀죽게 만들 때가 있다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
+		shortDesc: "30%의 확률로 상대를 풀죽게 한다.", // NEEDS QC
 	},
 	zippyzap: {
 		name: "파찌파찌액셀",
 		// Official flavor text: "사용할 수 없는 기술입니다. 다시 배우게 할 수 없지만 기술을 잊게 하는 것을 권장합니다."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "100%의 확률로 자신의 회피율을 1단계 올린다.", // NEEDS QC
+		shortDesc: "먼저 행동한다. 자신의 회피율 +1.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "반드시 급소에 맞는다.", // NEEDS QC
+			shortDesc: "거의 항상 선공. 반드시 급소에 맞는다.", // NEEDS QC
 		},
 	},
 };

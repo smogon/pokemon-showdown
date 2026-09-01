@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: null, // NEEDS TRANSLATION
-		winBattle: null, // NEEDS TRANSLATION
-		tieBattle: null, // NEEDS TRANSLATION
+		startBattle: "{TRAINER1}與{TRAINER2}的對戰開始了！", // NEEDS QC
+		winBattle: "**{TRAINER}**在對戰中獲勝了！", // NEEDS QC
+		tieBattle: "{TRAINER1}與{TRAINER2}打成了平手！", // NEEDS QC
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "對手的{NICKNAME}",
@@ -11,7 +11,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "我方的寶可夢",
 		opposingParty: "對手的寶可夢",
 
-		turn: null, // NEEDS TRANSLATION
+		turn: "== 第{NUMBER}回合 ==", // NEEDS QC
 		switchIn: "{TRAINER}派出了{FULLNAME}！",
 		switchInOwn: "上吧！{FULLNAME}！",
 		switchOut: "{TRAINER}換下了{NICKNAME}！",
@@ -36,13 +36,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "{POKEMON}的原始回歸！回到了原始的樣子！",
 		zPower: "  {POKEMON}讓Ｚ力量籠罩了全身！",
 		zBroken: "  {POKEMON}沒能防住攻擊，受到了傷害！",
-		terastallize: null, // NEEDS TRANSLATION
+		terastallize: "  ({POKEMON}太晶化成了{TYPE}屬性！)", // NEEDS QC
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "{POKEMON}無法使用{MOVE}！",
-		cantNoMove: null, // NEEDS TRANSLATION
+		cantNoMove: "{POKEMON}動彈不得！", // NEEDS QC
 		fail: "  但是，沒有效果！！",
 
 		// n.b. this is the default message for in-battle forme changes
@@ -52,26 +52,26 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		typeChangeFromEffect: "  {POKEMON}變成了{TYPE}屬性！",
 		typeAdd: "  {POKEMON}增加了{TYPE}屬性！",
 
-		start: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON}的{EFFECT}效果發動了！)", // NEEDS QC
 		end: "  {POKEMON}擺脫了{EFFECT}的束縛！",
-		activate: null, // NEEDS TRANSLATION
-		startTeamEffect: null, // NEEDS TRANSLATION
-		endTeamEffect: null, // NEEDS TRANSLATION
-		startFieldEffect: null, // NEEDS TRANSLATION
-		endFieldEffect: null, // NEEDS TRANSLATION
+		activate: "  ({EFFECT}發動了！)", // NEEDS QC
+		startTeamEffect: "  ({TEAM}的{EFFECT}效果發動了！)", // NEEDS QC
+		endTeamEffect: "  ({TEAM}的{EFFECT}效果消失了！)", // NEEDS QC
+		startFieldEffect: "  ({EFFECT}的效果發動了！)", // NEEDS QC
+		endFieldEffect: "  ({EFFECT}的效果消失了！)", // NEEDS QC
 
 		changeAbility: "  {POKEMON}的特性變成{ABILITY}了！",
 		addItem: "  {POKEMON}獲得了{ITEM}！",
 		takeItem: "  {POKEMON}從{SOURCE}那裡奪取了{ITEM}！",
-		eatItem: null, // NEEDS TRANSLATION
+		eatItem: "  ({POKEMON}吃了{ITEM}！)", // NEEDS QC
 		useGem: "  {ITEM}加強了{MOVE}的威力！",
 		eatItemWeaken: "  {ITEM}減輕了對{POKEMON}造成的傷害！",
-		removeItem: null, // NEEDS TRANSLATION
-		activateItem: null, // NEEDS TRANSLATION
+		removeItem: "  {POKEMON}失去了{ITEM}！", // NEEDS QC
+		activateItem: "  ({POKEMON}使用了{ITEM}！)", // NEEDS QC
 		activateWeaken: "  {ITEM}減輕了對{POKEMON}造成的傷害！",
 
 		damage: "  ({POKEMON}受到了傷害！)",
-		damagePercentage: null, // NEEDS TRANSLATION
+		damagePercentage: "  ({POKEMON}失去了{PERCENTAGE}%的體力！)", // NEEDS QC
 		damageFromPokemon: "  {POKEMON}因{SOURCE}的{ITEM}而受到了傷害！",
 		damageFromItem: "  {POKEMON}因{ITEM}而受到了傷害！",
 		damageFromPartialTrapping: "  {POKEMON}受到了{MOVE}的傷害。",
@@ -95,9 +95,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  {POKEMON}的{STAT}大幅降低了！",
 		unboost3: "  {POKEMON}的{STAT}極大幅降低了！",
 		unboost0: "  {POKEMON}的{STAT}已經無法再降低了！",
-		unboostFromItem: null, // NEEDS TRANSLATION
-		unboost2FromItem: null, // NEEDS TRANSLATION
-		unboost3FromItem: null, // NEEDS TRANSLATION
+		unboostFromItem: "  {ITEM}降低了{POKEMON}的{STAT}！", // NEEDS QC
+		unboost2FromItem: "  {ITEM}大幅降低了{POKEMON}的{STAT}！", // NEEDS QC
+		unboost3FromItem: "  {ITEM}極大幅降低了{POKEMON}的{STAT}！", // NEEDS QC
 
 		swapBoost: "  {POKEMON}和對手互換了自身的能力變化！",
 		swapOffensiveBoost: "  {POKEMON}和對手互換了自身的攻擊和特攻的能力變化！",
@@ -124,100 +124,100 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		immuneNoPokemon: "  但是，沒有效果！",
 		immuneOHKO: "  對於{POKEMON}完全沒有效果！",
 		miss: "  沒有擊中{POKEMON}！",
-		missNoPokemon: null, // NEEDS TRANSLATION
+		missNoPokemon: "  但是{SOURCE}的攻擊沒有擊中！", // NEEDS QC
 
 		center: "  復位移動！！",
-		noTarget: null, // NEEDS TRANSLATION
+		noTarget: "  但是沒有攻擊對象……", // NEEDS QC
 		ohko: "  一擊必殺！",
 		combine: "  兩個招式合而為一！這是合體招式！",
 		hitCount: "  擊中了{NUMBER}次！",
 	},
 	ui: {
-		whatDo: null, // NEEDS TRANSLATION
-		moveTarget: null, // NEEDS TRANSLATION
-		reviveWho: null, // NEEDS TRANSLATION
-		replaceWho: null, // NEEDS TRANSLATION
-		teamStart: null, // NEEDS TRANSLATION
-		teamRest: null, // NEEDS TRANSLATION
-		chooseLead: null, // NEEDS TRANSLATION
-		chooseSlot: null, // NEEDS TRANSLATION
-		teamSoFar: null, // NEEDS TRANSLATION
-		waitingOpponent: null, // NEEDS TRANSLATION
-		cantSwitchTrapped: null, // NEEDS TRANSLATION
-		usuallyMovesFirst: null, // NEEDS TRANSLATION
-		almostAlwaysMovesFirst: null, // NEEDS TRANSLATION
-		almostAlwaysMovesLast: null, // NEEDS TRANSLATION
-		failsIfHP: null, // NEEDS TRANSLATION
-		koSelfIfHP: null, // NEEDS TRANSLATION
-		transformedInto: null, // NEEDS TRANSLATION
-		changedForme: null, // NEEDS TRANSLATION
-		possibleIllusion: null, // NEEDS TRANSLATION
-		pixels: null, // NEEDS TRANSLATION
-		wouldTakeIfAbilityRemoved: null, // NEEDS TRANSLATION
-		nextDamage: null, // NEEDS TRANSLATION
-		turnsAsleep: null, // NEEDS TRANSLATION
-		illusionWarning: null, // NEEDS TRANSLATION
-		pressureGen3Warning: null, // NEEDS TRANSLATION
-		indistinguishableWarning: null, // NEEDS TRANSLATION
-		noConditions: null, // NEEDS TRANSLATION
-		turn: null, // NEEDS TRANSLATION
-		turns: null, // NEEDS TRANSLATION
-		afterStatModifiers: null, // NEEDS TRANSLATION
-		calls: null, // NEEDS TRANSLATION
-		base: null, // NEEDS TRANSLATION
-		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
-		zEffectCrit2: null, // NEEDS TRANSLATION
-		zEffectHeal: null, // NEEDS TRANSLATION
-		zEffectCurse: null, // NEEDS TRANSLATION
-		zEffectRedirect: null, // NEEDS TRANSLATION
-		zEffectHealReplacement: null, // NEEDS TRANSLATION
-		ppRange: null, // NEEDS TRANSLATION
-		revealed: null, // NEEDS TRANSLATION
-		range: null, // NEEDS TRANSLATION
-		beforeStatStages: null, // NEEDS TRANSLATION
-		beforeExternalModifiers: null, // NEEDS TRANSLATION
-		flingBerry: null, // NEEDS TRANSLATION
-		flingWhiteHerb: null, // NEEDS TRANSLATION
-		flingMentalHerb: null, // NEEDS TRANSLATION
-		cantFling: null, // NEEDS TRANSLATION
-		unobtainableInGen: null, // NEEDS TRANSLATION
-		tagMoves: null, // NEEDS TRANSLATION
-		notifyMoveTitle: null, // NEEDS TRANSLATION
-		notifyMove: null, // NEEDS TRANSLATION
-		notifyMoveAgainst: null, // NEEDS TRANSLATION
-		notifySwitchTitle: null, // NEEDS TRANSLATION
-		notifySwitch: null, // NEEDS TRANSLATION
-		notifySwitchAgainst: null, // NEEDS TRANSLATION
-		notifyTeamTitle: null, // NEEDS TRANSLATION
-		notifyTeam: null, // NEEDS TRANSLATION
-		notifyTeamAgainst: null, // NEEDS TRANSLATION
-		mightBeDisabled: null, // NEEDS TRANSLATION
-		mightBeLocked: null, // NEEDS TRANSLATION
-		lockedExplanation: null, // NEEDS TRANSLATION
-		mightBeTrapped: null, // NEEDS TRANSLATION
-		autoChoice: null, // NEEDS TRANSLATION
-		unrecognizedChoice: null, // NEEDS TRANSLATION
-		lockedIntoMove: null, // NEEDS TRANSLATION
-		willUseMove: null, // NEEDS TRANSLATION
-		atTarget: null, // NEEDS TRANSLATION
-		atSlot: null, // NEEDS TRANSLATION
-		atAllyTarget: null, // NEEDS TRANSLATION
-		atAllySlot: null, // NEEDS TRANSLATION
-		actionMegaEvolve: null, // NEEDS TRANSLATION
-		actionMegaEvolveX: null, // NEEDS TRANSLATION
-		actionMegaEvolveY: null, // NEEDS TRANSLATION
-		actionUltraBurst: null, // NEEDS TRANSLATION
-		actionTerastallize: null, // NEEDS TRANSLATION
-		actionDynamax: null, // NEEDS TRANSLATION
-		actionGigantamax: null, // NEEDS TRANSLATION
-		willRevive: null, // NEEDS TRANSLATION
-		willSwitch: null, // NEEDS TRANSLATION
-		willShift: null, // NEEDS TRANSLATION
-		youPicked: null, // NEEDS TRANSLATION
-		listComma: null, // NEEDS TRANSLATION
-		effectivenessVs: null, // NEEDS TRANSLATION
-		basePowerVs: null, // NEEDS TRANSLATION
-		or: null, // NEEDS TRANSLATION
+		whatDo: "**{POKEMON}**要怎麼做？", // NEEDS QC
+		moveTarget: "{POKEMON}要對哪裡使用**{MOVE}**？", // NEEDS QC
+		reviveWho: "**{POKEMON}**要復活誰？", // NEEDS QC
+		replaceWho: "讓誰來替換**{POKEMON}**？", // NEEDS QC
+		teamStart: "要如何開始對戰？", // NEEDS QC
+		teamRest: "剩餘寶可夢的出場順序？", // NEEDS QC
+		chooseLead: "選擇首發", // NEEDS QC
+		chooseSlot: "選擇第{NUMBER}位", // NEEDS QC
+		teamSoFar: "已選擇", // NEEDS QC
+		waitingOpponent: "等待對手中……", // NEEDS QC
+		cantSwitchTrapped: "你被**困住**了，無法更換！", // NEEDS QC
+		usuallyMovesFirst: "通常先制行動（優先度+{PRIORITY}）。", // NEEDS QC
+		almostAlwaysMovesFirst: "幾乎總是先制行動（優先度+{PRIORITY}）。", // NEEDS QC
+		almostAlwaysMovesLast: "幾乎總是最後行動（優先度−{PRIORITY}）。", // NEEDS QC
+		failsIfHP: "當前HP為{HP}時會失敗。", // NEEDS QC
+		koSelfIfHP: "當前HP恰好為{HP}時會使自己瀕死。", // NEEDS QC
+		transformedInto: "（變身為{SPECIES}）", // NEEDS QC
+		changedForme: "（形態變化：{SPECIES}）", // NEEDS QC
+		possibleIllusion: "可能是幻覺#{NUMBER}", // NEEDS QC
+		pixels: "（{HP}/{MAXHP}像素）", // NEEDS QC
+		wouldTakeIfAbilityRemoved: "若無特性將受到：{PERCENT}%", // NEEDS QC
+		nextDamage: "下次傷害：{PERCENT}%", // NEEDS QC
+		turnsAsleep: "已睡眠回合數：{NUMBER}", // NEEDS QC
+		illusionWarning: "（擁有5個以上招式通常意味著索羅亞克或索羅亞的幻覺。）", // NEEDS QC
+		pressureGen3Warning: "（第三世代中壓迫感不可見，因此某些情況下無法準確得知已消耗的PP。）", // NEEDS QC
+		indistinguishableWarning: "（對手有兩隻無法區分的寶可夢，因此無法判斷哪隻擁有哪些招式、特性和道具。）", // NEEDS QC
+		noConditions: "（無場地狀態）", // NEEDS QC
+		turn: "（{NUMBER}回合）", // NEEDS QC
+		turns: "（{NUMBER}回合）", // NEEDS QC
+		afterStatModifiers: "（能力修正後：）", // NEEDS QC
+		calls: "使用{MOVE}", // NEEDS QC
+		base: "（原為{VALUE}）", // NEEDS QC
+		zEffectClearNegativeBoost: "恢復降低的能力等級", // NEEDS QC
+		zEffectCrit2: "擊中要害率+2", // NEEDS QC
+		zEffectHeal: "回復全部HP", // NEEDS QC
+		zEffectCurse: "幽靈屬性則回復全部HP，否則攻擊+1", // NEEDS QC
+		zEffectRedirect: "將對手的攻擊引導至自己", // NEEDS QC
+		zEffectHealReplacement: "回復替換上場寶可夢的全部HP", // NEEDS QC
+		ppRange: "（{LOW}～{HIGH}）", // NEEDS QC
+		revealed: "（已知）", // NEEDS QC
+		range: "{LOW}～{HIGH}", // NEEDS QC
+		beforeStatStages: "（能力等級變化前）", // NEEDS QC
+		beforeExternalModifiers: "（外部修正前）", // NEEDS QC
+		flingBerry: "對目標發動樹果的效果。", // NEEDS QC
+		flingWhiteHerb: "恢復目標降低的能力等級。", // NEEDS QC
+		flingMentalHerb: "解除目標的迷人、定身法、再來一次、回復封鎖、挑釁、無理取鬧效果。", // NEEDS QC
+		cantFling: "此道具無法用投擲丟出。", // NEEDS QC
+		unobtainableInGen: "第{NUMBER}世代無法獲得", // NEEDS QC
+		tagMoves: "{TAG}招式", // NEEDS QC
+		notifyMoveTitle: "輪到你出招了！", // NEEDS QC
+		notifyMove: "在對戰中選擇招式", // NEEDS QC
+		notifyMoveAgainst: "在與{OPPONENT}的對戰中選擇招式", // NEEDS QC
+		notifySwitchTitle: "輪到你替換了！", // NEEDS QC
+		notifySwitch: "在對戰中選擇替換的寶可夢", // NEEDS QC
+		notifySwitchAgainst: "在與{OPPONENT}的對戰中選擇替換的寶可夢", // NEEDS QC
+		notifyTeamTitle: "隊伍預覽！", // NEEDS QC
+		notifyTeam: "在對戰中選擇隊伍順序", // NEEDS QC
+		notifyTeamAgainst: "在與{OPPONENT}的對戰中選擇隊伍順序", // NEEDS QC
+		mightBeDisabled: "部分招式**可能**已無法使用，因此無法取消招式選擇！", // NEEDS QC
+		mightBeLocked: "你**可能**被鎖定在某個招式上。", // NEEDS QC
+		lockedExplanation: "（若被鎖定，將無法替換）", // NEEDS QC
+		mightBeTrapped: "你**可能**無法脫身，因此無法取消替換！", // NEEDS QC
+		autoChoice: "自動選擇", // NEEDS QC
+		unrecognizedChoice: "來自伺服器的未知選擇：", // NEEDS QC
+		lockedIntoMove: "{POKEMON}被鎖定在某個招式上。", // NEEDS QC
+		willUseMove: "{POKEMON}將{ACTIONS}{AT}使用**{MOVE}**。", // NEEDS QC
+		atTarget: "對{TARGET}", // NEEDS QC
+		atSlot: "對第{NUMBER}位", // NEEDS QC
+		atAllyTarget: "對我方{TARGET}", // NEEDS QC
+		atAllySlot: "對我方第{NUMBER}位", // NEEDS QC
+		actionMegaEvolve: "**超級進化**並", // NEEDS QC
+		actionMegaEvolveX: "**超級進化**（X）並", // NEEDS QC
+		actionMegaEvolveY: "**超級進化**（Y）並", // NEEDS QC
+		actionUltraBurst: "**究極爆發**並", // NEEDS QC
+		actionTerastallize: "太晶化（**{TYPE}**）並", // NEEDS QC
+		actionDynamax: "**極巨化**並", // NEEDS QC
+		actionGigantamax: "**超極巨化**並", // NEEDS QC
+		willRevive: "{POKEMON}將復活**{TARGET}**。", // NEEDS QC
+		willSwitch: "{POKEMON}將替換為**{TARGET}**。", // NEEDS QC
+		willShift: "{POKEMON}將**移動**到中央。", // NEEDS QC
+		youPicked: "你選擇了{POKEMON}。", // NEEDS QC
+		listComma: "、", // NEEDS QC
+		effectivenessVs: "對{POKEMON}{EFFECT}", // NEEDS QC
+		basePowerVs: "對{POKEMON}的{LABEL}", // NEEDS QC
+		or: "或", // NEEDS QC
 	},
 
 	// statuses
@@ -310,8 +310,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON}已經無法逃走了！",
 	},
 	dynamax: {
-		start: null, // NEEDS TRANSLATION
-		end: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON}極巨化了！)", // NEEDS QC
+		end: "  ({POKEMON}恢復原樣了！)", // NEEDS QC
 		block: "  被極巨化的力量彈開了！",
 		fail: "  {POKEMON}搖了搖頭，好像無法使出這個招式……",
 	},
@@ -328,13 +328,13 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "大晴天",
 		start: "  日照變強了！",
 		end: "  日照復原了！",
-		upkeep: null, // NEEDS TRANSLATION
+		upkeep: "  (日照很強。)", // NEEDS QC
 	},
 	raindance: {
 		weatherName: "下雨",
 		start: "  開始下雨了！",
 		end: "  雨停了！",
-		upkeep: null, // NEEDS TRANSLATION
+		upkeep: "  (雨不停地下著。)", // NEEDS QC
 	},
 	hail: {
 		weatherName: "冰雹",

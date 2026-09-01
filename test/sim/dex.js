@@ -104,7 +104,7 @@ describe('DexText#get', () => {
 		assert.equal(Dex.text.get(Dex.moves.get('Tackle'), 'ja').name, 'たいあたり');
 	});
 
-	it.skip(`should translate names backed by Dex objects`, () => {
+	it(`should translate names backed by Dex objects`, () => {
 		const { Tags } = require('../../dist/data/tags');
 		assert.deepEqual(Dex.text.get(Dex.types.get('Fire'), 'ja'), { name: 'ほのお' });
 		assert.equal(Dex.text.typeName('Fire', 'ja'), 'ほのお');
@@ -114,7 +114,7 @@ describe('DexText#get', () => {
 		assert.deepEqual(Dex.text.get(Tags.restrictedlegendary, 'ja'), { name: '禁止級伝説' });
 	});
 
-	it.skip(`should translate scalar names`, () => {
+	it(`should translate scalar names`, () => {
 		assert.equal(Dex.text.termName('Egg Group', 'ja'), 'タマゴグループ');
 		assert.equal(Dex.text.termName('Moves', 'ja'), '技');
 		assert.equal(Dex.text.termName('Stats', 'fr'), 'Stats');

@@ -1,236 +1,226 @@
-// Mechanics desc style (zh-tw): official game terminology, halfwidth numerals (1.5倍, 30%, 2～5次).
-// Terminology: 使用者 (user), 目標 (target), 對手方 (opposing side), 己方 (user side),
-//   追加效果 (secondary effect), 畏縮 (flinch), 擊中要害 (crit), 能力等級 (stat stage), 異常狀態
-//   (non-volatile status), 連續攻擊招式 (multi-hit), 優先度 (priority), 替身 (substitute),
-//   屬性相性 (type effectiveness), 必定命中 (never misses), 反作用力 (recoil).
-// Rounding: 四捨五入 (half up), 五捨六入 (half down), 向下取整 (down), 向上取整 (up).
-// Fixed formulas mirror zh-cn/moves.ts (converted); boilerplate is shared verbatim across
-//   entries — QC one, fix all. Cross-references generated from zh-tw name fields.
-// CAP entities keep name null (English fallback); descs are translated with English names inline.
-
 export const MovesText: { [id: IDEntry]: MoveText } = {
 	"10000000voltthunderbolt": {
 		name: "千萬伏特",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "非常容易擊中要害（擊中要害等級+2）。", // NEEDS QC
+		shortDesc: "非常容易擊中要害。", // NEEDS QC
 	},
 	absorb: {
 		name: "吸取",
 		// Official flavor text: "吸取對手的養分進行攻擊。 可以回復給予對手 傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。攜帶大根莖時，回復量變為1.3倍（向下取整）。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。目標處於替身狀態時，此招式不會命中。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。此招式打破目標的替身時，不會回復HP。", // NEEDS QC
 		},
 	},
 	accelerock: {
 		name: "衝岩",
 		// Official flavor text: "迅速撞向對手進行攻擊。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	acid: {
 		name: "溶解液",
 		// Official flavor text: "將強酸潑向對手進行攻擊。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使對手的特防降低1級。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標的防禦降低1級。", // NEEDS QC
+			shortDesc: "有10%的機率使對手的防禦降低1級。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有33%的機率使目標的防禦降低1級。", // NEEDS QC
+			shortDesc: "有33%的機率使目標的防禦降低1級。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "有10%的機率使目標的防禦降低1級。", // NEEDS QC
 		},
 	},
 	acidarmor: {
 		name: "溶化",
 		// Official flavor text: "藉由細胞的變化讓身體液化， 大幅提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高2級。", // NEEDS QC
+		shortDesc: "自身的防禦提高2級。", // NEEDS QC
 	},
 	aciddownpour: {
 		name: "強酸劇毒滅絕雨",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	acidspray: {
 		name: "酸液炸彈",
 		// Official flavor text: "噴出能溶化對手的液體進行攻擊。 可大幅降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特防降低2級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的特防降低2級。", // NEEDS QC
 	},
 	acrobatics: {
 		name: "雜技",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "未攜帶道具時威力加倍。", // NEEDS QC
 	},
 	acupressure: {
 		name: "點穴",
 		// Official flavor text: "利用點穴激發身體的活力， 大幅提高某一項能力。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "隨機使一項尚未達到+6的能力提高2級。可以以自己或相鄰的隊友為對象。沒有可提高的能力時，或以處於替身狀態的隊友為對象時失敗。", // NEEDS QC
+		shortDesc: "使自己或隊友隨機1項能力提高2級。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "隨機使一項尚未達到+6的能力提高2級。可以以自己或隊友為對象。沒有可提高的能力時，或自己或隊友處於替身狀態時失敗。", // NEEDS QC
 		},
 	},
 	aerialace: {
 		name: "燕返",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	aeroblast: {
 		name: "氣旋攻擊",
 		// Official flavor text: "向對手發射空氣旋渦 進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	afteryou: {
 		name: "您先請",
 		// Official flavor text: "支援對手， 讓對手緊接在自己之後行動。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，對象無視其所選招式的優先度，在使用者之後立即行動。對象原本就將緊接著行動時，或本回合已經行動過時失敗。", // NEEDS QC
+		shortDesc: "使目標緊接在自己之後行動。", // NEEDS QC
 
 		activate: "  {TARGET}接受了對手的好意！",
 	},
 	agility: {
 		name: "高速移動",
 		// Official flavor text: "放鬆身體， 讓自己變得輕盈以進行高速移動。 可大幅提高自己的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度提高2級。", // NEEDS QC
+		shortDesc: "自身的速度提高2級。", // NEEDS QC
 	},
 	aircutter: {
 		name: "空氣利刃",
 		// Official flavor text: "用鋒利的風刃 斬切對手進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。攻擊所有對手。", // NEEDS QC
 	},
 	airslash: {
 		name: "空氣斬",
 		// Official flavor text: "用連天空也能劈開的 空氣之刃進行攻擊。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	alloutpummeling: {
 		name: "全力無雙激烈拳",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	alluringvoice: {
 		name: "魅誘之聲",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "命中在本回合能力等級提高過的目標時，有100%的機率使其陷入混亂狀態。", // NEEDS QC
+		shortDesc: "100%混亂本回合提升過能力的目標。", // NEEDS QC
 	},
 	allyswitch: {
 		name: "交換場地",
 		// Official flavor text: "用神奇的力量瞬間移動， 讓自己和同伴的所在位置互換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者與隊友互換位置。己方場上只有使用者時失敗。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是交換場地時，X重置為1。", // NEEDS QC
+		shortDesc: "與隊友互換位置。連續使用易失敗。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者與隊友互換位置。己方場上只有使用者時失敗。", // NEEDS QC
+			shortDesc: "與隊友互換位置。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者與場地另一端的隊友互換位置。該位置沒有寶可夢時、己方場上只有使用者時、使用者處於中間時失敗。", // NEEDS QC
+			shortDesc: "與另一端的隊友互換位置。", // NEEDS QC
 		},
 	},
 	amnesia: {
 		name: "瞬間失憶",
 		// Official flavor text: "將頭腦清空， 藉由在一瞬間遺忘某些事 大幅提高自己的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特防提高2級。", // NEEDS QC
+		shortDesc: "自身的特防提高2級。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的特殊提高2級。", // NEEDS QC
+			shortDesc: "使用者的特殊提高2級。", // NEEDS QC
 		},
 	},
 	anchorshot: {
 		name: "擲錨",
 		// Official flavor text: "將錨纏住對手進行攻擊。 使對手無法逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "使目標無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 	},
 	ancientpower: {
 		name: "原始之力",
 		// Official flavor text: "用原始之力進行攻擊。 有時會提高 自己的所有能力。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使使用者的攻擊、防禦、特攻、特防、速度各提高1級。", // NEEDS QC
+		shortDesc: "10%機率全部能力提高1級。", // NEEDS QC
 	},
 	appleacid: {
 		name: "蘋果酸",
 		// Official flavor text: "使用從酸蘋果提煉出的 酸性液體進行攻擊。 可降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	aquacutter: {
 		name: "水波刀",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	aquajet: {
 		name: "水流噴射",
 		// Official flavor text: "以迅雷不及掩耳之勢 撲向對手。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	aquaring: {
 		name: "水流環",
 		// Official flavor text: "在自己的身邊套上水流環。 每回合會回復自己的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "在場期間，每回合結束時回復最大HP的1/16（向下取整）。攜帶大根莖時，回復量變為1.3倍（五捨六入）。使用接棒後，此效果會由接替的寶可夢繼承。", // NEEDS QC
+		shortDesc: "每回合回復最大HP的1/16。", // NEEDS QC
 
 		start: "  {POKEMON}套上了水環！",
 		heal: "  {POKEMON}透過水環回復了體力！",
 	},
 	aquastep: {
 		name: "流水旋舞",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的速度提高1級。", // NEEDS QC
+		shortDesc: "有100%的機率使自身的速度提高1級。", // NEEDS QC
 	},
 	aquatail: {
 		name: "水流尾",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	armorcannon: {
 		name: "鎧農炮",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各降低1級。", // NEEDS QC
+		shortDesc: "使自身的防禦、特防降低1級。", // NEEDS QC
 	},
 	armthrust: {
 		name: "猛推",
 		// Official flavor text: "用張開的雙手 猛推對手進行攻擊。 連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 	},
 	aromatherapy: {
 		name: "芳香治療",
 		// Official flavor text: "釋放出宜人的香氣， 治癒我方全體的異常狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "治癒己方全隊的異常狀態。場上特性為食草的寶可夢除使用者本人外不會被治癒。", // NEEDS QC
+		shortDesc: "治癒己方全隊的異常狀態。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "治癒己方全隊的異常狀態。", // NEEDS QC
 		},
 
 		activate: "  怡人的香氣擴散了開來！",
@@ -238,73 +228,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	aromaticmist: {
 		name: "芳香薄霧",
 		// Official flavor text: "利用神奇的芳香， 提高我方寶可夢的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使作為對象的隊友的特防提高1級。使用者沒有相鄰的隊友時失敗。", // NEEDS QC
+		shortDesc: "使隊友的特防提高1級。", // NEEDS QC
 	},
 	assist: {
 		name: "借助",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "從使用者以外的同行寶可夢學會的招式中，隨機選擇1個使出。但不會選擇借助、碉堡、鳥嘴加農炮、打嗝、傳遞禮物、灼熱暴衝、彈跳、慶祝、喋喋不休、巴投、格鬥暴衝、仿效、雙倍奉還、渴望、同命、看穿、挖洞、潛水、龍尾、挺住、佯攻、飛翔、真氣拳、看我嘛、幫助、牽手、王者盾牌、魔法暴衝、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、劇毒暴衝、潛靈奇襲、守住、憤怒粉、吼叫、暗影潛襲、陷阱甲殼、寫生、自由落體、夢話、搶奪、尖刺防守、聚光燈、掙扎、掉包、晶光星群、小偷、變身、戲法、吹飛、黑暗暴衝。", // NEEDS QC
+		shortDesc: "隨機使出同伴學會的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者以外的同行寶可夢學會的招式中，隨機選擇1個使出。但不會選擇借助、碉堡、鳥嘴加農炮、打嗝、傳遞禮物、彈跳、慶祝、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、挖洞、潛水、龍尾、挺住、佯攻、飛翔、真氣拳、看我嘛、幫助、牽手、王者盾牌、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、潛靈奇襲、守住、憤怒粉、吼叫、暗影潛襲、陷阱甲殼、寫生、自由落體、夢話、搶奪、尖刺防守、聚光燈、掙扎、掉包、小偷、變身、戲法、吹飛。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者以外的同行寶可夢學會的招式中，隨機選擇1個使出。但不會選擇借助、碉堡、鳥嘴加農炮、打嗝、傳遞禮物、彈跳、慶祝、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、挖洞、潛水、龍尾、挺住、佯攻、飛翔、真氣拳、看我嘛、幫助、牽手、王者盾牌、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、潛靈奇襲、守住、憤怒粉、吼叫、暗影潛襲、陷阱甲殼、寫生、自由落體、夢話、搶奪、尖刺防守、聚光燈、掙扎、掉包、小偷、變身、戲法、吹飛以及Z招式。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者以外的同行寶可夢學會的招式中，隨機選擇1個使出。但不會選擇借助、打嗝、傳遞禮物、彈跳、慶祝、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、挖洞、潛水、龍尾、挺住、佯攻、飛翔、真氣拳、看我嘛、幫助、牽手、王者盾牌、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、潛靈奇襲、守住、憤怒粉、吼叫、暗影潛襲、寫生、自由落體、夢話、搶奪、尖刺防守、掙扎、掉包、小偷、變身、戲法、吹飛。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者以外的同行寶可夢學會的招式中，隨機選擇1個使出。但不會選擇借助、傳遞禮物、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、龍尾、挺住、佯攻、真氣拳、看我嘛、幫助、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、守住、憤怒粉、寫生、夢話、搶奪、掙扎、掉包、小偷、變身、戲法。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者以外的同行寶可夢學會的招式中，隨機選擇1個使出。但不會選擇借助、喋喋不休、仿效、雙倍奉還、渴望、同命、看穿、挺住、佯攻、真氣拳、看我嘛、幫助、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、守住、寫生、夢話、搶奪、掙扎、掉包、小偷、戲法。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者以外的同行寶可夢學會的招式中，隨機選擇1個使出。但不會選擇借助、雙倍奉還、渴望、同命、看穿、挺住、真氣拳、看我嘛、幫助、揮指、模仿、鏡面反射、鸚鵡學舌、守住、寫生、夢話、搶奪、掙扎、小偷、戲法。", // NEEDS QC
 		},
 	},
 	assurance: {
 		name: "惡意追擊",
 		// Official flavor text: "如果此回合內對手 已受到傷害， 招式威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合已經受到過傷害的目標，受到的威力變為2倍。但腹鼓、混亂、詛咒、分擔痛楚造成的直接傷害不計入。", // NEEDS QC
+		shortDesc: "目標本回合已受傷時威力加倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合已經受到過傷害的目標，受到的威力變為2倍。", // NEEDS QC
 		},
 	},
 	astonish: {
 		name: "驚嚇",
 		// Official flavor text: "用巨大的聲響等 突然驚嚇對手進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，傷害變為2倍。", // NEEDS QC
 		},
 	},
 	astralbarrage: {
 		name: "星碎",
 		// Official flavor text: "向對手釋出大量的 小靈體進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	attackorder: {
 		name: "攻擊指令",
 		// Official flavor text: "呼喚手下， 向對手發動攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	attract: {
 		name: "迷人",
 		// Official flavor text: "♂誘惑♀而♀誘惑♂， 讓對手著迷。 對手將難以使用招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入著迷狀態，有50%的機率無法攻擊。使用者與目標性別相同時、任意一方無性別時、目標已處於著迷狀態時失敗。使用者或目標離場後效果結束。對特性為遲鈍的寶可夢和受芳香幕保護的寶可夢無效。", // NEEDS QC
+		shortDesc: "使異性目標陷入著迷狀態。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入著迷狀態，有50%的機率無法攻擊。使用者與目標性別相同時、任意一方無性別時、目標已處於著迷狀態時失敗。使用者或目標離場後效果結束。對特性為遲鈍的寶可夢無效。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入著迷狀態，有50%的機率無法攻擊。使用者與目標性別相同時、任意一方無性別時、目標已處於著迷狀態時失敗。使用者或目標離場後效果結束。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}陷入了著迷狀態！",
@@ -316,32 +306,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aurasphere: {
 		name: "波導彈",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	aurawheel: {
 		name: "氣場輪",
 		// Official flavor text: "用儲存在頰囊中的能量進行攻擊， 並提高自己的速度。招式屬性 會隨著莫魯貝可的樣子而改變。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的速度提高1級。使用者是滿腹花紋的莫魯貝可時為電屬性，空腹花紋的莫魯貝可時為惡屬性。（考慮變身後的）當前樣子不是滿腹花紋或空腹花紋的莫魯貝可時無法使用。", // NEEDS QC
+		shortDesc: "屬性隨莫魯貝可花紋變化。速度+1。", // NEEDS QC
 	},
 	aurorabeam: {
 		name: "極光束",
 		// Official flavor text: "向對手發射 七彩光束進行攻擊。 有時會降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的攻擊降低1級。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有33%的機率使目標的攻擊降低1級。", // NEEDS QC
+			shortDesc: "有33%的機率使目標的攻擊降低1級。", // NEEDS QC
 		},
 	},
 	auroraveil: {
 		name: "極光幕",
 		// Official flavor text: "在５回合內減弱 物理和特殊的傷害。 在下冰雹時才有效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，使用者及其隊友受到的物理招式和特殊招式的傷害變為0.5倍（雙打對戰中為0.66倍）。不與反射壁、光牆疊加進一步減傷。被擊中要害時不減傷。使用者或隊友受到劈瓦、精神之牙、清除濃霧攻擊時，己方的此效果消失。劈瓦和精神之牙在傷害計算前消除此效果。攜帶光之黏土時持續8回合。天氣不是下雪時失敗。", // NEEDS QC
+		shortDesc: "5回合內己方受到的傷害減半。僅限下雪。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友受到的物理招式和特殊招式的傷害變為0.5倍（雙打對戰中為0.66倍）。不與反射壁、光牆疊加進一步減傷。被擊中要害時不減傷。使用者或隊友受到劈瓦、精神之牙、清除濃霧攻擊時，己方的此效果消失。劈瓦和精神之牙在傷害計算前消除此效果。攜帶光之黏土時持續8回合。天氣不是冰雹時失敗。", // NEEDS QC
+			shortDesc: "5回合內己方受到的傷害減半。僅限冰雹。", // NEEDS QC
 		},
 
 		start: "  極光幕使{TEAM}的物理和特殊抗性提高了！",
@@ -350,145 +340,145 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	autotomize: {
 		name: "身體輕量化",
 		// Official flavor text: "削去身體上多餘的部分。 以大幅提高自己的速度， 同時體重也會變輕。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度提高2級。速度發生了變化時，在場期間使用者的體重減輕100kg。此效果可以疊加，但體重不會低於0.1kg。", // NEEDS QC
+		shortDesc: "速度提高2級，體重減輕100kg。", // NEEDS QC
 
 		start: "  {POKEMON}變得身輕如燕了！",
 	},
 	avalanche: {
 		name: "雪崩",
 		// Official flavor text: "如果受到對手的招式攻擊， 給予該對手的招式威力就會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合受到過目標的攻擊時，威力變為2倍。", // NEEDS QC
+		shortDesc: "本回合受到目標攻擊時威力加倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合受到過目標位置的寶可夢的攻擊時，威力變為2倍。", // NEEDS QC
 		},
 	},
 	axekick: {
 		name: "下壓踢",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入混亂狀態。攻擊未命中時，使用者受到最大HP的1/2（向下取整）的摔落傷害。特性為魔法防守的寶可夢不受摔落傷害。", // NEEDS QC
+		shortDesc: "30%機率混亂。未命中時失去一半HP。", // NEEDS QC
 
 		damage: "#crash",
 	},
 	babydolleyes: {
 		name: "圓瞳",
 		// Official flavor text: "用圓圓的眼睛凝視對手， 降低對手的攻擊。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "使目標的攻擊降低1級。", // NEEDS QC
 	},
 	baddybad: {
 		name: "壞壞領域",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用後，己方場上產生5回合的反射壁效果。", // NEEDS QC
+		shortDesc: "布下反射壁的效果。", // NEEDS QC
 	},
 	banefulbunker: {
 		name: "碉堡",
 		// Official flavor text: "防住對手攻擊的同時， 讓碰觸到自己的對手中毒。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式，並使接觸到使用者的寶可夢陷入中毒狀態。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "防住招式，並使接觸者中毒。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使接觸到使用者的寶可夢陷入中毒狀態。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使接觸到使用者的寶可夢陷入中毒狀態。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 	},
 	barbbarrage: {
 		name: "毒千針",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標陷入中毒狀態。目標已處於中毒狀態時，威力變為2倍。", // NEEDS QC
+		shortDesc: "50%機率中毒。目標已中毒時威力加倍。", // NEEDS QC
 	},
 	barrage: {
 		name: "投球",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。傷害只在第一次攻擊時計算1次，並套用於每次攻擊。若中途某次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	barrier: {
 		name: "屏障",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高2級。", // NEEDS QC
+		shortDesc: "自身的防禦提高2級。", // NEEDS QC
 	},
 	batonpass: {
 		name: "接棒",
 		// Official flavor text: "與後備寶可夢進行替換。 替換上場的寶可夢， 將承接目前寶可夢的能力變化。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "與同行的其他寶可夢交換。接替的寶可夢繼承使用者的能力等級變化，以及混亂、水流環、詛咒、龍聲鼓舞、查封、聚氣、胃液、回復封鎖、扎根、寄生種子、鎖定、心之眼、電磁飄浮、滅亡之歌、力量戲法、意念移物的效果和保留剩餘HP的替身。接替的寶可夢的特性無法被無效化時，不繼承胃液的效果。", // NEEDS QC
+		shortDesc: "繼承能力變化等並與同伴交換。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "與同行的其他寶可夢交換。接替的寶可夢繼承使用者的能力等級變化，以及混亂、水流環、詛咒、查封、聚氣、胃液、回復封鎖、扎根、寄生種子、鎖定（心之眼）、電磁飄浮、滅亡之歌、力量戲法、意念移物的效果和保留剩餘HP的替身。接替的寶可夢的特性無法被無效化時，不繼承胃液的效果。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "與同行的其他寶可夢交換。接替的寶可夢繼承使用者的能力等級變化，以及混亂、水流環、詛咒、查封、聚氣、胃液、回復封鎖、扎根、寄生種子、鎖定（心之眼）、電磁飄浮、滅亡之歌、力量戲法、意念移物的效果、因黑色目光（擋路、蛛網）而無法交換的效果和保留剩餘HP的替身。接替的寶可夢的特性無法被無效化時，不繼承胃液的效果。接替的寶可夢是超級耿鬼時，不繼承意念移物的效果。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "與同行的其他寶可夢交換。接替的寶可夢繼承使用者的能力等級變化，以及混亂、水流環、詛咒、查封、聚氣、胃液、回復封鎖、扎根、寄生種子、鎖定（心之眼）、電磁飄浮、滅亡之歌、力量戲法、意念移物的效果、因黑色目光（擋路、蛛網）而無法交換的效果和保留剩餘HP的替身。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "與同行的其他寶可夢交換。接替的寶可夢繼承使用者的能力等級變化，以及混亂、水流環、詛咒、查封、聚氣、胃液、回復封鎖、扎根、寄生種子、鎖定（心之眼）、電磁飄浮、玩泥巴、滅亡之歌、力量戲法、玩水的效果、因黑色目光（擋路、蛛網）而使對手無法交換或自己無法交換的效果和保留剩餘HP的替身。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "與同行的其他寶可夢交換。接替的寶可夢繼承使用者的能力等級變化，以及混亂、詛咒、聚氣、扎根、寄生種子、鎖定（心之眼）、玩泥巴、滅亡之歌、玩水的效果、因黑色目光（擋路、蛛網）而使對手無法交換或自己無法交換的效果和保留剩餘HP的替身。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "與同行的其他寶可夢交換。接替的寶可夢繼承使用者的能力等級變化，以及混亂、詛咒、變圓、聚氣、識破、寄生種子、鎖定（心之眼）、變小、白霧、滅亡之歌的效果、因黑色目光（蛛網）而使對手無法交換或自己無法交換的效果和保留剩餘HP的替身。", // NEEDS QC
 		},
 	},
 	beakblast: {
 		name: "鳥嘴加農炮",
 		// Official flavor text: "先加熱鳥嘴後再進行攻擊。 若對手在加熱時觸碰的話， 就會灼傷。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合在使出此招式前受到接觸類招式攻擊時，使攻擊方陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "行動前被接觸時使對方灼傷。", // NEEDS QC
 
 		start: "  {POKEMON}開始給鳥嘴加熱了！",
 	},
 	beatup: {
 		name: "圍攻",
 		// Official flavor text: "讓我方所有寶可夢進行攻擊。 同行的寶可夢越多， 招式的攻擊次數越多。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者以及同行的每隻未瀕死且無異常狀態的寶可夢各攻擊1次。每次攻擊的威力為5+(X/10)（X為參與攻擊的寶可夢的攻擊種族值）。所有攻擊都視為由使用者使出。", // NEEDS QC
+		shortDesc: "所有健康的同伴一起攻擊。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "造成無屬性傷害。使用者以及同行的每隻未瀕死且無異常狀態的寶可夢各攻擊1次。每次攻擊的傷害計算中，使用參與攻擊的寶可夢的攻擊種族值作為攻擊、目標的防禦種族值作為防禦，並無視能力等級等修正攻擊和防禦的效果。所有攻擊都視為由使用者使出。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "造成無屬性傷害。同行的每隻未瀕死且無異常狀態的寶可夢各攻擊1次，沒有符合條件的寶可夢時失敗。每次攻擊的傷害計算中，使用參與攻擊的寶可夢的攻擊種族值作為攻擊、目標的防禦種族值作為防禦，並無視能力等級等修正攻擊和防禦的效果。所有攻擊都視為由使用者使出。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "造成無屬性傷害。同行的每隻未瀕死且無異常狀態的寶可夢各攻擊1次。每次攻擊的傷害計算中，使用參與攻擊的寶可夢的等級和攻擊種族值、目標的防禦種族值，並無視能力等級等修正攻擊和防禦的效果。沒有能參與的寶可夢時失敗。", // NEEDS QC
 		},
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  {NAME}的攻擊！", // NEEDS QC
 	},
 	behemothbash: {
 		name: "巨獸彈",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "目標處於極巨化狀態時傷害變為2倍。", // NEEDS QC
 		},
 	},
 	behemothblade: {
 		name: "巨獸斬",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "目標處於極巨化狀態時傷害變為2倍。", // NEEDS QC
 		},
 	},
 	belch: {
 		name: "打嗝",
 		// Official flavor text: "朝著對手打嗝進行攻擊。 沒吃下樹果時無法使用。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者吃過樹果後才能選擇此招式。吃掉攜帶的樹果、用蟲咬或啄食奪取並吃掉目標的樹果、吃掉被投擲過來的樹果均可滿足條件。一旦滿足條件，即使之後獲得或使用其他道具、交換下場，此對戰中也可以一直選擇此招式。用自然之恩消耗樹果不算吃掉樹果。", // NEEDS QC
+		shortDesc: "吃過樹果後才能選擇。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -497,10 +487,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bellydrum: {
 		name: "腹鼓",
 		// Official flavor text: "將現有的ＨＰ 減去最大ＨＰ的一半， 讓自己的攻擊提高至最大值。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "失去最大HP的1/2（向下取整），使使用者的攻擊提高12級。HP不足時，或攻擊的能力等級已為+6時失敗。", // NEEDS QC
+		shortDesc: "失去一半HP，將攻擊提升到最大。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "除非會因此瀕死或攻擊已達+6，否則失去最大HP的1/2（向下取整）。HP不足時，攻擊提高2級。否則，在攻擊等級低於+6期間每次提高2級，若此步驟前的攻擊實際值為999，則等級降低1級並結束循環。", // NEEDS QC
 		},
 
 		boost: "  {POKEMON}削減體力並釋放了全部力量！",
@@ -508,13 +498,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bestow: {
 		name: "傳遞禮物",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "將使用者的攜帶道具交給目標。使用者沒有道具或攜帶Z純晶時、目標已攜帶道具時失敗。道具是超級石且使用者或目標是能用牠超級進化的寶可夢時，或道具是靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟且使用者或目標分別是蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸時也會失敗。", // NEEDS QC
+		shortDesc: "把自己的攜帶道具交給目標。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "將使用者的攜帶道具交給目標。使用者沒有道具時、目標已攜帶道具時失敗。道具是超級石且使用者或目標是能用牠超級進化的寶可夢時，或道具是靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶且使用者或目標分別是蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特時也會失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "將使用者的攜帶道具交給目標。使用者沒有道具或攜帶信件時、目標已攜帶道具時失敗。道具是白金寶珠、屬性板、卡帶且使用者或目標分別是騎拉帝納、阿爾宙斯、蓋諾賽克特時也會失敗。", // NEEDS QC
 		},
 
 		takeItem: "  {POKEMON}從{SOURCE}那裡獲得了{ITEM}！",
@@ -522,20 +512,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bide: {
 		name: "忍耐",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回合內固定使出此招式，2回合後，將此期間因攻擊而失去的HP的2倍傷害返還給最後攻擊自己的寶可夢。最後攻擊自己的寶可夢已不在場時，改為隨機攻擊一隻對手寶可夢。使出期間無法行動時，效果結束。此招式不進行命中判定，但不能無視屬性相性帶來的無效。", // NEEDS QC
+		shortDesc: "忍耐2回合，返還所受傷害的2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回合內固定使出此招式，2回合後，將此期間因攻擊而失去的HP的2倍傷害返還給最後攻擊自己的寶可夢。最後攻擊自己的寶可夢已不在場時，改為隨機攻擊一隻對手寶可夢。使出期間無法行動時，效果結束。此招式不進行命中判定，且能無視屬性相性帶來的無效。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回合內固定使出此招式，2回合後，將此期間失去的HP的2倍傷害返還給最後攻擊自己的寶可夢。最後攻擊自己的寶可夢已不在場時，改為隨機攻擊一隻對手寶可夢。使出期間無法行動時，效果結束。不能無視屬性相性帶來的無效。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，2～3回合後，將此期間失去的HP的2倍傷害返還給對手。使出期間無法行動時，效果結束。不能無視屬性相性帶來的無效。", // NEEDS QC
+			shortDesc: "等待2～3回合後，返還所受傷害的2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，2～3回合後，將此期間失去的HP的2倍傷害返還給對手。能無視屬性相性帶來的無效，即使目標正在使用挖洞或飛翔也無法回避。效果期間自己可以交換。交換或無法行動時，效果結束。效果期間對手交換或使用奇異之光、紋理、聚氣、大蛇瞪眼、黑霧、寄生種子、光牆、模仿、白霧、毒瓦斯、毒粉、自我再生、反射壁、睡覺、生蛋、躍起、麻痺粉、替身、超音波、瞬間移動、電磁波、劇毒、變身時，之前受到的傷害會計入總和。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}正在忍耐。",
@@ -545,27 +535,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bind: {
 		name: "綁緊",
 		// Official flavor text: "使用長長的身體或藤蔓等， 在４～５回合內 綁緊對手進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（使用者攜帶緊綁束帶時為1/8，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合（使用者攜帶緊纏鉤爪時總是5回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+			shortDesc: "2～5回合內束縛目標並造成傷害。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但使用接棒的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內使出此招式。持續2～3回合的機率各為3/8，持續4～5回合的機率各為1/8。第1回合計算的傷害將用於之後的每回合。效果期間，使用者無法選擇招式，目標無法使出招式，但雙方都可以交換。使用者交換時，目標該回合仍無法使出招式。目標交換時，使用者自動再次使出此招式，此時PP為0的話會變為63。使用者或目標交換，或使用者無法行動時，效果結束。此招式即使對屬性相性無效的目標也能阻止其行動，但不會造成傷害。", // NEEDS QC
+			shortDesc: "2～5回合內目標無法行動。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被{SOURCE}緊緊綁住了！",
@@ -574,180 +564,180 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bite: {
 		name: "咬住",
 		// Official flavor text: "用尖銳的牙齒 咬住對手進行攻擊。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標畏縮。", // NEEDS QC
+			shortDesc: "有10%的機率使目標畏縮。", // NEEDS QC
 		},
 	},
 	bitterblade: {
 		name: "悔念劍",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 	},
 	bittermalice: {
 		name: "冤冤相報",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
 	},
 	blackholeeclipse: {
 		name: "黑洞吞噬萬物滅",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	blastburn: {
 		name: "爆炸烈焰",
 		// Official flavor text: "用爆炸的火焰 燒盡對手進行攻擊。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	blazekick: {
 		name: "火焰踢",
 		// Official flavor text: "有時會讓受到攻擊的對手 陷入灼傷狀態。 且容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。10%機率灼傷。", // NEEDS QC
 	},
 	blazingtorque: {
 		name: "灼熱暴衝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標灼傷。", // NEEDS QC
 	},
 	bleakwindstorm: {
 		name: "枯葉風暴",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標的速度降低1級。天氣為下雨或大雨時必定命中。對攜帶萬能傘的目標，命中率保持80%。", // NEEDS QC
+		shortDesc: "30%機率使對手速度-1。下雨時必中。", // NEEDS QC
 	},
 	blizzard: {
 		name: "暴風雪",
 		// Official flavor text: "將猛烈的暴風雪 吹向對手進行攻擊。 有時會讓對手陷入冰凍狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。天氣為下雪時必定命中。", // NEEDS QC
+		shortDesc: "10%機率冰凍。下雪時必中。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標陷入冰凍狀態。天氣為冰雹時，不進行命中判定。", // NEEDS QC
+			shortDesc: "10%機率冰凍。冰雹時必中。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標陷入冰凍狀態。", // NEEDS QC
+			shortDesc: "有10%的機率使對手冰凍。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "有10%的機率使目標冰凍。", // NEEDS QC
 		},
 	},
 	block: {
 		name: "擋路",
 		// Official flavor text: "張開雙手進行阻擋， 封住對手的退路， 讓對手無法逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "使目標無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束，但通過接棒離場時，目標仍然無法交換。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但使用接棒的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束，但通過接棒離場時，目標仍然無法交換。", // NEEDS QC
 		},
 	},
 	bloodmoon: {
 		name: "血月",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "不能連續兩回合選擇。", // NEEDS QC
 	},
 	bloomdoom: {
 		name: "絢爛繽紛花怒放",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	blueflare: {
 		name: "青焰",
 		// Official flavor text: "用美麗而激烈的青焰 燃燒對手進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有20%的機率使目標灼傷。", // NEEDS QC
 	},
 	bodypress: {
 		name: "撲擊",
 		// Official flavor text: "用身體撞向對手進行攻擊。 自己的防禦越高， 給予對手的傷害越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用能力等級變化計算在內的使用者的防禦數值代替攻擊來計算傷害。其他改變攻擊的效果照常適用。", // NEEDS QC
+		shortDesc: "以自身防禦而非攻擊計算傷害。", // NEEDS QC
 	},
 	bodyslam: {
 		name: "泰山壓頂",
 		// Official flavor text: "用整個身體 壓住對手進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "有30%的機率使目標麻痺。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
 		},
 	},
 	boltbeak: {
 		name: "電喙",
 		// Official flavor text: "用帶有電流的鳥嘴刺向對手。 若在對手之前進行攻擊， 招式的威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "先於目標行動時，威力變為2倍。", // NEEDS QC
+		shortDesc: "先於目標行動時威力加倍。", // NEEDS QC
 	},
 	boltstrike: {
 		name: "雷擊",
 		// Official flavor text: "用強大的電流圍繞身體， 猛撞對手進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有20%的機率使目標麻痺。", // NEEDS QC
 	},
 	boneclub: {
 		name: "骨棒",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有10%的機率使目標畏縮。", // NEEDS QC
 	},
 	bonemerang: {
 		name: "骨頭回力鏢",
 		// Official flavor text: "向對手投擲手中的骨頭， 來回連續２次給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "1回合內攻擊2次。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次。若第1次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	bonerush: {
 		name: "骨棒亂打",
 		// Official flavor text: "用堅硬的骨頭 毆打對手進行攻擊。 連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 	},
 	boomburst: {
 		name: "爆音波",
 		// Official flavor text: "利用震耳欲聾的爆炸聲 所產生的破壞力， 攻擊自己周圍所有的寶可夢。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊周圍全體。", // NEEDS QC
 	},
 	bounce: {
 		name: "彈跳",
 		// Official flavor text: "彈跳到高空中， 在下一回合攻擊對手。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、暴風、衝天拳、擊落、千箭齊發、打雷、龍捲風擊中，其中起風和龍捲風的威力變為2倍。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合彈起，第2回合攻擊。30%麻痺。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、暴風、衝天拳、擊落、打雷、龍捲風擊中，其中起風和龍捲風的威力變為2倍。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、衝天拳、打雷、龍捲風擊中，其中起風和龍捲風的威力變為2倍。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、衝天拳、打雷、龍捲風擊中，其中起風和龍捲風的威力變為2倍。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}高高地跳了起來！",
@@ -755,95 +745,95 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bouncybubble: {
 		name: "活活氣泡",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 	},
 	branchpoke: {
 		name: "木枝突刺",
 		// Official flavor text: "用尖銳的樹枝 刺向對手進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	bravebird: {
 		name: "勇鳥猛攻",
 		// Official flavor text: "收起翅膀， 低空飛行突擊對手。 自己也會受到不小的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害33%（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到33%的反作用力傷害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/3（向下取整，最少1）的反作用力傷害。", // NEEDS QC
+			shortDesc: "受到1/3的反作用力傷害。", // NEEDS QC
 		},
 	},
 	breakingswipe: {
 		name: "廣域破壞",
 		// Official flavor text: "激烈地甩動強韌 的尾巴攻擊對手， 降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "100%使對手的攻擊降低1級。", // NEEDS QC
 	},
 	breakneckblitz: {
 		name: "究極無敵大衝撞",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	brickbreak: {
 		name: "劈瓦",
 		// Official flavor text: "猛烈地揮下手刀 攻擊對手。還可以破壞 光牆和反射壁等。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊沒有落空時，在傷害計算前消除目標方場上的反射壁、光牆、極光幕效果。", // NEEDS QC
+		shortDesc: "攻擊前破壞對手方的屏障。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊沒有落空時，在傷害計算前消除目標方場上的反射壁、光牆效果。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊沒有落空時，無論目標是否免疫，都在傷害計算前消除目標方場上的反射壁、光牆效果。", // NEEDS QC
+			shortDesc: "破壞光牆，即使對目標無效。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊沒有落空時，無論目標是否免疫，都在傷害計算前消除目標方場上的反射壁、光牆效果。", // NEEDS QC
 		},
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  {POKEMON}打破了{TEAM}的壁障！", // NEEDS QC
 	},
 	brine: {
 		name: "鹽水",
 		// Official flavor text: "當對手負傷， ＨＰ剩一半左右時， 招式威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標的剩餘HP為其最大HP的1/2以下時，威力變為2倍。", // NEEDS QC
+		shortDesc: "目標HP在一半以下時威力加倍。", // NEEDS QC
 	},
 	brutalswing: {
 		name: "狂舞揮打",
 		// Official flavor text: "用自己的身體狂舞揮打， 給予對手傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊周圍全體。", // NEEDS QC
 	},
 	bubble: {
 		name: "泡沫",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使對手的速度降低1級。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有33%的機率使目標的速度降低1級。", // NEEDS QC
+			shortDesc: "有33%的機率使目標的速度降低1級。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "有10%的機率使目標的速度降低1級。", // NEEDS QC
 		},
 	},
 	bubblebeam: {
 		name: "泡沫光線",
 		// Official flavor text: "向對手猛烈地噴射 泡沫進行攻擊。 有時會降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的速度降低1級。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有33%的機率使目標的速度降低1級。", // NEEDS QC
+			shortDesc: "有33%的機率使目標的速度降低1級。", // NEEDS QC
 		},
 	},
 	bugbite: {
 		name: "蟲咬",
 		// Official flavor text: "叮咬對手進行攻擊。 可以吃下對手攜帶的樹果， 並獲得樹果的效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，奪取目標攜帶的樹果並立即吃掉，（即使使用者的道具被無效化）獲得其效果。因此招式失去的樹果無法用回收利用或特性收穫取回。", // NEEDS QC
+		shortDesc: "奪取並吃掉目標的樹果。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "奪取目標攜帶的樹果並立即吃掉，使用者的道具未被無效化時獲得其效果。因此招式失去的樹果可以用回收利用取回。", // NEEDS QC
 		},
 
 		removeItem: "  {SOURCE}奪取並吃掉了{ITEM}！",
@@ -851,60 +841,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bugbuzz: {
 		name: "蟲鳴",
 		// Official flavor text: "利用振動產生出的音波進行攻擊。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	bulkup: {
 		name: "健美",
 		// Official flavor text: "將力量集中於體內，增厚肌肉， 提高自己的攻擊和防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊和防禦各提高1級。", // NEEDS QC
+		shortDesc: "自身的攻擊、防禦提高1級。", // NEEDS QC
 	},
 	bulldoze: {
 		name: "重踏",
 		// Official flavor text: "用力踩踏地面， 攻擊自己周圍所有的寶可夢。 可降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "100%使周圍寶可夢的速度降低1級。", // NEEDS QC
 	},
 	bulletpunch: {
 		name: "子彈拳",
 		// Official flavor text: "向對手連續揮出如子彈般 快速且堅硬的拳頭。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	bulletseed: {
 		name: "種子機關槍",
 		// Official flavor text: "向對手猛烈地 發射種子進行攻擊。 連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 	},
 	burningbulwark: {
 		name: "火焰守護",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢陷入灼傷狀態。不能防住不造成傷害的招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "防住攻擊招式，並使接觸者灼傷。", // NEEDS QC
 	},
 	burningjealousy: {
 		name: "妒火",
 		// Official flavor text: "用嫉妒的能量攻擊對手。 讓此回合內能力提高的 寶可夢陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "命中在本回合能力等級提高過的目標時，有100%的機率使其陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "100%灼傷本回合提升過能力的目標。", // NEEDS QC
 	},
 	burnup: {
 		name: "燃盡",
 		// Official flavor text: "燃盡全身的火焰， 給予對手巨大的傷害。 自己的火屬性將會消失。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者不是火屬性時失敗。攻擊成功後，未太晶化時，使用者在場期間失去火屬性（變為無屬性）。", // NEEDS QC
+		shortDesc: "限火屬性使用。使用後失去火屬性。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者不是火屬性時失敗。此招式成功後，使用者在場期間失去火屬性。", // NEEDS QC
 		},
 
 		typeChange: "  {POKEMON}的火焰燃盡了！",
@@ -912,68 +902,68 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	buzzybuzz: {
 		name: "麻麻電擊",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "100%使目標陷入麻痺狀態。", // NEEDS QC
 	},
 	calmmind: {
 		name: "冥想",
 		// Official flavor text: "屏氣凝神， 提高自己的特攻和特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻和特防各提高1級。", // NEEDS QC
+		shortDesc: "自身的特攻、特防提高1級。", // NEEDS QC
 	},
 	camouflage: {
 		name: "保護色",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的屬性隨場地變化。通常為一般屬性，電氣場地時為電屬性，薄霧場地時為妖精屬性，青草場地時為草屬性，精神場地時為超能力屬性。使用者的屬性無法改變時，或已經只有該屬性時失敗。", // NEEDS QC
+		shortDesc: "屬性隨場地變化（通常為一般）。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性隨場地變化。通常為一般屬性，電氣場地時為電屬性，薄霧場地時為妖精屬性，青草場地時為草屬性。使用者的屬性無法改變時，或已經只有該屬性時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性隨場地變化。通常為地面屬性。使用者的屬性無法改變時，或已經只有該屬性時失敗。", // NEEDS QC
+			shortDesc: "屬性隨場地變化。（地面）", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性隨場地變化。通常為一般屬性。使用者的特性為多屬性時，或該屬性已包含在使用者當前屬性中時失敗。", // NEEDS QC
+			shortDesc: "屬性隨場地變化。（一般）", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性隨場地變化。通常為一般屬性。該屬性已包含在使用者當前屬性中時失敗。", // NEEDS QC
 		},
 	},
 	captivate: {
 		name: "誘惑",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特攻降低2級。使用者與目標性別相同時，或任意一方無性別時無效。對特性為遲鈍的寶可夢無效。", // NEEDS QC
+		shortDesc: "使異性對手的特攻降低2級。", // NEEDS QC
 	},
 	catastropika: {
 		name: "皮卡皮卡必殺擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	ceaselessedge: {
 		name: "秘劍・千重濤",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加3層，傷害為1層時最大HP的1/8、2層時1/6、3層時1/4（均向下取整）。任意寶可夢使用大掃除，或對手方寶可夢成功使用晶光轉轉、高速旋轉、清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
+		shortDesc: "在對手方布下撒菱。", // NEEDS QC
 	},
 	celebrate: {
 		name: "慶祝",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "沒有對戰效果。", // NEEDS QC
 
 		activate: "  恭喜恭喜！{TRAINER}！！",
 	},
 	charge: {
 		name: "充電",
 		// Official flavor text: "提高下一回合使出的 電屬性招式威力。 也會提高自己的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特防提高1級。使用者的下一個電屬性攻擊招式威力變為2倍。離場，或試圖使用充電以外的電屬性招式（即使失敗）後，此效果結束。", // NEEDS QC
+		shortDesc: "特防+1。下一個電屬性招式威力加倍。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的特防提高1級。使用者下回合使用電屬性攻擊招式時，其威力變為2倍。", // NEEDS QC
+			shortDesc: "特防+1。下回合電屬性招式威力2倍。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者下回合使用電屬性攻擊招式時，其威力變為2倍。", // NEEDS QC
+			shortDesc: "下回合電屬性招式威力變為2倍。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}開始充電了！",
@@ -981,82 +971,82 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	chargebeam: {
 		name: "充電光束",
 		// Official flavor text: "向對手發射電擊光束。 有時會因電流蓄積， 提高自己的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有70%的機率使使用者的特攻提高1級。", // NEEDS QC
+		shortDesc: "有70%的機率使自身的特攻提高1級。", // NEEDS QC
 	},
 	charm: {
 		name: "撒嬌",
 		// Official flavor text: "用撒嬌的眼神 誘使對手疏忽大意， 大幅降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊降低2級。", // NEEDS QC
+		shortDesc: "使目標的攻擊降低2級。", // NEEDS QC
 	},
 	chatter: {
 		name: "喋喋不休",
 		// Official flavor text: "用非常煩人且喋喋不休的 音波攻擊對手。 使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有100%的機率使目標混亂。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有X%的機率使目標陷入混亂狀態。使用者不是未變身的聒噪鳥時X為0。使用者是聒噪鳥時，X根據錄制的叫聲音量為0或10：音量小或沒有錄音時為0，音量中等以上時為10。", // NEEDS QC
+			shortDesc: "若為聒噪鳥，10%機率混亂。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有X%的機率使目標陷入混亂狀態。使用者不是未變身的聒噪鳥時X為0。使用者是聒噪鳥時，X根據錄制的叫聲音量為1、11或31：沒有錄音或音量小時為1，音量中等時為11，音量大時為31。", // NEEDS QC
+			shortDesc: "若為聒噪鳥，31%機率混亂。", // NEEDS QC
 		},
 	},
 	chillingwater: {
 		name: "潑冷水",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
 	},
 	chillyreception: {
 		name: "冷笑話",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，天氣變為下雪。使用者即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時不交換。", // NEEDS QC
+		shortDesc: "召喚下雪並與同伴交換。", // NEEDS QC
 
 		prepare: "  {POKEMON}說了冷笑話！",
 	},
 	chipaway: {
 		name: "逐步擊破",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無視目標的能力等級變化（包括回避率）進行攻擊。", // NEEDS QC
+		shortDesc: "無視目標的能力等級變化。", // NEEDS QC
 	},
 	chloroblast: {
 		name: "葉綠爆震",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，使用者受到最大HP的1/2（向上取整）的傷害。特性為魔法防守或堅硬腦袋時不受傷害。", // NEEDS QC
+		shortDesc: "自己失去最大HP的1/2。", // NEEDS QC
 	},
 	circlethrow: {
 		name: "巴投",
 		// Official flavor text: "摔飛對手， 強制讓後備寶可夢上場。 對手為野生寶可夢時，戰鬥將直接結束。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者和目標都未瀕死時，強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標處於扎根效果下時、特性為吸盤時、此招式命中替身時，此效果失敗。", // NEEDS QC
+		shortDesc: "強制目標與隨機同伴交換。", // NEEDS QC
 	},
 	clamp: {
 		name: "貝殼夾擊",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（使用者攜帶緊綁束帶時為1/8，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合（使用者攜帶緊纏鉤爪時總是5回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+			shortDesc: "2～5回合內束縛目標並造成傷害。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但使用接棒的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內使出此招式。持續2～3回合的機率各為3/8，持續4～5回合的機率各為1/8。第1回合計算的傷害將用於之後的每回合。效果期間，使用者無法選擇招式，目標無法使出招式，但雙方都可以交換。使用者交換時，目標該回合仍無法使出招式。目標交換時，使用者自動再次使出此招式，此時PP為0的話會變為63。使用者或目標交換，或使用者無法行動時，效果結束。此招式即使對屬性相性無效的目標也能阻止其行動，但不會造成傷害。", // NEEDS QC
+			shortDesc: "2～5回合內目標無法行動。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被{SOURCE}的殼夾住了！",
@@ -1065,188 +1055,188 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	clangingscales: {
 		name: "鱗片噪音",
 		// Official flavor text: "摩擦全身鱗片， 發出響亮的聲音並進行攻擊。 攻擊後自己的防禦會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦降低1級。", // NEEDS QC
+		shortDesc: "使自身的防禦降低1級。", // NEEDS QC
 	},
 	clangoroussoul: {
 		name: "魂舞烈音爆",
 		// Official flavor text: "消耗一些自己的ＨＰ， 提高自己的所有能力。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "失去最大HP的33%（向下取整），使使用者的攻擊、防禦、特攻、特防、速度各提高1級。HP不足時，或攻擊、防禦、特攻、特防、速度的能力等級都不會變化時失敗。", // NEEDS QC
+		shortDesc: "失去33%HP，全部能力提高1級。", // NEEDS QC
 	},
 	clangoroussoulblaze: {
 		name: "熾魂熱舞烈音爆",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊、防禦、特攻、特防、速度各提高1級。", // NEEDS QC
+		shortDesc: "自身全部能力提高1級。", // NEEDS QC
 	},
 	clearsmog: {
 		name: "清除之煙",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "重置目標的能力等級變化。", // NEEDS QC
 	},
 	closecombat: {
 		name: "近身戰",
 		// Official flavor text: "反守為攻，近身突擊對手。 自己的防禦和特防會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各降低1級。", // NEEDS QC
+		shortDesc: "使自身的防禦、特防降低1級。", // NEEDS QC
 	},
 	coaching: {
 		name: "指導",
 		// Official flavor text: "透過適切的指導， 提高我方全體的攻擊和防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使作為對象的隊友的攻擊和防禦各提高1級。使用者沒有相鄰的隊友時失敗。", // NEEDS QC
+		shortDesc: "使隊友的攻擊和防禦提高1級。", // NEEDS QC
 	},
 	coil: {
 		name: "盤蜷",
 		// Official flavor text: "盤蜷身體集中精神。 可提高自己的攻擊、防禦和命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊、防禦、命中率各提高1級。", // NEEDS QC
+		shortDesc: "攻擊、防禦、命中率各提高1級。", // NEEDS QC
 	},
 	collisioncourse: {
 		name: "全開猛撞",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標效果絕佳時，傷害變為1.3333倍。", // NEEDS QC
+		shortDesc: "效果絕佳時傷害變為1.3333倍。", // NEEDS QC
 	},
 	combattorque: {
 		name: "格鬥暴衝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標麻痺。", // NEEDS QC
 	},
 	cometpunch: {
 		name: "連續拳",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。傷害只在第一次攻擊時計算1次，並套用於每次攻擊。若中途某次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	comeuppance: {
 		name: "復仇",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對本回合最後用物理或特殊招式對使用者造成傷害的對手，給予該傷害1.5倍（向下取整）的傷害。該傷害為0時，改為給予1點傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理或特殊招式攻擊時失敗。", // NEEDS QC
+		shortDesc: "受擊後返還1.5倍傷害。", // NEEDS QC
 	},
 	confide: {
 		name: "密語",
 		// Official flavor text: "向對手低聲密語， 使對手失去集中力， 降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "使目標的特攻降低1級。", // NEEDS QC
 	},
 	confuseray: {
 		name: "奇異之光",
 		// Official flavor text: "讓對手看奇怪的光線 擾亂對手。 使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "使目標陷入混亂狀態。", // NEEDS QC
 	},
 	confusion: {
 		name: "念力",
 		// Official flavor text: "向對手發送 微弱的念力進行攻擊。 有時會使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標混亂。", // NEEDS QC
 	},
 	constrict: {
 		name: "纏繞",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的速度降低1級。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有33%的機率使目標的速度降低1級。", // NEEDS QC
+			shortDesc: "有33%的機率使目標的速度降低1級。", // NEEDS QC
 		},
 	},
 	continentalcrush: {
 		name: "毀天滅地巨岩墜",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	conversion: {
 		name: "紋理",
 		// Official flavor text: "將自己的屬性轉換成 與已學會的招式中 第１個招式相同的屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的屬性變為自己第1個招式的（變化前的）屬性。使用者的屬性無法改變時，或該屬性已包含在使用者當前屬性中時失敗。", // NEEDS QC
+		shortDesc: "屬性變為自己第1個招式的屬性。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性隨機變為自己此招式以外的招式之一的原本屬性（使用者當前的屬性除外）。使用者的屬性無法改變時，或只能選到使用者當前屬性時失敗。", // NEEDS QC
+			shortDesc: "屬性變為與所會招式相同。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性隨機變為自己此招式和詛咒以外的招式之一的原本屬性（使用者當前的屬性除外）。使用者的屬性無法改變時，或只能選到使用者當前屬性時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性隨機變為自己詛咒以外的招式之一的原本屬性（使用者當前的屬性除外）。使用者的屬性無法改變時，或只能選到使用者當前屬性時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性變得和目標當前的屬性相同。", // NEEDS QC
+			shortDesc: "屬性變為與目標相同。", // NEEDS QC
 		},
 
-		typeChange: null, // NEEDS TRANSLATION
+		typeChange: "  將自己的屬性變得和{SOURCE}相同了！", // NEEDS QC
 	},
 	conversion2: {
 		name: "紋理２",
 		// Official flavor text: "改變屬性， 讓自己能夠抵抗對手 最近一次使出的招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的屬性變為能抵抗或免疫目標最後使用的招式屬性的屬性之一（使用者當前的屬性除外）。招式屬性按變化後的屬性判定。目標還未使用過招式時、使用者的屬性無法改變時、只能選到使用者當前屬性時失敗。", // NEEDS QC
+		shortDesc: "屬性變為可抵抗目標最後招式的屬性。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性變為能抵抗或免疫最後對使用者使出且成功的招式屬性的屬性之一（使用者當前的屬性除外）。招式屬性按變化後的屬性判定。最後對使用者使出的招式未成功時、使用者的特性為多屬性時、只能選到使用者當前屬性時失敗。", // NEEDS QC
+			shortDesc: "屬性變為抵抗最後所受的招式。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性變為能抵抗或免疫最後對使用者使出且成功的招式屬性的屬性之一（使用者當前的屬性除外）。招式屬性按變化後的屬性判定，但掙扎視為一般屬性。最後對使用者使出的招式未成功時，或只能選到使用者當前屬性時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的屬性變為能抵抗或免疫對手最後使用的招式屬性的屬性之一，也可以變為使用者當前的屬性。招式屬性按原本屬性而非變化後的屬性判定。對手還未使用過招式時失敗。", // NEEDS QC
+			shortDesc: "屬性變為抵抗對手最後的招式。", // NEEDS QC
 		},
 	},
 	copycat: {
 		name: "仿效",
 		// Official flavor text: "模仿對手最近一次使用的招式， 若對手沒有成功出招則會失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使出（包括自己在內）任意寶可夢最後使用的招式。還沒有招式被使用過時，或最後使用的招式是借助、碉堡、鳥嘴加農炮、巨獸彈、巨獸斬、打嗝、傳遞禮物、灼熱暴衝、慶祝、喋喋不休、巴投、格鬥暴衝、仿效、雙倍奉還、渴望、同命、看穿、龍尾、極巨炮、挺住、佯攻、真氣拳、看我嘛、幫助、牽手、王者盾牌、魔法暴衝、掀榻榻米、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、劇毒暴衝、守住、憤怒粉、吼叫、陷阱甲殼、寫生、夢話、搶奪、尖刺防守、聚光燈、掙扎、掉包、晶光星群、小偷、變身、戲法、吹飛、黑暗暴衝時失敗。", // NEEDS QC
+		shortDesc: "使出最後被使用過的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出（包括自己在內）任意寶可夢最後使用的招式。極巨招式和超極巨招式按原本招式判定。還沒有招式被使用過時，或最後使用的招式是借助、碉堡、鳥嘴加農炮、巨獸彈、巨獸斬、打嗝、傳遞禮物、慶祝、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、龍尾、極巨炮、挺住、佯攻、真氣拳、看我嘛、幫助、牽手、王者盾牌、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、守住、憤怒粉、吼叫、陷阱甲殼、寫生、夢話、搶奪、尖刺防守、聚光燈、掙扎、掉包、小偷、變身、戲法、吹飛時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出（包括自己在內）任意寶可夢最後使用的招式。還沒有招式被使用過時，或最後使用的招式是借助、碉堡、鳥嘴加農炮、打嗝、傳遞禮物、慶祝、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、龍尾、挺住、佯攻、真氣拳、看我嘛、幫助、牽手、王者盾牌、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、守住、憤怒粉、吼叫、陷阱甲殼、寫生、夢話、搶奪、尖刺防守、聚光燈、掙扎、掉包、小偷、變身、戲法、吹飛或Z招式時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出（包括自己在內）任意寶可夢最後使用的招式。還沒有招式被使用過時，或最後使用的招式是借助、打嗝、傳遞禮物、慶祝、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、龍尾、挺住、佯攻、真氣拳、看我嘛、幫助、牽手、王者盾牌、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、守住、憤怒粉、吼叫、寫生、夢話、搶奪、尖刺防守、掙扎、掉包、小偷、變身、戲法、吹飛時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出（包括自己在內）任意寶可夢最後使用的招式。還沒有招式被使用過時，或最後使用的招式是借助、傳遞禮物、喋喋不休、巴投、仿效、雙倍奉還、渴望、同命、看穿、龍尾、挺住、佯攻、真氣拳、看我嘛、幫助、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、守住、憤怒粉、寫生、夢話、搶奪、掙扎、掉包、小偷、變身、戲法時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出（包括自己在內）任意寶可夢最後使用的招式。還沒有招式被使用過時，或最後使用的招式是借助、喋喋不休、仿效、雙倍奉還、渴望、同命、看穿、挺住、佯攻、真氣拳、看我嘛、幫助、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、守住、寫生、夢話、搶奪、掙扎、掉包、小偷、戲法時失敗。", // NEEDS QC
 		},
 	},
 	coreenforcer: {
 		name: "核心懲罰者",
 		// Official flavor text: "如果攻擊的對手在該回合 已經結束行動， 對手的特性就會被消除。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "後於目標行動時，目標在場期間其特性被無效化。目標使用接棒後，接替的寶可夢繼續受此效果影響。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶變形、達摩模式、全能變身時此效果不發生，通過接棒繼承的此效果會立即結束。", // NEEDS QC
+		shortDesc: "後於目標行動時使其特性無效。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "後於目標行動時，目標在場期間其特性被無效化。目標使用接棒後，接替的寶可夢繼續受此效果影響。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、達摩模式時此效果不發生，通過接棒繼承的此效果會立即結束。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "後於目標行動時，目標在場期間其特性被無效化。目標使用接棒後，接替的寶可夢繼續受此效果影響。目標的特性為牽絆變身、絕對睡眠、畫皮、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、達摩模式時此效果不發生，通過接棒繼承的此效果會立即結束。", // NEEDS QC
 		},
 	},
 	corkscrewcrash: {
 		name: "超絕螺旋連擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	corrosivegas: {
 		name: "腐蝕氣體",
 		// Official flavor text: "用強烈的酸性氣體 包圍周圍所有的寶可夢， 並將攜帶的道具融化掉。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標失去攜帶的道具。無法使特性為黏著的寶可夢失去道具，也無法使蓋歐卡、固拉多、帝牙盧卡、帕路奇亞、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特、悖謬寶可夢、厄鬼椪所攜帶的、分別與之對應的靛藍色寶珠、朱紅色寶珠、大金剛寶玉、大白寶玉、大白金寶玉、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾、驅勁能量、面具失去。這裡的悖謬寶可夢指特性為古代活性、夸克充能的所有種族（破空焰、猛雷鼓、鐵磐岩、鐵頭殼除外）。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
+		shortDesc: "使周圍寶可夢失去攜帶道具。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標失去攜帶的道具。無法使特性為黏著的寶可夢失去道具，也無法使蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特所攜帶的、分別與之對應的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾失去。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 
 		fail: "#healblock",
@@ -1255,89 +1245,89 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	cosmicpower: {
 		name: "宇宙力量",
 		// Official flavor text: "吸取來自宇宙的神秘力量， 提高自己的防禦和特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各提高1級。", // NEEDS QC
+		shortDesc: "自身的防禦、特防提高1級。", // NEEDS QC
 	},
 	cottonguard: {
 		name: "棉花防守",
 		// Official flavor text: "用軟綿綿的絨毛 保護自己的身體。 極大幅提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高3級。", // NEEDS QC
+		shortDesc: "自身的防禦提高3級。", // NEEDS QC
 	},
 	cottonspore: {
 		name: "棉孢子",
 		// Official flavor text: "將棉花般柔軟的孢子 纏繞對手， 大幅降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的速度降低2級。", // NEEDS QC
+		shortDesc: "使目標的速度降低2級。", // NEEDS QC
 	},
 	counter: {
 		name: "雙倍奉還",
 		// Official flavor text: "將來自對手的物理攻擊傷害加倍後， 返還給該對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對本回合最後用物理招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該傷害為0時，改為給予1點傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理招式攻擊時失敗。", // NEEDS QC
+		shortDesc: "返還所受物理傷害的2倍。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用物理招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該傷害為0時，改為以威力1造成傷害。該對手的位置已空時，改為對範圍內隨機一隻對手寶可夢造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理招式攻擊時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用物理招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理招式攻擊時，或未因此失去HP時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用物理招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。覺醒力量視為一般屬性，連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理招式攻擊時，或未因此失去HP時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "將本回合因物理攻擊失去的HP的2倍傷害返還給對手。覺醒力量視為一般屬性，連續攻擊招式只計算最後1次攻擊。使用者先行動時、本回合未受到物理攻擊時、未因此失去HP時失敗。對手使用地裂或角鑽且沒有命中時，此招式造成65535點傷害。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "將戰鬥中最後使用的招式所造成傷害的2倍返還給對手。能無視屬性相性帶來的無效。使用者先行動時，或對手方最後的招式是雙倍奉還、威力為0、不是一般或格鬥屬性時失敗。任意一方最後使用的招式造成0傷害且不是奇異之光、紋理、聚氣、大蛇瞪眼、黑霧、寄生種子、光牆、模仿、白霧、毒瓦斯、毒粉、自我再生、反射壁、睡覺、生蛋、躍起、麻痺粉、替身、超音波、瞬間移動、電磁波、劇毒、變身時失敗。", // NEEDS QC
+			shortDesc: "受到一般/格鬥招式時，返還2倍傷害。", // NEEDS QC
 		},
 	},
 	courtchange: {
 		name: "換場",
 		// Official flavor text: "用神奇的力量 與對手交換場地效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "將白霧、光牆、反射壁、撒菱、神祕守護、順風、毒菱、隱形岩、水之誓約、火之誓約、草之誓約、黏黏網、極光幕、超極巨鋼鐵陣法、超極巨水砲轟滅、超極巨灰飛鞭滅、超極巨地獄滅焰的效果在己方和對手方之間互換。", // NEEDS QC
+		shortDesc: "互換雙方場地上的效果。", // NEEDS QC
 
 		activate: "  {POKEMON}交換了雙方的場地效果！",
 	},
 	covet: {
 		name: "渴望",
 		// Official flavor text: "一邊可愛地撒嬌， 一邊靠近對手， 奪取對手攜帶的道具。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標的攜帶道具。特性為黏著的目標未瀕死時不會失去道具。蓋歐卡、固拉多、帝牙盧卡、帕路奇亞、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特、悖謬寶可夢、厄鬼椪所攜帶的、分別與之對應的靛藍色寶珠、朱紅色寶珠、大金剛寶玉、大白寶玉、大白金寶玉、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾、驅勁能量、面具無法奪取，使用者是這些種族且目標攜帶對應道具時也無法奪取。這裡的悖謬寶可夢指特性為古代活性、夸克充能的所有種族（破空焰、猛雷鼓、鐵磐岩、鐵頭殼除外）。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
+		shortDesc: "未攜帶道具時奪取目標的道具。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是Z純晶、能用牠超級進化的寶可夢所攜帶的超級石，或蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是能用牠超級進化的寶可夢所攜帶的超級石，或蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是信件，或騎拉帝納、阿爾宙斯、蓋諾賽克特分別攜帶的白金寶珠、屬性板、卡帶時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者沒有攜帶道具時，奪取目標攜帶的道具。道具是信件或白金寶珠時，或目標的特性為多屬性或黏著時無法奪取。因此招式失去的道具無法用回收利用取回。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者沒有攜帶道具時，奪取目標攜帶的道具。道具是信件或謎芝果時，或目標的特性為黏著時無法奪取。因此招式失去的道具無法用回收利用取回。", // NEEDS QC
 		},
 	},
 	crabhammer: {
 		name: "蟹鉗錘",
 		// Official flavor text: "用巨大的鉗子 敲打對手進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	craftyshield: {
 		name: "戲法防守",
 		// Official flavor text: "使用神奇的力量 防禦住攻擊我方的變化招式。 但無法防禦住攻擊招式的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的不造成傷害的招式。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "本回合防住指向己方的變化招式。", // NEEDS QC
 
 		start: "  {TEAM}受到了戲法防守的保護！",
 		block: "  {POKEMON}受到了戲法防守的保護！",
@@ -1345,50 +1335,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	crosschop: {
 		name: "十字劈",
 		// Official flavor text: "用左右手刀 劈打對手進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	crosspoison: {
 		name: "十字毒刃",
 		// Official flavor text: "用毒刃劈開對手。 有時會讓對手陷入中毒狀態， 也容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入中毒狀態。容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。10%機率中毒。", // NEEDS QC
 	},
 	crunch: {
 		name: "咬碎",
 		// Official flavor text: "用尖銳的牙齒咬碎對手進行攻擊。 有時會降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有20%的機率使目標的防禦降低1級。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有20%的機率使目標的特防降低1級。", // NEEDS QC
+			shortDesc: "有20%的機率使目標的特防降低1級。", // NEEDS QC
 		},
 	},
 	crushclaw: {
 		name: "撕裂爪",
 		// Official flavor text: "用堅硬的銳爪 撕裂對手進行攻擊。 有時會降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	crushgrip: {
 		name: "捏碎",
 		// Official flavor text: "用驚人的力量捏碎對手。 對手現有的ＨＰ越多， 招式的威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為120×（目標的剩餘HP÷目標的最大HP）（五捨六入，最低為1）。", // NEEDS QC
+		shortDesc: "目標剩餘HP越多威力越大。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力為120×（目標的當前HP÷目標的最大HP）+1（向下取整）。", // NEEDS QC
 		},
 	},
 	curse: {
 		name: "詛咒",
 		// Official flavor text: "使用詛咒時， 幽靈屬性的寶可夢和其他屬性的寶可夢， 會獲得不同的招式效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者不是幽靈屬性時，速度降低1級，攻擊和防禦各提高1級。使用者是幽靈屬性時，失去最大HP的1/2（向下取整，即使會因此瀕死），使目標在場期間每回合結束時失去最大HP的1/4（向下取整）。目標使用接棒後，接替的寶可夢繼續受此效果影響。沒有對象時，或目標已受此效果影響時失敗。", // NEEDS QC
+		shortDesc: "幽靈屬性則詛咒，否則速度-1、攻防+1。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者不是幽靈屬性時，使用者的速度降低1級，攻擊和防禦各提高1級。是幽靈屬性時，（即使會因此瀕死）失去最大HP的1/2（向下取整），換取目標在場期間每回合結束時失去其最大HP的1/4（向下取整）。目標使用接棒後，接替的寶可夢繼續受影響。沒有目標時，或目標已受此影響或處於替身狀態時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者不是幽靈屬性時，除非攻擊和防禦都已達+6，否則使用者的速度降低1級，攻擊和防禦各提高1級。是幽靈屬性時，（即使會因此瀕死）失去最大HP的1/2（向下取整），換取目標在場期間每回合結束時失去其最大HP的1/4（向下取整）。目標使用接棒後，接替的寶可夢繼續受影響。目標已受此影響或處於替身狀態時失敗。", // NEEDS QC
 		},
 
 		start: "  {SOURCE}削減了自己的體力，並詛咒了{POKEMON}！",
@@ -1396,28 +1386,28 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	cut: {
 		name: "居合斬",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	darkestlariat: {
 		name: "ＤＤ金勾臂",
 		// Official flavor text: "旋轉雙臂並打向對手。 可不顧對手的能力變化 給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無視目標的能力等級變化（包括回避率）進行攻擊。", // NEEDS QC
+		shortDesc: "無視目標的能力等級變化。", // NEEDS QC
 	},
 	darkpulse: {
 		name: "惡之波動",
 		// Official flavor text: "從身體散發出 充滿惡意的恐怖氣場。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有20%的機率使目標畏縮。", // NEEDS QC
 	},
 	darkvoid: {
 		name: "暗黑洞",
 		// Official flavor text: "將對手強制拉進黑暗的世界， 讓對手陷入睡眠狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入睡眠狀態。（考慮變身後的）當前樣子不是達克萊伊時無法使用。", // NEEDS QC
+		shortDesc: "達克萊伊專用。使對手陷入睡眠。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入睡眠狀態。", // NEEDS QC
+			shortDesc: "使對手陷入睡眠狀態。", // NEEDS QC
 		},
 
 		fail: "但是，{POKEMON}無法使用！",
@@ -1426,60 +1416,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dazzlinggleam: {
 		name: "魔法閃耀",
 		// Official flavor text: "發出強烈的閃光， 給予對手傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	decorate: {
 		name: "裝飾",
 		// Official flavor text: "透過裝飾， 大幅提高對手的 攻擊和特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊和特攻各提高2級。", // NEEDS QC
+		shortDesc: "目標的攻擊、特攻提高2級。", // NEEDS QC
 	},
 	defendorder: {
 		name: "防禦指令",
 		// Official flavor text: "呼喚手下，覆蓋住自己的身體。 可提高自己的防禦和特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各提高1級。", // NEEDS QC
+		shortDesc: "自身的防禦、特防提高1級。", // NEEDS QC
 	},
 	defensecurl: {
 		name: "變圓",
 		// Official flavor text: "將身體蜷縮成圓形， 提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高1級。在場期間，使用者的冰球和滾動威力變為2倍（此效果不可疊加）。", // NEEDS QC
+		shortDesc: "自身的防禦提高1級。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的防禦提高1級。在場期間，使用者的滾動威力變為2倍（不可疊加）。此效果可通過接棒傳遞。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的防禦提高1級。", // NEEDS QC
 		},
 	},
 	defog: {
 		name: "清除濃霧",
 		// Official flavor text: "用強風吹開對手的 反射壁或光牆等。 也會降低對手的閃避率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的回避率降低1級。攻擊成功後，無論回避率是否下降，目標方場上的反射壁、光牆、極光幕、神祕守護、白霧、撒菱、毒菱、隱形岩、黏黏網效果和己方場上的撒菱、毒菱、隱形岩、黏黏網效果消失。可以無視替身，但替身仍會擋下回避率的降低。攻擊成功且存在場地時，場地也會被消除。", // NEEDS QC
+		shortDesc: "回避-1。消除雙方陷阱和場地。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使目標的閃避率降低1級。此招式成功後，無論閃避率是否降低，都消除目標方場上的反射壁、光牆、極光幕、神秘守護、白霧、撒菱、毒菱、隱形岩、黏黏網效果以及己方場上的撒菱、毒菱、隱形岩、黏黏網效果。無視目標的替身，但替身仍會擋下閃避率的降低。", // NEEDS QC
+			shortDesc: "回避率-1。清除雙方場上的陷阱。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的閃避率降低1級。此招式成功後，無論閃避率是否降低，都消除目標方場上的反射壁、光牆、神秘守護、白霧、撒菱、毒菱、隱形岩、黏黏網效果以及己方場上的撒菱、毒菱、隱形岩、黏黏網效果。無視目標的替身，但替身仍會擋下閃避率的降低。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使目標的閃避率降低1級。此招式成功後，無論閃避率是否降低，都消除目標方場上的反射壁、光牆、神秘守護、白霧、撒菱、毒菱、隱形岩效果。無視目標的替身，但替身仍會擋下閃避率的降低。", // NEEDS QC
+			shortDesc: "回避率-1。清除對方的陷阱和光牆。", // NEEDS QC
 		},
 	},
 	destinybond: {
 		name: "同命",
 		// Official flavor text: "使出招式後，當受到對手攻擊， 陷入瀕死時，對手也會一同陷入瀕死。 連續使用時會失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到使用者下次行動為止，若使用者因對手的攻擊而瀕死，該對手也一同瀕死。但破滅之願、預知未來造成的傷害不會觸發。（除通過特性舞者使出的招式外）最後使用的招式是此招式且成功時失敗。", // NEEDS QC
+		shortDesc: "被打倒時，攻擊方一同瀕死。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到使用者下次行動為止，因對手的攻擊而瀕死時，該對手也一同瀕死。但破滅之願、預知未來不會觸發此效果。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到使用者下次行動為止，因對手的攻擊而瀕死時，該對手也一同瀕死。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}想和對手同歸於盡！",
@@ -1488,68 +1478,68 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	detect: {
 		name: "看穿",
 		// Official flavor text: "完全防住對手的所有攻擊。 連續使用時容易失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "本回合防住指向自己的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍。失敗時，或最後使用的招式不是看穿、挺住、守住、快速防守、廣域防守時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍，最大為8。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為X/65536。X從65535開始，每次成功使用後減半（向下取整）。連續成功4次後X降為118，之後每次成功都會變為0～65535之間近乎隨機的值。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為65535。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住對手的招式。此招式的成功率為X/255。X從255開始，每次成功使用後減半（向下取整）。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為255。使用者處於替身狀態時，或本回合最後行動時失敗。", // NEEDS QC
 		},
 	},
 	devastatingdrake: {
 		name: "究極巨龍震天地",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	diamondstorm: {
 		name: "鑽石風暴",
 		// Official flavor text: "吹起鑽石風暴給予對手傷害。 有時會大幅提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使使用者的防禦提高2級。", // NEEDS QC
+		shortDesc: "有50%的機率使自身防禦提高2級。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "每次攻擊都有50%的機率使使用者的防禦提高1級。", // NEEDS QC
+			shortDesc: "每次攻擊有50%機率使防禦+1。", // NEEDS QC
 		},
 	},
 	dig: {
 		name: "挖洞",
 		// Official flavor text: "使用後的第１回合潛入地底， 並於第２回合攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合鑽入地下，第2回合攻擊。鑽入地下期間，只會被地震和震級擊中，且受到的傷害變為2倍。此外不受天氣影響。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合鑽入地下，第2回合攻擊。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合鑽入地下，第2回合攻擊。鑽入地下期間，只會被地震和震級擊中，且這兩個招式的威力變為2倍，同時不受天氣影響。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合鑽入地下，第2回合攻擊。鑽入地下期間，只會被地震和震級擊中，且這兩個招式的威力變為2倍，同時不受天氣影響。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合鑽入地下，第2回合攻擊。鑽入地下期間，只會被地震、地裂、震級擊中，不受天氣影響，地震和震級的威力變為2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合鑽入地下，第2回合攻擊。鑽入地下期間，只會被忍耐、高速星星、變身擊中。第2回合因麻痺而無法行動時，在交換或成功使出此招式或飛翔的第2回合之前，將持續回避攻擊。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}鑽進了地下！",
 	},
 	direclaw: {
 		name: "剋命爪",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標陷入睡眠、中毒或麻痺狀態之一。", // NEEDS QC
+		shortDesc: "50%機率使目標睡眠、中毒或麻痺。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -1558,29 +1548,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disable: {
 		name: "定身法",
 		// Official flavor text: "阻止對手出招， 最近一次使用的招式 在４回合內無法使用。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4回合內，使目標無法使用其最後使用的招式。目標已有招式受此效果影響時、目標還未使用過招式時、目標已不會該招式時、該招式是極巨招式或超極巨招式時失敗。", // NEEDS QC
+		shortDesc: "4回合內封印目標最後使用的招式。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4回合內，使目標最後使用的招式無法使用。目標的招式已受此效果時、目標還未使用過招式時、目標已不會該招式時、該招式是Z招式時失敗。效果期間仍可以選擇並使出Z力量強化的招式。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4回合內，使目標最後使用的招式無法使用。目標的招式已受此效果時、目標還未使用過招式時、目標已不會該招式時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "4～7回合內，使目標最後使用的招式無法使用。目標的招式已受此效果時、目標還未使用過招式時、目標已不會該招式時、該招式PP為0時失敗。", // NEEDS QC
+			shortDesc: "4～7回合內封印目標最後的招式。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內，使目標最後使用的招式無法使用。目標的招式已受此效果時、目標還未使用過招式時、目標已不會該招式時、該招式PP為0時失敗。", // NEEDS QC
+			shortDesc: "2～5回合內封印目標最後的招式。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "1～7回合內，使目標最後使用的招式無法使用。目標的招式已受此效果時、目標還未使用過招式時、目標已不會該招式時、該招式PP為0時失敗。", // NEEDS QC
+			shortDesc: "1～7回合內封印目標最後的招式。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "0～7回合內，隨機使目標所會的、剩餘PP至少為1的招式之一無法使用。目標的招式已受此效果時，或目標沒有剩餘PP的招式時失敗。任意寶可夢使用黑霧後，效果結束。無論此招式是否成功，對於對手的憤怒都視為受到了攻擊。", // NEEDS QC
+			shortDesc: "0～7回合內封印目標的一個招式。", // NEEDS QC
 		},
 
 		start: "  封住了{POKEMON}的{MOVE}！",
@@ -1590,25 +1580,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	disarmingvoice: {
 		name: "魅惑之聲",
 		// Official flavor text: "發出迷人的叫聲， 給予對手精神上的傷害。 攻擊必定會命中。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定命中。", // NEEDS QC
+		shortDesc: "必定命中。攻擊所有對手。", // NEEDS QC
 	},
 	discharge: {
 		name: "放電",
 		// Official flavor text: "用耀眼的電流 攻擊自己周圍所有的寶可夢。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使周圍陷入麻痺。", // NEEDS QC
 	},
 	dive: {
 		name: "潛水",
 		// Official flavor text: "使用後的第１回合潛入水中， 並於第２回合浮上來進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合潛入水中，第2回合攻擊。潛入水中期間，只會被衝浪和潮旋擊中，且受到的傷害變為2倍。此外不受天氣影響。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合潛入水中，第2回合攻擊。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合潛入水中，第2回合攻擊。潛入水中期間，只會被衝浪和潮旋擊中，且這兩個招式的威力變為2倍，同時不受天氣影響。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合潛入水中，第2回合攻擊。潛入水中期間，只會被衝浪和潮旋擊中，且這兩個招式的威力變為2倍，同時不受天氣影響。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}潛入了水中！",
@@ -1616,25 +1606,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	dizzypunch: {
 		name: "迷昏拳",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有20%的機率使目標混亂。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無追加效果。", // NEEDS QC
+			shortDesc: "無追加效果。", // NEEDS QC
 		},
 	},
 	doodle: {
 		name: "描繪",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者和隊友的特性變為與目標相同的特性。使用者或隊友的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶變形、達摩模式、全能變身時，或已與目標相同時，其特性不變。使用者和隊友的特性都已與目標相同時，或目標的特性為人馬一體、牽絆變身、絕對睡眠、發號施令、畫皮、面影輝映、花之禮、陰晴不定、飽了又餓、結凍頭、幻覺、變身者、多屬性、化學變化氣體、毒傀儡、群聚變形、化學之力、古代活性、夸克充能、接球手、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶甲殼、太晶變形、歸零化境、複製、神奇守護、達摩模式、全能變身時失敗。", // NEEDS QC
+		shortDesc: "自己和隊友的特性變為與目標相同。", // NEEDS QC
 	},
 	doomdesire: {
 		name: "破滅之願",
 		// Official flavor text: "使用招式的２回合後， 向對手發射無數道光束 進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用2回合後造成傷害。在那一回合結束時計算傷害，並對使用此招式時目標所在位置的寶可夢造成傷害。此時使用者不在場時，以不含攜帶道具和特性強化的使用者原本的特攻、屬性、等級計算傷害。此招式或預知未來已預定在目標位置發動時失敗。", // NEEDS QC
+		shortDesc: "使用2回合後發動攻擊。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用2回合後造成不會擊中要害的無屬性傷害。傷害在使用時針對目標計算，並在最後回合結束時給予處於目標原位置的寶可夢。該位置已有此招式或預知未來發動時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}將破滅之願託付給了未來！",
@@ -1643,321 +1633,321 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleedge: {
 		name: "捨身衝撞",
 		// Official flavor text: "捨身衝撞對手進行攻擊。 自己也會受到不小的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害33%（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到33%的反作用力傷害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/3（向下取整，最少1）的反作用力傷害。", // NEEDS QC
+			shortDesc: "受到1/3的反作用力傷害。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/4（向下取整，最少1）的反作用力傷害。此招式命中替身時，反作用力傷害總是為1。", // NEEDS QC
+			shortDesc: "受到1/4的反作用力傷害。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/4（向下取整，最少1）的反作用力傷害。此招式打破目標的替身時，使用者不會受到反作用力傷害。", // NEEDS QC
 		},
 	},
 	doublehit: {
 		name: "二連擊",
 		// Official flavor text: "用尾巴等 向對手進行攻擊。 連續２次給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "1回合內攻擊2次。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 	},
 	doubleironbash: {
 		name: "鋼拳雙擊",
 		// Official flavor text: "以胸口的螺帽為軸心旋轉， 連續２次揮動手臂痛擊對手。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。每次攻擊有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "攻擊2次。30%機率使目標畏縮。", // NEEDS QC
 	},
 	doublekick: {
 		name: "二連踢",
 		// Official flavor text: "用２隻腳踢飛對手進行攻擊。 連續２次給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "1回合內攻擊2次。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次。傷害只在第1次攻擊時計算1次，並套用於兩次攻擊。若第1次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	doubleshock: {
 		name: "電光雙擊",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者不是電屬性時失敗。攻擊成功後，未太晶化時，使用者在場期間失去電屬性（變為無屬性）。", // NEEDS QC
+		shortDesc: "限電屬性使用。使用後失去電屬性。", // NEEDS QC
 
 		typeChange: "  {POKEMON}用盡了電力！",
 	},
 	doubleslap: {
 		name: "連環巴掌",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。傷害只在第一次攻擊時計算1次，並套用於每次攻擊。若中途某次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	doubleteam: {
 		name: "影子分身",
 		// Official flavor text: "利用快速移動 製造出分身擾亂對手， 提高自己的閃避率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的回避率提高1級。", // NEEDS QC
+		shortDesc: "自身的回避率提高1級。", // NEEDS QC
 	},
 	dracometeor: {
 		name: "流星群",
 		// Official flavor text: "讓隕石從空中落下以攻擊對手。 使用後因為反作用力， 自己的特攻會大幅降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻降低2級。", // NEEDS QC
+		shortDesc: "使自身的特攻降低2級。", // NEEDS QC
 	},
 	dragonascent: {
 		name: "畫龍點睛",
 		// Official flavor text: "從天空中急速下降攻擊對手。 自己的防禦和特防會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各降低1級。", // NEEDS QC
+		shortDesc: "使自身的防禦、特防降低1級。", // NEEDS QC
 
 		megaNoItem: "  {TRAINER}衷心的祈願傳遞到了{POKEMON}那裡！",
 	},
 	dragonbreath: {
 		name: "龍息",
 		// Official flavor text: "將強烈的氣息 吹向對手進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標麻痺。", // NEEDS QC
 	},
 	dragoncheer: {
 		name: "龍聲鼓舞",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使作為對象的隊友的擊中要害等級提高1級（對象為龍屬性時提高2級）。使用者沒有相鄰的隊友時，或對象已有此效果或聚氣的效果時失敗。可以用接棒繼承此效果。", // NEEDS QC
+		shortDesc: "隊友擊要等級+1（龍屬性則+2）。", // NEEDS QC
 
 		start: "#focusenergy",
 	},
 	dragonclaw: {
 		name: "龍爪",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	dragondance: {
 		name: "龍之舞",
 		// Official flavor text: "激烈地跳起神秘又強而有力的舞蹈。 提高自己的攻擊和速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊和速度各提高1級。", // NEEDS QC
+		shortDesc: "自身的攻擊、速度提高1級。", // NEEDS QC
 	},
 	dragondarts: {
 		name: "龍箭",
 		// Official flavor text: "讓多龍梅西亞進行２次攻擊。 當對手場上有２隻寶可夢時， 則向牠們各進行１次攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。雙打對戰中，對目標及其隊友各攻擊1次。若對其中一隻的攻擊會因屬性免疫、守護類招式、處於場外、特性或命中而無效，則改為對另一隻攻擊2次。此招式的對象被變更時，對該對象攻擊2次。", // NEEDS QC
+		shortDesc: "攻擊2次。雙打時分別攻擊兩只對手。", // NEEDS QC
 	},
 	dragonenergy: {
 		name: "巨龍威能",
 		// Official flavor text: "將生命力化為力量攻擊對手。 自己的ＨＰ越少，招式的威力越小。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（使用者的剩餘HP×150÷使用者的最大HP）（向下取整，最低為1）。", // NEEDS QC
+		shortDesc: "自身HP越少威力越低。攻擊所有對手。", // NEEDS QC
 	},
 	dragonhammer: {
 		name: "龍錘",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	dragonpulse: {
 		name: "龍之波動",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	dragonrage: {
 		name: "龍之怒",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "造成40點固定傷害。", // NEEDS QC
 	},
 	dragonrush: {
 		name: "龍之俯衝",
 		// Official flavor text: "釋放出駭人的殺氣， 威嚇並撞擊對手。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標畏縮。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "有20%的機率使目標畏縮。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有20%的機率使目標畏縮。", // NEEDS QC
 		},
 	},
 	dragontail: {
 		name: "龍尾",
 		// Official flavor text: "彈飛對手， 強制讓後備寶可夢上場。 對手為野生寶可夢時，戰鬥將直接結束。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者和目標都未瀕死時，強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標使用過扎根時、特性為吸盤時、此招式命中替身時，此效果失敗。", // NEEDS QC
+		shortDesc: "強制目標與隨機同伴交換。", // NEEDS QC
 	},
 	drainingkiss: {
 		name: "吸取之吻",
 		// Official flavor text: "親吻對手來吸取對手的ＨＰ。 可以回復給予對手 傷害的一半以上的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的3/4（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的3/4。", // NEEDS QC
 	},
 	drainpunch: {
 		name: "吸取拳",
 		// Official flavor text: "從拳頭吸取對手的力量。 可以回復給予對手 傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。攜帶大根莖時，回復量變為1.3倍（向下取整）。", // NEEDS QC
 		},
 	},
 	dreameater: {
 		name: "食夢",
 		// Official flavor text: "吃掉熟睡中對手的夢 進行攻擊。可以回復給予對手 傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "只對睡眠狀態的目標有效。回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "僅對睡眠目標有效。回復傷害的一半。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標處於睡眠狀態且沒有替身時才有效果。回復給目標造成的傷害的1/2（向下取整，最少1）的HP。攜帶大根莖時，回復量變為1.3倍（向下取整）。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標處於睡眠狀態且沒有替身時才有效果。回復給目標造成的傷害的1/2（向下取整，最少1）的HP。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標處於睡眠狀態時才有效果。回復給目標造成的傷害的1/2（向下取整，最少1）的HP。此招式打破目標的替身時，不會回復HP。", // NEEDS QC
 		},
 	},
 	drillpeck: {
 		name: "啄鑽",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	drillrun: {
 		name: "直衝鑽",
 		// Official flavor text: "像鑽頭一樣旋轉身體， 猛烈地撞擊對手。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	drumbeating: {
 		name: "鼓擊",
 		// Official flavor text: "用打鼓來控制 鼓的根部進行攻擊， 進而降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
 	},
 	dualchop: {
 		name: "二連劈",
 		// Official flavor text: "用身體的堅硬部分攻擊對手。 連續２次給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "1回合內攻擊2次。", // NEEDS QC
 	},
 	dualwingbeat: {
 		name: "雙翼",
 		// Official flavor text: "用翅膀撞向對手進行攻擊。 連續２次給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "1回合內攻擊2次。", // NEEDS QC
 	},
 	dynamaxcannon: {
 		name: "極巨炮",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "目標處於極巨化狀態時傷害變為2倍。", // NEEDS QC
 		},
 	},
 	dynamicpunch: {
 		name: "爆裂拳",
 		// Official flavor text: "使出渾身力量出拳進行攻擊。 必定會使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有100%的機率使目標混亂。", // NEEDS QC
 	},
 	earthpower: {
 		name: "大地之力",
 		// Official flavor text: "向對手腳下 釋放出大地之力。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	earthquake: {
 		name: "地震",
 		// Official flavor text: "用地震的衝擊， 攻擊自己周圍所有的寶可夢。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對用挖洞鑽入地下的目標，傷害變為2倍。", // NEEDS QC
+		shortDesc: "攻擊周圍全體。對鑽地目標傷害加倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標正在使用挖洞時，威力變為2倍。", // NEEDS QC
+			shortDesc: "命中周圍全體。對挖洞威力2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無追加效果。", // NEEDS QC
+			shortDesc: "無追加效果。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "對挖洞中的目標威力2倍。", // NEEDS QC
 		},
 	},
 	echoedvoice: {
 		name: "回聲",
 		// Official flavor text: "用回聲攻擊對手。 每回合有寶可夢持續使用回聲時， 招式的威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "任意寶可夢連續在每回合使用此招式時，威力隨經過的回合數翻倍（最多5倍）。", // NEEDS QC
+		shortDesc: "連續使用時威力遞增。", // NEEDS QC
 	},
 	eerieimpulse: {
 		name: "怪異電波",
 		// Official flavor text: "從身體發出怪異電波 影響對手， 大幅降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特攻降低2級。", // NEEDS QC
+		shortDesc: "使目標的特攻降低2級。", // NEEDS QC
 	},
 	eeriespell: {
 		name: "詭異咒語",
 		// Official flavor text: "用強大的精神力量攻擊。 讓對手最近一次使用的招式 減少３ＰＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，使目標最後使用的招式減少3點PP。", // NEEDS QC
+		shortDesc: "使目標最後使用的招式減少3點PP。", // NEEDS QC
 
 		activate: "#spite",
 	},
 	eggbomb: {
 		name: "炸蛋",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	electricterrain: {
 		name: "電氣場地",
 		// Official flavor text: "在５回合內將腳下變成電氣場地。 地面上的寶可夢將不會陷入睡眠狀態。 電屬性招式的威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場地變為電氣場地。期間，地面上的寶可夢的電屬性攻擊招式威力變為1.3倍，地面上的寶可夢不會陷入睡眠狀態（已經睡著的不會醒來）。地面上的寶可夢不受哈欠影響，也不會因其效果入睡。保護色會變為電屬性，自然之力會變為十萬伏特，祕密之力會有30%的機率造成麻痺。已經是電氣場地時失敗。", // NEEDS QC
+		shortDesc: "5回合內變為電氣場地。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內變為電氣場地。效果期間，地面上的寶可夢使出的電屬性攻擊招式威力變為1.5倍，地面上的寶可夢不會陷入睡眠狀態；已經睡著的寶可夢不會醒來。地面上的寶可夢不會受到哈欠的影響，也不會因其效果入睡。使用保護色會變為電屬性，自然之力會變為十萬伏特，秘密之力有30%的機率造成麻痺。已經是電氣場地時失敗。", // NEEDS QC
 		},
 	},
 	electrify: {
 		name: "輸電",
 		// Official flavor text: "如果在對手使用招式前輸電， 該回合對手的招式會變成電屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，目標的招式變為電屬性。在改變招式屬性的效果中，此效果最後適用。目標本回合已經行動過時失敗。", // NEEDS QC
+		shortDesc: "本回合使目標的招式變為電屬性。", // NEEDS QC
 
 		start: "  因為輸電，{POKEMON}的招式變成了電屬性！",
 	},
 	electroball: {
 		name: "電球",
 		// Official flavor text: "用電球攻擊對手。 速度比對手快越多， 威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由（使用者的當前速度÷目標的當前速度）（向下取整）決定。結果為4以上時威力150，3時120，2時80，1時60，不足1時40。目標的當前速度為0時，威力為40。", // NEEDS QC
+		shortDesc: "比目標越快威力越大。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力由（使用者的當前速度÷目標的當前速度）（向下取整）決定。結果為4以上時威力為150，為3時為120，為2時為80，為1時為60，小於1時為40。目標的當前速度為0時視為1。", // NEEDS QC
 		},
 	},
 	electrodrift: {
 		name: "閃電猛衝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標效果絕佳時，傷害變為1.3333倍。", // NEEDS QC
+		shortDesc: "效果絕佳時傷害變為1.3333倍。", // NEEDS QC
 	},
 	electroshot: {
 		name: "電光束",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合蓄力，第2回合攻擊。第1回合使使用者的特攻提高1級。攜帶強力香草時，或天氣為下雨或大雨時，1回合內完成攻擊。但攜帶萬能傘時，即使天氣為下雨或大雨也需要蓄力回合。", // NEEDS QC
+		shortDesc: "第1回合特攻+1，第2回合攻擊。雨天免蓄力。", // NEEDS QC
 
 		prepare: "{POKEMON}吸收了電力！",
 	},
 	electroweb: {
 		name: "電網",
 		// Official flavor text: "用電網捉住對手進行攻擊。 可降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "100%使對手的速度降低1級。", // NEEDS QC
 	},
 	embargo: {
 		name: "查封",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，目標的攜帶道具失去效果。引發形態變化的道具效果不受影響，但這類道具的其他效果會被無效化。效果期間，目標無法使用投擲和自然之恩。被投擲到目標身上的道具仍會生效。目標使用接棒後，接替的寶可夢也無法使用道具。", // NEEDS QC
+		shortDesc: "5回合內使目標的道具無效。", // NEEDS QC
 
 		start: "  {POKEMON}無法使用道具了！",
 		end: "  {POKEMON}變得可以使用道具了！",
@@ -1965,33 +1955,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ember: {
 		name: "火花",
 		// Official flavor text: "向對手發射 小火焰進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標灼傷。", // NEEDS QC
 	},
 	encore: {
 		name: "再來一次",
 		// Official flavor text: "要求對手再來一次， 讓對手連續３次 使出最近一次使用的招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3回合內，目標只能重複使用其最後使用的招式。該招式的PP耗盡後效果結束。目標已受此效果影響時、還未使用過招式時、該招式的PP為0時、該招式是借助、灼熱暴衝、格鬥暴衝、仿效、極巨炮、再來一次、魔法暴衝、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、劇毒暴衝、寫生、夢話、掙扎、變身、黑暗暴衝時失敗。", // NEEDS QC
+		shortDesc: "3回合內使目標重複最後使用的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "接下來3回合內，目標被迫重複使用最後使用的招式。該招式PP耗盡時效果結束。目標已受此效果時、還未使用過招式時、該招式PP為0時、目標處於極巨化狀態時、該招式是借助、仿效、極巨炮、再來一次、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、寫生、夢話、掙扎、變身時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "接下來3回合內，目標被迫重複使用最後使用的招式。該招式PP耗盡時效果結束。目標已受此效果時、還未使用過招式時、該招式PP為0時、該招式是借助、仿效、再來一次、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、寫生、夢話、掙扎、變身或Z招式時失敗。效果期間仍可以選擇並使出Z力量強化的招式。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3回合內，目標被迫重複使用最後使用的招式。該招式PP耗盡時效果結束。目標已受此效果時、還未使用過招式時、該招式PP為0時、該招式是再來一次、模仿、鸚鵡學舌、寫生、掙扎、變身時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "4～8回合內，目標被迫重複使用最後使用的招式。該招式PP耗盡時效果結束。目標已受此效果時、還未使用過招式時、該招式PP為0時、該招式是再來一次、模仿、鸚鵡學舌、寫生、掙扎、變身時失敗。", // NEEDS QC
+			shortDesc: "目標4～8回合內重複最後的招式。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3～6回合內，目標被迫重複使用最後使用的招式。該招式PP耗盡時效果結束。目標已受此效果時、還未使用過招式時、該招式PP為0時、該招式是再來一次、模仿、鸚鵡學舌、寫生、掙扎、變身時失敗。", // NEEDS QC
+			shortDesc: "目標3～6回合內重複最後的招式。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3～6回合內，目標被迫重複使用最後使用的招式。該招式PP耗盡時效果結束。目標已受此效果時、還未使用過招式時、該招式PP為0時、該招式是再來一次、揮指、模仿、鸚鵡學舌、寫生、夢話、掙扎、變身時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}接受了再來一次！",
@@ -2000,34 +1990,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	endeavor: {
 		name: "蠻幹",
 		// Official flavor text: "給予傷害， 使對手的ＨＰ變得 和自己的ＨＰ一樣。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的HP減少（目標的剩餘HP−使用者的剩餘HP）。目標的剩餘HP為使用者的剩餘HP以下時無效。", // NEEDS QC
+		shortDesc: "將目標的HP降至與自己相同。", // NEEDS QC
 	},
 	endure: {
 		name: "挺住",
 		// Official flavor text: "即使受到再強烈的攻擊， 也一定會剩下１ＨＰ。 連續使用時容易失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合受到其他寶可夢的攻擊時，必定保留至少1點HP。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "本回合必以至少1點HP撐過攻擊。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合即使受到其他寶可夢的攻擊，HP也必定剩下1。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合即使受到其他寶可夢的攻擊，HP也必定剩下1。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合即使受到其他寶可夢的攻擊，HP也必定剩下1。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合即使受到其他寶可夢的攻擊，HP也必定剩下1。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍。失敗時，或最後使用的招式不是看穿、挺住、守住、快速防守、廣域防守時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合即使受到其他寶可夢的攻擊，HP也必定剩下1。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍，最大為8。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合即使受到其他寶可夢的攻擊，HP也必定剩下1。此招式的成功率為X/65536。X從65535開始，每次成功使用後減半（向下取整）。連續成功4次後X降為118，之後每次成功都會變為0～65535之間近乎隨機的值。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為65535。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合即使受到對手的攻擊，HP也必定剩下1。此招式的成功率為X/255。X從255開始，每次成功使用後減半（向下取整）。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為255。使用者處於替身狀態時，或本回合最後行動時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}擺出了挺住攻擊的架勢！",
@@ -2036,122 +2026,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	energyball: {
 		name: "能量球",
 		// Official flavor text: "發射從大自然匯聚而來的生命力量。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	entrainment: {
 		name: "找夥伴",
 		// Official flavor text: "用神奇的節奏跳舞。 讓對手模仿自己的動作， 變成和自己一樣的特性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特性變為與使用者相同的特性。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶變形、達摩模式、全能變身、懶惰時或與使用者相同時，或使用者的特性為人馬一體、牽絆變身、絕對睡眠、發號施令、畫皮、面影輝映、花之禮、陰晴不定、飽了又餓、結凍頭、幻覺、變身者、多屬性、化學變化氣體、毒傀儡、群聚變形、化學之力、古代活性、夸克充能、接球手、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶甲殼、太晶變形、歸零化境、複製、神奇守護、達摩模式、全能變身時失敗。", // NEEDS QC
+		shortDesc: "使目標的特性變為與自己相同。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標的特性變得和使用者相同。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、懶惰、達摩模式或與使用者相同時，或使用者的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、花之禮、陰晴不定、一口飛彈、飽了又餓、結凍頭、幻覺、變身者、多屬性、化學變化氣體、群聚變形、化學之力、接球手、ＡＲ系統、魚群、界限盾殼、戰鬥切換、複製、達摩模式時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標的特性變得和使用者相同。目標的特性為牽絆變身、絕對睡眠、畫皮、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、懶惰、達摩模式或與使用者相同時，或使用者的特性為牽絆變身、絕對睡眠、畫皮、花之禮、陰晴不定、幻覺、變身者、多屬性、群聚變形、化學之力、接球手、ＡＲ系統、魚群、界限盾殼、戰鬥切換、複製、達摩模式時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標的特性變得和使用者相同。目標的特性為多屬性、戰鬥切換、懶惰或與使用者相同時，或使用者的特性為花之禮、陰晴不定、幻覺、變身者、多屬性、戰鬥切換、複製、達摩模式時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標的特性變得和使用者相同。目標的特性為多屬性、懶惰或與使用者相同時，或使用者的特性為花之禮、陰晴不定、幻覺、變身者、多屬性、複製、達摩模式時失敗。", // NEEDS QC
 		},
 	},
 	eruption: {
 		name: "噴火",
 		// Official flavor text: "爆發怒火攻擊對手。 自己的ＨＰ越少， 招式的威力越小。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（使用者的剩餘HP×150÷使用者的最大HP）（向下取整，最低為1）。", // NEEDS QC
+		shortDesc: "自身HP越少威力越低。攻擊所有對手。", // NEEDS QC
 	},
 	esperwing: {
 		name: "氣場之翼",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的速度提高1級。容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "100%速度+1。容易擊中要害。", // NEEDS QC
 	},
 	eternabeam: {
 		name: "無極光束",
 		// Official flavor text: "無極汰那變回 本來樣子時的最強攻擊。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	expandingforce: {
 		name: "廣域戰力",
 		// Official flavor text: "用精神力量攻擊對手。 在精神場地時，威力會提高， 能給予所有對手傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場地為精神場地且使用者在地面上時，攻擊所有對手，且威力變為1.5倍。", // NEEDS QC
+		shortDesc: "精神場地時威力1.5倍且攻擊全體。", // NEEDS QC
 	},
 	explosion: {
 		name: "大爆炸",
 		// Official flavor text: "引起大爆炸， 攻擊自己周圍所有的寶可夢。 使用後自己會陷入瀕死。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用後，使用者瀕死（因沒有對象而失敗時也一樣）。場上有特性為濕氣的寶可夢時無法使用。", // NEEDS QC
+		shortDesc: "攻擊周圍全體，自己瀕死。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使出招式後使用者瀕死。沒有目標時不會瀕死。傷害計算時，目標的防禦減半計算。特性為濕氣的寶可夢在場時，此招式無法使出。", // NEEDS QC
+			shortDesc: "計算時目標防禦減半。使用者瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出招式後使用者瀕死。傷害計算時，目標的防禦減半計算。特性為濕氣的寶可夢在場時，此招式無法使出。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出招式後使用者瀕死。傷害計算時，目標的防禦減半計算。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出招式後使用者瀕死。此招式打破目標的替身時不會瀕死。傷害計算時，目標的防禦減半計算。", // NEEDS QC
 		},
 	},
 	extrasensory: {
 		name: "神通力",
 		// Official flavor text: "發送看不見的 神奇力量進行攻擊。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有10%的機率使目標畏縮。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標畏縮。目標出場後使用過變小時，傷害變為2倍。", // NEEDS QC
 		},
 	},
 	extremeevoboost: {
 		name: "九彩昇華齊聚頂",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊、防禦、特攻、特防、速度各提高2級。", // NEEDS QC
+		shortDesc: "自身全部能力提高2級。", // NEEDS QC
 	},
 	extremespeed: {
 		name: "神速",
 		// Official flavor text: "以迅雷不及掩耳之勢 猛撞向對手進行攻擊。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "優先度很高的先制招式（+2）。", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 		},
 	},
 	facade: {
 		name: "硬撐",
 		// Official flavor text: "當自己陷入中毒、麻痺、灼傷等 狀態時，向對手使用此招式， 威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者處於灼傷、麻痺或中毒狀態時，威力變為2倍。灼傷使物理傷害減半的效果也會被無視。", // NEEDS QC
+		shortDesc: "有異常狀態時威力加倍。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者處於灼傷、麻痺或中毒狀態時，威力變為2倍。", // NEEDS QC
 		},
 	},
 	fairylock: {
 		name: "妖精之鎖",
 		// Official flavor text: "封鎖對戰場地， 下一回合所有的 寶可夢都無法逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "下一回合，場上所有寶可夢都無法交換。但攜帶美麗空殼的寶可夢，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的寶可夢可以交換。已有此效果時失敗。", // NEEDS QC
+		shortDesc: "下一回合所有寶可夢無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "下回合，場上所有寶可夢都無法交換。但攜帶美麗空殼的寶可夢，或使用接棒、拋下狠話、急速折返、伏特替換的寶可夢可以交換。效果已發動時失敗。", // NEEDS QC
 		},
 
 		activate: "  下回合無法逃走！",
 	},
 	fairywind: {
 		name: "妖精之風",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	fakeout: {
 		name: "擊掌奇襲",
 		// Official flavor text: "利用先制攻擊使對手畏縮。 要在上場後立即使用才會成功。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標畏縮。不是使用者出場後的第1回合時失敗。", // NEEDS QC
+		shortDesc: "先制且100%畏縮。僅限出場首回合。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2159,116 +2149,116 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	faketears: {
 		name: "假哭",
 		// Official flavor text: "裝哭掉眼淚。 讓對手不知所措， 大幅降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特防降低2級。", // NEEDS QC
+		shortDesc: "使目標的特防降低2級。", // NEEDS QC
 	},
 	falsesurrender: {
 		name: "假跪真撞",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	falseswipe: {
 		name: "點到為止",
 		// Official flavor text: "手下留情地攻擊對手， 一定會讓對手剩下１ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定使目標保留至少1點HP。", // NEEDS QC
+		shortDesc: "必定使目標保留至少1點HP。", // NEEDS QC
 	},
 	featherdance: {
 		name: "羽毛舞",
 		// Official flavor text: "撒出羽毛， 纏住對手的身體。 大幅降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊降低2級。", // NEEDS QC
+		shortDesc: "使目標的攻擊降低2級。", // NEEDS QC
 	},
 	feint: {
 		name: "佯攻",
 		// Official flavor text: "能夠攻擊使用了 守住或看穿的對手。 並解除對手的防守效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，本回合打破目標的碉堡、看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊目標方。", // NEEDS QC
+		shortDesc: "突破守住等守護進行攻擊。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式成功後，本回合打破目標的看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式成功後，本回合打破目標的看穿或守住守護，其他寶可夢也可以正常攻擊目標。目標是對手且其一方受快速防守或廣域防守保護時，該守護本回合也被打破。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標沒有在使用看穿或守住時失敗。此招式成功後，本回合打破該守護，其他寶可夢也可以正常攻擊目標。", // NEEDS QC
+			shortDesc: "打破守護。目標未守住時失敗。", // NEEDS QC
 		},
 
 		activate: "  {TARGET}中了佯攻！",
 	},
 	feintattack: {
 		name: "出奇一擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	fellstinger: {
 		name: "致命針刺",
 		// Official flavor text: "使用此招式打倒對手時， 自己的攻擊會極大幅提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "用此招式使目標瀕死時，使用者的攻擊提高3級。", // NEEDS QC
+		shortDesc: "用此招打倒目標時攻擊提高3級。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "此招式使目標瀕死時，使用者的攻擊提高2級。", // NEEDS QC
+			shortDesc: "用此招式打倒目標時攻擊+2。", // NEEDS QC
 		},
 	},
 	ficklebeam: {
 		name: "隨機光",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "有30%的機率威力加倍。", // NEEDS QC
 
 		activate: "  {POKEMON}拿出全力了！",
 	},
 	fierydance: {
 		name: "火之舞",
 		// Official flavor text: "讓火焰圍繞全身後， 振翅攻擊對手。 有時會提高自己的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使使用者的特攻提高1級。", // NEEDS QC
+		shortDesc: "有50%的機率使自身的特攻提高1級。", // NEEDS QC
 	},
 	fierywrath: {
 		name: "怒火中燒",
 		// Official flavor text: "將憤怒化為火焰般的氣場進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有20%的機率使目標畏縮。", // NEEDS QC
 	},
 	filletaway: {
 		name: "甩肉",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "失去最大HP的1/2（向下取整），使使用者的攻擊、特攻、速度各提高2級。HP不足時，或攻擊、特攻、速度的能力等級都不會變化時失敗。", // NEEDS QC
+		shortDesc: "失去一半HP，攻擊、特攻、速度+2。", // NEEDS QC
 	},
 	finalgambit: {
 		name: "搏命",
 		// Official flavor text: "捨身攻擊對手。 雖然自己會陷入瀕死，但能夠給予對手 和自己現有ＨＰ相同的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成與使用者剩餘HP相同的傷害。攻擊成功後，使用者瀕死。", // NEEDS QC
+		shortDesc: "造成等同自身HP的傷害後瀕死。", // NEEDS QC
 	},
 	fireblast: {
 		name: "大字爆炎",
 		// Official flavor text: "用大字形狀的火焰燒盡對手。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標灼傷。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入灼傷狀態。", // NEEDS QC
+			shortDesc: "有30%的機率使目標灼傷。", // NEEDS QC
 		},
 	},
 	firefang: {
 		name: "火焰牙",
 		// Official flavor text: "用纏繞火焰的牙齒咬住對手。 有時會讓對手畏縮 或陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。有10%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "10%機率灼傷。10%機率畏縮。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標灼傷，有10%的機率使其畏縮。此招式無論屬性如何，都能命中特性為神奇守護的寶可夢。", // NEEDS QC
 		},
 	},
 	firelash: {
 		name: "火焰鞭",
 		// Official flavor text: "用燃燒的鞭子抽打對手。 受到攻擊的對手防禦會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	firepledge: {
 		name: "火之誓約",
 		// Official flavor text: "用火柱進行攻擊。 和草之誓約同時使用時，威力會提高， 周圍會變成火海。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "隊友在本回合選擇了草之誓約或水之誓約且尚未行動時，隊友緊接在使用者之後行動，使用者的招式不產生效果。與草之誓約組合時，隊友使出威力150的火之誓約，對手方場地在4回合內變為火海，火屬性以外的寶可夢在每回合結束時（包括最後一回合）受到最大HP的1/8（向下取整）的傷害。與水之誓約組合時，隊友使出威力150的水之誓約，己方場地在4回合內出現彩虹，招式追加效果的發動機率翻倍（可與特性天恩疊加，但使目標畏縮的效果發動機率只能翻倍1次）。作為組合招式使出時，無論使用者的屬性如何都獲得屬性一致加成。此招式不消耗使用者的火之寶石。", // NEEDS QC
+		shortDesc: "與草或水之誓約組合有追加效果。", // NEEDS QC
 
 		activate: "#waterpledge",
 		start: "  {TEAM}周圍被火海包圍了！",
@@ -2278,33 +2268,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firepunch: {
 		name: "火焰拳",
 		// Official flavor text: "用帶有火焰的拳頭 攻擊對手。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標灼傷。", // NEEDS QC
 	},
 	firespin: {
 		name: "火焰旋渦",
 		// Official flavor text: "將對手困在 熊熊燃燒的火焰旋渦中， 在４～５回合內進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（使用者攜帶緊綁束帶時為1/8，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合（使用者攜帶緊纏鉤爪時總是5回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+			shortDesc: "2～5回合內束縛目標並造成傷害。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但使用接棒的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內使出此招式。持續2～3回合的機率各為3/8，持續4～5回合的機率各為1/8。第1回合計算的傷害將用於之後的每回合。效果期間，使用者無法選擇招式，目標無法使出招式，但雙方都可以交換。使用者交換時，目標該回合仍無法使出招式。目標交換時，使用者自動再次使出此招式，此時PP為0的話會變為63。使用者或目標交換，或使用者無法行動時，效果結束。此招式即使對屬性相性無效的目標也能阻止其行動，但不會造成傷害。", // NEEDS QC
+			shortDesc: "2～5回合內目標無法行動。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被困在了火焰旋渦之中！",
@@ -2313,8 +2303,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	firstimpression: {
 		name: "迎頭一擊",
 		// Official flavor text: "招式的威力雖高， 但只有在出場戰鬥時， 立刻使出才能成功。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "不是使用者出場後的第1回合時失敗。", // NEEDS QC
+		shortDesc: "高優先度先制招式。僅限出場首回合。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
@@ -2322,44 +2312,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	fishiousrend: {
 		name: "鰓咬",
 		// Official flavor text: "用堅硬的鰓咬住對手。 若在對手之前進行攻擊， 招式的威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "先於目標行動時，威力變為2倍。", // NEEDS QC
+		shortDesc: "先於目標行動時威力加倍。", // NEEDS QC
 	},
 	fissure: {
 		name: "地裂",
 		// Official flavor text: "讓對手掉進地面的 裂縫中進行攻擊。 只要命中就會一擊瀕死。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成與目標最大HP相同的傷害。無視命中率和回避率的變化。此招式的命中率為（使用者的等級−目標的等級+30）%，目標的等級高於使用者時失敗。對特性為結實的寶可夢無效。", // NEEDS QC
+		shortDesc: "一擊必殺。目標等級更高時失敗。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "給目標造成65535點傷害。此招式以256為分母的命中率為（2×（使用者的等級−目標的等級）+76）與255中較小的一方，之後再套用命中率和閃避率的修正。目標等級更高時失敗。可以命中正在使用挖洞的目標。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "給目標造成65535點傷害。目標的速度高於使用者時失敗。", // NEEDS QC
+			shortDesc: "造成65535點傷害。目標更快時失敗。", // NEEDS QC
 		},
 	},
 	flail: {
 		name: "抓狂",
 		// Official flavor text: "抓狂般亂打進行攻擊。 自己的ＨＰ越少， 招式的威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由X=（使用者的剩餘HP×48÷使用者的最大HP）（向下取整）決定。X為33～48時威力20，17～32時40，10～16時80，5～9時100，2～4時150，0～1時200。", // NEEDS QC
+		shortDesc: "自身剩餘HP越少威力越大。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "將（使用者的當前HP×64÷使用者的最大HP）（向下取整）記為X，X為43～48時威力為20，22～42時為40，13～21時為80，6～12時為100，2～5時為150，0或1時為200。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力由X=（使用者的剩餘HP×48÷使用者的最大HP）（向下取整）決定。X為33～48時威力20，17～32時40，10～16時80，5～9時100，2～4時150，0～1時200。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "將（使用者的當前HP×48÷使用者的最大HP）（向下取整）記為X，X為33～48時威力為20，17～32時為40，10～16時為80，5～9時為100，2～4時為150，0或1時為200。此招式沒有傷害浮動，也不會擊中要害。", // NEEDS QC
 		},
 	},
 	flameburst: {
 		name: "烈焰濺射",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，目標相鄰的隊友也受到其最大HP的1/16（向下取整）的傷害。特性為魔法防守時不受傷害。", // NEEDS QC
+		shortDesc: "目標相鄰的寶可夢也受到傷害。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式成功後，目標相鄰的隊友只要特性不是魔法防守，就會失去最大HP的1/16（向下取整）。", // NEEDS QC
 		},
 
 		damage: "  火花也飛濺到了{POKEMON}的身上！",
@@ -2367,62 +2357,62 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flamecharge: {
 		name: "蓄能焰襲",
 		// Official flavor text: "讓火焰圍繞全身後攻擊對手。 同時蓄積力量來提高自己的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的速度提高1級。", // NEEDS QC
+		shortDesc: "有100%的機率使自身的速度提高1級。", // NEEDS QC
 	},
 	flamethrower: {
 		name: "噴射火焰",
 		// Official flavor text: "向對手發射 強烈火焰進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標灼傷。", // NEEDS QC
 	},
 	flamewheel: {
 		name: "火焰輪",
 		// Official flavor text: "用火焰圍繞身體， 猛撞對手進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "10%機率灼傷。解除自身的冰凍。", // NEEDS QC
 	},
 	flareblitz: {
 		name: "閃焰衝鋒",
 		// Official flavor text: "將火焰圍繞全身後猛撞對手。 自己也會受到不小的傷害。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。對目標造成了傷害時，使用者受到相當於所造成傷害33%（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "33%反作用力。10%灼傷。解自身冰凍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標灼傷。目標失去HP時，使用者受到目標所失去HP的1/3（向下取整，最少1）的反作用力傷害。", // NEEDS QC
+			shortDesc: "反作用力1/3。10%灼傷。解除冰凍。", // NEEDS QC
 		},
 	},
 	flash: {
 		name: "閃光",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "使目標的命中率降低1級。", // NEEDS QC
 	},
 	flashcannon: {
 		name: "加農光炮",
 		// Official flavor text: "將身體的光芒 聚集在一個點後釋放出去。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	flatter: {
 		name: "吹捧",
 		// Official flavor text: "吹捧對手，使其混亂。 同時還會提高對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特攻提高1級，並使其陷入混亂狀態。", // NEEDS QC
+		shortDesc: "使目標特攻提高1級並陷入混亂。", // NEEDS QC
 	},
 	fleurcannon: {
 		name: "花朵加農炮",
 		// Official flavor text: "放出強力光束後， 自己的特攻會大幅降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻降低2級。", // NEEDS QC
+		shortDesc: "使自身的特攻降低2級。", // NEEDS QC
 	},
 	fling: {
 		name: "投擲",
 		// Official flavor text: "快速投擲攜帶的道具進行攻擊。 招式威力和效果會隨著 道具不同而改變。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由使用者的攜帶道具決定。攜帶道具會失去，若道具有效果則對目標發動。沒有對象時，或目標用守護類招式防住時，攜帶道具也會失去。投擲的道具可以用回收利用或特性收穫取回。使用者沒有攜帶道具時、道具無法投擲時、使用者處於查封或魔法空間效果下時、使用者的特性為笨拙時失敗。", // NEEDS QC
+		shortDesc: "投擲攜帶道具。威力由道具決定。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力由使用者攜帶的道具決定。攜帶的道具會失去，若道具可以發動則對目標發動。目標通過守護回避此招式時，道具也會失去。擲出的道具可以用回收利用取回。使用者沒有攜帶道具時、道具無法擲出時、使用者處於查封效果下時失敗。", // NEEDS QC
 		},
 
 		removeItem: "  {POKEMON}投擲了{ITEM}！",
@@ -2430,53 +2420,53 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flipturn: {
 		name: "快速折返",
 		// Official flavor text: "攻擊後迅速返回， 和後備寶可夢進行替換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時，或目標用逃脫按鍵或因特性危險迴避、躍躍欲逃交換下場時不交換。", // NEEDS QC
+		shortDesc: "攻擊後與同伴交換。", // NEEDS QC
 
 		switchOut: "#uturn",
 	},
 	floatyfall: {
 		name: "飄飄墜落",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	floralhealing: {
 		name: "花療",
 		// Official flavor text: "回復對手最大ＨＰ的一半。 在青草場地時，效果會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復對象最大HP的1/2（四捨五入）。場地為青草場地時，改為回復最大HP的2/3（五捨六入）。", // NEEDS QC
+		shortDesc: "回復目標最大HP的1/2。", // NEEDS QC
 	},
 	flowershield: {
 		name: "鮮花防守",
 		// Official flavor text: "使用神奇的力量， 提高場上全體 草屬性寶可夢的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使場上所有草屬性寶可夢的防禦提高1級。場上沒有草屬性寶可夢時失敗。", // NEEDS QC
+		shortDesc: "場上所有草屬性寶可夢防禦提高1級。", // NEEDS QC
 	},
 	flowertrick: {
 		name: "千變萬花",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定擊中要害。但目標處於幸運咒語效果下，或特性為戰鬥盔甲、硬殼盔甲時不會擊中要害。必定命中。", // NEEDS QC
+		shortDesc: "必定擊中要害且必定命中。", // NEEDS QC
 	},
 	fly: {
 		name: "飛翔",
 		// Official flavor text: "使用後的第１回合飛上天空， 並於第２回合攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、暴風、衝天拳、擊落、千箭齊發、打雷、龍捲風擊中，其中起風和龍捲風的傷害變為2倍。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合飛上高空，第2回合攻擊。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、暴風、衝天拳、擊落、打雷、龍捲風擊中，其中起風和龍捲風的威力變為2倍。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、衝天拳、打雷、龍捲風擊中，其中起風和龍捲風的威力變為2倍。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、衝天拳、打雷、龍捲風擊中，其中起風和龍捲風的威力變為2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被起風、打雷、龍捲風、吹飛擊中，其中起風和龍捲風的威力變為2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合飛上高空，第2回合攻擊。飛在空中期間，只會被忍耐、高速星星、變身擊中。第2回合因麻痺而無法行動時，在交換或成功使出此招式或挖洞的第2回合之前，將持續回避攻擊。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}飛向了高空！",
@@ -2484,27 +2474,27 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flyingpress: {
 		name: "飛身重壓",
 		// Official flavor text: "從空中俯衝向對手進行攻擊。 此招式同時具有 格鬥屬性和飛行屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "與目標的屬性相性計算中，在此招式屬性的基礎上追加飛行屬性。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "相性計算追加飛行屬性。", // NEEDS QC
 	},
 	focusblast: {
 		name: "真氣彈",
 		// Official flavor text: "提高氣勢， 釋放全身所有力量。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	focusenergy: {
 		name: "聚氣",
 		// Official flavor text: "深呼吸後集中精神。 讓自己的攻擊 變得容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的擊中要害等級提高2級。已有此效果時失敗。可以用接棒繼承此效果。", // NEEDS QC
+		shortDesc: "自身擊中要害等級提高2級。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的擊中要害等級提高1級。已有此效果時失敗。此效果可通過接棒傳遞。", // NEEDS QC
+			shortDesc: "使用者的擊中要害等級+1。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "在場期間，使用者的擊中要害機率變為1/4。已有此效果時失敗。任意寶可夢使用黑霧後，效果結束。", // NEEDS QC
+			shortDesc: "使用者的擊中要害機率變為1/4。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}現在幹勁十足！",
@@ -2514,10 +2504,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	focuspunch: {
 		name: "真氣拳",
 		// Official flavor text: "集中精神後出拳。 若出拳前受到攻擊， 則會失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合在使出此招式前受到造成傷害的攻擊時，會失去專注而失敗。", // NEEDS QC
+		shortDesc: "出招前受到傷害則失敗。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在使出此招式前，本回合受到攻擊招式的傷害時，會失去集中而什麼都做不了，但仍會消耗PP。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}聚精會神了起來！",
@@ -2526,16 +2516,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	followme: {
 		name: "看我嘛",
 		// Official flavor text: "吸引對手的注意， 將對手的攻擊 全部轉移到自己身上。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到回合結束為止，對手方使出的單體攻擊招式全部轉向使用者。這些招式在被魔法反射或特性魔法鏡反彈、被特性避雷針或引水引開之前，就會轉向使用者。不是雙打對戰或皇家對戰時失敗。使用者處於自由落體效果下時，此效果被無視。", // NEEDS QC
+		shortDesc: "本回合吸引對手的招式指向自己。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到回合結束為止，對手方的單體攻擊若在範圍內，都會轉向使用者。此轉向在被魔法反射或特性魔法鏡反彈、被特性避雷針或引水引來之前適用。不是雙打或三打對戰時失敗。使用者處於自由落體效果下時，此效果被無視。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到回合結束為止，對手方的單體攻擊都會轉向使用者。此轉向在被魔法反射反彈、被特性避雷針或引水引來之前適用。即使使用者離場，效果仍持續。不是雙打對戰時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到回合結束為止，對手方的單體攻擊都會轉向使用者。此轉向在被魔法反射反彈、被特性避雷針引來之前適用。即使使用者離場，效果仍持續。不是雙打對戰時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}變得萬眾矚目了！",
@@ -2544,22 +2534,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forcepalm: {
 		name: "發勁",
 		// Official flavor text: "向對手的身體 發出衝擊波進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標麻痺。", // NEEDS QC
 	},
 	foresight: {
 		name: "識破",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標在場期間，其回避率等級為+1以上時在命中判定中被無視，且一般屬性和格鬥屬性的攻擊可以命中幽靈屬性的目標。目標已受此效果或奇跡之眼、氣味偵測的效果影響時失敗。", // NEEDS QC
+		shortDesc: "一般和格鬥可命中幽靈。無視回避。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間，其閃避率等級大於0時會在命中判定中被無視，即使目標是幽靈屬性，一般和格鬥屬性的攻擊也能命中。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間，其閃避率等級會在命中判定中被無視，即使目標是幽靈屬性，一般和格鬥屬性的攻擊也能命中。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間，若其閃避率等級高於攻擊方的命中率等級，則命中判定中兩者都被無視，即使目標是幽靈屬性，一般和格鬥屬性的攻擊也能命中。目標通過接棒離場時，接替的寶可夢繼續受此效果影響。目標已受此效果時失敗。", // NEEDS QC
 		},
 
 		start: "  識破了{POKEMON}的原形！",
@@ -2567,20 +2557,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	forestscurse: {
 		name: "森林詛咒",
 		// Official flavor text: "向對手施加森林詛咒。 中了詛咒的對手 會被追加草屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "為目標追加草屬性，使其擁有2～3種屬性。目標已是草屬性時失敗。被萬聖夜追加屬性時，此招式追加的屬性會被替換（反之亦然）。", // NEEDS QC
+		shortDesc: "為目標追加草屬性。", // NEEDS QC
 	},
 	foulplay: {
 		name: "欺詐",
 		// Official flavor text: "利用對手的力量進行攻擊。 對手的攻擊越高， 給予對手的傷害越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用能力等級變化計算在內的目標的攻擊數值代替使用者的攻擊來計算傷害。使用者的特性、道具、灼傷照常適用。", // NEEDS QC
+		shortDesc: "以目標的攻擊計算傷害。", // NEEDS QC
 	},
 	freezedry: {
 		name: "冷凍乾燥",
 		// Official flavor text: "急速冷凍對手， 有時會讓對手陷入冰凍狀態。 對水屬性寶可夢也是效果絕佳。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。無論此招式屬性如何，對水屬性的相性都變為效果絕佳。", // NEEDS QC
+		shortDesc: "10%冰凍。對水屬性效果絕佳。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -2589,105 +2579,105 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	freezeshock: {
 		name: "冰凍伏特",
 		// Official flavor text: "製造出帶有電流的冰塊， 在下一回合攻擊對手。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。第1回合蓄力，第2回合攻擊。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合蓄力，第2回合攻擊。30%麻痺。", // NEEDS QC
 
 		prepare: "  {POKEMON}被冷光包圍了！",
 	},
 	freezingglare: {
 		name: "冰冷視線",
 		// Official flavor text: "從雙眼釋放出精神力量進行攻擊。 有時會讓對手陷入冰凍狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標冰凍。", // NEEDS QC
 	},
 	freezyfrost: {
 		name: "冰冰霜凍",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "重置場上所有寶可夢的能力等級變化。", // NEEDS QC
+		shortDesc: "重置所有寶可夢的能力等級變化。", // NEEDS QC
 	},
 	frenzyplant: {
 		name: "瘋狂植物",
 		// Official flavor text: "將大大的樹木 甩向對手進行攻擊。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	frostbreath: {
 		name: "冰息",
 		// Official flavor text: "將冰冷的氣息 吹向對手進行攻擊。 必定會擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定擊中要害。但目標處於幸運咒語效果下，或特性為戰鬥盔甲、硬殼盔甲時不會擊中要害。", // NEEDS QC
+		shortDesc: "必定擊中要害。", // NEEDS QC
 	},
 	frustration: {
 		name: "遷怒",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（（255−使用者的親密度）×2/5）（向下取整，最低為1）。", // NEEDS QC
+		shortDesc: "親密度越低威力越大（最大102）。", // NEEDS QC
 	},
 	furyattack: {
 		name: "亂擊",
 		// Official flavor text: "用角或喙 刺向對手進行攻擊。 連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。傷害只在第一次攻擊時計算1次，並套用於每次攻擊。若中途某次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	furycutter: {
 		name: "連斬",
 		// Official flavor text: "用鐮刀或爪子等 斬切對手進行攻擊。 連續命中時威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "每次命中威力翻倍（最高160）。落空或使用其他招式後，威力恢復原狀。", // NEEDS QC
+		shortDesc: "每次命中威力加倍（最大160）。", // NEEDS QC
 	},
 	furyswipes: {
 		name: "亂抓",
 		// Official flavor text: "用爪子或鐮刀等 向對手進行攻擊。 可連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。傷害只在第一次攻擊時計算1次，並套用於每次攻擊。若中途某次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	fusionbolt: {
 		name: "交錯閃電",
 		// Official flavor text: "放出巨大的閃電攻擊對手。 受到巨大的火焰影響時， 招式的威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合（任意寶可夢）最後使用的招式是交錯火焰時，威力變為2倍。", // NEEDS QC
+		shortDesc: "在交錯火焰後使用時威力加倍。", // NEEDS QC
 	},
 	fusionflare: {
 		name: "交錯火焰",
 		// Official flavor text: "放出巨大的火焰攻擊對手。 受到巨大的閃電影響時， 招式的威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合（任意寶可夢）最後使用的招式是交錯閃電時，威力變為2倍。", // NEEDS QC
+		shortDesc: "在交錯閃電後使用時威力加倍。", // NEEDS QC
 	},
 	futuresight: {
 		name: "預知未來",
 		// Official flavor text: "使用招式的２回合後， 向對手發送一團念力進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用2回合後造成傷害。在那一回合結束時計算傷害，並對使用此招式時目標所在位置的寶可夢造成傷害。此時使用者不在場時，以不含攜帶道具和特性強化的使用者原本的特攻、屬性、等級計算傷害。此招式或破滅之願已預定在目標位置發動時失敗。", // NEEDS QC
+		shortDesc: "使用2回合後發動攻擊。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用2回合後造成不會擊中要害的無屬性傷害。傷害在使用時針對目標計算，並在最後回合結束時給予處於目標原位置的寶可夢。該位置已有此招式或破滅之願發動時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用2回合後造成不會擊中要害的無屬性傷害。傷害在使用時針對目標計算，並在最後回合結束時給予處於目標原位置的寶可夢。該位置已有此招式發動時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}預知了未來的攻擊！",
@@ -2696,16 +2686,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gastroacid: {
 		name: "胃液",
 		// Official flavor text: "將胃液吐向對手的身體。 沾到的胃液會消除 對手的特性效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標在場期間，其特性被無效化。目標使用接棒後，接替的寶可夢繼續受此效果影響。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶變形、達摩模式、全能變身時失敗，通過接棒繼承的此效果會立即結束。", // NEEDS QC
+		shortDesc: "使目標的特性無效。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間其特性被無效化。目標使用接棒後，接替的寶可夢繼續受此效果影響。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、達摩模式時此招式失敗，通過接棒繼承的此效果會立即結束。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間其特性被無效化。目標使用接棒後，接替的寶可夢繼續受此效果影響。目標的特性為牽絆變身、絕對睡眠、畫皮、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、達摩模式時此招式失敗，通過接棒繼承的此效果會立即結束。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間其特性被無效化。目標使用接棒後，接替的寶可夢繼續受此效果影響。目標的特性為多屬性、戰鬥切換時此招式失敗，通過接棒繼承的此效果會立即結束。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}的特性變得無效了！",
@@ -2713,211 +2703,211 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	geargrind: {
 		name: "齒輪飛盤",
 		// Official flavor text: "向對手投擲 鋼鐵齒輪進行攻擊。 連續２次給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "1回合內攻擊2次。", // NEEDS QC
 	},
 	gearup: {
 		name: "輔助齒輪",
 		// Official flavor text: "藉由啟動齒輪， 提高特性為正電和負電的 寶可夢的攻擊和特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使己方特性為正電或負電的寶可夢的攻擊和特攻各提高1級。", // NEEDS QC
+		shortDesc: "正電、負電隊友的攻擊和特攻+1。", // NEEDS QC
 	},
 	genesissupernova: {
 		name: "起源超新星大爆炸",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，場地變為精神場地。", // NEEDS QC
+		shortDesc: "布下精神場地。", // NEEDS QC
 	},
 	geomancy: {
 		name: "大地掌控",
 		// Official flavor text: "使用後的第１回合吸收能量， 並於第２回合大幅提高 自己的特攻、特防和速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻、特防、速度各提高2級。第1回合蓄力，第2回合發動。攜帶強力香草時，1回合內完成發動。", // NEEDS QC
+		shortDesc: "蓄力1回合後特攻、特防、速度+2。", // NEEDS QC
 
 		prepare: "{POKEMON}正在積蓄力量！",
 	},
 	gigadrain: {
 		name: "終極吸取",
 		// Official flavor text: "吸取對手的養分進行攻擊。 可以回復給予對手 傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。攜帶大根莖時，回復量變為1.3倍（向下取整）。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。", // NEEDS QC
 		},
 	},
 	gigaimpact: {
 		name: "終極衝擊",
 		// Official flavor text: "使出全身上下所有力量突擊對手。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	gigatonhammer: {
 		name: "巨力錘",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "不能連續兩回合選擇。", // NEEDS QC
 	},
 	gigavolthavoc: {
 		name: "終極伏特狂雷閃",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	glaciallance: {
 		name: "雪矛",
 		// Official flavor text: "向對手投擲 捲著暴風雪的冰矛進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	glaciate: {
 		name: "冰封世界",
 		// Official flavor text: "放出冰凍的寒氣 向對手進行攻擊。 可降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "100%使對手的速度降低1級。", // NEEDS QC
 	},
 	glaiverush: {
 		name: "巨劍突擊",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，到使用者下次行動為止，以使用者為目標的招式必定命中，且傷害變為2倍。", // NEEDS QC
+		shortDesc: "至下次行動前受擊必中且傷害加倍。", // NEEDS QC
 	},
 	glare: {
 		name: "大蛇瞪眼",
 		// Official flavor text: "用腹部的花紋使對手心生恐懼， 讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "使目標陷入麻痺狀態。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入麻痺狀態。不能無視屬性相性帶來的無效。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入麻痺狀態。", // NEEDS QC
 		},
 	},
 	glitzyglow: {
 		name: "嘩嘩氣場",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用後，己方場上產生5回合的光牆效果。", // NEEDS QC
+		shortDesc: "布下光牆的效果。", // NEEDS QC
 	},
 	gmaxbefuddle: {
 		name: "超極巨蝶影蠱惑",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢分別陷入睡眠、中毒或麻痺狀態之一（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方睡眠、中毒或麻痺。", // NEEDS QC
 	},
 	gmaxcannonade: {
 		name: "超極巨水砲轟滅",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，4回合內，對手方的水屬性以外的寶可夢在每回合結束時（包括最後一回合）受到最大HP的1/6（向下取整）的傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方4回合每回合損失1/6HP。", // NEEDS QC
 
 		start: "  {PARTY}被水流包圍了！",
 		damage: "  {POKEMON}被吞沒在超極巨水砲轟滅的水流裡，痛苦難耐！",
 	},
 	gmaxcentiferno: {
 		name: "超極巨百火焚野",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使對手方的寶可夢無法交換（處於替身狀態也會受到效果），並在每回合結束時對其造成各自最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的寶可夢，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的寶可夢可以交換。對象離場，或成功使用高速旋轉、替身後，對該寶可夢的效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "威力由原招式決定。束縛對手方4～5回合。", // NEEDS QC
 	},
 	gmaxchistrike: {
 		name: "超極巨會心一擊",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方所有寶可夢的擊中要害等級提高1級（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方擊中要害等級+1。", // NEEDS QC
 
 		start: "#focusenergy",
 	},
 	gmaxcuddle: {
 		name: "超極巨熱情擁抱",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢陷入著迷狀態（處於替身狀態也會受到效果）。對象與使用者性別相同時、任意一方無性別時、對象已處於著迷狀態時，對該寶可夢無效。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方陷入著迷。", // NEEDS QC
 	},
 	gmaxdepletion: {
 		name: "超極巨劣化衰變",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢各自最後使用的招式減少2點PP（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方最後招式PP-2。", // NEEDS QC
 
 		activate: "  {TARGET}的PP減少了！",
 	},
 	gmaxdrumsolo: {
 		name: "超極巨狂擂亂打",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無論原招式的極巨招式威力如何，威力均為160。此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "威力固定為160。無視特性。", // NEEDS QC
 	},
 	gmaxfinale: {
 		name: "超極巨幸福圓滿",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方所有寶可夢回復最大HP的1/6（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方回復1/6最大HP。", // NEEDS QC
 	},
 	gmaxfireball: {
 		name: "超極巨破陣火球",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無論原招式的極巨招式威力如何，威力均為160。此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "威力固定為160。無視特性。", // NEEDS QC
 	},
 	gmaxfoamburst: {
 		name: "超極巨激漩泡渦",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，對手方所有寶可夢的速度降低2級（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方速度-2。", // NEEDS QC
 	},
 	gmaxgoldrush: {
 		name: "超極巨特大金幣",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢陷入混亂狀態（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方混亂。", // NEEDS QC
 	},
 	gmaxgravitas: {
 		name: "超極巨天道七星",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生重力的效果。", // NEEDS QC
+		shortDesc: "威力由原招式決定。產生重力效果。", // NEEDS QC
 	},
 	gmaxhydrosnipe: {
 		name: "超極巨狙擊神射",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無論原招式的極巨招式威力如何，威力均為160。此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "威力固定為160。無視特性。", // NEEDS QC
 	},
 	gmaxmalodor: {
 		name: "超極巨臭氣沖天",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢陷入中毒狀態（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方中毒。", // NEEDS QC
 	},
 	gmaxmeltdown: {
 		name: "超極巨液金熔擊",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢分別陷入無理取鬧的效果（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方陷入無理取鬧。", // NEEDS QC
 	},
 	gmaxoneblow: {
 		name: "超極巨奪命一擊",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。此招式可以突破包括極巨防壁在內的所有守護類招式。", // NEEDS QC
+		shortDesc: "威力由原招式決定。可穿透極巨防壁。", // NEEDS QC
 	},
 	gmaxrapidflow: {
 		name: "超極巨流水連擊",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。此招式可以突破包括極巨防壁在內的所有守護類招式。", // NEEDS QC
+		shortDesc: "威力由原招式決定。可穿透極巨防壁。", // NEEDS QC
 	},
 	gmaxreplenish: {
 		name: "超極巨資源再生",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，有50%的機率使己方所有寶可夢的樹果復原（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。50%機率恢復樹果。", // NEEDS QC
 	},
 	gmaxresonance: {
 		name: "超極巨極光旋律",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方場上產生極光幕的效果。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方獲得極光幕。", // NEEDS QC
 	},
 	gmaxsandblast: {
 		name: "超極巨沙塵漫天",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使對手方的寶可夢無法交換（處於替身狀態也會受到效果），並在每回合結束時對其造成各自最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的寶可夢，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的寶可夢可以交換。對象離場，或成功使用高速旋轉、替身後，對該寶可夢的效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "威力由原招式決定。束縛對手方4～5回合。", // NEEDS QC
 	},
 	gmaxsmite: {
 		name: "超極巨天譴雷誅",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢陷入混亂狀態（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方混亂。", // NEEDS QC
 	},
 	gmaxsnooze: {
 		name: "超極巨睡魔降臨",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，有50%的機率使目標進入哈欠的效果（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。50%使目標進入哈欠狀態。", // NEEDS QC
 	},
 	gmaxsteelsurge: {
 		name: "超極巨鋼鐵陣法",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。傷害由對手對鋼屬性的相性決定，0.25倍、0.5倍、等倍、2倍、4倍分別對應最大HP的1/32、1/16、1/8、1/4、1/2（向下取整）。對手方寶可夢成功使用高速旋轉、清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
+		shortDesc: "威力由原招式決定。布下鋼屬性陷阱。", // NEEDS QC
 
 		start: "  {PARTY}周圍開始浮現出尖銳的鋼刺！",
 		end: "  {PARTY}周圍的鋼刺消失了！",
@@ -2925,74 +2915,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxstonesurge: {
 		name: "超極巨岩陣以待",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。傷害由對手對岩石屬性的相性決定，0.25倍、0.5倍、等倍、2倍、4倍分別對應最大HP的1/32、1/16、1/8、1/4、1/2（向下取整）。對手方寶可夢成功使用高速旋轉、清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
+		shortDesc: "威力由原招式決定。布下隱形岩。", // NEEDS QC
 	},
 	gmaxstunshock: {
 		name: "超極巨異毒電場",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢分別陷入中毒或麻痺狀態（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方中毒或麻痺。", // NEEDS QC
 	},
 	gmaxsweetness: {
 		name: "超極巨瓊漿玉液",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，治癒己方所有寶可夢的異常狀態（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。治癒己方的異常狀態。", // NEEDS QC
 	},
 	gmaxtartness: {
 		name: "超極巨酸不溜丟",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，對手方所有寶可夢的回避率降低1級（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方回避率-1。", // NEEDS QC
 	},
 	gmaxterror: {
 		name: "超極巨幻影幽魂",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢無法交換（處於替身狀態也會受到效果）。但攜帶美麗空殼的寶可夢，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的寶可夢可以交換。使用者或對象離場後效果結束。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方無法交換。", // NEEDS QC
 	},
 	gmaxvinelash: {
 		name: "超極巨灰飛鞭滅",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，4回合內，對手方的草屬性以外的寶可夢在每回合結束時（包括最後一回合）受到最大HP的1/6（向下取整）的傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方4回合每回合損失1/6HP。", // NEEDS QC
 
 		start: "  {PARTY}被鞭子的猛擊包圍了！",
 		damage: "  {POKEMON}被暴露在超極巨灰飛鞭滅的猛擊下，疼痛不堪！",
 	},
 	gmaxvolcalith: {
 		name: "超極巨炎石噴發",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，4回合內，對手方的岩石屬性以外的寶可夢在每回合結束時（包括最後一回合）受到最大HP的1/6（向下取整）的傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方4回合每回合損失1/6HP。", // NEEDS QC
 
 		start: "  {PARTY}被岩石包圍了！",
 		damage: "  {POKEMON}被困在超極巨炎石噴發的岩石裡，疼痛不堪！",
 	},
 	gmaxvoltcrash: {
 		name: "超極巨萬雷轟頂",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，使對手方的寶可夢陷入麻痺狀態（處於替身狀態也會受到效果）。", // NEEDS QC
+		shortDesc: "威力由原招式決定。使對手方麻痺。", // NEEDS QC
 	},
 	gmaxwildfire: {
 		name: "超極巨地獄滅焰",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，4回合內，對手方的火屬性以外的寶可夢在每回合結束時（包括最後一回合）受到最大HP的1/6（向下取整）的傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方4回合每回合損失1/6HP。", // NEEDS QC
 
 		start: "  {PARTY}被火焰包圍了！",
 		damage: "  {POKEMON}被超極巨地獄滅焰的火焰包圍，熾熱難耐！",
 	},
 	gmaxwindrage: {
 		name: "超極巨旋風襲捲",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，電氣場地、青草場地、薄霧場地、精神場地的效果，目標方場上的反射壁、光牆、極光幕、神祕守護、白霧、超極巨鋼鐵陣法、撒菱、毒菱、隱形岩、黏黏網效果，以及己方場上的超極巨鋼鐵陣法、撒菱、毒菱、隱形岩、黏黏網效果消失。", // NEEDS QC
+		shortDesc: "威力由原招式決定。消除場地和陷阱。", // NEEDS QC
 	},
 	grassknot: {
 		name: "打草結",
 		// Official flavor text: "用打結的草絆倒對手。 對手越重，威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由目標的體重決定。不足10kg時威力20，不足25kg時40，不足50kg時60，不足100kg時80，不足200kg時100，200kg以上時120。", // NEEDS QC
+		shortDesc: "目標越重威力越大。", // NEEDS QC
 	},
 	grasspledge: {
 		name: "草之誓約",
 		// Official flavor text: "用草柱進行攻擊。 和水之誓約同時使用時，威力會提高， 周圍會變成濕地。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "隊友在本回合選擇了火之誓約或水之誓約且尚未行動時，隊友緊接在使用者之後行動，使用者的招式不產生效果。與火之誓約組合時，隊友使出威力150的火之誓約，對手方場地在4回合內變為火海，火屬性以外的寶可夢在每回合結束時（包括最後一回合）受到最大HP的1/8（向下取整）的傷害。與水之誓約組合時，隊友使出威力150的草之誓約，對手方場地在4回合內變為濕地，該方寶可夢的速度變為1/4。作為組合招式使出時，無論使用者的屬性如何都獲得屬性一致加成。此招式不消耗使用者的草之寶石。", // NEEDS QC
+		shortDesc: "與火或水之誓約組合有追加效果。", // NEEDS QC
 
 		activate: "#waterpledge",
 		start: "  在{TEAM}周圍開展出了濕地！",
@@ -3000,81 +2990,81 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	grasswhistle: {
 		name: "草笛",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入睡眠狀態。", // NEEDS QC
 	},
 	grassyglide: {
 		name: "青草滑梯",
 		// Official flavor text: "在地面上滑行般地攻擊對手。 在青草場地時， 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場地為青草場地且使用者在地面上時，優先度+1。", // NEEDS QC
+		shortDesc: "青草場地時優先度+1。", // NEEDS QC
 	},
 	grassyterrain: {
 		name: "青草場地",
 		// Official flavor text: "在５回合內將腳下變成青草場地。 地面上的寶可夢每回合都會回復ＨＰ。 草屬性招式的威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場地變為青草場地。期間，地面上的寶可夢的草屬性攻擊招式威力變為1.3倍，對地面上的寶可夢使出的重踏、地震、震級威力變為0.5倍，地面上的寶可夢在每回合結束時（包括最後一回合）回復最大HP的1/16（向下取整）。保護色會變為草屬性，自然之力會變為能量球，祕密之力會有30%的機率造成睡眠。已經是青草場地時失敗。", // NEEDS QC
+		shortDesc: "5回合內變為青草場地。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內變為青草場地。效果期間，地面上的寶可夢使出的草屬性攻擊招式威力變為1.5倍，對地面上的寶可夢使出的重踏、地震、震級威力變為0.5倍，地面上的寶可夢在每回合結束時（包括最後回合）回復最大HP的1/16（向下取整）。使用保護色會變為草屬性，自然之力會變為能量球，秘密之力有30%的機率造成睡眠。已經是青草場地時失敗。", // NEEDS QC
 		},
 	},
 	gravapple: {
 		name: "萬有引力",
 		// Official flavor text: "讓蘋果從高處落下， 給予對手傷害。 可降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的防禦降低1級。重力的效果期間，威力變為1.5倍。", // NEEDS QC
+		shortDesc: "100%防禦-1。重力時威力1.5倍。", // NEEDS QC
 	},
 	gravity: {
 		name: "重力",
 		// Official flavor text: "在５回合內，飄浮特性和飛行屬性的 寶可夢會被地面屬性的招式擊中。 且無法使用飛向空中的招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場上所有寶可夢的回避率變為0.6倍。使用時，場上所有寶可夢的彈跳、飛翔、電磁飄浮、自由落體、意念移物效果立即結束。效果期間，場上所有寶可夢無法使用彈跳、飛翔、飛身重壓、飛膝踢、飛踢、電磁飄浮、自由落體、躍起、意念移物。地面屬性的攻擊和撒菱、毒菱、黏黏網、特性沙穴會對飛行屬性寶可夢和特性為飄浮的寶可夢生效。已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內地面免疫失效，命中1.67倍。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，場上所有寶可夢的閃避率變為0.6倍。使用時，所有寶可夢的彈跳、飛翔、電磁飄浮、自由落體、意念移物立即結束。效果期間，所有寶可夢都無法使用彈跳、飛翔、飛身重壓、飛膝踢、飛踢、電磁飄浮、自由落體、躍起、意念移物。地面屬性攻擊、撒菱、毒菱、黏黏網和特性沙穴對飛行屬性或特性為飄浮的寶可夢也能生效。效果已發動時失敗。相關的Z力量強化的招式仍可選擇，但效果期間執行時會被阻止。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，場上所有寶可夢的回避率變為0.6倍。使用時，場上所有寶可夢的彈跳、飛翔、電磁飄浮、自由落體、意念移物效果立即結束。效果期間，場上所有寶可夢無法使用彈跳、飛翔、飛身重壓、飛膝踢、飛踢、電磁飄浮、自由落體、躍起、意念移物。地面屬性的攻擊和撒菱、毒菱、黏黏網、特性沙穴會對飛行屬性寶可夢和特性為飄浮的寶可夢生效。已有此效果時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，場上所有寶可夢的閃避率變為0.6倍。使用時，所有寶可夢的彈跳、飛翔、電磁飄浮、自由落體、意念移物立即結束。效果期間，所有寶可夢都無法使用彈跳、飛翔、飛膝踢、飛踢、電磁飄浮、自由落體、躍起、意念移物。地面屬性攻擊、撒菱、毒菱和特性沙穴對飛行屬性或特性為飄浮的寶可夢也能生效。效果已發動時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，場上所有寶可夢的閃避率變為0.6倍。使用時，所有寶可夢的彈跳、飛翔、電磁飄浮立即結束。效果期間，所有寶可夢都無法使用彈跳、飛翔、飛膝踢、飛踢、電磁飄浮、躍起。地面屬性攻擊、撒菱、毒菱和特性沙穴對飛行屬性或特性為飄浮的寶可夢也能生效。效果已發動時失敗。", // NEEDS QC
 		},
 	},
 	growl: {
 		name: "叫聲",
 		// Official flavor text: "發出可愛的叫聲， 誘使對手疏忽大意， 降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "使對手的攻擊降低1級。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "使目標的攻擊降低1級。", // NEEDS QC
 		},
 	},
 	growth: {
 		name: "生長",
 		// Official flavor text: "讓身體瞬間長大， 提高自己的攻擊和特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊和特攻各提高1級。天氣為大晴天或大日照時，各提高2級。但攜帶萬能傘時，即使天氣為大晴天或大日照也只各提高1級。", // NEEDS QC
+		shortDesc: "攻擊和特攻提高1級。大晴天則2級。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的攻擊和特攻各提高1級。天氣為晴朗或大日照時，各提高2級。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的攻擊和特攻各提高1級。天氣為大晴天時，各提高2級。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的特攻提高1級。", // NEEDS QC
+			shortDesc: "使用者的特攻提高1級。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的特殊提高1級。", // NEEDS QC
+			shortDesc: "使用者的特殊提高1級。", // NEEDS QC
 		},
 	},
 	grudge: {
 		name: "怨念",
 		// Official flavor text: "因為對手的招式而陷入瀕死時， 施加怨念， 讓該招式的ＰＰ變成０。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到使用者下次行動為止，若使用者因對手的攻擊而瀕死，該招式的剩餘PP全部清零。", // NEEDS QC
+		shortDesc: "被打倒時使對方招式的PP歸零。", // NEEDS QC
 
 		activate: "  因為怨念，{POKEMON}失去了{MOVE}的所有ＰＰ！",
 		start: "{POKEMON}想向對手施放怨念！",
@@ -3082,112 +3072,112 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	guardianofalola: {
 		name: "巨人衛士・阿羅拉",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成目標剩餘HP的3/4（向下取整，最少1點）的傷害。", // NEEDS QC
+		shortDesc: "造成目標剩餘HP3/4的傷害。", // NEEDS QC
 	},
 	guardsplit: {
 		name: "防守平分",
 		// Official flavor text: "用超能力將自己和對手的 防禦和特防各別相加後， 再進行平分。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "將使用者和目標的防禦分別變為兩者防禦的平均值（向下取整），特防分別變為兩者特防的平均值（向下取整）。能力等級變化不受影響。", // NEEDS QC
+		shortDesc: "與目標平分防禦和特防。", // NEEDS QC
 
 		activate: "  {POKEMON}平分了各自的防守！",
 	},
 	guardswap: {
 		name: "防守互換",
 		// Official flavor text: "用超能力將自己和對手的 防禦與特防的能力變化互相交換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者和目標的防禦和特防的能力等級變化。", // NEEDS QC
+		shortDesc: "與目標互換防禦和特防的能力變化。", // NEEDS QC
 	},
 	guillotine: {
 		name: "斷頭鉗",
 		// Official flavor text: "用巨大的鉗子或剪刀等 撕裂對手進行攻擊。 只要命中就會一擊瀕死。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成與目標最大HP相同的傷害。無視命中率和回避率的變化。此招式的命中率為（使用者的等級−目標的等級+30）%，目標的等級高於使用者時失敗。對特性為結實的寶可夢無效。", // NEEDS QC
+		shortDesc: "一擊必殺。目標等級更高時失敗。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "給目標造成65535點傷害。此招式以256為分母的命中率為（2×（使用者的等級−目標的等級）+76）與255中較小的一方，之後再套用命中率和閃避率的修正。目標等級更高時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "給目標造成65535點傷害。目標的速度高於使用者時失敗。", // NEEDS QC
+			shortDesc: "造成65535點傷害。目標更快時失敗。", // NEEDS QC
 		},
 	},
 	gunkshot: {
 		name: "垃圾射擊",
 		// Official flavor text: "將骯髒的垃圾 丟向對手進行攻擊。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標中毒。", // NEEDS QC
 	},
 	gust: {
 		name: "起風",
 		// Official flavor text: "用翅膀刮起狂風， 吹向對手進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標，傷害變為2倍。", // NEEDS QC
+		shortDesc: "對飛行等狀態的目標威力加倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標正在使用彈跳或飛翔時，威力變為2倍。", // NEEDS QC
+			shortDesc: "對彈跳、飛翔中的目標威力2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標正在使用飛翔時，威力變為2倍。", // NEEDS QC
+			shortDesc: "對飛翔中的目標威力2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無追加效果。", // NEEDS QC
+			shortDesc: "無追加效果。", // NEEDS QC
 		},
 	},
 	gyroball: {
 		name: "陀螺球",
 		// Official flavor text: "高速旋轉身體，撞擊對手。 速度比對手越慢，威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（25×目標的當前速度÷使用者的當前速度）+1（向下取整，最高150）。使用者的當前速度為0時，威力為1。", // NEEDS QC
+		shortDesc: "比目標越慢威力越大。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力為（25×目標的當前速度÷使用者的當前速度）+1（向下取整，最大150）。使用者的當前速度為0時視為1。", // NEEDS QC
 		},
 	},
 	hail: {
 		name: "冰雹",
 		// Official flavor text: "降下冰雹，在５回合內 場上除了冰屬性以外的寶可夢 都會受到傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，天氣變為冰雹。除最後一回合外的每回合結束時，場上所有寶可夢受到最大HP的1/16（向下取整）的傷害。冰屬性寶可夢和特性為冰凍之軀、魔法防守、防塵、雪隱的寶可夢不受傷害。攜帶冰冷岩石時持續8回合。已經是冰雹時失敗。", // NEEDS QC
+		shortDesc: "5回合內召喚冰雹。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內天氣變為冰雹。除最後回合外的每回合結束時，冰屬性以外且特性不是冰凍之軀、魔法防守、雪隱的所有在場寶可夢失去最大HP的1/16（向下取整）。攜帶冰冷岩石時持續8回合。天氣已經是冰雹時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內天氣變為冰雹。除最後回合外的每回合結束時，冰屬性以外的所有在場寶可夢失去最大HP的1/16（向下取整）。天氣已經是冰雹時失敗。", // NEEDS QC
 		},
 	},
 	hammerarm: {
 		name: "臂錘",
 		// Official flavor text: "揮出強力而沉重的拳頭， 給予對手傷害。 自己的速度會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度降低1級。", // NEEDS QC
+		shortDesc: "使自身的速度降低1級。", // NEEDS QC
 	},
 	happyhour: {
 		name: "歡樂時光",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "沒有對戰效果。", // NEEDS QC
 
 		activate: "  大家被歡樂的氣氛包圍了！",
 	},
 	harden: {
 		name: "變硬",
 		// Official flavor text: "使用全身的力量讓身體硬化， 提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高1級。", // NEEDS QC
+		shortDesc: "自身的防禦提高1級。", // NEEDS QC
 	},
 	hardpress: {
 		name: "硬壓",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為100×（目標的剩餘HP÷目標的最大HP）（五捨六入，最低為1）。", // NEEDS QC
+		shortDesc: "目標剩餘HP越多威力越大。", // NEEDS QC
 	},
 	haze: {
 		name: "黑霧",
 		// Official flavor text: "放出黑霧，讓場上全體寶可夢的 能力變化回到初始狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "重置場上所有寶可夢的能力等級變化。", // NEEDS QC
+		shortDesc: "重置所有寶可夢的能力等級變化。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "將雙方寶可夢的能力等級重置為0，並消除灼傷和麻痺造成的能力下降。將劇毒計數重置為0，並消除雙方寶可夢的混亂及奇異之光、定身法、聚氣、寄生種子、光牆、白霧、反射壁的效果。消除對手的異常狀態。", // NEEDS QC
+			shortDesc: "重置所有能力變化。消除對手的異常狀態。", // NEEDS QC
 		},
 
 		// Only used in Gen 1
@@ -3196,45 +3186,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	headbutt: {
 		name: "頭錘",
 		// Official flavor text: "將頭伸出， 直直衝向對手進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	headcharge: {
 		name: "爆炸頭突擊",
 		// Official flavor text: "用帥氣的爆炸頭 猛撞對手進行攻擊。 自己也會受到少許傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到1/4的反作用力傷害。", // NEEDS QC
 	},
 	headlongrush: {
 		name: "突飛猛撲",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各降低1級。", // NEEDS QC
+		shortDesc: "使自身的防禦、特防降低1級。", // NEEDS QC
 	},
 	headsmash: {
 		name: "雙刃頭錘",
 		// Official flavor text: "使出渾身力量， 捨身向對手進行頭錘攻擊。 自己也會受到非常大的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/2（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到1/2的反作用力傷害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/2（向下取整，最少1）的反作用力傷害。", // NEEDS QC
 		},
 	},
 	healbell: {
 		name: "治癒鈴聲",
 		// Official flavor text: "發出悅耳的鈴聲， 治癒我方全體的異常狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "治癒己方全隊的異常狀態。場上特性為隔音的寶可夢除使用者本人外不會被治癒。", // NEEDS QC
+		shortDesc: "治癒己方全隊的異常狀態。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "治癒使用者全隊的異常狀態。在場的特性為隔音的寶可夢不會被治癒。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "治癒使用者全隊的異常狀態。在場的特性為隔音的寶可夢也會被治癒。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "治癒使用者全隊的異常狀態。特性為隔音的寶可夢不會被治癒。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "治癒己方全隊的異常狀態。", // NEEDS QC
 		},
 
 		activate: "  鈴聲響徹四周！",
@@ -3242,20 +3232,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healblock: {
 		name: "回復封鎖",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，目標在場期間無法回復HP。效果期間，回復類和吸取類招式無法使用，有回復效果的特性和道具也不會回復。受影響的寶可夢使用接棒後，接替的寶可夢也無法回復HP。分擔痛楚和特性再生力不受影響。", // NEEDS QC
+		shortDesc: "5回合內使對手無法回復HP。", // NEEDS QC
 		gen8: {
 			end: "  {POKEMON}的回復封鎖效果消失了！",
 			cant: "{POKEMON}因回復封鎖而無法使出{MOVE}！",
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，目標在場期間無法回復HP。效果期間，回復招式和吸取招式無法使用，有回復效果的特性和道具也不會發動。受影響的寶可夢使用接棒後，接替的寶可夢也無法回復HP。分擔痛楚和特性再生力不受影響。相關的Z力量強化的招式在效果期間仍可選擇並使出。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，目標在場期間無法回復HP。效果期間，回復類和吸取類招式無法使用，有回復效果的特性和道具也不會回復。受影響的寶可夢使用接棒後，接替的寶可夢也無法回復HP。分擔痛楚和特性再生力不受影響。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，目標在場期間無法回復HP。效果期間，回復招式無法使用，招式的回復效果也不會發動，但特性和道具仍會回復。受影響的寶可夢使用接棒後，接替的寶可夢繼續受此效果影響。分擔痛楚不受影響。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}的回復行為被封住了！",
@@ -3266,14 +3256,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healingwish: {
 		name: "治癒之願",
 		// Official flavor text: "雖然自己會陷入瀕死， 但可以治癒接替上場的 寶可夢的異常狀態並回復ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者瀕死，代替出場的寶可夢HP不滿或有異常狀態時，其HP被完全回復，異常狀態也被治癒。交換在回合結束時進行，回復先於場地陷阱的效果發動。此效果持續到滿足條件的寶可夢交換到使用者的位置，或通過交換場地移動到該位置為止。使用者是同行最後一隻未瀕死的寶可夢時失敗。", // NEEDS QC
+		shortDesc: "自己瀕死，下一隻受傷寶可夢被完全回復。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者瀕死，接替出場的寶可夢回復全部HP並治癒異常狀態。新的寶可夢在回合結束時出場，回復在設置類招式生效前進行。使用者是隊伍中最後一隻未瀕死的寶可夢時失敗。", // NEEDS QC
+			shortDesc: "使用者瀕死。接替者完全回復。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者瀕死，接替出場的寶可夢回復全部HP並治癒異常狀態。新的寶可夢立即出場，回復在設置類招式生效後進行。使用者是隊伍中最後一隻未瀕死的寶可夢時失敗。", // NEEDS QC
 		},
 
 		heal: "  治癒之願在{POKEMON}身上實現了！",
@@ -3281,153 +3271,153 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healorder: {
 		name: "回復指令",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復使用者最大HP的1/2（四捨五入）。", // NEEDS QC
+		shortDesc: "回復自身最大HP的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。", // NEEDS QC
 		},
 	},
 	healpulse: {
 		name: "治癒波動",
 		// Official flavor text: "釋放出治癒波動， 讓對手回復 最大ＨＰ的一半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復對象最大HP的1/2（四捨五入）。使用者的特性為超級發射器時，改為回復最大HP的3/4（五捨六入）。", // NEEDS QC
+		shortDesc: "回復目標最大HP的1/2。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復目標最大HP的1/2（四捨五入）。", // NEEDS QC
 		},
 	},
 	heartstamp: {
 		name: "愛心印章",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	heartswap: {
 		name: "心靈互換",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者和目標的所有能力等級變化。", // NEEDS QC
+		shortDesc: "與目標互換全部能力變化。", // NEEDS QC
 	},
 	heatcrash: {
 		name: "高溫重壓",
 		// Official flavor text: "用燃燒的身體重壓對手 進行攻擊。體重比對手 重越多，威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由（使用者的體重÷目標的體重）（向下取整）決定。結果為5以上時威力120，4時100，3時80，2時60，1以下時40。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "比目標越重威力越大。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力由（使用者的重量÷目標的重量）（向下取整）決定。結果為5以上時威力為120，為4時為100，為3時為80，為2時為60，為1以下時為40。", // NEEDS QC
 		},
 	},
 	heatwave: {
 		name: "熱風",
 		// Official flavor text: "將炎熱的氣息 吹向對手進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標灼傷。", // NEEDS QC
 	},
 	heavyslam: {
 		name: "重磅衝撞",
 		// Official flavor text: "用沉重的身體衝撞對手進行攻擊。 體重比對手重越多，威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由（使用者的體重÷目標的體重）（向下取整）決定。結果為5以上時威力120，4時100，3時80，2時60，1以下時40。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "比目標越重威力越大。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力由（使用者的重量÷目標的重量）（向下取整）決定。結果為5以上時威力為120，為4時為100，為3時為80，為2時為60，為1以下時為40。", // NEEDS QC
 		},
 	},
 	helpinghand: {
 		name: "幫助",
 		// Official flavor text: "幫助夥伴。 被幫助的寶可夢， 招式的威力會比原來更大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，作為對象的隊友的攻擊招式威力變為1.5倍（此效果可以疊加）。使用者沒有相鄰的隊友時，或隊友已經行動過時失敗。但隊友正在使用需要2回合的招式時不會失敗。", // NEEDS QC
+		shortDesc: "本回合使隊友的招式威力變為1.5倍。", // NEEDS QC
 
 		start: "  {SOURCE}擺出了幫助{POKEMON}的架勢！",
 	},
 	hex: {
 		name: "禍不單行",
 		// Official flavor text: "接二連三地向對手進行攻擊。 攻擊陷入異常狀態的對手時， 能給予較大的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標處於異常狀態時，威力變為2倍。", // NEEDS QC
+		shortDesc: "目標有異常狀態時威力加倍。", // NEEDS QC
 	},
 	hiddenpower: {
 		name: "覺醒力量",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式的屬性由使用者的個體值決定，可以是妖精和一般以外的任意屬性。", // NEEDS QC
+		shortDesc: "屬性由個體值決定。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "此招式的屬性和威力由使用者的個體值決定。威力在30～70之間變化，屬性可以是一般以外的任何屬性。", // NEEDS QC
+			shortDesc: "威力和屬性隨個體值變化。", // NEEDS QC
 		},
 	},
 	hiddenpowerbug: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（蟲）", // NEEDS QC
 	},
 	hiddenpowerdark: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（惡）", // NEEDS QC
 	},
 	hiddenpowerdragon: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（龍）", // NEEDS QC
 	},
 	hiddenpowerelectric: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（電）", // NEEDS QC
 	},
 	hiddenpowerfighting: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（格鬥）", // NEEDS QC
 	},
 	hiddenpowerfire: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（火）", // NEEDS QC
 	},
 	hiddenpowerflying: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（飛行）", // NEEDS QC
 	},
 	hiddenpowerghost: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（幽靈）", // NEEDS QC
 	},
 	hiddenpowergrass: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（草）", // NEEDS QC
 	},
 	hiddenpowerground: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（地面）", // NEEDS QC
 	},
 	hiddenpowerice: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（冰）", // NEEDS QC
 	},
 	hiddenpowerpoison: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（毒）", // NEEDS QC
 	},
 	hiddenpowerpsychic: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（超能力）", // NEEDS QC
 	},
 	hiddenpowerrock: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（岩石）", // NEEDS QC
 	},
 	hiddenpowersteel: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（鋼）", // NEEDS QC
 	},
 	hiddenpowerwater: {
-		name: null, // NEEDS TRANSLATION
+		name: "覺醒力量（水）", // NEEDS QC
 	},
 	highhorsepower: {
 		name: "十萬馬力",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	highjumpkick: {
 		name: "飛膝踢",
 		// Official flavor text: "跳起後用膝蓋踢擊對手。 沒踢中對手時自己會受到傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊未命中時，使用者受到最大HP的1/2（向下取整）的摔落傷害。特性為魔法防守的寶可夢不受摔落傷害。", // NEEDS QC
+		shortDesc: "未命中時自己失去最大HP的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊失敗時，若目標免疫，使用者受到目標最大HP的一半（向下取整）的墜落傷害；否則受到目標本應受到傷害的一半（向下取整，最少1，最多為目標最大HP的一半）的墜落傷害。特性為魔法防守的寶可夢不會受到墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到應給傷害的一半。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊失敗且目標並非免疫時，使用者受到目標本應受到傷害的一半（向下取整，最少1，最多為目標最大HP的一半）的墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到應給傷害的一半。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊失敗且目標並非免疫時，使用者受到目標本應受到傷害的1/8（向下取整，最少1）的墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到應給傷害的1/8。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊沒有命中目標時，使用者受到1點墜落傷害。使用者處於替身狀態時，若目標有替身則由其替身受到此傷害，否則不會產生墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到1點傷害。", // NEEDS QC
 		},
 
 		damage: "#crash",
@@ -3435,112 +3425,112 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	holdback: {
 		name: "手下留情",
 		// Official flavor text: "在攻擊的時候手下留情， 讓對手的ＨＰ一定會剩下１。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定使目標保留至少1點HP。", // NEEDS QC
+		shortDesc: "必定使目標保留至少1點HP。", // NEEDS QC
 	},
 	holdhands: {
 		name: "牽手",
 		// Official flavor text: "我方的寶可夢手牽手。 心情會變得非常幸福。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "沒有對戰效果。使用者沒有相鄰的隊友時失敗。", // NEEDS QC
+		shortDesc: "沒有對戰效果。", // NEEDS QC
 	},
 	honeclaws: {
 		name: "磨爪",
 		// Official flavor text: "將爪子磨得更加鋒利。 可提高自己的攻擊和命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊和命中率各提高1級。", // NEEDS QC
+		shortDesc: "自身的攻擊、命中率提高1級。", // NEEDS QC
 	},
 	hornattack: {
 		name: "角撞",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	horndrill: {
 		name: "角鑽",
 		// Official flavor text: "用旋轉的角 刺進對手進行攻擊。 只要命中就會一擊瀕死。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成與目標最大HP相同的傷害。無視命中率和回避率的變化。此招式的命中率為（使用者的等級−目標的等級+30）%，目標的等級高於使用者時失敗。對特性為結實的寶可夢無效。", // NEEDS QC
+		shortDesc: "一擊必殺。目標等級更高時失敗。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "給目標造成65535點傷害。此招式以256為分母的命中率為（2×（使用者的等級−目標的等級）+76）與255中較小的一方，之後再套用命中率和閃避率的修正。目標等級更高時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "給目標造成65535點傷害。目標的速度高於使用者時失敗。", // NEEDS QC
+			shortDesc: "造成65535點傷害。目標更快時失敗。", // NEEDS QC
 		},
 	},
 	hornleech: {
 		name: "木角",
 		// Official flavor text: "將角刺進對手，吸取養分。 可以回復給予對手 傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 	},
 	howl: {
 		name: "長嚎",
 		// Official flavor text: "大聲地吼叫提升氣勢， 提高自己和同伴的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使使用者和所有隊友的攻擊提高1級。", // NEEDS QC
+		shortDesc: "自己和隊友的攻擊提高1級。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的攻擊提高1級。", // NEEDS QC
+			shortDesc: "自身的攻擊提高1級。", // NEEDS QC
 		},
 	},
 	hurricane: {
 		name: "暴風",
 		// Official flavor text: "用強烈的風席捲 對手進行攻擊。 有時會使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入混亂狀態。可以命中用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標。天氣為下雨或大雨時必定命中。天氣為大晴天或大日照時，命中率變為50%。對攜帶萬能傘的目標，命中率保持70%。", // NEEDS QC
+		shortDesc: "30%機率混亂。下雨時必中。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入混亂狀態。可以命中正在使用彈跳、飛翔、自由落體或處於自由落體效果下的目標。天氣為大雨或下雨時，不進行命中判定。天氣為大日照或大晴天時，命中率變為50%。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入混亂狀態。可以命中正在使用彈跳、飛翔、自由落體或處於自由落體效果下的目標。天氣為下雨時，不進行命中判定。天氣為大晴天時，命中率變為50%。", // NEEDS QC
 		},
 	},
 	hydrocannon: {
 		name: "加農水炮",
 		// Official flavor text: "向對手發射水炮進行攻擊。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	hydropump: {
 		name: "水炮",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	hydrosteam: {
 		name: "水蒸氣",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天氣為大晴天且使用者未攜帶萬能傘時，傷害不會因水屬性而減半，而是變為1.5倍。", // NEEDS QC
+		shortDesc: "大晴天時威力不減反增為1.5倍。", // NEEDS QC
 	},
 	hydrovortex: {
 		name: "超級水流大漩渦",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	hyperbeam: {
 		name: "破壞光線",
 		// Official flavor text: "向對手發射 強烈的光線進行攻擊。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "此招式成功後，下回合會因反作用力而無法行動。但此招式擊倒了目標或其替身時，沒有反作用力。", // NEEDS QC
+			shortDesc: "未打倒目標時下回合無法行動。", // NEEDS QC
 		},
 	},
 	hyperdrill: {
 		name: "強力鑽",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "穿透守護類招式（不破壞）。", // NEEDS QC
 	},
 	hyperfang: {
 		name: "必殺門牙",
 		// Official flavor text: "用銳利的門牙 牢牢咬住對手進行攻擊。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有10%的機率使目標畏縮。", // NEEDS QC
 	},
 	hyperspacefury: {
 		name: "異次元猛攻",
 		// Official flavor text: "使用許多手臂，發動可 不顧守住和看穿的連續攻擊。 自己的防禦會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦降低1級。（考慮變身後的）當前樣子不是解放胡帕時無法使用。攻擊成功後，本回合打破目標的碉堡、看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊目標方。", // NEEDS QC
+		shortDesc: "解放胡帕專用。防禦-1。可破守護。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的防禦降低1級。（考慮變身後的）當前樣子不是解放胡帕時無法使用。此招式成功後，本回合打破目標的看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破。", // NEEDS QC
 		},
 
 		activate: "#shadowforce",
@@ -3549,10 +3539,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hyperspacehole: {
 		name: "異次元洞",
 		// Official flavor text: "利用異次元洞， 突然出現在對手的側面進行攻擊。 可避開對手的守住和看穿等招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，本回合打破目標的碉堡、看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊目標方。", // NEEDS QC
+		shortDesc: "突破目標本回合的守護進行攻擊。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式成功後，本回合打破目標的看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破。", // NEEDS QC
 		},
 
 		activate: "#shadowforce",
@@ -3560,111 +3550,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hypervoice: {
 		name: "巨聲",
 		// Official flavor text: "製造出震耳欲聾的 巨大聲波攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	hypnosis: {
 		name: "催眠術",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入睡眠狀態。", // NEEDS QC
 	},
 	iceball: {
 		name: "冰球",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，固定使出此招式，直到落空、經過5回合或無法使用為止，不能選擇其他招式。每次命中威力翻倍，之前使用過變圓時再翻倍。通過夢話選到此招式時，只使用1回合。", // NEEDS QC
+		shortDesc: "連續使用5回合，每次命中威力加倍。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式成功後，直到落空、經過5回合或無法使出為止，固定使出此招式而無法進行其他行動。每次命中威力變為2倍，之前使用過變圓的話再變為2倍。通過夢話使出此招式時，只使出1回合。效果期間此招式命中發動中的畫皮時，威力倍率暫停但回合計數不停，因此效果結束後倍率可能套用於使用者的下一個招式。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，固定使出此招式，直到落空、經過5回合或無法使用為止，不能選擇其他招式。每次命中威力翻倍，之前使用過變圓時再翻倍。通過夢話選到此招式時，只使用1回合。", // NEEDS QC
 		},
 	},
 	icebeam: {
 		name: "冰凍光束",
 		// Official flavor text: "向對手發射 冰凍光束進行攻擊。 有時會讓對手陷入冰凍狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標冰凍。", // NEEDS QC
 	},
 	iceburn: {
 		name: "極寒冷焰",
 		// Official flavor text: "在使用後的下一回合， 用能夠凍結一切的強烈寒氣包圍對手。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。第1回合蓄力，第2回合攻擊。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合蓄力，第2回合攻擊。30%灼傷。", // NEEDS QC
 
 		prepare: "  {POKEMON}被冰凍的空氣包圍了！",
 	},
 	icefang: {
 		name: "冰凍牙",
 		// Official flavor text: "用帶有寒氣的牙齒咬住對手。 有時會讓對手畏縮 或陷入冰凍狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。有10%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "10%機率冰凍。10%機率畏縮。", // NEEDS QC
 	},
 	icehammer: {
 		name: "冰錘",
 		// Official flavor text: "揮出強力而沉重的拳頭， 給予對手傷害。 自己的速度會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度降低1級。", // NEEDS QC
+		shortDesc: "使自身的速度降低1級。", // NEEDS QC
 	},
 	icepunch: {
 		name: "冰凍拳",
 		// Official flavor text: "用帶有寒氣的拳頭 攻擊對手。 有時會讓對手陷入冰凍狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標冰凍。", // NEEDS QC
 	},
 	iceshard: {
 		name: "冰礫",
 		// Official flavor text: "將瞬間製造出的冰塊 快速地扔向對手。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	icespinner: {
 		name: "冰旋",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "消除電氣場地、青草場地、薄霧場地、精神場地的效果。", // NEEDS QC
+		shortDesc: "消除場地的效果。", // NEEDS QC
 	},
 	iciclecrash: {
 		name: "冰柱墜擊",
 		// Official flavor text: "將巨大冰柱猛烈地 砸向對手進行攻擊。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	iciclespear: {
 		name: "冰錐",
 		// Official flavor text: "向對手發射 尖銳的冰柱進行攻擊。 可連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 	},
 	icywind: {
 		name: "冰凍之風",
 		// Official flavor text: "將冰冷的寒氣 吹向對手進行攻擊。 可降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "100%使對手的速度降低1級。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
 		},
 	},
 	imprison: {
 		name: "封印",
 		// Official flavor text: "如果對手也學會了和自己 相同的招式，則對手將 不能使用該招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者在場期間，所有對手都無法使用與使用者相同的招式。", // NEEDS QC
+		shortDesc: "對手無法使用與自己相同的招式。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，對手無法使用使用者也會的招式。效果期間仍可以選擇並使出Z力量強化的招式。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，所有對手都無法使用與使用者相同的招式。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，對手無法使用使用者也會的招式。沒有對手會使用者的招式時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}封印了對手的招式！",
@@ -3673,40 +3663,40 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	incinerate: {
 		name: "燒盡",
 		// Official flavor text: "用火焰攻擊對手。 能夠燒掉對手攜帶的樹果等道具， 讓對手無法使用。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標攜帶的道具是樹果或寶石時，使其失去該道具。無法使特性為黏著的寶可夢失去道具。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
+		shortDesc: "燒毀對手的樹果或寶石。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標攜帶的道具是樹果時，使其失去。無法使特性為黏著的寶可夢失去道具。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
+			shortDesc: "破壞對手的樹果。", // NEEDS QC
 		},
 
 		removeItem: "  {POKEMON}的{ITEM}被燒掉了！",
 	},
 	infernalparade: {
 		name: "群魔亂舞",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。目標處於異常狀態時，威力變為2倍。", // NEEDS QC
+		shortDesc: "30%灼傷。目標有異常狀態時威力加倍。", // NEEDS QC
 	},
 	inferno: {
 		name: "煉獄",
 		// Official flavor text: "用猛烈的火焰 包圍對手進行攻擊。 能讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "有100%的機率使目標灼傷。", // NEEDS QC
 	},
 	infernooverdrive: {
 		name: "超強極限爆焰彈",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	infestation: {
 		name: "死纏爛打",
 		// Official flavor text: "在４～５回合內 死纏爛打地進行攻擊。 在此期間對手將無法逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}受到了{SOURCE}的死纏爛打！",
@@ -3714,20 +3704,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ingrain: {
 		name: "扎根",
 		// Official flavor text: "在大地上扎根， 每回合會回復自己的ＨＰ。 但扎根之後無法進行替換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "每回合結束時回復最大HP的1/16，但使用者無法交換，也不會被其他寶可夢強制交換。使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換時可以交換。通過接棒離場時，接替的寶可夢同樣無法交換，並繼續獲得回復效果。效果期間，即使使用者是飛行屬性或特性為飄浮，也會被地面屬性的攻擊正常命中，並受到撒菱、毒菱、黏黏網的影響。", // NEEDS QC
+		shortDesc: "扎根後每回合回復1/16HP，無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "每回合結束時回復最大HP的1/16，但無法交換，其他寶可夢也無法迫使使用者交換。使用接棒、拋下狠話、急速折返、伏特替換時可以交換。通過接棒離場時，接替的寶可夢繼續無法交換並繼承回復效果。效果期間，即使使用者是飛行屬性或特性為飄浮，也會被地面屬性攻擊命中，並受到撒菱、毒菱、黏黏網的影響。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "每回合結束時回復最大HP的1/16，但無法交換，其他寶可夢也無法迫使使用者交換。使用接棒、急速折返、伏特替換時可以交換。通過接棒離場時，接替的寶可夢繼續無法交換並繼承回復效果。效果期間，即使使用者是飛行屬性或特性為飄浮，也會被地面屬性攻擊命中，並受到撒菱、毒菱的影響。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "每回合結束時回復最大HP的1/16，但無法交換，其他寶可夢也無法迫使使用者交換。使用接棒、急速折返時可以交換。通過接棒離場時，接替的寶可夢繼續無法交換並繼承回復效果。效果期間，即使使用者是飛行屬性或特性為飄浮，也會被地面屬性攻擊命中，並受到撒菱、毒菱的影響。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "每回合結束時回復最大HP的1/16，但無法交換，其他寶可夢也無法迫使使用者交換。使用接棒時可以交換，接替的寶可夢繼續無法交換並繼承回復效果。", // NEEDS QC
+			shortDesc: "每回合回復1/16。自己無法交換。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}扎下了根！",
@@ -3737,13 +3727,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	instruct: {
 		name: "號令",
 		// Official flavor text: "對手使出招式之後， 能夠透過指令讓對手 再次使出相同招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標立即再次使出其最後使用的招式。目標還未使用過招式時、該招式的PP為0時、目標正準備使出鳥嘴加農炮、真氣拳、陷阱甲殼時、該招式是借助、鳥嘴加農炮、打嗝、忍耐、灼熱暴衝、慶祝、喋喋不休、格鬥暴衝、仿效、極巨炮、真氣拳、牽手、冰球、號令、王者盾牌、魔法暴衝、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、劇毒暴衝、攔堵、逆鱗、花瓣舞、滾動、陷阱甲殼、寫生、夢話、掙扎、大鬧一番、變身、吵鬧、黑暗暴衝、需要2回合的招式或需要反作用力回合的招式時失敗。", // NEEDS QC
+		shortDesc: "使目標立即再次使出最後的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標立即再次使用最後使用的招式。目標還未使用過招式時、該招式PP為0時、目標處於極巨化狀態時、目標正準備使用鳥嘴加農炮、真氣拳、陷阱甲殼時，或該招式是借助、鳥嘴加農炮、打嗝、忍耐、慶祝、喋喋不休、仿效、極巨炮、真氣拳、牽手、冰球、號令、王者盾牌、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、攔堵、逆鱗、花瓣舞、滾動、陷阱甲殼、寫生、夢話、掙扎、大鬧一番、變身、吵鬧、需2回合的招式、會因反作用力無法行動的招式、極巨或超極巨招式時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標立即再次使用最後使用的招式。目標還未使用過招式時、該招式PP為0時、目標正準備使用鳥嘴加農炮、真氣拳、陷阱甲殼時，或該招式是借助、鳥嘴加農炮、打嗝、忍耐、慶祝、喋喋不休、仿效、真氣拳、牽手、冰球、號令、王者盾牌、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、逆鱗、花瓣舞、滾動、陷阱甲殼、寫生、夢話、掙扎、大鬧一番、變身、吵鬧、需2回合的招式、會因反作用力無法行動的招式、Z招式時失敗。", // NEEDS QC
 		},
 
 		activate: "  根據{POKEMON}的指示，{TARGET}使出了招式！",
@@ -3751,22 +3741,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	iondeluge: {
 		name: "等離子浴",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，一般屬性的招式變為電屬性。此效果在其他改變招式屬性的效果之後適用。", // NEEDS QC
+		shortDesc: "本回合一般屬性招式變為電屬性。", // NEEDS QC
 
 		activate: "  等離子雨傾盆而下！",
 	},
 	irondefense: {
 		name: "鐵壁",
 		// Official flavor text: "將皮膚變得堅硬如鐵， 大幅提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高2級。", // NEEDS QC
+		shortDesc: "自身的防禦提高2級。", // NEEDS QC
 	},
 	ironhead: {
 		name: "鐵頭",
 		// Official flavor text: "用如同鋼鐵般 堅硬的頭部進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -3775,51 +3765,51 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	irontail: {
 		name: "鐵尾",
 		// Official flavor text: "將堅硬的尾巴 甩向對手進行攻擊。 有時會降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有30%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	ivycudgel: {
 		name: "棘藤棒",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。使用者是厄鬼椪時，此招式的屬性隨其樣子變化。水井面具時為水屬性，火灶面具時為火屬性，礎石面具時為岩石屬性。", // NEEDS QC
+		shortDesc: "容易擊中要害。屬性隨樣子變化。", // NEEDS QC
 	},
 	jawlock: {
 		name: "緊咬不放",
 		// Official flavor text: "使攻擊對象及自己在陷入瀕死前 都無法進行替換。當兩隻寶可夢 其中一方退場時，效果就會消失。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使使用者和目標都無法交換。但攜帶美麗空殼或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換時可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "使自己和目標都無法交換。", // NEEDS QC
 	},
 	jetpunch: {
 		name: "噴射拳",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	judgment: {
 		name: "制裁光礫",
 		// Official flavor text: "向對手放出無數的光彈。 招式的屬性會隨著自己 攜帶的石板不同而改變。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式的屬性由使用者攜帶的屬性板決定。", // NEEDS QC
+		shortDesc: "屬性由攜帶的屬性板決定。", // NEEDS QC
 	},
 	jumpkick: {
 		name: "飛踢",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊未命中時，使用者受到最大HP的1/2（向下取整）的摔落傷害。特性為魔法防守的寶可夢不受摔落傷害。", // NEEDS QC
+		shortDesc: "未命中時自己失去最大HP的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊失敗時，若目標免疫，使用者受到目標最大HP的一半（向下取整）的墜落傷害；否則受到目標本應受到傷害的一半（向下取整，最少1，最多為目標最大HP的一半）的墜落傷害。特性為魔法防守的寶可夢不會受到墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到應給傷害的一半。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊失敗且目標並非免疫時，使用者受到目標本應受到傷害的一半（向下取整，最少1，最多為目標最大HP的一半）的墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到應給傷害的一半。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊失敗且目標並非免疫時，使用者受到目標本應受到傷害的1/8（向下取整，最少1）的墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到應給傷害的1/8。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊沒有命中目標時，使用者受到1點墜落傷害。使用者處於替身狀態時，若目標有替身則由其替身受到此傷害，否則不會產生墜落傷害。", // NEEDS QC
+			shortDesc: "落空時自己受到1點傷害。", // NEEDS QC
 		},
 
 		damage: "#crash",
@@ -3827,157 +3817,157 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	junglehealing: {
 		name: "叢林治療",
 		// Official flavor text: "和叢林化為一體， 回復自己和場上同伴的ＨＰ和狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復己方場上每隻寶可夢最大HP的1/4（四捨五入），並治癒其異常狀態。", // NEEDS QC
+		shortDesc: "己方回復1/4HP並治癒異常狀態。", // NEEDS QC
 	},
 	karatechop: {
 		name: "空手劈",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	kinesis: {
 		name: "折彎湯匙",
 		// Official flavor text: "折彎湯匙引起注意， 降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "使目標的命中率降低1級。", // NEEDS QC
 	},
 	kingsshield: {
 		name: "王者盾牌",
 		// Official flavor text: "防住對手攻擊的同時， 使自己變為防禦姿態。 降低接觸到的對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢的攻擊降低1級。不能防住不造成傷害的招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "防住攻擊招式，接觸者攻擊-1。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢的攻擊降低1級。變化招式無法防住。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢的攻擊降低2級。變化招式無法防住。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+			shortDesc: "防住攻擊招式。接觸者攻擊-2。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢的攻擊降低2級。變化招式無法防住。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 	},
 	knockoff: {
 		name: "拍落",
 		// Official flavor text: "拍落對手的持有物， 讓對手在戰鬥結束前都無法使用。 對手有攜帶物品時，傷害會增加。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標攜帶道具時，威力變為1.5倍，且使用者未瀕死時會拍落目標的攜帶道具。特性為黏著的目標未瀕死時不會失去道具。蓋歐卡、固拉多、帝牙盧卡、帕路奇亞、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特、悖謬寶可夢、厄鬼椪所攜帶的、分別與之對應的靛藍色寶珠、朱紅色寶珠、大金剛寶玉、大白寶玉、大白金寶玉、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾、驅勁能量、面具時，或使用者是這些種族且目標攜帶對應道具時，威力不會提高，道具也不會被拍落。這裡的悖謬寶可夢指特性為古代活性、夸克充能的所有種族（破空焰、猛雷鼓、鐵磐岩、鐵頭殼除外）。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
+		shortDesc: "目標有道具時威力1.5倍並拍落道具。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標攜帶道具時此招式威力變為1.5倍，且使用者未瀕死的話目標失去該道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾時，威力不會提高也無法奪去道具，使用者是這些寶可夢且目標攜帶對應道具時也一樣。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標攜帶道具時此招式威力變為1.5倍，且使用者未瀕死的話目標失去該道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是Z純晶、能用牠超級進化的寶可夢所攜帶的超級石，或蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟時，威力不會提高也無法奪去道具，使用者是這些寶可夢且目標攜帶對應道具時也一樣。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標攜帶道具時此招式威力變為1.5倍，且使用者未瀕死的話目標失去該道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是能用牠超級進化的寶可夢所攜帶的超級石，或蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶時，威力不會提高也無法奪去道具，使用者是這些寶可夢且目標攜帶對應道具時也一樣。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者未瀕死時，目標失去攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是騎拉帝納、阿爾宙斯、蓋諾賽克特分別攜帶的白金寶珠、屬性板、卡帶時無法使其失去，使用者是這些寶可夢且目標攜帶對應道具時也一樣。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
+			shortDesc: "使目標失去攜帶的道具。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標在戰鬥結束前失去攜帶的道具。道具是白金寶珠時，或目標的特性為多屬性或黏著時不會失去。效果期間，目標無法以任何方式獲得新道具。", // NEEDS QC
+			shortDesc: "目標失去道具且無法獲得新道具。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在戰鬥結束前失去攜帶的道具。特性為黏著時不會失去。效果期間，目標無法以任何方式獲得新道具。", // NEEDS QC
 		},
 
 		removeItem: "  {SOURCE}拍落了{POKEMON}的{ITEM}！",
 	},
 	kowtowcleave: {
 		name: "仆斬",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	landswrath: {
 		name: "大地神力",
 		// Official flavor text: "聚集大地的能量後， 將力量集中攻擊對手給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	laserfocus: {
 		name: "磨礪",
 		// Official flavor text: "集中精神， 下次攻擊必定會擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到下一回合結束為止，使用者的攻擊必定擊中要害。", // NEEDS QC
+		shortDesc: "至下回合結束攻擊必定擊中要害。", // NEEDS QC
 
 		start: "  {POKEMON}集中了精神！",
 	},
 	lashout: {
 		name: "洩憤",
 		// Official flavor text: "將惱怒砸向對手進行攻擊。 如果此回合已被降低能力， 招式威力就會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合使用者的能力等級降低過時，威力變為2倍。", // NEEDS QC
+		shortDesc: "本回合能力被降低過時威力加倍。", // NEEDS QC
 	},
 	lastresort: {
 		name: "珍藏",
 		// Official flavor text: "在戰鬥中將其他已學會的招式 全部使用過後， 才能夠使出的珍藏招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者會此招式和至少1個其他招式，且出場後（或變身後）已將其他招式各使用過至少1次，否則失敗。", // NEEDS QC
+		shortDesc: "未用過其他所有招式時失敗。", // NEEDS QC
 	},
 	lastrespects: {
 		name: "掃墓",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為50+(X×50)。X為己方寶可夢瀕死的累計次數（最多100）。", // NEEDS QC
+		shortDesc: "每有1隻同伴瀕死威力+50。", // NEEDS QC
 	},
 	lavaplume: {
 		name: "噴煙",
 		// Official flavor text: "用熊熊烈火 攻擊自己周圍所有的寶可夢。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "30%機率使周圍陷入灼傷。", // NEEDS QC
 	},
 	leafage: {
 		name: "樹葉",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	leafblade: {
 		name: "葉刃",
 		// Official flavor text: "如用劍般操控葉子 切斬對手進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	leafstorm: {
 		name: "飛葉風暴",
 		// Official flavor text: "用尖銳的葉子捲起風暴向對手進行攻擊。 使用後因為反作用力， 自己的特攻會大幅降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻降低2級。", // NEEDS QC
+		shortDesc: "使自身的特攻降低2級。", // NEEDS QC
 	},
 	leaftornado: {
 		name: "青草攪拌器",
 		// Official flavor text: "用銳利的葉子包圍住 對手進行攻擊。 有時會降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的命中率降低1級。", // NEEDS QC
 	},
 	leechlife: {
 		name: "吸血",
 		// Official flavor text: "吸取對手的血液進行攻擊。 可以回復給予對手 傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。攜帶大根莖時，回復量變為1.3倍（向下取整）。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。", // NEEDS QC
 		},
 	},
 	leechseed: {
 		name: "寄生種子",
 		// Official flavor text: "在對手身上植入種子， 每回合吸取對手少許的ＨＰ， 用來回復自己的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "每回合結束時，使用者位置上的寶可夢吸取目標最大HP的1/8（向下取整）。吸取方攜帶大根莖時，回復量變為1.3倍（五捨六入）。目標使用接棒後，接替的寶可夢繼續被吸取。目標交換下場，或成功使用晶光轉轉、高速旋轉後，效果結束。草屬性寶可夢不會被此招式命中，但會受其效果影響。", // NEEDS QC
+		shortDesc: "每回合吸取目標1/8的HP。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者位置的寶可夢在每回合結束時奪取目標最大HP的1/8（向下取整）。接受方攜帶大根莖時，回復量變為1.3倍（五捨六入）。目標使用接棒後，接替的寶可夢繼續被吸取。目標交換或成功使用高速旋轉後，效果結束。草屬性寶可夢免疫此招式的使用，但不免疫其效果。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者位置的寶可夢在每回合結束時奪取目標最大HP的1/8（向下取整）。目標使用接棒後，接替的寶可夢繼續被吸取。目標交換或使用高速旋轉後，效果結束。草屬性寶可夢免疫此招式的使用，但不免疫其效果。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標的每回合結束時，使用者位置的寶可夢奪取目標最大HP的1/16（向下取整，目標有劇毒計數的話乘以該計數），即使目標剩餘HP少於該數值也會奪取。目標交換或任意寶可夢使用黑霧後，此效果結束。草屬性寶可夢免疫此招式。", // NEEDS QC
+			shortDesc: "每回合奪取目標HP的1/16。", // NEEDS QC
 		},
 
 		start: "  將種子種植在了{POKEMON}身上！",
@@ -3987,56 +3977,56 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	leer: {
 		name: "瞪眼",
 		// Official flavor text: "用犀利的眼神使對手害怕， 降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "使對手的防禦降低1級。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "使目標的防禦降低1級。", // NEEDS QC
 		},
 	},
 	letssnuggleforever: {
 		name: "親密無間大亂揍",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	lick: {
 		name: "舌舔",
 		// Official flavor text: "用長長的舌頭， 舔遍對手進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標麻痺。", // NEEDS QC
 	},
 	lifedew: {
 		name: "生命水滴",
 		// Official flavor text: "灑出神奇之水， 回復自己和場上同伴的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復己方場上每隻寶可夢最大HP的1/4（四捨五入）。", // NEEDS QC
+		shortDesc: "己方回復最大HP的1/4。", // NEEDS QC
 	},
 	lightofruin: {
 		name: "破滅之光",
 		// Official flavor text: "借用永恆之花的力量， 發射出強力光線。 自己也會受到不小的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/2（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到1/2的反作用力傷害。", // NEEDS QC
 	},
 	lightscreen: {
 		name: "光牆",
 		// Official flavor text: "利用神奇的屏障， 在５回合內減輕 來自對手的特殊攻擊傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，使用者及其隊友受到的特殊招式傷害變為0.5倍（雙打對戰中為0.66倍）。不與極光幕疊加進一步減傷。被擊中要害時不減傷。使用者或隊友受到劈瓦、精神之牙、清除濃霧攻擊時，己方的此效果消失。攜帶光之黏土時持續8回合。己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內己方受到的特殊傷害減半。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友受到的特殊招式傷害變為0.5倍（雙打或三打對戰中為0.66倍）。被擊中要害時不減傷。使用者或隊友受到劈瓦或清除濃霧攻擊時，己方的此效果消失。攜帶光之黏土時持續8回合。己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友受到的特殊招式傷害變為1/2（己方場上有多隻寶可夢時為2/3）。被擊中要害時不減傷。使用者或隊友受到劈瓦或清除濃霧攻擊時，己方的此效果消失。攜帶光之黏土時持續8回合。己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友受到的特殊招式傷害變為1/2（己方場上有多隻寶可夢時為2/3）。被擊中要害時不減傷。使用者或隊友受到劈瓦攻擊時，己方的此效果消失。己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友的特防變為2倍。被擊中要害時不減傷。己方已有此效果時失敗。", // NEEDS QC
+			shortDesc: "5回合內己方特防變為2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
-			start: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，受到傷害時特殊變為2倍。被擊中要害時不減傷。任意寶可夢使用黑霧後，效果結束。", // NEEDS QC
+			shortDesc: "在場期間受擊時特殊變為2倍。", // NEEDS QC
+			start: "  {POKEMON}的特殊抗性提高了！", // NEEDS QC
 		},
 
 		start: "  光牆使{TEAM}的特殊抗性提高了！",
@@ -4045,80 +4035,80 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lightthatburnsthesky: {
 		name: "焚天滅世熾光爆",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "（能力等級變化計算在內）使用者的攻擊高於特攻時，變為物理招式。此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "攻擊高於特攻時為物理。無視特性。", // NEEDS QC
 	},
 	liquidation: {
 		name: "水流裂破",
 		// Official flavor text: "用水之力量撞向對手進行攻擊。 有時會降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有20%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	lockon: {
 		name: "鎖定",
 		// Official flavor text: "精確地瞄準， 下次攻擊時一定 會命中對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到下一回合結束為止，使用者的招式必定命中目標（目標處於需要2回合的招式中也能命中）。使用者或目標離場後效果結束。使用者已有此效果時失敗。", // NEEDS QC
+		shortDesc: "下次攻擊必定命中目標。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到下回合結束為止，目標即使處於需2回合的招式中也無法回避使用者的招式。此效果對目標發動時，其他所有寶可夢對該目標的此招式和心之眼效果結束。目標通過接棒離場時，接替的寶可夢繼續受此效果影響。使用者通過接棒離場時，效果對同一目標為接替的寶可夢重新發動。使用者或目標離場後效果結束。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "對目標的下一次命中判定必定成功。目標正在使用飛翔時，仍會回避地震、地裂、震級。目標通過接棒離場時，接替的寶可夢繼續受此效果影響。目標離場或對其進行命中判定後，效果結束。", // NEEDS QC
+			shortDesc: "下一個招式必定命中目標。", // NEEDS QC
 		},
 
 		start: "  {SOURCE}將目標對準了{POKEMON}！",
 	},
 	lovelykiss: {
 		name: "惡魔之吻",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入睡眠狀態。", // NEEDS QC
 	},
 	lowkick: {
 		name: "踢倒",
 		// Official flavor text: "用力踢對手的腳， 讓對手摔倒進行攻擊。 對手越重，威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由目標的體重決定。不足10kg時威力20，不足25kg時40，不足50kg時60，不足100kg時80，不足200kg時100，200kg以上時120。", // NEEDS QC
+		shortDesc: "目標越重威力越大。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。", // NEEDS QC
+			shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		},
 	},
 	lowsweep: {
 		name: "下盤踢",
 		// Official flavor text: "瞄準對手的腳， 以敏捷的動作進行攻擊。 可降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
 	},
 	luckychant: {
 		name: "幸運咒語",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，使用者及其隊友不會被擊中要害。己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內己方不會被擊中要害。", // NEEDS QC
 
 		start: "  因幸運咒語的力量，{TEAM}的要害被隱藏了起來！",
 		end: "  {TEAM}的幸運咒語解除了！",
 	},
 	luminacrash: {
 		name: "琉光衝激",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特防降低2級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的特防降低2級。", // NEEDS QC
 	},
 	lunarblessing: {
 		name: "新月祈禱",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復己方場上每隻寶可夢最大HP的1/4（四捨五入），並治癒其異常狀態。", // NEEDS QC
+		shortDesc: "己方回復1/4HP並治癒異常狀態。", // NEEDS QC
 	},
 	lunardance: {
 		name: "新月舞",
 		// Official flavor text: "雖然自己會陷入瀕死， 但可以讓接替上場的 寶可夢回復到萬全狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者瀕死，代替出場的寶可夢HP或PP不滿、或有異常狀態時，其HP和PP被完全回復，異常狀態也被治癒。交換在回合結束時進行，回復先於場地陷阱的效果發動。此效果持續到滿足條件的寶可夢交換到使用者的位置，或通過交換場地移動到該位置為止。使用者是同行最後一隻未瀕死的寶可夢時失敗。", // NEEDS QC
+		shortDesc: "自己瀕死，下一隻寶可夢HP和PP全回復。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者瀕死，接替出場的寶可夢回復全部HP和PP並治癒異常狀態。新的寶可夢在回合結束時出場，回復在設置類招式生效前進行。使用者是隊伍中最後一隻未瀕死的寶可夢時失敗。", // NEEDS QC
+			shortDesc: "使用者瀕死。接替者連PP完全回復。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者瀕死，接替出場的寶可夢回復全部HP和PP並治癒異常狀態。新的寶可夢立即出場，回復在設置類招式生效後進行。使用者是隊伍中最後一隻未瀕死的寶可夢時失敗。", // NEEDS QC
 		},
 
 		heal: "  {POKEMON}被神秘的月光包圍了！",
@@ -4126,43 +4116,43 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lunge: {
 		name: "猛撲",
 		// Official flavor text: "全力猛撲對手進行攻擊。 進而降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
 	},
 	lusterpurge: {
 		name: "潔淨光芒",
 		// Official flavor text: "放出耀眼的光芒進行攻擊。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	machpunch: {
 		name: "音速拳",
 		// Official flavor text: "以迅雷不及掩耳之勢出拳。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	magicalleaf: {
 		name: "魔法葉",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	magicaltorque: {
 		name: "魔法暴衝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標混亂。", // NEEDS QC
 	},
 	magiccoat: {
 		name: "魔法反射",
 		// Official flavor text: "若對手使用寄生種子或 其他會讓寶可夢陷入異常狀態的招式時， 可將對手的招式反彈回去。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到回合結束為止，使用者不受以其為目標的一部分不造成傷害的招式影響，並將這些招式反彈給原使用者。以此方式反彈的招式無法被此招式或特性魔法鏡的效果再次反彈。撒菱、隱形岩、黏黏網、毒菱每一方只能被反彈1次，由處於此招式或特性魔法鏡效果下的最左側寶可夢反彈。特性避雷針、引水的引開效果先於此招式發動。", // NEEDS QC
+		shortDesc: "將變化招式反彈給對方。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到回合結束為止，使用者不受以自己為目標的部分變化招式影響，並將其反彈給原使用者。被反彈的招式無法被此效果或特性魔法鏡的效果再次反彈。撒菱、隱形岩、毒菱每方只能被反彈1次，由受此效果或特性魔法鏡效果影響的最左側寶可夢反彈。特性避雷針和引水在此招式生效前引來各自的招式。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者不受以自己為目標的部分變化招式影響，並將其反彈給原使用者。該招式以雙方對手為目標時，受此效果影響的寶可夢只以原使用者為目標反彈。反彈1次招式或回合結束後，效果消失。特性避雷針和引水在此招式生效前引來各自的招式。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者不受以自己為目標的部分變化招式影響，並將其反彈給原使用者。該招式以雙方對手為目標時，受此效果影響的寶可夢在左側的話，以雙方對手為目標反彈，其同伴不受原招式影響；在右側的話，同伴受原招式影響，該寶可夢只以原使用者為目標反彈。反彈1次招式或回合結束後，效果消失。以此方式反彈的招式可以被受此效果影響的其他寶可夢再次反彈。使用者的特性為隔音時，在此效果前使聲音招式無效。特性避雷針在此招式生效前引來電屬性招式。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}獲得了魔法反射的效果！",
@@ -4171,59 +4161,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magicpowder: {
 		name: "魔法粉",
 		// Official flavor text: "撒出魔法粉末， 使對手變為超能力屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標變為超能力屬性。目標是阿爾宙斯或銀伴戰獸時、已經只有超能力屬性時、已太晶化時失敗。", // NEEDS QC
+		shortDesc: "使目標變為超能力屬性。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標變為超能力屬性。目標是阿爾宙斯或銀伴戰獸時、已經只有超能力屬性時失敗。", // NEEDS QC
 		},
 	},
 	magicroom: {
 		name: "魔法空間",
 		// Official flavor text: "創造出非常不可思議的空間。 在５回合內，所有寶可夢 攜帶的道具都會失去效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場上所有寶可夢的攜帶道具失去效果。引發形態變化的道具效果不受影響，但這類道具的其他效果會被無效化。效果期間，場上所有寶可夢無法使用投擲和自然之恩。效果期間再次使用此招式時，效果結束。", // NEEDS QC
+		shortDesc: "5回合內所有攜帶道具無效。", // NEEDS QC
 	},
 	magmastorm: {
 		name: "熔岩風暴",
 		// Official flavor text: "將對手困在 熊熊燃燒的火焰中， 在４～５回合內進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（使用者攜帶緊綁束帶時為1/8，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標使用高速旋轉後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合（使用者攜帶緊纏鉤爪時總是5回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+			shortDesc: "2～5回合內束縛目標並造成傷害。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被困在了熔岩旋渦之中！",
 	},
 	magnetbomb: {
 		name: "磁鐵炸彈",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	magneticflux: {
 		name: "磁場操控",
 		// Official flavor text: "操控磁場， 提高特性是正電和負電的 寶可夢的防禦和特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使己方特性為正電或負電的寶可夢的防禦和特防各提高1級。", // NEEDS QC
+		shortDesc: "正電、負電隊友的防禦和特防+1。", // NEEDS QC
 	},
 	magnetrise: {
 		name: "電磁飄浮",
 		// Official flavor text: "利用電氣產生的磁力浮在空中。 在５回合內可以飄浮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，使用者在場期間不受地面屬性的攻擊及撒菱、毒菱、黏黏網、特性沙穴的影響。使用者使用接棒時，接替的寶可夢繼承此效果。使用者處於扎根、擊落、千箭齊發、黑色鐵球的效果下時，以後者優先。使用者已有此效果，或處於扎根、擊落、千箭齊發的效果下時失敗。", // NEEDS QC
+		shortDesc: "5回合內不受地面屬性招式影響。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者在場期間不受地面屬性的攻擊及撒菱、毒菱、特性沙穴的影響。使用者使用接棒時，接替的寶可夢繼承此效果。使用者處於扎根、擊落、黑色鐵球的效果下時，以後者優先。使用者已有此效果，或處於扎根、擊落的效果下時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者在場期間不受地面屬性的攻擊及撒菱、毒菱、特性沙穴的影響。使用者使用接棒時，接替的寶可夢繼承此效果。使用者處於扎根、黑色鐵球的效果下時，以後者優先。使用者已有此效果，或處於扎根的效果下時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}因電磁力浮了起來！",
@@ -4232,18 +4222,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	magnitude: {
 		name: "震級",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力隨機變化。10和150各5%，30和110各10%，50和90各20%，70為30%的機率。對用挖洞鑽入地下的目標，傷害變為2倍。", // NEEDS QC
+		shortDesc: "攻擊周圍。威力隨機，對鑽地加倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力隨機變化。10和150各5%，30和110各10%，50和90各20%，70為30%的機率。目標正在使用挖洞時，威力變為2倍。", // NEEDS QC
 		},
 
 		activate: "  震級{NUMBER}！",
 	},
 	makeitrain: {
 		name: "淘金潮",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻降低1級。", // NEEDS QC
+		shortDesc: "自身特攻-1。攻擊所有對手。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4254,223 +4244,223 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	maliciousmoonsault: {
 		name: "極惡飛躍粉碎擊",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "對用過變小的目標傷害加倍。", // NEEDS QC
 	},
 	malignantchain: {
 		name: "邪毒鎖鏈",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標陷入劇毒狀態。", // NEEDS QC
+		shortDesc: "有50%的機率使目標劇毒。", // NEEDS QC
 	},
 	matblock: {
 		name: "掀榻榻米",
 		// Official flavor text: "將掀起來的榻榻米當作盾牌， 防禦住攻擊我方的攻擊招式。 但無法防禦住變化招式的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的造成傷害的招式。不是使用者出場後的第1回合時、本回合最後行動時、己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "防住指向己方的攻擊招式。僅首回合。", // NEEDS QC
 
 		start: "  {POKEMON}正在伺機使出掀榻榻米！",
 		block: "  {MOVE}被掀榻榻米防禦住了！",
 	},
 	matchagotcha: {
 		name: "刷刷茶炮",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入灼傷狀態。回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。治癒冰凍狀態目標的冰凍。", // NEEDS QC
+		shortDesc: "20%灼傷。回復一半傷害。解目標冰凍。", // NEEDS QC
 	},
 	maxairstream: {
 		name: "極巨飛衝",
 		// Official flavor text: "極巨化寶可夢 所使出的飛行屬性攻擊。 可提高我方的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方所有寶可夢的速度提高1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方速度+1。", // NEEDS QC
 	},
 	maxdarkness: {
 		name: "極巨惡霸",
 		// Official flavor text: "極巨化寶可夢 所使出的惡屬性攻擊。 可降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，對手方所有寶可夢的特防降低1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方特防-1。", // NEEDS QC
 	},
 	maxflare: {
 		name: "極巨火爆",
 		// Official flavor text: "極巨化寶可夢 所使出的火屬性攻擊。 可在５回合內讓日照增強。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生大晴天的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。召喚大晴天。", // NEEDS QC
 	},
 	maxflutterby: {
 		name: "極巨蟲蠱",
 		// Official flavor text: "極巨化寶可夢 所使出的蟲屬性攻擊。 可降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，對手方所有寶可夢的特攻降低1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方特攻-1。", // NEEDS QC
 	},
 	maxgeyser: {
 		name: "極巨水流",
 		// Official flavor text: "極巨化寶可夢 所使出的水屬性攻擊。 在５回合內會降下大雨。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生求雨的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。召喚下雨。", // NEEDS QC
 	},
 	maxguard: {
 		name: "極巨防壁",
 		// Official flavor text: "完全防住對手的所有攻擊。 連續使用時容易失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的幾乎所有招式，包括極巨招式和超極巨招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "防住包括極巨招式在內的招式。", // NEEDS QC
 
 		activate: "  {POKEMON}在攻擊中守護住了自己！",
 	},
 	maxhailstorm: {
 		name: "極巨寒冰",
 		// Official flavor text: "極巨化寶可夢 所使出的冰屬性攻擊。 在５回合內會降下冰雹。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生冰雹的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。召喚冰雹。", // NEEDS QC
 	},
 	maxknuckle: {
 		name: "極巨拳鬥",
 		// Official flavor text: "極巨化寶可夢 所使出的格鬥屬性攻擊。 可提高我方的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方所有寶可夢的攻擊提高1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方攻擊+1。", // NEEDS QC
 	},
 	maxlightning: {
 		name: "極巨閃電",
 		// Official flavor text: "極巨化寶可夢 所使出的電屬性攻擊。 可在５回合內將腳下變成電氣場地。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生電氣場地的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。布下電氣場地。", // NEEDS QC
 	},
 	maxmindstorm: {
 		name: "極巨超能",
 		// Official flavor text: "極巨化寶可夢 所使出的超能力屬性攻擊。 可在５回合內將腳下變成精神場地。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生精神場地的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。布下精神場地。", // NEEDS QC
 	},
 	maxooze: {
 		name: "極巨酸毒",
 		// Official flavor text: "極巨化寶可夢 所使出的毒屬性攻擊。 可提高我方的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方所有寶可夢的特攻提高1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方特攻+1。", // NEEDS QC
 	},
 	maxovergrowth: {
 		name: "極巨草原",
 		// Official flavor text: "極巨化寶可夢 所使出的草屬性攻擊。 可在５回合內將腳下變成青草場地。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生青草場地的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。布下青草場地。", // NEEDS QC
 	},
 	maxphantasm: {
 		name: "極巨幽魂",
 		// Official flavor text: "極巨化寶可夢 所使出的幽靈屬性攻擊。 可降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，對手方所有寶可夢的防禦降低1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方防禦-1。", // NEEDS QC
 	},
 	maxquake: {
 		name: "極巨大地",
 		// Official flavor text: "極巨化寶可夢 所使出的地面屬性攻擊。 可提高我方的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方所有寶可夢的特防提高1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方特防+1。", // NEEDS QC
 	},
 	maxrockfall: {
 		name: "極巨岩石",
 		// Official flavor text: "極巨化寶可夢 所使出的岩石屬性攻擊。 在５回合內會捲起沙暴。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生沙暴的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。召喚沙暴。", // NEEDS QC
 	},
 	maxstarfall: {
 		name: "極巨妖精",
 		// Official flavor text: "極巨化寶可夢 所使出的妖精屬性攻擊。 可在５回合內將腳下變成薄霧場地。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，產生薄霧場地的效果。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。布下薄霧場地。", // NEEDS QC
 	},
 	maxsteelspike: {
 		name: "極巨鋼鐵",
 		// Official flavor text: "極巨化寶可夢 所使出的鋼屬性攻擊。 可提高我方的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，己方所有寶可夢的防禦提高1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。己方防禦+1。", // NEEDS QC
 	},
 	maxstrike: {
 		name: "極巨攻擊",
 		// Official flavor text: "極巨化寶可夢 所使出的一般屬性攻擊。 可降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，對手方所有寶可夢的速度降低1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方速度-1。", // NEEDS QC
 	},
 	maxwyrmwind: {
 		name: "極巨龍騎",
 		// Official flavor text: "極巨化寶可夢 所使出的龍屬性攻擊。 可降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力與原招式的極巨招式威力相同。攻擊成功後，對手方所有寶可夢的攻擊降低1級（處於替身狀態也會受到效果）。使用者未極巨化時，此效果不發生。作為原招式使出時，以威力0造成傷害。", // NEEDS QC
+		shortDesc: "威力由原招式決定。對手方攻擊-1。", // NEEDS QC
 	},
 	meanlook: {
 		name: "黑色目光",
 		// Official flavor text: "用漆黑深邃的眼神 一動也不動地凝視對手， 讓對手無法從戰鬥中逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "使目標無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束，但通過接棒離場時，目標仍然無法交換。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但使用接棒的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束，但通過接棒離場時，目標仍然無法交換。", // NEEDS QC
 		},
 	},
 	meditate: {
 		name: "瑜伽姿勢",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊提高1級。", // NEEDS QC
+		shortDesc: "自身的攻擊提高1級。", // NEEDS QC
 	},
 	mefirst: {
 		name: "搶先一步",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "可能的情況下，以1.5倍威力搶先使出目標本回合所選的招式。只能搶先鳥嘴加農炮、打嗝、灼熱暴衝、格鬥暴衝、復仇、雙倍奉還、渴望、真氣拳、魔法暴衝、搶先一步、金屬爆炸、鏡面反射、劇毒暴衝、陷阱甲殼、掙扎、小偷、黑暗暴衝以外的攻擊招式。目標先於使用者行動時失敗。複製招式時無視目標的替身。", // NEEDS QC
+		shortDesc: "以1.5倍威力搶先使出目標的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "可能的情況下，以1.5倍威力搶先使出目標本回合所選的招式。只能搶先鳥嘴加農炮、打嗝、喋喋不休、雙倍奉還、渴望、真氣拳、搶先一步、金屬爆炸、鏡面反射、陷阱甲殼、掙扎、小偷以外的攻擊招式。目標先於使用者行動時失敗。複製招式時無視目標的替身。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "可能的情況下，以1.5倍威力搶先使出目標本回合所選的招式。只能搶先鳥嘴加農炮、打嗝、喋喋不休、雙倍奉還、渴望、真氣拳、搶先一步、金屬爆炸、鏡面反射、陷阱甲殼、掙扎、小偷及Z招式以外的攻擊招式。目標先於使用者行動時失敗。複製招式時無視目標的替身。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "可能的情況下，以1.5倍威力搶先使出目標本回合所選的招式。只能搶先打嗝、喋喋不休、雙倍奉還、渴望、真氣拳、搶先一步、金屬爆炸、鏡面反射、掙扎、小偷以外的攻擊招式。目標先於使用者行動時失敗。複製招式時無視目標的替身。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "可能的情況下，以1.5倍威力搶先使出目標本回合所選的招式。只能搶先喋喋不休、雙倍奉還、渴望、真氣拳、搶先一步、金屬爆炸、鏡面反射、掙扎、小偷以外的攻擊招式。目標先於使用者行動時失敗。複製招式時無視目標的替身。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "可能的情況下，以1.5倍威力搶先使出目標本回合所選的招式。只能搶先喋喋不休、雙倍奉還、渴望、真氣拳、搶先一步、鏡面反射、掙扎、小偷以外的攻擊招式。目標先於使用者行動時失敗。複製招式時無視目標的替身。", // NEEDS QC
 		},
 	},
 	megadrain: {
 		name: "超級吸取",
 		// Official flavor text: "吸取對手的養分進行攻擊。 可以回復給予對手 傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。攜帶大根莖時，回復量變為1.3倍（向下取整）。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復給目標造成的傷害的1/2（向下取整）的HP。", // NEEDS QC
 		},
 	},
 	megahorn: {
 		name: "超級角擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	megakick: {
 		name: "百萬噸重踢",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	megapunch: {
 		name: "百萬噸重拳",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	memento: {
 		name: "臨別禮物",
 		// Official flavor text: "雖然自己會陷入瀕死， 但可以大幅降低 對手的攻擊和特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊和特攻各降低2級。除落空或沒有對象的情況外，使用者瀕死。命中替身時完全失敗，但目標的能力無法變化時不會失敗。", // NEEDS QC
+		shortDesc: "目標攻擊和特攻-2。自己瀕死。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的攻擊和特攻各降低2級。即使此招式落空，使用者也會瀕死。此招式可以命中處於需2回合的招式中的目標。沒有對象時完全失敗，但目標的能力無法變化時不會失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的攻擊和特攻各降低2級。使用者瀕死。此招式不進行命中判定，且可以命中處於需2回合的招式中的目標。目標的攻擊和特攻能力等級都為-6時完全失敗。", // NEEDS QC
 		},
 
 		heal: "  因為Ｚ力量，{POKEMON}的體力回復了！",
@@ -4478,124 +4468,124 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	menacingmoonrazemaelstrom: {
 		name: "月華飛濺落靈霄",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "無視其他寶可夢的特性。", // NEEDS QC
 	},
 	metalburst: {
 		name: "金屬爆炸",
 		// Official flavor text: "將發動攻擊前 最後受到的招式傷害放大， 向對手進行反擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對本回合最後用物理或特殊招式對使用者造成傷害的對手，給予該傷害1.5倍（向下取整）的傷害。該傷害為0時，改為給予1點傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理或特殊招式攻擊時失敗。", // NEEDS QC
+		shortDesc: "受擊後返還1.5倍傷害。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用物理或特殊招式對使用者造成傷害的對手，給予該傷害1.5倍（向下取整）的傷害。該傷害為0時，改為以威力1造成傷害。該對手的位置已空時，改為對範圍內隨機一隻對手造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理或特殊招式攻擊時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用物理或特殊招式對使用者造成傷害的對手，給予該傷害1.5倍（向下取整）的傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的物理或特殊招式攻擊時，或該攻擊未造成HP損失時失敗。", // NEEDS QC
 		},
 	},
 	metalclaw: {
 		name: "金屬爪",
 		// Official flavor text: "用鋼鐵之爪 撕裂對手進行攻擊。 有時會提高自己的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使使用者的攻擊提高1級。", // NEEDS QC
+		shortDesc: "有10%的機率使自身的攻擊提高1級。", // NEEDS QC
 	},
 	metalsound: {
 		name: "金屬音",
 		// Official flavor text: "讓對手聽如同金屬摩擦般 的刺耳聲。 大幅降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特防降低2級。", // NEEDS QC
+		shortDesc: "使目標的特防降低2級。", // NEEDS QC
 	},
 	meteorassault: {
 		name: "流星突擊",
 		// Official flavor text: "揮舞粗壯的莖進行攻擊。 但同時自己也會站不穩， 下一回合將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	meteorbeam: {
 		name: "流星光束",
 		// Official flavor text: "使用後的第１回合會聚集 宇宙的力量來提高特攻， 並於第２回合攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合蓄力，第2回合攻擊。第1回合使使用者的特攻提高1級。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合特攻+1，第2回合攻擊。", // NEEDS QC
 
 		prepare: "{POKEMON}湧起了宇宙的力量！",
 	},
 	meteormash: {
 		name: "彗星拳",
 		// Official flavor text: "使出如同彗星般的拳頭攻擊對手。 有時會提高自己的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使使用者的攻擊提高1級。", // NEEDS QC
+		shortDesc: "有20%的機率使自身的攻擊提高1級。", // NEEDS QC
 	},
 	metronome: {
 		name: "揮指",
 		// Official flavor text: "揮動手指刺激自己的大腦， 從全部的招式中 隨機選出１招使出。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "從您先請、蘋果酸、鎧農炮、借助、星碎、氣場輪、碉堡、鳥嘴加農炮、巨獸彈、巨獸斬、打嗝、傳遞禮物、灼熱暴衝、撲擊、木枝突刺、廣域破壞、慶祝、喋喋不休、潑冷水、冷笑話、魂舞烈音爆、全開猛撞、格鬥暴衝、復仇、仿效、雙倍奉還、渴望、戲法防守、裝飾、同命、看穿、鑽石風暴、描繪、鋼拳雙擊、電光雙擊、畫龍點睛、巨龍威能、鼓擊、極巨炮、閃電猛衝、挺住、無極光束、假跪真撞、佯攻、怒火中燒、甩肉、花朵加農炮、真氣拳、看我嘛、冰凍伏特、冰冷視線、雪矛、萬有引力、幫助、牽手、強力鑽、異次元猛攻、異次元洞、極寒冷焰、號令、噴射拳、叢林治療、王者盾牌、生命水滴、破滅之光、魔法暴衝、淘金潮、掀榻榻米、搶先一步、流星突擊、揮指、模仿、驚爆大頭、鏡面反射、鸚鵡學舌、暗影之光、自然之力、自然之怒、劇毒暴衝、攔堵、上菜、根源波動、破音、光子噴湧、等離子閃電拳、鼠數兒、蟲撲、力量轉換、斷崖之劍、守住、火焰球、延後、快速防守、憤怒之拳、憤怒粉、怒牛、大憤慨、古老之歌、復生祈禱、大災難、鹽醃、神祕之劍、斷尾、陷阱甲殼、線阱、寫生、夢話、捕獸夾、大聲咆哮、搶奪、打鼾、雪景、暗影偷盜、辣椒精華、尖刺防守、靈魂衝擊、聚光燈、陽春風暴、蒸汽爆炸、鐵蹄光線、神奇蒸汽、掙扎、流星閃衝、水流連打、掉包、高科技光炮、晶光星群、小偷、千箭齊發、千波激盪、雷電囚籠、雷鳴蹴擊、大掃除、起草、變身、戲法、雙光束、Ｖ熱焰、暗冥強擊、黑暗暴衝、廣域防守以外的招式中，隨機選擇1個使出。", // NEEDS QC
+		shortDesc: "隨機使出招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從您先請、蘋果酸、借助、星碎、氣場輪、碉堡、鳥嘴加農炮、巨獸彈、巨獸斬、打嗝、傳遞禮物、撲擊、木枝突刺、廣域破壞、慶祝、喋喋不休、魂舞烈音爆、仿效、雙倍奉還、渴望、戲法防守、裝飾、同命、看穿、鑽石風暴、鋼拳雙擊、畫龍點睛、巨龍威能、龍錘、鼓擊、極巨炮、挺住、無極光束、假跪真撞、佯攻、怒火中燒、花朵加農炮、真氣拳、看我嘛、冰凍伏特、冰冷視線、雪矛、萬有引力、幫助、牽手、異次元猛攻、異次元洞、極寒冷焰、號令、叢林治療、王者盾牌、生命水滴、破滅之光、掀榻榻米、搶先一步、流星突擊、揮指、模仿、驚爆大頭、鏡面反射、鸚鵡學舌、暗影之光、自然之力、自然之怒、攔堵、根源波動、破音、光子噴湧、等離子閃電拳、斷崖之劍、守住、火焰球、延後、快速防守、憤怒粉、古老之歌、神秘之劍、陷阱甲殼、寫生、夢話、捕獸夾、大聲咆哮、搶奪、打鼾、暗影偷盜、尖刺防守、靈魂衝擊、聚光燈、蒸汽爆炸、鐵蹄光線、神奇蒸汽、掙扎、流星閃衝、水流連打、掉包、高科技光炮、小偷、千箭齊發、千波激盪、雷電囚籠、雷鳴蹴擊、變身、戲法、Ｖ熱焰、暗冥強擊、廣域防守以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從您先請、借助、碉堡、鳥嘴加農炮、打嗝、傳遞禮物、慶祝、喋喋不休、仿效、雙倍奉還、渴望、戲法防守、同命、看穿、鑽石風暴、畫龍點睛、挺住、佯攻、花朵加農炮、真氣拳、看我嘛、冰凍伏特、幫助、牽手、異次元猛攻、異次元洞、極寒冷焰、號令、王者盾牌、破滅之光、掀榻榻米、搶先一步、揮指、模仿、驚爆大頭、鏡面反射、鸚鵡學舌、自然之力、根源波動、光子噴湧、等離子閃電拳、斷崖之劍、守住、延後、快速防守、憤怒粉、古老之歌、神秘之劍、陷阱甲殼、寫生、夢話、大聲咆哮、搶奪、打鼾、暗影偷盜、尖刺防守、聚光燈、蒸汽爆炸、掙扎、掉包、高科技光炮、小偷、千箭齊發、千波激盪、變身、戲法、Ｖ熱焰、廣域防守以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從您先請、借助、打嗝、傳遞禮物、慶祝、喋喋不休、仿效、雙倍奉還、渴望、戲法防守、同命、看穿、鑽石風暴、畫龍點睛、挺住、佯攻、真氣拳、看我嘛、冰凍伏特、幫助、牽手、異次元猛攻、異次元洞、極寒冷焰、王者盾牌、破滅之光、掀榻榻米、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、根源波動、斷崖之劍、守住、延後、快速防守、憤怒粉、古老之歌、神秘之劍、寫生、夢話、大聲咆哮、搶奪、打鼾、尖刺防守、蒸汽爆炸、掙扎、掉包、高科技光炮、小偷、千箭齊發、千波激盪、變身、戲法、Ｖ熱焰、廣域防守以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從您先請、借助、傳遞禮物、喋喋不休、仿效、雙倍奉還、渴望、同命、看穿、挺住、佯攻、真氣拳、看我嘛、冰凍伏特、幫助、極寒冷焰、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、自然之力、守住、延後、快速防守、憤怒粉、古老之歌、神秘之劍、寫生、夢話、大聲咆哮、搶奪、打鼾、掙扎、掉包、高科技光炮、小偷、變身、戲法、Ｖ熱焰、廣域防守以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從借助、喋喋不休、仿效、雙倍奉還、渴望、同命、看穿、挺住、佯攻、真氣拳、看我嘛、幫助、搶先一步、揮指、模仿、鏡面反射、鸚鵡學舌、守住、寫生、夢話、搶奪、掙扎、掉包、小偷、戲法以及使用者已會的招式以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從雙倍奉還、渴望、同命、看穿、挺住、真氣拳、看我嘛、幫助、揮指、模仿、鏡面反射、守住、寫生、夢話、搶奪、掙扎、小偷、戲法以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從雙倍奉還、同命、看穿、挺住、揮指、模仿、鏡面反射、守住、寫生、夢話、掙扎、小偷以及使用者已會的招式以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從揮指、掙扎以外的招式中，隨機選擇1個使出。", // NEEDS QC
 		},
 
 		move: "揮動手指後，使出了{MOVE}！",
 	},
 	mightycleave: {
 		name: "強刃攻擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "穿透守護類招式（不破壞）。", // NEEDS QC
 	},
 	milkdrink: {
 		name: "喝牛奶",
 		// Official flavor text: "回復自己最大ＨＰ的一半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復使用者最大HP的1/2（四捨五入）。", // NEEDS QC
+		shortDesc: "回復自身最大HP的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。", // NEEDS QC
 		},
 	},
 	mimic: {
 		name: "模仿",
 		// Official flavor text: "在戰鬥期間， 將對手最近一次使用的招式 變成自己的招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者在場期間，此招式被替換為目標最後使用的招式。複製的招式PP為該招式的最大值。目標還未使用過招式時、使用者已變身時、使用者已會該招式時、該招式是借助、巨獸彈、巨獸斬、打嗝、灼熱暴衝、慶祝、喋喋不休、格鬥暴衝、仿效、極巨炮、牽手、魔法暴衝、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、劇毒暴衝、寫生、夢話、掙扎、晶光星群、變身、黑暗暴衝時失敗。", // NEEDS QC
+		shortDesc: "將目標最後的招式替換此招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，此招式被替換為目標最後使用的招式。複製的招式PP為該招式的最大值。目標還未使用過招式時、使用者已變身時、使用者已會該招式時、該招式是巨獸彈、巨獸斬、喋喋不休、極巨炮、模仿、寫生、掙扎、變身或極巨、超極巨招式時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，此招式被替換為目標最後使用的招式。複製的招式PP為該招式的最大值。目標還未使用過招式時、使用者已變身時、使用者已會該招式時、該招式是喋喋不休、模仿、寫生、掙扎、變身或Z招式時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，此招式被替換為目標最後使用的招式。複製的招式PP為該招式的最大值。目標還未使用過招式時、使用者已變身時、使用者已會該招式時、該招式是喋喋不休、模仿、寫生、掙扎、變身時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，此招式被替換為目標最後使用的招式。複製的招式PP為5。目標還未使用過招式時、使用者已變身時、使用者已會該招式時、該招式是喋喋不休、揮指、模仿、寫生、掙扎時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，此招式被替換為目標最後使用的招式。複製的招式PP為5。目標還未使用過招式時、使用者已變身時、使用者已會該招式時、該招式是揮指、模仿、寫生、掙扎時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，此招式被替換為目標最後使用的招式。複製的招式PP為5。目標還未使用過招式時、使用者已會該招式時、該招式是掙扎時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，此招式被替換為目標所會的隨機一個招式，即使使用者已會該招式。複製的招式無論其最大PP為多少，都繼承此招式的剩餘PP。複製的招式每消耗1點PP，此招式也消耗1點PP。", // NEEDS QC
+			shortDesc: "替換為目標的隨機一個招式。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}學會了{MOVE}！",
@@ -4603,22 +4593,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mindblown: {
 		name: "驚爆大頭",
 		// Official flavor text: "會讓自己的頭爆炸， 來攻擊周遭的一切。 自己也會受到傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無論成功與否，使用者失去最大HP的1/2（向上取整，即使會因此瀕死）。特性為魔法防守時不會失去。場上有特性為濕氣的寶可夢時，或此招式為火屬性且使用者處於粉塵效果下或天氣為大雨時，此招式不會發動，HP也不會失去。", // NEEDS QC
+		shortDesc: "失去一半HP。攻擊周圍全體。", // NEEDS QC
 
-		damage: null, // NEEDS TRANSLATION
+		damage: "  ({POKEMON}削減自己的HP，提高了招式的威力！)", // NEEDS QC
 	},
 	mindreader: {
 		name: "心之眼",
 		// Official flavor text: "用心感受對手的行動模式， 下次攻擊時必定 會命中對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到下一回合結束為止，使用者的招式必定命中目標（目標處於需要2回合的招式中也能命中）。使用者或目標離場後效果結束。使用者已有此效果時失敗。", // NEEDS QC
+		shortDesc: "下次攻擊必定命中目標。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到下回合結束為止，目標即使處於需2回合的招式中也無法回避使用者的招式。此效果對目標發動時，其他所有寶可夢對該目標的此招式和鎖定效果結束。目標通過接棒離場時，接替的寶可夢繼續受此效果影響。使用者通過接棒離場時，效果對同一目標為接替的寶可夢重新發動。使用者或目標離場後效果結束。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "對目標的下一次命中判定必定成功。目標正在使用飛翔時，仍會回避地震、地裂、震級。目標通過接棒離場時，接替的寶可夢繼續受此效果影響。目標離場或對其進行命中判定後，效果結束。", // NEEDS QC
+			shortDesc: "下一個招式必定命中目標。", // NEEDS QC
 		},
 
 		start: "#lockon",
@@ -4626,38 +4616,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	minimize: {
 		name: "變小",
 		// Official flavor text: "蜷縮身體使自己顯得很小， 大幅提高 自己的閃避率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的回避率提高2級。無論回避率是否變化，在場期間受到泰山壓頂、龍之俯衝、飛身重壓、高溫重壓、重磅衝撞、極惡飛躍粉碎擊、瘋狂滾壓、踩踏、閃電強襲攻擊時，必定被命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "自身的回避率提高2級。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的回避率提高2級。無論回避率是否變化，在場期間受到泰山壓頂、龍之俯衝、飛身重壓、高溫重壓、重磅衝撞、極惡飛躍粉碎擊、瘋狂滾壓、踩踏攻擊時，必定被命中且傷害變為2倍。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的回避率提高2級。無論回避率是否變化，在場期間受到泰山壓頂、龍之俯衝、飛身重壓、高溫重壓、潛靈奇襲、暗影潛襲、瘋狂滾壓、踩踏攻擊時，必定被命中且傷害變為2倍。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的回避率提高2級。無論回避率是否變化，在場期間受到踩踏、瘋狂滾壓攻擊時，傷害變為2倍。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的回避率提高1級。無論回避率是否變化，在場期間受到踩踏攻擊時，威力變為2倍。", // NEEDS QC
+			shortDesc: "自身的回避率提高1級。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的回避率提高1級。無論回避率是否變化，在場期間受到驚嚇、神通力、尖刺臂、踩踏攻擊時，傷害變為2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的回避率提高1級。無論回避率是否變化，在場期間受到踩踏攻擊時，威力變為2倍。可以通過接棒將此效果轉移給同伴。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的回避率提高1級。", // NEEDS QC
 		},
 	},
 	miracleeye: {
 		name: "奇跡之眼",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標在場期間，其回避率等級為+1以上時在命中判定中被無視，且超能力屬性的攻擊可以命中惡屬性的目標。目標已受此效果或識破、氣味偵測的效果影響時失敗。", // NEEDS QC
+		shortDesc: "超能力招式可命中惡屬性。無視回避。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間，其回避率等級為+1以上時在命中判定中被無視，且超能力屬性的攻擊可以命中惡屬性的目標。", // NEEDS QC
 		},
 
 		start: "#foresight",
@@ -4665,59 +4655,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mirrorcoat: {
 		name: "鏡面反射",
 		// Official flavor text: "將來自對手的特殊攻擊傷害加倍後， 返還給該對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對本回合最後用特殊招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該傷害為0時，改為給予1點傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的特殊招式攻擊時失敗。", // NEEDS QC
+		shortDesc: "返還所受特殊傷害的2倍。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用特殊招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該傷害為0時，改為以威力1造成傷害。該對手的位置已空時，改為對範圍內隨機一隻對手造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的特殊招式攻擊時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用特殊招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。連續攻擊招式只計算最後1次攻擊。本回合未受到對手的特殊招式攻擊時，或該攻擊未造成HP損失時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對本回合最後用特殊招式對使用者造成傷害的對手，給予該傷害2倍的傷害。該對手的位置已空且場上有其他對手寶可夢時，改為對其造成傷害。此招式將覺醒力量視為一般屬性，且連續攻擊招式只計算最後1次攻擊。本回合未受到對手的特殊招式攻擊時，或該攻擊未造成HP損失時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對對手給予使用者本回合因特殊招式失去的HP的2倍的傷害。此招式將覺醒力量視為一般屬性，且連續攻擊招式只計算最後1次攻擊。使用者先行動時、本回合未受到特殊招式攻擊時、該攻擊未造成HP損失時失敗。", // NEEDS QC
 		},
 	},
 	mirrormove: {
 		name: "鸚鵡學舌",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使出目標最後使用的招式，可能的情況下以該目標為對象。目標還未使用過招式時，或最後使用的招式無法被此招式複製時失敗。", // NEEDS QC
+		shortDesc: "對目標使出其最後使用的招式。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出最後成功以使用者為目標的招式。複製的招式不指定特定對象使出。沒有以使用者為目標的招式時、該招式是被其他招式調用的時、該招式是再來一次時、該招式無法被此招式複製時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出最後成功以使用者為目標的招式。複製的招式不指定特定對象使出。沒有以使用者為目標的招式時、該招式落空・失敗或對使用者無效時、該招式無法被此招式複製時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出目標最後使用的招式。使用者出場後目標還未使用過招式時，或最後使用的招式是揮指、模仿、鸚鵡學舌、寫生、夢話、變身或使用者已會的招式時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出目標最後使用的招式。使用者出場後目標還未使用過招式時，或最後使用的招式是鸚鵡學舌時失敗。", // NEEDS QC
 		},
 	},
 	mirrorshot: {
 		name: "鏡光射擊",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "有30%的機率使目標的命中率降低1級。", // NEEDS QC
 	},
 	mist: {
 		name: "白霧",
 		// Official flavor text: "用白霧覆蓋身體。 在５回合內不會讓對手 降低自己的能力。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，使用者及其隊友的能力等級不會被其他寶可夢降低。己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內己方能力不會被降低。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
-			start: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，其能力等級不會被其他寶可夢降低。使用者已有此效果時失敗。可以通過接棒將此效果轉移給同伴。", // NEEDS QC
+			shortDesc: "在場期間能力不會被降低。", // NEEDS QC
+			start: "  {POKEMON}被白霧籠罩了！", // NEEDS QC
 			block: "  {POKEMON}正受到白霧的保護！",
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			start: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，除招式的追加效果造成的以外，其能力等級不會被其他寶可夢降低。使用者已有此效果時失敗。任意寶可夢使用黑霧後，效果結束。", // NEEDS QC
+			start: "  {POKEMON}被白霧籠罩了！", // NEEDS QC
 			block: "  但是，沒有效果！！",
 		},
 
@@ -4728,29 +4718,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mistball: {
 		name: "薄霧球",
 		// Official flavor text: "將霧狀的羽毛聚集成團進行攻擊。 有時會降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的特攻降低1級。", // NEEDS QC
 	},
 	mistyexplosion: {
 		name: "薄霧炸裂",
 		// Official flavor text: "對自己周圍的所有寶可夢進行攻擊， 但使出後，自己會陷入瀕死。 在薄霧場地時，招式威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場地為薄霧場地且使用者在地面上時，威力變為1.5倍。使用後，使用者瀕死（因沒有對象而失敗時也一樣）。場上有特性為濕氣的寶可夢時無法使用。", // NEEDS QC
+		shortDesc: "自己瀕死。薄霧場地時威力1.5倍。", // NEEDS QC
 	},
 	mistyterrain: {
 		name: "薄霧場地",
 		// Official flavor text: "在５回合內， 地面上的寶可夢不會陷入異常狀態。 龍屬性招式的傷害也會減半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場地變為薄霧場地。期間，對地面上的寶可夢使出的龍屬性攻擊招式威力變為0.5倍，地面上的寶可夢不會陷入異常狀態或混亂狀態。地面上的寶可夢會受到哈欠影響，但不會因其效果入睡。保護色會變為妖精屬性，自然之力會變為月亮之力，祕密之力會有30%的機率使特攻降低1級。已經是薄霧場地時失敗。", // NEEDS QC
+		shortDesc: "5回合內變為薄霧場地。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，場地變為薄霧場地。期間，對地面上的寶可夢使出的龍屬性攻擊招式威力變為0.5倍，地面上的寶可夢不會陷入異常狀態。地面上的寶可夢會受到哈欠影響，但不會因其效果入睡。保護色會變為妖精屬性，自然之力會變為月亮之力，秘密之力會有30%的機率使特攻降低1級。已經是薄霧場地時失敗。", // NEEDS QC
 		},
 	},
 	moonblast: {
 		name: "月亮之力",
 		// Official flavor text: "借用月亮的力量攻擊對手。 有時會降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "有30%的機率使目標的特攻降低1級。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -4759,150 +4749,150 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	moongeistbeam: {
 		name: "暗影之光",
 		// Official flavor text: "放出奇怪的光線攻擊對手。 可不顧對手的特性進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "無視其他寶可夢的特性。", // NEEDS QC
 	},
 	moonlight: {
 		name: "月光",
 		// Official flavor text: "回復自己的ＨＰ。 回復量會隨著天氣的不同 而有所變化。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天氣為無或亂流時或攜帶萬能傘時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為下雨、大雨、沙暴或下雪時回復1/4（均五捨六入）。", // NEEDS QC
+		shortDesc: "根據天氣回復不同量的HP。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無或亂流時或攜帶萬能傘時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為冰雹、大雨、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無或亂流時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為冰雹、大雨、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復2/3，天氣為冰雹、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復2/3，天氣為冰雹、下雨或沙暴時回復1/4（均向下取整）。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復全部HP，天氣為下雨或沙暴時回復1/4（均向下取整）。", // NEEDS QC
 		},
 	},
 	morningsun: {
 		name: "晨光",
 		// Official flavor text: "回復自己的ＨＰ。 回復量會隨著天氣的不同 而有所變化。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天氣為無或亂流時或攜帶萬能傘時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為下雨、大雨、沙暴或下雪時回復1/4（均五捨六入）。", // NEEDS QC
+		shortDesc: "根據天氣回復不同量的HP。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無或亂流時或攜帶萬能傘時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為冰雹、大雨、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無或亂流時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為冰雹、大雨、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復2/3，天氣為冰雹、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復2/3，天氣為冰雹、下雨或沙暴時回復1/4（均向下取整）。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復全部HP，天氣為下雨或沙暴時回復1/4（均向下取整）。", // NEEDS QC
 		},
 	},
 	mortalspin: {
 		name: "晶光轉轉",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，使用者所受的寄生種子和束縛類招式的效果結束，己方場上的陷阱全部被清除。有100%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "使對手中毒，並解除陷阱和束縛。", // NEEDS QC
 	},
 	mountaingale: {
 		name: "冰山風",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	mudbomb: {
 		name: "泥巴炸彈",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "有30%的機率使目標的命中率降低1級。", // NEEDS QC
 	},
 	muddywater: {
 		name: "濁流",
 		// Official flavor text: "用渾濁的污水攻擊對手。 有時會降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "有30%的機率使對手命中率降低1級。", // NEEDS QC
 	},
 	mudshot: {
 		name: "泥巴射擊",
 		// Official flavor text: "向對手投擲 泥塊進行攻擊。 同時降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
 	},
 	mudslap: {
 		name: "擲泥",
 		// Official flavor text: "向對手的臉等處 投擲泥巴進行攻擊。 可降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的命中率降低1級。", // NEEDS QC
 	},
 	mudsport: {
 		name: "玩泥巴",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場上所有寶可夢的電屬性攻擊招式威力變為0.33倍。已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內電屬性招式威力變為1/3。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，場上所有寶可夢的電屬性攻擊招式威力變為0.33倍。任意寶可夢已有此效果時失敗。", // NEEDS QC
+			shortDesc: "電屬性攻擊威力變為1/3。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，場上所有寶可夢的電屬性攻擊招式威力減半。使用者已有此效果時失敗。可以通過接棒將此效果轉移給同伴。", // NEEDS QC
+			shortDesc: "電屬性攻擊威力減半。", // NEEDS QC
 		},
 	},
 	multiattack: {
 		name: "多屬性攻擊",
 		// Official flavor text: "讓強大能量圍繞全身， 撞向對手進行攻擊。 招式屬性會隨著記憶碟而改變。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式的屬性由使用者攜帶的記憶碟決定。", // NEEDS QC
+		shortDesc: "屬性由攜帶的記憶碟決定。", // NEEDS QC
 	},
 	mysticalfire: {
 		name: "魔法火焰",
 		// Official flavor text: "從口中吐出特別灼熱的 火焰進行攻擊。 可降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的特攻降低1級。", // NEEDS QC
 	},
 	mysticalpower: {
 		name: "神秘之力",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的特攻提高1級。", // NEEDS QC
+		shortDesc: "有100%的機率使自身的特攻提高1級。", // NEEDS QC
 	},
 	nastyplot: {
 		name: "詭計",
 		// Official flavor text: "動歪腦筋，活化大腦。 大幅提高自己的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻提高2級。", // NEEDS QC
+		shortDesc: "自身的特攻提高2級。", // NEEDS QC
 	},
 	naturalgift: {
 		name: "自然之恩",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式的屬性和威力由使用者攜帶的樹果決定，該樹果會失去。使用者沒有攜帶樹果時、特性為笨拙時、處於查封或魔法空間效果下時失敗。", // NEEDS QC
+		shortDesc: "威力和屬性由攜帶的樹果決定。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式的屬性和威力由使用者攜帶的樹果決定，該樹果會失去。使用者沒有攜帶樹果時、特性為笨拙時、處於查封效果下時失敗。", // NEEDS QC
 		},
 	},
 	naturepower: {
 		name: "自然之力",
 		// Official flavor text: "用自然之力進行攻擊。 隨著使用地點的不同， 使出的招式也會改變。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "根據場地調用其他招式使出。通常為三重攻擊，電氣場地時為十萬伏特，薄霧場地時為月亮之力，青草場地時為能量球，精神場地時為精神強念。", // NEEDS QC
+		shortDesc: "根據場地使出不同的招式。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "根據場地調用其他招式使出。通常的Wi-Fi場地為三重攻擊，電氣場地時為十萬伏特，薄霧場地時為月亮之力，青草場地時為能量球。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "根據場地調用其他招式使出。通常的Wi-Fi場地為地震。", // NEEDS QC
+			shortDesc: "招式隨場地變化。（地震）", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "根據場地調用其他招式使出。Wi-Fi對戰中為三重攻擊。", // NEEDS QC
+			shortDesc: "招式隨場地變化。（三重攻擊）", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "根據場地調用其他招式使出。Wi-Fi對戰中為高速星星。", // NEEDS QC
+			shortDesc: "招式隨場地變化。（高速星星）", // NEEDS QC
 		},
 
 		move: "自然之力變成了{MOVE}！",
@@ -4910,33 +4900,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	naturesmadness: {
 		name: "自然之怒",
 		// Official flavor text: "向對手發洩自然之怒。 會使對手的ＨＰ減半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成目標剩餘HP的1/2（向下取整，最少1點）的傷害。", // NEEDS QC
+		shortDesc: "造成目標剩餘HP1/2的傷害。", // NEEDS QC
 	},
 	needlearm: {
 		name: "尖刺臂",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，傷害變為2倍。", // NEEDS QC
 		},
 	},
 	neverendingnightmare: {
 		name: "無盡暗夜之誘惑",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	nightdaze: {
 		name: "暗黑爆破",
 		// Official flavor text: "放出黑暗的衝擊波攻擊對手。 有時會降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有40%的機率使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "有40%的機率使目標的命中率降低1級。", // NEEDS QC
 	},
 	nightmare: {
 		name: "惡夢",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標睡眠期間，每回合結束時失去最大HP的1/4（向下取整）。只對睡眠狀態的目標有效。目標醒來後（即使在同一回合再次入睡）效果結束。", // NEEDS QC
+		shortDesc: "睡眠中的目標每回合失去1/4HP。", // NEEDS QC
 
 		start: "  {POKEMON}開始做惡夢了！",
 		damage: "  {POKEMON}正被惡夢纏身！",
@@ -4944,162 +4934,162 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	nightshade: {
 		name: "黑夜魔影",
 		// Official flavor text: "讓對手看見恐怖幻影， 給予對手和自己等級 相同的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成與使用者等級相同的傷害。", // NEEDS QC
+		shortDesc: "造成與自身等級相同的傷害。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "造成與使用者等級相同的傷害。此招式無視屬性免疫。", // NEEDS QC
+			shortDesc: "傷害=自身等級。可命中一般屬性。", // NEEDS QC
 		},
 	},
 	nightslash: {
 		name: "暗襲要害",
 		// Official flavor text: "抓住瞬間的空隙 斬切對手。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	nobleroar: {
 		name: "戰吼",
 		// Official flavor text: "發出戰吼威嚇對手， 降低對手的 攻擊和特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊和特攻各降低1級。", // NEEDS QC
+		shortDesc: "使目標的攻擊、特攻降低1級。", // NEEDS QC
 	},
 	noretreat: {
 		name: "背水一戰",
 		// Official flavor text: "提高自己所有的能力， 但無法進行替換或逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊、防禦、特攻、特防、速度各提高1級，但使用者無法交換。使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換時可以交換。已因此效果無法交換時失敗。", // NEEDS QC
+		shortDesc: "全部能力提高1級，但無法交換。", // NEEDS QC
 
 		start: "  {POKEMON}受到背水一戰的效果影響，無法逃走了！",
 	},
 	noxioustorque: {
 		name: "劇毒暴衝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標中毒。", // NEEDS QC
 	},
 	nuzzle: {
 		name: "蹭蹭臉頰",
 		// Official flavor text: "用帶電的臉頰 磨蹭對手進行攻擊。 能讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有100%的機率使目標麻痺。", // NEEDS QC
 	},
 	oblivionwing: {
 		name: "死亡之翼",
 		// Official flavor text: "從鎖定的對手身上吸取ＨＰ。 可以回復給予對手 傷害的一半以上的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的3/4（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的3/4。", // NEEDS QC
 	},
 	obstruct: {
 		name: "攔堵",
 		// Official flavor text: "完全防住對手的所有攻擊。 連續使用時容易失敗。 一旦觸碰到，防禦會大幅降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢的防禦降低2級。不能防住不造成傷害的招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "防住攻擊招式，接觸者防禦-2。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢的防禦降低2級。不能防住不造成傷害的招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 	},
 	oceanicoperetta: {
 		name: "海神莊嚴交響樂",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	octazooka: {
 		name: "章魚桶炮",
 		// Official flavor text: "向對手的臉等 噴出墨汁進行攻擊。 有時會降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的命中率降低1級。", // NEEDS QC
 	},
 	octolock: {
 		name: "蛸固",
 		// Official flavor text: "讓對手無法逃走。 對手被纏住後， 防禦和特防每回合都會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法交換，並在每回合結束時使目標的防禦和特防各降低1級。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "困住目標，每回合防禦和特防-1。", // NEEDS QC
 
 		start: "  {POKEMON}受到蛸固的效果影響，無法逃走了！",
 	},
 	odorsleuth: {
 		name: "氣味偵測",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標在場期間，其回避率等級為+1以上時在命中判定中被無視，且一般屬性和格鬥屬性的攻擊可以命中幽靈屬性的目標。目標已受此效果或識破、奇跡之眼的效果影響時失敗。", // NEEDS QC
+		shortDesc: "一般和格鬥可命中幽靈。無視回避。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間，其閃避率等級大於0時會在命中判定中被無視，即使目標是幽靈屬性，一般和格鬥屬性的攻擊也能命中。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在場期間，其閃避率等級會在命中判定中被無視，即使目標是幽靈屬性，一般和格鬥屬性的攻擊也能命中。", // NEEDS QC
 		},
 	},
 	ominouswind: {
 		name: "奇異之風",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使使用者的攻擊、防禦、特攻、特防、速度各提高1級。", // NEEDS QC
+		shortDesc: "10%機率全部能力提高1級。", // NEEDS QC
 	},
 	orderup: {
 		name: "上菜",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "隊友米立龍的特性發號施令已發動時，該米立龍是上彎的樣子時使用者的攻擊提高1級，下垂的樣子時防禦提高1級，伸直的樣子時速度提高1級。發動該效果的米立龍即使已瀕死，此效果也會發生。", // NEEDS QC
+		shortDesc: "根據米立龍的樣子提升1項能力。", // NEEDS QC
 	},
 	originpulse: {
 		name: "根源波動",
 		// Official flavor text: "放出無數閃耀著青白色光輝的 光線攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	outrage: {
 		name: "逆鱗",
 		// Official flavor text: "在２～３回合內 瘋狂亂打對手進行攻擊。 大鬧一番後自己會陷入混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2～3回合內固定使出此招式，並在效果最後一回合行動後立即（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、在效果第1回合（3回合時第2回合也是）攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式並在睡眠中使用時，只使用1回合且不會混亂。", // NEEDS QC
+		shortDesc: "持續2～3回合，之後自己陷入混亂。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合行動後立即（若還未混亂）陷入混亂狀態。此招式每回合從相鄰的對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、在效果第1回合（3回合時第2回合也是）攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合結束時（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合結束時（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、入睡時、陷入冰凍狀態時、攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "無論此招式是否成功，2～3回合內固定使出此招式，並在效果最後一回合行動後立即陷入混亂狀態，即使已經混亂。無法行動時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 	},
 	overdrive: {
 		name: "破音",
 		// Official flavor text: "彈奏吉他和貝斯， 用發出巨響的激烈震動 攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	overheat: {
 		name: "過熱",
 		// Official flavor text: "釋放全部能量攻擊對手。 使用後因為反作用力， 自己的特攻會大幅降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻降低2級。", // NEEDS QC
+		shortDesc: "使自身的特攻降低2級。", // NEEDS QC
 	},
 	painsplit: {
 		name: "分擔痛楚",
 		// Official flavor text: "將自己的ＨＰ和 對手的ＨＰ相加， 然後雙方友好地平分。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "將使用者和目標的HP變為兩者剩餘HP的平均值（向下取整）。但不會超過各自的最大HP。", // NEEDS QC
+		shortDesc: "與目標平分HP。", // NEEDS QC
 
 		activate: "  均分了彼此的體力！",
 	},
 	paleowave: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有20%的機率使目標的攻擊降低1級。", // NEEDS QC
 	},
 	paraboliccharge: {
 		name: "拋物面充電",
 		// Official flavor text: "攻擊自己周圍所有的寶可夢。 可以回復給予傷害的一半ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復給目標造成的傷害的1/2（四捨五入）的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。", // NEEDS QC
+		shortDesc: "回復所造成傷害的1/2。", // NEEDS QC
 	},
 	partingshot: {
 		name: "拋下狠話",
 		// Official flavor text: "拋下狠話恐嚇對手， 降低對手的攻擊和特攻後， 和後備寶可夢進行替換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊和特攻各降低1級。成功後，使用者即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。目標的攻擊和特攻的能力等級都沒有變化時，或同行沒有未瀕死的寶可夢時不交換。", // NEEDS QC
+		shortDesc: "目標攻擊和特攻-1。自己與同伴交換。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的攻擊和特攻各降低1級。成功後，使用者即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時不交換。", // NEEDS QC
 		},
 
 		heal: "#memento",
@@ -5108,32 +5098,32 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	payback: {
 		name: "以牙還牙",
 		// Official flavor text: "累積力量進行攻擊。 若在對手之後進行攻擊， 招式的威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合後於目標行動時，威力變為2倍（包括通過號令或特性舞者進行的行動）。交換出場不算行動。", // NEEDS QC
+		shortDesc: "後於目標行動時威力加倍。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合後於目標行動時，威力變為2倍。交換出場不算行動。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合後於目標行動時，威力變為2倍。交換出場也算行動。", // NEEDS QC
 		},
 	},
 	payday: {
 		name: "聚寶功",
 		// Official flavor text: "往對手身上 投擲金幣進行攻擊。 戰鬥後可以得到錢。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "撒出金幣攻擊。", // NEEDS QC
 
 		activate: "  金幣散落一地！",
 	},
 	peck: {
 		name: "啄",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	perishsong: {
 		name: "滅亡之歌",
 		// Official flavor text: "聽了歌聲的寶可夢 ３回合後將陷入瀕死。 替換寶可夢後效果就會消失。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場上每隻寶可夢獲得滅亡計數4（已有滅亡計數的除外）。包括使用回合在內的每回合結束時，場上所有寶可夢的計數減1，計數變為0的寶可夢瀕死。交換下場後計數消失。持有滅亡計數的寶可夢使用接棒時，接替的寶可夢繼承計數並繼續倒數。", // NEEDS QC
+		shortDesc: "場上所有寶可夢3回合後瀕死。", // NEEDS QC
 
 		start: "  聽過滅亡之歌的寶可夢3回合後就會滅亡！",
 		activate: "  {POKEMON}的滅亡計時變成{NUMBER}了！",
@@ -5141,38 +5131,38 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	petalblizzard: {
 		name: "落英繽紛",
 		// Official flavor text: "猛烈地刮起飛雪般的落花， 攻擊自己周圍所有的寶可夢。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊周圍全體。", // NEEDS QC
 	},
 	petaldance: {
 		name: "花瓣舞",
 		// Official flavor text: "在２～３回合內 不斷灑出花瓣攻擊對手。 招式結束後自己會陷入混亂狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2～3回合內固定使出此招式，並在效果最後一回合行動後立即（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、在效果第1回合（3回合時第2回合也是）攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式並在睡眠中使用時，只使用1回合且不會混亂。", // NEEDS QC
+		shortDesc: "持續2～3回合，之後自己陷入混亂。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合行動後立即（若還未混亂）陷入混亂狀態。此招式每回合從相鄰的對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、在效果第1回合（3回合時第2回合也是）攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合結束時（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合結束時（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、入睡時、陷入冰凍狀態時、攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "無論此招式是否成功，2～3回合內固定使出此招式，並在效果最後一回合行動後立即陷入混亂狀態，即使已經混亂。無法行動時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無論此招式是否成功，3～4回合內固定使出此招式，並在效果最後一回合行動後立即陷入混亂狀態，即使已經混亂。無法行動時，效果結束且不會混亂。效果期間，此招式的命中率每回合被包含能力等級變化在內計算出的當前命中率覆蓋，但不會低於1/256或高於255/256。", // NEEDS QC
+			shortDesc: "持續3～4回合，之後自己混亂。", // NEEDS QC
 		},
 	},
 	phantomforce: {
 		name: "潛靈奇襲",
 		// Official flavor text: "使用後的第１回合消失到某處， 並於第２回合攻擊對手。 可不顧對手的守護進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，本回合打破目標的碉堡、看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊目標方。第1回合隱藏身影，第2回合攻擊。隱藏期間不會受到任何攻擊。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合消失，第2回合攻擊。可破守護。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，本回合打破目標的看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊目標方。第1回合隱藏身影，第2回合攻擊。隱藏期間不會受到任何攻擊。攜帶強力香草時，1回合內完成攻擊。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
 		},
 
 		prepare: "#shadowforce",
@@ -5181,58 +5171,58 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	photongeyser: {
 		name: "光子噴湧",
 		// Official flavor text: "以光柱進行攻擊。 會比較自己的攻擊和特攻， 以數值較高的一方進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "（能力等級變化計算在內）使用者的攻擊高於特攻時，變為物理招式。此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "攻擊高於特攻時為物理。無視特性。", // NEEDS QC
 	},
 	pikapapow: {
 		name: "閃閃雷光",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（使用者的親密度×2/5）（向下取整，最低為1）。", // NEEDS QC
+		shortDesc: "親密度最高時威力102。必定命中。", // NEEDS QC
 	},
 	pinmissile: {
 		name: "飛彈針",
 		// Official flavor text: "向對手發射 銳利的針進行攻擊。 可連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。傷害只在第一次攻擊時計算1次，並套用於每次攻擊。若中途某次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	plasmafists: {
 		name: "等離子閃電拳",
 		// Official flavor text: "用帶有電流的拳頭進行攻擊。 可以將一般屬性的 招式轉變為電屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，本回合一般屬性的招式變為電屬性。", // NEEDS QC
+		shortDesc: "本回合一般屬性招式變為電屬性。", // NEEDS QC
 	},
 	playnice: {
 		name: "和睦相處",
 		// Official flavor text: "和對手和睦相處， 讓對手失去戰鬥意志， 降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "使目標的攻擊降低1級。", // NEEDS QC
 	},
 	playrough: {
 		name: "嬉鬧",
 		// Official flavor text: "在和對手嬉鬧的同時進行攻擊。 有時會降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的攻擊降低1級。", // NEEDS QC
 	},
 	pluck: {
 		name: "啄食",
 		// Official flavor text: "用鳥喙進行攻擊。 可以吃下對手攜帶的樹果， 並獲得樹果的效果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，奪取目標攜帶的樹果並立即吃掉，（即使使用者的道具被無效化）獲得其效果。因此招式失去的樹果無法用回收利用或特性收穫取回。", // NEEDS QC
+		shortDesc: "奪取並吃掉目標的樹果。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "奪取目標攜帶的樹果並立即吃掉，使用者的道具未被無效化時獲得其效果。因此招式失去的樹果可以用回收利用取回。", // NEEDS QC
 		},
 
 		removeItem: "#bugbite",
@@ -5240,88 +5230,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	poisonfang: {
 		name: "劇毒牙",
 		// Official flavor text: "用有毒的牙齒 咬住對手進行攻擊。 有時會讓對手陷入劇毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標陷入劇毒狀態。", // NEEDS QC
+		shortDesc: "有50%的機率使目標劇毒。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入劇毒狀態。", // NEEDS QC
+			shortDesc: "有30%的機率使目標劇毒。", // NEEDS QC
 		},
 	},
 	poisongas: {
 		name: "毒瓦斯",
 		// Official flavor text: "將毒瓦斯吹到對手的臉上， 讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "使對手陷入中毒狀態。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "使目標陷入中毒狀態。", // NEEDS QC
 		},
 	},
 	poisonjab: {
 		name: "毒擊",
 		// Official flavor text: "以帶有毒性的觸手或手臂刺進對手。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標中毒。", // NEEDS QC
 	},
 	poisonpowder: {
 		name: "毒粉",
 		// Official flavor text: "撒出大量的有毒粉末 讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "使目標陷入中毒狀態。", // NEEDS QC
 	},
 	poisonsting: {
 		name: "毒針",
 		// Official flavor text: "將有毒的針 刺進對手進行攻擊。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標中毒。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有20%的機率使目標陷入中毒狀態。", // NEEDS QC
+			shortDesc: "有20%的機率使目標中毒。", // NEEDS QC
 		},
 	},
 	poisontail: {
 		name: "毒尾",
 		// Official flavor text: "將尾巴甩向對手進行攻擊。 有時會讓對手陷入中毒狀態， 且容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入中毒狀態。容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。10%機率中毒。", // NEEDS QC
 	},
 	polarflare: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。此招式不能解除目標的冰凍。對至少1個目標攻擊成功且使用者是Ramnarok時，當前為Dormant Forme則變為Radiant Forme，當前為Radiant Forme則變為Dormant Forme。特性為強行的Ramnarok不會變化形態。Radiant Forme在離場後變回Dormant Forme。", // NEEDS QC
+		shortDesc: "10%冰凍。Ramnarok變換形態。", // NEEDS QC
 	},
 	pollenpuff: {
 		name: "花粉團",
 		// Official flavor text: "對敵人使用時，用會爆炸的花粉團來攻擊。 對我方同伴使用時， 則給予有回復效果的花粉團。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對象是隊友時，不造成傷害，改為回復其最大HP的1/2（向下取整）。", // NEEDS QC
+		shortDesc: "對隊友使用時回復其1/2最大HP。", // NEEDS QC
 	},
 	poltergeist: {
 		name: "靈騷",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "目標未攜帶道具時失敗。", // NEEDS QC
 
 		activate: "  {POKEMON}被{ITEM}襲擊了！",
 	},
 	populationbomb: {
 		name: "鼠數兒",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊10次。每次攻擊都進行命中判定，落空時攻擊結束。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊10次。攜帶老千骰子時，不進行每次攻擊的命中判定，隨機攻擊4～10次。", // NEEDS QC
+		shortDesc: "攻擊10次。每次判定命中。", // NEEDS QC
 	},
 	pounce: {
 		name: "蟲撲",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
 	},
 	pound: {
 		name: "拍擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	powder: {
 		name: "粉塵",
 		// Official flavor text: "被撒到粉塵的對手 使用火屬性招式時， 會發生爆炸並受到傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合目標試圖使用火屬性招式時，該招式不會發動，且目標失去最大HP的1/4（四捨五入）。火屬性招式因大雨而不發動時，此效果不發生。", // NEEDS QC
+		shortDesc: "目標使用火招式時失去1/4最大HP。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合目標試圖使用火屬性招式時，該招式不會發動，且目標失去最大HP的1/4（四捨五入）。此效果在火屬性招式因大雨而不發動之前發生。", // NEEDS QC
 		},
 
 		start: "  向{POKEMON}拋灑了粉塵！",
@@ -5330,34 +5320,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powdersnow: {
 		name: "細雪",
 		// Official flavor text: "將冰冷的細雪 吹向對手進行攻擊。 有時會讓對手陷入冰凍狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入冰凍狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標冰凍。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "有10%的機率使目標冰凍。", // NEEDS QC
 		},
 	},
 	powergem: {
 		name: "力量寶石",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	powersplit: {
 		name: "力量平分",
 		// Official flavor text: "用超能力將自己和對手的 攻擊和特攻各別相加後， 再進行平分。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "將使用者和目標的攻擊分別變為兩者攻擊的平均值（向下取整），特攻分別變為兩者特攻的平均值（向下取整）。能力等級變化不受影響。", // NEEDS QC
+		shortDesc: "與目標平分攻擊和特攻。", // NEEDS QC
 
 		activate: "  {POKEMON}平分了各自的力量！",
 	},
 	powerswap: {
 		name: "力量互換",
 		// Official flavor text: "用超能力將自己和對手的 攻擊與特攻的能力變化互相交換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者和目標的攻擊和特攻的能力等級變化。", // NEEDS QC
+		shortDesc: "與目標互換攻擊和特攻的能力變化。", // NEEDS QC
 	},
 	powershift: {
 		name: "力量轉換",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者的攻擊和防禦的數值（能力等級變化保留在各自的能力上）。再次使用時恢復原狀。使用者使用接棒時，若效果仍在，接替的寶可夢的攻擊和防禦也會互換。互換期間因形態變化等重新計算能力時，此效果被無視，但對接棒仍然有效。", // NEEDS QC
+		shortDesc: "互換自身的攻擊和防禦。", // NEEDS QC
 
 		start: "  {POKEMON}互換了進攻力和防守力！",
 		end: "#.start",
@@ -5365,8 +5355,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrick: {
 		name: "力量戲法",
 		// Official flavor text: "利用超能力， 將自己的攻擊和 防禦互相交換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者的攻擊和防禦的數值（能力等級變化保留在各自的能力上）。再次使用時恢復原狀。使用者使用接棒時，若效果仍在，接替的寶可夢的攻擊和防禦也會互換。互換期間因形態變化等重新計算能力時，此效果被無視，但對接棒仍然有效。", // NEEDS QC
+		shortDesc: "互換自身的攻擊和防禦。", // NEEDS QC
 
 		start: "  {POKEMON}互換了攻擊和防禦！",
 		end: "#.start",
@@ -5374,65 +5364,65 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powertrip: {
 		name: "囂張",
 		// Official flavor text: "耀武揚威地攻擊對手， 自己的能力提高得越多， 威力就越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為20+(X×20)。X為使用者+1以上的能力等級的總和。", // NEEDS QC
+		shortDesc: "每有1級能力提升威力+20。", // NEEDS QC
 	},
 	poweruppunch: {
 		name: "增強拳",
 		// Official flavor text: "反覆出拳擊打對手， 使自己的拳頭慢慢變硬。 命中對手時會提高自己的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的攻擊提高1級。", // NEEDS QC
+		shortDesc: "有100%的機率使自身的攻擊提高1級。", // NEEDS QC
 	},
 	powerwhip: {
 		name: "強力鞭打",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	precipiceblades: {
 		name: "斷崖之劍",
 		// Official flavor text: "將大地的力量化為利刃 攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "無追加效果。攻擊所有對手。", // NEEDS QC
 	},
 	present: {
 		name: "禮物",
 		// Official flavor text: "將暗藏機關的盒子 遞給對手進行攻擊。 但也有可能回復對手的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，造成傷害或回復目標。40%的機率威力40，30%的機率威力80，10%的機率威力120，20%的機率回復目標最大HP的1/4（向下取整）。", // NEEDS QC
+		shortDesc: "威力40、80、120或回復目標1/4HP。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，造成傷害或回復目標。102/256的機率威力40，76/256的機率威力80，26/256的機率威力120，52/256的機率回復目標最大HP的1/4（向下取整）。造成傷害時，使用替換了部分數值的異常傷害計算式：使用者的攻擊被替換為此招式對目標的屬性相性倍率的10倍，目標的防禦被替換為使用者第二屬性的索引編號，使用者的等級被替換為目標第二屬性的索引編號。沒有第二屬性的寶可夢使用第一屬性。各屬性的索引編號為一般：0、格鬥：1、飛行：2、毒：3、地面：4、岩石：5、蟲：7、幽靈：8、鋼：9、火：20、水：21、草：22、電：23、超能力：24、冰：25、龍：26、惡：27。計算式中出現除以0的情況時，改為除以1。", // NEEDS QC
 		},
 	},
 	prismaticlaser: {
 		name: "稜鏡鐳射",
 		// Official flavor text: "用稜鏡的力量發射強烈光線。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	protect: {
 		name: "守住",
 		// Official flavor text: "完全防住對手的所有攻擊。 連續使用時容易失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "本回合防住指向自己的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍。失敗時，或最後使用的招式不是看穿、挺住、守住、快速防守、廣域防守時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍，最大為8。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式。此招式的成功率為X/65536。X從65535開始，每次成功使用後減半（向下取整）。連續成功4次後X降為118，之後每次成功都會變為0～65535之間近乎隨機的值。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為65535。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住對手的招式。此招式的成功率為X/255。X從255開始，每次成功使用後減半（向下取整）。失敗時，或最後使用的招式不是看穿、挺住、守住時，X重置為255。使用者處於替身狀態時，或本回合最後行動時失敗。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}擺出了防守的架勢！",
@@ -5441,178 +5431,178 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psybeam: {
 		name: "幻象光線",
 		// Official flavor text: "向對手發射 神奇的光線進行攻擊。 有時會使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標混亂。", // NEEDS QC
 	},
 	psyblade: {
 		name: "精神劍",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場地為電氣場地時，威力變為1.5倍。", // NEEDS QC
+		shortDesc: "電氣場地時威力1.5倍。", // NEEDS QC
 	},
 	psychic: {
 		name: "精神強念",
 		// Official flavor text: "向對手發送 強大的念力進行攻擊。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有10%的機率使目標的特防降低1級。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有33%的機率使目標的特殊降低1級。", // NEEDS QC
+			shortDesc: "有33%的機率使目標的特殊降低1級。", // NEEDS QC
 		},
 	},
 	psychicfangs: {
 		name: "精神之牙",
 		// Official flavor text: "利用精神力量咬住對手進行攻擊。 並可破壞光牆和反射壁等。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊沒有落空時，在傷害計算前消除目標方場上的反射壁、光牆、極光幕效果。", // NEEDS QC
+		shortDesc: "攻擊前破壞對手方的屏障。", // NEEDS QC
 	},
 	psychicnoise: {
 		name: "精神噪音",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回合內，目標在場期間無法回復HP。效果期間，回復類和吸取類招式無法使用，有回復效果的特性和道具也不會回復。受影響的寶可夢使用接棒後，接替的寶可夢也無法回復HP。分擔痛楚和特性再生力不受影響。", // NEEDS QC
+		shortDesc: "2回合內使目標無法回復HP。", // NEEDS QC
 	},
 	psychicterrain: {
 		name: "精神場地",
 		// Official flavor text: "在５回合內，地面上的寶可夢 不會受到先制招式攻擊。 超能力屬性的招式威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場地變為精神場地。期間，地面上的寶可夢的超能力屬性攻擊招式威力變為1.3倍，地面上的寶可夢不會被優先度+1以上的招式命中（來自隊友的招式除外）。保護色會變為超能力屬性，自然之力會變為精神強念，祕密之力會有30%的機率使速度降低1級。已經是精神場地時失敗。", // NEEDS QC
+		shortDesc: "5回合內變為精神場地。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，場地變為精神場地。期間，地面上的寶可夢的超能力屬性攻擊招式威力變為1.5倍，地面上的寶可夢不會被優先度+1以上的招式命中（來自隊友的招式除外）。保護色會變為超能力屬性，自然之力會變為精神強念，秘密之力會有30%的機率使速度降低1級。已經是精神場地時失敗。", // NEEDS QC
 		},
 	},
 	psychoboost: {
 		name: "精神突進",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻降低2級。", // NEEDS QC
+		shortDesc: "使自身的特攻降低2級。", // NEEDS QC
 	},
 	psychocut: {
 		name: "精神利刃",
 		// Official flavor text: "用實體化的 精神利刃斬向對手。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	psychoshift: {
 		name: "精神轉移",
 		// Official flavor text: "用超能力施加暗示， 將自己的異常狀態 轉移給對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "將使用者的異常狀態轉移給目標，使用者被治癒。使用者沒有異常狀態時，或目標已有異常狀態時失敗。", // NEEDS QC
+		shortDesc: "將自身的異常狀態轉移給目標。", // NEEDS QC
 	},
 	psychup: {
 		name: "自我暗示",
 		// Official flavor text: "向自己施加自我暗示， 讓能力變化的狀態 變得與對手相同。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "複製目標當前的所有能力等級變化。", // NEEDS QC
+		shortDesc: "複製目標的能力等級變化。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "複製目標當前的所有能力等級變化。目標的能力等級全部為0時失敗。", // NEEDS QC
 		},
 	},
 	psyshieldbash: {
 		name: "屏障猛攻",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的防禦提高1級。", // NEEDS QC
+		shortDesc: "有100%的機率使自身的防禦提高1級。", // NEEDS QC
 	},
 	psyshock: {
 		name: "精神衝擊",
 		// Official flavor text: "將神奇的念力波實體化後攻擊對手。 給予對手物理傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用目標的防禦代替特防計算傷害。", // NEEDS QC
+		shortDesc: "以目標的防禦而非特防計算傷害。", // NEEDS QC
 	},
 	psystrike: {
 		name: "精神擊破",
 		// Official flavor text: "將神奇的念力波實體化後攻擊對手。 給予對手物理傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用目標的防禦代替特防計算傷害。", // NEEDS QC
+		shortDesc: "以目標的防禦而非特防計算傷害。", // NEEDS QC
 	},
 	psywave: {
 		name: "精神波",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成（使用者的等級）×(X+50)÷100（X為0～100的隨機數，向下取整，最少1點）的傷害。", // NEEDS QC
+		shortDesc: "造成等級0.5～1.5倍的隨機傷害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "造成（使用者的等級）×(X×10+50)÷100（X為0～10的隨機數，向下取整，最少1點）的傷害。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "造成1～（使用者的等級×1.5−1）之間的隨機數值（向下取整，最少1點）的傷害。", // NEEDS QC
+			shortDesc: "1～(等級×1.5-1)的隨機傷害。", // NEEDS QC
 		},
 	},
 	pulverizingpancake: {
 		name: "認真起來大爆擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	punishment: {
 		name: "懲罰",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為60+(X×20)（最高200）。X為目標+1以上的能力等級的總和。", // NEEDS QC
+		shortDesc: "威力60，目標每級提升+20。", // NEEDS QC
 	},
 	purify: {
 		name: "淨化",
 		// Official flavor text: "治癒對手的異常狀態。 治癒後可以回復自己的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標處於異常狀態時，將其治癒。治癒成功時，回復使用者最大HP的1/2（向下取整）。", // NEEDS QC
+		shortDesc: "治癒目標異常狀態則自己回復一半HP。", // NEEDS QC
 	},
 	pursuit: {
 		name: "追打",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合有對手寶可夢交換下場時，（即使不是原本的對象）在其離場前對其攻擊。後於使用快速折返、拋下狠話、瞬間移動、急速折返、伏特替換（不含接棒）的對手行動時，也會在其離場前對其攻擊。命中正在交換的對手時，必定命中且威力變為2倍，且使用者本回合的行動結束；對手因此瀕死時，接替的寶可夢到回合結束才會出場。", // NEEDS QC
+		shortDesc: "對正要交換的目標以2倍威力攻擊。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合有相鄰的對手寶可夢交換下場時，（即使不是原本的對象）在其離場前對其攻擊。後於使用拋下狠話、急速折返、伏特替換（不含接棒）的對手行動時，也會在其離場前對其攻擊。命中正在交換的對手時，必定命中且威力變為2倍，且使用者本回合的行動結束；對手因此瀕死時，接替的寶可夢到回合結束才會出場。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合有相鄰的對手寶可夢交換下場時，（即使不是原本的對象）在其離場前對其攻擊。後於使用急速折返、伏特替換（不含接棒）的對手行動時，也會在其離場前對其攻擊。命中正在交換的對手時，必定命中且威力變為2倍，且使用者本回合的行動結束；對手因此瀕死時，接替的寶可夢到回合結束才會出場。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合有對手寶可夢交換下場時，（即使不是原本的對象）在其離場前對其攻擊。後於使用急速折返（不含接棒）的對手行動時，也會在其離場前對其攻擊。命中正在交換的對手時，必定命中且威力變為2倍，且使用者本回合的行動結束；對手因此瀕死時，接替的寶可夢立即出場。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標是對手寶可夢且本回合交換下場時，在其離場前對其攻擊。命中正在交換的對手時，必定命中且威力變為2倍，且使用者本回合的行動結束；對手因此瀕死時，接替的寶可夢立即出場。", // NEEDS QC
+			shortDesc: "被指定的對手交換下場時威力2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標本回合交換下場時，在其離場前以2倍威力對其攻擊，且使用者本回合的行動結束。", // NEEDS QC
+			shortDesc: "對手交換下場時威力2倍。", // NEEDS QC
 		},
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  ({TARGET}正要被收回……)", // NEEDS QC
 	},
 	pyroball: {
 		name: "火焰球",
 		// Official flavor text: "燃燒小石子， 形成火球攻擊對手。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "10%機率灼傷。解除自身的冰凍。", // NEEDS QC
 	},
 	quash: {
 		name: "延後",
 		// Official flavor text: "壓制對手，讓對手在 回合的最後才能行動。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，目標無視其所選招式的優先度，在其他所有寶可夢之後行動。目標已經行動過時失敗。", // NEEDS QC
+		shortDesc: "使目標本回合最後行動。", // NEEDS QC
 
 		activate: "  延後了{TARGET}的順序！",
 	},
 	quickattack: {
 		name: "電光一閃",
 		// Official flavor text: "以迅雷不及掩耳之勢 撲向對手。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	quickguard: {
 		name: "快速防守",
 		// Official flavor text: "保護自己和同伴， 防禦來自對手的先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的（原本或被改變後）優先度+1以上的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "本回合防住指向己方的先制招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的（原本或被改變後）優先度+1以上的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的（原本或被改變後）優先度+1以上的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的（原本或被改變後）優先度+1以上的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的原本優先度+1以上的招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍。失敗時，或最後使用的招式不是看穿、挺住、守住、快速防守、廣域防守時，X重置為1。X為256以上時，此招式的成功率為1/(2^32)。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
 		},
 
 		start: "  {TEAM}受到了快速防守的保護！",
@@ -5621,30 +5611,30 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	quiverdance: {
 		name: "蝶舞",
 		// Official flavor text: "輕巧地跳起神秘又美麗的舞蹈。 提高自己的特攻、特防和速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻、特防、速度各提高1級。", // NEEDS QC
+		shortDesc: "自身的特攻、特防、速度提高1級。", // NEEDS QC
 	},
 	rage: {
 		name: "憤怒",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，持續選擇此招式期間，每次受到其他寶可夢的攻擊時，使用者的攻擊提高1級。", // NEEDS QC
+		shortDesc: "使用期間受擊時攻擊提高1級。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用此招式後，只要目標沒有守住，持續選擇此招式期間，每次受到其他寶可夢的攻擊時，使用者的攻擊提高1級。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，X從1開始。此招式的傷害變為X倍，且使用者每次受到對手攻擊時，X增加1（最大255）。使用者離場或未選擇此招式時，X重置為1。", // NEEDS QC
+			shortDesc: "使用中受擊時下次憤怒傷害提高。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，使用者每回合自動使出此招式，且無法交換。效果期間，每次受到對手攻擊時，使用者的攻擊提高1級，且此招式的命中率每回合被包含能力等級變化在內計算出的當前命中率覆蓋，但不會低於1/256或高於255/256。", // NEEDS QC
+			shortDesc: "永久持續。每次受擊攻擊+1。", // NEEDS QC
 		},
 	},
 	ragefist: {
 		name: "憤怒之拳",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為50+(X×50)。X為本場對戰中使用者受到造成傷害的攻擊的累計次數（即使HP沒有減少也計算，最多6）。交換下場或瀕死也不會重置。連續攻擊招式按每次攻擊計算，但混亂的自傷不計算。", // NEEDS QC
+		shortDesc: "每被擊1次威力+50（最多6次）。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -5653,10 +5643,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	ragepowder: {
 		name: "憤怒粉",
 		// Official flavor text: "將令人煩躁的粉末撒在自己身上， 吸引對手的注意。進而將對手的攻擊 全部轉移到自己身上。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到回合結束為止，對手方使出的單體攻擊招式全部轉向使用者。這些招式在被魔法反射或特性魔法鏡反彈、被特性避雷針或引水引開之前，就會轉向使用者。不是雙打對戰或皇家對戰時失敗。使用者處於自由落體效果下時，此效果被無視。", // NEEDS QC
+		shortDesc: "本回合吸引對手的招式指向自己。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "到回合結束為止，對手方的單體攻擊若在範圍內，都會轉向使用者。此轉向在被魔法反射或特性魔法鏡反彈、被特性避雷針或引水引來之前適用。不是雙打或三打對戰時失敗。使用者處於自由落體效果下時，此效果被無視。", // NEEDS QC
 		},
 
 		start: "#followme",
@@ -5664,78 +5654,78 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragingbull: {
 		name: "怒牛",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊沒有落空時，在傷害計算前消除目標方場上的反射壁、光牆、極光幕效果。使用者當前是帕底亞的樣子的肯泰羅時，此招式的屬性隨其樣子變化。鬥戰種時為格鬥屬性，火熾種時為火屬性，水瀾種時為水屬性。", // NEEDS QC
+		shortDesc: "破壞屏障。屬性隨樣子變化。", // NEEDS QC
 
-		activate: null, // NEEDS TRANSLATION
+		activate: "  {POKEMON}打破了{TEAM}的壁障！", // NEEDS QC
 	},
 	ragingfury: {
 		name: "大憤慨",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2～3回合內固定使出此招式，並在效果最後一回合行動後立即（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、在效果第1回合（3回合時第2回合也是）攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式並在睡眠中使用時，只使用1回合且不會混亂。", // NEEDS QC
+		shortDesc: "持續2～3回合，之後自己陷入混亂。", // NEEDS QC
 	},
 	raindance: {
 		name: "求雨",
 		// Official flavor text: "降下大雨，在５回合內 提高水屬性招式的威力。 火屬性招式的威力會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，天氣變為下雨。期間，水屬性攻擊招式的傷害變為1.5倍，火屬性攻擊招式的傷害變為0.5倍。攜帶潮濕岩石時持續8回合。已經是下雨時失敗。", // NEEDS QC
+		shortDesc: "5回合內召喚下雨。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，天氣變為下雨。期間，水屬性攻擊招式的傷害變為1.5倍，火屬性攻擊招式的傷害變為0.5倍。已經是下雨時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "即使已經是下雨，5回合內，天氣變為下雨。期間，水屬性攻擊招式的傷害變為1.5倍，火屬性攻擊招式的傷害變為0.5倍。", // NEEDS QC
 		},
 	},
 	rapidspin: {
 		name: "高速旋轉",
 		// Official flavor text: "藉由旋轉來攻擊對手。 也可以擺脫綁緊、緊束、寄生種子等招式。 自己的速度也會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，使用者所受的寄生種子和束縛類招式的效果結束，己方場上的陷阱全部被清除。有100%的機率使使用者的速度提高1級。", // NEEDS QC
+		shortDesc: "解除陷阱和束縛等，速度+1。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，使用者所受的寄生種子和束縛類招式的效果結束，己方場上的陷阱全部被清除。", // NEEDS QC
+			shortDesc: "解除陷阱、束縛和寄生種子。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，使用者所受的寄生種子和束縛類招式的效果結束，己方場上的陷阱全部被清除。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，使用者所受的寄生種子和束縛類招式的效果結束，己方場上的撒菱被清除。", // NEEDS QC
 		},
 	},
 	razorleaf: {
 		name: "飛葉快刀",
 		// Official flavor text: "飛射葉子， 切斬對手進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。攻擊所有對手。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "容易擊中要害。", // NEEDS QC
 		},
 	},
 	razorshell: {
 		name: "貝殼刃",
 		// Official flavor text: "用鋒利的貝殼斬切 對手進行攻擊。 有時會降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	razorwind: {
 		name: "旋風刀",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。第1回合蓄力，第2回合攻擊。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "蓄力1回合後攻擊。易擊中要害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "容易擊中要害（擊中要害等級+1）。第1回合蓄力，第2回合攻擊。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
+			shortDesc: "第1回合蓄力，第2回合攻擊對手。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "容易擊中要害（擊中要害等級+1）。第1回合蓄力，第2回合攻擊。", // NEEDS QC
+			shortDesc: "蓄力後第2回合攻擊。易擊中要害。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
+			shortDesc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
 		},
 
 		prepare: "  {POKEMON}周圍的空氣產生了旋渦！",
@@ -5743,25 +5733,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	recover: {
 		name: "自我再生",
 		// Official flavor text: "讓細胞再生， 回復自己最大ＨＰ的一半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復使用者最大HP的1/2（四捨五入）。", // NEEDS QC
+		shortDesc: "回復自身最大HP的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。（使用者的最大HP−當前HP+1）能被256整除時失敗。", // NEEDS QC
 		},
 	},
 	recycle: {
 		name: "回收利用",
 		// Official flavor text: "將在戰鬥中已消耗完的 寶可夢持有物回收後， 回復成可以使用的狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "取回使用者最後使用的道具。使用者攜帶著道具時、還未持有過道具時、道具是破裂的氣球時、道具被特性撿拾的寶可夢撿走時、道具因蟲咬、腐蝕氣體、渴望、燒盡、拍落、啄食、小偷而失去時失敗。用投擲丟出的道具可以取回。", // NEEDS QC
+		shortDesc: "取回最後使用的道具。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "取回使用者最後使用的道具。使用者攜帶著道具時、還未持有過道具時、道具是破裂的氣球時、道具被特性撿拾的寶可夢撿走時、道具因蟲咬、渴望、燒盡、拍落、啄食、小偷而失去時失敗。用投擲丟出的道具可以取回。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "取回在使用者當前位置最後使用的道具，即使使用該道具的寶可夢不是使用者。使用者攜帶著道具時、使用者的位置沒有使用過道具時、道具因渴望、拍落、小偷而失去時失敗。用投擲丟出的道具可以取回。", // NEEDS QC
 		},
 
 		addItem: "  {POKEMON}撿來了{ITEM:classified}！",
@@ -5769,25 +5759,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflect: {
 		name: "反射壁",
 		// Official flavor text: "利用神奇的屏障， 在５回合內減輕 來自對手的物理攻擊傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，使用者及其隊友受到的物理招式傷害變為0.5倍（雙打對戰中為0.66倍）。不與極光幕疊加進一步減傷。被擊中要害時不減傷。使用者或隊友受到劈瓦、精神之牙、清除濃霧攻擊時，己方的此效果消失。攜帶光之黏土時持續8回合。己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內己方受到的物理傷害減半。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友受到的物理招式傷害變為0.5倍（雙打或三打對戰中為0.66倍）。被擊中要害時不減傷。使用者或隊友受到劈瓦或清除濃霧攻擊時，己方的此效果消失。攜帶光之黏土時持續8回合。己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友受到的物理招式傷害變為1/2（己方場上有多隻寶可夢時為2/3）。被擊中要害時不減傷。使用者或隊友受到劈瓦或清除濃霧攻擊時，己方的此效果消失。攜帶光之黏土時持續8回合。己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友受到的物理招式傷害變為1/2（己方場上有多隻寶可夢時為2/3）。被擊中要害時不減傷。使用者或隊友受到劈瓦攻擊時，己方的此效果消失。己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友的防禦變為2倍。被擊中要害時不減傷。己方已有此效果時失敗。", // NEEDS QC
+			shortDesc: "5回合內己方防禦變為2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
-			start: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，受到傷害時防禦變為2倍。被擊中要害時不減傷。此效果可被黑霧清除。", // NEEDS QC
+			shortDesc: "在場期間自己的防禦變為2倍。", // NEEDS QC
+			start: "  {POKEMON}的物理抗性提高了！", // NEEDS QC
 		},
 
 		start: "  反射壁使{TEAM}的物理抗性提高了！",
@@ -5796,13 +5786,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflecttype: {
 		name: "鏡面屬性",
 		// Official flavor text: "在自己身上反映出對手的屬性， 讓自己也變成相同的屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使使用者的屬性變為與目標當前的屬性相同。目標的當前屬性包含無屬性和普通屬性時，無屬性被無視。目標的當前屬性包含無屬性和由森林詛咒或萬聖夜追加的屬性時，無屬性作為一般屬性複製。使用者是阿爾宙斯或銀伴戰獸時、已太晶化時、目標的當前屬性只有無屬性時失敗。", // NEEDS QC
+		shortDesc: "屬性變為與目標相同。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使使用者的屬性變為與目標當前的屬性相同。目標的當前屬性包含無屬性和非追加屬性時，無屬性被無視。目標的當前屬性包含無屬性和由森林詛咒或萬聖夜追加的屬性時，無屬性作為一般屬性複製。使用者是阿爾宙斯或銀伴戰獸時、目標的當前屬性只有無屬性時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使使用者的屬性變為與目標當前的屬性相同。使用者是阿爾宙斯時失敗。", // NEEDS QC
 		},
 
 		typeChange: "  {POKEMON}變成了和{SOURCE}相同的屬性！",
@@ -5810,192 +5800,192 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	refresh: {
 		name: "煥然一新",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "治癒使用者的灼傷、中毒或麻痺。使用者不處於灼傷、中毒或麻痺狀態時失敗。", // NEEDS QC
+		shortDesc: "治癒自身的灼傷、中毒或麻痺。", // NEEDS QC
 	},
 	relicsong: {
 		name: "古老之歌",
 		// Official flavor text: "唱出古老之歌， 打動對手的心進行攻擊。 有時會讓對手陷入睡眠狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入睡眠狀態。對至少1個目標攻擊成功且使用者是美洛耶塔時，歌聲形態變為舞步形態，舞步形態變為歌聲形態。特性為強行的美洛耶塔不會變化形態。舞步形態在離場後變回歌聲形態。", // NEEDS QC
+		shortDesc: "10%催眠。美洛耶塔變換形態。", // NEEDS QC
 	},
 	rest: {
 		name: "睡覺",
 		// Official flavor text: "連續睡２回合。 回復自己的全部ＨＰ 以及治癒所有異常狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "陷入2回合的睡眠狀態，回復全部HP，並治癒異常狀態。HP全滿時、已處於睡眠狀態時、因其他效果無法入睡時失敗。", // NEEDS QC
+		shortDesc: "睡眠2回合，回復全部HP和異常狀態。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "陷入2回合的睡眠狀態，回復全部HP，並治癒異常狀態。已處於睡眠狀態時也會發動。HP全滿時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "陷入2回合的睡眠狀態，回復全部HP，並治癒異常狀態。不會消除灼傷或麻痺造成的能力下降。HP全滿時失敗。", // NEEDS QC
 		},
 	},
 	retaliate: {
 		name: "報仇",
 		// Official flavor text: "為倒下的同伴報仇。 前一回合有同伴被打倒時， 招式的威力會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "上一回合有同行寶可夢瀕死時，威力變為2倍。", // NEEDS QC
+		shortDesc: "上回合有同伴瀕死時威力加倍。", // NEEDS QC
 	},
 	return: {
 		name: "報恩",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（使用者的親密度×2/5）（向下取整，最低為1）。", // NEEDS QC
+		shortDesc: "親密度越高威力越大（最大102）。", // NEEDS QC
 	},
 	revelationdance: {
 		name: "覺醒之舞",
 		// Official flavor text: "全力跳舞進行攻擊。 此招式的屬性將 變得和自己的屬性相同。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式的屬性與使用者的第1屬性相同。第1屬性是無屬性時，若有第2屬性則為第2屬性，否則為森林詛咒或萬聖夜追加的屬性。使用者的屬性只有無屬性時，此招式為無屬性。", // NEEDS QC
+		shortDesc: "屬性與自身第1屬性相同。", // NEEDS QC
 	},
 	revenge: {
 		name: "報復",
 		// Official flavor text: "如果受到對手的招式攻擊， 給予該對手的傷害就會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合受到過目標的攻擊時，威力變為2倍。", // NEEDS QC
+		shortDesc: "本回合受到目標攻擊時威力加倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合受到過目標當前位置的寶可夢的攻擊時，威力變為2倍。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "本回合受到過目標當前位置的寶可夢的攻擊，且該寶可夢是最後攻擊使用者的寶可夢時，傷害變為2倍。", // NEEDS QC
+			shortDesc: "受到目標攻擊時傷害變為2倍。", // NEEDS QC
 		},
 	},
 	reversal: {
 		name: "起死回生",
 		// Official flavor text: "竭盡全力進行攻擊。 自己的ＨＰ越少， 招式的威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由X=（使用者的剩餘HP×48÷使用者的最大HP）（向下取整）決定。X為33～48時威力20，17～32時40，10～16時80，5～9時100，2～4時150，0～1時200。", // NEEDS QC
+		shortDesc: "自身剩餘HP越少威力越大。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "將（使用者的當前HP×64÷使用者的最大HP）（向下取整）記為X，X為43～48時威力為20，22～42時為40，13～21時為80，6～12時為100，2～5時為150，0或1時為200。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力由X=（使用者的剩餘HP×48÷使用者的最大HP）（向下取整）決定。X為33～48時威力20，17～32時40，10～16時80，5～9時100，2～4時150，0～1時200。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "將（使用者的當前HP×48÷使用者的最大HP）（向下取整）記為X，X為33～48時威力為20，17～32時為40，10～16時為80，5～9時為100，2～4時為150，0或1時為200。此招式沒有傷害浮動，也不會擊中要害。", // NEEDS QC
 		},
 	},
 	revivalblessing: {
 		name: "復生祈禱",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "選擇1隻瀕死的同行寶可夢，使其以最大HP的1/2（向下取整）的HP復活。沒有瀕死的寶可夢時失敗。", // NEEDS QC
+		shortDesc: "使瀕死的同伴以一半HP復活。", // NEEDS QC
 
 		heal: "  {POKEMON}復活並能夠繼續戰鬥了！",
 	},
 	risingvoltage: {
 		name: "電力上升",
 		// Official flavor text: "用從地面升騰的電擊攻擊。 當對手在電氣場地時， 招式威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場地為電氣場地且目標在地面上時，威力變為2倍。", // NEEDS QC
+		shortDesc: "目標在電氣場地上時威力加倍。", // NEEDS QC
 	},
 	roar: {
 		name: "吼叫",
 		// Official flavor text: "趕走對手， 強制讓後備寶可夢上場。 對手為野生寶可夢時，戰鬥將直接結束。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標是同行最後一隻未瀕死的寶可夢時、使用過扎根時、特性為吸盤時失敗。", // NEEDS QC
+		shortDesc: "強制目標與隨機同伴交換。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標是同行最後一隻未瀕死的寶可夢時、使用過扎根時、特性為吸盤時失敗。此外，使用者的等級低於目標，且對0～255的隨機數X，X×(使用者的等級+目標的等級)÷256+1（向下取整）小於等於（目標的等級÷4）（向下取整）時也失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標是同行最後一隻未瀕死的寶可夢時，或使用者先於目標行動時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "沒有對戰效果。", // NEEDS QC
+			shortDesc: "沒有對戰效果。", // NEEDS QC
 		},
 	},
 	roaroftime: {
 		name: "時光咆哮",
 		// Official flavor text: "釋放出足以扭曲時間的 強大力量攻擊對手。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	rockblast: {
 		name: "岩石爆擊",
 		// Official flavor text: "向對手發射 堅硬的岩石進行攻擊。 連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 	},
 	rockclimb: {
 		name: "攀岩",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有20%的機率使目標混亂。", // NEEDS QC
 	},
 	rockpolish: {
 		name: "岩石打磨",
 		// Official flavor text: "打磨自己的身體， 減少空氣阻力。 可大幅提高自己的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度提高2級。", // NEEDS QC
+		shortDesc: "自身的速度提高2級。", // NEEDS QC
 	},
 	rockslide: {
 		name: "岩崩",
 		// Official flavor text: "將大岩石 猛烈地砸向對手進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無追加效果。", // NEEDS QC
+			shortDesc: "無追加效果。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		},
 	},
 	rocksmash: {
 		name: "碎岩",
 		// Official flavor text: "用拳頭進行攻擊。 有時會降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	rockthrow: {
 		name: "落石",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	rocktomb: {
 		name: "岩石封鎖",
 		// Official flavor text: "投擲岩石進行攻擊。 封住對手的行動， 進而降低其速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的速度降低1級。", // NEEDS QC
 	},
 	rockwrecker: {
 		name: "岩石炮",
 		// Official flavor text: "向對手發射 巨大的岩石進行攻擊。 下一回合自己將無法動彈。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，下一回合因反作用力無法行動，不能選擇招式。", // NEEDS QC
+		shortDesc: "使用者下一回合無法行動。", // NEEDS QC
 	},
 	roleplay: {
 		name: "扮演",
 		// Official flavor text: "扮演成對手， 讓自己的特性 也變得和對手相同。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特性變為與目標相同的特性。使用者的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶變形、達摩模式、全能變身時或已與目標相同時，或目標的特性為人馬一體、牽絆變身、絕對睡眠、發號施令、畫皮、面影輝映、花之禮、陰晴不定、飽了又餓、結凍頭、幻覺、變身者、多屬性、化學變化氣體、毒傀儡、群聚變形、化學之力、古代活性、夸克充能、接球手、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶甲殼、太晶變形、歸零化境、複製、神奇守護、達摩模式、全能變身時失敗。", // NEEDS QC
+		shortDesc: "將自身特性變為與目標相同。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的特性變為與目標相同的特性。使用者的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、達摩模式時或已與目標相同時，或目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、花之禮、陰晴不定、一口飛彈、飽了又餓、結凍頭、幻覺、變身者、多屬性、化學變化氣體、群聚變形、化學之力、接球手、ＡＲ系統、魚群、界限盾殼、戰鬥切換、複製、神奇守護、達摩模式時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的特性變為與目標相同的特性。使用者的特性為牽絆變身、絕對睡眠、畫皮、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、達摩模式時或已與目標相同時，或目標的特性為牽絆變身、絕對睡眠、畫皮、花之禮、陰晴不定、幻覺、變身者、多屬性、群聚變形、化學之力、接球手、ＡＲ系統、魚群、界限盾殼、戰鬥切換、複製、神奇守護、達摩模式時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的特性變為與目標相同的特性。使用者的特性為多屬性、戰鬥切換時或已與目標相同時，或目標的特性為花之禮、陰晴不定、幻覺、變身者、多屬性、戰鬥切換、複製、神奇守護、達摩模式時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的特性變為與目標相同的特性。使用者的特性為多屬性時或已與目標相同時，或目標的特性為花之禮、陰晴不定、幻覺、變身者、多屬性、複製、神奇守護、達摩模式時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的特性變為與目標相同的特性。使用者的特性為多屬性時或已與目標相同時，目標的特性為多屬性或神奇守護時，或使用者攜帶白金寶珠時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者的特性變為與目標相同的特性。目標的特性為神奇守護時失敗。", // NEEDS QC
 		},
 
 		changeAbility: "  {POKEMON}複製了{SOURCE}的{ABILITY}！",
@@ -6003,74 +5993,74 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	rollingkick: {
 		name: "迴旋踢",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	rollout: {
 		name: "滾動",
 		// Official flavor text: "在５回合內連續滾動攻擊對手。 每擊中一次，威力就會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，固定使出此招式，直到落空、經過5回合或無法使用為止，不能選擇其他招式。每次命中威力翻倍，之前使用過變圓時再翻倍。通過夢話選到此招式時，只使用1回合。", // NEEDS QC
+		shortDesc: "連續使用5回合，每次命中威力加倍。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式成功後，直到落空、經過5回合或無法使出為止，固定使出此招式而無法進行其他行動。每次命中威力變為2倍，之前使用過變圓的話再變為2倍。通過夢話使出此招式時，只使出1回合。效果期間此招式命中發動中的畫皮時，威力倍率暫停但回合計數不停，因此效果結束後倍率可能套用於使用者的下一個招式。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，固定使出此招式，直到落空、經過5回合或無法使用為止，不能選擇其他招式。每次命中威力翻倍，之前使用過變圓時再翻倍。通過夢話選到此招式時，只使用1回合。", // NEEDS QC
 		},
 	},
 	roost: {
 		name: "羽棲",
 		// Official flavor text: "降落到地面，讓身體休息。 回復自己最大ＨＰ的一半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復使用者最大HP的1/2（四捨五入）。未太晶化時，到回合結束為止，飛行屬性的使用者失去飛行屬性，只有飛行屬性的使用者變為一般屬性。HP全滿時不產生任何效果。", // NEEDS QC
+		shortDesc: "回復一半HP。本回合失去飛行屬性。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（四捨五入）。到回合結束為止，飛行屬性的使用者失去飛行屬性，只有飛行屬性的使用者變為一般屬性。HP全滿時不產生任何效果。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。到回合結束為止，飛行屬性的使用者失去飛行屬性，只有飛行屬性的使用者變為無屬性。HP全滿時不產生任何效果。", // NEEDS QC
 		},
 
-		start: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON}在這一回合失去了飛行屬性。)", // NEEDS QC
 	},
 	rototiller: {
 		name: "耕地",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使場上所有在地面上的草屬性寶可夢的攻擊和特攻各提高1級。", // NEEDS QC
+		shortDesc: "地面上的草屬性寶可夢攻擊、特攻+1。", // NEEDS QC
 	},
 	round: {
 		name: "輪唱",
 		// Official flavor text: "用歌聲攻擊對手。 大家一起輪唱便可以接連使出， 威力也會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合有其他寶可夢選擇了此招式時，這些寶可夢按速度順序緊接在使用者之後行動，且第2位及以後的使用者威力變為120。", // NEEDS QC
+		shortDesc: "本回合有他人用過時威力加倍。", // NEEDS QC
 	},
 	ruination: {
 		name: "大災難",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成目標剩餘HP的1/2（向下取整，最少1點）的傷害。", // NEEDS QC
+		shortDesc: "造成目標剩餘HP1/2的傷害。", // NEEDS QC
 	},
 	sacredfire: {
 		name: "神聖之火",
 		// Official flavor text: "用神秘的火焰 燒盡對手進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "50%機率灼傷。解除自身的冰凍。", // NEEDS QC
 	},
 	sacredsword: {
 		name: "聖劍",
 		// Official flavor text: "用長角斬切對手進行攻擊。 可不顧對手的能力變化 給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無視目標的能力等級變化（包括回避率）進行攻擊。", // NEEDS QC
+		shortDesc: "無視目標的能力等級變化。", // NEEDS QC
 	},
 	safeguard: {
 		name: "神秘守護",
 		// Official flavor text: "在５回合內 被神奇的力量守護， 不會陷入異常狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，使用者及其隊友不會被其他寶可夢施加異常狀態或混亂狀態。己方寶可夢不受哈欠影響，但已受到的效果仍會使其入睡。使用者或隊友受到清除濃霧攻擊時，己方的此效果消失。己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內保護己方不陷入異常狀態。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友不會被其他寶可夢施加異常狀態或混亂狀態。己方寶可夢不受哈欠影響，但已受到的效果仍會使其入睡。己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，使用者及其隊友不會被其他寶可夢施加異常狀態或混亂狀態。效果期間，逆鱗、大鬧一番、花瓣舞不會使使用者混亂。己方已有此效果時失敗。", // NEEDS QC
 		},
 
 		start: "  {TEAM}被神秘之幕包圍了！",
@@ -6079,8 +6069,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	saltcure: {
 		name: "鹽醃",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "效果期間，每回合結束時給目標造成其最大HP的1/8（鋼屬性或水屬性時為1/4，向下取整）的傷害。目標離場後效果結束。", // NEEDS QC
+		shortDesc: "每回合損失1/8HP（鋼、水為1/4）。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -6092,50 +6082,50 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandattack: {
 		name: "潑沙",
 		// Official flavor text: "向對手的臉上潑沙， 降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "使目標的命中率降低1級。", // NEEDS QC
 	},
 	sandsearstorm: {
 		name: "熱沙風暴",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入灼傷狀態。天氣為下雨或大雨時必定命中。對攜帶萬能傘的目標，命中率保持80%。", // NEEDS QC
+		shortDesc: "20%機率灼傷。下雨時必中。", // NEEDS QC
 	},
 	sandstorm: {
 		name: "沙暴",
 		// Official flavor text: "揚起沙暴，在５回合內給予 岩石、地面和鋼屬性以外的寶可夢傷害。 岩石屬性寶可夢的特防會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，天氣變為沙暴。除最後一回合外的每回合結束時，場上所有寶可夢受到最大HP的1/16（向下取整）的傷害。地面、岩石、鋼屬性寶可夢和特性為魔法防守、防塵、沙之力、撥沙、沙隱的寶可夢不受傷害。效果期間，岩石屬性寶可夢受到特殊攻擊時特防變為1.5倍。攜帶沙沙岩石時持續8回合。已經是沙暴時失敗。", // NEEDS QC
+		shortDesc: "5回合內召喚沙暴。岩石特防1.5倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，天氣變為沙暴。除最後一回合外的每回合結束時，場上所有寶可夢受到最大HP的1/16（向下取整）的傷害。地面、岩石、鋼屬性寶可夢和特性為魔法防守、沙隱的寶可夢不受傷害。效果期間，岩石屬性寶可夢受到特殊攻擊時特防變為1.5倍。攜帶沙沙岩石時持續8回合。已經是沙暴時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "5回合內，天氣變為沙暴。除最後一回合外的每回合結束時，場上所有寶可夢受到最大HP的1/16（向下取整）的傷害。地面、岩石、鋼屬性寶可夢和特性為沙隱的寶可夢不受傷害。已經是沙暴時失敗。", // NEEDS QC
+			shortDesc: "5回合內天氣變為沙暴。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，天氣變為沙暴。除最後一回合外的每回合結束時，場上所有寶可夢受到最大HP的1/8（向下取整）的傷害。地面、岩石、鋼屬性寶可夢不受傷害。已經是沙暴時失敗。", // NEEDS QC
 		},
 	},
 	sandtomb: {
 		name: "流沙地獄",
 		// Official flavor text: "將對手困在 鋪天蓋地的沙暴中， 在４～５回合內進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（使用者攜帶緊綁束帶時為1/8，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標使用高速旋轉後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合（使用者攜帶緊纏鉤爪時總是5回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+			shortDesc: "2～5回合內束縛目標並造成傷害。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但使用接棒的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}陷入了流沙地獄！",
@@ -6143,153 +6133,153 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sappyseed: {
 		name: "茁茁轟炸",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標進入寄生種子的效果。", // NEEDS QC
+		shortDesc: "產生寄生種子的效果。", // NEEDS QC
 	},
 	savagespinout: {
 		name: "絕對捕食迴旋斬",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	scald: {
 		name: "熱水",
 		// Official flavor text: "向對手噴射 滾燙的熱水進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。治癒冰凍狀態目標的冰凍。", // NEEDS QC
+		shortDesc: "30%機率灼傷。解除目標的冰凍。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入灼傷狀態。", // NEEDS QC
+			shortDesc: "有30%的機率使目標灼傷。", // NEEDS QC
 		},
 	},
 	scaleshot: {
 		name: "鱗射",
 		// Official flavor text: "射出鱗片進行攻擊。 可連續攻擊２～５次。 速度會提高但防禦會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。最後1次攻擊後，使用者的防禦降低1級，速度提高1級。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "攻擊2～5次。之後防禦-1、速度+1。", // NEEDS QC
 	},
 	scaryface: {
 		name: "鬼面",
 		// Official flavor text: "用恐怖的表情瞪著對手， 讓對手害怕， 大幅降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的速度降低2級。", // NEEDS QC
+		shortDesc: "使目標的速度降低2級。", // NEEDS QC
 	},
 	scorchingsands: {
 		name: "熱沙大地",
 		// Official flavor text: "向對手投灑熾熱的沙子進行攻擊。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。治癒冰凍狀態目標的冰凍。", // NEEDS QC
+		shortDesc: "30%機率灼傷。解除目標的冰凍。", // NEEDS QC
 	},
 	scratch: {
 		name: "抓",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	screech: {
 		name: "刺耳聲",
 		// Official flavor text: "發出令人不由自主想要 摀起耳朵的刺耳聲， 大幅降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的防禦降低2級。", // NEEDS QC
+		shortDesc: "使目標的防禦降低2級。", // NEEDS QC
 	},
 	searingshot: {
 		name: "火焰彈",
 		// Official flavor text: "用熊熊烈火 攻擊自己周圍所有的寶可夢。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "30%機率使周圍陷入灼傷。", // NEEDS QC
 	},
 	searingsunrazesmash: {
 		name: "日光迴旋下蒼穹",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "無視其他寶可夢的特性。", // NEEDS QC
 	},
 	secretpower: {
 		name: "秘密之力",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率根據場地對目標產生追加效果。通常為麻痺，電氣場地時為麻痺，薄霧場地時使特攻降低1級，青草場地時為睡眠，精神場地時使速度降低1級。", // NEEDS QC
+		shortDesc: "追加效果隨場地變化（通常30%麻痺）。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率根據場地對目標產生追加效果。通常的Wi-Fi場地為麻痺，電氣場地時為麻痺，薄霧場地時使特攻降低1級，青草場地時為睡眠。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率根據場地對目標產生追加效果。通常的Wi-Fi場地使命中率降低1級。追加效果的機率不受特性天恩影響。", // NEEDS QC
+			shortDesc: "效果隨場地變化。（30%命中-1）", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率根據場地對目標產生追加效果。通常的Wi-Fi場地為麻痺。", // NEEDS QC
+			shortDesc: "追加效果隨場地變化（通常30%麻痺）。", // NEEDS QC
 		},
 	},
 	secretsword: {
 		name: "神秘之劍",
 		// Official flavor text: "用長角斬切對手進行攻擊。 角上擁有的神奇力量 會給予對手物理傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用目標的防禦代替特防計算傷害。", // NEEDS QC
+		shortDesc: "以目標的防禦而非特防計算傷害。", // NEEDS QC
 	},
 	seedbomb: {
 		name: "種子炸彈",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	seedflare: {
 		name: "種子閃光",
 		// Official flavor text: "從身體裡發出衝擊波攻擊對手。 有時會大幅降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有40%的機率使目標的特防降低2級。", // NEEDS QC
+		shortDesc: "有40%的機率使目標的特防降低2級。", // NEEDS QC
 	},
 	seismictoss: {
 		name: "地球上投",
 		// Official flavor text: "利用引力將對手甩飛出去。 給予對手和自己等級相同的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成與使用者等級相同的傷害。", // NEEDS QC
+		shortDesc: "造成與自身等級相同的傷害。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "造成與使用者等級相同的傷害。此招式無視屬性免疫。", // NEEDS QC
+			shortDesc: "傷害=自身等級。可命中幽靈屬性。", // NEEDS QC
 		},
 	},
 	selfdestruct: {
 		name: "自爆",
 		// Official flavor text: "引起爆炸， 攻擊自己周圍所有的寶可夢。 使用後自己會陷入瀕死。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用後，使用者瀕死（因沒有對象而失敗時也一樣）。場上有特性為濕氣的寶可夢時無法使用。", // NEEDS QC
+		shortDesc: "攻擊周圍全體，自己瀕死。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使出招式後使用者瀕死。沒有目標時不會瀕死。傷害計算時，目標的防禦減半計算。特性為濕氣的寶可夢在場時，此招式無法使出。", // NEEDS QC
+			shortDesc: "計算時目標防禦減半。使用者瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出招式後使用者瀕死。傷害計算時，目標的防禦減半計算。特性為濕氣的寶可夢在場時，此招式無法使出。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使出招式後使用者瀕死。傷害計算時，目標的防禦減半計算。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用後，使用者瀕死。但目標的替身因此傷害而破裂時，使用者不會瀕死。傷害計算時，目標的防禦減半。", // NEEDS QC
 		},
 	},
 	shadowball: {
 		name: "暗影球",
 		// Official flavor text: "投擲一團黑影進行攻擊。 有時會降低對手的特防。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標的特防降低1級。", // NEEDS QC
+		shortDesc: "有20%的機率使目標的特防降低1級。", // NEEDS QC
 	},
 	shadowbone: {
 		name: "暗影之骨",
 		// Official flavor text: "用寄宿了靈魂的骨頭 毆打對手進行攻擊。 有時會降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有20%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	shadowclaw: {
 		name: "暗影爪",
 		// Official flavor text: "用黑影化成的銳利爪子 撕裂對手。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	shadowforce: {
 		name: "暗影潛襲",
 		// Official flavor text: "使用後的第１回合消失身影， 並於第２回合攻擊對手。 處於守護的對手也能擊中。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，本回合打破目標的碉堡、看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊目標方。第1回合隱藏身影，第2回合攻擊。隱藏期間不會受到任何攻擊。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合消失，第2回合攻擊。可破守護。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，本回合打破目標的看穿、王者盾牌、守住、尖刺防守守護，其他寶可夢也可以正常攻擊目標。目標方受戲法防守、掀榻榻米、快速防守、廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊目標方。第1回合隱藏身影，第2回合攻擊。隱藏期間不會受到任何攻擊。攜帶強力香草時，1回合內完成攻擊。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功後，本回合打破目標的看穿、守住守護，其他寶可夢也可以正常攻擊目標。目標是對手寶可夢且其一方受快速防守或廣域防守保護時，該守護本回合也被打破，其他寶可夢可以正常攻擊對手方。第1回合隱藏身影，第2回合攻擊。隱藏期間不會受到任何攻擊。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
 		},
 
 		activate: "  打破了{TARGET}的防守！",
@@ -6297,33 +6287,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shadowpunch: {
 		name: "暗影拳",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	shadowsneak: {
 		name: "影子偷襲",
 		// Official flavor text: "伸長自己的影子， 從對手的背後進行攻擊。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	shadowstrike: {
 		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有50%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	sharpen: {
 		name: "稜角化",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊提高1級。", // NEEDS QC
+		shortDesc: "自身的攻擊提高1級。", // NEEDS QC
 	},
 	shatteredpsyche: {
 		name: "至高精神破壞波",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	shedtail: {
 		name: "斷尾",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "消耗使用者最大HP的1/2（向上取整），製造一個HP為使用者最大HP1/4（向下取整）的替身。之後與同行的其他寶可夢交換，替身轉移給接替的寶可夢。HP不足時，或同行沒有未瀕死的寶可夢時失敗。", // NEEDS QC
+		shortDesc: "消耗一半HP留下替身並交換。", // NEEDS QC
 
 		start: "  {POKEMON}截斷尾巴，把它做成了替身！",
 		alreadyStarted: "#substitute",
@@ -6332,30 +6322,30 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sheercold: {
 		name: "絕對零度",
 		// Official flavor text: "一擊讓對手陷入瀕死。 冰屬性以外的寶可夢使用時， 會比較不易命中對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成與目標最大HP相同的傷害。無視命中率和回避率的變化。此招式的命中率為（使用者的等級−目標的等級+X）%（使用者是冰屬性時X=30，否則X=20），目標的等級高於使用者時失敗。對冰屬性寶可夢和特性為結實的寶可夢無效。", // NEEDS QC
+		shortDesc: "一擊必殺。對冰屬性無效。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "造成與目標最大HP相同的傷害。無視命中率和回避率的變化。此招式的命中率為（使用者的等級−目標的等級+30）%，目標的等級高於使用者時失敗。對特性為結實的寶可夢無效。", // NEEDS QC
+			shortDesc: "一擊必殺。目標等級更高時失敗。", // NEEDS QC
 		},
 	},
 	shellsidearm: {
 		name: "臂貝武器",
 		// Official flavor text: "用物理攻擊和特殊攻擊中 能夠給予更大傷害的能力進行攻擊。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入中毒狀態。比較((((2×使用者的等級÷5+2)×90×X)÷Y)÷50)的值，X為使用者的攻擊、Y為目標的防禦時的值更大時，變為會接觸的物理招式。此比較只考慮能力等級變化，不考慮其他能力修正。兩值相等時，隨機變為物理或特殊。", // NEEDS QC
+		shortDesc: "20%中毒。以更強的分類攻擊。", // NEEDS QC
 	},
 	shellsmash: {
 		name: "破殼",
 		// Official flavor text: "破殼而出。 自己的防禦和特防會降低， 但能大幅提高攻擊、特攻和速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各降低1級，攻擊、特攻、速度各提高2級。", // NEEDS QC
+		shortDesc: "防禦、特防-1；攻擊、特攻、速度+2。", // NEEDS QC
 	},
 	shelltrap: {
 		name: "陷阱甲殼",
 		// Official flavor text: "設下甲殼陷阱。 若對手使出物理招式， 就會爆炸並給予傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合在使出此招式前未受到對手的物理招式攻擊時失敗。受到物理招式攻擊且使用者未瀕死時，在受擊後立即攻擊，效果結束。對手物理招式的追加效果被特性強行消除時，不滿足此效果的條件。", // NEEDS QC
+		shortDesc: "受到物理攻擊後才會出招。", // NEEDS QC
 
 		start: "  {POKEMON}設下了陷阱甲殼！",
 		prepare: "  {POKEMON}設下了陷阱甲殼！",
@@ -6363,88 +6353,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shelter: {
 		name: "閉關",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高2級。", // NEEDS QC
+		shortDesc: "自身的防禦提高2級。", // NEEDS QC
 	},
 	shiftgear: {
 		name: "換檔",
 		// Official flavor text: "轉動齒輪， 提高自己的攻擊， 同時大幅提高自己的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度提高2級，攻擊提高1級。", // NEEDS QC
+		shortDesc: "速度提高2級，攻擊提高1級。", // NEEDS QC
 	},
 	shockwave: {
 		name: "電擊波",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	shoreup: {
 		name: "集沙",
 		// Official flavor text: "回復自己最大ＨＰ的一半。 在沙暴中回復得更多。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復使用者最大HP的1/2（五捨六入）。天氣為沙暴時，改為回復最大HP的2/3（五捨六入）。", // NEEDS QC
+		shortDesc: "回復一半HP。沙暴時回復2/3。", // NEEDS QC
 	},
 	signalbeam: {
 		name: "信號光束",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標混亂。", // NEEDS QC
 	},
 	silktrap: {
 		name: "線阱",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式，並使試圖接觸使用者的寶可夢的速度降低1級。不能防住不造成傷害的招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "防住攻擊招式，接觸者速度-1。", // NEEDS QC
 	},
 	silverwind: {
 		name: "銀色旋風",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使使用者的攻擊、防禦、特攻、特防、速度各提高1級。", // NEEDS QC
+		shortDesc: "10%機率全部能力提高1級。", // NEEDS QC
 	},
 	simplebeam: {
 		name: "單純光束",
 		// Official flavor text: "向對手發射謎樣的念力波。 接收了念力波的對手， 特性會變成單純。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特性變為單純。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、單純、戰鬥切換、太晶變形、懶惰、達摩模式、全能變身時失敗。", // NEEDS QC
+		shortDesc: "使目標的特性變為單純。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為單純。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、單純、戰鬥切換、懶惰、達摩模式時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為單純。目標的特性為牽絆變身、絕對睡眠、畫皮、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、單純、戰鬥切換、懶惰、達摩模式時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為單純。目標的特性為多屬性、單純、戰鬥切換、懶惰時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為單純。目標的特性為多屬性、單純、懶惰時失敗。", // NEEDS QC
 		},
 	},
 	sing: {
 		name: "唱歌",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入睡眠狀態。", // NEEDS QC
 	},
 	sinisterarrowraid: {
 		name: "遮天蔽日暗影箭",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	sizzlyslide: {
 		name: "熊熊火爆",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "100%使目標陷入灼傷狀態。", // NEEDS QC
 	},
 	sketch: {
 		name: "寫生",
 		// Official flavor text: "將對手使用的招式變成自己的。 寫生在使用１次之後就會消失。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式被永久替換為目標最後使用的招式。複製的招式PP為該招式的最大值。目標還未使用過招式時、使用者已變身時、該招式是灼熱暴衝、格鬥暴衝、暗黑洞、異次元猛攻、魔法暴衝、劇毒暴衝、復生祈禱、寫生、掙扎、晶光星群、黑暗暴衝或使用者已會的招式時失敗。", // NEEDS QC
+		shortDesc: "永久複製目標最後使用的招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式被永久替換為目標最後使用的招式。複製的招式PP為該招式的最大值。目標還未使用過招式時、使用者已變身時、該招式是喋喋不休、寫生、掙扎或使用者已會的招式時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "此招式被永久替換為目標最後使用的招式。複製的招式PP為該招式的最大值。目標還未使用過招式時、使用者已變身時、該招式是寫生、掙扎或使用者已會的招式時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "在通信對戰中使用時失敗。", // NEEDS QC
+			shortDesc: "在通信對戰中使用時失敗。", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}對{MOVE}進行了寫生！",
@@ -6452,25 +6442,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skillswap: {
 		name: "特性互換",
 		// Official flavor text: "用超能力將自己和 對手的特性互相交換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者和目標的特性。使用者或目標的特性為人馬一體、牽絆變身、絕對睡眠、發號施令、畫皮、面影輝映、飽了又餓、結凍頭、幻覺、多屬性、化學變化氣體、毒傀儡、群聚變形、古代活性、夸克充能、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶甲殼、太晶變形、歸零化境、神奇守護、達摩模式、全能變身時失敗。", // NEEDS QC
+		shortDesc: "與目標互換特性。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的特性。使用者或目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、飽了又餓、結凍頭、幻覺、多屬性、化學變化氣體、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、神奇守護、達摩模式時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的特性。使用者或目標的特性為牽絆變身、絕對睡眠、畫皮、幻覺、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、神奇守護、達摩模式時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的特性。使用者或目標的特性為幻覺、多屬性、戰鬥切換、神奇守護時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的特性。使用者或目標的特性為幻覺、多屬性、神奇守護時，或雙方特性相同時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的特性。使用者或目標的特性為多屬性或神奇守護時、雙方特性相同時、任意一方攜帶白金寶珠時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的特性。使用者或目標的特性為神奇守護時失敗。", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}互換了各自的特性！",
@@ -6478,20 +6468,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skittersmack: {
 		name: "爬擊",
 		// Official flavor text: "從對手背後爬近後進行攻擊。 會降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "100%使目標的特攻降低1級。", // NEEDS QC
 	},
 	skullbash: {
 		name: "火箭頭錘",
 		// Official flavor text: "使用後的第１回合把頭後縮，提高防禦。 並於第２回合攻擊對手。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合蓄力，第2回合攻擊。第1回合使使用者的防禦提高1級。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "第1回合防禦+1，第2回合攻擊。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。第1回合使用者的防禦提高1級。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
+			shortDesc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}把頭縮了進去！",
@@ -6499,14 +6489,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyattack: {
 		name: "神鳥猛擊",
 		// Official flavor text: "在使用後的下一回合進行攻擊。 有時會使對手畏縮。 且容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。容易擊中要害（擊中要害等級+1）。第1回合蓄力，第2回合攻擊。攜帶強力香草時，1回合內完成攻擊。", // NEEDS QC
+		shortDesc: "蓄力1回合攻擊。30%畏縮。易擊要害。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮，且容易擊中要害。第1回合蓄力，第2回合攻擊。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
+			shortDesc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
 		},
 
 		prepare: "強光包圍了{POKEMON}！",
@@ -6514,10 +6504,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skydrop: {
 		name: "自由落體",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合帶著目標飛上高空，第2回合攻擊。體重200kg以上的寶可夢無法帶起。飛在空中期間，使用者和目標只會被起風、暴風、衝天拳、擊落、千箭齊發、打雷、龍捲風擊中。期間使用者和目標無法行動，但目標可以選擇招式。此招式無法對飛行屬性寶可夢造成傷害。目標是隊友時、處於替身狀態時、正在使用彈跳、挖洞、潛水、飛翔、潛靈奇襲、暗影潛襲、自由落體時，第1回合失敗。", // NEEDS QC
+		shortDesc: "帶目標飛上高空，第2回合摔下。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合帶著目標飛上高空，第2回合攻擊。飛在空中期間，使用者和目標只會被起風、暴風、衝天拳、擊落、打雷、龍捲風擊中。期間使用者和目標無法行動，但目標可以選擇招式。此招式無法對飛行屬性寶可夢造成傷害。目標是隊友時、處於替身狀態時、正在使用彈跳、挖洞、潛水、飛翔、暗影潛襲、自由落體時，第1回合失敗。重力的效果使此效果在第2回合前結束時，使用者和目標都回到地面；否則，直到使用者離場或成功使出任意需2回合招式的第2回合為止，目標持續受此效果影響。", // NEEDS QC
 		},
 
 		prepare: "{POKEMON}將{TARGET}帶上了高空！",
@@ -6528,129 +6518,129 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	skyuppercut: {
 		name: "衝天拳",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "可以命中用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標。", // NEEDS QC
+		shortDesc: "可命中飛翔等狀態的目標。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "此招式可以命中正在使用彈跳或飛翔的目標。", // NEEDS QC
+			shortDesc: "可命中彈跳、飛翔中的目標。", // NEEDS QC
 		},
 	},
 	slackoff: {
 		name: "偷懶",
 		// Official flavor text: "偷懶休息。 回復自己最大ＨＰ的一半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復使用者最大HP的1/2（四捨五入）。", // NEEDS QC
+		shortDesc: "回復自身最大HP的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。", // NEEDS QC
 		},
 	},
 	slam: {
 		name: "摔打",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	slash: {
 		name: "劈開",
 		// Official flavor text: "用爪子或鐮刀等 劈開對手進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	sleeppowder: {
 		name: "催眠粉",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入睡眠狀態。", // NEEDS QC
 	},
 	sleeptalk: {
 		name: "夢話",
 		// Official flavor text: "從自己已學會的招式中 隨機選出１個使出。 只有在睡眠狀態時可以使用。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，PP為0的招式也可以被選中。借助、鳥嘴加農炮、打嗝、忍耐、灼熱暴衝、慶祝、喋喋不休、格鬥暴衝、仿效、極巨炮、真氣拳、牽手、魔法暴衝、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、劇毒暴衝、陷阱甲殼、寫生、夢話、掙扎、吵鬧、黑暗暴衝和需要2回合的招式不會被選中。", // NEEDS QC
+		shortDesc: "睡眠時隨機使出自己的其他招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，PP為0的招式也可以被選中。借助、鳥嘴加農炮、打嗝、忍耐、慶祝、喋喋不休、仿效、極巨炮、真氣拳、牽手、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、陷阱甲殼、寫生、夢話、掙扎、吵鬧和需要2回合的招式及極巨招式不會被選中。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，PP為0的招式也可以被選中。借助、鳥嘴加農炮、打嗝、忍耐、慶祝、喋喋不休、仿效、真氣拳、牽手、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、陷阱甲殼、寫生、夢話、掙扎、吵鬧和需要2回合的招式及Z招式不會被選中。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，PP為0的招式也可以被選中。借助、打嗝、忍耐、慶祝、喋喋不休、仿效、真氣拳、牽手、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、寫生、夢話、掙扎、吵鬧和需要2回合的招式不會被選中。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，PP為0的招式也可以被選中。借助、忍耐、喋喋不休、仿效、真氣拳、搶先一步、揮指、模仿、鸚鵡學舌、自然之力、寫生、夢話、掙扎、吵鬧和需要2回合的招式不會被選中。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，PP為0的招式也可以被選中。借助、忍耐、喋喋不休、仿效、真氣拳、搶先一步、揮指、鸚鵡學舌、夢話、吵鬧和需要2回合的招式不會被選中。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，但PP為0時該招式會失敗。借助、忍耐、真氣拳、揮指、鸚鵡學舌、夢話、吵鬧和需要2回合的招式不會被選中。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從使用者會的此招式以外的招式中，隨機選擇1個使出。使用者不處於睡眠狀態時失敗。被選中的招式不消耗PP，PP為0的招式也可以被選中。忍耐、夢話和需要2回合的招式不會被選中。", // NEEDS QC
 		},
 	},
 	sludge: {
 		name: "污泥攻擊",
 		// Official flavor text: "向對手投擲污泥進行攻擊。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標中毒。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有40%的機率使目標陷入中毒狀態。", // NEEDS QC
+			shortDesc: "有40%的機率使目標中毒。", // NEEDS QC
 		},
 	},
 	sludgebomb: {
 		name: "污泥炸彈",
 		// Official flavor text: "向對手投擲污泥進行攻擊。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標中毒。", // NEEDS QC
 	},
 	sludgewave: {
 		name: "污泥波",
 		// Official flavor text: "用污泥波攻擊 自己周圍所有的寶可夢。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使周圍中毒。", // NEEDS QC
 	},
 	smackdown: {
 		name: "擊落",
 		// Official flavor text: "向空中的對手投擲石頭或炮彈等物體 進行攻擊。對手會被擊落，掉到地面。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "可以命中用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標。命中處於彈跳、飛翔、電磁飄浮、意念移物效果下的目標時，該效果結束。目標是（本回合未使用過羽棲的）飛行屬性寶可夢或特性為飄浮的寶可夢時，其在場期間失去對地面屬性攻擊和特性沙穴的免疫。效果期間，目標無法使用電磁飄浮，對目標使用的意念移物也會失敗。", // NEEDS QC
+		shortDesc: "擊落目標，使其可被地面屬性命中。", // NEEDS QC
 
 		start: "  {POKEMON}被擊落，掉到了地面！",
 	},
 	smartstrike: {
 		name: "修長之角",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "必定命中。", // NEEDS QC
 	},
 	smellingsalts: {
 		name: "清醒",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標處於麻痺狀態時，威力變為2倍。使用者未瀕死時，治癒目標的麻痺。", // NEEDS QC
+		shortDesc: "對麻痺目標威力加倍，並治癒麻痺。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標處於麻痺狀態時，威力變為2倍。攻擊成功後，治癒目標的麻痺。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標處於麻痺狀態時，傷害變為2倍。攻擊成功後，治癒目標的麻痺。", // NEEDS QC
+			shortDesc: "對麻痺的目標傷害2倍並治癒麻痺。", // NEEDS QC
 		},
 	},
 	smog: {
 		name: "濁霧",
 		// Official flavor text: "將骯髒的濃霧 吹向對手進行攻擊。 有時會讓對手陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有40%的機率使目標陷入中毒狀態。", // NEEDS QC
+		shortDesc: "有40%的機率使目標中毒。", // NEEDS QC
 	},
 	smokescreen: {
 		name: "煙幕",
 		// Official flavor text: "向對手噴出煙霧或墨汁等， 降低對手的命中率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的命中率降低1級。", // NEEDS QC
+		shortDesc: "使目標的命中率降低1級。", // NEEDS QC
 	},
 	snaptrap: {
 		name: "捕獸夾",
 		// Official flavor text: "用捕獸夾， 在４～５回合內 夾住對手進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被捕獸夾困住了！",
@@ -6658,16 +6648,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snarl: {
 		name: "大聲咆哮",
 		// Official flavor text: "沒完沒了地向對手大聲咆哮， 降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "100%使對手的特攻降低1級。", // NEEDS QC
 	},
 	snatch: {
 		name: "搶奪",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合其他寶可夢使用一部分不造成傷害的招式時，使用者搶奪該招式並自己使出。本回合有多隻寶可夢使用這些招式時，由本回合行動順序最先使用此招式的寶可夢搶奪全部適用的招式。使用者處於自由落體效果下時，此效果被無視。", // NEEDS QC
+		shortDesc: "搶奪對方的回復類等招式使用。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合其他寶可夢使用一部分不造成傷害的招式時，使用者搶奪該招式並自己使出。本回合有多隻寶可夢使用此招式時，適用的招式按行動順序被各寶可夢依次搶奪，只有行動順序最後的寶可夢獲得效果。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}正在觀察對手的動向！",
@@ -6676,73 +6666,73 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snipeshot: {
 		name: "狙擊",
 		// Official flavor text: "能不受具有吸引對手招式 效果的特性或招式影響， 向選定的對手進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。此招式不會被任何效果變更對象。", // NEEDS QC
+		shortDesc: "容易擊中要害。目標不會被變更。", // NEEDS QC
 	},
 	snore: {
 		name: "打鼾",
 		// Official flavor text: "在自己睡著時， 發出噪音進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。使用者不處於睡眠狀態時失敗。", // NEEDS QC
+		shortDesc: "僅睡眠時可用。30%機率畏縮。", // NEEDS QC
 	},
 	snowscape: {
 		name: "雪景",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，天氣變為下雪。期間，冰屬性寶可夢受到物理攻擊時防禦變為1.5倍。攜帶冰冷岩石時持續8回合。已經是下雪時失敗。", // NEEDS QC
+		shortDesc: "5回合內召喚下雪。冰屬性防禦1.5倍。", // NEEDS QC
 	},
 	soak: {
 		name: "浸水",
 		// Official flavor text: "朝對手灑下大量的水， 讓對手變成水屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標變為水屬性。目標是阿爾宙斯或銀伴戰獸時、已經只有水屬性時、已太晶化時失敗。", // NEEDS QC
+		shortDesc: "使目標變為水屬性。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標變為水屬性。目標是阿爾宙斯或銀伴戰獸時、已經只有水屬性時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標變為水屬性。目標是阿爾宙斯時、已經只有水屬性時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標變為水屬性。目標是阿爾宙斯時失敗。", // NEEDS QC
 		},
 	},
 	softboiled: {
 		name: "生蛋",
 		// Official flavor text: "回復自己最大ＨＰ的一半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "回復使用者最大HP的1/2（四捨五入）。", // NEEDS QC
+		shortDesc: "回復自身最大HP的1/2。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "回復使用者最大HP的1/2（向下取整）。（使用者的最大HP−當前HP+1）能被256整除時失敗。", // NEEDS QC
 		},
 	},
 	solarbeam: {
 		name: "日光束",
 		// Official flavor text: "使用後的第１回合吸收大量日光， 並於第２回合發射光束進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合蓄力，第2回合攻擊。天氣為下雨、大雨、沙暴或下雪且使用者未攜帶萬能傘時，威力減半。攜帶強力香草時，或天氣為大晴天或大日照時，1回合內完成攻擊。但攜帶萬能傘時，即使天氣為大晴天或大日照也需要蓄力回合。", // NEEDS QC
+		shortDesc: "第1回合蓄力，第2回合攻擊。大晴天免蓄力。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為冰雹、下雨、大雨或沙暴且使用者未攜帶萬能傘時，威力減半。攜帶強力香草時，或天氣為大晴天或大日照時，1回合內完成攻擊。但攜帶萬能傘時，即使天氣為大晴天或大日照也需要蓄力回合。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為冰雹、大雨、下雨或沙暴時，威力減半。攜帶強力香草時，或天氣為大晴天或大日照時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為冰雹、下雨或沙暴時，威力減半。攜帶強力香草時或天氣為大晴天時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為冰雹、下雨或沙暴時，傷害減半。攜帶強力香草時或天氣為大晴天時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為冰雹、下雨或沙暴時，傷害減半。天氣為大晴天時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為下雨時，傷害減半。天氣為大晴天時，1回合內完成攻擊。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
+			shortDesc: "第1回合蓄力，第2回合攻擊。", // NEEDS QC
 		},
 
 		prepare: "  {POKEMON}吸收了光線！",
@@ -6750,13 +6740,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	solarblade: {
 		name: "日光刃",
 		// Official flavor text: "使用後的第１回合吸收大量日光， 並於第２回合把力量 注入劍裡進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "第1回合蓄力，第2回合攻擊。天氣為冰雹、下雨、大雨或沙暴且使用者未攜帶萬能傘時，威力減半。攜帶強力香草時，或天氣為大晴天或大日照時，1回合內完成攻擊。但攜帶萬能傘時，即使天氣為大晴天或大日照也需要蓄力回合。", // NEEDS QC
+		shortDesc: "第1回合蓄力，第2回合攻擊。大晴天免蓄力。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為下雨、大雨、沙暴或下雪且使用者未攜帶萬能傘時，威力減半。攜帶強力香草時，或天氣為大晴天或大日照時，1回合內完成攻擊。但攜帶萬能傘時，即使天氣為大晴天或大日照也需要蓄力回合。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "第1回合蓄力，第2回合攻擊。天氣為冰雹、大雨、下雨或沙暴時，威力減半。攜帶強力香草時，或天氣為大晴天或大日照時，1回合內完成攻擊。", // NEEDS QC
 		},
 
 		prepare: "#solarbeam",
@@ -6764,111 +6754,111 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sonicboom: {
 		name: "音爆",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成20點固定傷害。", // NEEDS QC
+		shortDesc: "固定造成20點傷害。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對目標造成20點固定傷害。此招式無視屬性免疫。", // NEEDS QC
 		},
 	},
 	soulstealing7starstrike: {
 		name: "七星奪魂腿",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	spacialrend: {
 		name: "亞空裂斬",
 		// Official flavor text: "將對手連同周圍的空間 一起切開，給予對手傷害。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	spark: {
 		name: "電光",
 		// Official flavor text: "用電流圍繞身體， 猛撞對手進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標麻痺。", // NEEDS QC
 	},
 	sparklingaria: {
 		name: "泡影的詠歎調",
 		// Official flavor text: "隨著歌聲放出許多水球。 受此招式攻擊時， 灼傷會被治癒。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者未瀕死時，治癒目標的灼傷。", // NEEDS QC
+		shortDesc: "治癒目標的灼傷。", // NEEDS QC
 	},
 	sparklyswirl: {
 		name: "亮亮風暴",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "治癒己方全隊的異常狀態。", // NEEDS QC
+		shortDesc: "治癒己方全隊的異常狀態。", // NEEDS QC
 	},
 	spectralthief: {
 		name: "暗影偷盜",
 		// Official flavor text: "潛入對手的影子， 奪取對手的能力提升進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "在造成傷害前，奪取目標+1以上的能力等級變化，變為使用者自己的。", // NEEDS QC
+		shortDesc: "先奪取目標的能力提升再攻擊。", // NEEDS QC
 
 		clearBoost: "  {SOURCE}奪取了提高的那部分能力！",
 	},
 	speedswap: {
 		name: "速度互換",
 		// Official flavor text: "將對手和自己的速度 進行互換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者和目標的速度數值。能力等級變化不受影響。", // NEEDS QC
+		shortDesc: "與目標互換速度數值。", // NEEDS QC
 
 		activate: "  {POKEMON}互換了各自的速度！",
 	},
 	spicyextract: {
 		name: "辣椒精華",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊提高2級，防禦降低2級。", // NEEDS QC
+		shortDesc: "目標攻擊+2、防禦-2。", // NEEDS QC
 	},
 	spiderweb: {
 		name: "蛛網",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "使目標無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束，但通過接棒離場時，目標仍然無法交換。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但使用接棒的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束，但通過接棒離場時，目標仍然無法交換。", // NEEDS QC
 		},
 	},
 	spikecannon: {
 		name: "尖刺加農炮",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。目標攜帶氣勢披帶且此招式開始時HP全滿的話，無論被攻擊多少次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為3/8，攻擊4次、5次的機率各為1/8。傷害只在第一次攻擊時計算1次，並套用於每次攻擊。若中途某次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	spikes: {
 		name: "撒菱",
 		// Official flavor text: "將撒菱散布在對手的腳下。 讓對手替換出場的寶可夢 受到傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加3層，傷害為1層時最大HP的1/8、2層時1/6、3層時1/4（均向下取整）。任意寶可夢使用大掃除，或對手方寶可夢成功使用晶光轉轉、高速旋轉、清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
+		shortDesc: "對手出場時受傷。最多疊3層。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加3層，傷害為1層時最大HP的1/8、2層時1/6、3層時1/4（均向下取整）。對手方寶可夢成功使用高速旋轉或清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加3層，傷害為1層時最大HP的1/8、2層時1/6、3層時1/4（均向下取整）。對手方寶可夢成功使用高速旋轉或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加3層，傷害為1層時最大HP的1/8、2層時1/6、3層時1/4（均向下取整）。對手方寶可夢成功使用高速旋轉時，陷阱被清除。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，使交換出場的對手寶可夢失去最大HP的1/8（向下取整）。對飛行屬性寶可夢無效。對手方已有此效果時失敗。對手方寶可夢成功使用高速旋轉時，陷阱被清除。", // NEEDS QC
+			shortDesc: "對交換出場的對手造成傷害。最多1層。", // NEEDS QC
 		},
 
 		start: "  {TEAM}腳下散落著撒菱！",
@@ -6878,51 +6868,51 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spikyshield: {
 		name: "尖刺防守",
 		// Official flavor text: "防禦來自對手的攻擊， 同時削減接觸到自己的 對手的ＨＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合防住其他寶可夢的大部分招式，並使接觸到使用者的寶可夢失去最大HP的1/8（向下取整）。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
+		shortDesc: "防住招式，接觸者失去1/8HP。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使接觸到使用者的寶可夢失去最大HP的1/8（向下取整）。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使接觸到使用者的寶可夢失去最大HP的1/8（向下取整）。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合防住其他寶可夢的大部分招式，並使接觸到使用者的寶可夢失去最大HP的1/8（向下取整）。此招式的成功率為1/X。X從1開始，每次成功使用後變為3倍。失敗時，或最後使用的招式不是看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時失敗。", // NEEDS QC
 		},
 
 		damage: "  {POKEMON}受傷了！",
 	},
 	spinout: {
 		name: "疾速轉輪",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度降低2級。", // NEEDS QC
+		shortDesc: "使自身的速度降低2級。", // NEEDS QC
 	},
 	spiritbreak: {
 		name: "靈魂衝擊",
 		// Official flavor text: "用足以讓對手一蹶不振的 氣勢進行攻擊。 可降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的特攻降低1級。", // NEEDS QC
 	},
 	spiritshackle: {
 		name: "縫影",
 		// Official flavor text: "攻擊的同時， 縫住對手的影子， 使其無法逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "使目標無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 	},
 	spite: {
 		name: "怨恨",
 		// Official flavor text: "向對手最近一次使用的招式 發出怨念， 讓該招式減少４ＰＰ。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標最後使用的招式減少4點PP。目標還未使用過招式時、該招式的PP為0時、目標已不會該招式時失敗。", // NEEDS QC
+		shortDesc: "使目標最後使用的招式減少4點PP。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使目標最後使用的招式隨機減少2～5點PP。目標還未使用過招式時、該招式的PP為0或1時、目標已不會該招式時失敗。", // NEEDS QC
+			shortDesc: "使目標最後的招式減少2～5點PP。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標最後使用的招式隨機減少2～5點PP。目標還未使用過招式時或該招式的PP為0時失敗。", // NEEDS QC
 		},
 
 		activate: "  削減了{TARGET}的{MOVE}{NUMBER}點！",
@@ -6930,61 +6920,61 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	spitup: {
 		name: "噴出",
 		// Official flavor text: "將蓄積的力量 撞向對手進行攻擊。 蓄積得越多，威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為使用者的蓄力次數×100。蓄力次數為0時失敗。無論成功與否，使用者的防禦和特防降低蓄力提高過的級數，次數重置為0。", // NEEDS QC
+		shortDesc: "蓄力次數越多威力越大。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力為使用者的蓄力次數×100。此招式不套用傷害浮動。蓄力次數為0時失敗。除沒有對象的情況外，無論成功與否，使用者的防禦和特防降低蓄力提高過的級數，次數重置為0。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "傷害乘以使用者的蓄力次數。此招式不套用傷害浮動，也不會擊中要害。蓄力次數為0時失敗。只要此招式沒有落空，次數重置為0。", // NEEDS QC
 		},
 	},
 	splash: {
 		name: "躍起",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "沒有對戰效果。", // NEEDS QC
 
 		activate: "  但是什麼事也沒發生！",
 	},
 	splinteredstormshards: {
 		name: "狼嘯石牙颶風暴",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "消除電氣場地、青草場地、薄霧場地、精神場地的效果。", // NEEDS QC
+		shortDesc: "消除場地的效果。", // NEEDS QC
 	},
 	splishysplash: {
 		name: "滔滔衝浪",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有30%的機率使目標麻痺。", // NEEDS QC
 	},
 	spore: {
 		name: "蘑菇孢子",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入睡眠狀態。", // NEEDS QC
 	},
 	spotlight: {
 		name: "聚光燈",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "到回合結束為止，目標的對手使出的單體攻擊招式全部轉向目標。這些招式在被魔法反射或特性魔法鏡反彈、被特性避雷針或引水引開之前，就會轉向目標。不是雙打對戰或皇家對戰時失敗。", // NEEDS QC
+		shortDesc: "本回合使攻擊集中到對象身上。", // NEEDS QC
 
 		start: "#followme",
 		startFromZEffect: "#followme",
 	},
 	springtidestorm: {
 		name: "陽春風暴",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有30%的機率使對手攻擊降低1級。", // NEEDS QC
 	},
 	stealthrock: {
 		name: "隱形岩",
 		// Official flavor text: "在對手周圍撒下無數飄浮的岩石， 讓對手替換出場的寶可夢受到傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對手方已有此效果時失敗。傷害由對手對岩石屬性的相性決定，0.25倍、0.5倍、等倍、2倍、4倍分別對應最大HP的1/32、1/16、1/8、1/4、1/2（向下取整）。任意寶可夢使用大掃除，或對手方寶可夢成功使用晶光轉轉、高速旋轉、清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
+		shortDesc: "對手出場時受岩石相性傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對手方已有此效果時失敗。傷害由對手對岩石屬性的相性決定，0.25倍、0.5倍、等倍、2倍、4倍分別對應最大HP的1/32、1/16、1/8、1/4、1/2（向下取整）。對手方寶可夢成功使用高速旋轉或清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。對手方已有此效果時失敗。傷害由對手對岩石屬性的相性決定，0.25倍、0.5倍、等倍、2倍、4倍分別對應最大HP的1/32、1/16、1/8、1/4、1/2（向下取整）。對手方寶可夢成功使用高速旋轉或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
 		},
 
 		start: "  {TEAM}周圍開始浮現出尖銳的岩石！",
@@ -6994,45 +6984,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	steameruption: {
 		name: "蒸汽爆炸",
 		// Official flavor text: "將超高溫的蒸汽噴向對手。 有時會讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入灼傷狀態。治癒冰凍狀態目標的冰凍。", // NEEDS QC
+		shortDesc: "30%機率灼傷。解除目標的冰凍。", // NEEDS QC
 	},
 	steamroller: {
 		name: "瘋狂滾壓",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，傷害變為2倍。", // NEEDS QC
 		},
 	},
 	steelbeam: {
 		name: "鐵蹄光線",
 		// Official flavor text: "將從全身匯聚起來的鋼鐵 化為光束激烈地發射出去。 自己也會受到傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無論成功與否，使用者失去最大HP的1/2（向上取整，即使會因此瀕死）。特性為魔法防守時不會失去。", // NEEDS QC
+		shortDesc: "自己失去最大HP的1/2。", // NEEDS QC
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "鐵滾輪",
 		// Official flavor text: "一邊破壞場地，一邊進行攻擊。 在不是特殊狀態的場地上使用， 招式就會失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "沒有場地時失敗。消除電氣場地、青草場地、薄霧場地、精神場地的效果。", // NEEDS QC
+		shortDesc: "無場地時失敗。消除場地。", // NEEDS QC
 	},
 	steelwing: {
 		name: "鋼翼",
 		// Official flavor text: "用堅硬的翅膀撞擊 對手進行攻擊。 有時會提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使使用者的防禦提高1級。", // NEEDS QC
+		shortDesc: "有10%的機率使自身的防禦提高1級。", // NEEDS QC
 	},
 	stickyweb: {
 		name: "黏黏網",
 		// Official flavor text: "在對手周圍撒下黏黏的網， 降低替換出場的對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "在對手方場上設置陷阱，使交換出場的對手寶可夢的速度降低1級。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。對手方已有此效果時失敗。任意寶可夢使用大掃除，或對手方寶可夢成功使用晶光轉轉、高速旋轉、清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
+		shortDesc: "對手出場時速度降低1級。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，使交換出場的對手寶可夢的速度降低1級。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。對手方已有此效果時失敗。對手方寶可夢成功使用高速旋轉或清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
 		},
 
 		start: "  {TEAM}的腳下張開了黏黏網！",
@@ -7042,11 +7032,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stockpile: {
 		name: "蓄力",
 		// Official flavor text: "蓄積力量， 提高自己的防禦和特防。 最多蓄積３次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦和特防各提高1級。使用者的蓄力次數增加1。蓄力次數為3時失敗。離場後次數重置為0。", // NEEDS QC
+		shortDesc: "防禦和特防+1。最多蓄力3次。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的蓄力次數增加1。次數為3時失敗。離場後次數重置為0。", // NEEDS QC
+			shortDesc: "蓄力次數+1。最多3次。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}蓄力了{NUMBER}次！",
@@ -7055,122 +7045,122 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stokedsparksurfer: {
 		name: "駕雷馭電戲衝浪",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有100%的機率使目標麻痺。", // NEEDS QC
 	},
 	stomp: {
 		name: "踩踏",
 		// Official flavor text: "用大腳踩踏對手進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，傷害變為2倍。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，威力變為2倍。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。目標出場後使用過變小時，傷害變為2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。目標處於變小效果下時，威力變為2倍。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標畏縮。", // NEEDS QC
 		},
 	},
 	stompingtantrum: {
 		name: "跺腳",
 		// Official flavor text: "化悔恨為力量進行攻擊。 如果上一回合的招式沒有命中， 威力就會加倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "上一回合使用者最後使用的招式（包括由其他招式調用的招式，以及通過號令、魔法反射、搶奪、特性舞者、魔法鏡使出的招式）沒有發揮任何原本效果而失敗時（失敗的飛膝踢、飛踢、驚爆大頭的自傷除外），或因反作用力和自由落體以外的效果無法行動時，威力變為2倍。被碉堡、看穿、王者盾牌、守住、尖刺防守、戲法防守、掀榻榻米、快速防守、廣域防守防住時，或彈跳、飛翔因重力、擊落、千箭齊發的效果中斷時，威力不會變為2倍。", // NEEDS QC
+		shortDesc: "上回合招式失敗時威力加倍。", // NEEDS QC
 	},
 	stoneaxe: {
 		name: "岩斧",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，在對手方場上設置陷阱，對交換出場的對手寶可夢造成傷害。傷害由對手對岩石屬性的相性決定，0.25倍、0.5倍、等倍、2倍、4倍分別對應最大HP的1/32、1/16、1/8、1/4、1/2（向下取整）。任意寶可夢使用大掃除，或對手方寶可夢成功使用晶光轉轉、高速旋轉、清除濃霧或受到清除濃霧攻擊時，陷阱被清除。", // NEEDS QC
+		shortDesc: "在對手方布下隱形岩。", // NEEDS QC
 	},
 	stoneedge: {
 		name: "尖石攻擊",
 		// Official flavor text: "用尖銳的岩石 刺進對手進行攻擊。 容易擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "容易擊中要害。", // NEEDS QC
 	},
 	storedpower: {
 		name: "輔助力量",
 		// Official flavor text: "用蓄積的力量攻擊對手。 自己的能力提高越多， 招式的威力越大。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為20+(X×20)。X為使用者+1以上的能力等級的總和。", // NEEDS QC
+		shortDesc: "每有1級能力提升威力+20。", // NEEDS QC
 	},
 	stormthrow: {
 		name: "山嵐摔",
 		// Official flavor text: "向對手發動強烈的一擊。 一定會擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定擊中要害。但目標處於幸運咒語效果下，或特性為戰鬥盔甲、硬殼盔甲時不會擊中要害。", // NEEDS QC
+		shortDesc: "必定擊中要害。", // NEEDS QC
 	},
 	strangesteam: {
 		name: "神奇蒸汽",
 		// Official flavor text: "噴出煙霧攻擊對手。 有時會使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有20%的機率使目標混亂。", // NEEDS QC
 	},
 	strength: {
 		name: "怪力",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	strengthsap: {
 		name: "吸取力量",
 		// Official flavor text: "將自己的ＨＰ回復到和 對手的攻擊力相同。 然後降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊降低1級，並回復與使用此招式前目標能力等級下計算的攻擊數值相同的HP。攜帶大根莖時，回復量變為1.3倍（五捨六入）。目標的攻擊能力等級為-6時失敗。", // NEEDS QC
+		shortDesc: "回復目標攻擊值的HP並使其攻擊-1。", // NEEDS QC
 	},
 	stringshot: {
 		name: "吐絲",
 		// Official flavor text: "用口中吐出的絲纏繞對手， 大幅降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的速度降低2級。", // NEEDS QC
+		shortDesc: "使對手的速度降低2級。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使目標的速度降低1級。", // NEEDS QC
+			shortDesc: "使對手的速度降低1級。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "使目標的速度降低1級。", // NEEDS QC
 		},
 	},
 	struggle: {
 		name: "掙扎",
 		// Official flavor text: "在自己的ＰＰ耗盡時， 努力掙扎攻擊對手。 自己也會受到少許傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "從對手寶可夢中隨機選擇對象，造成無屬性傷害。攻擊成功後，使用者失去最大HP的1/4（四捨五入），特性堅硬腦袋也無法防止。會的招式都無法選擇時，自動使出此招式。", // NEEDS QC
+		shortDesc: "自己也失去最大HP的1/4。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從相鄰的對手寶可夢中隨機選擇對象，造成無屬性傷害。攻擊成功後，使用者失去最大HP的1/4（四捨五入），特性堅硬腦袋也無法防止。會的招式都無法選擇時，自動使出此招式。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "從對手寶可夢中隨機選擇對象，造成無屬性傷害。攻擊成功後，使用者失去最大HP的1/4（向下取整），特性堅硬腦袋也無法防止。會的招式都無法選擇時，自動使出此招式。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "從對手寶可夢中隨機選擇對象，造成無屬性傷害。攻擊成功後，使用者受到相當於目標所失HP的1/4（向下取整，最少1點）的傷害，特性堅硬腦袋也無法防止。會的招式都無法選擇時，自動使出此招式。", // NEEDS QC
+			shortDesc: "自己損失目標所失HP的1/4。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "造成無屬性傷害。攻擊成功後，使用者受到相當於目標所失HP的1/4（向下取整，最少1點）的傷害。會的招式都無法選擇時，自動使出此招式。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "造成一般屬性傷害。攻擊成功後，使用者受到相當於目標所失HP的1/2（向下取整，最少1點）的傷害。會的招式都無法選擇時，自動使出此招式。", // NEEDS QC
+			shortDesc: "自己損失目標所失HP的1/2。", // NEEDS QC
 		},
 	},
 	strugglebug: {
 		name: "蟲之抵抗",
 		// Official flavor text: "抵抗對手進行攻擊。 可降低對手的特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的特攻降低1級。", // NEEDS QC
+		shortDesc: "100%使對手的特攻降低1級。", // NEEDS QC
 	},
 	stuffcheeks: {
 		name: "大快朵頤",
 		// Official flavor text: "吃掉攜帶的樹果， 大幅提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者攜帶樹果時才能選擇此招式。吃掉攜帶的樹果，使使用者的防禦提高2級。此效果不會被特性笨拙、緊張感或查封、魔法空間的效果阻止。沒有攜帶樹果時失敗。", // NEEDS QC
+		shortDesc: "吃掉樹果並使防禦提高2級。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7179,44 +7169,44 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stunspore: {
 		name: "麻痺粉",
 		// Official flavor text: "撒出大量令人麻痺的粉末， 讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "使目標陷入麻痺狀態。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入麻痺狀態。不能無視屬性相性帶來的無效。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入麻痺狀態。", // NEEDS QC
 		},
 	},
 	submission: {
 		name: "地獄翻滾",
 		// Official flavor text: "將對手連同自己一起 摔向地面進行攻擊。 自己也會受到少許傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到1/4的反作用力傷害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（向下取整，最少1點）的反作用力傷害。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（四捨五入，最少1點）的反作用力傷害。此招式命中替身時，反作用力傷害恆為1點。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/4（向下取整，最少1）的反作用力傷害。此招式打破目標的替身時，使用者不會受到反作用力傷害。", // NEEDS QC
 		},
 	},
 	substitute: {
 		name: "替身",
 		// Official flavor text: "消耗一些自己的ＨＰ， 製造分身。 分身將成為自己的替身。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "消耗使用者最大HP的1/4（向下取整），製造代替自己戰鬥的替身。替身在受到足夠傷害後、使用者交換下場或瀕死後、任意寶可夢使用大掃除後消失。可以用接棒將保留剩餘HP的替身轉移給接替的寶可夢。替身被打破前，其他寶可夢的所有攻擊傷害由替身承受，並保護使用者不受其他寶可夢造成的狀態變化和能力等級變化影響。聲音類招式和特性為穿透的寶可夢無視替身。處於替身狀態期間，天氣和異常狀態的傷害照常受到。連續攻擊招式中途打破替身時，剩餘攻擊由使用者承受。被束縛類招式束縛期間製造替身時，該效果立即結束。剩餘HP不足以在不瀕死的情況下製造替身時，或已有替身時失敗。", // NEEDS QC
+		shortDesc: "消耗1/4最大HP製造替身。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "消耗使用者最大HP的1/4（向下取整），製造代替自己戰鬥的替身。替身在受到足夠傷害後、使用者交換下場或瀕死後消失。可以用接棒將保留剩餘HP的替身轉移給接替的寶可夢。替身被打破前，其他寶可夢的所有攻擊傷害由替身承受，並保護使用者不受其他寶可夢造成的狀態變化和能力等級變化影響。聲音類招式和特性為穿透的寶可夢無視替身。處於替身狀態期間，天氣和異常狀態的傷害照常受到。連續攻擊招式中途打破替身時，剩餘攻擊由使用者承受。被束縛類招式束縛期間製造替身時，該效果立即結束。剩餘HP不足以在不瀕死的情況下製造替身時，或已有替身時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "消耗使用者最大HP的1/4（向下取整），製造代替自己戰鬥的替身。替身在受到足夠傷害後、使用者交換下場或瀕死後消失。可以用接棒將保留剩餘HP的替身轉移給接替的寶可夢。替身被打破前，其他寶可夢的所有攻擊傷害由替身承受，並保護使用者不受其他寶可夢造成的狀態變化和能力等級變化影響。處於替身狀態期間，天氣和異常狀態的傷害照常受到。連續攻擊招式中途打破替身時，剩餘攻擊由使用者承受。被束縛類招式束縛期間製造替身時，該效果立即結束。剩餘HP不足以在不瀕死的情況下製造替身時，或已有替身時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "消耗使用者最大HP的1/4（向下取整），製造代替自己戰鬥的替身。替身的HP為製造時消耗的HP+1，在受到足夠傷害或一次受到255點傷害後、使用者交換下場或瀕死後消失。替身被打破前，對手的所有攻擊傷害由替身承受，並保護使用者不受對手造成的異常狀態和能力等級變化影響。但該效果是定身法、寄生種子、睡眠、作為主要效果的麻痺、作為追加效果的混亂且替身未被打破時，無法防住。處於替身狀態期間，異常狀態的傷害照常受到，但混亂造成的傷害改為由對手的替身承受。連續攻擊招式中途打破替身時，攻擊結束。HP不足以製造替身時，或已有替身時失敗。當前HP恰好為最大HP的1/4時，製造替身後使用者瀕死。", // NEEDS QC
+			shortDesc: "消耗最大HP的1/4製造替身。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}的替身出現了！",
@@ -7227,162 +7217,162 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	subzeroslammer: {
 		name: "激狂大地萬里冰",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	suckerpunch: {
 		name: "突襲",
 		// Official flavor text: "可以搶先對手一步進行攻擊。 若對手使用的不是攻擊招式則會失敗。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標本回合沒有選擇物理招式、特殊招式或搶先一步時，或目標先於使用者行動時失敗。", // NEEDS QC
+		shortDesc: "先制招式。目標未選攻擊招式則失敗。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標本回合沒有選擇物理招式或特殊招式時，或目標先於使用者行動時失敗。", // NEEDS QC
 		},
 	},
 	sunnyday: {
 		name: "大晴天",
 		// Official flavor text: "讓日照增強，在５回合內 提高火屬性招式的威力。 水屬性招式的威力會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，天氣變為大晴天。期間，火屬性攻擊招式的傷害變為1.5倍，水屬性攻擊招式的傷害變為0.5倍。攜帶熾熱岩石時持續8回合。已經是大晴天時失敗。", // NEEDS QC
+		shortDesc: "5回合內召喚大晴天。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，天氣變為大晴天。期間，火屬性攻擊招式的傷害變為1.5倍，水屬性攻擊招式的傷害變為0.5倍。已經是大晴天時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "即使已經是大晴天，5回合內，天氣變為大晴天。期間，火屬性攻擊招式的傷害變為1.5倍，水屬性攻擊招式的傷害變為0.5倍。", // NEEDS QC
 		},
 	},
 	sunsteelstrike: {
 		name: "流星閃衝",
 		// Official flavor text: "以流星般的氣勢猛撞對手。 可不顧對手的特性進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式及其效果無視其他寶可夢的特性。", // NEEDS QC
+		shortDesc: "無視其他寶可夢的特性。", // NEEDS QC
 	},
 	supercellslam: {
 		name: "閃電強襲",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊未命中時，使用者受到最大HP的1/2（向下取整）的摔落傷害。特性為魔法防守的寶可夢不受摔落傷害。目標出場後使用過變小時，必定命中且傷害變為2倍。", // NEEDS QC
+		shortDesc: "未命中時自己失去最大HP的1/2。", // NEEDS QC
 
 		damage: "#crash",
 	},
 	superfang: {
 		name: "憤怒門牙",
 		// Official flavor text: "用銳利的門牙 猛烈地咬住對手進行攻擊。 對手的ＨＰ將會減半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "造成目標剩餘HP的1/2（向下取整，最少1點）的傷害。", // NEEDS QC
+		shortDesc: "造成目標剩餘HP1/2的傷害。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "造成目標剩餘HP的1/2（向下取整，最少1點）的傷害。此招式無視屬性免疫。", // NEEDS QC
+			shortDesc: "傷害=目標剩餘HP的一半。可命中幽靈。", // NEEDS QC
 		},
 	},
 	superpower: {
 		name: "蠻力",
 		// Official flavor text: "發揮驚人的力量攻擊對手。 自己的攻擊和防禦會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊和防禦各降低1級。", // NEEDS QC
+		shortDesc: "使自身的攻擊、防禦降低1級。", // NEEDS QC
 	},
 	supersonic: {
 		name: "超音波",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入混亂狀態。", // NEEDS QC
 	},
 	supersonicskystrike: {
 		name: "極速俯衝轟烈撞",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	surf: {
 		name: "衝浪",
 		// Official flavor text: "使用大浪 攻擊自己周圍所有的寶可夢。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對用潛水潛入水中的目標，傷害變為2倍。", // NEEDS QC
+		shortDesc: "攻擊周圍全體。對潛水目標加倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標正在使用潛水時，威力變為2倍。", // NEEDS QC
+			shortDesc: "命中周圍全體。對潛水威力2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無追加效果。", // NEEDS QC
+			shortDesc: "無追加效果。", // NEEDS QC
 		},
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "命中所有對手。對潛水威力2倍。", // NEEDS QC
 		},
 	},
 	surgingstrikes: {
 		name: "水流連打",
 		// Official flavor text: "將水之流派鍛鍊到了極致， 猶如行雲流水的３次連擊。 必定會擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊3次。必定擊中要害。但目標處於幸運咒語效果下，或特性為戰鬥盔甲、硬殼盔甲時不會擊中要害。", // NEEDS QC
+		shortDesc: "攻擊3次。必定擊中要害。", // NEEDS QC
 	},
 	swagger: {
 		name: "虛張聲勢",
 		// Official flavor text: "讓對手火大並陷入混亂。 但對手的攻擊會因憤怒 而大幅提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊提高2級，並使其陷入混亂狀態。", // NEEDS QC
+		shortDesc: "使目標攻擊提高2級並陷入混亂。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的攻擊提高2級，並使其陷入混亂狀態。目標的攻擊無法提高時，此招式會落空。", // NEEDS QC
 		},
 	},
 	swallow: {
 		name: "吞下",
 		// Official flavor text: "將蓄積的力量吞下， 回復自己的ＨＰ。 蓄積得越多，回復越多。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "根據使用者的蓄力次數回復HP。1次時回復最大HP的1/4，2次時回復1/2（均五捨六入），3次時全部回復。蓄力次數為0時失敗。使用者的防禦和特防降低蓄力提高過的級數，次數重置為0。", // NEEDS QC
+		shortDesc: "根據蓄力次數回復HP。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "根據使用者的蓄力次數回復HP。1次時回復最大HP的1/4，2次時回復1/2（均向下取整），3次時全部回復。次數為0時失敗。使用者的防禦和特防降低蓄力提高過的級數，次數重置為0。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "根據使用者的蓄力次數回復HP。1次時回復最大HP的1/4，2次時回復1/2（均五捨六入），3次時全部回復。次數為0時失敗。次數重置為0。", // NEEDS QC
 		},
 	},
 	sweetkiss: {
 		name: "天使之吻",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "使目標陷入混亂狀態。", // NEEDS QC
 	},
 	sweetscent: {
 		name: "甜甜香氣",
 		// Official flavor text: "用香氣大幅降低對手的閃避率。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的回避率降低2級。", // NEEDS QC
+		shortDesc: "使對手的回避率降低2級。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使目標的回避率降低1級。", // NEEDS QC
+			shortDesc: "使對手的回避率降低1級。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "使目標的回避率降低1級。", // NEEDS QC
 		},
 	},
 	swift: {
 		name: "高速星星",
 		// Official flavor text: "發射星型光線攻擊對手。 攻擊必定會命中。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定命中。", // NEEDS QC
+		shortDesc: "必定命中。攻擊所有對手。", // NEEDS QC
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "必定命中，即使目標正在使用挖洞或飛翔也能命中。", // NEEDS QC
+			shortDesc: "必定命中，即使對挖洞、飛翔。", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "必定命中。", // NEEDS QC
 		},
 	},
 	switcheroo: {
 		name: "掉包",
 		// Official flavor text: "以肉眼看不清的速度 將自己和對手的持有物互相交換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時失敗。此外，試圖在蓋歐卡、固拉多、帝牙盧卡、帕路奇亞、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特、悖謬寶可夢、厄鬼椪與分別對應的靛藍色寶珠、朱紅色寶珠、大金剛寶玉、大白寶玉、大白金寶玉、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾、驅勁能量、面具的組合間交出或奪取道具時也會失敗。這裡的悖謬寶可夢指特性為古代活性、夸克充能的所有種族（破空焰、猛雷鼓、鐵磐岩、鐵頭殼除外）。對特性為黏著的目標無效。", // NEEDS QC
+		shortDesc: "與目標互換攜帶道具。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時，或試圖在蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特與分別對應的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、任意一方攜帶Z純晶時、試圖向能用其超級進化的寶可夢交出或從其奪取超級石時，或試圖在蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸與分別對應的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、試圖向能用其超級進化的寶可夢交出或從其奪取超級石時，或試圖在蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特與分別對應的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、任意一方攜帶信件時，或試圖在騎拉帝納、阿爾宙斯、蓋諾賽克特與分別對應的白金寶珠、屬性板、卡帶的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、任意一方攜帶信件或白金寶珠時、任意一方的特性為多屬性時、任意一方處於拍落效果下時、目標的特性為黏著時失敗。", // NEEDS QC
 		},
 
 		activate: "#trick",
@@ -7390,88 +7380,88 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	swordsdance: {
 		name: "劍舞",
 		// Official flavor text: "激烈地跳起戰舞提升氣勢， 大幅提高自己的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊提高2級。", // NEEDS QC
+		shortDesc: "自身的攻擊提高2級。", // NEEDS QC
 	},
 	synchronoise: {
 		name: "同步干擾",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對與使用者沒有任何相同屬性的目標無效。", // NEEDS QC
+		shortDesc: "攻擊周圍與自己同屬性的寶可夢。", // NEEDS QC
 	},
 	synthesis: {
 		name: "光合作用",
 		// Official flavor text: "回復自己的ＨＰ。 回復量會隨著天氣的不同 而有所變化。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天氣為無或亂流時或攜帶萬能傘時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為下雨、大雨、沙暴或下雪時回復1/4（均五捨六入）。", // NEEDS QC
+		shortDesc: "根據天氣回復不同量的HP。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無或亂流時或攜帶萬能傘時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為冰雹、大雨、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無或亂流時回復最大HP的1/2，天氣為大晴天或大日照時回復2/3，天氣為冰雹、大雨、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復2/3，天氣為冰雹、下雨或沙暴時回復1/4（均五捨六入）。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復2/3，天氣為冰雹、下雨或沙暴時回復1/4（均向下取整）。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣為無時回復最大HP的1/2，天氣為大晴天時回復全部HP，天氣為下雨或沙暴時回復1/4（均向下取整）。", // NEEDS QC
 		},
 	},
 	syrupbomb: {
 		name: "糖漿炸彈",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功後，3回合內，每回合結束時目標的速度降低1級。", // NEEDS QC
+		shortDesc: "3回合內目標速度每回合-1。", // NEEDS QC
 
 		start: "  {POKEMON}陷入了滿身糖狀態！",
 	},
 	tackle: {
 		name: "撞擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	tachyoncutter: {
 		name: "迅子利刃",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。必定命中。", // NEEDS QC
+		shortDesc: "攻擊2次。必定命中。", // NEEDS QC
 	},
 	tailglow: {
 		name: "螢火",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的特攻提高3級。", // NEEDS QC
+		shortDesc: "自身的特攻提高3級。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者的特攻提高2級。", // NEEDS QC
+			shortDesc: "自身的特攻提高2級。", // NEEDS QC
 		},
 	},
 	tailslap: {
 		name: "掃尾拍打",
 		// Official flavor text: "將堅硬的尾巴 掃向對手進行攻擊。 可連續攻擊２～５次。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 	},
 	tailwhip: {
 		name: "搖尾巴",
 		// Official flavor text: "可愛地左右搖晃尾巴， 誘使對手疏忽大意。 可降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "使對手的防禦降低1級。", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "使目標的防禦降低1級。", // NEEDS QC
 		},
 	},
 	tailwind: {
 		name: "順風",
 		// Official flavor text: "刮起猛烈的強風， 在４回合內 提高我方全體的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4回合內，使用者及其隊友的速度變為2倍。己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "4回合內己方速度變為2倍。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3回合內，使用者及其隊友的速度變為2倍。己方已有此效果時失敗。", // NEEDS QC
+			shortDesc: "3回合內己方速度變為2倍。", // NEEDS QC
 		},
 
 		start: "  從{TEAM}身後吹起了順風！",
@@ -7480,52 +7470,52 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	takedown: {
 		name: "猛撞",
 		// Official flavor text: "以驚人的氣勢 撞向對手進行攻擊。 自己也會受到少許傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到1/4的反作用力傷害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（向下取整，最少1點）的反作用力傷害。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（四捨五入，最少1點）的反作用力傷害。此招式命中替身時，反作用力傷害恆為1點。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/4（向下取整，最少1）的反作用力傷害。此招式打破目標的替身時，使用者不會受到反作用力傷害。", // NEEDS QC
 		},
 	},
 	takeheart: {
 		name: "勇氣填充",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "治癒使用者的異常狀態，並使其特攻和特防各提高1級。", // NEEDS QC
+		shortDesc: "治癒異常狀態，特攻和特防+1。", // NEEDS QC
 	},
 	tarshot: {
 		name: "瀝青射擊",
 		// Official flavor text: "射出黏黏的瀝青， 降低對手的速度。 對手的弱點將變為火。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的速度降低1級。到目標交換下場為止，火屬性招式對其的相性變為2倍。", // NEEDS QC
+		shortDesc: "目標速度-1，並變得害怕火屬性。", // NEEDS QC
 
 		start: "  {POKEMON}變得怕火了！",
 	},
 	taunt: {
 		name: "挑釁",
 		// Official flavor text: "激怒對手。 在３回合內讓對手 只能使出給予傷害的招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標在接下來的3回合內無法使用不造成傷害的招式。對特性為遲鈍的寶可夢和受芳香幕保護的寶可夢無效。", // NEEDS QC
+		shortDesc: "3回合內目標無法使用變化招式。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在接下來的3回合內無法使用不造成傷害的招式。對特性為遲鈍的寶可夢和受芳香幕保護的寶可夢無效。效果期間仍可以選擇並使出Z力量強化的招式。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在接下來的3回合內無法使用不造成傷害的招式。對特性為遲鈍的寶可夢和受芳香幕保護的寶可夢無效。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標在接下來的3回合內無法使用不造成傷害的招式。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3～5回合內，目標無法使用不造成傷害的招式。", // NEEDS QC
+			shortDesc: "3～5回合內目標無法使用變化招式。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2回合內，目標無法使用不造成傷害的招式。", // NEEDS QC
+			shortDesc: "2回合內目標無法使用變化招式。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}中了挑釁！",
@@ -7535,14 +7525,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	tearfullook: {
 		name: "淚眼汪汪",
 		// Official flavor text: "變得淚眼汪汪， 令對手喪失鬥志。 進而降低對手的攻擊和特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊和特攻各降低1級。", // NEEDS QC
+		shortDesc: "使目標的攻擊、特攻降低1級。", // NEEDS QC
 	},
 	teatime: {
 		name: "茶會",
 		// Official flavor text: "舉辦茶會， 在場上的寶可夢都會 吃掉自己攜帶的樹果。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "場上所有寶可夢吃掉攜帶的樹果。此效果不會被替身、特性笨拙、緊張感或查封、魔法空間的效果阻止。場上沒有寶可夢攜帶樹果時失敗。", // NEEDS QC
+		shortDesc: "場上所有寶可夢吃掉攜帶的樹果。", // NEEDS QC
 
 		activate: "  舉辦茶會，大家一起吃了樹果！",
 		fail: "  但是什麼事也沒發生！",
@@ -7550,29 +7540,29 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	technoblast: {
 		name: "高科技光炮",
 		// Official flavor text: "向對手發射光彈。 招式的屬性會隨著自己 攜帶的卡帶不同而改變。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "此招式的屬性由使用者攜帶的卡帶決定。", // NEEDS QC
+		shortDesc: "屬性由攜帶的卡帶決定。", // NEEDS QC
 	},
 	tectonicrage: {
 		name: "地隆嘯天大終結",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	teeterdance: {
 		name: "搖晃舞",
 		// Official flavor text: "搖搖晃晃地跳起舞， 讓自己周圍的寶可夢 陷入混亂狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "使周圍的寶可夢陷入混亂。", // NEEDS QC
 	},
 	telekinesis: {
 		name: "意念移物",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3回合內，目標在場期間無法躲避向其使出的攻擊（一擊必殺招式除外）。效果期間，目標在場期間不受地面屬性的攻擊及撒菱、毒菱、黏黏網、特性沙穴的影響。目標使用接棒時，接替的寶可夢繼承此效果。目標處於扎根、擊落、千箭齊發、黑色鐵球的效果下時，以後者優先。目標已有此效果，或處於扎根、擊落、千箭齊發的效果下時失敗。目標是地鼠、三地鼠、地鼠（阿羅拉的樣子）、三地鼠（阿羅拉的樣子）、沙丘娃、噬沙堡爺或超級進化的耿鬼時無效。超級耿鬼無論如何都不會受此效果影響。", // NEEDS QC
+		shortDesc: "3回合內使目標漂浮且被必中。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3回合內，目標在場期間無法躲避向其使出的攻擊（一擊必殺招式除外）。效果期間，目標在場期間不受地面屬性的攻擊及撒菱、毒菱、黏黏網、特性沙穴的影響。目標使用接棒時，接替的寶可夢繼承此效果。目標處於扎根、擊落、千箭齊發、黑色鐵球的效果下時，以後者優先。目標已有此效果，或處於扎根、擊落、千箭齊發的效果下時失敗。目標是地鼠、三地鼠或超級進化的耿鬼時無效。超級耿鬼無論如何都不會受此效果影響。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3回合內，目標在場期間無法躲避向其使出的攻擊（一擊必殺招式除外）。效果期間，目標在場期間不受地面屬性的攻擊及撒菱、毒菱、特性沙穴的影響。目標使用接棒時，接替的寶可夢繼承此效果。目標處於扎根、擊落、黑色鐵球的效果下時，以後者優先。目標已有此效果，或處於扎根、擊落的效果下時失敗。目標是地鼠或三地鼠時無效。", // NEEDS QC
 		},
 
 		start: "  讓{POKEMON}浮在了空中！",
@@ -7581,108 +7571,108 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	teleport: {
 		name: "瞬間移動",
 		// Official flavor text: "在有後備寶可夢時使用， 可進行替換。 野生寶可夢則會逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時不交換。", // NEEDS QC
+		shortDesc: "與同伴交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用時失敗。", // NEEDS QC
+			shortDesc: "使用時失敗。", // NEEDS QC
 		},
 	},
 	temperflare: {
 		name: "豁出去",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "上一回合使用者最後使用的招式（包括由其他招式調用的招式，以及通過號令、魔法反射、搶奪、特性舞者、魔法鏡使出的招式）沒有發揮任何原本效果而失敗時（失敗的飛膝踢、飛踢、驚爆大頭的自傷除外），或因反作用力和自由落體以外的效果無法行動時，威力變為2倍。被碉堡、看穿、王者盾牌、守住、尖刺防守、戲法防守、掀榻榻米、快速防守、廣域防守防住時，或彈跳、飛翔因重力、擊落、千箭齊發的效果中斷時，威力不會變為2倍。", // NEEDS QC
+		shortDesc: "上回合招式失敗時威力加倍。", // NEEDS QC
 	},
 	terablast: {
 		name: "太晶爆發",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "已太晶化時，（能力等級變化計算在內）使用者的攻擊高於特攻則變為物理招式，且此招式的屬性變為與使用者的太晶屬性相同。此外，太晶屬性為星晶時，威力變為100，對已太晶化的目標效果絕佳、對其他目標為等倍，且使用者的攻擊和特攻各降低1級。", // NEEDS QC
+		shortDesc: "太晶化時屬性和分類會變化。", // NEEDS QC
 	},
 	terastarstorm: {
 		name: "晶光星群",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者是星晶形態的太樂巴戈斯時，此招式的屬性變為星晶，攻擊所有對手，且（能力等級變化計算在內）使用者的攻擊高於特攻時變為物理招式。", // NEEDS QC
+		shortDesc: "星晶太樂巴戈斯：星晶屬性打全體。", // NEEDS QC
 	},
 	terrainpulse: {
 		name: "大地波動",
 		// Official flavor text: "藉助場地的力量進行攻擊。 視使出招式時場地狀態不同， 招式的屬性和威力會有所變化。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者在地面上且存在場地時，威力變為2倍，且此招式的屬性隨場地變化。電氣場地時為電屬性，青草場地時為草屬性，薄霧場地時為妖精屬性，精神場地時為超能力屬性。", // NEEDS QC
+		shortDesc: "有場地時威力加倍且屬性變化。", // NEEDS QC
 	},
 	thief: {
 		name: "小偷",
 		// Official flavor text: "在攻擊的同時偷取道具。 當寶可夢自己有攜帶道具時， 則無法偷取。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標的攜帶道具。特性為黏著的目標未瀕死時不會失去道具。蓋歐卡、固拉多、帝牙盧卡、帕路奇亞、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特、悖謬寶可夢、厄鬼椪所攜帶的、分別與之對應的靛藍色寶珠、朱紅色寶珠、大金剛寶玉、大白寶玉、大白金寶玉、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾、驅勁能量、面具無法奪取，使用者是這些種族且目標攜帶對應道具時也無法奪取。這裡的悖謬寶可夢指特性為古代活性、夸克充能的所有種族（破空焰、猛雷鼓、鐵磐岩、鐵頭殼除外）。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
+		shortDesc: "未攜帶道具時奪取目標的道具。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是Z純晶、能用牠超級進化的寶可夢所攜帶的超級石，或蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是能用牠超級進化的寶可夢所攜帶的超級石，或蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特分別攜帶的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，若使用者沒有攜帶道具，則奪取目標攜帶的道具。特性為黏著的目標只要未瀕死就不會失去道具。道具是信件，或騎拉帝納、阿爾宙斯、蓋諾賽克特分別攜帶的白金寶珠、屬性板、卡帶時無法奪取，使用者是這些寶可夢且目標攜帶對應道具時也無法奪取。因此招式失去的道具無法用回收利用或特性收穫取回。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者沒有攜帶道具時，奪取目標攜帶的道具。道具是信件或白金寶珠時，或目標的特性為多屬性或黏著時無法奪取。因此招式失去的道具無法用回收利用取回。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者沒有攜帶道具時，奪取目標攜帶的道具。道具是信件或謎芝果時，或目標的特性為黏著時無法奪取。因此招式失去的道具無法用回收利用取回。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使用者沒有攜帶道具時，有100%的機率奪取目標的攜帶道具。目標的道具是信件時無法奪取。", // NEEDS QC
 		},
 	},
 	thousandarrows: {
 		name: "千箭齊發",
 		// Official flavor text: "能夠命中飄浮在空中的寶可夢。 飄浮在空中的對手 會被擊落掉到地面。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "可以命中空中的寶可夢，包括飛行屬性寶可夢、特性為飄浮的寶可夢、攜帶氣球的寶可夢以及處於電磁飄浮或意念移物效果下的寶可夢。目標是尚未落地的飛行屬性寶可夢時，無論其他屬性如何都造成等倍傷害。可以命中用彈跳、飛翔、自由落體飛上高空的目標。命中處於彈跳、飛翔、電磁飄浮、意念移物效果下的目標時，該效果結束。目標是（本回合未使用過羽棲的）飛行屬性寶可夢或特性為飄浮的寶可夢時，其在場期間失去對地面屬性攻擊和特性沙穴的免疫。效果期間，目標無法使用電磁飄浮，對目標使用的意念移物也會失敗。", // NEEDS QC
+		shortDesc: "可擊落並命中空中的目標。", // NEEDS QC
 	},
 	thousandwaves: {
 		name: "千波激盪",
 		// Official flavor text: "化成波浪從地面進行攻擊。 被捲入波浪中的對手 將無法從戰鬥中逃走。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場後效果結束。", // NEEDS QC
+		shortDesc: "攻擊所有對手並使其無法交換。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標無法交換。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。目標通過接棒離場時，接替的寶可夢仍然無法交換。使用者離場後效果結束。", // NEEDS QC
 		},
 	},
 	thrash: {
 		name: "大鬧一番",
 		// Official flavor text: "在２～３回合內 瘋狂亂打對手進行攻擊。 大鬧一番後自己會陷入混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2～3回合內固定使出此招式，並在效果最後一回合行動後立即（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、在效果第1回合（3回合時第2回合也是）攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式並在睡眠中使用時，只使用1回合且不會混亂。", // NEEDS QC
+		shortDesc: "持續2～3回合，之後自己陷入混亂。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合行動後立即（若還未混亂）陷入混亂狀態。此招式每回合從相鄰的對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、在效果第1回合（3回合時第2回合也是）攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合結束時（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、回合開始時處於睡眠狀態時、攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～3回合內固定使出此招式，並在效果最後一回合結束時（若還未混亂）陷入混亂狀態。此招式每回合從對手寶可夢中隨機選擇對象。無法行動時、入睡時、陷入冰凍狀態時、攻擊失敗時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "無論此招式是否成功，2～3回合內固定使出此招式，並在效果最後一回合行動後立即陷入混亂狀態，即使已經混亂。無法行動時，效果結束且不會混亂。通過夢話選到此招式時，只使用1回合且不會混亂。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無論此招式是否成功，3～4回合內固定使出此招式，並在效果最後一回合行動後立即陷入混亂狀態，即使已經混亂。無法行動時，效果結束且不會混亂。效果期間，此招式的命中率每回合被包含能力等級變化在內計算出的當前命中率覆蓋，但不會低於1/256或高於255/256。", // NEEDS QC
+			shortDesc: "持續3～4回合，之後自己混亂。", // NEEDS QC
 		},
 	},
 	throatchop: {
 		name: "地獄突刺",
 		// Official flavor text: "受到此招式攻擊的對手， 會因為地獄般的痛苦，在２回合內 無法使用會發出聲音的招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "2回合內，目標無法使用聲音類招式。", // NEEDS QC
+		shortDesc: "2回合內目標無法使用聲音招式。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2回合內，目標無法使用聲音類招式。效果期間仍可以選擇並使出Z力量強化的聲音類招式。", // NEEDS QC
 		},
 
 		cant: "{POKEMON}因地獄突刺的效果而無法使出招式！",
@@ -7690,106 +7680,106 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	thunder: {
 		name: "打雷",
 		// Official flavor text: "向對手劈下暴雷進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標陷入麻痺狀態。可以命中用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標。天氣為下雨或大雨時必定命中。天氣為大晴天或大日照時，命中率變為50%。對攜帶萬能傘的目標，命中率保持70%。", // NEEDS QC
+		shortDesc: "30%機率麻痺。下雨時必中。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。可以命中用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標。天氣為下雨或大雨時必定命中。天氣為大晴天或大日照時，命中率變為50%。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。可以命中用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標。天氣為下雨時必定命中。天氣為大晴天時，命中率變為50%。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。可以命中正在使用彈跳或飛翔的目標。天氣為下雨時必定命中。天氣為大晴天時，命中率變為50%。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有30%的機率使目標陷入麻痺狀態。可以命中正在使用飛翔的目標。天氣為下雨時必定命中。天氣為大晴天時，命中率變為50%。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標陷入麻痺狀態。", // NEEDS QC
+			shortDesc: "有10%的機率使目標麻痺。", // NEEDS QC
 		},
 	},
 	thunderbolt: {
 		name: "十萬伏特",
 		// Official flavor text: "向對手放出強力電流進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標麻痺。", // NEEDS QC
 	},
 	thundercage: {
 		name: "雷電囚籠",
 		// Official flavor text: "將對手困在 電流奔竄的電牢中， 在４～５回合內進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被{SOURCE}困住了！",
 	},
 	thunderclap: {
 		name: "迅雷",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標本回合沒有選擇物理招式、特殊招式或搶先一步時，或目標先於使用者行動時失敗。", // NEEDS QC
+		shortDesc: "先制招式。目標未選攻擊招式則失敗。", // NEEDS QC
 	},
 	thunderfang: {
 		name: "雷電牙",
 		// Official flavor text: "用蓄滿電流的牙齒咬住對手。 有時會讓對手畏縮 或陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入麻痺狀態。有10%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "10%機率麻痺。10%機率畏縮。", // NEEDS QC
 	},
 	thunderouskick: {
 		name: "雷鳴蹴擊",
 		// Official flavor text: "以雷電般的動作 一邊戲弄對手一邊使出踢擊。 可降低對手的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的防禦降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的防禦降低1級。", // NEEDS QC
 	},
 	thunderpunch: {
 		name: "雷電拳",
 		// Official flavor text: "用帶有電流的拳頭 攻擊對手。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標麻痺。", // NEEDS QC
 	},
 	thundershock: {
 		name: "電擊",
 		// Official flavor text: "發出電流刺激對手進行攻擊。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標麻痺。", // NEEDS QC
 	},
 	thunderwave: {
 		name: "電磁波",
 		// Official flavor text: "放出微弱的電流。 讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入麻痺狀態。不能無視屬性相性帶來的無效。", // NEEDS QC
+		shortDesc: "使目標陷入麻痺狀態。", // NEEDS QC
 	},
 	tickle: {
 		name: "搔癢",
 		// Official flavor text: "搔癢對手的身體，讓對手發笑， 降低對手的攻擊和防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的攻擊和防禦各降低1級。", // NEEDS QC
+		shortDesc: "使目標的攻擊、防禦降低1級。", // NEEDS QC
 	},
 	tidyup: {
 		name: "大掃除",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊和速度各提高1級。消除場上所有寶可夢的替身，以及雙方場上的撒菱、隱形岩、黏黏網、毒菱效果。", // NEEDS QC
+		shortDesc: "攻擊和速度+1。清除替身和陷阱。", // NEEDS QC
 
 		activate: "  大掃除完畢！",
 	},
 	topsyturvy: {
 		name: "顛倒",
 		// Official flavor text: "讓對手身上所有的 能力變化顛倒過來， 變成和原來相反的狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "將目標能力等級變化的正負顛倒。目標的能力等級全部為0時失敗。", // NEEDS QC
+		shortDesc: "顛倒目標的能力等級變化。", // NEEDS QC
 	},
 	torchsong: {
 		name: "閃焰高歌",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的特攻提高1級。", // NEEDS QC
+		shortDesc: "有100%的機率使自身的特攻提高1級。", // NEEDS QC
 	},
 	torment: {
 		name: "無理取鬧",
 		// Official flavor text: "無理取鬧， 讓對手不能連續２次 使出相同招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標無法連續2回合選擇同一招式。目標離場後效果結束。", // NEEDS QC
+		shortDesc: "使目標無法連續使用同一招式。", // NEEDS QC
 
 		start: "  {POKEMON}遭到了無理取鬧！",
 		end: "  {POKEMON}的無理取鬧效果消失了！",
@@ -7797,26 +7787,26 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxic: {
 		name: "劇毒",
 		// Official flavor text: "讓對手陷入劇毒狀態。 中毒傷害會隨著 回合的進行而增加。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入劇毒狀態。毒屬性寶可夢使用時，目標（即使處於需要2回合的招式中）也無法躲避此招式。", // NEEDS QC
+		shortDesc: "使目標劇毒。毒屬性使用時必中。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使目標陷入劇毒狀態。", // NEEDS QC
+			shortDesc: "使目標陷入劇毒狀態。", // NEEDS QC
 		},
 	},
 	toxicspikes: {
 		name: "毒菱",
 		// Official flavor text: "在對手腳下散布毒菱。 讓對手替換出場的寶可夢 陷入中毒狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "在對手方場上設置陷阱，使交換出場的對手寶可夢陷入中毒狀態。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加2層，1層時使其中毒，2層時使其劇毒。任意寶可夢使用大掃除，或對手方寶可夢成功使用晶光轉轉、高速旋轉、清除濃霧或受到清除濃霧攻擊，或地面上的毒屬性寶可夢交換出場時，陷阱被清除。神祕守護可以防止出場時中毒，但替身不能。", // NEEDS QC
+		shortDesc: "對手出場時中毒。最多疊2層。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，使交換出場的對手寶可夢陷入中毒狀態。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加2層，1層時使其中毒，2層時使其劇毒。對手方寶可夢成功使用高速旋轉或清除濃霧或受到清除濃霧攻擊，或地面上的毒屬性寶可夢交換出場時，陷阱被清除。神秘守護可以防止出場時中毒，但替身不能。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，使交換出場的對手寶可夢陷入中毒狀態。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加2層，1層時使其中毒，2層時使其劇毒。對手方寶可夢成功使用高速旋轉或受到清除濃霧攻擊，或地面上的毒屬性寶可夢交換出場時，陷阱被清除。神秘守護可以防止出場時中毒，但替身不能。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "在對手方場上設置陷阱，使交換出場的對手寶可夢陷入中毒狀態。對飛行屬性寶可夢和特性為飄浮的寶可夢無效。最多可疊加2層，1層時使其中毒，2層時使其劇毒。對手方寶可夢成功使用高速旋轉或受到清除濃霧攻擊，或地面上的毒屬性寶可夢交換出場時，陷阱被清除。神秘守護可以防止出場時中毒，帶著替身交換出場也可以防止。", // NEEDS QC
 		},
 
 		start: "  {TEAM}腳下散落著毒菱！",
@@ -7825,8 +7815,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	toxicthread: {
 		name: "毒絲",
 		// Official flavor text: "將混有毒的絲吐向對手。 使其中毒， 進而降低對手的速度。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的速度降低1級，並使其陷入中毒狀態。", // NEEDS QC
+		shortDesc: "使目標速度降低1級並中毒。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
@@ -7834,23 +7824,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	trailblaze: {
 		name: "起草",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的速度提高1級。", // NEEDS QC
+		shortDesc: "有100%的機率使自身的速度提高1級。", // NEEDS QC
 	},
 	transform: {
 		name: "變身",
 		// Official flavor text: "變身成對手寶可夢的樣子， 能夠使用和對手 完全相同的招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "變身為目標。複製目標當前的能力、能力等級、屬性、招式、特性、體重、性別和外觀。使用者的等級和HP保持不變，複製的每個招式PP最大為5。即使是可以形態變化的寶可夢，變身期間也無法變化。命中替身時、使用者或目標已變身時、任意一方處於幻覺的偽裝下時失敗。", // NEEDS QC
+		shortDesc: "複製目標的能力、招式、屬性和特性。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "變身為目標。複製目標當前的能力、能力等級、屬性、招式、特性、體重、個體值、種族和外觀。使用者的等級和HP保持不變，複製的每個招式PP為5。目標已變身時失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "變身為目標。複製目標當前的能力、能力等級、屬性、招式、個體值、種族和外觀。使用者的等級和HP保持不變，複製的每個招式PP為5。目標已變身時失敗。", // NEEDS QC
+			shortDesc: "複製目標的能力、招式、屬性和種族。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "變身為目標。複製目標當前的能力、能力等級、屬性、招式、個體值、種族和外觀。使用者的等級和HP保持不變，複製的每個招式PP為5。此招式可以命中正在使用挖洞或飛翔的目標。", // NEEDS QC
 		},
 
 		transform: "{POKEMON}變身成了{SPECIES}！",
@@ -7858,41 +7848,41 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	triattack: {
 		name: "三重攻擊",
 		// Official flavor text: "用３種光線進行攻擊。 有時會讓對手陷入 麻痺、灼傷或冰凍的狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入灼傷、冰凍或麻痺狀態之一。", // NEEDS QC
+		shortDesc: "20%機率麻痺、灼傷或冰凍。", // NEEDS QC
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "隨機選擇灼傷、冰凍或麻痺之一，有20%的機率使目標陷入該狀態。目標處於冰凍狀態且選中灼傷時，冰會融化。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無追加效果。", // NEEDS QC
+			shortDesc: "無追加效果。", // NEEDS QC
 		},
 	},
 	trick: {
 		name: "戲法",
 		// Official flavor text: "在對手露出空隙時， 趁機交換自己和對手的持有物。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時失敗。此外，試圖在蓋歐卡、固拉多、帝牙盧卡、帕路奇亞、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特、悖謬寶可夢、厄鬼椪與分別對應的靛藍色寶珠、朱紅色寶珠、大金剛寶玉、大白寶玉、大白金寶玉、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾、驅勁能量、面具的組合間交出或奪取道具時也會失敗。這裡的悖謬寶可夢指特性為古代活性、夸克充能的所有種族（破空焰、猛雷鼓、鐵磐岩、鐵頭殼除外）。對特性為黏著的目標無效。", // NEEDS QC
+		shortDesc: "與目標互換攜帶道具。", // NEEDS QC
 		champions: {
 			desc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時，或試圖在蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸、蒼響、藏瑪然特與分別對應的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟、腐朽的劍、腐朽的盾的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、任意一方攜帶Z純晶時、試圖向能用其超級進化的寶可夢交出或從其奪取超級石時，或試圖在蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特、銀伴戰獸與分別對應的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶、記憶碟的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、試圖向能用其超級進化的寶可夢交出或從其奪取超級石時，或試圖在蓋歐卡、固拉多、騎拉帝納、阿爾宙斯、蓋諾賽克特與分別對應的靛藍色寶珠、朱紅色寶珠、白金寶珠、屬性板、卡帶的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、任意一方攜帶信件時，或試圖在騎拉帝納、阿爾宙斯、蓋諾賽克特與分別對應的白金寶珠、屬性板、卡帶的組合間交出或奪取道具時失敗。對特性為黏著的目標無效。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、任意一方攜帶信件或白金寶珠時、任意一方的特性為多屬性時、任意一方處於拍落效果下時、目標的特性為黏著時失敗。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "互換使用者和目標的攜帶道具。使用者和目標都沒有攜帶道具時、任意一方攜帶信件時、任意一方處於拍落效果下時、目標的特性為黏著時失敗。", // NEEDS QC
 		},
 
 		activate: "  {POKEMON}互換了各自的道具！",
@@ -7900,123 +7890,123 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	trickortreat: {
 		name: "萬聖夜",
 		// Official flavor text: "邀請對手參加萬聖夜。 讓對手追加幽靈屬性。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "為目標追加幽靈屬性，使其擁有2～3種屬性。目標已是幽靈屬性時失敗。被森林詛咒追加屬性時，此招式追加的屬性會被替換（反之亦然）。", // NEEDS QC
+		shortDesc: "為目標追加幽靈屬性。", // NEEDS QC
 	},
 	trickroom: {
 		name: "戲法空間",
 		// Official flavor text: "創造出非常不可思議的空間。 在５回合內， 速度慢的寶可夢可以先行動。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，重新計算所有寶可夢用於決定行動順序的速度。效果期間，每隻寶可夢的速度視為（10000−其正常速度），該值超過8191時再減去8192。效果期間再次使用此招式時，效果結束。", // NEEDS QC
+		shortDesc: "5回合內行動順序顛倒。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "5回合內，在相同優先度的招式之間，速度低的寶可夢先於速度高的寶可夢行動。效果期間再次使用此招式時，效果結束。", // NEEDS QC
 		},
 	},
 	triplearrows: {
 		name: "三連箭",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有50%的機率使目標的防禦降低1級。有30%的機率使目標畏縮。容易擊中要害（擊中要害等級+1）。", // NEEDS QC
+		shortDesc: "易擊要害。50%防禦-1，30%畏縮。", // NEEDS QC
 	},
 	tripleaxel: {
 		name: "三旋擊",
 		// Official flavor text: "連續踢對手３次進行攻擊。 每踢中一次，威力就會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊3次。威力第2次提高到40，第3次提高到60。每次攻擊都進行命中判定，落空時攻擊結束。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊3次。", // NEEDS QC
+		shortDesc: "攻擊3次。每次判定命中，威力遞增。", // NEEDS QC
 	},
 	tripledive: {
 		name: "三連鑽",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊3次。", // NEEDS QC
+		shortDesc: "攻擊3次。", // NEEDS QC
 	},
 	triplekick: {
 		name: "三連踢",
 		// Official flavor text: "連續踢對手３次進行攻擊。 每踢中一次，威力就會提高。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊3次。威力第2次提高到20，第3次提高到30。每次攻擊都進行命中判定，落空時攻擊結束。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊3次。", // NEEDS QC
+		shortDesc: "攻擊3次。每次判定命中，威力遞增。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊3次。威力第2次提高到20，第3次提高到30。每次攻擊都進行命中判定，落空時攻擊結束。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。目標攜帶氣勢披帶且此招式開始時HP全滿時，無論攻擊幾次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊3次。威力第2次提高到20，第3次提高到30。每次攻擊都進行命中判定，落空時攻擊結束。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "隨機連續攻擊1～3次。威力第2次提高到20，第3次提高到30。", // NEEDS QC
+			shortDesc: "攻擊1～3次。威力逐次提高。", // NEEDS QC
 		},
 	},
 	tropkick: {
 		name: "熱帶踢",
 		// Official flavor text: "向對手使出來自南國的火熱腳踢。 進而降低對手的攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
+		shortDesc: "有100%的機率使目標的攻擊降低1級。", // NEEDS QC
 	},
 	trumpcard: {
 		name: "王牌",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力由正常PP消耗和特性壓迫感的效果結算後的剩餘PP決定。0時威力200，1時80，2時60，3時50，4以上時40。", // NEEDS QC
+		shortDesc: "剩餘PP越少威力越大。", // NEEDS QC
 	},
 	twinbeam: {
 		name: "雙光束",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "1回合內攻擊2次。", // NEEDS QC
 	},
 	twineedle: {
 		name: "雙針",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2次，每次攻擊有20%的機率使目標陷入中毒狀態。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
+		shortDesc: "攻擊2次。每次20%機率中毒。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次，每次攻擊有20%的機率使目標陷入中毒狀態。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。目標攜帶氣勢披帶且此招式開始時HP全滿時，無論攻擊幾次都不會瀕死。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次，每次攻擊有20%的機率使目標陷入中毒狀態。若第1次攻擊打破目標的替身，第2次攻擊將命中本體。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次，第2次攻擊有20%的機率使目標陷入中毒狀態。若第1次攻擊打破目標的替身，第2次攻擊將命中本體，但不會因此中毒。", // NEEDS QC
+			shortDesc: "攻擊2次。第2次有20%機率中毒。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2次，第2次攻擊有20%的機率使目標陷入中毒狀態。若第1次攻擊打破目標的替身，招式結束。", // NEEDS QC
 		},
 	},
 	twinkletackle: {
 		name: "可愛星星飛天撞",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "威力由原招式的Ｚ威力決定。", // NEEDS QC
 	},
 	twister: {
 		name: "龍捲風",
 		// Official flavor text: "刮起龍捲風， 將對手捲入進行攻擊。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標畏縮。對用彈跳、飛翔、自由落體飛上高空的目標，或處於自由落體效果下的目標，威力變為2倍。", // NEEDS QC
+		shortDesc: "有20%的機率使目標畏縮。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "有20%的機率使目標畏縮。目標正在使用彈跳或飛翔時，威力變為2倍。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有20%的機率使目標畏縮。目標正在使用飛翔時，威力變為2倍。", // NEEDS QC
+			shortDesc: "有20%的機率使目標畏縮。", // NEEDS QC
 		},
 	},
 	upperhand: {
 		name: "快手還擊",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標畏縮。目標本回合沒有選擇被改變為優先度+1以上的物理或特殊招式時，或目標先於使用者行動時失敗。", // NEEDS QC
+		shortDesc: "100%畏縮。目標未用先制攻擊則失敗。", // NEEDS QC
 	},
 	uproar: {
 		name: "吵鬧",
 		// Official flavor text: "在３回合內 大吵大鬧攻擊對手。 在此期間誰都無法入眠。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "3回合內固定使出此招式。此招式每回合從對手寶可夢中隨機選擇對象。3回合中的第1回合，場上所有睡眠狀態的寶可夢醒來。3回合內，場上的寶可夢無論如何都不會陷入睡眠狀態，效果期間交換出場的寶可夢也不會醒來。無法行動或攻擊失敗時，效果結束。", // NEEDS QC
+		shortDesc: "持續3回合，期間無人能入睡。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "3回合內固定使出此招式。此招式每回合從相鄰的對手寶可夢中隨機選擇對象。3回合中的第1回合，場上所有睡眠狀態的寶可夢醒來。3回合內，場上的寶可夢無論如何都不會陷入睡眠狀態，效果期間交換出場的寶可夢也不會醒來。無法行動或攻擊失敗時，效果結束。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "3～6回合內固定使出此招式。此招式每回合從對手寶可夢中隨機選擇對象。效果期間，場上的寶可夢無論如何都不會陷入睡眠狀態，已處於睡眠狀態的寶可夢在自己的回合開始時或包括最後一回合在內的每回合結束時醒來。無法行動或攻擊失敗時，效果結束。", // NEEDS QC
+			shortDesc: "持續3～6回合。期間無人能入睡。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內固定使出此招式。此招式每回合從對手寶可夢中隨機選擇對象。效果期間，場上的寶可夢無論如何都不會陷入睡眠狀態，已處於睡眠狀態的寶可夢在自己的回合開始時或包括最後一回合在內的每回合結束時醒來。無法行動或攻擊失敗時，效果結束。", // NEEDS QC
+			shortDesc: "持續2～5回合。期間無人能入睡。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}吵鬧了起來！",
@@ -8028,13 +8018,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	uturn: {
 		name: "急速折返",
 		// Official flavor text: "攻擊後迅速返回， 和後備寶可夢進行替換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時，或目標用逃脫按鍵或因特性危險迴避、躍躍欲逃交換下場時不交換。", // NEEDS QC
+		shortDesc: "攻擊後與同伴交換。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時，或目標用逃脫按鍵交換下場時不交換。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時不交換。", // NEEDS QC
 		},
 
 		switchOut: "{POKEMON}要回到{TRAINER}的身邊了！",
@@ -8042,59 +8032,59 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	vacuumwave: {
 		name: "真空波",
 		// Official flavor text: "揮動拳頭， 捲起真空波。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "無追加效果。", // NEEDS QC
+		shortDesc: "可以先制攻擊（優先度+1）。", // NEEDS QC
 	},
 	vcreate: {
 		name: "Ｖ熱焰",
 		// Official flavor text: "在前額產生灼熱的火焰， 然後捨身撞擊對手。 自己的防禦、特防和速度會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的速度、防禦、特防各降低1級。", // NEEDS QC
+		shortDesc: "使自身的防禦、特防、速度降低1級。", // NEEDS QC
 	},
 	veeveevolley: {
 		name: "砰砰擊破",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（使用者的親密度×2/5）（向下取整，最低為1）。", // NEEDS QC
+		shortDesc: "親密度最高時威力102。必定命中。", // NEEDS QC
 	},
 	venomdrench: {
 		name: "毒液陷阱",
 		// Official flavor text: "向對手發射特殊的毒液。 陷入中毒狀態的對手 攻擊、特攻和速度會降低。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使中毒狀態的目標的攻擊、特攻、速度各降低1級。目標不處於中毒狀態時失敗。", // NEEDS QC
+		shortDesc: "中毒的對手攻擊、特攻、速度-1。", // NEEDS QC
 	},
 	venoshock: {
 		name: "毒液衝擊",
 		// Official flavor text: "將特殊的毒液潑向對手。 攻擊陷入中毒狀態的對手時， 威力會變成２倍。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標處於中毒狀態時，威力變為2倍。", // NEEDS QC
+		shortDesc: "目標中毒時威力加倍。", // NEEDS QC
 	},
 	victorydance: {
 		name: "勝利之舞",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊、防禦、速度各提高1級。", // NEEDS QC
+		shortDesc: "自身的攻擊、防禦、速度提高1級。", // NEEDS QC
 	},
 	vinewhip: {
 		name: "藤鞭",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	visegrip: {
 		name: "夾住",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	vitalthrow: {
 		name: "借力摔",
 		// Official flavor text: "攻擊的順序會在對手之後。 但是自己的攻擊必定會命中。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定命中。", // NEEDS QC
+		shortDesc: "必定命中，但後行動。", // NEEDS QC
 	},
 	voltswitch: {
 		name: "伏特替換",
 		// Official flavor text: "攻擊後迅速返回， 和後備寶可夢進行替換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "攻擊成功且使用者未瀕死時，即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時，或目標用逃脫按鍵或因特性危險迴避、躍躍欲逃交換下場時不交換。", // NEEDS QC
+		shortDesc: "攻擊後與同伴交換。", // NEEDS QC
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "攻擊成功且使用者未瀕死時，即使處於無法交換的狀態也必定交換，立即與選擇的同行寶可夢互換。同行沒有未瀕死的寶可夢時，或目標用逃脫按鍵交換下場時不交換。", // NEEDS QC
 		},
 
 		switchOut: "#uturn",
@@ -8102,45 +8092,45 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	volttackle: {
 		name: "伏特攻擊",
 		// Official flavor text: "用電流圍繞全身後猛撞對手。 自己也會受到不小的傷害。 有時會讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入麻痺狀態。對目標造成了傷害時，使用者受到相當於所造成傷害33%（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "33%反作用力。10%機率麻痺。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "有10%的機率使目標陷入麻痺狀態。對目標造成了傷害時，使用者受到相當於所造成傷害1/3（向下取整，最少1點）的反作用力傷害。", // NEEDS QC
+			shortDesc: "反作用力1/3。10%機率麻痺。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/3（向下取整，最少1）的反作用力傷害。", // NEEDS QC
+			shortDesc: "受到1/3的反作用力傷害。", // NEEDS QC
 		},
 	},
 	wakeupslap: {
 		name: "喚醒巴掌",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "目標處於睡眠狀態時，威力變為2倍。使用者未瀕死時，治癒目標的睡眠。", // NEEDS QC
+		shortDesc: "對睡眠目標威力加倍，並將其喚醒。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "目標處於睡眠狀態時，威力變為2倍。攻擊成功後，目標醒來。", // NEEDS QC
 		},
 	},
 	waterfall: {
 		name: "攀瀑",
 		// Official flavor text: "以驚人的氣勢撲向對手。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有20%的機率使目標畏縮。", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "無追加效果。", // NEEDS QC
+			shortDesc: "無追加效果。", // NEEDS QC
 		},
 	},
 	watergun: {
 		name: "水槍",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	waterpledge: {
 		name: "水之誓約",
 		// Official flavor text: "用水柱進行攻擊。 和火之誓約同時使用時，威力會提高， 天空會出現彩虹。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "隊友在本回合選擇了火之誓約或草之誓約且尚未行動時，隊友緊接在使用者之後行動，使用者的招式不產生效果。與火之誓約組合時，隊友使出威力150的水之誓約，己方場地在4回合內出現彩虹，招式追加效果的發動機率翻倍（可與特性天恩疊加，但使目標畏縮的效果發動機率只能翻倍1次）。與草之誓約組合時，隊友使出威力150的草之誓約，對手方場地在4回合內變為濕地，該方寶可夢的速度變為1/4。作為組合招式使出時，無論使用者的屬性如何都獲得屬性一致加成。此招式不消耗使用者的水之寶石，也不會被特性引水引開。", // NEEDS QC
+		shortDesc: "與草或火之誓約組合有追加效果。", // NEEDS QC
 
 		activate: "  {POKEMON}正在等候{TARGET}……",
 		start: "  彩虹出現在了{TEAM}上空！",
@@ -8149,60 +8139,60 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	waterpulse: {
 		name: "水之波動",
 		// Official flavor text: "用水的震動攻擊對手。 有時會使對手混亂。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入混亂狀態。", // NEEDS QC
+		shortDesc: "有20%的機率使目標混亂。", // NEEDS QC
 	},
 	watershuriken: {
 		name: "飛水手裡劍",
 		// Official flavor text: "射出用黏液製成的手裡劍， 連續攻擊２～５次。 必定能夠發動先制攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。使用者是特性為牽絆變身的小智版甲賀忍蛙時，威力變為20且必定攻擊3次。攜帶老千骰子時必定攻擊4次或5次。", // NEEDS QC
+		shortDesc: "先制招式。1回合內攻擊2～5次。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "連續攻擊2～5次。攻擊2次、3次的機率各為35%，攻擊4次、5次的機率各為15%。若中途某次攻擊打破目標的替身，剩餘的攻擊將命中本體。使用者的特性為連續攻擊時必定攻擊5次。", // NEEDS QC
 		},
 	},
 	watersport: {
 		name: "玩水",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場上所有寶可夢的火屬性攻擊招式威力變為0.33倍。已有此效果時失敗。", // NEEDS QC
+		shortDesc: "5回合內火屬性招式威力變為1/3。", // NEEDS QC
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，場上所有寶可夢的火屬性攻擊招式威力變為0.33倍。任意寶可夢已有此效果時失敗。", // NEEDS QC
+			shortDesc: "火屬性攻擊威力變為1/3。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "使用者在場期間，場上所有寶可夢的火屬性攻擊招式威力減半。使用者已有此效果時失敗。可以通過接棒將此效果轉移給同伴。", // NEEDS QC
+			shortDesc: "火屬性攻擊威力減半。", // NEEDS QC
 		},
 	},
 	waterspout: {
 		name: "噴水",
 		// Official flavor text: "噴起潮水進行攻擊。 自己的ＨＰ越少， 招式的威力越小。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為（使用者的剩餘HP×150÷使用者的最大HP）（向下取整，最低為1）。", // NEEDS QC
+		shortDesc: "自身HP越少威力越低。攻擊所有對手。", // NEEDS QC
 	},
 	wavecrash: {
 		name: "波動衝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害33%（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到33%的反作用力傷害。", // NEEDS QC
 	},
 	weatherball: {
 		name: "氣象球",
 		// Official flavor text: "招式屬性和威力會隨著 使用時天氣的不同而改變。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "天氣（德爾塔氣流除外）存在時，威力變為2倍，且此招式的屬性隨天氣變化。下雪時為冰屬性，求雨或大雨時為水屬性，沙暴時為岩石屬性，大晴天或大日照時為火屬性。攜帶萬能傘並在求雨、大雨、大晴天或大日照中使用時，保持一般屬性且威力不會翻倍。", // NEEDS QC
+		shortDesc: "有天氣時威力加倍且屬性變化。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣（德爾塔氣流除外）存在時，威力變為2倍，且此招式的屬性隨天氣變化。冰雹時為冰屬性，求雨或大雨時為水屬性，沙暴時為岩石屬性，大晴天或大日照時為火屬性。攜帶萬能傘並在求雨、大雨、大晴天或大日照中使用時，保持一般屬性且威力不會翻倍。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "天氣存在時，威力變為2倍，且此招式的屬性隨天氣變化。冰雹時為冰屬性，求雨時為水屬性，沙暴時為岩石屬性，大晴天時為火屬性。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "天氣存在時，傷害變為2倍，且此招式的屬性隨天氣變化。冰雹時為冰屬性，求雨時為水屬性，沙暴時為岩石屬性，大晴天時為火屬性。", // NEEDS QC
+			shortDesc: "有天氣時傷害2倍且屬性變化。", // NEEDS QC
 		},
 
 		move: "究極無敵大衝撞因天氣的影響變成了{MOVE}！",
@@ -8210,23 +8200,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlpool: {
 		name: "潮旋",
 		// Official flavor text: "將對手困在激烈的 水流漩渦中， 在４～５回合內進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（使用者攜帶緊綁束帶時為1/8，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合（使用者攜帶緊纏鉤爪時總是5回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+			shortDesc: "2～5回合內束縛目標並造成傷害。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但使用接棒的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被困在了漩渦之中！",
@@ -8234,47 +8224,47 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	whirlwind: {
 		name: "吹飛",
 		// Official flavor text: "吹飛對手， 強制讓後備寶可夢上場。 對手為野生寶可夢時，戰鬥將直接結束。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標是同行最後一隻未瀕死的寶可夢時、使用過扎根時、特性為吸盤時失敗。", // NEEDS QC
+		shortDesc: "強制目標與隨機同伴交換。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標是同行最後一隻未瀕死的寶可夢時、使用過扎根時、特性為吸盤時失敗。此外，使用者的等級低於目標，且對0～255的隨機數X，X×(使用者的等級+目標的等級)÷256+1（向下取整）小於等於（目標的等級÷4）（向下取整）時也失敗。", // NEEDS QC
 		},
 		gen2: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "強制目標交換，從未瀕死的同行寶可夢中隨機選擇1隻出場。目標是同行最後一隻未瀕死的寶可夢時，或使用者先於目標行動時失敗。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "沒有對戰效果。", // NEEDS QC
+			shortDesc: "沒有對戰效果。", // NEEDS QC
 		},
 	},
 	wickedblow: {
 		name: "暗冥強擊",
 		// Official flavor text: "將惡之流派鍛鍊到了 極致的強烈一擊。 必定會擊中要害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "必定擊中要害。但目標處於幸運咒語效果下，或特性為戰鬥盔甲、硬殼盔甲時不會擊中要害。", // NEEDS QC
+		shortDesc: "必定擊中要害。", // NEEDS QC
 	},
 	wickedtorque: {
 		name: "黑暗暴衝",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有10%的機率使目標陷入睡眠狀態。", // NEEDS QC
+		shortDesc: "有10%的機率使目標陷入睡眠。", // NEEDS QC
 	},
 	wideguard: {
 		name: "廣域防守",
 		// Official flavor text: "在１回合內， 防禦住攻擊我方全體的攻擊招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的以周圍所有對手或周圍全體為對象的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是碉堡、火焰守護、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、線阱、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
+		shortDesc: "本回合防住指向己方的群體招式。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的以周圍所有對手或周圍全體為對象的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、極巨防壁、攔堵、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的以周圍所有對手或周圍全體為對象的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是碉堡、看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的以周圍所有對手或周圍全體為對象的造成傷害的招式。此招式會改變與其他守護類招式共用的成功率1/X（X從1開始，每次成功使用後變為3倍），但自身的成敗判定不使用該機率。失敗時，或最後使用的招式不是看穿、挺住、王者盾牌、守住、快速防守、尖刺防守、廣域防守時，或使用這些招式但守護被打破時，X重置為1。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
+			shortDesc: "本回合防住多體攻擊保護己方。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "本回合，使用者及其場上隊友防住（包括隊友在內的）其他寶可夢使出的以周圍所有對手或周圍全體為對象的造成傷害的招式。此招式的成功率為1/X。X從1開始，每次成功使用後變為2倍。失敗時，或最後使用的招式不是看穿、挺住、守住、快速防守、廣域防守時，X重置為1。X為256以上時，此招式的成功率為1/(2^32)。本回合最後行動時，或己方已有此效果時失敗。", // NEEDS QC
 		},
 
 		start: "  {TEAM}受到了廣域防守的保護！",
@@ -8282,33 +8272,33 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wildboltstorm: {
 		name: "鳴雷風暴",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標陷入麻痺狀態。天氣為下雨或大雨時必定命中。對攜帶萬能傘的目標，命中率保持80%。", // NEEDS QC
+		shortDesc: "20%機率麻痺。下雨時必中。", // NEEDS QC
 	},
 	wildcharge: {
 		name: "瘋狂伏特",
 		// Official flavor text: "讓電流圍繞全身， 衝撞對手進行攻擊。 自己也會受到少許傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害1/4（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到1/4的反作用力傷害。", // NEEDS QC
 	},
 	willowisp: {
 		name: "鬼火",
 		// Official flavor text: "放出詭異的火焰， 讓對手陷入灼傷狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標陷入灼傷狀態。", // NEEDS QC
+		shortDesc: "使目標陷入灼傷狀態。", // NEEDS QC
 	},
 	wingattack: {
 		name: "翅膀攻擊",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	wish: {
 		name: "祈願",
 		// Official flavor text: "在下一回合回復自己或是 替換上場的寶可夢最大ＨＰ的一半。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "下一回合結束時，回復使用者位置上的寶可夢相當於使用者最大HP1/2（向下取整）的HP。使用者的位置已有此效果時失敗。", // NEEDS QC
+		shortDesc: "下一回合回復最大HP的一半。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "下一回合結束時，回復使用者位置上的寶可夢相當於該寶可夢最大HP1/2（向下取整）的HP。使用者的位置已有此效果時失敗。", // NEEDS QC
+			shortDesc: "下回合回復接受方最大HP的一半。", // NEEDS QC
 		},
 
 		heal: "  {NICKNAME}的祈願實現了！",
@@ -8316,128 +8306,128 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	withdraw: {
 		name: "縮入殼中",
 		// Official flavor text: "縮入殼中保護身體， 提高自己的防禦。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的防禦提高1級。", // NEEDS QC
+		shortDesc: "自身的防禦提高1級。", // NEEDS QC
 	},
 	wonderroom: {
 		name: "奇妙空間",
 		// Official flavor text: "創造出非常不可思議的空間。 在５回合內，讓所有寶可夢的 防禦和特防互相交換。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "5回合內，場上所有寶可夢的防禦和特防數值互換。能力等級變化不受影響。效果期間再次使用此招式時，效果結束。", // NEEDS QC
+		shortDesc: "5回合內所有寶可夢防禦與特防互換。", // NEEDS QC
 	},
 	woodhammer: {
 		name: "木槌",
 		// Official flavor text: "用堅硬的軀體 撞擊對手進行攻擊。 自己也會受到不小的傷害。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "對目標造成了傷害時，使用者受到相當於所造成傷害33%（四捨五入，最少1點）的反作用力傷害。", // NEEDS QC
+		shortDesc: "受到33%的反作用力傷害。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "目標失去HP時，使用者受到目標所失去HP的1/3（向下取整，最少1）的反作用力傷害。", // NEEDS QC
+			shortDesc: "受到1/3的反作用力傷害。", // NEEDS QC
 		},
 	},
 	workup: {
 		name: "自我激勵",
 		// Official flavor text: "激勵自己， 提高自己的攻擊和特攻。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使用者的攻擊和特攻各提高1級。", // NEEDS QC
+		shortDesc: "自身的攻擊、特攻提高1級。", // NEEDS QC
 	},
 	worryseed: {
 		name: "煩惱種子",
 		// Official flavor text: "埋下令人心煩意亂的種子， 讓對手睡不著， 將對手的特性變成不眠。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "使目標的特性變為不眠。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、不眠、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、太晶變形、懶惰、達摩模式、全能變身時失敗。", // NEEDS QC
+		shortDesc: "使目標的特性變為失眠。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為不眠。目標的特性為人馬一體、牽絆變身、絕對睡眠、畫皮、一口飛彈、結凍頭、不眠、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、懶惰、達摩模式時失敗。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為不眠。目標的特性為牽絆變身、絕對睡眠、畫皮、不眠、多屬性、群聚變形、ＡＲ系統、魚群、界限盾殼、戰鬥切換、懶惰、達摩模式時失敗。", // NEEDS QC
 		},
 		gen6: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為不眠。目標的特性為不眠、多屬性、戰鬥切換、懶惰時失敗。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為不眠。目標的特性為不眠、多屬性、懶惰時失敗。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "使目標的特性變為不眠。目標的特性為多屬性或懶惰時，或目標攜帶白金寶珠時失敗。", // NEEDS QC
 		},
 	},
 	wrap: {
 		name: "緊束",
 		// Official flavor text: "使用長長的身體或藤蔓等， 在４～５回合內 緊束對手進行攻擊。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "4～5回合內（使用者攜帶緊纏鉤爪時為7回合），使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、斷尾、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用晶光轉轉、高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+		shortDesc: "束縛目標4～5回合並造成傷害。", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、快速折返、拋下狠話、瞬間移動、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/8（使用者攜帶緊綁束帶時為1/6，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、拋下狠話、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen5: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "4～5回合（使用者攜帶緊纏鉤爪時為7回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（使用者攜帶緊綁束帶時為1/8，向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返、伏特替換的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合（使用者攜帶緊纏鉤爪時總是5回合）內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但攜帶美麗空殼的目標，或使用接棒、急速折返的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
+			shortDesc: "2～5回合內束縛目標並造成傷害。", // NEEDS QC
 		},
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內，使目標無法交換，並在每回合結束時給目標造成其最大HP的1/16（向下取整）的傷害。但使用接棒的目標可以交換。使用者或目標離場，或目標成功使用高速旋轉、替身後，效果結束。此效果不可疊加，再次使用此招式或其他束縛類招式也不會重置回合數。", // NEEDS QC
 		},
 		gen1: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "2～5回合內使出此招式。持續2～3回合的機率各為3/8，持續4～5回合的機率各為1/8。第1回合計算的傷害將用於之後的每回合。效果期間，使用者無法選擇招式，目標無法使出招式，但雙方都可以交換。使用者交換時，目標該回合仍無法使出招式。目標交換時，使用者自動再次使出此招式，此時PP為0的話會變為63。使用者或目標交換，或使用者無法行動時，效果結束。此招式即使對屬性相性無效的目標也能阻止其行動，但不會造成傷害。", // NEEDS QC
+			shortDesc: "2～5回合內目標無法行動。", // NEEDS QC
 		},
 
 		start: "  {POKEMON}被{SOURCE}緊緊束縛住了！",
-		move: null, // NEEDS TRANSLATION
+		move: "{POKEMON}的攻擊還在繼續！", // NEEDS QC
 	},
 	wringout: {
 		name: "絞緊",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "威力為120×（目標的剩餘HP÷目標的最大HP）（五捨六入，最低為1）。", // NEEDS QC
+		shortDesc: "目標剩餘HP越多威力越大。", // NEEDS QC
 		gen4: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "威力為120×（目標的當前HP÷目標的最大HP）+1（向下取整）。", // NEEDS QC
 		},
 	},
 	xscissor: {
 		name: "十字剪",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "無追加效果。", // NEEDS QC
 	},
 	yawn: {
 		name: "哈欠",
 		// Official flavor text: "打個大哈欠引起睡意。 在下一回合 讓對手陷入睡眠狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "下一回合結束時，使目標陷入睡眠狀態。使用時目標處於無法入睡的狀態或已有異常狀態時失敗。下一回合結束時，目標仍在場、沒有異常狀態且可以入睡時，陷入睡眠狀態。效果發生後，神祕守護和替身都無法防止，效果期間入睡再醒來也無法防止。", // NEEDS QC
+		shortDesc: "下一回合結束時使目標入睡。", // NEEDS QC
 
 		start: "  讓{POKEMON}產生睡意了！",
 	},
 	zapcannon: {
 		name: "電磁炮",
 		// Official flavor text: "發射如大炮般的 電流進行攻擊。 能讓對手陷入麻痺狀態。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使目標陷入麻痺狀態。", // NEEDS QC
+		shortDesc: "有100%的機率使目標麻痺。", // NEEDS QC
 	},
 	zenheadbutt: {
 		name: "意念頭錘",
 		// Official flavor text: "將意念的力量集中在 前額進行攻擊。 有時會讓對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有20%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有20%的機率使目標畏縮。", // NEEDS QC
 	},
 	zingzap: {
 		name: "麻麻刺刺",
 		// Official flavor text: "撞向對手，並利用 強電流使其感到麻麻刺刺的。 有時會使對手畏縮。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有30%的機率使目標畏縮。", // NEEDS QC
+		shortDesc: "有30%的機率使目標畏縮。", // NEEDS QC
 	},
 	zippyzap: {
 		name: "電電加速",
 		// Official flavor text: "無法使用此招式。 雖然忘記後將無法再想起來， 但還是建議忘記此招式。"
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "有100%的機率使使用者的回避率提高1級。", // NEEDS QC
+		shortDesc: "先制招式。自身回避率提高1級。", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "必定擊中要害。", // NEEDS QC
+			shortDesc: "幾乎總是先制。必定擊中要害。", // NEEDS QC
 		},
 	},
 };
