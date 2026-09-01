@@ -1526,6 +1526,17 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	wildfire: "G-Max Wildfire",
 	windrage: "G-Max Wind Rage",
 
+	// tags --- ordered alphabetically by alias
+	ballistic: "Bullet",
+	bypassesprotect: "Bypass Protect",
+	bypassessubstitutes: "Bypass Substitute",
+	bypasssub: "Bypass Substitute",
+	hasrechargeturn: "Recharge",
+	punch: "Fist",
+	punching: "Fist",
+	rechargeturn: "Recharge",
+	slice: "Slicing",
+
 	// Japanese names --- ordered by dex number
 	fushigidane: "Bulbasaur",
 	fushigisou: "Ivysaur",

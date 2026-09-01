@@ -202,7 +202,7 @@ class SSBAbilityHTML extends Chat.JSX.Component<{
 		const customMegaAbilities = ['Sableye', 'Ampharos'];
 		if (!Array.isArray(set.ability) &&
 			(customMegaAbilities.includes(set.species) || !baseDex.abilities.get(set.ability).exists)) {
-			let sigAbil = baseDex.deepClone(dex.abilities.get(set.ability));
+			let sigAbil: Ability = baseDex.deepClone(dex.abilities.get(set.ability));
 			if (customMegaAbilities.includes(set.species)) {
 				const megaAbil = dex.species.get(`${set.species}-Mega`).abilities[0];
 				sigAbil = baseDex.deepClone(dex.abilities.get(megaAbil));
