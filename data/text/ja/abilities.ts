@@ -136,6 +136,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		start: "  {POKEMON}は すべての オーラを 制圧する！",
 	},
+	auraguard: {
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
+	},
 	baddreams: {
 		name: "ナイトメア",
 		// Official flavor text: "ねむり状態の 相手に ダメージを あたえる。"

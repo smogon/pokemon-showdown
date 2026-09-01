@@ -116,6 +116,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		start: "  {POKEMON} reversed all other Pok\u00E9mon's auras!",
 	},
+	auraguard: {
+		name: "Aura Guard",
+		shortDesc: "This Pokemon receives 1/2 damage from contact moves.",
+	},
 	baddreams: {
 		name: "Bad Dreams",
 		desc: "Causes opposing Pokemon to lose 1/8 of their maximum HP, rounded down, at the end of each turn if they are asleep.",

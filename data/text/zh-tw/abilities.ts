@@ -135,6 +135,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		start: "  {POKEMON}壓制了所有氣場！",
 	},
+	auraguard: {
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
+	},
 	baddreams: {
 		name: "夢魘",
 		// Official flavor text: "給予陷入睡眠狀態的對手傷害。"

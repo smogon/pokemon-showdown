@@ -132,6 +132,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		start: "  ¡{POKEMON} ha invertido todas las auras!",
 	},
+	auraguard: {
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
+	},
 	baddreams: {
 		name: "Mal Sueño",
 		// Official flavor text: "Inflige daño a cualquier rival que esté dormido."
