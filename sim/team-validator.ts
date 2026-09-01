@@ -718,6 +718,8 @@ export class TeamValidator {
 			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
 				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}.`);
 			}
+			const problem = this.checkTeraType(set, type, setHas);
+			if (problem) problems.push(problem);
 			set.teraType = type.name;
 		} else {
 			delete set.teraType;
@@ -728,6 +730,11 @@ export class TeamValidator {
 
 		problem = this.checkItem(set, item, setHas);
 		if (problem) problems.push(problem);
+
+		for (const typeName of species.types) {
+			problem = this.checkType(set, dex.types.get(typeName), setHas);
+			if (problem) problems.push(problem);
+		}
 		if (ruleTable.has('obtainablemisc')) {
 			if (dex.gen === 4 && item.id === 'griseousorb' && species.num !== 487) {
 				problems.push(`${set.name} cannot hold the Griseous Orb.`, `(In Gen 4, only Giratina could hold the Griseous Orb).`);
@@ -1985,6 +1992,34 @@ export class TeamValidator {
 
 		const tagProblem = this.checkTagRules(set, move, setHas);
 		if (tagProblem !== undefined) return tagProblem;
+
+		return null;
+	}
+
+	checkType(set: PokemonSet, type: TypeInfo, setHas: { [k: string]: true }) {
+		const ruleTable = this.ruleTable;
+
+		setHas['type:' + type.id] = true;
+
+		const banReason = ruleTable.check('type:' + type.id);
+		if (banReason) {
+			return `${set.name}'s type ${type.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		return null;
+	}
+
+	checkTeraType(set: PokemonSet, teraType: TypeInfo, setHas: { [k: string]: true }) {
+		const ruleTable = this.ruleTable;
+
+		setHas['teratype:' + teraType.id] = true;
+
+		const banReason = ruleTable.check('teratype:' + teraType.id);
+		if (banReason) {
+			return `${set.name}'s Tera type ${teraType.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
 
 		return null;
 	}
