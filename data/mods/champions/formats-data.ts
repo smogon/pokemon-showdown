@@ -1616,7 +1616,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	gallademega: {
-		tier: "(UU)",
+		tier: "UU",
 	},
 	surskit: {
 		isNonstandard: "Past",
@@ -1846,7 +1846,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	altariamega: {
-		tier: "(UU)",
+		tier: "UU",
 	},
 	zangoose: {
 		isNonstandard: "Past",
@@ -3483,7 +3483,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	hawluchamega: {
-		tier: "(UU)",
+		tier: "UU",
 	},
 	dedenne: {
 		tier: "RU",
