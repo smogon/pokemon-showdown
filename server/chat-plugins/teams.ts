@@ -43,7 +43,7 @@ interface TeamSearch {
 function refresh(context: Chat.PageContext) {
 	return (
 		`<button class="button" name="send" value="/j ${context.pageid}" style="float: right">` +
-		` <i class="fa fa-refresh"></i> ${context.tr('Refresh')}</button>`
+		` <i class="fa fa-refresh"></i> ${context.TL('Refresh')}</button>`
 	);
 }
 

@@ -126,6 +126,59 @@ describe('Dex data', () => {
 		}
 	});
 
+	it('should have unique Pokedex names and formes within each species', () => {
+		const languages = ['en', ...fs.readdirSync(`${Dex.dataDir}/text`, { withFileTypes: true })
+			.filter(entry => entry.isDirectory())
+			.map(entry => entry.name)];
+		for (const language of languages) {
+			const text = Dex.loadTextData(language).Pokedex;
+			const speciesValues = new Map();
+			for (const id in text) {
+				const entry = text[id];
+				const species = Dex.species.get(id);
+				let values = speciesValues.get(species.baseSpecies);
+				if (!values) {
+					values = { name: new Map(), forme: new Map() };
+					speciesValues.set(species.baseSpecies, values);
+				}
+				for (const field of ['name', 'forme']) {
+					const value = entry[field];
+					if (typeof value !== 'string') continue;
+					const duplicate = values[field].get(value);
+					assert.equal(
+						duplicate, undefined,
+						`${language} ${species.baseSpecies} formes ${duplicate} and ${id} have the same ${field} "${value}"`
+					);
+					values[field].set(value, id);
+				}
+			}
+		}
+	});
+
+	it.skip('should only have necessary baseSpecies text on base species entries', () => {
+		const languages = ['en', ...fs.readdirSync(`${Dex.dataDir}/text`, { withFileTypes: true })
+			.filter(entry => entry.isDirectory())
+			.map(entry => entry.name)];
+		for (const language of languages) {
+			const path = language === 'en' ? 'pokedex' : `${language}/pokedex`;
+			const rawText = Dex.loadTextFile(path, 'PokedexText', language !== 'en');
+			for (const id in rawText) {
+				const entry = rawText[id];
+				const species = Dex.species.get(id);
+				if (entry.baseSpecies !== undefined) {
+					assert.equal(
+						species.name, species.baseSpecies,
+						`${language} ${id} has baseSpecies text, but is not a base species entry`
+					);
+					assert.notEqual(
+						entry.baseSpecies, entry.name,
+						`${language} ${id} should omit baseSpecies text when it is the same as its name`
+					);
+				}
+			}
+		}
+	});
+
 	it('should have valid Items entries', () => {
 		const Items = Dex.data.Items;
 		for (const itemid in Items) {
@@ -157,6 +210,7 @@ describe('Dex data', () => {
 
 	it('should have valid Aliases entries', () => {
 		const Aliases = require('../../dist/data/aliases').Aliases;
+		const Tags = require('../../dist/data/tags').Tags;
 		for (const aliasid in Aliases) {
 			const targetid = toID(Aliases[aliasid]);
 			if (targetid in Dex.data.Pokedex) {
@@ -169,8 +223,12 @@ describe('Dex data', () => {
 				assert.equal(Aliases[aliasid], Dex.data.Items[targetid].name, `Alias ${aliasid} has incorrect Item name "${Aliases[aliasid]}"`);
 			} else if (targetid in Dex.data.Rulesets) {
 				assert.equal(Aliases[aliasid], Dex.data.Rulesets[targetid].name, `Alias ${aliasid} has incorrect Ruleset name "${Aliases[aliasid]}"`);
+			} else if (targetid in Tags) {
+				if (toID(Tags[targetid].name) === targetid) {
+					assert.equal(Aliases[aliasid], Tags[targetid].name, `Alias ${aliasid} has incorrect Tag name "${Aliases[aliasid]}"`);
+				}
 			} else {
-				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format`);
+				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format/tag`);
 			}
 		}
 

@@ -1,219 +1,226 @@
+// Mechanics desc style (es): official game terminology. Terminology: el portador (holder),
+//   el usuario (user), el objetivo (target), efecto secundario (secondary effect), hacer
+//   retroceder (flinch), golpe crítico (crit), niveles (stat stages), redondeado hacia
+//   abajo/arriba (rounded down/up), características (stats), un solo uso (single use).
+// Cross-references generated from name fields / pokedex-names.ts. CAP entities keep name
+//   null (English fallback); descs are translated with English names inline.
+
 export const ItemsText: { [id: IDEntry]: ItemText } = {
 	abilityshield: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Escudo Habilidad",
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡El Escudo Habilidad ha protegido la habilidad de [POKEMON]!",
+		block: "  ¡El Escudo Habilidad ha protegido la habilidad de {POKEMON}!",
 	},
 	abomasite: {
-		name: "Abomasnowita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	absolite: {
-		name: "Absolita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	absolitez: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	absorbbulb: {
 		name: "Tubérculo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	adamantcrystal: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gran Diamansfera",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	adamantorb: {
 		name: "Diamansfera",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	adrenalineorb: {
 		name: "Nerviosfera",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aerodactylite: {
-		name: "Aerodactylita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aggronite: {
-		name: "Aggronita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aguavberry: {
 		name: "Baya Guaya",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	airballoon: {
 		name: "Globo Helio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] está flotando con un Globo Helio!",
-		end: "  ¡Ha explotado el Globo Helio de [POKEMON]!",
+		start: "  ¡{POKEMON} está flotando con un Globo Helio!",
+		end: "  ¡Ha explotado el Globo Helio de {POKEMON}!",
 	},
 	alakazite: {
-		name: "Alakazamita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aloraichiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Alo-Raistal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	altarianite: {
-		name: "Altarianita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ampharosite: {
-		name: "Ampharosita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	apicotberry: {
 		name: "Baya Aricoc",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	armorfossil: {
 		name: "Fósil Coraza",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aspearberry: {
 		name: "Baya Perasi",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	assaultvest: {
 		name: "Chaleco Asalto",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	audinite: {
-		name: "Audinita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	auspiciousarmor: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Armadura Auspiciosa",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	babiriberry: {
 		name: "Baya Baribá",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	banettite: {
-		name: "Banettita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	barbaracite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	baxcalibrite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	beastball: {
 		name: "Ente Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	beedrillite: {
-		name: "Beedrillita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	belueberry: {
 		name: "Baya Andano",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	berryjuice: {
 		name: "Zumo de Baya",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	berrysweet: {
 		name: "Confite Fruto",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bignugget: {
 		name: "Maxipepita",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bigroot: {
 		name: "Raíz Grande",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	bindingband: {
 		name: "Banda Atadura",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blackbelt: {
 		name: "Cinturón Negro",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	blacksludge: {
 		name: "Lodo Negro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		heal: "  ¡Ha recuperado unos pocos PS gracias al Lodo Negro!",
+		heal: "  ¡{POKEMON} ha recuperado unos pocos PS gracias al Lodo Negro!",
 	},
 	blackglasses: {
 		name: "Gafas de Sol",
 		grammar: "fp",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	blastoisinite: {
-		name: "Blastoisita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blazikenite: {
-		name: "Blazikenita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blueorb: {
 		name: "Prisma Azul",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blukberry: {
 		name: "Baya Oram",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blunderpolicy: {
 		name: "Seguro Fallo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	boosterenergy: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Energía Potenciadora",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bottlecap: {
 		name: "Chapa Plateada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	brightpowder: {
 		name: "Polvo Brillo",
@@ -222,43 +229,43 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "saquito de Polvo Brillo",
 			grammar: "ms",
 		},
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	buggem: {
 		name: "Gema Bicho",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	buginiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Insectostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bugmemory: {
 		name: "Disco Bicho",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	burndrive: {
 		name: "PiroROM",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cameruptite: {
-		name: "Cameruptita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cellbattery: {
 		name: "Pila",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chandelurite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	charcoal: {
 		name: "Carbón",
@@ -267,1095 +274,1103 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "trozo de Carbón",
 			grammar: "ms",
 		},
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	charizarditex: {
-		name: "Charizardita X",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	charizarditey: {
-		name: "Charizardita Y",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chartiberry: {
 		name: "Baya Alcho",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cheriberry: {
 		name: "Baya Zreza",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cherishball: {
 		name: "Gloria Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chesnaughtite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chestoberry: {
 		name: "Baya Atania",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chilanberry: {
 		name: "Baya Chilan",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chilldrive: {
 		name: "CrioROM",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chimechite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chippedpot: {
 		name: "Tetera Rota",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	choiceband: {
 		name: "Cinta Elección",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	choicescarf: {
 		name: "Pañuelo Elección",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	choicespecs: {
 		name: "Gafas Elección",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chopleberry: {
 		name: "Baya Pomaro",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	clawfossil: {
 		name: "Fósil Garra",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	clearamulet: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Amuleto Puro",
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡El Amuleto Puro ha impedido que disminuyan las características de [POKEMON]!",
+		block: "  ¡El Amuleto Puro ha impedido que disminuyan las características de {POKEMON}!",
 	},
 	clefablite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cloversweet: {
 		name: "Confite Trébol",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cobaberry: {
 		name: "Baya Kouba",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	colburberry: {
 		name: "Baya Dillo",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cornerstonemask: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Máscara Cimiento",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cornnberry: {
 		name: "Baya Mais",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	coverfossil: {
 		name: "Fósil Tapa",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	covertcloak: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Capa Furtiva",
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	crabominite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	crackedpot: {
 		name: "Tetera Agrietada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	custapberry: {
 		name: "Baya Chiri",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡Gracias a la Baya Chiri, [POKEMON] puede tener prioridad!",
+		activate: "  ¡Gracias a la Baya Chiri, {POKEMON} puede tener prioridad!",
 	},
 	damprock: {
 		name: "Roca Lluvia",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	darkgem: {
 		name: "Gema Siniestra",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	darkiniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Nictostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	darkmemory: {
 		name: "Disco Siniestro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	darkranite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dawnstone: {
 		name: "Piedra Alba",
-		desc: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Brilla como un lucero.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Brilla como un lucero."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	decidiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Dueyestal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	deepseascale: {
 		name: "Escama Marina",
-		desc: "Tiene un débil brillo rosado y debe llevarla Clamperl. Sube la Defensa Especial.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Tiene un débil brillo rosado y debe llevarla Clamperl. Sube la Defensa Especial."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	deepseatooth: {
 		name: "Diente Marino",
-		desc: "Tiene el brillo afilado de la plata y debe llevarlo Clamperl. Sube el Ataque Especial.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Tiene el brillo afilado de la plata y debe llevarlo Clamperl. Sube el Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	delphoxite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	destinyknot: {
 		name: "Lazo Destino",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	diancite: {
-		name: "Diancita",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	diveball: {
 		name: "Buceo Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	domefossil: {
 		name: "Fósil Domo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dousedrive: {
 		name: "HidroROM",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dracoplate: {
 		name: "Tabla Draco",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragalgite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonfang: {
 		name: "Colmillo de Dragón",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	dragongem: {
 		name: "Gema Dragón",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	dragoninite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragoniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Dracostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonmemory: {
 		name: "Disco Dragón",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonscale: {
 		name: "Escama Dragón",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	drampanite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dreadplate: {
 		name: "Tabla Oscura",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dreamball: {
 		name: "Ensueño Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	dubiousdisc: {
 		name: "Disco Extraño",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	durinberry: {
 		name: "Baya Rudion",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	duskball: {
 		name: "Ocaso Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	duskstone: {
 		name: "Piedra Noche",
-		desc: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Es oscura como la noche.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Es oscura como la noche."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	earthplate: {
 		name: "Tabla Terrax",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	eelektrossite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	eeviumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Eeveestal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ejectbutton: {
 		name: "Botón Escape",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		end: "  ¡[POKEMON] regresa gracias al Botón Escape!",
+		end: "  ¡{POKEMON} regresa gracias al Botón Escape!",
 	},
 	ejectpack: {
 		name: "Mochila Escape",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		end: "  ¡[POKEMON] regresa gracias a la Mochila Escape!",
+		end: "  ¡{POKEMON} regresa gracias a la Mochila Escape!",
 	},
 	electirizer: {
 		name: "Electrizador",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	electricgem: {
 		name: "Gema Eléctrica",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	electricmemory: {
 		name: "Disco Eléctrico",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	electricseed: {
 		name: "Semilla Electro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	electriumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Electrostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	emboarite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	enigmaberry: {
 		name: "Baya Enigma",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	eviolite: {
 		name: "Mineral Evol",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	excadrite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	expertbelt: {
 		name: "Cinta Experto",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fairiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Feeristal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fairyfeather: {
 		name: "Pluma Feérica",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fairygem: {
 		name: "Gema Hada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fairymemory: {
 		name: "Disco Hada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	falinksite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fastball: {
 		name: "Rapid Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	feraligite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fightinggem: {
 		name: "Gema Lucha",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	fightingmemory: {
 		name: "Disco Lucha",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fightiniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Lizastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	figyberry: {
 		name: "Baya Higog",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	firegem: {
 		name: "Gema Fuego",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	firememory: {
 		name: "Disco Fuego",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	firestone: {
 		name: "Piedra Fuego",
-		desc: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es amarilla con una marca naranja.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es amarilla con una marca naranja."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	firiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pirostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fistplate: {
 		name: "Tabla Fuerte",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flameorb: {
 		name: "Llamasfera",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flameplate: {
 		name: "Tabla Llama",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	floatstone: {
 		name: "Piedra Pómez",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	floettite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flowersweet: {
 		name: "Confite Flor",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flyinggem: {
 		name: "Gema Voladora",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	flyingmemory: {
 		name: "Disco Volador",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flyiniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Aerostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	focusband: {
 		name: "Cinta Aguante",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡Ha usado la Cinta Aguante y ha logrado resistir!",
+		activate: "  ¡{POKEMON} ha usado la Cinta Aguante y ha logrado resistir!",
 	},
 	focussash: {
 		name: "Banda Aguante",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		end: "  ¡Ha usado la Banda Aguante y ha logrado resistir!",
+		end: "  ¡{POKEMON} ha usado la Banda Aguante y ha logrado resistir!",
 	},
 	fossilizedbird: {
 		name: "Ornitofósil",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fossilizeddino: {
 		name: "Plesiofósil",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fossilizeddrake: {
 		name: "Dracofósil",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fossilizedfish: {
 		name: "Ictiofósil",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	friendball: {
 		name: "Amigo Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	froslassite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fullincense: {
 		name: "Incienso Lento",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	galaricacuff: {
 		name: "Brazal Galanuez",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	galaricawreath: {
 		name: "Corona Galanuez",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	galladite: {
-		name: "Galladita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ganlonberry: {
 		name: "Baya Gonlan",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	garchompite: {
-		name: "Garchompita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	garchompitez: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gardevoirite: {
-		name: "Gardevoirita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gengarite: {
-		name: "Gengarita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ghostgem: {
 		name: "Gema Fantasma",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	ghostiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Espectrostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ghostmemory: {
 		name: "Disco Fantasma",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	glalitite: {
-		name: "Glalita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	glimmoranite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	goldbottlecap: {
 		name: "Chapa Dorada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	golisopite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	golurkite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grassgem: {
 		name: "Gema Planta",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	grassiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Fitostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grassmemory: {
 		name: "Disco Planta",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grassyseed: {
 		name: "Semilla Hierba",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	greatball: {
 		name: "Super Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	greninjite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grepaberry: {
 		name: "Baya Uvav",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gripclaw: {
 		name: "Garra Garfio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	griseouscore: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gran Griseosfera",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	griseousorb: {
 		name: "Griseosfera",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	groundgem: {
 		name: "Gema Tierra",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	groundiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Geostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	groundmemory: {
 		name: "Disco Tierra",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gyaradosite: {
-		name: "Gyaradosita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	habanberry: {
 		name: "Baya Anjiro",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hardstone: {
 		name: "Piedra Dura",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	hawluchanite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	healball: {
 		name: "Sana Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hearthflamemask: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Máscara Horno",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heatranite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heatrock: {
 		name: "Roca Calor",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heavyball: {
 		name: "Peso Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heavydutyboots: {
 		name: "Botas Gruesas",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	helixfossil: {
 		name: "Fósil Hélix",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	heracronite: {
-		name: "Heracrossita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hondewberry: {
 		name: "Baya Meluce",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	houndoominite: {
-		name: "Houndoomita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iapapaberry: {
 		name: "Baya Pabaya",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	icegem: {
 		name: "Gema Hielo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	icememory: {
 		name: "Disco Hielo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	icestone: {
 		name: "Piedra Hielo",
-		desc: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Presenta motivos que recuerdan a los cristales de hielo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Presenta motivos que recuerdan a los cristales de hielo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	icicleplate: {
 		name: "Tabla Helada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iciumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Criostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	icyrock: {
 		name: "Roca Helada",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	inciniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Incinostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	insectplate: {
 		name: "Tabla Bicho",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ironball: {
 		name: "Bola Férrea",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	ironplate: {
 		name: "Tabla Acero",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	jabocaberry: {
 		name: "Baya Jaboca",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	jawfossil: {
 		name: "Fósil Mandíbula",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kangaskhanite: {
-		name: "Kangaskhanita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kasibberry: {
 		name: "Baya Drasi",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kebiaberry: {
 		name: "Baya Kebia",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	keeberry: {
 		name: "Baya Biglia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kelpsyberry: {
 		name: "Baya Algama",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kingsrock: {
 		name: "Roca del Rey",
 		grammar: "fs",
-		desc: "El Pokémon que la lleva puede amedrentar al Pokémon al que le inflige daño.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "El Pokémon que la lleva puede amedrentar al Pokémon al que le inflige daño."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	kommoniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Kommostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	laggingtail: {
 		name: "Cola Plúmbea",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lansatberry: {
 		name: "Baya Zonlan",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	latiasite: {
-		name: "Latiasita",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	latiosite: {
-		name: "Latiosita",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	laxincense: {
 		name: "Incienso Suave",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	leafstone: {
 		name: "Piedra Hoja",
-		desc: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Tiene grabada una hoja.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Tiene grabada una hoja."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	leek: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Puerro",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	leftovers: {
 		name: "Restos",
 		grammar: "mp",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		heal: "  ¡Ha recuperado unos pocos PS gracias a los Restos!",
+		heal: "  ¡{POKEMON} ha recuperado unos pocos PS gracias a los Restos!",
 	},
 	leppaberry: {
 		name: "Baya Zanama",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ha recuperado los PP de [MOVE] gracias a la Baya Zanama!",
+		activate: "  ¡{POKEMON} ha recuperado los PP de {MOVE} gracias a la Baya Zanama!",
 	},
 	levelball: {
 		name: "Nivel Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	liechiberry: {
 		name: "Baya Lichi",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lifeorb: {
 		name: "Vidasfera",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		damage: "  ¡[POKEMON] ha perdido unos pocos PS!",
+		damage: "  ¡{POKEMON} ha perdido unos pocos PS!",
 	},
 	lightball: {
 		name: "Bola Luminosa",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	lightclay: {
 		name: "Refleluz",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	loadeddice: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Dado Trucado",
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lopunnite: {
-		name: "Lopunnita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	loveball: {
 		name: "Amor Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lovesweet: {
 		name: "Confite Corazón",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lucarionite: {
-		name: "Lucarita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lucarionitez: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	luckypunch: {
 		name: "Puño Suerte",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	lumberry: {
 		name: "Baya Ziuela",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	luminousmoss: {
 		name: "Musgo Brillante",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lunaliumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Lunalastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lureball: {
 		name: "Cebo Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lustrousglobe: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Gran Lustresfera",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lustrousorb: {
 		name: "Lustresfera",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	luxuryball: {
 		name: "Lujo Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lycaniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Lycanrostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	machobrace: {
 		name: "Brazal Firme",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magearnite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magmarizer: {
 		name: "Magmatizador",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magnet: {
 		name: "Imán",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	magoberry: {
 		name: "Baya Ango",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	magostberry: {
 		name: "Baya Aostan",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mail: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	malamarite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	maliciousarmor: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Armadura Maldita",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	manectite: {
-		name: "Manectricita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	marangaberry: {
 		name: "Baya Maranga",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	marshadiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Marshastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	masterball: {
 		name: "Master Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	masterpieceteacup: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Cuenco Exquisito",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mawilite: {
-		name: "Mawilita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	meadowplate: {
 		name: "Tabla Pradal",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	medichamite: {
-		name: "Medichamita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	meganiumite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mentalherb: {
 		name: "Hierba Mental",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	meowsticite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	metagrossite: {
-		name: "Metagrossita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	metalalloy: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Metal Compuesto",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	metalcoat: {
 		name: "Revest. Metálico",
@@ -1364,83 +1379,85 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Revestimiento Metálico",
 			grammar: "ms",
 		},
-		desc: "Película metálica que fortalece los ataques de tipo Acero. Debe llevarlo un Pokémon.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Película metálica que fortalece los ataques de tipo Acero. Debe llevarlo un Pokémon."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	metalpowder: {
 		name: "Polvo Metálico",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	metronome: {
 		name: "Metrónomo",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	mewniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Mewstal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mewtwonitex: {
-		name: "Mewtwoita X",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mewtwonitey: {
-		name: "Mewtwoita Y",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	micleberry: {
 		name: "Baya Lagro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mimikiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Mimikyustal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mindplate: {
 		name: "Tabla Mental",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	miracleseed: {
 		name: "Semilla Milagro",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	mirrorherb: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hierba Copia",
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ha usado una Hierba Copia y ha copiado los cambios en las características del rival!",
+		activate: "  ¡{POKEMON} ha usado una Hierba Copia y ha copiado los cambios en las características del rival!",
 	},
 	mistyseed: {
 		name: "Semilla Bruma",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	moonball: {
 		name: "Luna Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	moonstone: {
 		name: "Piedra Lunar",
-		desc: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es oscura como la noche.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es oscura como la noche."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	muscleband: {
 		name: "Cinta Fuerte",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mysticwater: {
 		name: "Agua Mística",
@@ -1450,22 +1467,22 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "colgante de Agua Mística",
 			grammar: "ms",
 		},
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	nanabberry: {
 		name: "Baya Latano",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	nestball: {
 		name: "Nido Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	netball: {
 		name: "Malla Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	nevermeltice: {
 		name: "Hielo Perpetuo",
@@ -1474,482 +1491,485 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "trozo de Hielo Perpetuo",
 			grammar: "ms",
 		},
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	nomelberry: {
 		name: "Baya Monli",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	normalgem: {
 		name: "Gema Normal",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	normaliumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Normastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	occaberry: {
 		name: "Baya Caoca",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	oddincense: {
 		name: "Incienso Raro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	oldamber: {
 		name: "Ámbar Viejo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	oranberry: {
 		name: "Baya Aranja",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ovalstone: {
 		name: "Piedra Oval",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pamtreberry: {
 		name: "Baya Plama",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	parkball: {
 		name: "Parque Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	passhoberry: {
 		name: "Baya Pasio",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	payapaberry: {
 		name: "Baya Payapa",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pechaberry: {
 		name: "Baya Meloc",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	persimberry: {
 		name: "Baya Caquic",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	petayaberry: {
 		name: "Baya Yapati",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pidgeotite: {
-		name: "Pidgeotita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pikaniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pikastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pikashuniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ash-Pikastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pinapberry: {
 		name: "Baya Pinia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pinsirite: {
-		name: "Pinsirita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pixieplate: {
 		name: "Tabla Duende",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	plumefossil: {
 		name: "Fósil Pluma",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poisonbarb: {
 		name: "Flecha Venenosa",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	poisongem: {
 		name: "Gema Veneno",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	poisoniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Toxistal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poisonmemory: {
 		name: "Disco Veneno",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pokeball: {
 		name: "Poké Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pomegberry: {
 		name: "Baya Grana",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poweranklet: {
 		name: "Franja Recia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powerband: {
 		name: "Banda Recia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powerbelt: {
 		name: "Cinto Recio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powerbracer: {
 		name: "Brazal Recio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powerherb: {
 		name: "Hierba Única",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		end: "  ¡[POKEMON] ya está listo gracias a la Hierba Única!",
+		end: "  ¡{POKEMON} ya está listo gracias a la Hierba Única!",
 	},
 	powerlens: {
 		name: "Lente Recia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powerweight: {
 		name: "Pesa Recia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	premierball: {
 		name: "Honor Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	prettyfeather: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Pluma Bella",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	primariumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Primastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	prismscale: {
 		name: "Escama Bella",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	protectivepads: {
 		name: "Paracontacto",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡[POKEMON] ha neutralizado el efecto gracias al Paracontacto!",
+		block: "  ¡{POKEMON} ha neutralizado el efecto gracias al Paracontacto!",
 	},
 	protector: {
 		name: "Protector",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychicgem: {
 		name: "Gema Psíquica",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	psychicmemory: {
 		name: "Disco Psíquico",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychicseed: {
 		name: "Semilla Psique",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psychiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Psicostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	punchingglove: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Guante de Boxeo",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pyroarite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	qualotberry: {
 		name: "Baya Ispero",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	quickball: {
 		name: "Veloz Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	quickclaw: {
 		name: "Garra Rápida",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡Gracias a la Garra Rápida, [POKEMON] puede tener prioridad!",
+		activate: "  ¡Gracias a la Garra Rápida, {POKEMON} puede tener prioridad!",
 	},
 	quickpowder: {
 		name: "Polvo Veloz",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rabutaberry: {
 		name: "Baya Rautan",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	raichunitex: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	raichunitey: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rarebone: {
 		name: "Hueso Raro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rawstberry: {
 		name: "Baya Safre",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	razorclaw: {
 		name: "Garra Afilada",
-		desc: "Aumenta la probabilidad de que el Pokémon que la lleve consiga un golpe crítico.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la probabilidad de que el Pokémon que la lleve consiga un golpe crítico."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	razorfang: {
 		name: "Colmillo Agudo",
-		desc: "Si lo lleva un Pokémon, puede amedrentar al objetivo al infligirle daño.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si lo lleva un Pokémon, puede amedrentar al objetivo al infligirle daño."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	razzberry: {
 		name: "Baya Frambu",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	reapercloth: {
 		name: "Tela Terrible",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	redcard: {
 		name: "Tarjeta Roja",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		end: "  ¡[POKEMON] le ha sacado una Tarjeta Roja a [TARGET]!",
+		end: "  ¡{POKEMON} le ha sacado una Tarjeta Roja a {TARGET}!",
 	},
 	redorb: {
 		name: "Prisma Rojo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	repeatball: {
 		name: "Acopio Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ribbonsweet: {
 		name: "Confite Lazo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rindoberry: {
 		name: "Baya Tamar",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ringtarget: {
 		name: "Blanco",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockgem: {
 		name: "Gema Roca",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	rockincense: {
 		name: "Incienso Roca",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Litostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockmemory: {
 		name: "Disco Roca",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockyhelmet: {
 		name: "Casco Dentado",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		damage: "  ¡El Casco Dentado ha dañado a [POKEMON]!",
+		damage: "  ¡El Casco Dentado ha dañado a {POKEMON}!",
 	},
 	roomservice: {
 		name: "Servicio Raro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rootfossil: {
 		name: "Fósil Raíz",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	roseincense: {
 		name: "Incienso Floral",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	roseliberry: {
 		name: "Baya Hibis",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rowapberry: {
 		name: "Baya Magua",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rustedshield: {
 		name: "Escudo Oxidado",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rustedsword: {
 		name: "Espada Oxidada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sablenite: {
-		name: "Sableynita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sachet: {
 		name: "Saquito Fragante",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	safariball: {
 		name: "Safari Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	safetygoggles: {
 		name: "Gafa Protectora",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡[MOVE] no ha afectado a [POKEMON] gracias a la Gafa Protectora!",
+		block: "  ¡{MOVE} no ha afectado a {POKEMON} gracias a la Gafa Protectora!",
 	},
 	sailfossil: {
 		name: "Fósil Aleta",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	salacberry: {
 		name: "Baya Aslac",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	salamencite: {
-		name: "Salamencita",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sceptilite: {
-		name: "Sceptilita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scizorite: {
-		name: "Scizorita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scolipite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scopelens: {
 		name: "Periscopio",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scovillainite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	scraftinite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	seaincense: {
 		name: "Incienso Marino",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	sharpbeak: {
 		name: "Pico Afilado",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	sharpedonite: {
-		name: "Sharpedonita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shedshell: {
 		name: "Muda Concha",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shellbell: {
 		name: "Cascabel Concha",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		heal: "  ¡Ha recuperado unos pocos PS gracias al Cascabel Concha!",
+		heal: "  ¡{POKEMON} ha recuperado unos pocos PS gracias al Cascabel Concha!",
 	},
 	shinystone: {
 		name: "Piedra Día",
-		desc: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Tiene un brillo espectacular.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Una piedra peculiar que hace evolucionar a algunos Pokémon. Tiene un brillo espectacular."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shockdrive: {
 		name: "FulgoROM",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shucaberry: {
 		name: "Baya Acardo",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	silkscarf: {
 		name: "Pañuelo de Seda",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	silverpowder: {
@@ -1959,52 +1979,52 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "puñado de Polvo Plata",
 			grammar: "ms",
 		},
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	sitrusberry: {
 		name: "Baya Zidra",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	skarmorite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	skullfossil: {
 		name: "Fósil Cráneo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	skyplate: {
 		name: "Tabla Cielo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	slowbronite: {
-		name: "Slowbronita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	smoothrock: {
 		name: "Roca Suave",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	snorliumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Snorlastal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	snowball: {
 		name: "Bola de Nieve",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	softsand: {
 		name: "Arena Fina",
@@ -2013,792 +2033,796 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "saquito de Arena Fina",
 			grammar: "ms",
 		},
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	solganiumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Solgaleostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	souldew: {
 		name: "Rocío Bondad",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	spelltag: {
 		name: "Hechizo",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	spelonberry: {
 		name: "Baya Wikano",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	splashplate: {
 		name: "Tabla Linfa",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spookyplate: {
 		name: "Tabla Terror",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sportball: {
 		name: "Competi Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	staraptite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	starfberry: {
 		name: "Baya Arabol",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	starminite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	starsweet: {
 		name: "Confite Estrella",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steelgem: {
 		name: "Gema Acero",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	steeliumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Metalostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steelixite: {
-		name: "Steelixita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steelmemory: {
 		name: "Disco Acero",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stick: {
 		name: "Puerro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen2: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	stickybarb: {
 		name: "Toxiestrella",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stoneplate: {
 		name: "Tabla Pétrea",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	strangeball: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Extraña Ball",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	strawberrysweet: {
 		name: "Confite Fresa",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sunstone: {
 		name: "Piedra Solar",
-		desc: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es roja como el núcleo del sol.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es roja como el núcleo del sol."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	swampertite: {
-		name: "Swampertita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sweetapple: {
 		name: "Manzana Dulce",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	syrupyapple: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Manzana Melosa",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tamatoberry: {
 		name: "Baya Tamate",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tangaberry: {
 		name: "Baya Yecana",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tapuniumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Tapistal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tartapple: {
 		name: "Manzana Ácida",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tatsugirinite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	terrainextender: {
 		name: "Cubresuelos",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thickclub: {
 		name: "Hueso Grueso",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	throatspray: {
 		name: "Espray Bucal",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thunderstone: {
 		name: "Piedra Trueno",
-		desc: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Tiene grabado un rayo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Tiene grabado un rayo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	timerball: {
 		name: "Turno Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	toxicorb: {
 		name: "Toxisfera",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	toxicplate: {
 		name: "Tabla Tóxica",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr00: {
 		name: "DT00",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr01: {
 		name: "DT01",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr02: {
 		name: "DT02",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr03: {
 		name: "DT03",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr04: {
 		name: "DT04",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr05: {
 		name: "DT05",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr06: {
 		name: "DT06",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr07: {
 		name: "DT07",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr08: {
 		name: "DT08",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr09: {
 		name: "DT09",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr10: {
 		name: "DT10",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr11: {
 		name: "DT11",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr12: {
 		name: "DT12",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr13: {
 		name: "DT13",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr14: {
 		name: "DT14",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr15: {
 		name: "DT15",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr16: {
 		name: "DT16",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr17: {
 		name: "DT17",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr18: {
 		name: "DT18",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr19: {
 		name: "DT19",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr20: {
 		name: "DT20",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr21: {
 		name: "DT21",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr22: {
 		name: "DT22",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr23: {
 		name: "DT23",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr24: {
 		name: "DT24",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr25: {
 		name: "DT25",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr26: {
 		name: "DT26",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr27: {
 		name: "DT27",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr28: {
 		name: "DT28",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr29: {
 		name: "DT29",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr30: {
 		name: "DT30",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr31: {
 		name: "DT31",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr32: {
 		name: "DT32",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr33: {
 		name: "DT33",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr34: {
 		name: "DT34",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr35: {
 		name: "DT35",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr36: {
 		name: "DT36",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr37: {
 		name: "DT37",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr38: {
 		name: "DT38",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr39: {
 		name: "DT39",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr40: {
 		name: "DT40",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr41: {
 		name: "DT41",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr42: {
 		name: "DT42",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr43: {
 		name: "DT43",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr44: {
 		name: "DT44",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr45: {
 		name: "DT45",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr46: {
 		name: "DT46",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr47: {
 		name: "DT47",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr48: {
 		name: "DT48",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr49: {
 		name: "DT49",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr50: {
 		name: "DT50",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr51: {
 		name: "DT51",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr52: {
 		name: "DT52",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr53: {
 		name: "DT53",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr54: {
 		name: "DT54",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr55: {
 		name: "DT55",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr56: {
 		name: "DT56",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr57: {
 		name: "DT57",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr58: {
 		name: "DT58",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr59: {
 		name: "DT59",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr60: {
 		name: "DT60",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr61: {
 		name: "DT61",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr62: {
 		name: "DT62",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr63: {
 		name: "DT63",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr64: {
 		name: "DT64",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr65: {
 		name: "DT65",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr66: {
 		name: "DT66",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr67: {
 		name: "DT67",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr68: {
 		name: "DT68",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr69: {
 		name: "DT69",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr70: {
 		name: "DT70",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr71: {
 		name: "DT71",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr72: {
 		name: "DT72",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr73: {
 		name: "DT73",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr74: {
 		name: "DT74",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr75: {
 		name: "DT75",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr76: {
 		name: "DT76",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr77: {
 		name: "DT77",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr78: {
 		name: "DT78",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr79: {
 		name: "DT79",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr80: {
 		name: "DT80",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr81: {
 		name: "DT81",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr82: {
 		name: "DT82",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr83: {
 		name: "DT83",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr84: {
 		name: "DT84",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr85: {
 		name: "DT85",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr86: {
 		name: "DT86",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr87: {
 		name: "DT87",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr88: {
 		name: "DT88",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr89: {
 		name: "DT89",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr90: {
 		name: "DT90",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr91: {
 		name: "DT91",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr92: {
 		name: "DT92",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr93: {
 		name: "DT93",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr94: {
 		name: "DT94",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr95: {
 		name: "DT95",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr96: {
 		name: "DT96",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr97: {
 		name: "DT97",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr98: {
 		name: "DT98",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tr99: {
 		name: "DT99",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	twistedspoon: {
 		name: "Cuchara Torcida",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	tyranitarite: {
-		name: "Tyranitarita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ultraball: {
 		name: "Ultra Ball",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ultranecroziumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Ultranecrostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 
-		transform: "  ¡[POKEMON] emite una luz cegadora!",
-		activate: "¡[POKEMON] ha adoptado una nueva forma gracias a la Ultraexplosión!",
+		transform: "  ¡{POKEMON} emite una luz cegadora!",
+		activate: "¡{POKEMON} ha adoptado una nueva forma gracias a la Ultraexplosión!",
 	},
 	unremarkableteacup: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Cuenco Mediocre",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	upgrade: {
 		name: "Mejora",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	utilityumbrella: {
 		name: "Parasol Multiuso",
-		desc: "El portador se vuelve invulnerable a los efectos de la lluvia y del sol.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "El portador se vuelve invulnerable a los efectos de la lluvia y del sol."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	venusaurite: {
-		name: "Venusaurita",
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	victreebelite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wacanberry: {
 		name: "Baya Gualot",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	watergem: {
 		name: "Gema Agua",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	wateriumz: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Hidrostal Z",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	watermemory: {
 		name: "Disco Agua",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	waterstone: {
 		name: "Piedra Agua",
-		desc: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es de color azul.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Curiosa piedra que hace evolucionar a determinadas especies de Pokémon. Es de color azul."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	watmelberry: {
 		name: "Baya Sambia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	waveincense: {
 		name: "Incienso Acua",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	weaknesspolicy: {
 		name: "Seguro Debilidad",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wellspringmask: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Máscara Fuente",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wepearberry: {
 		name: "Baya Peragu",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	whippeddream: {
 		name: "Dulce de Nata",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	whiteherb: {
 		name: "Hierba Blanca",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		end: "  ¡La Hierba Blanca ha restaurado sus características!",
+		end: "  ¡La Hierba Blanca ha restaurado las características de {POKEMON}!",
 	},
 	widelens: {
 		name: "Lupa",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wikiberry: {
 		name: "Baya Wiki",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	wiseglasses: {
 		name: "Gafas Especiales",
 		grammar: "fp",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	yacheberry: {
 		name: "Baya Rimoya",
 		grammar: "fs",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zapplate: {
 		name: "Tabla Trueno",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zeraorite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zoomlens: {
 		name: "Telescopio",
 		grammar: "ms",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zygardite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 
 	// Gen 2 items
 
 	berserkgene: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	berry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bitterberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	burntberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	goldberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	iceberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mintberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	miracleberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mysteryberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ha restaurado los PP de [MOVE] con la Baya Misterio!",
+		activate: "  ¡{POKEMON} ha restaurado los PP de {MOVE} con la Baya Misterio!",
 	},
 	pinkbow: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	polkadotbow: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	przcureberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	psncureberry: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 
 	// CAP items
 
 	crucibellite: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	vilevial: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 };

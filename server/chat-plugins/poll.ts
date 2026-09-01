@@ -377,11 +377,11 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
-			if (target.length > 1024) throw new Chat.ErrorMessage(this.tr`Poll too long.`);
-			if (room.battle) throw new Chat.ErrorMessage(this.tr`Battles do not support polls.`);
+			if (target.length > 1024) throw new Chat.ErrorMessage(this.TL`Poll too long.`);
+			if (room.battle) throw new Chat.ErrorMessage(this.TL`Battles do not support polls.`);
 
 			const text = this.filter(target);
-			if (target !== text) throw new Chat.ErrorMessage(this.tr`You are not allowed to use filtered words in polls.`);
+			if (target !== text) throw new Chat.ErrorMessage(this.TL`You are not allowed to use filtered words in polls.`);
 
 			const supportHTML = cmd.includes('html');
 			const multiPoll = cmd.includes('multi');
@@ -396,7 +396,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (text.includes(',')) {
 				separator = ',';
 			} else {
-				throw new Chat.ErrorMessage(this.tr`Not enough arguments for /poll new.`);
+				throw new Chat.ErrorMessage(this.TL`Not enough arguments for /poll new.`);
 			}
 
 			let currentParam = "";
@@ -412,7 +412,7 @@ export const commands: Chat.ChatCommands = {
 						currentParam += nextCharacter;
 						i += 1;
 					} else {
-						throw new Chat.ErrorMessage(this.tr`Extra escape character. To end a poll with '\\', enter it as '\\\\'`);
+						throw new Chat.ErrorMessage(this.TL`Extra escape character. To end a poll with '\\', enter it as '\\\\'`);
 					}
 					continue;
 				}
@@ -436,21 +436,21 @@ export const commands: Chat.ChatCommands = {
 			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
 			if (room.minorActivity && !queue) {
-				throw new Chat.ErrorMessage(this.tr`There is already a poll or announcement in progress in this room.`);
+				throw new Chat.ErrorMessage(this.TL`There is already a poll or announcement in progress in this room.`);
 			}
 
-			if (params.length < 3) throw new Chat.ErrorMessage(this.tr`Not enough arguments for /poll new.`);
+			if (params.length < 3) throw new Chat.ErrorMessage(this.TL`Not enough arguments for /poll new.`);
 
 			// the function throws on failure, so no handling needs to be done anymore
 			if (supportHTML) params = params.map(parameter => this.checkHTML(parameter));
 
 			const questions = params.splice(1);
 			if (questions.length > MAX_QUESTIONS) {
-				throw new Chat.ErrorMessage(this.tr`Too many options for poll (maximum is ${MAX_QUESTIONS}).`);
+				throw new Chat.ErrorMessage(this.TL`Too many options for poll (maximum is ${MAX_QUESTIONS}).`);
 			}
 
 			if (new Set(questions).size !== questions.length) {
-				throw new Chat.ErrorMessage(this.tr`There are duplicate options in the poll.`);
+				throw new Chat.ErrorMessage(this.TL`There are duplicate options in the poll.`);
 			}
 
 			if (room.minorActivity) {
@@ -489,13 +489,13 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const queue = room.getMinorActivityQueue();
 			if (!queue) {
-				throw new Chat.ErrorMessage(this.tr`The queue is already empty.`);
+				throw new Chat.ErrorMessage(this.TL`The queue is already empty.`);
 			}
 			const slot = parseInt(target);
 			if (isNaN(slot)) {
-				throw new Chat.ErrorMessage(this.tr`Can't delete poll at slot ${target} - "${target}" is not a number.`);
+				throw new Chat.ErrorMessage(this.TL`Can't delete poll at slot ${target} - "${target}" is not a number.`);
 			}
-			if (!queue[slot - 1]) throw new Chat.ErrorMessage(this.tr`There is no poll in queue at slot ${slot}.`);
+			if (!queue[slot - 1]) throw new Chat.ErrorMessage(this.TL`There is no poll in queue at slot ${slot}.`);
 
 			room.clearMinorActivityQueue(slot - 1);
 
@@ -504,7 +504,7 @@ export const commands: Chat.ChatCommands = {
 				loggedBy: user.id,
 				note: slot.toString(),
 			});
-			room.sendMods(this.tr`(${user.name} deleted the queued poll in slot ${slot}.)`);
+			room.sendMods(this.TL`(${user.name} deleted the queued poll in slot ${slot}.)`);
 			room.update();
 			this.refreshPage(`pollqueue-${room.roomid}`);
 		},
@@ -516,11 +516,11 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const queue = room.getMinorActivityQueue();
 			if (!queue) {
-				throw new Chat.ErrorMessage(this.tr`The queue is already empty.`);
+				throw new Chat.ErrorMessage(this.TL`The queue is already empty.`);
 			}
 			room.clearMinorActivityQueue();
 			this.modlog('CLEARQUEUE');
-			this.sendReply(this.tr`Cleared poll queue.`);
+			this.sendReply(this.TL`Cleared poll queue.`);
 		},
 		clearqueuehelp: [
 			`/poll clearqueue - deletes the queue of polls. Requires: % @ # ~`,
@@ -534,9 +534,9 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help poll vote');
 
 			const parsed = parseInt(target);
-			if (isNaN(parsed)) throw new Chat.ErrorMessage(this.tr`To vote, specify the number of the option.`);
+			if (isNaN(parsed)) throw new Chat.ErrorMessage(this.TL`To vote, specify the number of the option.`);
 
-			if (!poll.answers.has(parsed)) return this.sendReply(this.tr`Option not in poll.`);
+			if (!poll.answers.has(parsed)) return this.sendReply(this.TL`Option not in poll.`);
 
 			if (cmd === 'deselect') {
 				poll.deselect(user, parsed);
@@ -564,23 +564,23 @@ export const commands: Chat.ChatCommands = {
 			if (target) {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
-					if (!poll.endTimer()) throw new Chat.ErrorMessage(this.tr("There is no timer to clear."));
-					return this.add(this.tr`The poll timer was turned off.`);
+					if (!poll.endTimer()) throw new Chat.ErrorMessage(this.TL("There is no timer to clear."));
+					return this.add(this.TL`The poll timer was turned off.`);
 				}
 				const timeoutMins = parseFloat(target);
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
-					throw new Chat.ErrorMessage(this.tr`Time should be a number of minutes less than one week.`);
+					throw new Chat.ErrorMessage(this.TL`Time should be a number of minutes less than one week.`);
 				}
 				poll.setTimer({ timeoutMins });
-				room.add(this.tr`The poll timer was turned on: the poll will end in ${Chat.toDurationString(timeoutMins * MINUTES)}.`);
+				room.add(this.TL`The poll timer was turned on: the poll will end in ${Chat.toDurationString(timeoutMins * MINUTES)}.`);
 				this.modlog('POLL TIMER', null, `${timeoutMins} minutes`);
 				return this.privateModAction(room.tr`The poll timer was set to ${timeoutMins} minute(s) by ${user.name}.`);
 			} else {
 				if (!this.runBroadcast()) return;
 				if (poll.timeout) {
-					return this.sendReply(this.tr`The poll timer is on and will end in ${Chat.toDurationString(poll.timeoutMins * MINUTES)}.`);
+					return this.sendReply(this.TL`The poll timer is on and will end in ${Chat.toDurationString(poll.timeoutMins * MINUTES)}.`);
 				} else {
-					return this.sendReply(this.tr`The poll timer is off.`);
+					return this.sendReply(this.TL`The poll timer is off.`);
 				}
 			}
 		},
@@ -681,20 +681,20 @@ export const pages: Chat.PageTable = {
 	pollqueue(args, user) {
 		const room = this.requireRoom();
 
-		let buf = `<div class="pad"><strong>${this.tr`Queued polls:`}</strong>`;
+		let buf = `<div class="pad"><strong>${this.TL`Queued polls:`}</strong>`;
 		buf += `<button class="button" name="send" value="/join view-pollqueue-${room.roomid}" style="float: right">`;
-		buf += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button><br />`;
+		buf += `<i class="fa fa-refresh"></i> ${this.TL`Refresh`}</button><br />`;
 		const queue = room.getMinorActivityQueue()?.filter(activity => activity.activityid === 'poll');
 		if (!queue) {
-			buf += `<hr /><strong>${this.tr`No polls queued.`}</strong></div>`;
+			buf += `<hr /><strong>${this.TL`No polls queued.`}</strong></div>`;
 			return buf;
 		}
 		for (const [i, poll] of queue.entries()) {
 			const number = i + 1; // for translation convenience
 			const button = (
-				`<strong>${this.tr`#${number} in queue`} </strong>` +
+				`<strong>${this.TL`#${number} in queue`} </strong>` +
 				`<button class="button" name="send" value="/msgroom ${room.roomid},/poll deletequeue ${i + 1}">` +
-				`(${this.tr`delete`})</button>`
+				`(${this.TL`delete`})</button>`
 			);
 			buf += `<hr />`;
 			buf += `${button}<br />${Poll.generateResults(poll, room, false)}`;

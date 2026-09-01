@@ -92,10 +92,10 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Trademarked",
-	lcotm: "[Gen 9] Pure Hackmons",
-	ommotm: "[Gen 9] NatDex Camove Chaos",
-	ommspotlight: "[Gen 9] NatDex Camove Chaos",
+	omotm: "[Gen 9] No Holds Barred!",
+	lcotm: "[Gen 9] Fortemons",
+	ommotm: "[Gen 9] Tier Shift AAA",
+	ommspotlight: "[Gen 9] Tier Shift AAA",
 	pmotm: "[Gen 9] Deltamon Random Battle",
 	mnmls: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
 
@@ -1524,6 +1524,17 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	voltcrash: "G-Max Volt Crash",
 	wildfire: "G-Max Wildfire",
 	windrage: "G-Max Wind Rage",
+
+	// tags --- ordered alphabetically by alias
+	ballistic: "Bullet",
+	bypassesprotect: "Bypass Protect",
+	bypassessubstitutes: "Bypass Substitute",
+	bypasssub: "Bypass Substitute",
+	hasrechargeturn: "Recharge",
+	punch: "Fist",
+	punching: "Fist",
+	rechargeturn: "Recharge",
+	slice: "Slicing",
 
 	// Japanese names --- ordered by dex number
 	fushigidane: "Bulbasaur",

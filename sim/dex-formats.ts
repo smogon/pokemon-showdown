@@ -1167,6 +1167,8 @@ export class DexFormats {
 				];
 				if (validTags.includes(ruleid) || this.validTag(ruleid)) {
 					matches.push('tag:' + ruleid);
+				} else if (this.validTag(id)) {
+					matches.push('tag:' + id);
 				}
 				continue;
 			default:
