@@ -194,7 +194,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		eloFloor = 1400;
 	}
 	if (!formatData || ((format.mod !== 'gen9ssb' && format.mod !== 'chatbats' &&
-		format.mod !== 'gen9mixandmegalimitedsupply' && format.mod !== 'gen9deltamon') &&
+		format.mod !== 'gen9mnmlimitedsupply' && format.mod !== 'gen9deltamon') &&
 		battle.rated < eloFloor) || !winner)
 		return;
 	checkRollover();
