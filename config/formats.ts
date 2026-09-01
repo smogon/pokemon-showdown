@@ -780,7 +780,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					'spd': 'def',
 				};
 
-				
 				let atkBoosts = attacker.boosts[attackStat];
 				let defBoosts = defender.boosts[defenseStat];
 				let otherAtkBoosts = attackStat === 'spe' ? undefined : attacker.boosts[otherHalf[attackStat]];
@@ -828,7 +827,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				// Calculate damage modifiers separately (order differs between generations)
 				return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
-			}
+			},
 		},
 		pokemon: {
 			calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon, otherBoost?: number) {
