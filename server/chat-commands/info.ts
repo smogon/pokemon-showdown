@@ -2311,7 +2311,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		// Item
-		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
+		if (item.exists && item.isHeldItem !== false && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
 			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/items/${item.id}">${generation.toUpperCase()} ${item.name} item analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
@@ -2401,7 +2401,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		// Item
-		if (item.exists) {
+		if (item.exists && item.isHeldItem !== false) {
 			atLeastOne = true;
 			if (item.isNonstandard && item.isNonstandard !== 'Past') {
 				throw new Chat.ErrorMessage(`${item.name} is not a real item.`);
