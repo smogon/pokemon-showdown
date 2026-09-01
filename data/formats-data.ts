@@ -6178,6 +6178,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "CAP",
 		tier: "Illegal",
 	},
+	scraptor: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
 	obliteryx: {
 		isNonstandard: "CAP",
 		tier: "CAP",
