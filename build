@@ -48,4 +48,8 @@ try {
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
 	require('./tools/build-utils').transpile(force, decl);
+	const {Dex} = require('./dist/sim/dex');
+	for (const entry of fs.readdirSync('data/text', {withFileTypes: true})) {
+		if (entry.isDirectory()) Dex.loadTextData(entry.name);
+	}
 });

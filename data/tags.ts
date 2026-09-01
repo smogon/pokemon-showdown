@@ -1,6 +1,5 @@
-interface TagData {
+export interface TagData {
 	name: string;
-	desc?: string;
 	speciesFilter?: (species: Species) => boolean;
 	moveFilter?: (move: Move) => boolean;
 	genericFilter?: (thing: Species | Move | Item | Ability) => boolean;
@@ -14,17 +13,14 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// ----------
 	physical: {
 		name: "Physical",
-		desc: "Move deals damage with the Attack and Defense stats.",
 		moveFilter: move => move.category === 'Physical',
 	},
 	special: {
 		name: "Special",
-		desc: "Move deals damage with the Special Attack and Special Defense stats.",
 		moveFilter: move => move.category === 'Special',
 	},
 	status: {
 		name: "Status",
-		desc: "Move does not deal damage.",
 		moveFilter: move => move.category === 'Status',
 	},
 
@@ -40,17 +36,14 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	mythical: {
 		name: "Mythical",
-		desc: "Legendaries usually only obtainable from events. Usually BST 600",
 		speciesFilter: species => species.tags.includes("Mythical"),
 	},
 	sublegendary: {
 		name: "Sub-Legendary",
-		desc: "Legendaries that aren't Restricted or Mythical. Usually BST 570 to 580.",
 		speciesFilter: species => species.tags.includes("Sub-Legendary"),
 	},
 	restrictedlegendary: {
 		name: "Restricted Legendary",
-		desc: "Officially called Special Pokémon. Legendaries restricted from most in-game formats. Usually BST at least 660.",
 		speciesFilter: species => species.tags.includes("Restricted Legendary"),
 	},
 	ultrabeast: {
@@ -78,62 +71,78 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	contact: {
 		name: "Contact",
-		desc: "Affected by a variety of moves, abilities, and items. Moves affected by contact moves include: Spiky Shield, King's Shield. Abilities affected by contact moves include: Iron Barbs, Rough Skin, Gooey, Flame Body, Static, Tough Claws. Items affected by contact moves include: Rocky Helmet, Sticky Barb.",
 		moveFilter: move => 'contact' in move.flags,
 	},
 	sound: {
 		name: "Sound",
-		desc: "Doesn't affect Soundproof Pokémon. (All sound moves also bypass Substitute.)",
 		moveFilter: move => 'sound' in move.flags,
 	},
 	powder: {
 		name: "Powder",
-		desc: "Doesn't affect Grass-type Pokémon, Overcoat Pokémon, or Safety Goggles holders.",
 		moveFilter: move => 'powder' in move.flags,
 	},
 	fist: {
 		name: "Fist",
-		desc: "Boosted 1.2x by Iron Fist.",
 		moveFilter: move => 'punch' in move.flags,
 	},
 	pulse: {
 		name: "Pulse",
-		desc: "Boosted 1.5x by Mega Launcher.",
 		moveFilter: move => 'pulse' in move.flags,
 	},
 	bite: {
 		name: "Bite",
-		desc: "Boosted 1.5x by Strong Jaw.",
 		moveFilter: move => 'bite' in move.flags,
 	},
-	ballistic: {
-		name: "Ballistic",
-		desc: "Doesn't affect Bulletproof Pokémon.",
+	bullet: {
+		name: "Bullet",
 		moveFilter: move => 'bullet' in move.flags,
 	},
+	dance: {
+		name: "Dance",
+		moveFilter: move => 'dance' in move.flags,
+	},
+	slicing: {
+		name: "Slicing",
+		moveFilter: move => 'slicing' in move.flags,
+	},
+	wind: {
+		name: "Wind",
+		moveFilter: move => 'wind' in move.flags,
+	},
+	twoturnmove: {
+		name: "Two-turn move",
+		moveFilter: move => 'charge' in move.flags,
+	},
+	recharge: {
+		name: "Recharge",
+		moveFilter: move => 'recharge' in move.flags,
+	},
+	suppressedbygravity: {
+		name: "Suppressed by Gravity",
+		moveFilter: move => 'gravity' in move.flags,
+	},
+	boostedbysheerforce: {
+		name: "Boosted by Sheer Force",
+		moveFilter: move => !!(move.secondary || move.secondaries || move.hasSheerForceBoost),
+	},
 	bypassprotect: {
-		name: "Bypass Protect",
-		desc: "Bypasses Protect, Detect, King's Shield, and Spiky Shield.",
+		name: "Bypasses Protect",
 		moveFilter: move => move.target !== 'self' && !('protect' in move.flags),
 	},
 	nonreflectable: {
 		name: "Nonreflectable",
-		desc: "Can't be bounced by Magic Coat or Magic Bounce.",
 		moveFilter: move => move.target !== 'self' && move.category === 'Status' && !('reflectable' in move.flags),
 	},
 	nonmirror: {
 		name: "Nonmirror",
-		desc: "Can't be copied by Mirror Move.",
 		moveFilter: move => move.target !== 'self' && !('mirror' in move.flags),
 	},
 	nonsnatchable: {
 		name: "Nonsnatchable",
-		desc: "Can't be copied by Snatch.",
 		moveFilter: move => ['allyTeam', 'self', 'adjacentAllyOrSelf'].includes(move.target) && !('snatch' in move.flags),
 	},
 	bypasssubstitute: {
-		name: "Bypass Substitute",
-		desc: "Bypasses but does not break a Substitute.",
+		name: "Bypasses Substitutes",
 		moveFilter: move => 'bypasssub' in move.flags,
 	},
 	gmaxmove: {
@@ -281,47 +290,38 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// Legality tags
 	past: {
 		name: "Past",
-		desc: "Obtainable in a past game, but not in this game.",
 		genericFilter: thing => thing.isNonstandard === 'Past',
 	},
 	truepast: {
 		name: "True Past",
-		desc: "Obtainable in a past game, but is not in this game's data at all, not even in Dexit placeholder form.",
 		genericFilter: thing => !!thing.tags?.includes("True Past"),
 	},
 	pastunobtainable: {
 		name: "Past Unobtainable",
-		desc: "Existed in game data in a past game, but was never obtainable.",
 		genericFilter: thing => !!thing.tags?.includes("Past Unobtainable"),
 	},
 	future: {
 		name: "Future",
-		desc: "Obtainable in a future game, but is not in this game's data at all.",
 		genericFilter: thing => thing.isNonstandard === 'Future',
 	},
 	lgpe: {
 		name: "LGPE",
-		desc: "Obtainable in Pokémon: Let's Go, Pikachu! or Let's Go, Eevee!, but not in this game.",
 		genericFilter: thing => thing.isNonstandard === 'LGPE',
 	},
 	unobtainable: {
 		name: "Unobtainable",
-		desc: "Exists in game data but not obtainable without hacking.",
 		genericFilter: thing => thing.isNonstandard === 'Unobtainable',
 	},
 	cap: {
 		name: "CAP",
-		desc: "Made up for the Smogon Create-A-Pokemon project.",
 		genericFilter: thing => thing.isNonstandard === 'CAP',
 	},
 	custom: {
 		name: "Custom",
-		desc: "Made up for... something or other. I don't recommend using this, it's not tagged very consistently.",
 		genericFilter: thing => thing.isNonstandard === 'Custom',
 	},
 	nonexistent: {
 		name: "Nonexistent",
-		desc: "Does not exist in game data. Includes Past, Future, LGPE, CAP, and Custom.",
 		genericFilter: thing => !!thing.isNonstandard && thing.isNonstandard !== 'Unobtainable',
 	},
 
@@ -342,37 +342,30 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	hp: {
 		name: "HP",
-		desc: "Hit Points",
 		speciesNumCol: species => species.baseStats.hp,
 	},
 	atk: {
 		name: "Atk",
-		desc: "Attack",
 		speciesNumCol: species => species.baseStats.atk,
 	},
 	def: {
 		name: "Def",
-		desc: "Defense",
 		speciesNumCol: species => species.baseStats.def,
 	},
 	spa: {
 		name: "SpA",
-		desc: "Special Attack",
 		speciesNumCol: species => species.baseStats.spa,
 	},
 	spd: {
 		name: "SpD",
-		desc: "Special Defense",
 		speciesNumCol: species => species.baseStats.spd,
 	},
 	spe: {
 		name: "Spe",
-		desc: "Speed",
 		speciesNumCol: species => species.baseStats.spe,
 	},
 	bst: {
 		name: "BST",
-		desc: "Base Stat Total",
 		speciesNumCol: species => species.bst,
 	},
 
