@@ -122,6 +122,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	garchompmegaz: {
 		inherit: true,
 		abilities: { 0: "Sand Force" },
+	},
 	zaciancrowned: {
 		inherit: true,
 		baseStats: { hp: 92, atk: 160, def: 115, spa: 80, spd: 115, spe: 148 },
