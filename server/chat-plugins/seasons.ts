@@ -145,7 +145,19 @@ export function generateFormatSchedule() {
 export async function getLadderTop(format: string) {
 	try {
 		const results = await Net(`https://${Config.routes.root}/ladder/?format=${toID(format)}&json`).get();
-		const reply = JSON.parse(results);
+		let reply;
+		try {
+			reply = JSON.parse(results);
+		} catch (parseError) {
+			Monitor.crashlog(parseError, "Invalid JSON response from ladder request");
+			return null;
+		}
+
+		// Check that toplist is defined and is an array
+		if (!reply || !Array.isArray(reply.toplist)) {
+			Monitor.crashlog(new Error(`Invalid toplist format: ${JSON.stringify(reply)}`), "Ladder toplist read error");
+			return null;
+		}
 		return reply.toplist;
 	} catch {
 		return null;
@@ -158,22 +170,38 @@ export async function updateBadgeholders() {
 	if (!data.badgeholders[period]) {
 		data.badgeholders[period] = {};
 	}
-	for (const formatName of data.formatSchedule[findPeriod()]) {
+
+	const currentPeriod = findPeriod();
+	const scheduledFormats = data.formatSchedule[currentPeriod];
+	if (!scheduledFormats) {
+		Monitor.crashlog(new Error(`No format schedule found for period ${currentPeriod}`), "Season badge update");
+		return;
+	}
+
+	for (const formatName of scheduledFormats) {
 		const formatid = `gen${Dex.gen}${formatName}`;
 		const response = await getLadderTop(formatid);
-		if (!response) continue; // ??
 		const newHolders: Record<string, string[]> = {};
 		for (const [i, row] of response.entries()) {
-			let badgeType = null;
+			if (!row) {
+				continue;
+			}
+			const userid = toID(row.userid);
+			if (!userid || userid.length > 18) {
+				continue; // skip if userid isn't readable
+			}
+
+			let badgeType: string | null = null;
 			for (const type in BADGE_THRESHOLDS) {
 				if ((i + 1) <= BADGE_THRESHOLDS[type]) {
 					badgeType = type;
 					break;
 				}
 			}
+
 			if (!badgeType) break;
 			if (!newHolders[badgeType]) newHolders[badgeType] = [];
-			newHolders[badgeType].push(row.userid);
+			newHolders[badgeType].push(userid);
 		}
 		data.badgeholders[period][formatid] = newHolders;
 	}
