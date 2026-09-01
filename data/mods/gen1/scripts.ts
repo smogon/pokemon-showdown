@@ -62,77 +62,40 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.modifiedStats![statName] = modifiedStats;
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
-		boostBy(boost) {
-			let changed: boolean | number = false;
-			let i: BoostID;
-			for (i in boost) {
-				const delta = boost[i];
-				if (delta === undefined) continue;
-				if (delta > 0 && this.boosts[i] >= 6) continue;
-				if (delta < 0 && this.boosts[i] <= -6) continue;
-				if (i === 'evasion' || i === 'accuracy') {
-					this.boosts[i] += delta;
-					if (this.boosts[i] > 6) {
-						this.boosts[i] = 6;
-					}
-					if (this.boosts[i] < -6) {
-						this.boosts[i] = -6;
-					}
-					changed = true;
-					continue;
-				}
-				// Stat being modified is not evasion or accuracy, so change modifiedStats.
+		boostBy(boosts) {
+			boosts = this.getCappedBoost(boosts);
+			let delta = 0;
+			let boostName: BoostID;
+			for (boostName in boosts) {
+				delta = boosts[boostName]!;
+				this.boosts[boostName] += delta;
+				if (boostName === 'evasion' || boostName === 'accuracy') continue;
 				if (delta > 0) {
-					if (this.modifiedStats![i] === 999) {
-						// Intended max stat value
-						this.boosts[i] += delta;
-						if (this.boosts[i] > 6) {
-							this.boosts[i] = 6;
-						}
-						this.boosts[i]--;
-						// changed = 0 corresponds to increasing stats at 999 (or decreasing at 1).
-						changed = 0;
-					} else {
-						this.boosts[i] += delta;
-						if (this.boosts[i] > 6) {
-							this.boosts[i] = 6;
-						}
-						changed = true;
+					if (this.modifiedStats![boostName] === 999) {
+						this.boosts[boostName]--;
+						delta = 0;
+					}
+				} else if (delta < 0) {
+					if (this.modifiedStats![boostName] === 1) {
+						this.boosts[boostName]++;
+						delta = 0;
 					}
 				}
-				if (delta < 0) {
-					if (this.modifiedStats![i] === 1) {
-						// Minimum stat value
-						this.boosts[i] += delta;
-						if (this.boosts[i] < -6) {
-							this.boosts[i] = -6;
-						}
-						this.boosts[i]++;
-						// changed = 0 corresponds to increasing stats at 999 (or decreasing at 1).
-						changed = 0;
-					} else {
-						this.boosts[i] += delta;
-						if (this.boosts[i] < -6) {
-							this.boosts[i] = -6;
-						}
-						changed = true;
-					}
-				}
-				if (changed) {
+				if (delta) {
 					// Recalculate the modified stat
-					this.modifiedStats![i] = this.storedStats[i];
-					if (this.boosts[i] >= 0) {
-						this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
+					this.modifiedStats![boostName] = this.storedStats[boostName];
+					if (this.boosts[boostName] >= 0) {
+						this.modifyStat!(boostName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[boostName]]);
 					} else {
-						this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
+						this.modifyStat!(boostName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[boostName]] / 100);
 					}
-					if (delta > 0 && this.modifiedStats![i] > 999) {
+					if (delta > 0 && this.modifiedStats![boostName] > 999) {
 						// Cap the stat at 999
-						this.modifiedStats![i] = 999;
+						this.modifiedStats![boostName] = 999;
 					}
 				}
 			}
-			return changed;
+			return delta;
 		},
 		clearBoosts() {
 			let i: BoostID;
@@ -371,7 +334,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// This function attempts a move hit and returns the attempt result before the actual hit happens.
 		// It deals with partial trapping weirdness and accuracy bugs as well.
-		tryMoveHit(target, pokemon, move) {
+		tryMoveHit(target: Pokemon, pokemon, move) {
 			let damage: number | false | undefined = 0;
 
 			// Add Thrashing effect before the move does damage, or add confusion if Thrash effect is ending
@@ -529,12 +492,15 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// It deals with the actual move hit, as the name indicates, dealing damage and/or effects.
 		// This function also deals with the Gen 1 Substitute behaviour on the hitting process.
-		moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
+		moveHit(target: Pokemon | null, pokemon, move, hitEffect, isSecondary, isSelf) {
 			let damage: number | false | null | undefined = 0;
 
 			if (!isSecondary && !isSelf) this.battle.setActiveMove(move, pokemon, target);
 			let hitResult: number | boolean = true;
+
+			let moveData = hitEffect as ActiveMove;
 			if (!moveData) moveData = move;
+			if (!moveData.flags) moveData.flags = {};
 
 			if (move.ignoreImmunity === undefined) {
 				move.ignoreImmunity = (move.category === 'Status');
