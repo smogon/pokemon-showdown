@@ -71,7 +71,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	absolmega: {
 		inherit: true,
-		baseStats: { hp: 65, atk: 130, def: 90, spa: 85, spd: 90, spe: 95 },
+		baseStats: { hp: 65, atk: 140, def: 90, spa: 85, spd: 90, spe: 95 },
 		abilities: { 0: "Tablets of Ruin" },
 		types: ["Dark", "Normal"],
 	},
@@ -122,5 +122,24 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	garchompmegaz: {
 		inherit: true,
 		abilities: { 0: "Sand Force" },
+	zaciancrowned: {
+		inherit: true,
+		baseStats: { hp: 92, atk: 160, def: 115, spa: 80, spd: 115, spe: 148 },
+	},
+	zamazentacrowned: {
+		inherit: true,
+		baseStats: { hp: 92, atk: 120, def: 145, spa: 80, spd: 145, spe: 128 },
+	},
+	gengarmega: {
+		inherit: true,
+		abilities: { 0: "Merciless" },
+	},
+	excadrillmega: {
+		inherit: true,
+		abilities: { 0: "Iron Barbs" },
+	},
+	audinomega: {
+		inherit: true,
+		abilities: { 0: "Regenerator" },
 	},
 };

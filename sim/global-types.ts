@@ -278,7 +278,9 @@ interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number;
 	clearBoosts?: (this: Pokemon) => void;
 	clearVolatile?: (this: Pokemon, includeSwitchFlags?: boolean) => void;
-	calculateStat?: (this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number) => number;
+	calculateStat?: (
+		this: Pokemon, statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon
+	) => number;
 	cureStatus?: (this: Pokemon, silent?: boolean) => boolean;
 	deductPP?: (
 		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
@@ -418,10 +420,12 @@ interface PlayerOptions {
 	seed?: PRNGSeed;
 }
 
+type TranslationString = string | null;
+
 interface BasicTextData {
-	desc?: string;
-	shortDesc?: string;
-	grammar?: string;
+	desc?: TranslationString;
+	shortDesc?: TranslationString;
+	grammar?: TranslationString;
 	articleRule?: 'stressed-a';
 	classified?: {
 		name: string,
@@ -430,42 +434,42 @@ interface BasicTextData {
 	};
 }
 interface ConditionTextData extends BasicTextData {
-	activate?: string;
-	addItem?: string;
-	block?: string;
-	boost?: string;
-	cant?: string;
-	changeAbility?: string;
-	damage?: string;
-	end?: string;
-	heal?: string;
-	move?: string;
-	start?: string;
-	transform?: string;
+	activate?: TranslationString;
+	addItem?: TranslationString;
+	block?: TranslationString;
+	boost?: TranslationString;
+	cant?: TranslationString;
+	changeAbility?: TranslationString;
+	damage?: TranslationString;
+	end?: TranslationString;
+	heal?: TranslationString;
+	move?: TranslationString;
+	start?: TranslationString;
+	transform?: TranslationString;
 }
 
 interface MoveTextData extends ConditionTextData {
-	alreadyStarted?: string;
-	blockSelf?: string;
-	clearBoost?: string;
-	endFromItem?: string;
-	fail?: string;
-	failSelect?: string;
-	failTooHeavy?: string;
-	failWrongForme?: string;
-	megaNoItem?: string;
-	prepare?: string;
-	removeItem?: string;
-	startFromItem?: string;
-	startFromZEffect?: string;
-	switchOut?: string;
-	takeItem?: string;
-	typeChange?: string;
-	upkeep?: string;
+	alreadyStarted?: TranslationString;
+	blockSelf?: TranslationString;
+	clearBoost?: TranslationString;
+	endFromItem?: TranslationString;
+	fail?: TranslationString;
+	failSelect?: TranslationString;
+	failTooHeavy?: TranslationString;
+	failWrongForme?: TranslationString;
+	megaNoItem?: TranslationString;
+	prepare?: TranslationString;
+	removeItem?: TranslationString;
+	startFromItem?: TranslationString;
+	startFromZEffect?: TranslationString;
+	switchOut?: TranslationString;
+	takeItem?: TranslationString;
+	typeChange?: TranslationString;
+	upkeep?: TranslationString;
 }
 
 type TextFile<T> = T & {
-	name: string,
+	name: TranslationString,
 	gen1?: T,
 	gen2?: T,
 	gen3?: T,
@@ -478,21 +482,44 @@ type TextFile<T> = T & {
 };
 
 type AbilityText = TextFile<ConditionTextData & {
-	activateFromItem?: string,
-	activateNoTarget?: string,
-	copyBoost?: string,
-	transformEnd?: string,
+	activateFromItem?: TranslationString,
+	activateNoTarget?: TranslationString,
+	copyBoost?: TranslationString,
+	transformEnd?: TranslationString,
 }>;
 type MoveText = TextFile<MoveTextData>;
 type ItemText = TextFile<ConditionTextData>;
-type PokedexText = TextFile<BasicTextData>;
+interface SpeciesText {
+	/**
+	 * Full species + short forme name - "Wormadam-Plant"
+	 *
+	 * Not the actual full official name, but the one Showdown uses that's
+	 * reasonably concise and mostly fits into teambuilder. Includes formes for
+	 * many but not all base formes. Can't contain parentheses because it's
+	 * designed to be used like "Go! Planty (Wormadam-Plant)".
+	 */
+	name?: TranslationString;
+	/** Species name by itself, without forme - "Wormadam" */
+	baseSpecies?: TranslationString;
+	/** Official forme name - "Plant Cloak" */
+	forme?: TranslationString;
+	grammar?: TranslationString;
+}
 type DefaultText = AnyObject;
+interface TagText {
+	name?: TranslationString;
+	/** used in move tooltips */
+	hint?: TranslationString;
+	desc?: TranslationString;
+}
 
-type ResolvedText<T extends BasicTextData> = T & { desc: string, shortDesc: string };
+type ResolvedText<T extends BasicTextData> = T & { name: string, desc: string, shortDesc: string };
 type ResolvedAbilityText = ResolvedText<AbilityText>;
 type ResolvedItemText = ResolvedText<ItemText>;
 type ResolvedMoveText = ResolvedText<MoveText>;
-type ResolvedPokedexText = ResolvedText<PokedexText>;
+type ResolvedNameText = { name: string };
+type ResolvedTagText = { name: string, hint?: string, desc?: string };
+type ResolvedSpeciesText = { name: string, baseSpecies: string, forme?: string, grammar?: string };
 
 declare namespace RandomTeamsTypes {
 	export interface TeamDetails {
