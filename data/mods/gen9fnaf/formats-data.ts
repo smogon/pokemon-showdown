@@ -3,6 +3,31 @@
 export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 
 	// ── Fakemon (Original) ─────────────────────────────────────────────
+	freddy: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	bonnie: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	chica: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	foxy: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	goldenfreddy: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
 	
 
 	// ── Champions Mega Evolutions ────────────────────────────────────────────

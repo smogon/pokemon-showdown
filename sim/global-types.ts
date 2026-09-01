@@ -34,7 +34,7 @@ type SparseStatsTable = Partial<StatsTable>;
 type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
 type BoostsTable = { [boost in BoostID]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
-type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax' | 'DigiPen' | 'DigiPen Past' | 'DigiPen Future';
+type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax' | 'DigiPen' | 'DigiPen Past' | 'DigiPen Future' | 'FNAF';
 
 type PokemonSet = import('./teams').PokemonSet;
 
@@ -45,7 +45,8 @@ declare namespace TierTypes {
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC" |
 		// DigiPen mod tiers — these are interleaved with standard tiers in the teambuilder.
 		"DigiPen Uber" | "DigiPen" | "DigiPen NFE" | "DigiPen LC" |
-		"DigiPen DUber" | "DigiPen Restricted" | "DigiPen Mythical" | "DigiPen Regular";
+		"DigiPen DUber" | "DigiPen Restricted" | "DigiPen Mythical" | "DigiPen Regular" |
+		"FNAF";
 }
 
 interface EventInfo {

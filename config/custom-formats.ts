@@ -156,4 +156,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted',  '+DigiPen', '+Past', '+Future'],
 		restricted: ['Restricted Legendary'],
 	},
+	// FNAF
+	///////////////////////////////////////////////////////////////////
+	{
+		section: "Five Nights At Freddy's",
+		column: 1,
+	},
+	{
+		name: "[Gen 9 FNAF] Singles",
+		mod: 'gen9fnaf',
+		searchShow: false,
+		ruleset: ['Standard AG', 'Nickname Clause', 'Species Clause'],
+		banlist: ['All Pokemon'],
+		unbanlist: ['FNAF'],
+	},
 ];

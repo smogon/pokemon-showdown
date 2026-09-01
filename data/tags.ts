@@ -240,6 +240,13 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		speciesFilter: species => species.doublesTier === 'DigiPen DUber',
 	},
 
+	// Other Custom Tiers
+	// -----------------
+	fnaf: {
+		name: "FNAF",
+		speciesFilter: species => species.isNonstandard === "FNAF",
+	},
+
 	// Doubles tiers
 	// -------------
 	duber: {
