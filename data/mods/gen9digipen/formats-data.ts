@@ -172,179 +172,178 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// ── Champions Mega Evolutions ────────────────────────────────────────────
 	// Added all to NatDex OU except Zygarde-Mega to NatDex Uber
 	absolmegaz: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	barbaraclemega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	baxcaliburmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	chandeluremega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	chesnaughtmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	chimechomega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	clefablemega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	crabominablemega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	darkraimega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	delphoxmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	dragonitemega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	drampamega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	eelektrossmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	emboarmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	excadrillmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	falinksmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	feraligatrmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	floetteternal: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	floettemega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	froslassmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	garchompmegaz: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	glimmoramega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	golisopodmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	golurkmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	greninjamega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	hawluchamega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	heatranmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	lucariomegaz: {
-		inherit: true,
-		natDexTier: "OU",
+		tier: "OU",
 	},
 	magearnamega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	malamarmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	meganiummega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	meowsticfmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	meowsticmmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	pyroarmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	raichumegax: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	raichumegay: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	staraptormega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	starmiemega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	tatsugiricurlymega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	tatsugiridroopymega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	tatsugiristretchymega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	victreebelmega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	zeraoramega: {
-		inherit: true,
+		tier: "OU",
 		natDexTier: "OU",
 	},
 	zygardemega: {
-		inherit: true,
+		tier: "Uber",
 		natDexTier: "Uber",
 	},
 

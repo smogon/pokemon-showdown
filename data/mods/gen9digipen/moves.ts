@@ -367,7 +367,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return secondaries.filter(effect => !!effect.self);
 			},	
 		},
-		shortDesc: "For 5 turns, protects user's party from stat drops, crits, and secondary effects.",
+		shortDesc: "5 turns: no stat drops, crits, and secondary effects.",
 		desc: "For 5 turns, the user and its party members are protected from having \
 			their stat stages lowered by other Pokemon or by their own status moves, \
 			cannot be struck by critical hits, and are not affected by the secondary \
@@ -398,7 +398,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return critRatio + 1;
 			},
 		},
-		shortDesc: "For 5 turns, user's party immune to crits and crit more often.",
+		shortDesc: "5-turns: party immune to crits, crit more often.",
 		desc: "For 5 turns, the user and its party members cannot be struck by a critical hit and have their critical hit ratio increased by 1. Fails if the effect is already active on the user's side.",
 		contributors: ["Bryce G."],
 	},

@@ -81,6 +81,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Assist'],
 	},
 
+
 	// DigiPen S/V Doubles
 	///////////////////////////////////////////////////////////////////
 
@@ -129,20 +130,4 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] VGC 2026 Reg I', '+DigiPen'],
 	},
-
-	// DigiPen Custom Game
-	///////////////////////////////////////////////////////////////////
-
-	{
-		name: "[Gen 9 DigiPen] Custom Game",
-		mod: 'gen9digipen',
-		searchShow: false,
-		debug: true,
-		ruleset: [
-			'+DigiPen', 'Team Preview', 'Cancel Mod',
-			'Max Team Size = 24', 'Max Move Count = 24',
-			'Max Level = 9999', 'Default Level = 100',
-		],
-	},
-
 ];
