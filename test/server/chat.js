@@ -14,14 +14,50 @@ describe('Chat', () => {
 		assert.equal(Chat.getLanguageName('english'), 'English');
 	});
 
+	it('should resolve language names and directory codes', () => {
+		assert.equal(Chat.getLanguageID('Japanese'), 'japanese');
+		assert.equal(Chat.getLanguageID('ja'), 'japanese');
+		assert.equal(Chat.getLanguageID('zh-cn'), 'simplifiedchinese');
+		assert.equal(Chat.getLanguageID('zh_tw'), 'traditionalchinese');
+		assert.equal(Chat.getLanguageID('not-a-language'), null);
+	});
+
+	it('should translate Dex objects with a Translator', () => {
+		const TL = Chat.getTranslator('japanese');
+		assert.equal(TL(Dex.items.get('Leftovers')), 'たべのこし');
+		assert.equal(TL(Dex.moves.get('Tackle')), 'たいあたり');
+		assert.equal(TL(Dex.species.get('Pikachu')), 'ピカチュウ');
+		const text = Dex.loadTextData('ja');
+		for (const [property, table] of Object.entries({
+			term: 'TermNames',
+			type: 'TypeNames',
+			nature: 'NatureNames',
+			gender: 'GenderNames',
+			egggroup: 'EggGroupNames',
+			color: 'ColorNames',
+			status: 'StatusNames',
+			target: 'TargetNames',
+			stat: 'StatNames',
+			statShort: 'StatShortNames',
+			statMedium: 'StatMediumNames',
+		})) {
+			assert.equal(TL[property], text[table]);
+		}
+		assert.equal(TL.tag.physical, text.Tags.physical.name);
+		assert.equal(TL.tag.contact, text.Tags.contact.name);
+	});
+
 	it('should localize data HTML', () => {
-		const html = Chat.getDataMoveHTML(Dex.moves.get('Close Combat'), { language: 'japanese' });
-		assert(html.includes('インファイト'));
-		assert(html.includes("Lowers the user's Defense and Sp. Def by 1."));
-		const detailsHTML = Chat.getDataMoveHTML(Dex.moves.get('Close Combat'), {
+		const move = Dex.moves.get('Close Combat');
+		const text = Dex.text.get(move, 'ja');
+		const description = text.shortDesc || text.desc;
+		const html = Chat.getDataMoveHTML(move, { language: 'japanese' });
+		assert(html.includes(text.name));
+		assert(html.includes(description));
+		const detailsHTML = Chat.getDataMoveHTML(move, {
 			language: 'japanese', hideShortDescription: true,
 		});
-		assert(!detailsHTML.includes("Lowers the user's Defense"));
+		assert(!detailsHTML.includes(description));
 	});
 
 	it('should not infinite loop formatText', () => {

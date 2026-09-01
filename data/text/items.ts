@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ability Shield",
 		shortDesc: "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",
 
-		block: "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
+		block: "  {POKEMON}'s Ability is protected by the effects of its Ability Shield!",
 	},
 	abomasite: {
 		name: "Abomasite",
@@ -55,8 +55,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Air Balloon",
 		shortDesc: "Holder is immune to Ground-type attacks. Pops when holder is hit.",
 
-		start: "  [POKEMON] floats in the air with its Air Balloon!",
-		end: "  [POKEMON]'s Air Balloon popped!",
+		start: "  {POKEMON} floats in the air with its Air Balloon!",
+		end: "  {POKEMON}'s Air Balloon popped!",
 	},
 	alakazite: {
 		name: "Alakazite",
@@ -160,7 +160,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Black Sludge",
 		shortDesc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not.",
 
-		heal: "  [POKEMON] restored a little HP using its Black Sludge!",
+		heal: "  {POKEMON} restored a little HP using its Black Sludge!",
 	},
 	blackglasses: {
 		name: "Black Glasses",
@@ -310,7 +310,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Clear Amulet",
 		shortDesc: "Prevents other Pokemon from lowering the holder's stat stages.",
 
-		block: "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
+		block: "  The effects of {POKEMON}'s Clear Amulet prevent its stats from being lowered!",
 	},
 	clefablite: {
 		name: "Clefablite",
@@ -357,7 +357,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Custap Berry",
 		shortDesc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
 
-		activate: "  [POKEMON] can act faster than normal, thanks to its Custap Berry!",
+		activate: "  {POKEMON} can act faster than normal, thanks to its Custap Berry!",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -517,13 +517,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Eject Button",
 		shortDesc: "If holder survives a hit, it immediately switches out to a chosen ally. Single use.",
 
-		end: "  [POKEMON] is switched out with the Eject Button!",
+		end: "  {POKEMON} is switched out with the Eject Button!",
 	},
 	ejectpack: {
 		name: "Eject Pack",
 		shortDesc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
 
-		end: "  [POKEMON] is switched out by the Eject Pack!",
+		end: "  {POKEMON} is switched out by the Eject Pack!",
 	},
 	electirizer: {
 		name: "Electirizer",
@@ -690,7 +690,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP.",
 		},
 
-		activate: "  [POKEMON] hung on using its Focus Band!",
+		activate: "  {POKEMON} hung on using its Focus Band!",
 	},
 	focussash: {
 		name: "Focus Sash",
@@ -699,7 +699,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
 		},
 
-		end: "  [POKEMON] hung on using its Focus Sash!",
+		end: "  {POKEMON} hung on using its Focus Sash!",
 	},
 	fossilizedbird: {
 		name: "Fossilized Bird",
@@ -1055,13 +1055,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Leftovers",
 		shortDesc: "At the end of every turn, holder restores 1/16 of its max HP.",
 
-		heal: "  [POKEMON] restored a little HP using its Leftovers!",
+		heal: "  {POKEMON} restored a little HP using its Leftovers!",
 	},
 	leppaberry: {
 		name: "Leppa Berry",
 		shortDesc: "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use.",
 
-		activate: "  [POKEMON] restored PP to its move [MOVE] using its Leppa Berry!",
+		activate: "  {POKEMON} restored PP to its move {MOVE} using its Leppa Berry!",
 	},
 	levelball: {
 		name: "Level Ball",
@@ -1075,7 +1075,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Life Orb",
 		shortDesc: "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
 
-		damage: "  [POKEMON] lost some of its HP!",
+		damage: "  {POKEMON} lost some of its HP!",
 	},
 	lightball: {
 		name: "Light Ball",
@@ -1316,7 +1316,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Mirror Herb",
 		shortDesc: "When an opposing Pokemon raises a stat stage, the holder copies it. Single use.",
 
-		activate: "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!",
+		activate: "  {POKEMON} used its Mirror Herb to mirror its opponent's stat changes!",
 	},
 	mistyseed: {
 		name: "Misty Seed",
@@ -1502,7 +1502,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Power Herb",
 		shortDesc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use.",
 
-		end: "  [POKEMON] became fully charged due to its Power Herb!",
+		end: "  {POKEMON} became fully charged due to its Power Herb!",
 	},
 	powerlens: {
 		name: "Power Lens",
@@ -1532,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Protective Pads",
 		shortDesc: "Holder's moves are protected from adverse contact effects, except Pickpocket.",
 
-		block: "  [POKEMON] protected itself with its Protective Pads!",
+		block: "  {POKEMON} protected itself with its Protective Pads!",
 	},
 	protector: {
 		name: "Protector",
@@ -1580,7 +1580,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
 		},
 
-		activate: "  [POKEMON] can act faster than normal, thanks to its Quick Claw!",
+		activate: "  {POKEMON} can act faster than normal, thanks to its Quick Claw!",
 	},
 	quickpowder: {
 		name: "Quick Powder",
@@ -1628,7 +1628,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Red Card",
 		shortDesc: "If holder survives a hit, attacker is forced to switch to a random ally. Single use.",
 
-		end: "  [POKEMON] held up its Red Card against [TARGET]!",
+		end: "  {POKEMON} held up its Red Card against {TARGET}!",
 	},
 	redorb: {
 		name: "Red Orb",
@@ -1673,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Rocky Helmet",
 		shortDesc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP.",
 
-		damage: "  [POKEMON] was hurt by the Rocky Helmet!",
+		damage: "  {POKEMON} was hurt by the Rocky Helmet!",
 	},
 	roomservice: {
 		name: "Room Service",
@@ -1719,7 +1719,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Safety Goggles",
 		shortDesc: "Holder is immune to powder moves and damage from Sandstorm or Hail.",
 
-		block: "  [POKEMON] is not affected by [MOVE] thanks to its Safety Goggles!",
+		block: "  {POKEMON} is not affected by {MOVE} thanks to its Safety Goggles!",
 	},
 	sailfossil: {
 		name: "Sail Fossil",
@@ -1783,7 +1783,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Shell Bell",
 		shortDesc: "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
 
-		heal: "  [POKEMON] restored a little HP using its Shell Bell!",
+		heal: "  {POKEMON} restored a little HP using its Shell Bell!",
 	},
 	shinystone: {
 		name: "Shiny Stone",
@@ -2437,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ultranecrozium Z",
 		shortDesc: "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
 
-		transform: "  Bright light is about to burst out of [POKEMON]!",
-		activate: "[POKEMON] regained its true power through Ultra Burst!",
+		transform: "  Bright light is about to burst out of {POKEMON}!",
+		activate: "{POKEMON} regained its true power through Ultra Burst!",
 	},
 	unremarkableteacup: {
 		name: "Unremarkable Teacup",
@@ -2516,7 +2516,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "White Herb",
 		shortDesc: "Restores all lowered stat stages to 0 when one is less than 0. Single use.",
 
-		end: "  [POKEMON] returned its stats to normal using its White Herb!",
+		end: "  {POKEMON} returned its stats to normal using its White Herb!",
 	},
 	widelens: {
 		name: "Wide Lens",
@@ -2595,7 +2595,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Mystery Berry",
 		shortDesc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
 
-		activate: "  [POKEMON] restored PP to its [MOVE] move using Mystery Berry!",
+		activate: "  {POKEMON} restored PP to its {MOVE} move using Mystery Berry!",
 	},
 	pinkbow: {
 		name: "Pink Bow",

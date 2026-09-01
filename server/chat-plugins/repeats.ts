@@ -129,23 +129,23 @@ export const pages: Chat.PageTable = {
 		this.title = `[Repeats]`;
 		this.checkCan("mute", null, room);
 		let html = `<div class="ladder pad">`;
-		html += `<button class="button" name="send" value="/join view-repeats-${room.roomid}" style="float: right"><i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
+		html += `<button class="button" name="send" value="/join view-repeats-${room.roomid}" style="float: right"><i class="fa fa-refresh"></i> ${this.TL`Refresh`}</button>`;
 		if (!room.settings.repeats?.length) {
-			return `${html}<h1>${this.tr`There are no repeated phrases in ${room.title}.`}</h1></div>`;
+			return `${html}<h1>${this.TL`There are no repeated phrases in ${room.title}.`}</h1></div>`;
 		}
-		html += `<h2>${this.tr`Repeated phrases in ${room.title}`}</h2>`;
-		html += `<table><tr><th>${this.tr`Identifier`}</th><th>${this.tr`Phrase`}</th><th>${this.tr`Raw text`}</th><th>${this.tr`Interval`}</th><th>${this.tr`Action`}</th>`;
+		html += `<h2>${this.TL`Repeated phrases in ${room.title}`}</h2>`;
+		html += `<table><tr><th>${this.TL`Identifier`}</th><th>${this.TL`Phrase`}</th><th>${this.TL`Raw text`}</th><th>${this.TL`Interval`}</th><th>${this.TL`Action`}</th>`;
 		for (const repeat of room.settings.repeats) {
 			const minutes = repeat.interval / (repeat.isByMessages ? 1 : 60 * 1000);
 			const repeatText = repeat.faq ? roomFaqs[room.roomid][repeat.id].source : repeat.phrase;
 			const phrase = repeat.faq ? visualizeFaq(roomFaqs[room.roomid][repeat.id]) :
 				repeat.isHTML ? repeat.phrase : Chat.formatText(repeatText, true);
-			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeatText)}</td><td>${repeat.isByMessages ? this.tr`every ${minutes} chat message(s)` : this.tr`every ${minutes} minute(s)`}</td>`;
-			html += `<td><button class="button" name="send" value="/msgroom ${room.roomid},/removerepeat ${repeat.id}">${this.tr`Remove`}</button></td>`;
+			html += `<tr><td>${repeat.id}</td><td>${phrase}</td><td>${Chat.getReadmoreCodeBlock(repeatText)}</td><td>${repeat.isByMessages ? this.TL`every ${minutes} chat message(s)` : this.TL`every ${minutes} minute(s)`}</td>`;
+			html += `<td><button class="button" name="send" value="/msgroom ${room.roomid},/removerepeat ${repeat.id}">${this.TL`Remove`}</button></td>`;
 		}
 		html += `</table>`;
 		if (user.can("editroom", null, room)) {
-			html += `<br /><button class="button" name="send" value="/msgroom ${room.roomid},/removeallrepeats">${this.tr`Remove all repeats`}</button>`;
+			html += `<br /><button class="button" name="send" value="/msgroom ${room.roomid},/removeallrepeats">${this.TL`Remove all repeats`}</button>`;
 		}
 		html += `</div>`;
 		return html;
@@ -164,16 +164,16 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
-		if (!id) throw new Chat.ErrorMessage(this.tr`Repeat names must include at least one alphanumeric character.`);
+		if (!id) throw new Chat.ErrorMessage(this.TL`Repeat names must include at least one alphanumeric character.`);
 
 		const phrase = messageArray.join(',').trim();
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
-			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes or chat messages between 1 and 1440.`);
+			throw new Chat.ErrorMessage(this.TL`You must specify an interval as a number of minutes or chat messages between 1 and 1440.`);
 		}
 
 		if (Repeats.hasRepeat(room, id)) {
-			throw new Chat.ErrorMessage(this.tr`The phrase labeled with "${id}" is already being repeated in this room.`);
+			throw new Chat.ErrorMessage(this.TL`The phrase labeled with "${id}" is already being repeated in this room.`);
 		}
 
 		if (isHTML) this.checkHTML(phrase);
@@ -217,7 +217,7 @@ export const commands: Chat.ChatCommands = {
 		let [intervalString, topic] = target.split(',');
 		const interval = parseInt(intervalString);
 		if (isNaN(interval) || !/[0-9]{1,}/.test(intervalString) || interval < 1 || interval > 24 * 60) {
-			throw new Chat.ErrorMessage(this.tr`You must specify an interval as a number of minutes or chat messages between 1 and 1440.`);
+			throw new Chat.ErrorMessage(this.TL`You must specify an interval as a number of minutes or chat messages between 1 and 1440.`);
 		}
 		if (!roomFaqs[room.roomid]) {
 			throw new Chat.ErrorMessage(`This room has no FAQs.`);
@@ -229,7 +229,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (Repeats.hasRepeat(room, topic as ID)) {
-			throw new Chat.ErrorMessage(this.tr`The text for the Room FAQ "${topic}" is already being repeated.`);
+			throw new Chat.ErrorMessage(this.TL`The text for the Room FAQ "${topic}" is already being repeated.`);
 		}
 
 		Repeats.addRepeat(room, {
@@ -257,11 +257,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('mute', null, room);
 		if (!room.settings.repeats?.length) {
-			throw new Chat.ErrorMessage(this.tr`There are no repeated phrases in this room.`);
+			throw new Chat.ErrorMessage(this.TL`There are no repeated phrases in this room.`);
 		}
 
 		if (!Repeats.hasRepeat(room, id)) {
-			throw new Chat.ErrorMessage(this.tr`The phrase labeled with "${id}" is not being repeated in this room.`);
+			throw new Chat.ErrorMessage(this.TL`The phrase labeled with "${id}" is not being repeated in this room.`);
 		}
 
 		Repeats.removeRepeat(room, id);
@@ -275,7 +275,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('declare', null, room);
 		if (!room.settings.repeats?.length) {
-			throw new Chat.ErrorMessage(this.tr`There are no repeated phrases in this room.`);
+			throw new Chat.ErrorMessage(this.TL`There are no repeated phrases in this room.`);
 		}
 
 		for (const { id } of room.settings.repeats) {
@@ -289,7 +289,7 @@ export const commands: Chat.ChatCommands = {
 	repeats: 'viewrepeats',
 	viewrepeats(target, room, user) {
 		const roomid = toID(target) || room?.roomid;
-		if (!roomid) throw new Chat.ErrorMessage(this.tr`You must specify a room when using this command in PMs.`);
+		if (!roomid) throw new Chat.ErrorMessage(this.TL`You must specify a room when using this command in PMs.`);
 		this.parse(`/j view-repeats-${roomid}`);
 	},
 };

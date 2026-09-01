@@ -1,1144 +1,1242 @@
+// Mechanics desc style (es): official game terminology. el usuario (user), el objetivo
+//   (target), efecto secundario, hacer retroceder (flinch), golpe crítico, niveles (stages),
+//   problema de estado (status), movimiento multigolpe, prioridad, sustituto, redondeado
+//   hacia abajo/arriba. Decimal comma (1,5). Boilerplate shared verbatim — QC one, fix all.
+// Cross-references generated from name fields / pokedex-names.ts. CAP entities keep name
+//   null (English fallback); descs are translated with English names inline.
+
 export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	noability: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	adaptability: {
 		name: "Adaptable",
-		desc: "Potencia aún más los movimientos cuyo tipo coincida con el suyo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia aún más los movimientos cuyo tipo coincida con el suyo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aerilate: {
 		name: "Piel Celeste",
-		desc: "Convierte los movimientos de tipo Normal en tipo Volador y aumenta ligeramente su potencia.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Volador y aumenta ligeramente su potencia."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	aftermath: {
 		name: "Detonación",
-		desc: "Daña al agresor que le ha dado el golpe de gracia con un movimiento de contacto.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Daña al agresor que le ha dado el golpe de gracia con un movimiento de contacto."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		damage: "  ¡[POKEMON] ha resultado herido!",
+		damage: "  ¡{POKEMON} ha resultado herido!",
 	},
 	airlock: {
 		name: "Bucle Aire",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  Los efectos del tiempo atmosférico se han neutralizado.",
 	},
 	analytic: {
 		name: "Cálculo Final",
-		desc: "Aumenta la potencia de su movimiento si es el último en atacar.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la potencia de su movimiento si es el último en atacar."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	angerpoint: {
 		name: "Irascible",
-		desc: "Si recibe un golpe crítico, monta en cólera y sube su Ataque hasta el máximo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si recibe un golpe crítico, monta en cólera y sube su Ataque hasta el máximo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		boost: "  ¡El Ataque de [POKEMON] ha aumentado al máximo!",
+		boost: "  ¡El Ataque de {POKEMON} ha aumentado al máximo!",
 	},
 	angershell: {
 		name: "Coraza Ira",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	anticipation: {
 		name: "Anticipación",
-		desc: "Prevé los movimientos peligrosos del rival.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Prevé los movimientos peligrosos del rival."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡[POKEMON] se ha estremecido!",
+		activate: "  ¡{POKEMON} se ha estremecido!",
 	},
 	arenatrap: {
 		name: "Trampa Arena",
-		desc: "Evita que el rival huya.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Evita que el rival huya."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	armortail: {
 		name: "Cola Armadura",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		block: "#damp",
 	},
 	aromaveil: {
 		name: "Velo Aroma",
-		desc: "Se protege a sí mismo y a sus aliados de ataques que impiden elegir movimientos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Se protege a sí mismo y a sus aliados de ataques que impiden elegir movimientos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡Velo Aroma ha protegido a [POKEMON]!",
+		block: "  ¡Velo Aroma ha protegido a {POKEMON}!",
 	},
 	asone: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Unidad Ecuestre",
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] tiene dos habilidades!",
+		start: "  ¡{POKEMON} tiene dos habilidades!",
 	},
 	asoneglastrier: {
-		name: "Unidad Ecuestre",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Unidad Ecuestre (Glastrier)", // PS-style disambiguator (not part of the official name)
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	asonespectrier: {
-		name: "Unidad Ecuestre",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Unidad Ecuestre (Spectrier)", // PS-style disambiguator (not part of the official name)
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	aurabreak: {
 		name: "Rompeaura",
-		desc: "Invierte los efectos de las auras, por lo que baja la potencia de ciertos movimientos en vez de subirla.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Invierte los efectos de las auras, por lo que baja la potencia de ciertos movimientos en vez de subirla."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] ha invertido todas las auras!",
+		start: "  ¡{POKEMON} ha invertido todas las auras!",
 	},
 	baddreams: {
 		name: "Mal Sueño",
-		desc: "Inflige daño a cualquier rival que esté dormido.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Inflige daño a cualquier rival que esté dormido."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		damage: "  ¡[POKEMON] está inmerso en un sueño agitado!",
+		damage: "  ¡{POKEMON} está inmerso en un sueño agitado!",
 	},
 	ballfetch: {
 		name: "Recogebolas",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	battery: {
 		name: "Batería",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	battlearmor: {
 		name: "Armadura Batalla",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	battlebond: {
 		name: "Fuerte Afecto",
-		desc: "Al derrotar a un rival, los vínculos con su Entrenador se refuerzan y se convierte en Greninja Ash. Su Shuriken de Agua también se ve potenciado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al derrotar a un rival, los vínculos con su Entrenador se refuerzan y se convierte en Greninja Ash. Su Shuriken de Agua también se ve potenciado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
-		activate: "  ¡[POKEMON] siente la fuerza de vuestro afecto mutuo!",
-		transform: "¡[POKEMON] se ha convertido en Greninja Ash!",
+		activate: "  ¡{POKEMON} siente la fuerza de vuestro afecto mutuo!",
+		transform: "¡{POKEMON} se ha convertido en Greninja Ash!",
 	},
 	beadsofruin: {
 		name: "Abalorio Debacle",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] ha mermado la Defensa Especial de los demás Pokémon con Abalorio Debacle!",
+		start: "  ¡{POKEMON} ha mermado la Defensa Especial de los demás Pokémon con Abalorio Debacle!",
 	},
 	beastboost: {
 		name: "Ultraimpulso",
-		desc: "Si derrota a un rival en ese turno, aumenta su característica más fuerte.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si derrota a un rival en ese turno, aumenta su característica más fuerte."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	berserk: {
 		name: "Cólera",
-		desc: "Aumenta su Ataque Especial si sus PS se ven reducidos a la mitad debido a algún ataque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta su Ataque Especial si sus PS se ven reducidos a la mitad debido a algún ataque."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	bigpecks: {
 		name: "Sacapecho",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	blaze: {
 		name: "Mar Llamas",
-		desc: "Potencia sus movimientos de tipo Fuego cuando le quedan pocos PS.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia sus movimientos de tipo Fuego cuando le quedan pocos PS."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	bulletproof: {
 		name: "Antibalas",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cheekpouch: {
 		name: "Carrillo",
-		desc: "Recupera PS al comer cualquier baya.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Recupera PS al comer cualquier baya."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	chillingneigh: {
 		name: "Relincho Blanco",
-		desc: "Al derrotar a un objetivo, emite un relincho gélido y aumenta su Ataque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al derrotar a un objetivo, emite un relincho gélido y aumenta su Ataque."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	chlorophyll: {
 		name: "Clorofila",
-		desc: "Sube su Velocidad cuando hace sol.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Sube su Velocidad cuando hace sol."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	clearbody: {
 		name: "Cuerpo Puro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cloudnine: {
 		name: "Aclimatación",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "#airlock",
 	},
 	colorchange: {
 		name: "Cambio Color",
-		desc: "Adopta el tipo del último movimiento del que es blanco.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Adopta el tipo del último movimiento del que es blanco."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	comatose: {
 		name: "Letargo Perenne",
-		desc: "No despierta jamás de su profundo letargo e incluso ataca dormido.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "No despierta jamás de su profundo letargo e incluso ataca dormido."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] está sumido en un profundo letargo!",
+		start: "  ¡{POKEMON} está sumido en un profundo letargo!",
 	},
 	commander: {
 		name: "Comandar",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ha sido engullido por [TARGET] y se ha convertido en su comandante!",
+		activate: "  ¡{POKEMON} ha sido engullido por {TARGET} y se ha convertido en su comandante!",
 	},
 	competitive: {
 		name: "Tenacidad",
-		desc: "Aumenta mucho su Ataque Especial cuando el rival le baja cualquiera de sus características.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta mucho su Ataque Especial cuando el rival le baja cualquiera de sus características."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	compoundeyes: {
 		name: "Ojo Compuesto",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	contrary: {
 		name: "Respondón",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	corrosion: {
 		name: "Corrosión",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	costar: {
 		name: "Unísono",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cottondown: {
 		name: "Pelusa",
-		desc: "Al ser alcanzado por un ataque, suelta una pelusa de algodón que reduce la Velocidad de todos los demás Pokémon.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al ser alcanzado por un ataque, suelta una pelusa de algodón que reduce la Velocidad de todos los demás Pokémon."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cudchew: {
 		name: "Rumia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	curiousmedicine: {
 		name: "Medicina Extraña",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cursedbody: {
 		name: "Cuerpo Maldito",
-		desc: "Puede anular el movimiento usado en su contra.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede anular el movimiento usado en su contra."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	cutecharm: {
 		name: "Gran Encanto",
-		desc: "Puede causar enamoramiento al rival que lo toque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede causar enamoramiento al rival que lo toque."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	damp: {
 		name: "Humedad",
-		desc: "Aumenta la humedad del entorno y evita que se puedan utilizar movimientos explosivos, tales como Autodestrucción.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la humedad del entorno y evita que se puedan utilizar movimientos explosivos, tales como Autodestrucción."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		block: "  ¡[SOURCE] no puede usar [MOVE]!",
+		block: "  ¡{SOURCE} no puede usar {MOVE}!",
 	},
 	dancer: {
 		name: "Pareja de Baile",
-		desc: "Puede copiar inmediatamente cualquier movimiento de baile que haya usado otro Pokémon presente en el combate.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede copiar inmediatamente cualquier movimiento de baile que haya usado otro Pokémon presente en el combate."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	darkaura: {
 		name: "Aura Oscura",
-		desc: "Aumenta la potencia de todos los movimientos de tipo Siniestro.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la potencia de todos los movimientos de tipo Siniestro."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] irradia un aura oscura!",
+		start: "  ¡{POKEMON} irradia un aura oscura!",
 	},
 	dauntlessshield: {
 		name: "Escudo Recio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	dazzling: {
 		name: "Cuerpo Vívido",
-		desc: "Desconcierta al rival y le impide utilizar movimientos con prioridad en su contra.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Desconcierta al rival y le impide utilizar movimientos con prioridad en su contra."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		block: "#damp",
 	},
 	defeatist: {
 		name: "Flaqueza",
-		desc: "Se debilita tanto cuando sus PS se ven reducidos a la mitad que su Ataque y su Ataque Especial bajan.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Se debilita tanto cuando sus PS se ven reducidos a la mitad que su Ataque y su Ataque Especial bajan."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	defiant: {
 		name: "Competitivo",
-		desc: "Sube mucho su Ataque cuando el rival le baja las características.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Sube mucho su Ataque cuando el rival le baja las características."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	deltastream: {
 		name: "Ráfaga Delta",
-		desc: "Altera el clima para anular las vulnerabilidades del tipo Volador.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Altera el clima para anular las vulnerabilidades del tipo Volador."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	desolateland: {
 		name: "Tierra del Ocaso",
-		desc: "Altera el clima para anular los ataques de tipo Agua.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Altera el clima para anular los ataques de tipo Agua."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	disguise: {
 		name: "Disfraz",
-		desc: "Puede eludir un ataque valiéndose de la tela que le cubre el cuerpo una vez por combate.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede eludir un ataque valiéndose de la tela que le cubre el cuerpo una vez por combate."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		block: "  ¡El disfraz ha actuado como señuelo!",
-		transform: "¡El disfraz de [POKEMON] se ha roto!",
+		transform: "¡El disfraz de {POKEMON} se ha roto!",
 	},
 	download: {
 		name: "Descarga",
-		desc: "Compara la Defensa y la Defensa Especial del rival para ver cuál es inferior y aumenta su propio Ataque o Ataque Especial según sea lo más eficaz.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Compara la Defensa y la Defensa Especial del rival para ver cuál es inferior y aumenta su propio Ataque o Ataque Especial según sea lo más eficaz."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonize: {
 		name: "Piel Dragontina",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dragonsmaw: {
 		name: "Mandíbula Dragón",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	drizzle: {
 		name: "Llovizna",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	drought: {
 		name: "Sequía",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	dryskin: {
 		name: "Piel Seca",
-		desc: "Pierde PS si hace sol y los recupera si llueve o recibe un movimiento de tipo Agua. Los movimientos de tipo Fuego, por su parte, le hacen más daño de lo normal.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Pierde PS si hace sol y los recupera si llueve o recibe un movimiento de tipo Agua. Los movimientos de tipo Fuego, por su parte, le hacen más daño de lo normal."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		damage: "  (¡[POKEMON] ha resultado herido!)",
+		damage: "#aftermath",
 	},
 	earlybird: {
 		name: "Madrugar",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	eartheater: {
 		name: "Geofagia",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	eelevate: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Impulso Anguila",
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	effectspore: {
 		name: "Efecto Espora",
-		desc: "Puede dormir, envenenar o paralizar al Pokémon con el que entre en contacto al recibir un ataque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede dormir, envenenar o paralizar al Pokémon con el que entre en contacto al recibir un ataque."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	electricsurge: {
 		name: "Electrogénesis",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	electromorphosis: {
 		name: "Dinamo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] se ha cargado de electricidad gracias a [MOVE]!",
+		start: "  ¡{POKEMON} se ha cargado de electricidad gracias a {MOVE}!",
 	},
 	embodyaspectcornerstone: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Evocarrecuerdos (Cimiento)", // PS-style disambiguator (not part of the official name)
+		shortDesc: null, // NEEDS TRANSLATION
 
-		boost: "  ¡[POKEMON] ha hecho brillar la Máscara Cimiento y ha aumentado su Defensa!",
+		boost: "  ¡{POKEMON} ha hecho brillar la Máscara Cimiento y ha aumentado su Defensa!",
 	},
 	embodyaspecthearthflame: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Evocarrecuerdos (Horno)", // PS-style disambiguator (not part of the official name)
+		shortDesc: null, // NEEDS TRANSLATION
 
-		boost: "  ¡[POKEMON] ha hecho brillar la Máscara Horno y ha aumentado su Ataque!",
+		boost: "  ¡{POKEMON} ha hecho brillar la Máscara Horno y ha aumentado su Ataque!",
 	},
 	embodyaspectteal: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Evocarrecuerdos (Turquesa)", // PS-style disambiguator (not part of the official name)
+		shortDesc: null, // NEEDS TRANSLATION
 
-		boost: "  ¡[POKEMON] ha hecho brillar la Máscara Turquesa y ha aumentado su Velocidad!",
+		boost: "  ¡{POKEMON} ha hecho brillar la Máscara Turquesa y ha aumentado su Velocidad!",
 	},
 	embodyaspectwellspring: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Evocarrecuerdos (Fuente)", // PS-style disambiguator (not part of the official name)
+		shortDesc: null, // NEEDS TRANSLATION
 
-		boost: "  ¡[POKEMON] ha hecho brillar la Máscara Fuente y ha aumentado su Defensa Especial!",
+		boost: "  ¡{POKEMON} ha hecho brillar la Máscara Fuente y ha aumentado su Defensa Especial!",
 	},
 	emergencyexit: {
 		name: "Retirada",
-		desc: "Abandona el terreno de combate cuando sus PS se ven reducidos a la mitad para evitar males mayores.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Abandona el terreno de combate cuando sus PS se ven reducidos a la mitad para evitar males mayores."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	fairyaura: {
 		name: "Aura Feérica",
-		desc: "Aumenta la potencia de todos los movimientos de tipo Hada.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la potencia de todos los movimientos de tipo Hada."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] irradia un aura feérica!",
+		start: "  ¡{POKEMON} irradia un aura feérica!",
 	},
 	filter: {
 		name: "Filtro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	firemane: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: "Crin de Fuego",
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flamebody: {
 		name: "Cuerpo Llama",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	flareboost: {
 		name: "Ímpetu Ardiente",
-		desc: "Aumenta la potencia de sus ataques especiales cuando sufre quemaduras.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la potencia de sus ataques especiales cuando sufre quemaduras."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	flashfire: {
 		name: "Absorbe Fuego",
-		desc: "Si le alcanza algún movimiento de tipo Fuego, potencia sus propios movimientos de dicho tipo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza algún movimiento de tipo Fuego, potencia sus propios movimientos de dicho tipo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		start: "  ¡La potencia de los movimientos de tipo Fuego de [POKEMON] ha aumentado!",
+		start: "  ¡La potencia de los movimientos de tipo Fuego de {POKEMON} ha aumentado!",
 	},
 	flowergift: {
 		name: "Don Floral",
-		desc: "Si hace sol, aumenta su Ataque y su Defensa Especial, así como los de sus aliados.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si hace sol, aumenta su Ataque y su Defensa Especial, así como los de sus aliados."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	flowerveil: {
 		name: "Velo Flor",
-		desc: "Evita que los Pokémon de tipo Planta aliados sufran problemas de estado o que les bajen sus características.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Evita que los Pokémon de tipo Planta aliados sufran problemas de estado o que les bajen sus características."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡Velo Flor ha protegido a [POKEMON]!",
+		block: "  ¡Velo Flor ha protegido a {POKEMON}!",
 	},
 	fluffy: {
 		name: "Peluche",
-		desc: "Reduce a la mitad el daño provocado por los movimientos de contacto, pero duplica el infligido por los de tipo Fuego.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Reduce a la mitad el daño provocado por los movimientos de contacto, pero duplica el infligido por los de tipo Fuego."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	forecast: {
 		name: "Predicción",
-		desc: "Cambia a tipo Agua, Fuego o Hielo en función del tiempo atmosférico.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cambia a tipo Agua, Fuego o Hielo en función del tiempo atmosférico."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	forewarn: {
 		name: "Alerta",
-		desc: "Indica el movimiento más potente del rival al entrar en combate.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Indica el movimiento más potente del rival al entrar en combate."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡Se ha detectado el movimiento [MOVE] de [TARGET]!",
-		activateNoTarget: "  ¡Alerta de [POKEMON] detectó [MOVE]!",
+		activate: "  ¡Se ha detectado el movimiento {MOVE} de {TARGET}!",
+		activateNoTarget: "  ¡Alerta de {POKEMON} detectó {MOVE}!",
 	},
 	friendguard: {
 		name: "Compiescolta",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	frisk: {
 		name: "Cacheo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡[POKEMON] ha cacheado a [TARGET] y ha hallado [ITEM:indefinite:classified]!",
-		activateNoTarget: "  ¡[POKEMON] ha cacheado a su rival y ha encontrado [ITEM]!",
+		activate: "  ¡{POKEMON} ha cacheado a {TARGET} y ha hallado {ITEM:indefinite:classified}!",
+		activateNoTarget: "  ¡{POKEMON} ha cacheado a su rival y ha encontrado {ITEM}!",
 	},
 	fullmetalbody: {
 		name: "Guardia Metálica",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	furcoat: {
 		name: "Pelaje Recio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	galewings: {
 		name: "Alas Vendaval",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	galvanize: {
 		name: "Piel Eléctrica",
-		desc: "Convierte los movimientos de tipo Normal en tipo Eléctrico y aumenta ligeramente su potencia.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Eléctrico y aumenta ligeramente su potencia."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gluttony: {
 		name: "Gula",
-		desc: "Cuando sus PS se ven reducidos a la mitad, engulle la baya que normalmente solo se comería cuando le quedasen pocos PS.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cuando sus PS se ven reducidos a la mitad, engulle la baya que normalmente solo se comería cuando le quedasen pocos PS."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	goodasgold: {
 		name: "Cuerpo Áureo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gooey: {
 		name: "Baba",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gorillatactics: {
 		name: "Monotema",
-		desc: "Potencia su Ataque, pero solo puede usar el primer movimiento escogido.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia su Ataque, pero solo puede usar el primer movimiento escogido."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grasspelt: {
 		name: "Manto Frondoso",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grassysurge: {
 		name: "Herbogénesis",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	grimneigh: {
 		name: "Relincho Negro",
-		desc: "Al derrotar a un objetivo, emite un relincho aterrador y aumenta su Ataque Especial.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al derrotar a un objetivo, emite un relincho aterrador y aumenta su Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	guarddog: {
 		name: "Perro Guardián",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	gulpmissile: {
 		name: "Tragamisil",
-		desc: "Tras usar Surf o Buceo, emerge con una presa en la boca. Al recibir daño, ataca escupiéndola al rival.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Tras usar Surf o Buceo, emerge con una presa en la boca. Al recibir daño, ataca escupiéndola al rival."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	guts: {
 		name: "Agallas",
-		desc: "Si sufre un problema de estado, se viene arriba y aumenta su Ataque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si sufre un problema de estado, se viene arriba y aumenta su Ataque."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hadronengine: {
 		name: "Motor Hadrónico",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] crea un campo eléctrico que impulsa su motor futurista!",
-		activate: "  ¡El campo eléctrico impulsa el motor futurista de [POKEMON]!",
+		start: "  ¡{POKEMON} crea un campo eléctrico que impulsa su motor futurista!",
+		activate: "  ¡El campo eléctrico impulsa el motor futurista de {POKEMON}!",
 	},
 	harvest: {
 		name: "Cosecha",
-		desc: "Puede reutilizar varias veces una misma baya.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede reutilizar varias veces una misma baya."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		addItem: "  ¡[POKEMON] ha recogido [ITEM:indefinite]!",
+		addItem: "  ¡{POKEMON} ha recogido {ITEM:indefinite}!",
 	},
 	healer: {
 		name: "Alma Cura",
-		desc: "A veces cura los problemas de estado de un aliado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "A veces cura los problemas de estado de un aliado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	heatproof: {
 		name: "Ignífugo",
-		desc: "Su cuerpo, resistente al calor, reduce a la mitad el daño recibido por movimientos de tipo Fuego.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Su cuerpo, resistente al calor, reduce a la mitad el daño recibido por movimientos de tipo Fuego."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	heavymetal: {
 		name: "Metal Pesado",
-		desc: "Duplica su peso.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Duplica su peso."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	honeygather: {
 		name: "Recogemiel",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hospitality: {
 		name: "Hospitalidad",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		heal: "  ¡[POKEMON] se ha bebido el té que ha preparado [SOURCE]!",
+		heal: "  ¡{POKEMON} se ha bebido el té que ha preparado {SOURCE}!",
 	},
 	hugepower: {
 		name: "Potencia",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hungerswitch: {
 		name: "Mutapetito",
-		desc: "Alterna entre su Forma Saciada y Forma Voraz al final de cada turno.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Alterna entre su Forma Saciada y Forma Voraz al final de cada turno."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hustle: {
 		name: "Entusiasmo",
-		desc: "Aumenta su Ataque, pero reduce su Precisión.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta su Ataque, pero reduce su Precisión."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	hydration: {
 		name: "Hidratación",
-		desc: "Cura los problemas de estado si está lloviendo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cura los problemas de estado si está lloviendo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	hypercutter: {
 		name: "Corte Fuerte",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	icebody: {
 		name: "Gélido",
-		desc: "Recupera PS de forma gradual cuando hay tormentas de granizo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Recupera PS de forma gradual cuando hay tormentas de granizo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	iceface: {
 		name: "Cara de Hielo",
-		desc: "Absorbe el daño de un ataque físico con el hielo de la cabeza, tras lo cual cambia de forma. El hielo se regenerará la próxima vez que granice.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Absorbe el daño de un ataque físico con el hielo de la cabeza, tras lo cual cambia de forma. El hielo se regenerará la próxima vez que granice."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	icescales: {
 		name: "Escama de Hielo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	illuminate: {
 		name: "Iluminación",
-		desc: "Aumenta la probabilidad de encontrar Pokémon al iluminar el entorno.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la probabilidad de encontrar Pokémon al iluminar el entorno."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	illusion: {
 		name: "Ilusión",
-		desc: "Adopta el aspecto del último Pokémon del equipo al entrar en combate para desconcertar al rival.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Adopta el aspecto del último Pokémon del equipo al entrar en combate para desconcertar al rival."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		end: "  ¡La ilusión de [POKEMON] se ha desvanecido!",
+		end: "  ¡La ilusión de {POKEMON} se ha desvanecido!",
 	},
 	immunity: {
 		name: "Inmunidad",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	imposter: {
 		name: "Impostor",
-		desc: "Se transforma en el Pokémon que tiene enfrente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Se transforma en el Pokémon que tiene enfrente."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	infiltrator: {
 		name: "Allanamiento",
-		desc: "Ataca sorteando la barrera o el sustituto del rival.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Ataca sorteando la barrera o el sustituto del rival."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	innardsout: {
 		name: "Revés",
-		desc: "Al caer debilitado, inflige al rival un daño equivalente a los PS que le quedaran.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al caer debilitado, inflige al rival un daño equivalente a los PS que le quedaran."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		damage: "#aftermath",
 	},
 	innerfocus: {
 		name: "Fuerza Mental",
-		desc: "Gracias a su profunda concentración, no se amedrenta ante los ataques del rival.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Gracias a su profunda concentración, no se amedrenta ante los ataques del rival."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	insomnia: {
 		name: "Insomnio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	intimidate: {
 		name: "Intimidación",
-		desc: "Al entrar en combate amilana al rival de tal manera que su Ataque disminuye.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al entrar en combate amilana al rival de tal manera que su Ataque disminuye."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	intrepidsword: {
 		name: "Espada Indómita",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	ironbarbs: {
 		name: "Punta Acero",
-		desc: "Inflige daño al rival si este le golpea con un movimiento de contacto.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Inflige daño al rival si este le golpea con un movimiento de contacto."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		damage: "#roughskin",
 	},
 	ironfist: {
 		name: "Puño Férreo",
-		desc: "Aumenta la potencia de los puñetazos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la potencia de los puñetazos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	justified: {
 		name: "Justiciero",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	keeneye: {
 		name: "Vista Lince",
-		desc: "Su aguda vista evita que le disminuya la Precisión.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Su aguda vista evita que le disminuya la Precisión."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	klutz: {
 		name: "Zoquete",
-		desc: "No puede usar objetos equipados.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "No puede usar objetos equipados."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	leafguard: {
 		name: "Defensa Hoja",
-		desc: "Evita los problemas de estado si hace sol.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Evita los problemas de estado si hace sol."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	levitate: {
 		name: "Levitación",
-		desc: "Su capacidad de flotar sobre el suelo le proporciona inmunidad frente a los movimientos de tipo Tierra.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Su capacidad de flotar sobre el suelo le proporciona inmunidad frente a los movimientos de tipo Tierra."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	libero: {
 		name: "Líbero",
-		desc: "Cambia su tipo al del movimiento que va a usar.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cambia su tipo al del movimiento que va a usar."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	lightmetal: {
 		name: "Metal Liviano",
-		desc: "Reduce a la mitad su peso.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Reduce a la mitad su peso."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lightningrod: {
 		name: "Pararrayos",
-		desc: "Atrae y neutraliza los movimientos de tipo Eléctrico, que además le suben el Ataque Especial.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Atrae y neutraliza los movimientos de tipo Eléctrico, que además le suben el Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡[POKEMON] ha atraído el ataque!",
+		activate: "  ¡{POKEMON} ha atraído el ataque!",
 	},
 	limber: {
 		name: "Flexibilidad",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	lingeringaroma: {
 		name: "Olor Persistente",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		changeAbility: "  ¡Un olor persistente impregna a [TARGET]!",
+		changeAbility: "  ¡Un olor persistente impregna a {TARGET}!",
 	},
 	liquidooze: {
 		name: "Lodo Líquido",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		damage: "  ¡[POKEMON] ha absorbido la secreción viscosa tóxica!",
+		damage: "  ¡{POKEMON} ha absorbido la secreción viscosa tóxica!",
 	},
 	liquidvoice: {
 		name: "Voz Fluida",
-		desc: "Hace que todos sus movimientos que usan sonido pasen a ser de tipo Agua.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Hace que todos sus movimientos que usan sonido pasen a ser de tipo Agua."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	longreach: {
 		name: "Remoto",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magicbounce: {
 		name: "Espejo Mágico",
-		desc: "Puede devolver los movimientos de estado lanzados por el rival, sin verse afectado por ellos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede devolver los movimientos de estado lanzados por el rival, sin verse afectado por ellos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		move: "#magiccoat",
 	},
 	magicguard: {
 		name: "Muro Mágico",
-		desc: "Solo recibe daño de ataques.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Solo recibe daño de ataques."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	magician: {
 		name: "Prestidigitador",
-		desc: "Roba el objeto del Pokémon al que alcance con un movimiento.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Roba el objeto del Pokémon al que alcance con un movimiento."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magmaarmor: {
 		name: "Escudo Magma",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	magnetpull: {
 		name: "Imán",
-		desc: "Su magnetismo atrae a los Pokémon de tipo Acero y les impide huir.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Su magnetismo atrae a los Pokémon de tipo Acero y les impide huir."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	marvelscale: {
 		name: "Escama Especial",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	megalauncher: {
 		name: "Megadisparador",
-		desc: "Aumenta la potencia de algunos movimientos de pulsos y auras.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la potencia de algunos movimientos de pulsos y auras."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	megasol: {
 		name: "Megasolar",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	merciless: {
 		name: "Ensañamiento",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mimicry: {
 		name: "Mimetismo",
-		desc: "Cambia su tipo según el campo que haya en el terreno de combate.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cambia su tipo según el campo que haya en el terreno de combate."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ha recobrado su tipo original!",
+		activate: "  ¡{POKEMON} ha recobrado su tipo original!",
 	},
 	mindseye: {
 		name: "Ojo Mental",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	minus: {
 		name: "Menos",
-		desc: "Potencia su Ataque Especial si un Pokémon aliado tiene la habilidad Más o Menos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia su Ataque Especial si un Pokémon aliado tiene la habilidad Más o Menos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	mirrorarmor: {
 		name: "Coraza Reflejo",
-		desc: "Refleja los efectos que reducen las características.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Refleja los efectos que reducen las características."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	mistysurge: {
 		name: "Nebulogénesis",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	moldbreaker: {
 		name: "Rompemoldes",
-		desc: "Las habilidades del objetivo no afectan a los movimientos que emplea.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Las habilidades del objetivo no afectan a los movimientos que emplea."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		start: "  ¡[POKEMON] rompe el molde!",
+		start: "  ¡{POKEMON} rompe el molde!",
 	},
 	moody: {
 		name: "Veleta",
-		desc: "Una característica le sube mucho en cada turno, pero le baja otra.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Una característica le sube mucho en cada turno, pero le baja otra."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	motordrive: {
 		name: "Electromotor",
-		desc: "Si le alcanza un movimiento de tipo Eléctrico, le sube la Velocidad en vez de sufrir daño.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza un movimiento de tipo Eléctrico, le sube la Velocidad en vez de sufrir daño."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	moxie: {
 		name: "Autoestima",
-		desc: "Al debilitar a un objetivo, su confianza se refuerza de tal manera que aumenta su Ataque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al debilitar a un objetivo, su confianza se refuerza de tal manera que aumenta su Ataque."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	multiscale: {
 		name: "Multiescamas",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	multitype: {
 		name: "Multitipo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	mummy: {
 		name: "Momia",
-		desc: "Contagia la habilidad Momia al rival que entre en contacto con él.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Contagia la habilidad Momia al rival que entre en contacto con él."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		changeAbility: "  ¡La habilidad de [TARGET] es ahora Momia!",
+		changeAbility: "  ¡La habilidad de {TARGET} es ahora Momia!",
 	},
 	myceliummight: {
 		name: "Poder Fúngico",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	naturalcure: {
 		name: "Cura Natural",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
 	},
 	neuroforce: {
 		name: "Fuerza Cerebral",
-		desc: "Potencia los ataques supereficaces.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia los ataques supereficaces."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	neutralizinggas: {
 		name: "Gas Reactivo",
-		desc: "Anula los efectos de las habilidades de los demás Pokémon presentes mientras esté en el terreno de combate.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Anula los efectos de las habilidades de los demás Pokémon presentes mientras esté en el terreno de combate."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		start: "  ¡Un gas reactivo se propaga por toda la zona!",
@@ -1146,667 +1244,717 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	noguard: {
 		name: "Indefenso",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	normalize: {
 		name: "Normalidad",
-		desc: "Hace que todos sus movimientos se vuelvan de tipo Normal y aumenten ligeramente su potencia.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Hace que todos sus movimientos se vuelvan de tipo Normal y aumenten ligeramente su potencia."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	oblivious: {
 		name: "Despiste",
-		desc: "Su indiferencia evita que sea provocado o caiga presa del enamoramiento.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Su indiferencia evita que sea provocado o caiga presa del enamoramiento."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	opportunist: {
 		name: "Oportunista",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	orichalcumpulse: {
 		name: "Latido Oricalco",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] intensifica el brillo del sol y desata su pulso primigenio!",
-		activate: "  ¡[POKEMON] recibe los rayos del sol y desata su pulso primigenio!",
+		start: "  ¡{POKEMON} intensifica el brillo del sol y desata su pulso primigenio!",
+		activate: "  ¡{POKEMON} recibe los rayos del sol y desata su pulso primigenio!",
 	},
 	overcoat: {
 		name: "Funda",
-		desc: "No le afectan las tormentas de arena, el granizo y los movimientos con polvos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "No le afectan las tormentas de arena, el granizo y los movimientos con polvos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	overgrow: {
 		name: "Espesura",
-		desc: "Potencia sus movimientos de tipo Planta cuando le quedan pocos PS.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia sus movimientos de tipo Planta cuando le quedan pocos PS."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	owntempo: {
 		name: "Ritmo Propio",
-		desc: "Como le gusta hacer las cosas a su manera, los rivales no logran confundirlo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Como le gusta hacer las cosas a su manera, los rivales no logran confundirlo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	parentalbond: {
 		name: "Amor Filial",
-		desc: "Une fuerzas con su cría y ataca dos veces.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Une fuerzas con su cría y ataca dos veces."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	pastelveil: {
 		name: "Velo Pastel",
-		desc: "Se protege a sí mismo y a sus aliados del envenenamiento.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Se protege a sí mismo y a sus aliados del envenenamiento."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	perishbody: {
 		name: "Cuerpo Mortal",
-		desc: "Si le alcanza un movimiento de contacto, se debilitará al cabo de 3 turnos, así como su agresor, a menos que abandonen el terreno de combate.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza un movimiento de contacto, se debilitará al cabo de 3 turnos, así como su agresor, a menos que abandonen el terreno de combate."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "  ¡Ambos Pokémon se debilitarán dentro de tres turnos!",
 	},
 	pickpocket: {
 		name: "Hurto",
-		desc: "Si el rival usa un movimiento de contacto al atacar, le roba el objeto.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si el rival usa un movimiento de contacto al atacar, le roba el objeto."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pickup: {
 		name: "Recogida",
-		desc: "Puede recoger objetos que el rival haya usado, o bien otros que encuentre en plena aventura.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede recoger objetos que el rival haya usado, o bien otros que encuentre en plena aventura."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		addItem: "#recycle",
 	},
 	piercingdrill: {
 		name: "Turbotaladro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	pixilate: {
 		name: "Piel Feérica",
-		desc: "Convierte los movimientos de tipo Normal en tipo Hada y aumenta ligeramente su potencia.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Hada y aumenta ligeramente su potencia."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	plus: {
 		name: "Más",
-		desc: "Potencia su Ataque Especial si un Pokémon aliado tiene la habilidad Más o Menos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia su Ataque Especial si un Pokémon aliado tiene la habilidad Más o Menos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	poisonheal: {
 		name: "Antídoto",
-		desc: "Si resulta envenenado, recupera PS en vez de perderlos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si resulta envenenado, recupera PS en vez de perderlos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poisonpoint: {
 		name: "Punto Tóxico",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	poisonpuppeteer: {
 		name: "Títere Tóxico",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	poisontouch: {
 		name: "Toque Tóxico",
-		desc: "Puede envenenar al objetivo con solo tocarlo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede envenenar al objetivo con solo tocarlo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	powerconstruct: {
 		name: "Agrupamiento",
-		desc: "Cuando sus PS se ven reducidos a la mitad, las células se reagrupan y adopta su Forma Completa.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cuando sus PS se ven reducidos a la mitad, las células se reagrupan y adopta su Forma Completa."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		activate: "  Sientes múltiples presencias...",
-		transform: "¡[POKEMON] ha adoptado la Forma Completa!",
+		transform: "¡{POKEMON} ha adoptado la Forma Completa!",
 	},
 	powerofalchemy: {
 		name: "Reacción Química",
-		desc: "Reacciona copiando la habilidad de un aliado debilitado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Reacciona copiando la habilidad de un aliado debilitado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		changeAbility: "#receiver",
 	},
 	powerspot: {
 		name: "Fuente Energía",
-		desc: "Potencia los movimientos de los Pokémon adyacentes.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia los movimientos de los Pokémon adyacentes."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	prankster: {
 		name: "Bromista",
-		desc: "Sus movimientos de estado tienen prioridad alta.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Sus movimientos de estado tienen prioridad alta."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	pressure: {
 		name: "Presión",
-		desc: "Presiona al rival para que sus PP se acaben antes.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Presiona al rival para que sus PP se acaben antes."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		start: "  ¡[POKEMON] ejerce presión!",
+		start: "  ¡{POKEMON} ejerce presión!",
 	},
 	primordialsea: {
 		name: "Mar del Albor",
-		desc: "Altera el clima para anular los ataques de tipo Fuego.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Altera el clima para anular los ataques de tipo Fuego."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	prismarmor: {
 		name: "Armadura Prisma",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	propellertail: {
 		name: "Hélice Caudal",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	protean: {
 		name: "Mutatipo",
-		desc: "Cambia su tipo al del movimiento que va a usar.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cambia su tipo al del movimiento que va a usar."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	protosynthesis: {
 		name: "Paleosíntesis",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡La habilidad Paleosíntesis de [POKEMON] se ha activado gracial al sol!",
-		activateFromItem: "  ¡[POKEMON] ha usado la Energía Potenciadora para activar Paleosíntesis!",
-		start: "  ¡[STAT:definite:capitalize] de [POKEMON] se ha reforzado!",
-		end: "  ¡El efecto de Paleosíntesis de [POKEMON] ha desaparecido!",
+		activate: "  ¡La habilidad Paleosíntesis de {POKEMON} se ha activado gracial al sol!",
+		activateFromItem: "  ¡{POKEMON} ha usado la Energía Potenciadora para activar Paleosíntesis!",
+		start: "  ¡{STAT:definite:capitalize} de {POKEMON} se ha reforzado!",
+		end: "  ¡El efecto de Paleosíntesis de {POKEMON} ha desaparecido!",
 	},
 	psychicsurge: {
 		name: "Psicogénesis",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	punkrock: {
 		name: "Punk Rock",
-		desc: "Potencia los movimientos que usan sonido y reduce a la mitad el daño que le infligen dichos movimientos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia los movimientos que usan sonido y reduce a la mitad el daño que le infligen dichos movimientos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	purepower: {
 		name: "Energía Pura",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	purifyingsalt: {
 		name: "Sal Purificadora",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	quarkdrive: {
 		name: "Carga Cuark",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡La habilidad Carga Cuark de [POKEMON] se ha activado gracias al campo eléctrico!",
-		activateFromItem: "  ¡[POKEMON] ha usado la Energía Potenciadora para activar Carga Cuark!",
-		start: "  ¡[STAT:definite:capitalize] de [POKEMON] se ha reforzado!",
-		end: "  ¡El efecto de Carga Cuark de [POKEMON] ha desaparecido!",
+		activate: "  ¡La habilidad Carga Cuark de {POKEMON} se ha activado gracias al campo eléctrico!",
+		activateFromItem: "  ¡{POKEMON} ha usado la Energía Potenciadora para activar Carga Cuark!",
+		start: "  ¡{STAT:definite:capitalize} de {POKEMON} se ha reforzado!",
+		end: "  ¡El efecto de Carga Cuark de {POKEMON} ha desaparecido!",
 	},
 	queenlymajesty: {
 		name: "Regia Presencia",
-		desc: "Intimida al objetivo y le impide usar movimientos con prioridad.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Intimida al objetivo y le impide usar movimientos con prioridad."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		block: "#damp",
 	},
 	quickdraw: {
 		name: "Mano Rápida",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ataca primero gracias a la habilidad Mano Rápida!",
+		activate: "  ¡{POKEMON} ataca primero gracias a la habilidad Mano Rápida!",
 	},
 	quickfeet: {
 		name: "Pies Rápidos",
-		desc: "Aumenta la Velocidad si sufre problemas de estado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la Velocidad si sufre problemas de estado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	raindish: {
 		name: "Cura Lluvia",
-		desc: "Recupera PS de forma gradual cuando llueve.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Recupera PS de forma gradual cuando llueve."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	rattled: {
 		name: "Cobardía",
-		desc: "Si le alcanza un movimiento de tipo Siniestro, Bicho o Fantasma, el miedo hace que le suba la Velocidad.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza un movimiento de tipo Siniestro, Bicho o Fantasma, el miedo hace que le suba la Velocidad."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	receiver: {
 		name: "Receptor",
-		desc: "Adquiere la habilidad de un aliado debilitado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Adquiere la habilidad de un aliado debilitado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		changeAbility: "  ¡El Pokémon ha recibido la habilidad [ABILITY] de [SOURCE]!",
+		changeAbility: "  ¡El Pokémon ha recibido la habilidad {ABILITY} de {SOURCE}!",
 	},
 	reckless: {
 		name: "Audaz",
-		desc: "Potencia los movimientos que también dañan al usuario.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia los movimientos que también dañan al usuario."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	refrigerate: {
 		name: "Piel Helada",
-		desc: "Convierte los movimientos de tipo Normal en tipo Hielo y aumenta ligeramente su potencia.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Hielo y aumenta ligeramente su potencia."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	regenerator: {
 		name: "Regeneración",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	ripen: {
 		name: "Maduración",
-		desc: "Hace madurar las bayas, por lo que duplica sus efectos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Hace madurar las bayas, por lo que duplica sus efectos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rivalry: {
 		name: "Rivalidad",
-		desc: "Si el objetivo es del mismo sexo, su competitividad le lleva a infligir más daño. Si es del sexo contrario, en cambio, el daño será menor.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si el objetivo es del mismo sexo, su competitividad le lleva a infligir más daño. Si es del sexo contrario, en cambio, el daño será menor."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rkssystem: {
 		name: "Sistema Alfa",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rockhead: {
 		name: "Cabeza Roca",
-		desc: "No puede dañarse con sus propios movimientos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "No puede dañarse con sus propios movimientos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	rockypayload: {
 		name: "Transportarrocas",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	roughskin: {
 		name: "Piel Tosca",
-		desc: "Hiere con su piel áspera al rival que lo ataque con un movimiento de contacto.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Hiere con su piel áspera al rival que lo ataque con un movimiento de contacto."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		damage: "  ¡[POKEMON] ha resultado herido!",
+		damage: "  ¡{POKEMON} ha resultado herido!",
 	},
 	runaway: {
 		name: "Fuga",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sandforce: {
 		name: "Poder Arena",
-		desc: "Potencia los movimientos de tipo Tierra, Acero y Roca durante las tormentas de arena.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia los movimientos de tipo Tierra, Acero y Roca durante las tormentas de arena."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sandrush: {
 		name: "Ímpetu Arena",
-		desc: "Aumenta su Velocidad durante las tormentas de arena.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta su Velocidad durante las tormentas de arena."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sandspit: {
 		name: "Expulsarena",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	sandstream: {
 		name: "Chorro Arena",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sandveil: {
 		name: "Velo Arena",
-		desc: "Aumenta su Evasión durante las tormentas de arena.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta su Evasión durante las tormentas de arena."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sapsipper: {
 		name: "Herbívoro",
-		desc: "Neutraliza los movimientos de tipo Planta y sube su Ataque.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Neutraliza los movimientos de tipo Planta y sube su Ataque."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	schooling: {
 		name: "Banco",
-		desc: "Forma bancos con sus congéneres cuando tiene muchos PS, lo cual le otorga más fuerza. Cuando le quedan pocos PS, el banco se dispersa.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Forma bancos con sus congéneres cuando tiene muchos PS, lo cual le otorga más fuerza. Cuando le quedan pocos PS, el banco se dispersa."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		transform: "¡[POKEMON] ha formado un banco!",
-		transformEnd: "¡El banco de [POKEMON] se ha dispersado!",
+		transform: "¡{POKEMON} ha formado un banco!",
+		transformEnd: "¡El banco de {POKEMON} se ha dispersado!",
 	},
 	scrappy: {
 		name: "Intrépido",
-		desc: "Puede alcanzar a Pokémon de tipo Fantasma con movimientos de tipo Normal o Lucha.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede alcanzar a Pokémon de tipo Fantasma con movimientos de tipo Normal o Lucha."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	screencleaner: {
 		name: "Antibarrera",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	seedsower: {
 		name: "Disemillar",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	serenegrace: {
 		name: "Dicha",
-		desc: "Aumenta la probabilidad de que los movimientos causen efectos secundarios.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la probabilidad de que los movimientos causen efectos secundarios."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	shadowshield: {
 		name: "Guardia Espectro",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shadowtag: {
 		name: "Sombra Trampa",
-		desc: "Impide que el enemigo huya o sea cambiado por otro.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Impide que el enemigo huya o sea cambiado por otro."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	sharpness: {
 		name: "Cortante",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shedskin: {
 		name: "Mudar",
-		desc: "Puede curar sus problemas de estado al mudar la piel.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede curar sus problemas de estado al mudar la piel."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sheerforce: {
 		name: "Potencia Bruta",
-		desc: "Sube la potencia de sus movimientos en detrimento de los efectos secundarios, que se ven anulados.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Sube la potencia de sus movimientos en detrimento de los efectos secundarios, que se ven anulados."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	shellarmor: {
 		name: "Caparazón",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	shielddust: {
 		name: "Polvo Escudo",
-		desc: "El polvo de escamas que lo envuelve lo protege de los efectos secundarios de los ataques recibidos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "El polvo de escamas que lo envuelve lo protege de los efectos secundarios de los ataques recibidos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	shieldsdown: {
 		name: "Escudo Limitado",
-		desc: "Rompe su coraza cuando sus PS se ven reducidos a la mitad y adopta una forma ofensiva.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Rompe su coraza cuando sus PS se ven reducidos a la mitad y adopta una forma ofensiva."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		transform: "¡Escudo Limitado activado!",
 		transformEnd: "Escudo Limitado desactivado.",
 	},
 	simple: {
 		name: "Simple",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	skilllink: {
 		name: "Encadenado",
-		desc: "Ejecuta siempre los movimientos múltiples con el número máximo de golpes.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Ejecuta siempre los movimientos múltiples con el número máximo de golpes."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	slowstart: {
 		name: "Inicio Lento",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		start: "  ¡[POKEMON] no rinde todo lo que podría!",
-		end: "  ¡[POKEMON] ahora va a a por todas!",
+		start: "  ¡{POKEMON} no rinde todo lo que podría!",
+		end: "  ¡{POKEMON} ahora va a a por todas!",
 	},
 	slushrush: {
 		name: "Quitanieves",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	sniper: {
 		name: "Francotirador",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	snowcloak: {
 		name: "Manto Níveo",
-		desc: "Sube la Evasión cuando graniza.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Sube la Evasión cuando graniza."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	snowwarning: {
 		name: "Nevada",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	solarpower: {
 		name: "Poder Solar",
-		desc: "Si hace sol, aumenta su Ataque Especial, pero pierde PS en cada turno.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si hace sol, aumenta su Ataque Especial, pero pierde PS en cada turno."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	solidrock: {
 		name: "Roca Sólida",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	soulheart: {
 		name: "Coránima",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	soundproof: {
 		name: "Insonorizar",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	speedboost: {
 		name: "Impulso",
-		desc: "Aumenta su Velocidad en cada turno.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta su Velocidad en cada turno."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	spicyspray: {
 		name: "Salpicante",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stakeout: {
 		name: "Vigilante",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stall: {
 		name: "Rezagado",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stalwart: {
 		name: "Acérrimo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stamina: {
 		name: "Firmeza",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stancechange: {
 		name: "Cambio Táctico",
-		desc: "Adopta la Forma Filo al lanzar un ataque, o bien la Forma Escudo si usa el movimiento Escudo Real.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Adopta la Forma Filo al lanzar un ataque, o bien la Forma Escudo si usa el movimiento Escudo Real."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		transform: "¡Cambio a Forma Filo!",
@@ -1814,475 +1962,505 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	static: {
 		name: "Electricidad Estática",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	steadfast: {
 		name: "Impasible",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steamengine: {
 		name: "Combustible",
-		desc: "Si le alcanza un movimiento de tipo Fuego o Agua, le sube muchísimo la Velocidad.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza un movimiento de tipo Fuego o Agua, le sube muchísimo la Velocidad."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steelworker: {
 		name: "Acero Templado",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	steelyspirit: {
 		name: "Alma Acerada",
-		desc: "Potencia los movimientos de tipo Acero de los aliados.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia los movimientos de tipo Acero de los aliados."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	stench: {
 		name: "Hedor",
-		desc: "Puede amedrentar al rival al atacarlo debido al mal olor que emana.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Puede amedrentar al rival al atacarlo debido al mal olor que emana."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	stickyhold: {
 		name: "Viscosidad",
-		desc: "Los objetos se quedan pegados a su cuerpo, por lo que no pueden robárselos.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Los objetos se quedan pegados a su cuerpo, por lo que no pueden robárselos."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		block: "  ¡Es imposible robarle objetos a [POKEMON]!",
+		block: "  ¡Es imposible robarle objetos a {POKEMON}!",
 	},
 	stormdrain: {
 		name: "Colector",
-		desc: "Atrae y neutraliza los movimientos de tipo Agua, que además le suben el Ataque Especial.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Atrae y neutraliza los movimientos de tipo Agua, que además le suben el Ataque Especial."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "#lightningrod",
 	},
 	strongjaw: {
 		name: "Mandíbula Fuerte",
-		desc: "Su robusta mandíbula le confiere una mordedura potente.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Su robusta mandíbula le confiere una mordedura potente."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	sturdy: {
 		name: "Robustez",
-		desc: "Evita que el rival pueda debilitarlo de un solo golpe cuando tiene los PS al máximo. También evita los movimientos fulminantes.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Evita que el rival pueda debilitarlo de un solo golpe cuando tiene los PS al máximo. También evita los movimientos fulminantes."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡[POKEMON] ha aguantado el golpe!",
+		activate: "  ¡{POKEMON} ha aguantado el golpe!",
 	},
 	suctioncups: {
 		name: "Ventosas",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡[POKEMON] se aferra al suelo gracias a la habilidad Ventosas!",
+		block: "  ¡{POKEMON} se aferra al suelo gracias a la habilidad Ventosas!",
 	},
 	superluck: {
 		name: "Afortunado",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	supersweetsyrup: {
 		name: "Néctar Dulce",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡El néctar de [POKEMON] desprende un aroma dulzón!",
+		start: "  ¡El néctar de {POKEMON} desprende un aroma dulzón!",
 	},
 	supremeoverlord: {
 		name: "General Supremo",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] recibe fuerzas de los aliados caídos!",
+		activate: "  ¡{POKEMON} recibe fuerzas de los aliados caídos!",
 	},
 	surgesurfer: {
 		name: "Cola Surf",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	swarm: {
 		name: "Enjambre",
-		desc: "Potencia sus movimientos de tipo Bicho cuando le quedan pocos PS.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia sus movimientos de tipo Bicho cuando le quedan pocos PS."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	sweetveil: {
 		name: "Velo Dulce",
-		desc: "No cae dormido y evita también que sus aliados se duerman.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "No cae dormido y evita también que sus aliados se duerman."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡[POKEMON] no se ha dormido debido al efecto de Velo Dulce!",
+		block: "  ¡{POKEMON} no se ha dormido debido al efecto de Velo Dulce!",
 	},
 	swiftswim: {
 		name: "Nado Rápido",
-		desc: "Sube su Velocidad cuando llueve.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Sube su Velocidad cuando llueve."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	swordofruin: {
 		name: "Espada Debacle",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] ha mermado la Defensa de los demás Pokémon con Espada Debacle!",
+		start: "  ¡{POKEMON} ha mermado la Defensa de los demás Pokémon con Espada Debacle!",
 	},
 	symbiosis: {
 		name: "Simbiosis",
-		desc: "Pasa su objeto a un aliado que ya haya utilizado el suyo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Pasa su objeto a un aliado que ya haya utilizado el suyo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		activate: "  ¡[POKEMON] le ha dado [ITEM:definite:classified] a [TARGET]!",
+		activate: "  ¡{POKEMON} le ha dado {ITEM:definite:classified} a {TARGET}!",
 	},
 	synchronize: {
 		name: "Sincronía",
-		desc: "Contagia el envenenamiento, las quemaduras o la parálisis al Pokémon que le cause ese estado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Contagia el envenenamiento, las quemaduras o la parálisis al Pokémon que le cause ese estado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 	},
 	tabletsofruin: {
 		name: "Tablilla Debacle",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] ha mermado el Ataque de los demás Pokémon con Tablilla Debacle!",
+		start: "  ¡{POKEMON} ha mermado el Ataque de los demás Pokémon con Tablilla Debacle!",
 	},
 	tangledfeet: {
 		name: "Tumbos",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	tanglinghair: {
 		name: "Rizos Rebeldes",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	technician: {
 		name: "Experto",
-		desc: "Potencia sus movimientos más débiles.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia sus movimientos más débiles."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	telepathy: {
 		name: "Telepatía",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		block: "  ¡[POKEMON] no ha sufrido el ataque de su aliado!",
+		block: "  ¡{POKEMON} no ha sufrido el ataque de su aliado!",
 	},
 	teraformzero: {
 		name: "Teraformación 0",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	terashell: {
 		name: "Teracaparazón",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ha hecho brillar su caparazón y ha alterado su compatibilidad entre tipos!",
+		activate: "  ¡{POKEMON} ha hecho brillar su caparazón y ha alterado su compatibilidad entre tipos!",
 	},
 	terashift: {
 		name: "Teracambio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		transform: "¡[POKEMON] se ha transformado!",
+		transform: "¡{POKEMON} se ha transformado!",
 	},
 	teravolt: {
 		name: "Terravoltaje",
-		desc: "Las habilidades del objetivo no afectan a los movimientos que emplea.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Las habilidades del objetivo no afectan a los movimientos que emplea."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		start: "  ¡[POKEMON] desprende un aura chisporroteante!",
+		start: "  ¡{POKEMON} desprende un aura chisporroteante!",
 	},
 	thermalexchange: {
 		name: "Termoconversión",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	thickfat: {
 		name: "Sebo",
-		desc: "Gracias a la gruesa capa de grasa que lo protege, reduce a la mitad el daño que recibe de ataques de tipo Fuego o Hielo.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Gracias a la gruesa capa de grasa que lo protege, reduce a la mitad el daño que recibe de ataques de tipo Fuego o Hielo."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	tintedlens: {
 		name: "Cromolente",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	torrent: {
 		name: "Torrente",
-		desc: "Potencia sus movimientos de tipo Agua cuando le quedan pocos PS.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Potencia sus movimientos de tipo Agua cuando le quedan pocos PS."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	toughclaws: {
 		name: "Garra Dura",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	toxicboost: {
 		name: "Ímpetu Tóxico",
-		desc: "Aumenta la potencia de sus ataques físicos cuando está envenenado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Aumenta la potencia de sus ataques físicos cuando está envenenado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	toxicchain: {
 		name: "Cadena Tóxica",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	toxicdebris: {
 		name: "Capa Tóxica",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	trace: {
 		name: "Calco",
-		desc: "Al entrar en combate copia la habilidad del rival.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al entrar en combate copia la habilidad del rival."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		changeAbility: "  ¡[POKEMON] rastreó [ABILITY] de [SOURCE]!",
+		changeAbility: "  ¡{POKEMON} rastreó {ABILITY} de {SOURCE}!",
 	},
 	transistor: {
 		name: "Transistor",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	triage: {
 		name: "Primer Auxilio",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	truant: {
 		name: "Ausente",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		cant: "¡[POKEMON] está holgazaneando!",
+		cant: "¡{POKEMON} está holgazaneando!",
 	},
 	turboblaze: {
 		name: "Turbollama",
-		desc: "Las habilidades del objetivo no afectan a los movimientos que emplea.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Las habilidades del objetivo no afectan a los movimientos que emplea."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen5: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen4: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
-		start: "  ¡[POKEMON] desprende un aura llameante!",
+		start: "  ¡{POKEMON} desprende un aura llameante!",
 	},
 	unaware: {
 		name: "Ignorante",
-		desc: "Pasa por alto las mejoras en las características del rival al atacar.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Pasa por alto las mejoras en las características del rival al atacar."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	unburden: {
 		name: "Liviano",
-		desc: "Sube su Velocidad si usa o pierde el objeto que lleva.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Sube su Velocidad si usa o pierde el objeto que lleva."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	unnerve: {
 		name: "Nerviosismo",
-		desc: "Pone nervioso al rival y le impide usar bayas.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Pone nervioso al rival y le impide usar bayas."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[TEAM:capitalize] está muy nervioso y no puede comer bayas!",
+		start: "  ¡{TEAM:capitalize} está muy nervioso y no puede comer bayas!",
 	},
 	unseenfist: {
 		name: "Puño Invisible",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		champions: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
 		},
 	},
 	vesselofruin: {
 		name: "Caldero Debacle",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		start: "  ¡[POKEMON] ha mermado el Ataque Especial de los demás Pokémon con Caldero Debacle!",
+		start: "  ¡{POKEMON} ha mermado el Ataque Especial de los demás Pokémon con Caldero Debacle!",
 	},
 	victorystar: {
 		name: "Tinovictoria",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	vitalspirit: {
 		name: "Espíritu Vital",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	voltabsorb: {
 		name: "Absorbe Electricidad",
-		desc: "Si le alcanza un movimiento de tipo Eléctrico, recupera PS en vez de sufrir daño.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza un movimiento de tipo Eléctrico, recupera PS en vez de sufrir daño."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen3: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	wanderingspirit: {
 		name: "Alma Errante",
-		desc: "Si le alcanza un movimiento de contacto, intercambia su habilidad con la del agresor.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza un movimiento de contacto, intercambia su habilidad con la del agresor."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen8: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		activate: "#skillswap",
 	},
 	waterabsorb: {
 		name: "Absorbe Agua",
-		desc: "Si le alcanza un movimiento de tipo Agua, recupera PS en vez de sufrir daño.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Si le alcanza un movimiento de tipo Agua, recupera PS en vez de sufrir daño."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	waterbubble: {
 		name: "Pompa",
-		desc: "Reduce el daño que le provocan los movimientos de tipo Fuego y es inmune a las quemaduras.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Reduce el daño que le provocan los movimientos de tipo Fuego y es inmune a las quemaduras."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	watercompaction: {
 		name: "Hidrorrefuerzo",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	waterveil: {
 		name: "Velo Agua",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	weakarmor: {
 		name: "Armadura Frágil",
-		desc: "Al recibir daño de un ataque físico, le baja la Defensa, pero le sube mucho la Velocidad.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Al recibir daño de un ataque físico, le baja la Defensa, pero le sube mucho la Velocidad."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	wellbakedbody: {
 		name: "Cuerpo Horneado",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	whitesmoke: {
 		name: "Humo Blanco",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wimpout: {
 		name: "Huida",
-		desc: "Se asusta y abandona el terreno de combate cuando sus PS se ven reducidos a la mitad.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Se asusta y abandona el terreno de combate cuando sus PS se ven reducidos a la mitad."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	windpower: {
 		name: "Energía Eólica",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		start: "#electromorphosis",
 	},
 	windrider: {
 		name: "Surcavientos",
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	wonderguard: {
 		name: "Superguarda",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 		gen4: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 		gen3: {
-			shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: null, // NEEDS TRANSLATION
 		},
 	},
 	wonderskin: {
 		name: "Piel Milagro",
-		desc: "Presenta una mayor resistencia ante los movimientos de estado.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Presenta una mayor resistencia ante los movimientos de estado."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	zenmode: {
 		name: "Modo Daruma",
-		desc: "Cambia de forma si sus PS se ven reducidos a la mitad.",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		// Official flavor text: "Cambia de forma si sus PS se ven reducidos a la mitad."
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 		gen7: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 		gen6: {
-			desc: "", // NEEDS TRANSLATION: not in PokeAPI
+			desc: null, // NEEDS TRANSLATION
 		},
 
 		transform: "¡Modo Daruma activado!",
@@ -2290,28 +2468,28 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	zerotohero: {
 		name: "Cambio Heroico",
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "  ¡[POKEMON] ha vuelto con una transformación heroica!",
+		activate: "  ¡{POKEMON} ha vuelto con una transformación heroica!",
 	},
 
 	// CAP
 	mountaineer: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		shortDesc: null, // NEEDS TRANSLATION
 	},
 	rebound: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
 		move: "#magiccoat",
 	},
 	persistent: {
-		name: "", // NEEDS TRANSLATION: not in PokeAPI
-		desc: "", // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: "", // NEEDS TRANSLATION: not in PokeAPI
+		name: null, // NEEDS TRANSLATION: not in PokeAPI
+		desc: null, // NEEDS TRANSLATION
+		shortDesc: null, // NEEDS TRANSLATION
 
-		activate: "", // NEEDS TRANSLATION: Showdown custom text
+		activate: null, // NEEDS TRANSLATION
 	},
 };
