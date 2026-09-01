@@ -1925,6 +1925,9 @@ export class TeamValidator {
 				// this to happen with an unusual ruleset, though, so we won't throw.
 				return `${displayName} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely a validator bug.)`;
 			}
+			if (thing.effectType === 'Move' && thing.isNonstandard === 'Gmax') {
+				return `${displayName} is a placeholder for the Gigantamax version of ${thing.isMax}. It can't actually exist on a normal moveset.`;
+			}
 			if (thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future') {
 				return `${displayName} does not exist in Gen ${dex.gen}.`;
 			}

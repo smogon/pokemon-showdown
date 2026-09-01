@@ -767,7 +767,8 @@ export const commands: Chat.ChatCommands = {
 						[TL.term.generation]: String(move.gen) || 'CAP',
 					};
 
-					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
+						(move.isNonstandard === "Gmax" && dex.gen !== 8);
 					if (pastGensOnly) details[`&#10007; ${TL.term.pastgensonly}`] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
 						details[`&#10003; ${TL.tag.boostedbysheerforce}`] = "";
