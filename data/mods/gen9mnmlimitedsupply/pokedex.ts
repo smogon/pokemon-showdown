@@ -115,6 +115,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 78, atk: 70, def: 120, spa: 155, spd: 121, spe: 46 },
 		abilities: { 0: "Fluffy" },
 	},
+	lucariomegaz: {
+		inherit: true,
+		abilities: { 0: "Adaptability" },
+	},
+	garchompmegaz: {
+		inherit: true,
+		abilities: { 0: "Sand Force" },
+	},
 	zaciancrowned: {
 		inherit: true,
 		baseStats: { hp: 92, atk: 160, def: 115, spa: 80, spd: 115, spe: 148 },
