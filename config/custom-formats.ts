@@ -130,4 +130,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] VGC 2026 Reg I', '+DigiPen'],
 	},
+	{
+		name: "[Gen 9 DigiPen] VGC Non-Restricted",
+		mod: 'gen9digipen',
+		searchShow: false,
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', '+DigiPen', '+Past', '+Future'],
+	},
+	{
+		name: "[Gen 9 DigiPen] VGC Restricted",
+		mod: 'gen9digipen',
+		searchShow: false,
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted',  '+DigiPen', '+Past', '+Future'],
+	},
 ];

@@ -122,7 +122,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				for (const moveid of set.moves) {
 					const move = this.dex.moves.get(moveid);
-					if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen || move.id === 'lightofruin') {
+					if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen) {
 						if (this.ruleTable.has(`+move:${move.id}`)) continue;
 						const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
 						if (this.ruleTable.has('omunobtainablemoves')) {

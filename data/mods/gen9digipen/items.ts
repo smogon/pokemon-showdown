@@ -323,5 +323,12 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		shortDesc: "Holder gains 1.5x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
 		contributors: ["Bryce G."],
-	}
+	},
+
+	// --- Legends ZA Mega Stones ──────────────────────────────────────────────
+	floettite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+
 };
