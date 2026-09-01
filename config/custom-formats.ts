@@ -14,14 +14,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 	},
-	{
-		name: "[Gen 9] VGC 2026 Reg I", // Change back to 2025 after removing the ladder
-		mod: 'gen9',
-		gameType: 'doubles',
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted'],
-		restricted: ['Restricted Legendary'],
-	},
 
 
 	// DigiPen S/V Singles
@@ -63,8 +55,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9 DigiPen] National Dex",
 		mod: 'gen9digipen',
 		searchShow: false,
-		ruleset: ['[Gen 9] National Dex', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Future'],
-		banlist: ['DigiPen Uber'],
+		ruleset: ['Standard AG', 'Nickname Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
+		banlist: ['ND Uber', 'DigiPen Uber'],
 		unbanlist: [
 			'Annihilape', 'Baxcalibur', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Darmanitan-Galar', 'Deoxys-Speed',
 			'Dracovish', 'Dragapult', 'Espathra', 'Flutter Mane', 'Genesect', 'Gouging Fire',
@@ -77,7 +69,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9 DigiPen] National Dex Ubers",
 		mod: 'gen9digipen',
 		searchShow: false,
-		ruleset: ['Standard NatDex', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Future'],
+		ruleset: ['Standard AG', 'Nickname Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
 		banlist: ['Assist'],
 	},
 
@@ -104,7 +96,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9digipen',
 		searchShow: false,
 		gameType: 'doubles',
-		ruleset: ['[Gen 9] Doubles OU', '+DigiPen', '+Past', '+Future'],
+		ruleset: ['[Gen 9] Doubles OU', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
 		banlist: ['DigiPen DUber'],
 	},
 	{
@@ -112,7 +104,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9digipen',
 		searchShow: false,
 		gameType: 'doubles',
-		ruleset: ['[Gen 9] Doubles Ubers', '+DigiPen', '+Past', '+Future'],
+		ruleset: ['[Gen 9] Doubles Ubers', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
 	},
 	{
 		name: "[Gen 9 DigiPen] VGC 2026 Reg F",
@@ -123,12 +115,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['[Gen 9] VGC 2026 Reg F', '+DigiPen'],
 	},
 	{
+		name: "[Gen 9 DigiPen] VGC 2026 Reg G",
+		mod: 'gen9digipen',
+		searchShow: false,
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['[Gen 9] VGC 2024 Reg G', '+DigiPen'],
+	},
+	{
 		name: "[Gen 9 DigiPen] VGC 2026 Reg I",
 		mod: 'gen9digipen',
 		searchShow: false,
 		gameType: 'doubles',
 		bestOfDefault: true,
-		ruleset: ['[Gen 9] VGC 2026 Reg I', '+DigiPen'],
+		ruleset: ['[Gen 9] VGC 2025 Reg I', '+DigiPen'],
 	},
 	{
 		name: "[Gen 9 DigiPen] VGC Non-Restricted",
@@ -139,11 +139,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', '+DigiPen', '+Past', '+Future'],
 	},
 	{
-		name: "[Gen 9 DigiPen] VGC Restricted",
+		name: "[Gen 9 DigiPen] VGC One Restricted",
+		mod: 'gen9digipen',
+		searchShow: false,
+		gameType: 'doubles',
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', 'Limit One Restricted',  '+DigiPen', '+Past', '+Future'],
+		restricted: ['Restricted Legendary'],
+	},
+	{
+		name: "[Gen 9 DigiPen] VGC Two Restricted",
 		mod: 'gen9digipen',
 		searchShow: false,
 		gameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted',  '+DigiPen', '+Past', '+Future'],
+		restricted: ['Restricted Legendary'],
 	},
 ];
