@@ -15,7 +15,7 @@ import { Teams } from './teams';
 import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
 
-const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent', 'digipen', 'digipenpast', 'digipenfuture'];
+const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent', 'digipen', 'digipenpast', 'digipenfuture', 'fnaf'];
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -1940,6 +1940,9 @@ export class TeamValidator {
 			}
 			if (thing.isNonstandard === 'DigiPen') {
 				return `${displayName} is a DigiPen Pokemon and does not exist in this game.`;
+			}
+			if (thing.isNonstandard === 'FNAF') {
+				return `${displayName} is a Five Nights at Freddy's Pokemon and does not exist in this game.`;
 			}
 			return `${displayName} does not exist in this game.`;
 		}
