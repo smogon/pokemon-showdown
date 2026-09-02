@@ -1440,12 +1440,11 @@ const commands: Chat.ChatCommands = {
 			this.checkCan('gamemoderation', targetUser, room);
 
 			const targetUserid = targetUser ? targetUser.id : toID(userid);
-			if (!targetUser) return false;
 			if (reason?.length > MAX_REASON_LENGTH) {
 				throw new Chat.ErrorMessage(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 			}
 
-			if (Tournament.checkBanned(room, targetUser)) {
+			if (Tournament.checkBanned(room, targetUser || targetUserid)) {
 				throw new Chat.ErrorMessage("This user is already banned from tournaments.");
 			}
 
@@ -1462,7 +1461,7 @@ const commands: Chat.ChatCommands = {
 			}
 			room.getGame(Tournament)?.removeBannedUser(targetUserid);
 
-			this.modlog('TOURBAN', targetUser, reason);
+			this.modlog('TOURBAN', targetUser || targetUserid, reason);
 			this.privateModAction(
 				`${targetUser ? targetUser.name : targetUserid} was banned from joining tournaments by ${user.name}. (${reason})`
 			);
