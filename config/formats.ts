@@ -433,16 +433,34 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: ['Archaludon', 'Volcarona', 'Tera Blast'],
 	},
 	{
-		name: "[Gen 9] NFE",
-		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
-		mod: 'gen9',
+		name: "[Gen 9] Statmons",
+		desc: `All Pok&eacute;mon on a team must have the same base stat be at 100 or higher.`,
+		mod: `gen9`,
 		searchShow: false,
-		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause'],
-		banlist: [
-			'Basculin-White-Striped', 'Bisharp', 'Chansey', 'Combusken', 'Dipplin', 'Duraludon', 'Dusclops', 'Electabuzz', 'Gligar', 'Gurdurr',
-			'Haunter', 'Magmar', 'Magneton', 'Misdreavus', 'Porygon2', 'Primeape', 'Qwilfish-Hisui', 'Rhydon', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
-			'Ursaring', 'Vigoroth', 'Vulpix-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Baton Pass',
-		],
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
+		banlist: ['AG', 'Uber', 'Regieleki', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+		onValidateTeam(team) {
+			let statsTable: string[] = [];
+			for (const [i, set] of team.entries()) {
+				let species = this.dex.species.get(set.species);
+				if (!species.types) return [`Invalid pokemon ${set.name || set.species}`];
+				if (i === 0) {
+					statsTable = Object.keys(species.baseStats).filter(stat => species.baseStats[stat as StatID] >= 100);
+				} else {
+					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] >= 100);
+				}
+				const item = this.dex.items.get(set.item);
+				if (item.megaStone?.[species.name]) {
+					species = this.dex.species.get(item.megaStone[species.name]);
+					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] >= 100);
+				}
+				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
+					species = this.dex.species.get("Necrozma-Ultra");
+					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] >= 100);
+				}
+				if (!statsTable.length) return [`All Pok\u00e9mon on your team must have the same base stat over 100.`];
+			}
+		},
 	},
 	{
 		name: "[Gen 9] Ubers UU",
@@ -1029,33 +1047,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Statmons",
-		desc: `All Pok&eacute;mon on a team must have the same base stat be at 100 or higher.`,
-		mod: `gen9`,
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
-		banlist: ['AG', 'Uber', 'Regieleki', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
-		onValidateTeam(team) {
-			let statsTable: string[] = [];
-			for (const [i, set] of team.entries()) {
-				let species = this.dex.species.get(set.species);
-				if (!species.types) return [`Invalid pokemon ${set.name || set.species}`];
-				if (i === 0) {
-					statsTable = Object.keys(species.baseStats).filter(stat => species.baseStats[stat as StatID] >= 100);
-				} else {
-					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] >= 100);
-				}
-				const item = this.dex.items.get(set.item);
-				if (item.megaStone?.[species.name]) {
-					species = this.dex.species.get(item.megaStone[species.name]);
-					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] >= 100);
-				}
-				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
-					species = this.dex.species.get("Necrozma-Ultra");
-					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] >= 100);
-				}
-				if (!statsTable.length) return [`All Pok\u00e9mon on your team must have the same base stat over 100.`];
-			}
-		},
+		name: "[Gen 9] NFE",
+		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
+		mod: 'gen9',
+		// searchShow: false,
+		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Basculin-White-Striped', 'Bisharp', 'Chansey', 'Combusken', 'Dipplin', 'Duraludon', 'Dusclops', 'Electabuzz', 'Gligar', 'Gurdurr',
+			'Haunter', 'Magmar', 'Magneton', 'Misdreavus', 'Porygon2', 'Primeape', 'Qwilfish-Hisui', 'Rhydon', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
+			'Ursaring', 'Vigoroth', 'Vulpix-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Baton Pass',
+		],
 	},
 	{
 		name: "[Gen 9] National Dex 35 Pokes",
