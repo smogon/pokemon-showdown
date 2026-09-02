@@ -3596,7 +3596,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Power Trip', 'Quiver Dance', 'Rage Fist', 'Revival Blessing', 'Rising Voltage', 'Salt Cure', 'Shed Tail', 'Shell Smash', 'Shift Gear', 'Stored Power', 'Substitute',
 			'Surging Strikes', 'Tail Glow', 'Take Heart', 'Thousand Arrows', 'Transform', 'Triple Arrows', 'V-create', 'Victory Dance', 'Water Spout', 'Wicked Blow',
 		],
-		unbanlist: ['Blazing Torque', 'Combat Torque', 'Light of Ruin', 'Magical Torque', 'Noxious Torque', 'Wicked Torque'],
+		unbanlist: ['Blazing Torque', 'Combat Torque', 'Light of Ruin', 'Magical Torque', 'Noxious Torque', 'Power Shift', 'Wicked Torque'],
 	},
 
 	// National Dex
