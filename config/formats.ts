@@ -678,10 +678,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		actions: {
-			getDamage(
-				source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
-				suppressMessages = false
-			): number | undefined | null | false {
+			getDamage(source, target, move, suppressMessages = false) {
 				if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
 				if (typeof move === 'number') {
