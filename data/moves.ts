@@ -16685,6 +16685,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
 			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
 		},
+		tracksTarget: true,
 		onModifyMove(move, source) {
 			if (!source.volatiles['skydrop']) {
 				move.accuracy = true;
