@@ -505,7 +505,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const move = this.dex.getActiveMove('pursuit');
 				source.deductPP(move.id);
 				source.moveUsed(move, pokemon.position);
-				if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
+				if (this.actions.useMove(move, source, { target: pokemon, sourceEffect: this.effectState.sourceEffect }) &&
+					source.getItem().isChoice) {
 					source.addVolatile('choicelock');
 				}
 			},
