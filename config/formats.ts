@@ -810,9 +810,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (otherHalf[attackStat]) attack += attacker.calculateStat(otherHalf[attackStat], otherAtkBoosts, 1, source);
 				if (otherHalf[defenseStat]) defense += defender.calculateStat(otherHalf[defenseStat], otherDefBoosts, 1, target);
 
-				console.log(`${attacker.name}: ${attack}`);
-				console.log(`${defender.name}: ${defense}`);
-
 				attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
 				// Apply Stat Modifiers
