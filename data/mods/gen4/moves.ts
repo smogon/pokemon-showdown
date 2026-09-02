@@ -249,6 +249,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 85,
 	},
+	counter: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onRedirectTarget(target, source, source2, move) {
+				if (move.id !== 'counter') return;
+				if (source !== this.effectState.target || !this.effectState.slot) return;
+				return this.getAtSlot(this.effectState.slot);
+			},
+		},
+	},
 	covet: {
 		inherit: true,
 		basePower: 40,
@@ -898,6 +909,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	miracleeye: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
+	},
+	mirrorcoat: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onRedirectTarget(target, source, source2, move) {
+				if (move.id !== 'mirrorcoat') return;
+				if (source !== this.effectState.target || !this.effectState.slot) return;
+				return this.getAtSlot(this.effectState.slot);
+			},
+		},
 	},
 	mirrormove: {
 		inherit: true,
