@@ -809,6 +809,10 @@ export class BattleActions {
 		return undefined;
 	}
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		for (const target of targets) {
+			this.battle.runEvent('ModifyMovePhase2', pokemon, target, move, move);
+		}
+
 		// console.log(`${targets}, ${pokemon}, ${move}`)
 		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
@@ -1088,6 +1092,7 @@ export class BattleActions {
 		for (const i of targets.keys()) {
 			if (!damage[i] && damage[i] !== 0) targets[i] = false;
 		}
+		move.numberTargets = damage.filter(val => typeof val === 'number').length;
 
 		// steps 4 and 5 can mess with this.battle.activeTarget, which needs to be preserved for Dancer
 		const activeTarget = this.battle.activeTarget;

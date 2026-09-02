@@ -77,4 +77,15 @@ describe('Sheer Force', () => {
 		battle.makeChoices('move flamethrower', 'auto');
 		assert.equal(frozenMon.status, '');
 	});
+
+	it('should suppress Life Orb recoil after knocking out a Neutralizing Gas user', () => {
+		battle = common.createBattle([[
+			{ species: 'landorus', ability: 'sheerforce', item: 'lifeorb', moves: ['earthpower'] },
+		], [
+			{ species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
+			{ species: 'wynaut', ability: 'neutralizinggas', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.fullHP(battle.p1.active[0]);
+	});
 });
