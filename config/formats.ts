@@ -832,14 +832,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				// Apply Stat Modifiers
 				// Apply both onModifyX - requested by Delibird Heart
+				// ^ After further deliberation, do not do this (yet)
 				attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-				attack = this.battle.runEvent(
-					'Modify' + statTable[otherHalf[attackStat] as StatIDExceptHP], source, target, move, attack
-				);
+				// attack = this.battle.runEvent(
+				// 	'Modify' + statTable[otherHalf[attackStat] as StatIDExceptHP], source, target, move, attack
+				// );
 				defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
-				defense = this.battle.runEvent(
-					'Modify' + statTable[otherHalf[defenseStat] as StatIDExceptHP], target, source, move, defense
-				);
+				// defense = this.battle.runEvent(
+				// 	'Modify' + statTable[otherHalf[defenseStat] as StatIDExceptHP], target, source, move, defense
+				// );
 
 				if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 					defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
