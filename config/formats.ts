@@ -770,7 +770,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				const statTable = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
 
-				const otherHalf: { [k: string]: StatIDExceptHP } = {
+				const otherHalf: { [k: string]: StatIDExceptHP & Omit <StatIDExceptHP, "spe"> } = {
 					'atk': 'spa',
 					'def': 'spd',
 					'spa': 'atk',
@@ -779,8 +779,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				let atkBoosts = attacker.boosts[attackStat];
 				let defBoosts = defender.boosts[defenseStat];
-				let otherAtkBoosts = attackStat === 'spe' ? undefined : attacker.boosts[otherHalf[attackStat]];
-				let otherDefBoosts = defenseStat === 'spe' ? undefined : defender.boosts[otherHalf[defenseStat]];
+
+				let otherAtkBoosts = attackStat === 'spe' ? 0 : attacker.boosts[otherHalf[attackStat] as StatIDExceptHP];
+				let otherDefBoosts = defenseStat === 'spe' ? 0 : defender.boosts[otherHalf[defenseStat] as StatIDExceptHP];
 
 				let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 				let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
@@ -802,10 +803,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					defBoosts = 0;
 					otherDefBoosts = 0;
 				}
-				// @ts-expect-error Need extra arg
-				let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source, otherAtkBoosts);
-				// @ts-expect-error Need extra arg
-				let defense = defender.calculateStat(defenseStat, defBoosts, 1, target, otherDefBoosts);
+
+				let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
+				let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
+
+				if (otherHalf[attackStat]) attack += attacker.calculateStat(otherHalf[attackStat], otherAtkBoosts, 1, source);
+				if (otherHalf[defenseStat]) defense += defender.calculateStat(otherHalf[defenseStat], otherDefBoosts, 1, target);
+
+				console.log(`${attacker.name}: ${attack}`);
+				console.log(`${defender.name}: ${defense}`);
 
 				attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
@@ -824,84 +830,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				// Calculate damage modifiers separately (order differs between generations)
 				return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
-			},
-		},
-		pokemon: {
-			calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon, otherBoost?: number) {
-				statName = this.battle.toID(statName) as StatIDExceptHP;
-				// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
-				if (statName === 'hp') throw new Error("Please read `maxhp` directly");
-
-				// base stat
-				let stat = this.storedStats[statName];
-
-				// Wonder Room swaps defenses before calculating anything else
-				if ('wonderroom' in this.battle.field.pseudoWeather) {
-					if (statName === 'def') {
-						stat = this.storedStats['spd'];
-					} else if (statName === 'spd') {
-						stat = this.storedStats['def'];
-					}
-				}
-
-				// stat boosts
-				let boosts: SparseBoostsTable = {};
-				let boostName = statName as BoostID;
-				boosts[boostName] = boost;
-				boosts = this.battle.runEvent('ModifyBoost', statUser || this, null, null, boosts);
-				boost = boosts[boostName]!;
-				const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
-				if (boost > 6) boost = 6;
-				if (boost < -6) boost = -6;
-				if (boost >= 0) {
-					stat = Math.floor(stat * boostTable[boost]);
-				} else {
-					stat = Math.floor(stat / boostTable[-boost]);
-				}
-
-				// stat modifier
-				const firstStatHalf = this.battle.modify(stat, (modifier || 1));
-
-				if (statName === 'spe') return firstStatHalf;
-
-				const otherHalf: { [k: string]: StatIDExceptHP } = {
-					'atk': 'spa',
-					'def': 'spd',
-					'spa': 'atk',
-					'spd': 'def',
-				};
-
-				statName = otherHalf[statName];
-
-				// other base stat
-				stat = this.storedStats[statName];
-
-				// Wonder Room swaps defenses before calculating anything else
-				if ('wonderroom' in this.battle.field.pseudoWeather) {
-					if (statName === 'def') {
-						stat = this.storedStats['spd'];
-					} else if (statName === 'spd') {
-						stat = this.storedStats['def'];
-					}
-				}
-
-				// stat boosts
-				boosts = {};
-				boostName = statName as BoostID;
-				boosts[boostName] = otherBoost || 0;
-				boosts = this.battle.runEvent('ModifyBoost', statUser || this, null, null, boosts);
-				boost = boosts[boostName]!;
-				if (boost > 6) boost = 6;
-				if (boost < -6) boost = -6;
-				if (boost >= 0) {
-					stat = Math.floor(stat * boostTable[boost]);
-				} else {
-					stat = Math.floor(stat / boostTable[-boost]);
-				}
-
-				// stat modifier
-				const secondStatHalf = this.battle.modify(stat, (modifier || 1));
-				return firstStatHalf + secondStatHalf;
 			},
 		},
 	},
