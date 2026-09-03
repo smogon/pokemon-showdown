@@ -1232,7 +1232,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 					if (inequalityString.startsWith('>')) directions.push('greater');
 					if (statKey in allStatAliases) statKey = allStatAliases[statKey];
 					if (compareType in allStatAliases) compareType = allStatAliases[compareType];
-					if (!allStats.slice(0, 6).includes(statKey) || !allStats.slice(0, 6).includes(compareType))
+					if (!allStats.includes(statKey) || !allStats.includes(compareType))
 						return { error: `'${target}' did not contain a valid stat to compare with another stat.` };
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
