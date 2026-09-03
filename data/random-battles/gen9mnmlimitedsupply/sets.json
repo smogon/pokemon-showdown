@@ -27,7 +27,7 @@
 		]
 	},
 	"heatran": {
-		"level": 87,
+		"level": 86,
 		"sets": [
 			{
 				"movepool": ["Magma Storm", "Dragon Pulse", "Earth Power", "Will-O-Wisp"],
@@ -63,7 +63,7 @@
 		]
 	},
 	"archaludon": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Flash Cannon", "Dragon Pulse", "Electro Shot", "Stealth Rock"],
@@ -75,7 +75,7 @@
 		"level": 84,
 		"sets": [
 			{
-				"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Swords Dance"],
+				"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Close Combat"],
 				"abilities": ["Weak Armor"]
 			}
 		]
@@ -102,7 +102,7 @@
 		"level": 81,
 		"sets": [
 			{
-				"movepool": ["Draining Kiss", "Stored Power", "Calm Mind", "Shift Gear"],
+				"movepool": ["Draining Kiss", "Flash Cannon", "Calm Mind", "Grass Knot"],
 				"abilities": ["Soul-Heart"]
 			}
 		]
@@ -189,7 +189,7 @@
 		]
 	},
 	"zamazenta": {
-		"level": 82,
+		"level": 81,
 		"sets": [
 			{
 				"movepool": ["Close Combat", "Fire Fang", "Heavy Slam", "Crunch"],
@@ -216,7 +216,7 @@
 		]
 	},
 	"salazzle": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Fire Lash", "Poison Jab", "Will-O-Wisp", "Encore"],
@@ -342,7 +342,7 @@
 		]
 	},
 	"vikavolt": {
-		"level": 88,
+		"level": 89,
 		"sets": [
 			{
 				"movepool": ["Sticky Web", "Volt Switch", "Bug Buzz", "Flash Cannon"],
@@ -414,7 +414,7 @@
 		]
 	},
 	"screamtail": {
-		"level": 86,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Boomburst", "Wish", "Thunder Wave", "Encore"],
@@ -441,7 +441,7 @@
 		]
 	},
 	"tinglu": {
-		"level": 88,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Body Press", "Spikes", "Whirlwind", "Ruination"],
@@ -504,7 +504,7 @@
 		]
 	},
 	"mimikyu": {
-		"level": 85,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Hone Claws", "Play Rough", "Shadow Claw", "Shadow Sneak"],
@@ -513,7 +513,7 @@
 		]
 	},
 	"appletun": {
-		"level": 89,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Apple Acid", "Draco Meteor", "Leech Seed", "Recover"],
@@ -522,7 +522,7 @@
 		]
 	},
 	"lucario": {
-		"level": 88,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Earthquake"],
@@ -540,7 +540,7 @@
 		]
 	},
 	"floatzel": {
-		"level": 87,
+		"level": 86,
 		"sets": [
 			{
 				"movepool": ["Wave Crash", "Low Kick", "Bulk Up", "Ice Spinner"],
@@ -567,7 +567,7 @@
 		]
 	},
 	"gastrodon": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Earth Power", "Ice Beam", "Recover", "Spikes"],
@@ -576,7 +576,7 @@
 		]
 	},
 	"primarina": {
-		"level": 85,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Draining Kiss", "Surf", "Flip Turn", "Moonblast"],
@@ -585,7 +585,7 @@
 		]
 	},
 	"bronzong": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Gyro Ball", "Trick Room", "Zen Headbutt", "Body Press"],
@@ -621,7 +621,7 @@
 		]
 	},
 	"lunala": {
-		"level": 88,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Moonblast", "Moongeist Beam", "Moonlight", "Calm Mind"],
@@ -657,7 +657,7 @@
 		]
 	},
 	"milotic": {
-		"level": 88,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Scald", "Haze", "Recover", "Flip Turn"],
@@ -666,7 +666,7 @@
 		]
 	},
 	"glimmora": {
-		"level": 85,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Mortal Spin", "Power Gem", "Sludge Bomb", "Earth Power"],
