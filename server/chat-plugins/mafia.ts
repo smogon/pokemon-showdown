@@ -362,7 +362,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	}
 }
 
-class Mafia extends Rooms.RoomGame<MafiaPlayer> {
+export class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	override readonly gameid = 'mafia' as ID;
 	started: boolean;
 	theme: MafiaDataTheme | null;
@@ -396,6 +396,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	originalRoleString: string;
 	roles: MafiaRole[];
 	roleString: string;
+	assignedRoles: { [userid: string]: MafiaRole };
 
 	phase: 'signups' | 'locked' | 'IDEApicking' | 'IDEAlocked' | 'day' | 'night';
 	dayNum: number;
@@ -446,6 +447,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.originalRoleString = '';
 		this.roles = [];
 		this.roleString = '';
+		this.assignedRoles = Object.create(null);
 
 		this.phase = "signups";
 		this.dayNum = 0;
@@ -622,6 +624,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}));
 			Utils.sortBy(this.originalRoles, role => role.name);
 			this.roles = this.originalRoles.slice();
+			this.assignedRoles = Object.create(null);
 			this.originalRoleString = this.originalRoles.map(
 				r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
 			).join(', ');
@@ -662,6 +665,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.IDEA.data = null;
 
 		this.originalRoles = newRoles;
+		this.assignedRoles = Object.create(null);
 		Utils.sortBy(this.originalRoles, role => [role.alignment, role.name]);
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.map(
@@ -825,11 +829,47 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 	}
 
+	assignRole(user: User, player: MafiaPlayer, roleName: string) {
+		if (roleName.length > MAX_ROLE_LENGTH) {
+			this.sendUser(user, `|error|Role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
+			return false;
+		}
+		if (!this.started && this.phase !== 'locked') {
+			this.sendUser(user, `|error|The game must be locked before roles can be assigned.`);
+			return false;
+		}
+
+		const parsedRole = Mafia.parseRole(roleName);
+		if (parsedRole.problems.length) {
+			for (const problem of parsedRole.problems) this.sendUser(user, `|error|${problem}`);
+			return false;
+		}
+
+		if (!this.started) {
+			this.assignedRoles[player.id] = parsedRole.role;
+			return true;
+		}
+
+		const oldRole = player.role;
+		if (oldRole && !player.isEliminated()) {
+			const oldRoleIndex = this.roles.findIndex(role => role.id === oldRole.id);
+			if (oldRoleIndex !== -1) this.roles.splice(oldRoleIndex, 1);
+		}
+		player.role = parsedRole.role;
+		player.revealed = '';
+		if (!player.isEliminated()) this.roles.push(parsedRole.role);
+		this.updateRoleString();
+		this.sendUser(player, `|notify|Your role is ${parsedRole.role.safeName}. For more details of your role, check your Role PM.`);
+		this.updatePlayers();
+		return true;
+	}
+
 	distributeRoles() {
 		const roles = Utils.shuffle(this.originalRoles.slice());
 		if (roles.length) {
 			for (const p of this.players) {
-				const role = roles.shift();
+				const assignedRole = this.assignedRoles[p.id];
+				const role = assignedRole || roles.shift();
 				if (!role) throw new Error(`Ran out of roles.`);
 				p.role = role;
 				const u = Users.get(p.id);
@@ -839,6 +879,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				}
 			}
 		}
+		this.assignedRoles = Object.create(null);
 
 		this.clearEliminations();
 		this.played = [this.hostid, ...this.cohostids, ...(this.players.map(p => p.id))];
@@ -2554,6 +2595,24 @@ export const commands: Chat.ChatCommands = {
 			`/mafia setroles [comma separated roles] - Set the roles for a game of mafia. You need to provide one role per player.`,
 			`/mafia forcesetroles [comma separated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set.`,
 			`/mafia resetroles [comma separated roles] - Reset the roles in an ongoing game.`,
+		],
+
+		assignrole(target, room, user) {
+			room = this.requireRoom();
+			const game = this.requireGame(Mafia);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+
+			const [playerName, roleName] = Utils.splitFirst(target, ',').map(value => value.trim());
+			if (!playerName || !roleName) return this.parse('/help mafia assignrole');
+
+			const player = game.getPlayer(toID(playerName));
+			if (!player) throw new Chat.ErrorMessage(`${playerName} is not a player.`);
+			if (!game.assignRole(user, player, roleName)) return;
+			game.logAction(user, `assigned ${roleName} to ${player.name}`);
+			this.sendReply(`${player.name}'s role has been assigned.`);
+		},
+		assignrolehelp: [
+			`/mafia assignrole [player], [role] - Assigns or overwrites a player's role. Requires host % @ # ~`,
 		],
 
 		resetgame: 'gamereset',
@@ -4438,6 +4497,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia forcevote [yes/no] - Forces players' votes onto themselves, and prevents unvoting. Requires host % @ # ~`,
 			`/mafia setroles [comma separated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # ~`,
 			`/mafia forcesetroles [comma separated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # ~`,
+			`/mafia assignrole [player], [role] - Assigns or overwrites a player's role. Requires host % @ # ~`,
 			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # ~`,
 			`/mafia [day|night] - Move to the next game day or night. Requires host % @ # ~`,
 			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # ~`,
