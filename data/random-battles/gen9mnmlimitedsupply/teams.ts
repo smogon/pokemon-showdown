@@ -309,7 +309,7 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'goodra') return 'Audinite';
 		if (species.id === 'milotic') return 'Excadrite';
 		if (species.id === 'glimmora') return 'Gengarite';
-		
+
 		else return 'Life Orb';
 	}
 }

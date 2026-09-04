@@ -117,7 +117,7 @@ export class RandomDelta extends RandomTeams {
 
 			// No more than one Z-move user
 			if (set.name === 'Z-move user') {
-				if (teamDetails.zMove = 1) continue;
+				if (teamDetails.zMove === 1) continue;
 				teamDetails.zMove = 1;
 			}
 
@@ -219,7 +219,7 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'maddummy' && role === 'Setup Sweeper') return 'Sitrus Berry';
 		if (species.id === 'seth' && role === 'Choice Item user') return 'Choice Specs';
 
-		if (species.id === 'ambyulance' && role === 'Bulky Support') return this.sample(['Heavy-Duty Boots', 'Choice Specs']);
+		if (species.id === 'ambyulance' && role === 'Bulky Support') return this.sample(['Heavy-Duty Boots', 'Leftovers']);
 		if (species.id === 'aqua' && role === 'Fast Attacker') return this.sample(['Choice Scarf', 'Choice Band']);
 		if (species.id === 'asgore' && role === 'Setup Sweeper') return this.sample(['Life Orb', 'Heavy-Duty Boots']);
 		if (species.id === 'asgore' && role === 'Bulky Attacker') return this.sample(['Terrain Extender', 'Leftovers']);
