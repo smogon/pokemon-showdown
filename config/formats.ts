@@ -3948,6 +3948,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Deltamon",
 		mod: 'gen9deltamon',
 		desc: "A format where Deltarune and Undertale characters are Pokemon!",
+		searchShow: false,
 		threads: [
 			`&bullet; <a href= "https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/">Deltamon Spreadsheet</a>`,
 		],
@@ -3972,6 +3973,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Mad Dummy', 'Temmie', 'Undyne', 'Undyne-Mega', 'Alphys', 'Vulkin', 'Tsunderplane', 'Pyrope', 'Muffet', 'Royal Guard 1', 'Royal Guard 2',
 			'Madjick', 'Knight Knight', 'Mettaton', 'Mettaton-Mega-X', 'Mettaton-Mega-Y', 'Memoryhead', 'Reaper Bird', 'Endogeny', 'Lemon Bread',
 			'Crystal', 'Asgore', 'Flowey', 'Flowey-Mega',
+			'Buginium Z', 'Darkinium Z', 'Dragonium Z', 'Electrium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Ghostium Z',
+			'Grassium Z', 'Groundium Z', 'Icium Z', 'Normalium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Waterium Z', 'Hidden Power',
 		],
 	},
 

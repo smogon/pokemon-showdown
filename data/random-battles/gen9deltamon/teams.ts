@@ -116,9 +116,13 @@ export class RandomDelta extends RandomTeams {
 			pokemon.push(set);
 
 			// No more than one Z-move user
-			if (!teamDetails.zMove) teamDetails.zMove = 0;
-			if (set.name === 'Z-move user') teamDetails.zMove++;
-			if (teamDetails.zMove > 1) continue;
+			if (set.name === 'Z-move user') {
+				if (teamDetails.zMove === 1) continue;
+				teamDetails.zMove = 1;
+			}
+
+			// Parsnik depends on sun
+			if (species.id === 'parsnik' && teamDetails.sun !== 1) continue;
 
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;
@@ -215,7 +219,7 @@ export class RandomDelta extends RandomTeams {
 		if (species.id === 'maddummy' && role === 'Setup Sweeper') return 'Sitrus Berry';
 		if (species.id === 'seth' && role === 'Choice Item user') return 'Choice Specs';
 
-		if (species.id === 'ambyulance' && role === 'Bulky Support') return this.sample(['Heavy-Duty Boots', 'Choice Specs']);
+		if (species.id === 'ambyulance' && role === 'Bulky Support') return this.sample(['Heavy-Duty Boots', 'Leftovers']);
 		if (species.id === 'aqua' && role === 'Fast Attacker') return this.sample(['Choice Scarf', 'Choice Band']);
 		if (species.id === 'asgore' && role === 'Setup Sweeper') return this.sample(['Life Orb', 'Heavy-Duty Boots']);
 		if (species.id === 'asgore' && role === 'Bulky Attacker') return this.sample(['Terrain Extender', 'Leftovers']);
@@ -380,10 +384,8 @@ export class RandomDelta extends RandomTeams {
 		) return 'Booster Energy';
 		if (species.id === 'floweymega' && role === 'Bulky Attacker') return 'Floweyite';
 		if (species.id === 'gersonmega' && role === 'Fast Attacker') return 'Gersonite';
-		if (
-			(species.id === 'greaterdog' && role === 'Bulky Attacker') ||
-			(species.id === 'jigsawjoe' && role === 'Fast Attacker')
-		) return 'Flame Orb';
+		if (species.id === 'greaterdog' && role === 'Bulky Attacker') return 'Flame Orb';
+		if (species.id === 'jigsawjoe') return 'Toxic Orb';
 		if (
 			(species.id === 'green' && role === 'Fast Support') ||
 			(species.id === 'noelle' && role === 'Fast Support') ||

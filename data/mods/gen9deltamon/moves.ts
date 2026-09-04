@@ -652,7 +652,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 5,
 				move: 'omegapatience',
 				source,
 				moveData: {
@@ -662,7 +661,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					basePower: 215,
 					category: "Physical",
 					priority: 0,
-					flags: { allyanim: 1, futuremove: 1, slicing: 1 },
+					flags: { allyanim: 1, slicing: 1 },
 					ignoreDefensive: true,
 					ignoreImmunity: false,
 					effectType: 'Move',
