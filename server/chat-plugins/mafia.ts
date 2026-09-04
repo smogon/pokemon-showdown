@@ -859,7 +859,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		player.revealed = '';
 		if (!player.isEliminated()) this.roles.push(parsedRole.role);
 		this.updateRoleString();
-		this.sendUser(player, `|notify|Your role is ${parsedRole.role.safeName}. For more details of your role, check your Role PM.`);
+		this.sendUser(
+			player,
+			`|notify|Your role is ${parsedRole.role.safeName}. For more details of your role, check your Role PM.`
+		);
 		this.updatePlayers();
 		return true;
 	}
