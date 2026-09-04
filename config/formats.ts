@@ -689,11 +689,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Archaludon', 'Blissey', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga',
-			'Dialga-Origin', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black',
-			'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame',
-			'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Terapagos', 'Volcarona', 'Zacian', 'Zacian-Crowned',
-			'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
+			'Annihilape', 'Arceus', 'Archaludon', 'Blissey', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Dialga-Origin',
+			'Dondozo', 'Espathra', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate',
+			'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin',
+			'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Terapagos', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody',
+			'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		actions: {
 			getDamage(source, target, move, suppressMessages = false) {
@@ -808,18 +808,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					ignoreNegativeOffensive = true;
 					ignorePositiveDefensive = true;
 				}
-				const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
-				const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
+				const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && (atkBoosts < 0 || otherAtkBoosts < 0)));
+				const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && (defBoosts > 0 || otherDefBoosts > 0)));
 
 				if (ignoreOffensive) {
 					this.battle.debug('Negating (sp)atk boost/penalty.');
-					atkBoosts = 0;
-					otherAtkBoosts = 0;
+					if (atkBoosts < 0) atkBoosts = 0;
+					if (otherAtkBoosts < 0) otherAtkBoosts = 0;
 				}
 				if (ignoreDefensive) {
 					this.battle.debug('Negating (sp)def boost/penalty.');
-					defBoosts = 0;
-					otherDefBoosts = 0;
+					if (defBoosts > 0) defBoosts = 0;
+					if (otherDefBoosts > 0) otherDefBoosts = 0;
 				}
 
 				let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
@@ -831,8 +831,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
 				// Apply Stat Modifiers
+				// Apply both onModifyX - requested by Delibird Heart
+				// ^ After further deliberation, do not do this (yet)
 				attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
+				// attack = this.battle.runEvent(
+				// 	'Modify' + statTable[otherHalf[attackStat] as StatIDExceptHP], source, target, move, attack
+				// );
 				defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+				// defense = this.battle.runEvent(
+				// 	'Modify' + statTable[otherHalf[defenseStat] as StatIDExceptHP], target, source, move, defense
+				// );
 
 				if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 					defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
