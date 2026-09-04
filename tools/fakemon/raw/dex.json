@@ -1,0 +1,4630 @@
+[
+ {
+  "species": [
+   {
+    "name": "Pumpini",
+    "types": [
+     "Grass",
+     "Ghost"
+    ],
+    "rawTypes": "Pflanze Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Candigrim",
+    "types": [
+     "Grass",
+     "Ghost"
+    ],
+    "rawTypes": "Pflanze Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Hallowisp",
+    "types": [
+     "Grass",
+     "Ghost"
+    ],
+    "rawTypes": "Pflanze Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Hallowisp-Mega",
+    "types": [
+     "Grass",
+     "Ghost",
+     "Fairy"
+    ],
+    "rawTypes": "Pflanze Geist Fee",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Sugarcrush",
+    "desc": "more damage every hit",
+    "page": 3,
+    "crossRef": false
+   },
+   {
+    "name": "Ghost Bash",
+    "desc": "pretends users speed is 2×",
+    "page": 3,
+    "crossRef": false
+   },
+   {
+    "name": "Full Moon",
+    "desc": "Sets Up Foll moon weather condition",
+    "page": 3,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Grass-Starter",
+    "desc": "Grass moves deal 30% more damage",
+    "page": 3,
+    "crossRef": false
+   },
+   {
+    "name": "Madness",
+    "desc": "Repeat used moves deal 10% more damage with every usage in a row",
+    "page": 3,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Sugar Pile",
+    "desc": "Contact Moves have no side effects",
+    "page": 4,
+    "crossRef": false
+   }
+  ],
+  "page": 3
+ },
+ {
+  "species": [
+   {
+    "name": "Sprank",
+    "types": [
+     "Ghost"
+    ],
+    "rawTypes": "Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Spukasten",
+    "types": [
+     "Ghost"
+    ],
+    "rawTypes": "Geist",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Furniture Haunt",
+    "desc": "Haunted Room Effect on the Field(Like Trick room doesnt overwrite Fields) for 5 Turns: All non-ghost-type Pokemon Act as if they had the ghost type too, no matter how many types they already have",
+    "page": 4,
+    "crossRef": false
+   },
+   {
+    "name": "Out of the Closet",
+    "desc": "Boosts Sp.Def by 1 in first turn. Attacks on second turn and uses Sp.Def instead of Atk stat to deal damage. In Haunted Room all happens in first turn",
+    "page": 4,
+    "crossRef": false
+   },
+   {
+    "name": "Wadrobe Change",
+    "desc": "Switches Out and Gives Changes in Defense and Sp.Def to the new switched in pokemon and boosts their Sp.Def by 1",
+    "page": 5,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Cabinet Lock",
+    "desc": "All other Ghost Type Pokemon are unable to switch out(switch out attacks still work)",
+    "page": 5,
+    "crossRef": false
+   },
+   {
+    "name": "Cuttered Interior",
+    "desc": "Pokemon trying to remove or change its held item(by attacks or abilities...) Loose their Item instead",
+    "page": 5,
+    "crossRef": false
+   },
+   {
+    "name": "Mirror Facade",
+    "desc": "In Haunted Room all Special Attacks used against it are, after it is hit by them, immediately used from it against the original user with 33% damage and same effects",
+    "page": 6,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 4
+ },
+ {
+  "species": [
+   {
+    "name": "Eggbun",
+    "types": [
+     "Normal"
+    ],
+    "rawTypes": "Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Bouncunny",
+    "types": [
+     "Normal"
+    ],
+    "rawTypes": "Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Bunbombard",
+    "types": [
+     "Normal"
+    ],
+    "rawTypes": "Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Bunbombard-Mega",
+    "types": [
+     "Normal"
+    ],
+    "rawTypes": "Normal",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Eggsplosion",
+    "desc": "Looses 50% max. HP",
+    "page": 6,
+    "crossRef": false
+   },
+   {
+    "name": "Payload Pouch",
+    "desc": "Hits 2-5 Times and deals 30% recoil damage. Hits 5 times if item is held but looses it after the 5th Attack(or Consumes it if food item)",
+    "page": 6,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Kamikaze",
+    "desc": "Boosts the Power of Recoil moves by 30%",
+    "page": 7,
+    "crossRef": false
+   },
+   {
+    "name": "Eggshell",
+    "desc": "Ignores Entry Hazards",
+    "page": 7,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Blastproof",
+    "desc": "Gets no Recoil damage",
+    "page": 7,
+    "crossRef": false
+   }
+  ],
+  "page": 6
+ },
+ {
+  "species": [
+   {
+    "name": "Hasunu",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": null
+   },
+   {
+    "name": "Nutree",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": null
+   },
+   {
+    "name": "Marionoak",
+    "types": [
+     "Grass",
+     "Psychic"
+    ],
+    "rawTypes": "Pflanze Psycho",
+    "splitEvo": null
+   },
+   {
+    "name": "Marionoak-Mega",
+    "types": [
+     "Grass",
+     "Psychic"
+    ],
+    "rawTypes": "Pflanze Psycho",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Puppet Show",
+    "desc": "If allready used an Attack before, Uses the before used Attack again with Psycic Type but fails by Protect Moves",
+    "page": 7,
+    "crossRef": false
+   },
+   {
+    "name": "Mahogany Mind Crash",
+    "desc": "Uses Enemy Sp.Atk instead of Sp.Def",
+    "page": 8,
+    "crossRef": false
+   },
+   {
+    "name": "Oak Carving",
+    "desc": "Looses 25% max. Hp but creates a substitute with these hp. If Marionoak has Spinter Bark as its ability, this Substitute also has Spinter Bark",
+    "page": 8,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Spinter Bark",
+    "desc": "Getting hit by a Physical Moves sets up stealth rocks",
+    "page": 8,
+    "crossRef": false
+   },
+   {
+    "name": "Fresh Air",
+    "desc": "Heals 1/16 of max.Hp when Weather is clear",
+    "page": 8,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Chloroplast Mind",
+    "desc": "Psycic Type Moves gain +1 Priority in Sunlight",
+    "page": 8,
+    "crossRef": false
+   }
+  ],
+  "page": 7
+ },
+ {
+  "species": [
+   {
+    "name": "Kabsalat",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Kabkoloss",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Kabkoloss-Mega",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Gigavolt Punch",
+    "desc": "Paralyzes User",
+    "page": 9,
+    "crossRef": false
+   },
+   {
+    "name": "Live Wire",
+    "desc": "Sets up electrified cables as entry hazard. These oaralyse pokemon that switch in new(dont effects flying type pokemon and dont effect+get removed by electric and ground type pokemon switching in)",
+    "page": 9,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Wired",
+    "desc": "No Electric-Damage > heals 25% max. Hp instead",
+    "page": 9,
+    "crossRef": false
+   },
+   {
+    "name": "Surge Protection",
+    "desc": "Can get Paralysed but Paralysis has no effects",
+    "page": 10,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Power Grid",
+    "desc": "Has 2 Abilities. Keeps the Ability is had before Mega and gets the ability Grounded Grid(Can hit Ground Type pokemon with neutral electric damage)",
+    "page": 10,
+    "crossRef": false
+   }
+  ],
+  "page": 9
+ },
+ {
+  "species": [
+   {
+    "name": "Bytebug",
+    "types": [
+     "Steel",
+     "Electric"
+    ],
+    "rawTypes": "Stahl Elektro",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Codebreaker",
+    "desc": "Target cant use Protect moves for 5 turns",
+    "page": 10,
+    "crossRef": false
+   },
+   {
+    "name": "DDOS Swarm",
+    "desc": "hits 2 to 5 times and lowers sp.def to 10% with every hit",
+    "page": 10,
+    "crossRef": false
+   },
+   {
+    "name": "Glitch Matrix",
+    "desc": "Sets up a new Room \"Glitched Room\" (like Trick Room doesnt override Fields) and lifts up type immunities",
+    "page": 11,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Hover",
+    "desc": "Is immune to Ground type Attacks in Electric Terrain and boosts its speed by 50%",
+    "page": 11,
+    "crossRef": false
+   },
+   {
+    "name": "Reflect Layer",
+    "desc": "Priotity Moves against it deal 100% recoil damage",
+    "page": 11,
+    "crossRef": false
+   },
+   {
+    "name": "Malware Injection",
+    "desc": "Permanently suppresses the target's Ability for the rest of the battle if the user is hit by a damaging move while having full HP",
+    "page": 11,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 10
+ },
+ {
+  "species": [
+   {
+    "name": "Candlit",
+    "types": [
+     "Fire"
+    ],
+    "rawTypes": "Feuer",
+    "splitEvo": null
+   },
+   {
+    "name": "Flamancer",
+    "types": [
+     "Fire"
+    ],
+    "rawTypes": "Feuer",
+    "splitEvo": null
+   },
+   {
+    "name": "Candelord",
+    "types": [
+     "Fire"
+    ],
+    "rawTypes": "Feuer",
+    "splitEvo": null
+   },
+   {
+    "name": "Candelord-Mega",
+    "types": [
+     "Fire",
+     "Dark"
+    ],
+    "rawTypes": "Feuer Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Fiendish Bargain",
+    "desc": "User looses 50% max.Hp and boosts Initiative and sp.atk by 2 stages",
+    "page": 12,
+    "crossRef": false
+   },
+   {
+    "name": "Infernal Meltdown",
+    "desc": "Doubles Damage if Super-Effective so it deals even more damage if super-effective",
+    "page": 12,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Fire Starter",
+    "desc": "Fire moves deal 30% more damage",
+    "page": 12,
+    "crossRef": false
+   },
+   {
+    "name": "Soul Burner",
+    "desc": "Deals more Damage the slower the enemy is. From 0.5× to 2×",
+    "page": 12,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Candle Sacrifice",
+    "desc": "If defeating Enemy, it Heals by 33% Enemies max.Hp",
+    "page": 13,
+    "crossRef": false
+   }
+  ],
+  "page": 12
+ },
+ {
+  "species": [
+   {
+    "name": "Peacloak",
+    "types": [
+     "Water",
+     "Fairy"
+    ],
+    "rawTypes": "Wasser Fee",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Feather Coat",
+    "desc": "Protect move. If Enemy Moves used against it would have side effects. Enemies have a chance to get them",
+    "page": 13,
+    "crossRef": false
+   },
+   {
+    "name": "Fae Mirror",
+    "desc": "Uses the last used Attack of the Target with Fairy Type against them",
+    "page": 13,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Aquatic Veil",
+    "desc": "Damage recieved in Rain is ⅔×",
+    "page": 13,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 13
+ },
+ {
+  "species": [
+   {
+    "name": "Borini",
+    "types": [
+     "Fire",
+     "Ground"
+    ],
+    "rawTypes": "Feuer Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Borosag",
+    "types": [
+     "Fire",
+     "Ground"
+    ],
+    "rawTypes": "Feuer Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Bororis",
+    "types": [
+     "Fire",
+     "Ground",
+     "Steel"
+    ],
+    "rawTypes": "Feuer Boden Stahl",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Volcanic Eruption",
+    "desc": "Deals high Damage",
+    "page": 14,
+    "crossRef": false
+   },
+   {
+    "name": "Shield Bash",
+    "desc": "Raises unsers Defense by 1",
+    "page": 14,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Fireproof",
+    "desc": "No Damage by Fire type Attacks",
+    "page": 14,
+    "crossRef": false
+   },
+   {
+    "name": "Mudlover",
+    "desc": "Water Type Moves of this Pokemon become Ground Type",
+    "page": 14,
+    "crossRef": false
+   },
+   {
+    "name": "Headshield",
+    "desc": "Boosts in Defense and Sf.Def count 1,3×",
+    "page": 14,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 14
+ },
+ {
+  "species": [
+   {
+    "name": "Törnchen",
+    "types": [
+     "Normal"
+    ],
+    "rawTypes": "Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Elektörnchen",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Elevoltörnchen",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Elerolltörnchen",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": [
+     3,
+     1
+    ]
+   },
+   {
+    "name": "Eleblitörnchen",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": [
+     3,
+     2
+    ]
+   }
+  ],
+  "moves": [
+   {
+    "name": "Electic Gnaw",
+    "desc": "Consumes Targets Food Item if held",
+    "page": 15,
+    "crossRef": false
+   },
+   {
+    "name": "Tailcanon",
+    "desc": "High Damage",
+    "page": 15,
+    "crossRef": false
+   },
+   {
+    "name": "Driftroll",
+    "desc": "High Damage",
+    "page": 15,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Electric Teeth",
+    "desc": "Biting Attacks have a 20% Chance to flinch",
+    "page": 15,
+    "crossRef": false
+   },
+   {
+    "name": "Crispy Charge",
+    "desc": "Effect of its and Allies food item is doubled. Like healing, stat buffs, 50% damage reduction by supereffective types,... depends on food item",
+    "page": 15,
+    "crossRef": false
+   },
+   {
+    "name": "Thundertail",
+    "desc": "Boosts Sp.Atk when using Electric Moves",
+    "page": 16,
+    "crossRef": false
+   },
+   {
+    "name": "Electric Carousel",
+    "desc": "Boosts Spe when using Electric Moves",
+    "page": 16,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 15
+ },
+ {
+  "species": [
+   {
+    "name": "Aquamaki",
+    "types": [
+     "Water"
+    ],
+    "rawTypes": "Wasser",
+    "splitEvo": null
+   },
+   {
+    "name": "Staffape",
+    "types": [
+     "Water"
+    ],
+    "rawTypes": "Wasser",
+    "splitEvo": null
+   },
+   {
+    "name": "Monkong",
+    "types": [
+     "Water",
+     "Fighting"
+    ],
+    "rawTypes": "Wasser Kampf",
+    "splitEvo": null
+   },
+   {
+    "name": "Monkong-Mega",
+    "types": [
+     "Water",
+     "Fighting"
+    ],
+    "rawTypes": "Wasser Kampf",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Mindful Strike",
+    "desc": "Doubles Damage if Status Move is used the Turn before",
+    "page": 16,
+    "crossRef": false
+   },
+   {
+    "name": "Heavenly Smite",
+    "desc": "User faints if Attack misses(blocked by Protect moves is not missing)",
+    "page": 16,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Water Starter",
+    "desc": "Water moves deal 30% more damage",
+    "page": 17,
+    "crossRef": false
+   },
+   {
+    "name": "Aura Aye",
+    "desc": "Accuracy-Changes and Evasion-Changes are Ignored and all Moves are 10% more Accurate",
+    "page": 17,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Mindfocus",
+    "desc": "Using a Non-Damaging Move for one Trun, maked you immune to flinch and guarantees a crit on the following turn",
+    "page": 17,
+    "crossRef": false
+   }
+  ],
+  "page": 16
+ },
+ {
+  "species": [
+   {
+    "name": "Puriserpent",
+    "types": [
+     "Water",
+     "Poison"
+    ],
+    "rawTypes": "Wasser Gift",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Clear Vitriolic",
+    "desc": "Damage+Clears Entry hazards on fieldside",
+    "page": 17,
+    "crossRef": false
+   },
+   {
+    "name": "Clarity Geyser",
+    "desc": "Special Attack with Priority and doubles damage if target is poisoned",
+    "page": 18,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Toxic Clarity",
+    "desc": "Partners Poisened by it, will heal the amount the poison would damage. Regardless if Puriserpent is still alive or on the feald it just has to inflict",
+    "page": 18,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 17
+ },
+ {
+  "species": [
+   {
+    "name": "Voltshen",
+    "types": [
+     "Dragon",
+     "Electric"
+    ],
+    "rawTypes": "Drache Elektro",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Celestial Thunderbolt",
+    "desc": "Always Hits in Rain",
+    "page": 18,
+    "crossRef": false
+   },
+   {
+    "name": "Ionizing Blast",
+    "desc": "Deals Double Damag in Rain and stops rain immediately. Normal 70 basepower",
+    "page": 18,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Skystrike Inception",
+    "desc": "Sp.Atk is 50% higher in Rain",
+    "page": 19,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 18
+ },
+ {
+  "species": [
+   {
+    "name": "Lithorca",
+    "types": [
+     "Water",
+     "Rock"
+    ],
+    "rawTypes": "Wasser Stein",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Crustal Ram",
+    "desc": "The greater the weight compared to the target, the greater the damage",
+    "page": 19,
+    "crossRef": false
+   },
+   {
+    "name": "Abyssal Burial",
+    "desc": "Lowers Users Special Attack by 2 Stages",
+    "page": 19,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Stonecrust",
+    "desc": "Super Effective Moves deal neutral Damage",
+    "page": 19,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 19
+ },
+ {
+  "species": [
+   {
+    "name": "Draptrich",
+    "types": [
+     "Psychic"
+    ],
+    "rawTypes": "Psycho",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Mental Overdrive",
+    "desc": "Lowers users Sp.Def by 2 Stages",
+    "page": 20,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Kaleidoscopic Veil",
+    "desc": "If hit by Special Attack, sets up Psycic Terrain",
+    "page": 20,
+    "crossRef": false
+   },
+   {
+    "name": "Mental Overwhelm",
+    "desc": "If attacked by a faster pokemon, they swap speed dor the whole fight",
+    "page": 20,
+    "crossRef": false
+   },
+   {
+    "name": "Counterweight",
+    "desc": "...",
+    "page": 20,
+    "crossRef": true
+   }
+  ],
+  "megaAbilities": [],
+  "page": 19
+ },
+ {
+  "species": [
+   {
+    "name": "Slicantis",
+    "types": [
+     "Bug"
+    ],
+    "rawTypes": "Käfer",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Guillotine Gust",
+    "desc": "High crit ratio",
+    "page": 20,
+    "crossRef": false
+   },
+   {
+    "name": "Phantom Slash",
+    "desc": "Has +2 Priority but only hits if Target wants to use a Status move",
+    "page": 20,
+    "crossRef": false
+   },
+   {
+    "name": "Mantis Dance",
+    "desc": "Boosts Atk and Spe by 1",
+    "page": 20,
+    "crossRef": false
+   },
+   {
+    "name": "Apex Sever",
+    "desc": "Lowers Defense and Sp.Def of user by 1",
+    "page": 21,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Dodge",
+    "desc": "Hightens Spe by 2 Stages if Attack misses it",
+    "page": 21,
+    "crossRef": false
+   },
+   {
+    "name": "Slicing Massacre",
+    "desc": "Uses Attack Stat as Special Attack stat",
+    "page": 21,
+    "crossRef": false
+   },
+   {
+    "name": "Executioner",
+    "desc": "Deals 50% more damage if target was unter 50% max.Hp",
+    "page": 21,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 20
+ },
+ {
+  "species": [
+   {
+    "name": "Schawoll",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Du-Schawoll",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Tri-Schawoll",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Double-Spin",
+    "desc": "Damages 2 Times",
+    "page": 21,
+    "crossRef": false
+   },
+   {
+    "name": "Triple-Spin",
+    "desc": "Damages 3 Times",
+    "page": 21,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Warm Body",
+    "desc": "Prevents Freeze/Hail on it",
+    "page": 22,
+    "crossRef": false
+   },
+   {
+    "name": "Power of Friendship",
+    "desc": "50% Chance to Heal Partner in Doubles at end of turn",
+    "page": 22,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 21
+ },
+ {
+  "species": [
+   {
+    "name": "Slugon",
+    "types": [
+     "Dragon"
+    ],
+    "rawTypes": "Drache",
+    "splitEvo": null
+   },
+   {
+    "name": "Slagmite",
+    "types": [
+     "Dragon",
+     "Rock"
+    ],
+    "rawTypes": "Drache Stein",
+    "splitEvo": null
+   },
+   {
+    "name": "Rollusk",
+    "types": [
+     "Dragon",
+     "Rock"
+    ],
+    "rawTypes": "Drache Stein",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Shell Toss",
+    "desc": "Lowers Attackers Defense by 1",
+    "page": 22,
+    "crossRef": false
+   },
+   {
+    "name": "Dragon Vortex",
+    "desc": "Boosts Speed and Defense by 1 in first round. In next round it attacks and Deals High damage to both Opponents",
+    "page": 22,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Centrifugal Force",
+    "desc": "ratation Atacks and Attacks using its Weight to calculate damage highten its speed by 1 stage after used",
+    "page": 23,
+    "crossRef": false
+   },
+   {
+    "name": "Spin Counter",
+    "desc": "Contact Attacks used against it deal 25% recoil damage to the attacker",
+    "page": 23,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 22
+ },
+ {
+  "species": [
+   {
+    "name": "Briccoloss",
+    "types": [
+     "Rock"
+    ],
+    "rawTypes": "Stein",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Brick Shelter",
+    "desc": "Protect Move. Lowers Enemy Attack if hit by physical move or Sp.Atk if hit by Special move",
+    "page": 23,
+    "crossRef": false
+   },
+   {
+    "name": "Fortress Bash",
+    "desc": "Deals Damage Based on the Users Defense stat instead of Attack and has Priority -1",
+    "page": 23,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Brickwall",
+    "desc": "Boosts Defense or Sp.Def, depending on wich is lower (including stat changes) when using a Protecting move",
+    "page": 24,
+    "crossRef": false
+   },
+   {
+    "name": "Ruine",
+    "desc": "If it Faints is Boosts Def and Sp.Def of the Pokemon switching in at its place",
+    "page": 24,
+    "crossRef": false
+   },
+   {
+    "name": "Brick Core",
+    "desc": "The First Attack every Fight that would KO it, instead halves its current Hp",
+    "page": 24,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 23
+ },
+ {
+  "species": [
+   {
+    "name": "Chronowl",
+    "types": [
+     "Psychic",
+     "Steel"
+    ],
+    "rawTypes": "Psycho Stahl",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Timewrap",
+    "desc": "Targets Speed is = 200-TargetsSpeed for 5 Turns",
+    "page": 24,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Slowmofly",
+    "desc": "All Effects (Except Statuseffects) of its attacks last 3 Rounds longer. Including Flields, Weather, Reflect, Gravity,... Every Thing like this + is immune to Ground type Attacks",
+    "page": 25,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 24
+ },
+ {
+  "species": [
+   {
+    "name": "Terraspire",
+    "types": [
+     "Psychic",
+     "Ground"
+    ],
+    "rawTypes": "Psycho Boden",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Crystal Spike",
+    "desc": "Also Able to damage Targets immune to Ground Type Attacks(By Effects abilities of flying type,...)",
+    "page": 25,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Spatial Catalyst",
+    "desc": "Increases all of its Damage by 30% if a Field is Active and gets immune to Attacks that share Typing with the Field",
+    "page": 25,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 25
+ },
+ {
+  "species": [
+   {
+    "name": "Mudumbo",
+    "types": [
+     "Ground"
+    ],
+    "rawTypes": "Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Mudrolloss",
+    "types": [
+     "Ground"
+    ],
+    "rawTypes": "Boden",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Spere Ramp",
+    "desc": "just a Bullet Attack",
+    "page": 26,
+    "crossRef": false
+   },
+   {
+    "name": "Heavy Trumpet",
+    "desc": "Chance to flinch Target equals the Amount of Hp Loss by this attack in %",
+    "page": 26,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Fireproof",
+    "desc": "...",
+    "page": 26,
+    "crossRef": true
+   },
+   {
+    "name": "Mudbody",
+    "desc": "Physical Attacks deal 25% Less damage and Water Attacks dont deal damage against it",
+    "page": 26,
+    "crossRef": false
+   },
+   {
+    "name": "Mud Rush",
+    "desc": "Doubles Initiative in Rain if it wants to use a Ground Type move",
+    "page": 26,
+    "crossRef": false
+   },
+   {
+    "name": "Trunk Launcher",
+    "desc": "Doubles Damage of first Bullet Attack used after switching in or Battle start",
+    "page": 27,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 26
+ },
+ {
+  "species": [
+   {
+    "name": "Bloomlet",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": null
+   },
+   {
+    "name": "Florumble",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": [
+     1,
+     1
+    ]
+   },
+   {
+    "name": "Cocobud",
+    "types": [
+     "Grass",
+     "Water"
+    ],
+    "rawTypes": "Pflanze Wasser",
+    "splitEvo": [
+     1,
+     2
+    ]
+   },
+   {
+    "name": "Cocobotan",
+    "types": [
+     "Grass",
+     "Water"
+    ],
+    "rawTypes": "Pflanze Wasser",
+    "splitEvo": [
+     2,
+     2
+    ]
+   }
+  ],
+  "moves": [
+   {
+    "name": "Stem Drop",
+    "desc": "Deals Damage by comparing this Pokemons bodyweight to the targets and has 30% recoil because it does a lot of damage",
+    "page": 27,
+    "crossRef": false
+   },
+   {
+    "name": "Loam Impact",
+    "desc": "Hits targets under Ground too and deals double damage to them",
+    "page": 28,
+    "crossRef": false
+   },
+   {
+    "name": "Flattening",
+    "desc": "Is 100% Accurate if the user is faster then the target and 70% if not. Deals damage and lowers targts speed by 1",
+    "page": 28,
+    "crossRef": false
+   },
+   {
+    "name": "Coco Refresh",
+    "desc": "Heals user by 50% max.Hp. If used in sunlight also heals Partner by 25% max.Hp",
+    "page": 28,
+    "crossRef": false
+   },
+   {
+    "name": "Nut Launcher",
+    "desc": "Hits 2-5 times and if used at Parter heals 50% of damage it would deal",
+    "page": 28,
+    "crossRef": false
+   },
+   {
+    "name": "Cream Splash",
+    "desc": "Damages Both Opponents",
+    "page": 29,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Root Anchor",
+    "desc": "Initiative is halfed but it cant get forced to switch out",
+    "page": 29,
+    "crossRef": false
+   },
+   {
+    "name": "Whac-A-Mole",
+    "desc": "Boosts Attack and Accuracy by 1 if it hits a phsyical Move but moves are 30% less Accurate",
+    "page": 29,
+    "crossRef": false
+   },
+   {
+    "name": "Timber Fall",
+    "desc": "Attacks using Bodyweight to calculate damage have -1 Priority but go through Protect and deal 20% more damage",
+    "page": 29,
+    "crossRef": false
+   },
+   {
+    "name": "Refresh Aura",
+    "desc": "Cures Partners and own Status Problems when switching in",
+    "page": 30,
+    "crossRef": false
+   },
+   {
+    "name": "Isotonic",
+    "desc": "Healing this Pokemon heals 50% more. If it heals other pokemon the healing is 33% More",
+    "page": 30,
+    "crossRef": false
+   },
+   {
+    "name": "Hydro Mechanics",
+    "desc": "Phsyical Water Type Attacks deal 50% more damage",
+    "page": 30,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 27
+ },
+ {
+  "species": [
+   {
+    "name": "Dimodile",
+    "types": [
+     "Steel",
+     "Electric"
+    ],
+    "rawTypes": "Stahl Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Crocantenna",
+    "types": [
+     "Steel",
+     "Electric",
+     "Ground"
+    ],
+    "rawTypes": "Stahl Elektro Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Solokrodil",
+    "types": [
+     "Steel",
+     "Electric",
+     "Ground"
+    ],
+    "rawTypes": "Stahl Elektro Boden",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Sonic Discharge",
+    "desc": "...",
+    "page": 31,
+    "crossRef": true
+   },
+   {
+    "name": "Seismic Hum",
+    "desc": "Hits all Pokemon and flinches 20%",
+    "page": 31,
+    "crossRef": false
+   },
+   {
+    "name": "Antenna Pulse",
+    "desc": "Always Hits and has +1 Priority if super effective against target",
+    "page": 31,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Solarcharge",
+    "desc": "Sunlight Boosts Sound- and Electric Attacks by 50%",
+    "page": 31,
+    "crossRef": false
+   },
+   {
+    "name": "Sonic Resonance",
+    "desc": "Sets up Reflect, when hit by Sound attack",
+    "page": 31,
+    "crossRef": false
+   },
+   {
+    "name": "Parabolic Amp",
+    "desc": "moves hitting the target for super effective damage are 30% more accurate",
+    "page": 31,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 30
+ },
+ {
+  "species": [
+   {
+    "name": "Sproutshroom",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": null
+   },
+   {
+    "name": "Shroomoo",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": [
+     1,
+     1
+    ]
+   },
+   {
+    "name": "Shroofo",
+    "types": [
+     "Grass",
+     "Psychic"
+    ],
+    "rawTypes": "Pflanze Psycho",
+    "splitEvo": [
+     1,
+     2
+    ]
+   },
+   {
+    "name": "Shroomogaar",
+    "types": [
+     "Grass",
+     "Poison"
+    ],
+    "rawTypes": "Pflanze Gift",
+    "splitEvo": [
+     1,
+     3
+    ]
+   },
+   {
+    "name": "Pilzogaar",
+    "types": [
+     "Grass",
+     "Poison",
+     "Dark"
+    ],
+    "rawTypes": "Pflanze Gift Unlicht",
+    "splitEvo": [
+     2,
+     3
+    ]
+   },
+   {
+    "name": "Pilzogaar-Mega",
+    "types": [
+     "Grass",
+     "Poison",
+     "Dark"
+    ],
+    "rawTypes": "Pflanze Gift Unlicht",
+    "splitEvo": [
+     2,
+     3
+    ]
+   }
+  ],
+  "moves": [
+   {
+    "name": "Spore Milk",
+    "desc": "Switches Out and heals the newly switched in Pokemon by 25% max.Hp and boosts their Def by 1",
+    "page": 32,
+    "crossRef": false
+   },
+   {
+    "name": "Woodbark Tackle",
+    "desc": "30% flinch Chance",
+    "page": 32,
+    "crossRef": false
+   },
+   {
+    "name": "Gravity Spore",
+    "desc": "Every Pokemon on the Field touches the Ground for 5 rounds",
+    "page": 33,
+    "crossRef": false
+   },
+   {
+    "name": "Psy-Cap Burst",
+    "desc": "Ignores Stat Changes in Enemies Sp.Def",
+    "page": 33,
+    "crossRef": false
+   },
+   {
+    "name": "Mycelium Uplift",
+    "desc": "Boosts Evasion and Sp.Atk by 1",
+    "page": 33,
+    "crossRef": false
+   },
+   {
+    "name": "Maligant Stalk",
+    "desc": "High Crit Ratio. Badly Poisons if crits",
+    "page": 33,
+    "crossRef": false
+   },
+   {
+    "name": "Shared Suffering",
+    "desc": "If user is infected by Status Effect, target gets effected too",
+    "page": 33,
+    "crossRef": false
+   },
+   {
+    "name": "Spore Envy",
+    "desc": "deals very low damage and boosts Attack by 1. If Target Boosted Its stats in this Round before he attacks them. This Pokemon steals these stat Boosts from the target",
+    "page": 33,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Mycelium Growth",
+    "desc": "Immune to Water Type Attacks. Boosts highest defense stat by 1 if hit by water type attack instead",
+    "page": 34,
+    "crossRef": false
+   },
+   {
+    "name": "Evergreen Cud",
+    "desc": "Frisst ein Food Item wenn es verbraucht wird eine Runde später am Ende der Runde erneut und löst erneut dessen effekt aus. Bei Sonnenschein und Regen auch 2 Runden danach nochmal",
+    "page": 34,
+    "crossRef": false
+   },
+   {
+    "name": "Shelf Shroom Texture",
+    "desc": "Physical Damage is Reduced by 20% but Fire Type attacks deal 30% more damage to it",
+    "page": 34,
+    "crossRef": false
+   },
+   {
+    "name": "Alien Spores",
+    "desc": "If it Gets Hit by a Physical Move in Psycic Terrain, the Attacker falls asleep + Is Immune to Ground Type Attacks",
+    "page": 35,
+    "crossRef": false
+   },
+   {
+    "name": "Telecinetic Cap",
+    "desc": "STAB Moves hit flying hovering and floating targets(type flying or through attacks, effects and abilities) super effective + Is Immune to Ground Type Attacks",
+    "page": 35,
+    "crossRef": false
+   },
+   {
+    "name": "Burning Rage",
+    "desc": "Attack is 50% higher if effected by Status Effect",
+    "page": 35,
+    "crossRef": false
+   },
+   {
+    "name": "Toxic Envy",
+    "desc": "If Enemy Heals itself, It heals the same amount by itself",
+    "page": 35,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Overgrown Predator",
+    "desc": "Damage of its STAB Attacks cant get reduced and these Deal 30% more Damage",
+    "page": 36,
+    "crossRef": false
+   }
+  ],
+  "page": 32
+ },
+ {
+  "species": [
+   {
+    "name": "Nibblarva",
+    "types": [
+     "Bug"
+    ],
+    "rawTypes": "Käfer",
+    "splitEvo": null
+   },
+   {
+    "name": "Spincoon",
+    "types": [
+     "Bug"
+    ],
+    "rawTypes": "Käfer",
+    "splitEvo": null
+   },
+   {
+    "name": "Metafly",
+    "types": [
+     "Bug",
+     "Electric"
+    ],
+    "rawTypes": "Käfer Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Metafly-Fairy",
+    "types": [
+     "Bug",
+     "Fairy"
+    ],
+    "rawTypes": "Käfer Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Metafly-Fire",
+    "types": [
+     "Bug",
+     "Fire"
+    ],
+    "rawTypes": "Käfer Feuer",
+    "splitEvo": null
+   },
+   {
+    "name": "Metafly-Ice",
+    "types": [
+     "Bug",
+     "Ice"
+    ],
+    "rawTypes": "Käfer Eis",
+    "splitEvo": null
+   },
+   {
+    "name": "Metafly-Poison",
+    "types": [
+     "Bug",
+     "Poison"
+    ],
+    "rawTypes": "Käfer Gift",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Cocoon Spin",
+    "desc": "30% Chance to Lower Targets Defense. Lowers Users Defense",
+    "page": 36,
+    "crossRef": false
+   },
+   {
+    "name": "Flutter Strike",
+    "desc": "Uses Users second typing as type and has +1 priority",
+    "page": 36,
+    "crossRef": false
+   },
+   {
+    "name": "Metamorphic Gale",
+    "desc": "30% Chance to boost random stat of user by 1",
+    "page": 37,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Nibble",
+    "desc": "Eats Targets Food Item if hitting with contact attack",
+    "page": 37,
+    "crossRef": false
+   },
+   {
+    "name": "Armored",
+    "desc": "Hitting this Pokemon with an Attack will do max. 25% of max. Hp as Damage but it loses this ability instantly after hit",
+    "page": 37,
+    "crossRef": false
+   },
+   {
+    "name": "Static Flutter",
+    "desc": "Hitting Targets with Electric or Bug Type Attacks has a 30% chance to Paralyse",
+    "page": 37,
+    "crossRef": false
+   },
+   {
+    "name": "Pixie Dust",
+    "desc": "Sets Up Misty Terrain by switching in",
+    "page": 37,
+    "crossRef": false
+   },
+   {
+    "name": "Thermal Lift",
+    "desc": "...",
+    "page": 38,
+    "crossRef": true
+   },
+   {
+    "name": "Frostbite Scale",
+    "desc": "Immune to Haildamage. If hit by Phsyical Move, 30% Chance to Freeze Attacker",
+    "page": 38,
+    "crossRef": false
+   },
+   {
+    "name": "Toxic Metamorphosis",
+    "desc": "Badly Poisons all Pokemon on the Feald, except itself, when it nicks out an Opponent",
+    "page": 38,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 36
+ },
+ {
+  "species": [
+   {
+    "name": "Zitrolina",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Zitronella",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Sour Scratch",
+    "desc": "Lowers Enemies highest Defense by 1",
+    "page": 38,
+    "crossRef": false
+   },
+   {
+    "name": "Zesty Somersault",
+    "desc": "Switches Out after this Attack",
+    "page": 38,
+    "crossRef": false
+   },
+   {
+    "name": "Acrobatic Pounce",
+    "desc": "Doubles Damage if no Held item",
+    "page": 39,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Sour Peel",
+    "desc": "Falling under 50% max.Hp raises Atk by 2 stages but lowers defense and sp.def by 1",
+    "page": 39,
+    "crossRef": false
+   },
+   {
+    "name": "Hunting Instinct",
+    "desc": "...",
+    "page": 39,
+    "crossRef": true
+   }
+  ],
+  "megaAbilities": [],
+  "page": 38
+ },
+ {
+  "species": [
+   {
+    "name": "Incoon",
+    "types": [
+     "Normal",
+     "Poison"
+    ],
+    "rawTypes": "Normal Gift",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Splatter Dash",
+    "desc": "Hits 2 Times and has a high crit ratio",
+    "page": 39,
+    "crossRef": false
+   },
+   {
+    "name": "Masterpiece Curse",
+    "desc": "Poisons Target and Lowers their Highets stat by 1, excepting hp",
+    "page": 39,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Toxic Palette",
+    "desc": "All secondary effects of his normal type moves get removed and have a 30% chance to poison the target instead",
+    "page": 39,
+    "crossRef": false
+   },
+   {
+    "name": "Acidic Pigment",
+    "desc": "Poison Attacks of this Pokemon can hit Steel and Poison type Opponents super effective, if Incoon has full Hp",
+    "page": 40,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 39
+ },
+ {
+  "species": [
+   {
+    "name": "Budpup",
+    "types": [
+     "Grass",
+     "Ground"
+    ],
+    "rawTypes": "Pflanze Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Budruff",
+    "types": [
+     "Grass",
+     "Ground"
+    ],
+    "rawTypes": "Pflanze Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Mudruff",
+    "types": [
+     "Grass",
+     "Ground"
+    ],
+    "rawTypes": "Pflanze Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Mudruff-Mega",
+    "types": [
+     "Grass",
+     "Ground",
+     "Dark"
+    ],
+    "rawTypes": "Pflanze Boden Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Root Snap",
+    "desc": "30% chance to lower targets speed by 1",
+    "page": 40,
+    "crossRef": false
+   },
+   {
+    "name": "Scent Track",
+    "desc": "Cant miss Attacks against the target of this attack for the next 3 Rounds",
+    "page": 41,
+    "crossRef": false
+   },
+   {
+    "name": "Bog Slam",
+    "desc": "If Users current Defense is higher then Opponents, deals 50% more Damage",
+    "page": 41,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Itemfinder",
+    "desc": "If Item is lost has a 33% Chance to find random Food Item at end of every turn",
+    "page": 41,
+    "crossRef": false
+   },
+   {
+    "name": "Sniff",
+    "desc": "Reveals Ememy Ability on switch in",
+    "page": 41,
+    "crossRef": false
+   },
+   {
+    "name": "Mudpile",
+    "desc": "Over 50% Hp it has 70% higher defense&sp.def but 50% less speed. After falling under 50% cant return",
+    "page": 41,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Sludgepile",
+    "desc": "Over 50% Hp it has 70% higher defense&sp.def but 50% less speed. After falling under 50% cant return. Also hitting Opponents with biting moves make them unable to switch out",
+    "page": 42,
+    "crossRef": false
+   }
+  ],
+  "page": 40
+ },
+ {
+  "species": [
+   {
+    "name": "Gloomp",
+    "types": [
+     "Dark"
+    ],
+    "rawTypes": "Unlicht",
+    "splitEvo": null
+   },
+   {
+    "name": "Dreadooze",
+    "types": [
+     "Dark"
+    ],
+    "rawTypes": "Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Dread Lock",
+    "desc": "Target cant switch out for 5 turns and has sp.atk lowered by 1",
+    "page": 42,
+    "crossRef": false
+   },
+   {
+    "name": "Pitch-Black Crush",
+    "desc": "Lowers Users Atk and Spe by 1 but deals massive damage",
+    "page": 42,
+    "crossRef": false
+   },
+   {
+    "name": "Chain Reaction",
+    "desc": "Hits 2 to 3 times and doubles damage with every hit in a row",
+    "page": 43,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Black Tar",
+    "desc": "Lowers Opponents Speed stat by 1 if hit by contact move + moves if 50 basepower or lower wont damage it at all",
+    "page": 43,
+    "crossRef": false
+   },
+   {
+    "name": "Corrosive Grip",
+    "desc": "Hitting Opponents with contact moves has a 30% chance to destroy their held item dor the fight",
+    "page": 43,
+    "crossRef": false
+   },
+   {
+    "name": "Iron Collar",
+    "desc": "Critical Hits against it deal no Damage at all and contact moves against it del ⅔× Damage",
+    "page": 43,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 42
+ },
+ {
+  "species": [
+   {
+    "name": "Fluffox",
+    "types": [
+     "Flying"
+    ],
+    "rawTypes": "Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Fluffox-Mega",
+    "types": [
+     "Flying",
+     "Ice"
+    ],
+    "rawTypes": "Flug Eis",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Clear Weather Burst",
+    "desc": "Boosts Speed of Parter ans itself by 1",
+    "page": 44,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Cloudy Mist",
+    "desc": "Evasion is 2 stages higher in Rain",
+    "page": 44,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Ice Spike Mist",
+    "desc": "Its Attacks Freeze Opponents in Rain by 50%",
+    "page": 44,
+    "crossRef": false
+   }
+  ],
+  "page": 44
+ },
+ {
+  "species": [
+   {
+    "name": "Orbitail",
+    "types": [
+     "Rock"
+    ],
+    "rawTypes": "Stein",
+    "splitEvo": null
+   },
+   {
+    "name": "Orbitail-Mega",
+    "types": [
+     "Rock",
+     "Psychic"
+    ],
+    "rawTypes": "Stein Psycho",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Gravity Force",
+    "desc": "Target is not immune to ground for 5 rounds",
+    "page": 44,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Planet Ring",
+    "desc": "Hits all Pokemon on the Field at the End of every Turn with 40 Rock-Type-Damage, Partner just 20",
+    "page": 44,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Supersonic Ring",
+    "desc": "All of its Attacks hit both Opponents",
+    "page": 45,
+    "crossRef": false
+   }
+  ],
+  "page": 44
+ },
+ {
+  "species": [
+   {
+    "name": "Tigitz",
+    "types": [
+     "Normal",
+     "Fighting"
+    ],
+    "rawTypes": "Normal Fighting",
+    "splitEvo": null
+   },
+   {
+    "name": "Tigraith",
+    "types": [
+     "Normal",
+     "Fighting"
+    ],
+    "rawTypes": "Normal Fighting",
+    "splitEvo": [
+     1,
+     1
+    ]
+   },
+   {
+    "name": "Tigraxe",
+    "types": [
+     "Normal",
+     "Fairy"
+    ],
+    "rawTypes": "Normal Fairy",
+    "splitEvo": [
+     1,
+     2
+    ]
+   }
+  ],
+  "moves": [
+   {
+    "name": "Furious Fang",
+    "desc": "Fairy Type if Female, Fighting if Male, 30% Flinch chance",
+    "page": 45,
+    "crossRef": false
+   },
+   {
+    "name": "Furious Axe Slash",
+    "desc": "Crit garanteed, 30% Flinch chance",
+    "page": 46,
+    "crossRef": false
+   },
+   {
+    "name": "Furious Crown Beam",
+    "desc": "Crit garanteed, 30% Flinch chance",
+    "page": 46,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Reckless",
+    "desc": "Hits Immune or not very effective moves as if neutral",
+    "page": 46,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 45
+ },
+ {
+  "species": [
+   {
+    "name": "Puffedo",
+    "types": [
+     "Grass",
+     "Flying"
+    ],
+    "rawTypes": "Pflanze Flug",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Puffbomb",
+    "desc": "Hits all pokemon on Field",
+    "page": 46,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Different Dimension",
+    "desc": "Highest Stat, except Hp, is always doubled",
+    "page": 46,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 46
+ },
+ {
+  "species": [
+   {
+    "name": "Flacicle",
+    "types": [
+     "Fire",
+     "Ice"
+    ],
+    "rawTypes": "Feuer Eis",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Cold Flamebeam",
+    "desc": "Fire Type, Freeze 30%",
+    "page": 47,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Different Dimension",
+    "desc": "Highest Stat, except Hp, is always doubled",
+    "page": 47,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 46
+ },
+ {
+  "species": [
+   {
+    "name": "Destidice",
+    "types": [
+     "Psychic",
+     "Ghost"
+    ],
+    "rawTypes": "Psycho Geist",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Rolladice",
+    "desc": "Chooses a Random Number from 1-6 as Damage and multiplies with 20",
+    "page": 47,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Different Dimension",
+    "desc": "Highest Stat, except Hp, is always doubled",
+    "page": 47,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 47
+ },
+ {
+  "species": [
+   {
+    "name": "Carapunch",
+    "types": [
+     "Bug",
+     "Fighting"
+    ],
+    "rawTypes": "Käfer Kampf",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Punch Kick Combo",
+    "desc": "Hits 2 Times and has Priority +1",
+    "page": 47,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Different Dimension",
+    "desc": "Highest Stat, except Hp, is always doubled",
+    "page": 48,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 47
+ },
+ {
+  "species": [
+   {
+    "name": "Dimenthor",
+    "types": [
+     "Psychic",
+     "Dark"
+    ],
+    "rawTypes": "Psycho Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Barrierbreak",
+    "desc": "Deals acts as if enemies sp.def stat change is always negative or neutral also if it was positiv. As if enemy sp.def stat change = -|sp.def stat change|",
+    "page": 48,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Dimensional Force",
+    "desc": "Always Hits",
+    "page": 48,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 48
+ },
+ {
+  "species": [
+   {
+    "name": "Bumburn",
+    "types": [
+     "Bug",
+     "Flying"
+    ],
+    "rawTypes": "Käfer Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Vespiferno",
+    "types": [
+     "Bug",
+     "Fire"
+    ],
+    "rawTypes": "Käfer Feuer",
+    "splitEvo": null
+   },
+   {
+    "name": "Gasiferno",
+    "types": [
+     "Bug",
+     "Fire",
+     "Poison"
+    ],
+    "rawTypes": "Käfer Feuer Gift",
+    "splitEvo": null
+   },
+   {
+    "name": "Gasiferno-Mega",
+    "types": [
+     "Dark",
+     "Fire",
+     "Poison"
+    ],
+    "rawTypes": "Unlicht Feuer Gift",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Flamesting",
+    "desc": "Burns",
+    "page": 49,
+    "crossRef": false
+   },
+   {
+    "name": "Gasveil",
+    "desc": "Gaseffect on opposing Fieldside: Doubles Fire Type Damage Recieved by all enemies for 5 Rounds",
+    "page": 49,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Warm Body",
+    "desc": "...",
+    "page": 49,
+    "crossRef": true
+   },
+   {
+    "name": "Inflaming",
+    "desc": "Super Effective Fire Type Moves deal 33% more Damage",
+    "page": 49,
+    "crossRef": false
+   },
+   {
+    "name": "Sneaky Sting",
+    "desc": "Priority Moves deal double Damage",
+    "page": 49,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Combustion Engine",
+    "desc": "Upon Mega Evolution Sets up Gasveil. If Gasveil on Opposing side, its speed is doubled and STAB Moves ignore resistances",
+    "page": 49,
+    "crossRef": false
+   }
+  ],
+  "page": 48
+ },
+ {
+  "species": [
+   {
+    "name": "Currypot",
+    "types": [
+     "Water",
+     "Fire"
+    ],
+    "rawTypes": "Wasser Feuer",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Boiling Splash",
+    "desc": "Water type Attack but also Super effective against types that are weak to fire(bug, grass, steel, ice)",
+    "page": 50,
+    "crossRef": false
+   },
+   {
+    "name": "Spice Overload",
+    "desc": "Lowers Targets Sp.Def and Accuracy by 1 and has a 20% chance to flinch them",
+    "page": 50,
+    "crossRef": false
+   },
+   {
+    "name": "Stir Fry",
+    "desc": "If users speed stat is boosted by at least 1 stage this move doubles in power",
+    "page": 50,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Warm Body",
+    "desc": "",
+    "page": 51,
+    "crossRef": true
+   },
+   {
+    "name": "Fireproof",
+    "desc": "",
+    "page": 51,
+    "crossRef": true
+   },
+   {
+    "name": "Cooking",
+    "desc": "Contact Moves boost atk, sp.atk and spe but lower def and sp.def all by 1",
+    "page": 51,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 50
+ },
+ {
+  "species": [
+   {
+    "name": "Ra-Tu",
+    "types": [
+     "Fighting"
+    ],
+    "rawTypes": "Kampf",
+    "splitEvo": null
+   },
+   {
+    "name": "Maskaratto",
+    "types": [
+     "Fighting",
+     "Ghost"
+    ],
+    "rawTypes": "Kampf Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Rattorombo",
+    "types": [
+     "Fighting",
+     "Ghost",
+     "Dark"
+    ],
+    "rawTypes": "Kampf Geist Unlicht",
+    "splitEvo": null
+   },
+   {
+    "name": "Rattorombo-Mega",
+    "types": [
+     "Fighting",
+     "Ghost",
+     "Dark"
+    ],
+    "rawTypes": "Kampf Geist Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Rumble",
+    "desc": "Damage is not lowered by Burn",
+    "page": 51,
+    "crossRef": false
+   },
+   {
+    "name": "Sneak Attack",
+    "desc": "Priority +1. Lowers Enemy Accuracy by 1",
+    "page": 51,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Focus",
+    "desc": "Redirected Attacks have doubled damage",
+    "page": 51,
+    "crossRef": false
+   },
+   {
+    "name": "Reckless",
+    "desc": "...",
+    "page": 52,
+    "crossRef": true
+   },
+   {
+    "name": "Ambush Speed",
+    "desc": "On its first turn after Switching in its next attack has +1 priority, halfed damage, and flinches guaranteed",
+    "page": 52,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Vanish Strike",
+    "desc": "Moves with 60 or lower basepower become priority moves and ignore Protect",
+    "page": 52,
+    "crossRef": false
+   }
+  ],
+  "page": 51
+ },
+ {
+  "species": [
+   {
+    "name": "Concreet",
+    "types": [
+     "Rock"
+    ],
+    "rawTypes": "Stein",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Cement Pour",
+    "desc": "Lowers the target's Speed by two stages and removes their airborne status (grounding Flying-types or Pokémon with Levitate)",
+    "page": 52,
+    "crossRef": false
+   },
+   {
+    "name": "Foundation Smash",
+    "desc": "Removes Relfect and Light Screen",
+    "page": 53,
+    "crossRef": false
+   },
+   {
+    "name": "Slow Attack",
+    "desc": "...",
+    "page": 53,
+    "crossRef": true
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Wet Cement",
+    "desc": "Opponents hitting it with a Contact move cant switch out for 3 turns",
+    "page": 53,
+    "crossRef": false
+   },
+   {
+    "name": "Curing Form",
+    "desc": "Raises Def by 1 and lowers Spe by 1 at the end of every turn",
+    "page": 53,
+    "crossRef": false
+   },
+   {
+    "name": "Foundation",
+    "desc": "Recoild Moves used against it deal halfed damage",
+    "page": 53,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 52
+ },
+ {
+  "species": [
+   {
+    "name": "Keksel",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Zuckerkeksel",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Butterkeksel",
+    "types": [
+     "Fairy",
+     "Fire"
+    ],
+    "rawTypes": "Fee Feuer",
+    "splitEvo": null
+   },
+   {
+    "name": "Butterkeksel-Mega",
+    "types": [
+     "Fairy",
+     "Fire"
+    ],
+    "rawTypes": "Fee Feuer",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Cookie Crunch",
+    "desc": "Heals user by 50% damage dealt",
+    "page": 54,
+    "crossRef": false
+   },
+   {
+    "name": "Sprinkle Shower",
+    "desc": "...",
+    "page": 54,
+    "crossRef": true
+   },
+   {
+    "name": "Overbake",
+    "desc": "50% recoil damage but also boosts users defense by 1",
+    "page": 54,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Sugar Rush",
+    "desc": "...",
+    "page": 54,
+    "crossRef": true
+   },
+   {
+    "name": "Gingerbread",
+    "desc": "Hit By Fire Type Move Boosts highets Attack Stat and Spe",
+    "page": 54,
+    "crossRef": false
+   },
+   {
+    "name": "Crumb Armor",
+    "desc": "Getting hit by a Physical move boosts Evasion by one but drops Defense by 1",
+    "page": 54,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Rainbowcake",
+    "desc": "Using Special Attacking Moves Boosts Sp.Atk before using them",
+    "page": 55,
+    "crossRef": false
+   }
+  ],
+  "page": 54
+ },
+ {
+  "species": [
+   {
+    "name": "Nanosol",
+    "types": [
+     "Ghost",
+     "Electric"
+    ],
+    "rawTypes": "Geist Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Nexasol",
+    "types": [
+     "Ghost",
+     "Electric"
+    ],
+    "rawTypes": "Geist Elektro",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Type:Hack",
+    "desc": "Is Super Effective",
+    "page": 55,
+    "crossRef": false
+   },
+   {
+    "name": "Bytepunch",
+    "desc": "no effects",
+    "page": 55,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Antienergy",
+    "desc": "Mega-Pokemon recieve 50% more Damage",
+    "page": 55,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 55
+ },
+ {
+  "species": [
+   {
+    "name": "Eneraptor",
+    "types": [
+     "Dark"
+    ],
+    "rawTypes": "Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Evaporate",
+    "desc": "Damages both Enemies",
+    "page": 55,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Mega Consumer",
+    "desc": "Mega Evolution boots all stats by 50% for 3 Rounds",
+    "page": 56,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 55
+ },
+ {
+  "species": [
+   {
+    "name": "Sparkchin",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Needle Roll",
+    "desc": "Uses Users Type as Attacktype and has a 30% chance to inflict the status condition of the type when hitting the target(Paralysis or badly Poison)",
+    "page": 56,
+    "crossRef": false
+   },
+   {
+    "name": "Barbed Counter",
+    "desc": "+3 Priority. Attack will fail if try to use 2 times in a row. User cant fall under 1 hp in the turn it uses it and if he takes damage by a physical move, he counter attacks with double the damage recieved and his typing as type directly after getting hit",
+    "page": 56,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Lightning Spike",
+    "desc": "Paralyses if Damaged",
+    "page": 57,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 56
+ },
+ {
+  "species": [
+   {
+    "name": "Toxurchin",
+    "types": [
+     "Poison"
+    ],
+    "rawTypes": "Gift",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Needle Roll",
+    "desc": "...",
+    "page": 57,
+    "crossRef": true
+   },
+   {
+    "name": "Barbed Counter",
+    "desc": "...",
+    "page": 57,
+    "crossRef": true
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Venomous Spike",
+    "desc": "Poisons badly of Damaged",
+    "page": 57,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 57
+ },
+ {
+  "species": [
+   {
+    "name": "Knuckimp",
+    "types": [
+     "Fighting"
+    ],
+    "rawTypes": "Kampf",
+    "splitEvo": null
+   },
+   {
+    "name": "Quakong",
+    "types": [
+     "Fighting",
+     "Ground"
+    ],
+    "rawTypes": "Kampf Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Quakong-Mega",
+    "types": [
+     "Fighting",
+     "Ground"
+    ],
+    "rawTypes": "Kampf Boden",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Quake Punch",
+    "desc": "Hits Ground-Immune Enemies",
+    "page": 58,
+    "crossRef": false
+   },
+   {
+    "name": "Shockwave Jump",
+    "desc": "The user vaults high into the air using a localized ground explosion, then next turn crashes down on the target. This move ignores the effects of protection moves like Protect or Detect",
+    "page": 58,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Violent",
+    "desc": "Deals 0.7% more damage for every 1% of hp lost. So if it had 0% hp it would deal 70% more damage",
+    "page": 58,
+    "crossRef": false
+   },
+   {
+    "name": "Seismic Force",
+    "desc": "Ground Type and Punch Attacks deal 30% More Damage",
+    "page": 59,
+    "crossRef": false
+   },
+   {
+    "name": "Aftershock",
+    "desc": "Every time this Pokémon uses a damaging Ground-type move, it releases a secondary shockwave at the end of the turn, dealing fixed damage equal to 10% of the target's maximum HP to all opponents",
+    "page": 59,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Epicenter Fury",
+    "desc": "If this Pokemon would Flinch, it doesnt and instead its next attacking moves deals double damage and flinches the target",
+    "page": 59,
+    "crossRef": false
+   }
+  ],
+  "page": 57
+ },
+ {
+  "species": [
+   {
+    "name": "Pterock",
+    "types": [
+     "Flying",
+     "Rock"
+    ],
+    "rawTypes": "Flug Stein",
+    "splitEvo": null
+   },
+   {
+    "name": "Pterock-Mega",
+    "types": [
+     "Flying",
+     "Rock"
+    ],
+    "rawTypes": "Flug Stein",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Stonebeak",
+    "desc": "+1 Priority",
+    "page": 60,
+    "crossRef": false
+   },
+   {
+    "name": "Roosting Wall",
+    "desc": "Heals 50% max.Hp als Looses Flying Type until it uses a damaging move again",
+    "page": 60,
+    "crossRef": false
+   },
+   {
+    "name": "Meteor Dive",
+    "desc": "33% recoild damage",
+    "page": 60,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Drilling Rock",
+    "desc": "Ignores Target Effects triggered by Contact like abilities",
+    "page": 60,
+    "crossRef": false
+   },
+   {
+    "name": "Aerodynamic Heavyweight",
+    "desc": "Attacks that calculate damage using the user's body weight gain +1 priority if the user is at full HP",
+    "page": 60,
+    "crossRef": false
+   },
+   {
+    "name": "Fossilized Wings",
+    "desc": "It is completely immune to recoil damage from Flying-type attacks and its Speed cannot be lowered by opponents",
+    "page": 61,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Prehistoric Terror",
+    "desc": "All Protect Moves of all Pokemon will Fail while this Pokemon is on the Field",
+    "page": 61,
+    "crossRef": false
+   }
+  ],
+  "page": 60
+ },
+ {
+  "species": [
+   {
+    "name": "Illusheep",
+    "types": [
+     "Ghost"
+    ],
+    "rawTypes": "Geist",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Fake Fluff",
+    "desc": "Lowers users def and sp.def by 2 and KOs the pokemon that knocks it out, of it is knocked out this round",
+    "page": 62,
+    "crossRef": false
+   },
+   {
+    "name": "Ghost Bash",
+    "desc": "...",
+    "page": 62,
+    "crossRef": true
+   },
+   {
+    "name": "Baiting Spirit",
+    "desc": "It locks the target into using its highest-damage attacking move for the next 3 turns",
+    "page": 62,
+    "crossRef": false
+   },
+   {
+    "name": "Full Moon",
+    "desc": "...",
+    "page": 62,
+    "crossRef": true
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Misfortune",
+    "desc": "Chance for Side Effects of all Attacks of pokemon on the field is halfed",
+    "page": 62,
+    "crossRef": false
+   },
+   {
+    "name": "Tragic Mist",
+    "desc": "When this Pokémon enters the field, it summons a creepy mist. For 5 turns, all positive stat changes gained by any Pokémon on the field are instantly halved in effectiveness",
+    "page": 63,
+    "crossRef": false
+   },
+   {
+    "name": "Eerie Silence",
+    "desc": "While this Pokémon is active, all sound-based moves (like Heavy Trumpet or Sonic Discharge) fail completely, and all Pokémon on the field are immune to flinching",
+    "page": 63,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 62
+ },
+ {
+  "species": [
+   {
+    "name": "Ghowl",
+    "types": [
+     "Ghost"
+    ],
+    "rawTypes": "Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Grollf",
+    "types": [
+     "Ghost"
+    ],
+    "rawTypes": "Geist",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Full Moon Beam",
+    "desc": "Sets up the full moon weather for 5 rounds and deals damage. By full Moon Ghost Pokemon deal more damage and ghost pokemons stats cant be lowered",
+    "page": 64,
+    "crossRef": false
+   },
+   {
+    "name": "Moonlight Pounce",
+    "desc": "Has +1 Priority and deals 50% more damage under full moon",
+    "page": 64,
+    "crossRef": false
+   },
+   {
+    "name": "Deep Forest Ambush",
+    "desc": "Deals 30% more damage if user attacks before target",
+    "page": 64,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Hunting Instinct",
+    "desc": "Using Contact Attacks pretends users speed is 50% higher",
+    "page": 65,
+    "crossRef": false
+   },
+   {
+    "name": "Survivalist",
+    "desc": "Verliert es sein Item, Boostet es seine 2 höchsten stats. Wird auch getriggert wenn es ein neues item bekommt und verliert",
+    "page": 65,
+    "crossRef": false
+   },
+   {
+    "name": "Soul Scent",
+    "desc": "If a pokemon on the battlefield faints it boosts its critical hit ratio and speed by 1",
+    "page": 65,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 64
+ },
+ {
+  "species": [
+   {
+    "name": "Magnorb",
+    "types": [
+     "Steel"
+    ],
+    "rawTypes": "Stahl",
+    "splitEvo": null
+   },
+   {
+    "name": "Orbimech",
+    "types": [
+     "Steel"
+    ],
+    "rawTypes": "Stahl",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Magnetic Charge",
+    "desc": "Boosts Atk and Sp. Atk By 1 and damages all electric and steel type pokemon on the field, excluding itself",
+    "page": 65,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Remanence",
+    "desc": "Doesnt Reset Anything like Statuses when switch out and keeps everything on it as it is",
+    "page": 66,
+    "crossRef": false
+   },
+   {
+    "name": "Magnetic Memory",
+    "desc": "If this pokemon is hit by a damaging move, it takes 25% less damamage from that move for the rest of the fight. Does not reset and has no limit in how many moves to memorize",
+    "page": 66,
+    "crossRef": false
+   },
+   {
+    "name": "Polarity Shift",
+    "desc": "After entering the battlefield the first time. Its type weaknesses turn in to immunities for 3 turns",
+    "page": 66,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 65
+ },
+ {
+  "species": [
+   {
+    "name": "Sparkup",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Sparkettle",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Glimmertea",
+    "types": [
+     "Fairy"
+    ],
+    "rawTypes": "Fee",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Teaparty",
+    "desc": "Heals itself and its parter by 25% of their Attack stat",
+    "page": 67,
+    "crossRef": false
+   },
+   {
+    "name": "Another Cup",
+    "desc": "Damage is doubled, if target was allready hit by water type attack this turn",
+    "page": 67,
+    "crossRef": false
+   },
+   {
+    "name": "Dinner-4-1",
+    "desc": "Heals itself by 10% of its max.Hp at the end of every turn for the next 5 turns. Stackable",
+    "page": 67,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Sparkle Sparkle Bling Bling",
+    "desc": "All moves of Opponents will be Redirected to hit it but only if it didnt choose to use a status move",
+    "page": 67,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 67
+ },
+ {
+  "species": [
+   {
+    "name": "Cottonip",
+    "types": [
+     "Grass",
+     "Normal"
+    ],
+    "rawTypes": "Pflanze Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Pompash",
+    "types": [
+     "Grass",
+     "Normal"
+    ],
+    "rawTypes": "Pflanze Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Pompomble",
+    "types": [
+     "Grass",
+     "Normal"
+    ],
+    "rawTypes": "Pflanze Normal",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Cotton Wind",
+    "desc": "Cotton Effect on you side of the field: Pokemon Cant flinch and super effective hits deal 25% less damage.",
+    "page": 68,
+    "crossRef": false
+   },
+   {
+    "name": "Pompom Puff",
+    "desc": "Used on enemy: Phyical Attack: Lowers their Initiative by 1; On Partner: Special Attack: Heals the Amount of Damage it would deal",
+    "page": 68,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Rooted",
+    "desc": "Cannot switch out bit regenerates ⅛ max. Hp every round",
+    "page": 69,
+    "crossRef": false
+   },
+   {
+    "name": "Fresh Air",
+    "desc": "...",
+    "page": 69,
+    "crossRef": true
+   },
+   {
+    "name": "Anxious",
+    "desc": "If it would get KOed this round (pre-calculated ), it uses its attack with +3 priority",
+    "page": 69,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 68
+ },
+ {
+  "species": [
+   {
+    "name": "Micbat",
+    "types": [
+     "Dark",
+     "Flying"
+    ],
+    "rawTypes": "Unlicht Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Batress",
+    "types": [
+     "Dark",
+     "Flying"
+    ],
+    "rawTypes": "Unlicht Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Vampulse",
+    "types": [
+     "Dark",
+     "Flying"
+    ],
+    "rawTypes": "Unlicht Flug",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Night Pulse",
+    "desc": "Strong Sound Move, no effects",
+    "page": 69,
+    "crossRef": false
+   },
+   {
+    "name": "Feedback Screech",
+    "desc": "30% Flinch chance. If used while a Room Effect is active, it hits all opponents",
+    "page": 69,
+    "crossRef": false
+   },
+   {
+    "name": "Echo Blast",
+    "desc": "Multipies with the amount of Sound Moves used in a row by this Pokemon. 50 Basepower up to 300. Sound Move",
+    "page": 70,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Echo Drain",
+    "desc": "Heals 50% of damage dealt by sound moves",
+    "page": 70,
+    "crossRef": false
+   },
+   {
+    "name": "Echo-Location",
+    "desc": "Ignores Opponents Evasiveness stat and substitutes when attacking",
+    "page": 70,
+    "crossRef": false
+   },
+   {
+    "name": "Audio Record",
+    "desc": "When this Pokémon switches into the battlefield, it automatically gains a 50% damage reduction against the exact move that the opponent used in the previous turn",
+    "page": 70,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 69
+ },
+ {
+  "species": [
+   {
+    "name": "Crabell",
+    "types": [
+     "Rock",
+     "Fairy"
+    ],
+    "rawTypes": "Stein Fee",
+    "splitEvo": null
+   },
+   {
+    "name": "Crabass",
+    "types": [
+     "Rock",
+     "Fairy"
+    ],
+    "rawTypes": "Stein Fee",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Crystal Melody",
+    "desc": "Hightens Def and Sp.Def and deals low damage to every pokemon on the field, also itself",
+    "page": 71,
+    "crossRef": false
+   },
+   {
+    "name": "Sonic Shielding",
+    "desc": "Protect movem Pritects and raises its Sp.Def by 1 if hit by special move",
+    "page": 71,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Boom Bass",
+    "desc": "Hit by sound moves hightens sp. Atk by 1",
+    "page": 72,
+    "crossRef": false
+   },
+   {
+    "name": "Resonance Shell",
+    "desc": "Cant get effected by status conditions and refelcts them back to the opponent but only if a room effect is active",
+    "page": 72,
+    "crossRef": false
+   },
+   {
+    "name": "Symphonic Shield",
+    "desc": "This Pokemon and its Partner recieve halfed damage by multi hit attacks",
+    "page": 72,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 71
+ },
+ {
+  "species": [
+   {
+    "name": "Pupette",
+    "types": [
+     "Fairy",
+     "Dark"
+    ],
+    "rawTypes": "Fee Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Copycat Strike",
+    "desc": "Type Changes to Type of Targets last moved attack. If no attack used before stays normal",
+    "page": 72,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Voodoo Doodoo",
+    "desc": "If enemy Boosts its stats, she does too",
+    "page": 73,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 72
+ },
+ {
+  "species": [
+   {
+    "name": "Strohtoela",
+    "types": [
+     "Grass",
+     "Fighting"
+    ],
+    "rawTypes": "Pflanze Kampf",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Harvest Hopper",
+    "desc": "Heals by 50% of damage dealt",
+    "page": 73,
+    "crossRef": false
+   },
+   {
+    "name": "Slow Attack",
+    "desc": "Damage is mulitplied by number of pokemon this turn that acted before user",
+    "page": 73,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Counter-Kick",
+    "desc": "Gettint hit by a Priority Move, this pokemon immediately strikes back with the same move but Fighting type and deals super effective damage against flying type pokemon",
+    "page": 73,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 73
+ },
+ {
+  "species": [
+   {
+    "name": "Marslash",
+    "types": [
+     "Psychic",
+     "Fairy"
+    ],
+    "rawTypes": "Psycho Fee",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Sweet Clap",
+    "desc": "hits 2 times and flinches enemy 10% with every hit",
+    "page": 74,
+    "crossRef": false
+   },
+   {
+    "name": "Sweet Glaze",
+    "desc": "Overwrites Enemys Ability by Its Ability",
+    "page": 74,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Chocolate Cover",
+    "desc": "Sandstorm and Powder Moves dont affect it",
+    "page": 74,
+    "crossRef": false
+   },
+   {
+    "name": "Sugar Rush",
+    "desc": "Raises Speed by 2, If consumes Food Item",
+    "page": 74,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 74
+ },
+ {
+  "species": [
+   {
+    "name": "Creamite",
+    "types": [
+     "Ice"
+    ],
+    "rawTypes": "Eis",
+    "splitEvo": null
+   },
+   {
+    "name": "Gelatide",
+    "types": [
+     "Ice"
+    ],
+    "rawTypes": "Eis",
+    "splitEvo": null
+   },
+   {
+    "name": "Gelatitan",
+    "types": [
+     "Ice"
+    ],
+    "rawTypes": "Eis",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Sprinkle Shower",
+    "desc": "Hits 2-5 Times",
+    "page": 75,
+    "crossRef": false
+   },
+   {
+    "name": "Meltdown",
+    "desc": "Deals Damage and Lowers Defense and Sp.Def",
+    "page": 75,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Frozen Armor",
+    "desc": "Immune to Ice type Attacks, Boosts Defense and Sp.Def when hit instead",
+    "page": 75,
+    "crossRef": false
+   },
+   {
+    "name": "Sugar Rush",
+    "desc": "...",
+    "page": 75,
+    "crossRef": true
+   },
+   {
+    "name": "Everfrost",
+    "desc": "Sets up Hail, when enemy changes weather",
+    "page": 75,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 74
+ },
+ {
+  "species": [
+   {
+    "name": "Jellume",
+    "types": [
+     "Water",
+     "Flying"
+    ],
+    "rawTypes": "Wasser Flug",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Moonlight Buoyancy",
+    "desc": "Boosts Initaiative and Evasion by 1. Boosts by 2 if in Misty Terrain or at Full Moon",
+    "page": 75,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Lightweight",
+    "desc": "Weight is ¼× and is immune to attacks that need its weight to calculate (Like attacks dealing damage on weight)",
+    "page": 76,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 75
+ },
+ {
+  "species": [
+   {
+    "name": "Zapzard",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Zaplick",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   },
+   {
+    "name": "Zaboom",
+    "types": [
+     "Electric"
+    ],
+    "rawTypes": "Elektro",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Volt Lick",
+    "desc": "Paralyses if Crits and crit ratio is +1",
+    "page": 76,
+    "crossRef": false
+   },
+   {
+    "name": "Mambrane Pulse",
+    "desc": "Hits Both Enemies",
+    "page": 76,
+    "crossRef": false
+   },
+   {
+    "name": "Sonic Discharge",
+    "desc": "Lowers Sp.Atk by 2 stages but deals massive damage",
+    "page": 76,
+    "crossRef": false
+   },
+   {
+    "name": "Short Circuit",
+    "desc": "Disables Targets last used move for 3 Turns and has +1 priority",
+    "page": 77,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Overcharge",
+    "desc": "Electric type moves deal 50% more damage if hp <⅓",
+    "page": 77,
+    "crossRef": false
+   },
+   {
+    "name": "Amped Up",
+    "desc": "Raises Sp.Atk when it paralyses Target",
+    "page": 77,
+    "crossRef": false
+   },
+   {
+    "name": "Conductor Tongue",
+    "desc": "Hits Pokemon with Electric attacks, that are immune to electric(also including abilities making immune to electric, these dont activate)",
+    "page": 77,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 76
+ },
+ {
+  "species": [
+   {
+    "name": "Pottakus",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": null
+   },
+   {
+    "name": "Nockaktus",
+    "types": [
+     "Grass",
+     "Fighting"
+    ],
+    "rawTypes": "Pflanze Kampf",
+    "splitEvo": null
+   },
+   {
+    "name": "Kaktombox",
+    "types": [
+     "Grass",
+     "Fighting",
+     "Dark"
+    ],
+    "rawTypes": "Pflanze Kampf Unlicht",
+    "splitEvo": null
+   },
+   {
+    "name": "Kaktombox-Mega",
+    "types": [
+     "Grass",
+     "Fighting",
+     "Dark"
+    ],
+    "rawTypes": "Pflanze Kampf Unlicht",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Needle Jab",
+    "desc": "Used Faster, if user is hit by damaging attack it uses the move directly after its hit",
+    "page": 78,
+    "crossRef": false
+   },
+   {
+    "name": "Desert Lariat",
+    "desc": "Ignores Enemy Stat boosts in Defense and Evasion",
+    "page": 78,
+    "crossRef": false
+   },
+   {
+    "name": "Dried Thorns",
+    "desc": "Damages enemy over 5 turns",
+    "page": 78,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Lucha Libre",
+    "desc": "Switching in Raises critical hit ratio",
+    "page": 78,
+    "crossRef": false
+   },
+   {
+    "name": "Dry Skin mask",
+    "desc": "Attack Stat cant be lowered",
+    "page": 79,
+    "crossRef": false
+   },
+   {
+    "name": "Clay Armor",
+    "desc": "Attacks with over 100 Basepower always have 100 Basepower againts it",
+    "page": 79,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Desert Grappler",
+    "desc": "Sets up Sunlight on switching in or Mega Evolution and doubles speed in sunlight",
+    "page": 79,
+    "crossRef": false
+   }
+  ],
+  "page": 78
+ },
+ {
+  "species": [
+   {
+    "name": "Fluggel",
+    "types": [
+     "Flying",
+     "Normal"
+    ],
+    "rawTypes": "Flug Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Brutalon",
+    "types": [
+     "Flying",
+     "Normal"
+    ],
+    "rawTypes": "Flug Normal",
+    "splitEvo": null
+   },
+   {
+    "name": "Kondorush",
+    "types": [
+     "Flying",
+     "Fighting"
+    ],
+    "rawTypes": "Flug Kampf",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Condor Dive",
+    "desc": "User looses 25% of max. Hp but cant fall under 1 hp by using this attack. High damage",
+    "page": 79,
+    "crossRef": false
+   },
+   {
+    "name": "Wall Breaker",
+    "desc": "Damage increases not with attack boosts but with enemy defense boosts",
+    "page": 80,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Wrecking Ball",
+    "desc": "Deals more Damage through reflect and other screens instead of less",
+    "page": 80,
+    "crossRef": false
+   },
+   {
+    "name": "Scavenger Hunger",
+    "desc": "Boosts Initaiative if a Pokemonon the Field faints",
+    "page": 80,
+    "crossRef": false
+   },
+   {
+    "name": "Brutal Temper",
+    "desc": "Raises Attack by 1 if hit by physical move",
+    "page": 80,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 79
+ },
+ {
+  "species": [
+   {
+    "name": "Corally",
+    "types": [
+     "Water",
+     "Ghost"
+    ],
+    "rawTypes": "Wasser Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Coravon",
+    "types": [
+     "Water",
+     "Ghost"
+    ],
+    "rawTypes": "Wasser Geist",
+    "splitEvo": null
+   },
+   {
+    "name": "Coravira",
+    "types": [
+     "Water",
+     "Ghost"
+    ],
+    "rawTypes": "Wasser Geist",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Spectral Tide",
+    "desc": "Heals 50% of Damage dealt if user is under 50% max.Hp",
+    "page": 81,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Coral Curse",
+    "desc": "Curses Itself and the Enemy if hit by a contact move to loose ¼ max.Hp every round until switched out",
+    "page": 81,
+    "crossRef": false
+   },
+   {
+    "name": "Dead Reef",
+    "desc": "Immune to Water type Attacks and instead raises Speed if hit",
+    "page": 81,
+    "crossRef": false
+   },
+   {
+    "name": "Bleak Bleach",
+    "desc": "Lowers all Enemys Sp.Atk when it switches in",
+    "page": 81,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 80
+ },
+ {
+  "species": [
+   {
+    "name": "Tuskit",
+    "types": [
+     "Ground"
+    ],
+    "rawTypes": "Boden",
+    "splitEvo": null
+   },
+   {
+    "name": "Dunfang",
+    "types": [
+     "Ground"
+    ],
+    "rawTypes": "Boden",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Bone Whip",
+    "desc": "Deals Damage ground type and is Super Effective against Ghost Type Pokemon",
+    "page": 82,
+    "crossRef": false
+   },
+   {
+    "name": "Counter Bone Swipe",
+    "desc": "Like Succer Punch only Attacks if the Target wants to attack the user. Then it attacks the target before they attack",
+    "page": 82,
+    "crossRef": false
+   },
+   {
+    "name": "Desert Prowl",
+    "desc": "Boosts Attack and Accuracy by 1 and also Boosts Evasion by one if in Sandstorm",
+    "page": 82,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Bone Grip",
+    "desc": "Boosts damage of all Moves with Ghost Type or \"Bone\" in the name by 50%",
+    "page": 82,
+    "crossRef": false
+   },
+   {
+    "name": "Apex Instinct",
+    "desc": "Lands a guaranteed Critical Hit if Enemy has full Hp",
+    "page": 83,
+    "crossRef": false
+   },
+   {
+    "name": "Survivalist",
+    "desc": "...",
+    "page": 83,
+    "crossRef": true
+   }
+  ],
+  "megaAbilities": [],
+  "page": 81
+ },
+ {
+  "species": [
+   {
+    "name": "Steelia",
+    "types": [
+     "Steel"
+    ],
+    "rawTypes": "Stahl",
+    "splitEvo": null
+   },
+   {
+    "name": "Steelaf",
+    "types": [
+     "Steel"
+    ],
+    "rawTypes": "Stahl",
+    "splitEvo": null
+   },
+   {
+    "name": "Giraforge",
+    "types": [
+     "Steel"
+    ],
+    "rawTypes": "Stahl",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Bulb Overload",
+    "desc": "Paralyses 30%",
+    "page": 83,
+    "crossRef": false
+   },
+   {
+    "name": "Crane Catapult",
+    "desc": "Damage + forces target to switch out",
+    "page": 83,
+    "crossRef": false
+   },
+   {
+    "name": "Focal Beam",
+    "desc": "Boosts Accuracy and Critical hit ratio by 1 and deals low damage. Only raises Accuracy and Crit Ratio if Crit ratio isnt allready raised",
+    "page": 83,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Counterweight",
+    "desc": "Enemy Attacks and Abilities cant flinch or switch out this Pokemon",
+    "page": 84,
+    "crossRef": false
+   },
+   {
+    "name": "Induction Charge",
+    "desc": "Gets Charged if hut by electric move(charge doubles danage of next electric type move)",
+    "page": 84,
+    "crossRef": false
+   },
+   {
+    "name": "Barbed Chassis",
+    "desc": "Contact Moves against it deal 20% of this pokemons Defense(of Sp.Def if Contact move is Special) Stat as damage back to the enemy",
+    "page": 84,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 83
+ },
+ {
+  "species": [
+   {
+    "name": "Clouda",
+    "types": [
+     "Flying"
+    ],
+    "rawTypes": "Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Pandaroo",
+    "types": [
+     "Flying"
+    ],
+    "rawTypes": "Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Puffloat",
+    "types": [
+     "Flying"
+    ],
+    "rawTypes": "Flug",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Baloon Bounce",
+    "desc": "Deals more Damage the less weight the target has. Min ¼× and Max. 4× basedamage",
+    "page": 85,
+    "crossRef": false
+   },
+   {
+    "name": "Anchor Drop",
+    "desc": "Deals rock type damage and user is profiting from fieldeffects until switched out also in not grounded",
+    "page": 85,
+    "crossRef": false
+   },
+   {
+    "name": "Helium Burst",
+    "desc": "Burns Unser and Target and deals damage",
+    "page": 85,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Ground Anchor",
+    "desc": "Cant be forced to switch out",
+    "page": 85,
+    "crossRef": false
+   },
+   {
+    "name": "Lightweight",
+    "desc": "...",
+    "page": 85,
+    "crossRef": true
+   },
+   {
+    "name": "Thermal Lift",
+    "desc": "In sunlight damage dealt to it by pokemon that are able to be hit by ground type attacks(non flying type and no effects and abilities that would make them immune) deal ⅔× Damage against it and it is immune to ground type attacks",
+    "page": 85,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 84
+ },
+ {
+  "species": [
+   {
+    "name": "Cinderbun",
+    "types": [
+     "Fire"
+    ],
+    "rawTypes": "Feuer",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Scorching Sprint",
+    "desc": "Switches out User after hitting target and has +1 Priority if user is heated up",
+    "page": 86,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Cinder Boost",
+    "desc": "If it gets a stat drop, its initiative gets boosted by 1 and it heats up(next fire type attacks has double damage)",
+    "page": 86,
+    "crossRef": false
+   },
+   {
+    "name": "Scorching Scurry",
+    "desc": "If hp drops below 50% it boosts evasion by 2",
+    "page": 86,
+    "crossRef": false
+   },
+   {
+    "name": "Blazing Fur",
+    "desc": "If hit by physical ice or grass type attacks damage is halfed and attacker gets burned",
+    "page": 87,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 86
+ },
+ {
+  "species": [
+   {
+    "name": "Florbat",
+    "types": [
+     "Grass",
+     "Flying"
+    ],
+    "rawTypes": "Pflanze Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Branchit",
+    "types": [
+     "Grass",
+     "Flying"
+    ],
+    "rawTypes": "Pflanze Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Bramvora",
+    "types": [
+     "Grass",
+     "Flying"
+    ],
+    "rawTypes": "Pflanze Flug",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Root Ambush",
+    "desc": "Priority +1 if user has full hp",
+    "page": 87,
+    "crossRef": false
+   },
+   {
+    "name": "Slumber Wing",
+    "desc": "It always works when the user is asleep and wakes them up",
+    "page": 87,
+    "crossRef": false
+   },
+   {
+    "name": "Grounded Drain",
+    "desc": "Looses Ground Type Immunity and gets immune to Electric type and heals 50% max.Hp. Now effected by every ground effect and fieldeffect (landed)",
+    "page": 87,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Inverted Flight",
+    "desc": "Accuracy, Evasion and Initiative drops turn into boosts instead",
+    "page": 88,
+    "crossRef": false
+   },
+   {
+    "name": "Vexed Awakaning",
+    "desc": "Falling under 50% max. HP boosts Attack and Sp.Atk and Speed but lowers Defense and Sp.Def",
+    "page": 88,
+    "crossRef": false
+   },
+   {
+    "name": "Deep Root Reflex",
+    "desc": "Boosts Damage of Ground Type Moves by 50%",
+    "page": 88,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 87
+ },
+ {
+  "species": [
+   {
+    "name": "Turtoga",
+    "types": [
+     "Fire",
+     "Rock"
+    ],
+    "rawTypes": "Feuer Stein",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Volcanic Shell Spam",
+    "desc": "Uses Users Defense Stat instead of Attack stat to calculate damage",
+    "page": 89,
+    "crossRef": false
+   },
+   {
+    "name": "Magma Gulp",
+    "desc": "Deals good damage and hits rock types super effective",
+    "page": 89,
+    "crossRef": false
+   },
+   {
+    "name": "Stone Snap",
+    "desc": "30% Flinch Chance",
+    "page": 89,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Magma Meltdown",
+    "desc": "Rock type Attacks become fire type if they would deal more damage being fire type",
+    "page": 89,
+    "crossRef": false
+   },
+   {
+    "name": "Thermal Furnace",
+    "desc": "Boosts Sp.Atk when hit by fire type moves and halves their damage. Also recieves halfed damage by Stealth rock and removes these and boosts sp.atk if hit by them",
+    "page": 89,
+    "crossRef": false
+   },
+   {
+    "name": "Crusted Obsidian",
+    "desc": "Boosts Defense by 2 stages and lowers speed by 1 stage if hit by water or ice type attack",
+    "page": 90,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [],
+  "page": 89
+ },
+ {
+  "species": [
+   {
+    "name": "Nadela",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": null
+   },
+   {
+    "name": "Tannadela",
+    "types": [
+     "Grass"
+    ],
+    "rawTypes": "Pflanze",
+    "splitEvo": null
+   },
+   {
+    "name": "Tannadela-Mega",
+    "types": [
+     "Grass",
+     "Ice"
+    ],
+    "rawTypes": "Pflanze Eis",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Needle Missle",
+    "desc": "Hits 2 to 5 times higher crit ratio",
+    "page": 90,
+    "crossRef": false
+   },
+   {
+    "name": "Resin Trap",
+    "desc": "lowers enemy Initiative by 2 and makes them unable to switch out or flee",
+    "page": 90,
+    "crossRef": false
+   },
+   {
+    "name": "Cone Crash",
+    "desc": "Hits both enemies and flinches 20%",
+    "page": 90,
+    "crossRef": false
+   },
+   {
+    "name": "Role Reset",
+    "desc": "The user passes its current Ability to the target, then restores its own Ability to what it was at the start of the battle",
+    "page": 91,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Evergreen",
+    "desc": "Cant get burned or frozen",
+    "page": 91,
+    "crossRef": false
+   },
+   {
+    "name": "Sylvan Veil",
+    "desc": "Recieves 20% less damage if weather is active but not in sandstorm",
+    "page": 91,
+    "crossRef": false
+   },
+   {
+    "name": "Cone Storage",
+    "desc": "Bullet Attacks deal 30% more damage",
+    "page": 91,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Holiday Cheer",
+    "desc": "Changes weather to snow for 5 Turns and all of its moves are 100% Accurate",
+    "page": 91,
+    "crossRef": false
+   }
+  ],
+  "page": 90
+ },
+ {
+  "species": [
+   {
+    "name": "Toli",
+    "types": [
+     "Grass",
+     "Flying"
+    ],
+    "rawTypes": "Pflanze Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Flattatoli",
+    "types": [
+     "Grass",
+     "Flying"
+    ],
+    "rawTypes": "Pflanze Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Tolithena",
+    "types": [
+     "Grass",
+     "Flying"
+    ],
+    "rawTypes": "Pflanze Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Tolithena-Mega",
+    "types": [
+     "Grass",
+     "Psychic"
+    ],
+    "rawTypes": "Pflanze Psycho",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Athenas Gaze",
+    "desc": "Accuracy and Crit Ratio is Boosted by 2 but normalises after 3 Turns",
+    "page": 92,
+    "crossRef": false
+   },
+   {
+    "name": "Nectar Dash",
+    "desc": "If user holds Food item it is consumed before attack and priority turns to +2 instead of 0",
+    "page": 92,
+    "crossRef": false
+   },
+   {
+    "name": "Strategic Dives",
+    "desc": "User switches out after Attack",
+    "page": 92,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Brassica Boost",
+    "desc": "Consuming Food Item or getting hit by Grass type attack boosts Initiative by 1",
+    "page": 92,
+    "crossRef": false
+   },
+   {
+    "name": "Tactical Lead",
+    "desc": "By switch in Boosts Attack or Sp.Atk depending on if Enemies defense of sp.def is lower. Lower sp.def -> higher sp.Atk; Lower Def -> higher Atk",
+    "page": 93,
+    "crossRef": false
+   },
+   {
+    "name": "Pinpoint Needle",
+    "desc": "Attacks using a Beak and sharp attacks deal 30% more damage",
+    "page": 93,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Athenas Decree",
+    "desc": "Boosts Sp.Atk by 2 stages when defeating enemy and turns flying type attacks into Psycic type",
+    "page": 93,
+    "crossRef": false
+   }
+  ],
+  "page": 92
+ },
+ {
+  "species": [
+   {
+    "name": "Helia",
+    "types": [
+     "Flying"
+    ],
+    "rawTypes": "Flug",
+    "splitEvo": null
+   },
+   {
+    "name": "Helia-Mega",
+    "types": [
+     "Flying"
+    ],
+    "rawTypes": "Flug",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Inflatable Fortress",
+    "desc": "Boists Defense and Sp.Def by 1",
+    "page": 94,
+    "crossRef": false
+   },
+   {
+    "name": "Thermal Ascent",
+    "desc": "Boosts initiative by 1 and heals ⅓ of max. Hp",
+    "page": 94,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Thermal Lift",
+    "desc": "...",
+    "page": 94,
+    "crossRef": true
+   },
+   {
+    "name": "Pop Relfex",
+    "desc": "Maxes out Speed if hit by crit",
+    "page": 94,
+    "crossRef": false
+   },
+   {
+    "name": "Helium Voice",
+    "desc": "Sound Attacks become Flying Type and deal 20% more Damage",
+    "page": 94,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Playtime Joy",
+    "desc": "On recieving this ability or switching in all enemies cant use status moves for 3 turns",
+    "page": 94,
+    "crossRef": false
+   }
+  ],
+  "page": 94
+ },
+ {
+  "species": [
+   {
+    "name": "Weeperry",
+    "types": [
+     "Poison",
+     "Grass"
+    ],
+    "rawTypes": "Poison Grass",
+    "splitEvo": null
+   },
+   {
+    "name": "Brambliss",
+    "types": [
+     "Poison",
+     "Grass"
+    ],
+    "rawTypes": "Poison Grass",
+    "splitEvo": null
+   },
+   {
+    "name": "Violethra",
+    "types": [
+     "Poison",
+     "Ghost"
+    ],
+    "rawTypes": "Poison Ghost",
+    "splitEvo": null
+   },
+   {
+    "name": "Violethra-Mega",
+    "types": [
+     "Poison"
+    ],
+    "rawTypes": "Poison",
+    "splitEvo": null
+   }
+  ],
+  "moves": [
+   {
+    "name": "Bitter Tears",
+    "desc": "Lowers Targets Attack and Poisones them",
+    "page": 95,
+    "crossRef": false
+   },
+   {
+    "name": "Bramble Gown",
+    "desc": "Boosts Def and Sp.Def by 1 and Attackers Hitting it with contact moves afterwards this round loose ⅛ max.Hp",
+    "page": 95,
+    "crossRef": false
+   },
+   {
+    "name": "Berry Burst",
+    "desc": "Badly Poisons Poisoned Enemies. Confuses Badly Poisoned Enemies",
+    "page": 95,
+    "crossRef": false
+   }
+  ],
+  "abilities": [
+   {
+    "name": "Weeping Berry",
+    "desc": "Lowers Enemy Accuracy by 1 if hit by attack",
+    "page": 95,
+    "crossRef": false
+   },
+   {
+    "name": "Inverted Growth",
+    "desc": "Swaps Def and Atk and swaps Sp.Def and Sp.Atk if under 50% max.Hp",
+    "page": 96,
+    "crossRef": false
+   },
+   {
+    "name": "Blind Needle",
+    "desc": "Attacks of this Pokemon that would miss because of Accuracy drops or enemy Evasion boosts but would normally hit without these drops or boosts, will hit but deal 10% less damage",
+    "page": 96,
+    "crossRef": false
+   }
+  ],
+  "megaAbilities": [
+   {
+    "name": "Corrosive Couture",
+    "desc": "Recieves no Damage of Types weak to poison (Fairy, Grass, Bug) and Badly Poisons the attacker if hit by these attack types",
+    "page": 96,
+    "crossRef": false
+   }
+  ],
+  "page": 95
+ }
+]

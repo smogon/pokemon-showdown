@@ -8,7 +8,10 @@ export default configure([
 			"logs/",
 			"node_modules/",
 			"dist/",
+			"dist-client/",
 			"data/**/learnsets.ts",
+			// machine-generated from the source PDFs/xlsx by tools/fakemon/build.py
+			"data/mods/fakemon/generated/",
 			"tools/set-import/importer.js",
 			"tools/set-import/sets",
 			"tools/modlog/converter.js",

@@ -55,6 +55,20 @@ const DISCONNECTION_BANK_TIME = 300;
 const TIMER_COOLDOWN = 20 * SECONDS;
 const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
+/**
+ * A computer-controlled battle participant. `RoomBattle` drives any slot that
+ * has one of these instead of a user: it forwards the public log to `observe`
+ * and answers each request with `decide`.
+ *
+ * The Fakemon system's implementation lives in `data/mods/fakemon/bot.ts`.
+ */
+export interface BattleBot {
+	readonly name: string;
+	setSide(side: SideID): void;
+	observe(line: string): void;
+	decide(request: AnyObject): string;
+}
+
 export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
 	readonly channelIndex: ChannelIndex;
@@ -614,6 +628,26 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		this.active = active;
 		if (Rooms.global.battleCount === 0) Rooms.global.automaticKillRequest();
 	}
+	/** Slots played by an AI rather than a user. See `BattleBot`. */
+	bots: { [slot: string]: BattleBot } = {};
+
+	/** Let a bot answer the request its slot just received. */
+	private botRespond(slot: SideID) {
+		const bot = this.bots[slot];
+		const player = this[slot];
+		if (!bot || !player) return;
+		const request = player.request;
+		if (request.isWait !== false) return;
+		const choice = bot.decide(JSON.parse(request.request));
+		if (!choice) return;
+		request.isWait = true;
+		request.choice = choice;
+		// Deferred so the choice is written outside the stream's own read loop.
+		process.nextTick(() => {
+			if (!this.ended) void this.stream.write(`>${slot} ${choice}`);
+		});
+	}
+
 	override choose(user: User, data: string) {
 		if (this.frozen) {
 			user.popup(`Your battle is currently paused, so you cannot move right now.`);
@@ -774,6 +808,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				if (line.startsWith('|turn|')) {
 					this.turn = parseInt(line.slice(6));
 				}
+				for (const bot of Object.values(this.bots)) bot.observe(line);
 				this.room.add(line);
 				if (line.startsWith(`|bigerror|You will auto-tie if `) && Config.allowrequestingties && !this.room.tour) {
 					this.room.add(`|-hint|If you want to tie earlier, consider using \`/offertie\`.`);
@@ -793,6 +828,13 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				const request = this[slot].request;
 				request.isWait = undoFailed ? 'cantUndo' : false;
 				request.choice = '';
+				if (this.bots[slot] && !undoFailed) {
+					// A bot must never leave the battle waiting on a bad choice.
+					request.isWait = true;
+					process.nextTick(() => {
+						if (!this.ended) void this.stream.write(`>${slot} default`);
+					});
+				}
 			} else if (lines[2].startsWith(`|request|`)) {
 				this.rqid++;
 				const request = JSON.parse(lines[2].slice(9));
@@ -806,6 +848,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				};
 				this.requestCount++;
 				player?.sendRoom(`|request|${requestJSON}`);
+				if (this.bots[slot]) {
+					this.botRespond(slot);
+					break;
+				}
 				if (!request.update) this.timer.nextRequest(player);
 				break;
 			}
@@ -1054,7 +1100,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	 * playerOpts should be empty only if importing an inputlog
 	 * (so the player isn't recreated)
 	 */
-	override addPlayer(user: User | string | null, playerOpts?: RoomBattlePlayerOptions | null) {
+	override addPlayer(user: User | string | null, playerOpts?: Partial<RoomBattlePlayerOptions> | null) {
 		const player = super.addPlayer(user);
 		if (typeof user === 'string') user = null;
 		if (!player) return null;

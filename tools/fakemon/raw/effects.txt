@@ -1,0 +1,474 @@
+
++1 priority
++1 priority if target is attacking
+10% Accuracy↓
+10% Bleed*
+10% Burn
+10% Burn, hits all adjacent foes.
+10% Burn, hits targets using Dive/Dig
+10% Chance auf Flinch
+10% Confusion
+10% Curse
+10% Defense↓
+10% Flinch
+10% Freeze
+10% Freeze, 10% chance to drop Sp. Def.
+10% Freeze, ignores target's Sp. Def boosts
+10% Leech Seed
+10% Paralysis
+10% Poison
+10% Sleep
+10% Sp. Atk↓
+10% Sp. Def↓
+10% Speed↓
+10% chance to Freeze
+10% chance to flinch
+10% chance to heal user 10%
+10% chance to induce Sleep
+10% chance to lower Defense by 1.
+10% chance to lower Sp. Def
+10% chance to lower Sp. Def.
+10% chance to lower Speed
+10% chance to lower target's Sp. Def by 1
+100% chance to lower target's Attack by 1.
+100% chance to paralyze if target has a Water-type move.
+20% Accuracy↓
+20% Burn
+20% Burn, hits Flying types for neutral damage
+20% Confusion
+20% Disable
+20% Flinch, 10% recoil
+20% Flinch, 20% Poison
+20% Paralysis
+20% Poison
+20% Sp. Def↓
+20% chance attackers become Paralyzed
+20% chance to Flinch, hits all adjacent targets
+20% chance to Freeze the target.
+20% chance to Sleep or Poison the target.
+20% chance to burn or paralyze
+20% chance to cause Confusion.
+20% chance to cause Flinch.
+20% chance to cause confusion
+20% chance to confuse the target.
+20% chance to confuse.
+20% chance to drop target's Accuracy by 1.
+20% chance to flinch
+20% chance to flinch.
+20% chance to freeze the target
+20% chance to lower Defense
+20% chance to lower Sp. Atk
+20% chance to lower Sp. Atk.
+20% chance to lower Sp. Def
+20% chance to lower Sp. Def by 2
+20% chance to lower Speed
+20% chance to lower accuracy, clears hazards on both sides
+20% chance to lower all target's stats by 1
+20% chance to lower target's Accuracy
+20% chance to lower target's Defense.
+20% chance to raise user's Sp. Atk
+20% chance to severely Poison.
+30% Accuracy↓
+30% Burn
+30% Burn, high critical hit ratio
+30% Burn, super effective against Ice types
+30% Flinch
+30% Paralysis
+30% Paralysis, user takes 1/8 recoil if it misses
+30% chance to Burn instead of Poison.
+30% chance to Burn, super effective on Ice.
+30% chance to Burn, super effective on Water types
+30% chance to Burn.
+30% chance to Flinch.
+30% chance to Paralyze (stun effect).
+30% chance to Paralyze.
+30% chance to Poison or Badly Poison.
+30% chance to Sleep.
+30% chance to badly poison
+30% chance to badly poison the target
+30% chance to cause Flinch.
+30% chance to cause Infatuation or Confusion.
+30% chance to cause Sleep.
+30% chance to cause confusion or paralysis
+30% chance to flinch
+30% chance to induce Sleep
+30% chance to lower Accuracy
+30% chance to lower Accuracy.
+30% chance to lower Defense
+30% chance to lower accuracy by 1
+30% chance to lower target's Defense by 1
+30% chance to lower target's Defense.
+30% chance to raise user's Speed by 1.
+30% chance to reflect entry hazards back to opponent's side.
+50% chance to paralyze
+Accuracy +1
+Accuracy -1
+Accuracy↓
+All allies heal 1/8 HP at end of turn for 3 turns.
+Allies take 50% less damage from physical moves for 3 turns.
+Always a critical hit if user moves first.
+Always a critical hit in Hail/Snow
+Always goes first if the target uses a status move
+Always hits
+Always hits neutral, ignores resistance/immunity
+Any damage the user takes this turn is mirrored to the target.
+Any healing the target receives also heals the user
+Attack +1
+Attack +1 and Defense +1, Speed -1
+Attack +1 and Speed +1, but Defense -1
+Attack +1, Speed -1
+Attack -1
+Attack -1, Sp. Atk -1
+Attack -2
+Attackers making contact have Defense and Sp. Def lowered by 1
+Attracts target (Infatuation) and lowers their Evasion by 1
+Averages the user's and target's stat changes
+Badly poisons all active Pokémon except Poison/Steel types
+Badly poisons the target
+Blocks priority moves for 5 turns
+Boosts Defense +2, hurts attackers making contact by 1/8
+Breaks Reflect and Light Screen
+Breaks Reflect, Light Screen, and Aurora Veil
+Breaks Terrains and Room effects (Trick Room, etc.).
+Burns attackers making physical contact for 2 turns.
+Burns target
+Bypasses Soundproof ability.
+Bypasses screens (Reflect/Light Screen/Aurora Veil).
+Can only be used if one of your moves has no pp left
+Cancels all weather conditions, prevents them for 5 turns
+Changes target's ability to Run Away
+Changes target's type to Rock
+Changes terrain to a random one, boosts user's Atk by 1
+Changes type randomly between Fire, Water, or Grass before hit
+Changes weather, non-Poison types lose 1/16 HP per turn.
+Clears all stat drops for the user's party.
+Clears hazards, 10% chance to blow target away (forced switch).
+Cures all status conditions on the user's active team
+Cures status conditions, raises Attack by 1
+Cures target's Poison, lowers their Def/Sp.Def by 2.
+Cures user's party of sleep condition.
+Curse effect but drains 1/8 HP instead of 1/4, user loses no HP
+Deals 2x the damage received from a physical attack, negative prio
+Deals damage based on user's weight.
+Deals double damage if target is below 33% HP.
+Deals double damage if target is grounded.
+Deals double damage if target is switching in this turn
+Deals double damage to Steel types.
+Deals double damage to grounded Pokémon
+Deals exactly the same amount of damage the user last received.
+Deals neutral damage regardless of target's type
+Defense +1
+Defense +1, Speed -1
+Defense +2
+Defense +2, Speed -1
+Defense +2, user takes double damage from Electric this turn.
+Defense -1
+Destroys target's held item and entry hazards on target's side
+Disables Steel moves & removes Steel-type abilities for 3 turns
+Disables target's last move for 2 turns
+Disables the target's last used move.
+Double damage if target is asleep, does not wake them up
+Double damage if target is burned, cures their burn
+Double damage if target is infatuated, cures infatuation
+Double damage if target used a Status move this turn
+Double power if hit first
+Drains 1/8 HP at the end of every turn, heals user
+Draws all Electric moves next turn, boosting Power to 100 if hit
+Electrifies ground, grounded Pokémon take 1/16 dmg, lose 1 Spd
+Eliminates all Terrains, paralyzes all grounded targets.
+Entry hazard, lowers Speed by 1.
+Evasion +1
+Evasion +1, Defense -1
+Forces switch, clears all stat changes of incoming Pokémon
+Forces target to switch out randomly
+Forces target to switch, incoming takes Stealth Rock damage.
+Forces the target to switch out randomly
+Forces the target to switch.
+Fully heals user, user's stats drop by 1 across the board.
+Ground-type moves fail against all allies for 3 turns
+Hazard: Causes Bleed (1/16 damage) on entry.
+Hazard: Grounded incoming Pokémon take 10% recoil on their first attack and lose 1 Speed.
+Hazard: lowers Speed by 1 upon switching in
+Heals 100% HP, freezes user for 2 turns instead of sleep
+Heals 25% HP
+Heals 25% HP each turn for 3 turns
+Heals 25% HP, user's next attack has +1 priority.
+Heals 50% HP, changes type to pure Flying for remainder of turn
+Heals 50% HP, changes user to Normal type.
+Heals 50% HP, halves Speed
+Heals 50% damage dealt, steals target's positive stat boosts.
+Heals 50% in sun, 25% otherwise, raises Sp. Atk +1
+Heals 50% of dmg dealt, heals 100% if target is poisoned
+Heals 75% of damage dealt.
+Heals target by 50%, cures status, user switches out
+Heals user 50%, cures Freeze status for party
+Heals user by 33%, cures sleep condition
+Heals user by 50% of damage dealt
+Heals user by 50% of damage dealt.
+Heals user for 50% damage dealt.
+Heals user for 50% of damage dealt
+Heals user for 50% of damage dealt.
+High critical hit ratio
+High critical hit ratio, ignores Defense boosts
+High critical hit ratio.
+High critical ratio
+Hits 1 time for every Bug type in the user's party
+Hits 2-5 times
+Hits 2-5 times, 10% chance to poison per hit
+Hits 2-5 times, priority +1.
+Hits 2–3 times
+Hits all Pokémon on the field.
+Hits all adjacent Pokémon, 10% chance to lower Speed
+Hits all adjacent foes, 20% chance to Poison.
+Hits all foes, sets Snow weather condition.
+Hits all targets, 10% chance to induce sleep.
+Hits twice if it is raining.
+If target switches, incoming Pokémon takes 1/8 damage.
+Ignores Accuracy checks
+Ignores Protect/Detect
+Ignores Reflect and Light Screen
+Ignores Reflect/Light Screen/Aurora Veil.
+Ignores effects of target's weight-based moves/abilities.
+Ignores positive stat changes of the target
+Ignores resistance of Rock types (hits neutrally).
+Ignores target's positive stat boosts.
+Ignores weight modifiers (does neutral damage regardless of weight moves).
+Leaves a burn that does 1/16 dmg but lowers Defense by 1 each turn
+Locked into move for 2-3 turns, confused afterwards.
+Lowers all opponents' Attack and Sp. Atk by 1
+Lowers all targets' Attack by 1.
+Lowers target Speed by 1, 10% Burn
+Lowers target's Accuracy by 2
+Lowers target's Defense by 2, removes Steel type from target.
+Lowers target's Evasion by 2, disables switching
+Lowers target's Sp. Atk and Sp. Def by 1
+Lowers target's Sp. Def by 1.
+Lowers target's Speed by 1 every turn they remain in battle.
+Lowers target's Speed by 1.
+Lowers target's Speed by 2
+Lowers target's Speed by 2, disables pivoting moves
+Lowers target's Speed by 2, ignores evasion
+Lowers target's accuracy by 1, removes toxic spikes/spikes
+Lowers user's Attack by 2.
+Lowers user's Defense and Sp. Def by 1.
+Lowers user's Sp. Atk by 1
+Lowers user's Sp. Def by 1.
+Lowers user's Speed by 1 after attacking
+Lowers user's Speed by 1.
+More power if target is Poisoned
+Move changes type to match user's primary type.
+Must recharge next turn unless Electric Terrain is active.
+Never misses
+Never misses in darkness or rain.
+Never misses, 10% poison
+Never misses, ignores all stat changes
+Never misses.
+Next Dark move hits 2x harder.
+Next Fire move has 1.5x power and ignores abilities
+Next Pokémon sent out on user's side gets +2 Speed
+Next attack against the user misses guaranteed.
+Next attack never misses and ignores stat changes
+Next attack received by the user does half damage.
+Paralyzes target, drops their Sp. Atk by 1.
+Physical attackers are Badly Poisoned upon contact (lasts 3 turns).
+Poison for 3 turns
+Poisons target
+Power doubles if no stat changes are active on the field
+Power doubles if target holds a Berry (destroys Berry).
+Power doubles if target is Poisoned.
+Power doubles if target used a stat-boosting move last turn
+Power doubles if the target is attacking this turn.
+Power doubles if user was hit by a Fire move previously
+Power doubles if user's HP is below 25%
+Power increases by 10 if used consecutively for every usage
+Power increases by 20 each consecutive successful use (max 110).
+Power increases by 20 each consecutive use
+Power increases by 20 for each Bug-type ally in party.
+Power increases by 30% if any Terrain is active
+Power increases with user's weight
+Prevents Burn for 5 turns
+Prevents target from switching out next turn
+Prevents target from switching out.
+Priority +1
+Priority +1 if user has no held item
+Priority +1, 10% Confusion
+Priority +1, 10% Paralysis
+Priority +1, 10% chance to Poison.
+Priority +1, 10% chance to drop target's Accuracy.
+Priority +1, double damage if HP is below 25%.
+Priority +1, only works on the user's first turn out
+Priority +1.
+Protects from attacks, damages contact attackers by 1/8
+Protects from attacks, heals 1/16 HP
+Protects from attacks, reflects status moves back to attacker
+Protects from physical moves, takes 1/4 damage from special moves.
+Puts target to sleep, user Speed -1
+Raises Atk, Def, Sp. Def by 1, user cannot switch
+Raises Attack and Sp. Atk by 1, lowers Defense by 1
+Raises Def and Sp. Def by 1 in Sandstorm weather
+Raises Def and Sp. Def by 1, heals status condition
+Raises Def and Sp. Def by 1, prevents stat reduction.
+Raises Def and Sp. Def by 1, prevents status condition for 3 turns
+Raises Def and Sp. Def by 1, user takes 1/8 damage.
+Raises Defense by 2, damages contact attackers by 1/8
+Raises Defense by 2, prevents critical hits for 3 turns
+Raises Defense by 2, user becomes immune to critical hits
+Raises Evasion by 1, immune to Electric moves for 1 turn
+Raises Evasion by 1, next Grass attack hits 100%
+Raises Evasion by 2, lowers Defense by 1
+Raises Evasion by 2.
+Raises Sp. Atk and Speed by 1
+Raises Sp. Atk and Speed by 1.
+Raises Sp. Atk by 1
+Raises Sp. Atk by 2, restores 33% HP
+Raises Sp. Def by 1
+Raises Sp. Def by 2, prevents stat drops for user
+Raises Speed by 1
+Raises Speed by 2, Attack by 1
+Raises allies' Speed by 1.
+Raises the user's lowest stat by 1
+Raises user and target Attack and Speed by 1
+Raises user's Defense by 2.
+Raises user's Evasion by 2.
+Randomly inflicts Sleep, Poison, or Paralysis
+Randomly raises one stat by 2
+Reduces Dragon damage for 5 turns
+Reduces damage from super-effective hits by 25% for 1 turn
+Reduces next Electric attack by 50%
+Reduces next Fire damage by 50%
+Reduces next attack by 30%
+Reduces next attack by 50%
+Reduces next physical attack
+Reduces next physical hit
+Reduces next physical hit by 50%
+Reduces next super-effective hit
+Reduces physical damage by 50% for 5 turns
+Reduces special damage by 50% for 5 turns
+Reflects special attacks for 3 turns.
+Removes all abilities from the field for 3 turns.
+Removes all entry hazards from user's side
+Removes one negative stat change from user
+Removes stat changes from target
+Removes stat drops
+Removes target's positive stat changes
+Removes target's stat boosts and Reflect/Light Screen
+Repeats at 50% power next turn
+Restores 1/16 HP for 5 turns
+Restores 25% HP
+Restores 25% damage
+Restores 30% damage dealt
+Restores 33% HP, Defense +1.
+Reveals opponent's entire moveset.
+Reveals target's held item and abilities
+Sets harsh sunlight, damages non-Fire types for 1/16 HP upon entry.
+Sets hazard: Damages on entry, applies Leech Seed effect.
+Sp. Atk +1
+Sp. Atk +1, Sp. Def +1
+Sp. Atk +2, Defense -1
+Sp. Atk -1
+Sp. Def +1
+Sp. Def -1
+Speed +1
+Speed -1
+Speed -2
+Speed↓
+Speed↓ and trapping
+Steals target's item, deals 1.5x damage if successful.
+Steel and Electric types cannot switch out while active.
+Stronger below 50% HP
+Summons ants: Deals 1/16 damage to all non-Bug types at turn end.
+Super effective against Flying types.
+Super effective against Psychic types.
+Super effective against Steel types
+Super effective against Water, 10% Freeze
+Super effective on Flying types.
+Swaps user's and target's stat changes before hitting.
+Swaps user's negative stat changes with target's positive ones.
+Tailwind effect for 3 turns, but only affects Fire/Flying types
+Target Accuracy -1
+Target Attack -1
+Target Defense -1
+Target Poisoned
+Target Sp. Atk -1
+Target Speed -1
+Target Speed -2
+Target becomes paralyzed, drops their Evasion by 1
+Target can't use status moves next turn
+Target cannot switch, Speed drops by 1.
+Target cannot switch, Speed drops by 2.
+Target cannot use sound-based moves for 3 turns.
+Target forgets the last move used for 3 turns
+Target heals 50% HP, but takes 100% damage over next 3 turns.
+Target is forced to switch, takes 1/8 damage upon entry
+Target levitates (loses Ground immunity), lowers Evasion by 1
+Target loses 2 PP on their last used move.
+Target switches out in single battles
+Target takes 1/16 damage every turn, halves their healing received.
+Target's Attack and Sp. Atk drop by 1.
+Target's Defense and Sp. Def drop by 1 each turn for 3 turns.
+Target's Evasion drops by 2, Electric moves can't miss them.
+Target's Speed -2, Water-type allies restore 1/16 HP per turn.
+Target's attacks deal 50% less damage to the user.
+Target's healing moves fail on the next turn.
+Target's held item loses effect and hurts them (1/8 HP) each turn
+Team Speed +1
+Transfers user's status condition to target
+Traps all active Pokémon on the field.
+Traps all active Pokémon, heals user by 1/16 each turn
+Traps target for 2–5 turns
+Traps target for 3 turns, deals 1/8 damage each turn
+Traps target for 4 turns.
+Traps target for 4-5 turns
+Traps target, drains 1/16 HP per turn to user
+Traps target, lowers Speed by 1
+Traps target, lowers Speed by 1 each turn
+Traps target, neither user nor target can use Status moves.
+Traps the target for 3 turns, deals 1/8 damage per turn
+Turns target's ability to Simple.
+Two-turn move, user avoids most attacks on turn 1.
+Type varies depending on active terrain.
+User Attack +1
+User Defense +1, Sp. Def +1.
+User Defense -1
+User Evasion +1, Speed +1.
+User Sp. Atk -1
+User Sp. Def -1
+User Speed +1
+User Speed -1
+User Speed↓
+User and allies are protected from status moves for 3 turns.
+User and target's HP are averaged.
+User becomes confused
+User becomes immune to Fire-type moves for 3 turns.
+User becomes invulnerable to all multi-target moves for 3 turns.
+User becomes pure Rock type, Atk +1, Def +2.
+User cures its own status condition, Attack +1.
+User faints, next Pokémon is fully healed and gets +1 all stats.
+User faints, target is afflicted with Curse and Confusion.
+User falls asleep for 1 turn, fully heals, wakes up with +1 Sp. Atk.
+User gains Levitate ability for 5 turns.
+User heals 33% HP and removes Poison/Bleed effects from itself.
+User loses 10% HP
+User loses 50% HP, controls target's move choice next turn
+User restores 25% damage dealt
+User rests 1 turn after use, guaranteed Paralysis on hit
+User switches out
+User switches out after attacking.
+User switches out, heals replacement by 1/8 HP.
+User switches out, replacement heals 25% HP.
+User takes 1/3 recoil
+User takes 10% recoil
+User takes 25% recoil damage
+User takes 25% recoil damage.
+User takes 33% recoil.
+User's Grass moves do 1.5x damage when HP is below 50%.
+User's Sp. Atk drops by 1.
+User's Sp. Atk drops by 2.
+User's Speed falls 1
+User's Speed rises by 1.
+Uses target's Sp. Def stat for damage calculation
+Uses target's weight for damage calculation
+Uses the target's last used move's type instead of Normal
+Uses the user's Special Attack stat for damage calculation
+Uses user's Sp. Atk for damage calculation (bypasses low Atk).
+Uses user's Sp. Def for damage calculation instead of Sp. Atk.

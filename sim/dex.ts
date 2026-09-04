@@ -677,8 +677,11 @@ export class ModdedDex {
 	}
 
 	loadAliases(): NonNullable<ModdedDex['aliases']> {
-		if (!this.isBase) return Dex.loadAliases();
+		// A mod may install its own alias table in `Scripts#init` - for instance a
+		// mod that replaces the dex wholesale, where an inherited alias could
+		// otherwise shadow one of its own entries.
 		if (this.aliases) return this.aliases;
+		if (!this.isBase) return Dex.loadAliases();
 		const exported = require(path.resolve(DATA_DIR, 'aliases'));
 		const aliases = new Map<ID, ID>();
 		for (const [alias, target] of Object.entries(exported.Aliases)) {

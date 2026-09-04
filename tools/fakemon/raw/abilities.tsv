@@ -1,0 +1,186 @@
+acidicpigment	abilities	Acidic Pigment	Poison Attacks of this Pokemon can hit Steel and Poison type Opponents super effective, if Incoon has full Hp
+aerodynamicheavyweight	abilities	Aerodynamic Heavyweight	Attacks that calculate damage using the user's body weight gain +1 priority if the user is at full HP
+aftershock	abilities	Aftershock	Every time this Pokémon uses a damaging Ground-type move, it releases a secondary shockwave at the end of the turn, dealing fixed damage equal to 10% of the target's maximum HP to all opponents
+alienspores	abilities	Alien Spores	If it Gets Hit by a Physical Move in Psycic Terrain, the Attacker falls asleep + Is Immune to Ground Type Attacks
+ambushspeed	abilities	Ambush Speed	On its first turn after Switching in its next attack has +1 priority, halfed damage, and flinches guaranteed
+ampedup	abilities	Amped Up	Raises Sp.Atk when it paralyses Target
+antienergy	abilities	Antienergy	Mega-Pokemon recieve 50% more Damage
+anxious	abilities	Anxious	If it would get KOed this round (pre-calculated ), it uses its attack with +3 priority
+apexinstinct	abilities	Apex Instinct	Lands a guaranteed Critical Hit if Enemy has full Hp
+aquaticveil	abilities	Aquatic Veil	Damage recieved in Rain is ⅔×
+armored	abilities	Armored	Hitting this Pokemon with an Attack will do max. 25% of max. Hp as Damage but it loses this ability instantly after hit
+athenasdecree	megaAbilities	Athenas Decree	Boosts Sp.Atk by 2 stages when defeating enemy and turns flying type attacks into Psycic type
+audiorecord	abilities	Audio Record	When this Pokémon switches into the battlefield, it automatically gains a 50% damage reduction against the exact move that the opponent used in the previous turn
+auraaye	abilities	Aura Aye	Accuracy-Changes and Evasion-Changes are Ignored and all Moves are 10% more Accurate
+barbedchassis	abilities	Barbed Chassis	Contact Moves against it deal 20% of this pokemons Defense(of Sp.Def if Contact move is Special) Stat as damage back to the enemy
+blacktar	abilities	Black Tar	Lowers Opponents Speed stat by 1 if hit by contact move + moves if 50 basepower or lower wont damage it at all
+blastproof	megaAbilities	Blastproof	Gets no Recoil damage
+blazingfur	abilities	Blazing Fur	If hit by physical ice or grass type attacks damage is halfed and attacker gets burned
+bleakbleach	abilities	Bleak Bleach	Lowers all Enemys Sp.Atk when it switches in
+blindneedle	abilities	Blind Needle	Attacks of this Pokemon that would miss because of Accuracy drops or enemy Evasion boosts but would normally hit without these drops or boosts, will hit but deal 10% less damage
+bonegrip	abilities	Bone Grip	Boosts damage of all Moves with Ghost Type or "Bone" in the name by 50%
+boombass	abilities	Boom Bass	Hit by sound moves hightens sp. Atk by 1
+brassicaboost	abilities	Brassica Boost	Consuming Food Item or getting hit by Grass type attack boosts Initiative by 1
+brickcore	abilities	Brick Core	The First Attack every Fight that would KO it, instead halves its current Hp
+brickwall	abilities	Brickwall	Boosts Defense or Sp.Def, depending on wich is lower (including stat changes) when using a Protecting move
+brutaltemper	abilities	Brutal Temper	Raises Attack by 1 if hit by physical move
+burningrage	abilities	Burning Rage	Attack is 50% higher if effected by Status Effect
+cabinetlock	abilities	Cabinet Lock	All other Ghost Type Pokemon are unable to switch out(switch out attacks still work)
+candlesacrifice	megaAbilities	Candle Sacrifice	If defeating Enemy, it Heals by 33% Enemies max.Hp
+centrifugalforce	abilities	Centrifugal Force	ratation Atacks and Attacks using its Weight to calculate damage highten its speed by 1 stage after used
+chloroplastmind	megaAbilities	Chloroplast Mind	Psycic Type Moves gain +1 Priority in Sunlight
+chocolatecover	abilities	Chocolate Cover	Sandstorm and Powder Moves dont affect it
+cinderboost	abilities	Cinder Boost	If it gets a stat drop, its initiative gets boosted by 1 and it heats up(next fire type attacks has double damage)
+clayarmor	abilities	Clay Armor	Attacks with over 100 Basepower always have 100 Basepower againts it
+cloudymist	abilities	Cloudy Mist	Evasion is 2 stages higher in Rain
+combustionengine	megaAbilities	Combustion Engine	Upon Mega Evolution Sets up Gasveil. If Gasveil on Opposing side, its speed is doubled and STAB Moves ignore resistances
+conductortongue	abilities	Conductor Tongue	Hits Pokemon with Electric attacks, that are immune to electric(also including abilities making immune to electric, these dont activate)
+conestorage	abilities	Cone Storage	Bullet Attacks deal 30% more damage
+cooking	abilities	Cooking	Contact Moves boost atk, sp.atk and spe but lower def and sp.def all by 1
+coralcurse	abilities	Coral Curse	Curses Itself and the Enemy if hit by a contact move to loose ¼ max.Hp every round until switched out
+corrosivecouture	megaAbilities	Corrosive Couture	Recieves no Damage of Types weak to poison (Fairy, Grass, Bug) and Badly Poisons the attacker if hit by these attack types
+corrosivegrip	abilities	Corrosive Grip	Hitting Opponents with contact moves has a 30% chance to destroy their held item dor the fight
+counterkick	abilities	Counter-Kick	Gettint hit by a Priority Move, this pokemon immediately strikes back with the same move but Fighting type and deals super effective damage against flying type pokemon
+counterweight	abilities	Counterweight	Enemy Attacks and Abilities cant flinch or switch out this Pokemon
+crispycharge	abilities	Crispy Charge	Effect of its and Allies food item is doubled. Like healing, stat buffs, 50% damage reduction by supereffective types,... depends on food item
+crumbarmor	abilities	Crumb Armor	Getting hit by a Physical move boosts Evasion by one but drops Defense by 1
+crustedobsidian	abilities	Crusted Obsidian	Boosts Defense by 2 stages and lowers speed by 1 stage if hit by water or ice type attack
+curingform	abilities	Curing Form	Raises Def by 1 and lowers Spe by 1 at the end of every turn
+cutteredinterior	abilities	Cuttered Interior	Pokemon trying to remove or change its held item(by attacks or abilities...) Loose their Item instead
+deadreef	abilities	Dead Reef	Immune to Water type Attacks and instead raises Speed if hit
+deeprootreflex	abilities	Deep Root Reflex	Boosts Damage of Ground Type Moves by 50%
+desertgrappler	megaAbilities	Desert Grappler	Sets up Sunlight on switching in or Mega Evolution and doubles speed in sunlight
+differentdimension	abilities	Different Dimension	Highest Stat, except Hp, is always doubled
+dimensionalforce	abilities	Dimensional Force	Always Hits
+dodge	abilities	Dodge	Hightens Spe by 2 Stages if Attack misses it
+drillingrock	abilities	Drilling Rock	Ignores Target Effects triggered by Contact like abilities
+dryskinmask	abilities	Dry Skin mask	Attack Stat cant be lowered
+echodrain	abilities	Echo Drain	Heals 50% of damage dealt by sound moves
+echolocation	abilities	Echo-Location	Ignores Opponents Evasiveness stat and substitutes when attacking
+eeriesilence	abilities	Eerie Silence	While this Pokémon is active, all sound-based moves (like Heavy Trumpet or Sonic Discharge) fail completely, and all Pokémon on the field are immune to flinching
+eggshell	abilities	Eggshell	Ignores Entry Hazards
+electriccarousel	abilities	Electric Carousel	Boosts Spe when using Electric Moves
+electricteeth	abilities	Electric Teeth	Biting Attacks have a 20% Chance to flinch
+epicenterfury	megaAbilities	Epicenter Fury	If this Pokemon would Flinch, it doesnt and instead its next attacking moves deals double damage and flinches the target
+everfrost	abilities	Everfrost	Sets up Hail, when enemy changes weather
+evergreen	abilities	Evergreen	Cant get burned or frozen
+evergreencud	abilities	Evergreen Cud	Frisst ein Food Item wenn es verbraucht wird eine Runde später am Ende der Runde erneut und löst erneut dessen effekt aus. Bei Sonnenschein und Regen auch 2 Runden danach nochmal
+executioner	abilities	Executioner	Deals 50% more damage if target was unter 50% max.Hp
+fireproof	abilities	Fireproof	No Damage by Fire type Attacks
+firestarter	abilities	Fire Starter	Fire moves deal 30% more damage
+focus	abilities	Focus	Redirected Attacks have doubled damage
+fossilizedwings	abilities	Fossilized Wings	It is completely immune to recoil damage from Flying-type attacks and its Speed cannot be lowered by opponents
+foundation	abilities	Foundation	Recoild Moves used against it deal halfed damage
+freshair	abilities	Fresh Air	Heals 1/16 of max.Hp when Weather is clear
+frostbitescale	abilities	Frostbite Scale	Immune to Haildamage. If hit by Phsyical Move, 30% Chance to Freeze Attacker
+frozenarmor	abilities	Frozen Armor	Immune to Ice type Attacks, Boosts Defense and Sp.Def when hit instead
+gingerbread	abilities	Gingerbread	Hit By Fire Type Move Boosts highets Attack Stat and Spe
+grassstarter	abilities	Grass-Starter	Grass moves deal 30% more damage
+groundanchor	abilities	Ground Anchor	Cant be forced to switch out
+headshield	abilities	Headshield	Boosts in Defense and Sf.Def count 1,3×
+heliumvoice	abilities	Helium Voice	Sound Attacks become Flying Type and deal 20% more Damage
+holidaycheer	megaAbilities	Holiday Cheer	Changes weather to snow for 5 Turns and all of its moves are 100% Accurate
+hover	abilities	Hover	Is immune to Ground type Attacks in Electric Terrain and boosts its speed by 50%
+huntinginstinct	abilities	Hunting Instinct	Using Contact Attacks pretends users speed is 50% higher
+hydromechanics	abilities	Hydro Mechanics	Phsyical Water Type Attacks deal 50% more damage
+icespikemist	megaAbilities	Ice Spike Mist	Its Attacks Freeze Opponents in Rain by 50%
+inductioncharge	abilities	Induction Charge	Gets Charged if hut by electric move(charge doubles danage of next electric type move)
+inflaming	abilities	Inflaming	Super Effective Fire Type Moves deal 33% more Damage
+invertedflight	abilities	Inverted Flight	Accuracy, Evasion and Initiative drops turn into boosts instead
+invertedgrowth	abilities	Inverted Growth	Swaps Def and Atk and swaps Sp.Def and Sp.Atk if under 50% max.Hp
+ironcollar	abilities	Iron Collar	Critical Hits against it deal no Damage at all and contact moves against it del ⅔× Damage
+isotonic	abilities	Isotonic	Healing this Pokemon heals 50% more. If it heals other pokemon the healing is 33% More
+itemfinder	abilities	Itemfinder	If Item is lost has a 33% Chance to find random Food Item at end of every turn
+kaleidoscopicveil	abilities	Kaleidoscopic Veil	If hit by Special Attack, sets up Psycic Terrain
+kamikaze	abilities	Kamikaze	Boosts the Power of Recoil moves by 30%
+lightningspike	abilities	Lightning Spike	Paralyses if Damaged
+lightweight	abilities	Lightweight	Weight is ¼× and is immune to attacks that need its weight to calculate (Like attacks dealing damage on weight)
+luchalibre	abilities	Lucha Libre	Switching in Raises critical hit ratio
+madness	abilities	Madness	Repeat used moves deal 10% more damage with every usage in a row
+magmameltdown	abilities	Magma Meltdown	Rock type Attacks become fire type if they would deal more damage being fire type
+magneticmemory	abilities	Magnetic Memory	If this pokemon is hit by a damaging move, it takes 25% less damamage from that move for the rest of the fight. Does not reset and has no limit in how many moves to memorize
+malwareinjection	abilities	Malware Injection	Permanently suppresses the target's Ability for the rest of the battle if the user is hit by a damaging move while having full HP
+megaconsumer	abilities	Mega Consumer	Mega Evolution boots all stats by 50% for 3 Rounds
+mentaloverwhelm	abilities	Mental Overwhelm	If attacked by a faster pokemon, they swap speed dor the whole fight
+mindfocus	megaAbilities	Mindfocus	Using a Non-Damaging Move for one Trun, maked you immune to flinch and guarantees a crit on the following turn
+mirrorfacade	abilities	Mirror Facade	In Haunted Room all Special Attacks used against it are, after it is hit by them, immediately used from it against the original user with 33% damage and same effects
+misfortune	abilities	Misfortune	Chance for Side Effects of all Attacks of pokemon on the field is halfed
+mudbody	abilities	Mudbody	Physical Attacks deal 25% Less damage and Water Attacks dont deal damage against it
+mudlover	abilities	Mudlover	Water Type Moves of this Pokemon become Ground Type
+mudpile	abilities	Mudpile	Over 50% Hp it has 70% higher defense&sp.def but 50% less speed. After falling under 50% cant return
+mudrush	abilities	Mud Rush	Doubles Initiative in Rain if it wants to use a Ground Type move
+myceliumgrowth	abilities	Mycelium Growth	Immune to Water Type Attacks. Boosts highest defense stat by 1 if hit by water type attack instead
+nibble	abilities	Nibble	Eats Targets Food Item if hitting with contact attack
+overcharge	abilities	Overcharge	Electric type moves deal 50% more damage if hp <⅓
+overgrownpredator	megaAbilities	Overgrown Predator	Damage of its STAB Attacks cant get reduced and these Deal 30% more Damage
+parabolicamp	abilities	Parabolic Amp	moves hitting the target for super effective damage are 30% more accurate
+pinpointneedle	abilities	Pinpoint Needle	Attacks using a Beak and sharp attacks deal 30% more damage
+pixiedust	abilities	Pixie Dust	Sets Up Misty Terrain by switching in
+planetring	abilities	Planet Ring	Hits all Pokemon on the Field at the End of every Turn with 40 Rock-Type-Damage, Partner just 20
+playtimejoy	megaAbilities	Playtime Joy	On recieving this ability or switching in all enemies cant use status moves for 3 turns
+polarityshift	abilities	Polarity Shift	After entering the battlefield the first time. Its type weaknesses turn in to immunities for 3 turns
+poprelfex	abilities	Pop Relfex	Maxes out Speed if hit by crit
+powergrid	megaAbilities	Power Grid	Has 2 Abilities. Keeps the Ability is had before Mega and gets the ability Grounded Grid(Can hit Ground Type pokemon with neutral electric damage)
+poweroffriendship	abilities	Power of Friendship	50% Chance to Heal Partner in Doubles at end of turn
+prehistoricterror	megaAbilities	Prehistoric Terror	All Protect Moves of all Pokemon will Fail while this Pokemon is on the Field
+rainbowcake	megaAbilities	Rainbowcake	Using Special Attacking Moves Boosts Sp.Atk before using them
+reckless	abilities	Reckless	Hits Immune or not very effective moves as if neutral
+reflectlayer	abilities	Reflect Layer	Priotity Moves against it deal 100% recoil damage
+refreshaura	abilities	Refresh Aura	Cures Partners and own Status Problems when switching in
+remanence	abilities	Remanence	Doesnt Reset Anything like Statuses when switch out and keeps everything on it as it is
+resonanceshell	abilities	Resonance Shell	Cant get effected by status conditions and refelcts them back to the opponent but only if a room effect is active
+rootanchor	abilities	Root Anchor	Initiative is halfed but it cant get forced to switch out
+rooted	abilities	Rooted	Cannot switch out bit regenerates ⅛ max. Hp every round
+ruine	abilities	Ruine	If it Faints is Boosts Def and Sp.Def of the Pokemon switching in at its place
+scavengerhunger	abilities	Scavenger Hunger	Boosts Initaiative if a Pokemonon the Field faints
+scorchingscurry	abilities	Scorching Scurry	If hp drops below 50% it boosts evasion by 2
+seismicforce	abilities	Seismic Force	Ground Type and Punch Attacks deal 30% More Damage
+shelfshroomtexture	abilities	Shelf Shroom Texture	Physical Damage is Reduced by 20% but Fire Type attacks deal 30% more damage to it
+skystrikeinception	abilities	Skystrike Inception	Sp.Atk is 50% higher in Rain
+slicingmassacre	abilities	Slicing Massacre	Uses Attack Stat as Special Attack stat
+slowmofly	abilities	Slowmofly	All Effects (Except Statuseffects) of its attacks last 3 Rounds longer. Including Flields, Weather, Reflect, Gravity,... Every Thing like this + is immune to Ground type Attacks
+sludgepile	megaAbilities	Sludgepile	Over 50% Hp it has 70% higher defense&sp.def but 50% less speed. After falling under 50% cant return. Also hitting Opponents with biting moves make them unable to switch out
+sneakysting	abilities	Sneaky Sting	Priority Moves deal double Damage
+sniff	abilities	Sniff	Reveals Ememy Ability on switch in
+solarcharge	abilities	Solarcharge	Sunlight Boosts Sound- and Electric Attacks by 50%
+sonicresonance	abilities	Sonic Resonance	Sets up Reflect, when hit by Sound attack
+soulburner	abilities	Soul Burner	Deals more Damage the slower the enemy is. From 0.5× to 2×
+soulscent	abilities	Soul Scent	If a pokemon on the battlefield faints it boosts its critical hit ratio and speed by 1
+sourpeel	abilities	Sour Peel	Falling under 50% max.Hp raises Atk by 2 stages but lowers defense and sp.def by 1
+sparklesparkleblingbling	abilities	Sparkle Sparkle Bling Bling	All moves of Opponents will be Redirected to hit it but only if it didnt choose to use a status move
+spatialcatalyst	abilities	Spatial Catalyst	Increases all of its Damage by 30% if a Field is Active and gets immune to Attacks that share Typing with the Field
+spincounter	abilities	Spin Counter	Contact Attacks used against it deal 25% recoil damage to the attacker
+spinterbark	abilities	Spinter Bark	Getting hit by a Physical Moves sets up stealth rocks
+staticflutter	abilities	Static Flutter	Hitting Targets with Electric or Bug Type Attacks has a 30% chance to Paralyse
+stonecrust	abilities	Stonecrust	Super Effective Moves deal neutral Damage
+sugarpile	megaAbilities	Sugar Pile	Contact Moves have no side effects
+sugarrush	abilities	Sugar Rush	Raises Speed by 2, If consumes Food Item
+supersonicring	megaAbilities	Supersonic Ring	All of its Attacks hit both Opponents
+surgeprotection	abilities	Surge Protection	Can get Paralysed but Paralysis has no effects
+survivalist	abilities	Survivalist	Verliert es sein Item, Boostet es seine 2 höchsten stats. Wird auch getriggert wenn es ein neues item bekommt und verliert
+sylvanveil	abilities	Sylvan Veil	Recieves 20% less damage if weather is active but not in sandstorm
+symphonicshield	abilities	Symphonic Shield	This Pokemon and its Partner recieve halfed damage by multi hit attacks
+tacticallead	abilities	Tactical Lead	By switch in Boosts Attack or Sp.Atk depending on if Enemies defense of sp.def is lower. Lower sp.def -> higher sp.Atk; Lower Def -> higher Atk
+telecineticcap	abilities	Telecinetic Cap	STAB Moves hit flying hovering and floating targets(type flying or through attacks, effects and abilities) super effective + Is Immune to Ground Type Attacks
+thermalfurnace	abilities	Thermal Furnace	Boosts Sp.Atk when hit by fire type moves and halves their damage. Also recieves halfed damage by Stealth rock and removes these and boosts sp.atk if hit by them
+thermallift	abilities	Thermal Lift	In sunlight damage dealt to it by pokemon that are able to be hit by ground type attacks(non flying type and no effects and abilities that would make them immune) deal ⅔× Damage against it and it is immune to ground type attacks
+thundertail	abilities	Thundertail	Boosts Sp.Atk when using Electric Moves
+timberfall	abilities	Timber Fall	Attacks using Bodyweight to calculate damage have -1 Priority but go through Protect and deal 20% more damage
+toxicclarity	abilities	Toxic Clarity	Partners Poisened by it, will heal the amount the poison would damage. Regardless if Puriserpent is still alive or on the feald it just has to inflict
+toxicenvy	abilities	Toxic Envy	If Enemy Heals itself, It heals the same amount by itself
+toxicmetamorphosis	abilities	Toxic Metamorphosis	Badly Poisons all Pokemon on the Feald, except itself, when it nicks out an Opponent
+toxicpalette	abilities	Toxic Palette	All secondary effects of his normal type moves get removed and have a 30% chance to poison the target instead
+tragicmist	abilities	Tragic Mist	When this Pokémon enters the field, it summons a creepy mist. For 5 turns, all positive stat changes gained by any Pokémon on the field are instantly halved in effectiveness
+trunklauncher	abilities	Trunk Launcher	Doubles Damage of first Bullet Attack used after switching in or Battle start
+vanishstrike	megaAbilities	Vanish Strike	Moves with 60 or lower basepower become priority moves and ignore Protect
+venomousspike	abilities	Venomous Spike	Poisons badly of Damaged
+vexedawakaning	abilities	Vexed Awakaning	Falling under 50% max. HP boosts Attack and Sp.Atk and Speed but lowers Defense and Sp.Def
+violent	abilities	Violent	Deals 0.7% more damage for every 1% of hp lost. So if it had 0% hp it would deal 70% more damage
+voodoodoodoo	abilities	Voodoo Doodoo	If enemy Boosts its stats, she does too
+warmbody	abilities	Warm Body	Prevents Freeze/Hail on it
+waterstarter	abilities	Water Starter	Water moves deal 30% more damage
+weepingberry	abilities	Weeping Berry	Lowers Enemy Accuracy by 1 if hit by attack
+wetcement	abilities	Wet Cement	Opponents hitting it with a Contact move cant switch out for 3 turns
+whacamole	abilities	Whac-A-Mole	Boosts Attack and Accuracy by 1 if it hits a phsyical Move but moves are 30% less Accurate
+wired	abilities	Wired	No Electric-Damage > heals 25% max. Hp instead
+wreckingball	abilities	Wrecking Ball	Deals more Damage through reflect and other screens instead of less

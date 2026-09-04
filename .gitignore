@@ -1,5 +1,6 @@
 /config/*
 !/config/formats.ts
+!/config/custom-formats.ts
 /logs/**/*
 /test/modlogs
 /test/replays/*.html
@@ -15,6 +16,8 @@ npm-debug.log
 databases/*.db*
 *.o
 *.o.dSYM
+/dist-client
+
 # Typescript build artifacts
 .*-dist/
 tools/set-import/importer.js
@@ -71,3 +74,7 @@ local_settings.py
 pip-log.txt
 # redis dumps
 *.rdb
+
+# Python bytecode from the Fakemon importers
+__pycache__/
+*.pyc

@@ -1,6 +1,22 @@
 Pokémon Showdown
 ========================================================================
 
+> ### This server runs a custom Pokémon system
+>
+> This repository is a Pokémon Showdown fork that has been converted to a custom
+> game: the original Pokémon, moves, abilities and items are **not available**.
+> It runs 158 custom Pokémon, 884 custom moves, 186 custom abilities and its own
+> Mega Evolution rules instead.
+>
+> * [IMPLEMENTATION_NOTES.md](./IMPLEMENTATION_NOTES.md) — what was built and why
+> * [DATA_GUIDE.md](./DATA_GUIDE.md) — how to add your own Pokémon, moves, abilities, items and Mega Stones
+> * [assets/README.md](./assets/README.md) — how to replace the placeholder art
+>
+> Formats: `[Fakemon] Singles`, `[Fakemon] Doubles`, `[Fakemon] Random Battle`,
+> `[Fakemon] Random Doubles Battle` and two Custom Games.
+> Play a bot with `/fakemonbot`, a friend with `/fakemonchallenge`.
+
+
 Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex repository][3]
 
   [1]: http://pokemonshowdown.com/
