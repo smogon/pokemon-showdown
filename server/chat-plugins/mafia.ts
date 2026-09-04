@@ -362,7 +362,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	}
 }
 
-export class Mafia extends Rooms.RoomGame<MafiaPlayer> {
+class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	override readonly gameid = 'mafia' as ID;
 	started: boolean;
 	theme: MafiaDataTheme | null;
