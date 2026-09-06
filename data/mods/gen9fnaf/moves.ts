@@ -987,4 +987,95 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
         desc: "Deals damage to the target based on its Defense instead of Special Defense.",
 		shortDesc: "Damages target based on Defense, not Sp. Def.",
     },
+
+    givegiftsgivelife: {
+        num: -46,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+        name: "Give Gifts, Give Life",
+        pp: 5,
+        priority: 0,
+        flags: { reflectable: 1, mirror: 1, metronome: 1 },
+		onHit(target, source, move) {
+            target.setType(target.getTypes(true).map(type => type === "Ghost" ? "???" : type));
+            this.add('-start', target, 'typechange', target.getTypes().join('/'), '[from] move: Give Gifts, Give Life');
+			return target.addVolatile('trapped', source, move, 'trapper');
+		},
+        target: "allAdjacentFoes",
+		type: "Ghost",
+		zMove: { boost: { spd: 1 } },
+		contestType: "Beautiful",
+        desc: "Foe's Ghost type becomes typeless. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		shortDesc: "Foes lose Ghost type and can't switch out.",
+    },
+    vent: {
+		num: -47,
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		name: "Vent",
+		pp: 5,
+		priority: 1,
+		flags: { contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1 },
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		condition: {
+			duration: 2,
+			onInvulnerability: false,
+		},
+		target: "normal",
+		type: "Dark",
+		contestType: "Cool",  
+		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Usually goes first. Disappears turn 1. Hits turn 2.",  
+    },
+    distractingvoice: {
+		num: -48,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Distracting Voice",
+		pp: 20,
+		priority: 2,
+		flags: { noassist: 1, failcopycat: 1, sound: 1 },
+		volatileStatus: 'distractingvoice',
+		onTry(source) {
+			return this.activePerHalf > 1;
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Distracting Voice');
+			},
+			onFoeRedirectTargetPriority: 1,
+			onFoeRedirectTarget(target, source, source2, move) {
+				const distractingVoiceUser = this.effectState.target;
+				if (distractingVoiceUser.isSkyDropped()) return;
+
+				if ((!source.hasAbility('soundproof') || this.suppressingAbility(source)) 
+                    && this.validTarget(distractingVoiceUser, source, move.target
+                )) {
+					if (move.smartTarget) move.smartTarget = false;
+					this.debug("Distracting Voice redirected target of move");
+					return distractingVoiceUser;
+				}
+			},
+		},
+		target: "self",
+		type: "Fairy",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Clever",
+        desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal. This effect is ignored while the user is under the effect of Sky Drop.",
+		shortDesc: "The foes' moves target the user on the turn used.",
+    },
 };
