@@ -1636,28 +1636,28 @@ export const commands: Chat.ChatCommands = {
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
 		const roomRanks = [
-			`<strong>Room ranks</strong>`,
-			`^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.`,
-			`+ <strong>Voice</strong> - They can use ! commands like !groups`,
-			`% <strong>Driver</strong> - The above, and they can mute and warn`,
-			`@ <strong>Moderator</strong> - The above, and they can room ban users`,
-			`* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML`,
-			`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it`,
+			this.TL`<strong>Room ranks</strong>`,
+			this.TL`^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.`,
+			this.TL`+ <strong>Voice</strong> - They can use ! commands like !groups`,
+			this.TL`% <strong>Driver</strong> - The above, and they can mute and warn`,
+			this.TL`@ <strong>Moderator</strong> - The above, and they can room ban users`,
+			this.TL`* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML`,
+			this.TL`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it`,
 		];
 
 		const globalRanks = [
-			`<strong>Global ranks</strong>`,
-			`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
-			`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
-			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
-			`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
-			`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
+			this.TL`<strong>Global ranks</strong>`,
+			this.TL`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
+			this.TL`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
+			this.TL`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
+			this.TL`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
+			this.TL`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
 		];
 
 		this.sendReplyBox(
-			(showRoom ? roomRanks.map(str => this.TL(str)).join('<br />') : ``) +
+			(showRoom ? roomRanks.join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalRanks.map(str => this.TL(str)).join('<br />') : ``)
+			(showGlobal ? globalRanks.join('<br />') : ``)
 		);
 	},
 	groupshelp: [
@@ -1673,21 +1673,21 @@ export const commands: Chat.ChatCommands = {
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
 		const roomPunishments = [
-			`<strong>Room punishments</strong>:`,
-			`<strong>warn</strong> - Displays a popup with the rules.`,
-			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
-			`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
-			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
-			`<strong>weekban</strong> - Bans a user from the room for a week.`,
-			`<strong>blacklist</strong> - Bans a user for a year.`,
+			this.TL`<strong>Room punishments</strong>:`,
+			this.TL`<strong>warn</strong> - Displays a popup with the rules.`,
+			this.TL`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
+			this.TL`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
+			this.TL`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
+			this.TL`<strong>weekban</strong> - Bans a user from the room for a week.`,
+			this.TL`<strong>blacklist</strong> - Bans a user for a year.`,
 		];
 
 		const globalPunishments = [
-			`<strong>Global punishments</strong>:`,
-			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
-			`<strong>weeklock</strong> - Locks a user for a week.`,
-			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
-			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
+			this.TL`<strong>Global punishments</strong>:`,
+			this.TL`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
+			this.TL`<strong>weeklock</strong> - Locks a user for a week.`,
+			this.TL`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
+			this.TL`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
 		const indefinitePunishments = [
@@ -1699,9 +1699,9 @@ export const commands: Chat.ChatCommands = {
 		];
 
 		this.sendReplyBox(
-			(showRoom ? roomPunishments.map(str => this.TL(str)).join('<br />') : ``) +
+			(showRoom ? roomPunishments.join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalPunishments.map(str => this.TL(str)).join('<br />') : ``) +
+			(showGlobal ? globalPunishments.join('<br />') : ``) +
 			(showGlobal ? `<br /><br />${indefinitePunishments.join('<br />')}` : ``)
 		);
 	},
@@ -2012,55 +2012,55 @@ export const commands: Chat.ChatCommands = {
 
 		const strings = [
 			[
-				`<strong>Room drivers (%)</strong> can use:`,
-				`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
-				`- /mute OR /m <em>username</em>: 7 minute mute`,
-				`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
-				`- /unmute <em>username</em>: unmute`,
-				`- /hidetext <em>username</em>: hide a user's messages from the room`,
-				`- /announce OR /wall <em>message</em>: make an announcement`,
-				`- /modlog <em>username</em>: search the moderator log of the room`,
-				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
-				`- !show [image or youtube link]: display given media in chat.`,
+				this.TL`<strong>Room drivers (%)</strong> can use:`,
+				this.TL`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
+				this.TL`- /mute OR /m <em>username</em>: 7 minute mute`,
+				this.TL`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
+				this.TL`- /unmute <em>username</em>: unmute`,
+				this.TL`- /hidetext <em>username</em>: hide a user's messages from the room`,
+				this.TL`- /announce OR /wall <em>message</em>: make an announcement`,
+				this.TL`- /modlog <em>username</em>: search the moderator log of the room`,
+				this.TL`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
+				this.TL`- !show [image or youtube link]: display given media in chat.`,
 			],
 			[
-				`<strong>Room moderators (@)</strong> can also use:`,
-				`- /roomban OR /rb <em>username</em>: ban user from the room`,
-				`- /roomunban <em>username</em>: unban user from the room`,
-				`- /roomvoice <em>username</em>: appoint a room voice`,
-				`- /roomdevoice <em>username</em>: remove a room voice`,
-				`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
-				`- /roomsettings: change a variety of room settings, namely modchat`,
+				this.TL`<strong>Room moderators (@)</strong> can also use:`,
+				this.TL`- /roomban OR /rb <em>username</em>: ban user from the room`,
+				this.TL`- /roomunban <em>username</em>: unban user from the room`,
+				this.TL`- /roomvoice <em>username</em>: appoint a room voice`,
+				this.TL`- /roomdevoice <em>username</em>: remove a room voice`,
+				this.TL`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
+				this.TL`- /roomsettings: change a variety of room settings, namely modchat`,
 			],
 			[
-				`<strong>Room owners (#)</strong> can also use:`,
-				`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
-				`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
-				`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
-				`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
-				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
-				`- /declare <em>message</em>: make a large blue declaration to the room`,
-				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
-				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
+				this.TL`<strong>Room owners (#)</strong> can also use:`,
+				this.TL`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
+				this.TL`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
+				this.TL`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
+				this.TL`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
+				this.TL`- /roomdeauth <em>username</em>: remove all room auth from a user`,
+				this.TL`- /declare <em>message</em>: make a large blue declaration to the room`,
+				this.TL`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
+				this.TL`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
 			],
 			[
-				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
+				this.TL`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
 			],
 			[
-				`Tournament Help:`,
-				`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
-				`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
-				`- /tour end: forcibly end the tournament in the current room`,
-				`- /tour start: start the tournament in the current room`,
-				`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
+				this.TL`Tournament Help:`,
+				this.TL`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
+				this.TL`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
+				this.TL`- /tour end: forcibly end the tournament in the current room`,
+				this.TL`- /tour start: start the tournament in the current room`,
+				this.TL`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
 			],
 			[
-				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
+				this.TL`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
 			],
 		];
 
 		this.sendReplyBox(
-			strings.map(par => par.map(string => this.TL(string)).join('<br />')).join('<br /><br />')
+			strings.map(par => par.join('<br />')).join('<br /><br />')
 		);
 	},
 

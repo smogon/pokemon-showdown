@@ -4,6 +4,7 @@ import * as ConfigLoader from '../config-loader';
 import type { Punishment } from '../punishments';
 import type { PartialModlogEntry, ModlogID } from '../modlog';
 import { runPunishments } from './helptickets-auto';
+import { TLkey } from '../../sim/dex-text';
 
 const TICKET_FILE = 'config/tickets.json';
 const SETTINGS_FILE = 'config/chat-plugins/ticket-settings.json';
@@ -287,8 +288,8 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (
 			(!user.isStaff || this.ticket.userid === user.id) && (message.length < 3 || blockedMessages.includes(toID(message)))
 		) {
-			this.room.add(`|c|~Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
-			this.room.add(`|c|~Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
+			this.room.add(`|c|~Staff|${this.room.TL`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
+			this.room.add(`|c|~Staff|${this.room.TL`Please post the information I requested above so a global staff member can come to help.`}`);
 			this.room.update();
 			return false;
 		}
@@ -297,7 +298,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			this.activationTime = Date.now();
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
-			this.room.add(`|c|~Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
+			this.room.add(`|c|~Staff|${this.room.TL`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
 			switch (this.ticket.type) {
 			case 'PM Harassment':
 				this.room.add(
@@ -760,7 +761,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 
 		if (ticket.needsDelayWarning && !ticket.claimed && delayWarnings[ticket.type]) {
 			ticketRoom.add(
-				`|c|~Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
+				`|c|~Staff|${ticketRoom.TL(delayWarningPreamble)}${ticketRoom.TL(delayWarnings[ticket.type])}`
 			).update();
 			ticket.needsDelayWarning = false;
 		}
@@ -997,65 +998,65 @@ for (const room of Rooms.rooms.values()) {
 // convert old-style Staff-room ticketbans to regular ones
 void convertRoomPunishments();
 
-const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
+const delayWarningPreamble = TLkey`Hi! All global staff members are busy right now and we apologize for the delay. `;
 const delayWarnings: { [k: string]: string } = {
-	'PM Harassment': `Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.`,
-	'Battle Harassment': `Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
-	'Inappropriate Username': `Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.`,
-	'Inappropriate Pokemon Nicknames': `Please save the replay of the battle and provide a link to it in this chat, so we can see the nicknames even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
-	'Appeal': `Please clearly explain why you should be unlocked and we will review it as soon as possible.`,
-	'IP-Appeal': `Please give us all relevant information on how you are connecting to Pokémon Showdown (if it is through mobile data, at home, a school or work network, etc), and we will review your case as soon as possible.`,
-	'Public Room Assistance Request': `Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.`,
-	other: `If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.`,
+	'PM Harassment': TLkey`Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.`,
+	'Battle Harassment': TLkey`Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
+	'Inappropriate Username': TLkey`Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.`,
+	'Inappropriate Pokemon Nicknames': TLkey`Please save the replay of the battle and provide a link to it in this chat, so we can see the nicknames even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
+	'Appeal': TLkey`Please clearly explain why you should be unlocked and we will review it as soon as possible.`,
+	'IP-Appeal': TLkey`Please give us all relevant information on how you are connecting to Pokémon Showdown (if it is through mobile data, at home, a school or work network, etc), and we will review your case as soon as possible.`,
+	'Public Room Assistance Request': TLkey`Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.`,
+	other: TLkey`If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.`,
 };
 const ticketTitles: { [k: string]: string } = {
-	pmharassment: `PM Harassment`,
-	battleharassment: `Battle Harassment`,
-	inapname: `Inappropriate Username`,
-	inappokemon: `Inappropriate Pokemon Nicknames`,
-	appeal: `Appeal`,
-	ipappeal: `IP-Appeal`,
-	roomhelp: `Public Room Assistance Request`,
-	other: `Other`,
+	pmharassment: TLkey`PM Harassment`,
+	battleharassment: TLkey`Battle Harassment`,
+	inapname: TLkey`Inappropriate Username`,
+	inappokemon: TLkey`Inappropriate Pokemon Nicknames`,
+	appeal: TLkey`Appeal`,
+	ipappeal: TLkey`IP-Appeal`,
+	roomhelp: TLkey`Public Room Assistance Request`,
+	other: TLkey`Other`,
 };
 const ticketPages: { [k: string]: string } = {
-	report: `I want to report someone`,
-	pmharassment: `Someone is harassing me in PMs`,
-	battleharassment: `Someone is harassing me in a battle`,
-	inapname: `Someone is using an offensive username`,
-	inappokemon: `Someone is using offensive Pokemon nicknames`,
-	cheating: `Someone is hacking or cheating in my battle`,
+	report: TLkey`I want to report someone`,
+	pmharassment: TLkey`Someone is harassing me in PMs`,
+	battleharassment: TLkey`Someone is harassing me in a battle`,
+	inapname: TLkey`Someone is using an offensive username`,
+	inappokemon: TLkey`Someone is using offensive Pokemon nicknames`,
+	cheating: TLkey`Someone is hacking or cheating in my battle`,
 
-	appeal: `I want to appeal a punishment`,
-	permalock: `I want to appeal my permalock`,
-	lock: `I want to appeal my lock`,
-	ip: `I'm locked because I have the same IP as someone I don't recognize.`,
-	homeip: `I'm locked because someone in my home was punished.`,
-	device: `I'm locked because someone misused my device or account.`,
-	mobileip: `I am using mobile data.`,
-	public: `I am at a public place (school, library, workplace, etc) or was locked in one.`,
-	timeleft: `I want to know how long is left on my lock.`,
-	reason: `I want to know why I was locked.`,
-	startedit: `The other user started it.`,
-	semilock: `I can't talk in chat because of my ISP`,
-	hostfilter: `I'm locked because of a proxy or VPN`,
-	hasautoconfirmed: `Yes, I have an autoconfirmed account`,
-	lacksautoconfirmed: `No, I don't have an autoconfirmed account`,
-	appealother: `I want to appeal a mute/roomban/blacklist`,
+	appeal: TLkey`I want to appeal a punishment`,
+	permalock: TLkey`I want to appeal my permalock`,
+	lock: TLkey`I want to appeal my lock`,
+	ip: TLkey`I'm locked because I have the same IP as someone I don't recognize.`,
+	homeip: TLkey`I'm locked because someone in my home was punished.`,
+	device: TLkey`I'm locked because someone misused my device or account.`,
+	mobileip: TLkey`I am using mobile data.`,
+	public: TLkey`I am at a public place (school, library, workplace, etc) or was locked in one.`,
+	timeleft: TLkey`I want to know how long is left on my lock.`,
+	reason: TLkey`I want to know why I was locked.`,
+	startedit: TLkey`The other user started it.`,
+	semilock: TLkey`I can't talk in chat because of my ISP`,
+	hostfilter: TLkey`I'm locked because of a proxy or VPN`,
+	hasautoconfirmed: TLkey`Yes, I have an autoconfirmed account`,
+	lacksautoconfirmed: TLkey`No, I don't have an autoconfirmed account`,
+	appealother: TLkey`I want to appeal a mute/roomban/blacklist`,
 
-	misc: `Something else`,
-	password: `I lost my password`,
-	roomhelp: `I need global staff to help watch a public room`,
-	other: `Other`,
+	misc: TLkey`Something else`,
+	password: TLkey`I lost my password`,
+	roomhelp: TLkey`I need global staff to help watch a public room`,
+	other: TLkey`Other`,
 
-	confirmpmharassment: `Report harassment in a private message (PM)`,
-	confirmbattleharassment: `Report harassment in a battle`,
-	confirminapname: `Report an inappropriate username`,
-	confirminappokemon: `Report inappropriate Pokemon nicknames`,
-	confirmappeal: `Appeal your lock`,
-	confirmipappeal: `Appeal IP lock`,
-	confirmroomhelp: `Call a Global Staff member to help`,
-	confirmother: `Call a Global Staff member`,
+	confirmpmharassment: TLkey`Report harassment in a private message (PM)`,
+	confirmbattleharassment: TLkey`Report harassment in a battle`,
+	confirminapname: TLkey`Report an inappropriate username`,
+	confirminappokemon: TLkey`Report inappropriate Pokemon nicknames`,
+	confirmappeal: TLkey`Appeal your lock`,
+	confirmipappeal: TLkey`Appeal IP lock`,
+	confirmroomhelp: TLkey`Call a Global Staff member to help`,
+	confirmother: TLkey`Call a Global Staff member`,
 };
 const cheatingScenarios = [
 	[
@@ -1849,7 +1850,7 @@ export const pages: Chat.PageTable = {
 					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${!ticket.claimed && ticket.open ? `Claim` : `View`}</a>`;
 				} else if (room) {
 					const ticketGame = room.getGame(HelpTicket)!;
-					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.TL(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
+					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${!ticket.claimed && ticket.open ? this.TL`Claim` : this.TL`View`}</button></a> `;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.TL`Log`}</button></a>`;
@@ -2199,20 +2200,20 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `</tbody></table></div>`;
 			const headerTitles: { [id: string]: string } = {
-				type: 'Type',
-				totaltickets: 'Total Tickets',
-				total: 'Average Total Time',
-				initwait: 'Average Initial Wait',
-				wait: 'Average Total Wait',
-				resolution: 'Resolutions',
-				result: 'Positive Result',
-				staff: 'Staff ID',
-				num: 'Number of Tickets',
-				time: 'Average Time Per Ticket',
+				type: this.TL`Type`,
+				totaltickets: this.TL`Total Tickets`,
+				total: this.TL`Average Total Time`,
+				initwait: this.TL`Average Initial Wait`,
+				wait: this.TL`Average Total Wait`,
+				resolution: this.TL`Resolutions`,
+				result: this.TL`Positive Result`,
+				staff: this.TL`Staff ID`,
+				num: this.TL`Number of Tickets`,
+				time: this.TL`Average Time Per Ticket`,
 			};
 			buf = buf.replace(/<Button>([a-z]+)<\/Button>/g, (match, id) => {
-				if (col === id) return this.TL(headerTitles[id]);
-				return `<a class="button" href="/view-help-stats-${table}-${dateUrl}-${id}" target="replace">${this.TL(headerTitles[id])}</a>`;
+				if (col === id) return headerTitles[id];
+				return `<a class="button" href="/view-help-stats-${table}-${dateUrl}-${id}" target="replace">${headerTitles[id]}</a>`;
 			});
 			return buf;
 		},
@@ -2295,15 +2296,14 @@ export const commands: Chat.ChatCommands = {
 			reportTarget = Utils.escapeHTML(reportTarget);
 			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
 			const contexts: { [k: string]: string } = {
-				'PM Harassment': `Hi! Who was harassing you in private messages?`,
-				'Battle Harassment': `Hi! Who was harassing you, and in which battle did it happen? Please post a link to the battle or a replay of the battle.`,
-				'Inappropriate Username': `Hi! Tell us the username that is inappropriate.`,
-				'Inappropriate Pokemon Nicknames': `Hi! Which user has Pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
-				Appeal: `Hi! Can you please explain why you feel your punishment is undeserved?`,
-				'IP-Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
-				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
-				Other: `Hi! What seems to be the problem? Tell us about any people involved,` +
-					` and if this happened in a specific place on the site.`,
+				'PM Harassment': this.TL`Hi! Who was harassing you in private messages?`,
+				'Battle Harassment': this.TL`Hi! Who was harassing you, and in which battle did it happen? Please post a link to the battle or a replay of the battle.`,
+				'Inappropriate Username': this.TL`Hi! Tell us the username that is inappropriate.`,
+				'Inappropriate Pokemon Nicknames': this.TL`Hi! Which user has Pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
+				Appeal: this.TL`Hi! Can you please explain why you feel your punishment is undeserved?`,
+				'IP-Appeal': this.TL`Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
+				'Public Room Assistance Request': this.TL`Hi! Which room(s) do you need us to help you watch?`,
+				Other: this.TL`Hi! What seems to be the problem? Tell us about any people involved, and if this happened in a specific place on the site.`,
 			};
 			const staffContexts: { [k: string]: string } = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${user.ips.map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
@@ -2471,12 +2471,12 @@ export const commands: Chat.ChatCommands = {
 			switch (ticket.type) {
 			case 'IP-Appeal':
 				if (user.locked === '#hostfilter') {
-					context += ` (Have you looked at https://${Config.routes.root}/pages/proxyhelp?)`;
+					context += this.TL` (Have you looked at https://${Config.routes.root}/pages/proxyhelp?)`;
 				}
 				break;
 			}
 			if (context) {
-				helpRoom.add(`|c|~Staff|${this.TL(context)}`);
+				helpRoom.add(`|c|~Staff|${context}`);
 				helpRoom.update();
 			}
 			if (pmRequestButton) {

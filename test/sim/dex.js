@@ -135,7 +135,7 @@ describe('DexText#get', () => {
 		assert.equal(
 			Dex.text.get(Dex.moves.get('Absorb')).gen4.desc,
 			'The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, ' +
-			'the HP recovered is 1.3x normal, rounded down.'
+			'the HP recovered is 1.3× normal, rounded down.'
 		);
 	});
 
