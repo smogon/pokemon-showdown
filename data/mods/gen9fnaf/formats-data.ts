@@ -28,7 +28,47 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "FNAF",
 		natDexTier: "FNAF",
 	},
-	
+	toyfreddy: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	toybonnie: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	toychica: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	mangle: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	thepuppet: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	balloonboy: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	jj: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+	nightmarionne: {
+		isNonstandard: "FNAF",
+		tier: "FNAF",
+		natDexTier: "FNAF",
+	},
+
 
 	// ── Champions Mega Evolutions ────────────────────────────────────────────
 	// Added all to NatDex OU except Zygarde-Mega to NatDex Uber
