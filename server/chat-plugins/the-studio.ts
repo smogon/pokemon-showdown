@@ -472,9 +472,9 @@ export const commands: Chat.ChatCommands = {
 		this.checkChat();
 		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
-		const targetUsername = this.splitUser(target).targetUsername || (user.named ? user.name : '');
-		const username = LastFM.getAccountName(targetUsername);
-		this.sendReplyBox(await LastFM.getScrobbleData(username, targetUsername));
+		const targetUser = this.splitOne(this.splitUser(target).targetUsername || (user.named ? user.name : ''))[0];
+		const username = LastFM.getAccountName(targetUser);
+		this.sendReplyBox(await LastFM.getScrobbleData(username, targetUser));
 	},
 	lastfmhelp: [
 		`/lastfm [username] - Displays the last scrobbled song for the person using the command or for [username] if provided.`,
@@ -485,10 +485,12 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help track');
 		this.checkChat();
 		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
-		const [track, artist] = this.splitOne(target);
+		const [track, optionals] = this.splitOne(target);
 		if (!track) return this.parse('/help track');
+		const [artist, comment] = this.splitOne(optionals);
 		this.runBroadcast(true);
-		this.sendReplyBox(await LastFM.tryGetTrackData(track, artist || undefined));
+		const trackData = await LastFM.tryGetTrackData(track, artist || undefined);
+		this.sendReplyBox(comment ? `${trackData}<br />(${Utils.escapeHTML(comment)})` : trackData);
 	},
 	trackhelp: [
 		`/track [song name], [artist] - Displays the most relevant search result to the song name (and artist if specified) provided.`,
