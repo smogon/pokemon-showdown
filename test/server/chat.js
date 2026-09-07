@@ -34,7 +34,6 @@ describe('Chat', () => {
 		assert.equal(translate(Dex.species.get('Pikachu')), 'ピカチュウ');
 		const text = Dex.loadTextData('ja');
 		for (const [property, table] of Object.entries({
-			term: 'TermNames',
 			type: 'TypeNames',
 			nature: 'NatureNames',
 			gender: 'GenderNames',

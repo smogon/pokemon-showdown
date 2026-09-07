@@ -43,7 +43,6 @@ describe('Shared TL', () => {
 	it('binds domain objects and tables to the requested language', () => {
 		const japanese = TLfor('ja');
 		assert.equal(japanese(Dex.items.get('Leftovers')), Dex.text.get(Dex.items.get('Leftovers'), 'ja').name);
-		assert.equal(japanese.term, Dex.loadTextData('ja').TermNames);
 		const oldDex = Dex.mod('gen3');
 		assert.equal(japanese(oldDex.moves.get('Tackle')), japanese(Dex.moves.get('Tackle')));
 		const move = { ...oldDex.moves.get('Tackle'), shortDesc: 'A mod-specific description.' };
@@ -54,7 +53,7 @@ describe('Shared TL', () => {
 
 	it('resolves named placeholders in context maps across catalogs', () => {
 		TLadd('en-afd', [{
-			'From {FIRST} to {SECOND}': { default: '{SECOND} after {FIRST}', brief: null },
+			'From {FIRST} to {SECOND}': { '': '{SECOND} after {FIRST}', brief: null },
 		}, {
 			'From {START} to {END}': { brief: '{END}/{START}' },
 		}]);

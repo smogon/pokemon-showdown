@@ -107,7 +107,7 @@ export const translations: TranslationCatalog = {
 	"Resolved": null,
 	"Unresolved": null,
 	"Dead": null,
-	"Type": null,
+	"Type": null, // NOT USED
 	"Total Tickets": null,
 	"Average Total Time": null,
 	"Average Initial Wait": null,

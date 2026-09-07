@@ -176,6 +176,7 @@ try {
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
+const DEX_TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'data', 'text');
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -1766,8 +1767,10 @@ export const Chat = new class {
 				if (!filename.endsWith('.js')) continue;
 				catalogs.push(require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations);
 			}
+			const uiCatalog = `${DEX_TRANSLATION_DIRECTORY}/${dirname}/ui.js`;
+			if (await FS(uiCatalog).exists()) catalogs.push(require(uiCatalog).translations);
 			TLadd(dirname, catalogs);
-			// Keep English names here for existing room lookups and moderation messages.
+
 			const englishName = /\(([^()]*)\)$/.exec(language.fullName)?.[1] || language.name;
 			Chat.languages.set(language.legacyId as ID, englishName);
 		}

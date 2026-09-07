@@ -1,104 +1,3 @@
-export const TermNames: { [id: string]: TranslationString } = {
-	shiny: "Variocolor",
-	happiness: null, // NEEDS TRANSLATION
-	level: null, // NEEDS TRANSLATION
-	nickname: null, // NEEDS TRANSLATION
-	ev: "EV",
-	evs: "EVs",
-	iv: "IV",
-	ivs: "IVs",
-	dv: "DVs",
-	dvs: "DVs",
-	av: "AV",
-	avs: "AVs",
-	point: null, // NEEDS TRANSLATION
-	points: null, // NEEDS TRANSLATION
-	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
-	stats: "Características",
-
-	pokemon: "Pokémon",
-	move: null, // NEEDS TRANSLATION
-	moves: "Movimientos", // verified: Champions es_ms 502
-	item: null, // NEEDS TRANSLATION
-	items: null, // NEEDS TRANSLATION
-	ability: "Habilidad", // verified: Champions es_ms 498
-	abilities: null, // NEEDS TRANSLATION
-	hiddenability: null, // NEEDS TRANSLATION
-	possibleabilities: null, // NEEDS TRANSLATION
-	team: null, // NEEDS TRANSLATION
-	teams: null, // NEEDS TRANSLATION
-	teamslist: null, // NEEDS TRANSLATION
-
-	type: "Tipo",
-	types: "Tipos",
-	teratype: null, // NEEDS TRANSLATION
-	nature: "Naturaleza",
-	category: "Clase",
-	categories: "Clases",
-	gender: "Sexo",
-	egggroup: null, // NEEDS TRANSLATION
-	egggroups: null, // NEEDS TRANSLATION
-	tag: null, // NEEDS TRANSLATION
-	article: null, // NEEDS TRANSLATION
-	articles: null, // NEEDS TRANSLATION
-	tier: "Tier",
-	tiers: "Tiers",
-	format: null, // NEEDS TRANSLATION
-	formats: null, // NEEDS TRANSLATION
-	color: "Color",
-	form: null, // NEEDS TRANSLATION
-	forme: null, // NEEDS TRANSLATION
-	dexnum: null, // NEEDS TRANSLATION
-	generation: null, // NEEDS TRANSLATION
-	gennum: null, // NEEDS TRANSLATION
-	evolution: null, // NEEDS TRANSLATION
-	preevolution: null, // NEEDS TRANSLATION
-	doesnotevolve: null, // NEEDS TRANSLATION
-	zcrystal: null, // NEEDS TRANSLATION
-	target: null, // NEEDS TRANSLATION
-	height: "Altura",
-	numm: "{NUMBER} m",
-	weight: "Peso",
-	numkg: "{NUMBER} kg",
-	critrate: null, // NEEDS TRANSLATION
-	user: null, // NEEDS TRANSLATION
-	requiredmove: null, // NEEDS TRANSLATION
-	dynamaxpower: null, // NEEDS TRANSLATION
-	none: null, // NEEDS TRANSLATION
-	pastgensonly: null, // NEEDS TRANSLATION
-	flingbasepower: null, // NEEDS TRANSLATION
-	flingeffect: null, // NEEDS TRANSLATION
-	naturalgifttype: null, // NEEDS TRANSLATION
-	naturalgiftbasepower: null, // NEEDS TRANSLATION
-
-	megaevolution: null, // NEEDS TRANSLATION
-	zpower: null, // NEEDS TRANSLATION
-	zeffect: null, // NEEDS TRANSLATION
-	dynamax: null, // NEEDS TRANSLATION
-	dynamaxlevel: null, // NEEDS TRANSLATION
-	ultraburst: null, // NEEDS TRANSLATION
-	tera: null, // NEEDS TRANSLATION
-
-	supereffective: "Supereficaz", // verified: Champions es_ms 427
-	extremelyeffective: "Hipereficaz", // verified: Champions es_ms 428
-	effective: "Eficaz", // verified: Champions es_ms 429
-	notveryeffective: "Poco eficaz", // verified: Champions es_ms 430
-	mostlyineffective: "Muy poco eficaz", // verified: Champions es_ms 431
-	noeffect: "Sin efecto", // verified: Champions es_ms 432 ("Has no effect")
-
-	weak: null, // NEEDS TRANSLATION
-	resist: null, // NEEDS TRANSLATION
-	immune: null, // NEEDS TRANSLATION
-
-	nicknamespecies: "{NICKNAME} ({SPECIES})",
-	label: null, // NEEDS TRANSLATION
-	noweather: null, // NEEDS TRANSLATION
-	noitem: null, // NEEDS TRANSLATION
-	noability: null, // NEEDS TRANSLATION
-	foescondition: null, // NEEDS TRANSLATION
-	speciesforme: null, // NEEDS TRANSLATION
-};
-
 export const StatNames: { [id: string]: TranslationString } = {
 	hp: "PS",
 	atk: "Ataque", "atk:grammar": "ms",
@@ -111,7 +10,7 @@ export const StatNames: { [id: string]: TranslationString } = {
 	spc: "Especial", "spc:grammar": "ms",
 
 	// n.b. used in "stats were lowered" battle messages,
-	// so it should be lowercase (unlike TermNames.stats)
+	// so it should be lowercase (unlike "Stats" in ui.ts)
 	stats: "características", "stats:grammar": "fp",
 };
 

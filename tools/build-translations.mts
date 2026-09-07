@@ -11,7 +11,8 @@ const ROOT_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..
 const TRANSLATIONS_PATH = path.resolve(ROOT_PATH, 'translations');
 const TEMPLATE_PATH = path.resolve(TRANSLATIONS_PATH, 'en-template');
 const TEXT_PATH = path.resolve(ROOT_PATH, 'data/text');
-const UI_TEMPLATE_PATH = path.resolve(ROOT_PATH, 'data/text/ui-template.ts');
+export const UI_TEMPLATE_PATH = path.resolve(TEXT_PATH, 'ui-template.ts');
+export const SOURCE_DIRECTORIES = ['server', 'sim'].map(directory => path.resolve(ROOT_PATH, directory));
 
 export const TL_CALL_OPTIONS = {
 	catalogByFile: {
@@ -42,7 +43,8 @@ export function updateTranslationFiles(options: { sync?: boolean } = {}): TLCall
 	const uiTemplate = new ParsedCatalog(uiTemplateSource, UI_TEMPLATE_PATH);
 	validateCatalog(ParsedCatalog.evaluate(uiTemplateSource, UI_TEMPLATE_PATH), UI_TEMPLATE_PATH);
 
-	const calls = findTLCalls(path.resolve(ROOT_PATH, 'server'), TL_CALL_OPTIONS);
+	const calls = findTLCalls(SOURCE_DIRECTORIES, TL_CALL_OPTIONS);
+	const uiCalls = new TLCalls(calls.options);
 	const templateFiles = fs.readdirSync(TEMPLATE_PATH)
 		.filter(filename => filename.endsWith('.ts')).sort();
 	const templates = new Map<string, { file: string, source: string, parsed: ParsedCatalog, calls: TLCalls }>();
@@ -54,6 +56,11 @@ export function updateTranslationFiles(options: { sync?: boolean } = {}): TLCall
 	}
 
 	for (const [key, call] of calls) {
+		if (call.placeholders.length ? uiTemplate.entriesByCallKey.has(key) : uiTemplate.entriesByKey.has(key)) {
+			call.catalog = 'ui';
+			uiCalls.set(key, call);
+			continue;
+		}
 		for (const [filename, { parsed }] of templates) {
 			if (call.placeholders.length ? parsed.entriesByCallKey.has(key) : parsed.entriesByKey.has(key)) {
 				call.catalog = filename.slice(0, -3);
@@ -61,11 +68,13 @@ export function updateTranslationFiles(options: { sync?: boolean } = {}): TLCall
 			}
 		}
 	}
+	resolveTLCalls(uiTemplate, uiCalls);
 	for (const [filename, template] of templates) {
 		template.calls = callsForCatalog(calls, filename.slice(0, -3));
 		resolveTLCalls(template.parsed, template.calls);
 	}
 	const missingCatalogs = new Set([...calls.values()].map(call => call.catalog));
+	missingCatalogs.delete('ui');
 	for (const filename of templateFiles) missingCatalogs.delete(filename.slice(0, -3));
 	if (missingCatalogs.size) {
 		throw new Error(`Missing translation template catalogs: ${[...missingCatalogs].sort().join(', ')}`);
@@ -129,7 +138,7 @@ export function updateTranslationFiles(options: { sync?: boolean } = {}): TLCall
 			mismatches.push(translationMismatchMessage(file, UI_TEMPLATE_PATH, comparison));
 			continue;
 		}
-		const synced = uiTemplate.sync(locale);
+		const synced = uiTemplate.sync(locale, uiCalls);
 		if (synced.comparison.incompatible.length) {
 			mismatches.push(translationMismatchMessage(file, UI_TEMPLATE_PATH, synced.comparison));
 			continue;

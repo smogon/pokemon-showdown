@@ -136,7 +136,7 @@ export const translations: TranslationCatalog = {
 	"You are now blocking room invites, except from staff and {TARGET}.": null,
 	"You are now blocking room invites, except from staff and {TARGET} users.": null,
 	"You are now blocking room invites, except from staff.": null,
-	"Format": null,
+	"Format": null, // NOT USED
 	"You are not a player and don't have a team.": null,
 	"You don't have a Pokémon matching \"{TARGET}\" in your team.": null,
 	"You don't have a Pokémon #{NUMBER} on your team - your team only has {COUNT} Pokémon.": null,

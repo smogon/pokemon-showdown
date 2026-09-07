@@ -1,104 +1,3 @@
-export const TermNames: { [id: string]: TranslationString } = {
-	shiny: "Schillernd",
-	happiness: null, // NEEDS TRANSLATION
-	level: "Level",
-	nickname: null, // NEEDS TRANSLATION
-	ev: "EV",
-	evs: "EVs",
-	iv: "IV",
-	ivs: "IVs",
-	dv: "DVs",
-	dvs: "DVs",
-	av: "AV",
-	avs: "AVs",
-	point: null, // NEEDS TRANSLATION
-	points: null, // NEEDS TRANSLATION
-	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
-	stats: "Statuswerte",
-
-	pokemon: "Pokémon",
-	move: null, // NEEDS TRANSLATION
-	moves: null, // NEEDS TRANSLATION
-	item: null, // NEEDS TRANSLATION
-	items: null, // NEEDS TRANSLATION
-	ability: null, // NEEDS TRANSLATION
-	abilities: null, // NEEDS TRANSLATION
-	hiddenability: null, // NEEDS TRANSLATION
-	possibleabilities: null, // NEEDS TRANSLATION
-	team: "Team",
-	teams: "Teams",
-	teamslist: null, // NEEDS TRANSLATION
-
-	type: "Typ",
-	types: "Typen",
-	teratype: null, // NEEDS TRANSLATION
-	nature: "Wesen",
-	category: "Kategorie",
-	categories: "Kategorien",
-	gender: "Geschlecht",
-	egggroup: null, // NEEDS TRANSLATION
-	egggroups: null, // NEEDS TRANSLATION
-	tag: null, // NEEDS TRANSLATION
-	article: null, // NEEDS TRANSLATION
-	articles: null, // NEEDS TRANSLATION
-	tier: "Tier",
-	tiers: "Tiers",
-	format: null, // NEEDS TRANSLATION
-	formats: null, // NEEDS TRANSLATION
-	color: "Farbe",
-	form: null, // NEEDS TRANSLATION
-	forme: null, // NEEDS TRANSLATION
-	dexnum: null, // NEEDS TRANSLATION
-	generation: "Generation",
-	gennum: null, // NEEDS TRANSLATION
-	evolution: null, // NEEDS TRANSLATION
-	preevolution: null, // NEEDS TRANSLATION
-	doesnotevolve: null, // NEEDS TRANSLATION
-	zcrystal: null, // NEEDS TRANSLATION
-	target: null, // NEEDS TRANSLATION
-	height: "Größe",
-	numm: "{NUMBER} m",
-	weight: "Gewicht",
-	numkg: "{NUMBER} kg",
-	critrate: null, // NEEDS TRANSLATION
-	user: null, // NEEDS TRANSLATION
-	requiredmove: null, // NEEDS TRANSLATION
-	dynamaxpower: null, // NEEDS TRANSLATION
-	none: null, // NEEDS TRANSLATION
-	pastgensonly: null, // NEEDS TRANSLATION
-	flingbasepower: null, // NEEDS TRANSLATION
-	flingeffect: null, // NEEDS TRANSLATION
-	naturalgifttype: null, // NEEDS TRANSLATION
-	naturalgiftbasepower: null, // NEEDS TRANSLATION
-
-	megaevolution: null, // NEEDS TRANSLATION
-	zpower: null, // NEEDS TRANSLATION
-	zeffect: null, // NEEDS TRANSLATION
-	dynamax: null, // NEEDS TRANSLATION
-	dynamaxlevel: null, // NEEDS TRANSLATION
-	ultraburst: null, // NEEDS TRANSLATION
-	tera: null, // NEEDS TRANSLATION
-
-	supereffective: null, // NEEDS TRANSLATION
-	extremelyeffective: null, // NEEDS TRANSLATION
-	effective: null, // NEEDS TRANSLATION
-	notveryeffective: null, // NEEDS TRANSLATION
-	mostlyineffective: null, // NEEDS TRANSLATION
-	noeffect: null, // NEEDS TRANSLATION
-
-	weak: null, // NEEDS TRANSLATION
-	resist: null, // NEEDS TRANSLATION
-	immune: null, // NEEDS TRANSLATION
-
-	nicknamespecies: "{NICKNAME} ({SPECIES})",
-	label: null, // NEEDS TRANSLATION
-	noweather: null, // NEEDS TRANSLATION
-	noitem: null, // NEEDS TRANSLATION
-	noability: null, // NEEDS TRANSLATION
-	foescondition: null, // NEEDS TRANSLATION
-	speciesforme: null, // NEEDS TRANSLATION
-};
-
 export const StatNames: { [id: string]: TranslationString } = {
 	hp: "KP",
 	atk: "Angriff", "atk:grammar": "ms",
@@ -111,7 +10,7 @@ export const StatNames: { [id: string]: TranslationString } = {
 	spc: "Spezial", "spc:grammar": "ns",
 
 	// n.b. used in "stats were lowered" battle messages,
-	// so it should be lowercase (unlike TermNames.stats)
+	// so it should be lowercase (unlike "Stats" in ui.ts)
 	stats: "Statuswerte", "stats:grammar": "mp",
 };
 

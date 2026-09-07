@@ -54,7 +54,7 @@ describe('Translation catalogs', () => {
 			this.TL("Open", 'verb');
 			TL('Open', "adjective");
 		`);
-		assert.deepEqual([...calls.get('Open').contexts], ['default', 'verb', 'adjective']);
+		assert.deepEqual([...calls.get('Open').contexts], ['', 'verb', 'adjective']);
 	});
 
 	it('routes shared strings independently of catalog and region boundaries', () => {
@@ -300,7 +300,7 @@ export const translations: UIText = {
 	it('allows reordered, repeated, and omitted placeholders and null fallback', () => {
 		const catalog = {
 			'From {FIRST} to {SECOND}': '{SECOND}/{FIRST}/{SECOND}',
-			'{NAME} joined': { default: 'Joined', brief: '{NAME}', fallback: null },
+			'{NAME} joined': { '': 'Joined', brief: '{NAME}', fallback: null },
 			'{NAME} left': null,
 		};
 		assert.equal(validateCatalog(catalog, 'example.ts'), catalog);
@@ -308,16 +308,22 @@ export const translations: UIText = {
 
 	it('compiles reordered placeholders in context maps and preserves null fallback', () => {
 		assert.deepEqual(compileTranslations({
-			'{FIRST} before {SECOND}': { default: '{SECOND} after {FIRST}', brief: null },
+			'{FIRST} before {SECOND}': { '': '{SECOND} after {FIRST}', brief: null },
 			Open: { verb: 'Start', adjective: 'Available' },
 		}), {
-			'{0} before {1}': { default: '{1} after {0}', brief: null },
+			'{0} before {1}': { '': '{1} after {0}', brief: null },
 			Open: { verb: 'Start', adjective: 'Available' },
 		});
 	});
 
 	it('keeps checked-in calls, templates, and locale catalogs synchronized', function () {
 		this.timeout(10_000);
-		updateTranslationFiles();
+		const calls = updateTranslationFiles();
+		assert.equal(calls.get('Format').catalog, 'ui');
+		assert.equal(calls.get('Type').catalog, 'ui');
+		assert.deepEqual([...calls.get('Type').contexts], ['kind']);
+		assert.deepEqual([...calls.get('User').contexts].sort(), ['', 'pokemon']);
+		assert.equal(calls.get('{0}: ').catalog, 'ui');
+		assert.deepEqual(calls.get('{0}: ').placeholders, ['LABEL']);
 	});
 });

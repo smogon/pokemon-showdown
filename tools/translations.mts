@@ -205,7 +205,7 @@ export class ParsedCatalog {
 			if (existing) {
 				const expectedContexts = new Set(call.contexts);
 				const actualContexts = existing.value && typeof existing.value === 'object' ?
-					new Set(Object.keys(existing.value)) : new Set(['default']);
+					new Set(Object.keys(existing.value)) : new Set(['']);
 				for (const context of expectedContexts) {
 					if (!actualContexts.has(context)) {
 						errors.push(`${JSON.stringify(key)} needs context ${JSON.stringify(context)}`);
@@ -253,7 +253,7 @@ export class ParsedCatalog {
 			const contexts = calls.get(entry.key)?.contexts || new Set<string>();
 			if (ParsedCatalog.isDynamicKey(lines[entry.start])) continue;
 			if (entry.value === null) {
-				lines[entry.start] = this.setNotUsed(lines[entry.start], !contexts.has('default'));
+				lines[entry.start] = this.setNotUsed(lines[entry.start], !contexts.has(''));
 				continue;
 			}
 			if (typeof entry.value !== 'object') continue;
@@ -349,16 +349,16 @@ export class ParsedCatalog {
 	}
 
 	private schema(value: TranslationValue): string {
-		if (value === null || typeof value === 'string') return 'default';
+		if (value === null || typeof value === 'string') return '';
 		if (!value || typeof value !== 'object' || Array.isArray(value)) return 'invalid';
 		return Object.keys(value).sort().join('\0');
 	}
 
 	private templateEntryLines(key: string, call: TLCallsForKey): string[] {
 		const contexts = [...call.contexts].sort((a, b) => (
-			a === 'default' ? -1 : b === 'default' ? 1 : a.localeCompare(b)
+			a === '' ? -1 : b === '' ? 1 : a.localeCompare(b)
 		));
-		if (contexts.length === 1 && contexts[0] === 'default') {
+		if (contexts.length === 1 && contexts[0] === '') {
 			return [`${this.indent}${JSON.stringify(key)}: null,`];
 		}
 		return [

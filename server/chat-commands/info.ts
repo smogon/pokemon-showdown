@@ -663,17 +663,17 @@ export const commands: Chat.ChatCommands = {
 						weighthit = 40;
 					}
 					details = {
-						[TL.term.dexnum]: String(pokemon.num),
-						[TL.term.generation]: String(pokemon.gen) || 'CAP',
-						[TL.term.height]: TL.term.numm.replace('{NUMBER}', `${pokemon.heightm}`),
+						[TL`Dex#`]: String(pokemon.num),
+						[TL`Generation`]: String(pokemon.gen) || 'CAP',
+						[TL`Height`]: TL`${pokemon.heightm} m`,
 					};
-					details[TL.term.weight] = `${TL.term.numkg.replace('{NUMBER}', `${pokemon.weighthg / 10}`)} <em>(${weighthit} BP)</em>`;
+					details[TL`Weight`] = `${TL`${pokemon.weighthg / 10} kg`} <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details[TL.tag.gmaxmove] = gmaxMove;
-					if (dex.gen === 1) details[TL.term.critrate] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
-					if (pokemon.color && dex.gen >= 5) details[TL.term.color] = TL.color[toID(pokemon.color)] || pokemon.color;
+					if (dex.gen === 1) details[TL`Crit rate`] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
+					if (pokemon.color && dex.gen >= 5) details[TL`Color`] = TL.color[toID(pokemon.color)] || pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) {
-						details[TL.term.egggroups] = pokemon.eggGroups.map(group => TL.egggroup[toID(group)] || group).join(", ");
+						details[TL`Egg Groups`] = pokemon.eggGroups.map(group => TL.egggroup[toID(group)] || group).join(", ");
 					}
 					const evos: string[] = [];
 					for (const evoName of pokemon.evos) {
@@ -709,12 +709,12 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 					if (pokemon.prevo) {
-						details[TL.term.preevolution] = TL(dex.species.get(pokemon.prevo));
+						details[TL`Pre-Evolution`] = TL(dex.species.get(pokemon.prevo));
 					}
 					if (!evos.length) {
-						details[`<span class="gray">${TL.term.doesnotevolve}</span>`] = "";
+						details[`<span class="gray">${TL`Does Not Evolve`}</span>`] = "";
 					} else {
-						details[TL.term.evolution] = evos.join(", ");
+						details[TL`Evolution`] = evos.join(", ");
 					}
 				}
 				break;
@@ -726,29 +726,29 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(item, textLanguage).desc;
 					details = {
-						[TL.term.generation]: String(item.gen),
+						[TL`Generation`]: String(item.gen),
 					};
 
 					if (dex.gen >= 4) {
 						if (item.fling) {
-							details[TL.term.flingbasepower] = String(item.fling.basePower);
-							if (item.fling.status) details[TL.term.flingeffect] = TL.status[item.fling.status] || item.fling.status;
+							details[TL`Fling base power`] = String(item.fling.basePower);
+							if (item.fling.status) details[TL`Fling effect`] = TL.status[item.fling.status] || item.fling.status;
 							if (item.fling.volatileStatus) {
-								details[TL.term.flingeffect] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
+								details[TL`Fling effect`] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
 							}
-							if (item.isBerry) details[TL.term.flingeffect] = TL.ui.flingBerry;
-							if (item.id === 'whiteherb') details[TL.term.flingeffect] = TL.ui.flingWhiteHerb;
+							if (item.isBerry) details[TL`Fling effect`] = TL.ui.flingBerry;
+							if (item.id === 'whiteherb') details[TL`Fling effect`] = TL.ui.flingWhiteHerb;
 							if (item.id === 'mentalherb') {
 								const flingEffect = TL.ui.flingMentalHerb;
-								details[TL.term.flingeffect] = flingEffect;
+								details[TL`Fling effect`] = flingEffect;
 							}
 						} else {
 							details[TL(dex.moves.get('fling'))] = TL.ui.cantFling;
 						}
 					}
 					if (item.naturalGift && dex.gen >= 3) {
-						details[TL.term.naturalgifttype] = TL.type[toID(item.naturalGift.type)] || item.naturalGift.type;
-						details[TL.term.naturalgiftbasepower] = String(item.naturalGift.basePower);
+						details[TL`Natural Gift type`] = TL.type[toID(item.naturalGift.type)] || item.naturalGift.type;
+						details[TL`Natural Gift base power`] = String(item.naturalGift.basePower);
 					}
 					if (item.isNonstandard) {
 						details[TL.ui.unobtainableInGen.replace('{NUMBER}', String(dex.gen))] = "";
@@ -764,12 +764,12 @@ export const commands: Chat.ChatCommands = {
 					description = dex.text.get(move, textLanguage).desc;
 					details = {
 						[TL.tag.priority]: String(move.priority),
-						[TL.term.generation]: String(move.gen) || 'CAP',
+						[TL`Generation`]: String(move.gen) || 'CAP',
 					};
 
 					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
 						(move.isNonstandard === "Gmax" && dex.gen !== 8);
-					if (pastGensOnly) details[`&#10007; ${TL.term.pastgensonly}`] = "";
+					if (pastGensOnly) details[`&#10007; ${TL`Past gens only`}`] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
 						details[`&#10003; ${TL.tag.boostedbysheerforce}`] = "";
 					}
@@ -798,7 +798,7 @@ export const commands: Chat.ChatCommands = {
 						if (move.gen >= 8 && move.isMax) {
 							// Don't display Z-Power for Max/G-Max moves
 						} else if (move.zMove?.basePower) {
-							details[TL.term.zpower] = String(move.zMove.basePower);
+							details[TL`Z-Power`] = String(move.zMove.basePower);
 						} else if (move.zMove?.effect) {
 							const zEffects: { [k: string]: string } = {
 								clearnegativeboost: 'zEffectClearNegativeBoost',
@@ -808,35 +808,35 @@ export const commands: Chat.ChatCommands = {
 								redirect: 'zEffectRedirect',
 								healreplacement: 'zEffectHealReplacement',
 							};
-							details[TL.term.zeffect] = TL.ui[zEffects[move.zMove.effect]] || move.zMove.effect;
+							details[TL`Z-Effect`] = TL.ui[zEffects[move.zMove.effect]] || move.zMove.effect;
 						} else if (move.zMove?.boost) {
-							details[TL.term.zeffect] = "";
+							details[TL`Z-Effect`] = "";
 							const boost = move.zMove.boost;
 							let h: BoostID;
 							for (h in boost) {
-								details[TL.term.zeffect] += ` ${TL.statMedium[h] || h} +${boost[h]}`;
+								details[TL`Z-Effect`] += ` ${TL.statMedium[h] || h} +${boost[h]}`;
 							}
 						} else if (move.isZ && typeof move.isZ === 'string') {
 							details[`&#10003; ${TL.tag.zmove}`] = "";
 							const zCrystal = dex.items.get(move.isZ);
-							details[TL.term.zcrystal] = TL(zCrystal);
+							details[TL`Z-Crystal`] = TL(zCrystal);
 							if (zCrystal.itemUser) {
-								details[TL.term.user] = zCrystal.itemUser.join(", ");
-								details[TL.term.requiredmove] = TL(dex.items.get(zCrystal.zMoveFrom));
+								details[TL("User", "pokemon")] = zCrystal.itemUser.join(", ");
+								details[TL`Required move`] = TL(dex.items.get(zCrystal.zMoveFrom));
 							}
 						} else {
-							details[TL.term.zeffect] = TL.term.none;
+							details[TL`Z-Effect`] = TL`None`;
 						}
 					}
 
 					if (move.isMax) {
 						details[`&#10003; ${TL.tag.maxmove}`] = "";
-						if (typeof move.isMax === "string") details[TL.term.user] = `${move.isMax}`;
+						if (typeof move.isMax === "string") details[TL("User", "pokemon")] = `${move.isMax}`;
 					} else if (dex.gen === 8 && move.maxMove?.basePower) {
-						details[TL.term.dynamaxpower] = String(move.maxMove.basePower);
+						details[TL`Dynamax power`] = String(move.maxMove.basePower);
 					}
 
-					details[TL.term.target] = TL.target[move.target] || "Unknown";
+					details[TL`Target`] = TL.target[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && dex.gen >= 3) {
 						const nonsnatchableMoves = TL.ui.tagMoves.replace('{TAG}', TL.tag.nonsnatchable);
@@ -859,7 +859,7 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(ability, textLanguage).desc;
 					details = {
-						[TL.term.generation]: String(ability.gen) || 'CAP',
+						[TL`Generation`]: String(ability.gen) || 'CAP',
 					};
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";

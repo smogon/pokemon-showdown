@@ -99,10 +99,6 @@ export class DexText {
 		};
 	}
 
-	termName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('TermNames', name, lang);
-	}
-
 	typeName(name: string, lang: TextLanguage = 'en'): string {
 		return this.otherName('TypeNames', name, lang);
 	}
@@ -145,7 +141,7 @@ export type TranslationCatalog = Record<string, string | null | Record<string, s
 const catalogs = new Map<string, TranslationCatalog>();
 const TLs = new Map<string, Translator>();
 
-function inLanguage(source: string, language: string, context = 'default'): string {
+function inLanguage(source: string, language: string, context = ''): string {
 	const translation = catalogs.get(language)?.[source];
 	return (typeof translation === 'string' ? translation : translation?.[context]) ?? source;
 }
@@ -167,7 +163,7 @@ function createTL(language: string) {
 		}
 
 		let source: string;
-		let context = 'default';
+		let context = '';
 		if (typeof strings === 'string') {
 			source = strings;
 			if (values.length) context = values[0] as string;
@@ -191,7 +187,7 @@ function createTL(language: string) {
 	const TL = Object.assign(translate, {
 		/** `TL.label("Ability", "Intimidate")` === `"Ability: Intimidate"` */
 		label(label: string, value?: unknown) {
-			const labelText = (TL.term.label || '{LABEL}: ').replace('{LABEL}', label);
+			const labelText = TL`${label}: `;
 			return value === undefined ? labelText : labelText + String(value as any);
 		},
 		orList(items: readonly string[]) {
@@ -224,7 +220,6 @@ function createTL(language: string) {
 			}
 			return TL.andList(items);
 		},
-		term: text.TermNames,
 		type: text.TypeNames,
 		nature: text.NatureNames,
 		gender: text.GenderNames,
@@ -265,7 +260,7 @@ export function TLfor(language: string): Translator {
 /**
  * Marks a string as a translation key without translating it, for strings
  * defined where no language is known yet (like a module-level table) and
- * translated later with `TL(key)`. The build scans these like `TL` calls.
+ * translated later with `TL(key)`. The build scans these like TL calls.
  * Keys can't contain `${}` substitutions, since `TL(key)` never substitutes.
  */
 export function TLkey(strings: TemplateStringsArray): string {

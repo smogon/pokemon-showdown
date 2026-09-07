@@ -102,7 +102,7 @@ export const translations: TranslationCatalog = {
 	"Some of the answers entered for question '{QUESTION}' were too long!": null, // NOT USED
 	"They must remain under {MAX} characters.": null, // NOT USED
 	"No questions await review.": null,
-	"Category": null,
+	"Category": null, // NOT USED
 	"Question": null,
 	"Answer(s)": null,
 	"Submitted By": null,
@@ -134,7 +134,7 @@ export const translations: TranslationCatalog = {
 	"Total correct answers: {CORRECT}": null, // NOT USED
 	"No trivia games have been played yet.": null, // NOT USED
 	"Rank": null,
-	"User": null,
+	"User": null, // NOT USED
 	"Leaderboard score": null,
 	"Total game points": null,
 	"Total correct answers": null,

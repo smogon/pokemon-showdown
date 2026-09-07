@@ -71,7 +71,7 @@ export class TLCalls extends Map<string, TLCallsForKey> {
 				if (match[1] === 'TLkey' && template.placeholders.length) {
 					throw new Error(`TLkey strings can't contain \${} substitutions (TL(key) never substitutes values)`);
 				}
-				this.addCall(template.key, template.placeholders, 'default', filename);
+				this.addCall(template.key, template.placeholders, '', filename);
 			} catch (error) {
 				const line = source.slice(0, match.index).split('\n').length;
 				throw new Error(`${filename}:${line}: ${error instanceof Error ? error.message : String(error)}`);
@@ -80,7 +80,7 @@ export class TLCalls extends Map<string, TLCallsForKey> {
 		for (const match of source.matchAll(CALLED_TL_REGEX)) {
 			const keyQuote = match[1] === undefined ? "'" : '"';
 			const key = TLCalls.decodeLiteral(match[1] ?? match[2], keyQuote);
-			let context = 'default';
+			let context = '';
 			if (match[3] !== undefined || match[4] !== undefined) {
 				const contextQuote = match[3] === undefined ? "'" : '"';
 				context = TLCalls.decodeLiteral(match[3] ?? match[4], contextQuote);
@@ -155,10 +155,12 @@ function findSourceFiles(directory: string): string[] {
 	return files.sort();
 }
 
-export function findTLCalls(directory: string, options: TLCallOptions = {}): TLCalls {
+export function findTLCalls(directories: string | readonly string[], options: TLCallOptions = {}): TLCalls {
 	const calls = new TLCalls(options);
-	for (const file of findSourceFiles(directory)) {
-		calls.scan(fs.readFileSync(file, 'utf8'), file);
+	for (const directory of typeof directories === 'string' ? [directories] : directories) {
+		for (const file of findSourceFiles(directory)) {
+			calls.scan(fs.readFileSync(file, 'utf8'), file);
+		}
 	}
 	return calls;
 }

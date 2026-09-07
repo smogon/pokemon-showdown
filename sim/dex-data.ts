@@ -46,7 +46,7 @@ export type EffectText =
 export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
 
 export const OTHER_NAME_TABLES = [
-	'TermNames', 'TypeNames', 'NatureNames', 'GenderNames',
+	'TypeNames', 'NatureNames', 'GenderNames',
 	'EggGroupNames', 'ColorNames', 'StatusNames', 'TargetNames',
 	'StatNames', 'StatMediumNames', 'StatShortNames',
 ] as const;

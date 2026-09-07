@@ -6,12 +6,12 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "对手的{NICKNAME}",
+		fullName: null, // NEEDS TRANSLATION
 		team: "我方",
 		opposingTeam: "对手",
 		party: "我方宝可梦",
 		opposingParty: "对手的宝可梦",
 
-		turn: "== 第{NUMBER}回合 ==", // PS "==" wrapper; 第……回合 per Champions btl_app msg_ui_btl_info_17
 		switchIn: "{TRAINER}派出了{FULLNAME}！",
 		switchInOwn: "上吧！{FULLNAME}！",
 		switchOut: "{TRAINER}换下了{NICKNAME}！",
@@ -144,38 +144,12 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		teamSoFar: null, // NEEDS TRANSLATION
 		waitingOpponent: null, // NEEDS TRANSLATION
 		cantSwitchTrapped: null, // NEEDS TRANSLATION
-		usuallyMovesFirst: null, // NEEDS TRANSLATION
-		almostAlwaysMovesFirst: null, // NEEDS TRANSLATION
-		almostAlwaysMovesLast: null, // NEEDS TRANSLATION
-		failsIfHP: null, // NEEDS TRANSLATION
-		koSelfIfHP: null, // NEEDS TRANSLATION
-		transformedInto: null, // NEEDS TRANSLATION
-		changedForme: null, // NEEDS TRANSLATION
-		possibleIllusion: null, // NEEDS TRANSLATION
-		pixels: null, // NEEDS TRANSLATION
-		wouldTakeIfAbilityRemoved: null, // NEEDS TRANSLATION
-		nextDamage: null, // NEEDS TRANSLATION
-		turnsAsleep: null, // NEEDS TRANSLATION
-		illusionWarning: null, // NEEDS TRANSLATION
-		pressureGen3Warning: null, // NEEDS TRANSLATION
-		indistinguishableWarning: null, // NEEDS TRANSLATION
-		noConditions: null, // NEEDS TRANSLATION
-		turn: null, // NEEDS TRANSLATION
-		turns: null, // NEEDS TRANSLATION
-		afterStatModifiers: null, // NEEDS TRANSLATION
-		calls: null, // NEEDS TRANSLATION
-		base: null, // NEEDS TRANSLATION
 		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
 		zEffectCrit2: null, // NEEDS TRANSLATION
 		zEffectHeal: null, // NEEDS TRANSLATION
 		zEffectCurse: null, // NEEDS TRANSLATION
 		zEffectRedirect: null, // NEEDS TRANSLATION
 		zEffectHealReplacement: null, // NEEDS TRANSLATION
-		ppRange: null, // NEEDS TRANSLATION
-		revealed: null, // NEEDS TRANSLATION
-		range: null, // NEEDS TRANSLATION
-		beforeStatStages: null, // NEEDS TRANSLATION
-		beforeExternalModifiers: null, // NEEDS TRANSLATION
 		flingBerry: null, // NEEDS TRANSLATION
 		flingWhiteHerb: null, // NEEDS TRANSLATION
 		flingMentalHerb: null, // NEEDS TRANSLATION
@@ -215,9 +189,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		willShift: null, // NEEDS TRANSLATION
 		youPicked: null, // NEEDS TRANSLATION
 		listComma: null, // NEEDS TRANSLATION
-		effectivenessVs: null, // NEEDS TRANSLATION
-		basePowerVs: null, // NEEDS TRANSLATION
-		or: null, // NEEDS TRANSLATION
 	},
 
 	// statuses

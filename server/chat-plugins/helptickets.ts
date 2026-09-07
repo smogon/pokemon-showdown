@@ -2200,7 +2200,7 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `</tbody></table></div>`;
 			const headerTitles: { [id: string]: string } = {
-				type: this.TL`Type`,
+				type: this.TL("Type", "kind"),
 				totaltickets: this.TL`Total Tickets`,
 				total: this.TL`Average Total Time`,
 				initwait: this.TL`Average Initial Wait`,
