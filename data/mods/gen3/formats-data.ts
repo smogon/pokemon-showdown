@@ -261,7 +261,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	magnemite: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	magneton: {
 		tier: "OU",
