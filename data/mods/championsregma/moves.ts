@@ -1,4 +1,14 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
+	ceaselessedge: {
+		inherit: true,
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('spikes');
+				}
+			}
+		},
+	},
 	direclaw: {
 		inherit: true,
 		secondary: {
@@ -15,6 +25,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				target.trySetStatus(status, source);
 			},
+		},
+	},
+	growth: {
+		inherit: true,
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasAbility('megasol') && !this.field.isWeather('sunnyday')) {
+				delete move.boosts;
+			} else if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				move.boosts = { atk: 2, spa: 2 };
+			}
+		},
+	},
+	stoneaxe: {
+		inherit: true,
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock');
+				}
+			}
 		},
 	},
 };
