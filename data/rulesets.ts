@@ -3121,7 +3121,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			buf += '</span>';
 			buf += '</li>';
 			buf = `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
-			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
+			if (pokemon.illusion) {
+				this.add('-start', pokemon, 'typechange', pokemon.illusion.getTypes(true).join('/'), '[silent]');
+			} else {
+				this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
+			}
 			this.add(`raw|${buf}`);
 		},
 		onDamagingHit(damage, target, source, move) {

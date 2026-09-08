@@ -358,7 +358,7 @@
         ]
     },
     "rapidash": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -383,7 +383,7 @@
         ]
     },
     "slowbro": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -468,7 +468,7 @@
         ]
     },
     "exeggutor": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -591,7 +591,7 @@
         ]
     },
     "kangaskhan": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -884,7 +884,7 @@
         ]
     },
     "articunogalar": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1035,7 +1035,7 @@
         ]
     },
     "bellossom": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1045,7 +1045,7 @@
         ]
     },
     "azumarill": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1107,7 +1107,7 @@
         ]
     },
     "umbreon": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Staller",
@@ -1117,7 +1117,7 @@
         ]
     },
     "slowking": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1329,7 +1329,7 @@
         ]
     },
     "kingdra": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1554,7 +1554,7 @@
         ]
     },
     "ludicolo": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1854,7 +1854,7 @@
         ]
     },
     "armaldo": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Dynamax User",
@@ -3153,7 +3153,7 @@
         ]
     },
     "galvantula": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3224,7 +3224,7 @@
         ]
     },
     "beartic": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3235,7 +3235,7 @@
         ]
     },
     "cryogonal": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3255,7 +3255,7 @@
         ]
     },
     "stunfisk": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3270,7 +3270,7 @@
         ]
     },
     "stunfiskgalar": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3300,7 +3300,7 @@
         ]
     },
     "druddigon": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3568,7 +3568,7 @@
         ]
     },
     "kyurem": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3761,7 +3761,7 @@
         ]
     },
     "slurpuff": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3786,7 +3786,7 @@
         ]
     },
     "barbaracle": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4002,7 +4002,7 @@
         ]
     },
     "noivern": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -4148,7 +4148,7 @@
         ]
     },
     "ribombee": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Support",
@@ -4298,7 +4298,7 @@
         ]
     },
     "tsareena": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Support",
@@ -4368,7 +4368,7 @@
         ]
     },
     "pyukumuku": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4378,7 +4378,7 @@
         ]
     },
     "typenull": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -4621,7 +4621,7 @@
         ]
     },
     "turtonator": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4762,7 +4762,7 @@
         ]
     },
     "tapufini": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -5587,7 +5587,7 @@
         ]
     },
     "arctozolt": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5622,7 +5622,7 @@
         ]
     },
     "duraludon": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5653,7 +5653,7 @@
         ]
     },
     "zacian": {
-        "level": 66,
+        "level": 67,
         "sets": [
             {
                 "role": "Fast Attacker",

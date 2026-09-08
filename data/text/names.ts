@@ -1,0 +1,273 @@
+export const TermNames: { [id: string]: TranslationString } = {
+	shiny: "Shiny",
+	happiness: "Happiness",
+	level: "Level",
+	nickname: "Nickname",
+	// only the EV vs IV distinction is important
+	// the English speaking community likes to distinguish all of these,
+	// but other languages don't need to
+	ev: "EV",
+	evs: "EVs",
+	iv: "IV",
+	ivs: "IVs",
+	dv: "DVs",
+	dvs: "DVs",
+	av: "AV",
+	avs: "AVs",
+	point: "Point",
+	points: "Points",
+	// n.b. used in Teambuilder, so it should be capitalized (unlike StatNames.stats)
+	stats: "Stats",
+
+	pokemon: "Pokémon",
+	move: "Move",
+	moves: "Moves",
+	item: "Item",
+	items: "Items",
+	ability: "Ability",
+	abilities: "Abilities",
+	hiddenability: "Hidden Ability",
+	possibleabilities: "Possible abilities",
+	team: "Team",
+	teams: "Teams",
+	teamslist: "Teams List",
+
+	type: "Type",
+	types: "Types",
+	teratype: "Tera {TYPE}",
+	nature: "Nature",
+	category: "Category",
+	categories: "Categories",
+	gender: "Gender",
+	egggroup: "Egg Group",
+	egggroups: "Egg Groups",
+	tag: "Tag",
+	article: "Article",
+	articles: "Articles",
+	tier: "Tier",
+	tiers: "Tiers",
+	format: "Format",
+	formats: "Formats",
+	color: "Color",
+	form: "Form",
+	forme: "Forme",
+	dexnum: "Dex#",
+	generation: "Generation",
+	gennum: "Gen {NUMBER}",
+	evolution: "Evolution",
+	preevolution: "Pre-Evolution",
+	doesnotevolve: "Does Not Evolve",
+	zcrystal: "Z-Crystal",
+	target: "Target",
+	height: "Height",
+	numm: "{NUMBER} m",
+	weight: "Weight",
+	numkg: "{NUMBER} kg",
+	critrate: "Crit rate",
+	// as in "species capable of making use of this item"
+	user: "User",
+	requiredmove: "Required move",
+	dynamaxpower: "Dynamax power",
+	// as a value, like "Ability: None"
+	none: "None",
+	pastgensonly: "Past gens only",
+	flingbasepower: "Fling base power",
+	flingeffect: "Fling effect",
+	naturalgifttype: "Natural Gift type",
+	naturalgiftbasepower: "Natural Gift base power",
+
+	megaevolution: "Mega Evolution",
+	zpower: "Z-Power",
+	zeffect: "Z-Effect",
+	dynamax: "Dynamax",
+	dynamaxlevel: "Dynamax Level",
+	ultraburst: "Ultra Burst",
+	tera: "Tera",
+
+	supereffective: "Super effective",
+	extremelyeffective: "Extremely effective",
+	effective: "Effective",
+	notveryeffective: "Not very effective",
+	mostlyineffective: "Mostly ineffective",
+	noeffect: "No effect",
+
+	weak: "Weak",
+	resist: "Resist",
+	immune: "Immune",
+
+	// used in switch-in messages in battles
+	nicknamespecies: "{NICKNAME} ({SPECIES})",
+	// puts a label on a value, e.g. "Ability: Intimidate"
+	label: "{LABEL}: ",
+	noweather: "(no weather)",
+	noitem: "(no item)",
+	noability: "(no ability)",
+	foescondition: "Foe's {CONDITION}",
+	// this one's not used in code; just a reference for how pokedex.ts should be filled
+	speciesforme: "{SPECIES}-{FORME}",
+};
+
+export const StatNames: { [id: string]: TranslationString } = {
+	hp: "HP",
+	atk: "Attack",
+	def: "Defense",
+	spa: "Sp. Atk",
+	spd: "Sp. Def",
+	spe: "Speed",
+	accuracy: "accuracy",
+	evasion: "evasiveness",
+	spc: "Special",
+
+	// n.b. used in "stats were lowered" battle messages,
+	// so it should be lowercase (unlike TermNames.stats)
+	stats: "stats",
+};
+
+export const StatMediumNames: { [id: string]: TranslationString } = {
+	hp: "HP",
+	atk: "Attack",
+	def: "Defense",
+	spa: "Sp. Atk",
+	spd: "Sp. Def",
+	spe: "Speed",
+	accuracy: "Accuracy",
+	evasion: "Evasiveness",
+	spc: "Special",
+};
+
+export const StatShortNames: { [id: string]: TranslationString } = {
+	hp: "HP",
+	atk: "Atk",
+	def: "Def",
+	spa: "SpA",
+	spd: "SpD",
+	spe: "Spe",
+	spc: "Spc",
+};
+
+export const TypeNames: { [id: string]: TranslationString } = {
+	bug: "Bug",
+	dark: "Dark",
+	dragon: "Dragon",
+	electric: "Electric",
+	fairy: "Fairy",
+	fighting: "Fighting",
+	fire: "Fire",
+	flying: "Flying",
+	ghost: "Ghost",
+	grass: "Grass",
+	ground: "Ground",
+	ice: "Ice",
+	normal: "Normal",
+	poison: "Poison",
+	psychic: "Psychic",
+	rock: "Rock",
+	steel: "Steel",
+	stellar: "Stellar",
+	water: "Water",
+};
+
+export const NatureNames: { [id: string]: TranslationString } = {
+	adamant: "Adamant",
+	bashful: "Bashful",
+	bold: "Bold",
+	brave: "Brave",
+	calm: "Calm",
+	careful: "Careful",
+	docile: "Docile",
+	gentle: "Gentle",
+	hardy: "Hardy",
+	hasty: "Hasty",
+	impish: "Impish",
+	jolly: "Jolly",
+	lax: "Lax",
+	lonely: "Lonely",
+	mild: "Mild",
+	modest: "Modest",
+	naive: "Naive",
+	naughty: "Naughty",
+	quiet: "Quiet",
+	quirky: "Quirky",
+	rash: "Rash",
+	relaxed: "Relaxed",
+	sassy: "Sassy",
+	serious: "Serious",
+	timid: "Timid",
+};
+
+export const GenderNames: { [id: string]: TranslationString } = {
+	male: "Male",
+	female: "Female",
+	genderless: "Genderless",
+};
+
+export const StatusNames: { [id: string]: TranslationString } = {
+	brn: "Burned",
+	par: "Paralyzed",
+	slp: "Asleep",
+	frz: "Frozen",
+	psn: "Poisoned",
+	tox: "Badly Poisoned",
+	fnt: "Fainted",
+	confusion: "Confused",
+};
+
+export const TargetNames: { [id: string]: TranslationString } = {
+	normal: "Can target any adjacent ally or foe",
+	normalDoubles: "Can target ally or any foe",
+	normalSingles: "Hits foe",
+	normalFFA: "Can target any foe",
+	self: "Hits user",
+	adjacentAlly: "Can target any adjacent ally",
+	adjacentAllyDoubles: "Hits your ally",
+	adjacentAllySingles: "Always fails in Singles",
+	adjacentAllyOrSelf: "Can target user or adjacent ally",
+	adjacentAllyOrSelfDoubles: "Can target user or ally",
+	adjacentFoe: "Can target any adjacent foe",
+	allAdjacentFoes: "Hits adjacent foes",
+	allAdjacentFoesDoubles: "Hits both foes",
+	foeSide: "Hits opposing side",
+	allySide: "Hits user's side",
+	allyTeam: "Hits user's team",
+	allAdjacent: "Hits adjacent allies and foes",
+	allAdjacentDoubles: "Hits ally and both foes",
+	allAdjacentFFA: "Hits all foes",
+	any: "Can target distant Pokémon in Triples",
+	all: "Hits all Pokémon",
+	scripted: "Target chosen automatically",
+	randomNormal: "Hits random adjacent foe",
+	randomNormalDoubles: "Hits random foe",
+	allies: "Hits user and allies",
+};
+
+// Pokédex 3D Pro names; Stadium 2 variants noted inline.
+export const EggGroupNames: { [id: string]: TranslationString } = {
+	monster: "Monster",
+	water1: "Water 1",
+	bug: "Bug",
+	flying: "Flying",
+	field: "Field", // Stadium 2: "Ground"
+	fairy: "Fairy",
+	grass: "Grass", // Stadium 2: "Plant"
+	humanlike: "Human-Like", // Stadium 2: "Humanshape"
+	water3: "Water 3",
+	mineral: "Mineral",
+	amorphous: "Amorphous", // Stadium 2: "Indeterminate"
+	water2: "Water 2",
+	ditto: "Ditto",
+	dragon: "Dragon",
+	undiscovered: "Undiscovered", // Stadium 2: "No EGGs"
+};
+
+export const ColorNames: { [id: string]: TranslationString } = {
+	black: "Black",
+	blue: "Blue",
+	brown: "Brown",
+	gray: "Gray",
+	green: "Green",
+	pink: "Pink",
+	purple: "Purple",
+	red: "Red",
+	white: "White",
+	yellow: "Yellow",
+};

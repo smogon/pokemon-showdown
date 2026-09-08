@@ -185,7 +185,7 @@ export const commands: Chat.ChatCommands = {
 		try {
 			gitVersion = (await ProcessManager.exec(['git', 'rev-parse', '--short', 'HEAD'])).stdout.trim();
 		} catch {}
-		this.sendReplyBox(this.tr`Server version: <b>${version}` +
+		this.sendReplyBox(this.TL`Server version: <b>${version}` +
 			`${gitVersion ? ` (commit <a href="https://github.com/smogon/pokemon-showdown/commits/${gitVersion}">${gitVersion}</a>)` : ''}</b>`);
 	},
 	versionhelp: [
@@ -212,7 +212,7 @@ export const commands: Chat.ChatCommands = {
 	mee: 'me',
 	me(target, room, user) {
 		if (this.cmd === 'mee' && /[A-Z-a-z0-9/]/.test(target.charAt(0))) {
-			throw new Chat.ErrorMessage(this.tr`/mee - must not start with a letter or number`);
+			throw new Chat.ErrorMessage(this.TL`/mee - must not start with a letter or number`);
 		}
 		target = this.checkChat(`/${this.cmd} ${target || ''}`);
 
@@ -256,7 +256,7 @@ export const commands: Chat.ChatCommands = {
 	'battle!': 'battle',
 	battle(target, room, user, connection, cmd) {
 		if (cmd === 'battle') {
-			return this.sendReply(this.tr`What?! How are you not more excited to battle?! Try /battle! to show me you're ready.`);
+			return this.sendReply(this.TL`What?! How are you not more excited to battle?! Try /battle! to show me you're ready.`);
 		}
 		if (!target) target = "randombattle";
 		return this.parse(`/search ${target}`);
@@ -321,7 +321,7 @@ export const commands: Chat.ChatCommands = {
 	reply(target, room, user) {
 		if (!target) return this.parse('/help reply');
 		if (!user.lastPM) {
-			throw new Chat.ErrorMessage(this.tr`No one has PMed you yet.`);
+			throw new Chat.ErrorMessage(this.TL`No one has PMed you yet.`);
 		}
 		return this.parse(`/msg ${user.lastPM || ''}, ${target}`);
 	},
@@ -334,7 +334,7 @@ export const commands: Chat.ChatCommands = {
 	msg(target, room, user, connection) {
 		if (!target) return this.parse('/help msg');
 		if (!target.includes(',')) {
-			this.errorReply(this.tr`You forgot the comma.`);
+			this.errorReply(this.TL`You forgot the comma.`);
 			return this.parse('/help msg');
 		}
 		this.checkRecursion();
@@ -355,10 +355,10 @@ export const commands: Chat.ChatCommands = {
 				}
 				user.lastCommand = 'pm';
 				throw new Chat.ErrorMessage(
-					this.tr`User ${targetUsername} is offline. Send the message again to confirm. If you are using /msg, use /offlinemsg instead.`
+					this.TL`User ${targetUsername} is offline. Send the message again to confirm. If you are using /msg, use /offlinemsg instead.`
 				);
 			}
-			let error = this.tr`User ${targetUsername} not found. Did you misspell their name?`;
+			let error = this.TL`User ${targetUsername} not found. Did you misspell their name?`;
 			error = `|pm|${this.user.getIdentity()}| ${targetUsername}|/error ${error}`;
 			connection.send(error);
 			return;
@@ -379,7 +379,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				user.lastCommand = 'pm';
 				throw new Chat.ErrorMessage(
-					this.tr`User ${targetUsername} is offline. Send the message again to confirm. If you are using /msg, use /offlinemsg instead.`
+					this.TL`User ${targetUsername} is offline. Send the message again to confirm. If you are using /msg, use /offlinemsg instead.`
 				);
 			}
 			throw new Chat.ErrorMessage(`${targetUsername} is offline.`);
@@ -468,7 +468,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const targetRoom = Rooms.search(target);
-		if (!targetRoom) throw new Chat.ErrorMessage(this.tr`The room "${target}" was not found.`);
+		if (!targetRoom) throw new Chat.ErrorMessage(this.TL`The room "${target}" was not found.`);
 
 		const invitesBlocked = pmTarget.settings.blockInvites;
 		if (invitesBlocked) {
@@ -481,11 +481,11 @@ export const commands: Chat.ChatCommands = {
 			this.room = targetRoom;
 			this.parse(`/roomvoice ${pmTarget.name}`);
 			if (!targetRoom.checkModjoin(pmTarget)) {
-				throw new Chat.ErrorMessage(this.tr`You do not have permission to invite people into this room.`);
+				throw new Chat.ErrorMessage(this.TL`You do not have permission to invite people into this room.`);
 			}
 		}
 		if (pmTarget.id in targetRoom.users) {
-			throw new Chat.ErrorMessage(this.tr`This user is already in "${targetRoom.title}".`);
+			throw new Chat.ErrorMessage(this.TL`This user is already in "${targetRoom.title}".`);
 		}
 		return this.checkChat(`/invite ${targetRoom.roomid}`);
 	},
@@ -512,21 +512,21 @@ export const commands: Chat.ChatCommands = {
 		const isOffline = cmd.includes('offline');
 		const msg = isOffline ? `offline ` : ``;
 		if (!isOffline && user.settings.blockPMs === (target || true)) {
-			throw new Chat.ErrorMessage(this.tr`You are already blocking ${msg}private messages! To unblock, use /unblockpms`);
+			throw new Chat.ErrorMessage(this.TL`You are already blocking ${msg}private messages! To unblock, use /unblockpms`);
 		}
 		if (Users.Auth.isAuthLevel(target)) {
 			if (!isOffline) user.settings.blockPMs = target;
-			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and ${target}.`);
+			this.sendReply(this.TL`You are now blocking ${msg}private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			if (!isOffline) user.settings.blockPMs = target;
-			target = this.tr(target);
-			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff, friends, and ${target} users.`);
+			target = this.TL(target);
+			this.sendReply(this.TL`You are now blocking ${msg}private messages, except from staff, friends, and ${target} users.`);
 		} else if (target === 'friends') {
 			if (!isOffline) user.settings.blockPMs = target;
-			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and friends.`);
+			this.sendReply(this.TL`You are now blocking ${msg}private messages, except from staff and friends.`);
 		} else {
 			if (!isOffline) user.settings.blockPMs = true;
-			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff.`);
+			this.sendReply(this.TL`You are now blocking ${msg}private messages, except from staff.`);
 		}
 		if (isOffline) {
 			let saveValue: string | null = target;
@@ -553,7 +553,7 @@ export const commands: Chat.ChatCommands = {
 		const isOffline = cmd.includes('offline');
 		const msg = isOffline ? 'offline ' : '';
 		if (isOffline ? !(await Chat.PrivateMessages.getSettings(user.id)) : !user.settings.blockPMs) {
-			throw new Chat.ErrorMessage(this.tr`You are not blocking ${msg}private messages! To block, use /blockpms`);
+			throw new Chat.ErrorMessage(this.TL`You are not blocking ${msg}private messages! To block, use /blockpms`);
 		}
 		if (isOffline) {
 			await Chat.PrivateMessages.deleteSettings(user.id);
@@ -562,7 +562,7 @@ export const commands: Chat.ChatCommands = {
 			user.settings.blockPMs = false;
 		}
 		user.update();
-		return this.sendReply(this.tr`You are no longer blocking ${msg}private messages.`);
+		return this.sendReply(this.TL`You are no longer blocking ${msg}private messages.`);
 	},
 	unblockpmshelp: [
 		`/unblockpms - Unblocks private messages. Block them with /blockpms.`,
@@ -585,13 +585,13 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (target in Config.groups) {
 				user.settings.blockInvites = target as GroupSymbol;
-				this.sendReply(this.tr`You are now blocking room invites, except from staff and ${target}.`);
+				this.sendReply(this.TL`You are now blocking room invites, except from staff and ${target}.`);
 			} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 				user.settings.blockInvites = target;
-				this.sendReply(this.tr`You are now blocking room invites, except from staff and ${target} users.`);
+				this.sendReply(this.TL`You are now blocking room invites, except from staff and ${target} users.`);
 			} else {
 				user.settings.blockInvites = true;
-				this.sendReply(this.tr`You are now blocking room invites, except from staff.`);
+				this.sendReply(this.TL`You are now blocking room invites, except from staff.`);
 			}
 		}
 		return user.update();
@@ -604,19 +604,19 @@ export const commands: Chat.ChatCommands = {
 
 	status(target, room, user, connection, cmd) {
 		if (user.locked || user.semilocked) {
-			throw new Chat.ErrorMessage(this.tr`Your status cannot be updated while you are locked or semilocked.`);
+			throw new Chat.ErrorMessage(this.TL`Your status cannot be updated while you are locked or semilocked.`);
 		}
 		if (!target) return this.parse('/help status');
 
 		const maxLength = 70;
 		if (target.length > maxLength) {
-			throw new Chat.ErrorMessage(this.tr`Your status is too long; it must be under ${maxLength} characters.`);
+			throw new Chat.ErrorMessage(this.TL`Your status is too long; it must be under ${maxLength} characters.`);
 		}
 		target = this.statusfilter(target);
-		if (!target) throw new Chat.ErrorMessage(this.tr`Your status contains a banned word.`);
+		if (!target) throw new Chat.ErrorMessage(this.TL`Your status contains a banned word.`);
 
 		user.setUserMessage(target);
-		this.sendReply(this.tr`Your status has been set to: ${target}.`);
+		this.sendReply(this.TL`Your status has been set to: ${target}.`);
 	},
 	statushelp: [
 		`/status [note] - Sets a short note as your status, visible when users click your username.`,
@@ -627,7 +627,7 @@ export const commands: Chat.ChatCommands = {
 	dnd: 'busy',
 	busy(target, room, user, connection, cmd) {
 		if (target) {
-			this.errorReply(this.tr`Setting status messages in /busy is no longer supported. Set a status using /status.`);
+			this.errorReply(this.TL`Setting status messages in /busy is no longer supported. Set a status using /status.`);
 		}
 		user.setStatusType('busy');
 		const isDND = ['dnd', 'donotdisturb'].includes(cmd);
@@ -636,7 +636,7 @@ export const commands: Chat.ChatCommands = {
 			this.parse('/blockchallenges');
 			user.settings.doNotDisturb = true;
 		}
-		this.sendReply(this.tr`You are now marked as busy.`);
+		this.sendReply(this.TL`You are now marked as busy.`);
 	},
 	busyhelp: [
 		`/busy OR /donotdisturb - Marks you as busy.`,
@@ -649,10 +649,10 @@ export const commands: Chat.ChatCommands = {
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
 		if (target) {
-			this.errorReply(this.tr`Setting status messages in /away is no longer supported. Set a status using /status.`);
+			this.errorReply(this.TL`Setting status messages in /away is no longer supported. Set a status using /status.`);
 		}
 		user.setStatusType('idle');
-		this.sendReply(this.tr`You are now marked as away. Send a message or use /back to indicate you are back.`);
+		this.sendReply(this.TL`You are now marked as away. Send a message or use /back to indicate you are back.`);
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
 
@@ -660,10 +660,10 @@ export const commands: Chat.ChatCommands = {
 	clearstatus(target, room, user) {
 		if (target) return this.parse(`/forceclearstatus ${target}`);
 
-		if (!user.userMessage) return this.sendReply(this.tr`You don't have a status message set.`);
+		if (!user.userMessage) return this.sendReply(this.TL`You don't have a status message set.`);
 		user.setUserMessage('');
 
-		return this.sendReply(this.tr`You have cleared your status message.`);
+		return this.sendReply(this.TL`You have cleared your status message.`);
 	},
 	clearstatushelp: [
 		`/clearstatus - Clears your status message.`,
@@ -673,7 +673,7 @@ export const commands: Chat.ChatCommands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
-		if (user.statusType === 'online') throw new Chat.ErrorMessage(this.tr`You are already marked as back.`);
+		if (user.statusType === 'online') throw new Chat.ErrorMessage(this.TL`You are already marked as back.`);
 		const statusType = user.statusType;
 		user.setStatusType('online');
 
@@ -684,10 +684,10 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (statusType) {
-			return this.sendReply(this.tr`You are no longer marked as busy.`);
+			return this.sendReply(this.TL`You are no longer marked as busy.`);
 		}
 
-		return this.sendReply(this.tr`You have cleared your status message.`);
+		return this.sendReply(this.TL`You have cleared your status message.`);
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
 
@@ -700,9 +700,9 @@ export const commands: Chat.ChatCommands = {
 		buffer += `<div style="overflow-x: auto;"><table>`;
 		const ratings = values.join(``);
 		if (!ratings) {
-			buffer += `<tr><td colspan="8"><em>${this.tr`This user has not played any ladder games yet.`}</em></td></tr>`;
+			buffer += `<tr><td colspan="8"><em>${this.TL`This user has not played any ladder games yet.`}</em></td></tr>`;
 		} else {
-			buffer += `<tr><th>${this.tr`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.tr`W`}</th><th>${this.tr`L`}</th><th>${this.tr`Total`}</th>`;
+			buffer += `<tr><th>${this.TL`Format`}</th><th><abbr title="Elo rating">Elo</abbr></th><th>${this.TL`W`}</th><th>${this.TL`L`}</th><th>${this.TL`Total`}</th>`;
 			buffer += ratings;
 		}
 		buffer += `</table></div></div>`;
@@ -723,17 +723,17 @@ export const commands: Chat.ChatCommands = {
 		const isShow = cmd === 'showrank';
 		const group = (isShow ? Users.globalAuth.get(user.id) : (target.trim() || Users.Auth.defaultSymbol()) as GroupSymbol);
 		if (user.tempGroup === group) {
-			throw new Chat.ErrorMessage(this.tr`You already have the temporary symbol '${group}'.`);
+			throw new Chat.ErrorMessage(this.TL`You already have the temporary symbol '${group}'.`);
 		}
 		if (!Users.Auth.isValidSymbol(group) || !(group in Config.groups)) {
-			throw new Chat.ErrorMessage(this.tr`You must specify a valid group symbol.`);
+			throw new Chat.ErrorMessage(this.TL`You must specify a valid group symbol.`);
 		}
 		if (!isShow && Config.groups[group].rank > Config.groups[user.tempGroup].rank) {
-			throw new Chat.ErrorMessage(this.tr`You may only set a temporary symbol below your current rank.`);
+			throw new Chat.ErrorMessage(this.TL`You may only set a temporary symbol below your current rank.`);
 		}
 		user.tempGroup = group;
 		user.updateIdentity();
-		this.sendReply(`|c|~|${this.tr`Your temporary group symbol is now`} \`\`${user.tempGroup}\`\`.`);
+		this.sendReply(`|c|~|${this.TL`Your temporary group symbol is now`} \`\`${user.tempGroup}\`\`.`);
 	},
 	showrankhelp: 'hiderankhelp',
 	hiderankhelp: [
@@ -744,12 +744,12 @@ export const commands: Chat.ChatCommands = {
 	language(target, room, user) {
 		if (!target) {
 			const language = Chat.getLanguageName(user.language || 'english' as ID);
-			return this.sendReply(this.tr`Currently, you're viewing Pokémon Showdown in ${language}.`);
+			return this.sendReply(this.TL`Currently, you're viewing Pokémon Showdown in ${language}.`);
 		}
-		const languageID = toID(target);
-		if (!Chat.languages.has(languageID)) {
+		const languageID = Chat.getLanguageID(target);
+		if (!languageID) {
 			const languages = [...Chat.languages].map(([id]) => Chat.getLanguageName(id)).join(', ');
-			throw new Chat.ErrorMessage(this.tr`Valid languages are: ${languages}`);
+			throw new Chat.ErrorMessage(this.TL`Valid languages are: ${languages}`);
 		}
 		user.language = languageID;
 		user.update();
@@ -760,7 +760,7 @@ export const commands: Chat.ChatCommands = {
 			language = `<a href="/${langRoom.roomid}">${language}</a>`;
 		}
 		return this.sendReply(
-			`|html|` + this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`
+			`|html|` + this.TL`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`
 		);
 	},
 	languagehelp: [
@@ -774,7 +774,7 @@ export const commands: Chat.ChatCommands = {
 		try {
 			const raw = JSON.parse(target);
 			if (typeof raw !== 'object' || Array.isArray(raw) || !raw) {
-				this.errorReply(this.tr`/updatesettings expects JSON encoded object.`);
+				this.errorReply(this.TL`/updatesettings expects JSON encoded object.`);
 			}
 			if (typeof raw.avatar === 'string') this.parse(`/noreply /avatar ${raw.avatar}`);
 			if (typeof raw.language === 'string') this.parse(`/noreply /language ${raw.language}`);
@@ -791,7 +791,7 @@ export const commands: Chat.ChatCommands = {
 			Object.assign(user.settings, settings);
 			user.update();
 		} catch {
-			this.errorReply(this.tr`Unable to parse settings in /updatesettings!`);
+			this.errorReply(this.TL`Unable to parse settings in /updatesettings!`);
 		}
 	},
 	updatesettingshelp: [
@@ -806,24 +806,24 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) {
-			throw new Chat.ErrorMessage(this.tr`Must be in a battle.`);
+			throw new Chat.ErrorMessage(this.TL`Must be in a battle.`);
 		}
 		const targetUser = Users.getExact(target);
 		if (!targetUser) {
-			throw new Chat.ErrorMessage(this.tr`User ${target} not found.`);
+			throw new Chat.ErrorMessage(this.TL`User ${target} not found.`);
 		}
 		if (!battle.playerTable[user.id]) {
-			throw new Chat.ErrorMessage(this.tr`Must be a player in this battle.`);
+			throw new Chat.ErrorMessage(this.TL`Must be a player in this battle.`);
 		}
 		if (!battle.allowExtraction[targetUser.id]) {
-			throw new Chat.ErrorMessage(this.tr`${targetUser.name} has not requested extraction.`);
+			throw new Chat.ErrorMessage(this.TL`${targetUser.name} has not requested extraction.`);
 		}
 		if (battle.allowExtraction[targetUser.id].has(user.id)) {
-			throw new Chat.ErrorMessage(this.tr`You have already consented to extraction with ${targetUser.name}.`);
+			throw new Chat.ErrorMessage(this.TL`You have already consented to extraction with ${targetUser.name}.`);
 		}
 		battle.allowExtraction[targetUser.id].add(user.id);
 		this.addModAction(room.tr`${user.name} consents to sharing battle team and choices with ${targetUser.name}.`);
-		if (!battle.inputLog) throw new Chat.ErrorMessage(this.tr`No input log found.`);
+		if (!battle.inputLog) throw new Chat.ErrorMessage(this.TL`No input log found.`);
 		if (Object.keys(battle.playerTable).length === battle.allowExtraction[targetUser.id].size) {
 			this.addModAction(room.tr`${targetUser.name} has extracted the battle input log.`);
 			const inputLog = battle.inputLog.map(Utils.escapeHTML).join(`<br />`);
@@ -842,16 +842,16 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) {
-			throw new Chat.ErrorMessage(this.tr`This command only works in battle rooms.`);
+			throw new Chat.ErrorMessage(this.TL`This command only works in battle rooms.`);
 		}
 		if (!battle.inputLog) {
-			this.errorReply(this.tr`This command only works when the battle has ended - if the battle has stalled, use /offertie.`);
-			if (user.can('forcewin')) this.errorReply(this.tr`Alternatively, you can end the battle with /forcetie.`);
+			this.errorReply(this.TL`This command only works when the battle has ended - if the battle has stalled, use /offertie.`);
+			if (user.can('forcewin')) this.errorReply(this.TL`Alternatively, you can end the battle with /forcetie.`);
 			return;
 		}
 		this.checkCan('exportinputlog', null, room);
 		if (user.can('forcewin') || Dex.formats.get(battle.format).team) {
-			if (!battle.inputLog) throw new Chat.ErrorMessage(this.tr`No input log found.`);
+			if (!battle.inputLog) throw new Chat.ErrorMessage(this.TL`No input log found.`);
 			this.addModAction(room.tr`${user.name} has extracted the battle input log.`);
 			const inputLog = battle.inputLog.map(Utils.escapeHTML).join(`<br />`);
 			user.sendTo(
@@ -885,8 +885,8 @@ export const commands: Chat.ChatCommands = {
 					Utils.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.id}">Share your team and choices with "${user.name}"</button>`
 				);
 			}
-			if (logExported) throw new Chat.ErrorMessage(this.tr`You already extracted the battle input log.`);
-			this.sendReply(this.tr`Battle input log re-requested.`);
+			if (logExported) throw new Chat.ErrorMessage(this.TL`You already extracted the battle input log.`);
+			this.sendReply(this.TL`Battle input log re-requested.`);
 		}
 	},
 	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: + % @ ~`],
@@ -895,10 +895,10 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('importinputlog');
 		const formatIndex = target.indexOf(`"formatid":"`);
 		const nextQuoteIndex = target.indexOf(`"`, formatIndex + 12);
-		if (formatIndex < 0 || nextQuoteIndex < 0) throw new Chat.ErrorMessage(this.tr`Invalid input log.`);
+		if (formatIndex < 0 || nextQuoteIndex < 0) throw new Chat.ErrorMessage(this.TL`Invalid input log.`);
 		target = target.replace(/\r/g, '');
 		if ((`\n` + target).includes(`\n>eval `) && !user.hasConsoleAccess(connection)) {
-			throw new Chat.ErrorMessage(this.tr`Your input log contains untrusted code - you must have console access to use it.`);
+			throw new Chat.ErrorMessage(this.TL`Your input log contains untrusted code - you must have console access to use it.`);
 		}
 
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
@@ -924,22 +924,22 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!showAll && !target) return this.parse(`/help showset`);
-		if (!battle) throw new Chat.ErrorMessage(this.tr`This command can only be used in a battle.`);
+		if (!battle) throw new Chat.ErrorMessage(this.TL`This command can only be used in a battle.`);
 		let team = await battle.getTeam(user);
-		if (!team) throw new Chat.ErrorMessage(this.tr`You are not a player and don't have a team.`);
+		if (!team) throw new Chat.ErrorMessage(this.TL`You are not a player and don't have a team.`);
 
 		if (!showAll) {
 			const parsed = parseInt(target);
 			if (isNaN(parsed)) {
 				const id = toID(target);
 				const matchedSet = team.find(set => toID(set.name) === id || toID(set.species) === id);
-				if (!matchedSet) throw new Chat.ErrorMessage(this.tr`You don't have a Pokémon matching "${target}" in your team.`);
+				if (!matchedSet) throw new Chat.ErrorMessage(this.TL`You don't have a Pokémon matching "${target}" in your team.`);
 				team = [matchedSet];
 			} else {
 				const setIndex = parsed - 1;
 				const indexedSet = team[setIndex];
 				if (!indexedSet) {
-					throw new Chat.ErrorMessage(this.tr`You don't have a Pokémon #${parsed} on your team - your team only has ${team.length} Pokémon.`);
+					throw new Chat.ErrorMessage(this.TL`You don't have a Pokémon #${parsed} on your team - your team only has ${team.length} Pokémon.`);
 				}
 				team = [indexedSet];
 			}
@@ -949,7 +949,7 @@ export const commands: Chat.ChatCommands = {
 			hideStats, useStatPoints: toID(battle.format).includes('champions'),
 		}));
 		if (showAll) {
-			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
+			resultString = `<details><summary>${this.TL`View team`}</summary>${resultString}</details>`;
 		}
 		this.runBroadcast(true);
 		return this.sendReplyBox(resultString);
@@ -968,28 +968,28 @@ export const commands: Chat.ChatCommands = {
 	acceptopenteamsheets(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const battle = room.battle;
-		if (!battle) throw new Chat.ErrorMessage(this.tr`Must be in a battle room.`);
+		if (!battle) throw new Chat.ErrorMessage(this.TL`Must be in a battle room.`);
 		const player = battle.playerTable[user.id];
 		if (!player) {
-			throw new Chat.ErrorMessage(this.tr`Must be a player to agree to open team sheets.`);
+			throw new Chat.ErrorMessage(this.TL`Must be a player to agree to open team sheets.`);
 		}
 		const format = Dex.formats.get(battle.options.format);
 		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
-			throw new Chat.ErrorMessage(this.tr`This format does not allow requesting open team sheets. You can both manually agree to it by using !showteam hidestats.`);
+			throw new Chat.ErrorMessage(this.TL`This format does not allow requesting open team sheets. You can both manually agree to it by using !showteam hidestats.`);
 		}
 		if (battle.turn > 0) {
-			throw new Chat.ErrorMessage(this.tr`You cannot agree to open team sheets after Team Preview. Each player can still show their own sheet by using this command: !showteam hidestats`);
+			throw new Chat.ErrorMessage(this.TL`You cannot agree to open team sheets after Team Preview. Each player can still show their own sheet by using this command: !showteam hidestats`);
 		}
 		if (battle.players.some(curPlayer => curPlayer.wantsOpenTeamSheets === false)) {
-			throw new Chat.ErrorMessage(this.tr`An opponent has already rejected open team sheets.`);
+			throw new Chat.ErrorMessage(this.TL`An opponent has already rejected open team sheets.`);
 		}
 		if (player.wantsOpenTeamSheets !== null) {
-			throw new Chat.ErrorMessage(this.tr`You have already made your decision about agreeing to open team sheets.`);
+			throw new Chat.ErrorMessage(this.TL`You have already made your decision about agreeing to open team sheets.`);
 		}
 		player.wantsOpenTeamSheets = true;
 		player.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
 
-		this.add(this.tr`${user.name} has agreed to open team sheets.`);
+		this.add(this.TL`${user.name} has agreed to open team sheets.`);
 		if (battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
 			void battle.stream.write('>show-openteamsheets');
 		}
@@ -999,26 +999,26 @@ export const commands: Chat.ChatCommands = {
 	rejectopenteamsheets(target, room, user) {
 		room = this.requireRoom();
 		const battle = room.battle;
-		if (!battle) throw new Chat.ErrorMessage(this.tr`Must be in a battle room.`);
+		if (!battle) throw new Chat.ErrorMessage(this.TL`Must be in a battle room.`);
 		const player = battle.playerTable[user.id];
 		if (!player) {
-			throw new Chat.ErrorMessage(this.tr`Must be a player to reject open team sheets.`);
+			throw new Chat.ErrorMessage(this.TL`Must be a player to reject open team sheets.`);
 		}
 		const format = Dex.formats.get(battle.options.format);
 		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
-			throw new Chat.ErrorMessage(this.tr`This format does not allow requesting open team sheets.`);
+			throw new Chat.ErrorMessage(this.TL`This format does not allow requesting open team sheets.`);
 		}
 		if (battle.turn > 0) {
-			throw new Chat.ErrorMessage(this.tr`You cannot reject open team sheets after Team Preview.`);
+			throw new Chat.ErrorMessage(this.TL`You cannot reject open team sheets after Team Preview.`);
 		}
 		if (player.wantsOpenTeamSheets !== null) {
-			throw new Chat.ErrorMessage(this.tr`You have already made your decision about agreeing to open team sheets.`);
+			throw new Chat.ErrorMessage(this.TL`You have already made your decision about agreeing to open team sheets.`);
 		}
 		player.wantsOpenTeamSheets = false;
 		for (const otherPlayer of battle.players) {
 			otherPlayer.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
 		}
-		return this.add(this.tr`${user.name} rejected open team sheets.`);
+		return this.add(this.TL`${user.name} rejected open team sheets.`);
 	},
 	rejectopenteamsheetshelp: [`/rejectopenteamsheetshelp - Rejects an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],
 
@@ -1029,28 +1029,28 @@ export const commands: Chat.ChatCommands = {
 	offertie(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const battle = room.battle;
-		if (!battle) throw new Chat.ErrorMessage(this.tr`Must be in a battle room.`);
+		if (!battle) throw new Chat.ErrorMessage(this.TL`Must be in a battle room.`);
 		if (!Config.allowrequestingties) {
-			throw new Chat.ErrorMessage(this.tr`This server does not allow offering ties.`);
+			throw new Chat.ErrorMessage(this.TL`This server does not allow offering ties.`);
 		}
 		if (room.tour) {
-			throw new Chat.ErrorMessage(this.tr`You can't offer ties in tournaments.`);
+			throw new Chat.ErrorMessage(this.TL`You can't offer ties in tournaments.`);
 		}
 		if (battle.turn < 100) {
-			throw new Chat.ErrorMessage(this.tr`It's too early to tie, please play until turn 100.`);
+			throw new Chat.ErrorMessage(this.TL`It's too early to tie, please play until turn 100.`);
 		}
 		this.checkCan('roomvoice', null, room);
 		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
-			throw new Chat.ErrorMessage(this.tr`No other player is requesting a tie right now. It was probably canceled.`);
+			throw new Chat.ErrorMessage(this.TL`No other player is requesting a tie right now. It was probably canceled.`);
 		}
 		const player = battle.playerTable[user.id];
 		if (!battle.players.some(curPlayer => curPlayer.wantsTie)) {
-			this.add(this.tr`${user.name} is offering a tie.`);
+			this.add(this.TL`${user.name} is offering a tie.`);
 			room.update();
 			for (const otherPlayer of battle.players) {
 				if (otherPlayer !== player) {
 					otherPlayer.sendRoom(
-						Utils.html`|uhtml|offertie|<button class="button" name="send" value="/accepttie"><strong>${this.tr`Accept tie`}</strong></button> <button class="button" name="send" value="/rejecttie">${this.tr`Reject`}</button>`
+						Utils.html`|uhtml|offertie|<button class="button" name="send" value="/accepttie"><strong>${this.TL`Accept tie`}</strong></button> <button class="button" name="send" value="/rejecttie">${this.TL`Reject`}</button>`
 					);
 				} else {
 					player.wantsTie = true;
@@ -1058,18 +1058,18 @@ export const commands: Chat.ChatCommands = {
 			}
 		} else {
 			if (!player) {
-				throw new Chat.ErrorMessage(this.tr`Must be a player to accept ties.`);
+				throw new Chat.ErrorMessage(this.TL`Must be a player to accept ties.`);
 			}
 			if (!player.wantsTie) {
 				player.wantsTie = true;
 			} else {
-				throw new Chat.ErrorMessage(this.tr`You have already agreed to a tie.`);
+				throw new Chat.ErrorMessage(this.TL`You have already agreed to a tie.`);
 			}
 			player.sendRoom(Utils.html`|uhtmlchange|offertie|`);
-			this.add(this.tr`${user.name} accepted the tie.`);
+			this.add(this.TL`${user.name} accepted the tie.`);
 			if (battle.players.every(curPlayer => curPlayer.wantsTie)) {
 				if (battle.players.length > 2) {
-					this.add(this.tr`All players have accepted the tie.`);
+					this.add(this.TL`All players have accepted the tie.`);
 				}
 				battle.tie();
 			}
@@ -1081,19 +1081,19 @@ export const commands: Chat.ChatCommands = {
 	rejecttie(target, room, user) {
 		room = this.requireRoom();
 		const battle = room.battle;
-		if (!battle) throw new Chat.ErrorMessage(this.tr`Must be in a battle room.`);
+		if (!battle) throw new Chat.ErrorMessage(this.TL`Must be in a battle room.`);
 		const player = battle.playerTable[user.id];
 		if (!player) {
-			throw new Chat.ErrorMessage(this.tr`Must be a player to reject ties.`);
+			throw new Chat.ErrorMessage(this.TL`Must be a player to reject ties.`);
 		}
 		if (!battle.players.some(curPlayer => curPlayer.wantsTie)) {
-			throw new Chat.ErrorMessage(this.tr`No other player is requesting a tie right now. It was probably canceled.`);
+			throw new Chat.ErrorMessage(this.TL`No other player is requesting a tie right now. It was probably canceled.`);
 		}
 		if (player.wantsTie) player.wantsTie = false;
 		for (const otherPlayer of battle.players) {
 			otherPlayer.sendRoom(Utils.html`|uhtmlchange|offertie|`);
 		}
-		return this.add(this.tr`${user.name} rejected the tie.`);
+		return this.add(this.TL`${user.name} rejected the tie.`);
 	},
 	rejecttiehelp: [`/rejecttie - Rejects a tie offered by another player in a battle.`],
 
@@ -1108,9 +1108,9 @@ export const commands: Chat.ChatCommands = {
 
 	forfeit(target, room, user) {
 		room = this.requireRoom();
-		if (!room.game) throw new Chat.ErrorMessage(this.tr`This room doesn't have an active game.`);
+		if (!room.game) throw new Chat.ErrorMessage(this.TL`This room doesn't have an active game.`);
 		if (!room.game.forfeit) {
-			throw new Chat.ErrorMessage(this.tr`This kind of game can't be forfeited.`);
+			throw new Chat.ErrorMessage(this.TL`This kind of game can't be forfeited.`);
 		}
 		room.game.forfeit(user);
 	},
@@ -1121,8 +1121,8 @@ export const commands: Chat.ChatCommands = {
 	guess: 'choose',
 	choose(target, room, user) {
 		room = this.requireRoom();
-		if (!room.game) throw new Chat.ErrorMessage(this.tr`This room doesn't have an active game.`);
-		if (!room.game.choose) throw new Chat.ErrorMessage(this.tr`This game doesn't support /choose`);
+		if (!room.game) throw new Chat.ErrorMessage(this.TL`This room doesn't have an active game.`);
+		if (!room.game.choose) throw new Chat.ErrorMessage(this.TL`This game doesn't support /choose`);
 		if (room.game.checkChat) this.checkChat();
 		room.game.choose(user, target);
 	},
@@ -1156,8 +1156,8 @@ export const commands: Chat.ChatCommands = {
 
 	undo(target, room, user) {
 		room = this.requireRoom();
-		if (!room.game) throw new Chat.ErrorMessage(this.tr`This room doesn't have an active game.`);
-		if (!room.game.undo) throw new Chat.ErrorMessage(this.tr`This game doesn't support /undo`);
+		if (!room.game) throw new Chat.ErrorMessage(this.TL`This room doesn't have an active game.`);
+		if (!room.game.undo) throw new Chat.ErrorMessage(this.TL`This game doesn't support /undo`);
 
 		room.game.undo(user, target);
 	},
@@ -1168,7 +1168,7 @@ export const commands: Chat.ChatCommands = {
 	uploadreplay: 'savereplay',
 	async savereplay(target, room, user, connection) {
 		if (!room?.battle) {
-			throw new Chat.ErrorMessage(this.tr`You can only save replays for battles.`);
+			throw new Chat.ErrorMessage(this.TL`You can only save replays for battles.`);
 		}
 
 		const options = (target === 'forpunishment' || target === 'silent') ? target : undefined;
@@ -1180,9 +1180,9 @@ export const commands: Chat.ChatCommands = {
 		if (!room?.battle) throw new Chat.ErrorMessage(`Must be used in a battle.`);
 		this.checkCan('joinbattle', null, room);
 		if (room.tour?.forcePublic) {
-			throw new Chat.ErrorMessage(this.tr`This battle can't have hidden replays, because the tournament is set to be forced public.`);
+			throw new Chat.ErrorMessage(this.TL`This battle can't have hidden replays, because the tournament is set to be forced public.`);
 		}
-		if (room.hideReplay) throw new Chat.ErrorMessage(this.tr`The replay for this battle is already set to hidden.`);
+		if (room.hideReplay) throw new Chat.ErrorMessage(this.TL`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
 		// If a replay has already been saved, /savereplay again to update the uploaded replay's hidden status
 		if (room.battle.replaySaved) this.parse('/savereplay');
@@ -1193,14 +1193,14 @@ export const commands: Chat.ChatCommands = {
 	addplayer: 'invitebattle',
 	invitebattle(target, room, user, connection) {
 		room = this.requireRoom();
-		if (!room.battle) throw new Chat.ErrorMessage(this.tr`You can only do this in battle rooms.`);
-		if (room.rated) throw new Chat.ErrorMessage(this.tr`You can only add a Player to unrated battles.`);
+		if (!room.battle) throw new Chat.ErrorMessage(this.TL`You can only do this in battle rooms.`);
+		if (room.rated) throw new Chat.ErrorMessage(this.TL`You can only add a Player to unrated battles.`);
 
 		this.checkCan('joinbattle', null, room);
 
 		const { targetUser, targetUsername: name, rest: slot } = this.splitUser(target, { exactName: true });
 		if (slot !== 'p1' && slot !== 'p2' && slot !== 'p3' && slot !== 'p4') {
-			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${slot}".`);
+			this.errorReply(this.TL`Player must be set to "p1" or "p2", not "${slot}".`);
 			return this.parse('/help addplayer');
 		}
 
@@ -1212,11 +1212,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!targetUser) {
 			battle.sendInviteForm(connection);
-			throw new Chat.ErrorMessage(this.tr`User ${name} not found.`);
+			throw new Chat.ErrorMessage(this.TL`User ${name} not found.`);
 		}
 		if (player.id) {
 			battle.sendInviteForm(connection);
-			throw new Chat.ErrorMessage(this.tr`This room already has a player in slot ${slot}.`);
+			throw new Chat.ErrorMessage(this.TL`This room already has a player in slot ${slot}.`);
 		}
 		if (player.invite) {
 			battle.sendInviteForm(connection);
@@ -1224,13 +1224,13 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (targetUser.id in battle.playerTable) {
 			battle.sendInviteForm(connection);
-			throw new Chat.ErrorMessage(this.tr`${targetUser.name} is already a player in this battle.`);
+			throw new Chat.ErrorMessage(this.TL`${targetUser.name} is already a player in this battle.`);
 		}
 
 		if (targetUser.settings.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			battle.sendInviteForm(connection);
 			Chat.maybeNotifyBlocked('challenge', targetUser, user);
-			throw new Chat.ErrorMessage(this.tr`The user '${targetUser.name}' is not accepting challenges right now.`);
+			throw new Chat.ErrorMessage(this.TL`The user '${targetUser.name}' is not accepting challenges right now.`);
 		}
 
 		// INVITE
@@ -1299,7 +1299,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('joinbattle', null, room);
 
-		if (!room.battle) throw new Chat.ErrorMessage(this.tr`You can only do this in battle rooms.`);
+		if (!room.battle) throw new Chat.ErrorMessage(this.TL`You can only do this in battle rooms.`);
 		const invitesFull = room.battle.invitesFull();
 		const challenges = Ladders.challenges.get(target as ID);
 
@@ -1320,8 +1320,8 @@ export const commands: Chat.ChatCommands = {
 
 	restoreplayers(target, room, user) {
 		room = this.requireRoom();
-		if (!room.battle) throw new Chat.ErrorMessage(this.tr`You can only do this in battle rooms.`);
-		if (room.rated) throw new Chat.ErrorMessage(this.tr`You can only add a Player to unrated battles.`);
+		if (!room.battle) throw new Chat.ErrorMessage(this.TL`You can only do this in battle rooms.`);
+		if (room.rated) throw new Chat.ErrorMessage(this.TL`You can only add a Player to unrated battles.`);
 
 		let didSomething = false;
 		for (const player of room.battle.players) {
@@ -1332,7 +1332,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (!didSomething) {
-			throw new Chat.ErrorMessage(this.tr`Players could not be restored (maybe this battle already has two players?).`);
+			throw new Chat.ErrorMessage(this.TL`Players could not be restored (maybe this battle already has two players?).`);
 		}
 	},
 	restoreplayershelp: [
@@ -1342,8 +1342,8 @@ export const commands: Chat.ChatCommands = {
 	joinbattle: 'joingame',
 	joingame(target, room, user) {
 		room = this.requireRoom();
-		if (!room.game) throw new Chat.ErrorMessage(this.tr`This room doesn't have an active game.`);
-		if (!room.game.joinGame) throw new Chat.ErrorMessage(this.tr`This game doesn't support /joingame`);
+		if (!room.game) throw new Chat.ErrorMessage(this.TL`This room doesn't have an active game.`);
+		if (!room.game.joinGame) throw new Chat.ErrorMessage(this.TL`This game doesn't support /joingame`);
 
 		room.game.joinGame(user, target);
 	},
@@ -1353,8 +1353,8 @@ export const commands: Chat.ChatCommands = {
 	partbattle: 'leavegame',
 	leavegame(target, room, user) {
 		room = this.requireRoom();
-		if (!room.game) throw new Chat.ErrorMessage(this.tr`This room doesn't have an active game.`);
-		if (!room.game.leaveGame) throw new Chat.ErrorMessage(this.tr`This game doesn't support /leavegame`);
+		if (!room.game) throw new Chat.ErrorMessage(this.TL`This room doesn't have an active game.`);
+		if (!room.game.leaveGame) throw new Chat.ErrorMessage(this.TL`This game doesn't support /leavegame`);
 
 		room.game.leaveGame(user);
 	},
@@ -1363,9 +1363,9 @@ export const commands: Chat.ChatCommands = {
 	kickbattle: 'kickgame',
 	kickgame(target, room, user) {
 		room = this.requireRoom();
-		if (!room.battle) throw new Chat.ErrorMessage(this.tr`You can only do this in battle rooms.`);
+		if (!room.battle) throw new Chat.ErrorMessage(this.TL`You can only do this in battle rooms.`);
 		if (room.battle.challengeType === 'tour' || room.battle.rated) {
-			throw new Chat.ErrorMessage(this.tr`You can only do this in unrated non-tour battles.`);
+			throw new Chat.ErrorMessage(this.TL`You can only do this in unrated non-tour battles.`);
 		}
 		const { targetUser, rest: reason } = this.requireUser(target, { allowOffline: true });
 		this.checkCan('kick', targetUser, room);
@@ -1390,22 +1390,22 @@ export const commands: Chat.ChatCommands = {
 		target = toID(target);
 		room = this.requireRoom();
 		if (!room.game?.timer) {
-			throw new Chat.ErrorMessage(this.tr`You can only set the timer from inside a battle room.`);
+			throw new Chat.ErrorMessage(this.TL`You can only set the timer from inside a battle room.`);
 		}
 		const timer = room.game.timer as any;
 		if (!timer.timerRequesters) {
-			return this.sendReply(this.tr`This game's timer is managed by a different command.`);
+			return this.sendReply(this.TL`This game's timer is managed by a different command.`);
 		}
 		if (!target) {
 			if (!timer.timerRequesters.size) {
-				return this.sendReply(this.tr`The game timer is OFF.`);
+				return this.sendReply(this.TL`The game timer is OFF.`);
 			}
 			const requester = [...timer.timerRequesters].join(', ');
-			return this.sendReply(this.tr`The game timer is ON (requested by ${requester})`);
+			return this.sendReply(this.TL`The game timer is ON (requested by ${requester})`);
 		}
 		const force = user.can('timer', null, room);
 		if (!force && !room.game.playerTable[user.id]) {
-			throw new Chat.ErrorMessage(this.tr`Access denied.`);
+			throw new Chat.ErrorMessage(this.TL`Access denied.`);
 		}
 		if (this.meansNo(target) || target === 'stop') {
 			if (timer.timerRequesters.size) {
@@ -1414,12 +1414,12 @@ export const commands: Chat.ChatCommands = {
 					room.send(`|inactiveoff|${room.tr`Timer was turned off by staff. Please do not turn it back on until our staff say it's okay.`}`);
 				}
 			} else {
-				throw new Chat.ErrorMessage(this.tr`The timer is already off.`);
+				throw new Chat.ErrorMessage(this.TL`The timer is already off.`);
 			}
 		} else if (this.meansYes(target) || target === 'start') {
 			timer.start(user);
 		} else {
-			throw new Chat.ErrorMessage(this.tr`"${target}" is not a recognized timer state.`);
+			throw new Chat.ErrorMessage(this.TL`"${target}" is not a recognized timer state.`);
 		}
 	},
 	timerhelp: [
@@ -1438,7 +1438,7 @@ export const commands: Chat.ChatCommands = {
 			Config.forcetimer = true;
 			this.addModAction(room.tr`Forcetimer is now ON: All battles will be timed. (set by ${user.name})`);
 		} else {
-			throw new Chat.ErrorMessage(this.tr`'${target}' is not a recognized forcetimer setting.`);
+			throw new Chat.ErrorMessage(this.TL`'${target}' is not a recognized forcetimer setting.`);
 		}
 	},
 	forcetimerhelp: [
@@ -1463,7 +1463,7 @@ export const commands: Chat.ChatCommands = {
 			return false;
 		}
 		const targetUser = Users.getExact(target);
-		if (!targetUser) throw new Chat.ErrorMessage(this.tr`User '${target}' not found.`);
+		if (!targetUser) throw new Chat.ErrorMessage(this.TL`User '${target}' not found.`);
 
 		(room.game as any).win(targetUser);
 		this.modlog('FORCEWIN', targetUser.id);
@@ -1481,13 +1481,13 @@ export const commands: Chat.ChatCommands = {
 		if (target) {
 			if (Config.laddermodchat && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
 				const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
-				this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to search for a battle.`);
+				this.popupReply(this.TL`This server requires you to be rank ${groupName} or higher to search for a battle.`);
 				return false;
 			}
 			const ladder = Ladders(target);
 			if (!user.registered && Config.forceregisterelo && await ladder.getRating(user.id) >= Config.forceregisterelo) {
 				user.send(
-					Utils.html`|popup||html|${this.tr`Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.`}<p style="text-align: center"><button name="register" value="${user.id}"><b>${this.tr`Register`}</b></button></p>`
+					Utils.html`|popup||html|${this.TL`Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.`}<p style="text-align: center"><button name="register" value="${user.id}"><b>${this.TL`Register`}</b></button></p>`
 				);
 				return false;
 			}
@@ -1516,20 +1516,20 @@ export const commands: Chat.ChatCommands = {
 	challenge(target, room, user, connection) {
 		const { targetUser, targetUsername, rest: formatName } = this.splitUser(target);
 		if (!targetUser?.connected) {
-			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
+			return this.popupReply(this.TL`The user '${targetUsername}' was not found.`);
 		}
 		if (user.locked && !targetUser.locked) {
-			return this.popupReply(this.tr`You are locked and cannot challenge unlocked users. If this user is your friend, ask them to challenge you instead.`);
+			return this.popupReply(this.TL`You are locked and cannot challenge unlocked users. If this user is your friend, ask them to challenge you instead.`);
 		}
 		if (Punishments.isBattleBanned(user)) {
-			return this.popupReply(this.tr`You are banned from battling and cannot challenge users.`);
+			return this.popupReply(this.TL`You are banned from battling and cannot challenge users.`);
 		}
 		if (!user.named) {
-			return this.popupReply(this.tr`You must choose a username before you challenge someone.`);
+			return this.popupReply(this.TL`You must choose a username before you challenge someone.`);
 		}
 		if (Config.pmmodchat && !user.hasSysopAccess() && !Users.globalAuth.atLeast(user, Config.pmmodchat as GroupSymbol)) {
 			const groupName = Config.groups[Config.pmmodchat].name || Config.pmmodchat;
-			this.popupReply(this.tr`This server requires you to be rank ${groupName} or higher to challenge users.`);
+			this.popupReply(this.TL`This server requires you to be rank ${groupName} or higher to challenge users.`);
 			return false;
 		}
 		return Ladders(formatName).makeChallenge(connection, targetUser);
@@ -1544,19 +1544,19 @@ export const commands: Chat.ChatCommands = {
 	blockchallenges(target, room, user) {
 		if (toID(target) === 'ac') target = 'autoconfirmed';
 		if (user.settings.blockChallenges === (target || true)) {
-			throw new Chat.ErrorMessage(this.tr`You are already blocking challenges!`);
+			throw new Chat.ErrorMessage(this.TL`You are already blocking challenges!`);
 		}
 		if (Users.Auth.isAuthLevel(target)) {
 			user.settings.blockChallenges = target;
-			this.sendReply(this.tr`You are now blocking challenges, except from staff and ${target}.`);
+			this.sendReply(this.TL`You are now blocking challenges, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked' || target === 'friends') {
 			user.settings.blockChallenges = target;
 			if (target === 'friends') target = 'friended';
-			target = this.tr(target);
-			this.sendReply(this.tr`You are now blocking challenges, except from staff and ${target} users.`);
+			target = this.TL(target);
+			this.sendReply(this.TL`You are now blocking challenges, except from staff and ${target} users.`);
 		} else {
 			user.settings.blockChallenges = true;
-			this.sendReply(this.tr`You are now blocking all incoming challenge requests.`);
+			this.sendReply(this.TL`You are now blocking all incoming challenge requests.`);
 		}
 		user.update();
 	},
@@ -1569,10 +1569,10 @@ export const commands: Chat.ChatCommands = {
 	unblockchalls: 'allowchallenges',
 	unblockchallenges: 'allowchallenges',
 	allowchallenges(target, room, user) {
-		if (!user.settings.blockChallenges) throw new Chat.ErrorMessage(this.tr`You are already available for challenges!`);
+		if (!user.settings.blockChallenges) throw new Chat.ErrorMessage(this.TL`You are already available for challenges!`);
 		user.settings.blockChallenges = false;
 		user.update();
-		this.sendReply(this.tr`You are available for challenges from now on.`);
+		this.sendReply(this.TL`You are available for challenges from now on.`);
 	},
 	allowchallengeshelp: [
 		`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`,
@@ -1580,10 +1580,10 @@ export const commands: Chat.ChatCommands = {
 	cchall: 'cancelchallenge',
 	cancelchallenge(target, room, user, connection) {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);
-		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
+		if (rest) return this.popupReply(this.TL`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
 		this.pmTargetName = targetUsername || this.pmTargetName;
-		if (!this.pmTarget) return this.popupReply(this.tr`User "${this.pmTargetName || ''}" not found.`);
+		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
 		if (!chall || chall.from !== user.id) {
@@ -1600,10 +1600,10 @@ export const commands: Chat.ChatCommands = {
 
 	async accept(target, room, user, connection) {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);
-		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
+		if (rest) return this.popupReply(this.TL`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
 		this.pmTargetName = targetUsername || this.pmTargetName;
-		if (!this.pmTarget) return this.popupReply(this.tr`User "${this.pmTargetName || ''}" not found.`);
+		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
 		if (!chall || chall.to !== user.id) {
@@ -1623,10 +1623,10 @@ export const commands: Chat.ChatCommands = {
 
 	reject(target, room, user, connection) {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);
-		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
+		if (rest) return this.popupReply(this.TL`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
 		this.pmTargetName = targetUsername || this.pmTargetName;
-		if (!this.pmTarget) return this.popupReply(this.tr`User "${this.pmTargetName || ''}" not found.`);
+		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
 		if (!chall || chall.to !== user.id) {
@@ -1650,18 +1650,18 @@ export const commands: Chat.ChatCommands = {
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
 			return;
 		}
-		if (!target) throw new Chat.ErrorMessage(this.tr`Provide a valid format.`);
+		if (!target) throw new Chat.ErrorMessage(this.TL`Provide a valid format.`);
 		const originalFormat = Dex.formats.get(target);
 		// Note: The default here of Anything Goes isn't normally hit; since the web client will send a default format
 		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get('Anything Goes');
-		if (format.effectType !== 'Format') return this.popupReply(this.tr`Please provide a valid format.`);
+		if (format.effectType !== 'Format') return this.popupReply(this.TL`Please provide a valid format.`);
 
 		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team, { user: user.id }).then(result => {
-			const matchMessage = (originalFormat === format ? "" : this.tr`The format '${originalFormat.name}' was not found.`);
+			const matchMessage = (originalFormat === format ? "" : this.TL`The format '${originalFormat.name}' was not found.`);
 			if (result.startsWith('1')) {
-				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team is valid for ${format.name}.`}`);
+				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.TL`Your team is valid for ${format.name}.`}`);
 			} else {
-				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team was rejected for the following reasons:`}\n\n- ${result.slice(1).replace(/\n/g, '\n- ')}`);
+				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.TL`Your team was rejected for the following reasons:`}\n\n- ${result.slice(1).replace(/\n/g, '\n- ')}`);
 			}
 		});
 	},
@@ -1677,9 +1677,9 @@ export const commands: Chat.ChatCommands = {
 		user.settings.hideBattlesFromTrainerCard = shouldHide;
 		user.update();
 		if (shouldHide) {
-			this.sendReply(this.tr`Battles are now hidden (except to staff) in your trainer card.`);
+			this.sendReply(this.TL`Battles are now hidden (except to staff) in your trainer card.`);
 		} else {
-			this.sendReply(this.tr`Battles are now visible in your trainer card.`);
+			this.sendReply(this.TL`Battles are now visible in your trainer card.`);
 		}
 	},
 	hidebattlesfromtrainercardhelp: [
@@ -1732,20 +1732,20 @@ export const commands: Chat.ChatCommands = {
 		if (target.startsWith('/') || target.startsWith('!')) target = target.slice(1);
 
 		if (!target) {
-			const broadcastMsg = this.tr`(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)`;
+			const broadcastMsg = this.TL`(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)`;
 
-			this.sendReply(`${this.tr`COMMANDS`}: /report, /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /join, /leave, /userauth, /roomauth`);
-			this.sendReply(`${this.tr`BATTLE ROOM COMMANDS`}: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit`);
-			this.sendReply(`${this.tr`OPTION COMMANDS`}: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms`);
-			this.sendReply(`${this.tr`INFORMATIONAL/RESOURCE COMMANDS`}: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq ${broadcastMsg}`);
-			this.sendReply(`${this.tr`DATA COMMANDS`}: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon ${broadcastMsg}`);
+			this.sendReply(`${this.TL`COMMANDS`}: /report, /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /join, /leave, /userauth, /roomauth`);
+			this.sendReply(`${this.TL`BATTLE ROOM COMMANDS`}: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit`);
+			this.sendReply(`${this.TL`OPTION COMMANDS`}: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms`);
+			this.sendReply(`${this.TL`INFORMATIONAL/RESOURCE COMMANDS`}: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq ${broadcastMsg}`);
+			this.sendReply(`${this.TL`DATA COMMANDS`}: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon ${broadcastMsg}`);
 			if (user.tempGroup !== Users.Auth.defaultSymbol()) {
-				this.sendReply(`${this.tr`DRIVER COMMANDS`}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /modchat, /lock, /weeklock, /unlock, /announce`);
-				this.sendReply(`${this.tr`MODERATOR COMMANDS`}: /globalban, /unglobalban, /ip, /markshared, /unlockip`);
-				this.sendReply(`${this.tr`ADMIN COMMANDS`}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /ipsearch`);
+				this.sendReply(`${this.TL`DRIVER COMMANDS`}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /modchat, /lock, /weeklock, /unlock, /announce`);
+				this.sendReply(`${this.TL`MODERATOR COMMANDS`}: /globalban, /unglobalban, /ip, /markshared, /unlockip`);
+				this.sendReply(`${this.TL`ADMIN COMMANDS`}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /ipsearch`);
 			}
-			this.sendReply(this.tr`For an overview of room commands, use /roomhelp`);
-			this.sendReply(this.tr`For details of a specific command, use something like: /help data`);
+			this.sendReply(this.TL`For an overview of room commands, use /roomhelp`);
+			this.sendReply(this.TL`For details of a specific command, use something like: /help data`);
 			return;
 		}
 
@@ -1789,7 +1789,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (isPrivate && !user.can(requiredPerm as GlobalPermission)) {
-				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
+				throw new Chat.ErrorMessage(this.TL`The command '/${target}' does not exist.`);
 			}
 
 			if (typeof help === 'function') {
@@ -1798,7 +1798,7 @@ export const commands: Chat.ChatCommands = {
 				return true;
 			}
 			if (Array.isArray(help)) {
-				this.sendReply(help.map(line => this.tr(line)).join('\n'));
+				this.sendReply(help.map(line => this.TL(line)).join('\n'));
 				return true;
 			}
 
@@ -1812,11 +1812,11 @@ export const commands: Chat.ChatCommands = {
 						return this.parse(`/help roompromote`);
 					}
 				}
-				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
+				throw new Chat.ErrorMessage(this.TL`The command '/${target}' does not exist.`);
 			}
 
 			if (cmd.endsWith('help')) {
-				this.sendReply(this.tr`'/${target}' is a help command.`);
+				this.sendReply(this.TL`'/${target}' is a help command.`);
 				return true;
 			}
 
@@ -1824,7 +1824,7 @@ export const commands: Chat.ChatCommands = {
 		};
 
 		if (!getHelp(Chat.commands, target.split(' '))) {
-			throw new Chat.ErrorMessage(this.tr`Could not find help for '/${target}'. Try /help for general help.`);
+			throw new Chat.ErrorMessage(this.TL`Could not find help for '/${target}'. Try /help for general help.`);
 		}
 	},
 	helphelp: [

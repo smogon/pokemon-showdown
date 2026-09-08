@@ -213,64 +213,106 @@ export class RandomMNMLS extends RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): string {
 		if (species.id === 'dragonite') return 'Scizorite';
-		if (species.id === 'garganacl') return 'Scraftinite';
+		if (
+			(species.id === 'garganacl') ||
+			(species.id === 'brutebonnet')
+		) return 'Staraptite';
 		if (species.id === 'greattusk') return 'Lopunnite';
 		if (species.id === 'heatran') return 'Garchompite Z';
 		if (species.id === 'pecharunt') return 'Gyaradosite';
-		if (species.id === 'ragingbolt') return 'Manectite';
+		if (
+			(species.id === 'ragingbolt') ||
+			(species.id === 'landorustherian')
+		) return 'Manectite';
 		if (species.id === 'annihilape') return 'Crabominite';
 		if (species.id === 'archaludon') return 'Blue Orb';
 		if (species.id === 'ceruledge') return 'Eelektrossite';
 		if (species.id === 'gholdengo') return 'Magearnite';
-		if (species.id === 'gougingfire') return 'Pinsirite';
+		if (
+			(species.id === 'gougingfire') ||
+			(species.id === 'revavroom')
+		) return 'Pinsirite';
 		if (species.id === 'magearna') return 'Metagrossite';
 		if (species.id === 'roaringmoon') return 'Sharpedonite';
 		if (species.id === 'walkingwake') return 'Charizardite Y';
-		if (species.id === 'darkrai') return 'Hawluchanite';
-		if (species.id === 'dragapult') return 'Red Orb';
+		if (
+			(species.id === 'darkrai') ||
+			(species.id === 'rotomwash')
+		) return 'Pidgeotite';
+		if (
+			(species.id === 'dragapult') ||
+			(species.id === 'zamazenta')
+		) return 'Red Orb';
 		if (species.id === 'gengar') return 'Dragoninite';
 		if (species.id === 'ironboulder') return 'Aerodactylite';
-		if (species.id === 'regieleki') return 'Altarianite';
-		if (species.id === 'shayminsky') return 'Meganiumite';
+		if (
+			(species.id === 'regieleki') ||
+			(species.id === 'flygon')
+		) return 'Altarianite';
+		if (
+			(species.id === 'shayminsky') ||
+			(species.id === 'umbreon')
+		) return 'Meganiumite';
 		if (species.id === 'weavile') return 'Zygardite';
-		if (species.id === 'zamazenta') return 'Red Orb';
 		if (species.id === 'mandibuzz') return 'Mawilite';
 		if (species.id === 'skarmory') return 'Starminite';
 		if (species.id === 'salazzle') return 'Beedrillite';
 		if (species.id === 'mamoswine') return 'Lucarionite Z';
-		if (species.id === 'fezandipiti') return 'Clefablite';
-		if (species.id === 'jirachi') return 'Clefablite';
-		if (species.id === 'hippowdon') return 'Steelixite';
+		if (
+			(species.id === 'fezandipiti') ||
+			(species.id === 'jirachi')
+		) return 'Clefablite';
+		if (
+			(species.id === 'hippowdon') ||
+			(species.id === 'rhyperior')
+		) return 'Steelixite';
 		if (species.id === 'drifblim') return 'Victreebelite';
 		if (species.id === 'tinkaton') return 'Banettite';
-		if (species.id === 'landorustherian') return 'Manectite';
-		if (species.id === 'hydreigon') return 'Chimechite';
+		if (
+			(species.id === 'hydreigon') ||
+			(species.id === 'ironmoth')
+		) return 'Chimechite';
 		if (species.id === 'lugia') return 'Wellspring Mask';
 		if (species.id === 'kyuremblack') return 'Zap Plate';
 		if (species.id === 'regigigas') return 'Iron Plate';
 		if (species.id === 'palossand') return 'Kangaskhanite';
-		if (species.id === 'revavroom') return 'Pinsirite';
 		if (species.id === 'vikavolt') return 'Aggronite';
-		if (species.id === 'umbreon') return 'Meganiumite';
-		if (species.id === 'ironmoth') return 'Chimechite';
 		if (species.id === 'fluttermane') return 'Cornerstone Mask';
-		if (species.id === 'rotomwash') return 'Pidgeotite';
-		if (species.id === 'flygon') return 'Altarianite';
-		if (species.id === 'hariyama') return 'Scolipite';
+		if (
+			(species.id === 'hariyama') ||
+			(species.id === 'bronzong')
+		) return 'Scolipite';
 		if (species.id === 'ursalunabloodmoon') return 'Sablenite';
 		if (species.id === 'screamtail') return 'Gardevoirite';
 		if (species.id === 'politoed') return 'Swampertite';
 		if (species.id === 'cryogonal') return 'Froslassite';
 		if (species.id === 'tinglu') return 'Tyranitarite';
-		if (species.id === 'brutebonnet') return 'Staraptite';
-		if (species.id === 'arcanine') return 'Absolite';
+		if (
+			(species.id === 'arcanine') ||
+			(species.id === 'hoopaunbound')
+		) return 'Absolite';
 		if (species.id === 'zapdos') return 'Raichunite X';
-		if (species.id === 'hoopaunbound') return 'Absolite';
 		if (species.id === 'dialga') return 'Griseous Core';
 		if (species.id === 'overqwil') return 'Falinksite';
 		if (species.id === 'mimikyu') return 'Garchompite';
 		if (species.id === 'appletun') return 'Ampharosite';
 		if (species.id === 'lucario') return 'Feraligite';
+		if (species.id === 'baxcalibur') return 'Heracronite';
+		if (species.id === 'floatzel') return 'Barbaracite';
+		if (species.id === 'ironhands') return 'Dragalgite';
+		if (species.id === 'empoleon') return 'Abomasite';
+		if (
+			(species.id === 'gastrodon') ||
+			(species.id === 'primarina')
+		) return 'Chandelurite';
+		if (species.id === 'slitherwing') return 'Drampanite';
+		if (species.id === 'corviknight') return 'Venusaurite';
+		if (species.id === 'lunala') return 'Pixie Plate';
+		if (species.id === 'groudon') return 'Hearthflame Mask';
+		if (species.id === 'zacian') return 'Fighting Memory';
+		if (species.id === 'goodra') return 'Audinite';
+		if (species.id === 'milotic') return 'Excadrite';
+		if (species.id === 'glimmora') return 'Gengarite';
 		/* Fallback */
 		else return 'Life Orb';
 	}

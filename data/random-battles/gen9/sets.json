@@ -1699,7 +1699,7 @@
         ]
     },
     "stantler": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1772,7 +1772,7 @@
         ]
     },
     "raikou": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2089,7 +2089,7 @@
         ]
     },
     "sableye": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4358,7 +4358,7 @@
         ]
     },
     "haxorus": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Setup Sweeper",

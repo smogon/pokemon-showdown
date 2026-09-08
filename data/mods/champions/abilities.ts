@@ -53,8 +53,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 		},
-		desc: "50% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
-		shortDesc: "50% chance this Pokemon's ally has its status cured at the end of each turn.",
 	},
 	megasol: {
 		inherit: true,
@@ -95,6 +93,5 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		inherit: true,
-		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
 	},
 };

@@ -76,10 +76,10 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help announcement new');
 			target = target.trim();
-			if (room.battle) throw new Chat.ErrorMessage(this.tr`Battles do not support announcements.`);
+			if (room.battle) throw new Chat.ErrorMessage(this.TL`Battles do not support announcements.`);
 
 			const text = this.filter(target);
-			if (target !== text) throw new Chat.ErrorMessage(this.tr`You are not allowed to use filtered words in announcements.`);
+			if (target !== text) throw new Chat.ErrorMessage(this.TL`You are not allowed to use filtered words in announcements.`);
 
 			const supportHTML = cmd === 'htmlcreate';
 
@@ -87,7 +87,7 @@ export const commands: Chat.ChatCommands = {
 			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
 			if (room.minorActivity) {
-				throw new Chat.ErrorMessage(this.tr`There is already a poll or announcement in progress in this room.`);
+				throw new Chat.ErrorMessage(this.TL`There is already a poll or announcement in progress in this room.`);
 			}
 
 			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
@@ -108,7 +108,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help announcement edit');
 			target = target.trim();
 			const text = this.filter(target);
-			if (target !== text) throw new Chat.ErrorMessage(this.tr`You are not allowed to use filtered words in announcements.`);
+			if (target !== text) throw new Chat.ErrorMessage(this.TL`You are not allowed to use filtered words in announcements.`);
 
 			const supportHTML = cmd === 'htmledit';
 
@@ -134,12 +134,12 @@ export const commands: Chat.ChatCommands = {
 			if (target) {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
-					if (!announcement.endTimer()) throw new Chat.ErrorMessage(this.tr`There is no timer to clear.`);
-					return this.add(this.tr`The announcement timer was turned off.`);
+					if (!announcement.endTimer()) throw new Chat.ErrorMessage(this.TL`There is no timer to clear.`);
+					return this.add(this.TL`The announcement timer was turned off.`);
 				}
 				const timeoutMins = parseFloat(target);
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
-					throw new Chat.ErrorMessage(this.tr`Time should be a number of minutes less than one week.`);
+					throw new Chat.ErrorMessage(this.TL`Time should be a number of minutes less than one week.`);
 				}
 				announcement.setTimer({ timeoutMins });
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeoutMins} minute${Chat.plural(timeoutMins)}.`);
@@ -150,7 +150,7 @@ export const commands: Chat.ChatCommands = {
 				if (announcement.timeout) {
 					return this.sendReply(`The announcement timer is on and will end in ${announcement.timeoutMins} minute${Chat.plural(announcement.timeoutMins)}.`);
 				} else {
-					return this.sendReply(this.tr`The announcement timer is off.`);
+					return this.sendReply(this.TL`The announcement timer is off.`);
 				}
 			}
 		},

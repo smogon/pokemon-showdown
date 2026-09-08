@@ -729,47 +729,47 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!silent || this.broadcasting) {
 			if (!this.broadcasting) {
-				this.sendReply(`${this.tr`Avatar changed to:`}`);
+				this.sendReply(`${this.TL`Avatar changed to:`}`);
 			}
 			this.sendReply(Chat.html`|raw|${Avatars.img(avatar)}`);
 			if (OFFICIAL_AVATARS_BELIOT419.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
 			}
 			if (OFFICIAL_AVATARS_GNOMOWLADNY.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}Gnomowladny)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}Gnomowladny)`);
 			}
 			if (OFFICIAL_AVATARS_BRUMIRAGE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Brumirage">Brumirage</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://twitter.com/Brumirage">Brumirage</a>)`);
 			}
 			if (OFFICIAL_AVATARS_ZACWEAVILE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}ZacWeavile)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}ZacWeavile)`);
 			}
 			if (OFFICIAL_AVATARS_KYLEDOVE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">kyledove</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://twitter.com/DoveKyle">kyledove</a>)`);
 			}
 			if (OFFICIAL_AVATARS_HYOOPPA.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/hyo_oppa">hyo-oppa</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://twitter.com/hyo_oppa">hyo-oppa</a>)`);
 			}
 			if (OFFICIAL_AVATARS_GRAPO.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
 			}
 			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/537330/">Fifty Shades of Rez</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://www.smogon.com/forums/members/537330/">Fifty Shades of Rez</a>)`);
 			}
 			if (OFFICIAL_AVATARS_HORO.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}Horo)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}Horo)`);
 			}
 			if (OFFICIAL_AVATARS_SELENA.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/SelenaStar00">Selena</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://twitter.com/SelenaStar00">Selena</a>)`);
 			}
 			if (OFFICIAL_AVATARS_WISTERIAPURPLE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/664887/">wisteriapurple</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://www.smogon.com/forums/members/664887/">wisteriapurple</a>)`);
 			}
 			if (OFFICIAL_AVATARS_FLAMIBANE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/706228/">Flamibane</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://www.smogon.com/forums/members/706228/">Flamibane</a>)`);
 			}
 			if (OFFICIAL_AVATARS_RADU.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/455774/">RADU</a>)`);
+				this.sendReply(`|raw|(${this.TL`Artist: `}<a href="https://www.smogon.com/forums/members/455774/">RADU</a>)`);
 			}
 		}
 	},

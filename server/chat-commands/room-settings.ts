@@ -343,8 +343,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('editroom', null, room);
 
-		const targetLanguage = toID(target);
-		if (!Chat.languages.has(targetLanguage)) throw new Chat.ErrorMessage(`"${target}" is not a supported language.`);
+		const targetLanguage = Chat.getLanguageID(target);
+		if (!targetLanguage) throw new Chat.ErrorMessage(`"${target}" is not a supported language.`);
 
 		room.settings.language = targetLanguage === 'english' ? false : targetLanguage;
 
