@@ -3507,7 +3507,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
 			'Calyrex-Shadow', 'Miraidon', 'Moody', 'Shadow Tag',
-			'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite', 'Kangaskhanite', 'Lucarionite Z', 'Magearnite', 'Malamarite', 'Mawilite', 'Medichamite', 
+			'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite', 'Kangaskhanite', 'Lucarionite Z', 'Magearnite', 'Malamarite', 'Mawilite', 'Medichamite',
 			'Pidgeotite', 'Raichunite Y', 'Red Orb', 'Scovillainite', 'Staraptite', 'Starminite', 'Zygardite',
 		],
 		restricted: [
