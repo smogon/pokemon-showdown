@@ -12,6 +12,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "味方の ポケモン",
 		opposingParty: "相手の ポケモン",
 
+		turn: null, // NEEDS TRANSLATION
 		switchIn: "{TRAINER}は {FULLNAME}を 繰り出した！",
 		switchInOwn: "ゆけっ！ {FULLNAME}！",
 		switchOut: "{TRAINER}は {NICKNAME}を 引っこめた！",

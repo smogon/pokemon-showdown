@@ -19,7 +19,7 @@ export const translations: TranslationCatalog = {
 	"trusted": null, // NEEDS TRANSLATION
 
 	"Please follow the rules:": "Lütfen kurallara uyun:",
-	// TRANSLATORS: Link to the PS rules for your language (path after pokemonshowdown.com
+	// TRANSLATORS: Link to the PS rules for your language (the part after pokemonshowdown.com)
 	"/rules": "/pages/rules-tr",
 	"Global Rules": "Genel kurallar",
 	"{ROOM} room rules": "{ROOM} odası kuralları",

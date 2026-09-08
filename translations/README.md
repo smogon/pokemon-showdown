@@ -8,6 +8,6 @@ Translatable strings are marked in code with `` TL`text` `` or `` TL("text", "co
 
 Context maps use `""` for calls without a context (including tagged templates), e.g. `"Type": { "": null, "kind": null }`. Use contexts to distinguish meanings, such as Pokémon types versus general classifications.
 
-`` TLkey`text` `` can be used to  literal strings marked this way reach the templates. A key that is only ever passed to `TL` through a variable (like a command help line) can be kept in a template by marking it `// DYNAMIC KEY` (in the same place `// NOT USED` goes); the build won't mark it `// NOT USED`.
-
 Keys no longer used in the codebase will stay in the template and a `// NOT USED` comment will be added to the template, without deleting any translations. Deleting an unused key from the template means you want to delete all its translations, which will be done when you call `./build translations --sync`.
+
+`` TLkey`text` `` can be used to mark TL keys as used, to be passed to `TL(...)` later. If you can't do that for whatever reason, replace `// NOT USED` with `// DYNAMIC KEY`.

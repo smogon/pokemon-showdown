@@ -12,6 +12,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "your ally Pok\u00E9mon",
 		opposingParty: "the opposing Pok\u00E9mon",
 
+		turn: "== Turn {NUMBER} ==",
 		switchIn: "{TRAINER} sent out {FULLNAME}!",
 		switchInOwn: "Go! {FULLNAME}!",
 		switchOut: "{TRAINER} withdrew {NICKNAME}!",

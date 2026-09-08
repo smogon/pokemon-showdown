@@ -12,6 +12,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: "les alliés",
 		opposingParty: "l’équipe ennemie",
 
+		turn: null, // NEEDS TRANSLATION
 		switchIn: "{TRAINER:definite:capitalize} envoie {FULLNAME} !",
 		switchInOwn: "{FULLNAME} ! Go !",
 		switchOut: "{TRAINER:definite:capitalize} retire {NICKNAME} !",

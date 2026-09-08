@@ -12,6 +12,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		party: null, // NEEDS TRANSLATION
 		opposingParty: null, // NEEDS TRANSLATION
 
+		turn: null, // NEEDS TRANSLATION
 		switchIn: "¡{TRAINER:definite:capitalize} saca a {FULLNAME}!",
 		switchInOwn: "¡Adelante, {FULLNAME}!",
 		switchOut: "¡{TRAINER:definite:capitalize} retira a {NICKNAME} del combate!",
