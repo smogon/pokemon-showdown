@@ -3,7 +3,7 @@ export const StatNames: { [id: string]: TranslationString } = {
 	accuracy: "命中率", evasion: "閃避率", spc: "特殊",
 
 	// n.b. used in "stats were lowered" battle messages,
-	// so it should be lowercase (unlike "Stats" in ui.ts)
+	// so it should be lowercase (unlike the "Stats" UI catalog entry)
 	stats: "能力",
 };
 
@@ -73,62 +73,62 @@ export const GenderNames: { [id: string]: TranslationString } = {
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
-	brn: null, // NEEDS TRANSLATION
-	par: null, // NEEDS TRANSLATION
-	slp: null, // NEEDS TRANSLATION
-	frz: null, // NEEDS TRANSLATION
-	psn: null, // NEEDS TRANSLATION
-	tox: null, // NEEDS TRANSLATION
-	fnt: null, // NEEDS TRANSLATION
-	confusion: null, // NEEDS TRANSLATION
+	brn: "灼傷", // NEEDS QC
+	par: "麻痺", // NEEDS QC
+	slp: "睡眠", // NEEDS QC
+	frz: "冰凍", // NEEDS QC
+	psn: "中毒", // NEEDS QC
+	tox: "劇毒", // NEEDS QC
+	fnt: "瀕死", // NEEDS QC
+	confusion: "混亂", // NEEDS QC
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "可以瞄準相鄰的同伴或對手", // NEEDS QC
+	normalDoubles: "可以瞄準同伴或任意對手", // NEEDS QC
+	normalSingles: "命中對手", // NEEDS QC
+	normalFFA: "可以瞄準任意對手", // NEEDS QC
+	self: "以自己為對象", // NEEDS QC
+	adjacentAlly: "可以瞄準相鄰的同伴", // NEEDS QC
+	adjacentAllyDoubles: "命中我方同伴", // NEEDS QC
+	adjacentAllySingles: "單打對戰中必定失敗", // NEEDS QC
+	adjacentAllyOrSelf: "可以瞄準自己或相鄰的同伴", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "可以瞄準自己或同伴", // NEEDS QC
+	adjacentFoe: "可以瞄準相鄰的對手", // NEEDS QC
+	allAdjacentFoes: "命中相鄰的對手", // NEEDS QC
+	allAdjacentFoesDoubles: "命中兩隻對手", // NEEDS QC
+	foeSide: "以對手的場地為對象", // NEEDS QC
+	allySide: "以我方的場地為對象", // NEEDS QC
+	allyTeam: "以我方全隊為對象", // NEEDS QC
+	allAdjacent: "命中相鄰的同伴和對手", // NEEDS QC
+	allAdjacentDoubles: "命中我方同伴和兩隻對手", // NEEDS QC
+	allAdjacentFFA: "命中所有對手", // NEEDS QC
+	any: "三打對戰中可以瞄準較遠的寶可夢", // NEEDS QC
+	all: "命中場上所有寶可夢", // NEEDS QC
+	scripted: "自動選擇對象", // NEEDS QC
+	randomNormal: "隨機命中相鄰的對手", // NEEDS QC
+	randomNormalDoubles: "隨機命中對手", // NEEDS QC
+	allies: "以自己和同伴為對象", // NEEDS QC
 };
 
 // no official Chinese egg group names exist (Pokédex 3D Pro predates official Chinese)
 // names from 52poke
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	monster: "怪獸", // NEEDS QC
+	water1: "水中1", // NEEDS QC
+	bug: "蟲", // NEEDS QC
+	flying: "飛行", // NEEDS QC
+	field: "陸上", // NEEDS QC
+	fairy: "妖精", // NEEDS QC
+	grass: "植物", // NEEDS QC
+	humanlike: "人型", // NEEDS QC
+	water3: "水中3", // NEEDS QC
+	mineral: "礦物", // NEEDS QC
+	amorphous: "不定形", // NEEDS QC
+	water2: "水中2", // NEEDS QC
+	ditto: "百變怪", // NEEDS QC
+	dragon: "龍", // NEEDS QC
+	undiscovered: "未發現", // NEEDS QC
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {

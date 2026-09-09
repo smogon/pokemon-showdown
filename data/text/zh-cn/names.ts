@@ -3,7 +3,7 @@ export const StatNames: { [id: string]: TranslationString } = {
 	accuracy: "命中率", evasion: "闪避率", spc: "特殊",
 
 	// n.b. used in "stats were lowered" battle messages,
-	// so it should be lowercase (unlike "Stats" in ui.ts)
+	// so it should be lowercase (unlike the "Stats" UI catalog entry)
 	stats: "能力",
 };
 
@@ -69,7 +69,7 @@ export const NatureNames: { [id: string]: TranslationString } = {
 export const GenderNames: { [id: string]: TranslationString } = {
 	male: "雄性",
 	female: "雌性",
-	genderless: null, // NEEDS TRANSLATION
+	genderless: "无性别", // NEEDS QC
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
@@ -84,51 +84,51 @@ export const StatusNames: { [id: string]: TranslationString } = {
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "可以瞄准相邻的同伴或对手", // NEEDS QC
+	normalDoubles: "可以瞄准同伴或任意对手", // NEEDS QC
+	normalSingles: "命中对手", // NEEDS QC
+	normalFFA: "可以瞄准任意对手", // NEEDS QC
+	self: "以自己为对象", // NEEDS QC
+	adjacentAlly: "可以瞄准相邻的同伴", // NEEDS QC
+	adjacentAllyDoubles: "命中我方同伴", // NEEDS QC
+	adjacentAllySingles: "单打对战中必定失败", // NEEDS QC
+	adjacentAllyOrSelf: "可以瞄准自己或相邻的同伴", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "可以瞄准自己或同伴", // NEEDS QC
+	adjacentFoe: "可以瞄准相邻的对手", // NEEDS QC
+	allAdjacentFoes: "命中相邻的对手", // NEEDS QC
+	allAdjacentFoesDoubles: "命中两只对手", // NEEDS QC
+	foeSide: "以对手的场地为对象", // NEEDS QC
+	allySide: "以我方的场地为对象", // NEEDS QC
+	allyTeam: "以我方全队为对象", // NEEDS QC
+	allAdjacent: "命中相邻的同伴和对手", // NEEDS QC
+	allAdjacentDoubles: "命中我方同伴和两只对手", // NEEDS QC
+	allAdjacentFFA: "命中所有对手", // NEEDS QC
+	any: "三打对战中可以瞄准较远的宝可梦", // NEEDS QC
+	all: "命中场上所有宝可梦", // NEEDS QC
+	scripted: "自动选择对象", // NEEDS QC
+	randomNormal: "随机命中相邻的对手", // NEEDS QC
+	randomNormalDoubles: "随机命中对手", // NEEDS QC
+	allies: "以自己和同伴为对象", // NEEDS QC
 };
 
 // no official Chinese egg group names exist (Pokédex 3D Pro predates official Chinese)
 // names from 52poke
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	monster: "怪兽", // NEEDS QC
+	water1: "水中1", // NEEDS QC
+	bug: "虫", // NEEDS QC
+	flying: "飞行", // NEEDS QC
+	field: "陆上", // NEEDS QC
+	fairy: "妖精", // NEEDS QC
+	grass: "植物", // NEEDS QC
+	humanlike: "人型", // NEEDS QC
+	water3: "水中3", // NEEDS QC
+	mineral: "矿物", // NEEDS QC
+	amorphous: "不定形", // NEEDS QC
+	water2: "水中2", // NEEDS QC
+	ditto: "百变怪", // NEEDS QC
+	dragon: "龙", // NEEDS QC
+	undiscovered: "蛋未发现", // NEEDS QC
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {

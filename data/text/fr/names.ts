@@ -10,7 +10,7 @@ export const StatNames: { [id: string]: TranslationString } = {
 	spc: "Spécial", "spc:grammar": "ms",
 
 	// n.b. used in "stats were lowered" battle messages,
-	// so it should be lowercase (unlike "Stats" in ui.ts)
+	// so it should be lowercase (unlike the "Stats" UI catalog entry)
 	stats: "stats", "stats:grammar": "fp",
 };
 
@@ -77,66 +77,66 @@ export const NatureNames: { [id: string]: TranslationString } = {
 export const GenderNames: { [id: string]: TranslationString } = {
 	male: "Mâle",
 	female: "Femelle",
-	genderless: null, // NEEDS TRANSLATION
+	genderless: "Inconnu", // NEEDS QC
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
-	brn: null, // NEEDS TRANSLATION
-	par: null, // NEEDS TRANSLATION
-	slp: null, // NEEDS TRANSLATION
-	frz: null, // NEEDS TRANSLATION
-	psn: null, // NEEDS TRANSLATION
-	tox: null, // NEEDS TRANSLATION
-	fnt: null, // NEEDS TRANSLATION
-	confusion: null, // NEEDS TRANSLATION
+	brn: "Brûlure", // NEEDS QC
+	par: "Paralysie", // NEEDS QC
+	slp: "Sommeil", // NEEDS QC
+	frz: "Gel", // NEEDS QC
+	psn: "Poison", // NEEDS QC
+	tox: "Poison grave", // NEEDS QC
+	fnt: "K.O.", // NEEDS QC
+	confusion: "Confusion", // NEEDS QC
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "Peut viser un allié ou ennemi adjacent", // NEEDS QC
+	normalDoubles: "Peut viser l'allié ou n'importe quel ennemi", // NEEDS QC
+	normalSingles: "Touche l'ennemi", // NEEDS QC
+	normalFFA: "Peut viser n'importe quel ennemi", // NEEDS QC
+	self: "Touche l'utilisateur", // NEEDS QC
+	adjacentAlly: "Peut viser un allié adjacent", // NEEDS QC
+	adjacentAllyDoubles: "Touche l'allié", // NEEDS QC
+	adjacentAllySingles: "Échoue toujours en Combat Solo", // NEEDS QC
+	adjacentAllyOrSelf: "Peut viser l'utilisateur ou un allié adjacent", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "Peut viser l'utilisateur ou l'allié", // NEEDS QC
+	adjacentFoe: "Peut viser un ennemi adjacent", // NEEDS QC
+	allAdjacentFoes: "Touche les ennemis adjacents", // NEEDS QC
+	allAdjacentFoesDoubles: "Touche les deux ennemis", // NEEDS QC
+	foeSide: "Touche le camp adverse", // NEEDS QC
+	allySide: "Touche le camp de l'utilisateur", // NEEDS QC
+	allyTeam: "Touche l'équipe de l'utilisateur", // NEEDS QC
+	allAdjacent: "Touche les alliés et ennemis adjacents", // NEEDS QC
+	allAdjacentDoubles: "Touche l'allié et les deux ennemis", // NEEDS QC
+	allAdjacentFFA: "Touche tous les ennemis", // NEEDS QC
+	any: "Peut viser un Pokémon éloigné en Combat Trio", // NEEDS QC
+	all: "Touche tous les Pokémon", // NEEDS QC
+	scripted: "Cible choisie automatiquement", // NEEDS QC
+	randomNormal: "Touche un ennemi adjacent au hasard", // NEEDS QC
+	randomNormalDoubles: "Touche un ennemi au hasard", // NEEDS QC
+	allies: "Touche l'utilisateur et les alliés", // NEEDS QC
 };
 
 // from veekun/Poképédia who presumably got it from Pokédex 3D Pro
 // Stadium 2 names in comments
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	monster: "Monstrueux", // NEEDS QC: Bulbapedia transcribes Pokédex 3D Pro as "Monstreux"; Stadium 2: "Monstre"
+	water1: "Aquatique 1", // NEEDS QC: Stadium 2: "Eau 1"
+	bug: "Insectoïde", // NEEDS QC: Stadium 2: "Insecte"
+	flying: "Aérien", // NEEDS QC: Stadium 2: "Vol"
+	field: "Terrestre", // NEEDS QC: Stadium 2: "Sol"
+	fairy: "Féerique", // NEEDS QC: Stadium 2: "Fée"
+	grass: "Végétal", // NEEDS QC: Stadium 2: "Plante"
+	humanlike: "Humanoïde", // NEEDS QC
+	water3: "Aquatique 3", // NEEDS QC: Stadium 2: "Eau 3"
+	mineral: "Minéral", // NEEDS QC
+	amorphous: "Amorphe", // NEEDS QC: Stadium 2: "Indéterminé"
+	water2: "Aquatique 2", // NEEDS QC: Stadium 2: "Eau 2"
+	ditto: "Métamorph", // NEEDS QC
+	dragon: "Draconique", // NEEDS QC: Stadium 2: "Dragon"
+	undiscovered: "Inconnu", // NEEDS QC: Stadium 2: "Pas d'Oeufs"
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
