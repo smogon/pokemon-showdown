@@ -62,17 +62,17 @@ export const TagsText: { [id: string]: TagText } = {
 	fist: {
 		name: "Fist",
 		hint: "boosted by Iron Fist",
-		desc: "Boosted 1.2x by Iron Fist.",
+		desc: "Boosted 1.2× by Iron Fist.",
 	},
 	pulse: {
 		name: "Pulse",
 		hint: "boosted by Mega Launcher",
-		desc: "Boosted 1.5x by Mega Launcher.",
+		desc: "Boosted 1.5× by Mega Launcher.",
 	},
 	bite: {
 		name: "Bite",
 		hint: "boosted by Strong Jaw",
-		desc: "Boosted 1.5x by Strong Jaw.",
+		desc: "Boosted 1.5× by Strong Jaw.",
 	},
 	bullet: {
 		name: "Bullet",
@@ -86,7 +86,7 @@ export const TagsText: { [id: string]: TagText } = {
 	slicing: {
 		name: "Slicing",
 		hint: "boosted by Sharpness",
-		desc: "Boosted 1.5x by Sharpness.",
+		desc: "Boosted 1.5× by Sharpness.",
 	},
 	wind: {
 		name: "Wind",

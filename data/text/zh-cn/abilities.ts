@@ -136,7 +136,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		start: "  {POKEMON}压制了所有气场！",
 	},
 	auraguard: {
-		name: null, // NEEDS TRANSLATION
+		name: "气场破坏",
 		shortDesc: null, // NEEDS TRANSLATION
 	},
 	baddreams: {

@@ -34,7 +34,9 @@ import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 import { pluginDatabase } from './chat-db';
-import type { TextEffect, TextLanguage } from '../sim/dex-data';
+import type { TextLanguage } from '../sim/dex-data';
+import { TLfor, TLadd, type Translator, type TranslationCatalog } from '../sim/dex-text';
+export type { Translator, TranslationCatalog } from '../sim/dex-text';
 
 export interface DataHTMLRenderOptions {
 	dex?: ModdedDex;
@@ -42,50 +44,6 @@ export interface DataHTMLRenderOptions {
 	language?: ID | null;
 	tier?: string;
 }
-
-const LANGUAGE_CODES: Readonly<Record<string, TextLanguage>> = {
-	english: 'en',
-	german: 'de',
-	spanish: 'es',
-	french: 'fr',
-	italian: 'it',
-	japanese: 'ja',
-	korean: 'ko',
-	simplifiedchinese: 'zh-cn',
-	traditionalchinese: 'zh-tw',
-};
-
-const LANGUAGE_NATIVE_NAMES: Readonly<Record<string, string>> = {
-	english: 'English',
-	german: 'Deutsch',
-	spanish: 'Español',
-	french: 'Français',
-	italian: 'Italiano',
-	dutch: 'Nederlands',
-	portuguese: 'Português',
-	turkish: 'Türkçe',
-	hindi: 'हिंदी',
-	japanese: '日本語',
-	korean: '한국어',
-	simplifiedchinese: '简体中文',
-	traditionalchinese: '繁體中文',
-};
-
-const TRANSLATION_LANGUAGE_IDS = {
-	en: 'english',
-	de: 'german',
-	es: 'spanish',
-	fr: 'french',
-	it: 'italian',
-	nl: 'dutch',
-	pt: 'portuguese',
-	tr: 'turkish',
-	hi: 'hindi',
-	ja: 'japanese',
-	ko: 'korean',
-	'zh-cn': 'simplifiedchinese',
-	'zh-tw': 'traditionalchinese',
-} as const;
 
 export type PageHandler = (this: PageContext, query: string[], user: User, connection: Connection)
 => Promise<string | null | void | JSX.VNode> | string | null | void | JSX.VNode;
@@ -190,11 +148,6 @@ export type PunishmentFilter = (user: User | ID, punishment: Punishment) => void
 export type LoginFilter = (user: User, oldUser: User | null, userType: string) => void;
 export type HostFilter = (host: string, user: User, connection: Connection, hostType: string) => void;
 
-export interface Translations {
-	name?: string;
-	strings: { [english: string]: string };
-}
-
 const LINK_WHITELIST = [
 	'*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us',
 	'*.smogon.com', '*.pastebin.com', '*.hastebin.com',
@@ -223,6 +176,7 @@ try {
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
+const DEX_TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'data', 'text');
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -305,24 +259,6 @@ export class Interruption extends Error {
 		Error.captureStackTrace(this, ErrorMessage);
 	}
 }
-
-export type Translator = {
-	(strings: TemplateStringsArray | string, ...keys: any[]): string,
-	(effect: TextEffect): string,
-	term: { [id: string]: string },
-	type: { [id: string]: string },
-	nature: { [id: string]: string },
-	gender: { [id: string]: string },
-	egggroup: { [id: string]: string },
-	tag: { [id: string]: string },
-	color: { [id: string]: string },
-	status: { [id: string]: string },
-	target: { [id: string]: string },
-	stat: { [id: string]: string },
-	statShort: { [id: string]: string },
-	statMedium: { [id: string]: string },
-	ui: { [id: string]: string },
-};
 
 // These classes need to be declared here because they aren't hoisted
 export abstract class MessageContext {
@@ -1803,153 +1739,48 @@ export const Chat = new class {
 	 *********************************************************/
 	/** language id -> language name */
 	readonly languages = new Map<ID, string>();
-	/** language id -> (english string -> translated string) */
-	readonly translations = new Map<ID, Map<string, [string, string[], string[]]>>();
 
 	getDexLanguage(language: ID | null = null): TextLanguage {
-		return LANGUAGE_CODES[language || 'english'] || 'en';
+		return Dex.text.findLanguage(language || 'english')?.code as TextLanguage || 'en';
 	}
-	readonly translators = new Map<ID, Translator>();
 	getTranslator(language: ID | null = null): Translator {
-		const lang = language || 'english' as ID;
-		let translator = this.translators.get(lang);
-		if (!translator) {
-			const dexLang = this.getDexLanguage(lang);
-			const text = Dex.loadTextData(dexLang);
-			translator = Object.assign(
-				(strings: TemplateStringsArray | string | TextEffect, ...keys: any[]) => {
-					if (typeof strings !== 'string' && !Array.isArray(strings)) {
-						return Dex.text.get(strings as TextEffect, dexLang).name;
-					}
-					return Chat.tr(lang, strings as TemplateStringsArray | string, ...keys);
-				},
-				{
-					term: text.TermNames,
-					type: text.TypeNames,
-					nature: text.NatureNames,
-					gender: text.GenderNames,
-					egggroup: text.EggGroupNames,
-					tag: Object.fromEntries(Object.entries(text.Tags).map(([id, tag]) => [id, tag.name])),
-					color: text.ColorNames,
-					status: text.StatusNames,
-					target: text.TargetNames,
-					stat: text.StatNames,
-					statShort: text.StatShortNames,
-					statMedium: text.StatMediumNames,
-					ui: { ...Dex.loadTextData('en').Default.ui, ...text.Default.ui } as { [id: string]: string },
-				}
-			);
-			this.translators.set(lang, translator);
-		}
-		return translator;
+		const code = Dex.text.findLanguage(language || 'english')?.code || 'en';
+		return TLfor(code);
 	}
 	getLanguageName(language: ID): string {
-		const englishName = Chat.languages.get(language) || "Unknown Language";
-		const nativeName = LANGUAGE_NATIVE_NAMES[language];
-		return nativeName && nativeName !== englishName ? `${nativeName} (${englishName})` : englishName;
+		return Dex.text.findLanguage(language)?.fullName || "Unknown Language";
 	}
 	getLanguageID(language: string): ID | null {
-		const languageID = toID(language);
-		if (Chat.languages.has(languageID)) return languageID;
-
-		const code = language.trim().toLowerCase().replace(/_/g, '-');
-		const languageName = TRANSLATION_LANGUAGE_IDS[
-			code as keyof typeof TRANSLATION_LANGUAGE_IDS
-		];
-		if (!languageName) return null;
-		const codeLanguageID = toID(languageName);
-		return Chat.languages.has(codeLanguageID) ? codeLanguageID : null;
+		const languageID = Dex.text.findLanguage(language)?.legacyId as ID | undefined;
+		return languageID && Chat.languages.has(languageID) ? languageID : null;
 	}
 
 	async loadTranslations() {
 		const directories = await FS(TRANSLATION_DIRECTORY).readdir();
-
-		// ensure that english is the first entry when we iterate over Chat.languages
 		Chat.languages.set('english' as ID, 'English');
 		for (const dirname of directories) {
-			const languageName = TRANSLATION_LANGUAGE_IDS[
-				dirname as keyof typeof TRANSLATION_LANGUAGE_IDS
-			];
-			if (!languageName) continue;
-			const dir = FS(`${TRANSLATION_DIRECTORY}/${dirname}`);
-
-			const languageID = toID(languageName);
-			const files = await dir.readdir();
-			for (const filename of files) {
+			const language = Dex.text.findLanguage(dirname);
+			if (!language || language.code !== dirname) continue;
+			const files = await FS(`${TRANSLATION_DIRECTORY}/${dirname}`).readdir();
+			const catalogs: TranslationCatalog[] = [];
+			for (const filename of files.sort()) {
 				if (!filename.endsWith('.js')) continue;
-
-				const content: Translations = require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations;
-
-				if (!Chat.translations.has(languageID)) {
-					Chat.translations.set(languageID, new Map());
-				}
-				const translationsSoFar = Chat.translations.get(languageID)!;
-
-				if (content.name && !Chat.languages.has(languageID)) {
-					Chat.languages.set(languageID, content.name);
-				}
-
-				if (content.strings) {
-					for (const key in content.strings) {
-						const keyLabels: string[] = [];
-						const valLabels: string[] = [];
-						const newKey = key.replace(/\${.+?}/g, str => {
-							keyLabels.push(str);
-							return '${}';
-						}).replace(/\[TN: ?.+?\]/g, '');
-						const val = content.strings[key].replace(/\${.+?}/g, (str: string) => {
-							valLabels.push(str);
-							return '${}';
-						}).replace(/\[TN: ?.+?\]/g, '');
-						translationsSoFar.set(newKey, [val, keyLabels, valLabels]);
-					}
-				}
+				catalogs.push(require(`${TRANSLATION_DIRECTORY}/${dirname}/${filename}`).translations);
 			}
-			if (!Chat.languages.has(languageID)) {
-				// Fallback in case no translation files provide the language's name
-				Chat.languages.set(languageID, "Unknown Language");
-			}
+			const uiCatalog = `${DEX_TRANSLATION_DIRECTORY}/${dirname}/ui.js`;
+			if (await FS(uiCatalog).exists()) catalogs.push(require(uiCatalog).translations);
+			TLadd(dirname, catalogs);
+
+			const englishName = /\(([^()]*)\)$/.exec(language.fullName)?.[1] || language.name;
+			Chat.languages.set(language.legacyId as ID, englishName);
 		}
 	}
-	tr(language: ID | null): (fStrings: TemplateStringsArray | string, ...fKeys: any) => string;
-	tr(language: ID | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
-	tr(language: ID | null, strings: TemplateStringsArray | string = '', ...keys: any[]) {
-		if (!language) language = 'english' as ID;
-		// If strings is an array (normally the case), combine before translating.
-		const trString = typeof strings === 'string' ? strings : strings.join('${}');
-
-		if (Chat.translationsLoaded && !Chat.translations.has(language)) {
-			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
-		}
-		if (!strings.length) {
-			return (fStrings: TemplateStringsArray | string, ...fKeys: any) => Chat.tr(language, fStrings, ...fKeys);
-		}
-
-		const entry = Chat.translations.get(language)?.get(trString);
-		let [translated, keyLabels, valLabels] = entry || ["", [], []];
-		if (!translated) translated = trString;
-
-		// Replace the gaps in the species string
-		if (keys.length) {
-			let reconstructed = '';
-
-			const left: (string | null)[] = keyLabels.slice();
-			for (const [i, str] of translated.split('${}').entries()) {
-				reconstructed += str;
-				if (keys[i]) {
-					let index = left.indexOf(valLabels[i]);
-					if (index < 0) {
-						index = left.findIndex(val => !!val);
-					}
-					if (index < 0) index = i;
-					reconstructed += keys[index];
-					left[index] = null;
-				}
-			}
-
-			translated = reconstructed;
-		}
-		return translated;
+	TLto(language: ID | null): Translator;
+	TLto(language: ID | null, strings: TemplateStringsArray | string, ...keys: any[]): string;
+	TLto(language: ID | null, strings?: TemplateStringsArray | string, ...keys: any[]) {
+		const translator = this.getTranslator(language);
+		if (strings === undefined) return translator;
+		return typeof strings === 'string' ? translator(strings, keys[0]) : translator(strings, ...keys);
 	}
 
 	/**
