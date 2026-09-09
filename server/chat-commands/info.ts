@@ -678,13 +678,13 @@ export const commands: Chat.ChatCommands = {
 					if (pokemon.gender && dex.gen >= 2) {
 						switch (pokemon.gender) {
 						case 'M':
-							details[TL`Gender`] = 'Male';
+							details[TL`Gender`] = TL`Male`;
 							break;
 						case 'F':
-							details[TL`Gender`] = "Female";
+							details[TL`Gender`] = TL`Female`;
 							break;
 						case 'N':
-							details[TL`Gender`] = "Unknown";
+							details[TL`Gender`] = TL`Unknown`;
 							break;
 						};
 					} else if (pokemon.genderRatio && dex.gen >= 2) {
