@@ -127,6 +127,14 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.effectState.move = pokemon.lastMove.id;
 		},
 	},
+	mustrecharge: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			this.add('cant', pokemon, 'recharge');
+			pokemon.removeVolatile('mustrecharge');
+			return null;
+		},
+	},
 	futuremove: {
 		inherit: true,
 		onResidualOrder: 11,
