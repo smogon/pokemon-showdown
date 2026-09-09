@@ -220,20 +220,20 @@ function headerButtons(type: string, user: User) {
 		spectate: '<i class="fa fa-binoculars"></i>',
 	};
 	const titles: { [k: string]: string } = {
-		all: 'All Friends',
-		spectate: 'Spectate',
-		sent: 'Sent',
-		received: 'Received',
-		help: 'Help',
-		settings: 'Settings',
+		all: user.TL`All Friends`,
+		spectate: user.TL`Spectate`,
+		sent: user.TL`Sent`,
+		received: user.TL`Received`,
+		help: user.TL`Help`,
+		settings: user.TL`Settings`,
 	};
 	for (const page in titles) {
 		const title = titles[page];
 		const icon = icons[page];
 		if (page === type) {
-			buf.push(`${icon} <strong>${user.TL(title)}</strong>`);
+			buf.push(`${icon} <strong>${title}</strong>`);
 		} else {
-			buf.push(`${icon} <a roomid="view-friends-${page}">${user.TL(title)}</a>`);
+			buf.push(`${icon} <a roomid="view-friends-${page}">${title}</a>`);
 		}
 	}
 	const refresh = (
@@ -346,7 +346,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				if (target) this.errorReply(this.TL`Unrecognized setting.`);
 				this.sendReply(
-					this.TL(setting ? `You are currently blocking friend requests.` : `You are not blocking friend requests.`)
+					setting ? this.TL`You are currently blocking friend requests.` : this.TL`You are not blocking friend requests.`
 				);
 			}
 			this.refreshPage('friends-settings');
@@ -380,7 +380,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				if (target) this.errorReply(this.TL`Unrecognized setting.`);
 				this.sendReply(
-					this.TL(setting ? `You are currently allowing friend notifications.` : `Your friend notifications are disabled.`)
+					setting ? this.TL`You are currently allowing friend notifications.` : this.TL`Your friend notifications are disabled.`
 				);
 			}
 			this.refreshPage('friends-settings');

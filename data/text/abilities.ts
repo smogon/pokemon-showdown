@@ -11,10 +11,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	aerilate: {
 		name: "Aerilate",
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.2x power.",
+		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.2× power.",
 		gen6: {
 			desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-			shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.3x power.",
+			shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.3× power.",
 		},
 	},
 	aftermath: {
@@ -33,7 +33,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	analytic: {
 		name: "Analytic",
 		desc: "The power of this Pokemon's move is multiplied by 1.3 if it is the last to move in a turn. Does not affect Doom Desire and Future Sight.",
-		shortDesc: "This Pokemon's attacks have 1.3x power if it is the last to move in a turn.",
+		shortDesc: "This Pokemon's attacks have 1.3× power if it is the last to move in a turn.",
 	},
 	angerpoint: {
 		name: "Anger Point",
@@ -112,7 +112,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	aurabreak: {
 		name: "Aura Break",
 		desc: "While this Pokemon is active, the effects of the Dark Aura and Fairy Aura Abilities are reversed, multiplying the power of Dark- and Fairy-type moves, respectively, by 3/4 instead of 1.33.",
-		shortDesc: "While this Pokemon is active, the Dark Aura and Fairy Aura power modifier is 0.75x.",
+		shortDesc: "While this Pokemon is active, the Dark Aura and Fairy Aura power modifier is 0.75×.",
 
 		start: "  {POKEMON} reversed all other Pok\u00E9mon's auras!",
 	},
@@ -153,7 +153,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		shortDesc: "After KOing a Pokemon: raises Attack, Sp. Atk, Speed by 1 stage. Once per battle.",
 		gen8: {
 			desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja if it attacks and knocks out another Pokemon. If this Pokemon is an Ash-Greninja, its Water Shuriken has 20 power and always hits three times.",
-			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
+			shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3×.",
 		},
 		activate: "  {POKEMON} became fully charged due to its bond with its Trainer!",
 		transform: "{POKEMON} became Ash-Greninja!",
@@ -181,10 +181,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	blaze: {
 		name: "Blaze",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Fire-type attack.",
-		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Fire attacks.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Fire attacks.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Fire-type attacks have their power multiplied by 1.5.",
-			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Fire-type attacks have 1.5x power.",
+			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Fire-type attacks have 1.5× power.",
 		},
 	},
 	bulletproof: {
@@ -328,7 +328,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	darkaura: {
 		name: "Dark Aura",
 		desc: "While this Pokemon is active, the power of Dark-type moves used by active Pokemon is multiplied by 1.33.",
-		shortDesc: "While this Pokemon is active, a Dark move used by any Pokemon has 1.33x power.",
+		shortDesc: "While this Pokemon is active, a Dark move used by any Pokemon has 1.33× power.",
 
 		start: "  {POKEMON} is radiating a dark aura!",
 	},
@@ -386,7 +386,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	dragonize: {
 		name: "Dragonize",
 		desc: "This Pokemon's Normal-type moves become Dragon-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves become Dragon type and have 1.2x power.",
+		shortDesc: "This Pokemon's Normal-type moves become Dragon type and have 1.2× power.",
 	},
 	dragonsmaw: {
 		name: "Dragon's Maw",
@@ -403,7 +403,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	dryskin: {
 		name: "Dry Skin",
 		desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain, and loses 1/8 of its maximum HP, rounded down, if the weather is Sun. The weather effects are prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25x by Fire, 1/8 by Sun.",
+		shortDesc: "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25× by Fire, 1/8 by Sun.",
 		gen7: {
 			desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain, and loses 1/8 of its maximum HP, rounded down, if the weather is Sun.",
 		},
@@ -478,7 +478,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	fairyaura: {
 		name: "Fairy Aura",
 		desc: "While this Pokemon is active, the power of Fairy-type moves used by active Pokemon is multiplied by 1.33.",
-		shortDesc: "While this Pokemon is active, a Fairy move used by any Pokemon has 1.33x power.",
+		shortDesc: "While this Pokemon is active, a Fairy move used by any Pokemon has 1.33× power.",
 
 		start: "  {POKEMON} is radiating a fairy aura!",
 	},
@@ -504,12 +504,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	flareboost: {
 		name: "Flare Boost",
 		desc: "While this Pokemon is burned, the power of its special attacks is multiplied by 1.5.",
-		shortDesc: "While this Pokemon is burned, its special attacks have 1.5x power.",
+		shortDesc: "While this Pokemon is burned, its special attacks have 1.5× power.",
 	},
 	flashfire: {
 		name: "Flash Fire",
 		desc: "This Pokemon is immune to Fire-type moves. The first time it is hit by a Fire-type move, its offensive stat is multiplied by 1.5 while using a Fire-type attack as long as it remains active and has this Ability. If this Pokemon is frozen, it cannot be defrosted by Fire-type attacks.",
-		shortDesc: "This Pokemon's Fire attacks do 1.5x damage if hit by one Fire move; Fire immunity.",
+		shortDesc: "This Pokemon's Fire attacks do 1.5× damage if hit by one Fire move; Fire immunity.",
 		gen4: {
 			desc: "This Pokemon is immune to Fire-type moves, as long as it is not frozen. The first time it is hit by a Fire-type move, damage from its Fire-type attacks will be multiplied by 1.5 as long as it remains active and has this Ability.",
 		},
@@ -522,13 +522,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	flowergift: {
 		name: "Flower Gift",
 		desc: "If this Pokemon is a Cherrim and Sun is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If user is Cherrim and Sun is active, it and allies' Attack and Sp. Def are 1.5x.",
+		shortDesc: "If user is Cherrim and Sun is active, it and allies' Attack and Sp. Def are 1.5×.",
 		gen7: {
 			desc: "If this Pokemon is a Cherrim and Sun is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5.",
 		},
 		gen4: {
 			desc: "If Sun is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
-			shortDesc: "If Sun is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x.",
+			shortDesc: "If Sun is active, Attack and Sp. Def of this Pokemon and its allies are 1.5×.",
 		},
 	},
 	flowerveil: {
@@ -541,7 +541,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	fluffy: {
 		name: "Fluffy",
 		desc: "This Pokemon receives 1/2 damage from contact moves, but double damage from Fire moves.",
-		shortDesc: "This Pokemon takes 1/2 damage from contact moves, 2x damage from Fire moves.",
+		shortDesc: "This Pokemon takes 1/2 damage from contact moves, 2× damage from Fire moves.",
 	},
 	forecast: {
 		name: "Forecast",
@@ -594,7 +594,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	galvanize: {
 		name: "Galvanize",
 		desc: "This Pokemon's Normal-type moves become Electric-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
+		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2× power.",
 	},
 	gluttony: {
 		name: "Gluttony",
@@ -612,7 +612,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	gorillatactics: {
 		name: "Gorilla Tactics",
 		desc: "This Pokemon's Attack is multiplied by 1.5, but it can only select the first move it executes. These effects are prevented while this Pokemon is Dynamaxed.",
-		shortDesc: "This Pokemon's Attack is 1.5x, but it can only select the first move it executes.",
+		shortDesc: "This Pokemon's Attack is 1.5×, but it can only select the first move it executes.",
 	},
 	grasspelt: {
 		name: "Grass Pelt",
@@ -640,11 +640,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	guts: {
 		name: "Guts",
 		desc: "If this Pokemon has a non-volatile status condition, its Attack is multiplied by 1.5. This Pokemon's physical attacks ignore the burn effect of halving damage.",
-		shortDesc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage.",
+		shortDesc: "If this Pokemon is statused, its Attack is 1.5×; ignores burn halving physical damage.",
 	},
 	hadronengine: {
 		name: "Hadron Engine",
-		shortDesc: "On switch-in, summons Electric Terrain. During Electric Terrain, Sp. Atk is 1.3333x.",
+		shortDesc: "On switch-in, summons Electric Terrain. During Electric Terrain, Sp. Atk is 1.3333×.",
 
 		start: "  {POKEMON} turned the ground into Electric Terrain, energizing its futuristic engine!",
 		activate: "  {POKEMON} used the Electric Terrain to energize its futuristic engine!",
@@ -705,7 +705,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	hustle: {
 		name: "Hustle",
 		desc: "This Pokemon's Attack is multiplied by 1.5 and the accuracy of its physical attacks is multiplied by 0.8.",
-		shortDesc: "This Pokemon's Attack is 1.5x and accuracy of its physical attacks is 0.8x.",
+		shortDesc: "This Pokemon's Attack is 1.5× and accuracy of its physical attacks is 0.8×.",
 	},
 	hydration: {
 		name: "Hydration",
@@ -835,7 +835,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	ironfist: {
 		name: "Iron Fist",
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2.",
-		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. Sucker Punch is not boosted.",
+		shortDesc: "This Pokemon's punch-based attacks have 1.2× power. Sucker Punch is not boosted.",
 	},
 	justified: {
 		name: "Justified",
@@ -1000,7 +1000,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	megalauncher: {
 		name: "Mega Launcher",
 		desc: "This Pokemon's pulse moves have their power multiplied by 1.5. Heal Pulse restores 3/4 of a target's maximum HP, rounded half down.",
-		shortDesc: "This Pokemon's pulse moves have 1.5x power. Heal Pulse heals 3/4 target's max HP.",
+		shortDesc: "This Pokemon's pulse moves have 1.5× power. Heal Pulse heals 3/4 target's max HP.",
 	},
 	megasol: {
 		name: "Mega Sol",
@@ -1025,14 +1025,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	minus: {
 		name: "Minus",
 		desc: "If an active ally has this Ability or the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active ally has this Ability or the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
+		shortDesc: "If an active ally has this Ability or the Plus Ability, this Pokemon's Sp. Atk is 1.5×.",
 		gen4: {
 			desc: "If an active ally has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
-			shortDesc: "If an active ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
+			shortDesc: "If an active ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5×.",
 		},
 		gen3: {
 			desc: "If an active Pokemon has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
-			shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
+			shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5×.",
 		},
 	},
 	mirrorarmor: {
@@ -1135,7 +1135,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	neuroforce: {
 		name: "Neuroforce",
 		desc: "This Pokemon's attacks that are super effective against the target have their damage multiplied by 1.25.",
-		shortDesc: "This Pokemon's attacks that are super effective against the target do 1.25x damage.",
+		shortDesc: "This Pokemon's attacks that are super effective against the target do 1.25× damage.",
 	},
 	neutralizinggas: {
 		name: "Neutralizing Gas",
@@ -1155,7 +1155,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	normalize: {
 		name: "Normalize",
 		desc: "This Pokemon's moves are changed to be Normal type and have their power multiplied by 1.2. This effect comes before other effects that change a move's type.",
-		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2x power.",
+		shortDesc: "This Pokemon's moves are changed to be Normal type and have 1.2× power.",
 		gen6: {
 			desc: "This Pokemon's moves are changed to be Normal type. This effect comes before other effects that change a move's type.",
 			shortDesc: "This Pokemon's moves are changed to be Normal type.",
@@ -1183,7 +1183,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	orichalcumpulse: {
 		name: "Orichalcum Pulse",
-		shortDesc: "On switch-in, summons Sun. During Sun, Attack is 1.3333x.",
+		shortDesc: "On switch-in, summons Sun. During Sun, Attack is 1.3333×.",
 
 		start: "  {POKEMON} turned the sunlight harsh, sending its ancient pulse into a frenzy!",
 		activate: "  {POKEMON} basked in the sunlight, sending its ancient pulse into a frenzy!",
@@ -1204,10 +1204,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	overgrow: {
 		name: "Overgrow",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Grass-type attack.",
-		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Grass attacks.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Grass attacks.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Grass-type attacks have their power multiplied by 1.5.",
-			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Grass-type attacks have 1.5x power.",
+			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Grass-type attacks have 1.5× power.",
 		},
 	},
 	owntempo: {
@@ -1272,23 +1272,23 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	pixilate: {
 		name: "Pixilate",
 		desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.2x power.",
+		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.2× power.",
 		gen6: {
 			desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-			shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.3x power.",
+			shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.3× power.",
 		},
 	},
 	plus: {
 		name: "Plus",
 		desc: "If an active ally has this Ability or the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active ally has this Ability or the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
+		shortDesc: "If an active ally has this Ability or the Minus Ability, this Pokemon's Sp. Atk is 1.5×.",
 		gen4: {
 			desc: "If an active ally has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
-			shortDesc: "If an active ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
+			shortDesc: "If an active ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5×.",
 		},
 		gen3: {
 			desc: "If an active Pokemon has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
-			shortDesc: "If an active Pokemon has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
+			shortDesc: "If an active Pokemon has the Minus Ability, this Pokemon's Sp. Atk is 1.5×.",
 		},
 	},
 	poisonheal: {
@@ -1394,7 +1394,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	protosynthesis: {
 		name: "Protosynthesis",
 		desc: "If Sun is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sun, a held Booster Energy will not activate and the effect ends when Sun is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
-		shortDesc: "Sun active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
+		shortDesc: "Sun active or Booster Energy used: highest stat is 1.3×, or 1.5× if Speed.",
 
 		activate: "  The harsh sunlight activated {POKEMON}'s Protosynthesis!",
 		activateFromItem: "  {POKEMON} used its Booster Energy to activate Protosynthesis!",
@@ -1408,7 +1408,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	punkrock: {
 		name: "Punk Rock",
 		desc: "This Pokemon's sound-based moves have their power multiplied by 1.3. This Pokemon takes halved damage from sound-based moves.",
-		shortDesc: "This Pokemon receives 1/2 damage from sound moves. Its own have 1.3x power.",
+		shortDesc: "This Pokemon receives 1/2 damage from sound moves. Its own have 1.3× power.",
 	},
 	purepower: {
 		name: "Pure Power",
@@ -1422,7 +1422,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	quarkdrive: {
 		name: "Quark Drive",
 		desc: "If Electric Terrain is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Electric Terrain, a held Booster Energy will not activate and the effect ends when Electric Terrain is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
-		shortDesc: "Electric Terrain active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
+		shortDesc: "Electric Terrain active or Booster Energy used: highest stat is 1.3×, or 1.5× if Speed.",
 
 		activate: "  The Electric Terrain activated {POKEMON}'s Quark Drive!",
 		activateFromItem: "  {POKEMON} used its Booster Energy to activate its Quark Drive!",
@@ -1445,7 +1445,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	quickfeet: {
 		name: "Quick Feet",
 		desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect of halving Speed.",
-		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis.",
+		shortDesc: "If this Pokemon is statused, its Speed is 1.5×; ignores Speed drop from paralysis.",
 		gen6: {
 			desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect of quartering Speed.",
 		},
@@ -1483,15 +1483,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	reckless: {
 		name: "Reckless",
 		desc: "This Pokemon's attacks with recoil or crash damage have their power multiplied by 1.2. Does not affect Struggle.",
-		shortDesc: "This Pokemon's attacks with recoil or crash damage have 1.2x power; not Struggle.",
+		shortDesc: "This Pokemon's attacks with recoil or crash damage have 1.2× power; not Struggle.",
 	},
 	refrigerate: {
 		name: "Refrigerate",
 		desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.2x power.",
+		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.2× power.",
 		gen6: {
 			desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
-			shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.3x power.",
+			shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.3× power.",
 		},
 	},
 	regenerator: {
@@ -1506,7 +1506,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	rivalry: {
 		name: "Rivalry",
 		desc: "This Pokemon's attacks have their power multiplied by 1.25 against targets of the same gender or multiplied by 0.75 against targets of the opposite gender. There is no modifier if either this Pokemon or the target is genderless.",
-		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets; 0.75x on opposite gender.",
+		shortDesc: "This Pokemon's attacks do 1.25× on same gender targets; 0.75× on opposite gender.",
 	},
 	rkssystem: {
 		name: "RKS System",
@@ -1546,7 +1546,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sandforce: {
 		name: "Sand Force",
 		desc: "If Sandstorm is active, this Pokemon's Ground-, Rock-, and Steel-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Sandstorm.",
-		shortDesc: "This Pokemon's Ground/Rock/Steel attacks do 1.3x in Sandstorm; immunity to it.",
+		shortDesc: "This Pokemon's Ground/Rock/Steel attacks do 1.3× in Sandstorm; immunity to it.",
 	},
 	sandrush: {
 		name: "Sand Rush",
@@ -1567,7 +1567,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sandveil: {
 		name: "Sand Veil",
 		desc: "If Sandstorm is active, the accuracy of moves used against this Pokemon is multiplied by 0.8. This Pokemon takes no damage from Sandstorm.",
-		shortDesc: "If Sandstorm is active, this Pokemon's evasiveness is 1.25x; immunity to Sandstorm.",
+		shortDesc: "If Sandstorm is active, this Pokemon's evasiveness is 1.25×; immunity to Sandstorm.",
 	},
 	sapsipper: {
 		name: "Sap Sipper",
@@ -1643,7 +1643,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sheerforce: {
 		name: "Sheer Force",
 		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Anger Shell, Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
-		shortDesc: "This Pokemon's attacks with secondary effects have 1.3x power; nullifies the effects.",
+		shortDesc: "This Pokemon's attacks with secondary effects have 1.3× power; nullifies the effects.",
 		gen8: {
 			desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
 		},
@@ -1738,10 +1738,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	snowcloak: {
 		name: "Snow Cloak",
 		desc: "If Snow is active, the accuracy of moves used against this Pokemon is multiplied by 0.8.",
-		shortDesc: "If Snow is active, this Pokemon's evasiveness is 1.25x.",
+		shortDesc: "If Snow is active, this Pokemon's evasiveness is 1.25×.",
 		gen8: {
 			desc: "If Hail is active, the accuracy of moves used against this Pokemon is multiplied by 0.8. This Pokemon takes no damage from Hail.",
-			shortDesc: "If Hail is active, this Pokemon's evasiveness is 1.25x; immunity to Hail.",
+			shortDesc: "If Hail is active, this Pokemon's evasiveness is 1.25×; immunity to Hail.",
 		},
 	},
 	snowwarning: {
@@ -1754,7 +1754,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	solarpower: {
 		name: "Solar Power",
 		desc: "If Sun is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Sun is active, this Pokemon's Sp. Atk is 1.5x; loses 1/8 max HP per turn.",
+		shortDesc: "If Sun is active, this Pokemon's Sp. Atk is 1.5×; loses 1/8 max HP per turn.",
 		gen7: {
 			desc: "If Sun is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn.",
 		},
@@ -1878,7 +1878,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	strongjaw: {
 		name: "Strong Jaw",
 		desc: "This Pokemon's bite-based attacks have their power multiplied by 1.5.",
-		shortDesc: "This Pokemon's bite-based attacks have 1.5x power. Bug Bite is not boosted.",
+		shortDesc: "This Pokemon's bite-based attacks have 1.5× power. Bug Bite is not boosted.",
 	},
 	sturdy: {
 		name: "Sturdy",
@@ -1909,7 +1909,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
-		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
+		desc: "This Pokemon's moves have their power multiplied by 1+(X × 0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
 		shortDesc: "This Pokemon's moves have 10% more power for each fainted ally, up to 5 allies.",
 
 		activate: "  {POKEMON} gained strength from the fallen!",
@@ -1921,10 +1921,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	swarm: {
 		name: "Swarm",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Bug-type attack.",
-		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Bug attacks.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Bug attacks.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Bug-type attacks have their power multiplied by 1.5.",
-			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Bug-type attacks have 1.5x power.",
+			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Bug-type attacks have 1.5× power.",
 		},
 	},
 	sweetveil: {
@@ -1986,10 +1986,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	technician: {
 		name: "Technician",
 		desc: "This Pokemon's moves of 60 power or less have their power multiplied by 1.5, including Struggle. This effect comes after a move's effect changes its own power.",
-		shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power, including Struggle.",
+		shortDesc: "This Pokemon's moves of 60 power or less have 1.5× power, including Struggle.",
 		gen4: {
 			desc: "This Pokemon's moves of 60 power or less have their power multiplied by 1.5, except Struggle. This effect comes after a move's effect changes its own power, as well as the effects of Charge and Helping Hand.",
-			shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power, except Struggle.",
+			shortDesc: "This Pokemon's moves of 60 power or less have 1.5× power, except Struggle.",
 		},
 	},
 	telepathy: {
@@ -2005,7 +2005,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	terashell: {
 		name: "Tera Shell",
 		desc: "If this Pokemon is a Terapagos at full HP, the effectiveness of attacks against it is changed to 0.5 unless this Pokemon is immune to the move. Multi-hit moves retain the same effectiveness throughout the attack.",
-		shortDesc: "Terapagos: If full HP, attacks taken have 0.5x effectiveness unless naturally immune.",
+		shortDesc: "Terapagos: If full HP, attacks taken have 0.5× effectiveness unless naturally immune.",
 
 		activate: "  {POKEMON} made its shell gleam! It's distorting type matchups!",
 	},
@@ -2062,10 +2062,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	torrent: {
 		name: "Torrent",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Water-type attack.",
-		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Water attacks.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5× with Water attacks.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Water-type attacks have their power multiplied by 1.5.",
-			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Water-type attacks have 1.5x power.",
+			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Water-type attacks have 1.5× power.",
 		},
 	},
 	toughclaws: {
@@ -2075,7 +2075,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	toxicboost: {
 		name: "Toxic Boost",
 		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
-		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
+		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5× power.",
 	},
 	toxicchain: {
 		name: "Toxic Chain",
@@ -2218,7 +2218,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	waterbubble: {
 		name: "Water Bubble",
 		desc: "This Pokemon's offensive stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
-		shortDesc: "This Pokemon's Water power is 2x; it can't be burned; Fire power against it is halved.",
+		shortDesc: "This Pokemon's Water power is 2×; it can't be burned; Fire power against it is halved.",
 	},
 	watercompaction: {
 		name: "Water Compaction",

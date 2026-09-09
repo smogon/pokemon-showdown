@@ -663,17 +663,17 @@ export const commands: Chat.ChatCommands = {
 						weighthit = 40;
 					}
 					details = {
-						[TL.term.dexnum]: String(pokemon.num),
-						[TL.term.generation]: String(pokemon.gen) || 'CAP',
-						[TL.term.height]: TL.term.numm.replace('{NUMBER}', `${pokemon.heightm}`),
+						[TL`Dex#`]: String(pokemon.num),
+						[TL`Generation`]: String(pokemon.gen) || 'CAP',
+						[TL`Height`]: TL`${pokemon.heightm} m`,
 					};
-					details[TL.term.weight] = `${TL.term.numkg.replace('{NUMBER}', `${pokemon.weighthg / 10}`)} <em>(${weighthit} BP)</em>`;
+					details[TL`Weight`] = `${TL`${pokemon.weighthg / 10} kg`} <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details[TL.tag.gmaxmove] = gmaxMove;
-					if (dex.gen === 1) details[TL.term.critrate] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
-					if (pokemon.color && dex.gen >= 5) details[TL.term.color] = TL.color[toID(pokemon.color)] || pokemon.color;
+					if (dex.gen === 1) details[TL`Crit rate`] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
+					if (pokemon.color && dex.gen >= 5) details[TL`Color`] = TL.color[toID(pokemon.color)] || pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) {
-						details[TL.term.egggroups] = pokemon.eggGroups.map(group => TL.egggroup[toID(group)] || group).join(", ");
+						details[TL`Egg Groups`] = pokemon.eggGroups.map(group => TL.egggroup[toID(group)] || group).join(", ");
 					}
 					const evos: string[] = [];
 					for (const evoName of pokemon.evos) {
@@ -709,12 +709,12 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 					if (pokemon.prevo) {
-						details[TL.term.preevolution] = TL(dex.species.get(pokemon.prevo));
+						details[TL`Pre-Evolution`] = TL(dex.species.get(pokemon.prevo));
 					}
 					if (!evos.length) {
-						details[`<span class="gray">${TL.term.doesnotevolve}</span>`] = "";
+						details[`<span class="gray">${TL`Does Not Evolve`}</span>`] = "";
 					} else {
-						details[TL.term.evolution] = evos.join(", ");
+						details[TL`Evolution`] = evos.join(", ");
 					}
 				}
 				break;
@@ -726,29 +726,29 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(item, textLanguage).desc;
 					details = {
-						[TL.term.generation]: String(item.gen),
+						[TL`Generation`]: String(item.gen),
 					};
 
 					if (dex.gen >= 4) {
 						if (item.fling) {
-							details[TL.term.flingbasepower] = String(item.fling.basePower);
-							if (item.fling.status) details[TL.term.flingeffect] = TL.status[item.fling.status] || item.fling.status;
+							details[TL`Fling base power`] = String(item.fling.basePower);
+							if (item.fling.status) details[TL`Fling effect`] = TL.status[item.fling.status] || item.fling.status;
 							if (item.fling.volatileStatus) {
-								details[TL.term.flingeffect] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
+								details[TL`Fling effect`] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
 							}
-							if (item.isBerry) details[TL.term.flingeffect] = TL.ui.flingBerry;
-							if (item.id === 'whiteherb') details[TL.term.flingeffect] = TL.ui.flingWhiteHerb;
+							if (item.isBerry) details[TL`Fling effect`] = TL.ui.flingBerry;
+							if (item.id === 'whiteherb') details[TL`Fling effect`] = TL.ui.flingWhiteHerb;
 							if (item.id === 'mentalherb') {
 								const flingEffect = TL.ui.flingMentalHerb;
-								details[TL.term.flingeffect] = flingEffect;
+								details[TL`Fling effect`] = flingEffect;
 							}
 						} else {
 							details[TL(dex.moves.get('fling'))] = TL.ui.cantFling;
 						}
 					}
 					if (item.naturalGift && dex.gen >= 3) {
-						details[TL.term.naturalgifttype] = TL.type[toID(item.naturalGift.type)] || item.naturalGift.type;
-						details[TL.term.naturalgiftbasepower] = String(item.naturalGift.basePower);
+						details[TL`Natural Gift type`] = TL.type[toID(item.naturalGift.type)] || item.naturalGift.type;
+						details[TL`Natural Gift base power`] = String(item.naturalGift.basePower);
 					}
 					if (item.isNonstandard) {
 						details[TL.ui.unobtainableInGen.replace('{NUMBER}', String(dex.gen))] = "";
@@ -764,12 +764,12 @@ export const commands: Chat.ChatCommands = {
 					description = dex.text.get(move, textLanguage).desc;
 					details = {
 						[TL.tag.priority]: String(move.priority),
-						[TL.term.generation]: String(move.gen) || 'CAP',
+						[TL`Generation`]: String(move.gen) || 'CAP',
 					};
 
 					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
 						(move.isNonstandard === "Gmax" && dex.gen !== 8);
-					if (pastGensOnly) details[`&#10007; ${TL.term.pastgensonly}`] = "";
+					if (pastGensOnly) details[`&#10007; ${TL`Past gens only`}`] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
 						details[`&#10003; ${TL.tag.boostedbysheerforce}`] = "";
 					}
@@ -798,7 +798,7 @@ export const commands: Chat.ChatCommands = {
 						if (move.gen >= 8 && move.isMax) {
 							// Don't display Z-Power for Max/G-Max moves
 						} else if (move.zMove?.basePower) {
-							details[TL.term.zpower] = String(move.zMove.basePower);
+							details[TL`Z-Power`] = String(move.zMove.basePower);
 						} else if (move.zMove?.effect) {
 							const zEffects: { [k: string]: string } = {
 								clearnegativeboost: 'zEffectClearNegativeBoost',
@@ -808,35 +808,35 @@ export const commands: Chat.ChatCommands = {
 								redirect: 'zEffectRedirect',
 								healreplacement: 'zEffectHealReplacement',
 							};
-							details[TL.term.zeffect] = TL.ui[zEffects[move.zMove.effect]] || move.zMove.effect;
+							details[TL`Z-Effect`] = TL.ui[zEffects[move.zMove.effect]] || move.zMove.effect;
 						} else if (move.zMove?.boost) {
-							details[TL.term.zeffect] = "";
+							details[TL`Z-Effect`] = "";
 							const boost = move.zMove.boost;
 							let h: BoostID;
 							for (h in boost) {
-								details[TL.term.zeffect] += ` ${TL.statMedium[h] || h} +${boost[h]}`;
+								details[TL`Z-Effect`] += ` ${TL.statMedium[h] || h} +${boost[h]}`;
 							}
 						} else if (move.isZ && typeof move.isZ === 'string') {
 							details[`&#10003; ${TL.tag.zmove}`] = "";
 							const zCrystal = dex.items.get(move.isZ);
-							details[TL.term.zcrystal] = TL(zCrystal);
+							details[TL`Z-Crystal`] = TL(zCrystal);
 							if (zCrystal.itemUser) {
-								details[TL.term.user] = zCrystal.itemUser.join(", ");
-								details[TL.term.requiredmove] = TL(dex.items.get(zCrystal.zMoveFrom));
+								details[TL("User", "pokemon")] = zCrystal.itemUser.join(", ");
+								details[TL`Required move`] = TL(dex.items.get(zCrystal.zMoveFrom));
 							}
 						} else {
-							details[TL.term.zeffect] = TL.term.none;
+							details[TL`Z-Effect`] = TL`None`;
 						}
 					}
 
 					if (move.isMax) {
 						details[`&#10003; ${TL.tag.maxmove}`] = "";
-						if (typeof move.isMax === "string") details[TL.term.user] = `${move.isMax}`;
+						if (typeof move.isMax === "string") details[TL("User", "pokemon")] = `${move.isMax}`;
 					} else if (dex.gen === 8 && move.maxMove?.basePower) {
-						details[TL.term.dynamaxpower] = String(move.maxMove.basePower);
+						details[TL`Dynamax power`] = String(move.maxMove.basePower);
 					}
 
-					details[TL.term.target] = TL.target[move.target] || "Unknown";
+					details[TL`Target`] = TL.target[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && dex.gen >= 3) {
 						const nonsnatchableMoves = TL.ui.tagMoves.replace('{TAG}', TL.tag.nonsnatchable);
@@ -859,7 +859,7 @@ export const commands: Chat.ChatCommands = {
 				if (showDetails) {
 					description = dex.text.get(ability, textLanguage).desc;
 					details = {
-						[TL.term.generation]: String(ability.gen) || 'CAP',
+						[TL`Generation`]: String(ability.gen) || 'CAP',
 					};
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
@@ -1636,28 +1636,28 @@ export const commands: Chat.ChatCommands = {
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
 		const roomRanks = [
-			`<strong>Room ranks</strong>`,
-			`^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.`,
-			`+ <strong>Voice</strong> - They can use ! commands like !groups`,
-			`% <strong>Driver</strong> - The above, and they can mute and warn`,
-			`@ <strong>Moderator</strong> - The above, and they can room ban users`,
-			`* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML`,
-			`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it`,
+			this.TL`<strong>Room ranks</strong>`,
+			this.TL`^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.`,
+			this.TL`+ <strong>Voice</strong> - They can use ! commands like !groups`,
+			this.TL`% <strong>Driver</strong> - The above, and they can mute and warn`,
+			this.TL`@ <strong>Moderator</strong> - The above, and they can room ban users`,
+			this.TL`* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML`,
+			this.TL`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it`,
 		];
 
 		const globalRanks = [
-			`<strong>Global ranks</strong>`,
-			`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
-			`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
-			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
-			`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
-			`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
+			this.TL`<strong>Global ranks</strong>`,
+			this.TL`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
+			this.TL`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
+			this.TL`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
+			this.TL`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
+			this.TL`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
 		];
 
 		this.sendReplyBox(
-			(showRoom ? roomRanks.map(str => this.TL(str)).join('<br />') : ``) +
+			(showRoom ? roomRanks.join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalRanks.map(str => this.TL(str)).join('<br />') : ``)
+			(showGlobal ? globalRanks.join('<br />') : ``)
 		);
 	},
 	groupshelp: [
@@ -1673,21 +1673,21 @@ export const commands: Chat.ChatCommands = {
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
 		const roomPunishments = [
-			`<strong>Room punishments</strong>:`,
-			`<strong>warn</strong> - Displays a popup with the rules.`,
-			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
-			`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
-			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
-			`<strong>weekban</strong> - Bans a user from the room for a week.`,
-			`<strong>blacklist</strong> - Bans a user for a year.`,
+			this.TL`<strong>Room punishments</strong>:`,
+			this.TL`<strong>warn</strong> - Displays a popup with the rules.`,
+			this.TL`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
+			this.TL`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
+			this.TL`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
+			this.TL`<strong>weekban</strong> - Bans a user from the room for a week.`,
+			this.TL`<strong>blacklist</strong> - Bans a user for a year.`,
 		];
 
 		const globalPunishments = [
-			`<strong>Global punishments</strong>:`,
-			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
-			`<strong>weeklock</strong> - Locks a user for a week.`,
-			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
-			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
+			this.TL`<strong>Global punishments</strong>:`,
+			this.TL`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
+			this.TL`<strong>weeklock</strong> - Locks a user for a week.`,
+			this.TL`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
+			this.TL`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
 		const indefinitePunishments = [
@@ -1699,9 +1699,9 @@ export const commands: Chat.ChatCommands = {
 		];
 
 		this.sendReplyBox(
-			(showRoom ? roomPunishments.map(str => this.TL(str)).join('<br />') : ``) +
+			(showRoom ? roomPunishments.join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalPunishments.map(str => this.TL(str)).join('<br />') : ``) +
+			(showGlobal ? globalPunishments.join('<br />') : ``) +
 			(showGlobal ? `<br /><br />${indefinitePunishments.join('<br />')}` : ``)
 		);
 	},
@@ -2012,55 +2012,55 @@ export const commands: Chat.ChatCommands = {
 
 		const strings = [
 			[
-				`<strong>Room drivers (%)</strong> can use:`,
-				`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
-				`- /mute OR /m <em>username</em>: 7 minute mute`,
-				`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
-				`- /unmute <em>username</em>: unmute`,
-				`- /hidetext <em>username</em>: hide a user's messages from the room`,
-				`- /announce OR /wall <em>message</em>: make an announcement`,
-				`- /modlog <em>username</em>: search the moderator log of the room`,
-				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
-				`- !show [image or youtube link]: display given media in chat.`,
+				this.TL`<strong>Room drivers (%)</strong> can use:`,
+				this.TL`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
+				this.TL`- /mute OR /m <em>username</em>: 7 minute mute`,
+				this.TL`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
+				this.TL`- /unmute <em>username</em>: unmute`,
+				this.TL`- /hidetext <em>username</em>: hide a user's messages from the room`,
+				this.TL`- /announce OR /wall <em>message</em>: make an announcement`,
+				this.TL`- /modlog <em>username</em>: search the moderator log of the room`,
+				this.TL`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
+				this.TL`- !show [image or youtube link]: display given media in chat.`,
 			],
 			[
-				`<strong>Room moderators (@)</strong> can also use:`,
-				`- /roomban OR /rb <em>username</em>: ban user from the room`,
-				`- /roomunban <em>username</em>: unban user from the room`,
-				`- /roomvoice <em>username</em>: appoint a room voice`,
-				`- /roomdevoice <em>username</em>: remove a room voice`,
-				`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
-				`- /roomsettings: change a variety of room settings, namely modchat`,
+				this.TL`<strong>Room moderators (@)</strong> can also use:`,
+				this.TL`- /roomban OR /rb <em>username</em>: ban user from the room`,
+				this.TL`- /roomunban <em>username</em>: unban user from the room`,
+				this.TL`- /roomvoice <em>username</em>: appoint a room voice`,
+				this.TL`- /roomdevoice <em>username</em>: remove a room voice`,
+				this.TL`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
+				this.TL`- /roomsettings: change a variety of room settings, namely modchat`,
 			],
 			[
-				`<strong>Room owners (#)</strong> can also use:`,
-				`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
-				`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
-				`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
-				`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
-				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
-				`- /declare <em>message</em>: make a large blue declaration to the room`,
-				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
-				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
+				this.TL`<strong>Room owners (#)</strong> can also use:`,
+				this.TL`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
+				this.TL`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
+				this.TL`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
+				this.TL`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
+				this.TL`- /roomdeauth <em>username</em>: remove all room auth from a user`,
+				this.TL`- /declare <em>message</em>: make a large blue declaration to the room`,
+				this.TL`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
+				this.TL`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
 			],
 			[
-				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
+				this.TL`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
 			],
 			[
-				`Tournament Help:`,
-				`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
-				`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
-				`- /tour end: forcibly end the tournament in the current room`,
-				`- /tour start: start the tournament in the current room`,
-				`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
+				this.TL`Tournament Help:`,
+				this.TL`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
+				this.TL`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
+				this.TL`- /tour end: forcibly end the tournament in the current room`,
+				this.TL`- /tour start: start the tournament in the current room`,
+				this.TL`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
 			],
 			[
-				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
+				this.TL`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
 			],
 		];
 
 		this.sendReplyBox(
-			strings.map(par => par.map(string => this.TL(string)).join('<br />')).join('<br /><br />')
+			strings.map(par => par.join('<br />')).join('<br /><br />')
 		);
 	},
 

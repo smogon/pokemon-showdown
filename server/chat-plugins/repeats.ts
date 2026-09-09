@@ -190,8 +190,8 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('REPEATPHRASE', null, `every ${interval} ${isByMessages ? `chat messages` : `minute`}${Chat.plural(interval)}: "${phrase.replace(/\n/g, ' ')}"`);
 		this.privateModAction(
 			isByMessages ?
-				room.tr`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} chat message(s).` :
-				room.tr`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} minute(s).`
+				room.TL`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} chat message(s).` :
+				room.TL`${user.name} set the phrase labeled with "${id}" to be repeated every ${interval} minute(s).`
 		);
 	},
 	repeathelp() {
@@ -243,8 +243,8 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('REPEATPHRASE', null, `every ${interval} ${isByMessages ? 'chat message' : 'minute'}${Chat.plural(interval)}: the Room FAQ for "${topic}"`);
 		this.privateModAction(
 			isByMessages ?
-				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} chat message(s).` :
-				room.tr`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).`
+				room.TL`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} chat message(s).` :
+				room.TL`${user.name} set the Room FAQ "${topic}" to be repeated every ${interval} minute(s).`
 		);
 	},
 
@@ -267,7 +267,7 @@ export const commands: Chat.ChatCommands = {
 		Repeats.removeRepeat(room, id);
 
 		this.modlog('REMOVE REPEATPHRASE', null, `"${id}"`);
-		this.privateModAction(room.tr`${user.name} removed the repeated phrase labeled with "${id}".`);
+		this.privateModAction(room.TL`${user.name} removed the repeated phrase labeled with "${id}".`);
 		this.refreshPage(`repeats-${room.roomid}`);
 	},
 
@@ -283,7 +283,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		this.modlog('REMOVE REPEATPHRASE', null, 'all repeated phrases');
-		this.privateModAction(room.tr`${user.name} removed all repeated phrases.`);
+		this.privateModAction(room.TL`${user.name} removed all repeated phrases.`);
 	},
 
 	repeats: 'viewrepeats',

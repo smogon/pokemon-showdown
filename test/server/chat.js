@@ -1,12 +1,17 @@
 'use strict';
 
 const assert = require('assert').strict;
+const { TLfor, TLadd } = require('../../dist/sim/dex-text');
 
 describe('Chat', () => {
+	before(async () => {
+		if (!Chat.translationsLoaded) await Chat.loadTranslations();
+	});
+
 	it('should convert interface language preferences to game text language codes', () => {
 		assert.equal(Chat.getDexLanguage('japanese'), 'ja');
 		assert.equal(Chat.getDexLanguage('simplifiedchinese'), 'zh-cn');
-		assert.equal(Chat.getDexLanguage('portuguese'), 'en');
+		assert.equal(Chat.getDexLanguage('portuguese'), 'pt');
 	});
 
 	it('should display both English and native language names', () => {
@@ -23,13 +28,12 @@ describe('Chat', () => {
 	});
 
 	it('should translate Dex objects with a Translator', () => {
-		const TL = Chat.getTranslator('japanese');
-		assert.equal(TL(Dex.items.get('Leftovers')), 'たべのこし');
-		assert.equal(TL(Dex.moves.get('Tackle')), 'たいあたり');
-		assert.equal(TL(Dex.species.get('Pikachu')), 'ピカチュウ');
+		const translate = TLfor('ja');
+		assert.equal(translate(Dex.items.get('Leftovers')), 'たべのこし');
+		assert.equal(translate(Dex.moves.get('Tackle')), 'たいあたり');
+		assert.equal(translate(Dex.species.get('Pikachu')), 'ピカチュウ');
 		const text = Dex.loadTextData('ja');
 		for (const [property, table] of Object.entries({
-			term: 'TermNames',
 			type: 'TypeNames',
 			nature: 'NatureNames',
 			gender: 'GenderNames',
@@ -41,10 +45,32 @@ describe('Chat', () => {
 			statShort: 'StatShortNames',
 			statMedium: 'StatMediumNames',
 		})) {
-			assert.equal(TL[property], text[table]);
+			assert.equal(translate[property], text[table]);
 		}
-		assert.equal(TL.tag.physical, text.Tags.physical.name);
-		assert.equal(TL.tag.contact, text.Tags.contact.name);
+		assert.equal(translate.tag.physical, text.Tags.physical.name);
+		assert.equal(translate.tag.contact, text.Tags.contact.name);
+	});
+
+	it('should reorder named UI translation placeholders', () => {
+		TLadd('en-afd', [{
+			'First {FIRST} then {SECOND}': 'Second {SECOND} before {FIRST}',
+		}]);
+		try {
+			const first = 'one';
+			const second = 'two';
+			assert.equal(TLfor('en-afd')`First ${first} then ${second}`, 'Second two before one');
+		} finally {
+			TLadd('en-afd', [{ 'First {FIRST} then {SECOND}': null }]);
+		}
+	});
+
+	it('should load flat UI translation catalogs', () => {
+		const uiText = require('../../dist/translations/ja/core-commands').translations;
+		const entry = Object.entries(uiText).find(([source, translation]) => (
+			typeof translation === 'string' && !source.includes('{')
+		));
+		assert(entry);
+		assert.equal(TLfor('ja')(entry[0]), entry[1]);
 	});
 
 	it('should localize data HTML', () => {

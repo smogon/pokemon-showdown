@@ -1185,8 +1185,8 @@ export abstract class BasicRoom {
 		Rooms.rooms.delete(this.roomid);
 		if (this.roomid === 'lobby') Rooms.lobby = null;
 	}
-	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
-		return Chat.tr(this.settings.language || 'english' as ID, strings, ...keys);
+	TL(strings: string | TemplateStringsArray, ...keys: any[]) {
+		return Chat.TLto(this.settings.language || 'english' as ID, strings, ...keys);
 	}
 }
 

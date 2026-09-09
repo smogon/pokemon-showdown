@@ -150,10 +150,10 @@ function getTriviaGame(room: Room | null) {
 	}
 	const game = room.game;
 	if (!game) {
-		throw new Chat.ErrorMessage(room.tr`There is no game in progress.`);
+		throw new Chat.ErrorMessage(room.TL`There is no game in progress.`);
 	}
 	if (game.gameid !== 'trivia') {
-		throw new Chat.ErrorMessage(room.tr`The currently running game is not Trivia, it's ${game.title}.`);
+		throw new Chat.ErrorMessage(room.TL`The currently running game is not Trivia, it's ${game.title}.`);
 	}
 	return game as Trivia;
 }
@@ -164,10 +164,10 @@ function getMastermindGame(room: Room | null) {
 	}
 	const game = room.game;
 	if (!game) {
-		throw new Chat.ErrorMessage(room.tr`There is no game in progress.`);
+		throw new Chat.ErrorMessage(room.TL`There is no game in progress.`);
 	}
 	if (game.gameid !== 'mastermind') {
-		throw new Chat.ErrorMessage(room.tr`The currently running game is not Mastermind, it's ${game.title}.`);
+		throw new Chat.ErrorMessage(room.TL`The currently running game is not Mastermind, it's ${game.title}.`);
 	}
 	return game as Mastermind;
 }
@@ -398,7 +398,7 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 				return ALL_CATEGORIES[CATEGORY_ALIASES[cat] || cat];
 			}));
 		let category = [...uniqueCategories].join(' + ');
-		if (isRandomCategory) category = this.room.tr`Random (${category})`;
+		if (isRandomCategory) category = this.room.TL`Random (${category})`;
 
 		this.game = {
 			mode: (isRandomMode ? `Random (${MODES[mode]})` : MODES[mode]),
@@ -451,20 +451,20 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 
 	addTriviaPlayer(user: User) {
 		if (this.playerTable[user.id]) {
-			throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+			throw new Chat.ErrorMessage(this.room.TL`You have already signed up for this game.`);
 		}
 		for (const id of user.previousIDs) {
-			if (this.playerTable[id]) throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+			if (this.playerTable[id]) throw new Chat.ErrorMessage(this.room.TL`You have already signed up for this game.`);
 		}
 		if (this.kickedUsers.has(user.id)) {
-			throw new Chat.ErrorMessage(this.room.tr`You were kicked from the game and thus cannot join it again.`);
+			throw new Chat.ErrorMessage(this.room.TL`You were kicked from the game and thus cannot join it again.`);
 		}
 		for (const id of user.previousIDs) {
 			if (this.playerTable[id]) {
-				throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+				throw new Chat.ErrorMessage(this.room.TL`You have already signed up for this game.`);
 			}
 			if (this.kickedUsers.has(id)) {
-				throw new Chat.ErrorMessage(this.room.tr`You were kicked from the game and cannot join until the next game.`);
+				throw new Chat.ErrorMessage(this.room.TL`You were kicked from the game and cannot join until the next game.`);
 			}
 		}
 
@@ -476,11 +476,11 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 					targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
 					!Config.noipchecks && targetUser.ips.some(ip => user.ips.includes(ip))
 				);
-				if (isSameUser) throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+				if (isSameUser) throw new Chat.ErrorMessage(this.room.TL`You have already signed up for this game.`);
 			}
 		}
 		if (this.phase !== SIGNUP_PHASE && !this.canLateJoin) {
-			throw new Chat.ErrorMessage(this.room.tr`This game does not allow latejoins.`);
+			throw new Chat.ErrorMessage(this.room.TL`This game does not allow latejoins.`);
 		}
 		this.addPlayer(user);
 	}
@@ -517,18 +517,18 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 	 */
 	init() {
 		const signupsMessage = this.game.givesPoints ?
-			`Signups for a new Trivia game have begun!` : `Signups for a new unranked Trivia game have begun!`;
+			this.room.TL`Signups for a new Trivia game have begun!` : this.room.TL`Signups for a new unranked Trivia game have begun!`;
 		broadcast(
 			this.room,
-			this.room.tr(signupsMessage),
-			this.room.tr`Mode: ${this.game.mode} | Category: ${this.game.category} | Cap: ${this.getDisplayableCap()}<br />` +
-			`<button class="button" name="send" value="/trivia join">` + this.room.tr`Sign up for the Trivia game!` + `</button>` +
-			this.room.tr` (You can also type <code>/trivia join</code> to sign up manually.)`
+			signupsMessage,
+			this.room.TL`Mode: ${this.game.mode} | Category: ${this.game.category} | Cap: ${this.getDisplayableCap()}<br />` +
+			`<button class="button" name="send" value="/trivia join">` + this.room.TL`Sign up for the Trivia game!` + `</button>` +
+			this.room.TL` (You can also type <code>/trivia join</code> to sign up manually.)`
 		);
 	}
 
 	getDescription() {
-		return this.room.tr`Mode: ${this.game.mode} | Category: ${this.game.category} | Cap: ${this.getDisplayableCap()}`;
+		return this.room.TL`Mode: ${this.game.mode} | Category: ${this.game.category} | Cap: ${this.getDisplayableCap()}`;
 	}
 
 	/**
@@ -548,12 +548,12 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 	kick(user: User) {
 		if (!this.playerTable[user.id]) {
 			if (this.kickedUsers.has(user.id)) {
-				throw new Chat.ErrorMessage(this.room.tr`User ${user.name} has already been kicked from the game.`);
+				throw new Chat.ErrorMessage(this.room.TL`User ${user.name} has already been kicked from the game.`);
 			}
 
 			for (const id of user.previousIDs) {
 				if (this.kickedUsers.has(id)) {
-					throw new Chat.ErrorMessage(this.room.tr`User ${user.name} has already been kicked from the game.`);
+					throw new Chat.ErrorMessage(this.room.TL`User ${user.name} has already been kicked from the game.`);
 				}
 			}
 
@@ -565,11 +565,11 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 						kickedUser.previousIDs.some(id => user.previousIDs.includes(id)) ||
 						!Config.noipchecks && kickedUser.ips.some(ip => user.ips.includes(ip))
 					);
-					if (isSameUser) throw new Chat.ErrorMessage(this.room.tr`User ${user.name} has already been kicked from the game.`);
+					if (isSameUser) throw new Chat.ErrorMessage(this.room.TL`User ${user.name} has already been kicked from the game.`);
 				}
 			}
 
-			throw new Chat.ErrorMessage(this.room.tr`User ${user.name} is not a player in the game.`);
+			throw new Chat.ErrorMessage(this.room.TL`User ${user.name} is not a player in the game.`);
 		}
 
 		this.kickedUsers.add(user.id);
@@ -582,7 +582,7 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 
 	leave(user: User) {
 		if (!this.playerTable[user.id]) {
-			throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current game.`);
+			throw new Chat.ErrorMessage(this.room.TL`You are not a player in the current game.`);
 		}
 		this.removePlayer(this.playerTable[user.id]);
 	}
@@ -591,26 +591,26 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 	 * Starts the question loop for a trivia game in its signup phase.
 	 */
 	start() {
-		if (this.phase !== SIGNUP_PHASE) throw new Chat.ErrorMessage(this.room.tr`The game has already been started.`);
+		if (this.phase !== SIGNUP_PHASE) throw new Chat.ErrorMessage(this.room.TL`The game has already been started.`);
 
-		broadcast(this.room, this.room.tr`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
+		broadcast(this.room, this.room.TL`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
 		this.phase = INTERMISSION_PHASE;
 		this.setPhaseTimeout(() => void this.askQuestion(), START_TIMEOUT);
 	}
 
 	pause() {
-		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is already paused.`);
+		if (this.isPaused) throw new Chat.ErrorMessage(this.room.TL`The trivia game is already paused.`);
 		if (this.phase === QUESTION_PHASE) {
-			throw new Chat.ErrorMessage(this.room.tr`You cannot pause the trivia game during a question.`);
+			throw new Chat.ErrorMessage(this.room.TL`You cannot pause the trivia game during a question.`);
 		}
 		this.isPaused = true;
-		broadcast(this.room, this.room.tr`The Trivia game has been paused.`);
+		broadcast(this.room, this.room.TL`The Trivia game has been paused.`);
 	}
 
 	resume() {
-		if (!this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is not paused.`);
+		if (!this.isPaused) throw new Chat.ErrorMessage(this.room.TL`The trivia game is not paused.`);
 		this.isPaused = false;
-		broadcast(this.room, this.room.tr`The Trivia game has been resumed.`);
+		broadcast(this.room, this.room.TL`The Trivia game has been resumed.`);
 		if (this.phase === INTERMISSION_PHASE) this.setPhaseTimeout(() => void this.askQuestion(), PAUSE_INTERMISSION);
 	}
 
@@ -637,8 +637,8 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 			this.phaseTimeout = null;
 			broadcast(
 				this.room,
-				this.room.tr`No questions are left!`,
-				this.room.tr`The game has reached a stalemate`
+				this.room.TL`No questions are left!`,
+				this.room.TL`The game has reached a stalemate`
 			);
 			if (this.room) this.destroy();
 			return;
@@ -670,8 +670,8 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 	sendQuestion(question: TriviaQuestion) {
 		broadcast(
 			this.room,
-			this.room.tr`Question ${this.questionNumber}: ${question.question}`,
-			this.room.tr`Category: ${ALL_CATEGORIES[question.category]}`
+			this.room.TL`Question ${this.questionNumber}: ${question.question}`,
+			this.room.TL`Category: ${ALL_CATEGORIES[question.category]}`
 		);
 	}
 
@@ -729,7 +729,7 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		this.phaseTimeout = null;
 		const winners = this.getTopPlayers({ max: 3, requirePoints: true });
 		buffer += `<br />${this.getWinningMessage(winners)}`;
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		broadcast(this.room, this.room.TL`The answering period has ended!`, buffer);
 
 		for (const i in this.playerTable) {
 			const player = this.playerTable[i];
@@ -737,8 +737,8 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 			if (!user) continue;
 			user.sendTo(
 				this.room.roomid,
-				(this.game.givesPoints ? this.room.tr`You gained ${player.points} points and answered ` : this.room.tr`You answered `) +
-				this.room.tr`${player.correctAnswers} questions correctly.`
+				(this.game.givesPoints ? this.room.TL`You gained ${player.points} points and answered ` : this.room.TL`You answered `) +
+				this.room.TL`${player.correctAnswers} questions correctly.`
 			);
 		}
 
@@ -829,22 +829,22 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		const [p1, p2, p3] = winners;
 
 		if (!p1) return `No winners this game!`;
-		let initialPart = this.room.tr`${Utils.escapeHTML(p1.name)} won the game with a final score of <strong>${p1.player.points}</strong>`;
+		let initialPart = this.room.TL`${Utils.escapeHTML(p1.name)} won the game with a final score of <strong>${p1.player.points}</strong>`;
 		if (!this.game.givesPoints) {
 			return `${initialPart}.`;
 		} else {
-			initialPart += this.room.tr`, and `;
+			initialPart += this.room.TL`, and `;
 		}
 
 		switch (winners.length) {
 		case 1:
-			return this.room.tr`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!`;
+			return this.room.TL`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!`;
 		case 2:
-			return this.room.tr`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points! ` +
-				this.room.tr`${Utils.escapeHTML(p2.name)} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
+			return this.room.TL`${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points! ` +
+				this.room.TL`${Utils.escapeHTML(p2.name)} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
 		case 3:
-			return initialPart + Utils.html`${this.room.tr`${p2.name} and ${p3.name} were runners-up. `}` +
-				this.room.tr`Their leaderboard score has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
+			return initialPart + Utils.html`${this.room.TL`${p2.name} and ${p3.name} were runners-up. `}` +
+				this.room.TL`Their leaderboard score has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
 		}
 	}
 
@@ -852,29 +852,29 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		let message = "";
 		if (winners.length) {
 			const winnerParts: ((k: TopPlayer) => string)[] = [
-				winner => this.room.tr`User ${mapper(winner)} won the game of ` +
-					(this.game.givesPoints ? this.room.tr`ranked ` : this.room.tr`unranked `) +
-					this.room.tr`${this.game.mode} mode trivia under the ${this.game.category} category with ` +
-					this.room.tr`a cap of ${this.getDisplayableCap()} ` +
-					this.room.tr`with ${winner.player.points} points and ` +
-					this.room.tr`${winner.player.correctAnswers} correct answers`,
-				winner => this.room.tr` Second place: ${mapper(winner)} (${winner.player.points} points)`,
-				winner => this.room.tr`, third place: ${mapper(winner)} (${winner.player.points} points)`,
+				winner => this.room.TL`User ${mapper(winner)} won the game of ` +
+					(this.game.givesPoints ? this.room.TL`ranked ` : this.room.TL`unranked `) +
+					this.room.TL`${this.game.mode} mode trivia under the ${this.game.category} category with ` +
+					this.room.TL`a cap of ${this.getDisplayableCap()} ` +
+					this.room.TL`with ${winner.player.points} points and ` +
+					this.room.TL`${winner.player.correctAnswers} correct answers`,
+				winner => this.room.TL` Second place: ${mapper(winner)} (${winner.player.points} points)`,
+				winner => this.room.TL`, third place: ${mapper(winner)} (${winner.player.points} points)`,
 			];
 			for (const [i, winner] of winners.entries()) {
 				message += winnerParts[i](winner);
 			}
 		} else {
 			message = `No participants in the game of ` +
-				(this.game.givesPoints ? this.room.tr`ranked ` : this.room.tr`unranked `) +
-				this.room.tr`${this.game.mode} mode trivia under the ${this.game.category} category with ` +
-				this.room.tr`a cap of ${this.getDisplayableCap()}`;
+				(this.game.givesPoints ? this.room.TL`ranked ` : this.room.TL`unranked `) +
+				this.room.TL`${this.game.mode} mode trivia under the ${this.game.category} category with ` +
+				this.room.TL`a cap of ${this.getDisplayableCap()}`;
 		}
 		return `${message}`;
 	}
 
 	end(user: User) {
-		broadcast(this.room, Utils.html`${this.room.tr`The game was forcibly ended by ${user.name}.`}`);
+		broadcast(this.room, Utils.html`${this.room.TL`The game was forcibly ended by ${user.name}.`}`);
 		this.destroy();
 	}
 }
@@ -892,11 +892,11 @@ const hrtimeToNanoseconds = (hrtime: number[]) => hrtime[0] * 1e9 + hrtime[1];
 export class FirstModeTrivia extends Trivia {
 	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
-		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
-		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
-		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.tr`There is no question to answer.`);
+		if (!player) throw new Chat.ErrorMessage(this.room.TL`You are not a player in the current trivia game.`);
+		if (this.isPaused) throw new Chat.ErrorMessage(this.room.TL`The trivia game is paused.`);
+		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.TL`There is no question to answer.`);
 		if (player.answer) {
-			throw new Chat.ErrorMessage(this.room.tr`You have already attempted to answer the current question.`);
+			throw new Chat.ErrorMessage(this.room.TL`You have already attempted to answer the current question.`);
 		}
 		if (!this.verifyAnswer(answer)) return;
 
@@ -908,10 +908,10 @@ export class FirstModeTrivia extends Trivia {
 		player.incrementPoints(points, this.questionNumber);
 
 		const players = user.name;
-		const buffer = Utils.html`${this.room.tr`Correct: ${players}`}<br />` +
-			this.room.tr`Answer(s): ${this.curAnswers.join(', ')}` + `<br />` +
-			this.room.tr`They gained <strong>5</strong> points!` + `<br />` +
-			this.room.tr`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`;
+		const buffer = Utils.html`${this.room.TL`Correct: ${players}`}<br />` +
+			this.room.TL`Answer(s): ${this.curAnswers.join(', ')}` + `<br />` +
+			this.room.TL`They gained <strong>5</strong> points!` + `<br />` +
+			this.room.TL`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`;
 
 		const cap = this.getCap();
 		if ((cap.points && player.points >= cap.points) || (cap.questions && this.questionNumber >= cap.questions)) {
@@ -923,7 +923,7 @@ export class FirstModeTrivia extends Trivia {
 			this.playerTable[i].clearAnswer();
 		}
 
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		broadcast(this.room, this.room.TL`The answering period has ended!`, buffer);
 		this.setAskTimeout();
 	}
 
@@ -942,11 +942,11 @@ export class FirstModeTrivia extends Trivia {
 
 		broadcast(
 			this.room,
-			this.room.tr`The answering period has ended!`,
-			this.room.tr`Correct: no one...` + `<br />` +
-			this.room.tr`Answers: ${this.curAnswers.join(', ')}` + `<br />` +
-			this.room.tr`Nobody gained any points.` + `<br />` +
-			this.room.tr`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`
+			this.room.TL`The answering period has ended!`,
+			this.room.TL`Correct: no one...` + `<br />` +
+			this.room.TL`Answers: ${this.curAnswers.join(', ')}` + `<br />` +
+			this.room.TL`Nobody gained any points.` + `<br />` +
+			this.room.TL`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`
 		);
 		this.setAskTimeout();
 	}
@@ -963,9 +963,9 @@ export class FirstModeTrivia extends Trivia {
 export class TimerModeTrivia extends Trivia {
 	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
-		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
-		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
-		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.tr`There is no question to answer.`);
+		if (!player) throw new Chat.ErrorMessage(this.room.TL`You are not a player in the current trivia game.`);
+		if (this.isPaused) throw new Chat.ErrorMessage(this.room.TL`The trivia game is paused.`);
+		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.TL`There is no question to answer.`);
 
 		const isCorrect = this.verifyAnswer(answer);
 		player.setAnswer(answer, isCorrect);
@@ -986,11 +986,11 @@ export class TimerModeTrivia extends Trivia {
 		this.phase = INTERMISSION_PHASE;
 
 		let buffer = (
-			this.room.tr`Answer(s): ${this.curAnswers.join(', ')}<br />` +
+			this.room.TL`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 			`<table style="width: 100%; background-color: #9CBEDF; margin: 2px 0">` +
 			`<tr style="background-color: #6688AA">` +
 			`<th style="width: 100px">Points gained</th>` +
-			`<th>${this.room.tr`Correct`}</th>` +
+			`<th>${this.room.TL`Correct`}</th>` +
 			`</tr>`
 		);
 		const innerBuffer = new Map<number, [string, number][]>([5, 4, 3, 2, 1].map(n => [n, []]));
@@ -1043,18 +1043,18 @@ export class TimerModeTrivia extends Trivia {
 			buffer += (
 				'<tr style="background-color: #6688AA">' +
 				'<td style="text-align: center">&#8212;</td>' +
-				`<td>${this.room.tr`No one answered correctly...`}</td>` +
+				`<td>${this.room.TL`No one answered correctly...`}</td>` +
 				'</tr>'
 			);
 		}
 
 		buffer += '</table>';
-		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`}`;
+		buffer += `<br />${this.room.TL`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`}`;
 
 		if (winner) {
 			return this.win(buffer);
 		} else {
-			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+			broadcast(this.room, this.room.TL`The answering period has ended!`, buffer);
 		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
@@ -1068,9 +1068,9 @@ export class TimerModeTrivia extends Trivia {
 export class NumberModeTrivia extends Trivia {
 	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
-		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
-		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
-		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.tr`There is no question to answer.`);
+		if (!player) throw new Chat.ErrorMessage(this.room.TL`You are not a player in the current trivia game.`);
+		if (this.isPaused) throw new Chat.ErrorMessage(this.room.TL`The trivia game is paused.`);
+		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.TL`There is no question to answer.`);
 
 		const isCorrect = this.verifyAnswer(answer);
 		player.setAnswer(answer, isCorrect);
@@ -1112,26 +1112,26 @@ export class NumberModeTrivia extends Trivia {
 			}
 
 			const players = Utils.escapeHTML(innerBuffer.map(([playerName]) => playerName).join(', '));
-			buffer = this.room.tr`Correct: ${players}` + `<br />` +
-				this.room.tr`Answer(s): ${this.curAnswers.join(', ')}<br />` +
-				`${Chat.plural(innerBuffer, this.room.tr`Each of them gained <strong>${points}</strong> point(s)!`, this.room.tr`They gained <strong>${points}</strong> point(s)!`)}`;
+			buffer = this.room.TL`Correct: ${players}` + `<br />` +
+				this.room.TL`Answer(s): ${this.curAnswers.join(', ')}<br />` +
+				`${Chat.plural(innerBuffer, this.room.TL`Each of them gained <strong>${points}</strong> point(s)!`, this.room.TL`They gained <strong>${points}</strong> point(s)!`)}`;
 		} else {
 			for (const userid in this.playerTable) {
 				const player = this.playerTable[userid];
 				player.clearAnswer();
 			}
 
-			buffer = this.room.tr`Correct: no one...` + `<br />` +
-				this.room.tr`Answer(s): ${this.curAnswers.join(', ')}<br />` +
-				this.room.tr`Nobody gained any points.`;
+			buffer = this.room.TL`Correct: no one...` + `<br />` +
+				this.room.TL`Answer(s): ${this.curAnswers.join(', ')}<br />` +
+				this.room.TL`Nobody gained any points.`;
 		}
 
-		buffer += `<br />${this.room.tr`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`}`;
+		buffer += `<br />${this.room.TL`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`}`;
 
 		if (winner) {
 			return this.win(buffer);
 		} else {
-			broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+			broadcast(this.room, this.room.TL`The answering period has ended!`, buffer);
 		}
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
@@ -1143,9 +1143,9 @@ export class NumberModeTrivia extends Trivia {
 export class TriumvirateModeTrivia extends Trivia {
 	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
-		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
-		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
-		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.tr`There is no question to answer.`);
+		if (!player) throw new Chat.ErrorMessage(this.room.TL`You are not a player in the current trivia game.`);
+		if (this.isPaused) throw new Chat.ErrorMessage(this.room.TL`The trivia game is paused.`);
+		if (this.phase !== QUESTION_PHASE) throw new Chat.ErrorMessage(this.room.TL`There is no question to answer.`);
 		player.setAnswer(answer, this.verifyAnswer(answer));
 		const correctAnswers = Object.keys(this.playerTable).filter(id => this.playerTable[id].isCorrect).length;
 		if (correctAnswers === 3) {
@@ -1182,18 +1182,18 @@ export class TriumvirateModeTrivia extends Trivia {
 		let buffer = ``;
 		if (playersWithPoints.length) {
 			const players = playersWithPoints.join(", ");
-			buffer = this.room.tr`Correct: ${players}<br />` +
-				this.room.tr`Answers: ${this.curAnswers.join(', ')}<br />` +
-				this.room.tr`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`;
+			buffer = this.room.TL`Correct: ${players}<br />` +
+				this.room.TL`Answers: ${this.curAnswers.join(', ')}<br />` +
+				this.room.TL`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`;
 		} else {
-			buffer = this.room.tr`Correct: no one...` + `<br />` +
-				this.room.tr`Answers: ${this.curAnswers.join(', ')}<br />` +
-				this.room.tr`Nobody gained any points.` + `<br />` +
-				this.room.tr`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`;
+			buffer = this.room.TL`Correct: no one...` + `<br />` +
+				this.room.TL`Answers: ${this.curAnswers.join(', ')}<br />` +
+				this.room.TL`Nobody gained any points.` + `<br />` +
+				this.room.TL`The top 5 players are: ${this.formatPlayerList({ max: 5 })}`;
 		}
 
 		if (winner) return this.win(buffer);
-		broadcast(this.room, this.room.tr`The answering period has ended!`, buffer);
+		broadcast(this.room, this.room.TL`The answering period has ended!`, buffer);
 		this.setPhaseTimeout(() => void this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
@@ -1229,15 +1229,15 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 	init() {
 		broadcast(
 			this.room,
-			this.room.tr`Signups for a new Mastermind game have begun!`,
-			this.room.tr`The top <strong>${this.numFinalists}</strong> players will advance to the finals!` + `<br />` +
-			this.room.tr`Type <code>/mastermind join</code> to sign up for the game.`
+			this.room.TL`Signups for a new Mastermind game have begun!`,
+			this.room.TL`The top <strong>${this.numFinalists}</strong> players will advance to the finals!` + `<br />` +
+			this.room.TL`Type <code>/mastermind join</code> to sign up for the game.`
 		);
 	}
 
 	addTriviaPlayer(user: User) {
 		if (user.previousIDs.concat(user.id).some(id => id in this.playerTable)) {
-			throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+			throw new Chat.ErrorMessage(this.room.TL`You have already signed up for this game.`);
 		}
 
 		for (const targetUser of Object.keys(this.playerTable).map(id => Users.get(id))) {
@@ -1247,7 +1247,7 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 				targetUser.previousIDs.some(tarId => user.previousIDs.includes(tarId)) ||
 				!Config.noipchecks && targetUser.ips.some(ip => user.ips.includes(ip))
 			);
-			if (isSameUser) throw new Chat.ErrorMessage(this.room.tr`You have already signed up for this game.`);
+			if (isSameUser) throw new Chat.ErrorMessage(this.room.TL`You have already signed up for this game.`);
 		}
 
 		this.addPlayer(user);
@@ -1273,16 +1273,16 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 	 */
 	startRound(playerID: ID, category: ID, questions: TriviaQuestion[], timeout: number) {
 		if (this.currentRound) {
-			throw new Chat.ErrorMessage(this.room.tr`There is already a round of Mastermind in progress.`);
+			throw new Chat.ErrorMessage(this.room.TL`There is already a round of Mastermind in progress.`);
 		}
 		if (!(playerID in this.playerTable)) {
-			throw new Chat.ErrorMessage(this.room.tr`That user is not signed up for Mastermind!`);
+			throw new Chat.ErrorMessage(this.room.TL`That user is not signed up for Mastermind!`);
 		}
 		if (this.leaderboard.has(playerID)) {
-			throw new Chat.ErrorMessage(this.room.tr`The user "${playerID}" has already played their round of Mastermind.`);
+			throw new Chat.ErrorMessage(this.room.TL`The user "${playerID}" has already played their round of Mastermind.`);
 		}
 		if (this.playerCount <= this.numFinalists) {
-			throw new Chat.ErrorMessage(this.room.tr`You cannot start the game of Mastermind until there are more players than finals slots.`);
+			throw new Chat.ErrorMessage(this.room.TL`You cannot start the game of Mastermind until there are more players than finals slots.`);
 		}
 
 		this.phase = MASTERMIND_ROUNDS_PHASE;
@@ -1294,8 +1294,8 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 			const player = this.playerTable[playerID].name;
 			broadcast(
 				this.room,
-				this.room.tr`The round of Mastermind has ended!`,
-				points ? this.room.tr`${player} earned ${points} points!` : undefined
+				this.room.TL`The round of Mastermind has ended!`,
+				points ? this.room.TL`${player} earned ${points} points!` : undefined
 			);
 
 			this.leaderboard.set(playerID, { score: points || 0 });
@@ -1312,16 +1312,16 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 	 */
 	async startFinals(timeout: number) {
 		if (this.currentRound) {
-			throw new Chat.ErrorMessage(this.room.tr`There is already a round of Mastermind in progress.`);
+			throw new Chat.ErrorMessage(this.room.TL`There is already a round of Mastermind in progress.`);
 		}
 		for (const player in this.playerTable) {
 			if (!this.leaderboard.has(toID(player))) {
-				throw new Chat.ErrorMessage(this.room.tr`You cannot start finals until the user '${player}' has played a round.`);
+				throw new Chat.ErrorMessage(this.room.TL`You cannot start finals until the user '${player}' has played a round.`);
 			}
 		}
 
 		const questions = await getQuestions(['all' as ID], 'random');
-		if (!questions.length) throw new Chat.ErrorMessage(this.room.tr`There are no questions in the Trivia database.`);
+		if (!questions.length) throw new Chat.ErrorMessage(this.room.TL`There are no questions in the Trivia database.`);
 
 		this.currentRound = new MastermindFinals(this.room, 'all' as ID, questions, this.getTopPlayers(this.numFinalists));
 
@@ -1334,20 +1334,20 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 					this.currentRound.destroy();
 					this.currentRound = null;
 
-					let buf = this.room.tr`No one scored any points, so it's a tie!`;
+					let buf = this.room.TL`No one scored any points, so it's a tie!`;
 					if (winner) {
 						const winnerName = Utils.escapeHTML(winner.name);
-						buf = this.room.tr`${winnerName} won the game of Mastermind with ${winner.player.points} points!`;
+						buf = this.room.TL`${winnerName} won the game of Mastermind with ${winner.player.points} points!`;
 					}
 
 					let smallBuf;
 					if (second && third) {
 						const secondPlace = Utils.escapeHTML(second.name);
 						const thirdPlace = Utils.escapeHTML(third.name);
-						smallBuf = `<br />${this.room.tr`${secondPlace} and ${thirdPlace} were runners-up with ${second.player.points} and ${third.player.points} points, respectively.`}`;
+						smallBuf = `<br />${this.room.TL`${secondPlace} and ${thirdPlace} were runners-up with ${second.player.points} and ${third.player.points} points, respectively.`}`;
 					} else if (second) {
 						const secondPlace = Utils.escapeHTML(second.name);
-						smallBuf = `<br />${this.room.tr`${secondPlace} was a runner up with ${second.player.points} points.`}`;
+						smallBuf = `<br />${this.room.TL`${secondPlace} was a runner up with ${second.player.points} points.`}`;
 					}
 
 					broadcast(this.room, buf, smallBuf);
@@ -1381,14 +1381,14 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 	}
 
 	end(user: User) {
-		broadcast(this.room, this.room.tr`The game of Mastermind was forcibly ended by ${user.name}.`);
+		broadcast(this.room, this.room.TL`The game of Mastermind was forcibly ended by ${user.name}.`);
 		if (this.currentRound) this.currentRound.destroy();
 		this.destroy();
 	}
 
 	leave(user: User) {
 		if (!this.playerTable[user.id]) {
-			throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current game.`);
+			throw new Chat.ErrorMessage(this.room.TL`You are not a player in the current game.`);
 		}
 		const lbEntry = this.leaderboard.get(user.id);
 		if (lbEntry) {
@@ -1399,12 +1399,12 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 
 	kick(toKick: User, kicker: User) {
 		if (!this.playerTable[toKick.id]) {
-			throw new Chat.ErrorMessage(this.room.tr`User ${toKick.name} is not a player in the game.`);
+			throw new Chat.ErrorMessage(this.room.TL`User ${toKick.name} is not a player in the game.`);
 		}
 
 		if (this.numFinalists > (this.players.length - 1)) {
 			throw new Chat.ErrorMessage(
-				this.room.tr`Kicking ${toKick.name} would leave this game of Mastermind without enough players to reach ${this.numFinalists} finalists.`
+				this.room.TL`Kicking ${toKick.name} would leave this game of Mastermind without enough players to reach ${this.numFinalists} finalists.`
 			);
 		}
 
@@ -1430,7 +1430,7 @@ export class MastermindRound extends FirstModeTrivia {
 		if (playerID) {
 			const player = Users.get(playerID);
 			const targetUsername = playerID;
-			if (!player) throw new Chat.ErrorMessage(this.room.tr`User "${targetUsername}" not found.`);
+			if (!player) throw new Chat.ErrorMessage(this.room.TL`User "${targetUsername}" not found.`);
 			this.addPlayer(player);
 		}
 		this.game.mode = 'Mastermind';
@@ -1442,7 +1442,7 @@ export class MastermindRound extends FirstModeTrivia {
 	override start() {
 		const player = Object.values(this.playerTable)[0];
 		const name = Utils.escapeHTML(player.name);
-		broadcast(this.room, this.room.tr`A Mastermind round in the ${this.game.category} category for ${name} is starting!`);
+		broadcast(this.room, this.room.TL`A Mastermind round in the ${this.game.category} category for ${name} is starting!`);
 		player.sendRoom(
 			`|tempnotify|mastermind|Your Mastermind round is starting|Your round of Mastermind is starting in the Trivia room.`
 		);
@@ -1490,7 +1490,7 @@ export class MastermindFinals extends MastermindRound {
 	}
 
 	override start() {
-		broadcast(this.room, this.room.tr`The Mastermind finals are starting!`);
+		broadcast(this.room, this.room.TL`The Mastermind finals are starting!`);
 		this.phase = INTERMISSION_PHASE;
 		// Use the regular start timeout since there are many players
 		this.setPhaseTimeout(() => void this.askQuestion(), MASTERMIND_FINALS_START_TIMEOUT);
@@ -1507,7 +1507,7 @@ export class MastermindFinals extends MastermindRound {
 	override setTallyTimeout = FirstModeTrivia.prototype.setTallyTimeout;
 
 	override pass() {
-		throw new Chat.ErrorMessage(this.room.tr`You cannot pass in the finals.`);
+		throw new Chat.ErrorMessage(this.room.TL`You cannot pass in the finals.`);
 	}
 }
 
@@ -1925,7 +1925,7 @@ const triviaCommands: Chat.ChatCommands = {
 		await database.deleteQuestion(question);
 
 		this.modlog('TRIVIAQUESTION', null, `removed '${target}' from ${category}`);
-		return this.privateModAction(room.tr`${user.name} removed question '${target}' (category: ${category}) from the question database.`);
+		return this.privateModAction(room.TL`${user.name} removed question '${target}' (category: ${category}) from the question database.`);
 	},
 	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # ~`],
 
@@ -2367,7 +2367,7 @@ const triviaCommands: Chat.ChatCommands = {
 			if (SPECIAL_CATEGORIES[category]) {
 				await database.clearCategory(category);
 				this.modlog(`TRIVIA CATEGORY CLEAR`, null, SPECIAL_CATEGORIES[category]);
-				return this.privateModAction(room.tr`${user.name} removed all questions of category '${category}'.`);
+				return this.privateModAction(room.TL`${user.name} removed all questions of category '${category}'.`);
 			} else {
 				throw new Chat.ErrorMessage(this.TL`You cannot clear the category '${ALL_CATEGORIES[category]}'.`);
 			}

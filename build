@@ -16,6 +16,13 @@ var force = decl || ['--force', 'force', '--full', 'full'].includes(process.argv
 
 process.chdir(__dirname);
 
+if (process.argv[2] === 'translations') {
+	const result = child_process.spawnSync(
+		process.execPath, ['./tools/build-translations.mts', ...process.argv.slice(3)], {stdio: 'inherit'}
+	);
+	process.exit(result.status === null ? 1 : result.status);
+}
+
 function shell(cmd) {
 	child_process.execSync(cmd, {stdio: 'inherit'});
 }

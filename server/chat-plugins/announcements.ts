@@ -48,7 +48,7 @@ export class Announcement extends Rooms.MinorActivity {
 	}
 
 	destroy() {
-		this.room.send(`|uhtmlchange|announcement${this.activityNumber}|<div class="infobox">(${this.room.tr`The announcement has ended.`})</div>`);
+		this.room.send(`|uhtmlchange|announcement${this.activityNumber}|<div class="infobox">(${this.room.TL`The announcement has ended.`})</div>`);
 		this.room.setMinorActivity(null);
 	}
 
@@ -96,7 +96,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
-			return this.privateModAction(room.tr`An announcement was started by ${user.name}.`);
+			return this.privateModAction(room.TL`An announcement was started by ${user.name}.`);
 		},
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # ~`],
 
@@ -122,7 +122,7 @@ export const commands: Chat.ChatCommands = {
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT EDIT');
-			this.privateModAction(room.tr`The announcement was edited by ${user.name}.`);
+			this.privateModAction(room.TL`The announcement was edited by ${user.name}.`);
 			this.parse('/announcement display');
 		},
 		edithelp: [`/announcement edit [announcement] - Edits the announcement. Requires: % @ # ~`],
@@ -168,7 +168,7 @@ export const commands: Chat.ChatCommands = {
 			const announcement = this.requireMinorActivity(Announcement);
 			announcement.end(room);
 			this.modlog('ANNOUNCEMENT END');
-			this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
+			this.privateModAction(room.TL`The announcement was ended by ${user.name}.`);
 		},
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # ~`],
 

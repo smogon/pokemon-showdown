@@ -46,7 +46,7 @@ export type EffectText =
 export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
 
 export const OTHER_NAME_TABLES = [
-	'TermNames', 'TypeNames', 'NatureNames', 'GenderNames',
+	'TypeNames', 'NatureNames', 'GenderNames',
 	'EggGroupNames', 'ColorNames', 'StatusNames', 'TargetNames',
 	'StatNames', 'StatMediumNames', 'StatShortNames',
 ] as const;
@@ -58,101 +58,6 @@ export type TextEffect = Species | Item | Ability | Move | Nature | TypeInfo | T
 export interface ModdedEffectText {
 	desc?: string;
 	shortDesc?: string;
-}
-
-type EffectTextTable = 'Abilities' | 'Items' | 'Moves';
-
-export class DexText {
-	readonly dex: ModdedDex;
-
-	constructor(dex: ModdedDex) {
-		this.dex = dex;
-	}
-
-	get(effect: Item, lang?: TextLanguage): ResolvedItemText;
-	get(effect: Ability, lang?: TextLanguage): ResolvedAbilityText;
-	get(effect: Move, lang?: TextLanguage): ResolvedMoveText;
-	get(effect: Species, lang?: TextLanguage): ResolvedSpeciesText;
-	get(effect: Nature | TypeInfo | TagData, lang?: TextLanguage): ResolvedNameText;
-	get(effect: TextEffect, lang?: TextLanguage): EffectText;
-	get(
-		effect: TextEffect, lang: TextLanguage = 'en'
-	): EffectText {
-		if (!('effectType' in effect)) {
-			return { name: this.tagName(effect.name, lang) };
-		}
-		let table: EffectTextTable;
-		switch (effect.effectType) {
-		case 'Pokemon': {
-			const species = effect;
-			return this.dex.loadTextData(lang).Pokedex[effect.id] || {
-				name: species.name,
-				baseSpecies: species.baseSpecies,
-				...(species.forme ? { forme: species.forme } : {}),
-			};
-		}
-		case 'Nature': return { name: this.otherName('NatureNames', effect.name, lang) };
-		case 'Type': case 'EffectType': return { name: this.otherName('TypeNames', effect.name, lang) };
-		case 'Item': table = 'Items'; break;
-		case 'Ability': table = 'Abilities'; break;
-		case 'Move': table = 'Moves'; break;
-		default: throw new Error(`Unsupported effect type`);
-		}
-
-		const entry = this.dex.loadTextData(lang)[table][effect.id];
-		const customText = effect as ModdedEffectText;
-		if (customText.desc !== undefined || customText.shortDesc !== undefined) {
-			const desc = customText.desc || customText.shortDesc || '';
-			const shortDesc = customText.shortDesc || customText.desc || '';
-			return { ...entry, name: effect.name, desc, shortDesc };
-		}
-
-		return entry || {
-			name: effect.name,
-			desc: '',
-			shortDesc: '',
-		};
-	}
-
-	termName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('TermNames', name, lang);
-	}
-
-	typeName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('TypeNames', name, lang);
-	}
-
-	natureName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('NatureNames', name, lang);
-	}
-
-	categoryName(name: string, lang: TextLanguage = 'en'): string {
-		return this.tagName(name, lang);
-	}
-
-	tagName(name: string, lang: TextLanguage = 'en'): string {
-		return this.dex.loadTextData(lang).Tags[toID(name)]?.name || name;
-	}
-
-	genderName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('GenderNames', name, lang);
-	}
-
-	eggGroupName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('EggGroupNames', name, lang);
-	}
-
-	colorName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('ColorNames', name, lang);
-	}
-
-	private otherName(table: OtherNameTable, name: string, lang: TextLanguage): string {
-		let id: string = toID(name);
-		if (table === 'GenderNames') {
-			id = ({ m: 'male', f: 'female', n: 'genderless' } as Record<string, string>)[id] || id;
-		}
-		return this.dex.loadTextData(lang)[table][id] || name;
-	}
 }
 
 export abstract class BasicEffect implements EffectData {
