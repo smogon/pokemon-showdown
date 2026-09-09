@@ -266,7 +266,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9 Champions] BSS Reg M-C",
 		mod: 'champions',
-		searchShow: false,
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'VGC Timer'],
 	},
