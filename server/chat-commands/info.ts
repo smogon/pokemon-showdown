@@ -675,7 +675,7 @@ export const commands: Chat.ChatCommands = {
 					if (pokemon.eggGroups && dex.gen >= 2) {
 						details[TL`Egg Groups`] = pokemon.eggGroups.map(group => TL.egggroup[toID(group)] || group).join(", ");
 					}
-          if (pokemon.gender && dex.gen >= 2) {
+					if (pokemon.gender && dex.gen >= 2) {
 						switch (pokemon.gender) {
 						case 'M':
 							details[TL`Gender`] = 'Male';
