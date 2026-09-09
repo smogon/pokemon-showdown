@@ -182,7 +182,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		listComma: ", ", // NEEDS QC
 
 		zEffectClearNegativeBoost: "Azzera le riduzioni delle statistiche", // NEEDS QC
-		zEffectCrit2: "Tasso di brutto colpo +2", // NEEDS QC
+		zEffectCrit2: "Probabilità di brutto colpo +2", // NEEDS QC
 		zEffectHeal: "Ripristina il 100% dei PS", // NEEDS QC
 		zEffectCurse: "Ripristina il 100% dei PS se l'utilizzatore è di tipo Spettro, altrimenti Attacco +1", // NEEDS QC
 		zEffectRedirect: "Reindirizza gli attacchi avversari sull'utilizzatore", // NEEDS QC

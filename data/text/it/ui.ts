@@ -76,7 +76,7 @@ export const translations: TranslationCatalog = {
 	"{NUMBER} m": "{NUMBER} m",
 	"Weight": "Peso",
 	"{NUMBER} kg": "{NUMBER} kg",
-	"Crit rate": "Tasso di brutto colpo", // NEEDS QC
+	"Crit rate": "Probabilità di brutto colpo", // NEEDS QC
 	// TRANSLATORS: "" as in user account; "pokemon" as in someone who uses an item/move
 	"User": {
 		"": null,

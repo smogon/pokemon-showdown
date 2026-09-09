@@ -1727,7 +1727,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragoncheer: {
 		name: "Grido del Drago",
-		desc: "Aumenta il tasso di brutto colpo del bersaglio di un livello, o di 2 se il bersaglio è di tipo Drago. Fallisce se nessun alleato è adiacente a chi la usa o se il bersaglio ha già questo effetto o quello di Focalenergia. Staffetta può trasferire questo effetto a un alleato.", // NEEDS QC
+		desc: "Aumenta la probabilità di brutti colpi del bersaglio di un livello, o di 2 se il bersaglio è di tipo Drago. Fallisce se nessun alleato è adiacente a chi la usa o se il bersaglio ha già questo effetto o quello di Focalenergia. Staffetta può trasferire questo effetto a un alleato.", // NEEDS QC
 		shortDesc: "Alleato: brutto colpo +1, o +2 se è di tipo Drago.", // NEEDS QC
 
 		start: "#focusenergy",
@@ -2486,11 +2486,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	focusenergy: {
 		name: "Focalenergia",
 		// Official flavor text: "Chi la usa fa un profondo respiro e si concentra per rendere più probabili i brutti colpi."
-		desc: "Aumenta il tasso di brutto colpo di chi la usa di 2 livelli. Fallisce se chi la usa ha già questo effetto. Staffetta può trasferire questo effetto a un alleato.", // NEEDS QC
-		shortDesc: "Aumenta il tasso di brutto colpo di 2 livelli.", // NEEDS QC
+		desc: "Aumenta la probabilità di brutti colpi di chi la usa di 2 livelli. Fallisce se chi la usa ha già questo effetto. Staffetta può trasferire questo effetto a un alleato.", // NEEDS QC
+		shortDesc: "Aumenta la probabilità di brutti colpi di 2 livelli.", // NEEDS QC
 		gen2: {
 			desc: "Aumenta la probabilità di brutti colpi di chi la usa di un livello. Fallisce se chi la usa ha già l’effetto. Questo effetto può essere trasmesso con Staffetta.", // NEEDS QC
-			shortDesc: "Aumenta il tasso di brutti colpi di 1.", // NEEDS QC
+			shortDesc: "Aumenta la probabilità di brutti colpi di 1.", // NEEDS QC
 		},
 		gen1: {
 			desc: "Finché chi la usa resta in campo, la sua probabilità di brutti colpi è ridotta a un quarto. Fallisce se chi la usa ha già l’effetto. Se un Pokémon usa Nube, l’effetto finisce.", // NEEDS QC
@@ -2807,7 +2807,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxchistrike: {
 		name: "Gigapugnointuito",
-		desc: "La potenza è pari a quella della mossa Dynamax della mossa di base. Se questa mossa va a segno, ogni Pokémon della parte di chi la usa vede il proprio tasso di brutto colpo aumentare di un livello, anche dietro un sostituto.", // NEEDS QC
+		desc: "La potenza è pari a quella della mossa Dynamax della mossa di base. Se questa mossa va a segno, ogni Pokémon della parte di chi la usa vede la propria probabilità di brutti colpi aumentare di un livello, anche dietro un sostituto.", // NEEDS QC
 		shortDesc: "Potenza da mossa base. Alleati: brutto colpo +1.", // NEEDS QC
 
 		start: "#focusenergy",
