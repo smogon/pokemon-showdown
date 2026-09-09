@@ -13,7 +13,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	absolitez: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	absorbbulb: {
 		inherit: true,
@@ -40,6 +40,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: null,
 	},
 	aguavberry: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	airballoon: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -81,7 +85,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	baxcalibrite: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	beastball: {
 		inherit: true,
@@ -96,6 +100,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	bignugget: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	bindingband: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -263,11 +271,19 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	ejectbutton: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	ejectpack: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	electirizer: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	electricseed: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -361,7 +377,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	garchompitez: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	gardevoirite: {
 		inherit: true,
@@ -385,11 +401,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	golisopite: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	golurkite: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	grassyseed: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	greatball: {
 		inherit: true,
@@ -505,7 +525,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	leek: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	levelball: {
 		inherit: true,
@@ -537,7 +557,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lucarionitez: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	luminousmoss: {
 		inherit: true,
@@ -631,6 +651,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	mistyseed: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	moonball: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -644,6 +668,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	netball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	normalgem: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -727,6 +755,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	psychicseed: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	punchingglove: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -767,6 +799,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	redcard: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	repeatball: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -776,6 +812,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	ringtarget: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	rockyhelmet: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -813,7 +853,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	salamencite: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	sceptilite: {
 		inherit: true,
@@ -936,6 +976,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	tartapple: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	terrainextender: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
