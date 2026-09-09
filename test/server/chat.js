@@ -45,7 +45,7 @@ describe('Chat', () => {
 			statShort: 'StatShortNames',
 			statMedium: 'StatMediumNames',
 		})) {
-			assert.equal(translate[property], text[table]);
+			assert.deepEqual(translate[property], text[table]);
 		}
 		assert.equal(translate.tag.physical, text.Tags.physical.name);
 		assert.equal(translate.tag.contact, text.Tags.contact.name);
