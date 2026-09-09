@@ -1314,7 +1314,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	leek: {
 		name: "Porro",
 		grammar: "ms",
-		shortDesc: "Se tenuto da Farfetch’d o Sirfetch’d, tasso di brutto colpo +2.", // NEEDS QC
+		shortDesc: "Se tenuto da Farfetch’d o Sirfetch’d, probabilità di brutti colpi +2.", // NEEDS QC
 	},
 	leftovers: {
 		name: "Avanzi",
@@ -1404,9 +1404,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	luckypunch: {
 		name: "Fortunpugno",
 		grammar: "ms",
-		shortDesc: "Se tenuto da Chansey, il suo tasso di brutto colpo aumenta di 2.", // NEEDS QC
+		shortDesc: "Se tenuto da Chansey, la sua probabilità di brutti colpi aumenta di 2.", // NEEDS QC
 		gen2: {
-			shortDesc: "Se tenuto da Chansey, il suo tasso di brutto colpo è sempre al livello 2. (25%)", // NEEDS QC
+			shortDesc: "Se tenuto da Chansey, la sua probabilità di brutti colpi è sempre al livello 2. (25%)", // NEEDS QC
 		},
 	},
 	lumberry: {
@@ -2017,8 +2017,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Affilartiglio", // renamed in SV (SwSh: Affilartigli)
 		grammar: "ms",
 		// Official flavor text: "Strumento da dare a un Pokémon. Artiglio che aumenta la probabilità di sferrare brutti colpi."
-		desc: "Il tasso di brutto colpo del portatore aumenta di un livello. Fa evolvere Sneasel in Weavile se il portatore sale di livello di notte.", // NEEDS QC
-		shortDesc: "Il tasso di brutto colpo del portatore aumenta di un livello.", // NEEDS QC
+		desc: "La probabilità di brutti colpi del portatore aumenta di un livello. Fa evolvere Sneasel in Weavile se il portatore sale di livello di notte.", // NEEDS QC
+		shortDesc: "La probabilità di brutti colpi del portatore aumenta di un livello.", // NEEDS QC
 	},
 	razorfang: {
 		name: "Affilodente",
@@ -2189,7 +2189,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	scopelens: {
 		name: "Mirino",
 		grammar: "ms",
-		shortDesc: "Il tasso di brutto colpo del portatore aumenta di un livello.", // NEEDS QC
+		shortDesc: "La probabilità di brutti colpi del portatore aumenta di un livello.", // NEEDS QC
 	},
 	scovillainite: {
 		name: "Scovillainite",
@@ -2420,9 +2420,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	stick: {
 		name: "Gambo",
 		grammar: "ms",
-		shortDesc: "Se tenuto da Farfetch’d, il suo tasso di brutto colpo aumenta di 2.", // NEEDS QC
+		shortDesc: "Se tenuto da Farfetch’d, la sua probabilità di brutti colpi aumenta di 2.", // NEEDS QC
 		gen2: {
-			shortDesc: "Se tenuto da Farfetch’d, il suo tasso di brutto colpo è sempre al livello 2. (25%)", // NEEDS QC
+			shortDesc: "Se tenuto da Farfetch’d, la sua probabilità di brutti colpi è sempre al livello 2. (25%)", // NEEDS QC
 		},
 	},
 	stickybarb: {

@@ -2047,7 +2047,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	superluck: {
 		name: "Supersorte",
-		shortDesc: "Il tasso di brutto colpo di questo Pokémon aumenta di un livello.", // NEEDS QC
+		shortDesc: "La probabilità di brutti colpi di questo Pokémon aumenta di un livello.", // NEEDS QC
 	},
 	supersweetsyrup: {
 		name: "Sciroppo Sublime",
