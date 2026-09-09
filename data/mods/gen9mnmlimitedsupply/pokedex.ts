@@ -143,4 +143,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Regenerator" },
 	},
+	steelixmega: {
+		inherit: true,
+		abilities: { 0: "Sandy Force" },
+	},
 };

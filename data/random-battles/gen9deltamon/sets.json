@@ -179,7 +179,7 @@
 		"sets": [
 			{
 				"role": "Wallbreaker",
-				"movepool": ["Rising Voltage", "Volt Switch", "Flamethrower", "Aura Sphere"],
+				"movepool": ["Thunderbolt", "Volt Switch", "Flamethrower", "Aura Sphere"],
 				"abilities": ["Surge Surfer"]
 			}
 		]
@@ -219,7 +219,7 @@
 		"sets": [
 			{
 				"role": "Choice Item user",
-				"movepool": ["Draco Meteor", "Freeze-Dry", "Ice Beam", "Air Slash", "Knock Off"],
+				"movepool": ["Draco Meteor", "Freeze-Dry", "Ice Beam", "Air Slash"],
 				"abilities": ["Competitive"]
 			}
 		]
@@ -309,7 +309,7 @@
 			},
 			{
 				"role": "Choice Item user",
-				"movepool": ["Hydro Steam", "Weather Ball", "U-turn", "Earth Power", "Ice Beam"],
+				"movepool": ["Hydro Steam", "U-turn", "Earth Power", "Ice Beam"],
 				"abilities": ["Storm Drain"]
 			}
 		]
@@ -555,7 +555,7 @@
 		"sets": [
 			{
 				"role": "Fast Attacker",
-				"movepool": ["Facade", "U-turn", "Encore", "Protect", "Hyper Voice", "Vacuum Wave"],
+				"movepool": ["Facade", "U-turn", "Encore", "Fake Out", "Sucker Punch"],
 				"abilities": ["Quick Feet"]
 			}
 		]
@@ -661,7 +661,7 @@
 			},
 			{
 				"role": "Choice Item user",
-				"movepool": ["Hurricane", "Leaf Storm", "Earth Power", "Weather Ball", "Tailwind"],
+				"movepool": ["Hurricane", "Leaf Storm", "Earth Power", "Heat Wave"],
 				"abilities": ["Wind Rider"]
 			}
 		]

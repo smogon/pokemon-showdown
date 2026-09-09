@@ -213,10 +213,7 @@ export class RandomMNMLS extends RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): string {
 		if (species.id === 'dragonite') return 'Scizorite';
-		if (
-			(species.id === 'garganacl') ||
-			(species.id === 'brutebonnet')
-		) return 'Staraptite';
+		if (species.id === 'garganacl') return 'Scraftinite';
 		if (species.id === 'greattusk') return 'Lopunnite';
 		if (species.id === 'heatran') return 'Garchompite Z';
 		if (species.id === 'pecharunt') return 'Gyaradosite';
@@ -235,10 +232,7 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'magearna') return 'Metagrossite';
 		if (species.id === 'roaringmoon') return 'Sharpedonite';
 		if (species.id === 'walkingwake') return 'Charizardite Y';
-		if (
-			(species.id === 'darkrai') ||
-			(species.id === 'rotomwash')
-		) return 'Pidgeotite';
+		if (species.id === 'darkrai') return 'Hawluchanite';
 		if (
 			(species.id === 'dragapult') ||
 			(species.id === 'zamazenta')
@@ -278,6 +272,7 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'palossand') return 'Kangaskhanite';
 		if (species.id === 'vikavolt') return 'Aggronite';
 		if (species.id === 'fluttermane') return 'Cornerstone Mask';
+		if (species.id === 'rotomwash') return 'Pidgeotite';
 		if (
 			(species.id === 'hariyama') ||
 			(species.id === 'bronzong')
@@ -287,6 +282,7 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'politoed') return 'Swampertite';
 		if (species.id === 'cryogonal') return 'Froslassite';
 		if (species.id === 'tinglu') return 'Tyranitarite';
+		if (species.id === 'brutebonnet') return 'Staraptite';
 		if (
 			(species.id === 'arcanine') ||
 			(species.id === 'hoopaunbound')
@@ -313,7 +309,7 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'goodra') return 'Audinite';
 		if (species.id === 'milotic') return 'Excadrite';
 		if (species.id === 'glimmora') return 'Gengarite';
-		/* Fallback */
+
 		else return 'Life Orb';
 	}
 }
