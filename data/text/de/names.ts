@@ -88,56 +88,56 @@ export const StatusNames: { [id: string]: TranslationString } = {
 	frz: "Gefroren",
 	psn: "Vergiftung",
 	tox: "Schwere Vergiftung",
-	fnt: null, // NEEDS TRANSLATION
+	fnt: "Besiegt", // NEEDS QC
 	confusion: "Verwirrung",
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "Kann benachbarte Mitstreiter oder Gegner anvisieren", // NEEDS QC
+	normalDoubles: "Kann Mitstreiter oder jeden Gegner anvisieren", // NEEDS QC
+	normalSingles: "Trifft den Gegner", // NEEDS QC
+	normalFFA: "Kann jeden Gegner anvisieren", // NEEDS QC
+	self: "Trifft den Anwender", // NEEDS QC
+	adjacentAlly: "Kann benachbarte Mitstreiter anvisieren", // NEEDS QC
+	adjacentAllyDoubles: "Trifft den Mitstreiter", // NEEDS QC
+	adjacentAllySingles: "Schlägt in Einzelkämpfen immer fehl", // NEEDS QC
+	adjacentAllyOrSelf: "Kann Anwender oder benachbarte Mitstreiter anvisieren", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "Kann Anwender oder Mitstreiter anvisieren", // NEEDS QC
+	adjacentFoe: "Kann benachbarte Gegner anvisieren", // NEEDS QC
+	allAdjacentFoes: "Trifft benachbarte Gegner", // NEEDS QC
+	allAdjacentFoesDoubles: "Trifft beide Gegner", // NEEDS QC
+	foeSide: "Trifft die gegnerische Seite", // NEEDS QC
+	allySide: "Trifft die eigene Seite", // NEEDS QC
+	allyTeam: "Trifft das eigene Team", // NEEDS QC
+	allAdjacent: "Trifft benachbarte Mitstreiter und Gegner", // NEEDS QC
+	allAdjacentDoubles: "Trifft Mitstreiter und beide Gegner", // NEEDS QC
+	allAdjacentFFA: "Trifft alle Gegner", // NEEDS QC
+	any: "Kann in Dreierkämpfen entfernte Pokémon anvisieren", // NEEDS QC
+	all: "Trifft alle Pokémon", // NEEDS QC
+	scripted: "Ziel wird automatisch gewählt", // NEEDS QC
+	randomNormal: "Trifft zufälligen benachbarten Gegner", // NEEDS QC
+	randomNormalDoubles: "Trifft zufälligen Gegner", // NEEDS QC
+	allies: "Trifft Anwender und Mitstreiter", // NEEDS QC
 };
 
 // from veekun/Bulbapedia who presumably got it from Pokédex 3D Pro
 // Stadium 2 names in comments
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	Monster: null, // NEEDS TRANSLATION
-	"Water 1": null, // NEEDS TRANSLATION
-	Bug: null, // NEEDS TRANSLATION
-	Flying: null, // NEEDS TRANSLATION
-	Field: null, // NEEDS TRANSLATION
-	Fairy: null, // NEEDS TRANSLATION
-	Grass: null, // NEEDS TRANSLATION
-	"Human-Like": null, // NEEDS TRANSLATION
-	"Water 3": null, // NEEDS TRANSLATION
-	Mineral: null, // NEEDS TRANSLATION
-	Amorphous: null, // NEEDS TRANSLATION
-	"Water 2": null, // NEEDS TRANSLATION
-	Ditto: null, // NEEDS TRANSLATION
-	Dragon: null, // NEEDS TRANSLATION
-	Undiscovered: null, // NEEDS TRANSLATION
+	Monster: "Monster", // NEEDS QC
+	"Water 1": "Wasser 1", // NEEDS QC
+	Bug: "Käfer", // NEEDS QC
+	Flying: "Flug", // NEEDS QC
+	Field: "Feld", // NEEDS QC: Stadium 2: "Boden" (when English was "Ground")
+	Fairy: "Fee", // NEEDS QC
+	Grass: "Pflanze", // NEEDS QC
+	"Human-Like": "Humanotyp", // NEEDS QC
+	"Water 3": "Wasser 3", // NEEDS QC
+	Mineral: "Mineral", // NEEDS QC
+	Amorphous: "Amorph", // NEEDS QC: Stadium 2: "Unbestimmt" (when English was "Indeterminate")
+	"Water 2": "Wasser 2", // NEEDS QC
+	Ditto: "Ditto", // NEEDS QC
+	Dragon: "Drache", // NEEDS QC
+	Undiscovered: "Unbekannt", // NEEDS QC: Stadium 2: "Keine Eier" (when English was "No Eggs")
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
