@@ -3397,6 +3397,12 @@
                 "movepool": ["Encore", "Knock Off", "Psychic Noise", "Stealth Rock", "Thunder Wave", "U-turn", "Yawn"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Dark", "Electric", "Steel"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Draining Kiss", "Nasty Plot"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Dark", "Electric", "Steel"]
             }
         ]
     },
@@ -7347,12 +7353,6 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["Earthquake", "Ice Punch", "Spikes", "Stealth Rock", "Stone Edge", "Volt Switch", "Wild Charge"],
-                "abilities": ["Quark Drive"],
-                "teraTypes": ["Flying", "Grass", "Water"]
-            },
-            {
                 "role": "Fast Bulky Setup",
                 "movepool": ["Dragon Dance", "Earthquake", "Ice Punch", "Stone Edge", "Wild Charge"],
                 "abilities": ["Quark Drive"],
@@ -7591,7 +7591,7 @@
             },
             {
                 "role": "AV Pivot",
-                "movepool": ["Fake Out", "Psychic Noise", "Sludge Wave", "U-turn"],
+                "movepool": ["Fake Out", "Focus Blast", "Psychic Noise", "Sludge Wave", "U-turn"],
                 "abilities": ["Toxic Chain"],
                 "teraTypes": ["Dark"]
             }

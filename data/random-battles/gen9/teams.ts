@@ -138,7 +138,7 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'Zacian', 'Zamazenta',
+	'Dugtrio', 'Gothitelle', 'Iron Thorns', 'Kingambit', 'Zacian', 'Zamazenta',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
@@ -1459,6 +1459,9 @@ export class RandomTeams {
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
 		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
+		if (species.baseSpecies === 'Squawkabilly' && this.format.mod.startsWith('champions')) {
+			return 'Squawkabilly' + this.sample(['', '-Blue', '-White', '-Yellow']);
+		}
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
 		if (species.baseSpecies === 'Pikachu' && this.gen >= 8 && !this.format.mod.startsWith('champions')) {
 			return 'Pikachu' + this.sample(

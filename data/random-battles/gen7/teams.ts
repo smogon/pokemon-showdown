@@ -87,6 +87,11 @@ const PRIORITY_POKEMON = [
 	'aegislash', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
 ];
 
+/** Pokemon who should not be in the lead slot for some reason or another */
+const NO_LEAD_POKEMON = [
+	'dugtrio', 'gothitelle',
+];
+
 export class RandomGen7Teams extends RandomGen8Teams {
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
