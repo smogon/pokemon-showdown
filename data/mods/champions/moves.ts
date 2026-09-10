@@ -603,6 +603,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	meteorassault: {
 		inherit: true,
 		basePower: 170,
+		isNonstandard: null,
 	},
 	metronome: {
 		inherit: true,
