@@ -1,0 +1,80 @@
+#!/usr/bin/env node
+"use strict";
+
+const childProcess = require("child_process");
+const fs = require("fs");
+const path = require("path");
+
+const serverDir = __dirname;
+const clientDir = path.resolve(serverDir, "../pokemon-showdown-client");
+const pidFile = path.join(serverDir, ".start-analysis.pids.json");
+const apiPort = 8002;
+const clientPort = 8081;
+
+function run(command, args, cwd, env = process.env) {
+	console.log(`\n> ${command} ${args.join(" ")} (${cwd})`);
+	childProcess.execFileSync(command, args, { cwd, env, stdio: "inherit" });
+}
+
+function killPid(pid, label) {
+	try {
+		process.kill(pid, "SIGTERM");
+		console.log(`Stopped ${label} (pid ${pid})`);
+	} catch (error) {
+		if (error.code !== "ESRCH") console.warn(`Could not stop ${label}: ${error.message}`);
+	}
+}
+
+function killPort(port) {
+	try {
+		const output = childProcess.execFileSync("lsof", ["-ti", `TCP:${port}`, "-sTCP:LISTEN"], { encoding: "utf8" });
+		for (const pid of output.trim().split(/\s+/).filter(Boolean)) killPid(Number(pid), `port ${port}`);
+	} catch (error) {
+		if (error.status !== 1) throw error;
+	}
+}
+
+function stopPrevious() {
+	if (fs.existsSync(pidFile)) {
+		const { pids } = JSON.parse(fs.readFileSync(pidFile, "utf8"));
+		for (const entry of pids || []) killPid(entry.pid, entry.label);
+		fs.unlinkSync(pidFile);
+	}
+	killPort(apiPort);
+	killPort(clientPort);
+}
+
+function start(label, command, args, cwd, env = process.env) {
+	const child = childProcess.spawn(command, args, { cwd, env, detached: true, stdio: "ignore" });
+	child.unref();
+	console.log(`Started ${label} (pid ${child.pid})`);
+	return { label, pid: child.pid };
+}
+
+function main() {
+	stopPrevious();
+	if (process.argv.includes("--kill")) return;
+
+	if (!fs.existsSync(clientDir)) throw new Error(`Client directory not found: ${clientDir}`);
+
+	run("npm", ["run", "build"], serverDir);
+	run("npm", ["run", "build"], clientDir);
+
+	const pids = [
+		start("analysis-api", "node", ["dist/tools/analysis-server.js"], serverDir, {
+			...process.env,
+			ANALYSIS_PORT: String(apiPort),
+		}),
+		start("analysis-client", "npx", ["http-server", "-p", String(clientPort), "."], clientDir),
+	];
+	fs.writeFileSync(pidFile, JSON.stringify({ startedAt: new Date().toISOString(), pids }, null, "\t"));
+	console.log(`\nAnalysis: http://localhost:${clientPort}/analysis.pokemonshowdown.com/?~~localhost:${apiPort}`);
+	console.log("Stop with: node start-analysis --kill");
+}
+
+try {
+	main();
+} catch (error) {
+	console.error(error.stack || error);
+	process.exit(1);
+}

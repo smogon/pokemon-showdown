@@ -33,6 +33,7 @@ tools/set-import/*.js
 
 # start-dev pid tracking
 .start-dev.pids.json
+.start-analysis.pids.json
 rebuild-dex-config
 start-dev-config
 
