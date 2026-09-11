@@ -138,10 +138,10 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'Dugtrio', 'Gothitelle', 'Iron Thorns', 'Kingambit', 'Zacian', 'Zamazenta',
+	'dugtrio', 'gothitelle', 'ironthorns', 'kingambit', 'zacian', 'zamazenta',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
-	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
+	'basculegion', 'basculegionf', 'houndstone', 'ironbundle', 'roaringmoon', 'zacian', 'zamazenta',
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [
@@ -554,6 +554,7 @@ export class RandomTeams {
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
 				['earthpower', 'sandsearstorm'],
+				[PROTECT_MOVES, PROTECT_MOVES],
 				['coaching', ['helpinghand', 'howl']],
 			];
 
@@ -636,8 +637,6 @@ export class RandomTeams {
 		if (species.id === 'quagsire') this.incompatibleMoves(moves, movePool, 'spikes', 'icebeam');
 		// Taunt/Knock should be Cyclizar's flex moveslot
 		if (species.id === 'cyclizar') this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
-		// To force Stealth Rock on Camerupt
-		if (species.id === 'camerupt') this.incompatibleMoves(moves, movePool, 'roar', 'willowisp');
 		// nothing else rolls these lol
 		if (species.id === 'coalossal') this.incompatibleMoves(moves, movePool, 'flamethrower', 'overheat');
 	}
@@ -792,6 +791,14 @@ export class RandomTeams {
 			}
 			if (movePool.includes('defog')) {
 				counter = this.addMove('defog', moves, types, abilities, teamDetails, species, isLead,
+					movePool, teraType, role, isDoubles);
+			}
+		}
+
+		// Enforce Stealth Rock on sets with phazing moves and low Speed
+		if (['dragontail', 'roar', 'whirlwind'].some(m => movePool.includes(m)) && species.baseStats.spe <= 60) {
+			if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
+				counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
 					movePool, teraType, role, isDoubles);
 			}
 		}
@@ -1284,7 +1291,7 @@ export class RandomTeams {
 			(!types.has('Flying') || this.dex.getEffectiveness('Rock', species) >= 2)
 		) return 'Heavy-Duty Boots';
 		if (
-			role === 'Doubles Support' && ability === 'Prankster' && moves.has('tailwind') && this.randomChance(3, 4)
+			role === 'Doubles Support' && ability === 'Prankster' && moves.has('tailwind') && this.randomChance(1, 4)
 		) return 'Covert Cloak';
 		if (
 			(role === 'Bulky Protect' && counter.get('setup')) ||
@@ -1845,8 +1852,8 @@ export class RandomTeams {
 
 			if (leadsRemaining) {
 				if (
-					isDoubles && DOUBLES_NO_LEAD_POKEMON.includes(species.baseSpecies) ||
-					!isDoubles && NO_LEAD_POKEMON.includes(species.baseSpecies)
+					isDoubles && DOUBLES_NO_LEAD_POKEMON.includes(species.id) ||
+					!isDoubles && NO_LEAD_POKEMON.includes(species.id)
 				) {
 					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
 					set = this.randomSet(species, teamDetails, false, isDoubles);

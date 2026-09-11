@@ -87,9 +87,9 @@ const PRIORITY_POKEMON = [
 	'aegislash', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
 ];
 
-/** Pokemon who should not be in the lead slot for some reason or another */
+/** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'dugtrio', 'gothitelle',
+	'dugtrio', 'gothitelle', 'wobbuffet',
 ];
 
 export class RandomGen7Teams extends RandomGen8Teams {
@@ -376,10 +376,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			}
 		}
 
-		// Enforce Thunder Wave on Prankster users
-		if (movePool.includes('thunderwave') && abilities.includes('Prankster')) {
-			counter = this.addMove('thunderwave', moves, types, abilities, teamDetails, species, isLead,
-				movePool, preferredType, role);
+		// Enforce Thunder Wave and Encore on Prankster users
+		for (const moveid of ['encore', 'thunderwave']) {
+			if (movePool.includes(moveid) && abilities.includes('Prankster')) {
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, preferredType, role);
+			}
 		}
 
 		// Enforce Shadow Sneak on Kecleon
@@ -676,8 +678,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (species.name === 'Mew') return 'Mewnium Z';
 			if (species.name === 'Mimikyu') return 'Mimikium Z';
 			if (species.name === 'Necrozma-Dusk-Mane' || species.name === 'Necrozma-Dawn-Wings') {
-				if (moves.has('autotomize') && moves.has('sunsteelstrike')) return 'Solganium Z';
-				if (moves.has('autotomize') && moves.has('moongeistbeam')) return 'Lunalium Z';
+				if (!moves.has('outrage')) return (species.name === 'Necrozma-Dusk-Mane') ? 'Solganium Z' : 'Lunalium Z';
 				return 'Ultranecrozium Z';
 			}
 			// General Z-Crystals
@@ -1193,8 +1194,15 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				// Prevent Shedinja from generating for Chimera 1v1 (for Randomized Format Spotlight)
 				if (set.ability === 'Wonder Guard' && ruleTable.has('chimera1v1rule')) continue;
 
-				// Okay, the set passes, add it to our team
-				pokemon.unshift(set);
+				// Some Pokemon should not be in the lead slot; otherwise, the set passes, add it to the team.
+				if (
+					NO_LEAD_POKEMON.includes(species.id) &&
+					pokemon.length === this.maxTeamSize - 1 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
+				) {
+					pokemon.push(set);
+				} else {
+					pokemon.unshift(set);
+				}
 
 				// Don't bother tracking details for the last Pokemon
 				if (pokemon.length === this.maxTeamSize) break;

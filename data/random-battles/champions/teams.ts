@@ -61,7 +61,7 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot. Currently just Kingambit, but more may be added in the future */
 const NO_LEAD_POKEMON = [
-	'Kingambit',
+	'kingambit',
 ];
 
 const DOUBLES_NO_LEAD_POKEMON = [
@@ -354,7 +354,7 @@ export class RandomChampionsTeams extends RandomTeams {
 
 		// Enforce Stealth Rock on sets with phazing moves
 		if (['dragontail', 'roar', 'whirlwind'].some(m => movePool.includes(m))) {
-			if (movePool.includes('stealthrock')) {
+			if (movePool.includes('stealthrock') && !teamDetails.stealthRock) {
 				counter = this.addMove('stealthrock', moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role, isDoubles);
 			}
@@ -1119,8 +1119,8 @@ export class RandomChampionsTeams extends RandomTeams {
 			const set = this.randomSet(species, teamDetails, isLead, isDoubles);
 			// Some Pokemon should not be in the lead slot
 			if (
-				(isDoubles && DOUBLES_NO_LEAD_POKEMON.includes(species.baseSpecies) && isLead) ||
-				(!isDoubles && NO_LEAD_POKEMON.includes(species.baseSpecies) && isLead)
+				(isDoubles && DOUBLES_NO_LEAD_POKEMON.includes(species.id) && isLead) ||
+				(!isDoubles && NO_LEAD_POKEMON.includes(species.id) && isLead)
 			) {
 				pokemon.push(set);
 			} else {

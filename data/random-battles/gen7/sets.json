@@ -2084,7 +2084,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bravebird", "defog", "earthquake", "roost", "sacredfire", "substitute", "toxic"],
+                "movepool": ["bravebird", "defog", "earthquake", "recover", "sacredfire", "substitute", "toxic"],
                 "abilities": ["Regenerator"]
             }
         ]
@@ -4340,12 +4340,6 @@
     "mesprit": {
         "level": 86,
         "sets": [
-            {
-                "role": "Fast Attacker",
-                "movepool": ["calmmind", "healingwish", "hiddenpowerfire", "psychic", "psyshock", "signalbeam", "thunderbolt", "uturn"],
-                "abilities": ["Levitate"],
-                "preferredTypes": ["Bug"]
-            },
             {
                 "role": "Bulky Support",
                 "movepool": ["knockoff", "psychic", "stealthrock", "thunderwave", "toxic", "uturn"],
@@ -7636,15 +7630,20 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"],
+                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike"],
                 "abilities": ["Prism Armor"],
                 "preferredTypes": ["Ground"]
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike", "swordsdance"],
+                "movepool": ["autotomize", "earthquake", "knockoff", "photongeyser", "sunsteelstrike"],
                 "abilities": ["Prism Armor"],
-                "preferredTypes": ["Psychic"]
+                "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["earthquake", "outrage", "photongeyser", "swordsdance"],
+                "abilities": ["Prism Armor"]
             }
         ]
     },
@@ -7653,12 +7652,17 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["autotomize", "calmmind", "heatwave", "moongeistbeam", "photongeyser", "signalbeam"],
+                "movepool": ["autotomize", "calmmind", "moongeistbeam", "photongeyser", "signalbeam"],
                 "abilities": ["Prism Armor"]
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["autotomize", "calmmind", "heatwave", "moongeistbeam", "photongeyser", "signalbeam"],
+                "movepool": ["autotomize", "calmmind", "moongeistbeam", "photongeyser", "signalbeam"],
+                "abilities": ["Prism Armor"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["earthquake", "outrage", "photongeyser", "swordsdance"],
                 "abilities": ["Prism Armor"]
             }
         ]
