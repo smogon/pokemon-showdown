@@ -141,7 +141,7 @@ const NO_LEAD_POKEMON = [
 	'dugtrio', 'gothitelle', 'ironthorns', 'kingambit', 'zacian', 'zamazenta',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
-	'basculegion', 'basculegionf', 'houndstone', 'ironbundle', 'roaringmoon', 'zacian', 'zamazenta',
+	'basculegion', 'basculegionf', 'dugtrio', 'gothitelle', 'houndstone', 'ironbundle', 'roaringmoon', 'zacian', 'zamazenta',
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [
