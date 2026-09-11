@@ -1604,7 +1604,7 @@
         "level": 48,
         "sets": [
             {
-                "role": "Doubles Fast Attacker",
+                "role": "Doubles Wallbreaker",
                 "movepool": ["Close Combat", "Encore", "Fake Out", "Protect", "Thunder Wave", "U-turn"],
                 "abilities": ["Limber"]
             }
