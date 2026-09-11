@@ -120,9 +120,10 @@ export class RandomChampionsTeams extends RandomTeams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
-			Normal: (movePool, moves, abilities, types, counter) => (
+			Normal: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Normal') && (
-					movePool.includes('boomburst') || ['Electric', 'Fire', 'Ghost', 'Ground'].some(t => types.has(t))
+					movePool.includes('boomburst') || ['Electric', 'Fire', 'Ghost', 'Ground'].some(t => types.has(t)) ||
+					species.baseSpecies === 'Squawkabilly'
 				)
 			),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),

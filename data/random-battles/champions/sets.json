@@ -3019,8 +3019,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Focus Blast", "Glare", "Hyper Voice", "Morning Sun", "Surf", "Thunderbolt", "Volt Switch"],
-                "abilities": ["Dry Skin"],
-                "preferredTypes": ["Normal"]
+                "abilities": ["Dry Skin"]
             }
         ]
     },
