@@ -264,7 +264,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: null,
 	},
 	ejectbutton: {
-		onAfterMoveSecondaryPriority: 2,
+		inherit: true,
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
