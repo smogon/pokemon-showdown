@@ -3989,7 +3989,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Crunch", "Play Rough", "Psychic Fangs", "Taunt"],
+                "movepool": ["Crunch", "Play Rough", "Psychic Fangs", "Taunt", "Wild Charge"],
                 "abilities": ["Stakeout"]
             },
             {
