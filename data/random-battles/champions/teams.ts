@@ -768,6 +768,9 @@ export class RandomChampionsTeams extends RandomTeams {
 			(!counter.get('Status') || counter.get('Status') === 1 && moves.has('partingshot'))
 		) return 'Choice Scarf';
 
+		if (['flamecharge', 'kingsshield', 'nuzzle', 'rapidspin', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
+		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
+
 		// Give physically bulky Pokemon with either Regenerator or a recovery move a chance at Rocky Helmet
 		if (
 			ability === 'Rough Skin' || (
@@ -778,10 +781,6 @@ export class RandomChampionsTeams extends RandomTeams {
 				(species.baseStats.hp + species.baseStats.def) > 200 && this.randomChance(1, 2)
 			)
 		) return 'Rocky Helmet';
-
-		if (['flamecharge', 'kingsshield', 'nuzzle', 'rapidspin', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
-		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
-		if (ability === 'Rough Skin') return 'Rocky Helmet';
 
 		// Default to Leftovers for Bulky roles
 		if (role.includes('Bulky')) return 'Leftovers';
