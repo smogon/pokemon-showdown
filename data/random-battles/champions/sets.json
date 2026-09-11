@@ -1563,7 +1563,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Close Combat", "Shadow Claw", "Sucker Punch", "Swords Dance", "Will-O-Wisp"],
-                "abilities": ["Sharpness"]
+                "abilities": ["Justified"]
             }
         ]
     },
@@ -3601,7 +3601,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bulk Up", "Brutal Swing", "Mach Punch", "Storm Throw"],
+                "movepool": ["Brutal Swing", "Bulk Up", "Mach Punch", "Storm Throw"],
                 "abilities": ["Technician"]
             }
         ]
