@@ -991,13 +991,13 @@
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": [ "Fire Blast", "Nasty Plot", "Pollen Puff", "Protect", "Psychic"],
+                "movepool": ["Fire Blast", "Nasty Plot", "Pollen Puff", "Protect", "Psychic"],
                 "abilities": ["Synchronize"],
                 "teraTypes": ["Fairy", "Steel"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Imprison", "Pollen Puff", "Psychic", "Transform"],
+                "movepool": ["Coaching", "Imprison", "Pollen Puff", "Psychic", "Transform"],
                 "abilities": ["Synchronize"],
                 "teraTypes": ["Fairy", "Steel"]
             }
