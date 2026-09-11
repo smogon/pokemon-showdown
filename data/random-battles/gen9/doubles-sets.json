@@ -996,7 +996,7 @@
                 "teraTypes": ["Fairy", "Steel"]
             },
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Coaching", "Imprison", "Pollen Puff", "Psychic", "Transform"],
                 "abilities": ["Synchronize"],
                 "teraTypes": ["Fairy", "Steel"]
