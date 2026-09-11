@@ -769,7 +769,7 @@ export class RandomChampionsTeams extends RandomTeams {
 			(!counter.get('Status') || counter.get('Status') === 1 && moves.has('partingshot'))
 		) return 'Choice Scarf';
 
-		if (['flamecharge', 'kingsshield', 'nuzzle', 'rapidspin', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
+		if (['flamecharge', 'kingsshield', 'nuzzle', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 
 		// Give physically bulky Pokemon with either Regenerator or a recovery move a chance at Rocky Helmet
