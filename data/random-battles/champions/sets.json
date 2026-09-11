@@ -3643,12 +3643,14 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Close Combat", "Iron Head", "Knock Off", "Spikes", "Stealth Rock", "Thunder Wave", "U-turn"],
-                "abilities": ["Tough Claws"]
+                "abilities": ["Tough Claws"],
+                "preferredTypes": ["Fighting"]
             },
             {
                 "role": "Wallbreaker",
                 "movepool": ["Close Combat", "Iron Head", "Knock Off", "Stealth Rock", "U-turn"],
-                "abilities": ["Tough Claws"]
+                "abilities": ["Tough Claws"],
+                "preferredTypes": ["Fighting"]
             }
         ]
     },
