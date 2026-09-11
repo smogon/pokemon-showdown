@@ -228,7 +228,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Stone Edge", "Sucker Punch", "Swords Dance"],
                 "abilities": ["Arena Trap"],
                 "teraTypes": ["Dark", "Fairy", "Flying", "Ghost", "Ground"]

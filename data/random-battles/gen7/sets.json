@@ -397,7 +397,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "honeclaws", "stealthrock", "stoneedge", "suckerpunch"],
                 "abilities": ["Arena Trap"]
             },

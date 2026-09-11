@@ -138,10 +138,10 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'dugtrio', 'gothitelle', 'ironthorns', 'kingambit', 'zacian', 'zamazenta',
+	'dugtrio', 'gothitelle', 'ironthorns', 'kingambit', 'zacian', 'zaciancrowned', 'zamazenta', 'zamazentacrowned',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
-	'basculegion', 'basculegionf', 'dugtrio', 'gothitelle', 'houndstone', 'ironbundle', 'roaringmoon', 'zacian', 'zamazenta',
+	'basculegion', 'basculegionf', 'dugtrio', 'gothitelle', 'houndstone', 'ironbundle', 'roaringmoon', 'zacian', 'zaciancrowned', 'zamazenta', 'zamazentacrowned',
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [

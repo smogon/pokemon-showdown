@@ -273,10 +273,9 @@
         "level": 82,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "nightslash", "stoneedge", "suckerpunch"],
-                "abilities": ["Arena Trap"],
-                "preferredTypes": ["Rock"]
+                "abilities": ["Arena Trap"]
             }
         ]
     },
