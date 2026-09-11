@@ -707,7 +707,7 @@ export class RandomChampionsTeams extends RandomTeams {
 		// Move this back to getDoublesItem() if Choice Band/Specs get added
 		if (role === 'Choice Item user') return 'Choice Scarf';
 		if (
-			['Cheek Pouch', 'Cud Chew', 'Harvest', 'Ripen'].some(m => ability === m) || moves.has('bellydrum')
+			['Cheek Pouch', 'Cud Chew', 'Emergency Exit', 'Harvest', 'Ripen'].some(m => ability === m) || moves.has('bellydrum')
 		) return 'Sitrus Berry';
 		if (species.id === 'alakazam' && this.randomChance(1, 2)) return 'Focus Sash';
 		if (species.id === 'glimmora') return 'Focus Sash';
