@@ -1221,7 +1221,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onAnyPrepareHit(source, target, move) {
-				const snatchUser = this.effectState.source;
+				const snatchUser = this.effectState.source as Pokemon;
 				if (snatchUser.isSkyDropped()) return;
 				if (!move || move.isZ || move.isMax || !move.flags['snatch']) {
 					return;
@@ -1236,7 +1236,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					snatchUser.deductPP(this.effectState.sourceEffect.id, extraPP);
 				}
 
-				this.actions.useMove(move.id, snatchUser);
+				const snatchedMove = this.dex.getActiveMove(move.id);
+				snatchUser.lastMove = snatchedMove;
+				this.actions.useMove(snatchedMove, snatchUser);
+				if (snatchUser.getItem().isChoice) {
+					delete snatchUser.volatiles['choicelock'];
+					snatchUser.addVolatile('choicelock');
+				}
 				return null;
 			},
 		},
