@@ -252,6 +252,9 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihitType?: 'parentalbond';
 	noDamageVariance?: boolean;
 	nonGhostTarget?: MoveTarget;
+	/**
+	 * Gen 4: spread moves dont deal reduced damage if it is the last target
+	 */
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
