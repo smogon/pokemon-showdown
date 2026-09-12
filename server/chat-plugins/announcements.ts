@@ -3,6 +3,8 @@
  * By Spandamn
  */
 
+import { Utils } from "../../lib";
+
 export interface AnnouncementOptions {
 	activityNumber?: number;
 	source: string;
@@ -184,6 +186,10 @@ export const commands: Chat.ChatCommands = {
 				announcement.display();
 			} else {
 				announcement.displayTo(user, connection);
+				if (user.can('declare', null, room, 'announcement')) {
+					const content = Utils.escapeHTML(announcement.source).replace(/\n/g, '<br />');
+					this.sendReply(`|uhtml|announcementsource|<div class="infobox"><details><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/announcement htmlcreate ${content}</code></details></div>`);
+				}
 			}
 		},
 		displayhelp: [`/announcement display - Displays the announcement`],
