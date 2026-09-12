@@ -348,6 +348,7 @@ interface ModdedBattlePokemon {
 
 interface ModdedBattleQueue extends Partial<BattleQueue> {
 	inherit?: true;
+	orders?: { [choice: string]: number };
 	resolveAction?: (this: BattleQueue, action: ActionChoice, midTurn?: boolean) => Action[];
 }
 
