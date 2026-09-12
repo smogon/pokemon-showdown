@@ -112,7 +112,7 @@ export const TargetNames: { [id: string]: TranslationString } = {
 	allAdjacent: "Colpisce gli alleati e i nemici adiacenti", // NEEDS QC
 	allAdjacentDoubles: "Colpisce l'alleato ed entrambi i nemici", // NEEDS QC
 	allAdjacentFFA: "Colpisce tutti i nemici", // NEEDS QC
-	any: "Può colpire Pokémon lontani nelle Lotte in Trio", // NEEDS QC
+	any: "Può colpire Pokémon lontani nelle Lotte in Triplo", // NEEDS QC
 	all: "Colpisce tutti i Pokémon", // NEEDS QC
 	scripted: "Bersaglio scelto automaticamente", // NEEDS QC
 	randomNormal: "Colpisce un nemico adiacente a caso", // NEEDS QC

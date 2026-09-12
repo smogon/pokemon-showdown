@@ -111,7 +111,7 @@ export const TargetNames: { [id: string]: TranslationString } = {
 	allAdjacent: "Afecta a los aliados y rivales adyacentes", // NEEDS QC
 	allAdjacentDoubles: "Afecta al aliado y a ambos rivales", // NEEDS QC
 	allAdjacentFFA: "Afecta a todos los rivales", // NEEDS QC
-	any: "Puede apuntar a Pokémon alejados en los Combates Trío", // NEEDS QC
+	any: "Puede apuntar a Pokémon alejados en los Combates Triples", // NEEDS QC
 	all: "Afecta a todos los Pokémon", // NEEDS QC
 	scripted: "Objetivo elegido automáticamente", // NEEDS QC
 	randomNormal: "Afecta a un rival adyacente al azar", // NEEDS QC
