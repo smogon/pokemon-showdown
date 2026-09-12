@@ -98,4 +98,34 @@ describe('Trace', () => {
 		battle.makeChoices('switch 2', 'auto');
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
+
+	describe('[Gen 4]', () => {
+		it.skip(`should delay the copied Ability activation until its standard switch-in priority`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: "Ralts", ability: 'trace', moves: ['sleeptalk'] },
+				{ species: "Arcanine", ability: 'intimidate', moves: ['sleeptalk'] },
+			], [
+				{ species: "Suicune", ability: 'pressure', moves: ['sleeptalk'] },
+				{ species: "Raikou", ability: 'pressure', moves: ['sleeptalk'] },
+			]]);
+			const debugLog = battle.getDebugLog();
+			const raltsTrace = debugLog.indexOf('|-ability|p1a: Ralts|Pressure');
+			const arcanineTrace = debugLog.indexOf('|-ability|p1b: Arcanine|Intimidate');
+			assert(arcanineTrace > 0);
+			assert(arcanineTrace < raltsTrace, `Expected Arcanine's Intimidate to activate before Ralts's Trace.`);
+		});
+	});
+
+	describe('[Gen 3]', () => {
+		it(`should not activate the opponent's Ability`, () => {
+			battle = common.gen(3).createBattle([[
+				{ species: "Ralts", ability: 'trace', moves: ['sleeptalk'] },
+			], [
+				{ species: "Arcanine", ability: 'intimidate', moves: ['sleeptalk'] },
+			]]);
+			assert.equal(battle.p1.active[0].ability, 'intimidate');
+			assert.equal(battle.p1.active[0].boosts.atk, -1);
+			assert.equal(battle.p2.active[0].boosts.atk, 0);
+		});
+	});
 });

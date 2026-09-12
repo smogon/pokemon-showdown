@@ -1,7 +1,10 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
-		onSwitchIn: undefined, // no inherit
+		onSwitchInPriority: 13,
+		onSwitchIn(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
@@ -16,6 +19,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		rating: 1.5,
+	},
+	anticipation: {
+		inherit: true,
+		onSwitchInPriority: 8,
 	},
 	baddreams: {
 		inherit: true,
@@ -36,7 +43,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cloudnine: {
 		inherit: true,
-		onSwitchIn: undefined, // no inherit
+		onSwitchInPriority: 13,
+		onSwitchIn(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false;
 		},
@@ -74,6 +84,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	download: {
 		inherit: true,
+		onSwitchInPriority: 9,
 		onStart(pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
@@ -88,6 +99,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.boost({ atk: 1 });
 			}
 		},
+	},
+	drizzle: {
+		inherit: true,
+		onSwitchInPriority: 11,
+	},
+	drought: {
+		inherit: true,
+		onSwitchInPriority: 11,
 	},
 	effectspore: {
 		inherit: true,
@@ -135,6 +154,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	flowergift: {
 		inherit: true,
+		onSwitchInPriority: 2,
 		onAllyModifyAtk(atk) {
 			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
@@ -149,10 +169,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	forecast: {
 		inherit: true,
+		onSwitchInPriority: 2,
 		flags: { notrace: 1 },
 	},
 	forewarn: {
 		inherit: true,
+		onSwitchInPriority: 7,
 		onStart(pokemon) {
 			let warnMoves: Move[] = [];
 			let warnBp = 1;
@@ -178,6 +200,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	frisk: {
 		inherit: true,
+		onSwitchInPriority: 6,
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (target?.item) {
@@ -210,6 +233,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	intimidate: {
 		inherit: true,
+		onSwitchInPriority: 10,
 		onStart(pokemon) {
 			const activated = pokemon.adjacentFoes().some(target => (
 				!(target.volatiles['substitute'] || target.volatiles['substitutebroken']?.move === 'uturn')
@@ -278,6 +302,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	moldbreaker: {
+		inherit: true,
+		onSwitchInPriority: 4,
+	},
 	multitype: {
 		inherit: true,
 		onTakeItem: false,
@@ -345,6 +373,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	pressure: {
 		inherit: true,
+		onSwitchInPriority: 3,
 		onDeductPP(target, source) {
 			if (target === source) return;
 			return 1;
@@ -358,6 +387,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
 		},
+	},
+	sandstream: {
+		inherit: true,
+		onSwitchInPriority: 11,
 	},
 	sandveil: {
 		inherit: true,
@@ -396,6 +429,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	slowstart: {
+		inherit: true,
+		onSwitchInPriority: 5,
+	},
 	snowcloak: {
 		inherit: true,
 		onModifyAccuracyPriority: 8,
@@ -406,6 +443,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.8);
 			}
 		},
+	},
+	snowwarning: {
+		inherit: true,
+		onSwitchInPriority: 11,
 	},
 	speedboost: {
 		inherit: true,
@@ -513,6 +554,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	trace: {
 		inherit: true,
+		onSwitchInPriority: 12,
 		onUpdate(pokemon) {
 			if (!this.effectState.seek) return;
 			const target = pokemon.side.randomFoe();
