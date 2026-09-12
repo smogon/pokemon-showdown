@@ -20,6 +20,29 @@ describe('Magician', () => {
 		assert.equal(battle.p1.active[0].item, 'tr69');
 	});
 
+	it(`should not steal from a Sticky Hold target`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['tackle'] },
+		], [
+			{ species: 'skarmory', ability: 'stickyhold', item: 'leftovers', moves: ['tackle'] },
+		]]);
+		battle.makeChoices();
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.holdsItem(battle.p2.active[0]);
+	});
+
+	it(`should steal if a Sticky Hold target faints`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['tackle'] },
+		], [
+			{ species: 'skarmory', level: 1, ability: 'stickyhold', item: 'leftovers', moves: ['tackle'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.fainted(battle.p2.active[0]);
+		assert.holdsItem(battle.p1.active[0]);
+	});
+
 	it(`should steal the opponents item if the target faints`, () => {
 		battle = common.createBattle([[
 			{ species: 'klefki', ability: 'magician', moves: ['flashcannon'] },
@@ -85,17 +108,143 @@ describe('Magician', () => {
 		assert.false.holdsItem(battle.p1.active[0], 'Klefki should not have stolen an item.');
 	});
 
-	it(`should steal the item from the faster opponent hit`, () => {
+	it(`should steal the item from the faster target hit, prioritizing foes`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
-			{ species: "Hoopa", ability: 'magician', moves: ['expandingforce'] },
-			{ species: "Tapu Lele", ability: 'psychicsurge', moves: ['sleeptalk'] },
+			{ species: "Hoopa", ability: 'magician', moves: ['surf'] },
+			{ species: "Regieleki", item: 'tr67', moves: ['sleeptalk'] },
 		], [
 			{ species: "Shuckle", item: 'tr68', moves: ['sleeptalk'] },
 			{ species: "Zapdos", item: 'tr69', moves: ['sleeptalk'] }],
 		]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, 'tr69');
+		assert.equal(battle.p1.active[1].item, 'tr67');
 		assert.equal(battle.p2.active[0].item, 'tr68');
 		assert.equal(battle.p2.active[1].item, '');
+	});
+
+	it(`should not be activated by a future move`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['sleeptalk', 'doomdesire'] },
+		], [
+			{ species: 'wynaut', item: 'tr69', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move doomdesire', 'move sleeptalk');
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.holdsItem(battle.p2.active[0]);
+	});
+
+	it(`should activate if the user consumed its Power Herb`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', item: 'powerherb', moves: ['meteorbeam'] },
+		], [
+			{ species: 'wynaut', item: 'tr69', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'tr69');
+		assert.false.holdsItem(battle.p2.active[0]);
+	});
+
+	it(`should not activate prior to Focus Sash activating`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['tackle'] },
+		], [
+			{ species: 'wynaut', level: 1, item: 'focussash', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p2.active[0].hp, 1);
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(battle.p2.active[0]);
+	});
+
+	it(`should not activate prior to status healing from Lum Berry`, () => {
+		battle = common.createBattle([[
+			{ species: 'Delphox', ability: 'magician', moves: ['inferno'] },
+		], [
+			{ species: 'Regieleki', ability: 'noguard', item: 'lumberry', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.false(battle.p2.active[0].status);
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(battle.p2.active[0]);
+	});
+
+	it(`should activate prior to healing from Sitrus Berry`, () => {
+		battle = common.createBattle([[
+			{ species: 'Urshifu', ability: 'magician', moves: ['wickedblow'] },
+		], [
+			{ species: 'Terapagos', ability: 'berserk', item: 'sitrusberry', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		const terapagos = battle.p2.active[0];
+		assert.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(terapagos);
+		assert.equal(terapagos.boosts.spa, 1);
+		assert(terapagos.hp < terapagos.maxhp / 2);
+	});
+
+	it(`should not activate prior to healing from Sitrus Berry after a multi-hit move`, () => {
+		battle = common.createBattle([[
+			{ species: 'Urshifu-Rapid-Strike', ability: 'magician', moves: ['surgingstrikes'] },
+		], [
+			{ species: 'Terapagos', ability: 'berserk', item: 'sitrusberry', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		const terapagos = battle.p2.active[0];
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(terapagos);
+		assert.equal(terapagos.boosts.spa, 0);
+		assert(terapagos.hp > terapagos.maxhp / 2);
+	});
+
+	it(`should activate after the last hit of a multi-hit move`, () => {
+		battle = common.createBattle([[
+			{ species: 'Urshifu-Rapid-Strike', ability: 'magician', moves: ['surgingstrikes'] },
+		], [
+			{ species: 'Terapagos', item: 'tr69', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(battle.p2.active[0]);
+		const debugLog = battle.getDebugLog();
+		const magician = debugLog.indexOf('Magician');
+		const hitCount = debugLog.indexOf('hitcount');
+		assert(-1 < hitCount);
+		assert(hitCount < magician);
+	});
+
+	it.skip(`should not steal an item through Substitute`, () => {
+		battle = common.createBattle([[
+			{ species: 'Urshifu', ability: 'magician', moves: ['wickedblow'] },
+		], [
+			{ species: 'Scolipede', item: 'tr69', moves: ['substitute'] },
+		]]);
+		battle.makeChoices();
+		const scolipede = battle.p2.active[0];
+		assert.false(scolipede.volatiles['substitute']);
+		assert.equal(scolipede.hp, scolipede.maxhp - Math.floor(scolipede.maxhp / 4));
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.holdsItem(battle.p2.active[0]);
+	});
+
+	it.skip(`should activate before Relic Song`, () => {
+		battle = common.createBattle([[
+			{ species: 'Meloetta', ability: 'magician', moves: ['relicsong'] },
+		], [
+			{ species: 'Scolipede', item: 'tr69', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p1.active[0]);
+		assert.false.holdsItem(battle.p2.active[0]);
+		assert.species(battle.p1.active[0], 'Meloetta-Pirouette');
+		const debugLog = battle.getDebugLog();
+		const magician = debugLog.indexOf('Magician');
+		const pirouette = debugLog.indexOf('Meloetta-Pirouette');
+		assert(-1 < magician);
+		assert(magician < pirouette);
 	});
 });
