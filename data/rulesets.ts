@@ -171,11 +171,21 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		banlist: ['Unreleased', 'Unobtainable', 'Nonexistent'],
 		// Mostly hardcoded in team-validator.ts
 		onValidateTeam(team, format) {
+			let spikyEaredPichuCount = 0;
 			let kyuremCount = 0;
 			let necrozmaDMCount = 0;
 			let necrozmaDWCount = 0;
 			let calyrexCount = 0;
 			for (const set of team) {
+				if (set.species === 'Spiky-eared Pichu') {
+					if (spikyEaredPichuCount > 0) {
+						return [
+							`You cannot have more than one Spiky-eared Pichu.`,
+							`(It's event-exclusive and untradeable.)`,
+						];
+					}
+					spikyEaredPichuCount++;
+				}
 				if (set.species === 'Kyurem-White' || set.species === 'Kyurem-Black') {
 					if (kyuremCount > 0) {
 						return [
