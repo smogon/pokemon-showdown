@@ -470,6 +470,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return this.chainModify([5325, 4096]);
 		},
 	},
+	weakenberry: {
+		name: 'weakenberry',
+		duration: 1,
+		onDamagingHit(damage, target, source, move) {
+			this.add('-enditem', target, this.effect, '[weaken]');
+			this.runEvent('EatItem', target, target, this.effectState.sourceEffect, this.dex.items.get(this.effectState.sourceEffect));
+			delete target.volatiles['weakenberry'];
+		},
+	},
 
 	// weather is implemented here since it's so important to the game
 
