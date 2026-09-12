@@ -1,18 +1,18 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: null, // NEEDS TRANSLATION
-		winBattle: null, // NEEDS TRANSLATION
-		tieBattle: null, // NEEDS TRANSLATION
+		startBattle: "{TRAINER1:conjunctive} {TRAINER2}의 배틀이 시작되었다!", // NEEDS QC
+		winBattle: "**{TRAINER}**의 승리다!", // NEEDS QC
+		tieBattle: "{TRAINER1:conjunctive} {TRAINER2}의 배틀은 무승부다!", // NEEDS QC
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "상대 {NICKNAME}",
-		fullName: null, // NEEDS TRANSLATION
+		fullName: "{NICKNAME}({SPECIES})", // NEEDS QC
 		team: "우리 편",
 		opposingTeam: "상대",
 		party: "같은 편 포켓몬", // LZA wording (newest; Champions has no line). SV: 우리 편 포켓몬
 		opposingParty: "상대의 포켓몬",
 
-		turn: null, // NEEDS TRANSLATION
+		turn: "== 턴 {NUMBER} ==",
 		switchIn: "{TRAINER:topic} {FULLNAME:object} 내보냈다!",
 		switchInOwn: "가랏! {FULLNAME}!",
 		switchOut: "{TRAINER:topic} {NICKNAME:object} 넣어 버렸다!",
@@ -37,56 +37,56 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		primal: "{POKEMON}의 원시회귀! 원시의 모습으로 돌아갔다!",
 		zPower: "  {POKEMON:topic} Z파워에 몸이 둘러싸였다!",
 		zBroken: "  {POKEMON:topic} 공격을 막아 내지 못하고 데미지를 입었다!",
-		terastallize: null, // NEEDS TRANSLATION
+		terastallize: "  ({POKEMON:topic} {TYPE}타입으로 테라스탈했다!)", // NEEDS QC
 
 		// in case the different default messages didn't make it obvious, the difference
 		// is that the `cant` message REPLACES "Pokemon used Move!", while the `fail`
 		// message happens AFTER "Pokemon used Move!"
 		cant: "{POKEMON:topic} {MOVE:object} 쓸 수 없다!",
-		cantNoMove: null, // NEEDS TRANSLATION
+		cantNoMove: "{POKEMON:topic} 움직일 수 없다!", // NEEDS QC
 		fail: "  그러나 실패하고 말았다!!",
 
 		// n.b. this is the default message for in-battle forme changes
 		// for the move Transform and ability Imposter, see the entry for the move Transform
 		transform: "{POKEMON}의 모습이 변화했다!",
 		typeChange: "  {POKEMON:topic} {TYPE}타입이 됐다!",
-		typeChangeFromEffect: null, // NEEDS TRANSLATION
+		typeChangeFromEffect: "  {POKEMON}의 {EFFECT} 때문에 {TYPE}타입이 되었다!", // NEEDS QC: possessive 의 per official 때문에-lines
 		typeAdd: "  {POKEMON}에게 {TYPE}타입이 추가되었다!",
 
-		start: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON}에게 {EFFECT}의 효과가 발생했다!)", // NEEDS QC
 		end: "  {POKEMON:topic} {EFFECT:directional}부터 풀려났다!",
-		activate: null, // NEEDS TRANSLATION
-		startTeamEffect: null, // NEEDS TRANSLATION
-		endTeamEffect: null, // NEEDS TRANSLATION
-		startFieldEffect: null, // NEEDS TRANSLATION
-		endFieldEffect: null, // NEEDS TRANSLATION
+		activate: "  ({EFFECT:subject} 발동했다!)", // NEEDS QC
+		startTeamEffect: "  ({TEAM}에게 {EFFECT}의 효과가 발생했다!)", // NEEDS QC
+		endTeamEffect: "  ({TEAM}의 {EFFECT} 효과가 없어졌다!)", // NEEDS QC
+		startFieldEffect: "  ({EFFECT}의 효과가 발생했다!)", // NEEDS QC
+		endFieldEffect: "  ({EFFECT}의 효과가 없어졌다!)", // NEEDS QC
 
 		changeAbility: "  {POKEMON:topic} {ABILITY:subject} 되었다!",
 		addItem: "  {POKEMON:topic} {ITEM:object} 손에 넣었다!",
 		takeItem: "  {POKEMON:topic} {SOURCE:directional}부터 {ITEM:object} 빼앗았다!",
-		eatItem: null, // NEEDS TRANSLATION
+		eatItem: "  ({POKEMON:topic} {ITEM:object} 먹었다!)", // NEEDS QC
 		useGem: "  {ITEM:topic} {MOVE}의 위력을 강하게 했다!",
 		eatItemWeaken: "  {POKEMON:subject} 입는 데미지를 {ITEM:subject} 약하게 했다!",
-		removeItem: null, // NEEDS TRANSLATION
-		activateItem: null, // NEEDS TRANSLATION
+		removeItem: "  {POKEMON:topic} {ITEM:object} 잃었다!", // NEEDS QC
+		activateItem: "  ({POKEMON:topic} {ITEM:object} 사용했다!)", // NEEDS QC
 		activateWeaken: "  {POKEMON:subject} 입는 데미지를 {ITEM:subject} 약하게 했다!",
 
 		damage: "  ({POKEMON:topic} 데미지를 입었다!)",
-		damagePercentage: null, // NEEDS TRANSLATION
+		damagePercentage: "  ({POKEMON:topic} 체력의 {PERCENTAGE}%를 잃었다!)", // NEEDS QC
 		damageFromPokemon: "  {POKEMON:topic} {SOURCE}의 {ITEM} 때문에 데미지를 입었다!",
 		damageFromItem: "  {POKEMON:topic} {ITEM} 때문에 데미지를 입었다!",
 		damageFromPartialTrapping: "  {POKEMON:topic} {MOVE}의 데미지를 입고 있다.",
 		heal: "  {POKEMON}의 체력이 회복되었다!",
 		healFromZEffect: "  {POKEMON:topic} Z파워로 체력을 회복했다!",
-		healFromEffect: null, // NEEDS TRANSLATION
+		healFromEffect: "  {POKEMON:topic} {EFFECT:directional} 인해 회복했다!", // NEEDS QC: PS-authored; particle structure per SV ko_common:7447
 
 		boost: "  {POKEMON}의 {STAT:subject} 올라갔다!",
 		boost2: "  {POKEMON}의 {STAT:subject} 크게 올라갔다!",
 		boost3: "  {POKEMON}의 {STAT:subject} 매우 크게 올라갔다!",
 		boost0: "  {POKEMON}의 {STAT:topic} 더 올라가지 않는다!",
-		boostFromItem: null, // NEEDS TRANSLATION
-		boost2FromItem: null, // NEEDS TRANSLATION
-		boost3FromItem: null, // NEEDS TRANSLATION
+		boostFromItem: "  {POKEMON:topic} {ITEM:directional} {STAT:subject} 올라갔다!", // NEEDS QC: structure per SM ko_common:8030
+		boost2FromItem: "  {POKEMON:topic} {ITEM:directional} {STAT:subject} 크게 올라갔다!", // NEEDS QC: structure per SM ko_common:8030
+		boost3FromItem: "  {POKEMON:topic} {ITEM:directional} {STAT:subject} 매우 크게 올라갔다!", // NEEDS QC: structure per SM ko_common:8030; literal 로 dropped — :directional emits 으로/로
 		boostFromZEffect: "  {POKEMON:topic} Z파워로 {STAT:subject} 올라갔다!",
 		boost2FromZEffect: "  {POKEMON:topic} Z파워로 {STAT:subject} 크게 올라갔다!",
 		boost3FromZEffect: "  {POKEMON:topic} Z파워로 {STAT:subject} 매우 크게 올라갔다!",
@@ -96,9 +96,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		unboost2: "  {POKEMON}의 {STAT:subject} 크게 떨어졌다!",
 		unboost3: "  {POKEMON}의 {STAT:subject} 매우 크게 떨어졌다!",
 		unboost0: "  {POKEMON}의 {STAT:topic} 더 떨어지지 않는다!",
-		unboostFromItem: null, // NEEDS TRANSLATION
-		unboost2FromItem: null, // NEEDS TRANSLATION
-		unboost3FromItem: null, // NEEDS TRANSLATION
+		unboostFromItem: "  {POKEMON:topic} {ITEM:directional} {STAT:subject} 떨어졌다!", // NEEDS QC
+		unboost2FromItem: "  {POKEMON:topic} {ITEM:directional} {STAT:subject} 크게 떨어졌다!", // NEEDS QC
+		unboost3FromItem: "  {POKEMON:topic} {ITEM:directional} {STAT:subject} 매우 크게 떨어졌다!", // NEEDS QC
 
 		swapBoost: "  {POKEMON:topic} 상대와 자신의 능력 변화를 바꿨다!",
 		swapOffensiveBoost: "  {POKEMON:topic} 상대와 자신의 공격과 특수공격의 능력 변화를 바꿨다!",
@@ -134,62 +134,65 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		hitCount: "  {NUMBER}번 맞았다!",
 	},
 	ui: {
-		whatDo: null, // NEEDS TRANSLATION
-		moveTarget: null, // NEEDS TRANSLATION
-		reviveWho: null, // NEEDS TRANSLATION
-		replaceWho: null, // NEEDS TRANSLATION
-		teamStart: null, // NEEDS TRANSLATION
-		teamRest: null, // NEEDS TRANSLATION
-		chooseLead: null, // NEEDS TRANSLATION
-		chooseSlot: null, // NEEDS TRANSLATION
-		teamSoFar: null, // NEEDS TRANSLATION
-		waitingOpponent: null, // NEEDS TRANSLATION
-		cantSwitchTrapped: null, // NEEDS TRANSLATION
-		zEffectClearNegativeBoost: null, // NEEDS TRANSLATION
-		zEffectCrit2: null, // NEEDS TRANSLATION
-		zEffectHeal: null, // NEEDS TRANSLATION
-		zEffectCurse: null, // NEEDS TRANSLATION
-		zEffectRedirect: null, // NEEDS TRANSLATION
-		zEffectHealReplacement: null, // NEEDS TRANSLATION
-		flingBerry: null, // NEEDS TRANSLATION
-		flingWhiteHerb: null, // NEEDS TRANSLATION
-		flingMentalHerb: null, // NEEDS TRANSLATION
-		cantFling: null, // NEEDS TRANSLATION
-		unobtainableInGen: null, // NEEDS TRANSLATION
-		tagMoves: null, // NEEDS TRANSLATION
-		notifyMoveTitle: null, // NEEDS TRANSLATION
-		notifyMove: null, // NEEDS TRANSLATION
-		notifyMoveAgainst: null, // NEEDS TRANSLATION
-		notifySwitchTitle: null, // NEEDS TRANSLATION
-		notifySwitch: null, // NEEDS TRANSLATION
-		notifySwitchAgainst: null, // NEEDS TRANSLATION
-		notifyTeamTitle: null, // NEEDS TRANSLATION
-		notifyTeam: null, // NEEDS TRANSLATION
-		notifyTeamAgainst: null, // NEEDS TRANSLATION
-		mightBeDisabled: null, // NEEDS TRANSLATION
-		mightBeLocked: null, // NEEDS TRANSLATION
-		lockedExplanation: null, // NEEDS TRANSLATION
-		mightBeTrapped: null, // NEEDS TRANSLATION
-		autoChoice: null, // NEEDS TRANSLATION
-		unrecognizedChoice: null, // NEEDS TRANSLATION
-		lockedIntoMove: null, // NEEDS TRANSLATION
-		willUseMove: null, // NEEDS TRANSLATION
-		atTarget: null, // NEEDS TRANSLATION
-		atSlot: null, // NEEDS TRANSLATION
-		atAllyTarget: null, // NEEDS TRANSLATION
-		atAllySlot: null, // NEEDS TRANSLATION
-		actionMegaEvolve: null, // NEEDS TRANSLATION
-		actionMegaEvolveX: null, // NEEDS TRANSLATION
-		actionMegaEvolveY: null, // NEEDS TRANSLATION
-		actionUltraBurst: null, // NEEDS TRANSLATION
-		actionTerastallize: null, // NEEDS TRANSLATION
-		actionDynamax: null, // NEEDS TRANSLATION
-		actionGigantamax: null, // NEEDS TRANSLATION
-		willRevive: null, // NEEDS TRANSLATION
-		willSwitch: null, // NEEDS TRANSLATION
-		willShift: null, // NEEDS TRANSLATION
-		youPicked: null, // NEEDS TRANSLATION
-		listComma: null, // NEEDS TRANSLATION
+		whatDo: "**{POKEMON:topic}** 무엇을 할까?", // NEEDS QC
+		moveTarget: "{POKEMON:topic} **{MOVE:object}** 어디에 쓸까?", // NEEDS QC
+		reviveWho: "**{POKEMON:topic}** 누구를 부활시킬까?", // NEEDS QC
+		replaceWho: "**{POKEMON}** 대신 누구를 내보낼까?", // NEEDS QC
+		teamStart: "어느 포켓몬으로 시작할까?", // NEEDS QC
+		teamRest: "나머지 포켓몬의 순서는?", // NEEDS QC
+		chooseLead: "선봉 선택", // NEEDS QC
+		chooseSlot: "{NUMBER}번째 선택", // NEEDS QC
+		teamSoFar: "현재 팀", // NEEDS QC
+		waitingOpponent: "상대를 기다리는 중...", // NEEDS QC
+		cantSwitchTrapped: "**도망칠 수 없어서** 교체할 수 없다!", // NEEDS QC
+
+		notifyMoveTitle: "기술을 선택하세요!", // NEEDS QC
+		notifyMove: "배틀에서 기술을 선택하세요", // NEEDS QC
+		notifyMoveAgainst: "{OPPONENT}와의 배틀에서 기술을 선택하세요", // NEEDS QC
+		notifySwitchTitle: "교체하세요!", // NEEDS QC
+		notifySwitch: "배틀에서 교체할 포켓몬을 선택하세요", // NEEDS QC
+		notifySwitchAgainst: "{OPPONENT}와의 배틀에서 교체할 포켓몬을 선택하세요", // NEEDS QC
+		notifyTeamTitle: "팀 미리보기!", // NEEDS QC
+		notifyTeam: "배틀에서 팀 순서를 선택하세요", // NEEDS QC
+		notifyTeamAgainst: "{OPPONENT}와의 배틀에서 팀 순서를 선택하세요", // NEEDS QC
+		mightBeDisabled: "사용할 수 없는 기술이 있을 **가능성**이 있어 기술 선택을 취소할 수 없습니다!", // NEEDS QC
+		mightBeLocked: "기술이 고정되었을 **가능성**이 있습니다.", // NEEDS QC
+		lockedExplanation: "(고정된 경우 교체할 수 없게 됩니다)", // NEEDS QC
+		mightBeTrapped: "교체할 수 없게 되었을 **가능성**이 있어 교체를 취소할 수 없습니다!", // NEEDS QC
+
+		autoChoice: "자동 선택", // NEEDS QC
+		unrecognizedChoice: "서버로부터 알 수 없는 선택:", // NEEDS QC
+		lockedIntoMove: "{POKEMON:topic} 기술이 고정되어 있습니다.", // NEEDS QC
+		willUseMove: "{POKEMON:topic} {ACTIONS}{AT}**{MOVE:object}** 사용한다.", // NEEDS QC
+		atTarget: "{TARGET}에게 ", // NEEDS QC
+		atSlot: "{NUMBER}번 위치에 ", // NEEDS QC
+		atAllyTarget: "아군 {TARGET}에게 ", // NEEDS QC
+		atAllySlot: "아군 {NUMBER}번 위치에 ", // NEEDS QC
+		actionMegaEvolve: "**메가진화**하고 ", // NEEDS QC
+		actionMegaEvolveX: "**메가진화**(X)하고 ", // NEEDS QC
+		actionMegaEvolveY: "**메가진화**(Y)하고 ", // NEEDS QC
+		actionUltraBurst: "**울트라버스트**하고 ", // NEEDS QC
+		actionTerastallize: "테라스탈(**{TYPE}**)하고 ", // NEEDS QC
+		actionDynamax: "**다이맥스**하고 ", // NEEDS QC
+		actionGigantamax: "**거다이맥스**하고 ", // NEEDS QC
+		willRevive: "{POKEMON:topic} **{TARGET:object}** 부활시킨다.", // NEEDS QC
+		willSwitch: "{POKEMON:topic} **{TARGET:conjunctive}** 교체한다.", // NEEDS QC
+		willShift: "{POKEMON:topic} 중앙으로 **이동**한다.", // NEEDS QC
+		youPicked: "{POKEMON:object} 선택했다.", // NEEDS QC
+		listComma: ", ", // NEEDS QC
+
+		zEffectClearNegativeBoost: "떨어진 능력 랭크를 원래대로 되돌린다", // NEEDS QC
+		zEffectCrit2: "급소율 +2", // NEEDS QC
+		zEffectHeal: "HP를 모두 회복한다", // NEEDS QC
+		zEffectCurse: "고스트타입이면 HP를 모두 회복, 그 외에는 공격 +1", // NEEDS QC
+		zEffectRedirect: "상대의 공격을 자신에게 돌린다", // NEEDS QC
+		zEffectHealReplacement: "교체로 나오는 포켓몬의 HP를 모두 회복한다", // NEEDS QC
+		flingBerry: "나무열매의 효과를 대상에게 발동시킨다.", // NEEDS QC
+		flingWhiteHerb: "대상의 떨어진 능력 랭크를 원래대로 되돌린다.", // NEEDS QC
+		flingMentalHerb: "대상의 헤롱헤롱, 사슬묶기, 앙코르, 회복봉인, 도발, 트집 효과를 해제한다.", // NEEDS QC
+		cantFling: "이 도구는 내던지기로 던질 수 없다.", // NEEDS QC
+		unobtainableInGen: "{NUMBER}세대에서는 입수 불가", // NEEDS QC
+		tagMoves: "{TAG} 기술", // NEEDS QC
 	},
 
 	// statuses
@@ -282,8 +285,8 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  {POKEMON:topic} 이제 도망칠 수 없다!",
 	},
 	dynamax: {
-		start: null, // NEEDS TRANSLATION
-		end: null, // NEEDS TRANSLATION
+		start: "  ({POKEMON:topic} 다이맥스했다!)", // NEEDS QC
+		end: "  ({POKEMON:topic} 원래 모습으로 되돌아왔다!)", // NEEDS QC
 		block: "  다이맥스의 힘으로 튕겨 냈다!",
 		fail: "  {POKEMON:topic} 고개를 가로저었다. 이 기술은 쓸 수 없는 것 같다...",
 	},
