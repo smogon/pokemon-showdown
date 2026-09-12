@@ -149,8 +149,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	generateUsernameList(players: (string | Player)[], max = players.length, clickable = false) {
+	generateUsernameList(players: (string | Player)[], max = players.length, clickable = false, showPrefixCount = false) {
 		let buf = `<span style="font-size: 85%">`;
+		if (showPrefixCount) {
+			buf += `<span title="Total players">(${players.length})</span> `;
+		}
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
 				return `<username ${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
@@ -219,7 +222,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.type !== 'snake') {
 				buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			}
-			buf += `<td title="${team.players.map(p => Utils.escapeHTML(p.name)).join(', ')}"><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td title="${team.players.map(p => Utils.escapeHTML(p.name)).join(', ')}"><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players, undefined, false, true)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
