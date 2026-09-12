@@ -221,6 +221,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	doubleshock: {
+		inherit: true,
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
+	},
 	dragonascent: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -599,6 +603,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	meteorassault: {
 		inherit: true,
 		basePower: 170,
+		isNonstandard: null,
 	},
 	metronome: {
 		inherit: true,

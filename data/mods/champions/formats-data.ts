@@ -2021,7 +2021,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	salamencemega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	beldum: {
 		isNonstandard: "Past",

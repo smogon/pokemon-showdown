@@ -19060,7 +19060,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		forme: "Mega",
 		types: ["Dragon", "Ice"],
 		baseStats: { hp: 115, atk: 175, def: 117, spa: 105, spd: 101, spe: 87 },
-		abilities: { 0: "Thermal Exchange", H: "Ice Body" },
+		abilities: { 0: "Thermal Exchange" },
 		heightm: 2.1,
 		weightkg: 315,
 		color: "Blue",
