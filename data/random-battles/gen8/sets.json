@@ -224,7 +224,7 @@
         "level": 81,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Hone Claws", "Stealth Rock", "Stone Edge", "Sucker Punch"],
                 "abilities": ["Arena Trap"]
             },
@@ -888,7 +888,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Calm Mind", "Freezing Glare", "Hurricane", "Recover"],
+                "movepool": ["Calm Mind", "Hurricane", "Psyshock", "Recover"],
                 "abilities": ["Competitive"]
             }
         ]
@@ -923,7 +923,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Brave Bird", "Defog", "Fire Blast", "Roost", "Scorching Sands", "Toxic", "U-turn", "Will-O-Wisp"],
+                "movepool": ["Brave Bird", "Defog", "Fire Blast", "Roost", "Toxic", "U-turn", "Will-O-Wisp"],
                 "abilities": ["Flame Body"]
             }
         ]
@@ -1478,7 +1478,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Brave Bird", "Defog", "Earthquake", "Roost", "Sacred Fire", "Toxic"],
+                "movepool": ["Brave Bird", "Defog", "Earthquake", "Recover", "Sacred Fire", "Toxic"],
                 "abilities": ["Regenerator"]
             }
         ]

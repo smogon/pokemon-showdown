@@ -19,7 +19,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["airslash", "dragonpulse", "fireblast", "focusblast", "hiddenpowergrass", "roost"],
+                "movepool": ["airslash", "fireblast", "focusblast", "hiddenpowergrass", "roost"],
                 "abilities": ["Blaze", "Solar Power"]
             },
             {
@@ -307,7 +307,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "honeclaws", "stoneedge", "suckerpunch"],
                 "abilities": ["Arena Trap"]
             },
@@ -1554,11 +1554,6 @@
                 "role": "Bulky Attacker",
                 "movepool": ["earthquake", "iceshard", "rapidspin", "stoneedge", "toxic"],
                 "abilities": ["Sturdy"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["earthquake", "protect", "stoneedge", "toxic"],
-                "abilities": ["Sturdy"]
             }
         ]
     },
@@ -1675,7 +1670,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "hydropump", "icebeam", "rest", "scald", "substitute"],
+                "movepool": ["calmmind", "icebeam", "rest", "scald", "substitute"],
                 "abilities": ["Pressure"]
             },
             {
@@ -1715,7 +1710,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bravebird", "earthquake", "roost", "sacredfire", "substitute", "toxic"],
+                "movepool": ["bravebird", "earthquake", "recover", "sacredfire", "substitute", "toxic"],
                 "abilities": ["Regenerator"]
             }
         ]
@@ -1790,10 +1785,9 @@
         "level": 96,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["crunch", "doubleedge", "firefang", "suckerpunch", "taunt"],
-                "abilities": ["Intimidate"],
-                "preferredTypes": ["Fire"]
+                "role": "Bulky Support",
+                "movepool": ["crunch", "healbell", "suckerpunch", "superfang", "taunt", "toxic"],
+                "abilities": ["Intimidate"]
             }
         ]
     },
@@ -2235,7 +2229,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["dracometeor", "earthquake", "fireblast", "roost", "uturn"],
+                "movepool": ["dracometeor", "earthquake", "fireblast", "roost", "toxic", "uturn"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -3246,7 +3240,7 @@
             },
             {
                 "role": "Staller",
-                "movepool": ["icebeam", "protect", "scald", "toxic", "uturn"],
+                "movepool": ["icebeam", "protect", "scald", "toxic"],
                 "abilities": ["Storm Drain"]
             },
             {

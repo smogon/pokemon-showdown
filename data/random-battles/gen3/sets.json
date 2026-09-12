@@ -401,7 +401,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "encore", "firepunch", "hiddenpowerdark", "psychic", "recover", "substitute", "thunderpunch"],
+                "movepool": ["calmmind", "encore", "firepunch", "hiddenpowerdark", "psychic", "recover", "substitute"],
                 "abilities": ["Synchronize"],
                 "preferredTypes": ["Fire"]
             }
@@ -773,7 +773,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["doubleedge", "earthquake", "rest", "return", "shadowball", "toxic"],
+                "movepool": ["earthquake", "rest", "return", "toxic"],
                 "abilities": ["Early Bird"],
                 "preferredTypes": ["Ground"]
             },
@@ -790,6 +790,11 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["hiddenpowerelectric", "hiddenpowergrass", "hydropump", "icebeam", "megahorn", "raindance"],
+                "abilities": ["Swift Swim"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["megahorn", "protect", "surf", "toxic"],
                 "abilities": ["Swift Swim"]
             }
         ]
@@ -857,13 +862,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["crosschop", "fireblast", "flamethrower", "focuspunch", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderpunch", "toxic"],
+                "movepool": ["crosschop", "fireblast", "flamethrower", "focuspunch", "hiddenpowergrass", "hiddenpowerice", "hiddenpowerwater", "substitute", "thunderpunch", "toxic"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             },
             {
                 "role": "Berry Sweeper",
-                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderpunch"],
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "hiddenpowerwater", "substitute", "thunderpunch"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             }
@@ -966,7 +971,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["flamethrower", "hiddenpowergrass", "protect", "toxic", "wish"],
+                "movepool": ["flamethrower", "protect", "toxic", "wish"],
                 "abilities": ["Flash Fire"]
             },
             {
@@ -1087,7 +1092,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["doubleedge", "dragondance", "earthquake", "healbell", "hiddenpowerflying", "substitute"],
+                "movepool": ["brickbreak", "dragondance", "earthquake", "healbell", "hiddenpowerflying"],
                 "abilities": ["Inner Focus"],
                 "preferredTypes": ["Ground"]
             },
@@ -1157,7 +1162,7 @@
         "sets": [
             {
                 "role": "Berry Sweeper",
-                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderpunch"],
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "hiddenpowerwater", "substitute", "thunderpunch"],
                 "abilities": ["Blaze"]
             },
             {
@@ -2394,7 +2399,7 @@
             },
             {
                 "role": "Generalist",
-                "movepool": ["focuspunch", "irontail", "rockslide", "substitute"],
+                "movepool": ["focuspunch", "rockslide", "substitute", "thunderwave", "toxic"],
                 "abilities": ["Rock Head"]
             }
         ]
@@ -2642,12 +2647,12 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["dragonclaw", "earthquake", "flamethrower", "haze", "healbell", "rest", "toxic"],
+                "movepool": ["dragonclaw", "earthquake", "flamethrower", "healbell", "rest", "toxic"],
                 "abilities": ["Natural Cure"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["dragondance", "earthquake", "fireblast", "healbell", "hiddenpowerflying", "rest"],
+                "movepool": ["dragondance", "earthquake", "healbell", "hiddenpowerflying", "rest"],
                 "abilities": ["Natural Cure"],
                 "preferredTypes": ["Ground"]
             }
@@ -2866,9 +2871,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["doubleedge", "hiddenpowerfighting", "quickattack", "shadowball", "swordsdance"],
-                "abilities": ["Pressure"],
-                "preferredTypes": ["Fighting", "Ghost"]
+                "movepool": ["doubleedge", "hiddenpowerfighting", "shadowball", "swordsdance"],
+                "abilities": ["Pressure"]
             },
             {
                 "role": "Wallbreaker",
@@ -2949,7 +2953,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["dragondance", "earthquake", "fireblast", "hiddenpowerflying", "rockslide"],
+                "movepool": ["brickbreak", "dragondance", "earthquake", "hiddenpowerflying", "rockslide"],
                 "abilities": ["Intimidate"],
                 "preferredTypes": ["Ground"]
             },
