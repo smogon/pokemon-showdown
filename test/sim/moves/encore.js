@@ -184,6 +184,19 @@ describe('Encore', () => {
 		assert(battle.log.every(line => !line.includes('Raichu|Destiny Bond')));
 	});
 
+	describe('[Gen 4]', () => {
+		it('should fail after the target is paralyzed', () => {
+			battle = common.gen(4).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Deoxys', moves: ['growl'] },
+			], [
+				{ species: 'Wynaut', moves: ['thunderwave', 'encore'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('move growl', 'move encore');
+			assert.false(battle.p1.active[0].volatiles['encore']);
+		});
+	});
+
 	describe('[Gen 2]', () => {
 		it(`Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, () => {
 			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
