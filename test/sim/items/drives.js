@@ -56,7 +56,7 @@ describe('Drives', () => {
 
 			it('should be removed if not held by a Genesect', () => {
 				battle = common.createBattle([[
-					{ species: 'Genesect', ability: 'frisk', moves: ['knockoff'] },
+					{ species: 'Politoed', ability: 'frisk', moves: ['knockoff'] },
 				], [
 					{ species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bulkup'] },
 				]]);
