@@ -689,7 +689,7 @@ export const commands: Chat.ChatCommands = {
 						};
 					} else if (pokemon.genderRatio && dex.gen >= 2) {
 						const g = pokemon.genderRatio;
-						details['Gender'] = `M: ${g.M * 100}%, F: ${g.F * 100}%`;
+						details[TL`Gender`] = `M: ${g.M * 100}%, F: ${g.F * 100}%`;
 					};
 
 					const evos: string[] = [];
