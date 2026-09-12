@@ -338,10 +338,6 @@ export interface ActiveMove extends MutableMove {
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
 	infiltrates?: boolean;
-	ruinedAtk?: Pokemon;
-	ruinedDef?: Pokemon;
-	ruinedSpA?: Pokemon;
-	ruinedSpD?: Pokemon;
 
 	/**
 	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as
