@@ -797,7 +797,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			name: species.baseSpecies,
 			species: forme,
 			speciesId: species.id,
-			gender: species.gender,
+			gender: species.gender || (this.random(2) ? 'F' : 'M'),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,
