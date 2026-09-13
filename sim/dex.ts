@@ -495,7 +495,7 @@ export class ModdedDex {
 	loadTextData(lang: TextLanguage = 'en'): TextTableData {
 		if (!this.gen) this.loadData();
 		lang ||= 'en';
-		const cacheKey = `${this.gen}:${lang}`;
+		const cacheKey = `${this.currentMod}:${lang}`;
 		const cached = dexes['base'].textCache[cacheKey];
 		if (cached) return cached;
 
@@ -553,15 +553,13 @@ export class ModdedDex {
 		for (const id in englishTable) {
 			const englishEntry = englishTable[id];
 			const localizedEntry = localizedTable[id];
-			const englishDesc = this.resolveTextField(englishEntry, englishEntry, 'desc');
-			const englishShortDesc = this.resolveTextField(englishEntry, englishEntry, 'shortDesc');
-			const localizedDesc = this.resolveTextField(localizedEntry, englishEntry, 'desc');
-			const localizedShortDesc = this.resolveTextField(localizedEntry, englishEntry, 'shortDesc');
+			const desc = this.resolveTextField(localizedEntry, englishEntry, 'desc');
+			const shortDesc = this.resolveTextField(localizedEntry, englishEntry, 'shortDesc');
 			table[id] = {
 				...(localizedEntry || englishEntry),
 				name: localizedEntry?.name ?? englishEntry.name,
-				desc: localizedDesc || englishDesc || localizedShortDesc || englishShortDesc,
-				shortDesc: localizedShortDesc || englishShortDesc || localizedDesc || englishDesc,
+				desc: desc || shortDesc,
+				shortDesc: shortDesc || desc,
 			} as ResolvedText<T>;
 		}
 		return table;
@@ -570,16 +568,19 @@ export class ModdedDex {
 	private resolveTextField<T extends AbilityText | ItemText | MoveText>(
 		localizedEntry: T | undefined, englishEntry: T, field: 'desc' | 'shortDesc'
 	): string {
-		const genKeys = Object.keys(englishEntry)
-			.filter(key => /^gen\d+$/.test(key) && Number(key.slice(3)) >= this.gen)
-			.sort((a, b) => Number(a.slice(3)) - Number(b.slice(3)));
-		for (const genKey of genKeys) {
-			const englishGen = (englishEntry as AnyObject)[genKey] as BasicTextData | undefined;
-			if (!englishGen?.[field]) continue;
-			const localizedGen = (localizedEntry as AnyObject | undefined)?.[genKey] as BasicTextData | undefined;
-			return localizedGen?.[field] || '';
+		const englishMod = englishEntry[this.currentMod as 'gen1'];
+		if (englishMod?.[field]) {
+			const localizedMod = localizedEntry?.[this.currentMod as 'gen1'];
+			return localizedMod?.[field] || englishMod?.[field];
 		}
-		return localizedEntry?.[field] || '';
+		for (let gen = this.gen; gen < Dex.gen; gen++) {
+			const englishGen = englishEntry[`gen${gen}` as 'gen1'];
+			if (!englishGen?.[field]) continue;
+			const localizedGen = localizedEntry?.[`gen${gen}` as 'gen1'];
+			const desc = localizedGen?.[field] || englishGen?.[field];
+			if (desc) return desc;
+		}
+		return localizedEntry?.[field] || englishEntry[field] || '';
 	}
 
 	getAlias(id: ID): ID | undefined {

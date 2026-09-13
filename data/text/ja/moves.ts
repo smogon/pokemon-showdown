@@ -4539,6 +4539,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "指をふり 自分の 脳を 刺激して すべての 技の なかから どれか １つを くりだす。"
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen8bdsp: {
+			desc: null, // NEEDS TRANSLATION
+		},
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen8: {
 			desc: null, // NEEDS TRANSLATION
 		},
@@ -7592,6 +7599,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "ひかえの ポケモンが いるときに 使うと 入れ替わる。 野生の ポケモンは 逃げてしまう。"
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION
 			shortDesc: null, // NEEDS TRANSLATION

@@ -4559,6 +4559,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "Le lanceur agite un doigt et stimule son cerveau pour utiliser presque n’importe quelle capacité au hasard."
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen8bdsp: {
+			desc: null, // NEEDS TRANSLATION
+		},
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen8: {
 			desc: null, // NEEDS TRANSLATION
 		},
@@ -7641,6 +7648,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "Permet de changer de place avec un autre Pokémon de l’équipe s’il y en a. Quand cette capacité est utilisée par un Pokémon sauvage, celui-ci fuit le combat."
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION
 			shortDesc: null, // NEEDS TRANSLATION

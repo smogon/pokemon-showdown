@@ -477,7 +477,9 @@ type TextFile<T> = T & {
 	gen5?: T,
 	gen6?: T,
 	gen7?: T,
+	gen7letsgo?: T,
 	gen8?: T,
+	gen8bdsp?: T,
 	champions?: T,
 };
 

@@ -25,59 +25,60 @@ export const StatShortNames: { [id: string]: TranslationString } = {
 };
 
 export const TypeNames: { [id: string]: TranslationString } = {
-	bug: "Bicho",
-	dark: "Siniestro",
-	dragon: "Dragón",
-	electric: "Eléctrico",
-	fairy: "Hada",
-	fighting: "Lucha",
-	fire: "Fuego",
-	flying: "Volador",
-	ghost: "Fantasma",
-	grass: "Planta",
-	ground: "Tierra",
-	ice: "Hielo",
-	normal: "Normal",
-	poison: "Veneno",
-	psychic: "Psíquico",
-	rock: "Roca",
-	steel: "Acero",
-	stellar: "Astral",
-	water: "Agua",
+	Bug: "Bicho",
+	Dark: "Siniestro",
+	Dragon: "Dragón",
+	Electric: "Eléctrico",
+	Fairy: "Hada",
+	Fighting: "Lucha",
+	Fire: "Fuego",
+	Flying: "Volador",
+	Ghost: "Fantasma",
+	Grass: "Planta",
+	Ground: "Tierra",
+	Ice: "Hielo",
+	Normal: "Normal",
+	Poison: "Veneno",
+	Psychic: "Psíquico",
+	Rock: "Roca",
+	Steel: "Acero",
+	Stellar: "Astral",
+	Water: "Agua",
+	"???": null, // NEEDS TRANSLATION
 };
 
 export const NatureNames: { [id: string]: TranslationString } = {
-	adamant: "Firme",
-	bashful: "Tímida",
-	bold: "Osada",
-	brave: "Audaz",
-	calm: "Serena",
-	careful: "Cauta",
-	docile: "Dócil",
-	gentle: "Amable",
-	hardy: "Fuerte",
-	hasty: "Activa",
-	impish: "Agitada",
-	jolly: "Alegre",
-	lax: "Floja",
-	lonely: "Huraña",
-	mild: "Afable",
-	modest: "Modesta",
-	naive: "Ingenua",
-	naughty: "Pícara",
-	quiet: "Mansa",
-	quirky: "Rara",
-	rash: "Alocada",
-	relaxed: "Plácida",
-	sassy: "Grosera",
-	serious: "Seria",
-	timid: "Miedosa",
+	Adamant: "Firme",
+	Bashful: "Tímida",
+	Bold: "Osada",
+	Brave: "Audaz",
+	Calm: "Serena",
+	Careful: "Cauta",
+	Docile: "Dócil",
+	Gentle: "Amable",
+	Hardy: "Fuerte",
+	Hasty: "Activa",
+	Impish: "Agitada",
+	Jolly: "Alegre",
+	Lax: "Floja",
+	Lonely: "Huraña",
+	Mild: "Afable",
+	Modest: "Modesta",
+	Naive: "Ingenua",
+	Naughty: "Pícara",
+	Quiet: "Mansa",
+	Quirky: "Rara",
+	Rash: "Alocada",
+	Relaxed: "Plácida",
+	Sassy: "Grosera",
+	Serious: "Seria",
+	Timid: "Miedosa",
 };
 
 export const GenderNames: { [id: string]: TranslationString } = {
-	male: "Macho",
-	female: "Hembra",
-	genderless: "Desconocido",
+	M: "Macho",
+	F: "Hembra",
+	N: "Desconocido",
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
@@ -122,32 +123,32 @@ export const TargetNames: { [id: string]: TranslationString } = {
 // from veekun/WikiDex who presumably got it from Pokédex 3D Pro
 // Stadium 2 names in comments
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	Monster: null, // NEEDS TRANSLATION
+	"Water 1": null, // NEEDS TRANSLATION
+	Bug: null, // NEEDS TRANSLATION
+	Flying: null, // NEEDS TRANSLATION
+	Field: null, // NEEDS TRANSLATION
+	Fairy: null, // NEEDS TRANSLATION
+	Grass: null, // NEEDS TRANSLATION
+	"Human-Like": null, // NEEDS TRANSLATION
+	"Water 3": null, // NEEDS TRANSLATION
+	Mineral: null, // NEEDS TRANSLATION
+	Amorphous: null, // NEEDS TRANSLATION
+	"Water 2": null, // NEEDS TRANSLATION
+	Ditto: null, // NEEDS TRANSLATION
+	Dragon: null, // NEEDS TRANSLATION
+	Undiscovered: null, // NEEDS TRANSLATION
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
-	black: "Negro",
-	blue: "Azul",
-	brown: "Marrón",
-	gray: "Gris",
-	green: "Verde",
-	pink: "Rosa",
-	purple: "Morado",
-	red: "Rojo",
-	white: "Blanco",
-	yellow: "Amarillo",
+	Black: "Negro",
+	Blue: "Azul",
+	Brown: "Marrón",
+	Gray: "Gris",
+	Green: "Verde",
+	Pink: "Rosa",
+	Purple: "Morado",
+	Red: "Rojo",
+	White: "Blanco",
+	Yellow: "Amarillo",
 };

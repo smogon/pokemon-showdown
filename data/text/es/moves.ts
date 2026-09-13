@@ -4527,6 +4527,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "Mueve un dedo y estimula su cerebro para usar al azar casi cualquier movimiento."
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen8bdsp: {
+			desc: null, // NEEDS TRANSLATION
+		},
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen8: {
 			desc: null, // NEEDS TRANSLATION
 		},
@@ -7580,6 +7587,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "Permite al usuario cambiarse por otro Pokémon del equipo, si es posible. Si un Pokémon salvaje usa este movimiento, huye del combate."
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION
 			shortDesc: null, // NEEDS TRANSLATION

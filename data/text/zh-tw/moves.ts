@@ -4530,6 +4530,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "揮動手指刺激自己的大腦， 從全部的招式中 隨機選出１招使出。"
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen8bdsp: {
+			desc: null, // NEEDS TRANSLATION
+		},
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen8: {
 			desc: null, // NEEDS TRANSLATION
 		},
@@ -7583,6 +7590,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "在有後備寶可夢時使用， 可進行替換。 野生寶可夢則會逃走。"
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION
 			shortDesc: null, // NEEDS TRANSLATION

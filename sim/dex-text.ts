@@ -184,7 +184,7 @@ export class DexText {
 		effect: TextEffect, lang: TextLanguage = 'en'
 	): EffectText {
 		if (!('effectType' in effect)) {
-			return { name: this.tagName(effect.name, lang) };
+			return { name: DexText.tagName(effect.name, lang) };
 		}
 		let table: EffectTextTable;
 		switch (effect.effectType) {
@@ -196,8 +196,8 @@ export class DexText {
 				...(species.forme ? { forme: species.forme } : {}),
 			};
 		}
-		case 'Nature': return { name: this.otherName('NatureNames', effect.name, lang) };
-		case 'Type': case 'EffectType': return { name: this.otherName('TypeNames', effect.name, lang) };
+		case 'Nature': return { name: DexText.otherName('NatureNames', effect.name, lang) };
+		case 'Type': case 'EffectType': return { name: DexText.otherName('TypeNames', effect.name, lang) };
 		case 'Item': table = 'Items'; break;
 		case 'Ability': table = 'Abilities'; break;
 		case 'Move': table = 'Moves'; break;
@@ -219,49 +219,13 @@ export class DexText {
 		};
 	}
 
-	typeName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('TypeNames', name, lang);
-	}
-
-	natureName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('NatureNames', name, lang);
-	}
-
-	categoryName(name: string, lang: TextLanguage = 'en'): string {
-		return this.tagName(name, lang);
-	}
-
-	tagName(name: string, lang: TextLanguage = 'en'): string {
-		return DexText.tagName(name, lang);
-	}
-
 	private static tagName(name: string, lang: TextLanguage): string {
 		const id = toID(name);
 		return (this.loadRawTextData(lang).Tags[id]?.name ?? this.loadRawTextData().Tags[id]?.name) || name;
 	}
 
-	genderName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('GenderNames', name, lang);
-	}
-
-	eggGroupName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('EggGroupNames', name, lang);
-	}
-
-	colorName(name: string, lang: TextLanguage = 'en'): string {
-		return this.otherName('ColorNames', name, lang);
-	}
-
-	private otherName(table: OtherNameTable, name: string, lang: TextLanguage): string {
-		return DexText.otherName(table, name, lang);
-	}
-
 	private static otherName(table: OtherNameTable, name: string, lang: TextLanguage): string {
-		let id: string = toID(name);
-		if (table === 'GenderNames') {
-			id = ({ m: 'male', f: 'female', n: 'genderless' } as Record<string, string>)[id] || id;
-		}
-		return (this.loadRawTextData(lang)[table][id] ?? this.loadRawTextData()[table][id]) || name;
+		return (this.loadRawTextData(lang)[table][name] ?? this.loadRawTextData()[table][name]) || name;
 	}
 }
 
@@ -333,6 +297,9 @@ function createTL(language: string) {
 			for (const item of items.slice(1, -1)) list += TL`, ${item}`;
 			const last = items[items.length - 1];
 			return list + TL`, and ${last}`;
+		},
+		commaList(items: readonly string[]) {
+			return items.join(TL`, ${''}`);
 		},
 		/** Asian translations use "person" counters, so don't use this for non-people */
 		cappedUserList(items: readonly string[], cap: number) {

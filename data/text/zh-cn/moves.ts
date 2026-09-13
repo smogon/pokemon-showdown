@@ -4531,6 +4531,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "挥动手指刺激自己的大脑， 从所有的招式中 任意使出１个。"
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen8bdsp: {
+			desc: null, // NEEDS TRANSLATION
+		},
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen8: {
 			desc: null, // NEEDS TRANSLATION
 		},
@@ -7584,6 +7591,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		// Official flavor text: "当有后备宝可梦在时， 如果使用就可以进行替换。 野生的宝可梦会逃走。"
 		desc: null, // NEEDS TRANSLATION
 		shortDesc: null, // NEEDS TRANSLATION
+		gen7letsgo: {
+			desc: null, // NEEDS TRANSLATION
+			shortDesc: null, // NEEDS TRANSLATION
+		},
 		gen7: {
 			desc: null, // NEEDS TRANSLATION
 			shortDesc: null, // NEEDS TRANSLATION

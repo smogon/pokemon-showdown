@@ -17,59 +17,60 @@ export const StatShortNames: { [id: string]: TranslationString } = {
 };
 
 export const TypeNames: { [id: string]: TranslationString } = {
-	bug: "虫",
-	dark: "恶",
-	dragon: "龙",
-	electric: "电",
-	fairy: "妖精",
-	fighting: "格斗",
-	fire: "火",
-	flying: "飞行",
-	ghost: "幽灵",
-	grass: "草",
-	ground: "地面",
-	ice: "冰",
-	normal: "一般",
-	poison: "毒",
-	psychic: "超能力",
-	rock: "岩石",
-	steel: "钢",
-	stellar: "星晶",
-	water: "水",
+	Bug: "虫",
+	Dark: "恶",
+	Dragon: "龙",
+	Electric: "电",
+	Fairy: "妖精",
+	Fighting: "格斗",
+	Fire: "火",
+	Flying: "飞行",
+	Ghost: "幽灵",
+	Grass: "草",
+	Ground: "地面",
+	Ice: "冰",
+	Normal: "一般",
+	Poison: "毒",
+	Psychic: "超能力",
+	Rock: "岩石",
+	Steel: "钢",
+	Stellar: "星晶",
+	Water: "水",
+	"???": null, // NEEDS TRANSLATION
 };
 
 export const NatureNames: { [id: string]: TranslationString } = {
-	adamant: "固执",
-	bashful: "害羞",
-	bold: "大胆",
-	brave: "勇敢",
-	calm: "温和",
-	careful: "慎重",
-	docile: "坦率",
-	gentle: "温顺",
-	hardy: "勤奋",
-	hasty: "急躁",
-	impish: "淘气",
-	jolly: "爽朗",
-	lax: "乐天",
-	lonely: "怕寂寞",
-	mild: "慢吞吞",
-	modest: "内敛",
-	naive: "天真",
-	naughty: "顽皮",
-	quiet: "冷静",
-	quirky: "浮躁",
-	rash: "马虎",
-	relaxed: "悠闲",
-	sassy: "自大",
-	serious: "认真",
-	timid: "胆小",
+	Adamant: "固执",
+	Bashful: "害羞",
+	Bold: "大胆",
+	Brave: "勇敢",
+	Calm: "温和",
+	Careful: "慎重",
+	Docile: "坦率",
+	Gentle: "温顺",
+	Hardy: "勤奋",
+	Hasty: "急躁",
+	Impish: "淘气",
+	Jolly: "爽朗",
+	Lax: "乐天",
+	Lonely: "怕寂寞",
+	Mild: "慢吞吞",
+	Modest: "内敛",
+	Naive: "天真",
+	Naughty: "顽皮",
+	Quiet: "冷静",
+	Quirky: "浮躁",
+	Rash: "马虎",
+	Relaxed: "悠闲",
+	Sassy: "自大",
+	Serious: "认真",
+	Timid: "胆小",
 };
 
 export const GenderNames: { [id: string]: TranslationString } = {
-	male: "雄性",
-	female: "雌性",
-	genderless: null, // NEEDS TRANSLATION
+	M: "雄性",
+	F: "雌性",
+	N: null, // NEEDS TRANSLATION
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
@@ -114,32 +115,32 @@ export const TargetNames: { [id: string]: TranslationString } = {
 // no official Chinese egg group names exist (Pokédex 3D Pro predates official Chinese)
 // names from 52poke
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	Monster: null, // NEEDS TRANSLATION
+	"Water 1": null, // NEEDS TRANSLATION
+	Bug: null, // NEEDS TRANSLATION
+	Flying: null, // NEEDS TRANSLATION
+	Field: null, // NEEDS TRANSLATION
+	Fairy: null, // NEEDS TRANSLATION
+	Grass: null, // NEEDS TRANSLATION
+	"Human-Like": null, // NEEDS TRANSLATION
+	"Water 3": null, // NEEDS TRANSLATION
+	Mineral: null, // NEEDS TRANSLATION
+	Amorphous: null, // NEEDS TRANSLATION
+	"Water 2": null, // NEEDS TRANSLATION
+	Ditto: null, // NEEDS TRANSLATION
+	Dragon: null, // NEEDS TRANSLATION
+	Undiscovered: null, // NEEDS TRANSLATION
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
-	black: "黑色",
-	blue: "蓝色",
-	brown: "褐色",
-	gray: "灰色",
-	green: "绿色",
-	pink: "粉红色",
-	purple: "紫色",
-	red: "红色",
-	white: "白色",
-	yellow: "黄色",
+	Black: "黑色",
+	Blue: "蓝色",
+	Brown: "褐色",
+	Gray: "灰色",
+	Green: "绿色",
+	Pink: "粉红色",
+	Purple: "紫色",
+	Red: "红色",
+	White: "白色",
+	Yellow: "黄色",
 };

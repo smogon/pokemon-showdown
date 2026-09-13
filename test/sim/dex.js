@@ -107,25 +107,22 @@ describe('DexText#get', () => {
 	it(`should translate names backed by Dex objects`, () => {
 		const { Tags } = require('../../dist/data/tags');
 		assert.deepEqual(Dex.text.get(Dex.types.get('Fire'), 'ja'), { name: 'ほのお' });
-		assert.equal(Dex.text.typeName('Fire', 'ja'), 'ほのお');
 		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'ja'), { name: 'いじっぱり' });
-		assert.equal(Dex.text.natureName('Adamant', 'ja'), 'いじっぱり');
-		assert.equal(Dex.text.natureName('Adamant', 'en'), 'Adamant');
+		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'en'), { name: 'Adamant' });
 		assert.deepEqual(Dex.text.get(Tags.restrictedlegendary, 'ja'), { name: Dex.loadTextData('ja').Tags.restrictedlegendary.name });
 	});
 
 	it(`should translate scalar names`, () => {
-		assert.equal(Dex.text.eggGroupName('Monster', 'ja'), Dex.loadTextData('ja').EggGroupNames.monster);
 		assert.equal(Dex.loadTextData('fr').StatNames.stats, 'stats');
 		assert.equal(Dex.loadTextData('fr').StatNames['stats:grammar'], 'fp');
 		assert.equal(Dex.loadTextData('fr').StatNames.spd, 'Défense Spéciale');
 		assert.equal(Dex.loadTextData('fr').StatNames['spd:grammar'], 'fs');
 		assert.equal(Dex.loadTextData('fr').StatMediumNames.spd, 'Déf. Spé.');
 		assert.equal(Dex.loadTextData('fr').StatShortNames.spd, 'DSp');
-		assert.equal(Dex.text.categoryName('Physical', 'ja'), 'ぶつり');
-		assert.equal(Dex.text.genderName('F', 'ja'), 'メス');
-		assert.equal(Dex.text.eggGroupName('Human-Like', 'ja'), Dex.loadTextData('ja').EggGroupNames.humanlike ?? 'Human-Like');
-		assert.equal(Dex.text.colorName('Purple', 'ja'), '紫');
+		const { Tags } = require('../../dist/data/tags');
+		assert.equal(Dex.text.get(Tags.physical, 'ja').name, 'ぶつり');
+		assert.equal(Dex.loadTextData('ja').GenderNames.F, 'メス');
+		assert.equal(Dex.loadTextData('ja').ColorNames.Purple, '紫');
 	});
 
 	it(`should return the entire text entry`, () => {
