@@ -442,7 +442,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	alakazammega: {
-		tier: "UUBL",
+		tier: "Uber",
 	},
 	machop: {
 		isNonstandard: "Past",
@@ -2333,7 +2333,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Uber",
 	},
 	lucariomegaz: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	hippopotas: {
 		isNonstandard: "Past",
@@ -4715,10 +4715,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	baxcalibur: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	baxcaliburmega: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	tatsugiri: {
 		isNonstandard: "Past",
