@@ -33,6 +33,38 @@ function validateTeam(format: string, packedTeam: string) {
 	return problems || [];
 }
 
+function getPendingMidTurnSwitches(battle: Battle) {
+	if (battle.requestState !== 'switch') return [];
+	return battle.sides.flatMap(side => side.active.flatMap(pokemon => {
+		if (!pokemon?.switchFlag) return [];
+		let reason = typeof pokemon.switchFlag === 'string' ? pokemon.switchFlag : '';
+		if (!reason && pokemon.usedItemThisTurn && ['ejectbutton', 'ejectpack'].includes(pokemon.lastItem)) {
+			reason = pokemon.lastItem;
+		}
+		if (!reason) return [];
+		const effect = Dex.moves.get(reason).exists ? Dex.moves.get(reason) : Dex.items.get(reason);
+		return [{
+			side: side.id,
+			pokemonIndex: side.pokemon.indexOf(pokemon),
+			pokemon: pokemon.name,
+			reason,
+			reasonName: effect.name,
+		}];
+	}));
+}
+
+function getAnalysisRequests(battle: Battle) {
+	const requests = battle.getRequests(battle.requestState);
+	for (const request of requests) {
+		for (const active of request?.active || []) {
+			for (const move of active?.moves || []) {
+				move.selfSwitch = !!battle.dex.moves.get(move.id).selfSwitch;
+			}
+		}
+	}
+	return requests;
+}
+
 function startBattle(request: StartRequest) {
 	const team1Problems = validateTeam(request.format, request.team1);
 	const team2Problems = validateTeam(request.format, request.team2);
@@ -91,7 +123,8 @@ function startBattle(request: StartRequest) {
 		log,
 		state: battle.toJSON(),
 		requestState: battle.requestState,
-		requests: battle.getRequests(battle.requestState),
+		requests: getAnalysisRequests(battle),
+		pendingMidTurnSwitches: getPendingMidTurnSwitches(battle),
 	};
 }
 
@@ -111,6 +144,11 @@ const server = http.createServer((req, res) => {
 	}
 
 	let body = '';
+	const abortController = new AbortController();
+	req.once('aborted', () => abortController.abort());
+	res.once('close', () => {
+		if (!res.writableEnded) abortController.abort();
+	});
 	req.setEncoding('utf8');
 	req.on('data', chunk => body += chunk);
 	req.on('end', async () => {
@@ -126,10 +164,12 @@ const server = http.createServer((req, res) => {
 					sendJson(res, 400, { error });
 					return;
 				}
-				const simulations = await runSimulationBatch(request);
+				const simulations = await runSimulationBatch(request, abortController.signal);
+				if (abortController.signal.aborted) return;
 				sendJson(res, 200, {
 					simulationCount: simulations.length,
-					groups: groupSimulationResults(simulations),
+					turnGroups: groupSimulationResults(simulations, 'turn'),
+					stateGroups: groupSimulationResults(simulations, 'state'),
 				});
 				return;
 			}
