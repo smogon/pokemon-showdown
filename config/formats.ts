@@ -1045,10 +1045,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Tier Shift AAA",
 		desc: `Pok&eacute;mon have access to almost any ability. Additionally, Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +15, RU/NUBL get +20, NU/PUBL get +25, and PU or lower get +30.`,
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', '!Obtainable Abilities', 'Ability Clause = 1', 'Tier Shift Mod', 'Terastal Clause'],
+		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', '!Obtainable Abilities', 'Ability Clause = 2', 'Tier Shift Mod', 'Terastal Clause'],
 		banlist: [
 			'Arceus', 'Calyrex-Shadow', 'Decidueye-Hisui', 'Deoxys-Attack', 'Electrode-Hisui', 'Eternatus', 'Ho-Oh', 'Hoopa-Confined', 'Kyurem-Black', 'Miraidon',
-			'Necrozma-Dusk-Mane', 'Noivern', 'Rayquaza', 'Regigigas', 'Slaking', 'Arena Trap', 'Comatose', 'Contrary', 'Fur Coat', 'Good as Gold', 'Gorilla Tactics',
+			'Necrozma-Dusk-Mane', 'Noivern', 'Rayquaza', 'Regigigas', 'Slaking', 'Weavile', 'Arena Trap', 'Comatose', 'Contrary', 'Fur Coat', 'Good as Gold', 'Gorilla Tactics',
 			'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse',
 			'Parental Bond', 'Poison Heal', 'Pure Power', 'Quick Draw', 'Shadow Tag', 'Simple', 'Speed Boost', 'Stakeout', 'Toxic Debris', 'Triage', 'Unburden',
 			'Water Bubble', 'Wonder Guard', 'Light Ball', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
