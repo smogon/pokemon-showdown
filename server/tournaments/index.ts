@@ -1588,10 +1588,10 @@ const commands: Chat.ChatCommands = {
 					if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
 						Monitor.log(`[TourMonitor] Room ${tournament.room.roomid} starting a tour over default cap (${tournament.playerCap})`);
 					}
-					room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
+					room.send(`|tournament|update|${JSON.stringify({playerCap})}`);
 				} else if (tournament.playerCap && !playerCap) {
 					tournament.playerCap = 0;
-					room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
+					room.send(`|tournament|update|${JSON.stringify({playerCap})}`);
 				}
 				const capNote = (tournament.playerCap ? ` with a player cap of ${tournament.playerCap}` : '');
 				this.privateModAction(`${user.name} set tournament type to ${generator.name}${capNote}.`);
@@ -1643,7 +1643,7 @@ const commands: Chat.ChatCommands = {
 				this.modlog('TOUR PLAYERCAP', null, tournament.playerCap.toString());
 				this.sendReply(`Tournament cap set to ${tournament.playerCap}.`);
 			}
-			room.send(`|tournament|update|{"playerCap": "${tournament.playerCap}"}`);
+			room.send(`|tournament|update|${JSON.stringify({playerCap: tournament.playerCap})}`);
 		},
 		end: 'delete',
 		stop: 'delete',
