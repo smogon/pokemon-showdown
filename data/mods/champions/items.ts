@@ -272,9 +272,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
-				target.switchFlag = true;
 				if (!target.useItem()) {
-					target.switchFlag = false;
+					target.switchFlag = true;
 				}
 			}
 		},
