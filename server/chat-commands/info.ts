@@ -671,9 +671,9 @@ export const commands: Chat.ChatCommands = {
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details[TL.tag.gmaxmove] = gmaxMove;
 					if (dex.gen === 1) details[TL`Crit rate`] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
-					if (pokemon.color && dex.gen >= 5) details[TL`Color`] = TL.color[toID(pokemon.color)] || pokemon.color;
+					if (pokemon.color && dex.gen >= 5) details[TL`Color`] = TL.color[pokemon.color] || pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) {
-						details[TL`Egg Groups`] = pokemon.eggGroups.map(group => TL.egggroup[toID(group)] || group).join(", ");
+						details[TL`Egg Groups`] = pokemon.eggGroups.map(group => TL.egggroup[group] || group).join(", ");
 					}
 					if (pokemon.gender && dex.gen >= 2) {
 						switch (pokemon.gender) {
@@ -767,7 +767,7 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 					if (item.naturalGift && dex.gen >= 3) {
-						details[TL`Natural Gift type`] = TL.type[toID(item.naturalGift.type)] || item.naturalGift.type;
+						details[TL`Natural Gift type`] = TL.type[item.naturalGift.type] || item.naturalGift.type;
 						details[TL`Natural Gift base power`] = String(item.naturalGift.basePower);
 					}
 					if (item.isNonstandard) {

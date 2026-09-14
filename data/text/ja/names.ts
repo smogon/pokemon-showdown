@@ -17,59 +17,60 @@ export const StatShortNames: { [id: string]: TranslationString } = {
 };
 
 export const TypeNames: { [id: string]: TranslationString } = {
-	bug: "むし",
-	dark: "あく",
-	dragon: "ドラゴン",
-	electric: "でんき",
-	fairy: "フェアリー",
-	fighting: "かくとう",
-	fire: "ほのお",
-	flying: "ひこう",
-	ghost: "ゴースト",
-	grass: "くさ",
-	ground: "じめん",
-	ice: "こおり",
-	normal: "ノーマル",
-	poison: "どく",
-	psychic: "エスパー",
-	rock: "いわ",
-	steel: "はがね",
-	stellar: "ステラ",
-	water: "みず",
+	Bug: "むし",
+	Dark: "あく",
+	Dragon: "ドラゴン",
+	Electric: "でんき",
+	Fairy: "フェアリー",
+	Fighting: "かくとう",
+	Fire: "ほのお",
+	Flying: "ひこう",
+	Ghost: "ゴースト",
+	Grass: "くさ",
+	Ground: "じめん",
+	Ice: "こおり",
+	Normal: "ノーマル",
+	Poison: "どく",
+	Psychic: "エスパー",
+	Rock: "いわ",
+	Steel: "はがね",
+	Stellar: "ステラ",
+	Water: "みず",
+	"???": null, // NEEDS TRANSLATION
 };
 
 export const NatureNames: { [id: string]: TranslationString } = {
-	adamant: "いじっぱり",
-	bashful: "てれや",
-	bold: "ずぶとい",
-	brave: "ゆうかん",
-	calm: "おだやか",
-	careful: "しんちょう",
-	docile: "すなお",
-	gentle: "おとなしい",
-	hardy: "がんばりや",
-	hasty: "せっかち",
-	impish: "わんぱく",
-	jolly: "ようき",
-	lax: "のうてんき",
-	lonely: "さみしがり",
-	mild: "おっとり",
-	modest: "ひかえめ",
-	naive: "むじゃき",
-	naughty: "やんちゃ",
-	quiet: "れいせい",
-	quirky: "きまぐれ",
-	rash: "うっかりや",
-	relaxed: "のんき",
-	sassy: "なまいき",
-	serious: "まじめ",
-	timid: "おくびょう",
+	Adamant: "いじっぱり",
+	Bashful: "てれや",
+	Bold: "ずぶとい",
+	Brave: "ゆうかん",
+	Calm: "おだやか",
+	Careful: "しんちょう",
+	Docile: "すなお",
+	Gentle: "おとなしい",
+	Hardy: "がんばりや",
+	Hasty: "せっかち",
+	Impish: "わんぱく",
+	Jolly: "ようき",
+	Lax: "のうてんき",
+	Lonely: "さみしがり",
+	Mild: "おっとり",
+	Modest: "ひかえめ",
+	Naive: "むじゃき",
+	Naughty: "やんちゃ",
+	Quiet: "れいせい",
+	Quirky: "きまぐれ",
+	Rash: "うっかりや",
+	Relaxed: "のんき",
+	Sassy: "なまいき",
+	Serious: "まじめ",
+	Timid: "おくびょう",
 };
 
 export const GenderNames: { [id: string]: TranslationString } = {
-	male: "オス",
-	female: "メス",
-	genderless: "せいべつなし",
+	M: "オス",
+	F: "メス",
+	N: "せいべつなし",
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
@@ -115,32 +116,32 @@ export const TargetNames: { [id: string]: TranslationString } = {
 // veekun (presumably from Pokédex 3D Pro) uses kana (かいじゅう, タマゴみはっけん, ...)
 // these are Kanji forms, presumably from guidebooks
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	monster: null, // NEEDS TRANSLATION
-	water1: null, // NEEDS TRANSLATION
-	bug: null, // NEEDS TRANSLATION
-	flying: null, // NEEDS TRANSLATION
-	field: null, // NEEDS TRANSLATION
-	fairy: null, // NEEDS TRANSLATION
-	grass: null, // NEEDS TRANSLATION
-	humanlike: null, // NEEDS TRANSLATION
-	water3: null, // NEEDS TRANSLATION
-	mineral: null, // NEEDS TRANSLATION
-	amorphous: null, // NEEDS TRANSLATION
-	water2: null, // NEEDS TRANSLATION
-	ditto: null, // NEEDS TRANSLATION
-	dragon: null, // NEEDS TRANSLATION
-	undiscovered: null, // NEEDS TRANSLATION
+	Monster: null, // NEEDS TRANSLATION
+	"Water 1": null, // NEEDS TRANSLATION
+	Bug: null, // NEEDS TRANSLATION
+	Flying: null, // NEEDS TRANSLATION
+	Field: null, // NEEDS TRANSLATION
+	Fairy: null, // NEEDS TRANSLATION
+	Grass: null, // NEEDS TRANSLATION
+	"Human-Like": null, // NEEDS TRANSLATION
+	"Water 3": null, // NEEDS TRANSLATION
+	Mineral: null, // NEEDS TRANSLATION
+	Amorphous: null, // NEEDS TRANSLATION
+	"Water 2": null, // NEEDS TRANSLATION
+	Ditto: null, // NEEDS TRANSLATION
+	Dragon: null, // NEEDS TRANSLATION
+	Undiscovered: null, // NEEDS TRANSLATION
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
-	black: "黒",
-	blue: "青",
-	brown: "茶",
-	gray: "灰",
-	green: "緑",
-	pink: "桃",
-	purple: "紫",
-	red: "赤",
-	white: "白",
-	yellow: "黄",
+	Black: "黒",
+	Blue: "青",
+	Brown: "茶",
+	Gray: "灰",
+	Green: "緑",
+	Pink: "桃",
+	Purple: "紫",
+	Red: "赤",
+	White: "白",
+	Yellow: "黄",
 };

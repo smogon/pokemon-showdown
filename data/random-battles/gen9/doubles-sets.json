@@ -585,10 +585,16 @@
         "level": 86,
         "sets": [
             {
-                "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Fake Out", "Knock Off", "Poison Jab", "Protect"],
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Close Combat", "Fake Out", "Knock Off", "Poison Jab"],
                 "abilities": ["Unburden"],
                 "teraTypes": ["Dark", "Poison"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Close Combat", "Fake Out", "Knock Off", "Protect"],
+                "abilities": ["Unburden"],
+                "teraTypes": ["Dark"]
             }
         ]
     },
@@ -597,7 +603,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Close Combat", "Coaching", "Fake Out", "Knock Off", "Poison Jab"],
+                "movepool": ["Close Combat",  "Fake Out", "Knock Off", "Poison Jab"],
                 "abilities": ["Inner Focus"],
                 "teraTypes": ["Dark", "Poison"]
             }
@@ -742,7 +748,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dragon Dance", "Earthquake", "Protect", "Temper Flare", "Waterfall"],
+                "movepool": ["Dragon Dance", "Earthquake", "Protect", "Waterfall"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Ground"]
             },
@@ -778,7 +784,7 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Transform"],
                 "abilities": ["Imposter"],
-                "teraTypes": ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
+                "teraTypes": ["Ghost", "Steel"]
             }
         ]
     },
@@ -787,13 +793,19 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Helping Hand", "Icy Wind", "Muddy Water", "Protect", "Scald", "Yawn"],
+                "movepool": ["Icy Wind", "Muddy Water", "Protect", "Scald", "Yawn"],
                 "abilities": ["Water Absorb"],
                 "teraTypes": ["Dragon", "Fire", "Ground"]
             },
             {
                 "role": "Bulky Protect",
-                "movepool": ["Icy Wind", "Muddy Water", "Protect", "Scald", "Wish", "Yawn"],
+                "movepool": ["Icy Wind", "Muddy Water", "Protect", "Scald", "Wish"],
+                "abilities": ["Water Absorb"],
+                "teraTypes": ["Dragon", "Fire", "Ground"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Helping Hand", "Icy Wind", "Muddy Water", "Protect", "Scald"],
                 "abilities": ["Water Absorb"],
                 "teraTypes": ["Dragon", "Fire", "Ground"]
             }
@@ -973,19 +985,19 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Coaching", "Encore", "Pollen Puff", "Tailwind", "Thunder Wave", "Will-O-Wisp"],
+                "movepool": ["Encore", "Pollen Puff", "Psychic", "Tailwind", "Thunder Wave", "Will-O-Wisp"],
                 "abilities": ["Synchronize"],
                 "teraTypes": ["Fairy", "Steel"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Baton Pass", "Fire Blast", "Nasty Plot", "Pollen Puff", "Psychic"],
+                "movepool": ["Fire Blast", "Nasty Plot", "Pollen Puff", "Protect", "Psychic"],
                 "abilities": ["Synchronize"],
                 "teraTypes": ["Fairy", "Steel"]
             },
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Coaching", "Imprison", "Pollen Puff", "Transform"],
+                "role": "Doubles Support",
+                "movepool": ["Coaching", "Imprison", "Pollen Puff", "Psychic", "Transform"],
                 "abilities": ["Synchronize"],
                 "teraTypes": ["Fairy", "Steel"]
             }
@@ -1494,13 +1506,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Baton Pass", "No Retreat", "Population Bomb", "Spiky Shield"],
-                "abilities": ["Technician"],
-                "teraTypes": ["Ghost"]
-            },
-            {
-                "role": "Doubles Support",
-                "movepool": ["Decorate", "Fake Out", "Follow Me", "Tailwind"],
+                "movepool": ["Baneful Bunker", "Baton Pass", "No Retreat", "Population Bomb", "Spiky Shield"],
                 "abilities": ["Technician"],
                 "teraTypes": ["Ghost"]
             }
@@ -1975,8 +1981,8 @@
         "level": 90,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Brave Bird", "Draco Meteor", "Fire Blast", "Helping Hand", "Roost", "Tailwind", "Will-O-Wisp"],
+                "role": "Doubles Support",
+                "movepool": ["Brave Bird", "Draco Meteor", "Fire Blast", "Helping Hand", "Tailwind", "Will-O-Wisp"],
                 "abilities": ["Natural Cure"],
                 "teraTypes": ["Steel"]
             },
@@ -3593,7 +3599,7 @@
         "level": 81,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Encore", "Moonblast", "Tailwind", "Taunt"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Fire", "Ghost", "Steel"]
@@ -3701,7 +3707,13 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Close Combat", "Coaching", "Fake Out", "Knock Off", "Poison Jab", "Snarl"],
+                "movepool": ["Close Combat", "Fake Out", "Knock Off", "Poison Jab", "Snarl"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Poison"]
+            },
+            {
+                "role": "Bulky Protect",
+                "movepool": ["Bulk Up", "Drain Punch", "Knock Off", "Protect"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Poison"]
             }
@@ -3712,13 +3724,13 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Dark Pulse", "Flamethrower", "Focus Blast", "Protect", "Sludge Bomb"],
+                "movepool": ["Dark Pulse", "Focus Blast", "Protect", "Sludge Bomb", "Snarl"],
                 "abilities": ["Illusion"],
                 "teraTypes": ["Poison"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Flamethrower", "Focus Blast", "Knock Off", "Protect", "Sludge Bomb"],
+                "movepool": ["Dark Pulse", "Nasty Plot", "Protect", "Sludge Bomb"],
                 "abilities": ["Illusion"],
                 "teraTypes": ["Poison"]
             }
@@ -6439,6 +6451,12 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Body Press", "Last Respects", "Shadow Sneak", "Trick"],
+                "abilities": ["Fluffy"],
+                "teraTypes": ["Ghost"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Body Press", "Last Respects", "Trick", "Will-O-Wisp"],
                 "abilities": ["Fluffy"],
                 "teraTypes": ["Ghost"]
             }
