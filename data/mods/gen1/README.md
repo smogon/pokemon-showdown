@@ -50,9 +50,18 @@ Partial Trapping Moves
 ----------------------
 Partial trapping moves let either Pokémon switch but target will be unable to move for its duration.
 
+RBY desyncs and Desync Clause Mod
+-----------------
+These are the mechanics for the Desync Clause Mod:
+1. Psywave would never roll a 0.
+2. Bide's accumulated damage is not reset if the opponent faints.
+3. Thawing before acting makes the thawed Pokémon use the last move selected by its team, even if that Pokémon does not have that move. If that team hasn't selected a move yet, the Pokémon will use a corrupted move with Fissure's animation, 102 base power, ??? type, Special category, and around 31.6% accuracy.
+4. The priority of a sleeping/frozen Pokémon would always be the same as the last move used by its team. For example, if a Jynx gets put to sleep while using Counter, its priority will remain -1 for the duration of its sleep or until another move is used by its team. The same happens with Quick Attack, but with higher priority.
+5. If Mirror Move copies a trapping move and the opponent switches out, the player would reuse the trapping move from turn zero. Metronome would still fall back to using Metronome.
+6. Counter has 2 parts:
+    - Counter reacts based on the last move used by the opponent's team. A move counts as used as soon as the message "<Pokémon> used <move>!" appears, even if it fails. So if a Pokémon gets full paralyzed, it doesn't count. For example, if a Chansey gets Ice Beamed by a paralyzed Snorlax, then the next turn it clicks Counter as the Snorlax clicks Body Slam and gets full para'd, Counter will fail.
+    - Counter fails if the opponent switches to a sleeping Pokemon that spends a turn sleeping and has Counter as its first move. For example—assume the Cloyster in the back is asleep and has Counter as its first move—if Chansey uses Counter as Snorlax switches into Cloyster, Counter might not fail. But if Snorlax switches into Cloyster, and in the following turn, Chansey clicks Counter as Cloyster spends a turn sleeping, Counter will always fail. This makes it optimal to put Counter in the first slot (we could probably code this into PS).
+
 TODO. Glitches not implemented
 ------------------------------
 There are a couple of divisions by zero in the original game in the cartridge. Those have not been implemented.
-
-If a Pokemon has its sleep or freeze status healed by Haze, it will not be able to move on that turn (skip turn glitch).
-This also applies to a frozen Pokemon that has just been thawed by a fire type move.

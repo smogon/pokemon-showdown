@@ -12,15 +12,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	effectspore: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (damage && move.flags['contact'] && !source.status) {
-				const r = this.random(300);
-				if (r < 10) {
-					source.setStatus('slp', target);
-				} else if (r < 20) {
-					source.setStatus('par', target);
-				} else if (r < 30) {
-					source.setStatus('psn', target);
-				}
+			if (damage && move.flags['contact'] && this.randomChance(1, 10)) {
+				const status = this.sample(['slp', 'par', 'psn']);
+				source.trySetStatus(status, target);
 			}
 		},
 	},
@@ -205,16 +199,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart: undefined, // no inherit
 		onSwitchIn(pokemon) {
 			pokemon.truantTurn = this.turn !== 0;
-		},
-		onBeforeMove(pokemon) {
+			// it is unnecessary to keep a volatile, but it helps with cross-gen implementation
 			if (pokemon.truantTurn) {
-				this.add('cant', pokemon, 'ability: Truant');
-				return false;
+				pokemon.addVolatile('truant');
+			} else {
+				pokemon.removeVolatile('truant');
 			}
 		},
 		onResidualOrder: 27,
 		onResidual(pokemon) {
 			pokemon.truantTurn = !pokemon.truantTurn;
+			if (pokemon.truantTurn) {
+				pokemon.addVolatile('truant');
+			} else {
+				pokemon.removeVolatile('truant');
+			}
 		},
 	},
 	voltabsorb: {

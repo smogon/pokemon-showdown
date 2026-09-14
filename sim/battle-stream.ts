@@ -14,32 +14,6 @@ import { Teams } from './teams';
 import { Battle, extractChannelMessages } from './battle';
 import type { ChoiceRequest } from './side';
 
-/**
- * Like string.split(delimiter), but only recognizes the first `limit`
- * delimiters (default 1).
- *
- * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
- *
- * `Utils.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
- *
- * Returns an array of length exactly limit + 1.
- */
-function splitFirst(str: string, delimiter: string, limit = 1) {
-	const splitStr: string[] = [];
-	while (splitStr.length < limit) {
-		const delimiterIndex = str.indexOf(delimiter);
-		if (delimiterIndex >= 0) {
-			splitStr.push(str.slice(0, delimiterIndex));
-			str = str.slice(delimiterIndex + delimiter.length);
-		} else {
-			splitStr.push(str);
-			str = '';
-		}
-	}
-	splitStr.push(str);
-	return splitStr;
-}
-
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	debug: boolean;
 	noCatch: boolean;
@@ -75,7 +49,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	_writeLines(chunk: string) {
 		for (const line of chunk.split('\n')) {
 			if (line.startsWith('>')) {
-				const [type, message] = splitFirst(line.slice(1), ' ');
+				const [type, message] = Utils.splitFirst(line.slice(1), ' ');
 				this._writeLine(type, message);
 			}
 		}
@@ -110,7 +84,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			this.battle = new Battle(options);
 			break;
 		case 'player':
-			const [slot, optionsText] = splitFirst(message, ' ');
+			const [slot, optionsText] = Utils.splitFirst(message, ' ');
 			this.battle!.setPlayer(slot as SideID, JSON.parse(optionsText));
 			break;
 		case 'p1':
@@ -208,6 +182,14 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				battle.add('', '<<< error: ' + e.message);
 			}
 			break;
+		case 'editbattle':
+			try {
+				this.editbattle(message);
+				this.battle!.inputLog.push(`>editbattle ${message}`);
+			} catch (e: any) {
+				this.battle!.add('', '<<< error: ' + e.message);
+			}
+			break;
 		case 'requestlog':
 			this.push(`requesteddata\n${this.battle!.inputLog.join('\n')}`);
 			break;
@@ -232,6 +214,167 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			break;
 		default:
 			throw new Error(`Unrecognized command ">${type} ${message}"`);
+		}
+	}
+	editbattle(target: string) {
+		const battle = this.battle!;
+		const toID = battle.toID;
+		const getPlayer = (originalInput: string) => {
+			const input = toID(originalInput);
+			if (/^p[1-9]$/.test(input)) return battle.sides[parseInt(input.slice(1)) - 1];
+			if (/^[1-9]$/.test(input)) return battle.sides[parseInt(input) - 1];
+			for (const side of battle.sides) {
+				if (toID(side.name) === input) return side;
+			}
+			throw new Error(`Player "${originalInput}" not found`);
+		};
+		const getPokemon = (side: string | Side, input: string) => {
+			if (typeof side === 'string') side = getPlayer(side)!;
+
+			input = toID(input);
+			let out = null;
+			if (/^[1-9]$/.test(input)) out = side.pokemon[parseInt(input) - 1];
+			else out = side.pokemon.find(p => p.baseSpecies.id === input || p.species.id === input);
+			if (!out) throw new Error(`Pokemon "${side.name} ${input}" not found`);
+			return out;
+		};
+		const requireInt = (input: string) => {
+			const num = Number(input);
+			if (!Number.isInteger(num)) throw new Error(`"${input}" is not an integer`);
+			return num;
+		};
+
+		let user = null;
+		if (target.startsWith('user:')) {
+			[user, target] = Utils.splitFirst(target.slice(5), ',');
+			target = target.trim();
+		}
+		battle.add('html', Utils.html`<div class="message-warning">${user ? `[${user}] ` : ''}<strong>/editbattle</strong> ${target}</div>`);
+
+		let cmd;
+		[cmd, target] = Utils.splitFirst(target, ' ');
+		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
+		const targets = target.split(',');
+		if (targets.length === 1 && targets[0] === '') targets.pop();
+		switch (cmd) {
+		case 'hp':
+		case 'h': {
+			if (targets.length !== 3) {
+				battle.add("||<<< Error: Format should be: hp PLAYER, POKEMON, HP");
+				return;
+			}
+			const [player, pokemon, hp] = targets;
+			const p = getPokemon(toID(player), toID(pokemon));
+			p.sethp(requireInt(hp));
+			if (p.isActive) battle.add('-damage', p, p.getHealth);
+			break;
+		}
+		case 'status':
+		case 's': {
+			if (targets.length !== 3) {
+				battle.add("||<<< Error: Format should be: status PLAYER, POKEMON, STATUS");
+				return;
+			}
+			const [player, pokemon, status] = targets.map(toID);
+			const pl = getPlayer(player);
+			const p = getPokemon(player, pokemon);
+			p.setStatus(toID(status));
+			if (!p.isActive) {
+				battle.add('', 'please ignore the above');
+				battle.add('-status', pl.active[0], pl.active[0].status, '[silent]');
+			}
+			break;
+		}
+		case 'pp': {
+			if (targets.length !== 4) {
+				battle.add("||<<< Error: Format should be: pp PLAYER, POKEMON, MOVE, PP");
+				return;
+			}
+			const [player, pokemon, move, pp] = targets;
+			const p = getPokemon(player, pokemon);
+			const moveData = p.getMoveData(toID(move)) || p.moveSlots[parseInt(move) - 1];
+			if (!moveData) {
+				battle.add(`||<<< Error: Move "${move}" not found for Pokemon "${player} ${pokemon}"`);
+				return;
+			}
+			moveData.pp = requireInt(pp);
+			break;
+		}
+		case 'boost':
+		case 'b': {
+			if (targets.length !== 4) {
+				battle.add("||<<< Error: Format should be: boost PLAYER, POKEMON, STAT, VALUE");
+				return;
+			}
+			const [player, pokemon, stat, boostLevel] = targets;
+			const p = getPokemon(player, pokemon);
+			const statID = toID(stat) as BoostID;
+			if (!['atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'].includes(statID)) {
+				battle.add(`||<<< Error: Invalid boost "${stat}:${boostLevel}"`);
+				return;
+			}
+			battle.boost({ [statID]: requireInt(boostLevel) }, p);
+			break;
+		}
+		case 'volatile':
+		case 'v': {
+			if (targets.length !== 3) {
+				battle.add("||<<< Error: Format should be: volatile PLAYER, POKEMON, VOLATILE");
+				return;
+			}
+			const [player, pokemon, volatile] = targets;
+			const p = getPokemon(player, pokemon);
+			p.addVolatile(toID(volatile));
+			break;
+		}
+		case 'sidecondition':
+		case 'sc': {
+			if (targets.length !== 2) {
+				battle.add("||<<< Error: Format should be: sidecondition PLAYER, SIDECONDITION");
+				return;
+			}
+			const [player, sideCondition] = targets;
+			const side = getPlayer(player);
+			side.addSideCondition(toID(sideCondition), 'debug');
+			break;
+		}
+		case 'fieldcondition': case 'pseudoweather':
+		case 'fc': {
+			if (targets.length !== 1) {
+				battle.add("||<<< Error: Format should be: fieldcondition FIELD, PSEUDOWEATHER");
+				return;
+			}
+			const [pseudoWeather] = targets;
+			battle.field.addPseudoWeather(toID(pseudoWeather), 'debug');
+			break;
+		}
+		case 'weather':
+		case 'w': {
+			if (targets.length !== 1) {
+				battle.add("||<<< Error: Format should be: weather FIELD, WEATHER");
+				return;
+			}
+			const [weather] = targets;
+			battle.field.setWeather(toID(weather), 'debug');
+			break;
+		}
+		case 'terrain':
+		case 't': {
+			if (targets.length !== 1) {
+				battle.add("||<<< Error: Format should be: terrain FIELD, TERRAIN");
+				return;
+			}
+			const [terrain] = targets;
+			battle.field.setTerrain(toID(terrain), 'debug');
+			break;
+		}
+		case 'reseed': {
+			battle.resetRNG(target as PRNGSeed);
+			if (targets.length) battle.add(`||Reseeded to ${targets.join(',')}`);
+			break;
+		}
+		default:
+			throw new Error(`Unknown editbattle command: ${cmd}`);
 		}
 	}
 
@@ -286,7 +429,7 @@ export function getPlayerStreams(stream: BattleStream) {
 	};
 	(async () => {
 		for await (const chunk of stream) {
-			const [type, data] = splitFirst(chunk, `\n`);
+			const [type, data] = Utils.splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
 				const channelMessages = extractChannelMessages(data, [-1, 0, 1, 2, 3, 4]);
@@ -298,7 +441,7 @@ export function getPlayerStreams(stream: BattleStream) {
 				streams.p4.push(channelMessages[4].join('\n'));
 				break;
 			case 'sideupdate':
-				const [side, sideData] = splitFirst(data, `\n`);
+				const [side, sideData] = Utils.splitFirst(data, `\n`);
 				streams[side as SideID].push(sideData);
 				break;
 			case 'end':
@@ -343,7 +486,7 @@ export abstract class BattlePlayer {
 	receiveLine(line: string) {
 		if (this.debug) console.log(line);
 		if (!line.startsWith('|')) return;
-		const [cmd, rest] = splitFirst(line.slice(1), '|');
+		const [cmd, rest] = Utils.splitFirst(line.slice(1), '|');
 		if (cmd === 'request') return this.receiveRequest(JSON.parse(rest));
 		if (cmd === 'error') return this.receiveError(new Error(rest));
 		this.log.push(line);

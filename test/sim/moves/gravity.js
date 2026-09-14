@@ -11,25 +11,31 @@ describe('Gravity', () => {
 	});
 
 	it('should ground Flying-type Pokemon and remove their Ground immunity', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Aerodactyl', ability: 'pressure', moves: ['gravity'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Aron', ability: 'sturdy', moves: ['earthpower'] }] });
+		battle = common.createBattle([[
+			{ species: 'Aerodactyl', ability: 'pressure', moves: ['gravity'] },
+		], [
+			{ species: 'Aron', ability: 'sturdy', moves: ['earthpower'] },
+		]]);
 		battle.makeChoices('move gravity', 'move earthpower');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should ground Pokemon with Levitate and remove their Ground immunity', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Rotom', ability: 'levitate', moves: ['gravity'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Aron', ability: 'sturdy', moves: ['earthpower'] }] });
+		battle = common.createBattle([[
+			{ species: 'Rotom', ability: 'levitate', moves: ['gravity'] },
+		], [
+			{ species: 'Aron', ability: 'sturdy', moves: ['earthpower'] },
+		]]);
 		battle.makeChoices('move gravity', 'move earthpower');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should interrupt and disable the use of airborne moves', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Spiritomb', ability: 'pressure', moves: ['gravity'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Aerodactyl', ability: 'pressure', moves: ['fly'] }] });
+		battle = common.createBattle([[
+			{ species: 'Spiritomb', ability: 'pressure', moves: ['gravity'] },
+		], [
+			{ species: 'Aerodactyl', ability: 'pressure', moves: ['fly'] },
+		]]);
 		battle.makeChoices('move gravity', 'move fly');
 		assert(!battle.p2.active[0].volatiles['twoturnmove']);
 		assert.cantMove(() => battle.makeChoices('move gravity', 'move fly'), 'Aerodactyl', 'Fly');

@@ -27,25 +27,23 @@ describe('Magic Guard', () => {
 	});
 
 	it(`should prevent Leech Seed's healing effect`, () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Clefable', ability: 'magicguard', moves: ['moonblast'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Ferrothorn', ability: 'noguard', moves: ['leechseed'] },
-		] });
+		]]);
 		battle.makeChoices('move moonblast', 'move leechseed');
 		assert.fullHP(battle.p1.active[0]);
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it('should not be suppressed by Mold Breaker', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 			{ species: 'Clefable', ability: 'magicguard', moves: ['doubleedge'] },
-		] });
-		battle.setPlayer('p2', { team: [{ species: 'Haxorus', ability: 'moldbreaker', moves: ['stealthrock', 'roar'] }] });
+		], [
+			{ species: 'Haxorus', ability: 'moldbreaker', moves: ['stealthrock', 'roar'] },
+		]]);
 		battle.makeChoices('move splash', 'move stealthrock');
 		battle.makeChoices('move splash', 'move roar');
 		assert.fullHP(battle.p1.active[0]);

@@ -13,17 +13,15 @@ describe('Follow Me', () => {
 	it('should redirect single-target moves towards it if it is a valid target', function () {
 		this.timeout(5000);
 
-		battle = common.gen(5).createBattle({ gameType: 'triples' });
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
 			{ species: 'Clefable', ability: 'unaware', moves: ['followme'] },
 			{ species: 'Clefairy', ability: 'unaware', moves: ['calmmind'] },
 			{ species: 'Cleffa', ability: 'unaware', moves: ['calmmind'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Abra', ability: 'synchronize', moves: ['lowkick'] },
 			{ species: 'Kadabra', ability: 'synchronize', moves: ['lowkick'] },
 			{ species: 'Alakazam', ability: 'synchronize', moves: ['lowkick'] },
-		] });
+		]]);
 		let hitCount = 0;
 		battle.onEvent('Damage', battle.format, (damage, pokemon) => {
 			if (pokemon.species.id === 'clefable') {
@@ -35,15 +33,13 @@ describe('Follow Me', () => {
 	});
 
 	it('should not redirect self-targeting moves', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Clefable', ability: 'unaware', moves: ['followme'] },
 			{ species: 'Clefairy', ability: 'unaware', moves: ['softboiled'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Alakazam', ability: 'synchronize', moves: ['honeclaws'] },
 			{ species: 'Kadabra', ability: 'synchronize', moves: ['honeclaws'] },
-		] });
+		]]);
 		battle.makeChoices('move followme, move softboiled', 'move honeclaws, move honeclaws');
 		assert.equal(battle.p1.active[0].boosts['atk'], 0);
 		assert.equal(battle.p2.active[0].boosts['atk'], 1);
@@ -83,6 +79,47 @@ describe('Follow Me', () => {
 		// Follow Me should have redirected both attacks, so the Wynaut should be at full HP
 		assert.fullHP(battle.p1.active[0]);
 		assert.fullHP(battle.p2.active[0]);
+	});
+
+	it(`should redirect charging moves if used on the resolution turn`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Wynaut", moves: ['solarbeam'] },
+		], [
+			{ species: "Blissey", moves: ['sleeptalk', 'followme'] },
+			{ species: "Accelgor", moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move sleeptalk, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move followme, move sleeptalk');
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
+	});
+
+	it(`should not redirect charging moves if used on the charnging turn`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Wynaut", moves: ['solarbeam'] },
+		], [
+			{ species: "Blissey", moves: ['sleeptalk', 'followme'] },
+			{ species: "Accelgor", moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move followme, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move sleeptalk, move sleeptalk');
+		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[1]);
+	});
+
+	it(`should redirect charging moves that skip the charging turn`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Wynaut", ability: 'drought', moves: ['solarbeam'] },
+		], [
+			{ species: "Blissey", moves: ['sleeptalk', 'followme'] },
+			{ species: "Accelgor", moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move followme, move sleeptalk');
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
 	});
 
 	it(`[Gen 3] should continue to redirect moves after the user is knocked out and replaced`, () => {

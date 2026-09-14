@@ -85,7 +85,114 @@ describe('Dex#getMove', () => {
 	it(`should correctly handle G-Max moves`, () => {
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').name, "G-Max Befuddle");
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').gen, 8);
-		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");
+		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isMax, "Butterfree");
+	});
+});
+
+describe('DexText#get', () => {
+	it(`should translate species, items, abilities, and moves`, () => {
+		const pikachuText = Dex.loadTextData('ja').Pokedex.pikachu;
+		assert.deepEqual(pikachuText, {
+			name: 'ピカチュウ', baseSpecies: 'ピカチュウ',
+		});
+		assert.equal(Dex.text.get(Dex.species.get('Pikachu'), 'ja'), pikachuText);
+		assert.deepEqual(Dex.loadTextData('ja').Pokedex.unownb, {
+			name: 'アンノーン-B', baseSpecies: 'アンノーン', forme: 'B',
+		});
+		assert.equal(Dex.text.get(Dex.items.get('Leftovers'), 'ja').name, 'たべのこし');
+		assert.equal(Dex.text.get(Dex.abilities.get('Levitate'), 'ja').name, 'ふゆう');
+		assert.equal(Dex.text.get(Dex.moves.get('Tackle'), 'ja').name, 'たいあたり');
+	});
+
+	it(`should translate names backed by Dex objects`, () => {
+		const { Tags } = require('../../dist/data/tags');
+		assert.deepEqual(Dex.text.get(Dex.types.get('Fire'), 'ja'), { name: 'ほのお' });
+		assert.equal(Dex.text.typeName('Fire', 'ja'), 'ほのお');
+		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'ja'), { name: 'いじっぱり' });
+		assert.equal(Dex.text.natureName('Adamant', 'ja'), 'いじっぱり');
+		assert.equal(Dex.text.natureName('Adamant', 'en'), 'Adamant');
+		assert.deepEqual(Dex.text.get(Tags.restrictedlegendary, 'ja'), { name: Dex.loadTextData('ja').Tags.restrictedlegendary.name });
+	});
+
+	it(`should translate scalar names`, () => {
+		assert.equal(Dex.text.eggGroupName('Monster', 'ja'), Dex.loadTextData('ja').EggGroupNames.monster);
+		assert.equal(Dex.loadTextData('fr').StatNames.stats, 'stats');
+		assert.equal(Dex.loadTextData('fr').StatNames['stats:grammar'], 'fp');
+		assert.equal(Dex.loadTextData('fr').StatNames.spd, 'Défense Spéciale');
+		assert.equal(Dex.loadTextData('fr').StatNames['spd:grammar'], 'fs');
+		assert.equal(Dex.loadTextData('fr').StatMediumNames.spd, 'Déf. Spé.');
+		assert.equal(Dex.loadTextData('fr').StatShortNames.spd, 'DSp');
+		assert.equal(Dex.text.categoryName('Physical', 'ja'), 'ぶつり');
+		assert.equal(Dex.text.genderName('F', 'ja'), 'メス');
+		assert.equal(Dex.text.eggGroupName('Human-Like', 'ja'), Dex.loadTextData('ja').EggGroupNames.humanlike ?? 'Human-Like');
+		assert.equal(Dex.text.colorName('Purple', 'ja'), '紫');
+	});
+
+	it(`should return the entire text entry`, () => {
+		assert.equal(
+			Dex.text.get(Dex.moves.get('Absorb')).gen4.desc,
+			'The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, ' +
+			'the HP recovered is 1.3× normal, rounded down.'
+		);
+	});
+
+	it(`should fall back to English text data`, () => {
+		const move = Dex.moves.get('Tackle');
+		const englishText = Dex.text.get(move, 'en');
+		assert.deepEqual(Dex.text.get(move, 'en-afd'), englishText);
+		assert.deepEqual(Dex.text.get(move), englishText);
+		assert.deepEqual(Dex.loadTextData('en-afd').Moves.tackle, Dex.loadTextData('en').Moves.tackle);
+	});
+
+	it(`should allow localized text files to be omitted`, () => {
+		const afd = Dex.loadTextData('en-afd');
+		const english = Dex.loadTextData('en');
+		const rawAfdDefault = Dex.loadTextFile('en-afd/default', 'DefaultText');
+		assert.deepEqual(afd.Moves.tackle, english.Moves.tackle);
+		assert.equal(afd.Default.default.mega, rawAfdDefault.default.mega);
+		assert.notEqual(afd.Default.default.mega, english.Default.default.mega);
+	});
+
+	it(`should keep long and short description fallbacks separate`, () => {
+		const text = Dex.text.get(Dex.moves.get('Close Combat'), 'ja');
+		assert.notEqual(text.desc, text.shortDesc);
+	});
+
+	it(`should use an old-generation translation instead of the current-generation description`, () => {
+		const dex = Dex.forGen(4);
+		const move = dex.moves.get('Brick Break');
+		const rawJapaneseText = Dex.loadTextFile('ja/moves', 'MovesText').brickbreak;
+		const desc = rawJapaneseText.gen4.desc || dex.loadTextData('en').Moves.brickbreak.desc;
+		assert.equal(dex.loadTextData('ja').Moves.brickbreak.desc, desc);
+		assert.equal(dex.text.get(move, 'ja').desc, desc);
+		assert.notEqual(desc, Dex.loadTextData('ja').Moves.brickbreak.desc);
+	});
+
+	it(`should use English-only descriptions defined by mods`, () => {
+		const dex = Dex.mod('afd');
+		const ability = dex.abilities.get('Chaos Saliva');
+		const text = dex.text.get(ability, 'ja');
+		assert.deepEqual(text, {
+			name: 'Chaos Saliva',
+			desc: "Contact moves have a 20% chance to paralyze and a 20% chance to confuse.",
+			shortDesc: "Contact moves have a 20% chance to paralyze and a 20% chance to confuse.",
+		});
+	});
+});
+
+describe('Dex#isTagged', () => {
+	it(`should check species, move, and generic tags`, () => {
+		assert(Dex.isTagged(Dex.species.get('Mew'), 'Mythical'));
+		assert(Dex.isTagged(Dex.species.get('Charizard-Gmax'), 'Gigantamax'));
+		assert(Dex.isTagged(Dex.moves.get('Tackle'), 'Contact'));
+		assert(Dex.isTagged(Dex.moves.get('Shadow Strike'), 'CAP'));
+		assert(Dex.isTagged(Dex.moves.get('Light of Ruin'), 'Past Unobtainable'));
+		assert(Dex.isTagged(Dex.items.get('Berserk Gene'), 'True Past'));
+
+		assert.false(Dex.isTagged(Dex.species.get('Charizard'), 'Gigantamax'));
+		assert.false(Dex.isTagged(Dex.moves.get('Confusion'), 'Contact'));
+		assert.false(Dex.isTagged(Dex.abilities.get('Pressure'), 'Mythical'));
+		assert.false(Dex.isTagged(Dex.species.get('Pikachu'), 'definitely not a real tag'));
 	});
 });
 

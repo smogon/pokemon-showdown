@@ -1,6 +1,7 @@
 import { PRNG } from '../../../sim/prng';
 import { Pokemon } from '../../../sim/pokemon';
 import { Teams } from '../../../sim/teams';
+import { Dex } from '../../../sim/dex';
 
 export const Scripts: ModdedBattleScriptsData = {
 	start() {

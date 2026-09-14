@@ -11,10 +11,11 @@ describe('Heavy Metal', () => {
 	});
 
 	it('should double the weight of a Pokemon', () => {
-		battle = common.createBattle([
-			[{ species: "Simisear", ability: 'heavymetal', moves: ['nastyplot'] }],
-			[{ species: "Simisage", ability: 'gluttony', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Simisear", ability: 'heavymetal', moves: ['nastyplot'] },
+		], [
+			{ species: "Simisage", ability: 'gluttony', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {
@@ -26,10 +27,11 @@ describe('Heavy Metal', () => {
 	});
 
 	it('should be negated by Mold Breaker', () => {
-		battle = common.createBattle([
-			[{ species: "Simisear", ability: 'heavymetal', moves: ['nastyplot'] }],
-			[{ species: "Simisage", ability: 'moldbreaker', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Simisear", ability: 'heavymetal', moves: ['nastyplot'] },
+		], [
+			{ species: "Simisage", ability: 'moldbreaker', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {
@@ -47,10 +49,11 @@ describe('Light Metal', () => {
 	});
 
 	it('should halve the weight of a Pokemon', () => {
-		battle = common.createBattle([
-			[{ species: "Registeel", ability: 'lightmetal', moves: ['curse'] }],
-			[{ species: "Simisage", ability: 'gluttony', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Registeel", ability: 'lightmetal', moves: ['curse'] },
+		], [
+			{ species: "Simisage", ability: 'gluttony', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {
@@ -62,10 +65,11 @@ describe('Light Metal', () => {
 	});
 
 	it('should be negated by Mold Breaker', () => {
-		battle = common.createBattle([
-			[{ species: "Registeel", ability: 'lightmetal', moves: ['splash'] }],
-			[{ species: "Simisage", ability: 'moldbreaker', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Registeel", ability: 'lightmetal', moves: ['splash'] },
+		], [
+			{ species: "Simisage", ability: 'moldbreaker', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {
@@ -83,10 +87,11 @@ describe('Float Stone', () => {
 	});
 
 	it('should halve the weight of a Pokemon', () => {
-		battle = common.createBattle([
-			[{ species: "Registeel", ability: 'clearbody', item: 'floatstone', moves: ['curse'] }],
-			[{ species: "Simisage", ability: 'gluttony', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Registeel", ability: 'clearbody', item: 'floatstone', moves: ['curse'] },
+		], [
+			{ species: "Simisage", ability: 'gluttony', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {
@@ -104,10 +109,11 @@ describe('Autotomize', () => {
 	});
 
 	it('should reduce the weight of a Pokemon by 100 kg with each use', () => {
-		battle = common.createBattle([
-			[{ species: "Registeel", ability: 'clearbody', moves: ['autotomize'] }],
-			[{ species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Registeel", ability: 'clearbody', moves: ['autotomize'] },
+		], [
+			{ species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {
@@ -121,10 +127,11 @@ describe('Autotomize', () => {
 	});
 
 	it('should factor into weight before Heavy Metal does', () => {
-		battle = common.createBattle([
-			[{ species: "Lairon", ability: 'heavymetal', moves: ['autotomize'] }],
-			[{ species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Lairon", ability: 'heavymetal', moves: ['autotomize'] },
+		], [
+			{ species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {
@@ -136,10 +143,11 @@ describe('Autotomize', () => {
 	});
 
 	it('should reset after a forme change', () => {
-		battle = common.createBattle([
-			[{ species: "Aegislash", ability: 'stancechange', moves: ['autotomize', 'shadowsneak'] }],
-			[{ species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Aegislash", ability: 'stancechange', moves: ['autotomize', 'shadowsneak'] },
+		], [
+			{ species: "Simisage", ability: 'gluttony', item: 'laggingtail', moves: ['grassknot'] },
+		]]);
 		let basePower = 0;
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'grassknot') {

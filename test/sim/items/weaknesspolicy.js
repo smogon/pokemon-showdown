@@ -11,13 +11,11 @@ describe('Weakness Policy', () => {
 	});
 
 	it('should be triggered by super effective hits', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: "Lucario", ability: 'justified', moves: ['aurasphere'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Blissey", ability: 'naturalcure', item: 'weaknesspolicy', moves: ['softboiled'] },
-		] });
+		]]);
 		const holder = battle.p2.active[0];
 		battle.makeChoices('move aurasphere', 'move softboiled');
 		assert.false.holdsItem(holder);
@@ -26,15 +24,13 @@ describe('Weakness Policy', () => {
 	});
 
 	it('should respect individual type effectivenesses in doubles', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Stunfisk", ability: 'limber', moves: ['earthquake', 'surf', 'discharge'] },
 			{ species: "Volcarona", ability: 'swarm', item: 'weaknesspolicy', moves: ['roost'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Zekrom", ability: 'teravolt', item: 'weaknesspolicy', moves: ['roost'] },
 			{ species: "Pyukumuku", ability: 'unaware', item: 'weaknesspolicy', moves: ['recover'] },
-		] });
+		]]);
 		const zekrom = battle.p2.active[0];
 		const pyuk = battle.p2.active[1];
 		const volc = battle.p1.active[1];
@@ -80,13 +76,11 @@ describe('Weakness Policy', () => {
 	});
 
 	it('should not be triggered by fixed damage moves', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: "Lucario", ability: 'justified', moves: ['seismictoss'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Blissey", ability: 'naturalcure', item: 'weaknesspolicy', moves: ['softboiled'] },
-		] });
+		]]);
 		const holder = battle.p2.active[0];
 		battle.makeChoices('move seismictoss', 'move softboiled');
 		assert.holdsItem(holder);

@@ -11,7 +11,7 @@ Installing
 
     ./pokemon-showdown
 
-(Requires Node.js v16+)
+(Requires Node.js v22+)
 
 If your distro package manager has an old Node.js version, the simplest way to upgrade is `n` – usually no root necessary:
 
@@ -22,7 +22,7 @@ If your distro package manager has an old Node.js version, the simplest way to u
 Detailed installation instructions
 ------------------------------------------------------------------------
 
-Pokémon Showdown requires you to have [Node.js][6] installed, v14.x or later.
+Pokémon Showdown requires you to have [Node.js][6] installed, v22.x or later.
 
 Next, obtain a copy of Pokémon Showdown. If you're reading this outside of GitHub, you've probably already done this. If you're reading this in GitHub, there's a "Clone or download" button near the top right (it's green). I recommend the "Open in Desktop" method - you need to install GitHub Desktop which is more work than "Download ZIP", but it makes it much easier to update in the long run (it lets you use the `/updateserver` command).
 
@@ -77,7 +77,7 @@ To become an Administrator, create a file named `config/usergroups.csv` containi
 
     USER,~
 
-Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
+Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the tilde.
 
 This username must be registered. If you do not have a registered account, you can create one using the Register button in the settings menu (it looks like a gear) in the upper-right of Pokémon Showdown.
 

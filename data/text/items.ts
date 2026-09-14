@@ -3,7 +3,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ability Shield",
 		shortDesc: "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",
 
-		block: "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
+		block: "  {POKEMON}'s Ability is protected by the effects of its Ability Shield!",
 	},
 	abomasite: {
 		name: "Abomasite",
@@ -11,7 +11,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	absolite: {
 		name: "Absolite",
-		shortDesc: "If held by an Absol, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by an Absol, this item allows it to Mega Evolve into Mega Absol in battle.",
+	},
+	absolitez: {
+		name: "Absolite Z",
+		shortDesc: "If held by an Absol, this item allows it to Mega Evolve into Mega Absol Z in battle.",
 	},
 	absorbbulb: {
 		name: "Absorb Bulb",
@@ -19,11 +23,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	adamantcrystal: {
 		name: "Adamant Crystal",
-		shortDesc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+		shortDesc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2× power.",
 	},
 	adamantorb: {
 		name: "Adamant Orb",
-		shortDesc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2x power.",
+		shortDesc: "If held by a Dialga, its Steel- and Dragon-type attacks have 1.2× power.",
 	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
@@ -51,8 +55,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Air Balloon",
 		shortDesc: "Holder is immune to Ground-type attacks. Pops when holder is hit.",
 
-		start: "  [POKEMON] floats in the air with its Air Balloon!",
-		end: "  [POKEMON]'s Air Balloon popped!",
+		start: "  {POKEMON} floats in the air with its Air Balloon!",
+		end: "  {POKEMON}'s Air Balloon popped!",
 	},
 	alakazite: {
 		name: "Alakazite",
@@ -84,7 +88,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	assaultvest: {
 		name: "Assault Vest",
-		shortDesc: "Holder's Sp. Def is 1.5x, but it can only select damaging moves.",
+		shortDesc: "Holder's Sp. Def is 1.5×, but it can only select damaging moves.",
 	},
 	audinite: {
 		name: "Audinite",
@@ -105,6 +109,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	barbaracite: {
 		name: "Barbaracite",
 		shortDesc: "If held by a Barbaracle, this item allows it to Mega Evolve in battle.",
+	},
+	baxcalibrite: {
+		name: "Baxcalibrite",
+		shortDesc: "If held by a Baxcalibur, this item allows it to Mega Evolve in battle.",
 	},
 	beastball: {
 		name: "Beast Ball",
@@ -132,9 +140,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	bigroot: {
 		name: "Big Root",
-		shortDesc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
+		shortDesc: "Holder gains 1.3× HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
 		gen6: {
-			shortDesc: "Holder gains 1.3x HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
+			shortDesc: "Holder gains 1.3× HP from draining moves, Aqua Ring, Ingrain, and Leech Seed.",
 		},
 	},
 	bindingband: {
@@ -143,22 +151,22 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	blackbelt: {
 		name: "Black Belt",
-		shortDesc: "Holder's Fighting-type attacks have 1.2x power.",
+		shortDesc: "Holder's Fighting-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Fighting-type attacks have 1.1x power.",
+			shortDesc: "Holder's Fighting-type attacks have 1.1× power.",
 		},
 	},
 	blacksludge: {
 		name: "Black Sludge",
 		shortDesc: "Each turn, if holder is a Poison type, restores 1/16 max HP; loses 1/8 if not.",
 
-		heal: "  [POKEMON] restored a little HP using its Black Sludge!",
+		heal: "  {POKEMON} restored a little HP using its Black Sludge!",
 	},
 	blackglasses: {
 		name: "Black Glasses",
-		shortDesc: "Holder's Dark-type attacks have 1.2x power.",
+		shortDesc: "Holder's Dark-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Dark-type attacks have 1.1x power.",
+			shortDesc: "Holder's Dark-type attacks have 1.1× power.",
 		},
 	},
 	blastoisinite: {
@@ -191,16 +199,16 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	brightpowder: {
 		name: "Bright Powder",
-		shortDesc: "The accuracy of attacks against the holder is 0.9x.",
+		shortDesc: "The accuracy of attacks against the holder is 0.9×.",
 		gen2: {
 			shortDesc: "An attack against the holder has its accuracy out of 255 lowered by 20.",
 		},
 	},
 	buggem: {
 		name: "Bug Gem",
-		shortDesc: "Holder's first successful Bug-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Bug-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Bug-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Bug-type attack will have 1.5× power. Single use.",
 		},
 	},
 	buginiumz: {
@@ -229,18 +237,18 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	charcoal: {
 		name: "Charcoal",
-		shortDesc: "Holder's Fire-type attacks have 1.2x power.",
+		shortDesc: "Holder's Fire-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Fire-type attacks have 1.1x power.",
+			shortDesc: "Holder's Fire-type attacks have 1.1× power.",
 		},
 	},
 	charizarditex: {
 		name: "Charizardite X",
-		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard X.",
 	},
 	charizarditey: {
 		name: "Charizardite Y",
-		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Charizard, this item allows it to Mega Evolve into Mega Charizard Y.",
 	},
 	chartiberry: {
 		name: "Charti Berry",
@@ -270,21 +278,25 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Chill Drive",
 		shortDesc: "Holder's Techno Blast is Ice type.",
 	},
+	chimechite: {
+		name: "Chimechite",
+		shortDesc: "If held by a Chimecho, this item allows it to Mega Evolve in battle.",
+	},
 	chippedpot: {
 		name: "Chipped Pot",
 		shortDesc: "Evolves Sinistea-Antique into Polteageist-Antique when used.",
 	},
 	choiceband: {
 		name: "Choice Band",
-		shortDesc: "Holder's Attack is 1.5x, but it can only select the first move it executes.",
+		shortDesc: "Holder's Attack is 1.5×, but it can only select the first move it executes.",
 	},
 	choicescarf: {
 		name: "Choice Scarf",
-		shortDesc: "Holder's Speed is 1.5x, but it can only select the first move it executes.",
+		shortDesc: "Holder's Speed is 1.5×, but it can only select the first move it executes.",
 	},
 	choicespecs: {
 		name: "Choice Specs",
-		shortDesc: "Holder's Sp. Atk is 1.5x, but it can only select the first move it executes.",
+		shortDesc: "Holder's Sp. Atk is 1.5×, but it can only select the first move it executes.",
 	},
 	chopleberry: {
 		name: "Chople Berry",
@@ -298,7 +310,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Clear Amulet",
 		shortDesc: "Prevents other Pokemon from lowering the holder's stat stages.",
 
-		block: "  The effects of [POKEMON]'s Clear Amulet prevent its stats from being lowered!",
+		block: "  The effects of {POKEMON}'s Clear Amulet prevent its stats from being lowered!",
 	},
 	clefablite: {
 		name: "Clefablite",
@@ -318,7 +330,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	cornerstonemask: {
 		name: "Cornerstone Mask",
-		shortDesc: "Ogerpon-Cornerstone: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+		shortDesc: "Ogerpon-Cornerstone: 1.2× power attacks; Terastallize to gain Embody Aspect.",
 	},
 	cornnberry: {
 		name: "Cornn Berry",
@@ -333,6 +345,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		desc: "The holder is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause the holder to flinch, cause the holder's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if the holder is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against the holder.",
 		shortDesc: "Holder is not affected by the secondary effect of another Pokemon's attack.",
 	},
+	crabominite: {
+		name: "Crabominite",
+		shortDesc: "If held by a Crabominable, this item allows it to Mega Evolve in battle.",
+	},
 	crackedpot: {
 		name: "Cracked Pot",
 		shortDesc: "Evolves Sinistea into Polteageist when used.",
@@ -341,7 +357,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Custap Berry",
 		shortDesc: "Holder moves first in its priority bracket when at 1/4 max HP or less. Single use.",
 
-		activate: "  [POKEMON] can act faster than normal, thanks to its Custap Berry!",
+		activate: "  {POKEMON} can act faster than normal, thanks to its Custap Berry!",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -349,9 +365,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	darkgem: {
 		name: "Dark Gem",
-		shortDesc: "Holder's first successful Dark-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Dark-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Dark-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Dark-type attack will have 1.5× power. Single use.",
 		},
 	},
 	darkiniumz: {
@@ -361,6 +377,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	darkmemory: {
 		name: "Dark Memory",
 		shortDesc: "Holder's Multi-Attack is Dark type.",
+	},
+	darkranite: {
+		name: "Darkranite",
+		shortDesc: "If held by a Darkrai, this item allows it to Mega Evolve in battle.",
 	},
 	dawnstone: {
 		name: "Dawn Stone",
@@ -407,7 +427,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dracoplate: {
 		name: "Draco Plate",
-		shortDesc: "Holder's Dragon-type attacks have 1.2x power. Judgment is Dragon type.",
+		shortDesc: "Holder's Dragon-type attacks have 1.2× power. Judgment is Dragon type.",
 	},
 	dragalgite: {
 		name: "Dragalgite",
@@ -415,9 +435,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dragonfang: {
 		name: "Dragon Fang",
-		shortDesc: "Holder's Dragon-type attacks have 1.2x power.",
+		shortDesc: "Holder's Dragon-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Dragon-type attacks have 1.1x power.",
+			shortDesc: "Holder's Dragon-type attacks have 1.1× power.",
 		},
 		gen2: {
 			shortDesc: "No competitive use.",
@@ -425,9 +445,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dragongem: {
 		name: "Dragon Gem",
-		shortDesc: "Holder's first successful Dragon-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Dragon-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Dragon-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Dragon-type attack will have 1.5× power. Single use.",
 		},
 	},
 	dragoninite: {
@@ -446,7 +466,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Dragon Scale",
 		shortDesc: "Evolves Seadra into Kingdra when traded.",
 		gen2: {
-			shortDesc: "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
+			shortDesc: "Holder's Dragon-type attacks have 1.1× power. Evolves Seadra (trade).",
 		},
 	},
 	drampanite: {
@@ -455,7 +475,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	dreadplate: {
 		name: "Dread Plate",
-		shortDesc: "Holder's Dark-type attacks have 1.2x power. Judgment is Dark type.",
+		shortDesc: "Holder's Dark-type attacks have 1.2× power. Judgment is Dark type.",
 	},
 	dreamball: {
 		name: "Dream Ball",
@@ -483,7 +503,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	earthplate: {
 		name: "Earth Plate",
-		shortDesc: "Holder's Ground-type attacks have 1.2x power. Judgment is Ground type.",
+		shortDesc: "Holder's Ground-type attacks have 1.2× power. Judgment is Ground type.",
 	},
 	eelektrossite: {
 		name: "Eelektrossite",
@@ -497,13 +517,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Eject Button",
 		shortDesc: "If holder survives a hit, it immediately switches out to a chosen ally. Single use.",
 
-		end: "  [POKEMON] is switched out with the Eject Button!",
+		end: "  {POKEMON} is switched out with the Eject Button!",
 	},
 	ejectpack: {
 		name: "Eject Pack",
 		shortDesc: "If the holder's stat stages are lowered, it switches to a chosen ally. Single use.",
 
-		end: "  [POKEMON] is switched out by the Eject Pack!",
+		end: "  {POKEMON} is switched out by the Eject Pack!",
 	},
 	electirizer: {
 		name: "Electirizer",
@@ -511,9 +531,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	electricgem: {
 		name: "Electric Gem",
-		shortDesc: "Holder's first successful Electric-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Electric-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Electric-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Electric-type attack will have 1.5× power. Single use.",
 		},
 	},
 	electricmemory: {
@@ -541,7 +561,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	eviolite: {
 		name: "Eviolite",
-		shortDesc: "If holder's species can evolve, its Defense and Sp. Def are 1.5x.",
+		shortDesc: "If holder's species can evolve, its Defense and Sp. Def are 1.5×.",
 	},
 	excadrite: {
 		name: "Excadrite",
@@ -549,7 +569,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	expertbelt: {
 		name: "Expert Belt",
-		shortDesc: "Holder's attacks that are super effective against the target do 1.2x damage.",
+		shortDesc: "Holder's attacks that are super effective against the target do 1.2× damage.",
 	},
 	fairiumz: {
 		name: "Fairium Z",
@@ -557,11 +577,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	fairyfeather: {
 		name: "Fairy Feather",
-		shortDesc: "Holder's Fairy-type attacks have 1.2x power.",
+		shortDesc: "Holder's Fairy-type attacks have 1.2× power.",
 	},
 	fairygem: {
 		name: "Fairy Gem",
-		shortDesc: "Holder's first successful Fairy-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Fairy-type attack will have 1.3× power. Single use.",
 	},
 	fairymemory: {
 		name: "Fairy Memory",
@@ -581,9 +601,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	fightinggem: {
 		name: "Fighting Gem",
-		shortDesc: "Holder's first successful Fighting-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Fighting-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Fighting-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Fighting-type attack will have 1.5× power. Single use.",
 		},
 	},
 	fightingmemory: {
@@ -606,9 +626,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	firegem: {
 		name: "Fire Gem",
-		shortDesc: "Holder's first successful Fire-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Fire-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Fire-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Fire-type attack will have 1.5× power. Single use.",
 		},
 	},
 	firememory: {
@@ -626,7 +646,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	fistplate: {
 		name: "Fist Plate",
-		shortDesc: "Holder's Fighting-type attacks have 1.2x power. Judgment is Fighting type.",
+		shortDesc: "Holder's Fighting-type attacks have 1.2× power. Judgment is Fighting type.",
 	},
 	flameorb: {
 		name: "Flame Orb",
@@ -634,7 +654,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	flameplate: {
 		name: "Flame Plate",
-		shortDesc: "Holder's Fire-type attacks have 1.2x power. Judgment is Fire type.",
+		shortDesc: "Holder's Fire-type attacks have 1.2× power. Judgment is Fire type.",
 	},
 	floatstone: {
 		name: "Float Stone",
@@ -650,9 +670,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	flyinggem: {
 		name: "Flying Gem",
-		shortDesc: "Holder's first successful Flying-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Flying-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Flying-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Flying-type attack will have 1.5× power. Single use.",
 		},
 	},
 	flyingmemory: {
@@ -670,7 +690,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP.",
 		},
 
-		activate: "  [POKEMON] hung on using its Focus Band!",
+		activate: "  {POKEMON} hung on using its Focus Band!",
 	},
 	focussash: {
 		name: "Focus Sash",
@@ -679,7 +699,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "If holder's HP is full, survives all hits of one attack with at least 1 HP. Single use.",
 		},
 
-		end: "  [POKEMON] hung on using its Focus Sash!",
+		end: "  {POKEMON} hung on using its Focus Sash!",
 	},
 	fossilizedbird: {
 		name: "Fossilized Bird",
@@ -727,7 +747,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	garchompite: {
 		name: "Garchompite",
-		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp.",
+	},
+	garchompitez: {
+		name: "Garchompite Z",
+		shortDesc: "If held by a Garchomp, this item allows it to Mega Evolve into Mega Garchomp Z.",
 	},
 	gardevoirite: {
 		name: "Gardevoirite",
@@ -739,9 +763,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	ghostgem: {
 		name: "Ghost Gem",
-		shortDesc: "Holder's first successful Ghost-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Ghost-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Ghost-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Ghost-type attack will have 1.5× power. Single use.",
 		},
 	},
 	ghostiumz: {
@@ -756,15 +780,27 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Glalitite",
 		shortDesc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
 	},
+	glimmoranite: {
+		name: "Glimmoranite",
+		shortDesc: "If held by a Glimmora, this item allows it to Mega Evolve in battle.",
+	},
 	goldbottlecap: {
 		name: "Gold Bottle Cap",
 		shortDesc: "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
 	},
+	golisopite: {
+		name: "Golisopite",
+		shortDesc: "If held by a Golisopod, this item allows it to Mega Evolve in battle.",
+	},
+	golurkite: {
+		name: "Golurkite",
+		shortDesc: "If held by a Golurk, this item allows it to Mega Evolve in battle.",
+	},
 	grassgem: {
 		name: "Grass Gem",
-		shortDesc: "Holder's first successful Grass-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Grass-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Grass-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Grass-type attack will have 1.5× power. Single use.",
 		},
 	},
 	grassiumz: {
@@ -797,20 +833,20 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	griseouscore: {
 		name: "Griseous Core",
-		shortDesc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+		shortDesc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2× power.",
 	},
 	griseousorb: {
 		name: "Griseous Orb",
-		shortDesc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2x power.",
+		shortDesc: "If held by a Giratina, its Ghost- and Dragon-type attacks have 1.2× power.",
 		gen4: {
-			shortDesc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2x power.",
+			shortDesc: "Can only be held by Giratina. Its Ghost- & Dragon-type attacks have 1.2× power.",
 		},
 	},
 	groundgem: {
 		name: "Ground Gem",
-		shortDesc: "Holder's first successful Ground-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Ground-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Ground-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Ground-type attack will have 1.5× power. Single use.",
 		},
 	},
 	groundiumz: {
@@ -831,9 +867,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	hardstone: {
 		name: "Hard Stone",
-		shortDesc: "Holder's Rock-type attacks have 1.2x power.",
+		shortDesc: "Holder's Rock-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Rock-type attacks have 1.1x power.",
+			shortDesc: "Holder's Rock-type attacks have 1.1× power.",
 		},
 	},
 	hawluchanite: {
@@ -846,7 +882,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	hearthflamemask: {
 		name: "Hearthflame Mask",
-		shortDesc: "Ogerpon-Hearthflame: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+		shortDesc: "Ogerpon-Hearthflame: 1.2× power attacks; Terastallize to gain Embody Aspect.",
+	},
+	heatranite: {
+		name: "Heatranite",
+		shortDesc: "If held by a Heatran, this item allows it to Mega Evolve in battle.",
 	},
 	heatrock: {
 		name: "Heat Rock",
@@ -888,9 +928,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icegem: {
 		name: "Ice Gem",
-		shortDesc: "Holder's first successful Ice-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Ice-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Ice-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Ice-type attack will have 1.5× power. Single use.",
 		},
 	},
 	icememory: {
@@ -907,7 +947,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	icicleplate: {
 		name: "Icicle Plate",
-		shortDesc: "Holder's Ice-type attacks have 1.2x power. Judgment is Ice type.",
+		shortDesc: "Holder's Ice-type attacks have 1.2× power. Judgment is Ice type.",
 	},
 	iciumz: {
 		name: "Icium Z",
@@ -926,7 +966,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	insectplate: {
 		name: "Insect Plate",
-		shortDesc: "Holder's Bug-type attacks have 1.2x power. Judgment is Bug type.",
+		shortDesc: "Holder's Bug-type attacks have 1.2× power. Judgment is Bug type.",
 	},
 	ironball: {
 		name: "Iron Ball",
@@ -937,7 +977,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	ironplate: {
 		name: "Iron Plate",
-		shortDesc: "Holder's Steel-type attacks have 1.2x power. Judgment is Steel type.",
+		shortDesc: "Holder's Steel-type attacks have 1.2× power. Judgment is Steel type.",
 	},
 	jabocaberry: {
 		name: "Jaboca Berry",
@@ -994,9 +1034,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	laxincense: {
 		name: "Lax Incense",
-		shortDesc: "The accuracy of attacks against the holder is 0.9x.",
+		shortDesc: "The accuracy of attacks against the holder is 0.9×.",
 		gen3: {
-			shortDesc: "The accuracy of attacks against the holder is 0.95x.",
+			shortDesc: "The accuracy of attacks against the holder is 0.95×.",
 		},
 	},
 	leafstone: {
@@ -1015,13 +1055,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Leftovers",
 		shortDesc: "At the end of every turn, holder restores 1/16 of its max HP.",
 
-		heal: "  [POKEMON] restored a little HP using its Leftovers!",
+		heal: "  {POKEMON} restored a little HP using its Leftovers!",
 	},
 	leppaberry: {
 		name: "Leppa Berry",
 		shortDesc: "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use.",
 
-		activate: "  [POKEMON] restored PP to its move [MOVE] using its Leppa Berry!",
+		activate: "  {POKEMON} restored PP to its move {MOVE} using its Leppa Berry!",
 	},
 	levelball: {
 		name: "Level Ball",
@@ -1033,9 +1073,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lifeorb: {
 		name: "Life Orb",
-		shortDesc: "Holder's attacks do 1.3x damage, and it loses 1/10 its max HP after the attack.",
+		shortDesc: "Holder's attacks do 1.3× damage, and it loses 1/10 its max HP after the attack.",
 
-		damage: "  [POKEMON] lost some of its HP!",
+		damage: "  {POKEMON} lost some of its HP!",
 	},
 	lightball: {
 		name: "Light Ball",
@@ -1073,7 +1113,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lucarionite: {
 		name: "Lucarionite",
-		shortDesc: "If held by a Lucario, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario in battle.",
+	},
+	lucarionitez: {
+		name: "Lucarionite Z",
+		shortDesc: "If held by a Lucario, this item allows it to Mega Evolve into Mega Lucario Z in battle.",
 	},
 	luckypunch: {
 		name: "Lucky Punch",
@@ -1100,11 +1144,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	lustrousglobe: {
 		name: "Lustrous Globe",
-		shortDesc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+		shortDesc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2× power.",
 	},
 	lustrousorb: {
 		name: "Lustrous Orb",
-		shortDesc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2x power.",
+		shortDesc: "If held by a Palkia, its Water- and Dragon-type attacks have 1.2× power.",
 	},
 	luxuryball: {
 		name: "Luxury Ball",
@@ -1118,15 +1162,19 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Macho Brace",
 		shortDesc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
+	magearnite: {
+		name: "Magearnite",
+		shortDesc: "If held by a Magearna, this item allows it to Mega Evolve in battle.",
+	},
 	magmarizer: {
 		name: "Magmarizer",
 		shortDesc: "Evolves Magmar into Magmortar when traded.",
 	},
 	magnet: {
 		name: "Magnet",
-		shortDesc: "Holder's Electric-type attacks have 1.2x power.",
+		shortDesc: "Holder's Electric-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Electric-type attacks have 1.1x power.",
+			shortDesc: "Holder's Electric-type attacks have 1.1× power.",
 		},
 	},
 	magoberry: {
@@ -1181,7 +1229,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	meadowplate: {
 		name: "Meadow Plate",
-		shortDesc: "Holder's Grass-type attacks have 1.2x power. Judgment is Grass type.",
+		shortDesc: "Holder's Grass-type attacks have 1.2× power. Judgment is Grass type.",
 	},
 	medichamite: {
 		name: "Medichamite",
@@ -1198,6 +1246,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder is cured if it is infatuated. Single use.",
 		},
 	},
+	meowsticite: {
+		name: "Meowsticite",
+		shortDesc: "If held by a Meowstic, this item allows it to Mega Evolve in battle.",
+	},
 	metagrossite: {
 		name: "Metagrossite",
 		shortDesc: "If held by a Metagross, this item allows it to Mega Evolve in battle.",
@@ -1208,25 +1260,25 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	metalcoat: {
 		name: "Metal Coat",
-		desc: "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
-		shortDesc: "Holder's Steel-type attacks have 1.2x power.",
+		desc: "Holder's Steel-type attacks have 1.2× power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+		shortDesc: "Holder's Steel-type attacks have 1.2× power.",
 		gen3: {
-			desc: "Holder's Steel-type attacks have 1.1x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
-			shortDesc: "Holder's Steel-type attacks have 1.1x power.",
+			desc: "Holder's Steel-type attacks have 1.1× power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+			shortDesc: "Holder's Steel-type attacks have 1.1× power.",
 		},
 	},
 	metalpowder: {
 		name: "Metal Powder",
 		shortDesc: "If held by a Ditto that hasn't Transformed, its Defense is doubled.",
 		gen2: {
-			shortDesc: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
+			shortDesc: "If held by a Ditto, its Defense and Sp. Def are 1.5×, even while Transformed.",
 		},
 	},
 	metronome: {
 		name: "Metronome",
-		shortDesc: "Damage of moves used on consecutive turns is increased. Max 2x after 5 turns.",
+		shortDesc: "Damage of moves used on consecutive turns is increased. Max 2× after 5 turns.",
 		gen4: {
-			shortDesc: "Damage of moves used on consecutive turns is increased. Max 2x after 10 turns.",
+			shortDesc: "Damage of moves used on consecutive turns is increased. Max 2× after 10 turns.",
 		},
 	},
 	mewniumz: {
@@ -1235,15 +1287,15 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	mewtwonitex: {
 		name: "Mewtwonite X",
-		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve into Mega Mewtwo X in battle.",
 	},
 	mewtwonitey: {
 		name: "Mewtwonite Y",
-		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Mewtwo, this item allows it to Mega Evolve into Mega Mewtwo Y in battle.",
 	},
 	micleberry: {
 		name: "Micle Berry",
-		shortDesc: "Holder's next move has 1.2x accuracy when at 1/4 max HP or less. Single use.",
+		shortDesc: "Holder's next move has 1.2× accuracy when at 1/4 max HP or less. Single use.",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
@@ -1251,20 +1303,20 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	mindplate: {
 		name: "Mind Plate",
-		shortDesc: "Holder's Psychic-type attacks have 1.2x power. Judgment is Psychic type.",
+		shortDesc: "Holder's Psychic-type attacks have 1.2× power. Judgment is Psychic type.",
 	},
 	miracleseed: {
 		name: "Miracle Seed",
-		shortDesc: "Holder's Grass-type attacks have 1.2x power.",
+		shortDesc: "Holder's Grass-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Grass-type attacks have 1.1x power.",
+			shortDesc: "Holder's Grass-type attacks have 1.1× power.",
 		},
 	},
 	mirrorherb: {
 		name: "Mirror Herb",
 		shortDesc: "When an opposing Pokemon raises a stat stage, the holder copies it. Single use.",
 
-		activate: "  [POKEMON] used its Mirror Herb to mirror its opponent's stat changes!",
+		activate: "  {POKEMON} used its Mirror Herb to mirror its opponent's stat changes!",
 	},
 	mistyseed: {
 		name: "Misty Seed",
@@ -1281,13 +1333,13 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	muscleband: {
 		name: "Muscle Band",
-		shortDesc: "Holder's physical attacks have 1.1x power.",
+		shortDesc: "Holder's physical attacks have 1.1× power.",
 	},
 	mysticwater: {
 		name: "Mystic Water",
-		shortDesc: "Holder's Water-type attacks have 1.2x power.",
+		shortDesc: "Holder's Water-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Water-type attacks have 1.1x power.",
+			shortDesc: "Holder's Water-type attacks have 1.1× power.",
 		},
 	},
 	nanabberry: {
@@ -1304,9 +1356,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	nevermeltice: {
 		name: "Never-Melt Ice",
-		shortDesc: "Holder's Ice-type attacks have 1.2x power.",
+		shortDesc: "Holder's Ice-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Ice-type attacks have 1.1x power.",
+			shortDesc: "Holder's Ice-type attacks have 1.1× power.",
 		},
 	},
 	nomelberry: {
@@ -1315,9 +1367,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	normalgem: {
 		name: "Normal Gem",
-		shortDesc: "Holder's first successful Normal-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Normal-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Normal-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Normal-type attack will have 1.5× power. Single use.",
 		},
 	},
 	normaliumz: {
@@ -1330,7 +1382,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	oddincense: {
 		name: "Odd Incense",
-		shortDesc: "Holder's Psychic-type attacks have 1.2x power.",
+		shortDesc: "Holder's Psychic-type attacks have 1.2× power.",
 	},
 	oldamber: {
 		name: "Old Amber",
@@ -1394,7 +1446,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	pixieplate: {
 		name: "Pixie Plate",
-		shortDesc: "Holder's Fairy-type attacks have 1.2x power. Judgment is Fairy type.",
+		shortDesc: "Holder's Fairy-type attacks have 1.2× power. Judgment is Fairy type.",
 	},
 	plumefossil: {
 		name: "Plume Fossil",
@@ -1402,16 +1454,16 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	poisonbarb: {
 		name: "Poison Barb",
-		shortDesc: "Holder's Poison-type attacks have 1.2x power.",
+		shortDesc: "Holder's Poison-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Poison-type attacks have 1.1x power.",
+			shortDesc: "Holder's Poison-type attacks have 1.1× power.",
 		},
 	},
 	poisongem: {
 		name: "Poison Gem",
-		shortDesc: "Holder's first successful Poison-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Poison-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Poison-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Poison-type attack will have 1.5× power. Single use.",
 		},
 	},
 	poisoniumz: {
@@ -1450,7 +1502,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Power Herb",
 		shortDesc: "Holder's two-turn moves complete in one turn (except Sky Drop). Single use.",
 
-		end: "  [POKEMON] became fully charged due to its Power Herb!",
+		end: "  {POKEMON} became fully charged due to its Power Herb!",
 	},
 	powerlens: {
 		name: "Power Lens",
@@ -1480,7 +1532,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Protective Pads",
 		shortDesc: "Holder's moves are protected from adverse contact effects, except Pickpocket.",
 
-		block: "  [POKEMON] protected itself with its Protective Pads!",
+		block: "  {POKEMON} protected itself with its Protective Pads!",
 	},
 	protector: {
 		name: "Protector",
@@ -1488,9 +1540,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	psychicgem: {
 		name: "Psychic Gem",
-		shortDesc: "Holder's first successful Psychic-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Psychic-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Psychic-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Psychic-type attack will have 1.5× power. Single use.",
 		},
 	},
 	psychicmemory: {
@@ -1507,7 +1559,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	punchingglove: {
 		name: "Punching Glove",
-		shortDesc: "Holder's punch-based attacks have 1.1x power and do not make contact.",
+		shortDesc: "Holder's punch-based attacks have 1.1× power and do not make contact.",
 	},
 	pyroarite: {
 		name: "Pyroarite",
@@ -1528,7 +1580,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Each turn, holder has a ~23.4% chance to move first in its priority bracket.",
 		},
 
-		activate: "  [POKEMON] can act faster than normal, thanks to its Quick Claw!",
+		activate: "  {POKEMON} can act faster than normal, thanks to its Quick Claw!",
 	},
 	quickpowder: {
 		name: "Quick Powder",
@@ -1537,6 +1589,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	rabutaberry: {
 		name: "Rabuta Berry",
 		shortDesc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+	},
+	raichunitex: {
+		name: "Raichunite X",
+		shortDesc: "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu X in battle.",
+	},
+	raichunitey: {
+		name: "Raichunite Y",
+		shortDesc: "If held by a Raichu, this item allows it to Mega Evolve into Mega Raichu Y in battle.",
 	},
 	rarebone: {
 		name: "Rare Bone",
@@ -1568,7 +1628,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Red Card",
 		shortDesc: "If holder survives a hit, attacker is forced to switch to a random ally. Single use.",
 
-		end: "  [POKEMON] held up its Red Card against [TARGET]!",
+		end: "  {POKEMON} held up its Red Card against {TARGET}!",
 	},
 	redorb: {
 		name: "Red Orb",
@@ -1592,14 +1652,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	rockgem: {
 		name: "Rock Gem",
-		shortDesc: "Holder's first successful Rock-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Rock-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Rock-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Rock-type attack will have 1.5× power. Single use.",
 		},
 	},
 	rockincense: {
 		name: "Rock Incense",
-		shortDesc: "Holder's Rock-type attacks have 1.2x power.",
+		shortDesc: "Holder's Rock-type attacks have 1.2× power.",
 	},
 	rockiumz: {
 		name: "Rockium Z",
@@ -1613,7 +1673,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Rocky Helmet",
 		shortDesc: "If holder is hit by a contact move, the attacker loses 1/6 of its max HP.",
 
-		damage: "  [POKEMON] was hurt by the Rocky Helmet!",
+		damage: "  {POKEMON} was hurt by the Rocky Helmet!",
 	},
 	roomservice: {
 		name: "Room Service",
@@ -1625,7 +1685,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	roseincense: {
 		name: "Rose Incense",
-		shortDesc: "Holder's Grass-type attacks have 1.2x power.",
+		shortDesc: "Holder's Grass-type attacks have 1.2× power.",
 	},
 	roseliberry: {
 		name: "Roseli Berry",
@@ -1659,7 +1719,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Safety Goggles",
 		shortDesc: "Holder is immune to powder moves and damage from Sandstorm or Hail.",
 
-		block: "  [POKEMON] is not affected by [MOVE] thanks to its Safety Goggles!",
+		block: "  {POKEMON} is not affected by {MOVE} thanks to its Safety Goggles!",
 	},
 	sailfossil: {
 		name: "Sail Fossil",
@@ -1689,22 +1749,26 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Scope Lens",
 		shortDesc: "Holder's critical hit ratio is raised by 1 stage.",
 	},
+	scovillainite: {
+		name: "Scovillainite",
+		shortDesc: "If held by a Scovillain, this item allows it to Mega Evolve in battle.",
+	},
 	scraftinite: {
 		name: "Scraftinite",
 		shortDesc: "If held by a Scrafty, this item allows it to Mega Evolve in battle.",
 	},
 	seaincense: {
 		name: "Sea Incense",
-		shortDesc: "Holder's Water-type attacks have 1.2x power.",
+		shortDesc: "Holder's Water-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Water-type attacks have 1.05x power.",
+			shortDesc: "Holder's Water-type attacks have 1.05× power.",
 		},
 	},
 	sharpbeak: {
 		name: "Sharp Beak",
-		shortDesc: "Holder's Flying-type attacks have 1.2x power.",
+		shortDesc: "Holder's Flying-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Flying-type attacks have 1.1x power.",
+			shortDesc: "Holder's Flying-type attacks have 1.1× power.",
 		},
 	},
 	sharpedonite: {
@@ -1719,7 +1783,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Shell Bell",
 		shortDesc: "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
 
-		heal: "  [POKEMON] restored a little HP using its Shell Bell!",
+		heal: "  {POKEMON} restored a little HP using its Shell Bell!",
 	},
 	shinystone: {
 		name: "Shiny Stone",
@@ -1736,16 +1800,16 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	silkscarf: {
 		name: "Silk Scarf",
-		shortDesc: "Holder's Normal-type attacks have 1.2x power.",
+		shortDesc: "Holder's Normal-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Normal-type attacks have 1.1x power.",
+			shortDesc: "Holder's Normal-type attacks have 1.1× power.",
 		},
 	},
 	silverpowder: {
 		name: "Silver Powder",
-		shortDesc: "Holder's Bug-type attacks have 1.2x power.",
+		shortDesc: "Holder's Bug-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Bug-type attacks have 1.1x power.",
+			shortDesc: "Holder's Bug-type attacks have 1.1× power.",
 		},
 	},
 	sitrusberry: {
@@ -1765,11 +1829,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	skyplate: {
 		name: "Sky Plate",
-		shortDesc: "Holder's Flying-type attacks have 1.2x power. Judgment is Flying type.",
+		shortDesc: "Holder's Flying-type attacks have 1.2× power. Judgment is Flying type.",
 	},
 	slowbronite: {
 		name: "Slowbronite",
 		shortDesc: "If held by a Slowbro, this item allows it to Mega Evolve in battle.",
+		champions: {
+			shortDesc: "If held by a Slowbro (not Galarian Slowbro), this item allows it to Mega Evolve.",
+		},
 	},
 	smoothrock: {
 		name: "Smooth Rock",
@@ -1785,9 +1852,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	softsand: {
 		name: "Soft Sand",
-		shortDesc: "Holder's Ground-type attacks have 1.2x power.",
+		shortDesc: "Holder's Ground-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Ground-type attacks have 1.1x power.",
+			shortDesc: "Holder's Ground-type attacks have 1.1× power.",
 		},
 	},
 	solganiumz: {
@@ -1796,16 +1863,16 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	souldew: {
 		name: "Soul Dew",
-		shortDesc: "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2x power.",
+		shortDesc: "If held by a Latias/Latios, its Dragon- and Psychic-type moves have 1.2× power.",
 		gen6: {
-			shortDesc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
+			shortDesc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5×.",
 		},
 	},
 	spelltag: {
 		name: "Spell Tag",
-		shortDesc: "Holder's Ghost-type attacks have 1.2x power.",
+		shortDesc: "Holder's Ghost-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Ghost-type attacks have 1.1x power.",
+			shortDesc: "Holder's Ghost-type attacks have 1.1× power.",
 		},
 	},
 	spelonberry: {
@@ -1814,15 +1881,19 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	splashplate: {
 		name: "Splash Plate",
-		shortDesc: "Holder's Water-type attacks have 1.2x power. Judgment is Water type.",
+		shortDesc: "Holder's Water-type attacks have 1.2× power. Judgment is Water type.",
 	},
 	spookyplate: {
 		name: "Spooky Plate",
-		shortDesc: "Holder's Ghost-type attacks have 1.2x power. Judgment is Ghost type.",
+		shortDesc: "Holder's Ghost-type attacks have 1.2× power. Judgment is Ghost type.",
 	},
 	sportball: {
 		name: "Sport Ball",
 		shortDesc: "A special Poke Ball for the Bug-Catching Contest.",
+	},
+	staraptite: {
+		name: "Staraptite",
+		shortDesc: "If held by a Staraptor, this item allows it to Mega Evolve in battle.",
 	},
 	starfberry: {
 		name: "Starf Berry",
@@ -1838,9 +1909,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	steelgem: {
 		name: "Steel Gem",
-		shortDesc: "Holder's first successful Steel-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Steel-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Steel-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Steel-type attack will have 1.5× power. Single use.",
 		},
 	},
 	steeliumz: {
@@ -1868,7 +1939,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	stoneplate: {
 		name: "Stone Plate",
-		shortDesc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
+		shortDesc: "Holder's Rock-type attacks have 1.2× power. Judgment is Rock type.",
 	},
 	strangeball: {
 		name: "Strange Ball",
@@ -1911,6 +1982,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Tart Apple",
 		shortDesc: "Evolves Applin into Flapple when used.",
 	},
+	tatsugirinite: {
+		name: "Tatsugirinite",
+		shortDesc: "If held by a Tatsugiri, this item allows it to Mega Evolve in battle.",
+	},
 	terrainextender: {
 		name: "Terrain Extender",
 		shortDesc: "Holder's use of Electric/Grassy/Misty/Psychic Terrain lasts 8 turns instead of 5.",
@@ -1941,7 +2016,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	toxicplate: {
 		name: "Toxic Plate",
-		shortDesc: "Holder's Poison-type attacks have 1.2x power. Judgment is Poison type.",
+		shortDesc: "Holder's Poison-type attacks have 1.2× power. Judgment is Poison type.",
 	},
 	tr00: {
 		name: "TR00",
@@ -2345,9 +2420,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	twistedspoon: {
 		name: "Twisted Spoon",
-		shortDesc: "Holder's Psychic-type attacks have 1.2x power.",
+		shortDesc: "Holder's Psychic-type attacks have 1.2× power.",
 		gen3: {
-			shortDesc: "Holder's Psychic-type attacks have 1.1x power.",
+			shortDesc: "Holder's Psychic-type attacks have 1.1× power.",
 		},
 	},
 	tyranitarite: {
@@ -2362,8 +2437,8 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Ultranecrozium Z",
 		shortDesc: "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
 
-		transform: "  Bright light is about to burst out of [POKEMON]!",
-		activate: "[POKEMON] regained its true power through Ultra Burst!",
+		transform: "  Bright light is about to burst out of {POKEMON}!",
+		activate: "{POKEMON} regained its true power through Ultra Burst!",
 	},
 	unremarkableteacup: {
 		name: "Unremarkable Teacup",
@@ -2395,9 +2470,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	watergem: {
 		name: "Water Gem",
-		shortDesc: "Holder's first successful Water-type attack will have 1.3x power. Single use.",
+		shortDesc: "Holder's first successful Water-type attack will have 1.3× power. Single use.",
 		gen5: {
-			shortDesc: "Holder's first successful Water-type attack will have 1.5x power. Single use.",
+			shortDesc: "Holder's first successful Water-type attack will have 1.5× power. Single use.",
 		},
 	},
 	wateriumz: {
@@ -2419,7 +2494,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	waveincense: {
 		name: "Wave Incense",
-		shortDesc: "Holder's Water-type attacks have 1.2x power.",
+		shortDesc: "Holder's Water-type attacks have 1.2× power.",
 	},
 	weaknesspolicy: {
 		name: "Weakness Policy",
@@ -2427,7 +2502,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	wellspringmask: {
 		name: "Wellspring Mask",
-		shortDesc: "Ogerpon-Wellspring: 1.2x power attacks; Terastallize to gain Embody Aspect.",
+		shortDesc: "Ogerpon-Wellspring: 1.2× power attacks; Terastallize to gain Embody Aspect.",
 	},
 	wepearberry: {
 		name: "Wepear Berry",
@@ -2441,11 +2516,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "White Herb",
 		shortDesc: "Restores all lowered stat stages to 0 when one is less than 0. Single use.",
 
-		end: "  [POKEMON] returned its stats to normal using its White Herb!",
+		end: "  {POKEMON} returned its stats to normal using its White Herb!",
 	},
 	widelens: {
 		name: "Wide Lens",
-		shortDesc: "The accuracy of attacks by the holder is 1.1x.",
+		shortDesc: "The accuracy of attacks by the holder is 1.1×.",
 	},
 	wikiberry: {
 		name: "Wiki Berry",
@@ -2459,7 +2534,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	wiseglasses: {
 		name: "Wise Glasses",
-		shortDesc: "Holder's special attacks have 1.1x power.",
+		shortDesc: "Holder's special attacks have 1.1× power.",
 	},
 	yacheberry: {
 		name: "Yache Berry",
@@ -2467,11 +2542,15 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	zapplate: {
 		name: "Zap Plate",
-		shortDesc: "Holder's Electric-type attacks have 1.2x power. Judgment is Electric type.",
+		shortDesc: "Holder's Electric-type attacks have 1.2× power. Judgment is Electric type.",
+	},
+	zeraorite: {
+		name: "Zeraorite",
+		shortDesc: "If held by a Zeraora, this item allows it to Mega Evolve in battle.",
 	},
 	zoomlens: {
 		name: "Zoom Lens",
-		shortDesc: "The accuracy of attacks by the holder is 1.2x if it moves after its target.",
+		shortDesc: "The accuracy of attacks by the holder is 1.2× if it moves after its target.",
 	},
 	zygardite: {
 		name: "Zygardite",
@@ -2516,15 +2595,15 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Mystery Berry",
 		shortDesc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
 
-		activate: "  [POKEMON] restored PP to its [MOVE] move using Mystery Berry!",
+		activate: "  {POKEMON} restored PP to its {MOVE} move using Mystery Berry!",
 	},
 	pinkbow: {
 		name: "Pink Bow",
-		shortDesc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
+		shortDesc: "(Gen 2) Holder's Normal-type attacks have 1.1× power.",
 	},
 	polkadotbow: {
 		name: "Polkadot Bow",
-		shortDesc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
+		shortDesc: "(Gen 2) Holder's Normal-type attacks have 1.1× power.",
 	},
 	przcureberry: {
 		name: "PRZ Cure Berry",
@@ -2543,6 +2622,6 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	vilevial: {
 		name: "Vile Vial",
-		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2× power.",
 	},
 };

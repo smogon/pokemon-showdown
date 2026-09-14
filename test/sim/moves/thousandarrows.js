@@ -74,7 +74,8 @@ describe('Thousand Arrows', () => {
 
 		battle.makeChoices('move sleeptalk', 'move gravity');
 		// During Gravity, Thousand Arrows can be super effective, but once it ends has to be neutral for one hit
-		while (battle.field.getPseudoWeather('gravity')) {
+		for (let i = 0; i < 5; i++) {
+			if (!battle.field.getPseudoWeather('gravity')) break;
 			battle.makeChoices();
 			assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		}

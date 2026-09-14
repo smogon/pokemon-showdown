@@ -11,15 +11,13 @@ describe('Healing Wish', () => {
 	});
 
 	it('should heal a switch-in for full before hazards at end of turn', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Caterpie', ability: 'shielddust', moves: ['stringshot'] },
 			{ species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish', 'protect'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Shedinja', ability: 'wonderguard', moves: ['endeavor'] },
 			{ species: 'Tyranitar', ability: 'sandstream', moves: ['seismictoss', 'stealthrock'] },
-		] });
+		]]);
 
 		battle.makeChoices('move stringshot', 'move endeavor'); // set Caterpie to 1hp
 		battle.makeChoices('switch jirachi', 'switch tyranitar'); // set up Sand
@@ -33,14 +31,12 @@ describe('Healing Wish', () => {
 	});
 
 	it('should not be consumed if a switch-in is fully healed already', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish', 'protect'] },
 			{ species: 'Caterpie', ability: 'shielddust', moves: ['stringshot'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Tyranitar', ability: 'sandstream', moves: ['seismictoss', 'stealthrock'] },
-		] });
+		]]);
 		battle.makeChoices('move protect', 'move stealthrock'); // set up Sand and Stealth Rock
 		battle.makeChoices('move healingwish', 'move seismictoss');
 		assert.equal(battle.requestState, 'switch');
@@ -50,16 +46,14 @@ describe('Healing Wish', () => {
 	});
 
 	it('should heal an ally fully after Ally Switch', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish'] },
 			{ species: 'Caterpie', ability: 'shielddust', moves: ['stringshot'] },
 			{ species: 'Rotom', ability: 'levitate', moves: ['allyswitch'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Garchomp', ability: 'sandveil', moves: ['sleeptalk'] },
 			{ species: 'Shedinja', ability: 'wonderguard', moves: ['endeavor', 'protect'] },
-		] });
+		]]);
 		// set up Healing Wish, Caterpie is at 1 HP
 		battle.makeChoices('move healingwish, move stringshot', 'move sleeptalk, move endeavor 2');
 		assert.equal(battle.requestState, 'switch');
@@ -110,16 +104,14 @@ describe('Healing Wish', () => {
 	});
 
 	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', () => {
-		battle = common.gen(4).createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.gen(4).createBattle([[
 			{ species: 'Caterpie', ability: 'shielddust', moves: ['stringshot'] },
 			{ species: 'Raichu', ability: 'lightningrod', moves: ['growl'] },
 			{ species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Shedinja', ability: 'wonderguard', moves: ['endeavor'] },
 			{ species: 'Tyranitar', ability: 'sandstream', moves: ['seismictoss', 'stealthrock'] },
-		] });
+		]]);
 
 		battle.makeChoices('move String Shot', 'move Endeavor'); // set Caterpie to 1hp
 
