@@ -104,10 +104,12 @@ export const commands: Chat.ChatCommands = {
 	whoare: 'whois',
 	altsnorecurse: 'whois',
 	profile: 'whois',
+	battles: 'whois',
 	whois(target, room, user, connection, cmd) {
 		if (room?.roomid === 'staff' && !this.runBroadcast()) return;
 		const targetUser = this.getUserOrSelf(target, { exactName: user.tempGroup === ' ' });
-		const showAll = (cmd === 'ip' || cmd === 'whoare' || cmd === 'alt' || cmd === 'alts' || cmd === 'altsnorecurse');
+		const showAllVariants = ['ip', 'whoare', 'alt', 'alts', 'altsnorecurse', 'battles'];
+		const showAll = showAllVariants.includes(cmd);
 		const showRecursiveAlts = showAll && (cmd !== 'altsnorecurse');
 		if (!targetUser) {
 			if (showAll) return this.parse('/offlinewhois ' + target);
