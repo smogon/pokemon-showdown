@@ -1,6 +1,5 @@
 import * as http from 'http';
 import * as https from 'https';
-import * as url from 'url';
 import * as util from 'util';
 
 import * as smogon from 'smogon';
@@ -10,6 +9,12 @@ import { Dex, toID } from '../../sim/dex';
 import { TeamValidator } from '../../sim/team-validator';
 Dex.includeModData();
 
+interface FetchOptions {
+	url: string;
+	options?: http.RequestOptions;
+	body?: string;
+}
+
 type DeepPartial<T> = {
 	[P in keyof T]?: T[P] extends (infer I)[] ? (DeepPartial<I>)[] : DeepPartial<T[P]>;
 };
@@ -18,11 +23,6 @@ interface PokemonSets {
 	[speciesid: string]: {
 		[name: string]: DeepPartial<PokemonSet>,
 	};
-}
-
-interface IncomingMessage extends NodeJS.ReadableStream {
-	statusCode: number;
-	headers: { location?: string };
 }
 
 // eg. 'gen1.json'
@@ -245,7 +245,7 @@ function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, se
 		nature: set.natures[0],
 		teraType: set.teratypes ? set.teratypes[0] : undefined,
 		ivs: toStatsTable(set.ivconfigs[0], 31),
-		evs: toStatsTable(set.evconfigs[0]),
+		evs: toStatsTable(set.evconfigs[0], dex.gen <= 2 ? 252 : 0),
 	};
 }
 
@@ -358,7 +358,7 @@ function toPokemonSet(
 	const copy = { species: pokemon, ...set } as PokemonSet;
 	copy.ivs = fillStats(set.ivs, fill);
 	// The validator expects us to have at least 1 EV set to prove it is intentional
-	if (!set.evs && dex.gen >= 3 && format.id !== 'gen7letsgoou') set.evs = { spe: 1 };
+	if (!set.evs && dex.gen >= 3 && format.mod !== 'gen7letsgo') set.evs = { spe: 1 };
 	copy.evs = fillStats(set.evs, dex.gen <= 2 ? 252 : 0);
 	// The validator wants an ability even when Gen < 3
 	copy.ability = copy.ability || 'None';
@@ -405,9 +405,9 @@ const SMOGON = {
 	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as { [id: string]: ID };
 
-const getAnalysis = retrying(async (u: string) => {
+const getAnalysis = retrying(async (o: FetchOptions) => {
 	try {
-		return smogon.Analyses.process(await request(u));
+		return smogon.Analyses.process(JSON.parse(await request(o)));
 	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
@@ -419,16 +419,16 @@ const getAnalysis = retrying(async (u: string) => {
 }, 3, 50);
 
 async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
-	const u = smogon.Analyses.url(pokemon === 'Meowstic' ? 'Meowstic-M' : pokemon, gen);
+	const r = smogon.Analyses.request(pokemon === 'Meowstic' ? 'Meowstic-M' : pokemon, gen);
 	try {
-		const analysesByTier = await getAnalysis(u);
+		const analysesByTier = await getAnalysis({ url: r.url, options: r.init, body: r.init.body });
 		if (!analysesByTier) {
 			error(`Unable to process analysis for ${pokemon} in generation ${gen}`);
 			return undefined;
 		}
 
 		const analysesByFormat = new Map<Format, smogon.Analysis[]>();
-		for (const [tier, analyses] of analysesByTier.entries()) {
+		for (const [tier, analyses] of analysesByTier.analyses.entries()) {
 			let t = toID(tier);
 			// Dumb hack, need to talk to BSS people
 			if (gen === 9 && t === 'battlestadiumsingles') {
@@ -477,7 +477,7 @@ function importUsageBasedSets(gen: GenerationNum, format: Format, statistics: sm
 				level: getLevel(format),
 				moves: (top(stats.Moves, 4) as string[]).map(m => dex.moves.get(m).name).filter(m => m),
 			};
-			if (gen >= 2 && format.id !== 'gen7letsgoou') {
+			if (gen >= 2 && format.mod !== 'gen7letsgo') {
 				const id = top(stats.Items) as string;
 				set.item = dex.items.get(id).name;
 				if (set.item === 'nothing') set.item = undefined;
@@ -487,7 +487,7 @@ function importUsageBasedSets(gen: GenerationNum, format: Format, statistics: sm
 				set.ability = fixedAbility(dex, pokemon, dex.abilities.get(id).name);
 				const { nature, evs } = fromSpread(top(stats.Spreads) as string);
 				set.nature = nature;
-				if (format.id !== 'gen7letsgoou') {
+				if (format.mod !== 'gen7letsgo') {
 					if (!evs || !Object.keys(evs).length) continue;
 					set.evs = evs;
 				}
@@ -555,25 +555,34 @@ class RetryableError extends Error {
 // requests makes us significantly less likely to encounter ECONNRESET errors
 // on macOS (though these are still pretty frequent, Linux is recommended for running
 // this tool). Retry up to 5 times with a 20ms backoff increment.
-const request = retrying(throttling(fetch, 1, 50), 5, 20);
+export const request = retrying(throttling(fetch, 1, 50), 5, 20);
 
-export function fetch(u: string) {
-	const client = u.startsWith('http:') ? http : https;
+export function fetch(r: string | FetchOptions) {
+	const url = typeof r === 'string' ? r : r.url;
+	const options = typeof r === 'string' ? undefined : r.options;
+	const body = typeof r === 'string' ? undefined : r.body;
+	const client = url.startsWith('http:') ? http : https;
+
 	return new Promise<string>((resolve, reject) => {
-		// @ts-expect-error Typescript bug - thinks the second argument should be RequestOptions, not a callback
-		const req = client.get(u, (res: IncomingMessage) => {
-			if (res.statusCode !== 200) {
-				if (res.statusCode >= 500 && res.statusCode < 600) {
-					return reject(new RetryableError(`HTTP ${res.statusCode}`));
-				} else if (res.statusCode >= 300 && res.statusCode <= 400 && res.headers.location) {
-					resolve(fetch(url.resolve(u, res.headers.location)));
+		const handleResponse = (res: http.IncomingMessage) => {
+			const statusCode = res.statusCode!;
+			if (statusCode !== 200) {
+				if (statusCode >= 500 && statusCode < 600) {
+					return reject(new RetryableError(`HTTP ${statusCode}`));
+				} else if (statusCode >= 300 && statusCode <= 400 && res.headers.location) {
+					const redirectedUrl = new URL(res.headers.location, url).toString();
+					resolve(fetch({ url: redirectedUrl, options, body }));
 				} else {
-					return reject(new Error(`HTTP ${res.statusCode}`));
+					return reject(new Error(`HTTP ${statusCode}`));
 				}
 			}
 			Streams.readAll(res).then(resolve, reject);
-		});
+		};
+		const req = options ?
+			client.request(url, options, handleResponse) :
+			client.request(url, handleResponse);
 		req.on('error', reject);
+		if (body) req.write(body);
 		req.end();
 	});
 }
