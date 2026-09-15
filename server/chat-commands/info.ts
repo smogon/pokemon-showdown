@@ -676,22 +676,12 @@ export const commands: Chat.ChatCommands = {
 						details[TL`Egg Groups`] = pokemon.eggGroups.map(group => TL.egggroup[group] || group).join(", ");
 					}
 					if (pokemon.gender && dex.gen >= 2) {
-						switch (pokemon.gender) {
-						case 'M':
-							details[TL`Gender`] = TL`Male`;
-							break;
-						case 'F':
-							details[TL`Gender`] = TL`Female`;
-							break;
-						case 'N':
-							details[TL`Gender`] = TL`Unknown`;
-							break;
-						};
+						details[TL`Gender`] = TL.gender[pokemon.gender];
 					} else if (pokemon.genderRatio && dex.gen >= 2) {
 						const g = pokemon.genderRatio;
 						details[TL`Gender`] = TL.commaList([
-							TL.label(TL`M`, TL`${g.M * 100}%`),
-							TL.label(TL`F`, TL`${g.F * 100}%`),
+							TL.label(TL.gender.M, TL`${g.M * 100}%`),
+							TL.label(TL.gender.F, TL`${g.F * 100}%`),
 						]);
 					};
 

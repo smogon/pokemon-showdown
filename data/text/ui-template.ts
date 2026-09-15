@@ -8,7 +8,7 @@ export const translations: TranslationCatalog = {
 
 	// TRANSLATORS: a label, like "Ability: Intimidate"
 	"{LABEL}: ": null,
-	"{PERCENT}%": null, // NOT USED
+	"{PERCENT}%": null,
 	// TRANSLATORS: as a value, like "Ability: None"
 	"None": null,
 	"(no item)": null,
