@@ -16700,11 +16700,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onMoveFail(target, source) {
 			if (source.volatiles['twoturnmove'] && source.volatiles['twoturnmove'].duration === 1) {
+				const droppedTarget = source.volatiles['twoturnmove'].source || target;
 				source.removeVolatile('skydrop');
 				source.removeVolatile('twoturnmove');
-				if (target === this.effectState.target) {
-					this.add('-end', target, 'Sky Drop', '[interrupt]');
-				}
+				this.add('-end', droppedTarget, 'Sky Drop', '[interrupt]');
 			}
 		},
 		onTry(source, target) {
@@ -16737,6 +16736,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		condition: {
 			duration: 2,
+			onMoveAborted(pokemon) {
+				if (this.effectState.source && !this.effectState.source.fainted) {
+					this.add('-end', this.effectState.source, 'Sky Drop', '[interrupt]');
+				}
+				pokemon.removeVolatile('skydrop');
+				pokemon.removeVolatile('twoturnmove');
+			},
 			onAnyDragOut(pokemon) {
 				if (pokemon === this.effectState.target || pokemon === this.effectState.source) return false;
 			},
