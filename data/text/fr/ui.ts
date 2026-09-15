@@ -5,15 +5,15 @@ export const translations: TranslationCatalog = {
 	// ==================================================================
 
 	// TRANSLATORS: a label, like "Ability: Intimidate"
-	"{LABEL}: ": "{LABEL} : ", // NEEDS QC (non-breaking space before the colon)
-	"{PERCENT}%": null, // NEEDS TRANSLATION
+	"{LABEL}: ": "{LABEL} : ", // NEEDS QC (note nbsp)
+	"{PERCENT}%": "{PERCENT} %", // NEEDS QC (note nbsp)
 	// TRANSLATORS: as a value, like "Ability: None"
 	"None": "Aucun", // NEEDS QC
 	"(no item)": "(aucun objet)", // NEEDS QC
 	"(no ability)": "(aucun talent)", // NEEDS QC
 	"(no weather)": "(aucune météo)", // NEEDS QC
 	// TRANSLATORS: a side condition on the opponent's side, like "Foe's Stealth Rock"
-	"Foe's {CONDITION}": "Côté adverse : {CONDITION}", // NEEDS QC
+	"Foe's {CONDITION}": "Côté adverse : {CONDITION}", // NEEDS QC (note nbsp)
 
 	// TRANSLATORS: for constructing lists
 	"{FIRST} or {SECOND}": "{FIRST} ou {SECOND}", // NEEDS QC

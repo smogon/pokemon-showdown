@@ -4528,11 +4528,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Usa un movimiento al azar, excluyendo Cede Paso, Ácido Málico, Cañón Armadura, Ayuda, Orbes Espectro, Rueda Aural, Búnker, Pico Cañón, Embate Supremo, Tajo Supremo, Eructo, Ofrenda, Pirochoque, Plancha Corporal, Punzada Rama, Vasto Impacto, Celebración, Cháchara, Agua Fría, Fría Acogida, Estruendo Escama, Nitrochoque, Pugnachoque, Resarcimiento, Copión, Contraataque, Antojo, Truco Defensa, Decoración, Mismo Destino, Detección, Tormenta de Diamantes, Decalcomanía, Ferropuño Doble, Electropalmas, Ascenso Draco, Dracoenergía, Batería Asalto, Cañón Dinamax, Electroderrape, Aguante, Rayo Infinito, Irreverencia, Amago, Furia Candente, Deslome, Cañón Floral, Puño Certero, Señuelo, Rayo Gélido, Mirada Heladora, Lanza Glacial, Fuerza G, Refuerzo, Manos Juntas, Hipertaladro, Cerco Dimensión, Paso Dimensional, Llama Gélida, Mandato, Puño Jet, Cura Selvática, Escudo Real, Gota Vital, Luz Aniquiladora, Feerichoque, Fiebre Dorada, Escudo Tatami, Yo Primero, Asalto Estelar, Metrónomo, Mimético, Cabeza Sorpresa, Manto Espejo, Espejo, Rayo Umbrío, Adaptación, Furia Natural, Ponzochoque, Obstrucción, Oído Cocina, Pulso Primigenio, Amplificador, Géiser Fotónico, Puños Plasma, Proliferación, Brinco, Cambiapoder, Filo del Abismo, Protección, Balón Ígneo, Último Lugar, Anticipo, Puño Furia, Polvo Ira, Furia Taurina, Erupción de Ira, Canto Arcaico, Plegaria Vital, Calamidad, Salazón, Sable Místico, Autotomía, Coraza Trampa, Telatrampa, Esquema, Sonámbulo, Cepo, Alarido, Robo, Ronquido, Paisaje Nevado, Robasombra, Extracto Picante, Barrera Espinosa, Choque Anímico, Foco, Ciclón Primavera, Chorro de Vapor, Metaláser, Cautivapor, Forcejeo, Meteoimpacto, Azote Torrencial, Trapicheo, Tecno Shock, Teraclúster, Ladrón, Mil Flechas, Mil Temblores, Electrojaula, Patada Relámpago, Limpieza General, Abrecaminos, Transformación, Truco, Láser Doble, V de Fuego, Golpe Oscuro, Ominochoque, Vasta Guardia.", // NEEDS QC
 		shortDesc: "Usa un movimiento al azar.", // NEEDS QC
 		gen8bdsp: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "Usa un movimiento al azar, excluyendo Cede Paso, Eructo, Plancha Corporal, Cháchara, Copión, Contraataque, Antojo, Mismo Destino, Detección, Ascenso Draco, Aguante, Amago, Puño Certero, Señuelo, Refuerzo, Gota Vital, Metrónomo, Mimético, Manto Espejo, Adaptación, Pulso Primigenio, Filo del Abismo, Protección, Último Lugar, Anticipo, Polvo Ira, Esquema, Sonámbulo, Alarido, Ronquido, Barrera Espinosa, Forcejeo, Trapicheo, Ladrón, Transformación, Truco, Vasta Guardia.", // NEEDS QC
 		},
 		gen7letsgo: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "Usa un movimiento de la 1.ª generación al azar, excluyendo Contraataque, Mimético, Espejo, Forcejeo y Transformación.", // NEEDS QC
+			shortDesc: "Usa un movimiento al azar de la 1.ª generación.", // NEEDS QC
 		},
 		gen8: {
 			desc: "Usa un movimiento al azar, excluyendo Cede Paso, Ácido Málico, Ayuda, Orbes Espectro, Rueda Aural, Búnker, Pico Cañón, Embate Supremo, Tajo Supremo, Eructo, Ofrenda, Plancha Corporal, Punzada Rama, Vasto Impacto, Celebración, Cháchara, Estruendo Escama, Copión, Contraataque, Antojo, Truco Defensa, Decoración, Mismo Destino, Detección, Tormenta de Diamantes, Ferropuño Doble, Ascenso Draco, Dracoenergía, Martillo Dragón, Batería Asalto, Cañón Dinamax, Aguante, Rayo Infinito, Irreverencia, Amago, Furia Candente, Cañón Floral, Puño Certero, Señuelo, Rayo Gélido, Mirada Heladora, Lanza Glacial, Fuerza G, Refuerzo, Manos Juntas, Cerco Dimensión, Paso Dimensional, Llama Gélida, Mandato, Cura Selvática, Escudo Real, Gota Vital, Luz Aniquiladora, Escudo Tatami, Yo Primero, Asalto Estelar, Metrónomo, Mimético, Cabeza Sorpresa, Manto Espejo, Espejo, Rayo Umbrío, Adaptación, Furia Natural, Obstrucción, Pulso Primigenio, Amplificador, Géiser Fotónico, Puños Plasma, Filo del Abismo, Protección, Balón Ígneo, Último Lugar, Anticipo, Polvo Ira, Canto Arcaico, Sable Místico, Coraza Trampa, Esquema, Sonámbulo, Cepo, Alarido, Robo, Ronquido, Robasombra, Barrera Espinosa, Choque Anímico, Foco, Chorro de Vapor, Metaláser, Cautivapor, Forcejeo, Meteoimpacto, Azote Torrencial, Trapicheo, Tecno Shock, Ladrón, Mil Flechas, Mil Temblores, Electrojaula, Patada Relámpago, Transformación, Truco, V de Fuego, Golpe Oscuro, Vasta Guardia.", // NEEDS QC
@@ -7588,8 +7588,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Si acierta y el usuario no se ha debilitado, se cambia aunque esté atrapado, siendo reemplazado de inmediato por el compañero elegido. No se cambia si no quedan compañeros sanos.", // NEEDS QC
 		shortDesc: "El usuario se cambia.", // NEEDS QC
 		gen7letsgo: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "Si acierta y el usuario no se ha debilitado, se cambia aunque esté atrapado, siendo reemplazado de inmediato por el compañero elegido. No se cambia si no quedan compañeros sanos.", // NEEDS QC
+			shortDesc: "El usuario se cambia.", // NEEDS QC
 		},
 		gen7: {
 			desc: "Falla al usarse.", // NEEDS QC

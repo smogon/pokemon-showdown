@@ -6,7 +6,7 @@ export const translations: TranslationCatalog = {
 
 	// TRANSLATORS: a label, like "Ability: Intimidate"
 	"{LABEL}: ": "{LABEL}: ", // NEEDS QC
-	"{PERCENT}%": null, // NEEDS TRANSLATION
+	"{PERCENT}%": "{PERCENT}%", // NEEDS QC
 	// TRANSLATORS: as a value, like "Ability: None"
 	"None": "없음", // NEEDS QC
 	"(no item)": "(지닌 물건 없음)", // NEEDS QC

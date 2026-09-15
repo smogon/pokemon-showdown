@@ -36,7 +36,7 @@ export const TypeNames: { [id: string]: TranslationString } = {
 	Steel: "강철",
 	Stellar: "스텔라",
 	Water: "물",
-	"???": null, // NEEDS TRANSLATION
+	"???": "???",
 };
 
 export const NatureNames: { [id: string]: TranslationString } = {
