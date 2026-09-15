@@ -178,6 +178,8 @@ export const commands: Chat.ChatCommands = {
 	roomdemote: 'roompromote',
 	forceroompromote: 'roompromote',
 	forceroomdemote: 'roompromote',
+	silentroompromote: 'roompromote',
+	forcesilentroompromote: 'roompromote',
 	roompromote(target, room, user, connection, cmd) {
 		if (!room) {
 			// this command isn't marked as room-only because it's usable in PMs through /invite
@@ -189,6 +191,7 @@ export const commands: Chat.ChatCommands = {
 		const force = cmd.startsWith('force');
 		const users = target.split(',').map(part => part.trim());
 		let nextSymbol = users.pop() as GroupSymbol | 'deauth';
+		const silent = cmd.startsWith('silent') || cmd.startsWith('forcesilent') || nextSymbol === 'deauth';
 		if (nextSymbol === 'deauth') nextSymbol = Users.Auth.defaultSymbol();
 		const nextGroup = Users.Auth.getGroup(nextSymbol);
 
@@ -212,6 +215,11 @@ export const commands: Chat.ChatCommands = {
 		for (const toPromote of users) {
 			const userid = toID(toPromote);
 			if (!userid) return this.parse('/help roompromote');
+
+			if (silent && nextSymbol === '#' && !this.checkCan('bypassall')) {
+				this.errorReply('Access denied for silently promoting Room Owners.');
+				continue;
+			}
 
 			// weird ts bug (?) - 7022
 			// it implicitly is 'any' because it has no annotation and is "is referenced directly or indirectly in its own initializer."
@@ -252,7 +260,11 @@ export const commands: Chat.ChatCommands = {
 				this.modlog('ROOM OWNER', userid);
 				shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else {
-				this.addModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+				if (silent) {
+					this.privateModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+				} else {
+					this.addModAction(`${name} was promoted to Room ${nextGroupName} by ${user.name}.`);
+				}
 				this.modlog(`ROOM${nextGroupName.toUpperCase()}`, userid);
 				shouldPopup?.popup(`You were promoted to Room ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			}
@@ -273,6 +285,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	roompromotehelp: [
 		`/roompromote OR /roomdemote [comma-separated usernames], [group symbol] - Promotes/demotes the user(s) to the specified room rank. Requires: @ # ~`,
+		`/silentroompromote [comma-separated usernames], [group symbol] - Promotes the user(s) to the specified room rank without broadcasting to the chat. Requires: @ # ~`,
 		`/room[group] [comma-separated usernames] - Promotes/demotes the user(s) to the specified room rank. Requires: @ # ~`,
 		`/roomdeauth [comma-separated usernames] - Removes all room rank from the user(s). Requires: @ # ~`,
 	],
