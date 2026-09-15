@@ -1100,16 +1100,43 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Deltamon Random Battle",
-		desc: `A Gen 9 metagame where characters from Undertale and Deltarune are Pokemon.`,
-		mod: 'gen9deltamon',
-		team: 'randomDelta',
+		name: "[Gen 9] Random Tandem",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3775975/">Random Tandem Thread</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/edit">Tandem Compendium</a>`,
+			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
+		],
+		mod: 'gen9randomtandem',
 		bestOfDefault: true,
-		ruleset: ['[Gen 9] Random Battle', 'Terastal Clause', 'Data Preview', 'Mega Data Preview'],
+		//searchShow: false,
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
+		banlist: [
+			'Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
+			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt', 'Kingambit'
+		],
+		onValidateTeam(team, format, teamHas) {
+			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
+
+			const heads: { [speciesid: string]: any[] } = require('../data/mods/gen9randomtandem/tandems.json');
+			// Need 2 Heads
+			let headCount = 0;
+			for (const set of team) {
+				let species = this.toID(this.dex.species.get(set.species));
+				// hardcode, not like any other species will increment headCount
+				if (species === 'keldeoresolute') species = 'keldeo' as ID;
+				if (species === 'dudunsparcethreesegment') species = 'dudunsparce' as ID;
+				if (heads[species]) headCount++;
+			}
+			if (headCount < 2) return [`You must have at least 2 Head Pokemon.`];
+			if (team.length > 3) return[`You cannot bring more than 3 Pokemon.`];
+		},
+		onValidateSet(set, format, setHas, teamHas) {
+			if (set.shiny) return [`You cannot bring Shiny Pokemon. (${set.name} is shiny).`];
+		},
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/" target="_blank">spreadsheet</a> for all the custom elements!</b></div>`);
-			this.add(`raw|Welcome to Deltamon Random Battle!`);
-			this.add(`raw|<br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3711007/post-11052905" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!`);
+			this.ruleTable.pickedTeamSize = 6;
+			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Random Tandem!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3711007/post-11052905" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
+			this.add(`raw|<b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b>`);
 		},
 	},
 	{
@@ -3951,39 +3978,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
 			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
 		},
-	},
-	{
-		name: "[Gen 9] Deltamon",
-		mod: 'gen9deltamon',
-		desc: "A format where Deltarune and Undertale characters are Pokemon!",
-		searchShow: false,
-		threads: [
-			`&bullet; <a href= "https://docs.google.com/spreadsheets/d/1BEBnhDP6YXtgm3b-lXv4wIK7_mC847meN7O31AIAqVw/">Deltamon Spreadsheet</a>`,
-		],
-		ruleset: ['Standard', 'Terastal Clause', 'Data Preview', 'Mega Data Preview'],
-		banlist: [
-			'Arena Trap', 'Shadow Tag', 'Moody', 'King\'s Rock', 'Quick Claw', 'Razor Fang',
-			'Shed Tail', 'Baton Pass', 'Assist', 'Last Respects', 'All Pokemon',
-		],
-		unbanlist: [
-			'Rudinn', 'Rudinn Ranger', 'Hathy', 'Head Hathy', 'Jigsawry', 'Jigsaw Joe', 'Ponman', 'Mr. Elegance', 'Mr. Society', 'Top Chef', 'Seam',
-			'C. Round', 'K. Round', 'Rabbick', 'Bloxer', 'Clover', 'Starwalker', 'Jevil', 'Rouxls Kaard', 'Rouxls Kaard-Mega', 'Lancer', 'Chaos King',
-			'Plugperson', 'Werewire', 'Werewerewire', 'Tasque', 'Tasque Manager', 'Virovirokun', 'Sweet', 'Cap\'n', 'K_K', 'Nubert', 'Hacker', 'Poppup',
-			'Ambyu-Lance', 'Maus-Delta', 'Mauswheel', 'Swatchling', 'Swatch', 'Pipis', 'Spamton', 'Spamton-Mega', 'Berdly', 'Noelle', 'Queen-Delta',
-			'Queen-Mega', 'Thrash Machine', 'Thrash Machine-Laser', 'Thrash Machine-Flame', 'Thrash Machine-Duck', 'Shadowguy', 'Pippins', 'Lanino',
-			'Elnina', 'Shuttah', 'Zapper', 'Watercooler', 'Ribbick', 'Ramb', 'White Cloak', 'Shadow Mantle', 'Tenna', 'Roaring Knight', 'Motormouth Mike',
-			'Cowboy Mike', 'Cat Mike', 'Carol', 'Guei', 'Balthizard', 'Bibliox', 'Mizzle', 'Miss Mizzle', 'Cuptain', 'Jackenstein', 'Titan Spawn',
-			'Gerson', 'Gerson-Mega', 'Organikk', 'Wicabel', 'Winglade', 'Sound of Justice', 'Trashy', 'Floradinn', 'Sheary', 'Netskie', 'Shi',
-			'Leafling', 'Kawkaw', 'Shinobeetle', 'Terakota', 'Aqua', 'Seth', 'Orange', 'Green', 'Blue', 'Yellow', 'Pink', 'Pink-Ghost', 'Flowery', 'Kris',
-			'Susie', 'Ralsei', 'Froggit', 'Final Froggit', 'Whimsun', 'Whimsalot', 'Moldsmal', 'Moldbygg', 'Moldessa', 'Loox', 'Astigmatism', 'Migosp',
-			'Migospel', 'Vegetoid', 'Parsnik', 'Napstablook', 'Toriel', 'Snowdrake', 'Chilldrake', 'Ice Cap', 'Doggo', 'Lesser Dog', 'Jerry', 'Dogamy',
-			'Dogaressa', 'Gyftrot', 'Glyde', 'Greater Dog', 'Ice Wolf', 'Papyrus', 'Mr. Sunshine', 'Abberant', 'Aaron', 'Woshua', 'Shyren', 'Onionsan',
-			'Mad Dummy', 'Temmie', 'Undyne', 'Undyne-Mega', 'Alphys', 'Vulkin', 'Tsunderplane', 'Pyrope', 'Muffet', 'Royal Guard 1', 'Royal Guard 2',
-			'Madjick', 'Knight Knight', 'Mettaton', 'Mettaton-Mega-X', 'Mettaton-Mega-Y', 'Memoryhead', 'Reaper Bird', 'Endogeny', 'Lemon Bread',
-			'Crystal', 'Asgore', 'Flowey', 'Flowey-Mega',
-			'Buginium Z', 'Darkinium Z', 'Dragonium Z', 'Electrium Z', 'Fairium Z', 'Fightinium Z', 'Firium Z', 'Flyinium Z', 'Ghostium Z',
-			'Grassium Z', 'Groundium Z', 'Icium Z', 'Normalium Z', 'Poisonium Z', 'Psychium Z', 'Rockium Z', 'Steelium Z', 'Waterium Z', 'Hidden Power',
-		],
 	},
 
 	// Randomized Metas

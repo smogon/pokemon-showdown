@@ -1,0 +1,1470 @@
+{
+	"garchomp": [
+		{
+			"species": "Forretress",
+			"items": ["leftovers"],
+			"abilities": ["sturdy"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["recover", "ironhead"],
+			"moves": ["rapidspin", "voltswitch", "spikes"],
+			"nature": "Careful"
+		},
+		{
+			"species": "Rotom-Heat",
+			"items": ["heavydutyboots"],
+			"abilities": ["levitate"],
+			"gender": "N",
+			"teraTypes": ["Poison", "Grass", "Fire"],
+			"forcedMoves": ["blueflare", "voltswitch"],
+			"moves": ["nastyplot", "painsplit", "willowisp"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Gardevoir",
+			"items": ["lifeorb"],
+			"abilities": ["trace"],
+			"teraTypes": ["Fairy", "Fire"],
+			"forcedMoves": ["calmmind", "psyshock"],
+			"moves": ["moonblast", "mysticalfire"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Froslass",
+			"items": ["focussash"],
+			"abilities": ["weakarmor"],
+			"gender": "F",
+			"teraTypes": ["Fighting", "Steel"],
+			"forcedMoves": ["tripleaxel", "poltergeist"],
+			"moves": ["willowisp", "spikes", "destinybond"],
+			"nature": "Jolly"
+		}
+	],
+	"slitherwing": [
+		{
+			"species": "Thundurus-Therian",
+			"items": ["heavydutyboots"],
+			"abilities": ["voltabsorb"],
+			"gender": "N",
+			"teraTypes": ["Electric", "Flying"],
+			"forcedMoves": ["thunderbolt", "aeroblast"],
+			"moves": ["sludgebomb", "focusblast", "voltswitch"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Walking Wake",
+			"items": ["choicespecs"],
+			"abilities": ["protosynthesis"],
+			"gender": "N",
+			"teraTypes": ["Water", "Dragon"],
+			"forcedMoves": ["hydrosteam", "dracometeor"],
+			"moves": ["flamethrower", "flipturn"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Arcanine",
+			"items": ["heavydutyboots"],
+			"abilities": ["intimidate"],
+			"teraTypes": ["Fire", "Fighting", "Flying"],
+			"forcedMoves": ["flareblitz", "extremespeed"],
+			"moves": ["closecombat", "morningsun", "swordsdance"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "decidueye",
+			"items": ["heatrock"],
+			"abilities": ["drought"],
+			"teraTypes": ["Fairy", "Water"],
+			"forcedMoves": ["solarblade", "defog"],
+			"moves": ["roost", "uturn"],
+			"nature": "Bold"
+		}
+	],
+	"slowking": [
+		{
+			"species": "Cetitan",
+			"items": ["heavydutyboots", "choiceband"],
+			"abilities": ["slushrush"],
+			"teraTypes": ["Ice", "Ground"],
+			"forcedMoves": ["glaciallance", "earthquake"],
+			"moves": ["liquidation", "iceshard"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "Hydrapple",
+			"items": ["heavydutyboots"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Fairy", "Steel"],
+			"forcedMoves": ["ficklebeam", "earthpower"],
+			"moves": ["recover", "gigadrain", "nastyplot"],
+			"nature": "Modest"
+		},
+		{
+			"species": "Excadrill",
+			"items": ["leftovers"],
+			"abilities": ["moldbreaker"],
+			"teraTypes": ["Flying"],
+			"forcedMoves": ["rapidspin", "earthquake"],
+			"moves": ["ironhead", "swordsdance", "stoneaxe"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Flutter Mane",
+			"items": ["leftovers", "lifeorb"],
+			"abilities": ["levitate"],
+			"gender": "N",
+			"teraTypes": ["Ghost", "Electric"],
+			"forcedMoves": ["moonblast", "shadowball"],
+			"moves": ["thunderbolt", "calmmind", "taunt"],
+			"nature": "Timid"
+		}
+	],
+	"cobalion": [
+		{
+			"species": "Hatterene",
+			"items": ["leftovers", "rockyhelmet"],
+			"abilities": ["magicbounce"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["psychicnoise", "drainingkiss"],
+			"moves": ["nuzzle", "mysticalfire", "calmmind"],
+			"nature": "Bold"
+		},
+		{
+			"species": "dragonite",
+			"items": ["heavydutyboots"],
+			"abilities": ["multiscale"],
+			"teraTypes": ["Normal", "Fire"],
+			"forcedMoves": ["extremespeed", "bitterblade"],
+			"moves": ["dragondance", "icespinner"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "tatsugiri",
+			"items": ["heavydutyboots"],
+			"abilities": ["adaptability"],
+			"teraTypes": ["Water", "Dragon"],
+			"forcedMoves": ["nastyplot", "hydropump"],
+			"moves": ["dracometeor", "rapidspin"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Scream Tail",
+			"items": ["choiceband", "assaultvest"],
+			"abilities": ["hugepower"],
+			"gender": "N",
+			"teraTypes": ["Fairy", "Water"],
+			"forcedMoves": ["playrough", "drainpunch"],
+			"moves": ["psychicfangs", "firepunch", "icepunch", "thunderpunch"],
+			"nature": "Jolly"
+		}
+	],
+	"keldeo": [
+		{
+			"species": "Zarude",
+			"items": ["choiceband", "choicescarf"],
+			"abilities": ["darkaura"],
+			"gender": "N",
+			"teraTypes": ["Electric", "Fighting"],
+			"forcedMoves": ["powerwhip", "knockoff"],
+			"moves": ["closecombat", "uturn"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Manaphy",
+			"items": ["leftovers"],
+			"abilities": ["unaware"],
+			"gender": "N",
+			"teraTypes": ["Water", "Grass"],
+			"forcedMoves": ["tailglow", "surf"],
+			"moves": ["energyball", "icebeam"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Volcanion",
+			"items": ["assaultvest"],
+			"abilities": ["waterabsorb"],
+			"gender": "N",
+			"teraTypes": ["Ground", "Fire"],
+			"forcedMoves": ["steameruption", "bitterblade"],
+			"moves": ["earthquake", "sludgebomb", "flamecharge"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "Shaymin-Sky",
+			"items": ["widelens"],
+			"abilities": ["serenegrace"],
+			"gender": "N",
+			"teraTypes": ["Fire"],
+			"forcedMoves": ["seedflare", "fusionflare"],
+			"moves": ["substitute", "leechseed"],
+			"nature": "Timid"
+		}
+	],
+	"tsareena": [
+		{
+			"species": "Ogerpon-Hearthflame",
+			"items": ["hearthflamemask"],
+			"abilities": ["grassysurge"],
+			"gender": "F",
+			"teraTypes": ["Fire"],
+			"forcedMoves": ["ivycudgel", "grassyglide"],
+			"moves": ["hornleech", "swordsdance"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Primarina",
+			"items": ["choicespecs"],
+			"abilities": ["liquidvoice"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["clangingscales", "flipturn"],
+			"moves": ["energyball", "moonblast"],
+			"nature": "Modest"
+		},
+		{
+			"species": "gougingfire",
+			"items": ["choiceband"],
+			"abilities": ["protosynthesis"],
+			"gender": "N",
+			"teraTypes": ["Fire", "Ground"],
+			"forcedMoves": ["sacredfire", "outrage"],
+			"moves": ["dragonclaw", "earthquake"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "gyarados",
+			"items": ["lumberry"],
+			"abilities": ["moxie", "intimidate"],
+			"teraTypes": ["Flying", "Grass", "Ice"],
+			"forcedMoves": ["dragondance", "dragonascent"],
+			"moves": ["earthquake", "stoneedge", "waterfall"],
+			"nature": "Jolly"
+		}
+	],
+	"zapdos": [
+		{
+			"species": "Snorlax",
+			"items": ["leftovers"],
+			"abilities": ["thickfat"],
+			"teraTypes": ["Fairy", "Ghost"],
+			"forcedMoves": ["bodyslam", "slackoff"],
+			"moves": ["curse", "earthquake", "heatcrash", "crunch"],
+			"nature": "Impish"
+		},
+		{
+			"species": "Cloyster",
+			"items": ["heavydutyboots"],
+			"abilities": ["skilllink"],
+			"teraTypes": ["Water", "Ice"],
+			"forcedMoves": ["shellsmash", "iciclespear"],
+			"moves": ["rockblast", "wavecrash"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "Tyranitar",
+			"items": ["leftovers"],
+			"abilities": ["sandstream"],
+			"teraTypes": ["Flying", "Steel"],
+			"forcedMoves": ["knockoff", "rockblast"],
+			"moves": ["stealthrock", "mortalspin", "earthquake"],
+			"nature": "Careful"
+		},
+		{
+			"species": "Gengar",
+			"items": ["leftovers"],
+			"abilities": ["levitate"],
+			"teraTypes": ["Fairy", "Electric"],
+			"forcedMoves": ["hex", "sludgebomb"],
+			"moves": ["taunt", "willowisp", "nastyplot", "thunderwave"],
+			"nature": "Timid"
+		}
+	],
+	"landorustherian": [
+		{
+			"species": "Cresselia",
+			"items": ["leftovers"],
+			"abilities": ["levitate"],
+			"gender": "N",
+			"teraTypes": ["Poison", "Fairy"],
+			"forcedMoves": ["mysticalpower", "moonlight"],
+			"moves": ["moonblast", "thunderwave"],
+			"nature": "Bold"
+		},
+		{
+			"species": "Heatran",
+			"items": ["leftovers", "airballoon"],
+			"abilities": ["flashfire", "flamebody"],
+			"gender": "N",
+			"teraTypes": ["Ground", "Grass"],
+			"forcedMoves": ["magmastorm", "earthpower"],
+			"moves": ["lavaplume", "heavyslam", "toxic", "protect"],
+			"nature": "Calm"
+		},
+		{
+			"species": "Amoonguss",
+			"items": ["rockyhelmet", "blacksludge"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["sludgebomb", "spore"],
+			"moves": ["foulplay", "gigadrain", "rapidspin"],
+			"nature": "Bold"
+		},
+		{
+			"species": "Kingdra",
+			"items": ["scopelens"],
+			"abilities": ["sniper"],
+			"teraTypes": ["Water", "Fairy"],
+			"forcedMoves": ["focusenergy", "dracometeor"],
+			"moves": ["agility", "snipeshot"],
+			"nature": "Timid"
+		}
+	],
+	"ironjugulis": [
+		{
+			"species": "Raikou",
+			"items": ["terrainextender"],
+			"abilities": ["electricsurge"],
+			"gender": "N",
+			"teraTypes": ["Ice"],
+			"forcedMoves": ["voltswitch", "scald"],
+			"moves": ["terablast", "thunderbolt"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Basculegion-F",
+			"items": ["choicespecs"],
+			"abilities": ["surgesurfer"],
+			"gender": "F",
+			"teraTypes": ["Water", "Ghost"],
+			"forcedMoves": ["surf", "shadowball"],
+			"moves": ["flipturn", "icebeam"],
+			"nature": "Modest"
+		},
+		{
+			"species": "Weezing-Galar",
+			"items": ["heavydutyboots"],
+			"abilities": ["neutralizinggas", "levitate"],
+			"teraTypes": ["Ghost", "Grass"],
+			"forcedMoves": ["sludgebomb", "moonlight"],
+			"moves": ["strangesteam", "defog", "willowisp"],
+			"nature": "Bold"
+		},
+		{
+			"species": "Kommo-o",
+			"items": ["throatspray"],
+			"abilities": ["soundproof", "bulletproof"],
+			"teraTypes": ["Normal", "Steel"],
+			"forcedMoves": ["clangoroussoul", "clangingscales"],
+			"moves": ["drainpunch", "boomburst", "flashcannon"],
+			"nature": "Hasty"
+		}
+	],
+	"sinistcha": [
+		{
+			"species": "Goodra-Hisui",
+			"items": ["leftovers"],
+			"abilities": ["corrosion", "regenerator"],
+			"teraTypes": ["Flying", "Dragon"],
+			"forcedMoves": ["dracometeor", "toxic"],
+			"moves": ["fireblast", "heavyslam"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "Zapdos-Galar",
+			"items": ["lifeorb"],
+			"abilities": ["defiant", "windrider", "scrappy"],
+			"gender": "N",
+			"teraTypes": ["Flying", "Electric"],
+			"forcedMoves": ["closecombat", "bravebird"],
+			"moves": ["tailwind", "supercellslam"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Ninetales-Alola",
+			"items": ["lightclay"],
+			"abilities": ["snowwarning"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["auroraveil", "blizzard"],
+			"moves": ["freezedry", "encore", "moonblast"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Walking Wake",
+			"items": ["choicespecs", "choicescarf"],
+			"abilities": ["orichalcumpulse", "hadronengine"],
+			"gender": "N",
+			"teraTypes": ["Fire", "Water", "Electric"],
+			"forcedMoves": ["hydrosteam", "flamethrower"],
+			"moves": ["dracometeor", "voltswitch"],
+			"nature": "Timid"
+		}
+	],
+	"azumarill": [
+		{
+			"species": "Arcanine-Hisui",
+			"items": ["lifeorb"],
+			"abilities": ["magicguard", "regenerator"],
+			"teraTypes": ["Flying", "Normal"],
+			"forcedMoves": ["flareblitz", "headsmash"],
+			"moves": ["extremespeed", "morningsun", "stealthrock", "bravebird"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "Meowscarada",
+			"items": ["focussash"],
+			"abilities": ["protean", "prankster"],
+			"teraTypes": ["Dark", "Grass"],
+			"forcedMoves": ["flowertrick", "stickyweb"],
+			"moves": ["knockoff", "uturn", "taunt", "tripleaxel"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Oricorio-Sensu",
+			"items": ["heavydutyboots"],
+			"abilities": ["shadowshield", "adaptability"],
+			"teraTypes": ["Fighting"],
+			"forcedMoves": ["quiverdance", "revelationdance"],
+			"moves": ["hurricane", "roost", "taunt", "storedpower"],
+			"nature": "Bold"
+		},
+		{
+			"species": "Torterra",
+			"items": ["whiteherb"],
+			"abilities": ["orichalcumpulse", "grassysurge"],
+			"teraTypes": ["Rock", "Fire"],
+			"forcedMoves": ["shellsmash", "woodhammer"],
+			"moves": ["headlongrush", "grassyglide", "terablast", "diamondstorm"],
+			"nature": "Jolly"
+		}
+	],
+	"revavroom": [
+		{
+			"species": "Ogerpon-Cornerstone",
+			"items": ["cornerstonemask"],
+			"abilities": ["sturdy", "toughclaws"],
+			"gender": "F",
+			"teraTypes": ["Rock"],
+			"forcedMoves": ["ivycudgel", "powerwhip"],
+			"moves": ["uturn", "headlongrush", "knockoff", "swordsdance"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Talonflame",
+			"items": ["lifeorb"],
+			"abilities": ["magicguard", "regenerator"],
+			"teraTypes": ["Steel", "Dragon", "Bug"],
+			"forcedMoves": ["flareblitz", "bravebird"],
+			"moves": ["uturn", "woodhammer", "roost", "swordsdance"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Blastoise",
+			"items": ["heavydutyboots", "whiteherb"],
+			"abilities": ["torrent", "megalauncher"],
+			"teraTypes": ["Water", "Dragon"],
+			"forcedMoves": ["shellsmash", "originpulse"],
+			"moves": ["dragonpulse", "icebeam", "darkpulse", "aurasphere"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Sandy Shocks",
+			"items": ["heavydutyboots"],
+			"abilities": ["levitate", "magnetpull"],
+			"gender": "N",
+			"teraTypes": ["Ghost"],
+			"forcedMoves": ["earthpower", "voltswitch"],
+			"moves": ["spikes", "thunderbolt", "icebeam"],
+			"nature": "Timid"
+		}
+	],
+	"heatran": [
+		{
+			"species": "Tapu Koko",
+			"items": ["heavydutyboots"],
+			"abilities": ["hadronengine"],
+			"gender": "N",
+			"teraTypes": ["Electric", "Grass"],
+			"forcedMoves": ["wildcharge", "roost"],
+			"moves": ["dazzlinggleam", "voltswitch"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Hawlucha",
+			"items": ["electricseed", "whiteherb"],
+			"abilities": ["unburden"],
+			"teraTypes": ["Flying"],
+			"forcedMoves": ["swordsdance", "acrobatics"],
+			"moves": ["closecombat", "taunt"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "Kyurem-Black",
+			"items": ["powerherb"],
+			"abilities": ["teravolt"],
+			"gender": "N",
+			"teraTypes": ["Ice", "Fairy", "Electric"],
+			"forcedMoves": ["freezeshock", "fusionbolt"],
+			"moves": ["icebeam", "earthpower", "recover"]
+		},
+		{
+			"species": "Rillaboom",
+			"items": ["assaultvest"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Fairy", "Water"],
+			"forcedMoves": ["woodhammer", "earthquake"],
+			"moves": ["knockoff", "uturn"],
+			"nature": "Impish"
+		}
+	],
+	"indeedee": [
+		{
+			"species": "Armarouge",
+			"items": ["choicespecs", "choicescarf"],
+			"abilities": ["beadsofruin"],
+			"teraTypes": ["Psychic", "Fire"],
+			"forcedMoves": ["armorcannon", "expandingforce"],
+			"moves": ["energyball", "focusblast", "scorchingsands", "trick"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Sharpedo",
+			"items": ["lifeorb", "focussash"],
+			"abilities": ["speedboost"],
+			"teraTypes": ["Dark", "Water"],
+			"forcedMoves": ["ceaselessedge", "liquidation"],
+			"moves": ["closecombat", "crunch", "destinybond", "protect", "taunt"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Sneasler",
+			"items": ["psychicseed", "whiteherb"],
+			"abilities": ["unburden"],
+			"teraTypes": ["Fighting", "Flying"],
+			"forcedMoves": ["closecombat", "swordsdance"],
+			"moves": ["direclaw", "icehammer", "acrobatics", "throatchop"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Diancie",
+			"items": ["leftovers"],
+			"abilities": ["clearbody"],
+			"gender": "N",
+			"teraTypes": ["Fighting", "Psychic", "Water"],
+			"forcedMoves": ["calmmind", "drainingkiss"],
+			"moves": ["storedpower", "earthpower", "diamondstorm"],
+			"nature": "Careful"
+		}
+	],
+	"weavile": [
+		{
+			"species": "Kartana",
+			"items": ["choicescarf"],
+			"abilities": ["moxie"],
+			"gender": "N",
+			"teraTypes": ["Fighting", "Dark"],
+			"forcedMoves": ["leafblade", "smartstrike"],
+			"moves": ["sacredsword", "knockoff"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Espathra",
+			"items": ["choicespecs"],
+			"abilities": ["speedboost"],
+			"teraTypes": ["Fairy"],
+			"forcedMoves": ["luminacrash", "shadowball"],
+			"moves": ["dazzlinggleam", "uturn"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Iron Moth",
+			"items": ["boosterenergy"],
+			"abilities": ["quarkdrive"],
+			"gender": "N",
+			"teraTypes": ["Poison"],
+			"forcedMoves": ["fierydance", "sludgewave"],
+			"moves": ["energyball", "agility"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Quaquaval",
+			"items": ["lifeorb"],
+			"abilities": ["moxie"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["closecombat", "aquastep"],
+			"moves": ["icespinner", "swordsdance", "jetpunch"],
+			"nature": "Jolly"
+		}
+	],
+	"fezandipiti": [
+		{
+			"species": "gholdengo",
+			"items": ["metalcoat"],
+			"abilities": ["goodasgold"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["nastyplot", "makeitrain"],
+			"moves": ["shadowball", "recover"],
+			"nature": "Timid"
+		},
+		{
+			"species": "mandibuzz",
+			"items": ["heavydutyboots"],
+			"abilities": ["unaware"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["foulplay", "roost"],
+			"moves": ["uturn", "toxic"],
+			"nature": "Careful"
+		},
+		{
+			"species": "latios",
+			"items": ["souldew"],
+			"abilities": ["levitate"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["dracometeor", "lusterpurge"],
+			"moves": ["recover", "nastyplot"],
+			"nature": "Timid"
+		},
+		{
+			"species": "slowbro",
+			"items": ["heavydutyboots"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["scald", "futuresight"],
+			"moves": ["slackoff", "teleport"],
+			"nature": "Bold"
+		}
+	],
+	"skarmory": [
+		{
+			"species": "alomomola",
+			"items": ["assaultvest"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Fairy", "Grass"],
+			"forcedMoves": ["scald", "flipturn"],
+			"moves": ["playrough", "mirrorcoat", "rapidspin"],
+			"nature": "Impish"
+		},
+		{
+			"species": "zamazenta",
+			"items": ["heavydutyboots"],
+			"abilities": ["dauntlessshield"],
+			"teraTypes": ["Dark", "Fighting"],
+			"forcedMoves": ["crunch", "closecombat"],
+			"moves": ["encore", "icefang", "stoneedge"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "latias",
+			"items": ["leftovers"],
+			"abilities": ["levitate"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["calmmind", "recover"],
+			"moves": ["drainingkiss", "psystrike"],
+			"nature": "Timid"
+		},
+		{
+			"species": "trevenant",
+			"items": ["leftovers", "colburberry"],
+			"abilities": ["prankster"],
+			"teraTypes": ["Dark", "Water"],
+			"forcedMoves": ["woodhammer", "painsplit"],
+			"moves": ["willowisp", "toxic", "poltergeist", "leechseed"],
+			"nature": "Impish"
+		}
+	],
+	"clefable": [
+		{
+			"species": "gliscor",
+			"items": ["toxicorb"],
+			"abilities": ["poisonheal"],
+			"teraTypes": ["Fire", "Water", "Steel"],
+			"forcedMoves": ["earthquake", "protect"],
+			"moves": ["toxic", "firelash"],
+			"nature": "Impish"
+		},
+		{
+			"species": "hydreigon",
+			"items": ["choicespecs"],
+			"abilities": ["levitate"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["dracometeor", "darkpulse"],
+			"moves": ["flashcannon", "earthpower"],
+			"nature": "Timid"
+		},
+		{
+			"species": "lunala",
+			"items": ["heavydutyboots"],
+			"abilities": ["shadowshield"],
+			"teraTypes": ["Ghost", "Fairy"],
+			"forcedMoves": ["moongeistbeam", "moonlight"],
+			"moves": ["futuresight", "willowisp", "teleport", "thunderwave"],
+			"nature": "Bold"
+		},
+		{
+			"species": "mienshao",
+			"items": ["lifeorb"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Fighting", "Steel"],
+			"forcedMoves": ["closecombat", "uturn"],
+			"moves": ["knockoff", "tripleaxel", "gigatonhammer"],
+			"nature": "Jolly"
+		}
+	],
+	"ogerpon": [
+		{
+			"species": "scizor",
+			"items": ["metalcoat"],
+			"abilities": ["technician"],
+			"teraTypes": ["Fire", "Steel"],
+			"forcedMoves": ["swordsdance", "bulletpunch"],
+			"moves": ["closecombat", "pinmissile", "knockoff"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "primarina",
+			"items": ["leftovers"],
+			"abilities": ["torrent"],
+			"teraTypes": ["Ghost", "Steel"],
+			"forcedMoves": ["calmmind", "moonblast"],
+			"moves": ["hydropump", "watershuriken"],
+			"nature": "Bold"
+		},
+		{
+			"species": "dragapult",
+			"items": ["leftovers", "heavydutyboots"],
+			"abilities": ["infiltrator", "clearbody"],
+			"teraTypes": ["Ghost", "Fairy"],
+			"forcedMoves": ["hex", "dragondarts"],
+			"moves": ["willowisp", "uturn", "thunderwave"],
+			"nature": "Timid"
+		},
+		{
+			"species": "regieleki",
+			"items": ["magnet", "heavydutyboots"],
+			"abilities": ["transistor"],
+			"teraTypes": ["Fire", "Electric"],
+			"forcedMoves": ["thunderbolt", "overheat"],
+			"moves": ["rapidspin", "voltswitch"],
+			"nature": "Timid"
+		}
+	],
+	"pecharunt": [
+		{
+			"species": "ironmoth",
+			"items": ["heavydutyboots"],
+			"abilities": ["merciless"],
+			"teraTypes": ["Fairy", "Grass"],
+			"forcedMoves": ["fierydance", "sludgewave"],
+			"moves": ["dazzlinggleam", "energyball", "toxic"],
+			"nature": "Timid"
+		},
+		{
+			"species": "mandibuzz",
+			"items": ["heavydutyboots"],
+			"abilities": ["overcoat"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["jawlock", "roost"],
+			"moves": ["uturn", "toxic", "defog"],
+			"nature": "Careful"
+		},
+		{
+			"species": "dudunsparce",
+			"items": ["toxicorb"],
+			"abilities": ["poisonheal"],
+			"teraTypes": ["Ghost", "Poison"],
+			"forcedMoves": ["facade", "toxic"],
+			"moves": ["roost", "stealthrock", "protect"],
+			"nature": "Careful"
+		},
+		{
+			"species": "ironvaliant",
+			"items": ["boosterenergy"],
+			"abilities": ["quarkdrive"],
+			"teraTypes": ["Fairy", "Steel"],
+			"forcedMoves": ["magicaltorque", "closecombat"],
+			"moves": ["knockoff", "encore"],
+			"nature": "Jolly"
+		}
+	],
+	"moltres": [
+		{
+			"species": "duraludon",
+			"items": ["eviolite"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Grass"],
+			"forcedMoves": ["dracometeor", "stealthrock"],
+			"moves": ["flashcannon", "bodypress", "thunderwave"],
+			"nature": "Calm"
+		},
+		{
+			"species": "mamoswine",
+			"items": ["lifeorb"],
+			"abilities": ["thickfat"],
+			"teraTypes": ["Ice", "Ground"],
+			"forcedMoves": ["iciclecrash", "earthquake"],
+			"moves": ["iceshard", "knockoff"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "miraidon",
+			"items": ["heavydutyboots"],
+			"abilities": ["stickyhold"],
+			"teraTypes": ["Electric", "Steel"],
+			"forcedMoves": ["discharge", "dragonpulse"],
+			"moves": ["flashcannon", "uturn"],
+			"nature": "Timid"
+		},
+		{
+			"species": "chandelure",
+			"items": ["choicespecs"],
+			"abilities": ["stormdrain"],
+			"teraTypes": ["Fire", "Steel"],
+			"forcedMoves": ["shadowball", "fireblast"],
+			"moves": ["energyball", "trick"],
+			"nature": "Modest"
+		}
+	],
+	"arcaninehisui": [
+		{
+			"species": "golisopod",
+			"items": ["heavydutyboots"],
+			"abilities": ["toughclaws"],
+			"teraTypes": ["Fighting"],
+			"forcedMoves": ["firstimpression", "liquidation"],
+			"moves": ["leechlife", "closecombat"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "calyrexice",
+			"items": ["weaknesspolicy"],
+			"abilities": ["asoneglastrier"],
+			"teraTypes": ["Water", "Steel"],
+			"forcedMoves": ["iciclecrash", "agility"],
+			"moves": ["highhorsepower", "closecombat"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "ogerponwellspring",
+			"items": ["wellspringmask"],
+			"abilities": ["waterabsorb"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["ivycudgel", "powerwhip"],
+			"moves": ["knockoff", "playrough", "spikes"],
+			"nature": "Timid"
+		},
+		{
+			"species": "corviknight",
+			"items": ["leftovers"],
+			"abilities": ["pressure"],
+			"teraTypes": ["Dragon"],
+			"forcedMoves": ["bravebird", "uturn"],
+			"moves": ["roost", "whirlwind"],
+			"nature": "Careful"
+		}
+	],
+	"ironboulder": [
+		{
+			"species": "keldeoresolute",
+			"items": ["leftovers"],
+			"abilities": ["justified"],
+			"teraTypes": ["Steel", "Electric"],
+			"forcedMoves": ["electrodrift", "calmmind"],
+			"moves": ["surf", "secretsword"],
+			"nature": "Timid"
+		},
+		{
+			"species": "buzzwole",
+			"items": ["rockyhelmet", "leftovers"],
+			"abilities": ["beastboost"],
+			"teraTypes": ["Water", "Steel"],
+			"forcedMoves": ["roost", "drainpunch"],
+			"moves": ["icepunch", "spikes", "earthquake", "toxic"],
+			"nature": "Impish"
+		},
+		{
+			"species": "chiyu",
+			"items": ["heavydutyboots"],
+			"abilities": ["flashfire"],
+			"teraTypes": ["Grass", "Fighting"],
+			"forcedMoves": ["darkpulse", "fireblast"],
+			"moves": ["nastyplot", "terablast"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Shaymin-Sky",
+			"items": ["heavydutyboots"],
+			"abilities": ["serenegrace"],
+			"teraTypes": ["Flying", "Steel"],
+			"forcedMoves": ["bleakwindstorm", "seedflare"],
+			"moves": ["earthpower", "healingwish"],
+			"nature": "Timid"
+		}
+	],
+	"tinglu": [
+		{
+			"species": "ironhands",
+			"items": ["roseliberry"],
+			"abilities": ["longreach"],
+			"teraTypes": ["Fire"],
+			"forcedMoves": ["drainpunch", "swordsdance"],
+			"moves": ["thunderpunch", "icepunch"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "screamtail",
+			"items": ["heavydutyboots", "leftovers"],
+			"abilities": ["pixilate"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["boomburst", "wish"],
+			"moves": ["protect", "psychicnoise"],
+			"nature": "Bold"
+		},
+		{
+			"species": "celesteela",
+			"items": ["leftovers"],
+			"abilities": ["waterabsorb"],
+			"teraTypes": ["Dragon"],
+			"forcedMoves": ["heavyslam", "leechseed"],
+			"moves": ["flamethrower", "protect"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "Skeledirge",
+			"items": ["heavydutyboots"],
+			"abilities": ["unaware"],
+			"teraTypes": ["Fairy"],
+			"forcedMoves": ["torchsong", "slackoff"],
+			"moves": ["infernalparade", "willowisp"],
+			"nature": "Bold"
+		}
+	],
+	"dondozo": [
+		{
+			"species": "blissey",
+			"items": ["heavydutyboots"],
+			"abilities": ["naturalcure"],
+			"teraTypes": ["Dark", "Water"],
+			"forcedMoves": ["seismictoss", "softboiled"],
+			"moves": ["calmmind", "shadowball", "toxic"],
+			"nature": "Bold"
+		},
+		{
+			"species": "clodsire",
+			"items": ["heavydutyboots", "leftovers"],
+			"abilities": ["unaware", "waterabsorb"],
+			"teraTypes": ["Dark"],
+			"forcedMoves": ["recover", "mortalspin"],
+			"moves": ["earthquake", "spikes", "amnesia"],
+			"nature": "Bold"
+		},
+		{
+			"species": "gliscor",
+			"items": ["toxicorb"],
+			"abilities": ["poisonheal"],
+			"teraTypes": ["Normal", "Water"],
+			"forcedMoves": ["protect", "knockoff"],
+			"moves": ["earthquake", "swordsdance", "facade"],
+			"nature": "Careful"
+		},
+		{
+			"species": "Weezing-Galar",
+			"items": ["heavydutyboots"],
+			"abilities": ["neutralizinggas"],
+			"teraTypes": ["Ghost", "Grass"],
+			"forcedMoves": ["defog", "shoreup"],
+			"moves": ["strangesteam", "willowisp", "sludgebomb", "toxic", "corrosivegas"],
+			"nature": "Bold"
+		}
+	],
+	"hoopaunbound": [
+		{
+			"species": "conkeldurr",
+			"items": ["flameorb"],
+			"abilities": ["guts"],
+			"teraTypes": ["Normal"],
+			"forcedMoves": ["closecombat", "knockoff"],
+			"moves": ["facade", "extremespeed"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "porygon2",
+			"items": ["eviolite"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Flying", "Ghost"],
+			"forcedMoves": ["terablast", "icebeam"],
+			"moves": ["recover", "trickroom"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "magearna",
+			"items": ["ejectpack"],
+			"abilities": ["magicbounce"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["fleurcannon", "mistyexplosion"],
+			"moves": ["spikes", "trickroom"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "camerupt",
+			"items": ["charcoal"],
+			"abilities": ["desolateland"],
+			"teraTypes": ["Fire"],
+			"forcedMoves": ["eruption", "earthpower"],
+			"moves": ["fireblast", "solarbeam"],
+			"nature": "Quiet"
+		}
+	],
+	"quaquaval": [
+		{
+			"species": "dragonite",
+			"items": ["dragoninite"],
+			"abilities": ["multiscale"],
+			"teraTypes": ["Dragon"],
+			"forcedMoves": ["roost", "hurricane"],
+			"moves": ["fierydance", "icebeam", "encore", "dragonpulse"],
+			"nature": "Timid"
+		},
+		{
+			"species": "scizor",
+			"items": ["scizorite"],
+			"abilities": ["technician"],
+			"teraTypes": ["Steel"],
+			"forcedMoves": ["uturn", "bulletpunch"],
+			"moves": ["knockoff", "swordsdance"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "typhlosionhisui",
+			"items": ["choicescarf", "choicespecs"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Fire", "Fairy"],
+			"forcedMoves": ["eruption", "flamethrower"],
+			"moves": ["shadowball", "focusblast"],
+			"nature": "Timid"
+		},
+		{
+			"species": "weavile",
+			"items": ["choiceband"],
+			"abilities": ["longreach"],
+			"teraTypes": ["Ghost", "Ice", "Dark"],
+			"forcedMoves": ["tripleaxel", "knockoff"],
+			"moves": ["iceshard", "lowkick"],
+			"nature": "Jolly"
+		}
+	],
+	"corviknight": [
+		{
+			"species": "froslass",
+			"items": ["froslassite"],
+			"abilities": ["cursedbody"],
+			"teraTypes": ["Ice"],
+			"forcedMoves": ["nastyplot", "blizzard"],
+			"moves": ["thunderbolt", "shadowball"],
+			"nature": "Timid"
+		},
+		{
+			"species": "emboar",
+			"items": ["emboarite"],
+			"abilities": ["reckless"],
+			"teraTypes": ["Fire"],
+			"forcedMoves": ["bulkup", "flareblitz"],
+			"moves": ["closecombat", "powerwhip"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "giratinaorigin",
+			"items": ["griseouscore"],
+			"abilities": ["levitate"],
+			"teraTypes": ["Fairy", "Steel"],
+			"forcedMoves": ["shadowball", "dragontail"],
+			"moves": ["drainpunch", "thunderwave", "shadowsneak"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "swampert",
+			"items": ["leftovers", "heavydutyboots"],
+			"abilities": ["torrent"],
+			"teraTypes": ["Poison", "Steel"],
+			"forcedMoves": ["earthquake", "recover"],
+			"moves": ["stealthrock", "knockoff", "flipturn"],
+			"nature": "Careful"
+		}
+	],
+	"brambleghast": [
+		{
+			"species": "floetteeternal",
+			"items": ["floettite"],
+			"abilities": ["symbiosis"],
+			"teraTypes": ["Fairy"],
+			"forcedMoves": ["calmmind", "lightofruin"],
+			"moves": ["drainingkiss", "burningjealousy"],
+			"nature": "Timid"
+		},
+		{
+			"species": "arcaninehisui",
+			"items": ["choiceband", "choicescarf"],
+			"abilities": ["rockhead"],
+			"teraTypes": ["Rock", "Grass"],
+			"forcedMoves": ["headsmash", "flareblitz"],
+			"moves": ["woodhammer", "closecombat"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "goodrahisui",
+			"items": ["assaultvest"],
+			"abilities": ["sapsipper", "shellarmor"],
+			"teraTypes": ["Flying", "Fairy"],
+			"forcedMoves": ["heavyslam", "dragontail"],
+			"moves": ["rapidspin", "knockoff", "flamethrower", "icebeam"],
+			"nature": "Sassy"
+		},
+		{
+			"species": "starmie",
+			"items": ["starminite"],
+			"abilities": ["naturalcure"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["zenheadbutt", "liquidation"],
+			"moves": ["thunderbolt", "flipturn", "rapidspin"],
+			"nature": "Hasty"
+		}
+	],
+	"hatterene": [
+		{
+			"species": "charizard",
+			"items": ["charizarditex"],
+			"abilities": ["blaze"],
+			"teraTypes": ["Fire"],
+			"forcedMoves": ["dragondance", "flareblitz"],
+			"moves": ["dragonclaw", "roost"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "rotomwash",
+			"items": ["leftovers", "heavydutyboots"],
+			"abilities": ["levitate"],
+			"teraTypes": ["Ghost", "Dragon"],
+			"forcedMoves": ["defog", "painsplit"],
+			"moves": ["hydropump", "voltswitch"],
+			"nature": "Bold"
+		},
+		{
+			"species": "meganium",
+			"items": ["meganiumite"],
+			"abilities": ["overgrow"],
+			"teraTypes": ["Grass"],
+			"forcedMoves": ["solarbeam", "dazzlinggleam"],
+			"moves": ["synthesis", "weatherball"],
+			"nature": "Bold"
+		},
+		{
+			"species": "clodsire",
+			"items": ["choiceband", "leftovers"],
+			"abilities": ["hugepower"],
+			"teraTypes": ["Ground", "Water"],
+			"forcedMoves": ["earthquake", "gunkshot"],
+			"moves": ["stoneedge", "liquidation"],
+			"nature": "Adamant"
+		}
+	],
+	"cyclizar": [
+		{
+			"species": "slowbrogalar",
+			"items": ["assaultvest"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["psyshock", "sludgebomb"],
+			"moves": ["flamethrower", "flipturn"],
+			"nature": "Relaxed"
+		},
+		{
+			"species": "infernape",
+			"items": ["lifeorb"],
+			"abilities": ["protean"],
+			"teraTypes": ["Stellar"],
+			"forcedMoves": ["flareblitz", "closecombat"],
+			"moves": ["uturn", "grassknot", "heatwave", "vacuumwave"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "feraligatr",
+			"items": ["feraligite"],
+			"abilities": ["sheerforce"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["liquidation", "bodyslam"],
+			"moves": ["swordsdance", "aquajet"],
+			"nature": "Adamant"
+		},
+		{
+			"species": "aerodactyl",
+			"items": ["aerodactylite"],
+			"abilities": ["unnerve"],
+			"teraTypes": ["Rock"],
+			"forcedMoves": ["dualwingbeat", "stoneaxe"],
+			"moves": ["crunch", "earthquake", "firefang"],
+			"nature": "Jolly"
+		}
+	],
+	"excadrill": [
+		{
+			"species": "ludicolo",
+			"items": ["leftovers"],
+			"abilities": ["furcoat"],
+			"teraTypes": ["Poison", "Steel"],
+			"forcedMoves": ["surf", "synthesis"],
+			"moves": ["knockoff", "encore", "leafstorm"],
+			"nature": "Bold"
+		},
+		{
+			"species": "pyroar",
+			"items": ["pyroarite"],
+			"abilities": ["unnerve"],
+			"teraTypes": ["Fire"],
+			"forcedMoves": ["torchsong", "hypervoice"],
+			"moves": ["flamecharge", "taunt"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Flapple",
+			"items": ["choicescarf"],
+			"abilities": ["parentalbond"],
+			"teraTypes": ["Grass", "Dragon"],
+			"forcedMoves": ["gravapple", "outrage"],
+			"moves": ["dragonrush", "uturn"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Roaringmoon",
+			"items": ["assaultvest"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Ghost"],
+			"forcedMoves": ["knockoff", "dragontail"],
+			"moves": ["ironhead", "uturn"],
+			"nature": "Jolly"
+		}
+	],
+	"hippowdon": [
+		{
+			"species": "Excadrill",
+			"items": ["leftovers", "airballoon"],
+			"abilities": ["sandrush"],
+			"teraTypes": ["Ground", "Ghost"],
+			"forcedMoves": ["swordsdance", "headlongrush"],
+			"moves": ["ironhead", "rapidspin", "rockslide"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Rotom-Mow",
+			"items": ["choicescarf", "choicespecs"],
+			"abilities": ["grassysurge"],
+			"teraTypes": ["Grass"],
+			"forcedMoves": ["leafstorm", "trick"],
+			"moves": ["thunderbolt", "voltswitch", "nastyplot"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Reuniclus",
+			"items": ["lifeorb"],
+			"abilities": ["magicguard"],
+			"teraTypes": ["Fighting", "Water"],
+			"forcedMoves": ["psystrike", "recover"],
+			"moves": ["focusblast", "calmmind", "thunder"],
+			"nature": "Bold"
+		},
+		{
+			"species": "Terrakion",
+			"items": ["choiceband"],
+			"abilities": ["sandrush"],
+			"teraTypes": ["Rock", "Ground", "Fighting"],
+			"forcedMoves": ["closecombat", "stoneedge"],
+			"moves": ["earthquake", "megahorn"],
+			"nature": "Jolly"
+		}
+	],
+	"primarina": [
+		{
+			"species": "Iron Crown",
+			"items": ["damprock"],
+			"abilities": ["drizzle"],
+			"teraTypes": ["Water", "Steel"],
+			"forcedMoves": ["tachyoncutter", "psychicnoise"],
+			"moves": ["weatherball", "voltswitch"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Moltres-Galar",
+			"items": ["heavydutyboots"],
+			"abilities": ["berserk"],
+			"teraTypes": ["Fairy", "Dark"],
+			"forcedMoves": ["hurricane", "fierywrath"],
+			"moves": ["nastplot", "roost"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Kyurem",
+			"items": ["choicespecs", "heavydutyboots"],
+			"abilities": ["pressure"],
+			"teraTypes": ["Ice", "Fairy"],
+			"forcedMoves": ["freezedry", "dracometeor"],
+			"moves": ["icebeam", "earthpower"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Sandslash",
+			"items": ["leftovers", "rockyhelmet"],
+			"abilities": ["sandrush"],
+			"teraTypes": ["Water"],
+			"forcedMoves": ["earthquake", "strengthsap"],
+			"moves": ["stealthrock", "rapidspin", "knockoff"],
+			"nature": "Impish"
+		}
+	],
+	"cinderace": [
+		{
+			"species": "Electrode-Hisui",
+			"items": ["heavydutyboots", "choicespecs"],
+			"abilities": ["tintedlens"],
+			"teraTypes": ["Fairy", "Ice"],
+			"forcedMoves": ["leafstorm", "thunderbolt"],
+			"moves": ["voltswitch", "terablast"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Rotom-Frost",
+			"items": ["heavydutyboots"],
+			"abilities": ["noguard"],
+			"teraTypes": ["electric"],
+			"forcedMoves": ["blizzard", "thunder"],
+			"moves": ["voltswitch", "willowisp"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Iron Treads",
+			"items": ["heavydutyboots"],
+			"abilities": ["heatproof"],
+			"teraTypes": ["Ghost"],
+			"forcedMoves": ["earthquake", "rapidspin"],
+			"moves": ["icespinner", "knockoff"],
+			"nature": "Jolly"
+		},
+		{
+			"species": "Okidogi",
+			"items": ["leftovers"],
+			"abilities": ["toxicchain"],
+			"teraTypes": ["Dark", "FIre"],
+			"forcedMoves": ["drainpunch", "knockoff"],
+			"moves": ["bulkup", "slackoff"],
+			"nature": "Careful"
+		}
+	],
+	"empoleon": [
+		{
+			"species": "Kyurem",
+			"items": ["assaultvest"],
+			"abilities": ["snowwarning"],
+			"teraTypes": ["Fairy", "Poison"],
+			"forcedMoves": ["blizzard", "dragontail"],
+			"moves": ["freezedry", "earthpower", "bodypress", "dracometeor"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Slowking-Galar",
+			"items": ["shucaberry", "colburberry", "heavydutyboots"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Fairy"],
+			"forcedMoves": ["rapidspin", "sludgebomb"],
+			"moves": ["chillyreception", "futuresight", "icebeam", "psychicnoise", "thunderwave", "flamethrower"],
+			"nature": "Bold"
+		},
+		{
+			"species": "Tsareena",
+			"items": ["toxicorb"],
+			"abilities": ["poisonheal"],
+			"teraTypes": ["Poison", "Steel", "Dragon"],
+			"forcedMoves": ["rapidspin", "knockoff"],
+			"moves": ["powerwhip", "uturn", "synthesis"],
+			"nature": "Impish"
+		},
+		{
+			"species": "Enamorus-Therian",
+			"items": ["heavydutyboots", "leftovers"],
+			"abilities": ["multiscale"],
+			"teraTypes": ["Fairy", "Poison", "Ground"],
+			"forcedMoves": ["rapidspin", "drainingkiss"],
+			"moves": ["mysticalfire", "earthpower", "moonblast"],
+			"nature": "Bold"
+		}
+	],
+	"dudunsparce": [
+		{
+			"species": "Terapagos",
+			"items": ["heavydutyboots"],
+			"abilities": ["terashift"],
+			"teraTypes": ["Stellar"],
+			"forcedMoves": ["rapidspin", "terastarstorm"],
+			"moves": ["shadowball", "icebeam", "flamethrower"],
+			"nature": "Calm"
+		},
+		{
+			"species": "Arceus",
+			"items": ["heavydutyboots"],
+			"abilities": ["multitype"],
+			"teraTypes": ["Ghost"],
+			"forcedMoves": ["dragondance", "extremespeed"],
+			"moves": ["shadowclaw", "lifedew"],
+			"nature": "Careful"
+		},
+		{
+			"species": "Ursaluna-Bloodmoon",
+			"items": ["leftovers"],
+			"abilities": ["mindseye"],
+			"teraTypes": ["Fairy", "Normal", "Water"],
+			"forcedMoves": ["bloodmoon", "moonlight"],
+			"moves": ["calmmind", "earthpower", "vacuumwave"],
+			"nature": "Calm"
+		},
+		{
+			"species": "Regigigas",
+			"items": ["heavydutyboots", "leftovers"],
+			"abilities": ["regenerator"],
+			"teraTypes": ["Fairy", "Water", "Normal"],
+			"forcedMoves": ["knockoff", "bodyslam"],
+			"moves": ["thunderwave", "drainpunch", "earthquake"],
+			"nature": "Careful"
+		}
+	],
+	"scizor": [
+		{
+			"species": "Zapdos",
+			"items": ["heavydutyboots"],
+			"abilities": ["electromorphosis"],
+			"teraTypes": ["Water", "Steel"],
+			"forcedMoves": ["thunderbolt", "hurricane"],
+			"moves": ["roost", "thunderwave"],
+			"nature": "Bold"
+		},
+		{
+			"species": "Blastoise",
+			"items": ["leftovers"],
+			"abilities": ["megalauncher"],
+			"teraTypes": ["Electric", "Dark"],
+			"forcedMoves": ["shellsmash", "hydropump"],
+			"moves": ["darkpulse", "icebeam", "aurasphere"],
+			"nature": "Timid"
+		},
+		{
+			"species": "Kommo-o",
+			"items": ["leftovers", "lifeorb"],
+			"abilities": ["contrary"],
+			"teraTypes": ["Fire", "Normal"],
+			"forcedMoves": ["clangingscales", "closecombat"],
+			"moves": ["flamethrower", "stealthrock", "boomburst"],
+			"nature": "Hasty"
+		},
+		{
+			"species": "Donphan",
+			"items": ["leftovers"],
+			"abilities": ["scrappy"],
+			"teraTypes": ["Water", "Ghost"],
+			"forcedMoves": ["earthquake", "rapidspin"],
+			"moves": ["knockoff", "stealthrock", "icespinner"],
+			"nature": "Bold"
+		}
+	]
+}
