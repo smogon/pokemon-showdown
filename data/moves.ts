@@ -9648,7 +9648,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, bypasssub: 1, allyanim: 1, failinstruct: 1 },
-		onHit(target, source) {
+		onHit(target, source, move) {
 			if (!target.lastMove || target.volatiles['dynamax']) return false;
 			const lastMove = target.lastMove;
 			const moveSlot = target.getMoveData(lastMove.id);
@@ -9666,7 +9666,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon: target,
 				moveid: target.lastMove.id,
 				targetLoc: target.lastMoveTargetLoc!,
-			})[0] as MoveAction);
+			})[0] as MoveAction, move);
 		},
 		target: "normal",
 		type: "Psychic",
@@ -14466,7 +14466,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 
-			action.order = 201;
+			this.queue.prioritizeAction(action, undefined, true);
 			this.add('-activate', target, 'move: Quash');
 		},
 		target: "normal",
@@ -15516,7 +15516,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const action of this.queue.list as MoveAction[]) {
 				if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
 				if (action.move.id === 'round') {
-					this.queue.prioritizeAction(action, move);
+					this.queue.prioritizeAction(action);
 					return;
 				}
 			}
