@@ -3747,7 +3747,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: [
-			'Standard AG', '-Nonexistent', 'NatDex Mod', '!Obtainable', 
+			'Standard AG', '-Nonexistent', 'NatDex Mod', '!Obtainable',
 			'Forme Clause', 'Sleep Moves Clause', 'Ability Clause = 2', 'OHKO Clause', 'Evasion Moves Clause', 'Dynamax Clause', 'CFZ Clause', 'Terastal Clause',
 		],
 		banlist: [
