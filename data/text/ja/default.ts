@@ -136,7 +136,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	ui: {
 		whatDo: "**{POKEMON}**は どうする？", // NEEDS QC
-		moveTarget: "{POKEMON}は **{MOVE}**を どこに使う？", // NEEDS QC
+		moveTarget: "{POKEMON}は **{MOVE}**を どこへ向ける？", // NEEDS QC
 		reviveWho: "**{POKEMON}**は だれを復活させる？", // NEEDS QC
 		replaceWho: "**{POKEMON}**の代わりに だれを出す？", // NEEDS QC
 		teamStart: "どのポケモンで始める？", // NEEDS QC

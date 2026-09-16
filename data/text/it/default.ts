@@ -135,7 +135,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	},
 	ui: {
 		whatDo: "Cosa deve fare **{POKEMON}**?", // NEEDS QC
-		moveTarget: "Dove deve usare **{MOVE}** {POKEMON}?", // NEEDS QC
+		moveTarget: "Dove deve mirare {POKEMON} con **{MOVE}**?", // NEEDS QC
 		reviveWho: "Chi deve rianimare **{POKEMON}**?", // NEEDS QC
 		replaceWho: "Chi deve sostituire **{POKEMON}**?", // NEEDS QC
 		teamStart: "Come inizierai la lotta?", // NEEDS QC
