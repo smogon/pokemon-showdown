@@ -1108,11 +1108,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		mod: 'gen9randomtandem',
 		bestOfDefault: true,
-		//searchShow: false,
+		// searchShow: false,
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
 		banlist: [
 			'Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
-			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt', 'Kingambit'
+			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt', 'Kingambit',
 		],
 		onValidateTeam(team, format, teamHas) {
 			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
@@ -1128,7 +1128,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (heads[species]) headCount++;
 			}
 			if (headCount < 2) return [`You must have at least 2 Head Pokemon.`];
-			if (team.length > 3) return[`You cannot bring more than 3 Pokemon.`];
+			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
 		},
 		onValidateSet(set, format, setHas, teamHas) {
 			if (set.shiny) return [`You cannot bring Shiny Pokemon. (${set.name} is shiny).`];

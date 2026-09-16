@@ -68,7 +68,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				const tandem1 = side.addPokemon(buildTandemSet.call(this, unbuiltTandem1));
 				if (tandem1) tandem1.m.tandem = true;
 
-
 				if (remainingTands.length) {
 					const tandem2Possible = remainingTands.filter(
 						t => !noTandem.has(getBaseSpeciesId.call(this, t.species))
@@ -125,5 +124,5 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.midTurn = true;
 
 		if (!this.requestState) this.turnLoop();
-	}
+	},
 };
