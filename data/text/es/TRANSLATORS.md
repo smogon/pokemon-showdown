@@ -3,6 +3,8 @@ Translation notes
 
 See [../README.md] for important notes for translators.
 
+Unlike the games, we use `.` instead of `,` as the decimal separator. Both are allowed, RAE prefers `.`, and even though the official Spanish translation is from Spain, most fans are from LatAm and prefer `.`.
+
 Mistakes in official text
 -------------------------
 

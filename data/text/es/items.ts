@@ -36,12 +36,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	adamantcrystal: {
 		name: "Gran Diamansfera",
 		grammar: "fs",
-		shortDesc: "Si lo lleva Dialga, sus ataques de Acero y Dragón tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Dialga, sus ataques de Acero y Dragón tienen 1.2× de potencia.", // NEEDS QC
 	},
 	adamantorb: {
 		name: "Diamansfera",
 		grammar: "fs",
-		shortDesc: "Si lo lleva Dialga, sus ataques de Acero y Dragón tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Dialga, sus ataques de Acero y Dragón tienen 1.2× de potencia.", // NEEDS QC
 	},
 	adrenalineorb: {
 		name: "Nerviosfera",
@@ -115,7 +115,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	assaultvest: {
 		name: "Chaleco Asalto",
 		grammar: "ms",
-		shortDesc: "Su Defensa Esp. se multiplica por 1,5, pero solo puede elegir ataques.", // NEEDS QC
+		shortDesc: "Su Defensa Esp. se multiplica por 1.5, pero solo puede elegir ataques.", // NEEDS QC
 	},
 	audinite: {
 		name: "Audinita",
@@ -180,9 +180,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	bigroot: {
 		name: "Raíz Grande",
 		grammar: "fs",
-		shortDesc: "Recupera 1,3× de PS con drenados, Acua Aro, Arraigo, Drenadoras y Absorbefuerza.", // NEEDS QC
+		shortDesc: "Recupera 1.3× de PS con drenados, Acua Aro, Arraigo, Drenadoras y Absorbefuerza.", // NEEDS QC
 		gen6: {
-			shortDesc: "Recupera 1,3× de PS con drenados, Acua Aro, Arraigo y Drenadoras.", // NEEDS QC
+			shortDesc: "Recupera 1.3× de PS con drenados, Acua Aro, Arraigo y Drenadoras.", // NEEDS QC
 		},
 	},
 	bindingband: {
@@ -193,9 +193,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	blackbelt: {
 		name: "Cinturón Negro",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Lucha del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Lucha del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Lucha del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Lucha del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	blacksludge: {
@@ -208,9 +208,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	blackglasses: {
 		name: "Gafas de Sol",
 		grammar: "fp",
-		shortDesc: "Los ataques de tipo Siniestro del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Siniestro del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Siniestro del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Siniestro del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	blastoisinite: {
@@ -255,7 +255,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "saquito de Polvo Brillo",
 			grammar: "ms",
 		},
-		shortDesc: "La precisión de los ataques contra el portador se multiplica por 0,9.", // NEEDS QC
+		shortDesc: "La precisión de los ataques contra el portador se multiplica por 0.9.", // NEEDS QC
 		gen2: {
 			shortDesc: "Un ataque contra el portador pierde 20 puntos de precisión sobre 255.", // NEEDS QC
 		},
@@ -263,9 +263,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	buggem: {
 		name: "Gema Bicho",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Bicho tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Bicho tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Bicho tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Bicho tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	buginiumz: {
@@ -305,9 +305,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "trozo de Carbón",
 			grammar: "ms",
 		},
-		shortDesc: "Los ataques de tipo Fuego del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Fuego del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Fuego del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Fuego del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	charizarditex: {
@@ -368,17 +368,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	choiceband: {
 		name: "Cinta Elección",
 		grammar: "fs",
-		shortDesc: "Su Ataque se multiplica por 1,5, pero solo puede usar su primer movimiento.", // NEEDS QC
+		shortDesc: "Su Ataque se multiplica por 1.5, pero solo puede usar su primer movimiento.", // NEEDS QC
 	},
 	choicescarf: {
 		name: "Pañuelo Elección",
 		grammar: "ms",
-		shortDesc: "Su Velocidad se multiplica por 1,5, pero solo puede usar su primer movimiento.", // NEEDS QC
+		shortDesc: "Su Velocidad se multiplica por 1.5, pero solo puede usar su primer movimiento.", // NEEDS QC
 	},
 	choicespecs: {
 		name: "Gafas Elección",
 		grammar: "fp",
-		shortDesc: "Su Ataque Esp. se multiplica por 1,5, pero solo puede usar su primer movimiento.", // NEEDS QC
+		shortDesc: "Su Ataque Esp. se multiplica por 1.5, pero solo puede usar su primer movimiento.", // NEEDS QC
 	},
 	chopleberry: {
 		name: "Baya Pomaro",
@@ -420,7 +420,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	cornerstonemask: {
 		name: "Máscara Cimiento",
 		grammar: "fs",
-		shortDesc: "Ogerpon Máscara Cimiento: 1,2× de potencia; Evocarrecuerdos al teracristalizar.", // NEEDS QC
+		shortDesc: "Ogerpon Máscara Cimiento: 1.2× de potencia; Evocarrecuerdos al teracristalizar.", // NEEDS QC
 	},
 	cornnberry: {
 		name: "Baya Mais",
@@ -463,9 +463,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	darkgem: {
 		name: "Gema Siniestro", // renamed in SV (SwSh: Gema Siniestra)
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Siniestro tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Siniestro tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Siniestro tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Siniestro tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	darkiniumz: {
@@ -542,7 +542,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	dracoplate: {
 		name: "Tabla Draco",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Dragón: 1,2× de potencia. Sentencia es de tipo Dragón.", // NEEDS QC
+		shortDesc: "Ataques de tipo Dragón: 1.2× de potencia. Sentencia es de tipo Dragón.", // NEEDS QC
 	},
 	dragalgite: {
 		name: "Dragalgita",
@@ -552,9 +552,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	dragonfang: {
 		name: "Colmillo de Dragón",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Dragón del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Dragón del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Dragón del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Dragón del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 		gen2: {
 			shortDesc: "Sin uso competitivo.", // NEEDS QC
@@ -563,9 +563,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	dragongem: {
 		name: "Gema Dragón",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Dragón tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Dragón tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Dragón tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Dragón tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	dragoninite: {
@@ -588,7 +588,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: "Hace evolucionar a Seadra en Kingdra al intercambiarlo.", // NEEDS QC
 		gen2: {
-			shortDesc: "Ataques de Dragón: 1,1× de potencia. Evoluciona a Seadra al intercambiarlo.", // NEEDS QC
+			shortDesc: "Ataques de Dragón: 1.1× de potencia. Evoluciona a Seadra al intercambiarlo.", // NEEDS QC
 		},
 	},
 	drampanite: {
@@ -599,7 +599,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	dreadplate: {
 		name: "Tabla Oscura",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Siniestro: 1,2× de potencia. Sentencia es de tipo Siniestro.", // NEEDS QC
+		shortDesc: "Ataques de tipo Siniestro: 1.2× de potencia. Sentencia es de tipo Siniestro.", // NEEDS QC
 	},
 	dreamball: {
 		name: "Ensueño Ball",
@@ -634,7 +634,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	earthplate: {
 		name: "Tabla Terrax",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Tierra: 1,2× de potencia. Sentencia es de tipo Tierra.", // NEEDS QC
+		shortDesc: "Ataques de tipo Tierra: 1.2× de potencia. Sentencia es de tipo Tierra.", // NEEDS QC
 	},
 	eelektrossite: {
 		name: "Eelektrossita",
@@ -668,9 +668,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	electricgem: {
 		name: "Gema Eléctrico", // renamed in SV (SwSh: Gema Eléctrica)
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Eléctrico tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Eléctrico tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Eléctrico tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Eléctrico tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	electricmemory: {
@@ -704,7 +704,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	eviolite: {
 		name: "Mineral Evolutivo", // renamed in SV (SwSh: Mineral Evol)
 		grammar: "ms",
-		shortDesc: "Si su especie aún puede evolucionar, su Defensa y Def. Esp. se multiplican por 1,5.", // NEEDS QC
+		shortDesc: "Si su especie aún puede evolucionar, su Defensa y Def. Esp. se multiplican por 1.5.", // NEEDS QC
 	},
 	excadrite: {
 		name: "Excadrillita",
@@ -714,7 +714,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	expertbelt: {
 		name: "Cinturón de Experto", // renamed in LZA/Champions (SV: Cinta Experto)
 		grammar: "ms",
-		shortDesc: "Sus ataques supereficaces infligen 1,2× de daño.", // NEEDS QC
+		shortDesc: "Sus ataques supereficaces infligen 1.2× de daño.", // NEEDS QC
 	},
 	fairiumz: {
 		name: "Feeristal Z",
@@ -724,12 +724,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	fairyfeather: {
 		name: "Pluma Feérica",
 		grammar: "fs",
-		shortDesc: "Los ataques de tipo Hada del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Hada del portador tienen 1.2× de potencia.", // NEEDS QC
 	},
 	fairygem: {
 		name: "Gema Hada",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Hada tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Hada tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 	},
 	fairymemory: {
 		name: "Disco Hada",
@@ -754,9 +754,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	fightinggem: {
 		name: "Gema Lucha",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Lucha tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Lucha tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Lucha tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Lucha tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	fightingmemory: {
@@ -783,9 +783,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	firegem: {
 		name: "Gema Fuego",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Fuego tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Fuego tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Fuego tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Fuego tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	firememory: {
@@ -808,7 +808,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	fistplate: {
 		name: "Tabla Fuerte",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Lucha: 1,2× de potencia. Sentencia es de tipo Lucha.", // NEEDS QC
+		shortDesc: "Ataques de tipo Lucha: 1.2× de potencia. Sentencia es de tipo Lucha.", // NEEDS QC
 	},
 	flameorb: {
 		name: "Llamasfera",
@@ -818,7 +818,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	flameplate: {
 		name: "Tabla Llama",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Fuego: 1,2× de potencia. Sentencia es de tipo Fuego.", // NEEDS QC
+		shortDesc: "Ataques de tipo Fuego: 1.2× de potencia. Sentencia es de tipo Fuego.", // NEEDS QC
 	},
 	floatstone: {
 		name: "Piedra Pómez",
@@ -838,9 +838,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	flyinggem: {
 		name: "Gema Volador", // renamed in SV (SwSh: Gema Voladora)
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Volador tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Volador tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Volador tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Volador tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	flyingmemory: {
@@ -858,7 +858,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: "10% de probabilidad de sobrevivir con 1 PS a un ataque que lo debilitaría.", // NEEDS QC
 		gen2: {
-			shortDesc: "~11,7% de probabilidad de sobrevivir con 1 PS a un ataque que lo debilitaría.", // NEEDS QC
+			shortDesc: "~11.7% de probabilidad de sobrevivir con 1 PS a un ataque que lo debilitaría.", // NEEDS QC
 		},
 
 		activate: "  ¡{POKEMON} ha usado la Cinta Aguante y ha logrado resistir!",
@@ -951,9 +951,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	ghostgem: {
 		name: "Gema Fantasma",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Fantasma tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Fantasma tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Fantasma tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Fantasma tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	ghostiumz: {
@@ -994,9 +994,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	grassgem: {
 		name: "Gema Planta",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Planta tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Planta tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Planta tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Planta tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	grassiumz: {
@@ -1037,22 +1037,22 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	griseouscore: {
 		name: "Gran Griseosfera",
 		grammar: "fs",
-		shortDesc: "Si lo lleva Giratina, sus ataques de Fantasma y Dragón tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Giratina, sus ataques de Fantasma y Dragón tienen 1.2× de potencia.", // NEEDS QC
 	},
 	griseousorb: {
 		name: "Griseosfera",
 		grammar: "fs",
-		shortDesc: "Si lo lleva Giratina, sus ataques de Fantasma y Dragón tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Giratina, sus ataques de Fantasma y Dragón tienen 1.2× de potencia.", // NEEDS QC
 		gen4: {
-			shortDesc: "Solo Giratina puede llevarlo. Sus ataques de Fantasma y Dragón: 1,2× de potencia.", // NEEDS QC
+			shortDesc: "Solo Giratina puede llevarlo. Sus ataques de Fantasma y Dragón: 1.2× de potencia.", // NEEDS QC
 		},
 	},
 	groundgem: {
 		name: "Gema Tierra",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Tierra tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Tierra tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Tierra tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Tierra tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	groundiumz: {
@@ -1078,9 +1078,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	hardstone: {
 		name: "Piedra Dura",
 		grammar: "fs",
-		shortDesc: "Los ataques de tipo Roca del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Roca del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Roca del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Roca del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	hawluchanite: {
@@ -1096,7 +1096,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	hearthflamemask: {
 		name: "Máscara Horno",
 		grammar: "fs",
-		shortDesc: "Ogerpon Máscara Horno: 1,2× de potencia; Evocarrecuerdos al teracristalizar.", // NEEDS QC
+		shortDesc: "Ogerpon Máscara Horno: 1.2× de potencia; Evocarrecuerdos al teracristalizar.", // NEEDS QC
 	},
 	heatranite: {
 		name: "Heatranita",
@@ -1152,9 +1152,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	icegem: {
 		name: "Gema Hielo",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Hielo tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Hielo tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Hielo tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Hielo tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	icememory: {
@@ -1175,7 +1175,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	icicleplate: {
 		name: "Tabla Helada",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Hielo: 1,2× de potencia. Sentencia es de tipo Hielo.", // NEEDS QC
+		shortDesc: "Ataques de tipo Hielo: 1.2× de potencia. Sentencia es de tipo Hielo.", // NEEDS QC
 	},
 	iciumz: {
 		name: "Criostal Z",
@@ -1198,7 +1198,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	insectplate: {
 		name: "Tabla Bicho",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Bicho: 1,2× de potencia. Sentencia es de tipo Bicho.", // NEEDS QC
+		shortDesc: "Ataques de tipo Bicho: 1.2× de potencia. Sentencia es de tipo Bicho.", // NEEDS QC
 	},
 	ironball: {
 		name: "Bola Férrea",
@@ -1211,7 +1211,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	ironplate: {
 		name: "Tabla Acero",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Acero: 1,2× de potencia. Sentencia es de tipo Acero.", // NEEDS QC
+		shortDesc: "Ataques de tipo Acero: 1.2× de potencia. Sentencia es de tipo Acero.", // NEEDS QC
 	},
 	jabocaberry: {
 		name: "Baya Jaboca",
@@ -1283,9 +1283,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	laxincense: {
 		name: "Incienso Suave",
 		grammar: "ms",
-		shortDesc: "La precisión de los ataques contra el portador se multiplica por 0,9.", // NEEDS QC
+		shortDesc: "La precisión de los ataques contra el portador se multiplica por 0.9.", // NEEDS QC
 		gen3: {
-			shortDesc: "La precisión de los ataques contra el portador se multiplica por 0,95.", // NEEDS QC
+			shortDesc: "La precisión de los ataques contra el portador se multiplica por 0.95.", // NEEDS QC
 		},
 	},
 	leafstone: {
@@ -1330,7 +1330,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	lifeorb: {
 		name: "Vidasfera",
 		grammar: "fs",
-		shortDesc: "Sus ataques infligen 1,3× de daño, pero pierde 1/10 de sus PS máximos al atacar.", // NEEDS QC
+		shortDesc: "Sus ataques infligen 1.3× de daño, pero pierde 1/10 de sus PS máximos al atacar.", // NEEDS QC
 
 		damage: "  ¡{POKEMON} ha perdido unos pocos PS!",
 	},
@@ -1415,12 +1415,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	lustrousglobe: {
 		name: "Gran Lustresfera",
 		grammar: "fs",
-		shortDesc: "Si lo lleva Palkia, sus ataques de Agua y Dragón tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Palkia, sus ataques de Agua y Dragón tienen 1.2× de potencia.", // NEEDS QC
 	},
 	lustrousorb: {
 		name: "Lustresfera",
 		grammar: "fs",
-		shortDesc: "Si lo lleva Palkia, sus ataques de Agua y Dragón tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Palkia, sus ataques de Agua y Dragón tienen 1.2× de potencia.", // NEEDS QC
 	},
 	luxuryball: {
 		name: "Lujo Ball",
@@ -1450,9 +1450,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	magnet: {
 		name: "Imán",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Eléctrico del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Eléctrico del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Eléctrico del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Eléctrico del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	magoberry: {
@@ -1519,7 +1519,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	meadowplate: {
 		name: "Tabla Pradal",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Planta: 1,2× de potencia. Sentencia es de tipo Planta.", // NEEDS QC
+		shortDesc: "Ataques de tipo Planta: 1.2× de potencia. Sentencia es de tipo Planta.", // NEEDS QC
 	},
 	medichamite: {
 		name: "Medichamita",
@@ -1562,11 +1562,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			grammar: "ms",
 		},
 		// Official flavor text: "Película metálica que fortalece los ataques de tipo Acero. Debe llevarlo un Pokémon."
-		desc: "Los ataques de tipo Acero del portador tienen 1,2× de potencia. Si lo lleva al intercambiarlo, Onix evoluciona a Steelix y Scyther evoluciona a Scizor.", // NEEDS QC
-		shortDesc: "Los ataques de tipo Acero del portador tienen 1,2× de potencia.", // NEEDS QC
+		desc: "Los ataques de tipo Acero del portador tienen 1.2× de potencia. Si lo lleva al intercambiarlo, Onix evoluciona a Steelix y Scyther evoluciona a Scizor.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Acero del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			desc: "Los ataques de Acero del portador tienen 1,1× de potencia. Al intercambiarlo, Onix evoluciona a Steelix y Scyther a Scizor.", // NEEDS QC
-			shortDesc: "Los ataques de tipo Acero del portador tienen 1,1× de potencia.", // NEEDS QC
+			desc: "Los ataques de Acero del portador tienen 1.1× de potencia. Al intercambiarlo, Onix evoluciona a Steelix y Scyther a Scizor.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Acero del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	metalpowder: {
@@ -1574,7 +1574,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "mu", // NEEDS QC
 		shortDesc: "Si lo lleva un Ditto sin transformar, su Defensa se duplica.", // NEEDS QC
 		gen2: {
-			shortDesc: "Si lo lleva un Ditto, su Defensa y Def. Esp. son ×1,5, incluso transformado.", // NEEDS QC
+			shortDesc: "Si lo lleva un Ditto, su Defensa y Def. Esp. son ×1.5, incluso transformado.", // NEEDS QC
 		},
 	},
 	metronome: {
@@ -1603,7 +1603,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	micleberry: {
 		name: "Baya Lagro",
 		grammar: "fs",
-		shortDesc: "Su próximo movimiento tiene 1,2× de precisión con 1/4 o menos de PS. 1 uso.", // NEEDS QC
+		shortDesc: "Su próximo movimiento tiene 1.2× de precisión con 1/4 o menos de PS. 1 uso.", // NEEDS QC
 	},
 	mimikiumz: {
 		name: "Mimikyustal Z",
@@ -1613,14 +1613,14 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	mindplate: {
 		name: "Tabla Mental",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Psíquico: 1,2× de potencia. Sentencia es de tipo Psíquico.", // NEEDS QC
+		shortDesc: "Ataques de tipo Psíquico: 1.2× de potencia. Sentencia es de tipo Psíquico.", // NEEDS QC
 	},
 	miracleseed: {
 		name: "Semilla Milagro",
 		grammar: "fs",
-		shortDesc: "Los ataques de tipo Planta del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Planta del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Planta del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Planta del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	mirrorherb: {
@@ -1650,7 +1650,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	muscleband: {
 		name: "Cinta Fuerte",
 		grammar: "fs",
-		shortDesc: "Sus ataques físicos tienen 1,1× de potencia.", // NEEDS QC
+		shortDesc: "Sus ataques físicos tienen 1.1× de potencia.", // NEEDS QC
 	},
 	mysticwater: {
 		name: "Agua Mística",
@@ -1660,9 +1660,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "colgante de Agua Mística",
 			grammar: "ms",
 		},
-		shortDesc: "Los ataques de tipo Agua del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Agua del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Agua del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Agua del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	nanabberry: {
@@ -1687,9 +1687,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "trozo de Hielo Perpetuo",
 			grammar: "ms",
 		},
-		shortDesc: "Los ataques de tipo Hielo del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Hielo del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Hielo del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Hielo del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	nomelberry: {
@@ -1700,9 +1700,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	normalgem: {
 		name: "Gema Normal",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Normal tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Normal tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Normal tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Normal tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	normaliumz: {
@@ -1718,7 +1718,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	oddincense: {
 		name: "Incienso Raro",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Psíquico del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Psíquico del portador tienen 1.2× de potencia.", // NEEDS QC
 	},
 	oldamber: {
 		name: "Ámbar Viejo",
@@ -1798,7 +1798,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	pixieplate: {
 		name: "Tabla Duende",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Hada: 1,2× de potencia. Sentencia es de tipo Hada.", // NEEDS QC
+		shortDesc: "Ataques de tipo Hada: 1.2× de potencia. Sentencia es de tipo Hada.", // NEEDS QC
 	},
 	plumefossil: {
 		name: "Fósil Pluma",
@@ -1808,17 +1808,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	poisonbarb: {
 		name: "Flecha Venenosa",
 		grammar: "fs",
-		shortDesc: "Los ataques de tipo Veneno del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Veneno del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Veneno del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Veneno del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	poisongem: {
 		name: "Gema Veneno",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Veneno tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Veneno tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Veneno tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Veneno tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	poisoniumz: {
@@ -1913,9 +1913,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	psychicgem: {
 		name: "Gema Psíquico", // renamed in SV (SwSh: Gema Psíquica)
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Psíquico tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Psíquico tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Psíquico tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Psíquico tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	psychicmemory: {
@@ -1936,7 +1936,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	punchingglove: {
 		name: "Guante de Boxeo",
 		grammar: "ms",
-		shortDesc: "Sus movimientos de puño tienen 1,1× de potencia y no hacen contacto.", // NEEDS QC
+		shortDesc: "Sus movimientos de puño tienen 1.1× de potencia y no hacen contacto.", // NEEDS QC
 	},
 	pyroarite: {
 		name: "Pyroarita",
@@ -1958,7 +1958,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		grammar: "fs",
 		shortDesc: "Cada turno, 20% de probabilidad de actuar primero dentro de su prioridad.", // NEEDS QC
 		gen2: {
-			shortDesc: "Cada turno, ~23,4% de probabilidad de actuar primero dentro de su prioridad.", // NEEDS QC
+			shortDesc: "Cada turno, ~23.4% de probabilidad de actuar primero dentro de su prioridad.", // NEEDS QC
 		},
 
 		activate: "  ¡{POKEMON} puede tener prioridad gracias a la Garra Rápida!", // Champions; SV: ¡Gracias a la Garra Rápida, {POKEMON} puede tener prioridad!
@@ -2052,15 +2052,15 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	rockgem: {
 		name: "Gema Roca",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Roca tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Roca tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Roca tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Roca tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	rockincense: {
 		name: "Incienso Roca",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Roca del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Roca del portador tienen 1.2× de potencia.", // NEEDS QC
 	},
 	rockiumz: {
 		name: "Litostal Z",
@@ -2092,7 +2092,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	roseincense: {
 		name: "Incienso Floral",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Planta del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Planta del portador tienen 1.2× de potencia.", // NEEDS QC
 	},
 	roseliberry: {
 		name: "Baya Hibis",
@@ -2184,17 +2184,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	seaincense: {
 		name: "Incienso Marino",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Agua del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Agua del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Agua del portador tienen 1,05× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Agua del portador tienen 1.05× de potencia.", // NEEDS QC
 		},
 	},
 	sharpbeak: {
 		name: "Pico Afilado",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Volador del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Volador del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Volador del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Volador del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	sharpedonite: {
@@ -2234,9 +2234,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	silkscarf: {
 		name: "Pañuelo de Seda",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Normal del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Normal del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Normal del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Normal del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	silverpowder: {
@@ -2246,9 +2246,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "puñado de Polvo Plata",
 			grammar: "ms",
 		},
-		shortDesc: "Los ataques de tipo Bicho del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Bicho del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Bicho del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Bicho del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	sitrusberry: {
@@ -2272,7 +2272,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	skyplate: {
 		name: "Tabla Cielo",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Volador: 1,2× de potencia. Sentencia es de tipo Volador.", // NEEDS QC
+		shortDesc: "Ataques de tipo Volador: 1.2× de potencia. Sentencia es de tipo Volador.", // NEEDS QC
 	},
 	slowbronite: {
 		name: "Slowbronita",
@@ -2304,9 +2304,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "saquito de Arena Fina",
 			grammar: "ms",
 		},
-		shortDesc: "Los ataques de tipo Tierra del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Tierra del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Tierra del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Tierra del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	solganiumz: {
@@ -2317,17 +2317,17 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	souldew: {
 		name: "Rocío Bondad",
 		grammar: "ms",
-		shortDesc: "Si lo lleva Latias o Latios, sus ataques de Dragón y Psíquico: 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Latias o Latios, sus ataques de Dragón y Psíquico: 1.2× de potencia.", // NEEDS QC
 		gen6: {
-			shortDesc: "Si lo lleva Latias o Latios, su At. Esp. y Def. Esp. son ×1,5.", // NEEDS QC
+			shortDesc: "Si lo lleva Latias o Latios, su At. Esp. y Def. Esp. son ×1.5.", // NEEDS QC
 		},
 	},
 	spelltag: {
 		name: "Hechizo",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Fantasma del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Fantasma del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Fantasma del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Fantasma del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	spelonberry: {
@@ -2338,12 +2338,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	splashplate: {
 		name: "Tabla Linfa",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Agua: 1,2× de potencia. Sentencia es de tipo Agua.", // NEEDS QC
+		shortDesc: "Ataques de tipo Agua: 1.2× de potencia. Sentencia es de tipo Agua.", // NEEDS QC
 	},
 	spookyplate: {
 		name: "Tabla Terror",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Fantasma: 1,2× de potencia. Sentencia es de tipo Fantasma.", // NEEDS QC
+		shortDesc: "Ataques de tipo Fantasma: 1.2× de potencia. Sentencia es de tipo Fantasma.", // NEEDS QC
 	},
 	sportball: {
 		name: "Competi Ball",
@@ -2373,9 +2373,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	steelgem: {
 		name: "Gema Acero",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Acero tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Acero tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Acero tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Acero tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	steeliumz: {
@@ -2409,7 +2409,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	stoneplate: {
 		name: "Tabla Pétrea",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Roca: 1,2× de potencia. Sentencia es de tipo Roca.", // NEEDS QC
+		shortDesc: "Ataques de tipo Roca: 1.2× de potencia. Sentencia es de tipo Roca.", // NEEDS QC
 	},
 	strangeball: {
 		name: "Extraña Ball",
@@ -2510,7 +2510,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	toxicplate: {
 		name: "Tabla Tóxica",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Veneno: 1,2× de potencia. Sentencia es de tipo Veneno.", // NEEDS QC
+		shortDesc: "Ataques de tipo Veneno: 1.2× de potencia. Sentencia es de tipo Veneno.", // NEEDS QC
 	},
 	tr00: {
 		name: "DT00",
@@ -3015,9 +3015,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	twistedspoon: {
 		name: "Cuchara Torcida",
 		grammar: "fs",
-		shortDesc: "Los ataques de tipo Psíquico del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Psíquico del portador tienen 1.2× de potencia.", // NEEDS QC
 		gen3: {
-			shortDesc: "Los ataques de tipo Psíquico del portador tienen 1,1× de potencia.", // NEEDS QC
+			shortDesc: "Los ataques de tipo Psíquico del portador tienen 1.1× de potencia.", // NEEDS QC
 		},
 	},
 	tyranitarite: {
@@ -3076,9 +3076,9 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	watergem: {
 		name: "Gema Agua",
 		grammar: "fs",
-		shortDesc: "Su primer ataque de tipo Agua tendrá 1,3× de potencia. Un solo uso.", // NEEDS QC
+		shortDesc: "Su primer ataque de tipo Agua tendrá 1.3× de potencia. Un solo uso.", // NEEDS QC
 		gen5: {
-			shortDesc: "Su primer ataque de tipo Agua tendrá 1,5× de potencia. Un solo uso.", // NEEDS QC
+			shortDesc: "Su primer ataque de tipo Agua tendrá 1.5× de potencia. Un solo uso.", // NEEDS QC
 		},
 	},
 	wateriumz: {
@@ -3106,7 +3106,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	waveincense: {
 		name: "Incienso Acua",
 		grammar: "ms",
-		shortDesc: "Los ataques de tipo Agua del portador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques de tipo Agua del portador tienen 1.2× de potencia.", // NEEDS QC
 	},
 	weaknesspolicy: {
 		name: "Seguro de Debilidad", // renamed in LZA (SV: Seguro Debilidad)
@@ -3116,7 +3116,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	wellspringmask: {
 		name: "Máscara Fuente",
 		grammar: "fs",
-		shortDesc: "Ogerpon Máscara Fuente: 1,2× de potencia; Evocarrecuerdos al teracristalizar.", // NEEDS QC
+		shortDesc: "Ogerpon Máscara Fuente: 1.2× de potencia; Evocarrecuerdos al teracristalizar.", // NEEDS QC
 	},
 	wepearberry: {
 		name: "Baya Peragu",
@@ -3138,7 +3138,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	widelens: {
 		name: "Lupa",
 		grammar: "fs",
-		shortDesc: "La precisión de los ataques del portador se multiplica por 1,1.", // NEEDS QC
+		shortDesc: "La precisión de los ataques del portador se multiplica por 1.1.", // NEEDS QC
 	},
 	wikiberry: {
 		name: "Baya Wiki",
@@ -3154,7 +3154,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	wiseglasses: {
 		name: "Gafas Especiales",
 		grammar: "fp",
-		shortDesc: "Sus ataques especiales tienen 1,1× de potencia.", // NEEDS QC
+		shortDesc: "Sus ataques especiales tienen 1.1× de potencia.", // NEEDS QC
 	},
 	yacheberry: {
 		name: "Baya Rimoya",
@@ -3164,7 +3164,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	zapplate: {
 		name: "Tabla Trueno",
 		grammar: "fs",
-		shortDesc: "Ataques de tipo Eléctrico: 1,2× de potencia. Sentencia es de tipo Eléctrico.", // NEEDS QC
+		shortDesc: "Ataques de tipo Eléctrico: 1.2× de potencia. Sentencia es de tipo Eléctrico.", // NEEDS QC
 	},
 	zeraorite: {
 		name: "Zeraoranita",
@@ -3174,7 +3174,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	zoomlens: {
 		name: "Telescopio",
 		grammar: "ms",
-		shortDesc: "Si actúa después del objetivo, la precisión de sus ataques se multiplica por 1,2.", // NEEDS QC
+		shortDesc: "Si actúa después del objetivo, la precisión de sus ataques se multiplica por 1.2.", // NEEDS QC
 	},
 	zygardite: {
 		name: "Zygardita",
@@ -3234,12 +3234,12 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	pinkbow: {
 		name: "Lazo Rosa", // Gen 2: LAZO ROSA
 		grammar: "ms",
-		shortDesc: "(2.ª gen.) Sus ataques de tipo Normal tienen 1,1× de potencia.", // NEEDS QC
+		shortDesc: "(2.ª gen.) Sus ataques de tipo Normal tienen 1.1× de potencia.", // NEEDS QC
 	},
 	polkadotbow: {
 		name: "Cintalunares", // Gen 2: CINTALUNARES (en: POLKADOT BOW); Stadium 2: EDREDÓN LUNARES
 		grammar: "fs",
-		shortDesc: "(2.ª gen.) Sus ataques de tipo Normal tienen 1,1× de potencia.", // NEEDS QC
+		shortDesc: "(2.ª gen.) Sus ataques de tipo Normal tienen 1.1× de potencia.", // NEEDS QC
 	},
 	przcureberry: {
 		name: "Antiparabaya", // Gen 2: ANTIPARABAYA (en: PRZCUREBERRY)
@@ -3260,6 +3260,6 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	vilevial: {
 		name: null, // NEEDS TRANSLATION: CAP
-		shortDesc: "Si lo lleva Venomicon, sus ataques de Veneno y Volador tienen 1,2× de potencia.", // NEEDS QC
+		shortDesc: "Si lo lleva Venomicon, sus ataques de Veneno y Volador tienen 1.2× de potencia.", // NEEDS QC
 	},
 };

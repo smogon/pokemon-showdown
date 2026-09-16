@@ -1,7 +1,7 @@
 // Mechanics desc style (es): official game terminology. el usuario (user), el objetivo
 //   (target), efecto secundario, hacer retroceder (flinch), golpe crítico, niveles (stages),
 //   problema de estado (status), movimiento multigolpe, prioridad, sustituto, redondeado
-//   hacia abajo/arriba. Decimal comma (1,5). Boilerplate shared verbatim — QC one, fix all.
+//   hacia abajo/arriba. Decimal point (1.5), not the comma of official es text. Boilerplate shared verbatim — QC one, fix all.
 // Cross-references generated from name fields / pokedex-names.ts. CAP entities keep name
 //   null (English fallback); descs are translated with English names inline.
 
@@ -13,17 +13,17 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	adaptability: {
 		name: "Adaptable",
 		// Official flavor text: "Potencia aún más los movimientos cuyo tipo coincida con el suyo."
-		desc: "La bonificación por tipo (STAB) de este Pokémon es 2 en lugar de 1,5.", // NEEDS QC
-		shortDesc: "Su bonificación por tipo (STAB) es 2 en lugar de 1,5.", // NEEDS QC
+		desc: "La bonificación por tipo (STAB) de este Pokémon es 2 en lugar de 1.5.", // NEEDS QC
+		shortDesc: "Su bonificación por tipo (STAB) es 2 en lugar de 1.5.", // NEEDS QC
 	},
 	aerilate: {
 		name: "Piel Celeste",
 		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Volador y aumenta ligeramente su potencia."
-		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Volador y su potencia se multiplica por 1,2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-		shortDesc: "Sus movimientos de tipo Normal son de tipo Volador y tienen 1,2× de potencia.", // NEEDS QC
+		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Volador y su potencia se multiplica por 1.2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+		shortDesc: "Sus movimientos de tipo Normal son de tipo Volador y tienen 1.2× de potencia.", // NEEDS QC
 		gen6: {
-			desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Volador y su potencia se multiplica por 1,3. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-			shortDesc: "Los movimientos Normal de este Pokémon pasan a tipo Volador con 1,3× potencia.", // NEEDS QC
+			desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Volador y su potencia se multiplica por 1.3. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+			shortDesc: "Los movimientos Normal de este Pokémon pasan a tipo Volador con 1.3× potencia.", // NEEDS QC
 		},
 	},
 	aftermath: {
@@ -43,8 +43,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	analytic: {
 		name: "Cálculo Final",
 		// Official flavor text: "Aumenta la potencia de su movimiento si es el último en atacar."
-		desc: "La potencia de los movimientos de este Pokémon se multiplica por 1,3 si es el último en actuar en el turno. No afecta a Deseo Oculto ni a Premonición.", // NEEDS QC
-		shortDesc: "Sus ataques tienen 1,3× de potencia si actúa el último del turno.", // NEEDS QC
+		desc: "La potencia de los movimientos de este Pokémon se multiplica por 1.3 si es el último en actuar en el turno. No afecta a Deseo Oculto ni a Premonición.", // NEEDS QC
+		shortDesc: "Sus ataques tienen 1.3× de potencia si actúa el último del turno.", // NEEDS QC
 	},
 	angerpoint: {
 		name: "Irascible",
@@ -127,8 +127,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	aurabreak: {
 		name: "Rompeaura",
 		// Official flavor text: "Invierte los efectos de las auras, por lo que baja la potencia de ciertos movimientos en vez de subirla."
-		desc: "Mientras este Pokémon está en combate, los efectos de Aura Oscura y Aura Feérica se invierten y multiplican la potencia por 0,75 en lugar de 1,33.", // NEEDS QC
-		shortDesc: "Invierte Aura Oscura y Aura Feérica: el modificador pasa a ser 0,75×.", // NEEDS QC
+		desc: "Mientras este Pokémon está en combate, los efectos de Aura Oscura y Aura Feérica se invierten y multiplican la potencia por 0.75 en lugar de 1.33.", // NEEDS QC
+		shortDesc: "Invierte Aura Oscura y Aura Feérica: el modificador pasa a ser 0.75×.", // NEEDS QC
 
 		start: "  ¡{POKEMON} ha invertido todas las auras!",
 	},
@@ -158,7 +158,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	battery: {
 		name: "Batería",
-		shortDesc: "Los ataques especiales de sus aliados tienen 1,3× de potencia.", // NEEDS QC
+		shortDesc: "Los ataques especiales de sus aliados tienen 1.3× de potencia.", // NEEDS QC
 	},
 	battlearmor: {
 		name: "Armadura Batalla",
@@ -178,7 +178,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	beadsofruin: {
 		name: "Abalorio Debacle",
-		shortDesc: "La Defensa Esp. de los demás Pokémon en combate se multiplica por 0,75.", // NEEDS QC
+		shortDesc: "La Defensa Esp. de los demás Pokémon en combate se multiplica por 0.75.", // NEEDS QC
 
 		start: "  ¡{POKEMON} ha mermado la Defensa Especial de los demás Pokémon con Abalorio Debacle!",
 	},
@@ -201,11 +201,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	blaze: {
 		name: "Mar Llamas",
 		// Official flavor text: "Potencia sus movimientos de tipo Fuego cuando le quedan pocos PS."
-		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1,5 al usar un ataque de tipo Fuego.", // NEEDS QC
-		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Fuego usan 1,5× su característica ofensiva.", // NEEDS QC
+		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1.5 al usar un ataque de tipo Fuego.", // NEEDS QC
+		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Fuego usan 1.5× su característica ofensiva.", // NEEDS QC
 		gen4: {
-			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Fuego se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Fuego tienen 1,5× potencia.", // NEEDS QC
+			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Fuego se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Fuego tienen 1.5× potencia.", // NEEDS QC
 		},
 	},
 	bulletproof: {
@@ -278,7 +278,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	compoundeyes: {
 		name: "Ojo Compuesto",
-		shortDesc: "La precisión de sus movimientos se multiplica por 1,3.", // NEEDS QC
+		shortDesc: "La precisión de sus movimientos se multiplica por 1.3.", // NEEDS QC
 	},
 	contrary: {
 		name: "Respondón",
@@ -360,8 +360,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	darkaura: {
 		name: "Aura Oscura",
 		// Official flavor text: "Aumenta la potencia de todos los movimientos de tipo Siniestro."
-		desc: "Mientras este Pokémon está en combate, la potencia de los movimientos de tipo Siniestro usados por cualquier Pokémon se multiplica por 1,33.", // NEEDS QC
-		shortDesc: "Los movimientos de tipo Siniestro de todos tienen 1,33× de potencia.", // NEEDS QC
+		desc: "Mientras este Pokémon está en combate, la potencia de los movimientos de tipo Siniestro usados por cualquier Pokémon se multiplica por 1.33.", // NEEDS QC
+		shortDesc: "Los movimientos de tipo Siniestro de todos tienen 1.33× de potencia.", // NEEDS QC
 
 		start: "  ¡{POKEMON} irradia un aura oscura!",
 	},
@@ -425,12 +425,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	dragonize: {
 		name: "Piel Dragontina",
-		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Dragón y su potencia se multiplica por 1,2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-		shortDesc: "Sus movimientos de tipo Normal son de tipo Dragón y tienen 1,2× de potencia.", // NEEDS QC
+		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Dragón y su potencia se multiplica por 1.2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+		shortDesc: "Sus movimientos de tipo Normal son de tipo Dragón y tienen 1.2× de potencia.", // NEEDS QC
 	},
 	dragonsmaw: {
 		name: "Mandíbula Dragón",
-		shortDesc: "Sus ataques de tipo Dragón usan 1,5× su característica ofensiva.", // NEEDS QC
+		shortDesc: "Sus ataques de tipo Dragón usan 1.5× su característica ofensiva.", // NEEDS QC
 	},
 	drizzle: {
 		name: "Llovizna",
@@ -443,10 +443,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	dryskin: {
 		name: "Piel Seca",
 		// Official flavor text: "Pierde PS si hace sol y los recupera si llueve o recibe un movimiento de tipo Agua. Los movimientos de tipo Fuego, por su parte, le hacen más daño de lo normal."
-		desc: "Este Pokémon es inmune a los movimientos de tipo Agua y recupera 1/4 de sus PS máximos (redondeado hacia abajo) al ser golpeado por uno. La potencia de los movimientos de tipo Fuego contra él se multiplica por 1,25. Al final de cada turno, recupera 1/8 de sus PS máximos si llueve y pierde 1/8 si hace sol. Los efectos del clima no se activan si lleva Parasol Multiuso.", // NEEDS QC
-		shortDesc: "El Agua lo cura 1/4 y la lluvia 1/8; el Fuego le hace 1,25× y el sol le quita 1/8.", // NEEDS QC
+		desc: "Este Pokémon es inmune a los movimientos de tipo Agua y recupera 1/4 de sus PS máximos (redondeado hacia abajo) al ser golpeado por uno. La potencia de los movimientos de tipo Fuego contra él se multiplica por 1.25. Al final de cada turno, recupera 1/8 de sus PS máximos si llueve y pierde 1/8 si hace sol. Los efectos del clima no se activan si lleva Parasol Multiuso.", // NEEDS QC
+		shortDesc: "El Agua lo cura 1/4 y la lluvia 1/8; el Fuego le hace 1.25× y el sol le quita 1/8.", // NEEDS QC
 		gen7: {
-			desc: "Este Pokémon es inmune a los movimientos de tipo Agua y recupera 1/4 de sus PS máximos (redondeado hacia abajo) al recibir uno. La potencia de los movimientos de tipo Fuego contra él se multiplica por 1,25. Al final de cada turno, recupera 1/8 de sus PS máximos (redondeado hacia abajo) con lluvia y pierde 1/8 (redondeado hacia abajo) con sol.", // NEEDS QC
+			desc: "Este Pokémon es inmune a los movimientos de tipo Agua y recupera 1/4 de sus PS máximos (redondeado hacia abajo) al recibir uno. La potencia de los movimientos de tipo Fuego contra él se multiplica por 1.25. Al final de cada turno, recupera 1/8 de sus PS máximos (redondeado hacia abajo) con lluvia y pierde 1/8 (redondeado hacia abajo) con sol.", // NEEDS QC
 		},
 
 		damage: "#aftermath",
@@ -521,8 +521,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	fairyaura: {
 		name: "Aura Feérica",
 		// Official flavor text: "Aumenta la potencia de todos los movimientos de tipo Hada."
-		desc: "Mientras este Pokémon está en combate, la potencia de los movimientos de tipo Hada usados por cualquier Pokémon se multiplica por 1,33.", // NEEDS QC
-		shortDesc: "Los movimientos de tipo Hada de todos tienen 1,33× de potencia.", // NEEDS QC
+		desc: "Mientras este Pokémon está en combate, la potencia de los movimientos de tipo Hada usados por cualquier Pokémon se multiplica por 1.33.", // NEEDS QC
+		shortDesc: "Los movimientos de tipo Hada de todos tienen 1.33× de potencia.", // NEEDS QC
 
 		start: "  ¡{POKEMON} irradia un aura feérica!",
 	},
@@ -532,7 +532,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	firemane: {
 		name: "Crin de Fuego",
-		shortDesc: "Sus ataques de tipo Fuego usan 1,5× su característica ofensiva.", // NEEDS QC
+		shortDesc: "Sus ataques de tipo Fuego usan 1.5× su característica ofensiva.", // NEEDS QC
 	},
 	flamebody: {
 		name: "Cuerpo Llama",
@@ -548,19 +548,19 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	flareboost: {
 		name: "Ímpetu Ardiente",
 		// Official flavor text: "Aumenta la potencia de sus ataques especiales cuando sufre quemaduras."
-		desc: "Mientras este Pokémon está quemado, la potencia de sus ataques especiales se multiplica por 1,5.", // NEEDS QC
-		shortDesc: "Si está quemado, sus ataques especiales tienen 1,5× de potencia.", // NEEDS QC
+		desc: "Mientras este Pokémon está quemado, la potencia de sus ataques especiales se multiplica por 1.5.", // NEEDS QC
+		shortDesc: "Si está quemado, sus ataques especiales tienen 1.5× de potencia.", // NEEDS QC
 	},
 	flashfire: {
 		name: "Absorbe Fuego",
 		// Official flavor text: "Si le alcanza algún movimiento de tipo Fuego, potencia sus propios movimientos de dicho tipo."
-		desc: "Este Pokémon es inmune a los movimientos de tipo Fuego. La primera vez que uno lo golpea, su característica ofensiva se multiplica por 1,5 al usar ataques de tipo Fuego mientras siga en combate con esta habilidad. Si está congelado, los ataques de tipo Fuego no pueden descongelarlo.", // NEEDS QC
-		shortDesc: "Inmune al Fuego: sus ataques de Fuego mejoran 1,5× si lo golpea uno.", // NEEDS QC
+		desc: "Este Pokémon es inmune a los movimientos de tipo Fuego. La primera vez que uno lo golpea, su característica ofensiva se multiplica por 1.5 al usar ataques de tipo Fuego mientras siga en combate con esta habilidad. Si está congelado, los ataques de tipo Fuego no pueden descongelarlo.", // NEEDS QC
+		shortDesc: "Inmune al Fuego: sus ataques de Fuego mejoran 1.5× si lo golpea uno.", // NEEDS QC
 		gen4: {
-			desc: "Este Pokémon es inmune a los movimientos de tipo Fuego mientras no esté congelado. La primera vez que uno lo golpea, el daño de sus ataques de tipo Fuego se multiplica por 1,5 mientras siga en combate con esta habilidad.", // NEEDS QC
+			desc: "Este Pokémon es inmune a los movimientos de tipo Fuego mientras no esté congelado. La primera vez que uno lo golpea, el daño de sus ataques de tipo Fuego se multiplica por 1.5 mientras siga en combate con esta habilidad.", // NEEDS QC
 		},
 		gen3: {
-			desc: "Este Pokémon es inmune a los movimientos de tipo Fuego mientras no esté congelado. La primera vez que uno lo golpea, el daño de sus ataques de tipo Fuego se multiplica por 1,5 mientras siga en combate con esta habilidad. Si este Pokémon tiene un problema de estado, es de tipo Fuego o tiene un sustituto, Fuego Fatuo no activa esta habilidad.", // NEEDS QC
+			desc: "Este Pokémon es inmune a los movimientos de tipo Fuego mientras no esté congelado. La primera vez que uno lo golpea, el daño de sus ataques de tipo Fuego se multiplica por 1.5 mientras siga en combate con esta habilidad. Si este Pokémon tiene un problema de estado, es de tipo Fuego o tiene un sustituto, Fuego Fatuo no activa esta habilidad.", // NEEDS QC
 		},
 
 		start: "  ¡La potencia de los movimientos de tipo Fuego de {POKEMON} ha aumentado!",
@@ -568,14 +568,14 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	flowergift: {
 		name: "Don Floral",
 		// Official flavor text: "Si hace sol, aumenta su Ataque y su Defensa Especial, así como los de sus aliados."
-		desc: "Si este Pokémon es un Cherrim y hace sol, cambia a la Forma Soleada y el Ataque y la Defensa Especial de él y de sus aliados se multiplican por 1,5. Estos efectos no se activan si lleva Parasol Multiuso.", // NEEDS QC
-		shortDesc: "(Cherrim) Con sol: su Ataque y Def. Esp. y los de sus aliados son 1,5×.", // NEEDS QC
+		desc: "Si este Pokémon es un Cherrim y hace sol, cambia a la Forma Soleada y el Ataque y la Defensa Especial de él y de sus aliados se multiplican por 1.5. Estos efectos no se activan si lleva Parasol Multiuso.", // NEEDS QC
+		shortDesc: "(Cherrim) Con sol: su Ataque y Def. Esp. y los de sus aliados son 1.5×.", // NEEDS QC
 		gen7: {
-			desc: "Si este Pokémon es un Cherrim y hay sol, cambia a la Forma Soleada, y el Ataque y la Defensa Especial de él y sus aliados se multiplican por 1,5.", // NEEDS QC
+			desc: "Si este Pokémon es un Cherrim y hay sol, cambia a la Forma Soleada, y el Ataque y la Defensa Especial de él y sus aliados se multiplican por 1.5.", // NEEDS QC
 		},
 		gen4: {
-			desc: "Con sol, el Ataque y la Defensa Especial de este Pokémon y sus aliados se multiplican por 1,5.", // NEEDS QC
-			shortDesc: "Con sol: Ataque y Def. Esp. de este Pokémon y sus aliados ×1,5.", // NEEDS QC
+			desc: "Con sol, el Ataque y la Defensa Especial de este Pokémon y sus aliados se multiplican por 1.5.", // NEEDS QC
+			shortDesc: "Con sol: Ataque y Def. Esp. de este Pokémon y sus aliados ×1.5.", // NEEDS QC
 		},
 	},
 	flowerveil: {
@@ -645,8 +645,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	galvanize: {
 		name: "Piel Eléctrica",
 		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Eléctrico y aumenta ligeramente su potencia."
-		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Eléctrico y su potencia se multiplica por 1,2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-		shortDesc: "Sus movimientos de tipo Normal son de tipo Eléctrico y tienen 1,2× de potencia.", // NEEDS QC
+		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Eléctrico y su potencia se multiplica por 1.2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+		shortDesc: "Sus movimientos de tipo Normal son de tipo Eléctrico y tienen 1.2× de potencia.", // NEEDS QC
 	},
 	gluttony: {
 		name: "Gula",
@@ -665,12 +665,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	gorillatactics: {
 		name: "Monotema",
 		// Official flavor text: "Potencia su Ataque, pero solo puede usar el primer movimiento escogido."
-		desc: "El Ataque de este Pokémon se multiplica por 1,5, pero solo puede usar el primer movimiento que ejecute. Estos efectos no se aplican mientras está dinamaxeado.", // NEEDS QC
-		shortDesc: "Su Ataque es 1,5×, pero solo puede usar su primer movimiento.", // NEEDS QC
+		desc: "El Ataque de este Pokémon se multiplica por 1.5, pero solo puede usar el primer movimiento que ejecute. Estos efectos no se aplican mientras está dinamaxeado.", // NEEDS QC
+		shortDesc: "Su Ataque es 1.5×, pero solo puede usar su primer movimiento.", // NEEDS QC
 	},
 	grasspelt: {
 		name: "Manto Frondoso",
-		shortDesc: "En campo de hierba, su Defensa se multiplica por 1,5.", // NEEDS QC
+		shortDesc: "En campo de hierba, su Defensa se multiplica por 1.5.", // NEEDS QC
 	},
 	grassysurge: {
 		name: "Herbogénesis",
@@ -696,12 +696,12 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	guts: {
 		name: "Agallas",
 		// Official flavor text: "Si sufre un problema de estado, se viene arriba y aumenta su Ataque."
-		desc: "Si este Pokémon tiene un problema de estado, su Ataque se multiplica por 1,5. Sus ataques físicos ignoran la reducción de daño de la quemadura.", // NEEDS QC
-		shortDesc: "Con un problema de estado, su Ataque es 1,5× e ignora la quemadura.", // NEEDS QC
+		desc: "Si este Pokémon tiene un problema de estado, su Ataque se multiplica por 1.5. Sus ataques físicos ignoran la reducción de daño de la quemadura.", // NEEDS QC
+		shortDesc: "Con un problema de estado, su Ataque es 1.5× e ignora la quemadura.", // NEEDS QC
 	},
 	hadronengine: {
 		name: "Motor Hadrónico",
-		shortDesc: "Al entrar crea campo eléctrico; en él, su Ataque Esp. es 1,3333×.", // NEEDS QC
+		shortDesc: "Al entrar crea campo eléctrico; en él, su Ataque Esp. es 1.3333×.", // NEEDS QC
 
 		start: "  ¡{POKEMON} crea un campo eléctrico que impulsa su motor futurista!",
 		activate: "  ¡El campo eléctrico impulsa el motor futurista de {POKEMON}!",
@@ -767,8 +767,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	hustle: {
 		name: "Entusiasmo",
 		// Official flavor text: "Aumenta su Ataque, pero reduce su Precisión."
-		desc: "El Ataque de este Pokémon se multiplica por 1,5 y la precisión de sus ataques físicos por 0,8.", // NEEDS QC
-		shortDesc: "Su Ataque es 1,5×, pero sus ataques físicos tienen 0,8× de precisión.", // NEEDS QC
+		desc: "El Ataque de este Pokémon se multiplica por 1.5 y la precisión de sus ataques físicos por 0.8.", // NEEDS QC
+		shortDesc: "Su Ataque es 1.5×, pero sus ataques físicos tienen 0.8× de precisión.", // NEEDS QC
 	},
 	hydration: {
 		name: "Hidratación",
@@ -909,8 +909,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	ironfist: {
 		name: "Puño Férreo",
 		// Official flavor text: "Aumenta la potencia de los puñetazos."
-		desc: "La potencia de los movimientos de puño de este Pokémon se multiplica por 1,2.", // NEEDS QC
-		shortDesc: "Sus movimientos de puño tienen 1,2× de potencia (no Golpe Bajo).", // NEEDS QC
+		desc: "La potencia de los movimientos de puño de este Pokémon se multiplica por 1.2.", // NEEDS QC
+		shortDesc: "Sus movimientos de puño tienen 1.2× de potencia (no Golpe Bajo).", // NEEDS QC
 	},
 	justified: {
 		name: "Justiciero",
@@ -975,7 +975,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	lightmetal: {
 		name: "Metal Liviano",
 		// Official flavor text: "Reduce a la mitad su peso."
-		desc: "El peso de este Pokémon se reduce a la mitad (redondeado hacia abajo a la décima de kg). Se calcula después del efecto de Aligerar y antes del de Piedra Pómez. El peso no baja de 0,1 kg.", // NEEDS QC
+		desc: "El peso de este Pokémon se reduce a la mitad (redondeado hacia abajo a la décima de kg). Se calcula después del efecto de Aligerar y antes del de Piedra Pómez. El peso no baja de 0.1 kg.", // NEEDS QC
 		shortDesc: "Su peso se reduce a la mitad.", // NEEDS QC
 	},
 	lightningrod: {
@@ -1082,13 +1082,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	marvelscale: {
 		name: "Escama Especial",
-		shortDesc: "Con un problema de estado, su Defensa se multiplica por 1,5.", // NEEDS QC
+		shortDesc: "Con un problema de estado, su Defensa se multiplica por 1.5.", // NEEDS QC
 	},
 	megalauncher: {
 		name: "Megadisparador",
 		// Official flavor text: "Aumenta la potencia de algunos movimientos de pulsos y auras."
-		desc: "La potencia de los movimientos de pulso de este Pokémon se multiplica por 1,5. Pulso Cura restaura 3/4 de los PS máximos del objetivo.", // NEEDS QC
-		shortDesc: "Sus movimientos de pulso tienen 1,5× de potencia; mejora Pulso Cura.", // NEEDS QC
+		desc: "La potencia de los movimientos de pulso de este Pokémon se multiplica por 1.5. Pulso Cura restaura 3/4 de los PS máximos del objetivo.", // NEEDS QC
+		shortDesc: "Sus movimientos de pulso tienen 1.5× de potencia; mejora Pulso Cura.", // NEEDS QC
 	},
 	megasol: {
 		name: "Megasolar",
@@ -1114,15 +1114,15 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	minus: {
 		name: "Menos",
 		// Official flavor text: "Potencia su Ataque Especial si un Pokémon aliado tiene la habilidad Más o Menos."
-		desc: "Si un aliado en combate tiene esta habilidad o Más, el Ataque Especial de este Pokémon se multiplica por 1,5.", // NEEDS QC
-		shortDesc: "Con un aliado con Más o esta habilidad, su Ataque Esp. es 1,5×.", // NEEDS QC
+		desc: "Si un aliado en combate tiene esta habilidad o Más, el Ataque Especial de este Pokémon se multiplica por 1.5.", // NEEDS QC
+		shortDesc: "Con un aliado con Más o esta habilidad, su Ataque Esp. es 1.5×.", // NEEDS QC
 		gen4: {
-			desc: "Si un aliado activo tiene la habilidad Más, el Ataque Especial de este Pokémon se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Si un aliado activo tiene Más, su At. Esp. es ×1,5.", // NEEDS QC
+			desc: "Si un aliado activo tiene la habilidad Más, el Ataque Especial de este Pokémon se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Si un aliado activo tiene Más, su At. Esp. es ×1.5.", // NEEDS QC
 		},
 		gen3: {
-			desc: "Si un Pokémon activo tiene la habilidad Más, el Ataque Especial de este Pokémon se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Si un Pokémon activo tiene Más, su At. Esp. es ×1,5.", // NEEDS QC
+			desc: "Si un Pokémon activo tiene la habilidad Más, el Ataque Especial de este Pokémon se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Si un Pokémon activo tiene Más, su At. Esp. es ×1.5.", // NEEDS QC
 		},
 	},
 	mirrorarmor: {
@@ -1231,8 +1231,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	neuroforce: {
 		name: "Fuerza Cerebral",
 		// Official flavor text: "Potencia los ataques supereficaces."
-		desc: "Los ataques supereficaces de este Pokémon infligen 1,25 veces el daño normal.", // NEEDS QC
-		shortDesc: "Sus ataques supereficaces infligen 1,25× de daño.", // NEEDS QC
+		desc: "Los ataques supereficaces de este Pokémon infligen 1.25 veces el daño normal.", // NEEDS QC
+		shortDesc: "Sus ataques supereficaces infligen 1.25× de daño.", // NEEDS QC
 	},
 	neutralizinggas: {
 		name: "Gas Reactivo",
@@ -1253,8 +1253,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	normalize: {
 		name: "Normalidad",
 		// Official flavor text: "Hace que todos sus movimientos se vuelvan de tipo Normal y aumenten ligeramente su potencia."
-		desc: "Todos los movimientos de este Pokémon se convierten en tipo Normal y su potencia se multiplica por 1,2. Este efecto se aplica antes que otros efectos que cambian el tipo de un movimiento.", // NEEDS QC
-		shortDesc: "Todos sus movimientos son de tipo Normal y tienen 1,2× de potencia.", // NEEDS QC
+		desc: "Todos los movimientos de este Pokémon se convierten en tipo Normal y su potencia se multiplica por 1.2. Este efecto se aplica antes que otros efectos que cambian el tipo de un movimiento.", // NEEDS QC
+		shortDesc: "Todos sus movimientos son de tipo Normal y tienen 1.2× de potencia.", // NEEDS QC
 		gen6: {
 			desc: "Los movimientos de este Pokémon pasan a ser de tipo Normal. Este efecto se aplica antes que otros efectos que cambian el tipo de un movimiento.", // NEEDS QC
 			shortDesc: "Los movimientos de este Pokémon pasan a ser de tipo Normal.", // NEEDS QC
@@ -1283,7 +1283,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	orichalcumpulse: {
 		name: "Latido Oricalco",
-		shortDesc: "Al entrar invoca el sol; con sol, su Ataque es 1,3333×.", // NEEDS QC
+		shortDesc: "Al entrar invoca el sol; con sol, su Ataque es 1.3333×.", // NEEDS QC
 
 		start: "  ¡{POKEMON} intensifica el brillo del sol y desata su pulso primigenio!",
 		activate: "  ¡{POKEMON} recibe los rayos del sol y desata su pulso primigenio!",
@@ -1305,11 +1305,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	overgrow: {
 		name: "Espesura",
 		// Official flavor text: "Potencia sus movimientos de tipo Planta cuando le quedan pocos PS."
-		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1,5 al usar un ataque de tipo Planta.", // NEEDS QC
-		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Planta usan 1,5× su ofensiva.", // NEEDS QC
+		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1.5 al usar un ataque de tipo Planta.", // NEEDS QC
+		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Planta usan 1.5× su ofensiva.", // NEEDS QC
 		gen4: {
-			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Planta se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Planta tienen 1,5× potencia.", // NEEDS QC
+			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Planta se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Planta tienen 1.5× potencia.", // NEEDS QC
 		},
 	},
 	owntempo: {
@@ -1380,25 +1380,25 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	pixilate: {
 		name: "Piel Feérica",
 		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Hada y aumenta ligeramente su potencia."
-		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hada y su potencia se multiplica por 1,2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-		shortDesc: "Sus movimientos de tipo Normal son de tipo Hada y tienen 1,2× de potencia.", // NEEDS QC
+		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hada y su potencia se multiplica por 1.2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+		shortDesc: "Sus movimientos de tipo Normal son de tipo Hada y tienen 1.2× de potencia.", // NEEDS QC
 		gen6: {
-			desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hada y su potencia se multiplica por 1,3. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-			shortDesc: "Los movimientos Normal de este Pokémon pasan a tipo Hada con 1,3× potencia.", // NEEDS QC
+			desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hada y su potencia se multiplica por 1.3. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+			shortDesc: "Los movimientos Normal de este Pokémon pasan a tipo Hada con 1.3× potencia.", // NEEDS QC
 		},
 	},
 	plus: {
 		name: "Más",
 		// Official flavor text: "Potencia su Ataque Especial si un Pokémon aliado tiene la habilidad Más o Menos."
-		desc: "Si un aliado en combate tiene esta habilidad o Menos, el Ataque Especial de este Pokémon se multiplica por 1,5.", // NEEDS QC
-		shortDesc: "Con un aliado con Menos o esta habilidad, su Ataque Esp. es 1,5×.", // NEEDS QC
+		desc: "Si un aliado en combate tiene esta habilidad o Menos, el Ataque Especial de este Pokémon se multiplica por 1.5.", // NEEDS QC
+		shortDesc: "Con un aliado con Menos o esta habilidad, su Ataque Esp. es 1.5×.", // NEEDS QC
 		gen4: {
-			desc: "Si un aliado activo tiene la habilidad Menos, el Ataque Especial de este Pokémon se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Si un aliado activo tiene Menos, su At. Esp. es ×1,5.", // NEEDS QC
+			desc: "Si un aliado activo tiene la habilidad Menos, el Ataque Especial de este Pokémon se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Si un aliado activo tiene Menos, su At. Esp. es ×1.5.", // NEEDS QC
 		},
 		gen3: {
-			desc: "Si un Pokémon activo tiene la habilidad Menos, el Ataque Especial de este Pokémon se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Si un Pokémon activo tiene Menos, su At. Esp. es ×1,5.", // NEEDS QC
+			desc: "Si un Pokémon activo tiene la habilidad Menos, el Ataque Especial de este Pokémon se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Si un Pokémon activo tiene Menos, su At. Esp. es ×1.5.", // NEEDS QC
 		},
 	},
 	poisonheal: {
@@ -1455,8 +1455,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	powerspot: {
 		name: "Fuente Energía",
 		// Official flavor text: "Potencia los movimientos de los Pokémon adyacentes."
-		desc: "La potencia de los movimientos de los aliados de este Pokémon se multiplica por 1,3. Afecta a Deseo Oculto y Premonición aunque el usuario no esté en el campo.", // NEEDS QC
-		shortDesc: "Los movimientos de sus aliados tienen 1,3× de potencia.", // NEEDS QC
+		desc: "La potencia de los movimientos de los aliados de este Pokémon se multiplica por 1.3. Afecta a Deseo Oculto y Premonición aunque el usuario no esté en el campo.", // NEEDS QC
+		shortDesc: "Los movimientos de sus aliados tienen 1.3× de potencia.", // NEEDS QC
 	},
 	prankster: {
 		name: "Bromista",
@@ -1512,8 +1512,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	protosynthesis: {
 		name: "Paleosíntesis",
-		desc: "Si hace sol o este Pokémon usa una Energía Potenciadora que lleve, su característica más alta se multiplica por 1,3 (o por 1,5 si es la Velocidad). Los cambios de nivel se consideran al activarse. En caso de empate, se prioriza Ataque, Defensa, Ataque Especial, Defensa Especial y Velocidad, en ese orden. Si el efecto empezó por el sol, la Energía Potenciadora no se activa y el efecto termina cuando el sol deja de estar activo. Si empezó por la Energía Potenciadora, termina cuando este Pokémon deja el combate.", // NEEDS QC
-		shortDesc: "Con sol o Energía Potenciadora: mejor característica 1,3× (Vel.: 1,5×).", // NEEDS QC
+		desc: "Si hace sol o este Pokémon usa una Energía Potenciadora que lleve, su característica más alta se multiplica por 1.3 (o por 1.5 si es la Velocidad). Los cambios de nivel se consideran al activarse. En caso de empate, se prioriza Ataque, Defensa, Ataque Especial, Defensa Especial y Velocidad, en ese orden. Si el efecto empezó por el sol, la Energía Potenciadora no se activa y el efecto termina cuando el sol deja de estar activo. Si empezó por la Energía Potenciadora, termina cuando este Pokémon deja el combate.", // NEEDS QC
+		shortDesc: "Con sol o Energía Potenciadora: mejor característica 1.3× (Vel.: 1.5×).", // NEEDS QC
 
 		activate: "  ¡La habilidad Paleosíntesis de {POKEMON} se ha activado gracial al sol!",
 		activateFromItem: "  ¡{POKEMON} ha usado la Energía Potenciadora para activar Paleosíntesis!",
@@ -1527,8 +1527,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	punkrock: {
 		name: "Punk Rock",
 		// Official flavor text: "Potencia los movimientos que usan sonido y reduce a la mitad el daño que le infligen dichos movimientos."
-		desc: "La potencia de los movimientos de sonido de este Pokémon se multiplica por 1,3. Recibe la mitad de daño de los movimientos de sonido.", // NEEDS QC
-		shortDesc: "Sus movimientos de sonido: 1,3× de potencia. Recibe la mitad de los ajenos.", // NEEDS QC
+		desc: "La potencia de los movimientos de sonido de este Pokémon se multiplica por 1.3. Recibe la mitad de daño de los movimientos de sonido.", // NEEDS QC
+		shortDesc: "Sus movimientos de sonido: 1.3× de potencia. Recibe la mitad de los ajenos.", // NEEDS QC
 	},
 	purepower: {
 		name: "Energía Pura",
@@ -1541,8 +1541,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	quarkdrive: {
 		name: "Carga Cuark",
-		desc: "Si hay Campo Eléctrico o este Pokémon usa una Energía Potenciadora que lleve, su característica más alta se multiplica por 1,3 (o por 1,5 si es la Velocidad). Los cambios de nivel se consideran al activarse. En caso de empate, se prioriza Ataque, Defensa, Ataque Especial, Defensa Especial y Velocidad, en ese orden. Si el efecto empezó por el Campo Eléctrico, la Energía Potenciadora no se activa y el efecto termina cuando el Campo Eléctrico deja de estar activo. Si empezó por la Energía Potenciadora, termina cuando este Pokémon deja el combate.", // NEEDS QC
-		shortDesc: "Con campo eléctrico o Energía Potenciadora: mejor característica 1,3× (Vel.: 1,5×).", // NEEDS QC
+		desc: "Si hay Campo Eléctrico o este Pokémon usa una Energía Potenciadora que lleve, su característica más alta se multiplica por 1.3 (o por 1.5 si es la Velocidad). Los cambios de nivel se consideran al activarse. En caso de empate, se prioriza Ataque, Defensa, Ataque Especial, Defensa Especial y Velocidad, en ese orden. Si el efecto empezó por el Campo Eléctrico, la Energía Potenciadora no se activa y el efecto termina cuando el Campo Eléctrico deja de estar activo. Si empezó por la Energía Potenciadora, termina cuando este Pokémon deja el combate.", // NEEDS QC
+		shortDesc: "Con campo eléctrico o Energía Potenciadora: mejor característica 1.3× (Vel.: 1.5×).", // NEEDS QC
 
 		activate: "  ¡La habilidad Carga Cuark de {POKEMON} se ha activado gracias al campo eléctrico!",
 		activateFromItem: "  ¡{POKEMON} ha usado la Energía Potenciadora para activar Carga Cuark!",
@@ -1566,10 +1566,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	quickfeet: {
 		name: "Pies Rápidos",
 		// Official flavor text: "Aumenta la Velocidad si sufre problemas de estado."
-		desc: "Si este Pokémon tiene un problema de estado, su Velocidad se multiplica por 1,5 e ignora la reducción de la Velocidad a la mitad por la parálisis.", // NEEDS QC
-		shortDesc: "Con un problema de estado, su Velocidad es 1,5× e ignora la parálisis.", // NEEDS QC
+		desc: "Si este Pokémon tiene un problema de estado, su Velocidad se multiplica por 1.5 e ignora la reducción de la Velocidad a la mitad por la parálisis.", // NEEDS QC
+		shortDesc: "Con un problema de estado, su Velocidad es 1.5× e ignora la parálisis.", // NEEDS QC
 		gen6: {
-			desc: "Si este Pokémon tiene un problema de estado, su Velocidad se multiplica por 1,5. Este Pokémon ignora la reducción de la Velocidad a 1/4 por la parálisis.", // NEEDS QC
+			desc: "Si este Pokémon tiene un problema de estado, su Velocidad se multiplica por 1.5. Este Pokémon ignora la reducción de la Velocidad a 1/4 por la parálisis.", // NEEDS QC
 		},
 	},
 	raindish: {
@@ -1608,17 +1608,17 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	reckless: {
 		name: "Audaz",
 		// Official flavor text: "Potencia los movimientos que también dañan al usuario."
-		desc: "La potencia de los ataques con retroceso o daño por fallo de este Pokémon se multiplica por 1,2. No afecta a Forcejeo.", // NEEDS QC
-		shortDesc: "Sus ataques con retroceso tienen 1,2× de potencia (no Forcejeo).", // NEEDS QC
+		desc: "La potencia de los ataques con retroceso o daño por fallo de este Pokémon se multiplica por 1.2. No afecta a Forcejeo.", // NEEDS QC
+		shortDesc: "Sus ataques con retroceso tienen 1.2× de potencia (no Forcejeo).", // NEEDS QC
 	},
 	refrigerate: {
 		name: "Piel Helada",
 		// Official flavor text: "Convierte los movimientos de tipo Normal en tipo Hielo y aumenta ligeramente su potencia."
-		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hielo y su potencia se multiplica por 1,2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-		shortDesc: "Sus movimientos de tipo Normal son de tipo Hielo y tienen 1,2× de potencia.", // NEEDS QC
+		desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hielo y su potencia se multiplica por 1.2. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+		shortDesc: "Sus movimientos de tipo Normal son de tipo Hielo y tienen 1.2× de potencia.", // NEEDS QC
 		gen6: {
-			desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hielo y su potencia se multiplica por 1,3. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
-			shortDesc: "Los movimientos Normal de este Pokémon pasan a tipo Hielo con 1,3× potencia.", // NEEDS QC
+			desc: "Los movimientos de tipo Normal de este Pokémon se convierten en tipo Hielo y su potencia se multiplica por 1.3. Este efecto se aplica después de otros efectos que cambian el tipo de un movimiento, pero antes de los efectos de Cortina Plasma y Electrificación.", // NEEDS QC
+			shortDesc: "Los movimientos Normal de este Pokémon pasan a tipo Hielo con 1.3× potencia.", // NEEDS QC
 		},
 	},
 	regenerator: {
@@ -1634,8 +1634,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	rivalry: {
 		name: "Rivalidad",
 		// Official flavor text: "Si el objetivo es del mismo sexo, su competitividad le lleva a infligir más daño. Si es del sexo contrario, en cambio, el daño será menor."
-		desc: "Los ataques de este Pokémon tienen su potencia multiplicada por 1,25 contra objetivos del mismo sexo y por 0,75 contra los del sexo opuesto. Sin modificador si alguno no tiene sexo.", // NEEDS QC
-		shortDesc: "Hace 1,25× de daño al mismo sexo y 0,75× al sexo opuesto.", // NEEDS QC
+		desc: "Los ataques de este Pokémon tienen su potencia multiplicada por 1.25 contra objetivos del mismo sexo y por 0.75 contra los del sexo opuesto. Sin modificador si alguno no tiene sexo.", // NEEDS QC
+		shortDesc: "Hace 1.25× de daño al mismo sexo y 0.75× al sexo opuesto.", // NEEDS QC
 	},
 	rkssystem: {
 		name: "Sistema Alfa",
@@ -1653,7 +1653,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	rockypayload: {
 		name: "Transportarrocas",
-		shortDesc: "Sus ataques de tipo Roca usan 1,5× su característica ofensiva.", // NEEDS QC
+		shortDesc: "Sus ataques de tipo Roca usan 1.5× su característica ofensiva.", // NEEDS QC
 	},
 	roughskin: {
 		name: "Piel Tosca",
@@ -1677,8 +1677,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sandforce: {
 		name: "Poder Arena",
 		// Official flavor text: "Potencia los movimientos de tipo Tierra, Acero y Roca durante las tormentas de arena."
-		desc: "Con tormenta de arena, la potencia de los ataques de tipo Tierra, Roca y Acero de este Pokémon se multiplica por 1,3. No recibe daño de la tormenta de arena.", // NEEDS QC
-		shortDesc: "En tormenta de arena: Tierra/Roca/Acero 1,3×; inmune a la arena.", // NEEDS QC
+		desc: "Con tormenta de arena, la potencia de los ataques de tipo Tierra, Roca y Acero de este Pokémon se multiplica por 1.3. No recibe daño de la tormenta de arena.", // NEEDS QC
+		shortDesc: "En tormenta de arena: Tierra/Roca/Acero 1.3×; inmune a la arena.", // NEEDS QC
 	},
 	sandrush: {
 		name: "Ímpetu Arena",
@@ -1700,8 +1700,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sandveil: {
 		name: "Velo Arena",
 		// Official flavor text: "Aumenta su Evasión durante las tormentas de arena."
-		desc: "Con tormenta de arena, la precisión de los movimientos usados contra este Pokémon se multiplica por 0,8. No recibe daño de la tormenta de arena.", // NEEDS QC
-		shortDesc: "En tormenta de arena, su evasión es 1,25×; inmune a la arena.", // NEEDS QC
+		desc: "Con tormenta de arena, la precisión de los movimientos usados contra este Pokémon se multiplica por 0.8. No recibe daño de la tormenta de arena.", // NEEDS QC
+		shortDesc: "En tormenta de arena, su evasión es 1.25×; inmune a la arena.", // NEEDS QC
 	},
 	sapsipper: {
 		name: "Herbívoro",
@@ -1772,7 +1772,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sharpness: {
 		name: "Cortante",
-		shortDesc: "Sus movimientos cortantes tienen 1,5× de potencia.", // NEEDS QC
+		shortDesc: "Sus movimientos cortantes tienen 1.5× de potencia.", // NEEDS QC
 	},
 	shedskin: {
 		name: "Mudar",
@@ -1783,16 +1783,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	sheerforce: {
 		name: "Potencia Bruta",
 		// Official flavor text: "Sube la potencia de sus movimientos en detrimento de los efectos secundarios, que se ven anulados."
-		desc: "La potencia de los ataques con efecto secundario de este Pokémon se multiplica por 1,3, pero pierden dichos efectos. Si se eliminó un efecto secundario, también se anulan el retroceso de Vidasfera y la recuperación de Cascabel Concha del usuario, y no se activan Coraza Ira, Cólera, Cambio Color, Retirada, Hurto, Huida ni Tarjeta Roja, Botón Escape, Baya Biglia o Baya Maranga del objetivo.", // NEEDS QC
-		shortDesc: "Sus ataques con efecto secundario: 1,3× de potencia, sin el efecto.", // NEEDS QC
+		desc: "La potencia de los ataques con efecto secundario de este Pokémon se multiplica por 1.3, pero pierden dichos efectos. Si se eliminó un efecto secundario, también se anulan el retroceso de Vidasfera y la recuperación de Cascabel Concha del usuario, y no se activan Coraza Ira, Cólera, Cambio Color, Retirada, Hurto, Huida ni Tarjeta Roja, Botón Escape, Baya Biglia o Baya Maranga del objetivo.", // NEEDS QC
+		shortDesc: "Sus ataques con efecto secundario: 1.3× de potencia, sin el efecto.", // NEEDS QC
 		gen8: {
-			desc: "Los ataques de este Pokémon con efectos secundarios tienen su potencia multiplicada por 1,3, pero pierden sus efectos secundarios. Si se eliminó un efecto secundario, también se eliminan el retroceso de Vidasfera y la curación de Cascabel Concha del usuario, y se impide que se activen Cólera, Cambio Color, Retirada, Hurto, Huida, Tarjeta Roja, Botón Escape, Baya Biglia y Baya Maranga del objetivo.", // NEEDS QC
+			desc: "Los ataques de este Pokémon con efectos secundarios tienen su potencia multiplicada por 1.3, pero pierden sus efectos secundarios. Si se eliminó un efecto secundario, también se eliminan el retroceso de Vidasfera y la curación de Cascabel Concha del usuario, y se impide que se activen Cólera, Cambio Color, Retirada, Hurto, Huida, Tarjeta Roja, Botón Escape, Baya Biglia y Baya Maranga del objetivo.", // NEEDS QC
 		},
 		gen6: {
-			desc: "Los ataques de este Pokémon con efectos secundarios tienen su potencia multiplicada por 1,3, pero pierden sus efectos secundarios. Si se eliminó un efecto secundario, también se eliminan el retroceso de Vidasfera y la curación de Cascabel Concha del usuario, y se impide que se activen Cambio Color, Hurto, Tarjeta Roja, Botón Escape, Baya Biglia y Baya Maranga del objetivo.", // NEEDS QC
+			desc: "Los ataques de este Pokémon con efectos secundarios tienen su potencia multiplicada por 1.3, pero pierden sus efectos secundarios. Si se eliminó un efecto secundario, también se eliminan el retroceso de Vidasfera y la curación de Cascabel Concha del usuario, y se impide que se activen Cambio Color, Hurto, Tarjeta Roja, Botón Escape, Baya Biglia y Baya Maranga del objetivo.", // NEEDS QC
 		},
 		gen5: {
-			desc: "Los ataques de este Pokémon con efectos secundarios tienen su potencia multiplicada por 1,3, pero pierden sus efectos secundarios. Si se eliminó un efecto secundario, también se eliminan el retroceso de Vidasfera y la curación de Cascabel Concha del usuario, y se impide que se activen Cambio Color, Hurto, Tarjeta Roja y Botón Escape del objetivo.", // NEEDS QC
+			desc: "Los ataques de este Pokémon con efectos secundarios tienen su potencia multiplicada por 1.3, pero pierden sus efectos secundarios. Si se eliminó un efecto secundario, también se eliminan el retroceso de Vidasfera y la curación de Cascabel Concha del usuario, y se impide que se activen Cambio Color, Hurto, Tarjeta Roja y Botón Escape del objetivo.", // NEEDS QC
 		},
 	},
 	shellarmor: {
@@ -1877,16 +1877,16 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	sniper: {
 		name: "Francotirador",
-		shortDesc: "El daño de sus golpes críticos se multiplica por 1,5.", // NEEDS QC
+		shortDesc: "El daño de sus golpes críticos se multiplica por 1.5.", // NEEDS QC
 	},
 	snowcloak: {
 		name: "Manto Níveo",
 		// Official flavor text: "Sube la Evasión cuando graniza."
-		desc: "Si nieva, la precisión de los movimientos usados contra este Pokémon se multiplica por 0,8.", // NEEDS QC
-		shortDesc: "Si nieva, su evasión se multiplica por 1,25.", // NEEDS QC
+		desc: "Si nieva, la precisión de los movimientos usados contra este Pokémon se multiplica por 0.8.", // NEEDS QC
+		shortDesc: "Si nieva, su evasión se multiplica por 1.25.", // NEEDS QC
 		gen8: {
-			desc: "Con granizo, la precisión de los movimientos usados contra este Pokémon se multiplica por 0,8. Este Pokémon no recibe daño del granizo.", // NEEDS QC
-			shortDesc: "Con granizo: evasión ×1,25; inmune al granizo.", // NEEDS QC
+			desc: "Con granizo, la precisión de los movimientos usados contra este Pokémon se multiplica por 0.8. Este Pokémon no recibe daño del granizo.", // NEEDS QC
+			shortDesc: "Con granizo: evasión ×1.25; inmune al granizo.", // NEEDS QC
 		},
 	},
 	snowwarning: {
@@ -1899,10 +1899,10 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	solarpower: {
 		name: "Poder Solar",
 		// Official flavor text: "Si hace sol, aumenta su Ataque Especial, pero pierde PS en cada turno."
-		desc: "Si hace sol, el Ataque Especial de este Pokémon se multiplica por 1,5 y pierde 1/8 de sus PS máximos (redondeado hacia abajo) al final de cada turno. Estos efectos no se activan si lleva Parasol Multiuso.", // NEEDS QC
-		shortDesc: "Con sol: su Ataque Esp. es 1,5×, pero pierde 1/8 de sus PS por turno.", // NEEDS QC
+		desc: "Si hace sol, el Ataque Especial de este Pokémon se multiplica por 1.5 y pierde 1/8 de sus PS máximos (redondeado hacia abajo) al final de cada turno. Estos efectos no se activan si lleva Parasol Multiuso.", // NEEDS QC
+		shortDesc: "Con sol: su Ataque Esp. es 1.5×, pero pierde 1/8 de sus PS por turno.", // NEEDS QC
 		gen7: {
-			desc: "Con sol, el Ataque Especial de este Pokémon se multiplica por 1,5 y pierde 1/8 de sus PS máximos (redondeado hacia abajo) al final de cada turno.", // NEEDS QC
+			desc: "Con sol, el Ataque Especial de este Pokémon se multiplica por 1.5 y pierde 1/8 de sus PS máximos (redondeado hacia abajo) al final de cada turno.", // NEEDS QC
 		},
 	},
 	solidrock: {
@@ -1987,13 +1987,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	steelworker: {
 		name: "Acero Templado",
-		shortDesc: "Sus ataques de tipo Acero usan 1,5× su característica ofensiva.", // NEEDS QC
+		shortDesc: "Sus ataques de tipo Acero usan 1.5× su característica ofensiva.", // NEEDS QC
 	},
 	steelyspirit: {
 		name: "Alma Acerada",
 		// Official flavor text: "Potencia los movimientos de tipo Acero de los aliados."
-		desc: "La potencia de los movimientos de tipo Acero de este Pokémon y sus aliados se multiplica por 1,5. Afecta a Deseo Oculto aunque el usuario no esté en el campo.", // NEEDS QC
-		shortDesc: "Los movimientos de tipo Acero suyos y de sus aliados: 1,5× de potencia.", // NEEDS QC
+		desc: "La potencia de los movimientos de tipo Acero de este Pokémon y sus aliados se multiplica por 1.5. Afecta a Deseo Oculto aunque el usuario no esté en el campo.", // NEEDS QC
+		shortDesc: "Los movimientos de tipo Acero suyos y de sus aliados: 1.5× de potencia.", // NEEDS QC
 	},
 	stench: {
 		name: "Hedor",
@@ -2031,8 +2031,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	strongjaw: {
 		name: "Mandíbula Fuerte",
 		// Official flavor text: "Su robusta mandíbula le confiere una mordedura potente."
-		desc: "La potencia de los ataques de mordisco de este Pokémon se multiplica por 1,5.", // NEEDS QC
-		shortDesc: "Sus ataques de mordisco tienen 1,5× de potencia (no Picadura).", // NEEDS QC
+		desc: "La potencia de los ataques de mordisco de este Pokémon se multiplica por 1.5.", // NEEDS QC
+		shortDesc: "Sus ataques de mordisco tienen 1.5× de potencia (no Picadura).", // NEEDS QC
 	},
 	sturdy: {
 		name: "Robustez",
@@ -2064,7 +2064,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	supremeoverlord: {
 		name: "General Supremo",
-		desc: "La potencia de los movimientos de este Pokémon se multiplica por 1+(X×0,1), donde X es el número de veces que un Pokémon de su equipo se ha debilitado cuando se activó esta habilidad (máximo 5).", // NEEDS QC
+		desc: "La potencia de los movimientos de este Pokémon se multiplica por 1+(X×0.1), donde X es el número de veces que un Pokémon de su equipo se ha debilitado cuando se activó esta habilidad (máximo 5).", // NEEDS QC
 		shortDesc: "Sus movimientos ganan 10% de potencia por cada aliado debilitado (máx. 5).", // NEEDS QC
 
 		activate: "  ¡{POKEMON} recibe fuerzas de los aliados caídos!",
@@ -2076,11 +2076,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	swarm: {
 		name: "Enjambre",
 		// Official flavor text: "Potencia sus movimientos de tipo Bicho cuando le quedan pocos PS."
-		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1,5 al usar un ataque de tipo Bicho.", // NEEDS QC
-		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Bicho usan 1,5× su ofensiva.", // NEEDS QC
+		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1.5 al usar un ataque de tipo Bicho.", // NEEDS QC
+		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Bicho usan 1.5× su ofensiva.", // NEEDS QC
 		gen4: {
-			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Bicho se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Bicho tienen 1,5× potencia.", // NEEDS QC
+			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Bicho se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Bicho tienen 1.5× potencia.", // NEEDS QC
 		},
 	},
 	sweetveil: {
@@ -2102,7 +2102,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	swordofruin: {
 		name: "Espada Debacle",
-		shortDesc: "La Defensa de los demás Pokémon en combate se multiplica por 0,75.", // NEEDS QC
+		shortDesc: "La Defensa de los demás Pokémon en combate se multiplica por 0.75.", // NEEDS QC
 
 		start: "  ¡{POKEMON} ha mermado la Defensa de los demás Pokémon con Espada Debacle!",
 	},
@@ -2131,7 +2131,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	tabletsofruin: {
 		name: "Tablilla Debacle",
-		shortDesc: "El Ataque de los demás Pokémon en combate se multiplica por 0,75.", // NEEDS QC
+		shortDesc: "El Ataque de los demás Pokémon en combate se multiplica por 0.75.", // NEEDS QC
 
 		start: "  ¡{POKEMON} ha mermado el Ataque de los demás Pokémon con Tablilla Debacle!",
 	},
@@ -2146,11 +2146,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	technician: {
 		name: "Experto",
 		// Official flavor text: "Potencia sus movimientos más débiles."
-		desc: "La potencia de los movimientos de este Pokémon de potencia 60 o menos se multiplica por 1,5, incluido Forcejeo. Este efecto se aplica después de que el propio movimiento modifique su potencia.", // NEEDS QC
-		shortDesc: "Sus movimientos de potencia 60 o menos: 1,5× de potencia (incluye Forcejeo).", // NEEDS QC
+		desc: "La potencia de los movimientos de este Pokémon de potencia 60 o menos se multiplica por 1.5, incluido Forcejeo. Este efecto se aplica después de que el propio movimiento modifique su potencia.", // NEEDS QC
+		shortDesc: "Sus movimientos de potencia 60 o menos: 1.5× de potencia (incluye Forcejeo).", // NEEDS QC
 		gen4: {
-			desc: "Los movimientos de este Pokémon de potencia 60 o menos tienen su potencia multiplicada por 1,5, salvo Forcejeo. Este efecto se aplica después de que un movimiento cambie su propia potencia y de los efectos de Carga y Refuerzo.", // NEEDS QC
-			shortDesc: "Sus movimientos de potencia 60 o menos tienen 1,5× potencia, salvo Forcejeo.", // NEEDS QC
+			desc: "Los movimientos de este Pokémon de potencia 60 o menos tienen su potencia multiplicada por 1.5, salvo Forcejeo. Este efecto se aplica después de que un movimiento cambie su propia potencia y de los efectos de Carga y Refuerzo.", // NEEDS QC
+			shortDesc: "Sus movimientos de potencia 60 o menos tienen 1.5× potencia, salvo Forcejeo.", // NEEDS QC
 		},
 	},
 	telepathy: {
@@ -2165,8 +2165,8 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	terashell: {
 		name: "Teracaparazón",
-		desc: "Si este Pokémon es un Terapagos con todos sus PS, la eficacia de los ataques contra él pasa a ser 0,5, salvo que sea inmune. Los movimientos multigolpe mantienen la misma eficacia durante todo el ataque.", // NEEDS QC
-		shortDesc: "(Terapagos) Con todos sus PS, los ataques tienen eficacia 0,5, salvo inmunidad.", // NEEDS QC
+		desc: "Si este Pokémon es un Terapagos con todos sus PS, la eficacia de los ataques contra él pasa a ser 0.5, salvo que sea inmune. Los movimientos multigolpe mantienen la misma eficacia durante todo el ataque.", // NEEDS QC
+		shortDesc: "(Terapagos) Con todos sus PS, los ataques tienen eficacia 0.5, salvo inmunidad.", // NEEDS QC
 
 		activate: "  ¡{POKEMON} ha hecho brillar su caparazón y ha alterado su compatibilidad entre tipos!",
 	},
@@ -2225,22 +2225,22 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	torrent: {
 		name: "Torrente",
 		// Official flavor text: "Potencia sus movimientos de tipo Agua cuando le quedan pocos PS."
-		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1,5 al usar un ataque de tipo Agua.", // NEEDS QC
-		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Agua usan 1,5× su ofensiva.", // NEEDS QC
+		desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), su característica ofensiva se multiplica por 1.5 al usar un ataque de tipo Agua.", // NEEDS QC
+		shortDesc: "Con 1/3 o menos de sus PS, sus ataques de Agua usan 1.5× su ofensiva.", // NEEDS QC
 		gen4: {
-			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Agua se multiplica por 1,5.", // NEEDS QC
-			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Agua tienen 1,5× potencia.", // NEEDS QC
+			desc: "Cuando este Pokémon tiene 1/3 o menos de sus PS máximos (redondeado hacia abajo), la potencia de sus ataques de tipo Agua se multiplica por 1.5.", // NEEDS QC
+			shortDesc: "Con 1/3 o menos de sus PS máx., sus ataques de Agua tienen 1.5× potencia.", // NEEDS QC
 		},
 	},
 	toughclaws: {
 		name: "Garra Dura",
-		shortDesc: "Sus movimientos de contacto tienen 1,3× de potencia.", // NEEDS QC
+		shortDesc: "Sus movimientos de contacto tienen 1.3× de potencia.", // NEEDS QC
 	},
 	toxicboost: {
 		name: "Ímpetu Tóxico",
 		// Official flavor text: "Aumenta la potencia de sus ataques físicos cuando está envenenado."
-		desc: "Mientras este Pokémon está envenenado, la potencia de sus ataques físicos se multiplica por 1,5.", // NEEDS QC
-		shortDesc: "Envenenado, sus ataques físicos tienen 1,5× de potencia.", // NEEDS QC
+		desc: "Mientras este Pokémon está envenenado, la potencia de sus ataques físicos se multiplica por 1.5.", // NEEDS QC
+		shortDesc: "Envenenado, sus ataques físicos tienen 1.5× de potencia.", // NEEDS QC
 	},
 	toxicchain: {
 		name: "Cadena Tóxica",
@@ -2279,9 +2279,9 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	transistor: {
 		name: "Transistor",
-		shortDesc: "Sus ataques de tipo Eléctrico usan 1,3× su característica ofensiva.", // NEEDS QC
+		shortDesc: "Sus ataques de tipo Eléctrico usan 1.3× su característica ofensiva.", // NEEDS QC
 		gen8: {
-			shortDesc: "Su característica ofensiva es ×1,5 al usar un ataque Eléctrico.", // NEEDS QC
+			shortDesc: "Su característica ofensiva es ×1.5 al usar un ataque Eléctrico.", // NEEDS QC
 		},
 	},
 	triage: {
@@ -2349,13 +2349,13 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	vesselofruin: {
 		name: "Caldero Debacle",
-		shortDesc: "El Ataque Esp. de los demás Pokémon en combate se multiplica por 0,75.", // NEEDS QC
+		shortDesc: "El Ataque Esp. de los demás Pokémon en combate se multiplica por 0.75.", // NEEDS QC
 
 		start: "  ¡{POKEMON} ha mermado el Ataque Especial de los demás Pokémon con Caldero Debacle!",
 	},
 	victorystar: {
 		name: "Tinovictoria",
-		shortDesc: "La precisión suya y de sus aliados se multiplica por 1,1.", // NEEDS QC
+		shortDesc: "La precisión suya y de sus aliados se multiplica por 1.1.", // NEEDS QC
 	},
 	vitalspirit: {
 		name: "Espíritu Vital",

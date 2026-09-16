@@ -1,7 +1,7 @@
 // Mechanics desc style (es): official game terminology. el usuario (user), el objetivo
 //   (target), efecto secundario, amedrentar (flinch), golpe crítico, niveles (stages),
 //   problema de estado (status), movimiento multigolpe, prioridad, sustituto, redondeado
-//   hacia abajo/arriba. Decimal comma (1,5). Boilerplate shared verbatim — QC one, fix all.
+//   hacia abajo/arriba. Decimal point (1.5), not the comma of official es text. Boilerplate shared verbatim — QC one, fix all.
 // Cross-references generated from name fields / pokedex-names.ts. CAP entities keep name
 //   null (English fallback); descs are translated with English names inline.
 
@@ -15,10 +15,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	absorb: {
 		name: "Absorber",
 		// Official flavor text: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 		gen4: {
-			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja).", // NEEDS QC
+			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja).", // NEEDS QC
 		},
 		gen3: {
 			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja).", // NEEDS QC
@@ -186,7 +186,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	aquaring: {
 		name: "Acua Aro",
 		// Official flavor text: "Un manto de agua cubre al Pokémon que lo usa. Recupera algunos PS en cada turno."
-		desc: "Mientras el usuario siga en combate, recupera 1/16 de sus PS máximos (redondeado hacia abajo) al final de cada turno. Si el usuario lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5). Si usa Relevo, el sustituto recibe el efecto curativo.", // NEEDS QC
+		desc: "Mientras el usuario siga en combate, recupera 1/16 de sus PS máximos (redondeado hacia abajo) al final de cada turno. Si el usuario lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5). Si usa Relevo, el sustituto recibe el efecto curativo.", // NEEDS QC
 		shortDesc: "Recupera 1/16 de sus PS máximos cada turno.", // NEEDS QC
 
 		start: "  ¡{POKEMON} se ha rodeado de un manto de agua!",
@@ -334,10 +334,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	auroraveil: {
 		name: "Velo Aurora",
 		// Official flavor text: "Reduce el daño de los ataques físicos y especiales que ejecuta el rival durante cinco turnos. Solo puede usarse cuando está granizando."
-		desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0,5 de daño de ataques físicos y especiales (×0,66 en combates dobles); no se acumula con Reflejo ni Pantalla de Luz. Los golpes críticos ignoran esta protección. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar; los dos primeros la eliminan antes de calcular el daño. Dura 8 turnos con Refleluz. Falla si no nieva.", // NEEDS QC
+		desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0.5 de daño de ataques físicos y especiales (×0.66 en combates dobles); no se acumula con Reflejo ni Pantalla de Luz. Los golpes críticos ignoran esta protección. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar; los dos primeros la eliminan antes de calcular el daño. Dura 8 turnos con Refleluz. Falla si no nieva.", // NEEDS QC
 		shortDesc: "5 turnos: daño a aliados a la mitad. Solo con nieve.", // NEEDS QC
 		gen8: {
-			desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0,5 de daño de ataques físicos y especiales (×0,66 en combates dobles); no se acumula con Reflejo ni Pantalla de Luz. Los golpes críticos ignoran esta protección. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar; los dos primeros la eliminan antes de calcular el daño. Dura 8 turnos con Refleluz. Falla si no graniza.", // NEEDS QC
+			desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0.5 de daño de ataques físicos y especiales (×0.66 en combates dobles); no se acumula con Reflejo ni Pantalla de Luz. Los golpes críticos ignoran esta protección. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar; los dos primeros la eliminan antes de calcular el daño. Dura 8 turnos con Refleluz. Falla si no graniza.", // NEEDS QC
 			shortDesc: "5 turnos: mitad de daño al equipo. Solo granizo.", // NEEDS QC
 		},
 
@@ -347,7 +347,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	autotomize: {
 		name: "Aligerar",
 		// Official flavor text: "El usuario se desprende de partes prescindibles de su cuerpo para hacerse más ligero y aumentar mucho su Velocidad."
-		desc: "Sube 2 niveles la Velocidad del usuario. Si su Velocidad cambió, su peso se reduce en 100 kg mientras siga en combate. El efecto es acumulable, pero el peso no baja de 0,1 kg.", // NEEDS QC
+		desc: "Sube 2 niveles la Velocidad del usuario. Si su Velocidad cambió, su peso se reduce en 100 kg mientras siga en combate. El efecto es acumulable, pero el peso no baja de 0.1 kg.", // NEEDS QC
 		shortDesc: "Sube 2 niveles su Velocidad; pierde 100 kg.", // NEEDS QC
 
 		start: "  ¡{POKEMON} es ahora más ligero!",
@@ -580,7 +580,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bitterblade: {
 		name: "Espada Lamento",
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 	},
 	bittermalice: {
@@ -752,7 +752,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bouncybubble: {
 		name: "Vapodrenaje",
 		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 	},
 	branchpoke: {
@@ -764,7 +764,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	bravebird: {
 		name: "Pájaro Osado",
 		// Official flavor text: "Pliega sus alas y ataca con un vuelo rasante. El Pokémon que lo usa también resulta seriamente dañado."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso del 33% del daño.", // NEEDS QC
 		gen4: {
 			desc: "Si el objetivo perdió PS, el usuario sufre daño de retroceso igual a 1/3 de los PS perdidos por el objetivo (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
@@ -1101,8 +1101,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	collisioncourse: {
 		name: "Nitrochoque",
-		desc: "El daño se multiplica por 1,3333 si el movimiento es supereficaz contra el objetivo.", // NEEDS QC
-		shortDesc: "Inflige 1,3333× de daño si es supereficaz.", // NEEDS QC
+		desc: "El daño se multiplica por 1.3333 si el movimiento es supereficaz contra el objetivo.", // NEEDS QC
+		shortDesc: "Inflige 1.3333× de daño si es supereficaz.", // NEEDS QC
 	},
 	combattorque: {
 		name: "Pugnachoque",
@@ -1126,8 +1126,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	comeuppance: {
 		name: "Resarcimiento",
-		desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1,5× el daño recibido (redondeado hacia abajo); si no perdió PS, inflige 1 PS. Si esa posición está vacía y hay otro rival en el campo, lo daña a él. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno.", // NEEDS QC
-		shortDesc: "Si lo golpean, devuelve 1,5× el daño.", // NEEDS QC
+		desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1.5× el daño recibido (redondeado hacia abajo); si no perdió PS, inflige 1 PS. Si esa posición está vacía y hay otro rival en el campo, lo daña a él. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno.", // NEEDS QC
+		shortDesc: "Si lo golpean, devuelve 1.5× el daño.", // NEEDS QC
 	},
 	confide: {
 		name: "Confidencia",
@@ -1370,7 +1370,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	crushgrip: {
 		name: "Agarrón",
 		// Official flavor text: "Estruja al objetivo con gran fuerza. Cuantos más PS le queden al objetivo, más fuerte será el ataque."
-		desc: "La potencia es 120×(PS actuales del objetivo÷PS máximos del objetivo) (redondeado a la baja desde 0,5, mínimo 1).", // NEEDS QC
+		desc: "La potencia es 120×(PS actuales del objetivo÷PS máximos del objetivo) (redondeado a la baja desde 0.5, mínimo 1).", // NEEDS QC
 		shortDesc: "Más potencia cuantos más PS le queden al objetivo.", // NEEDS QC
 		gen4: {
 			desc: "La potencia es 120 × (PS actuales del objetivo ÷ PS máximos del objetivo) + 1, redondeado hacia abajo.", // NEEDS QC
@@ -1640,7 +1640,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	doubleedge: {
 		name: "Doble Filo",
 		// Official flavor text: "Ataque arriesgado que también hiere al agresor."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso del 33% del daño.", // NEEDS QC
 		gen4: {
 			desc: "Si el objetivo perdió PS, el usuario sufre daño de retroceso igual a 1/3 de los PS perdidos por el objetivo (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
@@ -1791,25 +1791,25 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	drainingkiss: {
 		name: "Beso Drenaje",
 		// Official flavor text: "El usuario absorbe PS del objetivo con un beso y restaura su propia energía en una cantidad igual o superior a la mitad del daño infligido."
-		desc: "El usuario recupera 3/4 del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera 3/4 del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera 3/4 del daño infligido.", // NEEDS QC
 	},
 	drainpunch: {
 		name: "Puño Drenaje",
 		// Official flavor text: "Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 		gen4: {
-			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja).", // NEEDS QC
+			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja).", // NEEDS QC
 		},
 	},
 	dreameater: {
 		name: "Comesueños",
 		// Official flavor text: "Restaura al usuario la mitad del daño causado a un objetivo dormido."
-		desc: "Solo afecta a objetivos dormidos. El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "Solo afecta a objetivos dormidos. El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "Solo contra dormidos. Recupera la mitad del daño.", // NEEDS QC
 		gen4: {
-			desc: "Solo afecta al objetivo si está dormido y no tiene sustituto. El usuario recupera la mitad de los PS perdidos por el objetivo (redondeado hacia abajo, mínimo 1 PS). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado hacia abajo).", // NEEDS QC
+			desc: "Solo afecta al objetivo si está dormido y no tiene sustituto. El usuario recupera la mitad de los PS perdidos por el objetivo (redondeado hacia abajo, mínimo 1 PS). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado hacia abajo).", // NEEDS QC
 		},
 		gen3: {
 			desc: "Solo afecta al objetivo si está dormido y no tiene sustituto. El usuario recupera la mitad de los PS perdidos por el objetivo (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
@@ -1909,10 +1909,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	electricterrain: {
 		name: "Campo Eléctrico",
 		// Official flavor text: "Durante cinco turnos, se potencian los movimientos de tipo Eléctrico y los Pokémon que están en contacto con el suelo no pueden quedarse dormidos."
-		desc: "Durante 5 turnos, se activa el campo eléctrico: la potencia de los ataques de tipo Eléctrico de los Pokémon en el suelo se multiplica por 1,3 y estos no pueden dormirse (los ya dormidos no despiertan). Los Pokémon en el suelo no pueden verse afectados por Bostezo ni dormirse por su efecto. Camuflaje vuelve al usuario de tipo Eléctrico, Adaptación pasa a ser Rayo y Daño Secreto tiene un 30% de causar parálisis. Falla si ya hay campo eléctrico.", // NEEDS QC
+		desc: "Durante 5 turnos, se activa el campo eléctrico: la potencia de los ataques de tipo Eléctrico de los Pokémon en el suelo se multiplica por 1.3 y estos no pueden dormirse (los ya dormidos no despiertan). Los Pokémon en el suelo no pueden verse afectados por Bostezo ni dormirse por su efecto. Camuflaje vuelve al usuario de tipo Eléctrico, Adaptación pasa a ser Rayo y Daño Secreto tiene un 30% de causar parálisis. Falla si ya hay campo eléctrico.", // NEEDS QC
 		shortDesc: "5 turnos: potencia Eléctrico, nadie duerme en el suelo.", // NEEDS QC
 		gen7: {
-			desc: "Durante 5 turnos se activa un campo eléctrico. Mientras dura, la potencia de los ataques de tipo Eléctrico de los Pokémon en el suelo se multiplica por 1,5, y estos no pueden dormirse; los ya dormidos no despiertan. Los Pokémon en el suelo no pueden verse afectados por Bostezo ni dormirse por su efecto. Camuflaje convierte al usuario en tipo Eléctrico, Adaptación pasa a ser Rayo y Daño Secreto tiene un 30% de probabilidad de paralizar. Falla si ya hay un campo eléctrico.", // NEEDS QC
+			desc: "Durante 5 turnos se activa un campo eléctrico. Mientras dura, la potencia de los ataques de tipo Eléctrico de los Pokémon en el suelo se multiplica por 1.5, y estos no pueden dormirse; los ya dormidos no despiertan. Los Pokémon en el suelo no pueden verse afectados por Bostezo ni dormirse por su efecto. Camuflaje convierte al usuario en tipo Eléctrico, Adaptación pasa a ser Rayo y Daño Secreto tiene un 30% de probabilidad de paralizar. Falla si ya hay un campo eléctrico.", // NEEDS QC
 		},
 	},
 	electrify: {
@@ -1934,8 +1934,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	electrodrift: {
 		name: "Electroderrape",
-		desc: "El daño se multiplica por 1,3333 si el movimiento es supereficaz contra el objetivo.", // NEEDS QC
-		shortDesc: "Inflige 1,3333× de daño si es supereficaz.", // NEEDS QC
+		desc: "El daño se multiplica por 1.3333 si el movimiento es supereficaz contra el objetivo.", // NEEDS QC
+		shortDesc: "Inflige 1.3333× de daño si es supereficaz.", // NEEDS QC
 	},
 	electroshot: {
 		name: "Electrorrayo",
@@ -2074,8 +2074,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	expandingforce: {
 		name: "Vasta Fuerza",
 		// Official flavor text: "El usuario ataca al objetivo con sus poderes psíquicos. Cuando se usa en conjunción con un campo psíquico, aumenta su potencia e inflige daño a todos los rivales."
-		desc: "Si hay campo psíquico y el usuario está en el suelo, golpea a todos los rivales y su potencia se multiplica por 1,5.", // NEEDS QC
-		shortDesc: "En campo psíquico: 1,5× y golpea a los rivales.", // NEEDS QC
+		desc: "Si hay campo psíquico y el usuario está en el suelo, golpea a todos los rivales y su potencia se multiplica por 1.5.", // NEEDS QC
+		shortDesc: "En campo psíquico: 1.5× y golpea a los rivales.", // NEEDS QC
 	},
 	explosion: {
 		name: "Explosión",
@@ -2382,7 +2382,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	flareblitz: {
 		name: "Envite Ígneo",
 		// Official flavor text: "El Pokémon se cubre de llamas y carga contra el objetivo, aunque él también recibe daño. Puede quemar."
-		desc: "10% de probabilidad de quemar al objetivo. Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "10% de probabilidad de quemar al objetivo. Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso 33%. 10% de quemar. Descongela al usuario.", // NEEDS QC
 		gen4: {
 			desc: "10% de probabilidad de quemar al objetivo. Si el objetivo perdió PS, el usuario sufre daño de retroceso igual a 1/3 de los PS perdidos (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
@@ -2441,7 +2441,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	floralhealing: {
 		name: "Cura Floral",
 		// Official flavor text: "Restaura la mitad de los PS máximos del objetivo. Es más efectivo cuando se usa en conjunción con Campo de Hierba."
-		desc: "Restaura la mitad de los PS máximos del objetivo (redondeado al alza desde 0,5). Con campo de hierba, restaura 2/3 (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "Restaura la mitad de los PS máximos del objetivo (redondeado al alza desde 0.5). Con campo de hierba, restaura 2/3 (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El objetivo recupera la mitad de sus PS máximos.", // NEEDS QC
 	},
 	flowershield: {
@@ -2736,10 +2736,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gigadrain: {
 		name: "Gigadrenado",
 		// Official flavor text: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 		gen4: {
-			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja).", // NEEDS QC
+			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja).", // NEEDS QC
 		},
 		gen3: {
 			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja).", // NEEDS QC
@@ -2913,7 +2913,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsteelsurge: {
 		name: "Gigatrampa Acero",
-		desc: "Su potencia es la del Maximovimiento del movimiento base. Si acierta, coloca una trampa en el bando rival que daña a los rivales que entren en combate según su debilidad al tipo Acero: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0,25×, 0,5×, neutra, 2× o 4×. Se elimina si un rival usa con éxito Giro Rápido o Despejar o recibe Despejar.", // NEEDS QC
+		desc: "Su potencia es la del Maximovimiento del movimiento base. Si acierta, coloca una trampa en el bando rival que daña a los rivales que entren en combate según su debilidad al tipo Acero: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0.25×, 0.5×, neutra, 2× o 4×. Se elimina si un rival usa con éxito Giro Rápido o Despejar o recibe Despejar.", // NEEDS QC
 		shortDesc: "Potencia según mov. base. Trampa de tipo Acero.", // NEEDS QC
 
 		start: "  ¡{TEAM:capitalize} está rodeado de piezas de acero puntiagudas!", // SV es_common:8983 (bando→lado per Champions)
@@ -2922,7 +2922,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxstonesurge: {
 		name: "Gigatrampa Rocas",
-		desc: "Su potencia es la del Maximovimiento del movimiento base. Si acierta, coloca una trampa en el bando rival que daña a los rivales que entren en combate según su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0,25×, 0,5×, neutra, 2× o 4×. Se elimina si un rival usa con éxito Giro Rápido o Despejar o recibe Despejar.", // NEEDS QC
+		desc: "Su potencia es la del Maximovimiento del movimiento base. Si acierta, coloca una trampa en el bando rival que daña a los rivales que entren en combate según su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0.25×, 0.5×, neutra, 2× o 4×. Se elimina si un rival usa con éxito Giro Rápido o Despejar o recibe Despejar.", // NEEDS QC
 		shortDesc: "Potencia según mov. base. Coloca Trampa Rocas.", // NEEDS QC
 	},
 	gmaxstunshock: {
@@ -3008,34 +3008,34 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	grassyterrain: {
 		name: "Campo de Hierba",
 		// Official flavor text: "Durante cinco turnos, se potencian los movimientos de tipo Planta y los Pokémon que están en contacto con el suelo recuperan PS en cada turno."
-		desc: "Durante 5 turnos, se activa el campo de hierba: la potencia de los ataques de tipo Planta de los Pokémon en el suelo se multiplica por 1,3, la de Terratemblor, Terremoto, Magnitud contra Pokémon en el suelo por 0,5, y los Pokémon en el suelo recuperan 1/16 de sus PS máximos (redondeado hacia abajo) al final de cada turno, incluido el último. Camuflaje vuelve al usuario de tipo Planta, Adaptación pasa a ser Energibola y Daño Secreto tiene un 30% de causar sueño. Falla si ya hay campo de hierba.", // NEEDS QC
+		desc: "Durante 5 turnos, se activa el campo de hierba: la potencia de los ataques de tipo Planta de los Pokémon en el suelo se multiplica por 1.3, la de Terratemblor, Terremoto, Magnitud contra Pokémon en el suelo por 0.5, y los Pokémon en el suelo recuperan 1/16 de sus PS máximos (redondeado hacia abajo) al final de cada turno, incluido el último. Camuflaje vuelve al usuario de tipo Planta, Adaptación pasa a ser Energibola y Daño Secreto tiene un 30% de causar sueño. Falla si ya hay campo de hierba.", // NEEDS QC
 		shortDesc: "5 turnos: potencia Planta y cura 1/16 por turno.", // NEEDS QC
 		gen7: {
-			desc: "Durante 5 turnos se activa un campo de hierba. Mientras dura, la potencia de los ataques de tipo Planta de los Pokémon en el suelo se multiplica por 1,5, la potencia de Terratemblor, Terremoto y Magnitud contra Pokémon en el suelo se multiplica por 0,5, y los Pokémon en el suelo recuperan 1/16 de sus PS máximos (redondeado hacia abajo) al final de cada turno, incluido el último. Camuflaje convierte al usuario en tipo Planta, Adaptación pasa a ser Energibola y Daño Secreto tiene un 30% de probabilidad de dormir. Falla si ya hay un campo de hierba.", // NEEDS QC
+			desc: "Durante 5 turnos se activa un campo de hierba. Mientras dura, la potencia de los ataques de tipo Planta de los Pokémon en el suelo se multiplica por 1.5, la potencia de Terratemblor, Terremoto y Magnitud contra Pokémon en el suelo se multiplica por 0.5, y los Pokémon en el suelo recuperan 1/16 de sus PS máximos (redondeado hacia abajo) al final de cada turno, incluido el último. Camuflaje convierte al usuario en tipo Planta, Adaptación pasa a ser Energibola y Daño Secreto tiene un 30% de probabilidad de dormir. Falla si ya hay un campo de hierba.", // NEEDS QC
 		},
 	},
 	gravapple: {
 		name: "Fuerza G",
 		// Official flavor text: "El usuario ataca haciendo caer una manzana desde gran altura. Disminuye la Defensa del objetivo."
-		desc: "100% de probabilidad de bajar 1 nivel la Defensa del objetivo. La potencia se multiplica por 1,5 durante Gravedad.", // NEEDS QC
-		shortDesc: "100% de -1 Defensa. Con Gravedad: 1,5× potencia.", // NEEDS QC
+		desc: "100% de probabilidad de bajar 1 nivel la Defensa del objetivo. La potencia se multiplica por 1.5 durante Gravedad.", // NEEDS QC
+		shortDesc: "100% de -1 Defensa. Con Gravedad: 1.5× potencia.", // NEEDS QC
 	},
 	gravity: {
 		name: "Gravedad",
 		// Official flavor text: "Durante cinco turnos, se anulan los movimientos que alzan el vuelo y los Pokémon de tipo Volador o que levitan son vulnerables a movimientos de tipo Tierra."
-		desc: "Durante 5 turnos, la evasión de todos los Pokémon en combate se multiplica por 0,6. Al usarse, terminan de inmediato Bote, Vuelo, Levitón, Caída Libre, Telequinesis para todos. Durante el efecto, nadie puede usar Bote, Vuelo, Plancha Voladora, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas, Red Viscosa y la habilidad Trampa Arena afectan a los de tipo Volador y a los que tienen Levitación. Falla si ya está en efecto.", // NEEDS QC
-		shortDesc: "5 turnos: sin inmunidades a Tierra, 1,67× precisión.", // NEEDS QC
+		desc: "Durante 5 turnos, la evasión de todos los Pokémon en combate se multiplica por 0.6. Al usarse, terminan de inmediato Bote, Vuelo, Levitón, Caída Libre, Telequinesis para todos. Durante el efecto, nadie puede usar Bote, Vuelo, Plancha Voladora, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas, Red Viscosa y la habilidad Trampa Arena afectan a los de tipo Volador y a los que tienen Levitación. Falla si ya está en efecto.", // NEEDS QC
+		shortDesc: "5 turnos: sin inmunidades a Tierra, 1.67× precisión.", // NEEDS QC
 		gen7: {
-			desc: "Durante 5 turnos, la evasión de todos los Pokémon activos se multiplica por 0,6. Al usarse, Bote, Vuelo, Levitón, Caída Libre, Telequinesis terminan de inmediato para todos los Pokémon. Mientras dura, ningún Pokémon puede usar Bote, Vuelo, Plancha Voladora, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas, Red Viscosa y la habilidad Trampa Arena pueden afectar a los Pokémon de tipo Volador o con la habilidad Levitación. Falla si el efecto ya está activo. Los movimientos Z afectados pueden seguir eligiéndose, pero se impedirán al ejecutarse durante este efecto.", // NEEDS QC
+			desc: "Durante 5 turnos, la evasión de todos los Pokémon activos se multiplica por 0.6. Al usarse, Bote, Vuelo, Levitón, Caída Libre, Telequinesis terminan de inmediato para todos los Pokémon. Mientras dura, ningún Pokémon puede usar Bote, Vuelo, Plancha Voladora, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas, Red Viscosa y la habilidad Trampa Arena pueden afectar a los Pokémon de tipo Volador o con la habilidad Levitación. Falla si el efecto ya está activo. Los movimientos Z afectados pueden seguir eligiéndose, pero se impedirán al ejecutarse durante este efecto.", // NEEDS QC
 		},
 		gen6: {
-			desc: "Durante 5 turnos, la evasión de todos los Pokémon en combate se multiplica por 0,6. Al usarse, terminan de inmediato Bote, Vuelo, Levitón, Caída Libre, Telequinesis para todos. Durante el efecto, nadie puede usar Bote, Vuelo, Plancha Voladora, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas, Red Viscosa y la habilidad Trampa Arena afectan a los de tipo Volador y a los que tienen Levitación. Falla si ya está en efecto.", // NEEDS QC
+			desc: "Durante 5 turnos, la evasión de todos los Pokémon en combate se multiplica por 0.6. Al usarse, terminan de inmediato Bote, Vuelo, Levitón, Caída Libre, Telequinesis para todos. Durante el efecto, nadie puede usar Bote, Vuelo, Plancha Voladora, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas, Red Viscosa y la habilidad Trampa Arena afectan a los de tipo Volador y a los que tienen Levitación. Falla si ya está en efecto.", // NEEDS QC
 		},
 		gen5: {
-			desc: "Durante 5 turnos, la evasión de todos los Pokémon activos se multiplica por 0,6. Al usarse, Bote, Vuelo, Levitón, Caída Libre, Telequinesis terminan de inmediato para todos los Pokémon. Mientras dura, ningún Pokémon puede usar Bote, Vuelo, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas y la habilidad Trampa Arena pueden afectar a los Pokémon de tipo Volador o con la habilidad Levitación. Falla si el efecto ya está activo.", // NEEDS QC
+			desc: "Durante 5 turnos, la evasión de todos los Pokémon activos se multiplica por 0.6. Al usarse, Bote, Vuelo, Levitón, Caída Libre, Telequinesis terminan de inmediato para todos los Pokémon. Mientras dura, ningún Pokémon puede usar Bote, Vuelo, Patada Salto Alta, Patada Salto, Levitón, Caída Libre, Salpicadura, Telequinesis. Los ataques de tipo Tierra, Púas, Púas Tóxicas y la habilidad Trampa Arena pueden afectar a los Pokémon de tipo Volador o con la habilidad Levitación. Falla si el efecto ya está activo.", // NEEDS QC
 		},
 		gen4: {
-			desc: "Durante 5 turnos, la evasión de todos los Pokémon activos se multiplica por 0,6. Al usarse, Bote, Vuelo, Levitón terminan de inmediato para todos los Pokémon. Mientras dura, ningún Pokémon puede usar Bote, Vuelo, Patada Salto Alta, Patada Salto, Levitón, Salpicadura. Los ataques de tipo Tierra, Púas, Púas Tóxicas y la habilidad Trampa Arena pueden afectar a los Pokémon de tipo Volador o con la habilidad Levitación. Falla si el efecto ya está activo.", // NEEDS QC
+			desc: "Durante 5 turnos, la evasión de todos los Pokémon activos se multiplica por 0.6. Al usarse, Bote, Vuelo, Levitón terminan de inmediato para todos los Pokémon. Mientras dura, ningún Pokémon puede usar Bote, Vuelo, Patada Salto Alta, Patada Salto, Levitón, Salpicadura. Los ataques de tipo Tierra, Púas, Púas Tóxicas y la habilidad Trampa Arena pueden afectar a los Pokémon de tipo Volador o con la habilidad Levitación. Falla si el efecto ya está activo.", // NEEDS QC
 		},
 	},
 	growl: {
@@ -3174,7 +3174,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hardpress: {
 		name: "Prensa Metálica",
-		desc: "La potencia es 100×(PS actuales del objetivo÷PS máximos del objetivo) (redondeado a la baja desde 0,5, mínimo 1).", // NEEDS QC
+		desc: "La potencia es 100×(PS actuales del objetivo÷PS máximos del objetivo) (redondeado a la baja desde 0.5, mínimo 1).", // NEEDS QC
 		shortDesc: "Más potencia cuantos más PS le queden al objetivo.", // NEEDS QC
 	},
 	haze: {
@@ -3199,7 +3199,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	headcharge: {
 		name: "Ariete",
 		// Official flavor text: "Propina un tremendo cabezazo. También daña al usuario un poco."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso de 1/4 del daño.", // NEEDS QC
 	},
 	headlongrush: {
@@ -3210,7 +3210,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	headsmash: {
 		name: "Testarazo",
 		// Official flavor text: "El usuario arriesga su vida y lanza un cabezazo con toda su fuerza. El agresor resulta seriamente dañado."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de la mitad del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de la mitad del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso de la mitad del daño.", // NEEDS QC
 		gen4: {
 			desc: "Si el objetivo perdió PS, el usuario sufre daño de retroceso igual a la mitad de los PS perdidos (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
@@ -3278,7 +3278,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healorder: {
 		name: "Auxilio",
 		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad de sus PS máximos.", // NEEDS QC
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos (redondeado hacia abajo).", // NEEDS QC
@@ -3287,10 +3287,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	healpulse: {
 		name: "Pulso Cura",
 		// Official flavor text: "Una onda curativa restaura la mitad de los PS máximos del objetivo."
-		desc: "El objetivo recupera la mitad de sus PS máximos (redondeado al alza desde 0,5). Si el usuario tiene la habilidad Megadisparador, recupera 3/4 (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El objetivo recupera la mitad de sus PS máximos (redondeado al alza desde 0.5). Si el usuario tiene la habilidad Megadisparador, recupera 3/4 (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El objetivo recupera la mitad de sus PS máximos.", // NEEDS QC
 		gen5: {
-			desc: "El objetivo recupera la mitad de sus PS máximos (redondeado al alza desde 0,5).", // NEEDS QC
+			desc: "El objetivo recupera la mitad de sus PS máximos (redondeado al alza desde 0.5).", // NEEDS QC
 		},
 	},
 	heartstamp: {
@@ -3332,8 +3332,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	helpinghand: {
 		name: "Refuerzo",
 		// Official flavor text: "El usuario ayuda a un aliado reforzando la potencia de su ataque."
-		desc: "La potencia del ataque del aliado se multiplica por 1,5 este turno (efecto acumulable). Falla si el usuario no tiene un aliado adyacente o si este ya actuó, pero no si el aliado está usando un movimiento de dos turnos.", // NEEDS QC
-		shortDesc: "El movimiento de un aliado tiene 1,5× de potencia.", // NEEDS QC
+		desc: "La potencia del ataque del aliado se multiplica por 1.5 este turno (efecto acumulable). Falla si el usuario no tiene un aliado adyacente o si este ya actuó, pero no si el aliado está usando un movimiento de dos turnos.", // NEEDS QC
+		shortDesc: "El movimiento de un aliado tiene 1.5× de potencia.", // NEEDS QC
 
 		start: "  ¡{SOURCE} está listo para ayudar a {POKEMON}!",
 	},
@@ -3467,7 +3467,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	hornleech: {
 		name: "Asta Drenaje",
 		// Official flavor text: "Un golpe que drena energía. El Pokémon recupera la mitad de los PS arrebatados al objetivo."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 	},
 	howl: {
@@ -3504,8 +3504,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hydrosteam: {
 		name: "Hidrovapor",
-		desc: "Si hace sol y el usuario no lleva Parasol Multiuso, el daño se multiplica por 1,5 en lugar de reducirse a la mitad por ser de tipo Agua.", // NEEDS QC
-		shortDesc: "Con sol: 1,5× de daño en lugar de la mitad.", // NEEDS QC
+		desc: "Si hace sol y el usuario no lleva Parasol Multiuso, el daño se multiplica por 1.5 en lugar de reducirse a la mitad por ser de tipo Agua.", // NEEDS QC
+		shortDesc: "Con sol: 1.5× de daño en lugar de la mitad.", // NEEDS QC
 	},
 	hydrovortex: {
 		name: "Hidrovórtice Abisal",
@@ -3824,7 +3824,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	junglehealing: {
 		name: "Cura Selvática",
 		// Official flavor text: "Al entrar en plena armonía con la selva, el usuario cura problemas de estado y restaura PS no solo de sí mismo, sino también de los aliados presentes en el terreno."
-		desc: "Cada Pokémon del bando del usuario recupera 1/4 de sus PS máximos (redondeado al alza desde 0,5) y se cura de sus problemas de estado.", // NEEDS QC
+		desc: "Cada Pokémon del bando del usuario recupera 1/4 de sus PS máximos (redondeado al alza desde 0.5) y se cura de sus problemas de estado.", // NEEDS QC
 		shortDesc: "Usuario y aliados: +1/4 de PS y estados curados.", // NEEDS QC
 	},
 	karatechop: {
@@ -3858,19 +3858,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	knockoff: {
 		name: "Desarme",
 		// Official flavor text: "Impide al objetivo usar el objeto que lleva durante el combate. La potencia del movimiento se multiplica si el objetivo lleva un objeto."
-		desc: "La potencia se multiplica por 1,5 si el objetivo lleva objeto, y este lo pierde si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es Prisma Azul, Prisma Rojo, Gran Diamansfera, Gran Lustresfera, Gran Griseosfera, una tabla, un cartucho, un disco, Espada Oxidada, Escudo Oxidado, Energía Potenciadora o una máscara en poder de Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, un Pokémon Paradoja u Ogerpon, respectivamente, ni si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Aquí, los Pokémon Paradoja son todas las especies con las habilidades Paleosíntesis y Carga Cuark, salvo Flamariete, Electrofuria, Ferromole, Ferrotesta. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
-		shortDesc: "1,5× si el rival lleva objeto, y se lo quita.", // NEEDS QC
+		desc: "La potencia se multiplica por 1.5 si el objetivo lleva objeto, y este lo pierde si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es Prisma Azul, Prisma Rojo, Gran Diamansfera, Gran Lustresfera, Gran Griseosfera, una tabla, un cartucho, un disco, Espada Oxidada, Escudo Oxidado, Energía Potenciadora o una máscara en poder de Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, un Pokémon Paradoja u Ogerpon, respectivamente, ni si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Aquí, los Pokémon Paradoja son todas las especies con las habilidades Paleosíntesis y Carga Cuark, salvo Flamariete, Electrofuria, Ferromole, Ferrotesta. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
+		shortDesc: "1.5× si el rival lleva objeto, y se lo quita.", // NEEDS QC
 		champions: {
-			desc: "La potencia se multiplica por 1,5 si el objetivo lleva objeto, y este lo pierde. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es una megapiedra llevada por la especie que puede megaevolucionar con ella. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
+			desc: "La potencia se multiplica por 1.5 si el objetivo lleva objeto, y este lo pierde. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es una megapiedra llevada por la especie que puede megaevolucionar con ella. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
 		},
 		gen8: {
-			desc: "La potencia se multiplica por 1,5 si el objetivo lleva un objeto, y el objetivo pierde su objeto si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es Prisma Azul, Prisma Rojo, Griseosfera, una tabla, un cartucho, un disco, Espada Oxidada o Escudo Oxidado llevados, respectivamente, por Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, o si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
+			desc: "La potencia se multiplica por 1.5 si el objetivo lleva un objeto, y el objetivo pierde su objeto si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es Prisma Azul, Prisma Rojo, Griseosfera, una tabla, un cartucho, un disco, Espada Oxidada o Escudo Oxidado llevados, respectivamente, por Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, o si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
 		},
 		gen7: {
-			desc: "La potencia se multiplica por 1,5 si el objetivo lleva un objeto, y el objetivo pierde su objeto si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es un Cristal Z, una megapiedra llevada por la especie que puede megaevolucionar con ella, o Prisma Azul, Prisma Rojo, Griseosfera, una tabla, un cartucho o un disco llevados, respectivamente, por Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, o si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
+			desc: "La potencia se multiplica por 1.5 si el objetivo lleva un objeto, y el objetivo pierde su objeto si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es un Cristal Z, una megapiedra llevada por la especie que puede megaevolucionar con ella, o Prisma Azul, Prisma Rojo, Griseosfera, una tabla, un cartucho o un disco llevados, respectivamente, por Kyogre, Groudon, Giratina, Arceus, Genesect, Silvally, o si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
 		},
 		gen6: {
-			desc: "La potencia se multiplica por 1,5 si el objetivo lleva un objeto, y el objetivo pierde su objeto si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es una megapiedra llevada por la especie que puede megaevolucionar con ella, o Prisma Azul, Prisma Rojo, Griseosfera, una tabla o un cartucho llevados, respectivamente, por Kyogre, Groudon, Giratina, Arceus, Genesect, o si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
+			desc: "La potencia se multiplica por 1.5 si el objetivo lleva un objeto, y el objetivo pierde su objeto si el usuario no se ha debilitado. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. La potencia no aumenta ni se pierde el objeto si es una megapiedra llevada por la especie que puede megaevolucionar con ella, o Prisma Azul, Prisma Rojo, Griseosfera, una tabla o un cartucho llevados, respectivamente, por Kyogre, Groudon, Giratina, Arceus, Genesect, o si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
 		},
 		gen5: {
 			desc: "Si el usuario no se ha debilitado, el objetivo pierde su objeto. Un objetivo con la habilidad Viscosidad no pierde su objeto si no se ha debilitado. El objeto no se pierde si es Griseosfera, una tabla o un cartucho llevados, respectivamente, por Giratina, Arceus o Genesect, o si el usuario es una de esas especies y el objetivo lleva el objeto correspondiente. Los objetos perdidos así no pueden recuperarse con Reciclaje ni la habilidad Cosecha.", // NEEDS QC
@@ -3952,10 +3952,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	leechlife: {
 		name: "Chupavidas",
 		// Official flavor text: "Restaura al usuario la mitad del daño causado al objetivo."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 		gen4: {
-			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja).", // NEEDS QC
+			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja).", // NEEDS QC
 		},
 		gen3: {
 			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja).", // NEEDS QC
@@ -3964,10 +3964,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	leechseed: {
 		name: "Drenadoras",
 		// Official flavor text: "Planta semillas que absorben PS del objetivo en cada turno y que le sirven para recuperarse."
-		desc: "Al final de cada turno, el Pokémon en la posición del usuario drena 1/8 de los PS máximos del objetivo (redondeado hacia abajo). Si el receptor lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5). Si el objetivo usa Relevo, el sustituto sigue siendo drenado. El efecto termina si el objetivo se cambia o usa con éxito Giro Mortífero o Giro Rápido. Los Pokémon de tipo Planta son inmunes al movimiento, pero no a su efecto.", // NEEDS QC
+		desc: "Al final de cada turno, el Pokémon en la posición del usuario drena 1/8 de los PS máximos del objetivo (redondeado hacia abajo). Si el receptor lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5). Si el objetivo usa Relevo, el sustituto sigue siendo drenado. El efecto termina si el objetivo se cambia o usa con éxito Giro Mortífero o Giro Rápido. Los Pokémon de tipo Planta son inmunes al movimiento, pero no a su efecto.", // NEEDS QC
 		shortDesc: "Drena 1/8 de los PS del objetivo cada turno.", // NEEDS QC
 		gen8: {
-			desc: "El Pokémon en la posición del usuario roba 1/8 de los PS máximos del objetivo (redondeado hacia abajo) al final de cada turno. Si el receptor lleva Raíz Grande, la cantidad recuperada es 1,3× la normal (redondeado a la baja desde 0,5). Si el objetivo usa Relevo, el sustituto sigue siendo drenado. Si el objetivo se cambia o usa Giro Rápido con éxito, el efecto termina. Los Pokémon de tipo Planta son inmunes a este movimiento al usarse, pero no a su efecto.", // NEEDS QC
+			desc: "El Pokémon en la posición del usuario roba 1/8 de los PS máximos del objetivo (redondeado hacia abajo) al final de cada turno. Si el receptor lleva Raíz Grande, la cantidad recuperada es 1.3× la normal (redondeado a la baja desde 0.5). Si el objetivo usa Relevo, el sustituto sigue siendo drenado. Si el objetivo se cambia o usa Giro Rápido con éxito, el efecto termina. Los Pokémon de tipo Planta son inmunes a este movimiento al usarse, pero no a su efecto.", // NEEDS QC
 		},
 		gen3: {
 			desc: "El Pokémon en la posición del usuario roba 1/8 de los PS máximos del objetivo (redondeado hacia abajo) al final de cada turno. Si el objetivo usa Relevo, el sustituto sigue siendo drenado. Si el objetivo se cambia o usa Giro Rápido, el efecto termina. Los Pokémon de tipo Planta son inmunes a este movimiento al usarse, pero no a su efecto.", // NEEDS QC
@@ -4003,22 +4003,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	lifedew: {
 		name: "Gota Vital",
 		// Official flavor text: "Vierte un agua misteriosa y balsámica que restaura tanto sus propios PS como los de aquellos aliados presentes en el terreno de combate."
-		desc: "Cada Pokémon del bando del usuario recupera 1/4 de sus PS máximos (redondeado al alza desde 0,5).", // NEEDS QC
+		desc: "Cada Pokémon del bando del usuario recupera 1/4 de sus PS máximos (redondeado al alza desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario y sus aliados recuperan 1/4 de sus PS.", // NEEDS QC
 	},
 	lightofruin: {
 		name: "Luz Aniquiladora",
 		// Official flavor text: "El usuario emplea el poder de la Flor Eterna para lanzar un potente rayo de luz, pero sufre bastante daño al hacerlo."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de la mitad del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de la mitad del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso de la mitad del daño.", // NEEDS QC
 	},
 	lightscreen: {
 		name: "Pantalla de Luz",
 		// Official flavor text: "Pared de luz que reduce durante cinco turnos el daño producido por los ataques especiales."
-		desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0,5 de daño de ataques especiales (×0,66 en combates dobles). No se acumula con Velo Aurora. Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar. Dura 8 turnos con Refleluz. Falla si ya está activo en su bando.", // NEEDS QC
+		desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0.5 de daño de ataques especiales (×0.66 en combates dobles). No se acumula con Velo Aurora. Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar. Dura 8 turnos con Refleluz. Falla si ya está activo en su bando.", // NEEDS QC
 		shortDesc: "5 turnos: daño especial a los aliados a la mitad.", // NEEDS QC
 		gen6: {
-			desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0,5 de daño de ataques especiales (×0,66 en combates dobles o triples). Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición o Despejar. Dura 8 turnos con Refleluz. Falla si el efecto ya está activo en el bando del usuario.", // NEEDS QC
+			desc: "Durante 5 turnos, el usuario y sus aliados reciben ×0.5 de daño de ataques especiales (×0.66 en combates dobles o triples). Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición o Despejar. Dura 8 turnos con Refleluz. Falla si el efecto ya está activo en el bando del usuario.", // NEEDS QC
 		},
 		gen4: {
 			desc: "Durante 5 turnos, el usuario y sus aliados reciben 1/2 del daño de ataques especiales (2/3 si hay varios Pokémon activos en el bando del usuario). Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición o Despejar. Dura 8 turnos con Refleluz. Falla si el efecto ya está activo en el bando del usuario.", // NEEDS QC
@@ -4102,7 +4102,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lunarblessing: {
 		name: "Plegaria Lunar",
-		desc: "Cada Pokémon del bando del usuario recupera 1/4 de sus PS máximos (redondeado al alza desde 0,5) y se cura de sus problemas de estado.", // NEEDS QC
+		desc: "Cada Pokémon del bando del usuario recupera 1/4 de sus PS máximos (redondeado al alza desde 0.5) y se cura de sus problemas de estado.", // NEEDS QC
 		shortDesc: "Usuario y aliados: +1/4 de PS y estados curados.", // NEEDS QC
 	},
 	lunardance: {
@@ -4270,7 +4270,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	matchagotcha: {
 		name: "Cañón Batidor",
-		desc: "20% de probabilidad de quemar al objetivo. El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5); con Raíz Grande, 1,3× esa cantidad (redondeado a la baja desde 0,5). Descongela al objetivo.", // NEEDS QC
+		desc: "20% de probabilidad de quemar al objetivo. El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5); con Raíz Grande, 1.3× esa cantidad (redondeado a la baja desde 0.5). Descongela al objetivo.", // NEEDS QC
 		shortDesc: "20% de quemar. Recupera la mitad. Descongela.", // NEEDS QC
 	},
 	maxairstream: {
@@ -4416,31 +4416,31 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mefirst: {
 		name: "Yo Primero",
 		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-		desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1,5. Debe ser un movimiento de daño distinto de Pico Cañón, Eructo, Pirochoque, Pugnachoque, Resarcimiento, Contraataque, Antojo, Puño Certero, Feerichoque, Yo Primero, Represión Metal, Manto Espejo, Ponzochoque, Coraza Trampa, Forcejeo, Ladrón, Ominochoque. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
-		shortDesc: "Copia el movimiento rival a 1,5×. Debe ir más rápido.", // NEEDS QC
+		desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1.5. Debe ser un movimiento de daño distinto de Pico Cañón, Eructo, Pirochoque, Pugnachoque, Resarcimiento, Contraataque, Antojo, Puño Certero, Feerichoque, Yo Primero, Represión Metal, Manto Espejo, Ponzochoque, Coraza Trampa, Forcejeo, Ladrón, Ominochoque. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
+		shortDesc: "Copia el movimiento rival a 1.5×. Debe ir más rápido.", // NEEDS QC
 		gen8: {
-			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1,5. Debe ser un movimiento de daño distinto de Pico Cañón, Eructo, Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Coraza Trampa, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
+			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1.5. Debe ser un movimiento de daño distinto de Pico Cañón, Eructo, Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Coraza Trampa, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
 		},
 		gen7: {
-			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1,5. Debe ser un movimiento de daño distinto de Pico Cañón, Eructo, Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Coraza Trampa, Forcejeo, Ladrón o cualquier movimiento Z. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
+			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1.5. Debe ser un movimiento de daño distinto de Pico Cañón, Eructo, Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Coraza Trampa, Forcejeo, Ladrón o cualquier movimiento Z. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
 		},
 		gen6: {
-			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1,5. Debe ser un movimiento de daño distinto de Eructo, Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
+			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1.5. Debe ser un movimiento de daño distinto de Eructo, Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
 		},
 		gen5: {
-			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1,5. Debe ser un movimiento de daño distinto de Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
+			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1.5. Debe ser un movimiento de daño distinto de Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Represión Metal, Manto Espejo, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
 		},
 		gen4: {
-			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1,5. Debe ser un movimiento de daño distinto de Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Manto Espejo, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
+			desc: "El usuario usa contra el objetivo, si es posible, el movimiento que este eligió este turno, con su potencia multiplicada por 1.5. Debe ser un movimiento de daño distinto de Cháchara, Contraataque, Antojo, Puño Certero, Yo Primero, Manto Espejo, Forcejeo, Ladrón. Falla si el objetivo actúa antes que el usuario. Ignora el sustituto del objetivo al copiar el movimiento.", // NEEDS QC
 		},
 	},
 	megadrain: {
 		name: "Megaagotar",
 		// Official flavor text: "Un ataque que absorbe nutrientes. Quien lo usa recupera la mitad de los PS del daño que produce."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, recupera 1,3× esa cantidad (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, recupera 1.3× esa cantidad (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 		gen4: {
-			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, recupera 1,3× esa cantidad (redondeado a la baja).", // NEEDS QC
+			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja). Si el usuario lleva Raíz Grande, recupera 1.3× esa cantidad (redondeado a la baja).", // NEEDS QC
 		},
 		gen3: {
 			desc: "El usuario recupera la mitad del daño infligido (redondeado a la baja).", // NEEDS QC
@@ -4481,13 +4481,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	metalburst: {
 		name: "Represión Metal",
 		// Official flavor text: "Devuelve al rival el último ataque recibido, pero con mucha más fuerza."
-		desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1,5× el daño recibido (redondeado hacia abajo); si no perdió PS, inflige 1 PS. Si esa posición está vacía y hay otro rival en el campo, lo daña a él. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno.", // NEEDS QC
-		shortDesc: "Si lo golpean, devuelve 1,5× el daño.", // NEEDS QC
+		desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1.5× el daño recibido (redondeado hacia abajo); si no perdió PS, inflige 1 PS. Si esa posición está vacía y hay otro rival en el campo, lo daña a él. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno.", // NEEDS QC
+		shortDesc: "Si lo golpean, devuelve 1.5× el daño.", // NEEDS QC
 		gen6: {
-			desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1,5× el daño recibido (redondeado hacia abajo); si no perdió PS, inflige daño con potencia 1. Si esa posición está vacía, daña a un rival al azar dentro del alcance. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno.", // NEEDS QC
+			desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1.5× el daño recibido (redondeado hacia abajo); si no perdió PS, inflige daño con potencia 1. Si esa posición está vacía, daña a un rival al azar dentro del alcance. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno.", // NEEDS QC
 		},
 		gen4: {
-			desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1,5× el daño recibido (redondeado hacia abajo). Si esa posición está vacía y hay otro rival en el campo, lo daña a él. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno o si no perdió PS con el ataque.", // NEEDS QC
+			desc: "Inflige al último rival que dañó al usuario con un ataque físico o especial este turno 1.5× el daño recibido (redondeado hacia abajo). Si esa posición está vacía y hay otro rival en el campo, lo daña a él. De los multigolpes solo cuenta el último golpe. Falla si el usuario no recibió un ataque físico o especial rival este turno o si no perdió PS con el ataque.", // NEEDS QC
 		},
 	},
 	metalclaw: {
@@ -4568,7 +4568,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	milkdrink: {
 		name: "Batido",
 		// Official flavor text: "Restaura la mitad de los PS máximos del usuario."
-		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad de sus PS máximos.", // NEEDS QC
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos (redondeado hacia abajo).", // NEEDS QC
@@ -4738,16 +4738,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mistyexplosion: {
 		name: "Bruma Explosiva",
 		// Official flavor text: "El usuario ataca a todos a su alrededor, pero se debilita de inmediato. La potencia del movimiento aumenta si el terreno está cubierto por un campo de niebla."
-		desc: "Si hay campo de niebla y el usuario está en el suelo, su potencia se multiplica por 1,5. El usuario se debilita tras usarlo, incluso si falla por no haber objetivo. No puede ejecutarse si algún Pokémon en combate tiene la habilidad Humedad.", // NEEDS QC
-		shortDesc: "El usuario se debilita. En campo de niebla: 1,5×.", // NEEDS QC
+		desc: "Si hay campo de niebla y el usuario está en el suelo, su potencia se multiplica por 1.5. El usuario se debilita tras usarlo, incluso si falla por no haber objetivo. No puede ejecutarse si algún Pokémon en combate tiene la habilidad Humedad.", // NEEDS QC
+		shortDesc: "El usuario se debilita. En campo de niebla: 1.5×.", // NEEDS QC
 	},
 	mistyterrain: {
 		name: "Campo de Niebla",
 		// Official flavor text: "Durante cinco turnos, los Pokémon que están en el suelo no sufren problemas de estado y se reduce a la mitad el daño de los movimientos de tipo Dragón."
-		desc: "Durante 5 turnos, se activa el campo de niebla: la potencia de los ataques de tipo Dragón contra Pokémon en el suelo se multiplica por 0,5 y estos no pueden sufrir problemas de estado ni confusión. Pueden verse afectados por Bostezo, pero no dormirse por su efecto. Camuflaje vuelve al usuario de tipo Hada, Adaptación pasa a ser Fuerza Lunar y Daño Secreto tiene un 30% de bajar 1 nivel el Ataque Especial. Falla si ya hay campo de niebla.", // NEEDS QC
-		shortDesc: "5 turnos: sin estados; Dragón ×0,5 contra el suelo.", // NEEDS QC
+		desc: "Durante 5 turnos, se activa el campo de niebla: la potencia de los ataques de tipo Dragón contra Pokémon en el suelo se multiplica por 0.5 y estos no pueden sufrir problemas de estado ni confusión. Pueden verse afectados por Bostezo, pero no dormirse por su efecto. Camuflaje vuelve al usuario de tipo Hada, Adaptación pasa a ser Fuerza Lunar y Daño Secreto tiene un 30% de bajar 1 nivel el Ataque Especial. Falla si ya hay campo de niebla.", // NEEDS QC
+		shortDesc: "5 turnos: sin estados; Dragón ×0.5 contra el suelo.", // NEEDS QC
 		gen6: {
-			desc: "Durante 5 turnos, se activa el campo de niebla: la potencia de los ataques de tipo Dragón contra Pokémon en el suelo se multiplica por 0,5 y estos no pueden sufrir problemas de estado. Pueden verse afectados por Bostezo, pero no dormirse por su efecto. Camuflaje vuelve al usuario de tipo Hada, Adaptación pasa a ser Fuerza Lunar y Daño Secreto tiene un 30% de bajar 1 nivel el Ataque Especial. Falla si ya hay campo de niebla.", // NEEDS QC
+			desc: "Durante 5 turnos, se activa el campo de niebla: la potencia de los ataques de tipo Dragón contra Pokémon en el suelo se multiplica por 0.5 y estos no pueden sufrir problemas de estado. Pueden verse afectados por Bostezo, pero no dormirse por su efecto. Camuflaje vuelve al usuario de tipo Hada, Adaptación pasa a ser Fuerza Lunar y Daño Secreto tiene un 30% de bajar 1 nivel el Ataque Especial. Falla si ya hay campo de niebla.", // NEEDS QC
 		},
 	},
 	moonblast: {
@@ -4769,16 +4769,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	moonlight: {
 		name: "Luz Lunar",
 		// Official flavor text: "Restaura PS del usuario. La cantidad varía según el tiempo que haga."
-		desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con lluvia, diluvio, tormenta de arena o nieve (todo redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con lluvia, diluvio, tormenta de arena o nieve (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "Cura al usuario según el clima.", // NEEDS QC
 		gen8: {
-			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen7: {
-			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen5: {
-			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado hacia abajo).", // NEEDS QC
@@ -4790,16 +4790,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	morningsun: {
 		name: "Sol Matinal",
 		// Official flavor text: "Restaura PS del usuario. La cantidad varía según el tiempo que haga."
-		desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con lluvia, diluvio, tormenta de arena o nieve (todo redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con lluvia, diluvio, tormenta de arena o nieve (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "Cura al usuario según el clima.", // NEEDS QC
 		gen8: {
-			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen7: {
-			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen5: {
-			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado hacia abajo).", // NEEDS QC
@@ -4845,10 +4845,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mudsport: {
 		name: "Chapoteo Lodo",
 		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-		desc: "Durante 5 turnos, la potencia de los ataques de tipo Eléctrico de todos los Pokémon en combate se multiplica por 0,33. Falla si el efecto ya está activo.", // NEEDS QC
+		desc: "Durante 5 turnos, la potencia de los ataques de tipo Eléctrico de todos los Pokémon en combate se multiplica por 0.33. Falla si el efecto ya está activo.", // NEEDS QC
 		shortDesc: "5 turnos: ataques Eléctricos a 1/3 de potencia.", // NEEDS QC
 		gen5: {
-			desc: "Mientras el usuario siga en combate, la potencia de los ataques de tipo Eléctrico de todos los Pokémon en combate se multiplica por 0,33. Falla si el efecto ya está activo para algún Pokémon.", // NEEDS QC
+			desc: "Mientras el usuario siga en combate, la potencia de los ataques de tipo Eléctrico de todos los Pokémon en combate se multiplica por 0.33. Falla si el efecto ya está activo para algún Pokémon.", // NEEDS QC
 			shortDesc: "Reduce los ataques Eléctricos a 1/3 de potencia.", // NEEDS QC
 		},
 		gen4: {
@@ -4989,7 +4989,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	oblivionwing: {
 		name: "Ala Mortífera",
 		// Official flavor text: "El usuario absorbe energía del objetivo y aumenta sus PS en una cantidad igual o superior a la mitad del daño infligido."
-		desc: "El usuario recupera 3/4 del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, recupera 1,3× esa cantidad (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera 3/4 del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, recupera 1.3× esa cantidad (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera 3/4 del daño infligido.", // NEEDS QC
 	},
 	obstruct: {
@@ -5094,7 +5094,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	paraboliccharge: {
 		name: "Carga Parábola",
 		// Official flavor text: "Inflige daño a todos los Pokémon a su alrededor. El usuario absorbe la mitad del daño producido para restaurar sus propios PS."
-		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0,5). Si lleva Raíz Grande, recupera 1,3× esa cantidad (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad del daño infligido (redondeado al alza desde 0.5). Si lleva Raíz Grande, recupera 1.3× esa cantidad (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad del daño infligido.", // NEEDS QC
 	},
 	partingshot: {
@@ -5322,10 +5322,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	powder: {
 		name: "Polvo Explosivo",
 		// Official flavor text: "Esparce un polvo sobre el objetivo. Si este usa un movimiento de tipo Fuego en el mismo turno, el polvo explota y le inflige daño."
-		desc: "Si el objetivo usa un movimiento de tipo Fuego este turno, este no se ejecuta y el objetivo pierde 1/4 de sus PS máximos (redondeado al alza desde 0,5). No ocurre si el movimiento de Fuego lo impide el diluvio.", // NEEDS QC
+		desc: "Si el objetivo usa un movimiento de tipo Fuego este turno, este no se ejecuta y el objetivo pierde 1/4 de sus PS máximos (redondeado al alza desde 0.5). No ocurre si el movimiento de Fuego lo impide el diluvio.", // NEEDS QC
 		shortDesc: "Si usa un movimiento de Fuego, pierde 1/4 de sus PS.", // NEEDS QC
 		gen6: {
-			desc: "Si el objetivo usa un movimiento de tipo Fuego este turno, este no se ejecuta y el objetivo pierde 1/4 de sus PS máximos (redondeado al alza desde 0,5). Este efecto ocurre antes de que el diluvio impida el movimiento de tipo Fuego.", // NEEDS QC
+			desc: "Si el objetivo usa un movimiento de tipo Fuego este turno, este no se ejecuta y el objetivo pierde 1/4 de sus PS máximos (redondeado al alza desde 0.5). Este efecto ocurre antes de que el diluvio impida el movimiento de tipo Fuego.", // NEEDS QC
 		},
 
 		start: "  ¡{POKEMON} está cubierto de polvo!",
@@ -5450,8 +5450,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psyblade: {
 		name: "Psicohojas",
-		desc: "Si hay campo eléctrico, su potencia se multiplica por 1,5.", // NEEDS QC
-		shortDesc: "En campo eléctrico: 1,5× de potencia.", // NEEDS QC
+		desc: "Si hay campo eléctrico, su potencia se multiplica por 1.5.", // NEEDS QC
+		shortDesc: "En campo eléctrico: 1.5× de potencia.", // NEEDS QC
 	},
 	psychic: {
 		name: "Psíquico",
@@ -5477,10 +5477,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psychicterrain: {
 		name: "Campo Psíquico",
 		// Official flavor text: "Durante cinco turnos, se potencian los movimientos de tipo Psíquico y los Pokémon que están en el suelo quedan protegidos contra movimientos con prioridad."
-		desc: "Durante 5 turnos, se activa el campo psíquico: la potencia de los ataques de tipo Psíquico de los Pokémon en el suelo se multiplica por 1,3 y estos no pueden ser golpeados por movimientos con prioridad mayor que 0, salvo de sus aliados. Camuflaje vuelve al usuario de tipo Psíquico, Adaptación pasa a ser Psíquico y Daño Secreto tiene un 30% de bajar 1 nivel la Velocidad. Falla si ya hay campo psíquico.", // NEEDS QC
+		desc: "Durante 5 turnos, se activa el campo psíquico: la potencia de los ataques de tipo Psíquico de los Pokémon en el suelo se multiplica por 1.3 y estos no pueden ser golpeados por movimientos con prioridad mayor que 0, salvo de sus aliados. Camuflaje vuelve al usuario de tipo Psíquico, Adaptación pasa a ser Psíquico y Daño Secreto tiene un 30% de bajar 1 nivel la Velocidad. Falla si ya hay campo psíquico.", // NEEDS QC
 		shortDesc: "5 turnos: potencia Psíquico; bloquea prioridad.", // NEEDS QC
 		gen7: {
-			desc: "Durante 5 turnos, se activa el campo psíquico: la potencia de los ataques de tipo Psíquico de los Pokémon en el suelo se multiplica por 1,5 y estos no pueden ser golpeados por movimientos con prioridad mayor que 0, salvo de sus aliados. Camuflaje vuelve al usuario de tipo Psíquico, Adaptación pasa a ser Psíquico y Daño Secreto tiene un 30% de bajar 1 nivel la Velocidad. Falla si ya hay campo psíquico.", // NEEDS QC
+			desc: "Durante 5 turnos, se activa el campo psíquico: la potencia de los ataques de tipo Psíquico de los Pokémon en el suelo se multiplica por 1.5 y estos no pueden ser golpeados por movimientos con prioridad mayor que 0, salvo de sus aliados. Camuflaje vuelve al usuario de tipo Psíquico, Adaptación pasa a ser Psíquico y Daño Secreto tiene un 30% de bajar 1 nivel la Velocidad. Falla si ya hay campo psíquico.", // NEEDS QC
 		},
 	},
 	psychoboost: {
@@ -5531,13 +5531,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Psicoonda",
 		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
 		desc: "Inflige un daño igual a (nivel del usuario)×(X+50)÷100, donde X es un número al azar entre 0 y 100, redondeado hacia abajo (mínimo 1 PS).", // NEEDS QC
-		shortDesc: "Daño aleatorio entre 0,5× y 1,5× el nivel del usuario.", // NEEDS QC
+		shortDesc: "Daño aleatorio entre 0.5× y 1.5× el nivel del usuario.", // NEEDS QC
 		gen4: {
 			desc: "Inflige un daño igual a (nivel del usuario)×(X×10+50)÷100, donde X es un número al azar entre 0 y 10, redondeado hacia abajo (mínimo 1 PS).", // NEEDS QC
 		},
 		gen2: {
-			desc: "Inflige un daño igual a un número al azar entre 1 y (nivel del usuario×1,5−1), redondeado hacia abajo (mínimo 1 PS).", // NEEDS QC
-			shortDesc: "Daño al azar de 1 a (nivel × 1,5 − 1).", // NEEDS QC
+			desc: "Inflige un daño igual a un número al azar entre 1 y (nivel del usuario×1.5−1), redondeado hacia abajo (mínimo 1 PS).", // NEEDS QC
+			shortDesc: "Daño al azar de 1 a (nivel × 1.5 − 1).", // NEEDS QC
 		},
 	},
 	pulverizingpancake: {
@@ -5681,13 +5681,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	raindance: {
 		name: "Danza Lluvia",
 		// Official flavor text: "Genera una fuerte lluvia que refuerza los movimientos de tipo Agua durante cinco turnos y debilita los de tipo Fuego."
-		desc: "Durante 5 turnos, llueve: el daño de los ataques de tipo Agua se multiplica por 1,5 y el de los de tipo Fuego por 0,5. Dura 8 turnos con Roca Lluvia. Falla si ya llueve.", // NEEDS QC
+		desc: "Durante 5 turnos, llueve: el daño de los ataques de tipo Agua se multiplica por 1.5 y el de los de tipo Fuego por 0.5. Dura 8 turnos con Roca Lluvia. Falla si ya llueve.", // NEEDS QC
 		shortDesc: "5 turnos: la lluvia potencia los movimientos de Agua.", // NEEDS QC
 		gen3: {
-			desc: "Durante 5 turnos, llueve: el daño de los ataques de tipo Agua se multiplica por 1,5 y el de los de tipo Fuego por 0,5. Falla si ya llueve.", // NEEDS QC
+			desc: "Durante 5 turnos, llueve: el daño de los ataques de tipo Agua se multiplica por 1.5 y el de los de tipo Fuego por 0.5. Falla si ya llueve.", // NEEDS QC
 		},
 		gen2: {
-			desc: "Durante 5 turnos, llueve, incluso si ya está lloviendo: el daño de los ataques de tipo Agua se multiplica por 1,5 y el de los de tipo Fuego por 0,5.", // NEEDS QC
+			desc: "Durante 5 turnos, llueve, incluso si ya está lloviendo: el daño de los ataques de tipo Agua se multiplica por 1.5 y el de los de tipo Fuego por 0.5.", // NEEDS QC
 		},
 	},
 	rapidspin: {
@@ -5747,7 +5747,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	recover: {
 		name: "Recuperación",
 		// Official flavor text: "Restaura hasta la mitad de los PS máximos."
-		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad de sus PS máximos.", // NEEDS QC
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos (redondeado hacia abajo).", // NEEDS QC
@@ -5773,10 +5773,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	reflect: {
 		name: "Reflejo",
 		// Official flavor text: "Pared de luz que reduce durante cinco turnos el daño producido por los ataques físicos."
-		desc: "Durante 5 turnos, el usuario y sus aliados reciben 0,5× de daño de los ataques físicos (0,66× en combates dobles). No se acumula con Velo Aurora. Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar. Dura 8 turnos con Refleluz. Falla si ya está activo en su bando.", // NEEDS QC
+		desc: "Durante 5 turnos, el usuario y sus aliados reciben 0.5× de daño de los ataques físicos (0.66× en combates dobles). No se acumula con Velo Aurora. Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición, Psicocolmillo, Despejar. Dura 8 turnos con Refleluz. Falla si ya está activo en su bando.", // NEEDS QC
 		shortDesc: "5 turnos: daño físico a los aliados a la mitad.", // NEEDS QC
 		gen6: {
-			desc: "Durante 5 turnos, el usuario y sus aliados reciben 0,5× de daño de los ataques físicos (0,66× en combates dobles o triples). Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición o Despejar. Dura 8 turnos con Refleluz. Falla si el efecto ya está activo en el bando del usuario.", // NEEDS QC
+			desc: "Durante 5 turnos, el usuario y sus aliados reciben 0.5× de daño de los ataques físicos (0.66× en combates dobles o triples). Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición o Despejar. Dura 8 turnos con Refleluz. Falla si el efecto ya está activo en el bando del usuario.", // NEEDS QC
 		},
 		gen4: {
 			desc: "Durante 5 turnos, el usuario y sus aliados reciben 1/2 del daño de ataques físicos (2/3 si hay varios Pokémon activos en el bando del usuario). Los golpes críticos ignoran este efecto. Desaparece del bando del usuario si él o un aliado reciben Demolición o Despejar. Dura 8 turnos con Refleluz. Falla si el efecto ya está activo en el bando del usuario.", // NEEDS QC
@@ -6025,10 +6025,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	roost: {
 		name: "Respiro",
 		// Official flavor text: "Aterriza sobre la superficie para descansar. Recupera hasta la mitad del total de sus PS."
-		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0,5). Si no está teracristalizado, hasta el final del turno los usuarios de tipo Volador pierden ese tipo y los puramente Voladores pasan a ser de tipo Normal. No hace nada si tiene todos sus PS.", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0.5). Si no está teracristalizado, hasta el final del turno los usuarios de tipo Volador pierden ese tipo y los puramente Voladores pasan a ser de tipo Normal. No hace nada si tiene todos sus PS.", // NEEDS QC
 		shortDesc: "Recupera 1/2 PS. Pierde el tipo Volador este turno.", // NEEDS QC
 		gen8: {
-			desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0,5). Hasta el final del turno, los usuarios de tipo Volador pierden ese tipo y los puramente Voladores pasan a ser de tipo Normal. No hace nada si tiene todos sus PS.", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0.5). Hasta el final del turno, los usuarios de tipo Volador pierden ese tipo y los puramente Voladores pasan a ser de tipo Normal. No hace nada si tiene todos sus PS.", // NEEDS QC
 		},
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos (redondeado hacia abajo). Hasta el final del turno, los usuarios de tipo Volador pierden ese tipo y los puramente Voladores quedan sin tipo. No hace nada si tiene todos sus PS.", // NEEDS QC
@@ -6107,10 +6107,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sandstorm: {
 		name: "Tormenta de Arena", // Champions wazaname (SV/LZA name tables abbreviate to Tormenta Arena)
 		// Official flavor text: "Tormenta de arena que dura cinco turnos y hiere a todos, excepto a los de tipo Roca, Tierra y Acero, y aumenta la Defensa Especial de los de tipo Roca."
-		desc: "Durante 5 turnos, hay tormenta de arena: al final de cada turno salvo el último, todos los Pokémon en combate pierden 1/16 de sus PS máximos (redondeado hacia abajo), salvo los de tipo Tierra, Roca o Acero o con las habilidades Muro Mágico, Funda, Poder Arena, Ímpetu Arena, Velo Arena. Durante el efecto, la Defensa Especial de los Pokémon de tipo Roca se multiplica por 1,5 al recibir ataques especiales. Dura 8 turnos con Roca Suave. Falla si ya hay tormenta de arena.", // NEEDS QC
-		shortDesc: "5 turnos: tormenta de arena. Roca: 1,5× Def. Esp.", // NEEDS QC
+		desc: "Durante 5 turnos, hay tormenta de arena: al final de cada turno salvo el último, todos los Pokémon en combate pierden 1/16 de sus PS máximos (redondeado hacia abajo), salvo los de tipo Tierra, Roca o Acero o con las habilidades Muro Mágico, Funda, Poder Arena, Ímpetu Arena, Velo Arena. Durante el efecto, la Defensa Especial de los Pokémon de tipo Roca se multiplica por 1.5 al recibir ataques especiales. Dura 8 turnos con Roca Suave. Falla si ya hay tormenta de arena.", // NEEDS QC
+		shortDesc: "5 turnos: tormenta de arena. Roca: 1.5× Def. Esp.", // NEEDS QC
 		gen4: {
-			desc: "Durante 5 turnos, hay tormenta de arena: al final de cada turno salvo el último, todos los Pokémon en combate pierden 1/16 de sus PS máximos (redondeado hacia abajo), salvo los de tipo Tierra, Roca o Acero o con las habilidades Muro Mágico o Velo Arena. Durante el efecto, la Defensa Especial de los Pokémon de tipo Roca se multiplica por 1,5 al recibir ataques especiales. Dura 8 turnos con Roca Suave. Falla si ya hay tormenta de arena.", // NEEDS QC
+			desc: "Durante 5 turnos, hay tormenta de arena: al final de cada turno salvo el último, todos los Pokémon en combate pierden 1/16 de sus PS máximos (redondeado hacia abajo), salvo los de tipo Tierra, Roca o Acero o con las habilidades Muro Mágico o Velo Arena. Durante el efecto, la Defensa Especial de los Pokémon de tipo Roca se multiplica por 1.5 al recibir ataques especiales. Dura 8 turnos con Roca Suave. Falla si ya hay tormenta de arena.", // NEEDS QC
 		},
 		gen3: {
 			desc: "Durante 5 turnos, hay tormenta de arena: al final de cada turno salvo el último, todos los Pokémon en combate pierden 1/16 de sus PS máximos (redondeado hacia abajo), salvo los de tipo Tierra, Roca o Acero o con la habilidad Velo Arena. Falla si ya hay tormenta de arena.", // NEEDS QC
@@ -6383,7 +6383,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	shoreup: {
 		name: "Recogearena",
 		// Official flavor text: "Restaura la mitad de los PS máximos del usuario. Durante las tormentas de arena, restaura aún más PS."
-		desc: "El usuario recupera la mitad de sus PS máximos (redondeado a la baja desde 0,5). Con tormenta de arena, recupera 2/3 (redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos (redondeado a la baja desde 0.5). Con tormenta de arena, recupera 2/3 (redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "Recupera 1/2 PS; 2/3 en tormenta de arena.", // NEEDS QC
 	},
 	signalbeam: {
@@ -6542,7 +6542,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	slackoff: {
 		name: "Relajo",
 		// Official flavor text: "El usuario se relaja y restaura la mitad de sus PS máximos."
-		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad de sus PS máximos.", // NEEDS QC
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos (redondeado hacia abajo).", // NEEDS QC
@@ -6691,8 +6691,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	snowscape: {
 		name: "Paisaje Nevado",
-		desc: "Durante 5 turnos, nieva: la Defensa de los Pokémon de tipo Hielo se multiplica por 1,5 al recibir ataques físicos. Dura 8 turnos con Roca Helada. Falla si ya nieva.", // NEEDS QC
-		shortDesc: "5 turnos: nieve. Hielo: 1,5× Defensa.", // NEEDS QC
+		desc: "Durante 5 turnos, nieva: la Defensa de los Pokémon de tipo Hielo se multiplica por 1.5 al recibir ataques físicos. Dura 8 turnos con Roca Helada. Falla si ya nieva.", // NEEDS QC
+		shortDesc: "5 turnos: nieve. Hielo: 1.5× Defensa.", // NEEDS QC
 	},
 	soak: {
 		name: "Empapar",
@@ -6712,7 +6712,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	softboiled: {
 		name: "Ovocuración",
 		// Official flavor text: "Restaura la mitad de los PS máximos del usuario."
-		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos (redondeado al alza desde 0.5).", // NEEDS QC
 		shortDesc: "El usuario recupera la mitad de sus PS máximos.", // NEEDS QC
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos (redondeado hacia abajo).", // NEEDS QC
@@ -6982,13 +6982,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	stealthrock: {
 		name: "Trampa Rocas",
 		// Official flavor text: "Una trampa de rocas que flota en el aire y daña a los objetivos que entran en combate."
-		desc: "Coloca una trampa en el bando rival que daña a los rivales que entren en combate. Falla si el efecto ya está activo en ese bando. El daño depende de su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0,25, 0,5, neutra, 2 o 4, respectivamente. Se elimina si algún Pokémon usa Limpieza General o si un rival usa con éxito Giro Mortífero, Giro Rápido, Despejar o recibe Despejar.", // NEEDS QC
+		desc: "Coloca una trampa en el bando rival que daña a los rivales que entren en combate. Falla si el efecto ya está activo en ese bando. El daño depende de su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0.25, 0.5, neutra, 2 o 4, respectivamente. Se elimina si algún Pokémon usa Limpieza General o si un rival usa con éxito Giro Mortífero, Giro Rápido, Despejar o recibe Despejar.", // NEEDS QC
 		shortDesc: "Daña a los rivales al entrar según su debilidad a Roca.", // NEEDS QC
 		gen8: {
-			desc: "Coloca una trampa en el bando rival que daña a los rivales que entren en combate. Falla si el efecto ya está activo en ese bando. El daño depende de su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0,25, 0,5, neutra, 2 o 4, respectivamente. Se elimina si un rival usa con éxito Giro Rápido o Despejar, o recibe Despejar.", // NEEDS QC
+			desc: "Coloca una trampa en el bando rival que daña a los rivales que entren en combate. Falla si el efecto ya está activo en ese bando. El daño depende de su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0.25, 0.5, neutra, 2 o 4, respectivamente. Se elimina si un rival usa con éxito Giro Rápido o Despejar, o recibe Despejar.", // NEEDS QC
 		},
 		gen5: {
-			desc: "Coloca una trampa en el bando rival que daña a los rivales que entren en combate. Falla si el efecto ya está activo en ese bando. El daño depende de su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0,25, 0,5, neutra, 2 o 4, respectivamente. Se elimina si un rival usa con éxito Giro Rápido o recibe Despejar.", // NEEDS QC
+			desc: "Coloca una trampa en el bando rival que daña a los rivales que entren en combate. Falla si el efecto ya está activo en ese bando. El daño depende de su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0.25, 0.5, neutra, 2 o 4, respectivamente. Se elimina si un rival usa con éxito Giro Rápido o recibe Despejar.", // NEEDS QC
 		},
 
 		start: "  ¡{TEAM:capitalize} está rodeado de piedras puntiagudas!",
@@ -7091,7 +7091,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneaxe: {
 		name: "Hachazo Pétreo",
-		desc: "Si acierta, coloca una trampa en el bando rival que daña a los rivales que entren en combate según su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0,25, 0,5, neutra, 2 o 4. Se elimina si algún Pokémon usa Limpieza General o si un rival usa con éxito Giro Mortífero, Giro Rápido, Despejar o recibe Despejar.", // NEEDS QC
+		desc: "Si acierta, coloca una trampa en el bando rival que daña a los rivales que entren en combate según su debilidad al tipo Roca: pierden 1/32, 1/16, 1/8, 1/4 o 1/2 de sus PS máximos (redondeado hacia abajo) con eficacia 0.25, 0.5, neutra, 2 o 4. Se elimina si algún Pokémon usa Limpieza General o si un rival usa con éxito Giro Mortífero, Giro Rápido, Despejar o recibe Despejar.", // NEEDS QC
 		shortDesc: "Coloca Trampa Rocas en el bando rival.", // NEEDS QC
 	},
 	stoneedge: {
@@ -7125,7 +7125,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	strengthsap: {
 		name: "Absorbefuerza",
 		// Official flavor text: "Restaura una cantidad de PS equivalente al valor de Ataque del rival, que además verá reducida esta característica."
-		desc: "Baja 1 nivel el Ataque del objetivo y el usuario recupera tantos PS como el Ataque del objetivo calculado con su nivel previo al movimiento. Con Raíz Grande, recupera 1,3× esa cantidad (redondeado a la baja desde 0,5). Falla si el Ataque del objetivo está en -6.", // NEEDS QC
+		desc: "Baja 1 nivel el Ataque del objetivo y el usuario recupera tantos PS como el Ataque del objetivo calculado con su nivel previo al movimiento. Con Raíz Grande, recupera 1.3× esa cantidad (redondeado a la baja desde 0.5). Falla si el Ataque del objetivo está en -6.", // NEEDS QC
 		shortDesc: "Recupera PS igual al Ataque del rival y se lo baja 1.", // NEEDS QC
 	},
 	stringshot: {
@@ -7144,10 +7144,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	struggle: {
 		name: "Forcejeo",
 		// Official flavor text: "Solo se usa como último recurso al acabarse los PP. Hiere un poco al agresor."
-		desc: "Inflige daño sin tipo a un rival al azar. Si acierta, el usuario pierde 1/4 de sus PS máximos (redondeado al alza desde 0,5), sin que la habilidad Cabeza Roca lo evite. Se usa automáticamente cuando no puede seleccionarse ningún movimiento conocido.", // NEEDS QC
+		desc: "Inflige daño sin tipo a un rival al azar. Si acierta, el usuario pierde 1/4 de sus PS máximos (redondeado al alza desde 0.5), sin que la habilidad Cabeza Roca lo evite. Se usa automáticamente cuando no puede seleccionarse ningún movimiento conocido.", // NEEDS QC
 		shortDesc: "El usuario pierde 1/4 de sus PS máximos.", // NEEDS QC
 		gen6: {
-			desc: "Inflige daño sin tipo a un rival adyacente al azar. Si acierta, el usuario pierde 1/4 de sus PS máximos (redondeado al alza desde 0,5), sin que la habilidad Cabeza Roca lo evite. Se usa automáticamente cuando no puede seleccionarse ningún movimiento conocido.", // NEEDS QC
+			desc: "Inflige daño sin tipo a un rival adyacente al azar. Si acierta, el usuario pierde 1/4 de sus PS máximos (redondeado al alza desde 0.5), sin que la habilidad Cabeza Roca lo evite. Se usa automáticamente cuando no puede seleccionarse ningún movimiento conocido.", // NEEDS QC
 		},
 		gen4: {
 			desc: "Inflige daño sin tipo a un rival al azar. Si acierta, el usuario pierde 1/4 de sus PS máximos (redondeado hacia abajo), sin que la habilidad Cabeza Roca lo evite. Se usa automáticamente cuando no puede seleccionarse ningún movimiento conocido.", // NEEDS QC
@@ -7195,13 +7195,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	submission: {
 		name: "Sumisión",
 		// Official flavor text: "El usuario se lanza al suelo con el oponente en brazos y también se hace un poco de daño."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso de 1/4 del daño.", // NEEDS QC
 		gen4: {
 			desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
 		},
 		gen2: {
-			desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS). Si este movimiento golpea un sustituto, el retroceso es siempre de 1 PS.", // NEEDS QC
+			desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS). Si este movimiento golpea un sustituto, el retroceso es siempre de 1 PS.", // NEEDS QC
 		},
 		gen1: {
 			desc: "Si el objetivo perdió PS, el usuario sufre daño de retroceso igual a 1/4 de los PS perdidos (redondeado hacia abajo, mínimo 1 PS). Si el movimiento rompe el sustituto del objetivo, el usuario no sufre retroceso.", // NEEDS QC
@@ -7245,13 +7245,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	sunnyday: {
 		name: "Día Soleado",
 		// Official flavor text: "Hace que se intensifique el efecto del sol durante cinco turnos, lo que potencia los movimientos de tipo Fuego y debilita los de tipo Agua."
-		desc: "Durante 5 turnos, hace sol: el daño de los ataques de tipo Fuego se multiplica por 1,5 y el de los de tipo Agua por 0,5. Dura 8 turnos con Roca Calor. Falla si ya hace sol.", // NEEDS QC
+		desc: "Durante 5 turnos, hace sol: el daño de los ataques de tipo Fuego se multiplica por 1.5 y el de los de tipo Agua por 0.5. Dura 8 turnos con Roca Calor. Falla si ya hace sol.", // NEEDS QC
 		shortDesc: "5 turnos: el sol potencia los movimientos de Fuego.", // NEEDS QC
 		gen3: {
-			desc: "Durante 5 turnos, hace sol: el daño de los ataques de tipo Fuego se multiplica por 1,5 y el de los de tipo Agua por 0,5. Falla si ya hace sol.", // NEEDS QC
+			desc: "Durante 5 turnos, hace sol: el daño de los ataques de tipo Fuego se multiplica por 1.5 y el de los de tipo Agua por 0.5. Falla si ya hace sol.", // NEEDS QC
 		},
 		gen2: {
-			desc: "Durante 5 turnos, hace sol, incluso si ya hace sol: el daño de los ataques de tipo Fuego se multiplica por 1,5 y el de los de tipo Agua por 0,5.", // NEEDS QC
+			desc: "Durante 5 turnos, hace sol, incluso si ya hace sol: el daño de los ataques de tipo Fuego se multiplica por 1.5 y el de los de tipo Agua por 0.5.", // NEEDS QC
 		},
 	},
 	sunsteelstrike: {
@@ -7326,13 +7326,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	swallow: {
 		name: "Tragar",
 		// Official flavor text: "Absorbe la energía acumulada con Reserva para recobrar salud. Cuanta más se haya acumulado, mayor será el número de PS que se recuperen."
-		desc: "El usuario recupera PS según su contador de Reserva: 1/4 de sus PS máximos con 1, la mitad con 2 (ambos redondeados a la baja desde 0,5) y todos con 3. Falla si el contador es 0. Su Defensa y Defensa Especial bajan tantos niveles como los que subió Reserva, y el contador vuelve a 0.", // NEEDS QC
+		desc: "El usuario recupera PS según su contador de Reserva: 1/4 de sus PS máximos con 1, la mitad con 2 (ambos redondeados a la baja desde 0.5) y todos con 3. Falla si el contador es 0. Su Defensa y Defensa Especial bajan tantos niveles como los que subió Reserva, y el contador vuelve a 0.", // NEEDS QC
 		shortDesc: "Se cura según sus usos de Reserva.", // NEEDS QC
 		gen4: {
 			desc: "El usuario recupera PS según su contador de Reserva: 1/4 de sus PS máximos con 1, la mitad con 2 (ambos redondeados hacia abajo) y todos con 3. Falla si el contador es 0. Su Defensa y Defensa Especial bajan tantos niveles como los que subió Reserva, y el contador vuelve a 0.", // NEEDS QC
 		},
 		gen3: {
-			desc: "El usuario recupera PS según su contador de Reserva: 1/4 de sus PS máximos con 1, la mitad con 2 (ambos redondeados a la baja desde 0,5) y todos con 3. Falla si el contador es 0. El contador vuelve a 0.", // NEEDS QC
+			desc: "El usuario recupera PS según su contador de Reserva: 1/4 de sus PS máximos con 1, la mitad con 2 (ambos redondeados a la baja desde 0.5) y todos con 3. Falla si el contador es 0. El contador vuelve a 0.", // NEEDS QC
 		},
 	},
 	sweetkiss: {
@@ -7406,16 +7406,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	synthesis: {
 		name: "Fotosíntesis",
 		// Official flavor text: "Restaura PS del usuario. La cantidad varía según el tiempo que haga."
-		desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con lluvia, diluvio, tormenta de arena o nieve (todo redondeado a la baja desde 0,5).", // NEEDS QC
+		desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con lluvia, diluvio, tormenta de arena o nieve (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		shortDesc: "Cura al usuario según el clima.", // NEEDS QC
 		gen8: {
-			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima, o si lleva Parasol Multiuso; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen7: {
-			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos con turbulencias o sin clima; 2/3 con sol o luz solar extrema; y 1/4 con granizo, diluvio, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen5: {
-			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado a la baja desde 0,5).", // NEEDS QC
+			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado a la baja desde 0.5).", // NEEDS QC
 		},
 		gen4: {
 			desc: "El usuario recupera la mitad de sus PS máximos sin clima; 2/3 con sol; y 1/4 con granizo, lluvia o tormenta de arena (todo redondeado hacia abajo).", // NEEDS QC
@@ -7484,13 +7484,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	takedown: {
 		name: "Derribo",
 		// Official flavor text: "Carga desmedida que también hiere al agresor."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso de 1/4 del daño.", // NEEDS QC
 		gen4: {
 			desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
 		},
 		gen2: {
-			desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS). Si este movimiento golpea un sustituto, el retroceso es siempre de 1 PS.", // NEEDS QC
+			desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS). Si este movimiento golpea un sustituto, el retroceso es siempre de 1 PS.", // NEEDS QC
 		},
 		gen1: {
 			desc: "Si el objetivo perdió PS, el usuario sufre daño de retroceso igual a 1/4 de los PS perdidos (redondeado hacia abajo, mínimo 1 PS). Si el movimiento rompe el sustituto del objetivo, el usuario no sufre retroceso.", // NEEDS QC
@@ -8110,7 +8110,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	volttackle: {
 		name: "Placaje Eléctrico", // Champions wazaname (SV/LZA name tables abbreviate to Placaje Eléc)
 		// Official flavor text: "Quien lo usa electrifica su cuerpo para luego atacar. Se hiere mucho a sí mismo, pero puede paralizar al objetivo."
-		desc: "10% de probabilidad de paralizar al objetivo. Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "10% de probabilidad de paralizar al objetivo. Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso del 33%. 10% de paralizar.", // NEEDS QC
 		gen4: {
 			desc: "10% de probabilidad de paralizar al objetivo. Si el objetivo pierde PS, el usuario sufre un retroceso de 1/3 del daño infligido (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
@@ -8175,10 +8175,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	watersport: {
 		name: "Hidrochorro",
 		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-		desc: "Durante 5 turnos, la potencia de los ataques de tipo Fuego de todos los Pokémon en combate se multiplica por 0,33. Falla si el efecto ya está activo.", // NEEDS QC
+		desc: "Durante 5 turnos, la potencia de los ataques de tipo Fuego de todos los Pokémon en combate se multiplica por 0.33. Falla si el efecto ya está activo.", // NEEDS QC
 		shortDesc: "5 turnos: ataques de Fuego a 1/3 de potencia.", // NEEDS QC
 		gen5: {
-			desc: "Mientras el usuario siga en combate, la potencia de los ataques de tipo Fuego de todos los Pokémon en combate se multiplica por 0,33. Falla si el efecto ya está activo para algún Pokémon.", // NEEDS QC
+			desc: "Mientras el usuario siga en combate, la potencia de los ataques de tipo Fuego de todos los Pokémon en combate se multiplica por 0.33. Falla si el efecto ya está activo para algún Pokémon.", // NEEDS QC
 			shortDesc: "Reduce los ataques de Fuego a 1/3 de potencia.", // NEEDS QC
 		},
 		gen4: {
@@ -8194,7 +8194,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	wavecrash: {
 		name: "Envite Acuático",
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso del 33% del daño.", // NEEDS QC
 	},
 	weatherball: {
@@ -8296,7 +8296,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wildcharge: {
 		name: "Voltio Cruel",
 		// Official flavor text: "Carga eléctrica muy potente que también hiere ligeramente a quien la usa."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso de 1/4 del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso de 1/4 del daño.", // NEEDS QC
 	},
 	willowisp: {
@@ -8336,7 +8336,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	woodhammer: {
 		name: "Mazazo",
 		// Official flavor text: "Arremete contra el objetivo con su robusto cuerpo. El agresor también sufre bastante daño."
-		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0,5, mínimo 1 PS).", // NEEDS QC
+		desc: "Si el objetivo pierde PS, el usuario sufre un retroceso del 33% del daño infligido (redondeado al alza desde 0.5, mínimo 1 PS).", // NEEDS QC
 		shortDesc: "Retroceso del 33% del daño.", // NEEDS QC
 		gen4: {
 			desc: "Si el objetivo perdió PS, el usuario sufre daño de retroceso igual a 1/3 de los PS perdidos por el objetivo (redondeado hacia abajo, mínimo 1 PS).", // NEEDS QC
@@ -8402,7 +8402,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	wringout: {
 		name: "Estrujón",
 		// Official flavor text: "Este movimiento no se puede usar, por lo que sería mejor olvidarlo, aunque eso implique que no se pueda recordar posteriormente."
-		desc: "La potencia es 120×(PS actuales del objetivo÷PS máximos del objetivo) (redondeado a la baja desde 0,5, mínimo 1).", // NEEDS QC
+		desc: "La potencia es 120×(PS actuales del objetivo÷PS máximos del objetivo) (redondeado a la baja desde 0.5, mínimo 1).", // NEEDS QC
 		shortDesc: "Más potencia cuantos más PS le queden al objetivo.", // NEEDS QC
 		gen4: {
 			desc: "La potencia es 120×(PS actuales del objetivo÷PS máximos del objetivo)+1 (redondeado hacia abajo).", // NEEDS QC
