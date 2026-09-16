@@ -2,7 +2,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
 		startBattle: "Der Kampf zwischen {TRAINER1} und {TRAINER2} beginnt!", // NEEDS QC
 		winBattle: "**{TRAINER}** hat den Kampf gewonnen!", // NEEDS QC
-		tieBattle: "Der Kampf zwischen {TRAINER1} und {TRAINER2} endet unentschieden!", // NEEDS QC
+		tieBattle: "Patt zwischen {TRAINER1} und {TRAINER2}!", // NEEDS QC: SV "Patt zwischen dir und [Trainer]!"
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "{NICKNAME} (Gegner)",

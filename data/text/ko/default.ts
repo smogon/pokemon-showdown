@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
-		startBattle: "{TRAINER1:conjunctive} {TRAINER2}의 배틀이 시작되었다!", // NEEDS QC
-		winBattle: "**{TRAINER}**의 승리다!", // NEEDS QC
-		tieBattle: "{TRAINER1:conjunctive} {TRAINER2}의 배틀은 무승부다!", // NEEDS QC
+		startBattle: "{TRAINER1:conjunctive} {TRAINER2}의 승부가 시작되었다!", // NEEDS QC: SV uses 승부 for the match ("승부를 걸어왔다!")
+		winBattle: "**{TRAINER:subject}** 승부에서 이겼다!", // NEEDS QC: SV "[Trainer]의 승부에서 졌다!"
+		tieBattle: "{TRAINER1:conjunctive} {TRAINER2}의 승부는 무승부다!", // NEEDS QC: SV "[Trainer]의 승부에서 비겼다!"
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "상대 {NICKNAME}",

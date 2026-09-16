@@ -1,8 +1,8 @@
 export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	default: {
 		startBattle: "Le combat entre {TRAINER1} et {TRAINER2} commence !", // NEEDS QC
-		winBattle: "**{TRAINER}** remporte le combat !", // NEEDS QC
-		tieBattle: "Le combat entre {TRAINER1} et {TRAINER2} se termine sur une égalité !", // NEEDS QC
+		winBattle: "**{TRAINER}** a gagné !", // NEEDS QC: SV "[Dresseur] a gagné !"
+		tieBattle: "Égalité entre {TRAINER1} et {TRAINER2} !", // NEEDS QC: SV "Égalité avec [Dresseur] !"
 
 		pokemon: "{NICKNAME}",
 		opposingPokemon: "{NICKNAME} ennemi",
