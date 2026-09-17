@@ -25,7 +25,7 @@ function turnRecord(edits) {
 	return { edits, seed: SEED, inputLog: ['>p1 move 1', '>p2 move 1'] };
 }
 
-describe('Analysis field edits', () => {
+describe('Analysis state edits', () => {
 	it('offers only the field effects that exist in the format', () => {
 		const { battle } = battleFor([]);
 		const ids = getFieldEffectOptions(battle).map(option => option.id);
@@ -109,6 +109,99 @@ describe('Analysis field edits', () => {
 		assert.equal(changeLines.match(/\|-sidestart\|p1: Analysis 1\|move: Spikes/g).length, 1);
 		assert.match(changeLines, /\|-weather\|none\|\[silent\]/);
 		assert.deepEqual(appliedEdits[2].summary, { field: ['Weather (Off)'], p1: ['Spikes (1 Layer)'], p2: [] });
+	});
+
+	it('writes Pokémon state and emits the matching lines', () => {
+		const edits = {
+			pokemon: {
+				'p1:0': { hp: 20, status: 'tox', toxicStage: 3, boosts: { atk: 2, spe: -1 }, pp: [5] },
+				'p2:0': { status: 'slp', sleepTurns: 2 },
+			},
+		};
+		const { battle, output, appliedEdits } = battleFor([TEAM_PREVIEW, { edits }]);
+		const [p1, p2] = battle.sides.map(side => side.active[0]);
+		assert.equal(p1.hp, 20);
+		assert.equal(p1.status, 'tox');
+		assert.equal(p1.statusState.stage, 3);
+		assert.equal(p1.boosts.atk, 2);
+		assert.equal(p1.moveSlots[0].pp, 5);
+		assert.equal(p2.statusState.time, 2);
+		assert.match(output, /\|-status\|p1a: Magikarp\|tox\|\[silent\]/);
+		assert.match(output, /\|-sethp\|p1a: Magikarp\|20\/\d+ tox\|\[silent\]/);
+		assert.match(output, /\|-setboost\|p1a: Magikarp\|atk\|2\|\[silent\]/);
+		// the protocol can't set status counters, so they get their own silent lines
+		assert.match(output, /\|-message\|analysiscounter\|p1a: Magikarp\|toxic\|3\|\[silent\]/);
+		assert.match(output, /\|-message\|analysiscounter\|p2a: Magikarp\|sleep\|2\|\[silent\]/);
+		assert.deepEqual(appliedEdits[1].summary.p2, ['Magikarp: Status (Sleep, 2 turns)']);
+		assert.deepEqual(appliedEdits[1].summary.p1, [
+			'Magikarp: Status (Toxic, stage 3)', 'Magikarp: HP (20/181, 11%)', 'Magikarp: Splash PP (5/64)',
+			'Magikarp: Atk (+2)', 'Magikarp: Spe (-1)',
+		]);
+		// requests are rebuilt from live state, so the client sees the edited PP
+		assert.equal(battle.getRequests('move')[0].active[0].moves[0].pp, 5);
+	});
+
+	it('names Pokémon by team slot, so a swap in the same edit changes nothing', () => {
+		// team slots never move: 0 is Magikarp and 1 is Feebas, whichever is active
+		const edits = { pokemon: { 'p1:0': { hp: 30 } }, active: { p1: [1] } };
+		const { battle, appliedEdits } = battleFor([TEAM_PREVIEW, { edits }]);
+		const side = battle.sides[0];
+		assert.equal(side.active[0].name, 'Feebas');
+		assert.equal(side.pokemon[1].name, 'Magikarp');
+		assert.equal(side.pokemon[1].hp, 30, 'the HP edit should have hit Magikarp, in team slot 0');
+		assert.deepEqual(appliedEdits[1].summary.p1, ['Feebas: Active (Slot 1)', 'Magikarp: HP (30/181, 16.6%)']);
+
+		// and a Pokémon sent out in the same save can be given boosts, since the swap runs first
+		const together = { pokemon: { 'p1:1': { boosts: { atk: 2 } } }, active: { p1: [1] } };
+		const { battle: combined, droppedEdits } = battleFor([TEAM_PREVIEW, { edits: together }]);
+		assert.equal(droppedEdits.length, 0);
+		assert.equal(combined.sides[0].active[0].boosts.atk, 2);
+	});
+
+	it('sends another Pokémon out, clearing the old one\'s boosts', () => {
+		const setup = { pokemon: { 'p1:0': { boosts: { atk: 2 } } } };
+		const edits = { active: { p1: [1] } }; // send out team slot 1 (Feebas)
+		const { battle, output, appliedEdits } = battleFor([TEAM_PREVIEW, { edits: setup }, { edits }]);
+		const side = battle.sides[0];
+		assert.equal(side.active[0].name, 'Feebas');
+		assert.equal(side.pokemon[0].name, 'Feebas');
+		assert.equal(side.pokemon[1].name, 'Magikarp');
+		assert.equal(side.pokemon[1].boosts.atk, 0, 'the Pokémon that left should lose its boosts');
+		assert.match(output, /\|switch\|p1a: Feebas\|Feebas, M\|\d+\/\d+/);
+		assert.deepEqual(appliedEdits[2].summary.p1, ['Feebas: Active (Slot 1)']);
+		assert.deepEqual(appliedEdits[2].edits.active, { p1: [1] });
+		// the snapshot reports both the moved position and the stable team slot
+		const snapshot = getAnalysisSnapshot(battle).sides[0].pokemon;
+		assert.deepEqual(snapshot.map(pokemon => [pokemon.name, pokemon.index, pokemon.teamSlot]), [
+			['Feebas', 0, 1], ['Magikarp', 1, 0],
+		]);
+	});
+
+	it('Terastallizes through the sim, and reports edits it cannot undo', () => {
+		const edits = { pokemon: { 'p1:0': { terastallized: true } } };
+		const { battle, output } = battleFor([TEAM_PREVIEW, { edits }]);
+		assert.equal(battle.sides[0].active[0].terastallized, 'Water');
+		assert.equal(battle.sides[0].pokemon[1].canTerastallize, null, 'one Terastallization per side');
+		assert.match(output, /\|-terastallize\|p1a: Magikarp\|Water/);
+
+		const undo = { pokemon: { 'p1:0': { terastallized: false } } };
+		const { droppedEdits } = battleFor([TEAM_PREVIEW, { edits }, { edits: undo }]);
+		assert.equal(droppedEdits.length, 1);
+		assert.match(droppedEdits[0], /un-Terastallize/);
+	});
+
+	it('drops Pokémon edits that no longer make sense', () => {
+		const edits = {
+			pokemon: {
+				'p1:1': { boosts: { atk: 2 } },
+				'p1:5': { hp: 10 },
+			}, // slot 1 is benched, slot 5 doesn't exist
+		};
+		const { droppedEdits, appliedEdits } = battleFor([TEAM_PREVIEW, { edits }]);
+		assert.equal(droppedEdits.length, 2);
+		assert.match(droppedEdits[0], /isn't active/);
+		assert.match(droppedEdits[1], /no Pokémon in this team slot/);
+		assert.equal(appliedEdits[1].edits.pokemon, undefined);
 	});
 
 	it('leaves primal weather alone and reports the edit as dropped', () => {

@@ -19,21 +19,40 @@ import { applyAnalysisEdits, type AnalysisAppliedEdits } from './analysis-edits'
  */
 export interface AnalysisEdits {
 	teams?: { p1?: PokemonSet[], p2?: PokemonSet[] };
-	active?: { p1?: (number | null)[], p2?: (number | null)[] };
-	pokemon?: { [sideAndIndex: string]: AnalysisPokemonStateEdit };
+	/** team slot per active position; `null` leaves that position alone */
+	active?: { [side in AnalysisSideEditsID]?: (number | null)[] };
+	/** keyed `p1:<teamSlot>`, the Pokémon's slot in the original team (see AnalysisPokemonSnapshot) */
+	pokemon?: { [sideAndTeamSlot: string]: AnalysisPokemonStateEdit };
 	field?: AnalysisFieldStateEdit;
+}
+
+export type AnalysisSideEditsID = 'p1' | 'p2';
+
+/** One protocol line, as passed to `battle.add` (strings, or Pokémon and other sim objects). */
+export type AnalysisEditLine = Parameters<Battle['add']>;
+
+/**
+ * Summary lines for the Lines tooltip and the log, e.g. `Rain (3 Turns)`, `Rotom-Wash: HP (75%)`:
+ * field-wide effects, then each team's.
+ */
+export interface AnalysisEditSummary {
+	field: string[];
+	p1: string[];
+	p2: string[];
 }
 
 export interface AnalysisPokemonStateEdit {
 	hp?: number;
+	/** by move slot; `null` leaves that slot alone */
 	pp?: (number | null)[];
 	status?: '' | 'brn' | 'par' | 'slp' | 'frz' | 'psn' | 'tox';
 	toxicStage?: number;
 	sleepTurns?: number;
+	/** setting these is one-way: the protocol can't undo a Terastallization or Mega Evolution */
 	terastallized?: boolean;
 	megaEvolved?: boolean;
 	boosts?: Partial<BoostsTable>;
-	volatiles?: { [id: string]: false | { [param: string]: number | string | boolean } };
+	volatiles?: { [id: string]: null | { [param: string]: number | string | boolean } };
 }
 
 /** Turns remaining (including the current turn) and layers; each defaults to the condition's standard value. */
@@ -51,7 +70,7 @@ export interface AnalysisFieldStateEdit {
 	weather?: AnalysisWeatherEdit | null;
 	terrain?: AnalysisWeatherEdit | null;
 	pseudoWeather?: { [id: string]: AnalysisConditionEdit | null };
-	sides?: { p1?: { [id: string]: AnalysisConditionEdit | null }, p2?: { [id: string]: AnalysisConditionEdit | null } };
+	sides?: { [side in AnalysisSideEditsID]?: { [id: string]: AnalysisConditionEdit | null } };
 }
 
 /** One node on the path from the root. A record may carry only edits (no seed yet). */
@@ -76,7 +95,10 @@ export interface AnalysisEffectSnapshot {
 }
 
 export interface AnalysisPokemonSnapshot {
+	/** current position in `side.pokemon` (request order); changes when Pokémon switch */
 	index: number;
+	/** position in the original team, which never changes: edits use it to name a Pokémon */
+	teamSlot: number;
 	ident: string;
 	name: string;
 	species: string;
@@ -184,6 +206,7 @@ function snapshotPokemon(pokemon: Pokemon, index: number): AnalysisPokemonSnapsh
 	const battle = pokemon.battle;
 	return {
 		index,
+		teamSlot: pokemon.side.team.indexOf(pokemon.set),
 		ident: pokemon.fullname,
 		name: pokemon.name,
 		species: pokemon.species.name,

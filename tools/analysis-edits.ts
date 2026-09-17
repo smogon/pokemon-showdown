@@ -1,5 +1,6 @@
 /**
- * Manual state edits at an analysis node (docs/analysis/plan.md D3/D5; Phase 2a: field layer).
+ * Manual state edits at an analysis node (docs/analysis/plan.md D3/D5): the field layer, plus the entry
+ * point that runs every layer in order (Pokémon state lives in analysis-pokemon-edits.ts).
  *
  * Edits write sim state directly instead of calling event-firing APIs (setWeather, addSideCondition, ...),
  * so they never consume RNG or trigger abilities. They then emit `[silent]` protocol lines for what changed,
@@ -9,8 +10,10 @@
  */
 import type { Battle } from '../sim/battle';
 import { toID } from '../sim/dex';
+import { AnalysisPokemonEditor } from './analysis-pokemon-edits';
 import type {
-	AnalysisConditionEdit, AnalysisEdits, AnalysisFieldStateEdit, AnalysisWeatherEdit,
+	AnalysisConditionEdit, AnalysisEditLine, AnalysisEditSummary, AnalysisEdits, AnalysisFieldStateEdit,
+	AnalysisWeatherEdit,
 } from './analysis-state';
 
 export type AnalysisFieldEffectKind = 'weather' | 'terrain' | 'pseudoWeather' | 'sideCondition';
@@ -35,16 +38,6 @@ export interface AnalysisFieldEffectOption {
 	duration?: number;
 	/** Spikes and Toxic Spikes */
 	maxLayers?: number;
-}
-
-/**
- * Summary lines for the Lines tooltip and the log, e.g. `Rain (3 Turns)`, `Terrain (Off)`, `Spikes (2 Layers)`:
- * field-wide effects, then each team's.
- */
-export interface AnalysisEditSummary {
-	field: string[];
-	p1: string[];
-	p2: string[];
 }
 
 /** The edits a node actually made (entries that changed nothing are left out), and their summary. */
@@ -146,7 +139,7 @@ class FieldEditor {
 	options: Map<string, AnalysisFieldEffectOption>;
 	applied: AnalysisFieldStateEdit = {};
 	summary: AnalysisEditSummary = { field: [], p1: [], p2: [] };
-	lines: string[][] = [];
+	lines: AnalysisEditLine[] = [];
 	/** `weather:3`, `trickroom:2` (pseudo-weather or terrain id), `p1:reflect:5` */
 	durations: string[] = [];
 	droppedEdits: string[] = [];
@@ -331,30 +324,54 @@ class FieldEditor {
 /**
  * Applies a node's manual edits at the start of its turn. Values are absolute; entries that change nothing
  * are left out of the returned `applied` edits, so the client can store exactly what took effect.
- * Only the field layer exists so far (plan.md Phase 2a); later layers (teams, active, pokemon) go before it.
+ * Layers run in order (plan.md D3): Pokémon state, then which Pokémon are active, then the field.
+ * Pokémon state comes before the active swaps, because its keys are indices into the node's own
+ * `side.pokemon` order and sending a Pokémon out reorders that list. Team and set edits (Phase 3) go first.
  */
 export function applyAnalysisEdits(battle: Battle, edits: AnalysisEdits | undefined) {
 	const droppedEdits: string[] = [];
 	if (!edits) return { droppedEdits, applied: null };
 	const applied: AnalysisAppliedEdits = { edits: {}, summary: { field: [], p1: [], p2: [] } };
+	const lines: AnalysisEditLine[] = [];
+	const { summary } = applied;
+	/** keywords on the edits message for state the protocol can't express (see analysis-battle.ts) */
+	const keywords: string[] = [];
+
+	if (edits.active || edits.pokemon) {
+		const editor = new AnalysisPokemonEditor(battle);
+		editor.apply(edits);
+		droppedEdits.push(...editor.droppedEdits);
+		if (editor.changed) {
+			Object.assign(applied.edits, editor.applied);
+			summary.p1.push(...editor.summary.p1);
+			summary.p2.push(...editor.summary.p2);
+			lines.push(...editor.lines);
+		}
+	}
+
 	if (edits.field) {
 		const editor = new FieldEditor(battle);
 		editor.apply(edits.field);
 		droppedEdits.push(...editor.droppedEdits);
-		const { summary } = editor;
-		if (summary.field.length || summary.p1.length || summary.p2.length) {
+		const fieldSummary = editor.summary;
+		if (fieldSummary.field.length || fieldSummary.p1.length || fieldSummary.p2.length) {
 			applied.edits.field = editor.applied;
-			applied.summary = summary;
-			for (const line of editor.lines) battle.add(...line);
-			const parts = [
-				summary.field.join(', '),
-				summary.p1.length ? `Team 1: ${summary.p1.join(', ')}` : '',
-				summary.p2.length ? `Team 2: ${summary.p2.join(', ')}` : '',
-			];
-			const message = ['-message', `Analysis edits: ${parts.filter(Boolean).join('; ')}`];
-			if (editor.durations.length) message.push(`[analysisdurations] ${editor.durations.join(',')}`);
-			battle.add(...message);
+			summary.field.push(...fieldSummary.field);
+			summary.p1.push(...fieldSummary.p1);
+			summary.p2.push(...fieldSummary.p2);
+			lines.push(...editor.lines);
+			if (editor.durations.length) keywords.push(`[analysisdurations] ${editor.durations.join(',')}`);
 		}
+	}
+
+	if (summary.field.length || summary.p1.length || summary.p2.length) {
+		for (const line of lines) battle.add(...line);
+		const parts = [
+			summary.field.join(', '),
+			summary.p1.length ? `Team 1: ${summary.p1.join(', ')}` : '',
+			summary.p2.length ? `Team 2: ${summary.p2.join(', ')}` : '',
+		];
+		battle.add('-message', `Analysis edits: ${parts.filter(Boolean).join('; ')}`, ...keywords);
 	}
 	return { droppedEdits, applied };
 }
