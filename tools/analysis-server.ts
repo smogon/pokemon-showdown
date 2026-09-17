@@ -7,6 +7,7 @@ import {
 	type AnalysisBatchRequest,
 } from './analysis-batch';
 import { getAnalysisCalcs } from './analysis-calc';
+import { getFieldEffectOptions } from './analysis-edits';
 import {
 	applyInputLog, createAnalysisBattle, getAnalysisSnapshot, replayAnalysisRecords,
 	type AnalysisReplayRecord,
@@ -88,7 +89,7 @@ function startBattle(request: StartRequest) {
 
 	const output: string[] = [];
 	const battle = createAnalysisBattle(request, output);
-	const { droppedEdits } = replayAnalysisRecords(battle, request.replayNodes);
+	const { droppedEdits, appliedEdits } = replayAnalysisRecords(battle, request.replayNodes);
 	battle.sendUpdates();
 	let actionSeed: PRNGSeed | undefined;
 	if (request.inputLog?.length) {
@@ -113,6 +114,8 @@ function startBattle(request: StartRequest) {
 		log,
 		snapshot: getAnalysisSnapshot(battle),
 		droppedEdits,
+		appliedEdits,
+		editOptions: { field: getFieldEffectOptions(battle) },
 		requestState: battle.requestState,
 		requests: getAnalysisRequests(battle),
 		pendingMidTurnSwitches: getPendingMidTurnSwitches(battle),

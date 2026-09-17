@@ -9,12 +9,13 @@ import { Battle } from '../sim/battle';
 import { toID } from '../sim/dex';
 import type { PRNGSeed } from '../sim/prng';
 import type { Pokemon } from '../sim/pokemon';
+import { applyAnalysisEdits, type AnalysisAppliedEdits } from './analysis-edits';
 
 /**
  * Manual state edits stored on a node. Values are absolute ("set to"); missing
  * fields are left unchanged. Applied in layers: teams -> active -> pokemon -> field.
- * Not implemented yet (plan.md Phase 2/3); the shape is fixed here so records
- * can already carry it.
+ * Only `field` is implemented so far (plan.md Phase 2a, tools/analysis-edits.ts); the other
+ * layers' shapes are fixed here so records can already carry them.
  */
 export interface AnalysisEdits {
 	teams?: { p1?: PokemonSet[], p2?: PokemonSet[] };
@@ -35,11 +36,22 @@ export interface AnalysisPokemonStateEdit {
 	volatiles?: { [id: string]: false | { [param: string]: number | string | boolean } };
 }
 
+/** Turns remaining (including the current turn) and layers; each defaults to the condition's standard value. */
+export interface AnalysisConditionEdit {
+	duration?: number;
+	layers?: number;
+}
+
+export interface AnalysisWeatherEdit extends AnalysisConditionEdit {
+	id: string;
+}
+
+/** `null` removes the effect; a missing key leaves it as is. Applied by tools/analysis-edits.ts. */
 export interface AnalysisFieldStateEdit {
-	weather?: string;
-	terrain?: string;
-	pseudoWeather?: { [id: string]: boolean };
-	sides?: { p1?: { [id: string]: boolean | number }, p2?: { [id: string]: boolean | number } };
+	weather?: AnalysisWeatherEdit | null;
+	terrain?: AnalysisWeatherEdit | null;
+	pseudoWeather?: { [id: string]: AnalysisConditionEdit | null };
+	sides?: { p1?: { [id: string]: AnalysisConditionEdit | null }, p2?: { [id: string]: AnalysisConditionEdit | null } };
 }
 
 /** One node on the path from the root. A record may carry only edits (no seed yet). */
@@ -139,24 +151,20 @@ export function applyInputLog(battle: Battle, inputLog: string[] | undefined) {
 }
 
 /**
- * Applies a node's manual edits at the start of its turn. Edits must not consume
- * RNG (write state directly), so replays stay deterministic.
- * Not implemented yet: plan.md Phase 2 (field/pokemon) and Phase 3 (teams).
+ * Replays records in order: edits first (they must not consume RNG), then reseed and apply that
+ * node's choices. `appliedEdits` has one entry per record: what its edits actually changed.
  */
-export function applyAnalysisEdits(battle: Battle, edits: AnalysisEdits | undefined) {
-	if (!edits) return { droppedEdits: [] as string[] };
-	return { droppedEdits: [] as string[] };
-}
-
-/** Replays records in order: edits first, then reseed and apply that node's choices. */
 export function replayAnalysisRecords(battle: Battle, records: AnalysisReplayRecord[] | undefined) {
 	const droppedEdits: string[] = [];
+	const appliedEdits: (AnalysisAppliedEdits | null)[] = [];
 	for (const record of records || []) {
-		droppedEdits.push(...applyAnalysisEdits(battle, record.edits).droppedEdits);
+		const result = applyAnalysisEdits(battle, record.edits);
+		droppedEdits.push(...result.droppedEdits);
+		appliedEdits.push(result.applied);
 		if (record.seed) battle.resetRNG(record.seed);
 		applyInputLog(battle, record.inputLog);
 	}
-	return { droppedEdits };
+	return { droppedEdits, appliedEdits };
 }
 
 function snapshotEffectState(state: AnyObject): AnalysisEffectSnapshot {
