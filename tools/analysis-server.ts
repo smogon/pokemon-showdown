@@ -6,6 +6,7 @@ import {
 	groupSimulationResults, runSimulationBatch, validateBatchRequest,
 	type AnalysisBatchRequest,
 } from './analysis-batch';
+import { getAnalysisCalcs } from './analysis-calc';
 import {
 	applyInputLog, createAnalysisBattle, getAnalysisSnapshot, replayAnalysisRecords,
 	type AnalysisReplayRecord,
@@ -21,6 +22,8 @@ type StartRequest = {
 	/** choices to execute from the reconstructed position under a fresh seed */
 	inputLog?: string[],
 	autoTurn?: boolean,
+	/** /analysis/calc: draft choices (`>p1 move 1 +2`) for choice-dependent calc flags and targets */
+	choices?: string[],
 };
 
 function sendJson(res: http.ServerResponse, status: number, data: Record<string, any>) {
@@ -138,12 +141,31 @@ async function handleRequest(pathname: string, body: string, res: http.ServerRes
 			});
 			return;
 		}
+		if (pathname === '/analysis/calc') {
+			const calcResult = calcBattle(request);
+			sendJson(res, calcResult.error ? 400 : 200, calcResult);
+			return;
+		}
 		const result = startBattle(request);
 		sendJson(res, result.error ? 400 : 200, result);
 	} catch (error: any) {
 		sendJson(res, 400, { error: error.message || 'Invalid analysis request.' });
 	}
 }
+
+/** Damage calcs at the reconstructed decision point (docs/analysis/plan.md, Phase 1). */
+function calcBattle(request: StartRequest) {
+	const team1Problems = validateTeam(request.format, request.team1);
+	const team2Problems = validateTeam(request.format, request.team2);
+	if (team1Problems.length || team2Problems.length) {
+		return { error: { team1: team1Problems, team2: team2Problems } };
+	}
+	const battle = createAnalysisBattle(request);
+	replayAnalysisRecords(battle, request.replayNodes);
+	return { results: getAnalysisCalcs(battle, request.choices) };
+}
+
+const ROUTES = new Set(['/analysis/start', '/analysis/simulate', '/analysis/calc']);
 
 const server = http.createServer((req, res) => {
 	if (req.method === 'OPTIONS') {
@@ -155,7 +177,7 @@ const server = http.createServer((req, res) => {
 		return;
 	}
 	const pathname = new URL(req.url || '/', 'http://localhost').pathname;
-	if (req.method !== 'POST' || (pathname !== '/analysis/start' && pathname !== '/analysis/simulate')) {
+	if (req.method !== 'POST' || !ROUTES.has(pathname)) {
 		sendJson(res, 404, { error: 'Not found' });
 		return;
 	}
