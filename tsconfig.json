@@ -38,6 +38,7 @@
         "./sim/**/*",
         "./tools/set-import/*.ts",
         "./tools/modlog/*.ts",
+        "./tools/analysis-*.ts",
         "./translations/**/*.ts",
     ]
 }

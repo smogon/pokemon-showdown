@@ -1,21 +1,19 @@
 import { cpus } from 'node:os';
 import { isMainThread, parentPort, Worker, workerData } from 'node:worker_threads';
-import { Battle, extractChannelMessages } from '../sim/battle';
-import { Dex, PRNG, TeamValidator, Teams } from '../sim';
+import { type Battle, extractChannelMessages } from '../sim/battle';
+import { PRNG, TeamValidator, Teams } from '../sim';
 import type { PRNGSeed } from '../sim/prng';
 import type { Pokemon } from '../sim/pokemon';
-
-export interface AnalysisReplayNode {
-	seed: PRNGSeed;
-	inputLog: string[];
-}
+import {
+	applyInputLog, createAnalysisBattle, replayAnalysisRecords, type AnalysisReplayRecord,
+} from './analysis-state';
 
 export interface AnalysisBatchRequest {
 	format: string;
 	team1: string;
 	team2: string;
 	seed?: PRNGSeed;
-	replayNodes?: AnalysisReplayNode[];
+	replayNodes?: AnalysisReplayRecord[];
 	inputLog: string[];
 	midTurnSwitchChoices?: AnalysisMidTurnSwitchChoice[];
 	count: number;
@@ -60,13 +58,6 @@ interface SimulationJob extends AnalysisBatchRequest {
 interface ResolvedMidTurnSwitchChoice extends AnalysisMidTurnSwitchChoice {
 	pokemon?: Pokemon;
 	replacement?: Pokemon;
-}
-
-function applyInput(battle: Battle, inputLog: string[]) {
-	for (const line of inputLog) {
-		const match = /^>p([12])\s+(.+)$/.exec(line);
-		if (match) battle.choose(`p${match[1]}` as 'p1' | 'p2', match[2]);
-	}
 }
 
 function getMidTurnSwitchReason(pokemon: Pokemon) {
@@ -143,25 +134,25 @@ export function calculateTotalDamage(prefixLog: string[], turnLog: string[]) {
 function normalizeSimulationLine(
 	line: string, mode: AnalysisGroupingMode, protectedMisses: Set<string>, preserveExecution = false
 ) {
-		const parts = line.split('|');
-		const event = parts[1];
-		if (event === 't:') return null;
-		if (mode === 'state') {
-			if (event === '-damage' && parts.slice(4).includes('[from] confusion')) {
-				return preserveExecution ? `|cant|${parts[2]}|confusion` : `|move|${parts[2]}`;
-			}
-			if (['-crit', '-damage', '-heal', '-hitcount', '-resisted', '-supereffective'].includes(event)) return null;
-			if (event === '-activate' && ['confusion', 'item: Quick Claw'].includes(parts[3])) return null;
-			if (event === '-status') return parts.slice(0, 4).join('|');
-			if (event === '-miss') return preserveExecution && protectedMisses.has(line) ? line : null;
-			if (event === 'cant') return preserveExecution ? line : `|move|${parts[2]}`;
+	const parts = line.split('|');
+	const event = parts[1];
+	if (event === 't:') return null;
+	if (mode === 'state') {
+		if (event === '-damage' && parts.slice(4).includes('[from] confusion')) {
+			return preserveExecution ? `|cant|${parts[2]}|confusion` : `|move|${parts[2]}`;
 		}
-		if (event === 'move') return parts.slice(0, 3).join('|');
-		const hpIndex = event === 'switch' || event === 'drag' || event === 'replace' ? 4 :
-			['-damage', '-heal', '-sethp'].includes(event) ? 3 : -1;
-		if (hpIndex < 0 || !parts[hpIndex]) return line;
-		parts[hpIndex] = parts[hpIndex].replace(/^\d+\/\d+/, '<hp>');
-		return parts.join('|');
+		if (['-crit', '-damage', '-heal', '-hitcount', '-resisted', '-supereffective'].includes(event)) return null;
+		if (event === '-activate' && ['confusion', 'item: Quick Claw'].includes(parts[3])) return null;
+		if (event === '-status') return parts.slice(0, 4).join('|');
+		if (event === '-miss') return preserveExecution && protectedMisses.has(line) ? line : null;
+		if (event === 'cant') return preserveExecution ? line : `|move|${parts[2]}`;
+	}
+	if (event === 'move') return parts.slice(0, 3).join('|');
+	const hpIndex = event === 'switch' || event === 'drag' || event === 'replace' ? 4 :
+		['-damage', '-heal', '-sethp'].includes(event) ? 3 : -1;
+	if (hpIndex < 0 || !parts[hpIndex]) return line;
+	parts[hpIndex] = parts[hpIndex].replace(/^\d+\/\d+/, '<hp>');
+	return parts.join('|');
 }
 
 export function getSimulationGroupKey(
@@ -216,7 +207,7 @@ function getMoveResults(turnLog: string[]) {
 			results.set(currentKey, { crit: false, miss: false });
 			continue;
 		}
-		if (!event || !event.startsWith('-')) {
+		if (!event?.startsWith('-')) {
 			currentKey = '';
 			currentMove = '';
 			continue;
@@ -283,19 +274,8 @@ export function groupSimulationResults(
 
 function simulate(job: SimulationJob, seed: PRNGSeed, offset: number): AnalysisSimulationResult {
 	const output: string[] = [];
-	const battle = new Battle({
-		formatid: Dex.toID(job.format),
-		seed: job.seed as any,
-		p1: { name: 'Analysis 1', team: job.team1 },
-		p2: { name: 'Analysis 2', team: job.team2 },
-		send(type, data) {
-			if (type === 'update') output.push(...(Array.isArray(data) ? data : [data]));
-		},
-	});
-	for (const node of job.replayNodes || []) {
-		battle.resetRNG(node.seed);
-		applyInput(battle, node.inputLog);
-	}
+	const battle = createAnalysisBattle(job, output);
+	replayAnalysisRecords(battle, job.replayNodes);
 	battle.sendUpdates();
 	const midTurnSwitchChoices: ResolvedMidTurnSwitchChoice[] = (job.midTurnSwitchChoices || []).map(choice => {
 		const side = battle.sides[choice.side === 'p1' ? 0 : 1];
@@ -313,7 +293,7 @@ function simulate(job: SimulationJob, seed: PRNGSeed, offset: number): AnalysisS
 		].includes(pokemon.ability))
 	).map(pokemon => [pokemon.toString(), pokemon]));
 	battle.resetRNG(seed);
-	applyInput(battle, job.inputLog);
+	applyInputLog(battle, job.inputLog);
 	battle.sendUpdates();
 	const switchInputLog: string[] = [];
 	let switchCount = 0;
@@ -363,7 +343,10 @@ function runWorker(job: SimulationJob, signal?: AbortSignal) {
 			void worker.terminate();
 			finish(() => reject(new Error('Analysis simulation cancelled.')));
 		};
-		if (signal?.aborted) return abort();
+		if (signal?.aborted) {
+			abort();
+			return;
+		}
 		signal?.addEventListener('abort', abort, { once: true });
 		worker.once('message', result => finish(() => resolve(result)));
 		worker.once('error', error => finish(() => reject(error)));
@@ -393,7 +376,8 @@ export function validateBatchRequest(request: AnalysisBatchRequest) {
 export async function runSimulationBatch(request: AnalysisBatchRequest, signal?: AbortSignal) {
 	const seeds = Array.from({ length: request.count }, () => PRNG.generateSeed());
 	const configuredWorkers = Number(process.env.ANALYSIS_SIMULATION_WORKERS);
-	const workerLimit = Number.isSafeInteger(configuredWorkers) && configuredWorkers > 0 ? configuredWorkers : cpus().length - 1;
+	const workerLimit = Number.isSafeInteger(configuredWorkers) && configuredWorkers > 0 ?
+		configuredWorkers : cpus().length - 1;
 	const workerCount = Math.max(1, Math.min(request.count, workerLimit));
 	const chunkSize = Math.ceil(request.count / workerCount);
 	const jobs: SimulationJob[] = [];

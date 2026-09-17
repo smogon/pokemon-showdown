@@ -1,20 +1,26 @@
 import http from 'node:http';
-import { Battle, extractChannelMessages } from '../sim/battle';
+import { type Battle, extractChannelMessages } from '../sim/battle';
 import { PRNG, type PRNGSeed } from '../sim/prng';
 import { Dex, TeamValidator, Teams } from '../sim';
 import {
 	groupSimulationResults, runSimulationBatch, validateBatchRequest,
 	type AnalysisBatchRequest,
 } from './analysis-batch';
+import {
+	applyInputLog, createAnalysisBattle, getAnalysisSnapshot, replayAnalysisRecords,
+	type AnalysisReplayRecord,
+} from './analysis-state';
 
 type StartRequest = {
-	format: string;
-	team1: string;
-	team2: string;
-	seed?: PRNGSeed;
-	replayNodes?: { seed: PRNGSeed, inputLog: string[] }[];
-	inputLog?: string[];
-	autoTurn?: boolean;
+	format: string,
+	team1: string,
+	team2: string,
+	seed?: PRNGSeed,
+	/** path from the root to the target node, each with optional edits, seed, and inputs */
+	replayNodes?: AnalysisReplayRecord[],
+	/** choices to execute from the reconstructed position under a fresh seed */
+	inputLog?: string[],
+	autoTurn?: boolean,
 };
 
 function sendJson(res: http.ServerResponse, status: number, data: Record<string, any>) {
@@ -56,7 +62,7 @@ function getPendingMidTurnSwitches(battle: Battle) {
 function getAnalysisRequests(battle: Battle) {
 	const requests = battle.getRequests(battle.requestState);
 	for (const request of requests) {
-		for (const active of request?.active || []) {
+		for (const active of (request as AnyObject)?.active || []) {
 			for (const move of active?.moves || []) {
 				move.selfSwitch = !!battle.dex.moves.get(move.id).selfSwitch;
 			}
@@ -78,33 +84,14 @@ function startBattle(request: StartRequest) {
 	}
 
 	const output: string[] = [];
-	const battle = new Battle({
-		formatid: Dex.toID(request.format),
-		seed: request.seed as any,
-		p1: { name: 'Analysis 1', team: request.team1 },
-		p2: { name: 'Analysis 2', team: request.team2 },
-		send(type, data) {
-			if (type === 'update') output.push(...(Array.isArray(data) ? data : [data]));
-		},
-	});
-	const applyInput = (inputLog: string[]) => {
-		for (const line of inputLog) {
-			const match = /^>p([12])\s+(.+)$/.exec(line);
-			if (match) battle.choose(`p${match[1]}` as 'p1' | 'p2', match[2]);
-		}
-	};
-	if (request.replayNodes?.length) {
-		for (const node of request.replayNodes) {
-			battle.resetRNG(node.seed);
-			applyInput(node.inputLog);
-		}
-	}
+	const battle = createAnalysisBattle(request, output);
+	const { droppedEdits } = replayAnalysisRecords(battle, request.replayNodes);
 	battle.sendUpdates();
 	let actionSeed: PRNGSeed | undefined;
 	if (request.inputLog?.length) {
 		actionSeed = PRNG.generateSeed();
 		battle.resetRNG(actionSeed);
-		applyInput(request.inputLog);
+		applyInputLog(battle, request.inputLog);
 		battle.sendUpdates();
 	}
 	if (request.autoTurn) {
@@ -121,11 +108,41 @@ function startBattle(request: StartRequest) {
 		currentSeed: battle.prng.getSeed(),
 		actionSeed,
 		log,
-		state: battle.toJSON(),
+		snapshot: getAnalysisSnapshot(battle),
+		droppedEdits,
 		requestState: battle.requestState,
 		requests: getAnalysisRequests(battle),
 		pendingMidTurnSwitches: getPendingMidTurnSwitches(battle),
 	};
+}
+
+async function handleRequest(pathname: string, body: string, res: http.ServerResponse, signal: AbortSignal) {
+	try {
+		const request = JSON.parse(body) as StartRequest & AnalysisBatchRequest;
+		if (!request.format || !request.team1 || !request.team2) {
+			sendJson(res, 400, { error: 'format, team1, and team2 are required.' });
+			return;
+		}
+		if (pathname === '/analysis/simulate') {
+			const error = validateBatchRequest(request);
+			if (error) {
+				sendJson(res, 400, { error });
+				return;
+			}
+			const simulations = await runSimulationBatch(request, signal);
+			if (signal.aborted) return;
+			sendJson(res, 200, {
+				simulationCount: simulations.length,
+				turnGroups: groupSimulationResults(simulations, 'turn'),
+				stateGroups: groupSimulationResults(simulations, 'state'),
+			});
+			return;
+		}
+		const result = startBattle(request);
+		sendJson(res, result.error ? 400 : 200, result);
+	} catch (error: any) {
+		sendJson(res, 400, { error: error.message || 'Invalid analysis request.' });
+	}
 }
 
 const server = http.createServer((req, res) => {
@@ -150,35 +167,10 @@ const server = http.createServer((req, res) => {
 		if (!res.writableEnded) abortController.abort();
 	});
 	req.setEncoding('utf8');
-	req.on('data', chunk => body += chunk);
-	req.on('end', async () => {
-		try {
-			const request = JSON.parse(body) as StartRequest & AnalysisBatchRequest;
-			if (!request.format || !request.team1 || !request.team2) {
-				sendJson(res, 400, { error: 'format, team1, and team2 are required.' });
-				return;
-			}
-			if (pathname === '/analysis/simulate') {
-				const error = validateBatchRequest(request);
-				if (error) {
-					sendJson(res, 400, { error });
-					return;
-				}
-				const simulations = await runSimulationBatch(request, abortController.signal);
-				if (abortController.signal.aborted) return;
-				sendJson(res, 200, {
-					simulationCount: simulations.length,
-					turnGroups: groupSimulationResults(simulations, 'turn'),
-					stateGroups: groupSimulationResults(simulations, 'state'),
-				});
-				return;
-			}
-			const result = startBattle(request);
-			sendJson(res, result.error ? 400 : 200, result);
-		} catch (error: any) {
-			sendJson(res, 400, { error: error.message || 'Invalid analysis request.' });
-		}
+	req.on('data', chunk => {
+		body += chunk;
 	});
+	req.on('end', () => void handleRequest(pathname, body, res, abortController.signal));
 });
 
 const port = Number(process.env.ANALYSIS_PORT || 8001);
