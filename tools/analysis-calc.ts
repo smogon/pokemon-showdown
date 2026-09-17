@@ -42,8 +42,16 @@ export interface AnalysisCalcTargetResult {
 	error?: string;
 }
 
+/**
+ * The attacker's own transformation this turn: '' (as it is now), or terastallizing / mega evolving.
+ * Results are computed for every mode the attacker can still use, so the client can match the
+ * move menu's Mega/Tera checkboxes (or the chosen move's modifier) without refetching.
+ */
+export type AnalysisCalcMode = '' | 'tera' | 'mega' | 'megax' | 'megay';
+
 export interface AnalysisCalcMoveResult {
 	attacker: AnalysisCalcPokemonRef;
+	mode: AnalysisCalcMode;
 	/** 0-based move slot, matching request move order */
 	moveSlot: number;
 	moveId: string;
@@ -130,8 +138,7 @@ interface SlotChoice {
 	kind: 'move' | 'switch' | 'pass';
 	moveSlot?: number;
 	targetLoc?: number;
-	terastallize?: boolean;
-	mega?: boolean;
+	mode: AnalysisCalcMode;
 }
 
 const PROTECT_MOVES = new Set([
@@ -147,13 +154,13 @@ export function parseDraftChoices(inputLog: string[] | undefined) {
 		if (!match) continue;
 		choices[match[1]] = match[2].split(',').map(part => {
 			const tokens = part.trim().split(/\s+/);
-			if (tokens[0] === 'switch') return { kind: 'switch' };
-			if (tokens[0] !== 'move') return { kind: 'pass' };
-			const choice: SlotChoice = { kind: 'move', moveSlot: Number(tokens[1]) - 1 };
+			if (tokens[0] === 'switch') return { kind: 'switch', mode: '' };
+			if (tokens[0] !== 'move') return { kind: 'pass', mode: '' };
+			const choice: SlotChoice = { kind: 'move', moveSlot: Number(tokens[1]) - 1, mode: '' };
 			for (const token of tokens.slice(2)) {
 				if (/^[+-]?\d+$/.test(token)) choice.targetLoc = Number(token);
-				if (token === 'terastallize') choice.terastallize = true;
-				if (token === 'mega' || token === 'megax' || token === 'megay') choice.mega = true;
+				if (token === 'terastallize') choice.mode = 'tera';
+				if (token === 'mega' || token === 'megax' || token === 'megay') choice.mode = token;
 			}
 			return choice;
 		});
@@ -173,6 +180,15 @@ const TERRAIN: { [id: string]: I.Terrain } = {
 	electricterrain: 'Electric', grassyterrain: 'Grassy', psychicterrain: 'Psychic', mistyterrain: 'Misty',
 };
 
+/** Abilities that set weather/terrain when they start, e.g. on Mega Evolving before moves this turn. */
+const WEATHER_ABILITIES: { [id: string]: I.Weather } = {
+	drought: 'Sun', drizzle: 'Rain', sandstream: 'Sand', snowwarning: 'Snow',
+	desolateland: 'Harsh Sunshine', primordialsea: 'Heavy Rain', deltastream: 'Strong Winds',
+};
+const TERRAIN_ABILITIES: { [id: string]: I.Terrain } = {
+	electricsurge: 'Electric', grassysurge: 'Grassy', psychicsurge: 'Psychic', mistysurge: 'Misty',
+};
+
 function activePokemon(battle: Battle) {
 	return battle.sides.flatMap(side => side.active).filter(pokemon => pokemon && !pokemon.fainted && pokemon.hp);
 }
@@ -181,11 +197,27 @@ function choiceFor(choices: ReturnType<typeof parseDraftChoices>, pokemon: Pokem
 	return choices[pokemon.side.id]?.[pokemon.position];
 }
 
-function toCalcPokemon(generation: I.Generation, pokemon: Pokemon, choice: SlotChoice | undefined) {
+/** Transformations `pokemon` can still use this turn (the same flags that drive the request's checkboxes). */
+function availableModes(pokemon: Pokemon): AnalysisCalcMode[] {
+	const modes: AnalysisCalcMode[] = [''];
+	if (pokemon.canTerastallize && !pokemon.terastallized) modes.push('tera');
+	if (pokemon.canMegaEvo) modes.push('mega');
+	if (pokemon.canMegaEvoX) modes.push('megax');
+	if (pokemon.canMegaEvoY) modes.push('megay');
+	return modes;
+}
+
+function megaSpeciesFor(pokemon: Pokemon, mode: AnalysisCalcMode) {
+	const forme = mode === 'mega' ? pokemon.canMegaEvo : mode === 'megax' ? pokemon.canMegaEvoX :
+		mode === 'megay' ? pokemon.canMegaEvoY : null;
+	return typeof forme === 'string' ? forme : null;
+}
+
+function toCalcPokemon(generation: I.Generation, pokemon: Pokemon, mode: AnalysisCalcMode) {
 	const battle = pokemon.battle;
-	const megaSpecies = choice?.mega && !pokemon.species.isMega ? battle.actions.canMegaEvo(pokemon) : null;
+	const megaSpecies = megaSpeciesFor(pokemon, mode);
 	const species = megaSpecies ? battle.dex.species.get(megaSpecies) : pokemon.species;
-	const terastallized = pokemon.terastallized || (choice?.terastallize ? pokemon.teraType : undefined);
+	const terastallized = pokemon.terastallized || (mode === 'tera' ? pokemon.teraType : undefined);
 	const types = megaSpecies ? species.types : pokemon.getTypes(false, true);
 	const overrides: { types?: [I.TypeName] | [I.TypeName, I.TypeName] } = {};
 	if (types.join('/') !== species.types.join('/')) {
@@ -257,14 +289,26 @@ function toCalcSide(pokemon: Pokemon, opponent: Pokemon, choices: ReturnType<typ
 }
 
 function toCalcField(
-	battle: Battle, attacker: Pokemon, defender: Pokemon, choices: ReturnType<typeof parseDraftChoices>
+	battle: Battle, attacker: Pokemon, defender: Pokemon, choices: ReturnType<typeof parseDraftChoices>,
+	attackerMode: AnalysisCalcMode, defenderMode: AnalysisCalcMode
 ) {
 	const abilities = new Set<string>(activePokemon(battle).map(pokemon => pokemon.getAbility().id));
 	const { field } = battle;
+	let weather = WEATHER[field.weather];
+	let terrain = TERRAIN[field.terrain];
+	// a Mega's ability starts when it Mega Evolves, before moves (defender first, then attacker if both do)
+	for (const [pokemon, mode] of [[defender, defenderMode], [attacker, attackerMode]] as const) {
+		const megaSpecies = megaSpeciesFor(pokemon, mode);
+		if (!megaSpecies) continue;
+		const megaAbility = battle.dex.toID(battle.dex.species.get(megaSpecies).abilities[0]);
+		abilities.add(megaAbility);
+		weather = WEATHER_ABILITIES[megaAbility] || weather;
+		terrain = TERRAIN_ABILITIES[megaAbility] || terrain;
+	}
 	return new CalcField({
 		gameType: battle.gameType === 'singles' ? 'Singles' : 'Doubles',
-		weather: WEATHER[field.weather],
-		terrain: TERRAIN[field.terrain],
+		weather,
+		terrain,
 		isMagicRoom: !!field.pseudoWeather['magicroom'],
 		isWonderRoom: !!field.pseudoWeather['wonderroom'],
 		isGravity: !!field.pseudoWeather['gravity'],
@@ -334,61 +378,73 @@ function describe(result: ReturnType<typeof calculate>) {
 	return description;
 }
 
+function calcMove(
+	battle: Battle, generation: I.Generation, choices: ReturnType<typeof parseDraftChoices>,
+	attacker: Pokemon, attackerChoice: SlotChoice | undefined, mode: AnalysisCalcMode, moveSlot: number, moveId: string
+): AnalysisCalcMoveResult | null {
+	const move = battle.dex.moves.get(moveId);
+	if (!move.exists || move.category === 'Status') return null;
+	const spread = SPREAD_TARGETS.has(move.target);
+	if (!spread && !SINGLE_TARGETS.has(move.target)) return null;
+	const presentTargets = getTargetCandidates(attacker, move.target)
+		.filter(candidate => !candidate.pokemon.fainted && candidate.pokemon.hp);
+	if (!presentTargets.length) return null;
+	const ref = (pokemon: Pokemon): AnalysisCalcPokemonRef => ({
+		side: pokemon.side.id, index: pokemon.side.pokemon.indexOf(pokemon), slot: pokemon.position,
+	});
+	const targets = presentTargets.map(candidate => {
+		const defender = candidate.pokemon;
+		const entry: AnalysisCalcTargetResult = {
+			target: ref(defender),
+			relation: candidate.relation,
+			onMoveHover: spread || candidate.relation === 'foe',
+			selected: isSelectedTarget(attacker, candidate, attackerChoice, moveSlot, spread),
+		};
+		try {
+			const calcAttacker = toCalcPokemon(generation, attacker, mode);
+			const defenderMode = choiceFor(choices, defender)?.mode || '';
+			const calcDefender = toCalcPokemon(generation, defender, defenderMode);
+			const calcMoveData = new CalcMove(generation, move.name, {
+				ability: calcAttacker.ability,
+				item: calcAttacker.item,
+				useMax: !!attacker.volatiles['dynamax'],
+				// the spread modifier only applies when more than one target is actually present
+				overrides: spread && presentTargets.length < 2 ? { target: 'normal' } : undefined,
+			});
+			const result = calculate(
+				generation, calcAttacker, calcDefender, calcMoveData,
+				toCalcField(battle, attacker, defender, choices, mode, defenderMode)
+			);
+			const [min, max] = result.range();
+			const maxHP = calcDefender.maxHP();
+			entry.damage = [min, max];
+			entry.percent = [Math.floor(min * 1000 / maxHP) / 10, Math.floor(max * 1000 / maxHP) / 10];
+			entry.text = describe(result);
+		} catch (error: any) {
+			entry.error = error?.message || String(error);
+		}
+		return entry;
+	});
+	return { attacker: ref(attacker), mode, moveSlot, moveId: move.id, moveName: move.name, targets };
+}
+
 /**
  * Calcs for every active attacker's damaging moves against their potential targets, at the
- * battle's current decision point. `draftInputLog` supplies choice-dependent flags
- * (Protect, switching out, Helping Hand, terastallizing/mega evolving this turn) and targets.
+ * battle's current decision point, once per transformation mode each attacker can still use.
+ * `draftInputLog` supplies choice-dependent flags (Protect, switching out, Helping Hand, defenders
+ * terastallizing/mega evolving this turn) and the selected targets.
  */
 export function getAnalysisCalcs(battle: Battle, draftInputLog?: string[]): AnalysisCalcMoveResult[] {
 	if (battle.requestState !== 'move') return [];
 	const generation = getCalcGeneration(battle);
 	const choices = parseDraftChoices(draftInputLog);
-	const ref = (pokemon: Pokemon): AnalysisCalcPokemonRef => ({
-		side: pokemon.side.id, index: pokemon.side.pokemon.indexOf(pokemon), slot: pokemon.position,
-	});
 	const results: AnalysisCalcMoveResult[] = [];
 	for (const attacker of activePokemon(battle)) {
 		const attackerChoice = choiceFor(choices, attacker);
-		for (const [moveSlot, slot] of attacker.moveSlots.entries()) {
-			const move = battle.dex.moves.get(slot.id);
-			if (!move.exists || move.category === 'Status') continue;
-			const spread = SPREAD_TARGETS.has(move.target);
-			if (!spread && !SINGLE_TARGETS.has(move.target)) continue;
-			const candidates = getTargetCandidates(attacker, move.target);
-			const presentTargets = candidates.filter(candidate => !candidate.pokemon.fainted && candidate.pokemon.hp);
-			const targets: AnalysisCalcTargetResult[] = presentTargets.map(candidate => {
-				const defender = candidate.pokemon;
-				const entry: AnalysisCalcTargetResult = {
-					target: ref(defender),
-					relation: candidate.relation,
-					onMoveHover: spread || candidate.relation === 'foe',
-					selected: isSelectedTarget(attacker, candidate, attackerChoice, moveSlot, spread),
-				};
-				try {
-					const calcAttacker = toCalcPokemon(generation, attacker, attackerChoice);
-					const calcDefender = toCalcPokemon(generation, defender, choiceFor(choices, defender));
-					const calcMove = new CalcMove(generation, move.name, {
-						ability: calcAttacker.ability,
-						item: calcAttacker.item,
-						useMax: !!attacker.volatiles['dynamax'],
-						// the spread modifier only applies when more than one target is actually present
-						overrides: spread && presentTargets.length < 2 ? { target: 'normal' } : undefined,
-					});
-					const result = calculate(
-						generation, calcAttacker, calcDefender, calcMove, toCalcField(battle, attacker, defender, choices)
-					);
-					const [min, max] = result.range();
-					const maxHP = calcDefender.maxHP();
-					entry.damage = [min, max];
-					entry.percent = [Math.floor(min * 1000 / maxHP) / 10, Math.floor(max * 1000 / maxHP) / 10];
-					entry.text = describe(result);
-				} catch (error: any) {
-					entry.error = error?.message || String(error);
-				}
-				return entry;
-			});
-			if (targets.length) {
-				results.push({ attacker: ref(attacker), moveSlot, moveId: move.id, moveName: move.name, targets });
+		for (const mode of availableModes(attacker)) {
+			for (const [moveSlot, slot] of attacker.moveSlots.entries()) {
+				const result = calcMove(battle, generation, choices, attacker, attackerChoice, mode, moveSlot, slot.id);
+				if (result) results.push(result);
 			}
 		}
 	}
