@@ -260,7 +260,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ atk: length }, source, source, this.dex.abilities.get('chillingneigh'));
 			}
@@ -284,7 +284,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ spa: length }, source, source, this.dex.abilities.get('grimneigh'));
 			}
@@ -360,7 +360,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 4,
 	},
 	battlebond: {
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (source.bondTriggered) return;
 			if (effect?.effectType !== 'Move') return;
 			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
@@ -400,7 +400,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 284,
 	},
 	beastboost: {
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				const bestStat = source.getBestStat(true, true);
 				this.boost({ [bestStat]: length }, source);
@@ -499,7 +499,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 167,
 	},
 	chillingneigh: {
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ atk: length }, source);
 			}
@@ -1714,7 +1714,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 229,
 	},
 	grimneigh: {
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ spa: length }, source);
 			}
@@ -2747,7 +2747,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 78,
 	},
 	moxie: {
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ atk: length }, source);
 			}
@@ -4424,8 +4424,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 116,
 	},
 	soulheart: {
-		onAnyFaintPriority: 1,
-		onAnyFaint() {
+		onAnyAfterFaint() {
 			this.boost({ spa: 1 }, this.effectState.target);
 		},
 		flags: {},
