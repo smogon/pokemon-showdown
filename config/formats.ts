@@ -1115,8 +1115,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt', 'Kingambit',
 		],
 		onValidateTeam(team, format, teamHas) {
-			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
-
 			const heads: { [speciesid: string]: any[] } = require('../data/mods/gen9randomtandem/tandems.json');
 			// Need 2 Heads
 			let headCount = 0;
