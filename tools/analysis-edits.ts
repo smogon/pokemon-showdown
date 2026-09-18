@@ -11,6 +11,7 @@
 import type { Battle } from '../sim/battle';
 import { toID } from '../sim/dex';
 import { AnalysisPokemonEditor } from './analysis-pokemon-edits';
+import { AnalysisTeamEditor } from './analysis-team-edits';
 import type {
 	AnalysisConditionEdit, AnalysisEditLine, AnalysisEditSummary, AnalysisEdits, AnalysisFieldStateEdit,
 	AnalysisWeatherEdit,
@@ -337,12 +338,39 @@ export function applyAnalysisEdits(battle: Battle, edits: AnalysisEdits | undefi
 	/** keywords on the edits message for state the protocol can't express (see analysis-battle.ts) */
 	const keywords: string[] = [];
 
-	if (edits.active || edits.pokemon) {
-		const editor = new AnalysisPokemonEditor(battle);
+	/** team slots whose Pokémon the team layer replaced, so their state edits no longer mean anything */
+	let invalidatedSlots = new Set<string>();
+	if (edits.teams) {
+		const editor = new AnalysisTeamEditor(battle);
 		editor.apply(edits);
 		droppedEdits.push(...editor.droppedEdits);
+		invalidatedSlots = editor.invalidatedSlots;
 		if (editor.changed) {
 			Object.assign(applied.edits, editor.applied);
+			summary.p1.push(...editor.summary.p1);
+			summary.p2.push(...editor.summary.p2);
+			lines.push(...editor.lines);
+		}
+	}
+
+	if (edits.active || edits.pokemon) {
+		const editor = new AnalysisPokemonEditor(battle);
+		editor.apply(edits, invalidatedSlots);
+		droppedEdits.push(...editor.droppedEdits);
+		if (editor.changed) {
+			// `active` is merged per slot, not overwritten: the team layer records the replacements it
+			// had to make when a Pokémon was removed off the field
+			const { active, ...rest } = editor.applied;
+			Object.assign(applied.edits, rest);
+			for (const sideId of ['p1', 'p2'] as const) {
+				const slots = active?.[sideId];
+				if (!slots) continue;
+				const merged = [...(applied.edits.active?.[sideId] || [])];
+				for (let slot = 0; slot < slots.length; slot++) {
+					if (slots[slot] !== null && slots[slot] !== undefined) merged[slot] = slots[slot];
+				}
+				(applied.edits.active ||= {})[sideId] = merged;
+			}
 			summary.p1.push(...editor.summary.p1);
 			summary.p2.push(...editor.summary.p2);
 			lines.push(...editor.lines);

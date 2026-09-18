@@ -13,12 +13,20 @@ import { applyAnalysisEdits, type AnalysisAppliedEdits } from './analysis-edits'
 
 /**
  * Manual state edits stored on a node. Values are absolute ("set to"); missing
- * fields are left unchanged. Applied in layers: teams -> active -> pokemon -> field.
- * Only `field` is implemented so far (plan.md Phase 2a, tools/analysis-edits.ts); the other
- * layers' shapes are fixed here so records can already carry them.
+ * fields are left unchanged. Applied in layers: teams -> active -> pokemon -> field
+ * (tools/analysis-team-edits.ts, tools/analysis-pokemon-edits.ts, tools/analysis-edits.ts).
  */
+/**
+ * A side's whole roster at this node, in `side.pokemon` order. `from[i]` is the team slot entry `i` came
+ * from, so a set keeps its identity (and its slot) through a reorder; `null` means the entry is new.
+ */
+export interface AnalysisTeamEdit {
+	sets: PokemonSet[];
+	from: (number | null)[];
+}
+
 export interface AnalysisEdits {
-	teams?: { p1?: PokemonSet[], p2?: PokemonSet[] };
+	teams?: { [side in AnalysisSideEditsID]?: AnalysisTeamEdit };
 	/** team slot per active position; `null` leaves that position alone */
 	active?: { [side in AnalysisSideEditsID]?: (number | null)[] };
 	/** keyed `p1:<teamSlot>`, the Pokémon's slot in the original team (see AnalysisPokemonSnapshot) */
@@ -43,11 +51,16 @@ export interface AnalysisEditSummary {
 
 export interface AnalysisPokemonStateEdit {
 	hp?: number;
-	/** by move slot; `null` leaves that slot alone */
-	pp?: (number | null)[];
+	/**
+	 * PP by move id, not by slot: a slot's move can change, and an edit naming a move that is no longer
+	 * there is simply irrelevant rather than something to invalidate.
+	 */
+	pp?: { [moveid: string]: number };
 	status?: '' | 'brn' | 'par' | 'slp' | 'frz' | 'psn' | 'tox';
 	toxicStage?: number;
 	sleepTurns?: number;
+	/** current types, which moves like Soak and Reflect Type change mid-battle */
+	types?: string[];
 	/** setting these is one-way: the protocol can't undo a Terastallization or Mega Evolution */
 	terastallized?: boolean;
 	megaEvolved?: boolean;
