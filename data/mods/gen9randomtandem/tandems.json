@@ -64,9 +64,9 @@
 			"species": "Arcanine",
 			"items": ["heavydutyboots"],
 			"abilities": ["intimidate"],
-			"teraTypes": ["Fire", "Fighting", "Flying"],
+			"teraTypes": ["Fire", "Normal"],
 			"forcedMoves": ["flareblitz", "extremespeed"],
-			"moves": ["closecombat", "morningsun", "swordsdance"],
+			"moves": ["closecombat", "morningsun"],
 			"nature": "Adamant"
 		},
 		{
@@ -148,7 +148,7 @@
 		},
 		{
 			"species": "Scream Tail",
-			"items": ["choiceband", "assaultvest"],
+			"items": ["leftovers", "assaultvest"],
 			"abilities": ["hugepower"],
 			"gender": "N",
 			"teraTypes": ["Fairy", "Water"],
@@ -175,7 +175,7 @@
 			"gender": "N",
 			"teraTypes": ["Water", "Grass"],
 			"forcedMoves": ["tailglow", "surf"],
-			"moves": ["energyball", "icebeam"],
+			"moves": ["energyball", "icebeam", "alluringvoice"],
 			"nature": "Timid"
 		},
 		{
@@ -208,7 +208,7 @@
 			"teraTypes": ["Fire"],
 			"forcedMoves": ["ivycudgel", "grassyglide"],
 			"moves": ["hornleech", "swordsdance"],
-			"nature": "Timid"
+			"nature": "Jolly"
 		},
 		{
 			"species": "Primarina",
@@ -300,7 +300,7 @@
 		},
 		{
 			"species": "Amoonguss",
-			"items": ["rockyhelmet", "blacksludge"],
+			"items": ["rockyhelmet", "leftovers"],
 			"abilities": ["regenerator"],
 			"teraTypes": ["Water"],
 			"forcedMoves": ["sludgebomb", "spore"],
@@ -479,7 +479,7 @@
 		{
 			"species": "Tapu Koko",
 			"items": ["heavydutyboots"],
-			"abilities": ["hadronengine"],
+			"abilities": ["electricsurge"],
 			"gender": "N",
 			"teraTypes": ["Electric", "Grass"],
 			"forcedMoves": ["wildcharge", "roost"],
@@ -501,8 +501,8 @@
 			"abilities": ["teravolt"],
 			"gender": "N",
 			"teraTypes": ["Ice", "Fairy", "Electric"],
-			"forcedMoves": ["freezeshock", "fusionbolt"],
-			"moves": ["icebeam", "earthpower", "recover"]
+			"forcedMoves": ["freezeshock", "dragonpulse"],
+			"moves": ["icepunch", "earthpower", "fusionbolt"]
 		},
 		{
 			"species": "Rillaboom",
@@ -545,12 +545,12 @@
 		{
 			"species": "Diancie",
 			"items": ["leftovers"],
-			"abilities": ["clearbody"],
+			"abilities": ["stamina"],
 			"gender": "N",
 			"teraTypes": ["Fighting", "Psychic", "Water"],
 			"forcedMoves": ["calmmind", "drainingkiss"],
 			"moves": ["storedpower", "earthpower", "diamondstorm"],
-			"nature": "Careful"
+			"nature": "Relaxed"
 		}
 	],
 	"weavile": [
@@ -795,11 +795,11 @@
 		},
 		{
 			"species": "mamoswine",
-			"items": ["lifeorb"],
-			"abilities": ["thickfat"],
-			"teraTypes": ["Ice", "Ground"],
-			"forcedMoves": ["iciclecrash", "earthquake"],
-			"moves": ["iceshard", "knockoff"],
+			"items": ["loaded dice"],
+			"abilities": ["technician"],
+			"teraTypes": ["Ice", "Grass"],
+			"forcedMoves": ["icicle spear", "earthquake"],
+			"moves": ["iceshard", "rockblast", "trailblaze"],
 			"nature": "Jolly"
 		},
 		{
@@ -986,10 +986,10 @@
 		{
 			"species": "porygon2",
 			"items": ["eviolite"],
-			"abilities": ["regenerator"],
+			"abilities": ["download"],
 			"teraTypes": ["Flying", "Ghost"],
-			"forcedMoves": ["terablast", "icebeam"],
-			"moves": ["recover", "trickroom"],
+			"forcedMoves": ["terablast", "teleport"],
+			"moves": ["ice beam", "trickroom", "thunderbolt"],
 			"nature": "Sassy"
 		},
 		{
@@ -997,8 +997,8 @@
 			"items": ["ejectpack"],
 			"abilities": ["magicbounce"],
 			"teraTypes": ["Water"],
-			"forcedMoves": ["fleurcannon", "mistyexplosion"],
-			"moves": ["spikes", "trickroom"],
+			"forcedMoves": ["fleurcannon", "trickroom"],
+			"moves": ["spikes", "batonpass", "encore"],
 			"nature": "Sassy"
 		},
 		{
@@ -1175,11 +1175,11 @@
 		},
 		{
 			"species": "infernape",
-			"items": ["lifeorb"],
-			"abilities": ["protean"],
-			"teraTypes": ["Stellar"],
+			"items": ["heavydutyboots"],
+			"abilities": ["gorillatactics"],
+			"teraTypes": ["Fire", "Fighting"],
 			"forcedMoves": ["flareblitz", "closecombat"],
-			"moves": ["uturn", "grassknot", "heatwave", "vacuumwave"],
+			"moves": ["uturn", "grassknot", "knockoff"],
 			"nature": "Jolly"
 		},
 		{
@@ -1187,8 +1187,8 @@
 			"items": ["feraligite"],
 			"abilities": ["sheerforce"],
 			"teraTypes": ["Water"],
-			"forcedMoves": ["liquidation", "bodyslam"],
-			"moves": ["swordsdance", "aquajet"],
+			"forcedMoves": ["liquidation", "jet punch"],
+			"moves": ["swordsdance", "body slam"],
 			"nature": "Adamant"
 		},
 		{
@@ -1196,8 +1196,8 @@
 			"items": ["aerodactylite"],
 			"abilities": ["unnerve"],
 			"teraTypes": ["Rock"],
-			"forcedMoves": ["dualwingbeat", "stoneaxe"],
-			"moves": ["crunch", "earthquake", "firefang"],
+			"forcedMoves": ["brave bird", "stone edge"],
+			"moves": ["crunch", "earthquake", "firefang", "roost"],
 			"nature": "Jolly"
 		}
 	],
