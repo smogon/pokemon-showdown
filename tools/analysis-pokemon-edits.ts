@@ -176,24 +176,53 @@ export class AnalysisPokemonEditor {
 		return wanted;
 	}
 
-	applyPP(sideId: AnalysisSideEditsID, pokemon: Pokemon, pp: (number | null)[]) {
-		const applied: (number | null)[] = [];
-		for (let slot = 0; slot < pp.length; slot++) {
-			const wanted = pp[slot];
-			const moveSlot = pokemon.moveSlots[slot];
+	/**
+	 * PP is named by move id, so an edit for a move the Pokémon no longer has just doesn't apply — no
+	 * cross-layer invalidation needed, and a move change and its new PP can be saved together.
+	 */
+	applyPP(sideId: AnalysisSideEditsID, pokemon: Pokemon, pp: { [moveid: string]: number }) {
+		const applied: { [moveid: string]: number } = {};
+		for (const [moveid, wanted] of Object.entries(pp)) {
 			if (wanted === null || wanted === undefined) continue;
+			const moveSlot = pokemon.moveSlots.find(entry => entry.id === toID(moveid));
 			if (!moveSlot) {
-				this.drop(sideId, this.teamSlot(pokemon), `move slot ${slot + 1} doesn't exist`);
+				this.drop(sideId, this.teamSlot(pokemon), `${moveid} is no longer one of ${pokemon.name}'s moves`);
 				continue;
 			}
 			const value = clamp(wanted, 0, moveSlot.maxpp, moveSlot.pp);
-			applied[slot] = value;
+			applied[moveSlot.id] = value;
 			if (value === moveSlot.pp) continue;
 			moveSlot.pp = value;
 			// PP isn't in the protocol; the client reads it from the request
 			this.note(sideId, pokemon, `${moveSlot.move} PP (${value}/${moveSlot.maxpp})`);
 		}
-		return applied.length ? applied : undefined;
+		return Object.keys(applied).length ? applied : undefined;
+	}
+
+	/**
+	 * The Pokémon's current types, which moves like Soak and Reflect Type change mid-battle. `setType`
+	 * with `enforce` skips the sim's own guards (Arceus, Terastallization) and fires no events, so it's
+	 * safe here; the renderer picks the change up from the `typechange` line.
+	 */
+	applyTypes(sideId: AnalysisSideEditsID, pokemon: Pokemon, types: string[]) {
+		const wanted: string[] = [];
+		for (const type of types) {
+			const name = this.battle.dex.types.get(type).name;
+			if (name && !wanted.includes(name)) wanted.push(name);
+		}
+		if (!wanted.length) {
+			this.drop(sideId, this.teamSlot(pokemon), `a Pokémon needs at least one type`);
+			return undefined;
+		}
+		if (pokemon.terastallized) {
+			this.drop(sideId, this.teamSlot(pokemon), `${pokemon.name} is Terastallized, so its types are fixed`);
+			return undefined;
+		}
+		if (wanted.join('/') === pokemon.getTypes().join('/')) return undefined;
+		pokemon.setType(wanted, true);
+		this.lines.push(['-start', pokemon, 'typechange', wanted.join('/'), '[silent]']);
+		this.note(sideId, pokemon, `Types (${wanted.join('/')})`);
+		return wanted;
 	}
 
 	applyBoosts(sideId: AnalysisSideEditsID, pokemon: Pokemon, boosts: AnalysisPokemonStateEdit['boosts']) {
@@ -217,20 +246,61 @@ export class AnalysisPokemonEditor {
 	}
 
 	/** Terastallization and Mega Evolution run through the sim, and can't be undone here. */
+	/**
+	 * Takes back a Terastallization from an earlier node or a played turn. The sim needs little unwinding:
+	 * `getTypes` derives from the `terastallized` flag and `terastallize` never overwrites `types`, so
+	 * clearing the flag restores the typing. What it does do is null `canTerastallize` for the whole side,
+	 * which `battle.actions.canTerastallize` recomputes, and append `, tera:TYPE` to `details`.
+	 *
+	 * The protocol can't express this — no line clears `terastallized` on a living Pokémon — so it rides on
+	 * an `analysistera` message that only `analysis-battle.ts` reads.
+	 *
+	 * Terastallizing permanently changes forme for Ogerpon, Terapagos and Morpeko, and that is **not**
+	 * reversed here: the Pokémon keeps the Tera forme while no longer counting as Terastallized. Accepted
+	 * as sandbox behaviour (user decision, 2026-09-18) rather than special-cased.
+	 */
+	unTerastallize(sideId: AnalysisSideEditsID, pokemon: Pokemon) {
+		const previous = pokemon.terastallized;
+		pokemon.terastallized = '';
+		pokemon.apparentType = pokemon.getTypes().join('/');
+		pokemon.details = pokemon.getUpdatedDetails();
+		for (const ally of pokemon.side.pokemon) {
+			ally.canTerastallize = this.battle.actions.canTerastallize(ally);
+		}
+		this.lines.push(['-message', 'analysistera', pokemon, '', '[silent]']);
+		this.note(sideId, pokemon, `Un-Terastallized (was ${previous})`);
+	}
+
 	applyTransformation(sideId: AnalysisSideEditsID, pokemon: Pokemon, edit: AnalysisPokemonStateEdit) {
 		const applied: { terastallized?: boolean, megaEvolved?: boolean } = {};
+		/*
+		 * Unchecking Terastallization works whenever this node's own edit is what applied it: edits are
+		 * absolute and the battle is rebuilt from scratch, so "un-Terastallize" just means not doing it.
+		 * A Terastallization from an earlier node or a played turn is a different matter — no protocol line
+		 * takes it back on a living Pokémon — so that is refused and reported.
+		 *
+		 * The sim's one-per-side rule is deliberately not enforced: this is a sandbox (user decision,
+		 * 2026-09-18), so several Pokémon on a team may be Terastallized at once.
+		 */
 		if (edit.terastallized !== undefined) {
-			if (pokemon.terastallized) {
-				applied.terastallized = true;
-				if (!edit.terastallized) this.drop(sideId, this.teamSlot(pokemon), `${pokemon.name} can't un-Terastallize`);
-			} else if (edit.terastallized) {
-				if (pokemon.canTerastallize && pokemon.isActive) {
-					this.battle.actions.terastallize(pokemon);
+			if (!edit.terastallized) {
+				if (pokemon.terastallized) {
+					this.unTerastallize(sideId, pokemon);
+					applied.terastallized = false;
+				}
+			} else if (pokemon.terastallized) {
+				// already Terastallized by an earlier node or a played turn: this edit changes nothing
+			} else if (pokemon.isActive && pokemon.teraType) {
+				this.battle.actions.terastallize(pokemon);
+				if (pokemon.terastallized) {
 					applied.terastallized = true;
 					this.note(sideId, pokemon, `Terastallized (${pokemon.terastallized})`);
 				} else {
-					this.drop(sideId, this.teamSlot(pokemon), `${pokemon.name} can't Terastallize`);
+					// the sim refuses some combinations outright, e.g. Ogerpon into the wrong type
+					this.drop(sideId, this.teamSlot(pokemon), `${pokemon.name} can't Terastallize into ${pokemon.teraType}`);
 				}
+			} else {
+				this.drop(sideId, this.teamSlot(pokemon), `${pokemon.name} can't Terastallize`);
 			}
 		}
 		if (edit.megaEvolved !== undefined) {
@@ -260,6 +330,7 @@ export class AnalysisPokemonEditor {
 		Object.assign(applied, this.applyStatus(sideId, pokemon, edit));
 		if (edit.hp !== undefined) applied.hp = this.applyHP(sideId, pokemon, edit.hp);
 		if (edit.pp) applied.pp = this.applyPP(sideId, pokemon, edit.pp);
+		if (edit.types) applied.types = this.applyTypes(sideId, pokemon, edit.types);
 		if (edit.boosts) applied.boosts = this.applyBoosts(sideId, pokemon, edit.boosts);
 		Object.assign(applied, this.applyTransformation(sideId, pokemon, edit));
 		for (const [key, value] of Object.entries(applied)) {
@@ -272,17 +343,26 @@ export class AnalysisPokemonEditor {
 	 * Active swaps run first, so state edits see the Pokémon as they will be (a Pokémon sent out here can be
 	 * given boosts in the same save). Order is safe either way, because edits name Pokémon by team slot.
 	 */
-	apply(edits: AnalysisEdits) {
+	apply(edits: AnalysisEdits, invalidatedSlots = new Set<string>()) {
 		for (const sideId of ['p1', 'p2'] as const) {
 			const active = edits.active?.[sideId] || [];
 			for (let slot = 0; slot < active.length; slot++) {
 				const teamSlot = active[slot];
-				if (teamSlot !== null && teamSlot !== undefined) this.setActive(sideId, slot, teamSlot);
+				if (teamSlot === null || teamSlot === undefined) continue;
+				if (invalidatedSlots.has(`${sideId}:${teamSlot}`)) {
+					this.drop(sideId, teamSlot, `a team edit removed this Pokémon`);
+					continue;
+				}
+				this.setActive(sideId, slot, teamSlot);
 			}
 		}
 		for (const [key, edit] of Object.entries(edits.pokemon || {})) {
 			const [sideId, teamSlot] = key.split(':');
 			if (sideId !== 'p1' && sideId !== 'p2') continue;
+			if (invalidatedSlots.has(key)) {
+				this.drop(sideId, Number(teamSlot), `a team edit removed this Pokémon`);
+				continue;
+			}
 			this.applyPokemon(sideId, Number(teamSlot), edit);
 		}
 	}

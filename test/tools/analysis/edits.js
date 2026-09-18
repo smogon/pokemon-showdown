@@ -114,7 +114,7 @@ describe('Analysis state edits', () => {
 	it('writes Pokémon state and emits the matching lines', () => {
 		const edits = {
 			pokemon: {
-				'p1:0': { hp: 20, status: 'tox', toxicStage: 3, boosts: { atk: 2, spe: -1 }, pp: [5] },
+				'p1:0': { hp: 20, status: 'tox', toxicStage: 3, boosts: { atk: 2, spe: -1 }, pp: { splash: 5 } },
 				'p2:0': { status: 'slp', sleepTurns: 2 },
 			},
 		};
@@ -177,17 +177,76 @@ describe('Analysis state edits', () => {
 		]);
 	});
 
-	it('Terastallizes through the sim, and reports edits it cannot undo', () => {
+	it('Terastallizes through the sim', () => {
 		const edits = { pokemon: { 'p1:0': { terastallized: true } } };
 		const { battle, output } = battleFor([TEAM_PREVIEW, { edits }]);
 		assert.equal(battle.sides[0].active[0].terastallized, 'Water');
-		assert.equal(battle.sides[0].pokemon[1].canTerastallize, null, 'one Terastallization per side');
 		assert.match(output, /\|-terastallize\|p1a: Magikarp\|Water/);
+	});
 
-		const undo = { pokemon: { 'p1:0': { terastallized: false } } };
-		const { droppedEdits } = battleFor([TEAM_PREVIEW, { edits }, { edits: undo }]);
-		assert.equal(droppedEdits.length, 1);
-		assert.match(droppedEdits[0], /un-Terastallize/);
+	it("unchecking Terastallization on the node that set it simply doesn't apply it", () => {
+		// edits are absolute and the battle is rebuilt from scratch, so this needs no undo
+		const { battle, output, droppedEdits, appliedEdits } = battleFor([
+			TEAM_PREVIEW, { edits: { pokemon: { 'p1:0': { terastallized: false } } } },
+		]);
+		assert.deepEqual(droppedEdits, []);
+		assert(!battle.sides[0].active[0].terastallized, 'it should not be Terastallized');
+		assert(!/-terastallize/.test(output), 'no Terastallization line should be emitted');
+		assert.equal(appliedEdits[appliedEdits.length - 1].edits.pokemon, undefined, 'the no-op should disappear');
+	});
+
+	it('takes back a Terastallization from an earlier node', () => {
+		const tera = {
+			edits: { pokemon: { 'p1:0': { terastallized: true } } },
+			seed: SEED, inputLog: ['>p1 move 1', '>p2 move 1'],
+		};
+		const teraOnly = battleFor([TEAM_PREVIEW, tera]).battle.sides[0].active[0];
+		assert.equal(teraOnly.terastallized, 'Water');
+		assert.deepEqual(teraOnly.getTypes(), ['Water'], 'Terastallizing overrides the typing');
+
+		const { battle, output, droppedEdits } = battleFor([
+			TEAM_PREVIEW, tera, { edits: { pokemon: { 'p1:0': { terastallized: false } } } },
+		]);
+		assert.deepEqual(droppedEdits, []);
+		const pokemon = battle.sides[0].active[0];
+		assert(!pokemon.terastallized, 'it should no longer be Terastallized');
+		// types are derived from the flag, so clearing it restores the species typing
+		assert.deepEqual(pokemon.getTypes(), ['Water'], 'Magikarp is Water anyway');
+		assert(!/tera:/.test(pokemon.details), `details should lose the tera suffix: ${pokemon.details}`);
+		// terastallize() nulls this for the whole side; taking it back restores it
+		assert.equal(pokemon.canTerastallize, 'Water');
+		assert.equal(battle.sides[0].pokemon[1].canTerastallize, 'Water');
+		// the protocol can't express this, so the renderer reads it off a marker line
+		assert(output.includes('analysistera'), 'a marker line should be emitted for the renderer');
+	});
+
+	it('lets several Pokémon on a side Terastallize, because the tool is a sandbox', () => {
+		const { battle, droppedEdits } = battleFor([
+			TEAM_PREVIEW,
+			{ edits: { pokemon: { 'p1:0': { terastallized: true } } }, seed: SEED, inputLog: ['>p1 move 1', '>p2 move 1'] },
+			{ edits: { active: { p1: [1] }, pokemon: { 'p1:1': { terastallized: true } } } },
+		]);
+		assert.deepEqual(droppedEdits, []);
+		const side = battle.sides[0];
+		assert.equal(side.pokemon.filter(entry => entry.terastallized).length, 2, 'both should be Terastallized');
+	});
+
+	it('leaves the sim\'s own one-per-side rule alone: only the edit layer is permissive', () => {
+		// choosing Terastallization the normal way still goes through Side#chooseMove
+		const { battle } = battleFor([TEAM_PREVIEW]);
+		assert(battle.choose('p1', 'move 1 terastallize'), 'the first Terastallization should be accepted');
+		battle.choose('p2', 'move 1');
+		assert.equal(battle.sides[0].active[0].terastallized, 'Water');
+		assert.equal(battle.sides[0].pokemon[1].canTerastallize, null, 'the side has used its Terastallization');
+		// a later turn can't Terastallize again through the action menu
+		battle.choose('p1', 'move 1');
+		battle.choose('p2', 'move 1');
+		assert(!battle.choose('p1', 'move 1 terastallize'), 'the sim should refuse a second Terastallization');
+
+		// and an edit-driven Terastallization closes the normal path too, because it runs the sim's action
+		const edited = battleFor([TEAM_PREVIEW, { edits: { pokemon: { 'p1:0': { terastallized: true } } } }]).battle;
+		assert.equal(edited.sides[0].pokemon[1].canTerastallize, null);
+		assert(!edited.choose('p1', 'move 1 terastallize'), 'the action menu should still refuse after an edit');
 	});
 
 	it('drops Pokémon edits that no longer make sense', () => {
