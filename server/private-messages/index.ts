@@ -222,7 +222,7 @@ if (!database.isParentProcess) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
-	};
+	} as typeof Monitor;
 	process.on('uncaughtException', err => {
 		Monitor.crashlog(err, 'A private message database process');
 	});

@@ -49,6 +49,8 @@ function getDefaultStats(): Stats {
 			gen9babyrandombattle: { mons: {} },
 			gen9chatbats: { mons: {} },
 			gen9ccapm2025randombattle: { mons: {} },
+			gen9mixandmegalimitedsupplyrandombattle: { mons: {} },
+			gen9deltamonrandombattle: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
 			gen9championsrandombattle: { mons: {} },
 			gen9championsrandomdoublesbattle: { mons: {} },
@@ -192,7 +194,8 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		eloFloor = 1400;
 	}
 	if (!formatData || ((format.mod !== 'gen9ssb' && format.mod !== 'chatbats' &&
-		format.mod !== 'ccapm2025') && battle.rated < eloFloor) || !winner)
+		format.mod !== 'gen9mnmlimitedsupply' && format.mod !== 'gen9deltamon') &&
+		battle.rated < eloFloor) || !winner)
 		return;
 	checkRollover();
 	for (const p of battle.players) {

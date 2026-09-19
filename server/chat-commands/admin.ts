@@ -40,6 +40,29 @@ function bash(command: string, context: Chat.CommandContext, cwd?: string): Prom
 	});
 }
 
+function clearRequireCache(options: { exclude?: string[] } = {}) {
+	const excludes = [...(options?.exclude || []), '/node_modules/'];
+
+	for (const filepath in require.cache) {
+		if (excludes.some(p => filepath.includes(p))) continue;
+		const mod = require.cache[filepath]; // have to ref to appease ts
+		if (!mod) continue;
+		uncacheModuleTree(mod, excludes);
+		delete require.cache[filepath];
+	}
+}
+
+function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
+	const children = mod.children;
+	if (!children?.length || excludes.some(p => mod.filename.includes(p))) return;
+	// delete before recursing in case of circular requires
+	delete (mod as any).children;
+	for (const child of children) {
+		if (excludes.some(p => child.filename.includes(p))) continue;
+		uncacheModuleTree(child, excludes);
+	}
+}
+
 function keysIncludingNonEnumerable(obj: object) {
 	const methods = new Set<string>();
 	let current = obj;
@@ -619,7 +642,7 @@ export const commands: Chat.ChatCommands = {
 			if (!['all', 'formats', 'battles', 'validator', 'learnsets'].includes(target)) {
 				exclude.push('/sim/');
 			}
-			Utils.clearRequireCache({ exclude });
+			clearRequireCache({ exclude });
 			// Node retains `module.parent`, which means each hotpatch refers to the `admin.ts`
 			// from the hotpatch before it in an unbroken chain through every hotpatch,
 			// preventing any of them from being GC'd. There's no way to break this reference,

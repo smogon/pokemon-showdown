@@ -5,6 +5,7 @@
  * @license MIT
  */
 import { Utils } from '../lib/utils';
+import type { TagData } from '../data/tags';
 
 /**
 * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -38,6 +39,25 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 		if (k in self) continue;
 		self[k] = data[k];
 	}
+}
+
+export type EffectText =
+	ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedNameText | ResolvedSpeciesText;
+export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
+
+export const OTHER_NAME_TABLES = [
+	'TypeNames', 'NatureNames', 'GenderNames',
+	'EggGroupNames', 'ColorNames', 'StatusNames', 'TargetNames',
+	'StatNames', 'StatMediumNames', 'StatShortNames',
+] as const;
+export type OtherNameTable = typeof OTHER_NAME_TABLES[number];
+
+export type TextEffect = Species | Item | Ability | Move | Nature | TypeInfo | TagData;
+
+/** English-only text for custom effects defined by mods. */
+export interface ModdedEffectText {
+	desc?: string;
+	shortDesc?: string;
 }
 
 export abstract class BasicEffect implements EffectData {
@@ -82,13 +102,6 @@ export abstract class BasicEffect implements EffectData {
 	 */
 	gen: number;
 	/**
-	 * A shortened form of the description of this effect.
-	 * Not all effects have this.
-	 */
-	shortDesc: string;
-	/** The full description for this effect. */
-	desc: string;
-	/**
 	 * Is this item/move/ability/pokemon nonstandard? Specified for effects
 	 * that have no use in standard formats: made-up pokemon (CAP),
 	 * glitches (MissingNo etc), Pokestar pokemon, etc.
@@ -118,8 +131,6 @@ export abstract class BasicEffect implements EffectData {
 		this.exists = data.exists ?? !!this.id;
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
-		this.shortDesc = data.shortDesc || '';
-		this.desc = data.desc || '';
 		this.isNonstandard = data.isNonstandard || null;
 		this.duration = data.duration;
 		this.noCopy = !!data.noCopy;

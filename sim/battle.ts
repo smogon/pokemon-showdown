@@ -1324,6 +1324,9 @@ export class Battle {
 
 		if (this.gen <= 4 || source.isAlly(target)) {
 			this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
+			if (this.gen > 4) {
+				this.hint("Skill Swap does not announce the abilities of the Pokémon when used between allies.");
+			}
 		} else {
 			this.add('-activate', source, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${target}`);
 		}
@@ -1850,7 +1853,7 @@ export class Battle {
 
 		if (!this.ruleTable.has('endlessbattleclause')) return;
 		// for now, FFA doesn't support Endless Battle Clause
-		if (this.format.gameType === 'freeforall') return;
+		if (this.gameType === 'freeforall') return;
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
 		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;

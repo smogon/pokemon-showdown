@@ -89,4 +89,39 @@ describe('Truant', () => {
 
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices('move entrainment', 'move heavyslam mega'));
 	});
+
+	describe('[Gen 4]', () => {
+		it('should allow the user to act the turn it wakes up, if an even number of turns have passed', () => {
+			battle = common.gen(4).createBattle({ seed: [0, 0, 0, 1] }, [[
+				{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
+			], [
+				{ species: "Steelix", ability: 'sturdy', moves: ['endure', 'spore'] },
+			]]);
+			const slaking = battle.p1.active[0];
+			const pokemon = battle.p2.active[0];
+
+			battle.makeChoices('move scratch', 'move spore');
+			assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked on turn 1 of sleep');
+			assert.equal(slaking.status, 'slp');
+			assert.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked after waking up');
+			assert.equal(slaking.status, '');
+		});
+
+		it('should not allow the user to act the turn it wakes up, if an odd number of turns have passed', () => {
+			battle = common.gen(4).createBattle({ seed: [0, 0, 0, 2] }, [[
+				{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
+			], [
+				{ species: "Steelix", ability: 'sturdy', moves: ['endure', 'spore'] },
+			]]);
+			const slaking = battle.p1.active[0];
+			const pokemon = battle.p2.active[0];
+
+			battle.makeChoices('move scratch', 'move spore');
+			assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked on turn 1 of sleep');
+			assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked on turn 2 of sleep');
+			assert.equal(slaking.status, 'slp');
+			assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked after waking up');
+			assert.equal(slaking.status, '');
+		});
+	});
 });
