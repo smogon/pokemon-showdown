@@ -105,6 +105,8 @@ export interface AnalysisEffectSnapshot {
 	duration?: number;
 	/** primitive fields of the effect state, e.g. layers, stage, hp */
 	data?: { [key: string]: number | string | boolean };
+	/** the position of the Pokémon this effect hangs off (`p2a`), for Leech Seed and partial trapping */
+	sourceSlot?: string;
 }
 
 export interface AnalysisPokemonSnapshot {
@@ -212,6 +214,7 @@ function snapshotEffectState(state: AnyObject): AnalysisEffectSnapshot {
 		id: state.id,
 		duration: state.duration,
 		data: Object.keys(data).length ? data : undefined,
+		sourceSlot: typeof state.sourceSlot === 'string' ? state.sourceSlot : undefined,
 	};
 }
 
