@@ -294,21 +294,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const action = this.queue.willMove(target);
 				if (!action) {
 					this.effectState.duration!++;
-					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
 				} else if (action.moveid !== move.id && !target.hasItem('mentalherb')) {
-					const priority = action.priority -
-						this.dex.moves.get(action.moveid).priority +
-						this.dex.moves.get(move.id).priority;
 					this.queue.changeAction(target, {
 						choice: 'move',
 						// target: undefined,
 						// targetLoc: undefined,
 						moveid: move.id,
-						order: action.order,
 					});
-					this.queue.willMove(target)!.priority = priority;
 				}
 			},
+			onOverrideAction: undefined, // no inherit
 		},
 	},
 	esperwing: {
