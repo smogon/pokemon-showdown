@@ -2234,7 +2234,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
+			if (!move.hasSheerForce) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
 				}
@@ -18084,7 +18084,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
+			if (!move.hasSheerForce) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');
 				}
