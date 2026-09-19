@@ -586,7 +586,11 @@ export class TeamValidator {
 			if (set.name === set.species) {
 				set.name = species.baseSpecies;
 			} else {
-				problems.push(`Nickname "${set.name}" too long (should be 18 characters or fewer)`);
+				problems.push(`${set.species}'s nickname "${set.name}" is too long.`);
+				problems.push(
+					`(It's ${set.name.length} characters long, but should be 18 or less. ` +
+					`Some characters, like emojis, may count as more than one.)`
+				);
 			}
 		}
 		set.name = dex.getName(set.name);
@@ -1920,6 +1924,9 @@ export class TeamValidator {
 				// placeholder at this step of validation. It's not impossible for
 				// this to happen with an unusual ruleset, though, so we won't throw.
 				return `${displayName} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely a validator bug.)`;
+			}
+			if (thing.effectType === 'Move' && thing.isNonstandard === 'Gmax') {
+				return `${displayName} is a placeholder for the Gigantamax version of ${thing.isMax}. It can't actually exist on a normal moveset.`;
 			}
 			if (thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future') {
 				return `${displayName} does not exist in Gen ${dex.gen}.`;

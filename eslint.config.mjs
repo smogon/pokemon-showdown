@@ -43,6 +43,7 @@ export default configure([
 		files: [
 			"**/*.ts",
 			"**/*.tsx",
+			"**/*.mts",
 		],
 		extends: [configs.ts],
 		languageOptions: {

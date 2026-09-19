@@ -90,13 +90,19 @@ The data contains information for moves named "Hidden Power Fire", "Hidden Power
 These are matched with `move.placeholderFor === "Hidden Power"`. Since no other move has this feature, you can also check `move.placeholderFor` for existence.
 
 
-Max moves and G-Max moves
+Max moves
 -------------------------
 
-Max and G-Max moves cannot be learned normally, and behave weirdly (sometimes have 0 base power, dealing exactly 2 damage) if hacked into a Pokémon's moveset.
+Max moves cannot be learned normally, and behave weirdly (they have 0 base power, dealing exactly 2 damage) if hacked into a Pokémon's moveset.
 
-They are matched with `move.isMax`. `move.isNonstandard === null` for Max moves. `isMax` will be `true` for Max moves and a string for G-Max moves.
+They are matched with `move.isMax`. `move.isNonstandard === null` for Max moves.
 
+G-Max moves
+-----------
+
+Unlike Max moves, G-Max moves aren't "real" moves, and don't even have an entry in the in-game moves database, meaning they can't be hacked onto Pokémon at all.
+
+They are tagged `Gmax`.
 
 Z-moves
 -------

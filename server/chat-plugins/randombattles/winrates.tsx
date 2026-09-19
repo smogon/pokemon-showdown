@@ -49,8 +49,11 @@ function getDefaultStats(): Stats {
 			gen9babyrandombattle: { mons: {} },
 			gen9chatbats: { mons: {} },
 			gen9ccapm2025randombattle: { mons: {} },
+			gen9mixandmegalimitedsupplyrandombattle: { mons: {} },
+			gen9deltamonrandombattle: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
 			gen9championsrandombattle: { mons: {} },
+			gen9championsrandomdoublesbattle: { mons: {} },
 			gen8randombattle: { mons: {} },
 			gen7randombattle: { mons: {} },
 			gen6randombattle: { mons: {} },
@@ -178,7 +181,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const format = Dex.formats.get(battle.format);
 	if (format.mod.startsWith('champions')) {
 		// ladder is inactive, so use a lower threshold
-		eloFloor = 1200;
+		eloFloor = (format.gameType === 'doubles') ? 1150 : 1250;
 	} else if (format.mod === 'gen2') {
 		eloFloor = 1150;
 	} else if (format.team === 'randomBaby') {
@@ -190,7 +193,9 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		// may need to be raised again if ladder takes off further
 		eloFloor = 1400;
 	}
-	if (!formatData || ((format.mod !== 'gen9ssb' && format.mod !== 'chatbats') && battle.rated < eloFloor) || !winner)
+	if (!formatData || ((format.mod !== 'gen9ssb' && format.mod !== 'chatbats' &&
+		format.mod !== 'gen9mnmlimitedsupply' && format.mod !== 'gen9deltamon') &&
+		battle.rated < eloFloor) || !winner)
 		return;
 	checkRollover();
 	for (const p of battle.players) {

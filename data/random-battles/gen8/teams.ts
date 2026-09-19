@@ -71,6 +71,11 @@ const PRIORITY_POKEMON = [
 	'aegislash', 'doublade', 'golisopod', 'mimikyu', 'scizor',
 ];
 
+/** Pokemon who should never be in the lead slot */
+const NO_LEAD_POKEMON = [
+	'dugtrio', 'gothitelle', 'wobbuffet',
+];
+
 export class RandomGen8Teams extends RandomTeams {
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
@@ -996,6 +1001,8 @@ export class RandomGen8Teams extends RandomTeams {
 
 		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
+		if (ruleTable.has('pickedteamsize') || ruleTable.has('teampreview')) leadsRemaining = 0;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
@@ -1081,10 +1088,21 @@ export class RandomGen8Teams extends RandomTeams {
 			// Limit three of any type combination in Monotype
 			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 
-			const set = this.randomSet(species, teamDetails,
-				pokemon.length === 0 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
-			);
-			pokemon.push(set);
+			let set: RandomTeamsTypes.RandomSet;
+			if (leadsRemaining) {
+				if (NO_LEAD_POKEMON.includes(species.id)) {
+					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
+					set = this.randomSet(species, teamDetails, false);
+					pokemon.push(set);
+				} else {
+					set = this.randomSet(species, teamDetails, true);
+					pokemon.unshift(set);
+					leadsRemaining--;
+				}
+			} else {
+				set = this.randomSet(species, teamDetails, false);
+				pokemon.push(set);
+			}
 
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;

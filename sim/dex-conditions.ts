@@ -1,5 +1,5 @@
 import { Utils } from '../lib/utils';
-import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 import type { SecondaryEffect, MoveEventMethods } from './dex-moves';
 
 /**
@@ -624,7 +624,7 @@ export interface FieldConditionData extends
 
 export type ConditionData = PokemonConditionData | SideConditionData | FieldConditionData;
 
-export type ModdedConditionData = ConditionData & { inherit?: true };
+export type ModdedConditionData = ConditionData & ModdedEffectText & { inherit?: true };
 export interface ConditionDataTable { [id: IDEntry]: ConditionData }
 export interface ModdedConditionDataTable { [id: IDEntry]: ModdedConditionData }
 

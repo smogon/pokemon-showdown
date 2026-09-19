@@ -603,6 +603,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
+		const textLanguage = Chat.getDexLanguage(this.language);
+		const TL = this.TL;
 		if (!newTargets?.length) {
 			throw new Chat.ErrorMessage(`'${target}' doesn't match any Pok\u00e9mon, item, move, ability or nature${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
@@ -615,6 +617,7 @@ export const commands: Chat.ChatCommands = {
 				buffer = `'${target}' has no exact match${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Approximate match${newTargets.length === 1 ? '' : 'es'}:\n`;
 			}
 			let details: { [k: string]: string } = {};
+			let description = '';
 			switch (newTarget.searchType) {
 			case 'nature':
 				const nature = Dex.natures.get(newTarget.name);
@@ -643,7 +646,9 @@ export const commands: Chat.ChatCommands = {
 					tierDisplay === 'doubles tiers' ? pokemon.doublesTier :
 					tierDisplay === 'National Dex tiers' ? pokemon.natDexTier :
 					pokemon.num >= 0 ? String(pokemon.num) : pokemon.tier;
-				buffer += `${prefix}${Chat.getDataPokemonHTML(pokemon, dex.gen, displayedTier)}\n`;
+				buffer += `${prefix}${Chat.getDataPokemonHTML(
+					pokemon, { dex, tier: displayedTier, language: this.language }
+				)}\n`;
 				if (showDetails) {
 					let weighthit = 20;
 					if (pokemon.weighthg >= 2000) {
@@ -658,208 +663,218 @@ export const commands: Chat.ChatCommands = {
 						weighthit = 40;
 					}
 					details = {
-						"Dex#": String(pokemon.num),
-						Gen: String(pokemon.gen) || 'CAP',
-						Height: `${pokemon.heightm} m`,
+						[TL`Dex#`]: String(pokemon.num),
+						[TL`Generation`]: String(pokemon.gen) || 'CAP',
+						[TL`Height`]: TL`${pokemon.heightm} m`,
 					};
-					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
+					details[TL`Weight`] = `${TL`${pokemon.weighthg / 10} kg`} <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
-					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
-					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
-					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
-					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
+					if (gmaxMove && dex.gen === 8) details[TL.tag.gmaxmove] = gmaxMove;
+					if (dex.gen === 1) details[TL`Crit rate`] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
+					if (pokemon.color && dex.gen >= 5) details[TL`Color`] = TL.color[pokemon.color] || pokemon.color;
+					if (pokemon.eggGroups && dex.gen >= 2) {
+						details[TL`Egg Groups`] = pokemon.eggGroups.map(group => TL.egggroup[group] || group).join(", ");
+					}
+					if (pokemon.gender && dex.gen >= 2) {
+						details[TL`Gender`] = TL.gender[pokemon.gender];
+					} else if (pokemon.genderRatio && dex.gen >= 2) {
+						const g = pokemon.genderRatio;
+						details[TL`Gender`] = TL.commaList([
+							TL.label(TL.gender.M, TL`${g.M * 100}%`),
+							TL.label(TL.gender.F, TL`${g.F * 100}%`),
+						]);
+					};
+
 					const evos: string[] = [];
 					for (const evoName of pokemon.evos) {
 						const evo = dex.species.get(evoName);
 						if (evo.gen <= dex.gen) {
+							const name = TL(evo);
 							const condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
 							case 'levelExtra':
-								evos.push(`${evo.name} (level-up${condition})`);
+								evos.push(`${name} (level-up${condition})`);
 								break;
 							case 'levelFriendship':
-								evos.push(`${evo.name} (level-up with high Friendship${condition})`);
+								evos.push(`${name} (level-up with high Friendship${condition})`);
 								break;
 							case 'levelHold':
-								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
+								evos.push(`${name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
 							case 'useItem':
-								evos.push(`${evo.name} (${evo.evoItem})`);
+								evos.push(`${name} (${evo.evoItem})`);
 								break;
 							case 'levelMove':
-								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
+								evos.push(`${name} (level-up with ${evo.evoMove}${condition})`);
 								break;
 							case 'other':
-								evos.push(`${evo.name} (${evo.evoCondition})`);
+								evos.push(`${name} (${evo.evoCondition})`);
 								break;
 							case 'trade':
-								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
+								evos.push(`${name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
 								break;
 							default:
-								evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
+								evos.push(`${name} (${evo.evoLevel}${condition})`);
 							}
 						}
 					}
 					if (pokemon.prevo) {
-						details["Pre-Evolution"] = pokemon.prevo;
+						details[TL`Pre-Evolution`] = TL(dex.species.get(pokemon.prevo));
 					}
 					if (!evos.length) {
-						details[`<font color="#686868">Does Not Evolve</font>`] = "";
+						details[`<span class="gray">${TL`Does Not Evolve`}</span>`] = "";
 					} else {
-						details["Evolution"] = evos.join(", ");
+						details[TL`Evolution`] = evos.join(", ");
 					}
 				}
 				break;
 			case 'item':
 				const item = dex.items.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataItemHTML(item)}\n`;
+				buffer += `${prefix}${Chat.getDataItemHTML(
+					item, { dex, language: this.language, hideShortDescription: showDetails }
+				)}\n`;
 				if (showDetails) {
+					description = dex.text.get(item, textLanguage).desc;
 					details = {
-						Gen: String(item.gen),
+						[TL`Generation`]: String(item.gen),
 					};
 
 					if (dex.gen >= 4) {
 						if (item.fling) {
-							details["Fling Base Power"] = String(item.fling.basePower);
-							if (item.fling.status) details["Fling Effect"] = item.fling.status;
-							if (item.fling.volatileStatus) details["Fling Effect"] = item.fling.volatileStatus;
-							if (item.isBerry) details["Fling Effect"] = "Activates the Berry's effect on the target.";
-							if (item.id === 'whiteherb') details["Fling Effect"] = "Restores the target's negative stat stages to 0.";
+							details[TL`Fling base power`] = String(item.fling.basePower);
+							if (item.fling.status) details[TL`Fling effect`] = TL.status[item.fling.status] || item.fling.status;
+							if (item.fling.volatileStatus) {
+								details[TL`Fling effect`] = TL.status[item.fling.volatileStatus] || item.fling.volatileStatus;
+							}
+							if (item.isBerry) details[TL`Fling effect`] = TL.ui.flingBerry;
+							if (item.id === 'whiteherb') details[TL`Fling effect`] = TL.ui.flingWhiteHerb;
 							if (item.id === 'mentalherb') {
-								const flingEffect = "Removes the effects of Attract, Disable, Encore, Heal Block, Taunt, and Torment from the target.";
-								details["Fling Effect"] = flingEffect;
+								const flingEffect = TL.ui.flingMentalHerb;
+								details[TL`Fling effect`] = flingEffect;
 							}
 						} else {
-							details["Fling"] = "This item cannot be used with Fling.";
+							details[TL(dex.moves.get('fling'))] = TL.ui.cantFling;
 						}
 					}
 					if (item.naturalGift && dex.gen >= 3) {
-						details["Natural Gift Type"] = item.naturalGift.type;
-						details["Natural Gift Base Power"] = String(item.naturalGift.basePower);
+						details[TL`Natural Gift type`] = TL.type[item.naturalGift.type] || item.naturalGift.type;
+						details[TL`Natural Gift base power`] = String(item.naturalGift.basePower);
 					}
 					if (item.isNonstandard) {
-						details[`Unobtainable in Gen ${dex.gen}`] = "";
+						details[TL.ui.unobtainableInGen.replace('{NUMBER}', String(dex.gen))] = "";
 					}
 				}
 				break;
 			case 'move':
 				const move = dex.moves.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataMoveHTML(move, dex.currentMod.startsWith('champions'))}\n`;
+				buffer += `${prefix}${Chat.getDataMoveHTML(
+					move, { dex, language: this.language, hideShortDescription: showDetails }
+				)}\n`;
 				if (showDetails) {
+					description = dex.text.get(move, textLanguage).desc;
 					details = {
-						Priority: String(move.priority),
-						Gen: String(move.gen) || 'CAP',
+						[TL.tag.priority]: String(move.priority),
+						[TL`Generation`]: String(move.gen) || 'CAP',
 					};
 
-					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8);
-					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
+						(move.isNonstandard === "Gmax" && dex.gen !== 8);
+					if (pastGensOnly) details[`&#10007; ${TL`Past gens only`}`] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
-						details["&#10003; Boosted by Sheer Force"] = "";
+						details[`&#10003; ${TL.tag.boostedbysheerforce}`] = "";
 					}
-					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
-					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
-					if (move.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
-					if (move.flags['pulse'] && dex.gen >= 6) details["&#10003; Pulse"] = "";
-					if (!move.flags['protect'] && move.target !== 'self') details["&#10003; Bypasses Protect"] = "";
-					if (move.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
-					if (move.flags['defrost']) details["&#10003; Thaws user"] = "";
-					if (move.flags['bite'] && dex.gen >= 6) details["&#10003; Bite"] = "";
-					if (move.flags['punch'] && dex.gen >= 4) details["&#10003; Punch"] = "";
-					if (move.flags['powder'] && dex.gen >= 6) details["&#10003; Powder"] = "";
-					if (move.flags['reflectable'] && dex.gen >= 3) details["&#10003; Bounceable"] = "";
-					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
-					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
-					if (move.flags['gravity'] && dex.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
-					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
-					if (move.flags['slicing'] && dex.gen >= 9) details["&#10003; Slicing move"] = "";
-					if (move.flags['wind'] && dex.gen >= 9) details["&#10003; Wind move"] = "";
+					if (move.flags['contact'] && dex.gen >= 3) details[`&#10003; ${TL.tag.contact}`] = "";
+					if (move.flags['sound'] && dex.gen >= 3) details[`&#10003; ${TL.tag.sound}`] = "";
+					if (move.flags['bullet'] && dex.gen >= 6) details[`&#10003; ${TL.tag.bullet}`] = "";
+					if (move.flags['pulse'] && dex.gen >= 6) details[`&#10003; ${TL.tag.pulse}`] = "";
+					if (!move.flags['protect'] && move.target !== 'self') details[`&#10003; ${TL.tag.bypassprotect}`] = "";
+					if (move.flags['bypasssub']) details[`&#10003; ${TL.tag.bypasssubstitute}`] = "";
+					if (move.flags['defrost']) details[`&#10003; ${TL.tag.defrost}`] = "";
+					if (move.flags['bite'] && dex.gen >= 6) details[`&#10003; ${TL.tag.bite}`] = "";
+					if (move.flags['punch'] && dex.gen >= 4) details[`&#10003; ${TL.tag.fist}`] = "";
+					if (move.flags['powder'] && dex.gen >= 6) details[`&#10003; ${TL.tag.powder}`] = "";
+					if (!move.flags['reflectable'] && move.category === 'Status' &&
+						!['self', 'allySide'].includes(move.target) && dex.gen >= 3) {
+						details[`&#10003; ${TL.tag.nonreflectable}`] = "";
+					}
+					if (move.flags['charge']) details[`&#10003; ${TL.tag.twoturnmove}`] = "";
+					if (move.flags['recharge']) details[`&#10003; ${TL.tag.recharge}`] = "";
+					if (move.flags['gravity'] && dex.gen >= 4) details[`&#10007; ${TL.tag.suppressedbygravity}`] = "";
+					if (move.flags['dance'] && dex.gen >= 7) details[`&#10003; ${TL.tag.dance}`] = "";
+					if (move.flags['slicing'] && dex.gen >= 9) details[`&#10003; ${TL.tag.slicing}`] = "";
+					if (move.flags['wind'] && dex.gen >= 9) details[`&#10003; ${TL.tag.wind}`] = "";
 
 					if (dex.gen >= 7) {
 						if (move.gen >= 8 && move.isMax) {
 							// Don't display Z-Power for Max/G-Max moves
 						} else if (move.zMove?.basePower) {
-							details["Z-Power"] = String(move.zMove.basePower);
+							details[TL`Z-Power`] = String(move.zMove.basePower);
 						} else if (move.zMove?.effect) {
 							const zEffects: { [k: string]: string } = {
-								clearnegativeboost: "Restores negative stat stages to 0",
-								crit2: "Crit ratio +2",
-								heal: "Restores HP 100%",
-								curse: "Restores HP 100% if user is Ghost type, otherwise Attack +1",
-								redirect: "Redirects opposing attacks to user",
-								healreplacement: "Restores replacement's HP 100%",
+								clearnegativeboost: 'zEffectClearNegativeBoost',
+								crit2: 'zEffectCrit2',
+								heal: 'zEffectHeal',
+								curse: 'zEffectCurse',
+								redirect: 'zEffectRedirect',
+								healreplacement: 'zEffectHealReplacement',
 							};
-							details["Z-Effect"] = zEffects[move.zMove.effect];
+							details[TL`Z-Effect`] = TL.ui[zEffects[move.zMove.effect]] || move.zMove.effect;
 						} else if (move.zMove?.boost) {
-							details["Z-Effect"] = "";
+							details[TL`Z-Effect`] = "";
 							const boost = move.zMove.boost;
-							const stats: { [k in BoostID]: string } = {
-								atk: 'Attack', def: 'Defense', spa: 'Sp. Atk', spd: 'Sp. Def', spe: 'Speed', accuracy: 'Accuracy', evasion: 'Evasiveness',
-							};
 							let h: BoostID;
 							for (h in boost) {
-								details["Z-Effect"] += ` ${stats[h]} +${boost[h]}`;
+								details[TL`Z-Effect`] += ` ${TL.statMedium[h] || h} +${boost[h]}`;
 							}
 						} else if (move.isZ && typeof move.isZ === 'string') {
-							details["&#10003; Z-Move"] = "";
+							details[`&#10003; ${TL.tag.zmove}`] = "";
 							const zCrystal = dex.items.get(move.isZ);
-							details["Z-Crystal"] = zCrystal.name;
+							details[TL`Z-Crystal`] = TL(zCrystal);
 							if (zCrystal.itemUser) {
-								details["User"] = zCrystal.itemUser.join(", ");
-								details["Required Move"] = dex.items.get(move.isZ).zMoveFrom!;
+								details[TL("User", "pokemon")] = zCrystal.itemUser.join(", ");
+								details[TL`Required move`] = TL(dex.items.get(zCrystal.zMoveFrom));
 							}
 						} else {
-							details["Z-Effect"] = "None";
+							details[TL`Z-Effect`] = TL`None`;
 						}
 					}
 
 					if (move.isMax) {
-						details["&#10003; Max Move"] = "";
-						if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
+						details[`&#10003; ${TL.tag.maxmove}`] = "";
+						if (typeof move.isMax === "string") details[TL("User", "pokemon")] = `${move.isMax}`;
 					} else if (dex.gen === 8 && move.maxMove?.basePower) {
-						details["Dynamax Power"] = String(move.maxMove.basePower);
+						details[TL`Dynamax power`] = String(move.maxMove.basePower);
 					}
 
-					const targetTypes: { [k: string]: string } = {
-						normal: "One Adjacent Pok\u00e9mon",
-						self: "User",
-						adjacentAlly: "One Ally",
-						adjacentAllyOrSelf: "User or Ally",
-						adjacentFoe: "One Adjacent Opposing Pok\u00e9mon",
-						allAdjacentFoes: "All Adjacent Opponents",
-						foeSide: "Opposing Side",
-						allySide: "User's Side",
-						allyTeam: "User's Team",
-						allAdjacent: "All Adjacent Pok\u00e9mon",
-						any: "Any Pok\u00e9mon",
-						all: "All Pok\u00e9mon",
-						scripted: "Chosen Automatically",
-						randomNormal: "Random Adjacent Opposing Pok\u00e9mon",
-						allies: "User and Allies",
-					};
-					details["Target"] = targetTypes[move.target] || "Unknown";
+					details[TL`Target`] = TL.target[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && dex.gen >= 3) {
-						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">Non-Snatchable Moves</a>`] = '';
+						const nonsnatchableMoves = TL.ui.tagMoves.replace('{TAG}', TL.tag.nonsnatchable);
+						details[`<a href="https://${Config.routes.dex}/tags/nonsnatchable">${nonsnatchableMoves}</a>`] = '';
 					}
 					if (move.id === 'mirrormove') {
-						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">Non-Mirrorable Moves</a>`] = '';
+						const nonmirrorMoves = TL.ui.tagMoves.replace('{TAG}', TL.tag.nonmirror);
+						details[`<a href="https://${Config.routes.dex}/tags/nonmirror">${nonmirrorMoves}</a>`] = '';
 					}
 					if (move.isNonstandard === 'Unobtainable') {
-						details[`Unobtainable in Gen ${dex.gen}`] = "";
+						details[TL.ui.unobtainableInGen.replace('{NUMBER}', `${dex.gen}`)] = "";
 					}
 				}
 				break;
 			case 'ability':
 				const ability = dex.abilities.get(newTarget.name);
-				buffer += `${prefix}${Chat.getDataAbilityHTML(ability)}\n`;
+				buffer += `${prefix}${Chat.getDataAbilityHTML(
+					ability, { dex, language: this.language, hideShortDescription: showDetails }
+				)}\n`;
 				if (showDetails) {
+					description = dex.text.get(ability, textLanguage).desc;
 					details = {
-						Gen: String(ability.gen) || 'CAP',
+						[TL`Generation`]: String(ability.gen) || 'CAP',
 					};
 					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
 					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
 					if (ability.isNonstandard) {
-						details[`Unobtainable in Gen ${dex.gen}`] = "";
+						details[TL.ui.unobtainableInGen.replace('{NUMBER}', `${dex.gen}`)] = "";
 					}
 				}
 				break;
@@ -868,8 +883,11 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (showDetails) {
+				if (description) {
+					buffer += `${prefix}${Utils.escapeHTML(description)}\n`;
+				}
 				buffer += `${prefix}<font size="1">${Object.entries(details).map(([detail, value]) => (
-					value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
+					value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 				)).join("&nbsp;|&ThickSpace;")}</font>\n`;
 			}
 		}
@@ -1628,28 +1646,28 @@ export const commands: Chat.ChatCommands = {
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
 		const roomRanks = [
-			`<strong>Room ranks</strong>`,
-			`^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.`,
-			`+ <strong>Voice</strong> - They can use ! commands like !groups`,
-			`% <strong>Driver</strong> - The above, and they can mute and warn`,
-			`@ <strong>Moderator</strong> - The above, and they can room ban users`,
-			`* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML`,
-			`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it`,
+			this.TL`<strong>Room ranks</strong>`,
+			this.TL`^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.`,
+			this.TL`+ <strong>Voice</strong> - They can use ! commands like !groups`,
+			this.TL`% <strong>Driver</strong> - The above, and they can mute and warn`,
+			this.TL`@ <strong>Moderator</strong> - The above, and they can room ban users`,
+			this.TL`* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML`,
+			this.TL`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it`,
 		];
 
 		const globalRanks = [
-			`<strong>Global ranks</strong>`,
-			`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
-			`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
-			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
-			`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
-			`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
+			this.TL`<strong>Global ranks</strong>`,
+			this.TL`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
+			this.TL`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
+			this.TL`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
+			this.TL`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
+			this.TL`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
 		];
 
 		this.sendReplyBox(
-			(showRoom ? roomRanks.map(str => this.tr(str)).join('<br />') : ``) +
+			(showRoom ? roomRanks.join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalRanks.map(str => this.tr(str)).join('<br />') : ``)
+			(showGlobal ? globalRanks.join('<br />') : ``)
 		);
 	},
 	groupshelp: [
@@ -1665,35 +1683,35 @@ export const commands: Chat.ChatCommands = {
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 
 		const roomPunishments = [
-			`<strong>Room punishments</strong>:`,
-			`<strong>warn</strong> - Displays a popup with the rules.`,
-			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
-			`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
-			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
-			`<strong>weekban</strong> - Bans a user from the room for a week.`,
-			`<strong>blacklist</strong> - Bans a user for a year.`,
+			this.TL`<strong>Room punishments</strong>:`,
+			this.TL`<strong>warn</strong> - Displays a popup with the rules.`,
+			this.TL`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
+			this.TL`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
+			this.TL`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
+			this.TL`<strong>weekban</strong> - Bans a user from the room for a week.`,
+			this.TL`<strong>blacklist</strong> - Bans a user for a year.`,
 		];
 
 		const globalPunishments = [
-			`<strong>Global punishments</strong>:`,
-			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
-			`<strong>weeklock</strong> - Locks a user for a week.`,
-			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
-			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
+			this.TL`<strong>Global punishments</strong>:`,
+			this.TL`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
+			this.TL`<strong>weeklock</strong> - Locks a user for a week.`,
+			this.TL`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
+			this.TL`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
 		];
 
 		const indefinitePunishments = [
-			this.tr`<strong>Indefinite global punishments</strong>:`,
-			this.tr`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
-			this.tr`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
-			this.tr` forum after at least 3 months without incident.`,
-			this.tr`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
+			this.TL`<strong>Indefinite global punishments</strong>:`,
+			this.TL`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
+			this.TL`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
+			this.TL` forum after at least 3 months without incident.`,
+			this.TL`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
 		];
 
 		this.sendReplyBox(
-			(showRoom ? roomPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+			(showRoom ? roomPunishments.join('<br />') : ``) +
 			(showRoom && showGlobal ? `<br /><br />` : ``) +
-			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+			(showGlobal ? globalPunishments.join('<br />') : ``) +
 			(showGlobal ? `<br /><br />${indefinitePunishments.join('<br />')}` : ``)
 		);
 	},
@@ -1737,10 +1755,10 @@ export const commands: Chat.ChatCommands = {
 	privacypolicy(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox([
-			this.tr`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.`,
-			this.tr`- We log IPs to enforce bans and mutes.`,
-			this.tr`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.`,
-			this.tr`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`,
+			this.TL`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.`,
+			this.TL`- We log IPs to enforce bans and mutes.`,
+			this.TL`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.`,
+			this.TL`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`,
 		].join(`<br />`));
 	},
 	privacypolicyhelp: [`/privacypolicy - Displays PS's privacy policy.`],
@@ -2004,55 +2022,55 @@ export const commands: Chat.ChatCommands = {
 
 		const strings = [
 			[
-				`<strong>Room drivers (%)</strong> can use:`,
-				`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
-				`- /mute OR /m <em>username</em>: 7 minute mute`,
-				`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
-				`- /unmute <em>username</em>: unmute`,
-				`- /hidetext <em>username</em>: hide a user's messages from the room`,
-				`- /announce OR /wall <em>message</em>: make an announcement`,
-				`- /modlog <em>username</em>: search the moderator log of the room`,
-				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
-				`- !show [image or youtube link]: display given media in chat.`,
+				this.TL`<strong>Room drivers (%)</strong> can use:`,
+				this.TL`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
+				this.TL`- /mute OR /m <em>username</em>: 7 minute mute`,
+				this.TL`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
+				this.TL`- /unmute <em>username</em>: unmute`,
+				this.TL`- /hidetext <em>username</em>: hide a user's messages from the room`,
+				this.TL`- /announce OR /wall <em>message</em>: make an announcement`,
+				this.TL`- /modlog <em>username</em>: search the moderator log of the room`,
+				this.TL`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
+				this.TL`- !show [image or youtube link]: display given media in chat.`,
 			],
 			[
-				`<strong>Room moderators (@)</strong> can also use:`,
-				`- /roomban OR /rb <em>username</em>: ban user from the room`,
-				`- /roomunban <em>username</em>: unban user from the room`,
-				`- /roomvoice <em>username</em>: appoint a room voice`,
-				`- /roomdevoice <em>username</em>: remove a room voice`,
-				`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
-				`- /roomsettings: change a variety of room settings, namely modchat`,
+				this.TL`<strong>Room moderators (@)</strong> can also use:`,
+				this.TL`- /roomban OR /rb <em>username</em>: ban user from the room`,
+				this.TL`- /roomunban <em>username</em>: unban user from the room`,
+				this.TL`- /roomvoice <em>username</em>: appoint a room voice`,
+				this.TL`- /roomdevoice <em>username</em>: remove a room voice`,
+				this.TL`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
+				this.TL`- /roomsettings: change a variety of room settings, namely modchat`,
 			],
 			[
-				`<strong>Room owners (#)</strong> can also use:`,
-				`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
-				`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
-				`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
-				`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
-				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
-				`- /declare <em>message</em>: make a large blue declaration to the room`,
-				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
-				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
+				this.TL`<strong>Room owners (#)</strong> can also use:`,
+				this.TL`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
+				this.TL`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
+				this.TL`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
+				this.TL`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
+				this.TL`- /roomdeauth <em>username</em>: remove all room auth from a user`,
+				this.TL`- /declare <em>message</em>: make a large blue declaration to the room`,
+				this.TL`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
+				this.TL`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
 			],
 			[
-				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
+				this.TL`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
 			],
 			[
-				`Tournament Help:`,
-				`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
-				`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
-				`- /tour end: forcibly end the tournament in the current room`,
-				`- /tour start: start the tournament in the current room`,
-				`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
+				this.TL`Tournament Help:`,
+				this.TL`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
+				this.TL`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
+				this.TL`- /tour end: forcibly end the tournament in the current room`,
+				this.TL`- /tour start: start the tournament in the current room`,
+				this.TL`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
 			],
 			[
-				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
+				this.TL`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
 			],
 		];
 
 		this.sendReplyBox(
-			strings.map(par => par.map(string => this.tr(string)).join('<br />')).join('<br /><br />')
+			strings.map(par => par.join('<br />')).join('<br /><br />')
 		);
 	},
 
@@ -2074,9 +2092,9 @@ export const commands: Chat.ChatCommands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
-				`${room ? this.tr`Please follow the rules:` + '<br />' : ``}` +
-				`${room?.settings.rulesLink ? Utils.html`- <a href="${room.settings.rulesLink}">${this.tr`${room.title} room rules`}</a><br />` : ``}` +
-				`- <a href="https://${Config.routes.root}${this.tr`/rules`}">${this.tr`Global Rules`}</a>`
+				`${room ? this.TL`Please follow the rules:` + '<br />' : ``}` +
+				`${room?.settings.rulesLink ? Utils.html`- <a href="${room.settings.rulesLink}">${this.TL`${room.title} room rules`}</a><br />` : ``}` +
+				`- <a href="https://${Config.routes.root}${this.TL`/rules`}">${this.TL`Global Rules`}</a>`
 			);
 			return;
 		}
@@ -2097,7 +2115,7 @@ export const commands: Chat.ChatCommands = {
 			const rulesLink = possibleRoom.settings.rulesLink;
 			return this.sendReplyBox(
 				`${possibleRoom.title}'s rules:<br />` +
-				`${rulesLink ? Utils.html`- <a href="${rulesLink}">${this.tr`${possibleRoom.title} room rules`}</a><br />` : `None set.`}`
+				`${rulesLink ? Utils.html`- <a href="${rulesLink}">${this.TL`${possibleRoom.title} room rules`}</a><br />` : `None set.`}`
 			);
 		}
 
@@ -2135,39 +2153,39 @@ export const commands: Chat.ChatCommands = {
 		target = toID(this.splitOne(target)[0]);
 		const showAll = target === 'all';
 		if (showAll && this.shouldBroadcast()) {
-			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);
+			throw new Chat.ErrorMessage(this.TL`You cannot broadcast all FAQs at once.`);
 		}
 		const buffer = [];
 		if (showAll || target === 'staff') {
-			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/staff`}">${this.tr`Staff FAQ`}</a>`);
+			buffer.push(`<a href="https://pokemonshowdown.com/${this.TL`pages/staff`}">${this.TL`Staff FAQ`}</a>`);
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
-			buffer.push(this.tr`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
+			buffer.push(this.TL`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
 			if (!this.shouldBroadcast()) void this.parse(`/regtime`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
-			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/ladderhelp`}">${this.tr`How the ladder works`}</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/${this.TL`pages/ladderhelp`}">${this.TL`How the ladder works`}</a>`);
 		}
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
-			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">${this.tr`Tiering FAQ`}</a>`);
+			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">${this.TL`Tiering FAQ`}</a>`);
 		}
 		if (showAll || ['badge', 'badges', 'badgeholders'].includes(target)) {
-			buffer.push(`<a href="https://www.smogon.com/forums/threads/60351/">${this.tr`Badge FAQ`}</a>`);
+			buffer.push(`<a href="https://www.smogon.com/forums/threads/60351/">${this.TL`Badge FAQ`}</a>`);
 		}
 		if (showAll || target === 'rng') {
-			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/rng`}">${this.tr`Common misconceptions about our RNG`}</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/${this.TL`pages/rng`}">${this.TL`Common misconceptions about our RNG`}</a>`);
 		}
 		if (showAll || ['tournaments', 'tournament', 'tours', 'tour'].includes(target)) {
-			buffer.push(this.tr`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
+			buffer.push(this.TL`To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).`);
 		}
 		if (showAll || ['vpn', 'proxy'].includes(target)) {
-			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/proxyhelp`}">${this.tr`Proxy lock help`}</a>`);
+			buffer.push(`<a href="https://pokemonshowdown.com/${this.TL`pages/proxyhelp`}">${this.TL`Proxy lock help`}</a>`);
 		}
 		if (showAll || ['ca', 'customavatar', 'customavatars'].includes(target)) {
-			buffer.push(this.tr`Custom avatars are given to Global Staff members, contributors (coders and spriters) to Pokemon Showdown, and Smogon badgeholders at the discretion of the PS! Administrators. They are also sometimes given out as rewards for major events such as PSPL (Pokemon Showdown Premier League). If you're curious, you can view the entire list of <a href="https://www.smogon.com/smeargle/customs/">custom avatars</a>.`);
+			buffer.push(this.TL`Custom avatars are given to Global Staff members, contributors (coders and spriters) to Pokemon Showdown, and Smogon badgeholders at the discretion of the PS! Administrators. They are also sometimes given out as rewards for major events such as PSPL (Pokemon Showdown Premier League). If you're curious, you can view the entire list of <a href="https://www.smogon.com/smeargle/customs/">custom avatars</a>.`);
 		}
 		if (showAll || ['privacy', 'private'].includes(target)) {
-			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
+			buffer.push(`<a href="https://pokemonshowdown.com/${this.TL`pages/privacy`}">${this.TL`Pokémon Showdown privacy policy`}</a>`);
 		}
 		if (showAll || ['lostpassword', 'password', 'lostpass'].includes(target)) {
 			buffer.push(`Until an email server for Pokemon Showdown is set up, <b>it is no longer possible to reset the password for your account</b>`);
@@ -2177,7 +2195,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/help faq`);
 		}
 		if (!target || showAll) {
-			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.tr`pages/faq`}">${this.tr`Frequently Asked Questions`}</a>`);
+			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.TL`pages/faq`}">${this.TL`Frequently Asked Questions`}</a>`);
 		}
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(buffer.join(`<br />`));
@@ -3219,7 +3237,7 @@ export const pages: Chat.PageTable = {
 		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
 		let buf = `<div class="pad"><h2>Format customizer</h2>`;
 		buf += `<button class="button" name="send" value="/join ${this.pageid}">`;
-		buf += `<i class="fa fa-refresh"></i> ${this.tr`Refresh`}</button>`;
+		buf += `<i class="fa fa-refresh"></i> ${this.TL`Refresh`}</button>`;
 		buf += `<hr />`;
 		const formatId = toID(query[0]);
 		const format = Dex.formats.get(formatId);

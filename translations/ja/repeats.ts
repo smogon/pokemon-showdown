@@ -1,0 +1,27 @@
+import type { TranslationCatalog } from '../../server/chat';
+
+export const translations: TranslationCatalog = {
+	"Repeated phrases in {ROOM}": "{ROOM}でリピートされているメッセージ",
+	"There are no repeated phrases in {ROOM}.": "現在 {ROOM}でリピートされているメッセージはありません。",
+	"Phrase": "メッセージ",
+	"Identifier": "タイトル",
+	"Interval": "間隔",
+	"every {MINUTES} minute(s)": "{MINUTES}分おき",
+	"every {MESSAGES} chat message(s)": "メッセージ数: {MESSAGES}おき",
+	"Raw text": "コード",
+	"Remove": "削除",
+	"Remove all repeats": "全てのリピートを削除する",
+	"Repeat names must include at least one alphanumeric character.": "IDには少なくとも1文字以上の半角英数字が必要です。",
+	"You must specify an interval as a number of minutes or chat messages between 1 and 1440.": "リピート間隔は1440分以内の数字で指定する必要があります。",
+	'The phrase labeled with "{ID}" is already being repeated in this room.': 'この部屋ではすでにタイトルが "{ID}"のリピートが存在します。',
+	'{USER} set the phrase labeled with "{ID}" to be repeated every {INTERVAL} minute(s).': '{USER}が "{ID}"でリピートを{INTERVAL}分間隔で設定しました。',
+	'{USER} set the phrase labeled with "{ID}" to be repeated every {INTERVAL} chat message(s).': '{USER}が "{ID}"でリピートをメッセージ数: {INTERVAL}の間隔で設定しました。',
+	'{USER} set the Room FAQ "{TOPIC}" to be repeated every {INTERVAL} minute(s).': '{USER}がRoom FAQの "{TOPIC}"のリピートを{INTERVAL}分間隔で設定しました。',
+	'{USER} set the Room FAQ "{TOPIC}" to be repeated every {INTERVAL} chat message(s).': '{USER}がRoom FAQの "{TOPIC}"のリピートをメッセージ数: {INTERVAL}間隔で設定しました。',
+	'The phrase labeled with "{ID}" is not being repeated in this room.': 'タイトルが "{ID}"のメッセージは現在この部屋でリピートされていません。',
+	'The text for the Room FAQ "{TOPIC}" is already being repeated.': 'Room FAQの "{TOPIC}"はすでにリピートされています。',
+	'{USER} removed the repeated phrase labeled with "{ID}".': '{USER}がID: "{ID}"のリピートを削除しました。',
+	"There are no repeated phrases in this room.": "現在この部屋でリピートされているメッセージはありません。",
+	"{USER} removed all repeated phrases.": "{USER}が全てのリピートを削除しました。",
+	"You must specify a room when using this command in PMs.": "このコマンドをPMで使う場合は部屋を指定する必要があります。",
+};
