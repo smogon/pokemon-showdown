@@ -134,14 +134,31 @@ export class AnalysisTeamEditor {
 		if (!setsDiffer(previous, next)) return false;
 		const changes: string[] = [];
 		const speciesChanged = toID(previous.species) !== toID(next.species);
-		// the nickname is baked into `fullname`, which is the protocol ident and is readonly
-		if (previous.name !== next.name) {
-			this.drop(sideId, pokemon.name, `can't be renamed once the battle has started`);
-			next.name = previous.name;
-		}
+		/**
+		 * A rename. It used to be refused outright, because the name is baked into `fullname`, the protocol
+		 * ident, and the protocol can't express one. But `normalizeSet` fills an empty nickname in with the
+		 * species name, so an **un-nicknamed** Pokémon's name is just its species — and refusing to move it
+		 * left a Pokémon whose species had been changed still carrying the old one as a nickname, which is
+		 * what replacing a Set Up Position placeholder looks like (user report, 2026-09-19).
+		 *
+		 * So it is allowed, and re-establishing the ident rides on the roster resync a composition change
+		 * already uses. That covers a deliberate nickname too, rather than needing a "is this a real
+		 * nickname" test, which `baseSpecies` would make unreliable anyway (both Rotom formes are "Rotom").
+		 */
+		const renamed = previous.name !== next.name;
 		const hpPercent = pokemon.maxhp ? pokemon.hp / pokemon.maxhp : 1;
 
 		Object.assign(pokemon.set, next);
+
+		if (renamed) {
+			(pokemon as any).name = next.name;
+			(pokemon as any).fullname = `${pokemon.side.id}: ${next.name}`;
+			this.resyncSides.add(sideId);
+			// following the species isn't a nickname change worth reporting; the species line already says it
+			if (toID(next.name) !== toID(battle.dex.species.get(next.species).baseSpecies)) {
+				changes.push(`Nickname (${next.name})`);
+			}
+		}
 
 		if (speciesChanged) {
 			pokemon.baseSpecies = battle.dex.species.get(next.species);
@@ -192,8 +209,10 @@ export class AnalysisTeamEditor {
 		pokemon.details = pokemon.getUpdatedDetails();
 		if (!changes.length) changes.push('Set');
 		this.note(sideId, pokemon.name, changes.join(', '));
-		// the renderer keys Pokémon on ident|details, so a species change needs the slot updated
-		if (speciesChanged) {
+		// the renderer keys Pokémon on ident|details, so a species change needs the slot updated. A rename
+		// already forces a full resync, and these lines carry the *new* ident, which the renderer hasn't
+		// seen yet — so they would resolve against nothing. Leave them out and let the resync do it.
+		if (speciesChanged && !renamed) {
 			if (pokemon.isActive) {
 				const details = pokemon.details + (pokemon.terastallized ? `, tera:${pokemon.terastallized}` : '');
 				this.lines.push(['detailschange', pokemon, details]);

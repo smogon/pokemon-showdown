@@ -17,6 +17,8 @@ export interface AnalysisBatchRequest {
 	inputLog: string[];
 	midTurnSwitchChoices?: AnalysisMidTurnSwitchChoice[];
 	count: number;
+	/** skip team validation, for a Set Up Position tab (see tools/analysis-setup.ts) */
+	sandbox?: boolean;
 }
 
 export interface AnalysisMidTurnSwitchChoice {
@@ -365,8 +367,14 @@ export function validateBatchRequest(request: AnalysisBatchRequest) {
 	}
 	const team1 = Teams.unpack(request.team1) || [];
 	const team2 = Teams.unpack(request.team2) || [];
-	const team1Problems = team1.length ? new TeamValidator(request.format).validateTeam(team1) : ['Team is empty.'];
-	const team2Problems = team2.length ? new TeamValidator(request.format).validateTeam(team2) : ['Team is empty.'];
+	// a sandbox position's team is deliberately illegal, so only the sim's own "not empty" rule applies
+	const validate = (team: PokemonSet[]) => {
+		if (!team.length) return ['Team is empty.'];
+		if (request.sandbox) return [];
+		return new TeamValidator(request.format).validateTeam(team) || [];
+	};
+	const team1Problems = validate(team1);
+	const team2Problems = validate(team2);
 	if (team1Problems?.length || team2Problems?.length) {
 		return { team1: team1Problems || [], team2: team2Problems || [] };
 	}

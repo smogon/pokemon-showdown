@@ -8,6 +8,7 @@ import {
 } from './analysis-batch';
 import { getAnalysisCalcs } from './analysis-calc';
 import { getFieldEffectOptions } from './analysis-edits';
+import { getPlaceholderTeams } from './analysis-setup';
 import {
 	applyInputLog, createAnalysisBattle, getAnalysisSnapshot, replayAnalysisRecords,
 	type AnalysisReplayRecord,
@@ -23,6 +24,13 @@ type StartRequest = {
 	/** choices to execute from the reconstructed position under a fresh seed */
 	inputLog?: string[],
 	autoTurn?: boolean,
+	/**
+	 * Skip team validation. Set by a Set Up Position tab, whose placeholder team is deliberately illegal
+	 * (too small for a VGC format, no moves, two of a species); see tools/analysis-setup.ts. The tool is a
+	 * sandbox and mid-battle team edits already bypass the validator, so this only extends that to the
+	 * team the battle is built from.
+	 */
+	sandbox?: boolean,
 	/** /analysis/calc: draft choices (`>p1 move 1 +2`) for choice-dependent calc flags and targets */
 	choices?: string[],
 };
@@ -41,6 +49,18 @@ function validateTeam(format: string, packedTeam: string) {
 	if (!team.length) return ['Team is empty.'];
 	const problems = new TeamValidator(format).validateTeam(team);
 	return problems || [];
+}
+
+/** An empty team still breaks the sim, so a sandbox request is checked for that and nothing else. */
+function validateTeams(request: StartRequest) {
+	const team1Problems = request.sandbox ?
+		(Teams.unpack(request.team1)?.length ? [] : ['Team is empty.']) :
+		validateTeam(request.format, request.team1);
+	const team2Problems = request.sandbox ?
+		(Teams.unpack(request.team2)?.length ? [] : ['Team is empty.']) :
+		validateTeam(request.format, request.team2);
+	if (!team1Problems.length && !team2Problems.length) return null;
+	return { team1: team1Problems, team2: team2Problems };
 }
 
 function getPendingMidTurnSwitches(battle: Battle) {
@@ -76,16 +96,8 @@ function getAnalysisRequests(battle: Battle) {
 }
 
 function startBattle(request: StartRequest) {
-	const team1Problems = validateTeam(request.format, request.team1);
-	const team2Problems = validateTeam(request.format, request.team2);
-	if (team1Problems.length || team2Problems.length) {
-		return {
-			error: {
-				team1: team1Problems,
-				team2: team2Problems,
-			},
-		};
-	}
+	const teamProblems = validateTeams(request);
+	if (teamProblems) return { error: teamProblems };
 
 	const output: string[] = [];
 	const battle = createAnalysisBattle(request, output);
@@ -125,6 +137,11 @@ function startBattle(request: StartRequest) {
 async function handleRequest(pathname: string, body: string, res: http.ServerResponse, signal: AbortSignal) {
 	try {
 		const request = JSON.parse(body) as StartRequest & AnalysisBatchRequest;
+		if (pathname === '/analysis/setup') {
+			// the only route that builds its own teams, so it runs before the team check below
+			sendJson(res, 200, getPlaceholderTeams(request.format));
+			return;
+		}
 		if (!request.format || !request.team1 || !request.team2) {
 			sendJson(res, 400, { error: 'format, team1, and team2 are required.' });
 			return;
@@ -158,17 +175,14 @@ async function handleRequest(pathname: string, body: string, res: http.ServerRes
 
 /** Damage calcs at the reconstructed decision point (docs/analysis/plan.md, Phase 1). */
 function calcBattle(request: StartRequest) {
-	const team1Problems = validateTeam(request.format, request.team1);
-	const team2Problems = validateTeam(request.format, request.team2);
-	if (team1Problems.length || team2Problems.length) {
-		return { error: { team1: team1Problems, team2: team2Problems } };
-	}
+	const teamProblems = validateTeams(request);
+	if (teamProblems) return { error: teamProblems };
 	const battle = createAnalysisBattle(request);
 	replayAnalysisRecords(battle, request.replayNodes);
 	return { results: getAnalysisCalcs(battle, request.choices) };
 }
 
-const ROUTES = new Set(['/analysis/start', '/analysis/simulate', '/analysis/calc']);
+const ROUTES = new Set(['/analysis/start', '/analysis/simulate', '/analysis/calc', '/analysis/setup']);
 
 const server = http.createServer((req, res) => {
 	if (req.method === 'OPTIONS') {

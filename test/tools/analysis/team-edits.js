@@ -55,6 +55,48 @@ describe('Analysis team edits', () => {
 		assert.equal(side.team.length, 3);
 	});
 
+	it("renames an un-nicknamed Pokémon along with its species, and resyncs so the ident lands", () => {
+		// `normalizeSet` fills an empty nickname in with the species name, so refusing to move the name
+		// left a Pokémon whose species had changed still called by the old one (Set Up Position, Phase 4)
+		const roster = rosterOf(battleFor([TEAM_PREVIEW]).battle, 'p1');
+		const karp = roster.sets.findIndex(set => set.species === 'Magikarp');
+		roster.sets[karp] = { ...roster.sets[karp], species: 'Gyarados', name: 'Gyarados' };
+
+		const { battle, output, droppedEdits, appliedEdits } = battleFor([
+			TEAM_PREVIEW,
+			{ edits: { teams: { p1: roster } }, seed: SEED },
+		]);
+		assert.deepEqual(droppedEdits, []);
+		const pokemon = battle.sides[0].pokemon[karp];
+		assert.equal(pokemon.species.name, 'Gyarados');
+		assert.equal(pokemon.name, 'Gyarados');
+		assert.equal(pokemon.fullname, 'p1: Gyarados');
+		// the protocol can't rename, so the renderer has to be rebuilt to learn the new ident
+		assert.ok(output.includes('|clearpoke'), 'a rename should resync the rosters');
+		assert.ok(output.includes('|switch|p1a: Gyarados|'),
+			output.split('\n').filter(line => line.includes('switch')).join('\n'));
+		// a name that only followed the species isn't reported as a nickname change
+		const summary = appliedEdits[1].summary.p1.join(' ');
+		assert.ok(summary.includes('Species (Gyarados)'), summary);
+		assert.ok(!summary.includes('Nickname'), summary);
+	});
+
+	it('keeps a real nickname when only the species changes', () => {
+		const roster = rosterOf(battleFor([TEAM_PREVIEW]).battle, 'p1');
+		const karp = roster.sets.findIndex(set => set.species === 'Magikarp');
+		roster.sets[karp] = { ...roster.sets[karp], species: 'Gyarados', name: 'Splashy' };
+
+		const { battle, droppedEdits } = battleFor([
+			TEAM_PREVIEW,
+			{ edits: { teams: { p1: roster } }, seed: SEED },
+		]);
+		assert.deepEqual(droppedEdits, []);
+		const pokemon = battle.sides[0].pokemon[karp];
+		assert.equal(pokemon.species.name, 'Gyarados');
+		assert.equal(pokemon.name, 'Splashy');
+		assert.equal(pokemon.fullname, 'p1: Splashy');
+	});
+
 	it('keeps the HP percent when a set edit changes max HP', () => {
 		const roster = rosterOf(battleFor([TEAM_PREVIEW]).battle, 'p1');
 		const karp = roster.sets.findIndex(set => set.species === 'Magikarp');
