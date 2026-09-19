@@ -129,6 +129,10 @@ describe('Encore', () => {
 });
 
 describe('No Retreat', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
 	it.skip(`should not allow usage multiple times in a row even if it has the trapped volatile`, () => {
 		battle = createChampionsBattle([[
 			{ species: "Wynaut", moves: ['noretreat'] },
