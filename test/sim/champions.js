@@ -44,7 +44,7 @@ describe('Mega Sol', () => {
 		assert.bounded(tyranitar.maxhp - tyranitar.hp, [63, 75]);
 	});
 
-	it('should make Electro Shot recharge under rain', () => {
+	it('should force Electro Shot to charge under rain', () => {
 		battle = createChampionsBattle([[
 			{ species: "Meganium", item: 'meganiumite', moves: ['electroshot'] },
 		], [
@@ -64,7 +64,7 @@ describe('Prankster', () => {
 		battle.destroy();
 	});
 
-	it('should not cause Status moves forced by Encore to fail against Dark Pokémon', () => {
+	it('should cause Status moves forced by Encore to fail against Dark Pokémon', () => {
 		battle = createChampionsBattle([[
 			{ species: "Liepard", ability: 'prankster', moves: ['encore'] },
 		], [
@@ -75,7 +75,7 @@ describe('Prankster', () => {
 		assert.statStage(battle.p1.active[0], 'spa', 0);
 	});
 
-	it('should cause moves forced by Encore to fail against Dark Pokémon if the attacker intended to use a Status move', () => {
+	it('should not cause damaging moves forced by Encore to fail against Dark Pokémon even if the attacker intended to use a Status move', () => {
 		battle = createChampionsBattle({ gameType: 'doubles' }, [[
 			{ species: "Liepard", ability: 'prankster', moves: ['encore', 'nastyplot'] },
 			{ species: "Tapu Fini", ability: 'mistysurge', moves: ['calmmind'] },
@@ -122,9 +122,9 @@ describe('Encore', () => {
 		]]);
 
 		const eleki = battle.p1.active[0];
-		battle.makeChoices('auto', 'move sleeptalk, move headlongrush 2');
-		battle.makeChoices('auto', 'move encore -2, move quickattack 1');
-		assert.fainted(eleki);
+		battle.makeChoices('auto', 'move sleeptalk, move quickattack 2');
+		battle.makeChoices('auto', 'move encore -2, move headlongrush 1');
+		assert.fullHP(eleki);
 	});
 });
 
