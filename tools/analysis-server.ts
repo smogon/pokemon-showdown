@@ -55,6 +55,27 @@ const SERVER_COMMIT = (() => {
 	}
 })();
 
+/**
+ * Every format an analysis can be started in, in the order `formats.ts` declares them, so the client can
+ * group them by section the way the play client's own format menu does.
+ *
+ * **Team-generating formats are left out.** A random format has no teambuilder, so New Analysis From Teams
+ * has nothing to offer for it, and Set Up Position's random path is untested (see
+ * docs/analysis/replay-import-audit.md, QI). Listing a format the pickers cannot honour is worse than
+ * leaving it out; this is where to relax that if the random path is ever tested.
+ *
+ * Read fresh rather than cached: the list is small, the call is rare, and a cached copy would go stale
+ * against a mod reload.
+ */
+function getBuildableFormats() {
+	return Dex.formats.all()
+		.filter(format => format.effectType === 'Format' && !format.team)
+		// `column` is what lets the client lay the menu out in columns the way the play client's does
+		.map(format => ({
+			id: format.id, name: format.name, section: format.section || 'Other', column: format.column || 0,
+		}));
+}
+
 function sendJson(res: http.ServerResponse, status: number, data: Record<string, any>) {
 	res.writeHead(status, {
 		'Content-Type': 'application/json; charset=utf-8',
@@ -156,9 +177,13 @@ function startBattle(request: StartRequest) {
 
 async function handleRequest(pathname: string, body: string, res: http.ServerResponse, signal: AbortSignal) {
 	try {
-		// Takes no body, so it answers before the parse below: an empty POST is the natural way to ask.
+		// Take no body, so they answer before the parse below: an empty POST is the natural way to ask.
 		if (pathname === '/analysis/version') {
 			sendJson(res, 200, { serverCommit: SERVER_COMMIT });
+			return;
+		}
+		if (pathname === '/analysis/formats') {
+			sendJson(res, 200, { formats: getBuildableFormats() });
 			return;
 		}
 		const request = JSON.parse(body) as StartRequest & AnalysisBatchRequest;
@@ -209,6 +234,7 @@ function calcBattle(request: StartRequest) {
 
 const ROUTES = new Set([
 	'/analysis/start', '/analysis/simulate', '/analysis/calc', '/analysis/setup', '/analysis/version',
+	'/analysis/formats',
 ]);
 
 const server = http.createServer((req, res) => {
