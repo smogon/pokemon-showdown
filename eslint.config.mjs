@@ -12,6 +12,8 @@ export default configure([
 			"tools/set-import/importer.js",
 			"tools/set-import/sets",
 			"tools/modlog/converter.js",
+			// DigiPen fork: vendored third-party code (see tools/analysis-vendor/smogon-calc/README.md)
+			"tools/analysis-vendor/",
 			"server/global-variables.d.ts",
 		],
 	},
