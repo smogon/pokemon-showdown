@@ -27,11 +27,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('-start', target, 'cursecounter0');
 			target.addVolatile('itsmecurse');
 		},
-        onResidualOrder: 24,
-        onResidual(pokemon) {
-            const duration = pokemon.volatiles['cursecounter'].duration;
-            this.add('-start', pokemon, `cursecounter${duration}`);
-        },
+		onResidualOrder: 24,
+		onResidual(pokemon) {
+			const duration = pokemon.volatiles['cursecounter'].duration;
+			this.add('-start', pokemon, `cursecounter${duration}`);
+		},
 	},
 	itsmecurse: {
 		name: 'itsmecurse',

@@ -13,7 +13,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return this.chainModify(1.25);
 			}
 		},
-        onSourceBasePower(basePower, attacker, defender, move) {
+		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(1.25);
 			}

@@ -11,17 +11,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { snatch: 1, sound: 1, metronome: 1 },
 		boosts: {
 			def: 1,
-            spd: 1,
+			spd: 1,
 		},
 		target: "allies",
 		type: "Steel",
 		zMove: { boost: { def: 2, spd: 2 } },
 		contestType: "Cool",
-        desc: "Raises the Defense and Special Defense of the user and all allies 1 stages.",
+		desc: "Raises the Defense and Special Defense of the user and all allies 1 stages.",
 		shortDesc: "Raises user's and ally's Defense and Special Defense by 1.",
 	},
-    badpizza: {
-        isNonstandard: "FNAF",
+	badpizza: {
+		isNonstandard: "FNAF",
 		num: -2,
 		accuracy: 75,
 		basePower: 90,
@@ -37,11 +37,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Poison",
 		contestType: "Tough",
-        desc: "Has a 100% chance to poison the target.",
+		desc: "Has a 100% chance to poison the target.",
 		shortDesc: "100% chance to poison the target.",
 	},
-    balloons: {
-        isNonstandard: "FNAF",
+	balloons: {
+		isNonstandard: "FNAF",
 		num: -3,
 		accuracy: 90,
 		basePower: 50,
@@ -55,11 +55,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Flying",
 		maxMove: { basePower: 130 },
-        desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. In Double Battles, this move attempts to hit the targeted Pokemon and its ally once each. If hitting one of these Pokemon would be prevented by immunity, protection, semi-invulnerability, an Ability, or accuracy, it attempts to hit the other Pokemon twice instead. If this move is redirected, it hits that target twice.",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. In Double Battles, this move attempts to hit the targeted Pokemon and its ally once each. If hitting one of these Pokemon would be prevented by immunity, protection, semi-invulnerability, an Ability, or accuracy, it attempts to hit the other Pokemon twice instead. If this move is redirected, it hits that target twice.",
 		shortDesc: "Hits twice. Doubles: Tries to hit each foe once.",
 	},
-    bashjam: {
-        isNonstandard: "FNAF",
+	bashjam: {
+		isNonstandard: "FNAF",
 		num: -4,
 		accuracy: 100,
 		basePower: 90,
@@ -71,11 +71,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "allAdjacentFoes",
 		type: "Ghost",
 		contestType: "Cool",
-        desc: "No additional effect.",
+		desc: "No additional effect.",
 		shortDesc: "No additional effect. Hits adjacent foes.",
 	},
-    birthday: {
-        isNonstandard: "FNAF",
+	birthday: {
+		isNonstandard: "FNAF",
 		num: -5,
 		accuracy: true,
 		basePower: 0,
@@ -90,13 +90,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			spe: 1,
 		},
 		target: "adjacentAlly",
-		type: "Normal",    
-        desc: "Raises the target's Attack, Defense, and Speed by 1 stage.",
+		type: "Normal",
+		desc: "Raises the target's Attack, Defense, and Speed by 1 stage.",
 		shortDesc: "Raises the target's Attack, Defense, Speed by 1.",
-    },
-    superbite: {
-        isNonstandard: "FNAF",
-        num: -6,
+	},
+	superbite: {
+		isNonstandard: "FNAF",
+		num: -6,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
@@ -111,11 +111,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Dark",
 		contestType: "Tough",
-        desc: "Has a 30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch.",
 		shortDesc: "30% chance to make the target flinch.",
-    },
-    cosmicsong: {
-        isNonstandard: "FNAF",
+	},
+	cosmicsong: {
+		isNonstandard: "FNAF",
 		num: -7,
 		accuracy: 100,
 		basePower: 25,
@@ -130,11 +130,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		zMove: { basePower: 140 },
 		maxMove: { basePower: 130 },
 		contestType: "Beautiful",
-        desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 4-5 times.",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 4-5 times.",
 		shortDesc: "Hits 2-5 times in one turn.",
-    },
-    cupcake: {
-        isNonstandard: "FNAF",
+	},
+	cupcake: {
+		isNonstandard: "FNAF",
 		num: -8,
 		accuracy: true,
 		basePower: 0,
@@ -151,10 +151,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up, and has its status condition cured.",
 		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
-    },
-    endoarmy: {
-        isNonstandard: "FNAF",
-        num: -9,
+	},
+	endoarmy: {
+		isNonstandard: "FNAF",
+		num: -9,
 		accuracy: 100,
 		basePower: 25,
 		category: "Physical",
@@ -167,12 +167,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Steel",
 		zMove: { basePower: 140 },
 		maxMove: { basePower: 130 },
-        desc: "Hits adjacent foes three times.",
+		desc: "Hits adjacent foes three times.",
 		shortDesc: "Hits adjacent foes 3 times.",
-    },
-    esckey: {
-        isNonstandard: "FNAF",
-        num: -10,
+	},
+	esckey: {
+		isNonstandard: "FNAF",
+		num: -10,
 		accuracy: 30,
 		basePower: 0,
 		category: "Special",
@@ -188,10 +188,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Cool",
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 		shortDesc: "OHKOs the target. Fails if user's lower level.",
-    },
-    eyebeam: {
-        isNonstandard: "FNAF",
-        num: -11,
+	},
+	eyebeam: {
+		isNonstandard: "FNAF",
+		num: -11,
 		accuracy: 80,
 		basePower: 100,
 		category: "Special",
@@ -212,9 +212,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Tough",
 		desc: "Has a higher chance for a critical hit. Has a 20% chance to either burn or paralyze the target.",
 		shortDesc: "High crit ratio. 20% chance to paralyze or burn.",
-    },
-    freddles: {
-        isNonstandard: "FNAF",
+	},
+	freddles: {
+		isNonstandard: "FNAF",
 		num: -12,
 		accuracy: 90,
 		basePower: 25,
@@ -229,12 +229,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		zMove: { basePower: 140 },
 		maxMove: { basePower: 130 },
 		contestType: "Tough",
-        desc: "Hits adjacent foes two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 4-5 times.",
+		desc: "Hits adjacent foes two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 4-5 times.",
 		shortDesc: "Hits adjacent foes 2-5 times in one turn.",
 	},
-    giftboxes: {
-        isNonstandard: "FNAF",
-        num: -13,
+	giftboxes: {
+		isNonstandard: "FNAF",
+		num: -13,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -259,12 +259,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "self",
 		type: "Normal",
-        desc: "A fainted party member is selected and revived with 1/2 its max HP, rounded down. Fails if there are no fainted party members.",
+		desc: "A fainted party member is selected and revived with 1/2 its max HP, rounded down. Fails if there are no fainted party members.",
 		shortDesc: "Revives a fainted Pokemon to 50% HP.",
-    },
-    gloomballoon: {
-        isNonstandard: "FNAF",
-        num: -14,
+	},
+	gloomballoon: {
+		isNonstandard: "FNAF",
+		num: -14,
 		accuracy: 90,
 		basePower: 50,
 		category: "Physical",
@@ -279,12 +279,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ghost",
 		zMove: { boost: { def: 1 } },
 		contestType: "Tough",
-        desc: "Lowers the target's Attack by 2 stages.",
-		shortDesc: "Lowers the target's Attack by 2.",    
-    },
-    gloomsong: {
-        isNonstandard: "FNAF",
-        num: -15,
+		desc: "Lowers the target's Attack by 2 stages.",
+		shortDesc: "Lowers the target's Attack by 2.",
+	},
+	gloomsong: {
+		isNonstandard: "FNAF",
+		num: -15,
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
@@ -301,19 +301,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "allAdjacentFoes",
 		type: "Ghost",
 		contestType: "Tough",
-        desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
+		desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
 		shortDesc: "100% chance to lower the foe(s) Attack by 1.",
-    },
-    happyjam: {
-        isNonstandard: "FNAF",
-	    num: -16,
+	},
+	happyjam: {
+		isNonstandard: "FNAF",
+		num: -16,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		name: "Happy Jam",
 		pp: 10,
 		priority: 0,
-		flags: { heal: 1, allyanim: 1, metronome: 1, sound: 1, bypasssub: 1},
+		flags: { heal: 1, allyanim: 1, metronome: 1, sound: 1, bypasssub: 1 },
 		onHit(target, source) {
 			let success = false;
 			if (source.hasAbility('punkrock')) {
@@ -334,12 +334,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Beautiful",
-        desc: "The target restores 1/2 of its maximum HP, rounded half up. If the user has the Punk Rock Ability, the target instead restores 3/4 of its maximum HP, rounded half down.",
+		desc: "The target restores 1/2 of its maximum HP, rounded half up. If the user has the Punk Rock Ability, the target instead restores 3/4 of its maximum HP, rounded half down.",
 		shortDesc: "Heals ally by 50% of its max HP. Punk Rock: 75%",
-    },
-    haunting: {
-        isNonstandard: "FNAF",
-        num: -17,
+	},
+	haunting: {
+		isNonstandard: "FNAF",
+		num: -17,
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
@@ -354,12 +354,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Cute",
-        desc: "Has a 100% chance to paralyze the target.",
+		desc: "Has a 100% chance to paralyze the target.",
 		shortDesc: "100% chance to paralyze the target.",
-    },
-    hook: {
-        isNonstandard: "FNAF",
-    	num: -18,
+	},
+	hook: {
+		isNonstandard: "FNAF",
+		num: -18,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
@@ -378,11 +378,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Steel",
 		contestType: "Tough",
-        desc: "Has a 50% chance to raise the user's Attack by 1 stage.",
+		desc: "Has a 50% chance to raise the user's Attack by 1 stage.",
 		shortDesc: "50% chance to raise the user's Attack by 1.",
-    },
-    hotcheese: {
-        isNonstandard: "FNAF",
+	},
+	hotcheese: {
+		isNonstandard: "FNAF",
 		num: -19,
 		accuracy: 75,
 		basePower: 90,
@@ -391,7 +391,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-        secondary: {
+		secondary: {
 			chance: 30,
 			status: 'brn',
 		},
@@ -399,12 +399,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Normal",
 		contestType: "Tough",
-        desc: "Has a 30% chance to burn the target. Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
+		desc: "Has a 30% chance to burn the target. Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		shortDesc: "30% burn chance. Traps and damages target for 4-5 turns.",
-    },
-    jumpscare: {
-        isNonstandard: "FNAF",
-        num: -20,
+	},
+	jumpscare: {
+		isNonstandard: "FNAF",
+		num: -20,
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
@@ -425,12 +425,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Cute",
-        desc: "Has a 100% chance to make the target flinch. Fails unless it is the user's first turn on the field.",
+		desc: "Has a 100% chance to make the target flinch. Fails unless it is the user's first turn on the field.",
 		shortDesc: "Hits first. First turn out only. 100% flinch chance.",
-    },
-    megabite: {
-        isNonstandard: "FNAF",
-        num: -21,
+	},
+	megabite: {
+		isNonstandard: "FNAF",
+		num: -21,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
@@ -445,11 +445,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Dark",
 		contestType: "Tough",
-        desc: "Has a 30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch.",
 		shortDesc: "30% chance to make the target flinch.",
-    },
-    mictoss: {
-        isNonstandard: "FNAF",
+	},
+	mictoss: {
+		isNonstandard: "FNAF",
 		num: -21,
 		accuracy: 90,
 		basePower: 90,
@@ -465,11 +465,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "allAdjacentFoes",
 		type: "Steel",
 		contestType: "Tough",
-        desc: "Has a 30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch.",
 		shortDesc: "30% chance to make the target flinch.",
 	},
-    mimicball: {
-        isNonstandard: "FNAF",
+	mimicball: {
+		isNonstandard: "FNAF",
 		num: -22,
 		accuracy: true,
 		basePower: 0,
@@ -493,11 +493,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		zMove: { boost: { accuracy: 1 } },
 		contestType: "Cute",
-        desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Celebrate, Chatter, Circle Throw, Combat Torque, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Dynamax Cannon, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Hold Hands, King's Shield, Magical Torque, Mat Block, Me First, Metronome, Mimic, Mirror Move, Nature Power, Noxious Torque, Protect, Rage Powder, Roar, Shell Trap, Sketch, Sleep Talk, Snatch, Spiky Shield, Spotlight, Struggle, Switcheroo, Tera Starstorm, Thief, Transform, Trick, Whirlwind, or Wicked Torque.",
+		desc: "The user uses the last move used by any Pokemon, including itself. Fails if no move has been used, or if the last move used was Assist, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Celebrate, Chatter, Circle Throw, Combat Torque, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Tail, Dynamax Cannon, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Hold Hands, King's Shield, Magical Torque, Mat Block, Me First, Metronome, Mimic, Mirror Move, Nature Power, Noxious Torque, Protect, Rage Powder, Roar, Shell Trap, Sketch, Sleep Talk, Snatch, Spiky Shield, Spotlight, Struggle, Switcheroo, Tera Starstorm, Thief, Transform, Trick, Whirlwind, or Wicked Torque.",
 		shortDesc: "Uses the last move used in the battle.",
 	},
-    munchies: {
-        isNonstandard: "FNAF",
+	munchies: {
+		isNonstandard: "FNAF",
 		num: -23,
 		accuracy: 100,
 		basePower: 40,
@@ -511,30 +511,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Dark",
 		contestType: "Cute",
 		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
-        shortDesc: "Traps and damages the target for 4-5 turns.",
-    },
-    mysterybox: {
-        isNonstandard: "FNAF",
-        num: -24,
+		shortDesc: "Traps and damages the target for 4-5 turns.",
+	},
+	mysterybox: {
+		isNonstandard: "FNAF",
+		num: -24,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		name: "Mystery Box",
 		pp: 20,
 		priority: -6,
-		flags: { reflectable: 1, mirror: 1,  allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1 },
+		flags: { reflectable: 1, mirror: 1, allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1 },
 		forceSwitch: true,
-        selfSwitch: true,
+		selfSwitch: true,
 		target: "normal",
 		type: "Normal",
 		zMove: { effect: 'healreplacement' },
 		contestType: "Cool",
-        desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups Ability, or this move hit a substitute. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups Ability, or this move hit a substitute. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
 		shortDesc: "Forces target to switch to random ally. User switches out.",
-    },
-    neonwall: {
-        isNonstandard: "FNAF",
-        num: -25,
+	},
+	neonwall: {
+		isNonstandard: "FNAF",
+		num: -25,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -578,12 +578,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Electric",
 		zMove: { boost: { spe: 1 } },
 		contestType: "Beautiful",
-        desc: "For 3 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect, Light Screen, or Aurora Veil. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 5 turns if the user is holding Light Clay. Fails unless the weather is Snow.",
+		desc: "For 3 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect, Light Screen, or Aurora Veil. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 5 turns if the user is holding Light Clay. Fails unless the weather is Snow.",
 		shortDesc: "For 3 turns, damage to allies halved.",
-    },
-    partyfavors: {
-        isNonstandard: "FNAF",
-        num: -26,
+	},
+	partyfavors: {
+		isNonstandard: "FNAF",
+		num: -26,
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
@@ -594,12 +594,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		drain: [1, 2],
 		target: "allAdjacentFoes",
 		type: "Normal",
-        desc: "Hits adjacent foes. The user recovers 1/2 the HP lost by the target(s), rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "Hits adjacent foes. The user recovers 1/2 the HP lost by the target(s), rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "Hits adjacent foes. Recovers 50% dmg dealt.",
-    },
-    pizzawheel: {
-        isNonstandard: "FNAF",
-        num: -27,
+	},
+	pizzawheel: {
+		isNonstandard: "FNAF",
+		num: -27,
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
@@ -610,12 +610,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Steel",
 		contestType: "Tough",
-        desc: "No additional effect.",
+		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-    },
-    poppers: {
-        isNonstandard: "FNAF",
-        num: -28,
+	},
+	poppers: {
+		isNonstandard: "FNAF",
+		num: -28,
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
@@ -637,10 +637,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					category: "Physical",
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
-                    secondary: {
-			            chance: 30,
-			            volatileStatus: 'flinch',
-		            },
+					secondary: {
+						chance: 30,
+						volatileStatus: 'flinch',
+					},
 					ignoreImmunity: false,
 					effectType: 'Move',
 					type: 'Fire',
@@ -652,11 +652,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Fire",
 		contestType: "Clever",
-        desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position. Has a 30% chance to make the target flinch when the damage is dealt.",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position. Has a 30% chance to make the target flinch when the damage is dealt.",
 		shortDesc: "Hits two turns after being used. 30% chance to flinch.",
 	},
-    powersong: {
-        isNonstandard: "FNAF",
+	powersong: {
+		isNonstandard: "FNAF",
 		num: -29,
 		accuracy: true,
 		basePower: 0,
@@ -667,18 +667,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { snatch: 1, sound: 1, metronome: 1 },
 		boosts: {
 			atk: 1,
-            spa: 1,
+			spa: 1,
 		},
 		target: "allies",
 		type: "Fighting",
 		zMove: { boost: { atk: 2, spa: 2 } },
 		contestType: "Cool",
-        desc: "Raises the Attack and Special Attack of the user and all allies 1 stages.",
+		desc: "Raises the Attack and Special Attack of the user and all allies 1 stages.",
 		shortDesc: "Raises user's and ally's Attack and Sp. Atk by 1.",
 	},
-    prizeball: {
-        isNonstandard: "FNAF",
-        num: -30,
+	prizeball: {
+		isNonstandard: "FNAF",
+		num: -30,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -688,12 +688,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onHit(target) {
 			// Filter for metronome-valid, single-target attacking moves
-			let validMoves = this.dex.moves.all().filter(move => (
+			const validMoves = this.dex.moves.all().filter(move => (
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['metronome'] && move.target === 'normal' &&
-                (move.category === 'Physical' || move.category === 'Special')
+				(move.category === 'Physical' || move.category === 'Special')
 			));
-			
+
 			// Further filter for moves super effective on the target
 			const superEffectiveMoves = validMoves.filter(move => {
 				for (const targetType of target.types) {
@@ -703,10 +703,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				return false;
 			});
-			
+
 			// Use super effective moves if available, otherwise fall back to all valid moves
 			const movesToChooseFrom = superEffectiveMoves.length > 0 ? superEffectiveMoves : validMoves;
-			
+
 			let randomMove = '';
 			if (movesToChooseFrom.length) {
 				movesToChooseFrom.sort((a, b) => a.num - b.num);
@@ -719,12 +719,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Normal",
 		contestType: "Cool",
-        desc: "A random single-target damaging move that is super effective against the target is selected for use, other than After You, Apple Acid, Armor Cannon, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Chilling Water, Chilly Reception, Clangorous Soul, Collision Course, Combat Torque, Comeuppance, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Doodle, Double Iron Bash, Double Shock, Dragon Ascent, Dragon Energy, Drum Beating, Dynamax Cannon, Electro Drift, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fillet Away, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyper Drill, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jet Punch, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Magical Torque, Make It Rain, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Noxious Torque, Obstruct, Order Up, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Population Bomb, Pounce, Power Shift, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Fist, Rage Powder, Raging Bull, Raging Fury, Relic Song, Revival Blessing, Ruination, Salt Cure, Secret Sword, Shed Tail, Shell Trap, Silk Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Snowscape, Spectral Thief, Spicy Extract, Spiky Shield, Spirit Break, Spotlight, Springtide Storm, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Tera Starstorm, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Tidy Up, Trailblaze, Transform, Trick, Twin Beam, V-create, Wicked Blow, Wicked Torque, or Wide Guard.",
+		desc: "A random single-target damaging move that is super effective against the target is selected for use, other than After You, Apple Acid, Armor Cannon, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Chilling Water, Chilly Reception, Clangorous Soul, Collision Course, Combat Torque, Comeuppance, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Doodle, Double Iron Bash, Double Shock, Dragon Ascent, Dragon Energy, Drum Beating, Dynamax Cannon, Electro Drift, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fillet Away, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyper Drill, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jet Punch, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Magical Torque, Make It Rain, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Noxious Torque, Obstruct, Order Up, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Population Bomb, Pounce, Power Shift, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Fist, Rage Powder, Raging Bull, Raging Fury, Relic Song, Revival Blessing, Ruination, Salt Cure, Secret Sword, Shed Tail, Shell Trap, Silk Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Snowscape, Spectral Thief, Spicy Extract, Spiky Shield, Spirit Break, Spotlight, Springtide Storm, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Tera Starstorm, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Tidy Up, Trailblaze, Transform, Trick, Twin Beam, V-create, Wicked Blow, Wicked Torque, or Wide Guard.",
 		shortDesc: "Picks a random super effective single-target move.",
-    },
-    rainyday: {
-        isNonstandard: "FNAF",
-        num: -31,
+	},
+	rainyday: {
+		isNonstandard: "FNAF",
+		num: -31,
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
@@ -741,11 +741,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "allAdjacentFoes",
 		type: "Water",
 		contestType: "Beautiful",
-        desc: "Has a 100% chance to lower the target's Defense by 1 stage.",
+		desc: "Has a 100% chance to lower the target's Defense by 1 stage.",
 		shortDesc: "100% chance to lower the foe(s) Defense by 1.",
-    },
-    regensong: {
-        isNonstandard: "FNAF",
+	},
+	regensong: {
+		isNonstandard: "FNAF",
 		num: -32,
 		accuracy: true,
 		basePower: 0,
@@ -768,12 +768,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		zMove: { boost: { def: 1 } },
 		contestType: "Beautiful",
-        desc: "Each of the user and its allies have 1/16 of their maximum HP, rounded down, restored at the end of each turn while that Pokemon remains active. If Big Root is held by the user or an ally, the HP recovered by that Pokemon is 1.3x normal, rounded half down. If the user or an ally uses Baton Pass, the replacement will receive the healing effect.",
+		desc: "Each of the user and its allies have 1/16 of their maximum HP, rounded down, restored at the end of each turn while that Pokemon remains active. If Big Root is held by the user or an ally, the HP recovered by that Pokemon is 1.3x normal, rounded half down. If the user or an ally uses Baton Pass, the replacement will receive the healing effect.",
 		shortDesc: "User and Allies recovers 1/16 max HP per turn.",
 	},
-    sludge: {
-        isNonstandard: "FNAF",
-        num: -33,
+	sludge: {
+		isNonstandard: "FNAF",
+		num: -33,
 		accuracy: 95,
 		basePower: 55,
 		category: "Special",
@@ -790,11 +790,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "allAdjacentFoes",
 		type: "Poison",
 		contestType: "Beautiful",
-        desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
 		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
-    },
-    speedsong: {
-        isNonstandard: "FNAF",
+	},
+	speedsong: {
+		isNonstandard: "FNAF",
 		num: -34,
 		accuracy: true,
 		basePower: 0,
@@ -804,18 +804,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, sound: 1, metronome: 1 },
 		boosts: {
-            spe: 1,
+			spe: 1,
 		},
 		target: "allies",
 		type: "Electric",
 		zMove: { boost: { atk: 2, spa: 2 } },
 		contestType: "Cool",
-        desc: "Raises the Speed of the user and all allies 1 stages.",
+		desc: "Raises the Speed of the user and all allies 1 stages.",
 		shortDesc: "Raises user's and ally's Speed by 1.",
 	},
-    springlocks: {
-        isNonstandard: "FNAF",
-        num: -35,
+	springlocks: {
+		isNonstandard: "FNAF",
+		num: -35,
 		accuracy: 70,
 		basePower: 130,
 		category: "Physical",
@@ -830,19 +830,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.accuracy = true;
 				break;
 			}
-        },
-        secondary: {
-            chance: 50,
-            volatileStatus: 'flinch',
-        },
+		},
+		secondary: {
+			chance: 50,
+			volatileStatus: 'flinch',
+		},
 		target: "normal",
 		type: "Steel",
 		contestType: "Tough",
-        desc: "Has a 50% chance to flinch the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy",
+		desc: "Has a 50% chance to flinch the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy",
 		shortDesc: "50% chance to flinch. Can't miss in rain",
-    },
-    toxicballoon: {
-        isNonstandard: "FNAF",
+	},
+	toxicballoon: {
+		isNonstandard: "FNAF",
 		num: -36,
 		accuracy: 90,
 		basePower: 50,
@@ -851,18 +851,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
-        secondary: {
+		secondary: {
 			chance: 100,
 			status: 'psn',
-        },
+		},
 		target: "normal",
 		type: "Flying",
 		maxMove: { basePower: 130 },
-        desc: "Has a 100% chance to poison the target.",
+		desc: "Has a 100% chance to poison the target.",
 		shortDesc: "100% chance to poison the target.",
-    },
-    toxicbite: {
-        isNonstandard: "FNAF",
+	},
+	toxicbite: {
+		isNonstandard: "FNAF",
 		num: -37,
 		accuracy: 100,
 		basePower: 50,
@@ -878,12 +878,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Poison",
 		contestType: "Tough",
-        desc: "Has a 100% chance to poison the target.",
+		desc: "Has a 100% chance to poison the target.",
 		shortDesc: "100% chance to poison the target.",
 	},
-    unscrew: {
-        isNonstandard: "FNAF",
-        num: -38,
+	unscrew: {
+		isNonstandard: "FNAF",
+		num: -38,
 		accuracy: 30,
 		basePower: 0,
 		category: "Physical",
@@ -891,7 +891,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-        ohko: 'Dark',
+		ohko: 'Dark',
 		target: "normal",
 		type: "Dark",
 		zMove: { basePower: 180 },
@@ -899,8 +899,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Beautiful",
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + X)%, where X is 30 if the user is an Dark type and 20 otherwise, and fails if the target is at a higher level. Dark-type Pokemon and Pokemon with the Sturdy Ability are immune.",
 		shortDesc: "OHKOs non-Dark targets. Fails if user's lower level.",
-    },
-    waterhose: {
+	},
+	waterhose: {
 		num: -39,
 		accuracy: 100,
 		basePower: 0,
@@ -921,11 +921,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",
-        desc: "Deals damage to the target equal to the target's maximum HP, rounded down. This move fails if the target is at or above 50% of its maximum HP.",
-        shortDesc: "OHKOs target below 50% HP. Fails otherwise.",
-    },
-   slasher: {
-       isNonstandard: "FNAF",
+		desc: "Deals damage to the target equal to the target's maximum HP, rounded down. This move fails if the target is at or above 50% of its maximum HP.",
+		shortDesc: "OHKOs target below 50% HP. Fails otherwise.",
+	},
+	slasher: {
+		isNonstandard: "FNAF",
 		num: -40,
 		accuracy: 100,
 		basePower: 120,
@@ -939,13 +939,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "randomNormal",
 		type: "Steel",
-		contestType: "Tough",    
-        desc: "The user spends two or three turns locked into this move and becomes confused immediately after its move on the last turn of the effect if it is not already. This move targets an opposing Pokemon at random on each turn. If the user is prevented from moving, is asleep at the beginning of a turn, or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk and the user is asleep, the move is used for one turn and does not confuse the user.",
+		contestType: "Tough",
+		desc: "The user spends two or three turns locked into this move and becomes confused immediately after its move on the last turn of the effect if it is not already. This move targets an opposing Pokemon at random on each turn. If the user is prevented from moving, is asleep at the beginning of a turn, or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk and the user is asleep, the move is used for one turn and does not confuse the user.",
 		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
-    },
-    jackobomb: {
-        isNonstandard: "FNAF",
-	    num: -41,
+	},
+	jackobomb: {
+		isNonstandard: "FNAF",
+		num: -41,
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
@@ -960,12 +960,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Fire",
 		contestType: "Beautiful",
-        desc: "Has a 10% chance to burn the target.",
+		desc: "Has a 10% chance to burn the target.",
 		shortDesc: "10% chance to burn the target.",
-    } ,
-    buzzsaw: {
-        isNonstandard: "FNAF",
-        num: -42,
+	},
+	buzzsaw: {
+		isNonstandard: "FNAF",
+		num: -42,
 		accuracy: 80,
 		basePower: 100,
 		category: "Physical",
@@ -974,33 +974,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		ignoreEvasion: true,
-        ignoreDefensive: true,
+		ignoreDefensive: true,
 		target: "normal",
 		type: "Steel",
 		contestType: "Cool",
 		desc: "Ignores the target's stat stage changes, including evasiveness.",
 		shortDesc: "Ignores the target's stat stage changes.",
-    },
-    fourthwall: {
-        isNonstandard: "FNAF",
-        num: -43,
+	},
+	fourthwall: {
+		isNonstandard: "FNAF",
+		num: -43,
 		accuracy: true,
 		basePower: 90,
 		category: "Special",
 		name: "Fourth Wall",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1},
-        ignoreDefensive: true,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		ignoreDefensive: true,
 		target: "normal",
 		type: "Dark",
 		contestType: "Cool",
 		desc: "Ignores the target's stat stage changes, including evasiveness. This move does not check accuracy.",
 		shortDesc: "Does not check accuracy. Ignores target's stat changes.",
-    },
-    bubblebreath: {
-        isNonstandard: "FNAF",
-        num: -44,
+	},
+	bubblebreath: {
+		isNonstandard: "FNAF",
+		num: -44,
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
@@ -1012,12 +1012,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Clever",
-        desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
-    },
-    megavirus: {
-        isNonstandard: "FNAF",
-        num: -45,
+	},
+	megavirus: {
+		isNonstandard: "FNAF",
+		num: -45,
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
@@ -1029,34 +1029,34 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Electric",
 		contestType: "Beautiful",
-        desc: "Deals damage to the target based on its Defense instead of Special Defense.",
+		desc: "Deals damage to the target based on its Defense instead of Special Defense.",
 		shortDesc: "Damages target based on Defense, not Sp. Def.",
-    },
+	},
 
-    givegiftsgivelife: {
-        isNonstandard: "FNAF",
-        num: -46,
+	givegiftsgivelife: {
+		isNonstandard: "FNAF",
+		num: -46,
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-        name: "Give Gifts, Give Life",
-        pp: 5,
-        priority: 0,
-        flags: { reflectable: 1, mirror: 1, metronome: 1 },
+		name: "Give Gifts, Give Life",
+		pp: 5,
+		priority: 0,
+		flags: { reflectable: 1, mirror: 1, metronome: 1 },
 		onHit(target, source, move) {
-            target.setType(target.getTypes(true).map(type => type === "Ghost" ? "???" : type));
-            this.add('-start', target, 'typechange', target.getTypes().join('/'), '[from] move: Give Gifts, Give Life');
+			target.setType(target.getTypes(true).map(type => type === "Ghost" ? "???" : type));
+			this.add('-start', target, 'typechange', target.getTypes().join('/'), '[from] move: Give Gifts, Give Life');
 			return target.addVolatile('trapped', source, move, 'trapper');
 		},
-        target: "allAdjacentFoes",
+		target: "allAdjacentFoes",
 		type: "Ghost",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Beautiful",
-        desc: "Foe's Ghost type becomes typeless. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
+		desc: "Foe's Ghost type becomes typeless. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Foes lose Ghost type and can't switch out.",
-    },
-    vent: {
-        isNonstandard: "FNAF",
+	},
+	vent: {
+		isNonstandard: "FNAF",
 		num: -47,
 		accuracy: 90,
 		basePower: 90,
@@ -1082,12 +1082,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "normal",
 		type: "Dark",
-		contestType: "Cool",  
+		contestType: "Cool",
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Usually goes first. Disappears turn 1. Hits turn 2.",  
-    },
-    distractingvoice: {
-        isNonstandard: "FNAF",
+		shortDesc: "Usually goes first. Disappears turn 1. Hits turn 2.",
+	},
+	distractingvoice: {
+		isNonstandard: "FNAF",
 		num: -48,
 		accuracy: true,
 		basePower: 0,
@@ -1110,9 +1110,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const distractingVoiceUser = this.effectState.target;
 				if (distractingVoiceUser.isSkyDropped()) return;
 
-				if ((!source.hasAbility('soundproof') || this.suppressingAbility(source)) 
-                    && this.validTarget(distractingVoiceUser, source, move.target
-                )) {
+				if ((!source.hasAbility('soundproof') || this.suppressingAbility(source)) &&
+					this.validTarget(distractingVoiceUser, source, move.target
+					)) {
 					if (move.smartTarget) move.smartTarget = false;
 					this.debug("Distracting Voice redirected target of move");
 					return distractingVoiceUser;
@@ -1123,7 +1123,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Clever",
-        desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal. This effect is ignored while the user is under the effect of Sky Drop.",
+		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal. This effect is ignored while the user is under the effect of Sky Drop.",
 		shortDesc: "The foes' moves target the user on the turn used.",
-    },
+	},
 };
