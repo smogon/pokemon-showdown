@@ -69,7 +69,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 	},
 	toybonnie: {
-		num: -6,
+		num: -7,
 		name: "Toy Bonnie",
 		customSprite: true,
 		customIcon: true,
@@ -80,7 +80,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 	},
 	toychica: {
-		num: -6,
+		num: -8,
 		name: "Toy Chica",
 		customSprite: true,
 		customIcon: true,
@@ -91,7 +91,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 	},
 	mangle: {
-		num: -6,
+		num: -9,
 		name: "Mangle",
 		customSprite: true,
 		customIcon: true,
@@ -102,7 +102,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 	},
 	balloonboy: {
-		num: -7,
+		num: -10,
 		name: "Balloon Boy",
 		customSprite: true,
 		customIcon: true,
@@ -113,7 +113,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 	},
 	jj: {
-		num: -8,
+		num: -11,
 		name: "JJ",
 		customSprite: true,
 		customIcon: true,
@@ -125,7 +125,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 
 	thepuppet: {
-		num: 0,
+		num: -12,
 		name: "The Puppet",
 		customSprite: true,
 		customIcon: true,
@@ -136,7 +136,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Undiscovered"],
 	},
 	nightmarionne: {
-		num: 0,
+		num: -13,
 		name: "Nightmarionne",
 		customSprite: true,
 		customIcon: true,

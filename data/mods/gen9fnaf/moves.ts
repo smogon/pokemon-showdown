@@ -1,5 +1,6 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	armorsong: {
+		isNonstandard: "FNAF",
 		num: -1,
 		accuracy: true,
 		basePower: 0,
@@ -20,6 +21,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Raises user's and ally's Defense and Special Defense by 1.",
 	},
     badpizza: {
+        isNonstandard: "FNAF",
 		num: -2,
 		accuracy: 75,
 		basePower: 90,
@@ -39,6 +41,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "100% chance to poison the target.",
 	},
     balloons: {
+        isNonstandard: "FNAF",
 		num: -3,
 		accuracy: 90,
 		basePower: 50,
@@ -56,6 +59,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Hits twice. Doubles: Tries to hit each foe once.",
 	},
     bashjam: {
+        isNonstandard: "FNAF",
 		num: -4,
 		accuracy: 100,
 		basePower: 90,
@@ -71,6 +75,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "No additional effect. Hits adjacent foes.",
 	},
     birthday: {
+        isNonstandard: "FNAF",
 		num: -5,
 		accuracy: true,
 		basePower: 0,
@@ -78,18 +83,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Birthday",
 		pp: 10,
 		priority: 0,
-		flags: { snatch: 1, dance: 1, metronome: 1 },
+		flags: { bypasssub: 1, allyanim: 1, metronome: 1 },
 		boosts: {
 			atk: 1,
 			def: 1,
 			spe: 1,
 		},
-		target: "normal",
+		target: "adjacentAlly",
 		type: "Normal",    
         desc: "Raises the target's Attack, Defense, and Speed by 1 stage.",
 		shortDesc: "Raises the target's Attack, Defense, Speed by 1.",
     },
     superbite: {
+        isNonstandard: "FNAF",
         num: -6,
 		accuracy: 100,
 		basePower: 90,
@@ -109,6 +115,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "30% chance to make the target flinch.",
     },
     cosmicsong: {
+        isNonstandard: "FNAF",
 		num: -7,
 		accuracy: 100,
 		basePower: 25,
@@ -127,6 +134,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Hits 2-5 times in one turn.",
     },
     cupcake: {
+        isNonstandard: "FNAF",
 		num: -8,
 		accuracy: true,
 		basePower: 0,
@@ -145,6 +153,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
     },
     endoarmy: {
+        isNonstandard: "FNAF",
         num: -9,
 		accuracy: 100,
 		basePower: 25,
@@ -162,6 +171,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Hits adjacent foes 3 times.",
     },
     esckey: {
+        isNonstandard: "FNAF",
         num: -10,
 		accuracy: 30,
 		basePower: 0,
@@ -180,6 +190,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "OHKOs the target. Fails if user's lower level.",
     },
     eyebeam: {
+        isNonstandard: "FNAF",
         num: -11,
 		accuracy: 80,
 		basePower: 100,
@@ -203,6 +214,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "High crit ratio. 20% chance to paralyze or burn.",
     },
     freddles: {
+        isNonstandard: "FNAF",
 		num: -12,
 		accuracy: 90,
 		basePower: 25,
@@ -221,6 +233,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Hits adjacent foes 2-5 times in one turn.",
 	},
     giftboxes: {
+        isNonstandard: "FNAF",
         num: -13,
 		accuracy: true,
 		basePower: 0,
@@ -250,6 +263,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Revives a fainted Pokemon to 50% HP.",
     },
     gloomballoon: {
+        isNonstandard: "FNAF",
         num: -14,
 		accuracy: 90,
 		basePower: 50,
@@ -269,6 +283,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Lowers the target's Attack by 2.",    
     },
     gloomsong: {
+        isNonstandard: "FNAF",
         num: -15,
 		accuracy: 100,
 		basePower: 50,
@@ -290,6 +305,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "100% chance to lower the foe(s) Attack by 1.",
     },
     happyjam: {
+        isNonstandard: "FNAF",
 	    num: -16,
 		accuracy: true,
 		basePower: 0,
@@ -322,6 +338,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Heals ally by 50% of its max HP. Punk Rock: 75%",
     },
     haunting: {
+        isNonstandard: "FNAF",
         num: -17,
 		accuracy: 100,
 		basePower: 40,
@@ -341,6 +358,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "100% chance to paralyze the target.",
     },
     hook: {
+        isNonstandard: "FNAF",
     	num: -18,
 		accuracy: 100,
 		basePower: 80,
@@ -364,6 +382,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "50% chance to raise the user's Attack by 1.",
     },
     hotcheese: {
+        isNonstandard: "FNAF",
 		num: -19,
 		accuracy: 75,
 		basePower: 90,
@@ -384,6 +403,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "30% burn chance. Traps and damages target for 4-5 turns.",
     },
     jumpscare: {
+        isNonstandard: "FNAF",
         num: -20,
 		accuracy: 100,
 		basePower: 40,
@@ -409,6 +429,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Hits first. First turn out only. 100% flinch chance.",
     },
     megabite: {
+        isNonstandard: "FNAF",
         num: -21,
 		accuracy: 100,
 		basePower: 120,
@@ -428,6 +449,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "30% chance to make the target flinch.",
     },
     mictoss: {
+        isNonstandard: "FNAF",
 		num: -21,
 		accuracy: 90,
 		basePower: 90,
@@ -447,6 +469,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "30% chance to make the target flinch.",
 	},
     mimicball: {
+        isNonstandard: "FNAF",
 		num: -22,
 		accuracy: true,
 		basePower: 0,
@@ -474,6 +497,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Uses the last move used in the battle.",
 	},
     munchies: {
+        isNonstandard: "FNAF",
 		num: -23,
 		accuracy: 100,
 		basePower: 40,
@@ -490,6 +514,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
         shortDesc: "Traps and damages the target for 4-5 turns.",
     },
     mysterybox: {
+        isNonstandard: "FNAF",
         num: -24,
 		accuracy: true,
 		basePower: 0,
@@ -508,6 +533,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Forces target to switch to random ally. User switches out.",
     },
     neonwall: {
+        isNonstandard: "FNAF",
         num: -25,
 		accuracy: true,
 		basePower: 0,
@@ -556,6 +582,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "For 3 turns, damage to allies halved.",
     },
     partyfavors: {
+        isNonstandard: "FNAF",
         num: -26,
 		accuracy: 100,
 		basePower: 80,
@@ -571,6 +598,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Hits adjacent foes. Recovers 50% dmg dealt.",
     },
     pizzawheel: {
+        isNonstandard: "FNAF",
         num: -27,
 		accuracy: 100,
 		basePower: 100,
@@ -586,6 +614,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "No additional effect.",
     },
     poppers: {
+        isNonstandard: "FNAF",
         num: -28,
 		accuracy: 100,
 		basePower: 120,
@@ -627,6 +656,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Hits two turns after being used. 30% chance to flinch.",
 	},
     powersong: {
+        isNonstandard: "FNAF",
 		num: -29,
 		accuracy: true,
 		basePower: 0,
@@ -647,6 +677,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Raises user's and ally's Attack and Sp. Atk by 1.",
 	},
     prizeball: {
+        isNonstandard: "FNAF",
         num: -30,
 		accuracy: true,
 		basePower: 0,
@@ -692,6 +723,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Picks a random super effective single-target move.",
     },
     rainyday: {
+        isNonstandard: "FNAF",
         num: -31,
 		accuracy: 100,
 		basePower: 60,
@@ -713,6 +745,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "100% chance to lower the foe(s) Defense by 1.",
     },
     regensong: {
+        isNonstandard: "FNAF",
 		num: -32,
 		accuracy: true,
 		basePower: 0,
@@ -739,6 +772,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "User and Allies recovers 1/16 max HP per turn.",
 	},
     sludge: {
+        isNonstandard: "FNAF",
         num: -33,
 		accuracy: 95,
 		basePower: 55,
@@ -760,6 +794,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
     },
     speedsong: {
+        isNonstandard: "FNAF",
 		num: -34,
 		accuracy: true,
 		basePower: 0,
@@ -779,6 +814,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Raises user's and ally's Speed by 1.",
 	},
     springlocks: {
+        isNonstandard: "FNAF",
         num: -35,
 		accuracy: 70,
 		basePower: 130,
@@ -806,6 +842,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "50% chance to flinch. Can't miss in rain",
     },
     toxicballoon: {
+        isNonstandard: "FNAF",
 		num: -36,
 		accuracy: 90,
 		basePower: 50,
@@ -825,6 +862,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "100% chance to poison the target.",
     },
     toxicbite: {
+        isNonstandard: "FNAF",
 		num: -37,
 		accuracy: 100,
 		basePower: 50,
@@ -844,6 +882,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "100% chance to poison the target.",
 	},
     unscrew: {
+        isNonstandard: "FNAF",
         num: -38,
 		accuracy: 30,
 		basePower: 0,
@@ -866,7 +905,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "FNAF",
 		name: "Water Hose",
 		pp: 10,
 		priority: 0,
@@ -886,6 +925,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
         shortDesc: "OHKOs target below 50% HP. Fails otherwise.",
     },
    slasher: {
+       isNonstandard: "FNAF",
 		num: -40,
 		accuracy: 100,
 		basePower: 120,
@@ -904,6 +944,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
     },
     jackobomb: {
+        isNonstandard: "FNAF",
 	    num: -41,
 		accuracy: 100,
 		basePower: 100,
@@ -923,6 +964,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "10% chance to burn the target.",
     } ,
     buzzsaw: {
+        isNonstandard: "FNAF",
         num: -42,
 		accuracy: 80,
 		basePower: 100,
@@ -940,6 +982,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Ignores the target's stat stage changes.",
     },
     fourthwall: {
+        isNonstandard: "FNAF",
         num: -43,
 		accuracy: true,
 		basePower: 90,
@@ -956,6 +999,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Does not check accuracy. Ignores target's stat changes.",
     },
     bubblebreath: {
+        isNonstandard: "FNAF",
         num: -44,
 		accuracy: 100,
 		basePower: 75,
@@ -972,6 +1016,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "User recovers 50% of the damage dealt.",
     },
     megavirus: {
+        isNonstandard: "FNAF",
         num: -45,
 		accuracy: 100,
 		basePower: 90,
@@ -989,6 +1034,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
     },
 
     givegiftsgivelife: {
+        isNonstandard: "FNAF",
         num: -46,
 		accuracy: true,
 		basePower: 0,
@@ -1010,6 +1056,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Foes lose Ghost type and can't switch out.",
     },
     vent: {
+        isNonstandard: "FNAF",
 		num: -47,
 		accuracy: 90,
 		basePower: 90,
@@ -1040,6 +1087,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Usually goes first. Disappears turn 1. Hits turn 2.",  
     },
     distractingvoice: {
+        isNonstandard: "FNAF",
 		num: -48,
 		accuracy: true,
 		basePower: 0,

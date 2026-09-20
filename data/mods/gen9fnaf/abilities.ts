@@ -1,5 +1,6 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	itsme: {
+		isNonstandard: "FNAF",
         onSwitchIn(pokemon) {
 			if (pokemon.abilityState.itsmeTriggered) return;
 			pokemon.abilityState.itsmeTriggered = true;
@@ -18,6 +19,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
         desc: "Each adjacent foe receives a curse count of 1 if it doesn't already have a curse count. At the end of each turn including the turn used, the curse count of the foe lowers by 1. If the number reaches 0, the foe becomes cursed and loses 1/4 of its maximum HP at the end of each turn. The curse count and the curse are removed from the foe if it switches out.",
 	},
     hello: {
+        isNonstandard: "FNAF",
         onSwitchIn(pokemon) {
             for (const foe of pokemon.adjacentFoes()) {
                 
