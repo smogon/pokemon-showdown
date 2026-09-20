@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import http from 'node:http';
 import { type Battle, extractChannelMessages } from '../sim/battle';
 import { PRNG, type PRNGSeed } from '../sim/prng';
@@ -34,6 +35,25 @@ type StartRequest = {
 	/** /analysis/calc: draft choices (`>p1 move 1 +2`) for choice-dependent calc flags and targets */
 	choices?: string[],
 };
+
+/**
+ * The commit this API is running, recorded in an exported analysis so an import can say whether the sim
+ * has moved since (docs/analysis/plan.md, Phase 6).
+ *
+ * An exported node is a *recipe* — a seed plus edits and choices — not a saved position, so it only
+ * replays the same way under the same sim and mod code. An upstream merge or a fakemon change can make
+ * the same seed produce a different turn, silently. This is what lets the import warn about that.
+ *
+ * Read once at startup, as `server/room-battle.ts` does for `__version`. A checkout without git, or an
+ * export from a server that had none, simply has no commit to compare, and the import says nothing.
+ */
+const SERVER_COMMIT = (() => {
+	try {
+		return execSync('git rev-parse HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+	} catch {
+		return '';
+	}
+})();
 
 function sendJson(res: http.ServerResponse, status: number, data: Record<string, any>) {
 	res.writeHead(status, {
@@ -136,6 +156,11 @@ function startBattle(request: StartRequest) {
 
 async function handleRequest(pathname: string, body: string, res: http.ServerResponse, signal: AbortSignal) {
 	try {
+		// Takes no body, so it answers before the parse below: an empty POST is the natural way to ask.
+		if (pathname === '/analysis/version') {
+			sendJson(res, 200, { serverCommit: SERVER_COMMIT });
+			return;
+		}
 		const request = JSON.parse(body) as StartRequest & AnalysisBatchRequest;
 		if (pathname === '/analysis/setup') {
 			// the only route that builds its own teams, so it runs before the team check below
@@ -182,7 +207,9 @@ function calcBattle(request: StartRequest) {
 	return { results: getAnalysisCalcs(battle, request.choices) };
 }
 
-const ROUTES = new Set(['/analysis/start', '/analysis/simulate', '/analysis/calc', '/analysis/setup']);
+const ROUTES = new Set([
+	'/analysis/start', '/analysis/simulate', '/analysis/calc', '/analysis/setup', '/analysis/version',
+]);
 
 const server = http.createServer((req, res) => {
 	if (req.method === 'OPTIONS') {
