@@ -273,7 +273,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				delete move.volatileStatus;
 				delete move.onHit;
 				move.self = { boosts: { atk: 1, def: 1, spe: -1 } };
-				move.target = move.nonGhostTarget!;
+				move.target = 'self';
 			} else if (target?.volatiles['substitute']) {
 				delete move.volatileStatus;
 				delete move.onHit;
