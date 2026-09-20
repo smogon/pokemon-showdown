@@ -174,6 +174,50 @@ describe('Curse', () => {
 		assert.equal(aerodactyl.hp, aerodactyl.maxhp - curseResidual * 3);
 	});
 
+	it(`[forced by Encore] shouldn't fail if the target is already afflicted with Curse and the user has Protean`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Gengar', moves: ['curse', 'shadowball'] },
+			{ species: 'Gengar', moves: ['curse', 'sleeptalk'] },
+		], [
+			{ species: 'Pelipper', moves: ['soak', 'tailwind', 'encore'] },
+			{ species: 'Pelipper', ability: 'protean', moves: ['soak', 'sleeptalk', 'skillswap'] },
+		]]);
+		battle.makeChoices('move curse 1, move curse 2', 'move soak 1, move soak 2');
+		battle.makeChoices('move curse, move curse', 'move tailwind, move sleeptalk');
+		battle.makeChoices('move shadowball 1, move curse', 'move encore 1, move skillswap 1');
+		console.log(battle.getDebugLog());
+
+		const gengar1 = battle.p1.active[0];
+		assert.equal(gengar1.hp, gengar1.maxhp - Math.floor(gengar1.maxhp / 2) * 2);
+		assert.equal(gengar1.boosts.atk, 1);
+
+		const gengar2 = battle.p1.active[1];
+		assert.equal(gengar2.hp, gengar2.maxhp - Math.floor(gengar2.maxhp / 2));
+		assert.equal(gengar2.boosts.atk, 2);
+	});
+
+	it(`[forced by Encore] should fail if the target is already afflicted with Curse even if becomes a Ghost-type with Trick-or-Treat`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Gengar', moves: ['curse', 'shadowball'] },
+			{ species: 'Gengar', moves: ['curse', 'sleeptalk'] },
+		], [
+			{ species: 'Pelipper', moves: ['soak', 'tailwind', 'encore'] },
+			{ species: 'Pelipper', moves: ['soak', 'sleeptalk', 'trickortreat'] },
+		]]);
+		battle.makeChoices('move curse 1, move curse 2', 'move soak 1, move soak 2');
+		battle.makeChoices('move curse, move curse', 'move tailwind, move sleeptalk');
+		battle.makeChoices('move shadowball 1, move curse', 'move encore 1, move trickortreat 1');
+		console.log(battle.getDebugLog());
+
+		const gengar1 = battle.p1.active[0];
+		assert.equal(gengar1.hp, gengar1.maxhp - Math.floor(gengar1.maxhp / 2));
+		assert.equal(gengar1.boosts.atk, 1);
+
+		const gengar2 = battle.p1.active[1];
+		assert.equal(gengar2.hp, gengar2.maxhp - Math.floor(gengar2.maxhp / 2));
+		assert.equal(gengar2.boosts.atk, 2);
+	});
+
 	it(`should boost its stats if the user stops being a Ghost-type mid-turn`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Gengar', moves: ['curse'] },
