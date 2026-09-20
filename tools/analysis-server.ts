@@ -455,5 +455,9 @@ cleanInterval.unref();
 // Only when run directly, so a test can start the server on its own port (test/tools/analysis/server.js).
 if (require.main === module) {
 	const port = Number(process.env.ANALYSIS_PORT || 8001);
-	server.listen(port, () => console.log(`Analysis API listening on http://localhost:${port}`));
+	// Localhost by default: hosted, this sits behind an nginx proxy on the same box, and the VPS has no
+	// firewall in front of it, so anything bound on 0.0.0.0 is public (docs/hosting/overview.md). Set
+	// ANALYSIS_BIND_IP=0.0.0.0 only to reach the API from another machine.
+	const host = process.env.ANALYSIS_BIND_IP || '127.0.0.1';
+	server.listen(port, host, () => console.log(`Analysis API listening on http://${host}:${port}`));
 }
