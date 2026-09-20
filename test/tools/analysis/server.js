@@ -14,7 +14,7 @@
 
 const assert = require('assert').strict;
 
-process.env.ANALYSIS_RATE_LIMIT = '5';
+process.env.ANALYSIS_RATE_LIMIT = '8';
 process.env.ANALYSIS_RATE_WINDOW_MS = '60000';
 process.env.ANALYSIS_MAX_BODY_BYTES = '1024';
 process.env.ANALYSIS_ALLOWED_ORIGINS = 'https://analysis.example.net';
@@ -63,11 +63,39 @@ describe('analysis API HTTP layer', () => {
 			assert.equal(headers.get('access-control-allow-origin'), null);
 		});
 
-		it('should allow a request with no Origin, which is the same-origin production path', async () => {
+		it('should allow a request with no Origin, as a non-browser caller sends none', async () => {
 			const { status, data, headers } = await call('/analysis/version');
 			assert.equal(status, 200);
 			assert.equal(typeof data.serverCommit, 'string');
 			assert.equal(headers.get('access-control-allow-origin'), null);
+		});
+
+		// The regression that broke the first deployment: every route is POST, and the Fetch spec sends
+		// `Origin` on every non-GET/HEAD request, so the hosted page's own calls carry it and were 403ing.
+		it('should allow the page its own origin without it being configured', async () => {
+			const { status, data } = await call('/analysis/version', { headers: { Origin: `${LOCAL}:${server.address().port}` } });
+			assert.equal(status, 200);
+			assert.equal(typeof data.serverCommit, 'string');
+		});
+
+		it('should take the scheme from X-Forwarded-Proto, but only from a trusted proxy', async () => {
+			// nginx terminates TLS, so the page's origin is https while the request arrives here as http
+			const proxied = await call('/analysis/version', {
+				headers: { Origin: `https://127.0.0.1:${server.address().port}`, 'X-Forwarded-Proto': 'https' },
+			});
+			assert.equal(proxied.status, 200);
+			// the suite connects over loopback, which is trusted, so prove the header is what did it
+			const unproxied = await call('/analysis/version', {
+				headers: { Origin: `https://127.0.0.1:${server.address().port}` },
+			});
+			assert.equal(unproxied.status, 403);
+		});
+
+		it('should not confuse a different host for the page\'s own', async () => {
+			const { status } = await call('/analysis/version', {
+				headers: { Origin: 'http://evil.example.com', 'X-Forwarded-Proto': 'http' },
+			});
+			assert.equal(status, 403);
 		});
 
 		it('should answer a preflight from an allowed origin and refuse one from anywhere else', async () => {
@@ -111,8 +139,10 @@ describe('analysis API HTTP layer', () => {
 		it('should 429 once a caller passes the limit, and say when to retry', async () => {
 			/*
 			 * A fresh path is not a fresh budget — the limit is per caller, not per route — so this runs
-			 * last and simply spends what is left. Every request in this file counts towards it, which is
-			 * why the limit is 5 and this loop is generous.
+			 * last and simply spends what is left. Every request in this file that gets past the origin and
+			 * routing checks counts towards it (a 403 or 404 returns before the counter), which is why the
+			 * limit tracks the number of those and this loop is generous. Adding a test that gets a 2xx or
+			 * a 4xx from a real route means raising `ANALYSIS_RATE_LIMIT` above.
 			 */
 			let limited = null;
 			for (let i = 0; i < 20 && !limited; i++) {

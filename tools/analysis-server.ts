@@ -95,11 +95,12 @@ function getBuildableFormats() {
  *********************************************************/
 
 /**
- * Origins allowed to call the API from a browser, or `*` to allow any.
+ * Origins allowed to call the API from a browser, **beyond the page's own**, or `*` to allow any.
  *
- * The default is local development only. **Production needs nothing set**: the deployment plan proxies
- * the API under the page's own origin (`location /analysis/`), and a browser sends no `Origin` header on
- * a same-origin request, so there is nothing to grant. A separate API host is what this is for.
+ * The default is local development only. Production needs nothing set, but not for the reason this comment
+ * used to give: a same-origin request *does* send `Origin` (see `isSameOrigin`), and it is that check, not
+ * the absence of the header, which makes a proxied deployment work unconfigured. This list is for a browser
+ * page served from a **different** host than the API.
  */
 const ALLOWED_ORIGINS = (process.env.ANALYSIS_ALLOWED_ORIGINS || '')
 	.split(',').map(origin => origin.trim()).filter(Boolean);
@@ -183,6 +184,29 @@ function getClientIp(req: http.IncomingMessage) {
 }
 
 /**
+ * Whether `origin` is the request's own origin.
+ *
+ * **A same-origin request still sends `Origin`.** The Fetch spec appends it to every request whose method
+ * is not GET or HEAD, and every route here is POST, so the hosted page's own calls arrive carrying it.
+ * Treating that as "must be in the allowlist" is what broke the first deployment: the page 403'd itself,
+ * and the format list silently fell back to its hardcoded defaults. `curl` cannot reproduce it, because
+ * curl sends no `Origin` at all.
+ *
+ * The scheme comes from `X-Forwarded-Proto`, and only from a trusted proxy, by the same rule `getClientIp`
+ * uses for `X-Forwarded-For`: nginx terminates TLS, so the request arrives here as plain http while the
+ * page's origin is https, and without the header the two would never match. An untrusted caller cannot
+ * choose the scheme, and `Host` is compared exactly, so this grants nothing a proxy did not vouch for.
+ */
+function isSameOrigin(req: http.IncomingMessage, origin: string) {
+	const host = req.headers.host;
+	if (!host) return false;
+	const trusted = TRUSTED_PROXIES.has(req.socket.remoteAddress || '');
+	const forwardedProto = trusted ?
+		String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() : '';
+	return origin === `${forwardedProto || 'http'}://${host}`;
+}
+
+/**
  * The CORS headers for a request, or `null` when its origin is not allowed.
  *
  * A request with no `Origin` is same-origin or not a browser, and is allowed with no CORS headers at all —
@@ -192,7 +216,7 @@ function getClientIp(req: http.IncomingMessage) {
 function corsHeaders(req: http.IncomingMessage): Record<string, string> | null {
 	const origin = req.headers.origin;
 	if (!origin) return {};
-	const allowed = ALLOWED_ORIGINS.includes('*') || ALLOWED_ORIGINS.includes(origin) ||
+	const allowed = isSameOrigin(req, origin) || ALLOWED_ORIGINS.includes('*') || ALLOWED_ORIGINS.includes(origin) ||
 		(!ALLOWED_ORIGINS.length && /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(origin));
 	if (!allowed) return null;
 	return {
