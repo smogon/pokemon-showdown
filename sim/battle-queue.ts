@@ -260,6 +260,11 @@ export class BattleQueue {
 			let target = null;
 			action.move = this.battle.dex.getActiveMove(action.move);
 
+			if (this.battle.dex.currentMod.startsWith('champions') &&
+				action.move.id === 'curse' && !action.pokemon.hasType('Ghost')) {
+				action.targetLoc = action.pokemon.getLocOf(action.pokemon);
+			}
+
 			if (!action.targetLoc) {
 				target = this.battle.getRandomTarget(action.pokemon, action.move);
 				// TODO: what actually happens here?
