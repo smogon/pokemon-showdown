@@ -356,6 +356,31 @@ function isSelectedTarget(
  * Entry point
  *********************************************************/
 
+/**
+ * The base power of a move whose power isn't fixed, taken from the **sim's own** `basePowerCallback`.
+ *
+ * `@smogon/calc` models only some of these and reads a flat number from its tables for the rest, so Last
+ * Respects stayed at 50 however many Pokémon had fainted and Rage Fist ignored `timesAttacked` entirely
+ * (user report, 2026-09-19). Asking the sim covers every such move at once — Stored Power, Gyro Ball,
+ * Punishment and the rest — instead of re-implementing them one at a time, and it can't drift from the
+ * sim or miss a mod's custom move.
+ *
+ * Returns null when there is no callback, or it declines (several return false or null to mean "this
+ * move fails"), in which case the calc's own base power stands.
+ */
+function variableBasePower(battle: Battle, attacker: Pokemon, defender: Pokemon, move: { id: string }) {
+	const callback = battle.dex.moves.get(move.id).basePowerCallback;
+	if (typeof callback !== 'function') return null;
+	try {
+		const activeMove = battle.dex.getActiveMove(move.id);
+		const power = (callback as any).call(battle, attacker, defender, activeMove);
+		return typeof power === 'number' && power > 0 ? power : null;
+	} catch {
+		// a callback that wants state this position doesn't have shouldn't take the whole calc down
+		return null;
+	}
+}
+
 function describe(result: ReturnType<typeof calculate>) {
 	const rawDesc = result.rawDesc;
 	rawDesc.attackerName = ATTACKER_TOKEN as I.SpeciesName;
@@ -404,12 +429,16 @@ function calcMove(
 			const calcAttacker = toCalcPokemon(generation, attacker, mode);
 			const defenderMode = choiceFor(choices, defender)?.mode || '';
 			const calcDefender = toCalcPokemon(generation, defender, defenderMode);
+			const moveOverrides: { target?: string, basePower?: number } = {};
+			// the spread modifier only applies when more than one target is actually present
+			if (spread && presentTargets.length < 2) moveOverrides.target = 'normal';
+			const basePower = variableBasePower(battle, attacker, defender, move);
+			if (basePower !== null) moveOverrides.basePower = basePower;
 			const calcMoveData = new CalcMove(generation, move.name, {
 				ability: calcAttacker.ability,
 				item: calcAttacker.item,
 				useMax: !!attacker.volatiles['dynamax'],
-				// the spread modifier only applies when more than one target is actually present
-				overrides: spread && presentTargets.length < 2 ? { target: 'normal' } : undefined,
+				overrides: Object.keys(moveOverrides).length ? moveOverrides as any : undefined,
 			});
 			const result = calculate(
 				generation, calcAttacker, calcDefender, calcMoveData,

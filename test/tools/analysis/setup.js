@@ -5,7 +5,9 @@
 'use strict';
 
 const assert = require('assert').strict;
-const { getPlaceholderTeams, getPlaceholderLevel, getPlaceholderSpeciesList } = require('../../../dist/tools/analysis-setup');
+const {
+	getPlaceholderTeams, getPlaceholderLevel, getPlaceholderSpeciesList, getPlaceholderName,
+} = require('../../../dist/tools/analysis-setup');
 const { createAnalysisBattle, getAnalysisSnapshot, replayAnalysisRecords } = require('../../../dist/tools/analysis-state');
 const { Dex } = require('../../../dist/sim');
 
@@ -55,6 +57,22 @@ describe('Analysis Set Up Position', () => {
 				assert.equal(new Set(species).size, count, `${formatid}: ${species.join(', ')}`);
 			}
 			assert.deepEqual(getPlaceholderTeams('gen9doublesou').species, ['Bulbasaur', 'Ivysaur']);
+		});
+
+		it('nicknames the placeholders, numbering them only when a side has more than one', () => {
+			// the nickname is what says on the field that these Pokémon are there to be replaced
+			assert.deepEqual(getPlaceholderTeams('gen9ou').names, ['Placeholder']);
+			assert.deepEqual(getPlaceholderTeams('gen9doublesou').names, ['Placeholder 1', 'Placeholder 2']);
+			assert.equal(getPlaceholderName(0, 1), 'Placeholder');
+			assert.equal(getPlaceholderName(1, 2), 'Placeholder 2');
+		});
+
+		it('carries the nickname through into the battle, distinct per active slot', () => {
+			// two entries matching on both nickname and species collapse in the renderer
+			const { battle } = setupBattle('gen9doublesou');
+			const names = battle.sides[0].pokemon.map(pokemon => pokemon.name);
+			assert.deepEqual(names, ['Placeholder 1', 'Placeholder 2']);
+			assert.equal(new Set(names).size, names.length);
 		});
 
 		it('repeats the last species when the format has fewer legal ones than slots', () => {

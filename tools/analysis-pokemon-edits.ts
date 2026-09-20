@@ -14,8 +14,9 @@ import type { Battle } from '../sim/battle';
 import type { Pokemon } from '../sim/pokemon';
 import type { Side } from '../sim/side';
 import { toID } from '../sim/dex';
-import type {
-	AnalysisEditLine, AnalysisEditSummary, AnalysisEdits, AnalysisPokemonStateEdit, AnalysisSideEditsID,
+import {
+	ANALYSIS_RAW_LINE, type AnalysisEditLine, type AnalysisEditSummary, type AnalysisEdits,
+	type AnalysisPokemonStateEdit, type AnalysisSideEditsID,
 } from './analysis-state';
 
 const STATUSES = ['', 'brn', 'par', 'slp', 'frz', 'psn', 'tox'];
@@ -32,6 +33,10 @@ const MAX_CONFUSION_TURNS = 5;
 /** partial trapping rolls `random(5, 7)`, or a flat 8 when the trapper holds a Grip Claw */
 const MAX_TRAP_TURNS = 6;
 const GRIP_CLAW_TRAP_TURNS = 8;
+/** history counters are plain tallies; this is only a sanity bound, well past any real battle */
+const MAX_HISTORY_COUNT = 999;
+/** the sim's `stall` counter tops out at `counterMax` 729, which is 3^6 */
+const MAX_STALL_COUNT = 6;
 
 /**
  * The volatiles the analysis panel can set (docs/analysis/plan.md, Phase 2b-2), and what each needs beyond
@@ -40,21 +45,43 @@ const GRIP_CLAW_TRAP_TURNS = 8;
  * - `source`: the volatile hangs off an opposing Pokémon, so the edit names a foe slot.
  * - `sourceMove`: the condition reads `effectState.sourceEffect`, so it must be attributed to a move.
  * - `gen`: only settable in that generation.
+ * - `boosterUnless`: the ability takes its own volatile back unless this field condition is up, so without
+ *   it the edit has to be attributed to a Booster Energy (see `needsBooster`).
  */
-const VOLATILES: { [id: string]: { name: string, source?: boolean, sourceMove?: string, gen?: number } } = {
+const VOLATILES: {
+	[id: string]: {
+		name: string, source?: boolean, sourceMove?: string, gen?: number, move?: boolean,
+		boosterUnless?: { kind: 'weather' | 'terrain', id: string },
+	},
+} = {
 	aquaring: { name: 'Aqua Ring' },
 	charge: { name: 'Charge' },
 	confusion: { name: 'Confusion' },
 	curse: { name: 'Curse' },
 	destinybond: { name: 'Destiny Bond' },
+	// Which move is locked is in the replay log (`|-start|POKEMON|Disable|Shadow Sneak|...`), even though
+	// the client `Battle` throws that argument away, so a replay import can restore it exactly.
+	disable: { name: 'Disable', move: true },
 	dragoncheer: { name: 'Dragon Cheer' },
 	dynamax: { name: 'Dynamax', gen: 8 },
 	embargo: { name: 'Embargo' },
+	/*
+	 * Deliberately no `move`, unlike Disable. Encore's `onStart` locks whatever `lastMove` is, and that is
+	 * already the right answer for a replay: while a Pokémon is encored it can only repeat the encored move,
+	 * so its last move *is* the locked one. The log carries no argument to override it with either
+	 * (`|-start|POKEMON|Encore`, no third field), so a replacement line would invent a format the sim never
+	 * emits. The history layer runs before the volatiles, which is what makes `lastMove` available at all —
+	 * without it `onStart` refuses outright, exactly as Disable's does.
+	 */
+	encore: { name: 'Encore' },
 	flashfire: { name: 'Flash Fire' },
 	focusenergy: { name: 'Focus Energy' },
 	foresight: { name: 'Foresight' },
 	gastroacid: { name: 'Gastro Acid' },
 	healblock: { name: 'Heal Block' },
+	// No argument needed: the sim never stores which moves are sealed, it checks the imprisoner's own
+	// moveset every time a foe tries to move. So restoring the volatile restores the whole effect.
+	imprison: { name: 'Imprison' },
 	laserfocus: { name: 'Laser Focus' },
 	leechseed: { name: 'Leech Seed', source: true },
 	magnetrise: { name: 'Magnet Rise' },
@@ -66,14 +93,22 @@ const VOLATILES: { [id: string]: { name: string, source?: boolean, sourceMove?: 
 	partiallytrapped: { name: 'Partially Trapped', source: true, sourceMove: 'wrap' },
 	powershift: { name: 'Power Shift' },
 	powertrick: { name: 'Power Trick' },
+	// The sim works out which stat is boosted itself (`getBestStat`), so neither of these needs an argument;
+	// the `-start` line it emits carries the stat, which is how the renderer labels it "Protosynthesis: Atk".
+	protosynthesis: { name: 'Protosynthesis', boosterUnless: { kind: 'weather', id: 'sunnyday' } },
+	quarkdrive: { name: 'Quark Drive', boosterUnless: { kind: 'terrain', id: 'electricterrain' } },
 	saltcure: { name: 'Salt Cure' },
 	smackdown: { name: 'Smack Down' },
 	substitute: { name: 'Substitute' },
 	syrupbomb: { name: 'Syrup Bomb' },
+	// The log says a Pokémon was taunted but never for how long, so the sim's own duration stands in. Kept
+	// out of the list at first for that reason; an import dropping it outright was worse (user report,
+	// 2026-09-19), since "taunted, turns unknown" beats "not taunted".
+	taunt: { name: 'Taunt' },
 	yawn: { name: 'Yawn' },
 };
 
-function clamp(value: unknown, low: number, high: number, fallback: number) {
+export function clamp(value: unknown, low: number, high: number, fallback: number) {
 	const number = Math.trunc(Number(value));
 	return Number.isFinite(number) ? Math.min(high, Math.max(low, number)) : fallback;
 }
@@ -84,6 +119,8 @@ export class AnalysisPokemonEditor {
 	summary: AnalysisEditSummary = { field: [], p1: [], p2: [] };
 	lines: AnalysisEditLine[] = [];
 	droppedEdits: string[] = [];
+	/** this save's field edit, which the field layer applies after this one — see `needsBooster` */
+	pendingField: AnalysisEdits['field'] = undefined;
 
 	constructor(battle: Battle) {
 		this.battle = battle;
@@ -161,9 +198,42 @@ export class AnalysisPokemonEditor {
 		incoming.activeTurns = 0;
 		incoming.activeMoveActions = 0;
 		incoming.newlySwitched = true;
-		this.lines.push(['switch', incoming, incoming.getFullDetails]);
+		/*
+		 * The details are frozen **now**, not left to `getFullDetails` to resolve at flush time. It is a
+		 * function, and `battle.add` calls it when the line is finally serialized — by which point a Mega
+		 * Evolution in the same save has already happened, so the switch announced a Pokémon the renderer
+		 * had never seen ("Glalie-Mega" against a team-preview entry for "Glalie"). It filed that as a
+		 * *seventh* team member and left the real one stranded (user report, 2026-09-19).
+		 *
+		 * Frozen, the sequence is the one a real battle produces: switch in as Glalie, then `detailschange`
+		 * into Mega Glalie, which the renderer applies to the Pokémon already on the field.
+		 */
+		const details = incoming.getFullDetails();
+		this.lines.push(['switch', incoming, () => details]);
 		((this.applied.active ||= {})[sideId] ||= [])[slot] = teamSlot;
 		this.note(sideId, incoming, `Active (Slot ${slot + 1})`);
+	}
+
+	/**
+	 * Empties an active slot — `null` in `edits.active`, which a replay produces when a Pokémon fainted and
+	 * its side had nothing left to send out (user report, 2026-09-19). It used to be skipped outright, so the
+	 * slot kept its occupant: an imported turn 9 still had the fainted Basculegion on the field, and because
+	 * it counted as active the HP edit then clamped it to 1 rather than fainting it.
+	 *
+	 * The occupant is **fainted**, not quietly benched, because that is the only way a slot empties in a real
+	 * battle — and `|faint|` is the only line that tells the renderer a slot is now empty. This mirrors what
+	 * `faintMessages` leaves behind: `isActive` and `isStarted` off, while `side.active[slot]` still points at
+	 * the fainted Pokémon, which is how the sim represents "fainted, awaiting a replacement".
+	 */
+	clearActive(sideId: AnalysisSideEditsID, slot: number) {
+		const side = this.side(sideId);
+		const outgoing = side?.active[slot];
+		if (!side || !outgoing?.isActive) return;
+		if (!outgoing.fainted) this.faint(outgoing);
+		outgoing.isActive = false;
+		outgoing.isStarted = false;
+		((this.applied.active ||= {})[sideId] ||= [])[slot] = null;
+		this.note(sideId, outgoing, `Off the field`);
 	}
 
 	/**
@@ -260,8 +330,8 @@ export class AnalysisPokemonEditor {
 	 * That clamp is also what makes "set 0, then Set Active" land as *active at 1 HP*, with no special case:
 	 * active swaps run before state edits, so by the time this runs the Pokémon is no longer benched.
 	 */
-	applyHP(sideId: AnalysisSideEditsID, pokemon: Pokemon, hp: number) {
-		const lowest = pokemon.isActive ? 1 : 0;
+	applyHP(sideId: AnalysisSideEditsID, pokemon: Pokemon, hp: number, mayFaintActive = false) {
+		const lowest = pokemon.isActive && !mayFaintActive ? 1 : 0;
 		const wanted = clamp(hp, lowest, pokemon.maxhp, pokemon.hp);
 		if (wanted === pokemon.hp) return undefined;
 		const percent = Math.round(1000 * wanted / pokemon.maxhp) / 10;
@@ -277,6 +347,141 @@ export class AnalysisPokemonEditor {
 		this.lines.push(['-sethp', pokemon, `${wanted}/${pokemon.maxhp}${status}`, '[silent]']);
 		this.note(sideId, pokemon, `HP (${wanted}/${pokemon.maxhp}, ${percent}%)`);
 		return wanted;
+	}
+
+	/**
+	 * HP as a percentage of max HP, which is what a replay import stores: a replay only ever shows
+	 * percentages, and the real max HP depends on EVs and IVs it never reveals. Resolving here rather than
+	 * in the parser keeps the value right however the user later edits the team — the team layer has
+	 * already run by this point, so max HP has settled.
+	 */
+	applyHpPercent(sideId: AnalysisSideEditsID, pokemon: Pokemon, percent: number) {
+		const wanted = Math.round(clamp(percent, 0, 100, 100) * pokemon.maxhp / 100);
+		/*
+		 * **A replay may faint an Pokémon that is still on the field**, unlike the Pokémon panel, which
+		 * clamps an active one to 1 so the form can't KO whatever is out. The clamp is there to stop a
+		 * *user* doing it by hand; a replay is reporting something that already happened, and a battle
+		 * ends with exactly that — a fainted Pokémon on the field and no replacement to send out
+		 * (user report, 2026-09-19). `hpPercent` is the replay's own channel, so the two don't collide.
+		 *
+		 * Anything alive stays alive: rounding a sliver of HP down to 0 would faint it silently, and a
+		 * replay shows a Focus Sash survivor as `1/100`.
+		 */
+		return this.applyHP(sideId, pokemon, percent > 0 ? Math.max(1, wanted) : wanted, true);
+	}
+
+	/**
+	 * The Pokémon's **current** item, as opposed to its set's — a replay needs "held a Sitrus Berry, ate it
+	 * on turn 3". Written directly rather than through `setItem`, as the team layer does, so no events fire.
+	 */
+	applyItem(sideId: AnalysisSideEditsID, pokemon: Pokemon, item: string) {
+		const wanted = this.battle.dex.items.get(item);
+		if (item && !wanted.exists) {
+			this.drop(sideId, this.teamSlot(pokemon), `${item} isn't an item`);
+			return undefined;
+		}
+		const id = item ? wanted.id : '';
+		if (pokemon.item === id) return undefined;
+		pokemon.item = id;
+		pokemon.itemState = this.battle.initEffectState({ id, target: pokemon });
+		if (id) {
+			this.lines.push(['-item', pokemon, wanted.name, '[silent]']);
+		} else {
+			this.lines.push(['-enditem', pokemon, this.battle.dex.items.get(id).name || 'Item', '[silent]']);
+		}
+		this.note(sideId, pokemon, `Item (${wanted.name || 'None'})`);
+		return id;
+	}
+
+	/**
+	 * The Pokémon's **current** ability, which Trace, Skill Swap and Mega Evolution change without changing
+	 * the set. `baseAbility` deliberately stays put — editing the set's ability is the team layer's job.
+	 */
+	applyAbility(sideId: AnalysisSideEditsID, pokemon: Pokemon, ability: string) {
+		const wanted = this.battle.dex.abilities.get(ability);
+		if (ability && !wanted.exists) {
+			this.drop(sideId, this.teamSlot(pokemon), `${ability} isn't an ability`);
+			return undefined;
+		}
+		const id = ability ? wanted.id : '';
+		if (pokemon.ability === id) return undefined;
+		pokemon.ability = id;
+		pokemon.abilityState = this.battle.initEffectState({ id, target: pokemon });
+		this.lines.push(['-ability', pokemon, wanted.name || 'None', '[silent]']);
+		this.note(sideId, pokemon, `Ability (${wanted.name || 'None'})`);
+		return id;
+	}
+
+	/**
+	 * The history a rebuilt battle has no way to know. A reconstructed position is a fresh battle at turn 1,
+	 * so without these every Pokémon looks like it just switched in — Fake Out succeeds from one that has
+	 * been out all game. All direct writes; none of it is in the protocol, and none of it is rendered.
+	 */
+	applyHistory(sideId: AnalysisSideEditsID, pokemon: Pokemon, edit: AnalysisPokemonStateEdit) {
+		const applied: AnalysisPokemonStateEdit = {};
+		if (edit.activeTurns !== undefined) {
+			const wanted = clamp(edit.activeTurns, 0, MAX_HISTORY_COUNT, pokemon.activeTurns);
+			if (wanted !== pokemon.activeTurns) {
+				pokemon.activeTurns = wanted;
+				this.note(sideId, pokemon, `Turns Out (${wanted})`);
+			}
+			applied.activeTurns = wanted;
+		}
+		if (edit.activeMoveActions !== undefined) {
+			const wanted = clamp(edit.activeMoveActions, 0, MAX_HISTORY_COUNT, pokemon.activeMoveActions);
+			if (wanted !== pokemon.activeMoveActions) {
+				pokemon.activeMoveActions = wanted;
+				this.note(sideId, pokemon, `Moves Used (${wanted})`);
+			}
+			applied.activeMoveActions = wanted;
+		}
+		if (edit.timesAttacked !== undefined) {
+			const wanted = clamp(edit.timesAttacked, 0, MAX_HISTORY_COUNT, pokemon.timesAttacked);
+			if (wanted !== pokemon.timesAttacked) {
+				pokemon.timesAttacked = wanted;
+				// The renderer counts only the hits it watched land, and a reconstructed position watched
+				// none — so Rage Fist's tooltip would read 50 BP while the sim used the real number.
+				this.lines.push([
+					'-message', 'analysiscounter', pokemon, 'timesattacked', `${wanted}`, '[silent]',
+				]);
+				this.note(sideId, pokemon, `Times Attacked (${wanted})`);
+			}
+			applied.timesAttacked = wanted;
+		}
+		if (edit.lastMove !== undefined) {
+			const move = edit.lastMove ? this.battle.dex.moves.get(edit.lastMove) : null;
+			if (move && !move.exists) {
+				this.drop(sideId, this.teamSlot(pokemon), `${edit.lastMove} isn't a move`);
+			} else if (toID(pokemon.lastMove?.id) !== toID(move?.id)) {
+				pokemon.lastMove = move ? this.battle.dex.getActiveMove(move.id) : null;
+				this.note(sideId, pokemon, `Last Move (${move ? move.name : 'None'})`);
+				applied.lastMove = move ? move.id : '';
+			}
+		}
+		return applied;
+	}
+
+	/**
+	 * The Protect chain. The parser counts consecutive successful Protect-likes; the sim stores `3, 9, 27…`
+	 * and rolls `1/counter`, so the conversion lives here rather than in the parser — one authority on what
+	 * the sim's state looks like, as with the volatile defaults.
+	 */
+	applyStall(sideId: AnalysisSideEditsID, pokemon: Pokemon, count: number) {
+		const wanted = clamp(count, 0, MAX_STALL_COUNT, 0);
+		if (!wanted) {
+			if (!pokemon.volatiles['stall']) return {};
+			pokemon.removeVolatile('stall');
+			this.note(sideId, pokemon, `Protect Chain (0)`);
+			return { stallCount: 0 };
+		}
+		if (!pokemon.volatiles['stall']) pokemon.addVolatile('stall');
+		const state = pokemon.volatiles['stall'];
+		if (!state) return {};
+		state.counter = 3 ** wanted;
+		// `stall` expires at the end of the turn after the one it was set on, as the sim's own onRestart does.
+		state.duration = 2;
+		this.note(sideId, pokemon, `Protect Chain (${wanted})`);
+		return { stallCount: wanted };
 	}
 
 	/**
@@ -305,16 +510,23 @@ export class AnalysisPokemonEditor {
 	}
 
 	/**
-	 * Tells the renderer a **benched** Pokémon fainted or came back, so its team icon greys out and clears.
+	 * Tells the renderer a Pokémon fainted or came back.
 	 *
-	 * The protocol can express neither. `|faint|` assumes an active Pokémon: `battle.ts` looks it up by ident
-	 * and throws on `poke.side` for one the renderer has never seen, because team-preview entries have no
-	 * ident until they switch in. There is no revive line at all. So this rides on the `analysis*` escape
-	 * hatch (`analysis-battle.ts`), and names the Pokémon by **team slot** — the order the renderer keeps its
-	 * own `side.pokemon` in — rather than by an ident that may not resolve.
+	 * **On the field, that is a real `|faint|`**, which is what makes the sprite go and the slot read as
+	 * empty. Only an active Pokémon can have one: `battle.ts` looks the ident up and throws on `poke.side`
+	 * for a Pokémon the renderer has never seen, because team-preview entries have no ident until they
+	 * switch in.
+	 *
+	 * **Benched, the protocol can express neither** faint nor revive, so it rides on the `analysis*` escape
+	 * hatch (`analysis-battle.ts`) and names the Pokémon by **team slot** — the order the renderer keeps its
+	 * own `side.pokemon` in — rather than by an ident that may not resolve. That greys out its team icon.
 	 */
 	markFainted(pokemon: Pokemon, fainted: boolean) {
 		const side = pokemon.side.id;
+		// The ident is captured now, not passed as the object: lines are serialized once every edit has been
+		// applied, and by then this Pokémon is off the field, so `toString()` would drop the slot letter and
+		// leave the renderer no way to tell which slot to empty (the same trap as `swapActive`).
+		if (fainted && pokemon.isActive) this.lines.push(['faint', pokemon.toString()]);
 		this.lines.push(['-message', 'analysisfaint', side, `${this.teamSlot(pokemon)}`, fainted ? '1' : '0', '[silent]']);
 	}
 
@@ -322,15 +534,24 @@ export class AnalysisPokemonEditor {
 	 * PP is named by move id, so an edit for a move the Pokémon no longer has just doesn't apply — no
 	 * cross-layer invalidation needed, and a move change and its new PP can be saved together.
 	 */
-	applyPP(sideId: AnalysisSideEditsID, pokemon: Pokemon, pp: { [moveid: string]: number }) {
+	applyPP(
+		sideId: AnalysisSideEditsID, pokemon: Pokemon,
+		pp: { [moveid: string]: number }, ppUsed?: { [moveid: string]: number }
+	) {
 		const applied: { [moveid: string]: number } = {};
-		for (const [moveid, wanted] of Object.entries(pp)) {
-			if (wanted === null || wanted === undefined) continue;
-			const moveSlot = pokemon.moveSlots.find(entry => entry.id === toID(moveid));
+		// `ppUsed` first, so an explicit `pp` for the same move overrides it.
+		const wantedByMove: { [moveid: string]: number | 'used' } = {};
+		for (const moveid of Object.keys(ppUsed || {})) wantedByMove[moveid] = 'used';
+		for (const [moveid, value] of Object.entries(pp)) wantedByMove[moveid] = value;
+		for (const [moveid, entry] of Object.entries(wantedByMove)) {
+			if (entry === null || entry === undefined) continue;
+			const moveSlot = pokemon.moveSlots.find(item => item.id === toID(moveid));
 			if (!moveSlot) {
 				this.drop(sideId, this.teamSlot(pokemon), `${moveid} is no longer one of ${pokemon.name}'s moves`);
 				continue;
 			}
+			// Only the sim knows a move's real max PP, which is the whole point of taking uses instead.
+			const wanted = entry === 'used' ? moveSlot.maxpp - (ppUsed![moveid] || 0) : entry;
 			const value = clamp(wanted, 0, moveSlot.maxpp, moveSlot.pp);
 			applied[moveSlot.id] = value;
 			if (value === moveSlot.pp) continue;
@@ -418,15 +639,26 @@ export class AnalysisPokemonEditor {
 				pokemon.removeVolatile(id);
 			}
 			// partial trapping reads `effectState.sourceEffect.id` every residual, so it must have a move
-			const sourceEffect = info.sourceMove ? this.battle.dex.getActiveMove(info.sourceMove) : null;
+			const sourceEffect = info.sourceMove ? this.battle.dex.getActiveMove(info.sourceMove) :
+				this.needsBooster(info) ? this.battle.dex.items.get('boosterenergy') : null;
+			/*
+			 * Disable's own `onStart` line names `lastMove`, which is the disabled move only when Cursed Body
+			 * fired on the turn being rebuilt. A replay knows the real one — Ceruledge reconstructed at turn 5
+			 * announced "Bitter Blade" (its last move) while the sim correctly disabled Shadow Sneak — so the
+			 * line is replaced rather than corrected after the fact. `setVolatileCounters` fixes the state.
+			 */
+			const namedMove = info.move && params?.move ?
+				this.battle.dex.moves.get(String(params.move)) : null;
 			const added = this.logging(
-				() => pokemon.addVolatile(id, source, sourceEffect), ['-start', pokemon, info.name, '[silent]']
+				() => pokemon.addVolatile(id, source, sourceEffect),
+				['-start', pokemon, info.name, '[silent]'],
+				namedMove?.exists ? ['-start', pokemon, info.name, namedMove.name] : null
 			);
 			if (!added) {
 				this.drop(sideId, this.teamSlot(pokemon), `${pokemon.name} can't have ${info.name}`);
 				continue;
 			}
-			this.setVolatileCounters(id, pokemon, source);
+			this.setVolatileCounters(id, pokemon, source, params);
 			applied[id] = params;
 			this.note(sideId, pokemon, source && info.source ?
 				`${info.name} (from ${source.name})` : `${info.name} (On)`);
@@ -435,27 +667,101 @@ export class AnalysisPokemonEditor {
 	}
 
 	/**
-	 * Runs a sim change and, if it logged nothing, emits `fallback` instead.
+	 * Runs a sim change and makes sure exactly one line describes it, **in the edit channel**.
 	 *
 	 * Not every condition announces itself: Aqua Ring has no `onEnd` line, and Minimize has neither an
-	 * `onStart` nor an `onEnd` one. Without this the renderer would never learn those volatiles came or went,
-	 * and the battle window would drift out of step with the battle. A condition that does emit its own line
-	 * keeps it, so Destiny Bond still reads as `-singlemove` and Gastro Acid as `-endability`.
+	 * `onStart` nor an `onEnd` one. Without `fallback` the renderer would never learn those volatiles came or
+	 * went, and the battle window would drift out of step with the battle.
+	 *
+	 * A condition that *does* announce itself has its own line moved into `this.lines` rather than left where
+	 * the sim put it. Edit lines are added only after every layer has run (`applyAnalysisEdits`), so a line
+	 * the sim wrote during the call landed **before** the active layer's `switch` — and a switch resets that
+	 * Pokémon's volatiles in the renderer, so an imported Disable was applied and then immediately wiped,
+	 * showing nothing on the sprite (user report, 2026-09-19). One ordered channel fixes it for every
+	 * self-announcing condition at once. Destiny Bond still reads as `-singlemove`, Gastro Acid as
+	 * `-endability`; they just arrive in the right place.
+	 *
+	 * `replacement` overrides what the sim said, for a condition whose own line is built from state the
+	 * reconstruction is about to correct (see Disable below).
 	 */
-	logging<T>(change: () => T, fallback: AnalysisEditLine) {
+	/**
+	 * Runs a sim change and moves whatever it logged into the edit channel, keeping its own order.
+	 *
+	 * Same reason as `logging`, without a stand-in for the silent case: these changes always announce
+	 * themselves, and inventing a line for one that didn't would be guesswork.
+	 *
+	 * Mega Evolution is why this exists. `runMegaEvo` writes `|detailschange|p2b: …|Glalie-Mega` straight
+	 * into the log, so it reached the renderer **before** the active layer's deferred `switch`/`swap` lines
+	 * — while slot p2b still held the Pokémon that was about to be swapped out. The renderer applied the
+	 * forme change to the wrong Pokémon, which then took the right one's place in the roster: an imported
+	 * turn showed Mega Glalie twice and no Dragonite at all (user report, 2026-09-19).
+	 */
+	capture<T>(change: () => T) {
 		const before = this.battle.log.length;
 		const result = change();
-		if (this.battle.log.length === before) this.lines.push(fallback);
+		for (const line of this.battle.log.splice(before)) this.lines.push([ANALYSIS_RAW_LINE, line]);
 		return result;
+	}
+
+	logging<T>(change: () => T, fallback: AnalysisEditLine, replacement?: AnalysisEditLine | null) {
+		const before = this.battle.log.length;
+		const result = change();
+		// whatever the sim wrote for this change, taken back out of the log so it can be re-added in order
+		const emitted = this.battle.log.splice(before);
+		if (!emitted.length) {
+			this.lines.push(replacement || fallback);
+		} else if (replacement) {
+			this.lines.push(replacement);
+		} else {
+			for (const line of emitted) this.lines.push([ANALYSIS_RAW_LINE, line]);
+		}
+		return result;
+	}
+
+	/**
+	 * Whether a Protosynthesis or Quark Drive edit has to be attributed to a Booster Energy.
+	 *
+	 * The **ability** takes its own volatile back the moment the field stops enabling it, unless it came
+	 * from a Booster Energy (`onWeatherChange` / `onTerrainChange` in `data/abilities.ts`). So outside sun
+	 * or Electric Terrain a chip the user just added would disappear at the next weather change — and
+	 * outside that field condition a Booster Energy is the only way the Pokémon could have the boost at
+	 * all, so this is what did happen rather than a convenient fiction. In sun or terrain it is left alone,
+	 * because there the boost stands on its own and claiming an item would be the lie.
+	 *
+	 * Both field kinds are checked because either name only ever matches one of them.
+	 */
+	needsBooster(info: { boosterUnless?: { kind: 'weather' | 'terrain', id: string } }) {
+		const want = info.boosterUnless;
+		if (!want) return false;
+		/*
+		 * Against the field the node **will** have, not the one the battle has right now: the field layer
+		 * runs last (`applyAnalysisEdits`), so a save that sets sun and Protosynthesis together would
+		 * otherwise decide this before the sun exists and claim a Booster Energy the Pokémon doesn't need.
+		 * A field edit that doesn't mention this condition leaves whatever is already up.
+		 */
+		const pending = this.pendingField?.[want.kind];
+		if (pending !== undefined) return toID(pending?.id) !== want.id;
+		return want.kind === 'weather' ?
+			!this.battle.field.isWeather(want.id) : !this.battle.field.isTerrain(want.id);
 	}
 
 	/**
 	 * Counters `onStart` leaves for the move that normally causes the volatile. Everything else the sim
 	 * already fills in, including Substitute's HP (a quarter of max) and Dragon Cheer's frozen Dragon flag.
 	 */
-	setVolatileCounters(id: string, pokemon: Pokemon, source: Pokemon | null) {
+	setVolatileCounters(
+		id: string, pokemon: Pokemon, source: Pokemon | null,
+		params?: { [param: string]: number | string | boolean } | null
+	) {
 		const state = pokemon.volatiles[id];
 		switch (id) {
+		case 'disable': {
+			// `onStart` locks whatever `lastMove` was, which is right when Cursed Body fired and wrong
+			// otherwise. A replay knows the real one, so an explicit `move` wins.
+			const move = params?.move ? this.battle.dex.moves.get(String(params.move)) : null;
+			if (move?.exists) state.move = move.id;
+			break;
+		}
 		case 'confusion':
 			// without this, `time--` on the first move makes it NaN and the confusion never wears off
 			state.time = MAX_CONFUSION_TURNS;
@@ -542,7 +848,7 @@ export class AnalysisPokemonEditor {
 			} else if (pokemon.teraType) {
 				// benched Pokémon may Terastallize too: nothing in the sim or the renderer needs it to be on
 				// the field, and `terastallized` is a Pokemon field, so it survives switching in
-				this.battle.actions.terastallize(pokemon);
+				this.capture(() => this.battle.actions.terastallize(pokemon));
 				if (pokemon.terastallized) {
 					applied.terastallized = true;
 					this.note(sideId, pokemon, `Terastallized (${pokemon.terastallized})`);
@@ -560,7 +866,7 @@ export class AnalysisPokemonEditor {
 				if (!edit.megaEvolved) this.drop(sideId, this.teamSlot(pokemon), `${pokemon.name} can't revert its Mega Evolution`);
 			} else if (edit.megaEvolved) {
 				if (pokemon.canMegaEvo && pokemon.isActive) {
-					this.battle.actions.runMegaEvo(pokemon);
+					this.capture(() => this.battle.actions.runMegaEvo(pokemon));
 					applied.megaEvolved = true;
 					this.note(sideId, pokemon, `Mega Evolved (${pokemon.species.name})`);
 				} else {
@@ -583,18 +889,34 @@ export class AnalysisPokemonEditor {
 		 * But an edit that faints this Pokémon has to veto it up front: nothing is fainted yet at this point,
 		 * so `applyStatus`'s own guard wouldn't fire, and the Pokémon would end up fainted *and* statused.
 		 */
-		const faints = edit.hp !== undefined && edit.hp <= 0 && !pokemon.isActive;
+		// `hp` wins over `hpPercent` if both are given; an import only ever sends the percentage.
+		const wantedHp = edit.hp !== undefined ? edit.hp : undefined;
+		const wantedPercent = wantedHp === undefined ? edit.hpPercent : undefined;
+		const faints = !pokemon.isActive &&
+			((wantedHp !== undefined && wantedHp <= 0) || (wantedPercent !== undefined && wantedPercent <= 0));
 		if (faints) {
 			if (edit.status) this.drop(sideId, teamSlot, `${pokemon.name} has fainted`);
 		} else {
 			Object.assign(applied, this.applyStatus(sideId, pokemon, edit));
 		}
-		if (edit.hp !== undefined) applied.hp = this.applyHP(sideId, pokemon, edit.hp);
-		if (edit.pp) applied.pp = this.applyPP(sideId, pokemon, edit.pp);
+		if (wantedHp !== undefined) applied.hp = this.applyHP(sideId, pokemon, wantedHp);
+		if (wantedPercent !== undefined) applied.hp = this.applyHpPercent(sideId, pokemon, wantedPercent);
+		if (edit.item !== undefined) applied.item = this.applyItem(sideId, pokemon, edit.item);
+		if (edit.ability !== undefined) applied.ability = this.applyAbility(sideId, pokemon, edit.ability);
+		if (edit.pp || edit.ppUsed) applied.pp = this.applyPP(sideId, pokemon, edit.pp || {}, edit.ppUsed);
 		if (edit.types) applied.types = this.applyTypes(sideId, pokemon, edit.types);
 		if (edit.boosts) applied.boosts = this.applyBoosts(sideId, pokemon, edit.boosts);
+		/*
+		 * History before the volatiles, because Disable's `onStart` refuses outright when the Pokémon has
+		 * no `lastMove` — restoring the counters afterwards would leave the volatile never added at all.
+		 * The Protect chain is the exception and runs last, since it *adds* a volatile of its own.
+		 */
+		Object.assign(applied, this.applyHistory(sideId, pokemon, edit));
 		if (edit.volatiles) applied.volatiles = this.applyVolatiles(sideId, pokemon, edit.volatiles);
 		Object.assign(applied, this.applyTransformation(sideId, pokemon, edit));
+		if (edit.stallCount !== undefined) {
+			Object.assign(applied, this.applyStall(sideId, pokemon, edit.stallCount));
+		}
 		for (const [key, value] of Object.entries(applied)) {
 			if (value === undefined) delete (applied as AnyObject)[key];
 		}
@@ -606,11 +928,16 @@ export class AnalysisPokemonEditor {
 	 * given boosts in the same save). Order is safe either way, because edits name Pokémon by team slot.
 	 */
 	apply(edits: AnalysisEdits, invalidatedSlots = new Set<string>()) {
+		this.pendingField = edits.field;
 		for (const sideId of ['p1', 'p2'] as const) {
 			const active = edits.active?.[sideId] || [];
 			for (let slot = 0; slot < active.length; slot++) {
 				const teamSlot = active[slot];
-				if (teamSlot === null || teamSlot === undefined) continue;
+				if (teamSlot === undefined) continue;
+				if (teamSlot === null) {
+					this.clearActive(sideId, slot);
+					continue;
+				}
 				if (invalidatedSlots.has(`${sideId}:${teamSlot}`)) {
 					this.drop(sideId, teamSlot, `a team edit removed this Pokémon`);
 					continue;

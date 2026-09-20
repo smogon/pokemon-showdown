@@ -22,6 +22,8 @@ export interface AnalysisPlaceholderTeams {
 	count: number;
 	/** one species per active slot, all different (see getPlaceholderSpeciesList) */
 	species: string[];
+	/** the nickname each placeholder carries, one per active slot (see getPlaceholderName) */
+	names: string[];
 	level: number;
 	team1: string;
 	team2: string;
@@ -32,10 +34,11 @@ export interface AnalysisPlaceholderTeams {
  * formats start at Bulbasaur, a Champions VGC format at Venusaur (Flat Rules bans the unevolved ones), and a
  * FNAF format at Freddy Fazbear, because every vanilla Pokémon is banned there.
  *
- * **They have to be different species.** A side's placeholders share a nickname as well as a species, and
- * the renderer resolves a `switch` line against its own roster, so two identical entries collapse into one
- * and only half the field is drawn (user report, 2026-09-19). Giving each active slot the next legal species
- * keeps them distinguishable; the user replaces them immediately anyway.
+ * **They have to be different species.** The renderer resolves a `switch` line against its own roster, so
+ * two entries that match on both nickname and species collapse into one and only half the field is drawn
+ * (user report, 2026-09-19). Giving each active slot the next legal species keeps them distinguishable; the
+ * user replaces them immediately anyway. The per-slot nicknames (`getPlaceholderName`) now separate them
+ * too, but this stays as it is — it is the half that was actually verified against the renderer.
  */
 export function getPlaceholderSpeciesList(dex: ModdedDex, ruleTable: RuleTable, count: number) {
 	const picked = [];
@@ -50,6 +53,20 @@ export function getPlaceholderSpeciesList(dex: ModdedDex, ruleTable: RuleTable, 
 	// a format with fewer legal species than active slots has to repeat one, collapsed sprites and all
 	while (picked.length < count) picked.push(picked[picked.length - 1]);
 	return picked;
+}
+
+/**
+ * What a placeholder is called (user request, 2026-09-19). Nicknaming them says on the field itself that
+ * these Pokémon are scaffolding to be replaced, rather than leaving the user to infer it from a Bulbasaur.
+ *
+ * Numbered only when a side has more than one, so singles reads "Placeholder" rather than "Placeholder 1".
+ *
+ * **This is a real nickname, and the teambuilder keeps real nicknames across a species change** — so the
+ * client drops it when the placeholder is replaced (`collect` in analysis-teambuilder.tsx), or you would
+ * end up with a Garchomp still called Placeholder.
+ */
+export function getPlaceholderName(index: number, count: number) {
+	return count > 1 ? `Placeholder ${index + 1}` : 'Placeholder';
 }
 
 /** What the validator would have adjusted the level to, since a setup team never reaches it. */
@@ -74,8 +91,10 @@ export function getPlaceholderTeams(formatid: string): AnalysisPlaceholderTeams 
 		1;
 	const speciesList = getPlaceholderSpeciesList(dex, ruleTable, count);
 
-	const sets = speciesList.map(species => ({
-		name: species.name,
+	const names = speciesList.map((_species, index) => getPlaceholderName(index, count));
+
+	const sets = speciesList.map((species, index) => ({
+		name: names[index],
 		species: species.name,
 		item: '',
 		ability: species.abilities[0] || 'No Ability',
@@ -98,6 +117,7 @@ export function getPlaceholderTeams(formatid: string): AnalysisPlaceholderTeams 
 		gameType: format.gameType,
 		count,
 		species: speciesList.map(species => species.name),
+		names,
 		level,
 		team1: packed,
 		team2: packed,

@@ -6,7 +6,7 @@
  * ("Determinism model") and docs/analysis/plan.md (D2, D3).
  */
 import { Battle } from '../sim/battle';
-import { toID } from '../sim/dex';
+import { Dex, toID } from '../sim/dex';
 import type { PRNGSeed } from '../sim/prng';
 import type { Pokemon } from '../sim/pokemon';
 import { applyAnalysisEdits, type AnalysisAppliedEdits } from './analysis-edits';
@@ -31,6 +31,8 @@ export interface AnalysisEdits {
 	active?: { [side in AnalysisSideEditsID]?: (number | null)[] };
 	/** keyed `p1:<teamSlot>`, the Pokémon's slot in the original team (see AnalysisPokemonSnapshot) */
 	pokemon?: { [sideAndTeamSlot: string]: AnalysisPokemonStateEdit };
+	/** per-side state that isn't a side condition; side conditions live under `field.sides` */
+	sides?: { [side in AnalysisSideEditsID]?: AnalysisSideStateEdit };
 	field?: AnalysisFieldStateEdit;
 }
 
@@ -38,6 +40,16 @@ export type AnalysisSideEditsID = 'p1' | 'p2';
 
 /** One protocol line, as passed to `battle.add` (strings, or Pokémon and other sim objects). */
 export type AnalysisEditLine = Parameters<Battle['add']>;
+
+/**
+ * Marks a line the **sim** already serialized, to be re-added verbatim instead of through `battle.add`.
+ *
+ * Edit lines are collected and added only once every layer has run, but a sim call made by an edit (adding
+ * a volatile, say) writes its own line into `battle.log` immediately — so the two channels came out in the
+ * wrong order relative to each other. `AnalysisPokemonEditor.logging` moves the sim's lines into the edit
+ * channel and tags them with this, so there is one ordered stream. See its comment for what that fixed.
+ */
+export const ANALYSIS_RAW_LINE = '\0analysisraw';
 
 /**
  * Summary lines for the Lines tooltip and the log, e.g. `Rain (3 Turns)`, `Rotom-Wash: HP (75%)`:
@@ -52,10 +64,35 @@ export interface AnalysisEditSummary {
 export interface AnalysisPokemonStateEdit {
 	hp?: number;
 	/**
+	 * HP as a percentage of max HP, resolved against the Pokémon's live max HP when the edit applies.
+	 * A replay only ever shows percentages, and the real max HP depends on EVs and IVs it never reveals,
+	 * so an imported position stores this instead of `hp` and stays correct however the user later edits
+	 * the team. The team layer runs first, so max HP has already settled by the time this resolves.
+	 * `hp` wins if both are given.
+	 */
+	hpPercent?: number;
+	/**
+	 * Current item and ability, as opposed to the set's. A Pokémon that ate its berry still holds it on
+	 * its team, and Trace, Skill Swap or a Mega Evolution changes the ability without changing the set.
+	 * `''` removes. Editing the *set's* item or ability is the team layer's job.
+	 */
+	item?: string;
+	ability?: string;
+	/**
 	 * PP by move id, not by slot: a slot's move can change, and an edit naming a move that is no longer
 	 * there is simply irrelevant rather than something to invalidate.
 	 */
 	pp?: { [moveid: string]: number };
+	/**
+	 * PP **spent**, resolved against the move's real max PP when the edit applies — the same trick as
+	 * `hpPercent`, and for the same reason. A replay says how many times a move was used, never how many
+	 * uses it started with, and only the sim knows that: a mod is free to replace the formula outright, as
+	 * Champions does (`(pp / 5 + 1) * 4` rather than `pp * 8 / 5`), so a client that subtracts for itself
+	 * gets every value wrong and the clamp below quietly rounds it back up to full.
+	 *
+	 * `pp` wins where both name the same move, being the more specific statement.
+	 */
+	ppUsed?: { [moveid: string]: number };
 	status?: '' | 'brn' | 'par' | 'slp' | 'frz' | 'psn' | 'tox';
 	toxicStage?: number;
 	sleepTurns?: number;
@@ -66,6 +103,29 @@ export interface AnalysisPokemonStateEdit {
 	megaEvolved?: boolean;
 	boosts?: Partial<BoostsTable>;
 	volatiles?: { [id: string]: null | { [param: string]: number | string | boolean } };
+	/**
+	 * History the protocol can't express and a rebuilt battle has no way to know. A reconstructed position
+	 * is a fresh battle at turn 1, so without these every Pokémon looks like it just switched in: Fake Out
+	 * succeeds from one that has been out all game, Stakeout doubles against everything, and partial
+	 * trapping removes itself. See docs/analysis/replay-import-audit.md.
+	 */
+	activeTurns?: number;
+	activeMoveActions?: number;
+	/** Hits taken, for Rage Fist. Unlike the others this survives switching out. */
+	timesAttacked?: number;
+	/** Move id, for Encore, Disable, Torment, Instruct and the Gigaton Hammer / Blood Moon lockout. */
+	lastMove?: string;
+	/**
+	 * Consecutive successful Protect-likes, **not** the sim's counter: the sim stores 3, 9, 27… and the
+	 * conversion is done here so there is one authority on it. 0 removes the volatile.
+	 */
+	stallCount?: number;
+}
+
+/** Per-side state that isn't a side condition. */
+export interface AnalysisSideStateEdit {
+	/** Pokémon fainted on this side, for Last Respects and Supreme Overlord. */
+	totalFainted?: number;
 }
 
 /** Turns remaining (including the current turn) and layers; each defaults to the condition's standard value. */
@@ -137,6 +197,8 @@ export interface AnalysisPokemonSnapshot {
 	teraType: string;
 	terastallized: string | null;
 	canTerastallize: boolean;
+	/** hits taken, which Rage Fist reads; restored by a replay import and editable in the panel */
+	timesAttacked: number;
 	megaEvolved: boolean;
 	canMegaEvo: boolean;
 	stats: StatsExceptHPTable;
@@ -145,6 +207,8 @@ export interface AnalysisPokemonSnapshot {
 export interface AnalysisSideSnapshot {
 	id: SideID;
 	name: string;
+	/** Pokémon fainted on this side, which Last Respects and Supreme Overlord read */
+	totalFainted: number;
 	sideConditions: AnalysisEffectSnapshot[];
 	/** index into `pokemon` for each active slot */
 	active: (number | null)[];
@@ -169,8 +233,19 @@ export interface AnalysisSnapshot {
 const INPUT_LINE = /^>(p[1-4])\s+(.+)$/;
 
 export function createAnalysisBattle(options: AnalysisBattleOptions, output?: string[]) {
+	/*
+	 * The sim does **not** reject a format it doesn't have: `new Battle` falls back to a singles gen 9
+	 * game, so an unknown format fails silently and catastrophically — a doubles replay would import with
+	 * half the field missing and no error anywhere. This fork is routinely behind upstream on new formats
+	 * (it has Champions VGC Reg M-A and M-B but not M-C), so that is a live case, not a hypothetical.
+	 * Refusing here rather than substituting a near relative is the user's decision (audit, QA).
+	 */
+	const formatId = toID(options.format);
+	if (!Dex.formats.get(formatId).exists) {
+		throw new Error(`Unknown format: ${options.format}. This server doesn't have that format installed.`);
+	}
 	return new Battle({
-		formatid: toID(options.format),
+		formatid: formatId,
 		seed: options.seed,
 		p1: { name: 'Analysis 1', team: options.team1 },
 		p2: { name: 'Analysis 2', team: options.team2 },
@@ -248,6 +323,7 @@ function snapshotPokemon(pokemon: Pokemon, index: number): AnalysisPokemonSnapsh
 		teraType: pokemon.teraType,
 		terastallized: pokemon.terastallized || null,
 		canTerastallize: !!pokemon.canTerastallize,
+		timesAttacked: pokemon.timesAttacked,
 		megaEvolved: !!pokemon.species.isMega,
 		canMegaEvo: !!battle.actions.canMegaEvo(pokemon),
 		stats: { ...pokemon.storedStats },
@@ -273,6 +349,7 @@ export function getAnalysisSnapshot(battle: Battle): AnalysisSnapshot {
 		sides: battle.sides.map(side => ({
 			id: side.id,
 			name: side.name,
+			totalFainted: side.totalFainted,
 			sideConditions: Object.values(side.sideConditions).map(snapshotEffectState),
 			active: side.active.map(pokemon => pokemon ? side.pokemon.indexOf(pokemon) : null),
 			pokemon: side.pokemon.map(snapshotPokemon),

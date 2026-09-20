@@ -10,11 +10,12 @@
  */
 import type { Battle } from '../sim/battle';
 import { toID } from '../sim/dex';
-import { AnalysisPokemonEditor } from './analysis-pokemon-edits';
+import { AnalysisPokemonEditor, clamp } from './analysis-pokemon-edits';
 import { AnalysisTeamEditor } from './analysis-team-edits';
-import type {
-	AnalysisConditionEdit, AnalysisEditLine, AnalysisEditSummary, AnalysisEdits, AnalysisFieldStateEdit,
-	AnalysisWeatherEdit,
+import {
+	ANALYSIS_RAW_LINE, type AnalysisConditionEdit, type AnalysisEditLine, type AnalysisEditSummary,
+	type AnalysisEdits, type AnalysisFieldStateEdit, type AnalysisSideEditsID, type AnalysisSideStateEdit,
+	type AnalysisWeatherEdit,
 } from './analysis-state';
 
 export type AnalysisFieldEffectKind = 'weather' | 'terrain' | 'pseudoWeather' | 'sideCondition';
@@ -103,6 +104,8 @@ const FIELD_EFFECTS: FieldEffectDefinition[] = [
 
 const PRIMAL_WEATHERS = ['desolateland', 'primordialsea', 'deltastream'];
 const MAX_DURATION = 99;
+/** the sim caps `side.totalFainted` at 100 itself, so match that rather than the roster size */
+const MAX_TOTAL_FAINTED = 100;
 
 /**
  * The field effects that exist in this battle's generation and mod: the condition exists, the move that
@@ -325,10 +328,43 @@ class FieldEditor {
 /**
  * Applies a node's manual edits at the start of its turn. Values are absolute; entries that change nothing
  * are left out of the returned `applied` edits, so the client can store exactly what took effect.
- * Layers run in order (plan.md D3): Pokémon state, then which Pokémon are active, then the field.
- * Pokémon state comes before the active swaps, because its keys are indices into the node's own
- * `side.pokemon` order and sending a Pokémon out reorders that list. Team and set edits (Phase 3) go first.
+ * Layers run in order (plan.md D3): teams and sets first, then the active swaps, then per-Pokémon state,
+ * then per-side state, then the field. Active swaps come before state edits, so a Pokémon sent out here can
+ * be given boosts in the same save; edits name Pokémon by team slot, so the order is safe either way.
  */
+/**
+ * Per-side state that isn't a side condition. Only `totalFainted` so far, which Last Respects reads for its
+ * base power and Supreme Overlord for its boost — both format-defining, and neither expressible any other
+ * way: a reconstructed battle has nobody fainted, so an imported turn-8 position would have Last Respects
+ * stuck at 50 BP. The protocol can't say it either, so it rides on the `analysis*` escape hatch that
+ * `analysis-battle.ts` reads, the same pattern as `analysiscounter`.
+ */
+function applySideState(battle: Battle, edits: { [side in AnalysisSideEditsID]?: AnalysisSideStateEdit }) {
+	const droppedEdits: string[] = [];
+	const summary: { p1: string[], p2: string[] } = { p1: [], p2: [] };
+	const lines: AnalysisEditLine[] = [];
+	const applied: { [side in AnalysisSideEditsID]?: AnalysisSideStateEdit } = {};
+
+	for (const sideId of ['p1', 'p2'] as const) {
+		const edit = edits[sideId];
+		if (!edit) continue;
+		const side = battle.sides.find(candidate => candidate.id === sideId);
+		if (!side) {
+			droppedEdits.push(`${sideId}: no such side`);
+			continue;
+		}
+		if (edit.totalFainted === undefined) continue;
+		// The sim caps it at 100 itself (`battle.ts` faint handling), so match that rather than the roster.
+		const wanted = clamp(edit.totalFainted, 0, MAX_TOTAL_FAINTED, side.totalFainted);
+		applied[sideId] = { totalFainted: wanted };
+		if (wanted === side.totalFainted) continue;
+		side.totalFainted = wanted;
+		lines.push(['-message', 'analysisfaintcounter', sideId, `${wanted}`, '[silent]']);
+		summary[sideId].push(`Fainted (${wanted})`);
+	}
+	return { droppedEdits, summary, lines, applied };
+}
+
 export function applyAnalysisEdits(battle: Battle, edits: AnalysisEdits | undefined) {
 	const droppedEdits: string[] = [];
 	if (!edits) return { droppedEdits, applied: null };
@@ -377,6 +413,19 @@ export function applyAnalysisEdits(battle: Battle, edits: AnalysisEdits | undefi
 		}
 	}
 
+	// After the Pokémon layer on purpose: fainting and reviving move `totalFainted` themselves, and an
+	// imported replay's count is the authority on where it should end up.
+	if (edits.sides) {
+		const sideState = applySideState(battle, edits.sides);
+		droppedEdits.push(...sideState.droppedEdits);
+		if (sideState.summary.p1.length || sideState.summary.p2.length) {
+			applied.edits.sides = sideState.applied;
+			summary.p1.push(...sideState.summary.p1);
+			summary.p2.push(...sideState.summary.p2);
+			lines.push(...sideState.lines);
+		}
+	}
+
 	if (edits.field) {
 		const editor = new FieldEditor(battle);
 		editor.apply(edits.field);
@@ -393,7 +442,11 @@ export function applyAnalysisEdits(battle: Battle, edits: AnalysisEdits | undefi
 	}
 
 	if (summary.field.length || summary.p1.length || summary.p2.length) {
-		for (const line of lines) battle.add(...line);
+		for (const line of lines) {
+			// a line the sim already serialized, moved into this channel to keep the order right
+			if (line[0] === ANALYSIS_RAW_LINE) battle.log.push(line[1] as string);
+			else battle.add(...line);
+		}
 		const parts = [
 			summary.field.join(', '),
 			summary.p1.length ? `Team 1: ${summary.p1.join(', ')}` : '',
