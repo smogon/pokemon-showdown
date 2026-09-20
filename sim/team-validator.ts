@@ -15,7 +15,11 @@ import { Teams } from './teams';
 import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
 
-const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent', 'digipen', 'digipenpast', 'digipenfuture', 'fnaf'];
+// DigiPen fork: 'digipen*'/'fnaf' tags appended to upstream's list.
+const EXISTENCE_TAGS = [
+	'past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent',
+	'digipen', 'digipenpast', 'digipenfuture', 'fnaf',
+];
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -718,6 +722,8 @@ export class TeamValidator {
 			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
 				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}.`);
 			}
+			const problem = this.checkTeraType(set, type, setHas);
+			if (problem) problems.push(problem);
 			set.teraType = type.name;
 		} else {
 			delete set.teraType;
@@ -728,6 +734,11 @@ export class TeamValidator {
 
 		problem = this.checkItem(set, item, setHas);
 		if (problem) problems.push(problem);
+
+		for (const typeName of species.types) {
+			problem = this.checkType(set, dex.types.get(typeName), setHas);
+			if (problem) problems.push(problem);
+		}
 		if (ruleTable.has('obtainablemisc')) {
 			if (dex.gen === 4 && item.id === 'griseousorb' && species.num !== 487) {
 				problems.push(`${set.name} cannot hold the Griseous Orb.`, `(In Gen 4, only Giratina could hold the Griseous Orb).`);
@@ -1928,6 +1939,10 @@ export class TeamValidator {
 				// this to happen with an unusual ruleset, though, so we won't throw.
 				return `${displayName} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely a validator bug.)`;
 			}
+			if (thing.effectType === 'Move' && thing.isNonstandard === 'Gmax') {
+				return `${displayName} is a placeholder for the Gigantamax version of ${thing.isMax}. It can't actually exist on a normal moveset.`;
+			}
+			// DigiPen fork: the fork's Past/Future variants share upstream's handling.
 			if (thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future'
 				|| thing.isNonstandard === 'DigiPen Past' || thing.isNonstandard === 'DigiPen Future') {
 				return `${displayName} does not exist in Gen ${dex.gen}.`;
@@ -1938,6 +1953,7 @@ export class TeamValidator {
 			if (thing.isNonstandard === 'LGPE') {
 				return `${displayName} does not exist in this game, only in Let's Go Pikachu/Eevee.`;
 			}
+			// DigiPen fork: the fork's own nonstandard values.
 			if (thing.isNonstandard === 'DigiPen') {
 				return `${displayName} is a DigiPen Pokemon and does not exist in this game.`;
 			}
@@ -1995,6 +2011,34 @@ export class TeamValidator {
 
 		const tagProblem = this.checkTagRules(set, move, setHas);
 		if (tagProblem !== undefined) return tagProblem;
+
+		return null;
+	}
+
+	checkType(set: PokemonSet, type: TypeInfo, setHas: { [k: string]: true }) {
+		const ruleTable = this.ruleTable;
+
+		setHas['type:' + type.id] = true;
+
+		const banReason = ruleTable.check('type:' + type.id);
+		if (banReason) {
+			return `${set.name}'s type ${type.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		return null;
+	}
+
+	checkTeraType(set: PokemonSet, teraType: TypeInfo, setHas: { [k: string]: true }) {
+		const ruleTable = this.ruleTable;
+
+		setHas['teratype:' + teraType.id] = true;
+
+		const banReason = ruleTable.check('teratype:' + teraType.id);
+		if (banReason) {
+			return `${set.name}'s Tera type ${teraType.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
 
 		return null;
 	}

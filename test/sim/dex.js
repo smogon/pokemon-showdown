@@ -91,38 +91,63 @@ describe('Dex#getMove', () => {
 
 describe('DexText#get', () => {
 	it(`should translate species, items, abilities, and moves`, () => {
-		assert.equal(Dex.text.get(Dex.species.get('Pikachu'), 'ja').name, 'ピカチュウ');
+		const pikachuText = Dex.loadTextData('ja').Pokedex.pikachu;
+		assert.deepEqual(pikachuText, {
+			name: 'ピカチュウ', baseSpecies: 'ピカチュウ',
+		});
+		assert.equal(Dex.text.get(Dex.species.get('Pikachu'), 'ja'), pikachuText);
+		assert.deepEqual(Dex.loadTextData('ja').Pokedex.unownb, {
+			name: 'アンノーン-B', baseSpecies: 'アンノーン', forme: 'B',
+		});
 		assert.equal(Dex.text.get(Dex.items.get('Leftovers'), 'ja').name, 'たべのこし');
 		assert.equal(Dex.text.get(Dex.abilities.get('Levitate'), 'ja').name, 'ふゆう');
 		assert.equal(Dex.text.get(Dex.moves.get('Tackle'), 'ja').name, 'たいあたり');
+	});
+
+	it(`should translate names backed by Dex objects`, () => {
+		const { Tags } = require('../../dist/data/tags');
+		assert.deepEqual(Dex.text.get(Dex.types.get('Fire'), 'ja'), { name: 'ほのお' });
+		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'ja'), { name: 'いじっぱり' });
+		assert.deepEqual(Dex.text.get(Dex.natures.get('Adamant'), 'en'), { name: 'Adamant' });
+		assert.deepEqual(Dex.text.get(Tags.restrictedlegendary, 'ja'), { name: Dex.loadTextData('ja').Tags.restrictedlegendary.name });
+	});
+
+	it(`should translate scalar names`, () => {
+		assert.equal(Dex.loadTextData('fr').StatNames.stats, 'stats');
+		assert.equal(Dex.loadTextData('fr').StatNames['stats:grammar'], 'fp');
+		assert.equal(Dex.loadTextData('fr').StatNames.spd, 'Défense Spéciale');
+		assert.equal(Dex.loadTextData('fr').StatNames['spd:grammar'], 'fs');
+		assert.equal(Dex.loadTextData('fr').StatMediumNames.spd, 'Déf. Spé.');
+		assert.equal(Dex.loadTextData('fr').StatShortNames.spd, 'DSp');
+		const { Tags } = require('../../dist/data/tags');
+		assert.equal(Dex.text.get(Tags.physical, 'ja').name, 'ぶつり');
+		assert.equal(Dex.loadTextData('ja').GenderNames.F, 'メス');
+		assert.equal(Dex.loadTextData('ja').ColorNames.Purple, '紫');
 	});
 
 	it(`should return the entire text entry`, () => {
 		assert.equal(
 			Dex.text.get(Dex.moves.get('Absorb')).gen4.desc,
 			'The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, ' +
-			'the HP recovered is 1.3x normal, rounded down.'
+			'the HP recovered is 1.3× normal, rounded down.'
 		);
 	});
 
 	it(`should fall back to English text data`, () => {
-		// TODO: Revise as text is translated
 		const move = Dex.moves.get('Tackle');
-		const text = Dex.text.get(move, 'ja');
-		assert.equal(text.desc, 'No additional effect.');
-		assert.equal(text.shortDesc, 'No additional effect.');
-		assert.deepEqual(Dex.text.get(move), {
-			name: 'Tackle',
-			desc: 'No additional effect.',
-			shortDesc: 'No additional effect.',
-		});
-		assert.equal(Dex.loadTextData('ja').Moves.tackle.shortDesc, 'No additional effect.');
+		const englishText = Dex.text.get(move, 'en');
+		assert.deepEqual(Dex.text.get(move, 'en-afd'), englishText);
+		assert.deepEqual(Dex.text.get(move), englishText);
+		assert.deepEqual(Dex.loadTextData('en-afd').Moves.tackle, Dex.loadTextData('en').Moves.tackle);
 	});
 
 	it(`should allow localized text files to be omitted`, () => {
 		const afd = Dex.loadTextData('en-afd');
-		assert.equal(afd.Moves.tackle.name, 'Tackle');
-		assert.equal(afd.Default.default.mega, "  [POKEMON]'s [ITEM] glows!");
+		const english = Dex.loadTextData('en');
+		const rawAfdDefault = Dex.loadTextFile('en-afd/default', 'DefaultText');
+		assert.deepEqual(afd.Moves.tackle, english.Moves.tackle);
+		assert.equal(afd.Default.default.mega, rawAfdDefault.default.mega);
+		assert.notEqual(afd.Default.default.mega, english.Default.default.mega);
 	});
 
 	it(`should keep long and short description fallbacks separate`, () => {
@@ -130,13 +155,14 @@ describe('DexText#get', () => {
 		assert.notEqual(text.desc, text.shortDesc);
 	});
 
-	it(`should not use a current-generation translation for an old-generation description`, () => {
+	it(`should use an old-generation translation instead of the current-generation description`, () => {
 		const dex = Dex.forGen(4);
 		const move = dex.moves.get('Brick Break');
-		const desc = 'If this attack does not miss and whether or not the target is immune, the effects of Reflect and ' +
-			'Light Screen end for the target\'s side of the field before damage is calculated.';
+		const rawJapaneseText = Dex.loadTextFile('ja/moves', 'MovesText').brickbreak;
+		const desc = rawJapaneseText.gen4.desc || dex.loadTextData('en').Moves.brickbreak.desc;
 		assert.equal(dex.loadTextData('ja').Moves.brickbreak.desc, desc);
 		assert.equal(dex.text.get(move, 'ja').desc, desc);
+		assert.notEqual(desc, Dex.loadTextData('ja').Moves.brickbreak.desc);
 	});
 
 	it(`should use English-only descriptions defined by mods`, () => {

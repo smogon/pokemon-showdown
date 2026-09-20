@@ -1904,10 +1904,10 @@ export const commands: Chat.ChatCommands = {
 		const { targetUser, rest: reason } = this.requireUser(target, { allowOffline: true });
 		this.checkCan('forcerename', targetUser);
 
-		if (!targetUser.userMessage) throw new Chat.ErrorMessage(this.tr`${targetUser.name} does not have a status set.`);
+		if (!targetUser.userMessage) throw new Chat.ErrorMessage(this.TL`${targetUser.name} does not have a status set.`);
 
 		const displayReason = reason ? `: ${reason}` : ``;
-		this.privateGlobalModAction(this.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
+		this.privateGlobalModAction(this.TL`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
 		this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
 		targetUser.clearStatus();
 		targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);

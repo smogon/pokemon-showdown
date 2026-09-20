@@ -2227,7 +2227,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
+			if (!move.hasSheerForce) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('spikes');
 				}
@@ -6714,7 +6714,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax", // G-Max moves are not hackable
 		name: "G-Max Befuddle",
 		pp: 5,
 		priority: 0,
@@ -6737,7 +6737,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Cannonade",
 		pp: 10,
 		priority: 0,
@@ -6775,7 +6775,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Centiferno",
 		pp: 5,
 		priority: 0,
@@ -6797,7 +6797,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Chi Strike",
 		pp: 5,
 		priority: 0,
@@ -6838,7 +6838,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Cuddle",
 		pp: 5,
 		priority: 0,
@@ -6860,7 +6860,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Depletion",
 		pp: 5,
 		priority: 0,
@@ -6891,7 +6891,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 160,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Drum Solo",
 		pp: 5,
 		priority: 0,
@@ -6907,7 +6907,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Finale",
 		pp: 5,
 		priority: 0,
@@ -6929,7 +6929,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 160,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Fireball",
 		pp: 5,
 		priority: 0,
@@ -6945,7 +6945,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Foam Burst",
 		pp: 5,
 		priority: 0,
@@ -6967,7 +6967,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Gold Rush",
 		pp: 5,
 		priority: 0,
@@ -6989,7 +6989,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Gravitas",
 		pp: 5,
 		priority: 0,
@@ -7007,7 +7007,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 160,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Hydrosnipe",
 		pp: 5,
 		priority: 0,
@@ -7023,7 +7023,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Malodor",
 		pp: 5,
 		priority: 0,
@@ -7045,7 +7045,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Meltdown",
 		pp: 5,
 		priority: 0,
@@ -7067,7 +7067,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max One Blow",
 		pp: 5,
 		priority: 0,
@@ -7082,7 +7082,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Rapid Flow",
 		pp: 5,
 		priority: 0,
@@ -7097,7 +7097,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Replenish",
 		pp: 5,
 		priority: 0,
@@ -7127,7 +7127,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Resonance",
 		pp: 5,
 		priority: 0,
@@ -7145,7 +7145,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Sandblast",
 		pp: 5,
 		priority: 0,
@@ -7167,7 +7167,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Smite",
 		pp: 5,
 		priority: 0,
@@ -7189,7 +7189,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Snooze",
 		pp: 5,
 		priority: 0,
@@ -7214,7 +7214,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Steelsurge",
 		pp: 5,
 		priority: 0,
@@ -7252,7 +7252,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Stonesurge",
 		pp: 5,
 		priority: 0,
@@ -7274,7 +7274,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Stun Shock",
 		pp: 10,
 		priority: 0,
@@ -7301,7 +7301,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Sweetness",
 		pp: 10,
 		priority: 0,
@@ -7323,7 +7323,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Tartness",
 		pp: 10,
 		priority: 0,
@@ -7345,7 +7345,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Terror",
 		pp: 10,
 		priority: 0,
@@ -7367,7 +7367,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Vine Lash",
 		pp: 10,
 		priority: 0,
@@ -7405,7 +7405,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Volcalith",
 		pp: 10,
 		priority: 0,
@@ -7443,7 +7443,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Volt Crash",
 		pp: 10,
 		priority: 0,
@@ -7465,7 +7465,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Wildfire",
 		pp: 10,
 		priority: 0,
@@ -7503,7 +7503,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 10,
 		category: "Physical",
-		isNonstandard: "Past",
+		isNonstandard: "Gmax",
 		name: "G-Max Wind Rage",
 		pp: 10,
 		priority: 0,
@@ -7868,9 +7868,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onModifyMove(move, pokemon) {
-			if (pokemon.hasAbility('megasol') && !this.field.isWeather('sunnyday')) {
-				delete move.boosts;
-			} else if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				move.boosts = { atk: 2, spa: 2 };
 			}
 		},
@@ -14401,9 +14399,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onFoeBeforeSwitchOut(pokemon) {
 				const source: Pokemon = this.effectState.source;
 				this.debug('Pursuit start');
-				if (!source.isAdjacent(pokemon) || !source.hp ||
+				if (
+					!source.isAdjacent(pokemon) || !source.hp ||
 					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit') ||
-					!this.queue.cancelMove(source)) return;
+					!this.queue.cancelMove(source)
+				) {
+					return;
+				}
+				if (!this.event.pursuitMessageShown) {
+					this.add('-activate', pokemon, 'move: Pursuit');
+					this.event.pursuitMessageShown = true;
+				}
 				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 				// If it is, then Mega Evolve before moving.
 				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
@@ -16685,6 +16691,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
 			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
 		},
+		tracksTarget: true,
 		onModifyMove(move, source) {
 			if (!source.volatiles['skydrop']) {
 				move.accuracy = true;
@@ -18070,7 +18077,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
+			if (!move.hasSheerForce) {
 				for (const side of source.side.foeSidesWithConditions()) {
 					side.addSideCondition('stealthrock');
 				}
@@ -20355,7 +20362,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Special",
 		name: "Venoshock",
 		pp: 10,
-		priority: 0, 
+		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onBasePower(basePower, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {

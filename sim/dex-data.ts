@@ -5,6 +5,7 @@
  * @license MIT
  */
 import { Utils } from '../lib/utils';
+import type { TagData } from '../data/tags';
 
 /**
 * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -40,53 +41,23 @@ export function assignMissingFields(self: AnyObject, data: AnyObject) {
 	}
 }
 
-export type EffectText = ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedPokedexText;
+export type EffectText =
+	ResolvedAbilityText | ResolvedItemText | ResolvedMoveText | ResolvedNameText | ResolvedSpeciesText;
 export type TextLanguage = 'en' | 'en-afd' | 'de' | 'es' | 'fr' | 'it' | 'ja' | 'ko' | 'zh-cn' | 'zh-tw';
+
+export const OTHER_NAME_TABLES = [
+	'TypeNames', 'NatureNames', 'GenderNames',
+	'EggGroupNames', 'ColorNames', 'StatusNames', 'TargetNames',
+	'StatNames', 'StatMediumNames', 'StatShortNames',
+] as const;
+export type OtherNameTable = typeof OTHER_NAME_TABLES[number];
+
+export type TextEffect = Species | Item | Ability | Move | Nature | TypeInfo | TagData;
 
 /** English-only text for custom effects defined by mods. */
 export interface ModdedEffectText {
 	desc?: string;
 	shortDesc?: string;
-}
-
-type EffectTextTable = 'Abilities' | 'Items' | 'Moves' | 'Pokedex';
-
-export class DexText {
-	readonly dex: ModdedDex;
-
-	constructor(dex: ModdedDex) {
-		this.dex = dex;
-	}
-
-	get(effect: Species, lang?: TextLanguage): ResolvedPokedexText;
-	get(effect: Item, lang?: TextLanguage): ResolvedItemText;
-	get(effect: Ability, lang?: TextLanguage): ResolvedAbilityText;
-	get(effect: Move, lang?: TextLanguage): ResolvedMoveText;
-	get(effect: Species | Item | Ability | Move, lang?: TextLanguage): EffectText;
-	get(effect: Species | Item | Ability | Move, lang: TextLanguage = 'en'): EffectText {
-		let table: EffectTextTable;
-		switch (effect.effectType) {
-		case 'Pokemon': table = 'Pokedex'; break;
-		case 'Item': table = 'Items'; break;
-		case 'Ability': table = 'Abilities'; break;
-		case 'Move': table = 'Moves'; break;
-		default: throw new Error(`Unsupported effect type`);
-		}
-
-		const entry = this.dex.loadTextData(lang)[table][effect.id];
-		const customText = effect as ModdedEffectText;
-		if (customText.desc !== undefined || customText.shortDesc !== undefined) {
-			const desc = customText.desc || customText.shortDesc || '';
-			const shortDesc = customText.shortDesc || customText.desc || '';
-			return { ...entry, name: effect.name, desc, shortDesc };
-		}
-
-		return entry || {
-			name: effect.name,
-			desc: '',
-			shortDesc: '',
-		};
-	}
 }
 
 export abstract class BasicEffect implements EffectData {

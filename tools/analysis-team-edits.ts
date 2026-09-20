@@ -390,7 +390,7 @@ export class AnalysisTeamEditor {
 		this.note(sideId, incoming.name, `Sent out for ${outgoing.name} (Slot ${slot + 1})`);
 	}
 
-	/** Adds a Pokémon mid-battle the way `data/mods/ccapm2025` does, but without switching it in. */
+	/** Adds a Pokémon mid-battle, the way a mod that grows a team does, but without switching it in. */
 	addPokemon(sideId: AnalysisSideEditsID, side: Side, set: PokemonSet) {
 		if (this.battle.requestState !== 'move') {
 			this.drop(sideId, set.name, `can only be added at a move decision point`);

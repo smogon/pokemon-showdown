@@ -6,10 +6,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	absorb: {
 		name: "Absorb",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		gen4: {
-			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
+			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded down.",
 		},
 		gen3: {
 			desc: "The user recovers 1/2 the HP lost by the target, rounded down.",
@@ -82,7 +82,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The target makes its move immediately after the user this turn, no matter the priority of its selected move. Fails if the target would have moved next anyway, or if the target already moved this turn.",
 		shortDesc: "The target makes its move right after the user.",
 
-		activate: "  [TARGET] took the kind offer!",
+		activate: "  {TARGET} took the kind offer!",
 	},
 	agility: {
 		name: "Agility",
@@ -160,11 +160,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	aquaring: {
 		name: "Aqua Ring",
-		desc: "The user has 1/16 of its maximum HP, rounded down, restored at the end of each turn while it remains active. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user uses Baton Pass, the replacement will receive the healing effect.",
+		desc: "The user has 1/16 of its maximum HP, rounded down, restored at the end of each turn while it remains active. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down. If the user uses Baton Pass, the replacement will receive the healing effect.",
 		shortDesc: "User recovers 1/16 max HP per turn.",
 
-		start: "  [POKEMON] surrounded itself with a veil of water!",
-		heal: "  A veil of water restored [POKEMON]'s HP!",
+		start: "  {POKEMON} surrounded itself with a veil of water!",
+		heal: "  A veil of water restored {POKEMON}'s HP!",
 	},
 	aquastep: {
 		name: "Aqua Step",
@@ -269,12 +269,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active.",
 		},
 
-		start: "  [POKEMON] fell in love!",
-		startFromItem: "  [POKEMON] fell in love because of the [ITEM]!",
-		end: "  [POKEMON] got over its infatuation!",
-		endFromItem: "  [POKEMON] cured its infatuation using its [ITEM]!",
-		activate: "  [POKEMON] is in love with [TARGET]!",
-		cant: "[POKEMON] is immobilized by love!",
+		start: "  {POKEMON} fell in love!",
+		startFromItem: "  {POKEMON} fell in love because of the {ITEM}!",
+		end: "  {POKEMON} got over its infatuation!",
+		endFromItem: "  {POKEMON} cured its infatuation using its {ITEM}!",
+		activate: "  {POKEMON} is in love with {TARGET}!",
+		cant: "{POKEMON} is immobilized by love!",
 	},
 	aurasphere: {
 		name: "Aura Sphere",
@@ -296,22 +296,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	auroraveil: {
 		name: "Aurora Veil",
-		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Snow.",
+		desc: "For 5 turns, the user and its party members take 0.5× damage from physical and special attacks, or 0.66× damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Snow.",
 		shortDesc: "For 5 turns, damage to allies halved. Snow only.",
 		gen8: {
-			desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
+			desc: "For 5 turns, the user and its party members take 0.5× damage from physical and special attacks, or 0.66× damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
 			shortDesc: "For 5 turns, damage to allies is halved. Hail only.",
 		},
 
-		start: "  Aurora Veil made [TEAM] stronger against physical and special moves!",
-		end: "  [TEAM]'s Aurora Veil wore off!",
+		start: "  Aurora Veil made {TEAM} stronger against physical and special moves!",
+		end: "  {TEAM}'s Aurora Veil wore off!",
 	},
 	autotomize: {
 		name: "Autotomize",
 		desc: "Raises the user's Speed by 2 stages. If the user's Speed was changed, the user's weight is reduced by 100 kg as long as it remains active. This effect is stackable but cannot reduce the user's weight to less than 0.1 kg.",
 		shortDesc: "Raises the user's Speed by 2; user loses 100 kg.",
 
-		start: "  [POKEMON] became nimble!",
+		start: "  {POKEMON} became nimble!",
 	},
 	avalanche: {
 		name: "Avalanche",
@@ -352,7 +352,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	barbbarrage: {
 		name: "Barb Barrage",
 		desc: "Has a 50% chance to poison the target. Power doubles if the target is already poisoned.",
-		shortDesc: "50% psn. 2x power if target already poisoned.",
+		shortDesc: "50% psn. 2× power if target already poisoned.",
 	},
 	barrage: {
 		name: "Barrage",
@@ -401,7 +401,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "If the user is hit by a contact move this turn before it can execute this move, the attacker is burned.",
 		shortDesc: "Burns on contact with the user before it moves.",
 
-		start: "  [POKEMON] started heating up its beak!",
+		start: "  {POKEMON} started heating up its beak!",
 	},
 	beatup: {
 		name: "Beat Up",
@@ -417,7 +417,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Deals typeless damage. Hits one time for each unfainted Pokemon without a non-volatile status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's level, its base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense. Fails if no party members can participate.",
 		},
 
-		activate: "  [NAME]'s attack!", // past gen only
+		activate: "  {NAME}'s attack!", // past gen only
 	},
 	behemothbash: {
 		name: "Behemoth Bash",
@@ -450,7 +450,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user loses 1/2 of its maximum HP, rounded down, unless the user would faint or its Attack stat stage is 6. If the user did not have enough HP, its Attack is raised by 2 stages. Otherwise, while the user's Attack stat stage is less than 6 it is raised by 2, and if its Attack stat before this step was 999 then the stat stage is lowered by 1 and the loop ends.",
 		},
 
-		boost: "  [POKEMON] cut its own HP and maximized its Attack!",
+		boost: "  {POKEMON} cut its own HP and maximized its Attack!",
 	},
 	bestow: {
 		name: "Bestow",
@@ -463,7 +463,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The target receives the user's held item. Fails if the user has no item or is holding a Mail, if the target is already holding an item, or if the item is a Griseous Orb, Plate, or Drive and either the user or the target is a Giratina, Arceus, or Genesect, respectively.",
 		},
 
-		takeItem: "  [SOURCE] gave [POKEMON] its [ITEM]!",
+		takeItem: "  {SOURCE} gave {POKEMON} its {ITEM}!",
 	},
 	bide: {
 		name: "Bide",
@@ -483,9 +483,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user spends two or three turns locked into this move and then, on the second or third turn after using this move, the user attacks the opponent, inflicting double the damage in HP it lost during those turns. This move ignores type immunity and cannot be avoided even if the target is using Dig or Fly. The user can choose to switch out during the effect. If the user switches out or is prevented from moving during this move's use, the effect ends. During the effect, if the opposing Pokemon switches out or uses Confuse Ray, Conversion, Focus Energy, Glare, Haze, Leech Seed, Light Screen, Mimic, Mist, Poison Gas, Poison Powder, Recover, Reflect, Rest, Soft-Boiled, Splash, Stun Spore, Substitute, Supersonic, Teleport, Thunder Wave, Toxic, or Transform, the previous damage dealt to the user will be added to the total.",
 		},
 
-		start: "  [POKEMON] is storing energy!",
-		end: "  [POKEMON] unleashed its energy!",
-		activate: "  [POKEMON] is storing energy!",
+		start: "  {POKEMON} is storing energy!",
+		end: "  {POKEMON} unleashed its energy!",
+		activate: "  {POKEMON} is storing energy!",
 	},
 	bind: {
 		name: "Bind",
@@ -512,7 +512,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Prevents the target from moving for 2-5 turns.",
 		},
 
-		start: "  [POKEMON] was squeezed by [SOURCE]!",
+		start: "  {POKEMON} was squeezed by {SOURCE}!",
 		move: "#wrap", // gen 1 only
 	},
 	bite: {
@@ -526,7 +526,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bitterblade: {
 		name: "Bitter Blade",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 	},
 	bittermalice: {
@@ -555,7 +555,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	bleakwindstorm: {
 		name: "Bleakwind Storm",
-		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the weather is Heavy Rain or Rain, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
 		shortDesc: "30% to lower foe(s) Speed by 1. Rain: can't miss.",
 	},
 	blizzard: {
@@ -679,11 +679,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Sky Uppercut, Thunder, and Twister, and Gust and Twister have doubled power when used against it.",
 		},
 
-		prepare: "[POKEMON] sprang up!",
+		prepare: "{POKEMON} sprang up!",
 	},
 	bouncybubble: {
 		name: "Bouncy Bubble",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 	},
 	branchpoke: {
@@ -724,7 +724,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "If this attack does not miss and whether or not the target is immune, the effects of Reflect and Light Screen end for the opponent's side of the field before damage is calculated.",
 		},
 
-		activate: "  [POKEMON] shattered [TEAM]'s protections!",
+		activate: "  {POKEMON} shattered {TEAM}'s protections!",
 	},
 	brine: {
 		name: "Brine",
@@ -765,7 +765,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user steals the target's held Berry if it is holding one and eats it immediately, gaining its effects unless the user's item is being ignored. Items lost to this move can be regained with Recycle.",
 		},
 
-		removeItem: "  [SOURCE] stole and ate its target's [ITEM]!",
+		removeItem: "  {SOURCE} stole and ate its target's {ITEM}!",
 	},
 	bugbuzz: {
 		name: "Bug Buzz",
@@ -819,7 +819,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Fails unless the user is a Fire type. If this move is successful, the user's Fire type becomes typeless as long as it remains active.",
 		},
 
-		typeChange: "  [POKEMON] burned itself out!",
+		typeChange: "  {POKEMON} burned itself out!",
 	},
 	buzzybuzz: {
 		name: "Buzzy Buzz",
@@ -868,22 +868,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Celebrate",
 		shortDesc: "No competitive use.",
 
-		activate: "  Congratulations, [TRAINER]!",
+		activate: "  Congratulations, {TRAINER}!",
 	},
 	charge: {
 		name: "Charge",
 		desc: "Raises the user's Special Defense by 1 stage. The user's next Electric-type attack will have its power doubled; the effect ends when the user is no longer active, or after the user attempts to use any Electric-type move besides Charge, even if it is not successful.",
-		shortDesc: "+1 SpD, user's next Electric move 2x power.",
+		shortDesc: "+1 SpD, user's next Electric move 2× power.",
 		gen8: {
 			desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
-			shortDesc: "+1 SpD, user's Electric move next turn 2x power.",
+			shortDesc: "+1 SpD, user's Electric move next turn 2× power.",
 		},
 		gen3: {
 			desc: "If the user uses an Electric-type attack on the next turn, its power will be doubled.",
-			shortDesc: "The user's Electric attack next turn has 2x power.",
+			shortDesc: "The user's Electric attack next turn has 2× power.",
 		},
 
-		start: "  [POKEMON] began charging power!",
+		start: "  {POKEMON} began charging power!",
 	},
 	chargebeam: {
 		name: "Charge Beam",
@@ -918,7 +918,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "For 5 turns, the weather becomes Snow. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
 		shortDesc: "Starts Snow. User switches out.",
 
-		prepare: "  [POKEMON] is preparing to tell a chillingly bad joke!",
+		prepare: "  {POKEMON} is preparing to tell a chillingly bad joke!",
 	},
 	chipaway: {
 		name: "Chip Away",
@@ -960,7 +960,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Prevents the target from moving for 2-5 turns.",
 		},
 
-		start: "  [SOURCE] clamped down on [POKEMON]!",
+		start: "  {SOURCE} clamped down on {POKEMON}!",
 		move: "#wrap", // gen 1 only
 	},
 	clangingscales: {
@@ -1000,7 +1000,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	collisioncourse: {
 		name: "Collision Course",
 		desc: "Damage is multiplied by 1.3333 if this move is super effective against the target.",
-		shortDesc: "Deals 1.3333x damage with supereffective hits.",
+		shortDesc: "Deals 1.3333× damage with supereffective hits.",
 	},
 	combattorque: {
 		name: "Combat Torque",
@@ -1024,7 +1024,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	comeuppance: {
 		name: "Comeuppance",
 		desc: "Deals damage to the last opposing Pokemon to hit the user with a physical or special attack this turn equal to 1.5 times the HP lost by the user from that attack, rounded down. If the user did not lose HP from that attack, this move deals 1 HP of damage instead. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical or special attack this turn.",
-		shortDesc: "If hit by an attack, returns 1.5x damage.",
+		shortDesc: "If hit by an attack, returns 1.5× damage.",
 	},
 	confide: {
 		name: "Confide",
@@ -1073,7 +1073,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "User becomes the same type as the target.",
 		},
 
-		typeChange: "  Converted type to [SOURCE]'s!", // gen 1 only
+		typeChange: "  Converted type to {SOURCE}'s!", // gen 1 only
 	},
 	conversion2: {
 		name: "Conversion 2",
@@ -1135,7 +1135,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		fail: "#healblock",
-		removeItem: "  [SOURCE] corroded [POKEMON]'s [ITEM]!",
+		removeItem: "  {SOURCE} corroded {POKEMON}'s {ITEM}!",
 	},
 	cosmicpower: {
 		name: "Cosmic Power",
@@ -1170,7 +1170,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 		gen1: {
 			desc: "Deals damage to the opposing Pokemon equal to twice the damage dealt by the last move used in the battle. This move ignores type immunity. Fails if the user moves first, or if the opposing side's last move was Counter, had 0 power, or was not Normal or Fighting type. Fails if the last move used by either side did 0 damage and was not Confuse Ray, Conversion, Focus Energy, Glare, Haze, Leech Seed, Light Screen, Mimic, Mist, Poison Gas, Poison Powder, Recover, Reflect, Rest, Soft-Boiled, Splash, Stun Spore, Substitute, Supersonic, Teleport, Thunder Wave, Toxic, or Transform.",
-			shortDesc: "If hit by Normal/Fighting move, deals 2x damage.",
+			shortDesc: "If hit by Normal/Fighting move, deals 2× damage.",
 		},
 	},
 	courtchange: {
@@ -1178,7 +1178,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Switches the Mist, Light Screen, Reflect, Spikes, Safeguard, Tailwind, Toxic Spikes, Stealth Rock, Water Pledge, Fire Pledge, Grass Pledge, Sticky Web, Aurora Veil, G-Max Steelsurge, G-Max Cannonade, G-Max Vine Lash, and G-Max Wildfire effects from the user's side to the opposing side and vice versa.",
 		shortDesc: "Swaps user's field effects with the opposing side.",
 
-		activate: "  [POKEMON] swapped the battle effects affecting each side of the field!",
+		activate: "  {POKEMON} swapped the battle effects affecting each side of the field!",
 	},
 	covet: {
 		name: "Covet",
@@ -1216,8 +1216,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The user and its party members are protected from non-damaging attacks made by other Pokemon, including allies, during this turn. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		shortDesc: "Protects allies from Status moves this turn.",
 
-		start: "  Crafty Shield protected [TEAM]!",
-		block: "  Crafty Shield protected [POKEMON]!",
+		start: "  Crafty Shield protected {TEAM}!",
+		block: "  Crafty Shield protected {POKEMON}!",
 	},
 	crosschop: {
 		name: "Cross Chop",
@@ -1245,10 +1245,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	crushgrip: {
 		name: "Crush Grip",
-		desc: "Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
+		desc: "Power is equal to 120 × (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
 		shortDesc: "More power the more HP the target has left.",
 		gen4: {
-			desc: "Power is equal to 120 * (target's current HP / target's maximum HP) + 1, rounded down.",
+			desc: "Power is equal to 120 × (target's current HP / target's maximum HP) + 1, rounded down.",
 		},
 	},
 	curse: {
@@ -1262,8 +1262,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage, unless the user's Attack and Defense stats are both at stage 6. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if the target is already affected or has a substitute.",
 		},
 
-		start: "  [SOURCE] cut its own HP and put a curse on [POKEMON]!",
-		damage: "  [POKEMON] is afflicted by the curse!",
+		start: "  {SOURCE} cut its own HP and put a curse on {POKEMON}!",
+		damage: "  {POKEMON} is afflicted by the curse!",
 	},
 	cut: {
 		name: "Cut",
@@ -1288,8 +1288,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Causes the foe(s) to fall asleep.",
 		},
 
-		fail: "But [POKEMON] can't use the move!",
-		failWrongForme: "But [POKEMON] can't use it the way it is now!",
+		fail: "But {POKEMON} can't use the move!",
+		failWrongForme: "But {POKEMON} can't use it the way it is now!",
 	},
 	dazzlinggleam: {
 		name: "Dazzling Gleam",
@@ -1344,8 +1344,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Until the user's next turn, if an opposing Pokemon's attack knocks the user out, that Pokemon faints as well.",
 		},
 
-		start: "  [POKEMON] is hoping to take its attacker down with it!",
-		activate: "[POKEMON] took its attacker down with it!",
+		start: "  {POKEMON} is hoping to take its attacker down with it!",
+		activate: "{POKEMON} took its attacker down with it!",
 	},
 	detect: {
 		name: "Detect",
@@ -1403,7 +1403,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Bide, Swift, and Transform. If the user is fully paralyzed on the second turn, it continues avoiding attacks until it switches out or successfully executes the second turn of this move or Fly.",
 		},
 
-		prepare: "[POKEMON] burrowed its way under the ground!",
+		prepare: "{POKEMON} burrowed its way under the ground!",
 	},
 	direclaw: {
 		name: "Dire Claw",
@@ -1441,9 +1441,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "For 0-7 turns, disables one of the target's moves.",
 		},
 
-		start: "  [POKEMON]'s [MOVE] was disabled!",
-		end: "  [POKEMON]'s move is no longer disabled!",
-		cant: "[POKEMON]'s [MOVE] is disabled!",
+		start: "  {POKEMON}'s {MOVE} was disabled!",
+		end: "  {POKEMON}'s move is no longer disabled!",
+		cant: "{POKEMON}'s {MOVE} is disabled!",
 	},
 	disarmingvoice: {
 		name: "Disarming Voice",
@@ -1466,7 +1466,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool, which have doubled power when used against it, and is also unaffected by weather.",
 		},
 
-		prepare: "[POKEMON] hid underwater!",
+		prepare: "{POKEMON} hid underwater!",
 	},
 	dizzypunch: {
 		name: "Dizzy Punch",
@@ -1490,8 +1490,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Future Sight is already in effect for the target's position.",
 		},
 
-		start: "  [POKEMON] chose Doom Desire as its destiny!",
-		activate: "  [TARGET] took the Doom Desire attack!",
+		start: "  {POKEMON} chose Doom Desire as its destiny!",
+		activate: "  {TARGET} took the Doom Desire attack!",
 	},
 	doubleedge: {
 		name: "Double-Edge",
@@ -1541,7 +1541,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Fails unless the user is an Electric type. If this move is successful and the user is not Terastallized, the user's Electric type becomes typeless as long as it remains active.",
 		shortDesc: "User's Electric type: typeless; must be Electric.",
 
-		typeChange: "  [POKEMON] used up all its electricity!",
+		typeChange: "  {POKEMON} used up all its electricity!",
 	},
 	doubleslap: {
 		name: "Double Slap",
@@ -1572,7 +1572,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
 		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 
-		megaNoItem: "  [TRAINER]'s fervent wish has reached [POKEMON]!",
+		megaNoItem: "  {TRAINER}'s fervent wish has reached {POKEMON}!",
 	},
 	dragonbreath: {
 		name: "Dragon Breath",
@@ -1602,7 +1602,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	dragonenergy: {
 		name: "Dragon Energy",
-		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		desc: "Power is equal to (user's current HP × 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 	},
 	dragonhammer: {
@@ -1632,23 +1632,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	drainingkiss: {
 		name: "Draining Kiss",
-		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 75% of the damage dealt.",
 	},
 	drainpunch: {
 		name: "Drain Punch",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		gen4: {
-			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
+			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded down.",
 		},
 	},
 	dreameater: {
 		name: "Dream Eater",
-		desc: "The target is unaffected by this move unless it is asleep. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The target is unaffected by this move unless it is asleep. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User gains 1/2 HP inflicted. Sleeping target only.",
 		gen4: {
-			desc: "The target is unaffected by this move unless it is asleep and does not have a substitute. The user recovers 1/2 the HP lost by the target, rounded down, but not less than 1 HP. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
+			desc: "The target is unaffected by this move unless it is asleep and does not have a substitute. The user recovers 1/2 the HP lost by the target, rounded down, but not less than 1 HP. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded down.",
 		},
 		gen3: {
 			desc: "The target is unaffected by this move unless it is asleep and does not have a substitute. The user recovers 1/2 the HP lost by the target, rounded down, but not less than 1 HP.",
@@ -1748,7 +1748,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Causes the target's move to become Electric type this turn. Among effects that can change a move's type, this effect happens last. Fails if the target already moved this turn.",
 		shortDesc: "Changes the target's move to Electric this turn.",
 
-		start: "  [POKEMON]'s moves have been electrified!",
+		start: "  {POKEMON}'s moves have been electrified!",
 	},
 	electroball: {
 		name: "Electro Ball",
@@ -1761,14 +1761,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	electrodrift: {
 		name: "Electro Drift",
 		desc: "Damage is multiplied by 1.3333 if this move is super effective against the target.",
-		shortDesc: "Deals 1.3333x damage with supereffective hits.",
+		shortDesc: "Deals 1.3333× damage with supereffective hits.",
 	},
 	electroshot: {
 		name: "Electro Shot",
-		desc: "This attack charges on the first turn and executes on the second. Raises the user's Special Attack by 1 stage on the first turn. If the user is holding a Power Herb or the weather is Primordial Sea or Rain Dance, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Primordial Sea or Rain Dance, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Special Attack by 1 stage on the first turn. If the user is holding a Power Herb or the weather is Heavy Rain or Rain, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Heavy Rain or Rain, the move still requires a turn to charge.",
 		shortDesc: "Raises Sp. Atk by 1, hits turn 2. Rain: no charge.",
 
-		prepare: "[POKEMON] absorbed electricity!",
+		prepare: "{POKEMON} absorbed electricity!",
 	},
 	electroweb: {
 		name: "Electroweb",
@@ -1780,8 +1780,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "For 5 turns, the target's held item has no effect. An item's effect of causing forme changes is unaffected, but any other effects from such items are negated. During the effect, Fling and Natural Gift are prevented from being used by the target. Items thrown at the target with Fling will still activate for it. If the target uses Baton Pass, the replacement will remain unable to use items.",
 		shortDesc: "For 5 turns, the target's item has no effect.",
 
-		start: "  [POKEMON] can't use items anymore!",
-		end: "  [POKEMON] can use items again!",
+		start: "  {POKEMON} can't use items anymore!",
+		end: "  {POKEMON} can use items again!",
 	},
 	ember: {
 		name: "Ember",
@@ -1813,8 +1813,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "For 3 to 6 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Metronome, Mimic, Mirror Move, Sketch, Sleep Talk, Struggle, or Transform.",
 		},
 
-		start: "  [POKEMON] must do an encore!",
-		end: "  [POKEMON]'s encore ended!",
+		start: "  {POKEMON} must do an encore!",
+		end: "  {POKEMON}'s encore ended!",
 	},
 	endeavor: {
 		name: "Endeavor",
@@ -1847,8 +1847,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user will survive attacks made by the opponent during this turn with at least 1 HP. This move has an X/255 chance of being successful, where X starts at 255 and halves, rounded down, each time this move is successfully used. X resets to 255 if this move fails or if the user's last move used is not Detect, Endure, or Protect. Fails if the user has a substitute or moves last this turn.",
 		},
 
-		start: "  [POKEMON] braced itself!",
-		activate: "  [POKEMON] endured the hit!",
+		start: "  {POKEMON} braced itself!",
+		activate: "  {POKEMON} endured the hit!",
 	},
 	energyball: {
 		name: "Energy Ball",
@@ -1874,7 +1874,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	eruption: {
 		name: "Eruption",
-		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		desc: "Power is equal to (user's current HP × 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 	},
 	esperwing: {
@@ -1890,7 +1890,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	expandingforce: {
 		name: "Expanding Force",
 		desc: "If the current terrain is Psychic Terrain and the user is grounded, this move hits all opposing Pokemon and has its power multiplied by 1.5.",
-		shortDesc: "User on Psychic Terrain: 1.5x power, hits foes.",
+		shortDesc: "User on Psychic Terrain: 1.5× power, hits foes.",
 	},
 	explosion: {
 		name: "Explosion",
@@ -1995,7 +1995,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Breaks protection. Fails if target is not protecting.",
 		},
 
-		activate: "  [TARGET] fell for the feint!",
+		activate: "  {TARGET} fell for the feint!",
 	},
 	feintattack: {
 		name: "Feint Attack",
@@ -2014,7 +2014,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Fickle Beam",
 		shortDesc: "Has a 30% chance this move's power is doubled.",
 
-		activate: "  [POKEMON] is going all out for this attack!",
+		activate: "  {POKEMON} is going all out for this attack!",
 	},
 	fierydance: {
 		name: "Fiery Dance",
@@ -2064,9 +2064,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "Use with Grass or Water Pledge for added effect.",
 
 		activate: "#waterpledge",
-		start: "  A sea of fire enveloped [TEAM]!",
-		end: "  The sea of fire around [TEAM] disappeared!",
-		damage: "  [POKEMON] was hurt by the sea of fire!",
+		start: "  A sea of fire enveloped {TEAM}!",
+		end: "  The sea of fire around {TEAM} disappeared!",
+		damage: "  {POKEMON} was hurt by the sea of fire!",
 	},
 	firepunch: {
 		name: "Fire Punch",
@@ -2098,7 +2098,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Prevents the target from moving for 2-5 turns.",
 		},
 
-		start: "  [POKEMON] became trapped in the fiery vortex!",
+		start: "  {POKEMON} became trapped in the fiery vortex!",
 		move: "#wrap", // gen 1 only
 	},
 	firstimpression: {
@@ -2119,7 +2119,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		gen2: {
-			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level. Can hit a target using Dig.",
+			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 × (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level. Can hit a target using Dig.",
 		},
 		gen1: {
 			desc: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
@@ -2128,16 +2128,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	flail: {
 		name: "Flail",
-		desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP * 48 / user's maximum HP), rounded down.",
+		desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP × 48 / user's maximum HP), rounded down.",
 		shortDesc: "More power the less HP the user has left.",
 		gen4: {
-			desc: "The power of this move is 20 if X is 43 to 48, 40 if X is 22 to 42, 80 if X is 13 to 21, 100 if X is 6 to 12, 150 if X is 2 to 5, and 200 if X is 0 or 1, where X is equal to (user's current HP * 64 / user's maximum HP), rounded down.",
+			desc: "The power of this move is 20 if X is 43 to 48, 40 if X is 22 to 42, 80 if X is 13 to 21, 100 if X is 6 to 12, 150 if X is 2 to 5, and 200 if X is 0 or 1, where X is equal to (user's current HP × 64 / user's maximum HP), rounded down.",
 		},
 		gen3: {
-			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP * 48 / user's maximum HP), rounded down.",
+			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP × 48 / user's maximum HP), rounded down.",
 		},
 		gen2: {
-			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP * 48 / user's maximum HP), rounded down. This move does not apply damage variance and cannot be a critical hit.",
+			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP × 48 / user's maximum HP), rounded down. This move does not apply damage variance and cannot be a critical hit.",
 		},
 	},
 	flameburst: {
@@ -2148,7 +2148,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "If this move is successful, each ally adjacent to the target loses 1/16 of its maximum HP, rounded down, unless it has the Magic Guard Ability.",
 		},
 
-		damage: "  The bursting flame hit [POKEMON]!",
+		damage: "  The bursting flame hit {POKEMON}!",
 	},
 	flamecharge: {
 		name: "Flame Charge",
@@ -2202,7 +2202,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The power of this move is based on the user's held item. The held item is lost and it activates for the target if applicable. If the target avoids this move by protecting itself, the user's held item is still lost. The user can regain a thrown item with Recycle. Fails if the user has no held item, if the held item cannot be thrown, or if the user is under the effect of Embargo.",
 		},
 
-		removeItem: "  [POKEMON] flung its [ITEM]!",
+		removeItem: "  {POKEMON} flung its {ITEM}!",
 	},
 	flipturn: {
 		name: "Flip Turn",
@@ -2251,7 +2251,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Bide, Swift, and Transform. If the user is fully paralyzed on the second turn, it continues avoiding attacks until it switches out or successfully executes the second turn of this move or Dig.",
 		},
 
-		prepare: "[POKEMON] flew up high!",
+		prepare: "{POKEMON} flew up high!",
 	},
 	flyingpress: {
 		name: "Flying Press",
@@ -2276,9 +2276,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Quarters the user's chance for a critical hit.",
 		},
 
-		start: "  [POKEMON] is getting pumped!",
-		startFromItem: "  [POKEMON] used the [ITEM] to get pumped!",
-		startFromZEffect: "  [POKEMON] boosted its critical-hit ratio using its Z-Power!",
+		start: "  {POKEMON} is getting pumped!",
+		startFromItem: "  {POKEMON} used the {ITEM} to get pumped!",
+		startFromZEffect: "  {POKEMON} boosted its critical-hit ratio using its Z-Power!",
 	},
 	focuspunch: {
 		name: "Focus Punch",
@@ -2288,8 +2288,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move, but it still loses PP.",
 		},
 
-		start: "  [POKEMON] is tightening its focus!",
-		cant: "[POKEMON] lost its focus and couldn't move!",
+		start: "  {POKEMON} is tightening its focus!",
+		cant: "{POKEMON} lost its focus and couldn't move!",
 	},
 	followme: {
 		name: "Follow Me",
@@ -2305,8 +2305,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat, or drawn in by the Lightning Rod Ability. This effect remains active even if the user leaves the field. Fails if it is not a Double Battle.",
 		},
 
-		start: "  [POKEMON] became the center of attention!",
-		startFromZEffect: "  [POKEMON] became the center of attention!",
+		start: "  {POKEMON} became the center of attention!",
+		startFromZEffect: "  {POKEMON} became the center of attention!",
 	},
 	forcepalm: {
 		name: "Force Palm",
@@ -2327,7 +2327,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "As long as the target remains active, if its evasiveness stat stage is greater than the attacker's accuracy stat stage, both are ignored during accuracy checks, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type. If the target leaves the field using Baton Pass, the replacement will remain under this effect. Fails if the target is already affected.",
 		},
 
-		start: "  [POKEMON] was identified!",
+		start: "  {POKEMON} was identified!",
 	},
 	forestscurse: {
 		name: "Forest's Curse",
@@ -2353,7 +2353,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges turn 1. Hits turn 2. 30% paralyze.",
 
-		prepare: "  [POKEMON] became cloaked in a freezing light!",
+		prepare: "  {POKEMON} became cloaked in a freezing light!",
 	},
 	freezingglare: {
 		name: "Freezing Glare",
@@ -2377,7 +2377,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	frustration: {
 		name: "Frustration",
-		desc: "Power is equal to the greater of ((255 - user's Happiness) * 2/5), rounded down, or 1.",
+		desc: "Power is equal to the greater of ((255 - user's Happiness) × 2/5), rounded down, or 1.",
 		shortDesc: "Max 102 power at minimum Happiness.",
 	},
 	furyattack: {
@@ -2440,8 +2440,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move is already in effect for the target's position.",
 		},
 
-		start: "  [POKEMON] foresaw an attack!",
-		activate: "  [TARGET] took the Future Sight attack!",
+		start: "  {POKEMON} foresaw an attack!",
+		activate: "  {TARGET} took the Future Sight attack!",
 	},
 	gastroacid: {
 		name: "Gastro Acid",
@@ -2457,7 +2457,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Causes the target's Ability to be rendered ineffective as long as it remains active. If the target uses Baton Pass, the replacement will remain under this effect. If the target's Ability is Multitype or Stance Change, this move fails, and receiving the effect through Baton Pass ends the effect immediately.",
 		},
 
-		start: "  [POKEMON]'s Ability was suppressed!",
+		start: "  {POKEMON}'s Ability was suppressed!",
 	},
 	geargrind: {
 		name: "Gear Grind",
@@ -2479,14 +2479,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Raises the user's Special Attack, Special Defense, and Speed by 2 stages. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges, then raises SpA, SpD, Spe by 2 turn 2.",
 
-		prepare: "[POKEMON] is absorbing power!",
+		prepare: "{POKEMON} is absorbing power!",
 	},
 	gigadrain: {
 		name: "Giga Drain",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		gen4: {
-			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
+			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded down.",
 		},
 		gen3: {
 			desc: "The user recovers 1/2 the HP lost by the target, rounded down.",
@@ -2518,7 +2518,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	glaiverush: {
 		name: "Glaive Rush",
 		desc: "If this move is successful, moves targeted at the user deal double damage and do not check accuracy until the user's next turn.",
-		shortDesc: "User takes sure-hit 2x damage until its next turn.",
+		shortDesc: "User takes sure-hit 2× damage until its next turn.",
 	},
 	glare: {
 		name: "Glare",
@@ -2546,8 +2546,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Water-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
 
-		start: "  [PARTY] got caught in the vortex of water!",
-		damage: "  [POKEMON] is hurt by G-Max Cannonade’s vortex!",
+		start: "  {PARTY} got caught in the vortex of water!",
+		damage: "  {POKEMON} is hurt by G-Max Cannonade’s vortex!",
 	},
 	gmaxcentiferno: {
 		name: "G-Max Centiferno",
@@ -2571,7 +2571,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side loses 2 PP from its last move used, even if they have a substitute.",
 		shortDesc: "Base move affects power. Foes: last move -2 PP.",
 
-		activate: "  [TARGET]'s PP was reduced!",
+		activate: "  {TARGET}'s PP was reduced!",
 	},
 	gmaxdrumsolo: {
 		name: "G-Max Drum Solo",
@@ -2655,16 +2655,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	gmaxsteelsurge: {
 		name: "G-Max Steelsurge",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25×, 0.5×, neutral, 2×, or 4×, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Base move affects power. Foes: Steel hazard.",
 
-		start: "  Sharp-pointed pieces of steel started floating around [PARTY]!",
-		end: "  The pieces of steel surrounding [PARTY] disappeared!",
-		damage: "  The sharp steel bit into [POKEMON]!",
+		start: "  Sharp-pointed pieces of steel started floating around {PARTY}!",
+		end: "  The pieces of steel surrounding {PARTY} disappeared!",
+		damage: "  The sharp steel bit into {POKEMON}!",
 	},
 	gmaxstonesurge: {
 		name: "G-Max Stonesurge",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25×, 0.5×, neutral, 2×, or 4×, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		shortDesc: "Base move affects power. Foes: Stealth Rock.",
 	},
 	gmaxstunshock: {
@@ -2692,16 +2692,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Grass-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
 
-		start: "  [PARTY] got trapped with vines!",
-		damage: "  [POKEMON] is hurt by G-Max Vine Lash’s ferocious beating!",
+		start: "  {PARTY} got trapped with vines!",
+		damage: "  {POKEMON} is hurt by G-Max Vine Lash’s ferocious beating!",
 	},
 	gmaxvolcalith: {
 		name: "G-Max Volcalith",
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Rock-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
 
-		start: "  [PARTY] became surrounded by rocks!",
-		damage: "  [POKEMON] is hurt by the rocks thrown out by G-Max Volcalith!",
+		start: "  {PARTY} became surrounded by rocks!",
+		damage: "  {POKEMON} is hurt by the rocks thrown out by G-Max Volcalith!",
 	},
 	gmaxvoltcrash: {
 		name: "G-Max Volt Crash",
@@ -2713,8 +2713,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Power is equal to the base move's Max Move power. If this move is successful, for 4 turns each non-Fire-type Pokemon on the opposing side takes damage equal to 1/6 of its maximum HP, rounded down, at the end of each turn during effect, including the last turn.",
 		shortDesc: "Base move affects power. Foes: -1/6 HP, 4 turns.",
 
-		start: "  [PARTY] were surrounded by fire!",
-		damage: "  [POKEMON] is burning up within G-Max Wildfire’s flames!",
+		start: "  {PARTY} were surrounded by fire!",
+		damage: "  {POKEMON} is burning up within G-Max Wildfire’s flames!",
 	},
 	gmaxwindrage: {
 		name: "G-Max Wind Rage",
@@ -2732,8 +2732,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "Use with Fire or Water Pledge for added effect.",
 
 		activate: "#waterpledge",
-		start: "  A swamp enveloped [TEAM]!",
-		end: "  The swamp around [TEAM] disappeared!",
+		start: "  A swamp enveloped {TEAM}!",
+		end: "  The swamp around {TEAM} disappeared!",
 	},
 	grasswhistle: {
 		name: "Grass Whistle",
@@ -2755,12 +2755,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	gravapple: {
 		name: "Grav Apple",
 		desc: "Has a 100% chance to lower the target's Defense by 1 stage. Power is multiplied by 1.5 during Gravity's effect.",
-		shortDesc: "Target: 100% -1 Def. During Gravity: 1.5x power.",
+		shortDesc: "Target: 100% -1 Def. During Gravity: 1.5× power.",
 	},
 	gravity: {
 		name: "Gravity",
 		desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect.",
-		shortDesc: "5 turns: no Ground immunities, 1.67x accuracy.",
+		shortDesc: "5 turns: no Ground immunities, 1.67× accuracy.",
 		gen7: {
 			desc: "For 5 turns, the evasiveness of all active Pokemon is multiplied by 0.6. At the time of use, Bounce, Fly, Magnet Rise, Sky Drop, and Telekinesis end immediately for all active Pokemon. During the effect, Bounce, Fly, Flying Press, High Jump Kick, Jump Kick, Magnet Rise, Sky Drop, Splash, and Telekinesis are prevented from being used by all active Pokemon. Ground-type attacks, Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability can affect Flying types or Pokemon with the Levitate Ability. Fails if this move is already in effect. Relevant Z-Powered moves can still be selected, but will be prevented at execution during this effect.",
 		},
@@ -2784,13 +2784,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	growth: {
 		name: "Growth",
-		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages. If the user is holding Utility Umbrella, this move will only raise the user's Attack and Special Attack by 1 stage, even if the weather is Sunny Day or Desolate Land.",
+		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sun or Intense Sun, this move raises the user's Attack and Special Attack by 2 stages. If the user is holding Utility Umbrella, this move will only raise the user's Attack and Special Attack by 1 stage, even if the weather is Sun or Intense Sun.",
 		shortDesc: "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
 		gen7: {
-			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages.",
+			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sun or Intense Sun, this move raises the user's Attack and Special Attack by 2 stages.",
 		},
 		gen5: {
-			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, this move raises the user's Attack and Special Attack by 2 stages.",
+			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sun, this move raises the user's Attack and Special Attack by 2 stages.",
 		},
 		gen4: {
 			desc: "Raises the user's Special Attack by 1 stage.",
@@ -2806,8 +2806,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Until the user's next turn, if an opposing Pokemon's attack knocks the user out, that move loses all its remaining PP.",
 		shortDesc: "If the user faints, the attack used loses all its PP.",
 
-		activate: "  [POKEMON]'s [MOVE] lost all of its PP due to the grudge!",
-		start: "[POKEMON] wants its target to bear a grudge!",
+		activate: "  {POKEMON}'s {MOVE} lost all of its PP due to the grudge!",
+		start: "{POKEMON} wants its target to bear a grudge!",
 	},
 	guardianofalola: {
 		name: "Guardian of Alola",
@@ -2819,7 +2819,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The user and the target have their Defense and Special Defense stats set to be equal to the average of the user and the target's Defense and Special Defense stats, respectively, rounded down. Stat stage changes are unaffected.",
 		shortDesc: "Averages Defense and Sp. Def stats with target.",
 
-		activate: "  [POKEMON] shared its guard with the target!",
+		activate: "  {POKEMON} shared its guard with the target!",
 	},
 	guardswap: {
 		name: "Guard Swap",
@@ -2831,7 +2831,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		gen2: {
-			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
+			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 × (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
 		gen1: {
 			desc: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
@@ -2897,7 +2897,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hardpress: {
 		name: "Hard Press",
-		desc: "Power is equal to 100 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
+		desc: "Power is equal to 100 × (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
 		shortDesc: "More power the more HP the target has left.",
 	},
 	haze: {
@@ -2910,7 +2910,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		// Only used in Gen 1
-		activate: "  All STATUS changes are eliminated!",
+		activate: "  All stat changes were eliminated!", // gen 1: "All STATUS changes are eliminated!"
 	},
 	headbutt: {
 		name: "Headbutt",
@@ -2959,8 +2959,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected.",
 		shortDesc: "For 5 turns, the foe(s) is prevented from healing.",
 		gen8: {
-			end: "  [POKEMON]'s Heal Block wore off!",
-			cant: "[POKEMON] can't use [MOVE] because of Heal Block!",
+			end: "  {POKEMON}'s Heal Block wore off!",
+			cant: "{POKEMON} can't use {MOVE} because of Heal Block!",
 		},
 		gen7: {
 			desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP. Pain Split and the Regenerator Ability are unaffected. Relevant Z-Powered moves can still be selected and executed during this effect.",
@@ -2972,10 +2972,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "For 5 turns, the target is prevented from restoring any HP as long as it remains active. During the effect, healing moves are unusable, move effects that grant healing will not heal, but Abilities and items will continue to heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain under the effect. Pain Split is unaffected.",
 		},
 
-		start: "  [POKEMON] was prevented from healing!",
-		end: "  [POKEMON] is no longer prevented from healing!",
-		cant: "[POKEMON] is prevented from healing, so it can't use [MOVE]!",
-		fail: "  But it failed to affect [POKEMON]!",
+		start: "  {POKEMON} was prevented from healing!",
+		end: "  {POKEMON} is no longer prevented from healing!",
+		cant: "{POKEMON} is prevented from healing, so it can't use {MOVE}!",
+		fail: "  But it failed to affect {POKEMON}!",
 	},
 	healingwish: {
 		name: "Healing Wish",
@@ -2989,7 +2989,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any non-volatile status condition cured. The new Pokemon is sent out immediately and the healing happens after hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
 		},
 
-		heal: "  The healing wish came true for [POKEMON]!",
+		heal: "  The healing wish came true for {POKEMON}!",
 	},
 	healorder: {
 		name: "Heal Order",
@@ -3041,9 +3041,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	helpinghand: {
 		name: "Helping Hand",
 		desc: "The power of the target's attack this turn is multiplied by 1.5 (this effect is stackable). Fails if there is no ally adjacent to the user or if the ally already moved this turn, but does not fail if the ally is using a two-turn move.",
-		shortDesc: "One adjacent ally's move power is 1.5x this turn.",
+		shortDesc: "One adjacent ally's move power is 1.5× this turn.",
 
-		start: "  [SOURCE] is ready to help [POKEMON]!",
+		start: "  {SOURCE} is ready to help {POKEMON}!",
 	},
 	hex: {
 		name: "Hex",
@@ -3158,7 +3158,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
 		gen2: {
-			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
+			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 × (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
 		gen1: {
 			desc: "Deals 65535 damage to the target. Fails if the target's Speed is greater than the user's.",
@@ -3167,7 +3167,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hornleech: {
 		name: "Horn Leech",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 	},
 	howl: {
@@ -3181,13 +3181,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hurricane: {
 		name: "Hurricane",
-		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
+		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Heavy Rain or Rain, this move does not check accuracy. If the weather is Intense Sun or Sun, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
 		shortDesc: "30% chance to confuse target. Can't miss in rain.",
 		gen7: {
-			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Heavy Rain or Rain, this move does not check accuracy. If the weather is Intense Sun or Sun, this move's accuracy is 50%.",
 		},
 		gen5: {
-			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 	},
 	hydrocannon: {
@@ -3201,8 +3201,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	hydrosteam: {
 		name: "Hydro Steam",
-		desc: "If the current weather is Sunny Day and the user is not holding Utility Umbrella, this move's damage is multiplied by 1.5 instead of halved for being Water type.",
-		shortDesc: "During Sunny Day: 1.5x damage instead of half.",
+		desc: "If the current weather is Sun and the user is not holding Utility Umbrella, this move's damage is multiplied by 1.5 instead of halved for being Water type.",
+		shortDesc: "During Sun: 1.5× damage instead of half.",
 	},
 	hydrovortex: {
 		name: "Hydro Vortex",
@@ -3277,7 +3277,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a 30% chance to burn the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Charges turn 1. Hits turn 2. 30% burn.",
 
-		prepare: "  [POKEMON] became cloaked in freezing air!",
+		prepare: "  {POKEMON} became cloaked in freezing air!",
 	},
 	icefang: {
 		name: "Ice Fang",
@@ -3345,8 +3345,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user prevents all opposing Pokemon from using any moves that the user also knows as long as the user remains active. Fails if no opposing Pokemon know any of the user's moves.",
 		},
 
-		start: "  [POKEMON] sealed any moves its target shares with it!",
-		cant: "[POKEMON] can't use its sealed [MOVE]!",
+		start: "  {POKEMON} sealed any moves its target shares with it!",
+		cant: "{POKEMON} can't use its sealed {MOVE}!",
 	},
 	incinerate: {
 		name: "Incinerate",
@@ -3357,12 +3357,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Destroys the foe(s) Berry.",
 		},
 
-		removeItem: "  [POKEMON]'s [ITEM] was burned up!",
+		removeItem: "  {POKEMON}'s {ITEM} was burned up!",
 	},
 	infernalparade: {
 		name: "Infernal Parade",
 		desc: "Has a 30% chance to burn the target. Power doubles if the target has a non-volatile status condition.",
-		shortDesc: "30% burn. 2x power if target is already statused.",
+		shortDesc: "30% burn. 2× power if target is already statused.",
 	},
 	inferno: {
 		name: "Inferno",
@@ -3384,7 +3384,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		},
 
-		start: "  [POKEMON] has been afflicted with an infestation by [SOURCE]!",
+		start: "  {POKEMON} has been afflicted with an infestation by {SOURCE}!",
 	},
 	ingrain: {
 		name: "Ingrain",
@@ -3404,9 +3404,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "User recovers 1/16 max HP per turn. Traps user.",
 		},
 
-		start: "  [POKEMON] planted its roots!",
-		block: "  [POKEMON] is anchored in place with its roots!",
-		heal: "  [POKEMON] absorbed nutrients with its roots!",
+		start: "  {POKEMON} planted its roots!",
+		block: "  {POKEMON} is anchored in place with its roots!",
+		heal: "  {POKEMON} absorbed nutrients with its roots!",
 	},
 	instruct: {
 		name: "Instruct",
@@ -3419,7 +3419,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The target immediately uses its last used move. Fails if the target has not made a move, if the move has 0 PP, if the target is preparing to use Beak Blast, Focus Punch, or Shell Trap, or if the move is Assist, Beak Blast, Belch, Bide, Celebrate, Chatter, Copycat, Focus Punch, Hold Hands, Ice Ball, Instruct, King's Shield, Me First, Metronome, Mimic, Mirror Move, Nature Power, Outrage, Petal Dance, Rollout, Shell Trap, Sketch, Sleep Talk, Struggle, Thrash, Transform, Uproar, any two-turn move, any recharge move, or any Z-Move.",
 		},
 
-		activate: "  [TARGET] followed [POKEMON]'s instructions!",
+		activate: "  {TARGET} followed {POKEMON}'s instructions!",
 	},
 	iondeluge: {
 		name: "Ion Deluge",
@@ -3523,7 +3523,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	knockoff: {
 		name: "Knock Off",
 		desc: "This move's power is multiplied by 1.5 if the target is holding an item, and the target loses its held item if the user has not fainted. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not increase in power or remove the target's item if it is a Blue Orb, Red Orb, Adamant Crystal, Lustrous Globe, Griseous Core, Plate, Drive, Memory, Rusted Sword, Rusted Shield, Booster Energy, or Mask held by a Kyogre, Groudon, Dialga, Palkia, Giratina, Arceus, Genesect, Silvally, Zacian, Zamazenta, Paradox Pokemon, or Ogerpon, respectively, or if the user is one of those species and the target is holding the respective item. In this case, Paradox Pokemon include every species with the Protosynthesis and Quark Drive Abilities, except Gouging Fire, Raging Bolt, Iron Boulder, and Iron Crown. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
-		shortDesc: "1.5x damage if foe holds an item. Removes item.",
+		shortDesc: "1.5× damage if foe holds an item. Removes item.",
 		champions: {
 			desc: "This move's power is multiplied by 1.5 if the target is holding an item, and the target loses its held item. A target with the Sticky Hold Ability does not lose its held item if it has not fainted. This move does not increase in power or remove the target's item if it is a Mega Stone held by the species that can Mega Evolve with it. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
@@ -3548,7 +3548,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The target's held item is lost for the rest of the battle, unless it has the Sticky Hold Ability. During the effect, the target cannot gain a new item by any means.",
 		},
 
-		removeItem: "  [SOURCE] knocked off [POKEMON]'s [ITEM]!",
+		removeItem: "  {SOURCE} knocked off {POKEMON}'s {ITEM}!",
 	},
 	kowtowcleave: {
 		name: "Kowtow Cleave",
@@ -3564,12 +3564,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Until the end of the next turn, the user's attacks will be critical hits.",
 		shortDesc: "Until the end of the next turn, user's moves crit.",
 
-		start: "  [POKEMON] concentrated intensely!",
+		start: "  {POKEMON} concentrated intensely!",
 	},
 	lashout: {
 		name: "Lash Out",
 		desc: "Power doubles if the user had a stat stage lowered this turn.",
-		shortDesc: "2x power if the user had a stat lowered this turn.",
+		shortDesc: "2× power if the user had a stat lowered this turn.",
 	},
 	lastresort: {
 		name: "Last Resort",
@@ -3578,7 +3578,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lastrespects: {
 		name: "Last Respects",
-		desc: "Power is equal to 50+(X*50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
+		desc: "Power is equal to 50+(X × 50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
 		shortDesc: "+50 power for each time a party member fainted.",
 	},
 	lavaplume: {
@@ -3607,10 +3607,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leechlife: {
 		name: "Leech Life",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		gen4: {
-			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
+			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded down.",
 		},
 		gen3: {
 			desc: "The user recovers 1/2 the HP lost by the target, rounded down.",
@@ -3618,10 +3618,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	leechseed: {
 		name: "Leech Seed",
-		desc: "The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If Big Root is held by the recipient, the HP recovered is 1.3x normal, rounded half down. If the target uses Baton Pass, the replacement will continue being leeched. If the target switches out or uses Mortal Spin or Rapid Spin successfully, the effect ends. Grass-type Pokemon are immune to this move on use, but not its effect.",
+		desc: "The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If Big Root is held by the recipient, the HP recovered is 1.3× normal, rounded half down. If the target uses Baton Pass, the replacement will continue being leeched. If the target switches out or uses Mortal Spin or Rapid Spin successfully, the effect ends. Grass-type Pokemon are immune to this move on use, but not its effect.",
 		shortDesc: "1/8 of target's HP is restored to user every turn.",
 		gen8: {
-			desc: "The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If Big Root is held by the recipient, the HP recovered is 1.3x normal, rounded half down. If the target uses Baton Pass, the replacement will continue being leeched. If the target switches out or uses Rapid Spin successfully, the effect ends. Grass-type Pokemon are immune to this move on use, but not its effect.",
+			desc: "The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If Big Root is held by the recipient, the HP recovered is 1.3× normal, rounded half down. If the target uses Baton Pass, the replacement will continue being leeched. If the target switches out or uses Rapid Spin successfully, the effect ends. Grass-type Pokemon are immune to this move on use, but not its effect.",
 		},
 		gen3: {
 			desc: "The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If the target uses Baton Pass, the replacement will continue being leeched. If the target switches out or uses Rapid Spin, the effect ends. Grass-type Pokemon are immune to this move on use, but not its effect.",
@@ -3631,9 +3631,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "1/16 of target's HP is restored to user every turn.",
 		},
 
-		start: "  [POKEMON] was seeded!",
-		end: "  [POKEMON] was freed from Leech Seed!",
-		damage: "  [POKEMON]'s health is sapped by Leech Seed!",
+		start: "  {POKEMON} was seeded!",
+		end: "  {POKEMON} was freed from Leech Seed!",
+		damage: "  {POKEMON}'s health is sapped by Leech Seed!",
 	},
 	leer: {
 		name: "Leer",
@@ -3664,10 +3664,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	lightscreen: {
 		name: "Light Screen",
-		desc: "For 5 turns, the user and its party members take 0.5x damage from special attacks, or 0.66x damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
+		desc: "For 5 turns, the user and its party members take 0.5× damage from special attacks, or 0.66× damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
 		shortDesc: "For 5 turns, special damage to allies is halved.",
 		gen6: {
-			desc: "For 5 turns, the user and its party members take 0.5x damage from special attacks, or 0.66x damage if in a Double or Triple Battle. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
+			desc: "For 5 turns, the user and its party members take 0.5× damage from special attacks, or 0.66× damage if in a Double or Triple Battle. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
 		},
 		gen4: {
 			desc: "For 5 turns, the user and its party members take 1/2 damage from special attacks, or 2/3 damage if there are multiple active Pokemon on the user's side. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
@@ -3681,12 +3681,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 		gen1: {
 			desc: "While the user remains active, its Special is doubled when taking damage. Critical hits ignore this effect. If any Pokemon uses Haze, this effect ends.",
-			shortDesc: "While active, user's Special is 2x when damaged.",
-			start: "  [POKEMON]'s protected against special attacks!",
+			shortDesc: "While active, user's Special is 2× when damaged.",
+			start: "  {POKEMON}'s protected against special attacks!",
 		},
 
-		start: "  Light Screen made [TEAM] stronger against special moves!",
-		end: "  [TEAM]'s Light Screen wore off!",
+		start: "  Light Screen made {TEAM} stronger against special moves!",
+		end: "  {TEAM}'s Light Screen wore off!",
 	},
 	lightthatburnsthesky: {
 		name: "Light That Burns the Sky",
@@ -3710,7 +3710,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "The next move will not miss the target.",
 		},
 
-		start: "  [SOURCE] took aim at [POKEMON]!",
+		start: "  {SOURCE} took aim at {POKEMON}!",
 	},
 	lovelykiss: {
 		name: "Lovely Kiss",
@@ -3735,8 +3735,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "For 5 turns, the user and its party members cannot be struck by a critical hit. Fails if the effect is already active on the user's side.",
 		shortDesc: "For 5 turns, shields user's party from critical hits.",
 
-		start: "  Lucky Chant shielded [TEAM] from critical hits!",
-		end: "  [TEAM]'s Lucky Chant wore off!",
+		start: "  Lucky Chant shielded {TEAM} from critical hits!",
+		end: "  {TEAM}'s Lucky Chant wore off!",
 	},
 	luminacrash: {
 		name: "Lumina Crash",
@@ -3760,7 +3760,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user faints and the Pokemon brought out to replace it has its HP and PP fully restored along with having any non-volatile status condition cured. The new Pokemon is sent out immediately and the healing happens after hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
 		},
 
-		heal: "  [POKEMON] became cloaked in mystical moonlight!",
+		heal: "  {POKEMON} became cloaked in mystical moonlight!",
 	},
 	lunge: {
 		name: "Lunge",
@@ -3800,8 +3800,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. If the move targets both opposing Pokemon and the Pokemon under this effect is on the left side, it will reflect the move targeting both opposing Pokemon and its ally will not be affected by the original move; otherwise, if the Pokemon under this effect is on the right side, its ally will be affected by the original move and this Pokemon will reflect the move only targeting the original user. The effect ends once a move is reflected or at the end of the turn. Moves reflected in this way can be reflected again by another Pokemon under this effect. If the user has the Soundproof Ability, it nullifies sound-based moves before this effect happens. The Lightning Rod Ability redirects Electric moves before this move takes effect.",
 		},
 
-		start: "  [POKEMON] shrouded itself with Magic Coat!",
-		move: "[POKEMON] bounced the [MOVE] back!",
+		start: "  {POKEMON} shrouded itself with Magic Coat!",
+		move: "{POKEMON} bounced the {MOVE} back!",
 	},
 	magicpowder: {
 		name: "Magic Powder",
@@ -3834,7 +3834,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Traps and damages the target for 2-5 turns.",
 		},
 
-		start: "  [POKEMON] became trapped by swirling magma!",
+		start: "  {POKEMON} became trapped by swirling magma!",
 	},
 	magnetbomb: {
 		name: "Magnet Bomb",
@@ -3856,18 +3856,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "For 5 turns, the user is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, and the Arena Trap Ability as long as it remains active. If the user uses Baton Pass, the replacement will gain the effect. Ingrain and Iron Ball override this move if the user is under any of their effects. Fails if the user is already under this effect or the effect of Ingrain.",
 		},
 
-		start: "  [POKEMON] levitated with electromagnetism!",
-		end: "  [POKEMON]'s electromagnetism wore off!",
+		start: "  {POKEMON} levitated with electromagnetism!",
+		end: "  {POKEMON}'s electromagnetism wore off!",
 	},
 	magnitude: {
 		name: "Magnitude",
 		desc: "The power of this move varies; 5% chances for 10 and 150 power, 10% chances for 30 and 110 power, 20% chances for 50 and 90 power, and 30% chance for 70 power. Damage doubles if the target is using Dig.",
-		shortDesc: "Hits adjacent Pokemon. Power varies; 2x on Dig.",
+		shortDesc: "Hits adjacent Pokemon. Power varies; 2× on Dig.",
 		gen4: {
 			desc: "The power of this move varies. 5% chances for 10 and 150 power, 10% chances for 30 and 110 power, 20% chances for 50 and 90 power, and 30% chance for 70 power. Power doubles if the target is using Dig.",
 		},
 
-		activate: "  Magnitude [NUMBER]!",
+		activate: "  Magnitude {NUMBER}!",
 	},
 	makeitrain: {
 		name: "Make It Rain",
@@ -3895,12 +3895,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn. Fails unless it is the user's first turn on the field, if the user moves last this turn, or if this move is already in effect for the user's side.",
 		shortDesc: "Protects allies from damaging attacks. Turn 1 only.",
 
-		start: "  [POKEMON] intends to flip up a mat and block incoming attacks!",
-		block: "  [MOVE] was blocked by the kicked-up mat!",
+		start: "  {POKEMON} intends to flip up a mat and block incoming attacks!",
+		block: "  {MOVE} was blocked by the kicked-up mat!",
 	},
 	matchagotcha: {
 		name: "Matcha Gotcha",
-		desc: "Has a 20% chance to burn the target. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. The target thaws out if it is frozen.",
+		desc: "Has a 20% chance to burn the target. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down. The target thaws out if it is frozen.",
 		shortDesc: "20% burn. Recovers 50% dmg dealt. Thaws foe(s).",
 	},
 	maxairstream: {
@@ -3915,8 +3915,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maxflare: {
 		name: "Max Flare",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sunny Day begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
-		shortDesc: "Base move affects power. Starts Sunny Day.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sun begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
+		shortDesc: "Base move affects power. Starts Sun.",
 	},
 	maxflutterby: {
 		name: "Max Flutterby",
@@ -3925,15 +3925,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	maxgeyser: {
 		name: "Max Geyser",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Rain Dance begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
-		shortDesc: "Base move affects power. Starts Rain Dance.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Rain begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
+		shortDesc: "Base move affects power. Starts Rain.",
 	},
 	maxguard: {
 		name: "Max Guard",
 		desc: "The user is protected from nearly all attacks made by other Pokemon during this turn, including Max and G-Max Moves. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		shortDesc: "Protects user from moves & Max Moves this turn.",
 
-		activate: "  [POKEMON] protected itself!",
+		activate: "  {POKEMON} protected itself!",
 	},
 	maxhailstorm: {
 		name: "Max Hailstorm",
@@ -4025,7 +4025,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mefirst: {
 		name: "Me First",
 		desc: "The user uses the move the target chose for use this turn against it, if possible, with its power multiplied by 1.5. The move must be a damaging move other than Beak Blast, Belch, Blazing Torque, Combat Torque, Comeuppance, Counter, Covet, Focus Punch, Magical Torque, Me First, Metal Burst, Mirror Coat, Noxious Torque, Shell Trap, Struggle, Thief, or Wicked Torque. Fails if the target moves before the user. Ignores the target's substitute for the purpose of copying the move.",
-		shortDesc: "Copies a foe at 1.5x power. User must be faster.",
+		shortDesc: "Copies a foe at 1.5× power. User must be faster.",
 		gen8: {
 			desc: "The user uses the move the target chose for use this turn against it, if possible, with its power multiplied by 1.5. The move must be a damaging move other than Beak Blast, Belch, Chatter, Counter, Covet, Focus Punch, Me First, Metal Burst, Mirror Coat, Shell Trap, Struggle, or Thief. Fails if the target moves before the user. Ignores the target's substitute for the purpose of copying the move.",
 		},
@@ -4044,10 +4044,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	megadrain: {
 		name: "Mega Drain",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 		gen4: {
-			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
+			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded down.",
 		},
 		gen3: {
 			desc: "The user recovers 1/2 the HP lost by the target, rounded down.",
@@ -4076,7 +4076,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Lowers the target's Attack and Special Attack by 2 stages. The user faints. This move does not check accuracy, and can hit targets in the middle of a two-turn move. Fails entirely if the target's Attack and Special Attack stat stages are both -6.",
 		},
 
-		heal: "  [POKEMON]'s HP was restored by the Z-Power!",
+		heal: "  {POKEMON}'s HP was restored by the Z-Power!",
 	},
 	menacingmoonrazemaelstrom: {
 		name: "Menacing Moonraze Maelstrom",
@@ -4086,7 +4086,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	metalburst: {
 		name: "Metal Burst",
 		desc: "Deals damage to the last opposing Pokemon to hit the user with a physical or special attack this turn equal to 1.5 times the HP lost by the user from that attack, rounded down. If the user did not lose HP from that attack, this move deals 1 HP of damage instead. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical or special attack this turn.",
-		shortDesc: "If hit by an attack, returns 1.5x damage.",
+		shortDesc: "If hit by an attack, returns 1.5× damage.",
 		gen6: {
 			desc: "Deals damage to the last opposing Pokemon to hit the user with a physical or special attack this turn equal to 1.5 times the HP lost by the user from that attack, rounded down. If the user did not lose HP from that attack, this move deals damage with a power of 1 instead. If that opposing Pokemon's position is no longer in use, the damage is done to a random opposing Pokemon in range. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical or special attack this turn.",
 		},
@@ -4114,7 +4114,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "This attack charges on the first turn and executes on the second. Raises the user's Special Attack by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
 		shortDesc: "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2.",
 
-		prepare: "[POKEMON] is overflowing with space power!",
+		prepare: "{POKEMON} is overflowing with space power!",
 	},
 	meteormash: {
 		name: "Meteor Mash",
@@ -4125,8 +4125,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Metronome",
 		desc: "A random move is selected for use, other than After You, Apple Acid, Armor Cannon, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Chilling Water, Chilly Reception, Clangorous Soul, Collision Course, Combat Torque, Comeuppance, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Doodle, Double Iron Bash, Double Shock, Dragon Ascent, Dragon Energy, Drum Beating, Dynamax Cannon, Electro Drift, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fillet Away, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyper Drill, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jet Punch, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Magical Torque, Make It Rain, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Noxious Torque, Obstruct, Order Up, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Population Bomb, Pounce, Power Shift, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Fist, Rage Powder, Raging Bull, Raging Fury, Relic Song, Revival Blessing, Ruination, Salt Cure, Secret Sword, Shed Tail, Shell Trap, Silk Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Snowscape, Spectral Thief, Spicy Extract, Spiky Shield, Spirit Break, Spotlight, Springtide Storm, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Tera Starstorm, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Tidy Up, Trailblaze, Transform, Trick, Twin Beam, V-create, Wicked Blow, Wicked Torque, or Wide Guard.",
 		shortDesc: "Picks a random move.",
+		gen8bdsp: {
+			desc: "A random move is selected for use, other than After You, Belch, Body Press, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Ascent, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Life Dew, Metronome, Mimic, Mirror Coat, Nature Power, Origin Pulse, Precipice Blades, Protect, Quash, Quick Guard, Rage Powder, Sketch, Sleep Talk, Snarl, Snore, Spiky Shield, Struggle, Switcheroo, Thief, Transform, Trick, or Wide Guard.",
+		},
 		gen8: {
 			desc: "A random move is selected for use, other than After You, Apple Acid, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Clangorous Soul, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Double Iron Bash, Dragon Ascent, Dragon Energy, Dragon Hammer, Drum Beating, Dynamax Cannon, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Obstruct, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spirit Break, Spotlight, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Transform, Trick, V-create, Wicked Blow, or Wide Guard.",
+		},
+		gen7letsgo: {
+			desc: "A random move that was introduced in gen 1 is selected for use, other than Counter, Mimic, Mirror Move, Struggle, or Transform.",
+			shortDesc: "Picks a random move from gen 1.",
 		},
 		gen7: {
 			desc: "A random move is selected for use, other than After You, Assist, Baneful Bunker, Beak Blast, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Dragon Ascent, Endure, Feint, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Helping Hand, Hold Hands, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Nature Power, Origin Pulse, Photon Geyser, Plasma Fists, Precipice Blades, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spotlight, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, V-create, or Wide Guard.",
@@ -4150,7 +4157,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "A random move is selected for use, other than Metronome or Struggle.",
 		},
 
-		move: "Waggling a finger let it use [MOVE]!",
+		move: "Waggling a finger let it use {MOVE}!",
 	},
 	mightycleave: {
 		name: "Mighty Cleave",
@@ -4191,14 +4198,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Random move known by the target replaces this.",
 		},
 
-		start: "  [POKEMON] learned [MOVE]!",
+		start: "  {POKEMON} learned {MOVE}!",
 	},
 	mindblown: {
 		name: "Mind Blown",
-		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Damp Ability, or if this move is Fire type and the user is affected by Powder or the weather is Primordial Sea.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Damp Ability, or if this move is Fire type and the user is affected by Powder or the weather is Heavy Rain.",
 		shortDesc: "User loses 50% max HP. Hits adjacent Pokemon.",
 
-		damage: "  ([POKEMON] cut its own HP to power up its move!)",
+		damage: "  ({POKEMON} cut its own HP to power up its move!)",
 	},
 	mindreader: {
 		name: "Mind Reader",
@@ -4297,18 +4304,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen2: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "While active, user is protected from stat drops.",
-			start: "  [POKEMON]'s shrouded in MIST!",
-			block: "  [POKEMON]'s protected by MIST.",
+			start: "  {POKEMON}'s shrouded in MIST!",
+			block: "  {POKEMON}'s protected by MIST.",
 		},
 		gen1: {
 			desc: "While the user remains active, it is protected from having its stat stages lowered by other Pokemon, unless caused by the secondary effect of a move. Fails if the user already has the effect. If any Pokemon uses Haze, this effect ends.",
-			start: "  [POKEMON]'s shrouded in mist!",
+			start: "  {POKEMON}'s shrouded in mist!",
 			block: "  But it failed!",
 		},
 
-		start: "  [TEAM] became shrouded in mist!",
-		end: "  [TEAM] is no longer protected by mist!",
-		block: "  [POKEMON] is protected by the mist!",
+		start: "  {TEAM} became shrouded in mist!",
+		end: "  {TEAM} is no longer protected by mist!",
+		block: "  {POKEMON} is protected by the mist!",
 	},
 	mistball: {
 		name: "Mist Ball",
@@ -4318,7 +4325,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	mistyexplosion: {
 		name: "Misty Explosion",
 		desc: "If the current terrain is Misty Terrain and the user is grounded, this move's power is multiplied by 1.5. The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "User faints. User on Misty Terrain: 1.5x power.",
+		shortDesc: "User faints. User on Misty Terrain: 1.5× power.",
 	},
 	mistyterrain: {
 		name: "Misty Terrain",
@@ -4344,42 +4351,42 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	moonlight: {
 		name: "Moonlight",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Heavy Rain, Rain, Sandstorm, or Snow, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Hail, Heavy Rain, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen7: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Hail, Heavy Rain, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen5: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen4: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded down.",
 		},
 		gen2: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain or Sandstorm, all rounded down.",
 		},
 	},
 	morningsun: {
 		name: "Morning Sun",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Heavy Rain, Rain, Sandstorm, or Snow, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Hail, Heavy Rain, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen7: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Hail, Heavy Rain, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen5: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen4: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded down.",
 		},
 		gen2: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain or Sandstorm, all rounded down.",
 		},
 	},
 	mortalspin: {
@@ -4473,7 +4480,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Attack changes based on terrain. (Swift)",
 		},
 
-		move: "Nature Power turned into [MOVE]!",
+		move: "Nature Power turned into {MOVE}!",
 	},
 	naturesmadness: {
 		name: "Nature's Madness",
@@ -4502,8 +4509,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Causes the target to lose 1/4 of its maximum HP, rounded down, at the end of each turn as long as it is asleep. This move does not affect the target unless it is asleep. The effect ends when the target wakes up, even if it falls asleep again in the same turn.",
 		shortDesc: "A sleeping target is hurt by 1/4 max HP per turn.",
 
-		start: "  [POKEMON] began having a nightmare!",
-		damage: "  [POKEMON] is locked in a nightmare!",
+		start: "  {POKEMON} began having a nightmare!",
+		damage: "  {POKEMON} is locked in a nightmare!",
 	},
 	nightshade: {
 		name: "Night Shade",
@@ -4529,7 +4536,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage, but it becomes prevented from switching out. The user can still switch out if it uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. Fails if the user has already been prevented from switching by this effect.",
 		shortDesc: "Raises all stats by 1 (not acc/eva). Traps user.",
 
-		start: "  [POKEMON] can no longer escape because it used No Retreat!",
+		start: "  {POKEMON} can no longer escape because it used No Retreat!",
 	},
 	noxioustorque: {
 		name: "Noxious Torque",
@@ -4543,7 +4550,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	oblivionwing: {
 		name: "Oblivion Wing",
-		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 75% of the damage dealt.",
 	},
 	obstruct: {
@@ -4568,7 +4575,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense and Special Defense are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
 		shortDesc: "Traps target, lowers Def and SpD by 1 each turn.",
 
-		start: "  [POKEMON] can no longer escape because of Octolock!",
+		start: "  {POKEMON} can no longer escape because of Octolock!",
 	},
 	odorsleuth: {
 		name: "Odor Sleuth",
@@ -4637,7 +4644,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	paraboliccharge: {
 		name: "Parabolic Charge",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 	},
 	partingshot: {
@@ -4679,7 +4686,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "All active Pokemon will faint in 3 turns.",
 
 		start: "  All Pok\u00E9mon that heard the song will faint in three turns!",
-		activate: "  [POKEMON]'s perish count fell to [NUMBER]!",
+		activate: "  {POKEMON}'s perish count fell to {NUMBER}!",
 	},
 	petalblizzard: {
 		name: "Petal Blizzard",
@@ -4725,7 +4732,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	pikapapow: {
 		name: "Pika Papow",
-		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1.",
+		desc: "Power is equal to the greater of (user's Happiness × 2/5), rounded down, or 1.",
 		shortDesc: "Max happiness: 102 power. Can't miss.",
 	},
 	pinmissile: {
@@ -4825,7 +4832,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Poltergeist",
 		shortDesc: "Fails if the target has no held item.",
 
-		activate: "  [POKEMON] is about to be attacked by its [ITEM]!",
+		activate: "  {POKEMON} is about to be attacked by its {ITEM}!",
 	},
 	populationbomb: {
 		name: "Population Bomb",
@@ -4849,7 +4856,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
 		},
 
-		start: "  [POKEMON] is covered in powder!",
+		start: "  {POKEMON} is covered in powder!",
 		activate: "  When the flame touched the powder on the Pok\u00E9mon, it exploded!",
 	},
 	powdersnow: {
@@ -4869,7 +4876,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The user and the target have their Attack and Special Attack stats set to be equal to the average of the user and the target's Attack and Special Attack stats, respectively, rounded down. Stat stage changes are unaffected.",
 		shortDesc: "Averages Attack and Sp. Atk stats with target.",
 
-		activate: "  [POKEMON] shared its power with the target!",
+		activate: "  {POKEMON} shared its power with the target!",
 	},
 	powerswap: {
 		name: "Power Swap",
@@ -4881,7 +4888,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass.",
 		shortDesc: "Switches user's Attack and Defense stats.",
 
-		start: "  [POKEMON] swapped its offensive stats with its defensive stats!",
+		start: "  {POKEMON} swapped its offensive stats with its defensive stats!",
 		end: "#.start",
 	},
 	powertrick: {
@@ -4889,12 +4896,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The user swaps its Attack and Defense stats, and stat stage changes remain on their respective stats. This move can be used again to swap the stats back. If the user uses Baton Pass, the replacement will have its Attack and Defense stats swapped if the effect is active. If the user has its stats recalculated by changing forme while its stats are swapped, this effect is ignored but is still active for the purposes of Baton Pass.",
 		shortDesc: "Switches user's Attack and Defense stats.",
 
-		start: "  [POKEMON] switched its Attack and Defense!",
+		start: "  {POKEMON} switched its Attack and Defense!",
 		end: "#.start",
 	},
 	powertrip: {
 		name: "Power Trip",
-		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0.",
+		desc: "Power is equal to 20+(X × 20), where X is the user's total stat stage changes that are greater than 0.",
 		shortDesc: " + 20 power for each of the user's stat boosts.",
 	},
 	poweruppunch: {
@@ -4950,8 +4957,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user is protected from attacks made by the opponent during this turn. This move has an X/255 chance of being successful, where X starts at 255 and halves, rounded down, each time this move is successfully used. X resets to 255 if this move fails or if the user's last move used is not Detect, Endure, or Protect. Fails if the user has a substitute or moves last this turn.",
 		},
 
-		start: "  [POKEMON] protected itself!",
-		block: "  [POKEMON] protected itself!",
+		start: "  {POKEMON} protected itself!",
+		block: "  {POKEMON} protected itself!",
 	},
 	psybeam: {
 		name: "Psybeam",
@@ -4961,7 +4968,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	psyblade: {
 		name: "Psyblade",
 		desc: "If the current terrain is Electric Terrain, this move's power is multiplied by 1.5.",
-		shortDesc: "During Electric Terrain: 1.5x power.",
+		shortDesc: "During Electric Terrain: 1.5× power.",
 	},
 	psychic: {
 		name: "Psychic",
@@ -5030,14 +5037,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	psywave: {
 		name: "Psywave",
-		desc: "Deals damage to the target equal to (user's level) * (X + 50) / 100, where X is a random number from 0 to 100, rounded down, but not less than 1 HP.",
-		shortDesc: "Random damage equal to 0.5x-1.5x user's level.",
+		desc: "Deals damage to the target equal to (user's level) × (X + 50) / 100, where X is a random number from 0 to 100, rounded down, but not less than 1 HP.",
+		shortDesc: "Random damage equal to 0.5×-1.5× user's level.",
 		gen4: {
-			desc: "Deals damage to the target equal to (user's level) * (X * 10 + 50) / 100, where X is a random number from 0 to 10, rounded down, but not less than 1 HP.",
+			desc: "Deals damage to the target equal to (user's level) × (X × 10 + 50) / 100, where X is a random number from 0 to 10, rounded down, but not less than 1 HP.",
 		},
 		gen2: {
-			desc: "Deals damage to the target equal to a random number from 1 to (user's level * 1.5 - 1), rounded down, but not less than 1 HP.",
-			shortDesc: "Random damage from 1 to (user's level*1.5 - 1).",
+			desc: "Deals damage to the target equal to a random number from 1 to (user's level × 1.5 - 1), rounded down, but not less than 1 HP.",
+			shortDesc: "Random damage from 1 to (user's level × 1.5 - 1).",
 		},
 	},
 	pulverizingpancake: {
@@ -5046,7 +5053,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	punishment: {
 		name: "Punishment",
-		desc: "Power is equal to 60+(X*20), where X is the target's total stat stage changes that are greater than 0, but not more than 200 power.",
+		desc: "Power is equal to 60+(X × 20), where X is the target's total stat stage changes that are greater than 0, but not more than 200 power.",
 		shortDesc: "60 power +20 for each of the target's stat boosts.",
 	},
 	purify: {
@@ -5057,7 +5064,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	pursuit: {
 		name: "Pursuit",
 		desc: "If an opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over; if an opponent faints from this, the replacement Pokemon does not become active until the end of the turn.",
-		shortDesc: "If a foe is switching out, hits it at 2x power.",
+		shortDesc: "If a foe is switching out, hits it at 2× power.",
 		gen7: {
 			desc: "If an adjacent opposing Pokemon switches out this turn, this move hits that Pokemon before it leaves the field, even if it was not the original target. If the user moves after an opponent using Parting Shot, U-turn, or Volt Switch, but not Baton Pass, it will hit that opponent before it leaves the field. Power doubles and no accuracy check is done if the user hits an opponent switching out, and the user's turn is over; if an opponent faints from this, the replacement Pokemon does not become active until the end of the turn.",
 		},
@@ -5076,7 +5083,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Power doubles if the foe is switching out.",
 		},
 
-		activate: "  ([TARGET] is being withdrawn...)",
+		activate: "  ({TARGET} is being withdrawn...)",
 	},
 	pyroball: {
 		name: "Pyro Ball",
@@ -5088,7 +5095,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Causes the target to take its turn after all other Pokemon this turn, no matter the priority of its selected move. Fails if the target already moved this turn.",
 		shortDesc: "Forces the target to move last this turn.",
 
-		activate: "  [TARGET]'s move was postponed!",
+		activate: "  {TARGET}'s move was postponed!",
 	},
 	quickattack: {
 		name: "Quick Attack",
@@ -5112,8 +5119,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user and its party members are protected from attacks with original priority greater than 0 made by other Pokemon, including allies, during this turn. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		},
 
-		start: "  Quick Guard protected [TEAM]!",
-		block: "  Quick Guard protected [POKEMON]!",
+		start: "  Quick Guard protected {TEAM}!",
+		block: "  Quick Guard protected {POKEMON}!",
 	},
 	quiverdance: {
 		name: "Quiver Dance",
@@ -5138,10 +5145,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	ragefist: {
 		name: "Rage Fist",
-		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and does not reset upon switching out or fainting. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
+		desc: "Power is equal to 50+(X × 50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and does not reset upon switching out or fainting. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
 		shortDesc: "+50 power for each time user was hit. Max 6 hits.",
 		champions: {
-			desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and resets to 0 when the user leaves the field. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
+			desc: "Power is equal to 50+(X × 50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and resets to 0 when the user leaves the field. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
 			shortDesc: "+50 BP/hit on user. Max 6 hits. Resets on switch-out.",
 		},
 	},
@@ -5161,7 +5168,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "If this attack does not miss, the effects of Reflect, Light Screen, and Aurora Veil end for the target's side of the field before damage is calculated. If the user's current form is a Paldean Tauros, this move's type changes to match. Fighting type for Combat Breed, Fire type for Blaze Breed, and Water type for Aqua Breed.",
 		shortDesc: "Destroys screens. Type depends on user's form.",
 
-		activate: "  [POKEMON] shattered [TEAM]'s protections!",
+		activate: "  {POKEMON} shattered {TEAM}'s protections!",
 	},
 	ragingfury: {
 		name: "Raging Fury",
@@ -5170,13 +5177,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	raindance: {
 		name: "Rain Dance",
-		desc: "For 5 turns, the weather becomes Rain Dance. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Damp Rock. Fails if the current weather is Rain Dance.",
+		desc: "For 5 turns, the weather becomes Rain. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Damp Rock. Fails if the current weather is Rain.",
 		shortDesc: "For 5 turns, heavy rain powers Water moves.",
 		gen3: {
-			desc: "For 5 turns, the weather becomes Rain Dance. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Rain Dance.",
+			desc: "For 5 turns, the weather becomes Rain. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Rain.",
 		},
 		gen2: {
-			desc: "For 5 turns, the weather becomes Rain Dance, even if the current weather is Rain Dance. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect.",
+			desc: "For 5 turns, the weather becomes Rain, even if the current weather is Rain. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect.",
 		},
 	},
 	rapidspin: {
@@ -5227,7 +5234,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Charges turn 1. Hits turn 2.",
 		},
 
-		prepare: "  [POKEMON] whipped up a whirlwind!",
+		prepare: "  {POKEMON} whipped up a whirlwind!",
 	},
 	recover: {
 		name: "Recover",
@@ -5251,14 +5258,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user regains the item last used by a Pokemon in its current position on the field, even if that Pokemon was not the user. Fails if the user is holding an item, if no items have been used at the user's position, or if the item was lost to Covet, Knock Off, or Thief. Items thrown with Fling can be regained.",
 		},
 
-		addItem: "  [POKEMON] found one [ITEM]!",
+		addItem: "  {POKEMON} found one {ITEM}!",
 	},
 	reflect: {
 		name: "Reflect",
-		desc: "For 5 turns, the user and its party members take 0.5x damage from physical attacks, or 0.66x damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
+		desc: "For 5 turns, the user and its party members take 0.5× damage from physical attacks, or 0.66× damage if in a Double Battle. Damage is not reduced further with Aurora Veil. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
 		shortDesc: "For 5 turns, physical damage to allies is halved.",
 		gen6: {
-			desc: "For 5 turns, the user and its party members take 0.5x damage from physical attacks, or 0.66x damage if in a Double or Triple Battle. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
+			desc: "For 5 turns, the user and its party members take 0.5× damage from physical attacks, or 0.66× damage if in a Double or Triple Battle. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
 		},
 		gen4: {
 			desc: "For 5 turns, the user and its party members take 1/2 damage from physical attacks, or 2/3 damage if there are multiple active Pokemon on the user's side. Critical hits ignore this effect. It is removed from the user's side if the user or an ally is successfully hit by Brick Break or Defog. Lasts for 8 turns if the user is holding Light Clay. Fails if the effect is already active on the user's side.",
@@ -5273,11 +5280,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen1: {
 			desc: "While the user remains active, its Defense is doubled when taking damage. Critical hits ignore this protection. This effect can be removed by Haze.",
 			shortDesc: "While active, the user's Defense is doubled.",
-			start: "  [POKEMON] gained armor!",
+			start: "  {POKEMON} gained armor!",
 		},
 
-		start: "  Reflect made [TEAM] stronger against physical moves!",
-		end: "  [TEAM]'s Reflect wore off!",
+		start: "  Reflect made {TEAM} stronger against physical moves!",
+		end: "  {TEAM}'s Reflect wore off!",
 	},
 	reflecttype: {
 		name: "Reflect Type",
@@ -5290,7 +5297,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Causes the user's types to become the same as the current types of the target. Fails if the user is an Arceus.",
 		},
 
-		typeChange: "  [POKEMON]'s type became the same as [SOURCE]'s type!",
+		typeChange: "  {POKEMON}'s type became the same as {SOURCE}'s type!",
 	},
 	refresh: {
 		name: "Refresh",
@@ -5320,7 +5327,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	return: {
 		name: "Return",
-		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1.",
+		desc: "Power is equal to the greater of (user's Happiness × 2/5), rounded down, or 1.",
 		shortDesc: "Max 102 power at maximum Happiness.",
 	},
 	revelationdance: {
@@ -5342,16 +5349,16 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	reversal: {
 		name: "Reversal",
-		desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP * 48 / user's maximum HP), rounded down.",
+		desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP × 48 / user's maximum HP), rounded down.",
 		shortDesc: "More power the less HP the user has left.",
 		gen4: {
-			desc: "The power of this move is 20 if X is 43 to 48, 40 if X is 22 to 42, 80 if X is 13 to 21, 100 if X is 6 to 12, 150 if X is 2 to 5, and 200 if X is 0 or 1, where X is equal to (user's current HP * 64 / user's maximum HP), rounded down.",
+			desc: "The power of this move is 20 if X is 43 to 48, 40 if X is 22 to 42, 80 if X is 13 to 21, 100 if X is 6 to 12, 150 if X is 2 to 5, and 200 if X is 0 or 1, where X is equal to (user's current HP × 64 / user's maximum HP), rounded down.",
 		},
 		gen3: {
-			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP * 48 / user's maximum HP), rounded down.",
+			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP × 48 / user's maximum HP), rounded down.",
 		},
 		gen2: {
-			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP * 48 / user's maximum HP), rounded down. This move does not apply damage variance and cannot be a critical hit.",
+			desc: "The power of this move is 20 if X is 33 to 48, 40 if X is 17 to 32, 80 if X is 10 to 16, 100 if X is 5 to 9, 150 if X is 2 to 4, and 200 if X is 0 or 1, where X is equal to (user's current HP × 48 / user's maximum HP), rounded down. This move does not apply damage variance and cannot be a critical hit.",
 		},
 	},
 	revivalblessing: {
@@ -5359,19 +5366,19 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "A fainted party member is selected and revived with 1/2 its max HP, rounded down. Fails if there are no fainted party members.",
 		shortDesc: "Revives a fainted Pokemon to 50% HP.",
 
-		heal: "  [POKEMON] was revived and is ready to fight again!",
+		heal: "  {POKEMON} was revived and is ready to fight again!",
 	},
 	risingvoltage: {
 		name: "Rising Voltage",
 		desc: "If the current terrain is Electric Terrain and the target is grounded, this move's power is doubled.",
-		shortDesc: "2x power if target is grounded in Electric Terrain.",
+		shortDesc: "2× power if target is grounded in Electric Terrain.",
 	},
 	roar: {
 		name: "Roar",
 		desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, or if the target used Ingrain previously or has the Suction Cups Ability.",
 		shortDesc: "Forces the target to switch to a random ally.",
 		gen4: {
-			desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, if the target used Ingrain previously or has the Suction Cups Ability, or if the user's level is lower than the target's and X * (user's level + target's level) / 256 + 1 is less than or equal to (target's level / 4), rounded down, where X is a random number from 0 to 255.",
+			desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, if the target used Ingrain previously or has the Suction Cups Ability, or if the user's level is lower than the target's and X × (user's level + target's level) / 256 + 1 is less than or equal to (target's level / 4), rounded down, where X is a random number from 0 to 255.",
 		},
 		gen2: {
 			desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, or if the user moves before the target.",
@@ -5464,7 +5471,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user's Ability changes to match the target's Ability. Fails if the target's Ability is Wonder Guard.",
 		},
 
-		changeAbility: "  [POKEMON] copied [SOURCE]'s [ABILITY] Ability!",
+		changeAbility: "  {POKEMON} copied {SOURCE}'s {ABILITY} Ability!",
 	},
 	rollingkick: {
 		name: "Rolling Kick",
@@ -5493,7 +5500,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user restores 1/2 of its maximum HP, rounded down. Until the end of the turn, Flying-type users lose their Flying type and pure Flying-type users become typeless. Does nothing if the user's HP is full.",
 		},
 
-		start: "  ([POKEMON] loses Flying type this turn.)",
+		start: "  ({POKEMON} loses Flying type this turn.)",
 	},
 	rototiller: {
 		name: "Rototiller",
@@ -5531,9 +5538,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "For 5 turns, the user and its party members cannot have non-volatile status conditions or confusion inflicted on them by other Pokemon. During the effect, Outrage, Thrash, and Petal Dance do not confuse the user. Fails if the effect is already active on the user's side.",
 		},
 
-		start: "  [TEAM] cloaked itself in a mystical veil!",
-		end: "  [TEAM] is no longer protected by Safeguard!",
-		block: "  [POKEMON] is protected by Safeguard!",
+		start: "  {TEAM} cloaked itself in a mystical veil!",
+		end: "  {TEAM} is no longer protected by Safeguard!",
+		block: "  {POKEMON} is protected by Safeguard!",
 	},
 	saltcure: {
 		name: "Salt Cure",
@@ -5544,8 +5551,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Deals 1/16 max HP each turn; 1/8 on Steel, Water.",
 		},
 
-		start: "  [POKEMON] is being salt cured!",
-		damage: "  [POKEMON] is hurt by Salt Cure!",
+		start: "  {POKEMON} is being salt cured!",
+		damage: "  {POKEMON} is hurt by Salt Cure!",
 	},
 	sandattack: {
 		name: "Sand Attack",
@@ -5554,13 +5561,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sandsearstorm: {
 		name: "Sandsear Storm",
-		desc: "Has a 20% chance to burn the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		desc: "Has a 20% chance to burn the target. If the weather is Heavy Rain or Rain, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
 		shortDesc: "20% chance to burn foe(s). Can't miss in rain.",
 	},
 	sandstorm: {
 		name: "Sandstorm",
 		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
-		shortDesc: "For 5 turns, a sandstorm rages. Rock: 1.5x SpD.",
+		shortDesc: "For 5 turns, a sandstorm rages. Rock: 1.5× SpD.",
 		gen4: {
 			desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
 		},
@@ -5593,7 +5600,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Prevents the target from switching for two to five turns. Causes damage to the target equal to 1/16 of its maximum HP, rounded down, at the end of each turn during effect. The target can still switch out if it uses Baton Pass. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		},
 
-		start: "  [POKEMON] became trapped by the quicksand!",
+		start: "  {POKEMON} became trapped by the quicksand!",
 	},
 	sappyseed: {
 		name: "Sappy Seed",
@@ -5730,8 +5737,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "If this move is successful, it breaks through the target's Detect or Protect for this turn, allowing other Pokemon to attack the target normally. If the target is an opponent and its side is protected by Quick Guard or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the opponent's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
 		},
 
-		activate: "  It broke through [TARGET]'s protection!",
-		prepare: "[POKEMON] vanished instantly!",
+		activate: "  It broke through {TARGET}'s protection!",
+		prepare: "{POKEMON} vanished instantly!",
 	},
 	shadowpunch: {
 		name: "Shadow Punch",
@@ -5761,7 +5768,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The user takes 1/2 of its maximum HP, rounded up, and creates a substitute that has 1/4 of the user's maximum HP, rounded down. The user is replaced with another Pokemon in its party and the selected Pokemon has the substitute transferred to it. Fails if the user would faint, or if there are no unfainted party members.",
 		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
 
-		start: "  [POKEMON] shed its tail to create a decoy!",
+		start: "  {POKEMON} shed its tail to create a decoy!",
 		alreadyStarted: "#substitute",
 		fail: "#substitute",
 	},
@@ -5776,7 +5783,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	shellsidearm: {
 		name: "Shell Side Arm",
-		desc: "Has a 20% chance to poison the target. This move becomes a physical attack that makes contact if the value of ((((2 * the user's level / 5 + 2) * 90 * X) / Y) / 50), where X is the user's Attack stat and Y is the target's Defense stat, is greater than the same value where X is the user's Special Attack stat and Y is the target's Special Defense stat. No stat modifiers other than stat stage changes are considered for this purpose. If the two values are equal, this move chooses a damage category at random.",
+		desc: "Has a 20% chance to poison the target. This move becomes a physical attack that makes contact if the value of ((((2 × the user's level / 5 + 2) × 90 × X) / Y) / 50), where X is the user's Attack stat and Y is the target's Defense stat, is greater than the same value where X is the user's Special Attack stat and Y is the target's Special Defense stat. No stat modifiers other than stat stage changes are considered for this purpose. If the two values are equal, this move chooses a damage category at random.",
 		shortDesc: "20% psn. Physical+contact if it would be stronger.",
 	},
 	shellsmash: {
@@ -5789,9 +5796,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Fails unless the user is hit by a physical attack from an opponent this turn before it can execute the move. If the user was hit and has not fainted, it attacks immediately after being hit, and the effect ends. If the opponent's physical attack had a secondary effect removed by the Sheer Force Ability, it does not count for the purposes of this effect.",
 		shortDesc: "User must take physical damage before moving.",
 
-		start: "  [POKEMON] set a shell trap!",
-		prepare: "  [POKEMON] set a shell trap!",
-		cant: "[POKEMON]'s shell trap didn't work!",
+		start: "  {POKEMON} set a shell trap!",
+		prepare: "  {POKEMON} set a shell trap!",
+		cant: "{POKEMON}'s shell trap didn't work!",
 	},
 	shelter: {
 		name: "Shelter",
@@ -5872,7 +5879,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Fails when used in Link Battles.",
 		},
 
-		activate: "  [POKEMON] sketched [MOVE]!",
+		activate: "  {POKEMON} sketched {MOVE}!",
 	},
 	skillswap: {
 		name: "Skill Swap",
@@ -5897,7 +5904,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Wonder Guard.",
 		},
 
-		activate: "  [POKEMON] swapped Abilities with its target!",
+		activate: "  {POKEMON} swapped Abilities with its target!",
 	},
 	skittersmack: {
 		name: "Skitter Smack",
@@ -5916,7 +5923,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Charges turn 1. Hits turn 2.",
 		},
 
-		prepare: "[POKEMON] tucked in its head!",
+		prepare: "{POKEMON} tucked in its head!",
 	},
 	skyattack: {
 		name: "Sky Attack",
@@ -5930,7 +5937,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Charges turn 1. Hits turn 2.",
 		},
 
-		prepare: "[POKEMON] became cloaked in a harsh light!",
+		prepare: "{POKEMON} became cloaked in a harsh light!",
 	},
 	skydrop: {
 		name: "Sky Drop",
@@ -5940,10 +5947,10 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "This attack takes the target into the air with the user on the first turn and executes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally, if the target has a substitute, or if the target is using Bounce, Dig, Dive, Fly, Shadow Force, or Sky Drop. If the effect of Gravity ends this effect before the second turn, both the user and the target return to the ground, but the target will otherwise remain under this effect until the user leaves the field or successfully executes the second turn of any two-turn move.",
 		},
 
-		prepare: "[POKEMON] took [TARGET] into the sky!",
-		end: "  [POKEMON] was freed from the Sky Drop!",
-		failSelect: "Sky Drop won't let [POKEMON] go!",
-		failTooHeavy: "  [POKEMON] is too heavy to be lifted!",
+		prepare: "{POKEMON} took {TARGET} into the sky!",
+		end: "  {POKEMON} was freed from the Sky Drop!",
+		failSelect: "Sky Drop won't let {POKEMON} go!",
+		failTooHeavy: "  {POKEMON} is too heavy to be lifted!",
 	},
 	skyuppercut: {
 		name: "Sky Uppercut",
@@ -6025,7 +6032,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If this move hits a target under the effect of Bounce, Fly, Magnet Rise, or Telekinesis, the effect ends. If the target is a Flying type that has not used Roost this turn or a Pokemon with the Levitate Ability, it loses its immunity to Ground-type attacks and the Arena Trap Ability as long as it remains active. During the effect, Magnet Rise fails for the target and Telekinesis fails against the target.",
 		shortDesc: "Removes the target's Ground immunity.",
 
-		start: "  [POKEMON] fell straight down!",
+		start: "  {POKEMON} fell straight down!",
 	},
 	smartstrike: {
 		name: "Smart Strike",
@@ -6061,7 +6068,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		},
 
-		start: "  [POKEMON] got trapped by a snap trap!",
+		start: "  {POKEMON} got trapped by a snap trap!",
 	},
 	snarl: {
 		name: "Snarl",
@@ -6076,8 +6083,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "If another Pokemon uses certain non-damaging moves this turn, the user steals that move to use itself. If multiple Pokemon use this move this turn, the applicable moves are stolen by each of those Pokemon in turn order, and only the last user in turn order will gain the effects.",
 		},
 
-		start: "  [POKEMON] is waiting for a target to make a move!",
-		activate: "  [POKEMON] snatched [TARGET]'s move!",
+		start: "  {POKEMON} is waiting for a target to make a move!",
+		activate: "  {POKEMON} snatched {TARGET}'s move!",
 	},
 	snipeshot: {
 		name: "Snipe Shot",
@@ -6092,7 +6099,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	snowscape: {
 		name: "Snowscape",
 		desc: "For 5 turns, the weather becomes Snow. During the effect, the Defense of Ice-type Pokemon is multiplied by 1.5 when taking damage from a physical attack. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Snow.",
-		shortDesc: "For 5 turns, snow falls. Ice: 1.5x Def.",
+		shortDesc: "For 5 turns, snow falls. Ice: 1.5× Def.",
 	},
 	soak: {
 		name: "Soak",
@@ -6121,42 +6128,42 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	solarbeam: {
 		name: "Solar Beam",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Heavy Rain, Rain, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Intense Sun or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Intense Sun or Sun, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Heavy Rain, Rain, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Intense Sun or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Intense Sun or Sun, the move still requires a turn to charge.",
 		},
 		gen7: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Heavy Rain, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Intense Sun or Sun, the move completes in one turn.",
 		},
 		gen5: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Sun, the move completes in one turn.",
 		},
 		gen4: {
-			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Sun, the move completes in one turn.",
 		},
 		gen3: {
-			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain Dance, or Sandstorm. If the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain, or Sandstorm. If the weather is Sun, the move completes in one turn.",
 		},
 		gen2: {
-			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Rain Dance. If the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Rain. If the weather is Sun, the move completes in one turn.",
 		},
 		gen1: {
 			desc: "This attack charges on the first turn and executes on the second.",
 			shortDesc: "Charges turn 1. Hits turn 2.",
 		},
 
-		prepare: "  [POKEMON] absorbed light!",
+		prepare: "  {POKEMON} absorbed light!",
 	},
 	solarblade: {
 		name: "Solar Blade",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Heavy Rain, Rain, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Intense Sun or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Intense Sun or Sun, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Heavy Rain, Rain, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Intense Sun or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Intense Sun or Sun, the move still requires a turn to charge.",
 		},
 		gen7: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Heavy Rain, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Intense Sun or Sun, the move completes in one turn.",
 		},
 
 		prepare: "#solarbeam",
@@ -6198,14 +6205,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "The target's stat stages greater than 0 are stolen from it and applied to the user before dealing damage.",
 		shortDesc: "Steals target's boosts before dealing damage.",
 
-		clearBoost: "  [SOURCE] stole the target's boosted stats!",
+		clearBoost: "  {SOURCE} stole the target's boosted stats!",
 	},
 	speedswap: {
 		name: "Speed Swap",
 		desc: "The user swaps its Speed stat with the target. Stat stage changes are unaffected.",
 		shortDesc: "Swaps Speed stat with target.",
 
-		activate: "  [POKEMON] switched Speed with its target!",
+		activate: "  {POKEMON} switched Speed with its target!",
 	},
 	spicyextract: {
 		name: "Spicy Extract",
@@ -6261,9 +6268,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Hurts grounded foes on switch-in. Max 1 layer.",
 		},
 
-		start: "  Spikes were scattered on the ground all around [TEAM]!",
-		end: "  The spikes disappeared from the ground around [TEAM]!",
-		damage: "  [POKEMON] was hurt by the spikes!",
+		start: "  Spikes were scattered on the ground all around {TEAM}!",
+		end: "  The spikes disappeared from the ground around {TEAM}!",
+		damage: "  {POKEMON} was hurt by the spikes!",
 	},
 	spikyshield: {
 		name: "Spiky Shield",
@@ -6311,7 +6318,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Causes the target's last move used to lose 2 to 5 PP, at random. Fails if the target has not made a move, or if the move has 0 PP.",
 		},
 
-		activate: "  It reduced the PP of [TARGET]'s [MOVE] by [NUMBER]!",
+		activate: "  It reduced the PP of {TARGET}'s {MOVE} by {NUMBER}!",
 	},
 	spitup: {
 		name: "Spit Up",
@@ -6359,18 +6366,18 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stealthrock: {
 		name: "Stealth Rock",
-		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
+		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25×, 0.5×, neutral, 2×, or 4×, respectively. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
 		shortDesc: "Hurts foes on switch-in. Factors Rock weakness.",
 		gen8: {
-			desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+			desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25×, 0.5×, neutral, 2×, or 4×, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		},
 		gen5: {
-			desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin successfully, or is hit by Defog.",
+			desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25×, 0.5×, neutral, 2×, or 4×, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin successfully, or is hit by Defog.",
 		},
 
-		start: "  Pointed stones float in the air around [TEAM]!",
-		end: "  The pointed stones disappeared from around [TEAM]!",
-		damage: "  Pointed stones dug into [POKEMON]!",
+		start: "  Pointed stones float in the air around {TEAM}!",
+		end: "  The pointed stones disappeared from around {TEAM}!",
+		damage: "  Pointed stones dug into {POKEMON}!",
 	},
 	steameruption: {
 		name: "Steam Eruption",
@@ -6410,9 +6417,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Sets up a hazard on the opposing side of the field, lowering the Speed by 1 stage of each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Fails if the effect is already active on the opposing side. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
 		},
 
-		start: "  A sticky web has been laid out on the ground around [TEAM]!",
-		end: "  The sticky web has disappeared from the ground around [TEAM]!",
-		activate: "  [POKEMON] was caught in a sticky web!",
+		start: "  A sticky web has been laid out on the ground around {TEAM}!",
+		end: "  The sticky web has disappeared from the ground around {TEAM}!",
+		activate: "  {POKEMON} was caught in a sticky web!",
 	},
 	stockpile: {
 		name: "Stockpile",
@@ -6423,8 +6430,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Raises user's Stockpile count by 1. Max 3 uses.",
 		},
 
-		start: "  [POKEMON] stockpiled [NUMBER]!",
-		end: "  [POKEMON]'s stockpiled effect wore off!",
+		start: "  {POKEMON} stockpiled {NUMBER}!",
+		end: "  {POKEMON}'s stockpiled effect wore off!",
 	},
 	stokedsparksurfer: {
 		name: "Stoked Sparksurfer",
@@ -6458,7 +6465,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	stoneaxe: {
 		name: "Stone Axe",
-		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
+		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25×, 0.5×, neutral, 2×, or 4×, respectively. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
 		shortDesc: "Sets Stealth Rock on the target's side.",
 	},
 	stoneedge: {
@@ -6468,7 +6475,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	storedpower: {
 		name: "Stored Power",
-		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0.",
+		desc: "Power is equal to 20+(X × 20), where X is the user's total stat stage changes that are greater than 0.",
 		shortDesc: " + 20 power for each of the user's stat boosts.",
 	},
 	stormthrow: {
@@ -6487,7 +6494,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	strengthsap: {
 		name: "Strength Sap",
-		desc: "Lowers the target's Attack by 1 stage. The user restores its HP equal to the target's Attack stat calculated with its stat stage before this move was used. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Fails if the target's Attack stat stage is -6.",
+		desc: "Lowers the target's Attack by 1 stage. The user restores its HP equal to the target's Attack stat calculated with its stat stage before this move was used. If Big Root is held by the user, the HP recovered is 1.3× normal, rounded half down. Fails if the target's Attack stat stage is -6.",
 		shortDesc: "User heals HP=target's Atk stat. Lowers Atk by 1.",
 	},
 	stringshot: {
@@ -6578,11 +6585,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "User takes 1/4 its max HP to put in a Substitute.",
 		},
 
-		start: "  [POKEMON] put in a substitute!",
-		alreadyStarted: "  [POKEMON] already has a substitute!",
-		end: "  [POKEMON]'s substitute faded!",
+		start: "  {POKEMON} put in a substitute!",
+		alreadyStarted: "  {POKEMON} already has a substitute!",
+		end: "  {POKEMON}'s substitute faded!",
 		fail: "  But it does not have enough HP left to make a substitute!",
-		activate: "  The substitute took damage for [POKEMON]!",
+		activate: "  The substitute took damage for {POKEMON}!",
 	},
 	subzeroslammer: {
 		name: "Subzero Slammer",
@@ -6598,13 +6605,13 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	sunnyday: {
 		name: "Sunny Day",
-		desc: "For 5 turns, the weather becomes Sunny Day. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Heat Rock. Fails if the current weather is Sunny Day.",
+		desc: "For 5 turns, the weather becomes Sun. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Heat Rock. Fails if the current weather is Sun.",
 		shortDesc: "For 5 turns, intense sunlight powers Fire moves.",
 		gen3: {
-			desc: "For 5 turns, the weather becomes Sunny Day. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Sunny Day.",
+			desc: "For 5 turns, the weather becomes Sun. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Sun.",
 		},
 		gen2: {
-			desc: "For 5 turns, the weather becomes Sunny Day, even if the current weather is Sunny Day. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect.",
+			desc: "For 5 turns, the weather becomes Sun, even if the current weather is Sun. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect.",
 		},
 	},
 	sunsteelstrike: {
@@ -6746,22 +6753,22 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	synthesis: {
 		name: "Synthesis",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Heavy Rain, Rain, Sandstorm, or Snow, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Hail, Heavy Rain, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen7: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Strong Winds or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Intense Sun or Sun, and 1/4 of its maximum HP if the weather is Hail, Heavy Rain, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen5: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen4: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded down.",
 		},
 		gen2: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain or Sandstorm, all rounded down.",
 		},
 	},
 	syrupbomb: {
@@ -6769,7 +6776,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "If this move is successful, it causes the target's Speed to be lowered by 1 stage at the end of each turn for 3 turns.",
 		shortDesc: "Target's Speed is lowered by 1 stage for 3 turns.",
 
-		start: "  [POKEMON] got covered in sticky candy syrup!",
+		start: "  {POKEMON} got covered in sticky candy syrup!",
 	},
 	tackle: {
 		name: "Tackle",
@@ -6814,8 +6821,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "For 3 turns, allies' Speed is doubled.",
 		},
 
-		start: "  The Tailwind blew from behind [TEAM]!",
-		end: "  [TEAM]'s Tailwind petered out!",
+		start: "  The Tailwind blew from behind {TEAM}!",
+		end: "  {TEAM}'s Tailwind petered out!",
 	},
 	takedown: {
 		name: "Take Down",
@@ -6841,7 +6848,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Lowers the target's Speed by 1 stage. Until the target switches out, the effectiveness of Fire-type moves is doubled against it.",
 		shortDesc: "Target gets -1 Spe and becomes weaker to Fire.",
 
-		start: "  [POKEMON] became weaker to fire!",
+		start: "  {POKEMON} became weaker to fire!",
 	},
 	taunt: {
 		name: "Taunt",
@@ -6865,9 +6872,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "For 2 turns, the target can't use status moves.",
 		},
 
-		start: "  [POKEMON] fell for the taunt!",
-		end: "  [POKEMON] shook off the taunt!",
-		cant: "[POKEMON] can't use [MOVE] after the taunt!",
+		start: "  {POKEMON} fell for the taunt!",
+		end: "  {POKEMON} shook off the taunt!",
+		cant: "{POKEMON} can't use {MOVE} after the taunt!",
 	},
 	tearfullook: {
 		name: "Tearful Look",
@@ -6907,13 +6914,17 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "For 3 turns, the target cannot avoid any attacks made against it, other than OHKO moves, as long as it remains active. During the effect, the target is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, and the Arena Trap Ability as long as it remains active. If the target uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, and Iron Ball override this move if the target is under any of their effects. Fails if the target is already under this effect or the effects of Ingrain or Smack Down. The target is immune to this move on use if its species is Diglett or Dugtrio.",
 		},
 
-		start: "  [POKEMON] was hurled into the air!",
-		end: "  [POKEMON] was freed from the telekinesis!",
+		start: "  {POKEMON} was hurled into the air!",
+		end: "  {POKEMON} was freed from the telekinesis!",
 	},
 	teleport: {
 		name: "Teleport",
 		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
 		shortDesc: "User switches out.",
+		gen7letsgo: {
+			desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+			shortDesc: "User switches out.",
+		},
 		gen7: {
 			desc: "Fails when used.",
 			shortDesc: "Fails when used.",
@@ -7010,23 +7021,23 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "For 2 turns, the target cannot use sound-based moves. Z-Powered sound moves can still be selected and executed during this effect.",
 		},
 
-		cant: "The effects of Throat Chop prevent [POKEMON] from using certain moves!",
+		cant: "The effects of Throat Chop prevent {POKEMON} from using certain moves!",
 	},
 	thunder: {
 		name: "Thunder",
-		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
+		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Heavy Rain or Rain, this move does not check accuracy. If the weather is Intense Sun or Sun, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
 		shortDesc: "30% chance to paralyze. Can't miss in rain.",
 		gen7: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Heavy Rain or Rain, this move does not check accuracy. If the weather is Intense Sun or Sun, this move's accuracy is 50%.",
 		},
 		gen5: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 		gen4: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce or Fly. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce or Fly. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 		gen2: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Fly. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Fly. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 		gen1: {
 			desc: "Has a 10% chance to paralyze the target.",
@@ -7046,7 +7057,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		},
 
-		start: "  [SOURCE] trapped [POKEMON]!",
+		start: "  {SOURCE} trapped {POKEMON}!",
 	},
 	thunderclap: {
 		name: "Thunderclap",
@@ -7105,8 +7116,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Prevents the target from selecting the same move for use two turns in a row. This effect ends when the target is no longer active.",
 		shortDesc: "Target can't select the same move twice in a row.",
 
-		start: "  [POKEMON] was subjected to torment!",
-		end: "  [POKEMON] is no longer tormented!",
+		start: "  {POKEMON} was subjected to torment!",
+		end: "  {POKEMON} is no longer tormented!",
 	},
 	toxic: {
 		name: "Toxic",
@@ -7131,8 +7142,8 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Sets up a hazard on the opposing side of the field, poisoning each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Can be used up to two times before failing. Opposing Pokemon become poisoned with one layer and badly poisoned with two layers. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin successfully, is hit by Defog, or a grounded Poison-type Pokemon switches in. Safeguard prevents the opposing party from being poisoned on switch-in, as well as switching in with a substitute.",
 		},
 
-		start: "  Poison spikes were scattered on the ground all around [TEAM]!",
-		end: "  The poison spikes disappeared from the ground around [TEAM]!",
+		start: "  Poison spikes were scattered on the ground all around {TEAM}!",
+		end: "  The poison spikes disappeared from the ground around {TEAM}!",
 	},
 	toxicthread: {
 		name: "Toxic Thread",
@@ -7163,7 +7174,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user transforms into the target. The target's current stats, stat stages, types, moves, DVs, species, and sprite are copied. The user's level and HP remain the same and each copied move receives only 5 PP. This move can hit a target using Dig or Fly.",
 		},
 
-		transform: "[POKEMON] transformed into [SPECIES]!",
+		transform: "{POKEMON} transformed into {SPECIES}!",
 	},
 	triattack: {
 		name: "Tri Attack",
@@ -7203,7 +7214,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user swaps its held item with the target's held item. Fails if both the user and the target have no held item, if either is holding a Mail, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
 		},
 
-		activate: "  [POKEMON] switched items with its target!",
+		activate: "  {POKEMON} switched items with its target!",
 	},
 	trickortreat: {
 		name: "Trick-or-Treat",
@@ -7318,11 +7329,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Lasts 2-5 turns. Active Pokemon cannot sleep.",
 		},
 
-		start: "  [POKEMON] caused an uproar!",
-		end: "  [POKEMON] calmed down.",
-		upkeep: "  [POKEMON] is making an uproar!",
-		block: "  But the uproar kept [POKEMON] awake!",
-		blockSelf: "  But [POKEMON] can't sleep in an uproar!",
+		start: "  {POKEMON} caused an uproar!",
+		end: "  {POKEMON} calmed down.",
+		upkeep: "  {POKEMON} is making an uproar!",
+		block: "  But the uproar kept {POKEMON} awake!",
+		blockSelf: "  But {POKEMON} can't sleep in an uproar!",
 	},
 	uturn: {
 		name: "U-turn",
@@ -7335,7 +7346,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
 		},
 
-		switchOut: "[POKEMON] went back to [TRAINER]!",
+		switchOut: "{POKEMON} went back to {TRAINER}!",
 	},
 	vacuumwave: {
 		name: "Vacuum Wave",
@@ -7349,7 +7360,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	veeveevolley: {
 		name: "Veevee Volley",
-		desc: "Power is equal to the greater of (user's Happiness * 2/5), rounded down, or 1.",
+		desc: "Power is equal to the greater of (user's Happiness × 2/5), rounded down, or 1.",
 		shortDesc: "Max happiness: 102 power. Can't miss.",
 	},
 	venomdrench: {
@@ -7429,9 +7440,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Water Pledge with 150 power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances and stacks with the Serene Grace Ability, except effects that cause flinching can only have their chance doubled once. If combined with Grass Pledge, the ally uses Grass Pledge with 150 power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Water Gem, and cannot be redirected by the Storm Drain Ability.",
 		shortDesc: "Use with Grass or Fire Pledge for added effect.",
 
-		activate: "  [POKEMON] is waiting for [TARGET]'s move...",
-		start: "  A rainbow appeared in the sky on [TEAM]'s side!",
-		end: "  The rainbow on [TEAM]'s side disappeared!",
+		activate: "  {POKEMON} is waiting for {TARGET}'s move...",
+		start: "  A rainbow appeared in the sky on {TEAM}'s side!",
+		end: "  The rainbow on {TEAM}'s side disappeared!",
 	},
 	waterpulse: {
 		name: "Water Pulse",
@@ -7464,7 +7475,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	waterspout: {
 		name: "Water Spout",
-		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		desc: "Power is equal to (user's current HP × 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 	},
 	wavecrash: {
@@ -7474,20 +7485,20 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 	},
 	weatherball: {
 		name: "Weather Ball",
-		desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Snow, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",
+		desc: "Power doubles if a weather condition other than Strong Winds is active, and this move's type changes to match. Ice type during Snow, Water type during Heavy Rain or Rain, Rock type during Sandstorm, and Fire type during Intense Sun or Sun. If the user is holding Utility Umbrella and uses Weather Ball during Heavy Rain, Rain, Intense Sun, or Sun, this move remains Normal type and does not double in power.",
 		shortDesc: "Power doubles and type varies in each weather.",
 		gen8: {
-			desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Hail, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",
+			desc: "Power doubles if a weather condition other than Strong Winds is active, and this move's type changes to match. Ice type during Hail, Water type during Heavy Rain or Rain, Rock type during Sandstorm, and Fire type during Intense Sun or Sun. If the user is holding Utility Umbrella and uses Weather Ball during Heavy Rain, Rain, Intense Sun, or Sun, this move remains Normal type and does not double in power.",
 		},
 		gen5: {
-			desc: "Power doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
+			desc: "Power doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain, Rock type during Sandstorm, and Fire type during Sun.",
 		},
 		gen3: {
-			desc: "Damage doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
+			desc: "Damage doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain, Rock type during Sandstorm, and Fire type during Sun.",
 			shortDesc: "Damage doubles and type varies during weather.",
 		},
 
-		move: "Breakneck Blitz turned into [MOVE] due to the weather!",
+		move: "Breakneck Blitz turned into {MOVE} due to the weather!",
 	},
 	whirlpool: {
 		name: "Whirlpool",
@@ -7510,14 +7521,14 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Prevents the target from switching for two to five turns. Causes damage to the target equal to 1/16 of its maximum HP, rounded down, at the end of each turn during effect. The target can still switch out if it uses Baton Pass. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		},
 
-		start: "  [POKEMON] became trapped in the vortex!",
+		start: "  {POKEMON} became trapped in the vortex!",
 	},
 	whirlwind: {
 		name: "Whirlwind",
 		desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, or if the target used Ingrain previously or has the Suction Cups Ability.",
 		shortDesc: "Forces the target to switch to a random ally.",
 		gen4: {
-			desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, if the target used Ingrain previously or has the Suction Cups Ability, or if the user's level is lower than the target's and X * (user's level + target's level) / 256 + 1 is less than or equal to (target's level / 4), rounded down, where X is a random number from 0 to 255.",
+			desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, if the target used Ingrain previously or has the Suction Cups Ability, or if the user's level is lower than the target's and X × (user's level + target's level) / 256 + 1 is less than or equal to (target's level / 4), rounded down, where X is a random number from 0 to 255.",
 		},
 		gen2: {
 			desc: "The target is forced to switch out and be replaced with a random unfainted ally. Fails if the target is the last unfainted Pokemon in its party, or if the user moves before the target.",
@@ -7555,12 +7566,12 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn that target all adjacent foes or all adjacent Pokemon. This attack has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this attack fails or if the user's last used move is not Detect, Endure, Protect, Quick Guard, or Wide Guard. If X is 256 or more, this move has a 1/(2^32) chance of being successful. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
 		},
 
-		start: "  Wide Guard protected [TEAM]!",
-		block: "  Wide Guard protected [POKEMON]!",
+		start: "  Wide Guard protected {TEAM}!",
+		block: "  Wide Guard protected {POKEMON}!",
 	},
 	wildboltstorm: {
 		name: "Wildbolt Storm",
-		desc: "Has a 20% chance to paralyze the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		desc: "Has a 20% chance to paralyze the target. If the weather is Heavy Rain or Rain, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
 		shortDesc: "20% chance to paralyze foe(s). Rain: can't miss.",
 	},
 	wildcharge: {
@@ -7586,7 +7597,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		},
 
-		heal: "  [NICKNAME]'s wish came true!",
+		heal: "  {NICKNAME}'s wish came true!",
 	},
 	withdraw: {
 		name: "Withdraw",
@@ -7657,15 +7668,15 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Prevents the target from moving for 2-5 turns.",
 		},
 
-		start: "  [POKEMON] was wrapped by [SOURCE]!",
-		move: "[POKEMON]'s attack continues!", // gen 1 only
+		start: "  {POKEMON} was wrapped by {SOURCE}!",
+		move: "{POKEMON}'s attack continues!", // gen 1 only
 	},
 	wringout: {
 		name: "Wring Out",
-		desc: "Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
+		desc: "Power is equal to 120 × (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
 		shortDesc: "More power the more HP the target has left.",
 		gen4: {
-			desc: "Power is equal to 120 * (target's current HP / target's maximum HP) + 1, rounded down.",
+			desc: "Power is equal to 120 × (target's current HP / target's maximum HP) + 1, rounded down.",
 		},
 	},
 	xscissor: {
@@ -7677,7 +7688,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Causes the target to fall asleep at the end of the next turn. Fails when used if the target cannot fall asleep or if it already has a non-volatile status condition. At the end of the next turn, if the target is still active, does not have a non-volatile status condition, and can fall asleep, it falls asleep. If the target becomes affected, this effect cannot be prevented by Safeguard or a substitute, or by falling asleep and waking up during the effect.",
 		shortDesc: "Puts the target to sleep after 1 turn.",
 
-		start: "  [POKEMON] grew drowsy!",
+		start: "  {POKEMON} grew drowsy!",
 	},
 	zapcannon: {
 		name: "Zap Cannon",

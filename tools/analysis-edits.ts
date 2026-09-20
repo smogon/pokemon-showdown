@@ -118,7 +118,9 @@ export function getFieldEffectOptions(battle: Battle): AnalysisFieldEffectOption
 	for (const definition of FIELD_EFFECTS) {
 		const condition = dex.conditions.get(definition.id);
 		const move = dex.moves.get(definition.id);
-		if (!condition.exists || !move.exists || ['Past', 'Future'].includes(move.isNonstandard as string)) continue;
+		// 'Gmax' is upstream's marker for G-Max moves in gens that don't have them (gen8 leaves it unset).
+		if (!condition.exists || !move.exists ||
+			['Past', 'Future', 'Gmax'].includes(move.isNonstandard as string)) continue;
 		const createdEffect = move.weather || move.terrain || move.pseudoWeather || move.sideCondition;
 		if (createdEffect ? toID(createdEffect) !== definition.id : move.volatileStatus === definition.id) continue;
 		const duration = condition.duration || (condition.durationCallback ? 5 : undefined);

@@ -56,8 +56,8 @@ export function sendPM(message: string, to: string, from: string) {
 	const receiverID = toID(to);
 	const sendingUser = Users.get(senderID);
 	const receivingUser = Users.get(receiverID);
-	const fromIdentity = sendingUser ? sendingUser.getIdentity() : ` ${senderID}`;
-	const toIdentity = receivingUser ? receivingUser.getIdentity() : ` ${receiverID}`;
+	const fromIdentity = sendingUser?.connected ? sendingUser.getIdentity() : ` ${senderID}`;
+	const toIdentity = receivingUser?.connected ? receivingUser.getIdentity() : ` ${receiverID}`;
 
 	if (from === '~') {
 		return receivingUser?.send(`|pm|~|${toIdentity}|${message}`);

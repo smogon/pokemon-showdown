@@ -307,6 +307,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: 188,
 	},
+	auraguard: {
+		isNonstandard: "Future",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['contact']) return this.chainModify(0.5);
+		},
+		flags: { breakable: 1 }, // TODO check breakable
+		name: "Aura Guard",
+		rating: 3.5,
+		num: 319,
+	},
 	baddreams: {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -3491,6 +3501,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
+				this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
