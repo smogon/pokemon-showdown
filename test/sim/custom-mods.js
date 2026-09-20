@@ -93,6 +93,21 @@ describe('Custom content mods', () => {
 		}
 	});
 
+	it('should keep restricted legendaries and Arceus out of National Dex but not National Dex Ubers', () => {
+		// Arceus is tagged Mythical rather than Restricted Legendary, so the banlist names it; that
+		// bans every forme. The client mirrors this in `BattleCustomMods.nationalDexBanned`.
+		for (const mod of CustomMods) {
+			const natDex = `gen9${mod.prefix}nationaldex`;
+			const ubers = `gen9${mod.prefix}nationaldexubers`;
+			for (const name of ['Koraidon', 'Arceus', 'Arceus-Fire', 'Arceus-Ghost']) {
+				assert(speciesIsBanned(natDex, name), `${name} should be banned in ${natDex}`);
+				assert(!speciesIsBanned(ubers, name), `${name} should be legal in ${ubers}`);
+			}
+			// Other Mythicals are unaffected.
+			assert(!speciesIsBanned(natDex, 'Mew'), `Mew should be legal in ${natDex}`);
+		}
+	});
+
 	it("should take a mod species' tier from its evolution line", () => {
 		for (const mod of CustomMods) {
 			const tiers = getCustomModTiers(mod.label);

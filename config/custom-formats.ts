@@ -54,11 +54,14 @@ function customModFormats(mod: CustomModInfo): import('../sim/dex-formats').Form
 			ruleset: ['Standard AG', 'NatDex Mod', 'Species Clause', 'Nickname Clause', ...modOnly],
 		},
 		{
+			// Arceus is tagged Mythical rather than Restricted Legendary, so it needs banning by
+			// name. `Arceus` resolves to `basepokemon:arceus`, which covers all eighteen formes.
+			// The client mirrors this list in `BattleCustomMods.nationalDexBanned`.
 			name: `[Gen 9 ${label}] National Dex`,
 			mod: mod.id,
 			searchShow: false,
 			ruleset: natDex,
-			banlist: ['Restricted Legendary'],
+			banlist: ['Restricted Legendary', 'Arceus'],
 		},
 		{
 			name: `[Gen 9 ${label}] National Dex Ubers`,
