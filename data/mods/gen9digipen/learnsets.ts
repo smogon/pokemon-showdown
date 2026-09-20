@@ -1,7 +1,12 @@
 export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 
 	// ── Base-game Pokémon ─────────────────────────────────────────────
-	// Remember to add inherit: true to the base-game Pokémon learnsets.
+	// List only the moves this mod ADDS, and always include `inherit: true`.
+	//
+	// The dex loader merges mod data one level deep, so on its own an entry here would replace the
+	// Pokémon's whole movepool with the moves listed. `initCustomMod` in data/custom-mod-init.ts
+	// merges these onto the inherited movepool after loading; `inherit: true` is what keeps the
+	// entry's other keys (eventData, encounters) as well.
 	
 	aegislash: {
 		inherit: true,

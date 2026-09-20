@@ -1,173 +1,106 @@
 // Note: This is the list of formats
 // The rules that formats use are stored in data/rulesets.ts
 
-export const Formats: import('../sim/dex-formats').FormatList = [
+import { CustomMods, type CustomModInfo } from '../data/custom-mods';
 
-	// Formats removed from the main formats.ts file
-	///////////////////////////////////////////////////////////////////
-	{
-		name: "[Gen 9] VGC 2026 Reg F",
+/**
+ * DigiPen fork: every custom content mod gets the same eight formats, generated here.
+ *
+ * Adding a mod to `data/custom-mods.ts` is what adds its formats; there is nothing to write by
+ * hand. Keeping the set identical across mods is also what lets the client map a format to a
+ * teambuilder table from its name alone, instead of a `case` per format.
+ *
+ * Mechanics, which are less obvious than they look:
+ *
+ * - **Mega Evolution and Z-Moves** are not banned by any ruleset. Mega stones and Z-crystals are
+ *   simply `isNonstandard: "Past"` items, so every format here runs `NatDex Mod` to allow them.
+ * - **Terastallization** stays on because none of these inherit `[Gen 9] National Dex`, which is
+ *   what adds `Terastal Clause`. `NatDex Mod` separately turns Tera off for Mega, Primal and Ultra
+ *   formes, which is the real-game behaviour.
+ * - **Dynamax** needs no ban: `sim/side.ts` disables it outside gen 8, and Gmax formes are
+ *   `natDexTier: "Illegal"`, which `NatDex Mod` rejects.
+ * - **`+Future`** has to be explicit — `NatDex Mod` grants `+Unobtainable` and `+Past` only. The
+ *   Champions Pokémon it lets in also need the National Dex tiers that `gen9modbase` gives them.
+ * - **`+Light of Ruin`** is what makes Mega Floette usable. Upstream's National Dex check flags
+ *   that move by id no matter what, but honours `+move:` on it.
+ * - **Mod-only formats** (`Singles`, `VGC`) ban `All Pokemon` and unban the mod. Mega and armoured
+ *   formes still work, because the ban check runs against the forme the item produces, which is
+ *   the mod's own species.
+ */
 
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
-	},
+function customModFormats(mod: CustomModInfo): import('../sim/dex-formats').FormatList {
+	const label = mod.label;
+	// The National Dex mechanics every format here shares.
+	const mechanics = ['+Future', '+Light of Ruin'];
+	const withMod = [`+${label}`, ...mechanics];
+	// A mod-only pool. `All Pokemon` has to be banned inside the ruleset rather than via `banlist`,
+	// because every `+` rule must resolve after it and the whole ruleset resolves before the banlist.
+	const modOnly = ['-All Pokemon', ...withMod];
+	const vgcBase = ['Flat Rules', 'NatDex Mod', '!! Adjust Level = 50', 'VGC Timer', 'Open Team Sheets'];
+	const natDex = ['Standard NatDex', ...withMod];
+	const vgc = [...vgcBase, ...withMod];
+	const doubles = { mod: mod.id, searchShow: false, gameType: 'doubles' as const, bestOfDefault: true };
 
+	return [
+		{
+			section: `${mod.fullName} Singles`,
+			column: 1,
+		},
+		{
+			// Only the mod's own Pokémon, and all of them.
+			name: `[Gen 9 ${label}] Singles`,
+			mod: mod.id,
+			searchShow: false,
+			ruleset: ['Standard AG', 'NatDex Mod', 'Species Clause', 'Nickname Clause', ...modOnly],
+		},
+		{
+			name: `[Gen 9 ${label}] National Dex`,
+			mod: mod.id,
+			searchShow: false,
+			ruleset: natDex,
+			banlist: ['Restricted Legendary'],
+		},
+		{
+			name: `[Gen 9 ${label}] National Dex Ubers`,
+			mod: mod.id,
+			searchShow: false,
+			ruleset: natDex,
+		},
+		{
+			section: `${mod.fullName} Doubles`,
+			column: 1,
+		},
+		{
+			// Only the mod's own Pokémon, and all of them.
+			name: `[Gen 9 ${label}] VGC`,
+			...doubles,
+			ruleset: [...vgcBase, ...modOnly],
+		},
+		{
+			name: `[Gen 9 ${label}] VGC Non-Restricted`,
+			...doubles,
+			ruleset: vgc,
+		},
+		{
+			name: `[Gen 9 ${label}] VGC Restricted`,
+			...doubles,
+			ruleset: [...vgc, 'Limit One Restricted'],
+			restricted: ['Restricted Legendary'],
+		},
+		{
+			name: `[Gen 9 ${label}] VGC Dual Restricted`,
+			...doubles,
+			ruleset: [...vgc, 'Limit Two Restricted'],
+			restricted: ['Restricted Legendary'],
+		},
+		{
+			name: `[Gen 9 ${label}] VGC Mythical`,
+			...doubles,
+			ruleset: [...vgc, 'Limit Two Restricted'],
+			restricted: ['Restricted Legendary', 'Mythical'],
+		},
+	];
+}
 
-	// DigiPen S/V Singles
-	///////////////////////////////////////////////////////////////////
-	// Each format inherits from its standard Gen 9 counterpart, then
-	// adds `+DigiPen` to allow Pokémon and items tagged isNonstandard: "DigiPen".
-
-	{
-		section: "DigiPen Gen 9 Singles",
-		column: 1,
-	},
-	{
-		name: "[Gen 9 DigiPen] Singles",
-		mod: 'gen9digipen',
-		searchShow: false,
-		ruleset: ['Standard AG', 'Nickname Clause', 'Species Clause'],
-		banlist: ['All Pokemon'],
-		unbanlist: ['DigiPen', 'DigiPen Past', 'DigiPen Future'],
-	},
-	{
-		name: "[Gen 9 DigiPen] OU",
-		mod: 'gen9digipen',
-		searchShow: false,
-		ruleset: ['[Gen 9] OU', '+DigiPen'],
-		banlist: ['DigiPen Uber'],
-		unbanlist: [
-			'Annihilape', 'Archaludon', 'Chi-Yu', 'Chien-Pao', 'Espathra', 'Flutter Mane', 'Gouging Fire', 'Iron Bundle',
-			'Landorus', 'Magearna', 'Ogerpon-Hearthflame', 'Palafin', 'Roaring Moon', 
-			'Shaymin-Sky', 'Sneasler', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike',
-		]
-	},
-	{
-		name: "[Gen 9 DigiPen] Ubers",
-		mod: 'gen9digipen',
-		searchShow: false,
-		ruleset: ['Standard AG', 'Species Clause', 'Nickname Clause', '+DigiPen'],
-	},
-	{
-		name: "[Gen 9 DigiPen] National Dex",
-		mod: 'gen9digipen',
-		searchShow: false,
-		ruleset: ['Standard AG', 'Nickname Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
-		banlist: ['ND Uber', 'DigiPen Uber'],
-		unbanlist: [
-			'Annihilape', 'Baxcalibur', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Darmanitan-Galar', 'Deoxys-Speed',
-			'Dracovish', 'Dragapult', 'Espathra', 'Flutter Mane', 'Genesect', 'Gouging Fire',
-			'Iron Bundle', 'Landorus', 'Magearna', 'Marshadow', 'Naganadel', 'Ogerpon-Hearthflame',
-			'Palafin', 'Pheromosa', 'Roaring Moon', 'Shaymin-Sky', 'Sneasler', 'Spectrier',
-			'Ursaluna-Bloodmoon', 'Urshifu', 'Walking Wake', 'Zygarde-50%'
-		]
-	},
-	{
-		name: "[Gen 9 DigiPen] National Dex Ubers",
-		mod: 'gen9digipen',
-		searchShow: false,
-		ruleset: ['Standard AG', 'Nickname Clause', 'Species Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
-		banlist: ['Assist'],
-	},
-
-
-	// DigiPen S/V Doubles
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "DigiPen Gen 9 Doubles",
-		column: 1,
-	},
-	// Would need to add natdex doubles table to build indexes first
-	/*{
-		name: "[Gen 9 DigiPen] Doubles",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		ruleset: ['Standard AG', 'Species Clause', 'Nickname Clause'],
-		banlist: ['All Pokemon'],
-		unbanlist: ['DigiPen', 'DigiPen Past', 'DigiPen Future'],
-	},*/
-	{
-		name: "[Gen 9 DigiPen] Doubles OU",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		ruleset: ['[Gen 9] Doubles OU', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
-		banlist: ['DigiPen DUber'],
-	},
-	{
-		name: "[Gen 9 DigiPen] Doubles Ubers",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		ruleset: ['[Gen 9] Doubles Ubers', '+DigiPen', '+DigiPenPast', '+DigiPenFuture', '+Past', '+Future'],
-	},
-	{
-		name: "[Gen 9 DigiPen] VGC 2026 Reg F",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		bestOfDefault: true,
-		ruleset: ['[Gen 9] VGC 2026 Reg F', '+DigiPen'],
-	},
-	{
-		name: "[Gen 9 DigiPen] VGC 2026 Reg G",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		bestOfDefault: true,
-		ruleset: ['[Gen 9] VGC 2024 Reg G', '+DigiPen'],
-	},
-	{
-		name: "[Gen 9 DigiPen] VGC 2026 Reg I",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		bestOfDefault: true,
-		ruleset: ['[Gen 9] VGC 2025 Reg I', '+DigiPen'],
-	},
-	{
-		name: "[Gen 9 DigiPen] VGC Non-Restricted",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', '+DigiPen', '+Past', '+Future'],
-	},
-	{
-		name: "[Gen 9 DigiPen] VGC One Restricted",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', 'Limit One Restricted',  '+DigiPen', '+Past', '+Future'],
-		restricted: ['Restricted Legendary'],
-	},
-	{
-		name: "[Gen 9 DigiPen] VGC Two Restricted",
-		mod: 'gen9digipen',
-		searchShow: false,
-		gameType: 'doubles',
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', 'VGC Timer', 'Open Team Sheets', 'Limit Two Restricted',  '+DigiPen', '+Past', '+Future'],
-		restricted: ['Restricted Legendary'],
-	},
-	// FNAF
-	///////////////////////////////////////////////////////////////////
-	{
-		section: "Five Nights At Freddy's",
-		column: 1,
-	},
-	{
-		name: "[Gen 9 FNAF] Singles",
-		mod: 'gen9fnaf',
-		searchShow: false,
-		ruleset: ['Standard AG', 'Nickname Clause', 'Species Clause'],
-		banlist: ['All Pokemon'],
-		unbanlist: ['FNAF'],
-	},
-];
+export const Formats: import('../sim/dex-formats').FormatList =
+	CustomMods.flatMap(customModFormats);

@@ -3,12 +3,20 @@ import { assignMissingFields, toID, BasicEffect } from './dex-data';
 import type { EventMethods } from './dex-conditions';
 import type { SpeciesData } from './dex-species';
 import { Tags } from '../data/tags';
+import { CustomMods } from '../data/custom-mods';
+import { CustomModTags } from '../data/custom-mod-tags';
+
+// DigiPen fork: `data/tags.ts` is not allowed to import anything (test/sim/data.js enforces it for
+// every data file), so each custom content mod's tags are generated separately and merged in here,
+// the first module to consume `Tags` — `sim/dex.ts` imports this one.
+Object.assign(Tags, CustomModTags);
 
 const DEFAULT_MOD = 'gen9';
-// DigiPen fork: 'digipen*'/'fnaf' tags appended to upstream's list.
+// DigiPen fork: every custom content mod's generic tag is an existence tag. Kept in step with the
+// copy in team-validator.ts, which upstream also duplicates.
 const EXISTENCE_TAGS = [
 	'past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent',
-	'digipen', 'digipenpast', 'digipenfuture', 'fnaf',
+	...CustomMods.map(mod => mod.prefix),
 ];
 
 export interface FormatData extends Partial<Format>, EventMethods {

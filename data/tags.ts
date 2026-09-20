@@ -225,37 +225,6 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		speciesFilter: species => species.tier === 'AG' || species.tier === '(AG)',
 	},
 
-	// DigiPen tiers
-	// -------------
-	// These tags make 'DigiPen Uber', 'DigiPen DUber' etc. valid banlist entries in custom-formats.ts. 
-	digipenuber: {
-		name: "DigiPen Uber",
-		speciesFilter: species => species.tier === 'DigiPen Uber',
-	},
-	digipentier: {
-		name: "DigiPen Tier",
-		speciesFilter: species => species.tier === 'DigiPen'
-	},
-	digipennfe: {
-		name: "DigiPen NFE",
-		speciesFilter: species => species.tier === 'DigiPen NFE',
-	},
-	digipenlc: {
-		name: "DigiPen LC",
-		speciesFilter: species => species.tier === 'DigiPen LC',
-	},
-	digipenduber: {
-		name: "DigiPen DUber",
-		speciesFilter: species => species.doublesTier === 'DigiPen DUber',
-	},
-
-	// Other Custom Tiers
-	// -----------------
-	fnaf: {
-		name: "FNAF",
-		speciesFilter: species => species.isNonstandard === "FNAF",
-	},
-
 	// Doubles tiers
 	// -------------
 	duber: {
@@ -334,18 +303,6 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	future: {
 		name: "Future",
 		genericFilter: thing => thing.isNonstandard === 'Future',
-	},
-	digipen: {
-		name: "DigiPen",
-		genericFilter: thing => thing.isNonstandard === 'DigiPen',
-	},
-	digipenpast: {
-		name: "DigiPen Past",
-		genericFilter: thing => thing.isNonstandard === 'DigiPen Past',
-	},
-	digipenfuture: {
-		name: "DigiPen Future",
-		genericFilter: thing => thing.isNonstandard === 'DigiPen Future',
 	},
 	lgpe: {
 		name: "LGPE",

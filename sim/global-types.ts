@@ -34,9 +34,12 @@ type SparseStatsTable = Partial<StatsTable>;
 type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
 type BoostsTable = { [boost in BoostID]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
-// DigiPen fork: 'DigiPen'/'FNAF' values added to upstream's list.
+// DigiPen fork: the label of each custom content mod, i.e. the `label` field of every entry in
+// `data/custom-mods.ts`. This is the only literal the type system needs per mod — the Nonstandard
+// value a mod's exclusive content carries and its three tier names are both derived from it.
+type CustomModName = 'DigiPen' | 'FNAF';
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gmax' |
-	'DigiPen' | 'DigiPen Past' | 'DigiPen Future' | 'FNAF';
+	CustomModName;
 
 type PokemonSet = import('./teams').PokemonSet;
 
@@ -45,10 +48,9 @@ declare namespace TierTypes {
 		"PUBL" | "PU" | "ZUBL" | "ZU" | "NFE" | "LC";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC" |
-		// DigiPen mod tiers — these are interleaved with standard tiers in the teambuilder.
-		"DigiPen Uber" | "DigiPen" | "DigiPen NFE" | "DigiPen LC" |
-		"DigiPen DUber" | "DigiPen Restricted" | "DigiPen Mythical" | "DigiPen Regular" |
-		"FNAF";
+		// DigiPen fork: each custom content mod's three tiers, interleaved with the standard tiers
+		// in the teambuilder. Assigned from the evolution line, not written by hand.
+		CustomModName | `${CustomModName} NFE` | `${CustomModName} LC`;
 }
 
 interface EventInfo {

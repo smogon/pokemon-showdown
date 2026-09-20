@@ -1,6 +1,7 @@
 import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 import { Utils } from '../lib/utils';
 import { isDeepStrictEqual } from 'node:util';
+import { getCustomMod, getCustomModTiers } from '../data/custom-mods';
 
 interface SpeciesAbility {
 	0: string;
@@ -16,9 +17,9 @@ export interface SpeciesData extends Partial<Species> {
 	/** National Dex number */
 	num: number;
 	/** Client: load battle/teambuilder assets from DigiPen sprite host */
-	digipenSprite?: boolean;
+	customSprite?: boolean;
 	/** Client: icon index on DigiPen `pokemonicons-sheet` */
-	digipenIcon?: boolean;
+	customIcon?: boolean;
 	/** Client dex: Pokémon title */
 	title?: string;
 	/** Client dex: Pokédex entry */
@@ -183,9 +184,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 */
 	readonly iconnum?: number;
 	/** Client: gen5 battle / teambuilder sprites from DigiPen host */
-	readonly digipenSprite?: boolean;
+	readonly customSprite?: boolean;
 	/** Client: icon from DigiPen host */
-	readonly digipenIcon?: boolean;
+	readonly customIcon?: boolean;
 	/** Abilities. */
 	readonly abilities: SpeciesAbility;
 	/** Types. */
@@ -320,8 +321,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.spriteid = data.spriteid ||
 			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.iconnum = data.iconnum;
-		this.digipenSprite = data.digipenSprite || undefined;
-		this.digipenIcon = data.digipenIcon || undefined;
+		this.customSprite = data.customSprite || undefined;
+		this.customIcon = data.customIcon || undefined;
 		this.abilities = data.abilities || { 0: "" };
 		this.types = data.types || ['???'];
 		this.addedType = data.addedType || undefined;
@@ -445,6 +446,17 @@ export class DexSpecies {
 		this.dex = dex;
 	}
 
+	/**
+	 * DigiPen fork: which of a custom content mod's three tiers a species of its own belongs in.
+	 * Little Cup is the bottom of a three-stage line; anything else that still evolves is NFE.
+	 */
+	private customModTier(species: Species, label: string): TierTypes.Other {
+		const tiers = getCustomModTiers(label);
+		if (!species.evos.length) return tiers.fe as TierTypes.Other;
+		const evolvesTwice = species.evos.some(evo => this.get(evo).evos.length);
+		return (evolvesTwice ? tiers.lc : tiers.nfe) as TierTypes.Other;
+	}
+
 	get(name?: string | Species): Species {
 		if (name && typeof name !== 'string') return name;
 
@@ -561,6 +573,16 @@ export class DexSpecies {
 						(species as any)[key] = (baseSpeciesStatuses as any)[key];
 					}
 				}
+			}
+			// DigiPen fork: a species exclusive to a custom content mod takes its tier from its
+			// evolution line instead of a hand-written formats-data entry. This has to run before
+			// the base-species fallback below, which would otherwise hand a mod's new forme of a
+			// base-game Pokemon (an armored forme, a mod mega) that Pokemon's ordinary tier.
+			const customMod = getCustomMod(species);
+			if (customMod && !species.tier && !species.doublesTier && !species.natDexTier) {
+				species.tier = this.customModTier(species, customMod.label);
+				species.doublesTier = species.tier as TierTypes.Doubles;
+				species.natDexTier = species.tier;
 			}
 			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {
 				if (species.baseSpecies === 'Mimikyu') {

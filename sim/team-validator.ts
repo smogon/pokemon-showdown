@@ -11,14 +11,16 @@ import { Dex, toID } from './dex';
 import type { MoveSource } from './dex-species';
 import { Utils } from '../lib/utils';
 import { Tags } from '../data/tags';
+import { CustomMods, getCustomMod } from '../data/custom-mods';
 import { Teams } from './teams';
 import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
 
-// DigiPen fork: 'digipen*'/'fnaf' tags appended to upstream's list.
+// DigiPen fork: every custom content mod's generic tag is an existence tag, so that a format's
+// `+DigiPen` / `+FNAF` makes that mod's Pokemon, items, moves and abilities exist.
 const EXISTENCE_TAGS = [
 	'past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent',
-	'digipen', 'digipenpast', 'digipenfuture', 'fnaf',
+	...CustomMods.map(mod => mod.prefix),
 ];
 
 /**
@@ -1942,9 +1944,7 @@ export class TeamValidator {
 			if (thing.effectType === 'Move' && thing.isNonstandard === 'Gmax') {
 				return `${displayName} is a placeholder for the Gigantamax version of ${thing.isMax}. It can't actually exist on a normal moveset.`;
 			}
-			// DigiPen fork: the fork's Past/Future variants share upstream's handling.
-			if (thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future'
-				|| thing.isNonstandard === 'DigiPen Past' || thing.isNonstandard === 'DigiPen Future') {
+			if (thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future') {
 				return `${displayName} does not exist in Gen ${dex.gen}.`;
 			}
 			if (thing.isNonstandard === 'CAP') {
@@ -1953,12 +1953,12 @@ export class TeamValidator {
 			if (thing.isNonstandard === 'LGPE') {
 				return `${displayName} does not exist in this game, only in Let's Go Pikachu/Eevee.`;
 			}
-			// DigiPen fork: the fork's own nonstandard values.
-			if (thing.isNonstandard === 'DigiPen') {
-				return `${displayName} is a DigiPen Pokemon and does not exist in this game.`;
-			}
-			if (thing.isNonstandard === 'FNAF') {
-				return `${displayName} is a Five Nights at Freddy's Pokemon and does not exist in this game.`;
+			// DigiPen fork: content exclusive to one of the custom mods. `displayName` already
+			// names the kind of thing, so this must not say "Pokemon" — it is reached by items,
+			// moves and abilities too.
+			const customMod = getCustomMod(thing);
+			if (customMod) {
+				return `${displayName} is ${customMod.fullName} content and does not exist in this game.`;
 			}
 			return `${displayName} does not exist in this game.`;
 		}

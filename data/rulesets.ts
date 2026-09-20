@@ -122,7 +122,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				for (const moveid of set.moves) {
 					const move = this.dex.moves.get(moveid);
-					if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen) {
+					if (move.isNonstandard === 'Unobtainable' && move.gen === this.dex.gen || move.id === 'lightofruin') {
 						if (this.ruleTable.has(`+move:${move.id}`)) continue;
 						const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
 						if (this.ruleTable.has('omunobtainablemoves')) {
@@ -143,8 +143,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			if (requireObtainable && item.isNonstandard) {
 				if (this.ruleTable.has(`+item:${item.id}`)) return;
-				// Also allow if the item's isNonstandard tag is explicitly unbanned (e.g. +Future).
-				if (this.ruleTable.check('pokemontag:' + this.toID(item.isNonstandard)) === '') return;
+				// DigiPen fork: also allow an item whose isNonstandard tag the format unbans, so that
+				// `+Future` covers the Champions mega stones. Upstream only walks back to gen 7,
+				// which reaches Past items but nothing newer than the current gen.
+				if (this.ruleTable.check(`tag:${this.toID(item.isNonstandard)}`) === '') return;
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
 			}
 		},

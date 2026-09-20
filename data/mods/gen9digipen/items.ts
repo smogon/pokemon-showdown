@@ -3,7 +3,7 @@
 // HOW TO ADD CONTENT:
 //
 // ── Custom Items ─────────────────────────────────────────────────────────────
-// New DigiPen items must include `isNonstandard: "DigiPen" | "DigiPen Future" | "DigiPen Past"` so they are
+// New DigiPen items must include `isNonstandard: "DigiPen" | "DigiPen" | "DigiPen"` so they are
 // treated as illegal outside DigiPen formats and flagged as DigiPen in the Pokedex.
 //
 // DigiPen item icons image files are in a separate resource location and uses a file
@@ -30,8 +30,8 @@
 // its Mega Stone here so the validator can find it. Set
 // `megaStone: "<Species>-Mega"` and `itemUser: "<Species>"`.
 //
-// These should also be marked as `isNonstandard: "DigiPen Future"` or 
-// `isNonstandard: "DigiPen Past"` since mega stones are not legal in normal generation
+// These should also be marked as `isNonstandard: "DigiPen"` or 
+// `isNonstandard: "DigiPen"` since mega stones are not legal in normal generation
 //  9 formats.
 //
 // Finally, they should be marked as `quality: "specific"` since they are specific to a single Pokemon.
@@ -236,7 +236,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		num: 30003,
 		gen: 9,
-		isNonstandard: "DigiPen Future",
+		isNonstandard: "DigiPen",
 		shortDesc: "If held by a Hydreigon, this item allows it to Mega Evolve in battle.",
 		quality: "specific",
 		contributors: ["Bryce G."],
