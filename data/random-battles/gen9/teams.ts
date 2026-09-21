@@ -709,6 +709,21 @@ export class RandomTeams {
 			if (species.name.endsWith("Cornerstone")) return "Rock";
 		}
 
+		if (move.name === 'Terrain Pulse') {
+			if (abilities.includes('Grassy Surge') || abilities.includes('Seed Sower')) return 'Grass';
+			if (abilities.includes('Psychic Surge')) return 'Psychic';
+			if (abilities.includes('Electric Surge')) return 'Electric';
+		}
+
+		const sunAbilities = ['Chlorophyll', 'Drought', 'Mega Sol', 'Orichalcum Pulse'];
+		if (move.name === 'Weather Ball') {
+			if (
+				abilities.some(a => sunAbilities.includes(a)) ||
+				species.isMega && Object.values(species.abilities).some(a => sunAbilities.includes(a))
+			) return 'Fire';
+			if (abilities.includes('Drizzle')) return 'Water';
+		}
+
 		const moveType = move.type;
 		if (moveType === 'Normal') {
 			if (abilities.includes('Aerilate')) return 'Flying';

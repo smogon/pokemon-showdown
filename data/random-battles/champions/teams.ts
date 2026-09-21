@@ -241,10 +241,10 @@ export class RandomChampionsTeams extends RandomTeams {
 			// These attacks are redundant with each other
 			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
 			[['scald', 'surf', 'waterfall'], 'hydropump'],
-			[['muddywater', 'weatherball']],
+			['muddywater', 'weatherball'],
 			[['gigadrain', 'hornleech', 'tropkick'], ['leafstorm', 'powerwhip', 'woodhammer']],
 			['dazzlinggleam', ['alluringvoice', 'moonblast', 'playrough']],
-			[['fireblast', 'flamethrower'], ['fierydance', 'heatwave', 'overheat']],
+			[['fireblast', 'flamethrower', 'weatherball'], ['fierydance', 'heatwave', 'overheat']],
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
 			[['dragonpulse', 'ficklebeam'], 'dracometeor'],

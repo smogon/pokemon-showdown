@@ -1187,7 +1187,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Protect", "Tailwind", "Wide Guard"],
+                "movepool": ["Hurricane", "Muddy Water", "Protect", "Tailwind", "Weather Ball", "Wide Guard"],
                 "abilities": ["Drizzle"]
             }
         ]
@@ -1392,7 +1392,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Body Press", "Fire Blast", "Heat Wave", "Protect", "Solar Beam", "Will-O-Wisp"],
+                "movepool": ["Body Press", "Heat Wave", "Protect", "Solar Beam", "Weather Ball", "Will-O-Wisp"],
                 "abilities": ["Drought"],
                 "preferredTypes": ["Grass"]
             },
