@@ -6097,39 +6097,6 @@
             }
         ]
     },
-    "squawkabillywhite": {
-        "level": 91,
-        "sets": [
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Double-Edge", "Parting Shot", "Protect", "Quick Attack"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Flying", "Normal", "Steel"]
-            }
-        ]
-    },
-    "squawkabillyblue": {
-        "level": 91,
-        "sets": [
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Double-Edge", "Parting Shot", "Protect", "Quick Attack"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Flying", "Normal", "Steel"]
-            }
-        ]
-    },
-    "squawkabillyyellow": {
-        "level": 91,
-        "sets": [
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Double-Edge", "Parting Shot", "Protect", "Quick Attack"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Flying", "Normal", "Steel"]
-            }
-        ]
-    },
     "garganacl": {
         "level": 81,
         "sets": [

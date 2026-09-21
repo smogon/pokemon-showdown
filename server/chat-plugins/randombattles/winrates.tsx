@@ -108,10 +108,9 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Polteageist';
 	} else if (species === 'Sinistcha-Masterpiece') {
 		return 'Sinistcha';
-	} else if (species === "Squawkabilly-Blue") {
-		return "Squawkabilly";
-	} else if (species === "Squawkabilly-White") {
-		return "Squawkabilly-Yellow";
+	} else if (species.startsWith("Squawkabilly-")) {
+		if (species === "Squawkabilly-Blue") return "Squawkabilly";
+		return format.id === 'gen9randombattle' ? "Squawkabilly-Yellow" : "Squawkabilly";
 	} else if (species.startsWith("Basculin-")) {
 		return "Basculin";
 	} else if (species.startsWith("Sawsbuck-")) {

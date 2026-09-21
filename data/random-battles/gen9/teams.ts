@@ -1481,7 +1481,9 @@ export class RandomTeams {
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
 		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
-		if (species.baseSpecies === 'Squawkabilly' && this.format.mod.startsWith('champions')) {
+		if (
+			species.baseSpecies === 'Squawkabilly' &&
+			(this.format.mod.startsWith('champions') || this.format.gameType !== 'singles')) {
 			return 'Squawkabilly' + this.sample(['', '-Blue', '-White', '-Yellow']);
 		}
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
