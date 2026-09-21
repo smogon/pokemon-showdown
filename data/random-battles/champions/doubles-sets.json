@@ -1722,7 +1722,7 @@
                 "abilities": ["Limber"]
             },
             {
-                "role": "Doubles Support",
+                "role": "Choice Item user",
                 "movepool": ["Encore", "Fake Out", "Switcheroo", "Thunder Wave"],
                 "abilities": ["Klutz"]
             }
