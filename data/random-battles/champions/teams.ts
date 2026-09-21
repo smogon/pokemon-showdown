@@ -56,7 +56,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'golisopod', 'mimikyu', 'palafin', 'scizor', 'scizormega',
+	'golisopod', 'golisopodmega', 'mimikyu', 'palafin', 'scizor', 'scizormega',
 ];
 
 /** Pokemon who should never be in the lead slot. Currently just Kingambit, but more may be added in the future */
@@ -115,14 +115,15 @@ export class RandomChampionsTeams extends RandomTeams {
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Grass') && (
-					species.baseStats.atk >= 100 || movePool.includes('leafstorm') || types.has('Ghost')
+					species.baseStats.atk >= 100 || movePool.includes('leafstorm') ||
+					types.has('Ghost') || abilities.includes('Seed Sower')
 				)
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Normal: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Normal') && (
-					movePool.includes('boomburst') || ['Electric', 'Fire', 'Ghost', 'Ground'].some(t => types.has(t)) ||
+					movePool.includes('boomburst') || ['Electric', 'Fire', 'Ghost', 'Grass', 'Ground'].some(t => types.has(t)) ||
 					species.baseSpecies === 'Squawkabilly'
 				)
 			),
@@ -218,7 +219,9 @@ export class RandomChampionsTeams extends RandomTeams {
 
 			for (const pair of doublesIncompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
-			if (!role.includes('Protect')) this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
+			if (!['Offensive Protect', 'Doubles Fast Attacker'].includes(role)) {
+				this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
+			}
 		}
 
 		// General incompatibilities
@@ -237,7 +240,8 @@ export class RandomChampionsTeams extends RandomTeams {
 
 			// These attacks are redundant with each other
 			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
-			[['muddywater', 'scald', 'surf', 'waterfall'], 'hydropump'],
+			[['scald', 'surf', 'waterfall'], 'hydropump'],
+			[['muddywater', 'weatherball']],
 			[['gigadrain', 'hornleech', 'tropkick'], ['leafstorm', 'powerwhip', 'woodhammer']],
 			['dazzlinggleam', ['alluringvoice', 'moonblast', 'playrough']],
 			[['fireblast', 'flamethrower'], ['fierydance', 'heatwave', 'overheat']],
@@ -746,6 +750,7 @@ export class RandomChampionsTeams extends RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): string {
 		if (role === 'Doubles Fast Attacker') return 'Focus Sash';
+		if (species.baseStats.spe <= 70 && (moves.has('ragepowder') || moves.has('followme'))) return 'Rocky Helmet';
 		if (role === 'Doubles Bulky Setup' && !moves.has('dragondance')) return 'Leftovers';
 		if (['Offensive Protect', 'Doubles Wallbreaker', 'Doubles Setup Sweeper'].includes(role)) return 'Life Orb';
 		return 'Sitrus Berry';
@@ -980,6 +985,10 @@ export class RandomChampionsTeams extends RandomTeams {
 			[sunSetters, [...rainSetters, ...sandSetters, ...snowSetters]],
 			[rainSetters, [...sandSetters, ...snowSetters]],
 			[sandSetters, snowSetters],
+
+			// Prevent conflicting terrain abilities from generating together
+			['pincurchin', ['indeedee', 'indeedeef', 'rillaboom', 'arboliva']],
+			[['rillaboom', 'arboliva'], ['indeedee', 'indeedeef']],
 		];
 
 		const incompatibilityList = isDoubles ? doublesIncompatiblePokemon : incompatiblePokemon;
