@@ -1713,7 +1713,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Protect", "Tailwind", "Wide Guard"],
+                "movepool": ["Hurricane", "Muddy Water", "Protect", "Tailwind", "Weather Ball", "Wide Guard"],
                 "abilities": ["Drizzle"],
                 "teraTypes": ["Ground", "Steel"]
             }

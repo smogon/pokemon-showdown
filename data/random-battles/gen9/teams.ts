@@ -549,7 +549,7 @@ export class RandomTeams {
 				[RECOVERY_MOVES, ['healpulse', 'lifedew']],
 				['healpulse', 'lifedew'],
 				['haze', 'icywind'],
-				[['hydropump', 'muddywater'], ['muddywater', 'scald']],
+				[['hydropump', 'muddywater'], ['muddywater', 'scald', 'weatherball']],
 				['disable', 'encore'],
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
