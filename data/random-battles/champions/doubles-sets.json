@@ -382,7 +382,12 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Giga Drain", "Knock Off", "Protect", "Sludge Bomb", "Strength Sap", "Sucker Punch"],
+                "movepool": ["Giga Drain", "Knock Off", "Protect", "Sludge Bomb", "Sucker Punch"],
+                "abilities": ["Chlorophyll"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Giga Drain", "Knock Off", "Sludge Bomb", "Strength Sap", "Sucker Punch"],
                 "abilities": ["Chlorophyll"]
             }
         ]
@@ -598,7 +603,12 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dragon Dance", "Power Whip", "Protect", "Temper Flare", "Waterfall"],
+                "movepool": ["Dragon Dance", "Protect", "Temper Flare", "Waterfall"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Dragon Dance", "Power Whip", "Protect", "Waterfall"],
                 "abilities": ["Intimidate"]
             },
             {
@@ -1439,7 +1449,7 @@
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Coil", "Hypnosis", "Muddy Water", "Recover"],
+                "movepool": ["Blizzard", "Coil", "Muddy Water", "Recover"],
                 "abilities": ["Competitive"]
             }
         ]
@@ -1541,7 +1551,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Body Slam", "Explosion", "Icy Wind", "Protect"],
+                "movepool": ["Body Slam", "Freeze-Dry", "Icy Wind", "Protect"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -1708,8 +1718,13 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Close Combat", "Encore", "Fake Out", "Protect", "Thunder Wave", "U-turn"],
+                "movepool": ["Encore", "Fake Out", "Thunder Wave", "U-turn"],
                 "abilities": ["Limber"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Encore", "Fake Out", "Switcheroo", "Thunder Wave"],
+                "abilities": ["Klutz"]
             }
         ]
     },
@@ -1999,7 +2014,7 @@
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Hydro Pump", "Nasty Plot", "Protect", "Thunderbolt", "Will-O-Wisp"],
+                "movepool": ["Hydro Pump", "Nasty Plot", "Protect", "Thunderbolt"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -2130,7 +2145,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Fake Out", "Leaf Storm", "Protect", "Taunt"],
+                "movepool": ["Energy Ball", "Fake Out", "Protect", "Superpower", "Taunt"],
+                "abilities": ["Overgrow"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Gunk Shot", "Leaf Storm", "Protect", "Superpower"],
                 "abilities": ["Overgrow"]
             }
         ]
@@ -2301,7 +2321,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Close Combat", "Coaching", "Encore", "Fake Out", "Knock Off", "Snarl"],
+                "movepool": ["Close Combat", "Encore", "Fake Out", "Knock Off", "Snarl"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Bulk Up", "Detect", "Drain Punch", "Knock Off"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -2351,7 +2376,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Detect", "Flamethrower", "Focus Blast", "Night Daze", "Psychic", "Sludge Bomb"],
+                "movepool": ["Detect", "Focus Blast", "Night Daze", "Psychic", "Sludge Bomb", "Snarl"],
                 "abilities": ["Illusion"],
                 "preferredTypes": ["Poison"]
             }
@@ -2609,7 +2634,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Grass Knot", "Gunk Shot", "Hydro Pump", "Ice Beam", "Protect", "U-turn"],
+                "movepool": ["Dark Pulse", "Gunk Shot", "Hydro Pump", "Protect"],
                 "abilities": ["Protean"]
             }
         ]
@@ -3304,7 +3329,7 @@
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Helping Hand", "High Jump Kick", "Knock Off", "Protect", "Triple Axel", "Trop Kick"],
+                "movepool": ["Helping Hand", "High Jump Kick", "Knock Off", "Protect", "Rapid Spin", "Triple Axel", "Trop Kick"],
                 "abilities": ["Queenly Majesty"]
             },
             {
@@ -3720,7 +3745,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Aura Wheel", "Electroweb", "Fake Out", "Knock Off"],
+                "movepool": ["Aura Wheel", "Fake Out", "Knock Off", "Protect"],
                 "abilities": ["Hunger Switch"]
             }
         ]
@@ -3745,12 +3770,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Body Slam", "Earth Power", "Megahorn", "Protect", "Psyshield Bash", "Thunder Wave"],
+                "movepool": ["Body Slam", "Earth Power", "Megahorn", "Psyshield Bash", "Thunder Wave"],
                 "abilities": ["Intimidate"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Double-Edge", "Earth Power", "Psyshield Bash", "Trick Room"],
+                "movepool": ["Double-Edge", "Earth Power", "Psychic", "Trick Room"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -4069,6 +4094,11 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Body Press", "Last Respects", "Shadow Sneak", "Trick"],
+                "abilities": ["Fluffy"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Body Press", "Last Respects", "Trick", "Will-O-Wisp"],
                 "abilities": ["Fluffy"]
             }
         ]
