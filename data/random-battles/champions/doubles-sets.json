@@ -2240,7 +2240,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Dazzling Gleam", "Encore", "Heal Pulse", "Helping Hand", "Trick Room", "Yawn"],
+                "movepool": ["Dazzling Gleam", "Encore", "Heal Pulse", "Helping Hand", "Life Dew", "Trick Room", "Yawn"],
                 "abilities": ["Regenerator"]
             },
             {
