@@ -4336,7 +4336,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			if (pokemon.beingCalledBack) return;
+			if (pokemon.beingCalledBack || !this.effectState.counter) return;
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
 		},
 		flags: {},
@@ -4737,6 +4737,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
+			if (pokemon.beingCalledBack || !this.effectState.fallen) return
 			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
 		},
 		onBasePowerPriority: 21,
