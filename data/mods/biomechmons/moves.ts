@@ -42,7 +42,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					}
 				}
 			},
-			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+			// Item suppression implemented in sim/pokemon.ts#ignoringItem
 			onResidualOrder: 21,
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Embargo');
@@ -93,7 +93,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onFieldRestart(target, source) {
 				this.field.removePseudoWeather('magicroom');
 			},
-			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+			// Item suppression implemented in sim/pokemon.ts#ignoringItem
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 6,
 			onFieldEnd() {
@@ -116,7 +116,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	gastroacid: {
 		inherit: true,
 		condition: {
-			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.js
+			// Ability suppression implemented in sim/pokemon.ts#ignoringAbility
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');

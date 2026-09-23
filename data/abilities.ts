@@ -689,7 +689,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 126,
 	},
 	corrosion: {
-		// Implemented in sim/pokemon.js:Pokemon#setStatus
+		// Implemented in sim/pokemon.ts#setStatus
 		flags: {},
 		name: "Corrosion",
 		rating: 2.5,
@@ -829,7 +829,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	dancer: {
 		flags: {},
 		name: "Dancer",
-		// implemented in runMove in scripts.js
+		// implemented in sim/battle-actions.ts#runMove
 		rating: 1.5,
 		num: 216,
 	},
@@ -1126,7 +1126,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	earlybird: {
 		flags: {},
 		name: "Early Bird",
-		// Implemented in statuses.js
+		// Implemented in data/conditions.ts#slp
 		rating: 1.5,
 		num: 48,
 	},
@@ -2279,7 +2279,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		// Klutz isn't technically active immediately in-game, but it activates early enough to beat all items
 		// we should keep an eye out in future gens for items that activate on switch-in before Unnerve
 		onSwitchInPriority: 1,
-		// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
+		// Item suppression implemented in sim/pokemon.ts#ignoringItem
 		onStart(pokemon) {
 			this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 		},
@@ -2309,7 +2309,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 102,
 	},
 	levitate: {
-		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
+		// airborneness implemented in sim/pokemon.ts#isGrounded
 		flags: { breakable: 1 },
 		name: "Levitate",
 		rating: 3.5,
@@ -2770,7 +2770,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 136,
 	},
 	multitype: {
-		// Multitype's type-changing itself is implemented in statuses.js
+		// Multitype's type-changing itself is implemented in conditions.ts#arceus
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Multitype",
 		rating: 4,
@@ -3897,7 +3897,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 79,
 	},
 	rkssystem: {
-		// RKS System's type-changing itself is implemented in statuses.js
+		// RKS System's type-changing itself is implemented in conditions.ts#silvally
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "RKS System",
 		rating: 4,
@@ -4206,7 +4206,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				// Technically not a secondary effect, but it is negated
 				delete move.self;
 				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
-				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
+				// Actual negation of `AfterMoveSecondary` effects implemented sim/battle-actions.ts#useMoveInner
 				move.hasSheerForce = true;
 			}
 		},

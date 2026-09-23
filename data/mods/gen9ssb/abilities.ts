@@ -1683,7 +1683,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			if (move.self?.chance) move.self.chance *= 2;
 		},
-		// Item chances modified in items.js
+		// Item chances modified in items.ts
 	},
 
 	// pants
