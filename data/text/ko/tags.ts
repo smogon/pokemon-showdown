@@ -18,10 +18,10 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "환상의 포켓몬",
 	},
 	sublegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "준전설", // NEEDS QC
 	},
 	restrictedlegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "제한 전설", // NEEDS QC
 	},
 	ultrabeast: {
 		name: "울트라비스트",
@@ -30,7 +30,7 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "패러독스",
 	},
 	pokestar: {
-		name: null, // NEEDS TRANSLATION
+		name: "포켓우드", // NEEDS QC
 	},
 	zmove: {
 		name: "Z기술",
@@ -39,115 +39,115 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "다이맥스기술",
 	},
 	contact: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "직접 공격", // NEEDS QC
+		hint: "철가시, 니들가드 등이 발동한다", // NEEDS QC
 	},
 	sound: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "소리", // NEEDS QC
+		hint: "방음 특성에는 효과가 없다", // NEEDS QC
 	},
 	powder: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "가루", // NEEDS QC
+		hint: "풀타입, 방진, 방진고글에는 효과가 없다", // NEEDS QC
 	},
 	fist: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "펀치", // NEEDS QC
+		hint: "철주먹으로 강화된다", // NEEDS QC
 	},
 	pulse: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "파동", // NEEDS QC
+		hint: "메가런처로 강화된다", // NEEDS QC
 	},
 	bite: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "물기", // NEEDS QC
+		hint: "옹골찬턱으로 강화된다", // NEEDS QC
 	},
 	bullet: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "탄환", // NEEDS QC
+		hint: "방탄 특성에는 효과가 없다", // NEEDS QC
 	},
 	dance: {
-		name: null, // NEEDS TRANSLATION
+		name: "춤", // NEEDS QC
 	},
 	slicing: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "베기", // NEEDS QC
+		hint: "예리함으로 강화된다", // NEEDS QC
 	},
 	wind: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "바람", // NEEDS QC
+		hint: "풍력발전과 바람타기가 발동한다", // NEEDS QC
 	},
 	defrost: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "해동", // NEEDS QC
+		hint: "사용하면 얼음 상태가 낫는다", // NEEDS QC
 	},
 	recoil: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "반동", // NEEDS QC
+		hint: "이판사판으로 강화된다", // NEEDS QC
 	},
 	twoturnmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "2턴 기술", // NEEDS QC
 	},
 	recharge: {
-		name: null, // NEEDS TRANSLATION
+		name: "다음 턴에 움직일 수 없음", // NEEDS QC
 	},
 	suppressedbygravity: {
-		name: null, // NEEDS TRANSLATION
+		name: "중력 상태에서는 쓸 수 없음", // NEEDS QC
 	},
 	boostedbysheerforce: {
-		name: null, // NEEDS TRANSLATION
+		name: "우격다짐으로 강화된다", // NEEDS QC
 	},
 	bypassprotect: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "방어 관통", // NEEDS QC
+		hint: "판별, 킹실드, 니들가드도", // NEEDS QC
 	},
 	nonreflectable: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "매직미러 관통", // NEEDS QC
+		hint: "매직코트도", // NEEDS QC
 	},
 	nonmirror: {
-		name: null, // NEEDS TRANSLATION
+		name: "따라하기 불가", // NEEDS QC
 	},
 	nonsnatchable: {
-		name: null, // NEEDS TRANSLATION
+		name: "가로채기 불가", // NEEDS QC
 	},
 	bypasssubstitute: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "대타출동 관통", // NEEDS QC
+		hint: "대타출동은 부서지지 않는다", // NEEDS QC
 	},
 	gmaxmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "거다이맥스기술", // NEEDS QC
 	},
 	past: {
-		name: null, // NEEDS TRANSLATION
+		name: "과거작", // NEEDS QC
 	},
 	truepast: {
-		name: null, // NEEDS TRANSLATION
+		name: "완전 과거작", // NEEDS QC
 	},
 	pastunobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "과거작 입수 불가", // NEEDS QC
 	},
 	future: {
-		name: null, // NEEDS TRANSLATION
+		name: "미실장", // NEEDS QC
 	},
 	lgpe: {
 		name: "LGPE",
 	},
 	unobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "입수 불가", // NEEDS QC
 	},
 	cap: {
 		name: "CAP",
 	},
 	custom: {
-		name: null, // NEEDS TRANSLATION
+		name: "커스텀", // NEEDS QC
 	},
 	nonexistent: {
-		name: null, // NEEDS TRANSLATION
+		name: "존재하지 않음", // NEEDS QC
 	},
 
 	introducedgen: {
-		name: null, // NEEDS TRANSLATION
+		name: "등장 세대", // NEEDS QC
 	},
 	height: {
 		name: "키",
@@ -159,33 +159,33 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "HP",
 	},
 	atk: {
-		name: null, // NEEDS TRANSLATION
+		name: "공", // NEEDS QC
 	},
 	def: {
-		name: null, // NEEDS TRANSLATION
+		name: "방", // NEEDS QC
 	},
 	spa: {
-		name: null, // NEEDS TRANSLATION
+		name: "특공", // NEEDS QC
 	},
 	spd: {
-		name: null, // NEEDS TRANSLATION
+		name: "특방", // NEEDS QC
 	},
 	spe: {
-		name: null, // NEEDS TRANSLATION
+		name: "속", // NEEDS QC
 	},
 	bst: {
-		name: null, // NEEDS TRANSLATION
+		name: "종족값 합계", // NEEDS QC
 	},
 	basepower: {
 		name: "위력",
 	},
 	priority: {
-		name: null, // NEEDS TRANSLATION
+		name: "우선도", // NEEDS QC
 	},
 	accuracy: {
 		name: "명중",
 	},
 	maxpp: {
-		name: null, // NEEDS TRANSLATION
+		name: "최대 PP", // NEEDS QC
 	},
 };
