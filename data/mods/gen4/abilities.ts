@@ -204,8 +204,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	immunity: {
+		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
+				this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Immunity');
+				pokemon.clearStatus();
+			}
+		},
+	},
 	insomnia: {
 		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.status === 'slp') {
+				this.add('-curestatus', pokemon, 'slp', '[from] ability: Insomnia');
+				pokemon.clearStatus();
+			}
+		},
 		rating: 2.5,
 	},
 	intimidate: {
@@ -247,6 +262,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHit: undefined, // no inherit
 		rating: 0,
 	},
+	limber: {
+		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.status === 'par') {
+				this.add('-curestatus', pokemon, 'par', '[from] ability: Limber');
+				pokemon.clearStatus();
+			}
+		},
+	},
 	liquidooze: {
 		inherit: true,
 		onSourceTryHeal(damage, target, source, effect) {
@@ -266,6 +290,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		rating: 4.5,
+	},
+	magmaarmor: {
+		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.status === 'frz') {
+				this.add('-curestatus', pokemon, 'frz', '[from] ability: Magma Armor');
+				pokemon.clearStatus();
+			}
+		},
 	},
 	minus: {
 		inherit: true,
@@ -539,7 +572,22 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	vitalspirit: {
 		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.status === 'slp') {
+				this.add('-curestatus', pokemon, 'slp', '[from] ability: Vital Spirit');
+				pokemon.clearStatus();
+			}
+		},
 		rating: 2.5,
+	},
+	waterveil: {
+		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.status === 'brn') {
+				this.add('-curestatus', pokemon, 'brn', '[from] ability: Water Veil');
+				pokemon.clearStatus();
+			}
+		},
 	},
 	wonderguard: {
 		inherit: true,
