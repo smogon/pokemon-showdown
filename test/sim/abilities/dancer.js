@@ -183,4 +183,17 @@ describe('Dancer', () => {
 		assert.equal(fletchinder.boosts.atk, -2);
 		assert.equal(squawkabilly.boosts.atk, -4);
 	});
+
+	it('should not reset the stall counter', () => {
+		battle = common.createBattle({ gameType: 'doubles', seed: [1, 2, 3, 6] }, [[
+			{ species: 'oricoriopau', ability: 'dancer', moves: ['protect'] },
+			{ species: 'flamigo', moves: ['dragondance'] },
+		], [
+			{ species: 'miraidon', moves: ['thunderbolt'] },
+			{ species: 'squawkabilly', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.fainted(battle.p1.active[0]);
+	});
 });
