@@ -70,6 +70,16 @@ describe('Knock Off', () => {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
+	it('should not remove mega stones if the user can mega evolve with them', () => {
+		battle = common.createBattle([[
+			{ species: "Scizor", ability: 'technician', moves: ['knockoff'] },
+		], [
+			{ species: "Mew", ability: 'synchronize', item: 'scizorite', moves: ['swordsdance'] },
+		]]);
+		battle.makeChoices('move knockoff', 'move swordsdance');
+		assert.equal(battle.p2.active[0].item, 'scizorite');
+	});
+
 	it('should not remove items if the user faints mid-move', () => {
 		battle = common.createBattle([[
 			{ species: "Shedinja", ability: 'wonderguard', moves: ['knockoff'] },
