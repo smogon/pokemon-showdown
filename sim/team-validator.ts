@@ -1955,6 +1955,10 @@ export class TeamValidator {
 
 		setHas['item:' + item.id] = true;
 
+		if (item.isHeldItem === false) {
+			return `${item.name} is not a holdable item.`;
+		}
+
 		let banReason = ruleTable.check('item:' + (item.id || 'noitem'));
 		if (banReason) {
 			if (!item.id) {
@@ -2854,7 +2858,7 @@ export class TeamValidator {
 
 			if (!moveSources.size()) {
 				if (
-					(species.evoType === 'levelMove' && species.evoMove !== move.name) ||
+					(species.evoMove && species.evoMove !== move.name) ||
 					(species.id === 'sylveon' && move.type !== 'Fairy')
 				) {
 					moveSources.moveEvoCarryCount = 1;
