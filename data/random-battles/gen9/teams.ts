@@ -549,7 +549,7 @@ export class RandomTeams {
 				[RECOVERY_MOVES, ['healpulse', 'lifedew']],
 				['healpulse', 'lifedew'],
 				['haze', 'icywind'],
-				[['hydropump', 'muddywater'], ['muddywater', 'scald']],
+				[['hydropump', 'muddywater'], ['muddywater', 'scald', 'weatherball']],
 				['disable', 'encore'],
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
@@ -707,6 +707,21 @@ export class RandomTeams {
 			if (species.name.endsWith("Wellspring")) return "Water";
 			if (species.name.endsWith("Hearthflame")) return "Fire";
 			if (species.name.endsWith("Cornerstone")) return "Rock";
+		}
+
+		if (move.name === 'Terrain Pulse') {
+			if (abilities.includes('Grassy Surge') || abilities.includes('Seed Sower')) return 'Grass';
+			if (abilities.includes('Psychic Surge')) return 'Psychic';
+			if (abilities.includes('Electric Surge')) return 'Electric';
+		}
+
+		const sunAbilities = ['Chlorophyll', 'Drought', 'Mega Sol', 'Orichalcum Pulse'];
+		if (move.name === 'Weather Ball') {
+			if (
+				abilities.some(a => sunAbilities.includes(a)) ||
+				species.isMega && Object.values(species.abilities).some(a => sunAbilities.includes(a))
+			) return 'Fire';
+			if (abilities.includes('Drizzle')) return 'Water';
 		}
 
 		const moveType = move.type;
@@ -1466,7 +1481,9 @@ export class RandomTeams {
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
 		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
-		if (species.baseSpecies === 'Squawkabilly' && this.format.mod.startsWith('champions')) {
+		if (
+			species.baseSpecies === 'Squawkabilly' &&
+			(this.format.mod.startsWith('champions') || this.format.gameType !== 'singles')) {
 			return 'Squawkabilly' + this.sample(['', '-Blue', '-White', '-Yellow']);
 		}
 		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);

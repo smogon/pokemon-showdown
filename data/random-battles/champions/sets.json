@@ -3989,7 +3989,8 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Crunch", "Play Rough", "Psychic Fangs", "Taunt", "Wild Charge"],
-                "abilities": ["Stakeout"]
+                "abilities": ["Stakeout"],
+                "preferredTypes": ["Fairy"]
             },
             {
                 "role": "Fast Attacker",
