@@ -32,7 +32,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -98,7 +98,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -113,7 +113,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -128,7 +128,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -143,7 +143,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -158,7 +158,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -335,7 +335,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -399,7 +399,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -414,7 +414,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -518,7 +518,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -541,7 +541,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -556,7 +556,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -605,7 +605,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -645,7 +645,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -676,7 +676,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -783,7 +783,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -814,7 +814,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
@@ -846,7 +846,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					target.addVolatile('weakenberry');
 					return this.chainModify(0.5);
 				}
 			}
