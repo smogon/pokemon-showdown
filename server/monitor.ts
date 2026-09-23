@@ -70,6 +70,7 @@ export const Monitor = new class {
 
 	TimedCounter = TimedCounter;
 
+	rebuildLock = false;
 	updateServerLock = false;
 	cleanInterval: NodeJS.Timeout | null = null;
 	/**
