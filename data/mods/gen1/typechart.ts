@@ -8,6 +8,7 @@
 
 export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 	bug: {
+		num: 7,
 		damageTaken: {
 			Bug: 0,
 			Dragon: 0,
@@ -27,6 +28,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 		},
 	},
 	fire: {
+		num: 20,
 		damageTaken: {
 			Bug: 2,
 			Dragon: 0,
@@ -46,6 +48,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 		},
 	},
 	ghost: {
+		num: 8,
 		damageTaken: {
 			Bug: 2,
 			Dragon: 0,
@@ -65,6 +68,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 		},
 	},
 	ice: {
+		num: 25,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
@@ -87,6 +91,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 		},
 	},
 	poison: {
+		num: 3,
 		damageTaken: {
 			psn: 3,
 			tox: 3,
@@ -108,6 +113,7 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 		},
 	},
 	psychic: {
+		num: 24,
 		damageTaken: {
 			Bug: 1,
 			Dragon: 0,
