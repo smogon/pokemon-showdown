@@ -2156,6 +2156,11 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 						matched = true;
 						break;
 					}
+				} else if (flag === 'heal') {
+					if (!(move.heal || moveid === 'gmaxfinale') === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
 				} else {
 					if ((flag in move.flags) === alts.flags[flag]) {
 						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(move.target)) continue;
@@ -2173,7 +2178,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 				for (const recoveryType in alts.other) {
 					let hasRecovery = false;
 					if (recoveryType === "recovery") {
-						hasRecovery = !!move.drain || !!move.flags.heal;
+						hasRecovery = !!move.drain || !!move.flags.heal || moveid === 'gmaxfinale';
 					} else if (recoveryType === "zrecovery") {
 						hasRecovery = (move.zMove?.effect === 'heal');
 					}
@@ -2268,11 +2273,23 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 					move.status === searchStatus ||
 					(move.secondaries?.some(entry => entry.status === searchStatus))
 				);
-				if (searchStatus === 'slp') {
-					canStatus = canStatus || moveid === 'yawn';
-				}
-				if (searchStatus === 'brn' || searchStatus === 'frz' || searchStatus === 'par') {
+				if (searchStatus === 'brn') {
 					canStatus = canStatus || moveid === 'triattack';
+				}
+				if (searchStatus === 'par') {
+					canStatus = canStatus || moveid === 'triattack' || moveid === 'direclaw' ||
+						moveid === 'gmaxbefuddle' || moveid === 'gmaxstunshock' || moveid === 'gmaxvoltcrash';
+				}
+				if (searchStatus === 'slp') {
+					canStatus = canStatus || moveid === 'yawn' || moveid === 'direclaw' ||
+						moveid === 'gmaxbefuddle' || moveid === 'gmaxsnooze';
+				}
+				if (searchStatus === 'frz') {
+					canStatus = canStatus || moveid === 'triattack';
+				}
+				if (searchStatus === 'psn') {
+					canStatus = canStatus || moveid === 'direclaw' ||
+						moveid === 'gmaxbefuddle' || moveid === 'gmaxmalodor' || moveid === 'gmaxstunshock';
 				}
 				if (canStatus === alts.status[searchStatus]) {
 					matched = true;
@@ -2293,6 +2310,9 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 							(move.secondary?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.secondary.onHit.toString())) ||
 							(move.self?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.self.onHit.toString()))))
 				);
+				if (searchStatus === 'confusion') {
+					canStatus = canStatus || moveid === 'gmaxsmite';
+				}
 				if (searchStatus === 'partiallytrapped') {
 					canStatus = canStatus || moveid === 'gmaxcentiferno' || moveid === 'gmaxsandblast';
 				}
