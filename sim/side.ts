@@ -191,6 +191,8 @@ export class Side {
 	faintedLastTurn: Pokemon | null;
 	faintedThisTurn: Pokemon | null;
 	totalFainted: number;
+	/** only used by Gen 2 Confusion + Berserk Gene */
+	confusionCounter = 0;
 
 	/** these point to the same object as the ally's, in multi battles */
 	sideConditions: { [id: string]: EffectState };
