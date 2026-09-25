@@ -3187,6 +3187,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	battleedit: {
+		effectType: 'Rule',
+		name: 'Battle Edit',
+		desc: 'Allows users to edit the battle details using `/editbattle`.<br>Requires: ☆ and Global + * % @ ~',
+		// hardcoded in chat-commands/admin.ts
+	},
 	rebalancelevels: {
 		effectType: 'Rule',
 		name: 'Rebalance Levels',
