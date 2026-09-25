@@ -134,6 +134,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	quotehelp: [
 		"/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.",
+		"/addquote [quote] - Adds [quote] to the room's quotes. Requires: % @ # ~",
 		"/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # ~",
 		"/viewquote [index][, params] - View the quote from the room's quotes.",
 		"If 'showauthor' is used for the [params] argument, it shows who added the quote and when.",
