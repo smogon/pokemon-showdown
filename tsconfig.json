@@ -8,7 +8,6 @@
         "target": "es2020",
         "skipLibCheck": true,
         "module": "CommonJS",
-        "moduleResolution": "node",
         "strict": true,
         "allowJs": true,
         "checkJs": true,

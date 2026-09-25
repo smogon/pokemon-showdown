@@ -1478,7 +1478,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
-				return this.chainModify([5120, 4096]);//5120=25% 4915=20%
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -8214,8 +8214,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
-
-	//NUEVAS MEGAS (si tiene una normal está junto a la normal, si no está aquí)
 	kinglerita: {
 		name: "Kinglerita",
 		spritenum: 608,
@@ -8265,4 +8263,3 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		isNonstandard: "Past",
 	},
 };
-

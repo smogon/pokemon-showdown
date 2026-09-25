@@ -2217,7 +2217,7 @@ export class Pokemon {
 				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 			}
 		}
-		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
+		if (this.hasAbility('Tera Shell') &&
 			!this.battle.suppressingAbility(this)) {
 			if (move.hit === 1) delete this.abilityState.resisted; // reset for first hit
 			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective

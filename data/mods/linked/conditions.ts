@@ -18,22 +18,22 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return false;
 		},
 	},
-	frz: {
-		inherit: true,
-		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
-			if (this.effectState.durationRolled !== this.turn && this.randomChance(1, 5)) {
-				pokemon.cureStatus();
-				return;
-			}
-			if (this.effectState.durationRolled !== this.turn) {
-				// Display the `frozen` message only once per turn.
-				this.effectState.durationRolled = this.turn;
-				this.add('cant', pokemon, 'frz');
-			}
-			return false;
-		},
-	},
+	// frz: {
+	// 	inherit: true,
+	// 	onBeforeMove(pokemon, target, move) {
+	// 		if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
+	// 		if (this.effectState.durationRolled !== this.turn && this.randomChance(1, 5)) {
+	// 			pokemon.cureStatus();
+	// 			return;
+	// 		}
+	// 		if (this.effectState.durationRolled !== this.turn) {
+	// 			// Display the `frozen` message only once per turn.
+	// 			this.effectState.durationRolled = this.turn;
+	// 			this.add('cant', pokemon, 'frz');
+	// 		}
+	// 		return false;
+	// 	},
+	// },
 	confusion: {
 		inherit: true,
 		onBeforeMove(pokemon) {

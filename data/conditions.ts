@@ -83,6 +83,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	frz: {
 		name: 'frz',
 		effectType: 'Status',
+		// Damage reduction is handled directly in the sim/battle.js damage function
+		onResidualOrder: 10,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 16);
+		},
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
@@ -467,7 +472,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onBasePowerPriority: 14,
 		onBasePower(basePower, user, target, move) {
 			this.debug('Gem Boost');
-			return this.chainModify([5325, 4096]);
+			return this.chainModify([6144, 4096]);
 		},
 	},
 
