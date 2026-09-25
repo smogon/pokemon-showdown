@@ -1657,8 +1657,14 @@ export class BattleActions {
 		}
 
 		const dexMove = this.dex.moves.get(move.id);
+		if (source.terastallized === 'Stellar' && !source.stellarBoostedTypes.includes(move.type)) {
+			move.stellarBoosted = true;
+			if (source.species.name !== 'Terapagos-Stellar') {
+				source.stellarBoostedTypes.push(move.type);
+			}
+		}
 		if (source.terastallized && (source.terastallized === 'Stellar' ?
-			!source.stellarBoostedTypes.includes(move.type) : source.hasType(move.type)) &&
+			move.stellarBoosted : source.hasType(move.type)) &&
 			basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
 			// Hard move.basePower check for moves like Dragon Energy that have variable BP
 			!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
@@ -1775,12 +1781,8 @@ export class BattleActions {
 			// then the Stellar tera type applies a one-time 2x STAB boost for that type,
 			// and then goes back to using the regular 1.5x STAB boost for those types.
 			if (pokemon.terastallized === 'Stellar') {
-				if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
+				if (move.stellarBoosted) {
 					stab = isSTAB ? 2 : [4915, 4096];
-					move.stellarBoosted = true;
-					if (pokemon.species.name !== 'Terapagos-Stellar') {
-						pokemon.stellarBoostedTypes.push(type);
-					}
 				}
 			} else {
 				if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
