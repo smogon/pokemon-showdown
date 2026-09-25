@@ -26,6 +26,7 @@ export interface ExhaustiveRunnerOptions {
 	maxGames?: number;
 	maxFailures?: number;
 	dual?: boolean | 'debug';
+	timeoutMs?: number;
 }
 
 export class ExhaustiveRunner {
@@ -52,6 +53,7 @@ export class ExhaustiveRunner {
 	private readonly maxGames?: number;
 	private readonly maxFailures?: number;
 	private readonly dual: boolean | 'debug';
+	private readonly timeoutMs: number;
 
 	private failures: number;
 	private games: number;
@@ -64,6 +66,7 @@ export class ExhaustiveRunner {
 		this.maxGames = options.maxGames;
 		this.maxFailures = options.maxFailures || ExhaustiveRunner.MAX_FAILURES;
 		this.dual = options.dual || false;
+		this.timeoutMs = options.timeoutMs || 0;
 
 		this.failures = 0;
 		this.games = 0;
@@ -92,6 +95,7 @@ export class ExhaustiveRunner {
 					format: this.format,
 					dual: this.dual,
 					error: true,
+					timeoutMs: this.timeoutMs,
 				}).run();
 
 				if (this.log) this.logProgress(pools);
