@@ -162,6 +162,36 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	curse: {
+		inherit: true,
+		tracksTarget: true,
+		volatileStatus: undefined, // no inherit
+		onModifyMove(move, source, target) {
+			if (!source.hasType('Ghost')) {
+				move.target = 'self';
+			} else if (source !== target && source.isAlly(target)) {
+				move.target = 'randomNormal';
+			}
+		},
+		onTryHit(target, source, move) {
+			if (source.hasType('Ghost') && target.volatiles['curse']) {
+				return false;
+			}
+		},
+		onHit(target, source) {
+			if (!source.hasType('Ghost')) {
+				return !!this.boost({ spe: -1, atk: 1, def: 1 }, source, source);
+			}
+			this.directDamage(source.maxhp / 2, source, source);
+			if (source.isAlly(target)) {
+				const random = this.getRandomTarget(source, 'Curse');
+				if (!random) return false;
+				target = random;
+			}
+			delete target.volatiles['curse'];
+			target.addVolatile('curse');
+		},
+	},
 	cut: {
 		inherit: true,
 		isNonstandard: "Past",

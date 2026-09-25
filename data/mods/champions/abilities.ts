@@ -19,6 +19,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		isNonstandard: null,
 	},
+	emergencyexit: {
+		inherit: true,
+		onEmergencyExit(target) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+			target.switchFlag = true;
+			this.add('-activate', target, 'ability: Emergency Exit');
+		},
+	},
 	firemane: {
 		inherit: true,
 		isNonstandard: null,
@@ -83,6 +91,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				target.getMoveHitData(move).bypassProtect = this.effect;
 				return false;
 			}
+		},
+	},
+	wimpout: {
+		inherit: true,
+		onEmergencyExit(target) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+			target.switchFlag = true;
+			this.add('-activate', target, 'ability: Wimp Out');
 		},
 	},
 };

@@ -442,14 +442,10 @@ export const commands: Chat.ChatCommands = {
 				return; // error messages were thrown to the user
 			}
 
-			const page = isEdit ? 'edit' : 'upload';
 			if (result) {
 				connection.send(`|queryresponse|teamupload|` + JSON.stringify(result));
-				connection.send(`>view-teams-${page}\n|deinit`);
-				this.parse(`/join view-teams-view-${result.teamid}`);
-			} else {
-				this.parse(`/join view-teams-${page}`);
 			}
+			connection.popup(`Access your team now at https://psim.us/t/${result.teamid}!`);
 		},
 		''(target) {
 			return this.parse('/teams user ' + toID(target) || this.user.id);
