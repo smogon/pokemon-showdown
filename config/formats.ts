@@ -5726,12 +5726,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] UUBL",
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['[Gen 3] OU', '!Accuracy Trap Clause'],
+		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Moves Clause', 'Freeze Clause Mod', 'Speed Pass Clause'],
 		banlist: [
-			'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal',
-			'Baton Pass + Speed Boost', 'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry',
+			'Uber', 'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Assist',
+			'Confuse Ray', 'Supersonic', 'Swagger', 'Sweet Kiss', 'Flail', 'Reversal', 'Flatter', 'Teeter Dance',
+			"King's Rock", 'Quick Claw',
 		],
-		unbanlist: ['Soundproof', 'Sand Veil', 'Regice', 'Porygon2', 'Quick Claw'],
+		unbanlist: ['Regice', 'Porygon2', 'Sand Veil'],
 	},
 	{
 		name: "[Gen 3] ZU",
