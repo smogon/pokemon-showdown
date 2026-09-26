@@ -21125,8 +21125,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		requiredItem: "Aggronite Samaritano",
 	},
 	gengarpatata: {
-		num: -10001,
-		name: "Gengar-Mega",
+		num: 94,
+		name: "Gengar-Gmax",
 		baseSpecies: "Gengar",
 		forme: "Mega-Gengar",
 		types: ["Dark", "Ghost"],
