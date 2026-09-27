@@ -92,8 +92,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onBeforeMove(pokemon) {
 			if (pokemon.custapBerryFlag && pokemon.eatItem()) {
 				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
-				pokemon.custapBerryFlag = false;
 			}
+			pokemon.custapBerryFlag = false;
 		},
 	},
 	deepseascale: {
