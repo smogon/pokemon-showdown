@@ -95,7 +95,7 @@
         ]
     },
     "beedrillmega": {
-        "level": 52,
+        "level": 51,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -542,7 +542,7 @@
         ]
     },
     "pinsirmega": {
-        "level": 47,
+        "level": 48,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -568,7 +568,7 @@
         ]
     },
     "taurospaldeacombat": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1293,7 +1293,7 @@
         ]
     },
     "medicham": {
-        "level": 53,
+        "level": 54,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1476,7 +1476,7 @@
         ]
     },
     "banettemega": {
-        "level": 53,
+        "level": 54,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1647,7 +1647,7 @@
         ]
     },
     "staraptor": {
-        "level": 51,
+        "level": 50,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1995,7 +1995,7 @@
         ]
     },
     "rotomheat": {
-        "level": 52,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2040,7 +2040,7 @@
         ]
     },
     "rotommow": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2116,7 +2116,7 @@
         ]
     },
     "watchog": {
-        "level": 61,
+        "level": 62,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -2186,7 +2186,7 @@
         ]
     },
     "musharna": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2830,7 +2830,7 @@
         ]
     },
     "aegislash": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3490,7 +3490,7 @@
         ]
     },
     "corviknight": {
-        "level": 50,
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -3997,7 +3997,7 @@
         ]
     },
     "scovillain": {
-        "level": 57,
+        "level": 56,
         "sets": [
             {
                 "role": "Choice Item user",
