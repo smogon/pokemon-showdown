@@ -239,6 +239,12 @@ export class Pokemon {
 	attackedBy: Attacker[];
 	timesAttacked: number;
 
+	// Gen 4 only: quick claw roll is determined after action submission
+	// Quick Claw and Custap Berry flags are used to determine if these items will activate this turn
+	quickClawRoll: boolean;
+	quickClawFlag: boolean;
+	custapBerryFlag: boolean;
+
 	isActive: boolean;
 	activeTurns: number;
 	/**
@@ -269,6 +275,9 @@ export class Pokemon {
 
 	weighthg: number;
 	speed: number;
+
+	/** In Gen 4, fractional priority is used for sorting all events */
+	fractionalPriority: number;
 
 	canMegaEvo: string | false | null | undefined;
 	canMegaEvoX: string | false | null | undefined;
@@ -469,6 +478,9 @@ export class Pokemon {
 		this.lastDamage = 0;
 		this.attackedBy = [];
 		this.timesAttacked = 0;
+		this.quickClawRoll = this.battle.gen === 4 ? this.battle.randomChance(1, 5) : false;
+		this.quickClawFlag = false;
+		this.custapBerryFlag = false;
 
 		this.isActive = false;
 		this.activeTurns = 0;
@@ -486,6 +498,7 @@ export class Pokemon {
 
 		this.weighthg = 1;
 		this.speed = 0;
+		this.fractionalPriority = 0;
 
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
 		this.canMegaEvoX = this.battle.actions.canMegaEvoX?.(this);
@@ -555,6 +568,19 @@ export class Pokemon {
 
 	updateSpeed() {
 		this.speed = this.getActionSpeed();
+	}
+
+	getFractionalPriority() {
+		if (this.battle.gen !== 4) return undefined;
+		// Running the full event would be the correct behavior, but for performance reasons,
+		// we only run the singleEvent version of the FractionalPriority event.
+		// Stall has lower priority than the items.
+		// this.fractionalPriority = this.battle.priorityEvent('FractionalPriority', this, null, undefined, 0);
+		this.fractionalPriority =
+			this.battle.singleEvent('FractionalPriority', this.getItem(), this.itemState, this, null, undefined, 0) ||
+			this.battle.singleEvent('FractionalPriority', this.getAbility(), this.abilityState, this, null, undefined, 0) ||
+			0;
+		return this.fractionalPriority;
 	}
 
 	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon) {
@@ -1551,6 +1577,9 @@ export class Pokemon {
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
+		this.quickClawFlag = false;
+		this.custapBerryFlag = false;
+
 		this.volatileStaleness = undefined;
 
 		delete this.abilityState.started;
@@ -1851,6 +1880,7 @@ export class Pokemon {
 	takeItem(source?: Pokemon) {
 		if (!source) source = this;
 		if (this.battle.gen <= 4 && (this.itemKnockedOff || source.itemKnockedOff)) return false;
+		if (this.battle.gen === 4 && (this.quickClawFlag || this.custapBerryFlag)) return false;
 		if (!this.item) return;
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {

@@ -301,8 +301,8 @@ describe(`Pursuit`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "Tyranitar", moves: ['pursuit'] },
 			], [
-				{ species: "Breloom", moves: ['spore'] },
-				{ species: "Breloom", moves: ['sleeptalk'] },
+				{ species: "Breloom", ability: 'shellarmor', moves: ['spore'] },
+				{ species: "Breloom", ability: 'shellarmor', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices('move pursuit', 'move spore');
 			assert.equal(battle.p1.active[0].status, 'slp');

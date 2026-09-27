@@ -5,6 +5,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		inherit: true,
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
+			this.getFractionalPriority();
+			if (this.fractionalPriority > 0) return speed;
+			if (this.fractionalPriority < 0) return -speed;
 			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
 				!this.battle.field.getPseudoWeather('trickroom') : this.battle.field.getPseudoWeather('trickroom');
 			if (trickRoomCheck) {

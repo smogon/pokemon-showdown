@@ -185,7 +185,6 @@ describe('Curse', () => {
 		battle.makeChoices('move curse 1, move curse 2', 'move soak 1, move soak 2');
 		battle.makeChoices('move curse, move curse', 'move tailwind, move sleeptalk');
 		battle.makeChoices('move shadowball 1, move curse', 'move encore 1, move skillswap 1');
-		console.log(battle.getDebugLog());
 
 		const gengar1 = battle.p1.active[0];
 		assert.equal(gengar1.hp, gengar1.maxhp - Math.floor(gengar1.maxhp / 2) * 2);
@@ -207,7 +206,6 @@ describe('Curse', () => {
 		battle.makeChoices('move curse 1, move curse 2', 'move soak 1, move soak 2');
 		battle.makeChoices('move curse, move curse', 'move tailwind, move sleeptalk');
 		battle.makeChoices('move shadowball 1, move curse', 'move encore 1, move trickortreat 1');
-		console.log(battle.getDebugLog());
 
 		const gengar1 = battle.p1.active[0];
 		assert.equal(gengar1.hp, gengar1.maxhp - Math.floor(gengar1.maxhp / 2));

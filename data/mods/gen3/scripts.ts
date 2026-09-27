@@ -23,7 +23,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				speed = -speed;
 			}
 			if (this.battle.quickClawRoll && this.hasItem('quickclaw')) {
-				speed = 65535;
+				speed = 0xFFFFFFFF;
 			}
 			return speed;
 		},
