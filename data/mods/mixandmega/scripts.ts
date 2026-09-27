@@ -409,7 +409,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			pokemon.formeChange(species, pokemon.getItem(), true);
 			this.battle.add('-start', pokemon, oMegaSpecies.requiredItem, '[silent]');
 			if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
-				this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+				this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: Mix and Mega');
 			}
 			// }
 

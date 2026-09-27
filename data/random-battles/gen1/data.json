@@ -216,7 +216,7 @@
     "parasect": {
         "level": 77,
         "moves": ["bodyslam", "megadrain", "spore"],
-        "exclusiveMoves": ["hyperbeam", "slash", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"]
+        "exclusiveMoves": ["hyperbeam", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"]
     },
     "venonat": {
         "level": 88,
@@ -539,7 +539,7 @@
     "kangaskhan": {
         "level": 73,
         "moves": ["bodyslam", "earthquake", "hyperbeam"],
-        "exclusiveMoves": ["counter", "rockslide", "rockslide", "surf"]
+        "exclusiveMoves": ["blizzard", "counter", "rockslide", "rockslide"]
     },
     "horsea": {
         "level": 88,
@@ -570,7 +570,7 @@
         "level": 68,
         "moves": ["blizzard", "psychic", "thunderbolt"],
         "essentialMoves": ["recover", "thunderwave"],
-        "exclusiveMoves": ["hydropump", "psychic", "surf", "surf"]
+        "exclusiveMoves": ["psychic", "surf", "surf"]
     },
     "mrmime": {
         "level": 75,
@@ -604,8 +604,7 @@
     },
     "tauros": {
         "level": 68,
-        "moves": ["bodyslam", "earthquake", "hyperbeam"],
-        "exclusiveMoves": ["blizzard", "blizzard", "blizzard", "thunderbolt"]
+        "moves": ["blizzard", "bodyslam", "earthquake", "hyperbeam"]
     },
     "gyarados": {
         "level": 74,
@@ -654,8 +653,8 @@
     },
     "omastar": {
         "level": 74,
-        "moves": ["bodyslam", "rest", "seismictoss"],
-        "essentialMoves": ["blizzard"],
+        "moves": ["rest", "rest", "seismictoss"],
+        "essentialMoves": ["blizzard", "bodyslam"],
         "exclusiveMoves": ["hydropump", "surf"]
     },
     "kabuto": {

@@ -1,0 +1,27 @@
+import type { TranslationCatalog } from '../../server/chat';
+
+export const translations: TranslationCatalog = {
+	"Repeated phrases in {ROOM}": null,
+	"There are no repeated phrases in {ROOM}.": null,
+	"Phrase": null,
+	"Identifier": null,
+	"Interval": null,
+	"every {MINUTES} minute(s)": null,
+	"every {MESSAGES} chat message(s)": null,
+	"Raw text": null,
+	"Remove": null,
+	"Remove all repeats": null,
+	"Repeat names must include at least one alphanumeric character.": null,
+	"You must specify an interval as a number of minutes or chat messages between 1 and 1440.": null,
+	'The phrase labeled with "{ID}" is already being repeated in this room.': null,
+	'{USER} set the phrase labeled with "{ID}" to be repeated every {INTERVAL} minute(s).': null,
+	'{USER} set the phrase labeled with "{ID}" to be repeated every {INTERVAL} chat message(s).': null,
+	'{USER} set the Room FAQ "{TOPIC}" to be repeated every {INTERVAL} minute(s).': null,
+	'{USER} set the Room FAQ "{TOPIC}" to be repeated every {INTERVAL} chat message(s).': null,
+	'The phrase labeled with "{ID}" is not being repeated in this room.': null,
+	'The text for the Room FAQ "{TOPIC}" is already being repeated.': null,
+	'{USER} removed the repeated phrase labeled with "{ID}".': null,
+	"There are no repeated phrases in this room.": null,
+	"{USER} removed all repeated phrases.": null,
+	"You must specify a room when using this command in PMs.": null,
+};

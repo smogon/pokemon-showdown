@@ -1,4 +1,36 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
+	angershell: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			this.effectState.checkedAngerShell = !(effect.effectType === "Move" && !effect.multihit);
+		},
+	},
+	berserk: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
+		},
+	},
+	dragonize: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	eelevate: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	emergencyexit: {
+		inherit: true,
+		onEmergencyExit(target) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+			target.switchFlag = true;
+			this.add('-activate', target, 'ability: Emergency Exit');
+		},
+	},
+	firemane: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	healer: {
 		inherit: true,
 		onResidual(pokemon) {
@@ -9,23 +41,64 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 		},
-		desc: "50% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
-		shortDesc: "50% chance this Pokemon's ally has its status cured at the end of each turn.",
 	},
-	shedskin: {
+	megasol: {
 		inherit: true,
-		onResidual(pokemon) {
-			if (pokemon.hp && pokemon.status && this.randomChance(3, 10)) {
-				this.debug('shed skin');
-				this.add('-activate', pokemon, 'ability: Shed Skin');
-				pokemon.cureStatus();
+		isNonstandard: null,
+	},
+	naturalcure: {
+		inherit: true,
+		onCheckShow: undefined, // no inherit
+		onSwitchOut(pokemon) {
+			if (!pokemon.status || pokemon.status === 'fnt') return;
+
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure', '[silent]');
+			pokemon.clearStatus();
+		},
+	},
+	piercingdrill: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	regenerator: {
+		inherit: true,
+		onSwitchOut(pokemon) {
+			if (pokemon.heal(pokemon.baseMaxhp / 3)) {
+				this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Regenerator', '[silent]');
 			}
 		},
-		desc: "This Pokemon has a 30% chance to have its non-volatile status condition cured at the end of each turn.",
-		shortDesc: "This Pokemon has a 30% chance to have its status cured at the end of each turn.",
+	},
+	runaway: {
+		inherit: true,
+		onTrapPokemonPriority: -10,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = false;
+		},
+		onMaybeTrapPokemonPriority: -10,
+		onMaybeTrapPokemon(pokemon) {
+			pokemon.maybeTrapped = false;
+		},
+	},
+	spicyspray: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	unseenfist: {
 		inherit: true,
-		shortDesc: "This Pokemon's contact moves ignore a target's protection and deal 1/4 the usual damage.",
+		onModifyMove: undefined, // no inherit
+		onHitProtect(source, target, move) {
+			if (move.flags['contact']) {
+				target.getMoveHitData(move).bypassProtect = this.effect;
+				return false;
+			}
+		},
+	},
+	wimpout: {
+		inherit: true,
+		onEmergencyExit(target) {
+			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+			target.switchFlag = true;
+			this.add('-activate', target, 'ability: Wimp Out');
+		},
 	},
 };

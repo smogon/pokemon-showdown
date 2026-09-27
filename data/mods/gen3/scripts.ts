@@ -66,7 +66,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Weather
-			baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 			if (move.category === 'Physical' && !Math.floor(baseDamage)) {
 				baseDamage = 1;
@@ -199,7 +199,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
 				!this.battle.runEvent('TryMove', pokemon, target, move)) {
-				move.mindBlownRecoil = false;
 				return false;
 			}
 
@@ -468,8 +467,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.totalDamage = damage;
 			}
 
-			if (move.recoil && move.totalDamage) {
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, target, 'recoil');
+			if (move.totalDamage) {
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 
 			if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
@@ -486,10 +485,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return damage;
-		},
-
-		calcRecoilDamage(damageDealt, move) {
-			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 		},
 	},
 };
