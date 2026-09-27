@@ -411,7 +411,7 @@ export class Battle {
 	}
 
 	/**
-	 * Prioritizes foes over allies, then by speed.
+	 * Prioritizes foes over allies, then by speed. Used by Magician.
 	 */
 	comparePriorityFoesFirst(this: void, pokemon: Pokemon) {
 		return (a: Pokemon, b: Pokemon) =>
