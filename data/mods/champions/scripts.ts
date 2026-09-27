@@ -596,6 +596,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
 			return undefined;
-		}
+		},
 	},
 };
