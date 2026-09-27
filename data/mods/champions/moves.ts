@@ -164,7 +164,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	curse: {
 		inherit: true,
-		tracksTarget: true,
 		volatileStatus: undefined, // no inherit
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
