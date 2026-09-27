@@ -119,10 +119,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
-	seaincense: {
-		inherit: true,
-		isNonstandard: "Unobtainable",
-	},
 	shellbell: {
 		inherit: true,
 		isNonstandard: "Unobtainable",

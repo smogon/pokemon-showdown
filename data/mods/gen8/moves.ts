@@ -99,7 +99,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
-				move.target = move.nonGhostTarget!;
+				move.target = 'self';
 			}
 		},
 		target: "randomNormal",
@@ -186,6 +186,138 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	glaciallance: {
 		inherit: true,
 		basePower: 130,
+	},
+	gmaxbefuddle: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxcannonade: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxcentiferno: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxchistrike: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxcuddle: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxdepletion: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxdrumsolo: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxfinale: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxfireball: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxfoamburst: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxgoldrush: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxgravitas: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxhydrosnipe: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxmalodor: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxmeltdown: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxoneblow: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxrapidflow: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxreplenish: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxresonance: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsandblast: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsmite: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsnooze: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsteelsurge: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxstonesurge: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxstunshock: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsweetness: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxtartness: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxterror: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxvinelash: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxvolcalith: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxvoltcrash: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxwildfire: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxwindrage: {
+		inherit: true,
+		isNonstandard: "Gmax",
 	},
 	grassyglide: {
 		inherit: true,

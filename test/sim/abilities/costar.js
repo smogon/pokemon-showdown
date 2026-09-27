@@ -11,17 +11,15 @@ describe('Costar', () => {
 	});
 
 	it('should copy the teammate\'s crit ratio on activation', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Smeargle', level: 1, moves: ['sleeptalk', 'focusenergy'] },
 			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
 			{ species: 'Flamigo', level: 1, ability: 'costar', moves: ['sleeptalk'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
 			{ species: 'pikachu', level: 1, moves: ['sleeptalk'] },
 			{ species: 'weezinggalar', level: 1, ability: 'neutralizinggas', moves: ['sleeptalk'] },
-		] });
+		]]);
 
 		battle.makeChoices('move focusenergy, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move sleeptalk, switch flamigo', 'move sleeptalk, move sleeptalk');
@@ -35,16 +33,14 @@ describe('Costar', () => {
 	});
 
 	it('should copy both positive and negative stat changes', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
 			{ species: 'Smeargle', level: 1, moves: ['sleeptalk', 'shellsmash'] },
 			{ species: 'Flamigo', level: 1, ability: 'costar', moves: ['sleeptalk'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
 			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
-		] });
+		]]);
 
 		battle.makeChoices('move sleeptalk, move shellsmash', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('switch flamigo, move sleeptalk', 'move sleeptalk, move sleeptalk');

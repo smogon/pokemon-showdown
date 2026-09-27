@@ -27,6 +27,10 @@ describe('Curse', () => {
 		]]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 		battle.makeChoices();
+		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.equal(battle.p1.active[0].boosts.spe, -1);
+		assert.equal(!!battle.p2.active[0].volatiles['curse'], false);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
@@ -38,6 +42,10 @@ describe('Curse', () => {
 		]]);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 		battle.makeChoices();
+		assert.equal(battle.p1.active[0].hp, Math.ceil(battle.p1.active[0].maxhp / 2));
+		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp - Math.floor(battle.p2.active[0].maxhp / 4));
+		assert.equal(battle.p1.active[0].boosts.spe, 0);
+		assert.equal(!!battle.p2.active[0].volatiles['curse'], true);
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
