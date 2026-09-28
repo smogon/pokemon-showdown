@@ -12,7 +12,7 @@ describe('Quick Claw', () => {
 
 	describe('[Gen 4]', () => {
 		it(`should order the previous turn's residuals using the next turn's activation`, () => {
-			battle = common.gen(4).createBattle({ seed: [1, 2, 3, 8] }, [[
+			battle = common.gen(4).createBattle({ seed: [1, 2, 3, 3] }, [[
 				{ species: 'Snorlax', level: 1, item: 'quickclaw', moves: ['toxic', 'growl'] },
 			], [
 				{ species: 'Mew', ability: 'noguard', moves: ['toxic', 'tackle'] },
