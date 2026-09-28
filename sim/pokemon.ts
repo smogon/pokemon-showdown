@@ -571,7 +571,7 @@ export class Pokemon {
 	}
 
 	getFractionalPriority() {
-		if (this.battle.gen !== 4) return undefined;
+		if (this.battle.gen !== 4) throw new Error("Fractional priority is only relevant in Gen 4");
 		// Running the full event would be the correct behavior, but for performance reasons,
 		// we only run the singleEvent version of the FractionalPriority event.
 		// Stall has lower priority than the items.
