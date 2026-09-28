@@ -1,6 +1,6 @@
 import { Utils } from '../lib/utils';
 import type { ConditionData, ModdedConditionData } from './dex-conditions';
-import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -254,7 +254,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: 'parentalbond';
 	noDamageVariance?: boolean;
-	nonGhostTarget?: MoveTarget;
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
@@ -277,7 +276,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: ID;
 }
 
-export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
+export type ModdedMoveData = (MoveData | Partial<Omit<MoveData, 'name'>> & {
 	inherit: true,
 	igniteBoosted?: boolean,
 	settleBoosted?: boolean,
@@ -285,7 +284,7 @@ export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
 	longWhipBoost?: boolean,
 	gen?: number,
 	condition?: ModdedConditionData,
-};
+}) & ModdedEffectText;
 
 export interface MoveDataTable { [moveid: IDEntry]: MoveData }
 export interface ModdedMoveDataTable { [moveid: IDEntry]: ModdedMoveData }
@@ -458,8 +457,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
-	/** Move target used if the user is not a Ghost type (for Curse). */
-	readonly nonGhostTarget: MoveTarget;
 	/** Whether or not the move ignores abilities. */
 	readonly ignoreAbility: boolean;
 	/**
@@ -514,7 +511,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
-		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;
 		this.damage = data.damage!;
 		this.spreadHit = data.spreadHit || false;
@@ -649,11 +645,9 @@ export class DexMoves {
 		}
 		if (id && this.dex.data.Moves.hasOwnProperty(id)) {
 			const moveData = this.dex.data.Moves[id] as any;
-			const moveTextData = this.dex.getDescs('Moves', id, moveData);
 			move = new DataMove({
 				name: id,
 				...moveData,
-				...moveTextData,
 			});
 			if (move.gen > this.dex.gen) {
 				(move as any).isNonstandard = 'Future';
@@ -663,10 +657,7 @@ export class DexMoves {
 				const parentMod = this.dex.mod(this.dex.parentMod);
 				if (moveData === parentMod.data.Moves[id]) {
 					const parentMove = parentMod.moves.getByID(id);
-					if (
-						move.isNonstandard === parentMove.isNonstandard &&
-						move.desc === parentMove.desc && move.shortDesc === parentMove.shortDesc
-					) {
+					if (move.isNonstandard === parentMove.isNonstandard) {
 						move = parentMove;
 					}
 				}

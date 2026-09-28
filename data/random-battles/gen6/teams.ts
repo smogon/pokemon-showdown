@@ -342,10 +342,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			}
 		}
 
-		// Enforce Thunder Wave on Prankster users
-		if (movePool.includes('thunderwave') && abilities.includes('Prankster')) {
-			counter = this.addMove('thunderwave', moves, types, abilities, teamDetails, species, isLead,
-				movePool, preferredType, role);
+		// Enforce Thunder Wave and Encore on Prankster users
+		for (const moveid of ['encore', 'thunderwave']) {
+			if (movePool.includes(moveid) && abilities.includes('Prankster')) {
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, preferredType, role);
+			}
 		}
 
 		// Enforce Shadow Sneak on Kecleon

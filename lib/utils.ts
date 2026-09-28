@@ -325,29 +325,6 @@ export function clampIntRange(num: any, min?: number, max?: number): number {
 	return num;
 }
 
-export function clearRequireCache(options: { exclude?: string[] } = {}) {
-	const excludes = [...(options?.exclude || []), '/node_modules/'];
-
-	for (const path in require.cache) {
-		if (excludes.some(p => path.includes(p))) continue;
-		const mod = require.cache[path]; // have to ref to appease ts
-		if (!mod) continue;
-		uncacheModuleTree(mod, excludes);
-		delete require.cache[path];
-	}
-}
-
-export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
-	const children = mod.children;
-	if (!children?.length || excludes.some(p => mod.filename.includes(p))) return;
-	// delete before recursing in case of circular requires
-	delete (mod as any).children;
-	for (const child of children) {
-		if (excludes.some(p => child.filename.includes(p))) continue;
-		uncacheModuleTree(child, excludes);
-	}
-}
-
 export function deepClone(obj: any): any {
 	if (obj === null || typeof obj !== 'object') return obj;
 	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop));
@@ -472,7 +449,7 @@ export class Multiset<T> extends Map<T, number> {
 export const Utils = {
 	parseExactInt, waitUntil, html, escapeHTML,
 	compare, sortBy, levenshtein,
-	shuffle, deepClone, deepFreeze, clampIntRange, clearRequireCache,
+	shuffle, deepClone, deepFreeze, clampIntRange,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
 	escapeRegex, formatSQLArray,

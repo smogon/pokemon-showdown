@@ -825,13 +825,7 @@ export class Pokemon {
 				target = possibleTarget;
 			}
 			if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
-				const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
-					!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather(move))) &&
-					!(move.id === 'electroshot' && ['raindance', 'primordialsea'].includes(this.effectiveWeather(move))) &&
-					!(this.hasItem('powerherb') && move.id !== 'skydrop');
-				if (!isCharging) {
-					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
-				}
+				target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 			}
 			if (move.smartTarget) {
 				targets = this.getSmartTargets(target, move);
@@ -1002,7 +996,7 @@ export class Pokemon {
 			switch (moveSlot.id) {
 			case 'curse':
 				if (!this.hasType('Ghost')) {
-					target = this.battle.dex.moves.get('curse').nonGhostTarget;
+					target = 'self';
 				}
 				break;
 			case 'pollenpuff':
@@ -1830,7 +1824,7 @@ export class Pokemon {
 				break;
 			default:
 				if (item.isGem) {
-					this.battle.add('-enditem', this, item, '[from] gem');
+					this.battle.add('-enditem', this, item, '[from] gem', `[move] ${this.battle.activeMove!.name}`);
 				} else {
 					this.battle.add('-enditem', this, item);
 				}

@@ -26,6 +26,11 @@ const MOVE_PAIRS = [
 	['batonpass', 'spiderweb'],
 ];
 
+/** Pokemon who should never be in the lead slot */
+const NO_LEAD_POKEMON = [
+	'dugtrio', 'wobbuffet',
+];
+
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
 	battleHasWobbuffet: boolean;
@@ -489,8 +494,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		const salacReqs = species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && !counter.get('priority');
 
-		if (moves.has('bulkup') && moves.has('substitute') && counter.get('Status') === 2 && salacReqs) return 'Salac Berry';
-
 		if (moves.has('swordsdance') && moves.has('substitute') && counter.get('Status') === 2) {
 			if (salacReqs) return 'Salac Berry';
 			if (species.baseStats.spe > 100 && counter.get('Physical') >= 2) return 'Liechi Berry';
@@ -676,6 +679,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+		let leadsRemaining = 1;
+		if (ruleTable.has('pickedteamsize') || ruleTable.has('teampreview')) leadsRemaining = 0;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
@@ -734,9 +739,23 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				if (!this.getPokemonCompatibility(species, pokemon)) continue;
 			}
 
-			// Okay, the set passes, add it to our team
-			const set = this.randomSet(species, teamDetails);
-			pokemon.push(set);
+			let set: RandomTeamsTypes.RandomSet;
+
+			// Some Pokemon shouldn't be in the lead slot
+			if (leadsRemaining) {
+				if (NO_LEAD_POKEMON.includes(species.id)) {
+					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
+					set = this.randomSet(species, teamDetails, false);
+					pokemon.push(set);
+				} else {
+					set = this.randomSet(species, teamDetails, true);
+					pokemon.unshift(set);
+					leadsRemaining--;
+				}
+			} else {
+				set = this.randomSet(species, teamDetails, false);
+				pokemon.push(set);
+			}
 
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;

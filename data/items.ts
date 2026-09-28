@@ -1722,19 +1722,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onAnySwitchIn() {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
+			delete this.effectState.eject;
 		},
 		onAnyAfterMega() {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
+			delete this.effectState.eject;
 		},
 		onAnyAfterMove() {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
+			delete this.effectState.eject;
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
+			delete this.effectState.eject;
 		},
 		onUseItem(item, pokemon) {
 			if (!this.canSwitch(pokemon.side)) return false;
@@ -7859,7 +7863,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp < pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
@@ -7944,7 +7948,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onResidualOrder: 10,
 		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
+			if (pokemon.hp < pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},

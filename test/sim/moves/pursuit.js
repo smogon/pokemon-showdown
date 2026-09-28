@@ -8,6 +8,49 @@ let battle;
 describe(`Pursuit`, () => {
 	afterEach(() => battle.destroy());
 
+	for (const gen of [2, 3, 4, 5, 6, 7, 8, 9]) {
+		// [9:24 AM] Marty: It's an information loss; the text was there because since Gen 3 the game always shows you the usual "Player withdrew" text before a non-Encored Pursuit happens, whether or not it knocks them out
+		// [9:25 AM] Marty: The text itself was not game text, which is why it was in parentheses, what should actually happen is the standard switch out text appears first
+		it(`[Gen ${gen}] should announce each interrupted withdrawal before Pursuit`, () => {
+			battle = common.gen(gen).createBattle([[
+				{ species: 'Furret', moves: ['pursuit', 'splash'] },
+			], [
+				{ species: 'Snorlax', ability: 'shellarmor', moves: ['splash'] },
+				{ species: 'Blissey', moves: ['splash'] },
+			]]);
+			const message = '|-activate|p2a: Snorlax|move: Pursuit';
+			battle.makeChoices('move pursuit', 'move splash');
+			assert.false(battle.log.includes(message), 'Ordinary Pursuit should not announce a withdrawal');
+			const start = battle.log.length;
+			battle.makeChoices('move pursuit', 'switch 2');
+			const log = battle.log.slice(start);
+			assert.equal(log.filter(line => line === message).length, 1);
+			assert(log.findIndex(line => line.startsWith('|move|p1a: Furret|Pursuit|')) > log.indexOf(message));
+			battle.makeChoices('move splash', 'switch 2');
+			battle.makeChoices('move pursuit', 'switch 2');
+			assert.equal(battle.log.filter(line => line === message).length, 2);
+		});
+	}
+
+	for (const gen of [3, 4, 7, 9]) {
+		it(`[Gen ${gen}] should announce a withdrawal only once for multiple Pursuit users`, () => {
+			battle = common.gen(gen).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Beedrill', moves: ['pursuit'] },
+				{ species: 'Furret', moves: ['pursuit'] },
+			], [
+				{ species: 'Snorlax', ability: 'shellarmor', moves: ['splash'] },
+				{ species: 'Blissey', moves: ['splash'] },
+				{ species: 'Clefable', moves: ['splash'] },
+			]]);
+			battle.makeChoices('move pursuit 1, move pursuit 1', 'switch 3, move splash');
+			const message = '|-activate|p2a: Snorlax|move: Pursuit';
+			assert.equal(battle.log.filter(line => line === message).length, 1);
+			const moves = battle.log.filter(line => line.startsWith('|move|') && line.includes('|Pursuit|p2a: Snorlax'));
+			assert.equal(moves.length, 2);
+			assert(battle.log.indexOf(message) < battle.log.indexOf(moves[0]));
+		});
+	}
+
 	it(`should execute before the target switches out and after the user mega evolves`, () => {
 		battle = common.createBattle([[
 			{ species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit'] },
@@ -16,6 +59,9 @@ describe(`Pursuit`, () => {
 			{ species: "Clefable", ability: 'unaware', moves: ['calmmind'] },
 		]]);
 		battle.makeChoices('move Pursuit mega', 'switch 2');
+		const message = battle.log.indexOf('|-activate|p2a: Alakazam|move: Pursuit');
+		assert(message >= 0);
+		assert(message < battle.log.findIndex(line => line.startsWith('|-mega|')));
 		assert.species(battle.p1.active[0], "Beedrill-Mega");
 		assert.fainted(battle.p2.active[0]);
 	});
@@ -82,6 +128,7 @@ describe(`Pursuit`, () => {
 		assert.fullHP(toxapex);
 		assert.fullHP(wynaut);
 		assert.fullHP(alakazam);
+		assert.equal(battle.log.filter(line => line === '|-activate|p2a: Clefable|move: Pursuit').length, 1);
 	});
 
 	it(`should activate on the second target switching out, if the first fainted`, () => {
@@ -100,6 +147,8 @@ describe(`Pursuit`, () => {
 		assert.fainted(shedinja);
 		assert.fullHP(wynaut);
 		assert.fullHP(alakazam);
+		assert.equal(battle.log.filter(line => line === '|-activate|p2a: Clefable|move: Pursuit').length, 1);
+		assert.equal(battle.log.filter(line => line === '|-activate|p2b: Shedinja|move: Pursuit').length, 1);
 	});
 
 	it(`should activate on a switching opponent even if targeting an ally`, () => {
@@ -139,13 +188,18 @@ describe(`Pursuit`, () => {
 		]]);
 		battle.makeChoices('move Pursuit', 'move voltswitch');
 		assert.false.fullHP(battle.p2.pokemon[0]);
+		const activation = '|-activate|p2a: Emolga|move: Pursuit';
+		assert.equal(battle.log.filter(line => line === activation).length, 1);
 		battle.choose('p2', 'switch 2');
+		assert.equal(battle.log.filter(line => line === activation).length, 1);
 		assert.equal(battle.p2.pokemon[0].name, "Zapdos");
 		battle.makeChoices('move Pursuit', 'move batonpass');
 		battle.choose('p2', 'switch 2');
 		assert.fullHP(battle.p2.pokemon[1], 'should not hit Pokemon that has used Baton Pass');
 		assert.equal(battle.p2.pokemon[0].name, "Emolga");
+		assert.equal(battle.log.filter(line => line === activation).length, 1);
 		battle.makeChoices('move Pursuit', 'move voltswitch');
+		assert.equal(battle.log.filter(line => line === activation).length, 2);
 	});
 
 	it(`should only activate before switches on adjacent foes`, () => {
@@ -226,6 +280,7 @@ describe(`Pursuit`, () => {
 		battle.makeChoices('move pursuit 1, move sleeptalk', 'move encore 1, move uturn 2');
 		assert.fullHP(deoxys);
 		assert.fullHP(infernape);
+		assert.false(battle.log.includes('|-activate|p2b: Infernape|move: Pursuit'));
 		battle.makeChoices('', 'switch 3');
 		assert.false.fullHP(deoxys);
 	});
@@ -309,6 +364,7 @@ describe(`Pursuit`, () => {
 			battle.makeChoices('move pursuit 1, move sleeptalk', 'move encore 1, move uturn 2');
 			assert.fullHP(deoxys);
 			assert.fullHP(infernape);
+			assert.false(battle.log.includes('|-activate|p2b: Infernape|move: Pursuit'));
 			battle.makeChoices('', 'switch 3');
 			assert.false.fullHP(deoxys);
 		});

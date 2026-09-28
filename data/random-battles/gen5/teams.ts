@@ -50,6 +50,11 @@ const PRIORITY_POKEMON = [
 	'bisharp', 'breloom', 'cacturne', 'dusknoir', 'honchkrow', 'scizor', 'shedinja', 'shiftry',
 ];
 
+/** Pokemon who should never be in the lead slot */
+const NO_LEAD_POKEMON = [
+	'dugtrio', 'gothitelle', 'wobbuffet',
+];
+
 export class RandomGen5Teams extends RandomGen6Teams {
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
@@ -863,6 +868,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+		let leadsRemaining = 1;
+		if (ruleTable.has('pickedteamsize') || ruleTable.has('teampreview')) leadsRemaining = 0;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
@@ -926,12 +933,23 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				if (!this.getPokemonCompatibility(species, pokemon)) continue;
 			}
 
-			const set = this.randomSet(species, teamDetails,
-				pokemon.length === 0 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
-			);
+			let set: RandomTeamsTypes.RandomSet;
 
-			// Okay, the set passes, add it to our team
-			pokemon.push(set);
+			// Some Pokemon shouldn't be in the lead slot
+			if (leadsRemaining) {
+				if (NO_LEAD_POKEMON.includes(species.id)) {
+					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
+					set = this.randomSet(species, teamDetails, false);
+					pokemon.push(set);
+				} else {
+					set = this.randomSet(species, teamDetails, true);
+					pokemon.unshift(set);
+					leadsRemaining--;
+				}
+			} else {
+				set = this.randomSet(species, teamDetails, false);
+				pokemon.push(set);
+			}
 
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;

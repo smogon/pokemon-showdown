@@ -1,4 +1,4 @@
-import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 import { Utils } from '../lib/utils';
 import { isDeepStrictEqual } from 'node:util';
 
@@ -28,9 +28,9 @@ export interface CosmeticFormeData {
 	color: string;
 }
 
-export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
+export type ModdedSpeciesData = (SpeciesData | CosmeticFormeData |
 	Partial<Omit<SpeciesData, 'name'>> & { inherit: true } |
-	Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true };
+	Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true }) & ModdedEffectText;
 
 export interface SpeciesFormatsData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;

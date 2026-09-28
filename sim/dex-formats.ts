@@ -441,6 +441,7 @@ export class RuleTable extends Map<string, string> {
 
 export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly mod: string;
+	declare readonly desc: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses
 	 * random/fixed teams. null if players can bring teams.
@@ -1139,7 +1140,7 @@ export class DexFormats {
 		if (id === 'unreleased') return 'unreleased';
 		if (id === 'nonexistent') return 'nonexistent';
 		const matches = [];
-		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'nature', 'tag'];
+		let matchTypes = ['pokemon', 'move', 'ability', 'item', 'type', 'teratype', 'nature', 'tag'];
 		for (const matchType of matchTypes) {
 			if (rule.startsWith(`${matchType}:`)) {
 				matchTypes = [matchType];
@@ -1157,6 +1158,8 @@ export class DexFormats {
 			case 'move': table = this.dex.data.Moves; break;
 			case 'item': table = this.dex.data.Items; break;
 			case 'ability': table = this.dex.data.Abilities; break;
+			case 'type': table = this.dex.data.TypeChart; break;
+			case 'teratype': table = this.dex.data.TypeChart; break;
 			case 'nature': table = this.dex.data.Natures; break;
 			case 'tag':
 				// valid tags
@@ -1166,6 +1169,8 @@ export class DexFormats {
 				];
 				if (validTags.includes(ruleid) || this.validTag(ruleid)) {
 					matches.push('tag:' + ruleid);
+				} else if (this.validTag(id)) {
+					matches.push('tag:' + id);
 				}
 				continue;
 			default:

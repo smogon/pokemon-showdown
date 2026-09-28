@@ -389,6 +389,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 	},
+	quickpowder: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (pokemon.species.name === 'Ditto') {
+				return this.chainModify(2);
+			}
+		},
+	},
 	razorfang: {
 		inherit: true,
 		onModifyMove(move) {

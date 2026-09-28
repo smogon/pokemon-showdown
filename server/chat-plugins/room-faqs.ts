@@ -50,7 +50,7 @@ export function visualizeFaq(faq: RoomFAQ) {
 
 export function getAlias(roomid: RoomID, key: string) {
 	if (!roomFaqs[roomid]) return false;
-	const value = roomFaqs[roomid][key];
+	const value = roomFaqs[roomid][toID(key)];
 	if (value?.alias) return value.source;
 	return false;
 }
