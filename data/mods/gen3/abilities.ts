@@ -219,14 +219,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.trapped = true;
 		},
 	},
-	snowwarning: {
-		inherit: true,
-		onSwitchInPriority: 3,
-		onAfterEntryHazard(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
-		},
-		onSwitchIn: undefined, // no inherit
-	},
 	static: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
