@@ -57,6 +57,24 @@ describe('Custap Berry', () => {
 			});
 		}
 
+		it('should block Embargo if it is going to activate', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Deoxys-Attack', ability: 'hugepower', item: 'custapberry', moves: ['falseswipe', 'tackle'] },
+			], [
+				{ species: 'Deoxys-Attack', ability: 'hugepower', item: 'custapberry', moves: ['falseswipe', 'embargo'], evs: { spe: 252 } },
+			]]);
+			const slower = battle.p1.active[0];
+			const faster = battle.p2.active[0];
+			battle.makeChoices();
+			assert.equal(slower.hp, 1);
+			assert.equal(faster.hp, 1);
+
+			battle.makeChoices('move tackle', 'move embargo');
+			assert.false(slower.volatiles['embargo']);
+			assert.equal(slower.item, '');
+			assert.equal(faster.item, '');
+		});
+
 		it('should not activate if the opponent switches out', () => {
 			battle = common.gen(4).createBattle([[
 				{ species: 'gyarados', moves: ['falseswipe'] },
