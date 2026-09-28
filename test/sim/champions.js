@@ -111,7 +111,7 @@ describe('Curse', () => {
 		assert.equal(greninja.moveSlots[0].pp, greninja.moveSlots[0].maxpp - 3);
 	});
 
-	it(`should not hit a target mid-fly`, () => {
+	it(`should not hit a semi-invulnerable target`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Gengar', moves: ['curse'] },
 		], [
@@ -122,7 +122,7 @@ describe('Curse', () => {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should be able to hit a target mid-fly if a non-Ghost user has Protean`, () => {
+	it(`should be able to hit a semi-invulnerable target if a non-Ghost user has Protean`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Greninja', ability: 'protean', moves: ['curse'] },
 		], [
@@ -136,7 +136,7 @@ describe('Curse', () => {
 		assert.equal(aerodactyl.hp, aerodactyl.maxhp - curseResidual);
 	});
 
-	it(`should be able to hit a target mid-fly if the user became a Ghost due to Trick-or-Treat`, () => {
+	it(`should be able to hit a semi-invulnerable target if the user became a Ghost due to Trick-or-Treat`, () => {
 		battle = createChampionsBattle({ gameType: 'doubles' }, [[
 			{ species: 'Kecleon', ability: 'protean', moves: ['curse'] },
 			{ species: 'Magikarp', moves: ['splash'] },
@@ -230,6 +230,19 @@ describe('Curse', () => {
 		assert.fullHP(aerodactyl);
 	});
 
+	it(`should target a random opponent if the target is a semi-invulnerable ally`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Deoxys', moves: ['fly'] },
+			{ species: 'Gengar', moves: ['curse'] },
+		], [
+			{ species: 'Caterpie', moves: ['sleeptalk'] },
+			{ species: 'Metapod', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move fly 1, move curse -1', 'auto');
+		assert.fullHP(battle.p1.active[0]);
+		assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
+	});
+
 	it(`should boost its stats if a Ghost user has Protean and was hit by Electrify`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Gengar', ability: 'protean', moves: ['curse'] },
@@ -257,6 +270,46 @@ describe('Curse', () => {
 		assert.equal(gengar.boosts.atk, 1);
 		assert.fullHP(aerodactyl);
 		assert.equal(aerodactyl.moveSlots[0].pp, aerodactyl.moveSlots[0].maxpp - 1);
+	});
+
+	it(`should target a random opponent if the target is an ally that uses Ally Switch`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', moves: ['allyswitch'] },
+			{ species: 'Gengar', moves: ['curse'] },
+		], [
+			{ species: 'Caterpie', moves: ['sleeptalk'] },
+			{ species: 'Metapod', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move allyswitch, move curse -1', 'auto');
+		assert.fullHP(battle.p1.active[1]);
+		assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
+	});
+
+	it(`should not be able to hit an opposing semi-invulnerable target if targeted an ally`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Gengar', moves: ['curse'] },
+			{ species: 'Gourgeist', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Aerodactyl', moves: ['fly'] },
+			{ species: 'Aerodactyl', moves: ['fly'] },
+		]]);
+		battle.makeChoices();
+		assert.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
+	});
+
+	it(`should not be able to hit an opposing semi-invulnerable target if targeted an ally that uses Ally Switch`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Gengar', moves: ['curse'] },
+			{ species: 'Gourgeist', moves: ['allyswitch'] },
+		], [
+			{ species: 'Aerodactyl', moves: ['fly'] },
+			{ species: 'Aerodactyl', moves: ['fly'] },
+		]]);
+		
+		battle.makeChoices('move curse -2, move allyswitch', 'auto');
+		assert.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
 	});
 
 	it(`should boost its stats if the target is already afflicted with Curse and the user stops being a Ghost-type mid-turn`, () => {
