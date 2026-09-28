@@ -3138,7 +3138,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Avalanche", "Body Press", "Protect", "Recover"],
+                "movepool": ["Body Press", "Ice Spinner", "Protect", "Recover"],
                 "abilities": ["Sturdy"]
             }
         ]
