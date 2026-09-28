@@ -478,7 +478,7 @@ export class Pokemon {
 		this.lastDamage = 0;
 		this.attackedBy = [];
 		this.timesAttacked = 0;
-		this.quickClawRoll = this.battle.gen === 4 ? this.battle.randomChance(1, 5) : false;
+		this.quickClawRoll = false;
 		this.quickClawFlag = false;
 		this.custapBerryFlag = false;
 
