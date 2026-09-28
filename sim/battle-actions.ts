@@ -214,10 +214,10 @@ export class BattleActions {
 		for (const poke of switchersIn) {
 			if (!poke.hp) continue;
 			poke.isStarted = true;
-			if (this.battle.gen === 4) {
-				for (const foeActive of poke.foes()) {
-					foeActive.removeVolatile('substitutebroken');
-				}
+		}
+		if (this.battle.gen === 4) {
+			for (const poke of this.battle.getAllActive()) {
+				poke.removeVolatile('substitutebroken');
 			}
 		}
 		return true;
