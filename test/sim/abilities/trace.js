@@ -112,7 +112,7 @@ describe('Trace', () => {
 			const raltsTrace = debugLog.indexOf('|-ability|p1a: Ralts|Pressure');
 			const arcanineTrace = debugLog.indexOf('|-ability|p1b: Arcanine|Intimidate');
 			assert(arcanineTrace > 0);
-			assert(arcanineTrace < raltsTrace, `Expected Arcanine's Intimidate to activate before Ralts's Trace.`);
+			assert(arcanineTrace < raltsTrace, `Expected Arcanine's Intimidate to activate before Ralts's copied Pressure.`);
 		});
 	});
 
