@@ -15,6 +15,23 @@ const createChampionsBattle = (options, teams) => {
 	return common.createBattle({ formatid, ...options }, teams);
 };
 
+describe('Magician', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+	
+	it.skip(`should not take recoil damage if it steals a Life Orb`, () => {
+		battle = common.createBattle([[
+			{ species: 'delphox', ability: 'magician', moves: ['flamethrower'] },
+		], [
+			{ species: 'latios', item: 'lifeorb', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'lifeorb');
+		assert.fullHP(battle.p1.active[0]);
+	});
+});
+
 describe('Curse', () => {
 	afterEach(() => {
 		battle.destroy();

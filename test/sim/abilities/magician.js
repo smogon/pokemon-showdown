@@ -77,6 +77,17 @@ describe('Magician', () => {
 		assert.equal(battle.p1.active[0].item, 'tr69');
 	});
 
+	it(`should take recoil damage if it steals a Life Orb`, () => {
+		battle = common.createBattle([[
+			{ species: 'delphox', ability: 'magician', moves: ['flamethrower'] },
+		], [
+			{ species: 'latios', item: 'lifeorb', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'lifeorb');
+		assert.false.fullHP(battle.p1.active[0]);
+	});
+
 	it(`should steal the opponents item if the user uses Dragon Tail`, () => {
 		battle = common.createBattle([[
 			{ species: 'klefki', ability: 'magician', moves: ['dragontail'] },
