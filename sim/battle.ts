@@ -609,7 +609,8 @@ export class Battle {
 			return relayVar;
 		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && eventid !== 'SetAbility' && effect.effectType === 'Item' &&
-			(target instanceof Pokemon) && target.ignoringItem() && !(eventid === 'BeforeMove' && (target.quickClawFlag || target.custapBerryFlag))) {
+			(target instanceof Pokemon) && target.ignoringItem() &&
+			 !(eventid === 'BeforeMove' && (target.quickClawFlag || target.custapBerryFlag))) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
