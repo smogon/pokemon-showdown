@@ -306,7 +306,7 @@ describe('Curse', () => {
 			{ species: 'Aerodactyl', moves: ['fly'] },
 			{ species: 'Aerodactyl', moves: ['fly'] },
 		]]);
-		
+
 		battle.makeChoices('move curse -2, move allyswitch', 'auto');
 		assert.fullHP(battle.p2.active[0]);
 		assert.fullHP(battle.p2.active[1]);
