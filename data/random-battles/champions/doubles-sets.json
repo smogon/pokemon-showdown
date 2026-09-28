@@ -184,7 +184,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Fake Out", "Focus Blast", "Protect", "Volt Switch", "Zap Cannon"],
+                "movepool": ["Encore", "Fake Out", "Focus Blast", "Protect", "Volt Switch", "Zap Cannon"],
                 "abilities": ["Lightning Rod"]
             }
         ]
