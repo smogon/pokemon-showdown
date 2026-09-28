@@ -1,7 +1,7 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
-		onSwitchInPriority: 5,
+		onSwitchInPriority: 4,
 		onAfterEntryHazard(pokemon) {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
@@ -9,7 +9,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cloudnine: {
 		inherit: true,
-		onSwitchInPriority: 5,
+		onSwitchInPriority: 4,
 		onAfterEntryHazard(pokemon) {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
@@ -27,7 +27,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	drizzle: {
 		inherit: true,
-		onSwitchInPriority: 4,
+		onSwitchInPriority: 3,
 		onAfterEntryHazard(pokemon) {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
@@ -35,7 +35,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	drought: {
 		inherit: true,
-		onSwitchInPriority: 4,
+		onSwitchInPriority: 3,
 		onAfterEntryHazard(pokemon) {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
@@ -207,7 +207,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	sandstream: {
 		inherit: true,
-		onSwitchInPriority: 4,
+		onSwitchInPriority: 3,
 		onAfterEntryHazard(pokemon) {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
@@ -221,7 +221,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	snowwarning: {
 		inherit: true,
-		onSwitchInPriority: 4,
+		onSwitchInPriority: 3,
 		onAfterEntryHazard(pokemon) {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
