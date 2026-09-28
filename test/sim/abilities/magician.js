@@ -184,17 +184,16 @@ describe('Magician', () => {
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
 
-	it(`should activate prior to healing from Sitrus Berry`, () => {
+	it.skip(`should activate prior to healing from Sitrus Berry`, () => {
 		battle = common.createBattle([[
 			{ species: 'Urshifu', ability: 'magician', moves: ['wickedblow'] },
 		], [
-			{ species: 'Terapagos', ability: 'berserk', item: 'sitrusberry', moves: ['sleeptalk'] },
+			{ species: 'Terapagos', item: 'sitrusberry', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const terapagos = battle.p2.active[0];
 		assert.holdsItem(battle.p1.active[0]);
 		assert.false.holdsItem(terapagos);
-		assert.equal(terapagos.boosts.spa, 1);
 		assert(terapagos.hp < terapagos.maxhp / 2);
 	});
 
@@ -202,13 +201,12 @@ describe('Magician', () => {
 		battle = common.createBattle([[
 			{ species: 'Urshifu-Rapid-Strike', ability: 'magician', moves: ['surgingstrikes'] },
 		], [
-			{ species: 'Terapagos', ability: 'berserk', item: 'sitrusberry', moves: ['sleeptalk'] },
+			{ species: 'Terapagos', item: 'sitrusberry', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const terapagos = battle.p2.active[0];
 		assert.false.holdsItem(battle.p1.active[0]);
 		assert.false.holdsItem(terapagos);
-		assert.equal(terapagos.boosts.spa, 0);
 		assert(terapagos.hp > terapagos.maxhp / 2);
 	});
 

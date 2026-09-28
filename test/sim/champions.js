@@ -19,9 +19,9 @@ describe('Magician', () => {
 	afterEach(() => {
 		battle.destroy();
 	});
-	
+
 	it.skip(`should not take recoil damage if it steals a Life Orb`, () => {
-		battle = common.createBattle([[
+		battle = createChampionsBattle([[
 			{ species: 'delphox', ability: 'magician', moves: ['flamethrower'] },
 		], [
 			{ species: 'latios', item: 'lifeorb', moves: ['sleeptalk'] },
