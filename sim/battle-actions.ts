@@ -106,17 +106,6 @@ export class BattleActions {
 			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 			this.battle.queue.cancelAction(oldActive);
 
-			if (this.battle.gen === 1 && oldActive.volatiles['partiallytrapped']) {
-				const trapper = oldActive.volatiles['partiallytrapped'].source;
-				if (trapper.moveSlots[trapper.side.lastSelectedMoveSlot].id === 'metronome') {
-					// this is not done for Mirror Move, potentially resulting in a desync
-					trapper.side.lastSelectedMove = 'metronome' as ID;
-					if (this.battle.queue.willMove(trapper)) {
-						this.battle.queue.changeAction(trapper, { choice: 'move', poke: trapper, moveid: 'metronome' });
-					}
-				}
-			}
-
 			let newMove = null;
 			if (this.battle.gen === 4 && sourceEffect) {
 				newMove = oldActive.lastMove;
@@ -184,7 +173,7 @@ export class BattleActions {
 				this.battle.runEvent('AfterSwitchInSelf', pokemon);
 			}
 			if (!pokemon.hp) return false;
-			if (this.battle.turn > 0) {
+			if (this.battle.gen === 3 && this.battle.turn > 0) {
 				// Gen 3 Weather-related abilities activate before other Pokemon switch in
 				this.battle.runEvent('AfterEntryHazard', pokemon);
 			}
