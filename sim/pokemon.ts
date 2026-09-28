@@ -1880,7 +1880,6 @@ export class Pokemon {
 	takeItem(source?: Pokemon) {
 		if (!source) source = this;
 		if (this.battle.gen <= 4 && (this.itemKnockedOff || source.itemKnockedOff)) return false;
-		if (this.battle.gen === 4 && (this.quickClawFlag || this.custapBerryFlag)) return false;
 		if (!this.item) return;
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {

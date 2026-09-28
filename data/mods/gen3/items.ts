@@ -302,6 +302,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBeforeTurn: undefined, // no inherit
 		onBeforeMove: undefined, // no inherit
+		onTakeItem: undefined, // no inherit
 		// implemented in Pokemon#getActionSpeed()
 	},
 	salacberry: {

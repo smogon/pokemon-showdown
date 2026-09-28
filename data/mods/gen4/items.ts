@@ -95,6 +95,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.custapBerryFlag = false;
 			}
 		},
+		onTakeItem(item, source) {
+			return !source.custapBerryFlag;
+		},
 	},
 	deepseascale: {
 		inherit: true,
@@ -378,6 +381,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				this.add('-activate', pokemon, 'item: Quick Claw');
 				pokemon.quickClawFlag = false;
 			}
+		},
+		onTakeItem(item, source) {
+			return !source.quickClawFlag;
 		},
 	},
 	quickpowder: {
