@@ -2540,11 +2540,14 @@ export class Battle {
 		}
 
 		// In Gen 4, you can only switch one Pokémon per side at a time
-		const faintedCounter = Array(this.sides.length).fill(0);
+		const switches = this.gen === 4 ? Array(this.sides.length).fill(false) : [];
 
 		for (const poke of pokemon) {
-			if (this.gen === 4 && faintedCounter[poke.side.n]++) continue;
 			if (poke.fainted) {
+				if (this.gen === 4) {
+					if (switches[poke.side.n]) continue;
+					switches[poke.side.n] = true;
+				}
 				poke.status = 'fnt' as ID;
 				poke.switchFlag = true;
 			}
