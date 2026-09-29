@@ -9,7 +9,7 @@ export class RandomMNMLS extends RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		const sets = this.randomSets[species.id]["sets"];
+		const sets = this[`randomSets`][species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -59,23 +59,27 @@ export class RandomMNMLS extends RandomTeams {
 		const level = this.getLevel(species, isDoubles);
 
 		// Prepare optimal HP
-		const srImmunity = ability === 'Magic Guard' || ability === 'Frost Cloak' || item === 'Heavy-Duty Boots';
+		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
 		let srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		// Crash damage move users want an odd HP to survive two misses
-		if (['axekick', 'highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
+		if (['axekick', 'highjumpkick', 'jumpkick', 'supercellslam'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if ((moves.has('substitute') && ['Sitrus Berry', 'Salac Berry'].includes(item))) {
-				// Two Substitutes should activate Sitrus Berry
+			if ((moves.has('substitute') && ['Sitrus Berry'].includes(item)) || species.id === 'minior') {
+				// Two Substitutes should activate Sitrus Berry. Two switch-ins to Stealth Rock should activate Shields Down on Minior.
 				if (hp % 4 === 0) break;
-			} else if ((moves.has('bellydrum') || moves.has('filletaway')) && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
+			} else if (
+				(moves.has('bellydrum') || moves.has('filletaway') || moves.has('shedtail')) &&
+				(item === 'Sitrus Berry' || ability === 'Gluttony')
+			) {
 				// Belly Drum should activate Sitrus Berry
 				if (hp % 2 === 0) break;
 			} else if (moves.has('substitute') && moves.has('endeavor')) {
 				// Luvdisc should be able to Substitute down to very low HP
 				if (hp % 4 > 0) break;
 			} else {
-				// Maximize number of Stealth Rock switch-ins
+				// Maximize number of Stealth Rock switch-ins in singles
+				if (isDoubles) break;
 				if (srWeakness <= 0 || ability === 'Regenerator' || ['Leftovers', 'Life Orb'].includes(item)) break;
 				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
 				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
@@ -89,20 +93,22 @@ export class RandomMNMLS extends RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
-			// Magearna and doubles Dragonite, though these can work well as a general rule
-			if (move.id === 'terablast' && (
-				species.id === 'porygon2' || moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
+			// Physical Tera Blast
+			if (
+				move.id === 'terablast' && (species.id === 'porygon2' || ['Contrary', 'Defiant'].includes(ability) ||
+					moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
 			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
-		// prevents Illumise (who can turn into Volbeat with Physical moves) from having 0 Atk EVs
-		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime' &&
-			species.id !== 'illumise') {
+		if (
+			noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime' &&
+			!ruleTable.has('forceofthefallenmod')
+		) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
 
-		if (moves.has('gyroball') || moves.has('trickroom') || moves.has('archaicglare')) {
+		if (moves.has('gyroball') || moves.has('trickroom')) {
 			evs.spe = 0;
 			ivs.spe = 0;
 		}
@@ -116,6 +122,7 @@ export class RandomMNMLS extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
+			speciesId: species.id,
 			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
 			shiny: this.randomChance(1, 1024),
 			level,
