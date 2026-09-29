@@ -288,6 +288,33 @@ describe('Switching in', () => {
 			assert.equal(battle.p2.requestState, 'move');
 		});
 
+		it(`should make an instant switch request if a Pokemon faints during switch-in`, () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "groudon", ability: 'drought', moves: ['sleeptalk'] },
+			], [
+				{ species: "alakazam", level: 99, moves: ['spikes'] },
+				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "kyogre", ability: 'drizzle', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			assert.equal(battle.p1.requestState, 'move');
+			assert.equal(battle.p2.requestState, 'move');
+
+			battle.makeChoices('switch 3, move 1', 'switch 3, move 1');
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, '');
+			assert(battle.p2.activeRequest.wait);
+			assert.equal(battle.field.weather, '');
+
+			battle.makeChoices('switch 4');
+			assert.equal(battle.field.weather, 'raindance');
+			assert.equal(battle.p1.requestState, 'move');
+			assert.equal(battle.p2.requestState, 'move');
+		});
+
 		it(`should not send a switch request if the only available pokemon are queued`, () => {
 			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
 				{ species: "alakazam", level: 99, moves: ['spikes'] },
@@ -316,7 +343,7 @@ describe('Switching in', () => {
 	});
 
 	describe('[Gen 2]', () => {
-		it.skip(`effects should be applied when the Pokemon enters the field, but fainting should only happen after all Pokemon have switched in`, () => {
+		it(`effects should be applied when the Pokemon enters the field, but fainting should only happen after all Pokemon have switched in`, () => {
 			battle = common.gen(2).createBattle([[
 				{ species: "alakazam", moves: ['sleeptalk'] },
 				{ species: "shedinja", moves: ['sleeptalk'] }, // I know Shedinja doesn't exist in Gen 2, bite me

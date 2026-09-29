@@ -21,7 +21,7 @@ import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
 import { PRNG, type PRNGSeed } from './prng';
 import { type MoveRequest, type ChoiceRequest, Side } from './side';
 import { State } from './state';
-import { BattleQueue, type Action } from './battle-queue';
+import { BattleQueue, SwitchAction, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
 declare const __version: any;
@@ -2852,14 +2852,17 @@ export class Battle {
 
 		// fainting
 
-		this.faintMessages();
+		if (!(this.gen <= 2 && ['instaswitch', 'switch'].includes(this.queue.peek()?.choice ?? ''))) {
+			// in gen 2, there are not faint checks between switches
+			this.faintMessages();
+		}
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
 		if (
 			!this.queue.peek() ||
-			(this.gen === 3 && action.choice === 'instaswitch' && action.target.fainted) ||
+			(this.gen === 3 && ['instaswitch', 'switch'].includes(action.choice) && (action as SwitchAction).target.fainted) ||
 			(this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice)) ||
 			(this.gen === 4 && action.choice === 'instaswitch' &&
 				this.queue.list.every(queuedAction => queuedAction.choice === 'runSwitch'))
