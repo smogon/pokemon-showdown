@@ -265,7 +265,7 @@
         ]
     },
     "vileplume": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -377,7 +377,7 @@
         ]
     },
     "poliwrath": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -769,7 +769,7 @@
         ]
     },
     "kangaskhan": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -831,7 +831,7 @@
         ]
     },
     "jynx": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -858,7 +858,7 @@
         ]
     },
     "magmar": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -890,7 +890,7 @@
         ]
     },
     "tauros": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -900,7 +900,7 @@
         ]
     },
     "gyarados": {
-        "level": 73,
+        "level": 74,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1185,7 +1185,7 @@
         ]
     },
     "furret": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1572,7 +1572,7 @@
         ]
     },
     "forretress": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2119,7 +2119,7 @@
         ]
     },
     "mightyena": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2302,7 +2302,7 @@
         ]
     },
     "exploud": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2486,7 +2486,7 @@
         ]
     },
     "volbeat": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2659,7 +2659,7 @@
         ]
     },
     "zangoose": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3133,7 +3133,7 @@
         ]
     },
     "deoxysdefense": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Support",
