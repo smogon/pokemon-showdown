@@ -216,7 +216,11 @@ export const commands: Chat.ChatCommands = {
 			// weird ts bug (?) - 7022
 			// it implicitly is 'any' because it has no annotation and is "is referenced directly or indirectly in its own initializer."
 			// dunno why this happens, but for now we can just cast over it.
-			const oldSymbol: GroupSymbol = room.auth.getDirect(userid);
+			let oldSymbol: GroupSymbol = room.auth.getDirect(userid);
+			if (room.auth.has(userid) && oldSymbol === Users.Auth.defaultSymbol()) {
+				oldSymbol = 'whitelist';
+			}
+
 			let shouldPopup;
 			try {
 				shouldPopup = runPromote(user, room, userid, nextSymbol, toPromote, force);
