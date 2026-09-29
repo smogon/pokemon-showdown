@@ -280,6 +280,29 @@ describe('Switching in', () => {
 			assert.equal(battle.p1.active[0].boosts.atk, -1);
 			assert.equal(battle.p1.active[1].boosts.atk, -1);
 		});
+
+		it(`should not crash if a Pokemon faints during switch-in if the only available pokemon are queued`, () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: "alakazam", level: 99, moves: ['spikes'] },
+				{ species: "alakazam", level: 97, moves: ['explosion'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "snorlax", moves: ['sleeptalk'] },
+			], [
+				{ species: "alakazam", level: 100, moves: ['spikes'] },
+				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
+				{ species: "kyogre", ability: 'drizzle', moves: ['sleeptalk'] },
+				{ species: "gyarados", ability: 'intimidate', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			// Alakazams should all be fainted now
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, 'switch');
+
+			battle.makeChoices('switch 3, switch 4', 'switch 3, switch 4');
+			// Shedinja faints to Spikes, but the only available switch-in is Snorlax,
+			// who is already queued to switch in
+			battle.makeChoices();
+		});
 	});
 
 	describe('[Gen 2]', () => {
