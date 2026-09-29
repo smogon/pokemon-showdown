@@ -1467,122 +1467,122 @@
 			"nature": "Bold"
 		}
 	],
-	  "mew": [
-    {
-      "species": "Clefable",
-      "items": ["leftovers"],
-      "abilities": ["unaware","magicguard"],
-      "teraTypes": ["electric"],
-      "forcedMoves": ["quiverdance","moonblast"],
-      "moves": ["thunderbolt","moonlight"],
-      "nature": "Bold"
-    },
-    {
-      "species": "Bisharp",
-      "items": ["eviolite"],
-      "abilities": ["toughclaws"],
-      "teraTypes": ["dark","flying","fighting"],
-      "forcedMoves": ["swordsdance","suckerpunch"],
-      "moves": ["ironhead","throatpunch","lowkick"],
-      "nature": "Adamant"
-    },
-    {
-      "species": "Dragapult",
-      "items": ["leftovers","colburberry"],
-      "abilities": ["infiltrator","clearbody"],
-      "teraTypes": ["fairy","water","poison"],
-      "forcedMoves": ["dragonpulse","calmmind"],
-      "moves": ["willowisp","hex","flamethrower","terablast"],
-      "nature": "Timid"
-    },
-    {
-      "species": "Slither Wing",
-      "items": ["boosterenergy"],
-      "abilities": ["protosynthesis"],
-      "teraTypes": ["fire"],
-      "forcedMoves": ["dragondance","closecombat"],
-      "moves": ["leechlife","flareblitz"],
-      "nature": "Jolly",
-      "gender": "N"
-    }
-  ],
-  "rhyperior": [
-    {
-      "species": "Serperior",
-      "items": ["leftovers"],
-      "abilities": ["contrary"],
-      "teraTypes": ["electric"],
-      "forcedMoves": ["leafstorm","glare"],
-      "moves": ["synthesis","thunderbolt"],
-      "nature": "Timid"
-    },
-    {
-      "species": "Necrozma-Dawn-Wings",
-      "items": ["leftovers"],
-      "abilities": ["prismarmor"],
-      "teraTypes": ["electric","fairy"],
-      "forcedMoves": ["moongeistbeam","photongeyser"],
-      "moves": ["chargebeam","moonblast"],
-      "nature": "Modest",
-      "gender": "N"
-    },
-    {
-      "species": "Dragonite",
-      "items": ["heavydutyboots"],
-      "abilities": ["aerialate"],
-      "teraTypes": ["ground","fire"],
-      "forcedMoves": ["dragondance","bodyslam"],
-      "moves": ["firepunch","encore","earthquake"],
-      "nature": "Adamant"
-    },
-    {
-      "species": "Okidogi",
-      "items": ["assaultvest"],
-      "abilities": ["toxicchain"],
-      "teraTypes": ["fighting","poison"],
-      "forcedMoves": ["gunkshot","closecombat"],
-      "moves": ["mortalspin","knockoff"],
-      "nature": "Jolly",
-      "gender": "M"
-    }
-  ],
-  "munkidori": [
-    {
-      "species": "Volcarona",
-      "items": ["heavydutyboots"],
-      "abilities": ["flamebody"],
-      "teraTypes": ["water","dragon","grass"],
-      "forcedMoves": ["quiverdance","fierydance"],
-      "moves": ["bugbuzz","gigadrain","morningsun","mudshot"],
-      "nature": "Timid"
-    },
-    {
-      "species": "Conkeldurr",
-      "items": ["toxicorb"],
-      "abilities": ["poisonheal"],
-      "teraTypes": ["normal","water"],
-      "forcedMoves": ["machpunch","closecombat"],
-      "moves": ["knockoff","facade"],
-      "nature": "Adamant"
-    },
-    {
-      "species": "Greninja",
-      "items": ["choicescarf"],
-      "abilities": ["protean"],
-      "teraTypes": ["water","stellar"],
-      "forcedMoves": ["hydropump","vcreate"],
-      "moves": ["uturn","gunkshot","icebeam","switcheroo"],
-      "nature": "Hasty"
-    },
-    {
-      "species": "Raging Bolt",
-      "items": ["heavydutyboots","boosterenergy"],
-      "abilities": ["protosynthesis"],
-      "teraTypes": ["fairy","electric"],
-      "forcedMoves": ["dracometeor","thunderclap"],
-      "moves": ["voltswitch","thunderbolt","morningsun"],
-      "nature": "Timid",
-      "gender": "M"
-    }
-  ]
+	"mew": [
+		{
+		  "species": "Clefable",
+		  "items": ["leftovers"],
+		  "abilities": ["unaware","magicguard"],
+		  "teraTypes": ["electric"],
+		  "forcedMoves": ["quiverdance","moonblast"],
+		  "moves": ["thunderbolt","moonlight"],
+		  "nature": "Bold"
+		},
+		{
+		  "species": "Bisharp",
+		  "items": ["eviolite"],
+		  "abilities": ["toughclaws"],
+		  "teraTypes": ["dark","flying","fighting"],
+		  "forcedMoves": ["swordsdance","suckerpunch"],
+		  "moves": ["ironhead","throatpunch","lowkick"],
+		  "nature": "Adamant"
+		},
+		{
+		  "species": "Dragapult",
+		  "items": ["leftovers","colburberry"],
+		  "abilities": ["infiltrator","clearbody"],
+		  "teraTypes": ["fairy","water","poison"],
+		  "forcedMoves": ["dragonpulse","calmmind"],
+		  "moves": ["willowisp","hex","flamethrower","terablast"],
+		  "nature": "Timid"
+		},
+		{
+		  "species": "Slither Wing",
+		  "items": ["boosterenergy"],
+		  "abilities": ["protosynthesis"],
+		  "teraTypes": ["fire"],
+		  "forcedMoves": ["dragondance","closecombat"],
+		  "moves": ["leechlife","flareblitz"],
+		  "nature": "Jolly",
+		  "gender": "N"
+		}
+	],
+	"rhyperior": [
+		{
+		  "species": "Serperior",
+		  "items": ["leftovers"],
+		  "abilities": ["contrary"],
+		  "teraTypes": ["electric"],
+		  "forcedMoves": ["leafstorm","glare"],
+		  "moves": ["synthesis","thunderbolt"],
+		  "nature": "Timid"
+		},
+		{
+		  "species": "Necrozma-Dawn-Wings",
+		  "items": ["leftovers"],
+		  "abilities": ["prismarmor"],
+		  "teraTypes": ["electric","fairy"],
+		  "forcedMoves": ["moongeistbeam","photongeyser"],
+		  "moves": ["chargebeam","moonblast"],
+		  "nature": "Modest",
+		  "gender": "N"
+		},
+		{
+		  "species": "Dragonite",
+		  "items": ["heavydutyboots"],
+		  "abilities": ["aerialate"],
+		  "teraTypes": ["ground","fire"],
+		  "forcedMoves": ["dragondance","bodyslam"],
+		  "moves": ["firepunch","encore","earthquake"],
+		  "nature": "Adamant"
+		},
+		{
+		  "species": "Okidogi",
+		  "items": ["assaultvest"],
+		  "abilities": ["toxicchain"],
+		  "teraTypes": ["fighting","poison"],
+		  "forcedMoves": ["gunkshot","closecombat"],
+		  "moves": ["mortalspin","knockoff"],
+		  "nature": "Jolly",
+		  "gender": "M"
+		}
+	],
+	"munkidori": [
+		{
+		  "species": "Volcarona",
+		  "items": ["heavydutyboots"],
+		  "abilities": ["flamebody"],
+		  "teraTypes": ["water","dragon","grass"],
+		  "forcedMoves": ["quiverdance","fierydance"],
+		  "moves": ["bugbuzz","gigadrain","morningsun","mudshot"],
+		  "nature": "Timid"
+		},
+		{
+		  "species": "Conkeldurr",
+		  "items": ["toxicorb"],
+		  "abilities": ["poisonheal"],
+		  "teraTypes": ["normal","water"],
+		  "forcedMoves": ["machpunch","closecombat"],
+		  "moves": ["knockoff","facade"],
+		  "nature": "Adamant"
+		},
+		{
+		  "species": "Greninja",
+		  "items": ["choicescarf"],
+		  "abilities": ["protean"],
+		  "teraTypes": ["water","stellar"],
+		  "forcedMoves": ["hydropump","vcreate"],
+		  "moves": ["uturn","gunkshot","icebeam","switcheroo"],
+		  "nature": "Hasty"
+		},
+		{
+		  "species": "Raging Bolt",
+		  "items": ["heavydutyboots","boosterenergy"],
+		  "abilities": ["protosynthesis"],
+		  "teraTypes": ["fairy","electric"],
+		  "forcedMoves": ["dracometeor","thunderclap"],
+		  "moves": ["voltswitch","thunderbolt","morningsun"],
+		  "nature": "Timid",
+		  "gender": "M"
+		}
+	]
 }
