@@ -80,7 +80,6 @@ export const commands: Chat.ChatCommands = {
 	pmotm: 'petmodrandbats',
 	pmlc: 'petmodrandbats',
 	petmodrandbats(target, room, user, connection, cmd) {
-
 		if (!target || cmd === 'petmodrandbats') return this.parse(`/help petmodrandbats`);
 		const format = Dex.formats.get(Dex.getAlias(cmd as ID) || cmd);
 		if (!format) return this.errorReply(`No format ${cmd} was found.`);
@@ -131,7 +130,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(inexactMsg);
 			throw new Chat.ErrorMessage(`Error: ${species.name} has no data in ${format.name}`);
 		}
-		let buf = movesets.join('<hr/>');
+		const buf = movesets.join('<hr/>');
 		this.sendReply(inexactMsg);
 		this.sendReplyBox(buf);
 	},
@@ -145,8 +144,8 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 
 		const tandemData: { [species: string]: Tandem[] } = JSON.parse(
-		FS(`data/mods/gen9randomtandem/tandems.json`)
-			.readIfExistsSync()
+			FS(`data/mods/gen9randomtandem/tandems.json`)
+				.readIfExistsSync()
 		);
 
 		const searchResults = Dex.dataSearch(target, ['Pokedex']);
@@ -159,7 +158,7 @@ export const commands: Chat.ChatCommands = {
 		if (searchResults[0].isInexact) {
 			inexactMsg = `No Pok\u00e9mon named '${target}' was found. Searching for '${searchResults[0].name}' instead.`;
 		}
-		
+
 		const pokemon = Dex.species.get(searchResults[0].name).id;
 		const tandems = tandemData[pokemon];
 
@@ -167,43 +166,41 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`${pokemon} is not a Head.`);
 		};
 
-		const tandemsList = [];
-		// hardcode
 		let buf = `<span class="gray">Tandems for ${Dex.species.get(pokemon).name}:</span><br/>`;
 
 		for (const tandem of tandems) {
 			buf += `<details class="details"><summary>${Dex.species.get(tandem.species).name}</summary>`;
 			buf += `<b>Abilit${Chat.plural(tandem.abilities, 'ies', 'y')}</b>: ${
 				tandem.abilities
-				.map(ability => Dex.abilities.get(ability).name)
-				.sort()
-				.join(', ')
+					.map(ability => Dex.abilities.get(ability).name)
+					.sort()
+					.join(', ')
 			}<br/>`;
 			buf += `<b>Item${Chat.plural(tandem.items, 's', '')}</b>: ${
 				tandem.items
-				.map(item => Dex.items.get(item).name)
-				.sort()
-				.join(', ')}<br/>`;
+					.map(item => Dex.items.get(item).name)
+					.sort()
+					.join(', ')}<br/>`;
 			buf += `<b>Tera Type${Chat.plural(tandem.teraTypes)}</b>: ${tandem.teraTypes.join(', ')}<br/>`;
 			if (tandem.nature) buf += `<b>Nature</b>: ${tandem.nature}<br/>`;
 			// set has >4 moves, specify which are always present
 			if (tandem.moves.length > 2) {
 				buf += `<b>Forced Moves</b>: ${
 					tandem.forcedMoves
-					.map(move => Dex.moves.get(move).name)
-					.sort()
-					.join(', ')}<br/>`;
+						.map(move => Dex.moves.get(move).name)
+						.sort()
+						.join(', ')}<br/>`;
 				buf += `<b>Moves</b>: ${
 					tandem.moves
-					.map(move => Dex.moves.get(move).name)
-					.sort()
-					.join(', ')}<br/>`;
+						.map(move => Dex.moves.get(move).name)
+						.sort()
+						.join(', ')}<br/>`;
 			} else {
 				buf += `<b>Moves</b>: ${
 					[...tandem.forcedMoves, ...tandem.moves]
-					.map(move => Dex.moves.get(move).name)
-					.sort()
-					.join(', ')}<br/>`;
+						.map(move => Dex.moves.get(move).name)
+						.sort()
+						.join(', ')}<br/>`;
 			}
 			buf += '</details>';
 			buf += '<hr/>';
@@ -215,4 +212,4 @@ export const commands: Chat.ChatCommands = {
 		`/tandems [pokemon] - Show the possible Tandems of a Head Pokemon in [Gen 9] Random Tandem.`,
 		`!tandems [pokemon] - Shows everyone that information. Requires: + % @ ~`,
 	],
-}
+};

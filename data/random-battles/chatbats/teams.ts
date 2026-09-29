@@ -650,9 +650,12 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 		// Get items
 		// First, the priority items
-		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role, isDoubles) || '';
+		item = this.getPriorityItem(
+			ability, types, moves, counter, teamDetails, species, isLead, teraType, role, isDoubles
+		) || '';
 		if (item === undefined) {
-			item = set.items ? this.sample(set.items) : this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
+			item = set.items ? this.sample(set.items) :
+				this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
 		}
 
 		// Get level
@@ -744,9 +747,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'ironcrown') return moves.has('rest') ? 'Chesto Berry' : 'Leftovers';
 		if (species.id === 'dugtrio') return moves.has("swordsdance") ? 'Focus Sash' : 'Choice Band';
 		if (species.id === 'mesprit' && moves.has("aquaring")) return 'Leftovers';
-		if (species.id === 'electrode') return moves.has("rapidspin") ? 'Heavy-Duty Boots' : this.sample(['Normal Gem', 'Heavy-Duty Boots']);
+		if (species.id === 'electrode') return moves.has("rapidspin") ? 'Heavy-Duty Boots' :
+			this.sample(['Normal Gem', 'Heavy-Duty Boots']);
 		if (species.id === 'empoleon') return moves.has('watershuriken') ? 'Loaded Dice' : 'Leftovers';
-		if (species.id === 'glastrier') return moves.has('swordsdance') ?'Heavy-Duty Boots' : 'Assault Vest';
+		if (species.id === 'glastrier') return moves.has('swordsdance') ? 'Heavy-Duty Boots' : 'Assault Vest';
 		if (species.id === 'dodrio' && moves.has('drillpeck')) return 'Life Orb';
 		if (species.id === 'dodrio' && moves.has('bravebird')) return 'Heavy-Duty Boots';
 		if (species.id === 'kyuremblack' && moves.has('roost')) return 'Heavy-Duty Boots';
