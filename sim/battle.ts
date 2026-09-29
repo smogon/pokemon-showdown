@@ -2534,21 +2534,16 @@ export class Battle {
 	}
 
 	checkFainted() {
-		// In Gen 4, you can only switch one Pokémon per side at a time
-		const switches = this.gen === 4 ? Array(this.sides.length).fill(false) : [];
-
 		// should only be relevant for Gen 3
 		const queuedSwitchOuts = this.queue.getSwitches().map(action => action.pokemon);
 
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
 				if (pokemon.fainted && !queuedSwitchOuts.includes(pokemon)) {
-					if (this.gen === 4) {
-						if (switches[pokemon.side.n]) continue;
-						switches[pokemon.side.n] = true;
-					}
 					pokemon.status = 'fnt' as ID;
 					pokemon.switchFlag = true;
+					// In Gen 4, you can only switch one Pokémon per side at a time
+					if (this.gen === 4) break;
 				}
 			}
 		}
