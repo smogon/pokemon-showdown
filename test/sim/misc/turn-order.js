@@ -231,6 +231,9 @@ describe('Switching in', () => {
 			assert.equal(battle.p2.requestState, 'switch');
 
 			battle.makeChoices('', 'switch 5');
+
+			assert.equal(battle.p1.requestState, 'move');
+			assert.equal(battle.p2.requestState, 'move');
 		});
 	});
 
@@ -279,9 +282,12 @@ describe('Switching in', () => {
 			assert.species(battle.p1.active[0], 'Castform-Sunny');
 			assert.equal(battle.p1.active[0].boosts.atk, -1);
 			assert.equal(battle.p1.active[1].boosts.atk, -1);
+
+			assert.equal(battle.p1.requestState, 'move');
+			assert.equal(battle.p2.requestState, 'move');
 		});
 
-		it(`should not crash if a Pokemon faints during switch-in if the only available pokemon are queued`, () => {
+		it(`should not send a switch request if the only available pokemon are queued`, () => {
 			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
 				{ species: "alakazam", level: 99, moves: ['spikes'] },
 				{ species: "alakazam", level: 97, moves: ['explosion'] },
@@ -301,7 +307,10 @@ describe('Switching in', () => {
 			battle.makeChoices('switch 3, switch 4', 'switch 3, switch 4');
 			// Shedinja faints to Spikes, but the only available switch-in is Snorlax,
 			// who is already queued to switch in
-			battle.makeChoices();
+			assert.fainted(battle.p1.active[0]);
+			assert.species(battle.p1.active[1], 'Snorlax');
+			assert.equal(battle.p1.requestState, 'move');
+			assert.equal(battle.p2.requestState, 'move');
 		});
 	});
 

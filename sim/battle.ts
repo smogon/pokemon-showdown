@@ -1584,10 +1584,13 @@ export class Battle {
 	private possibleSwitches(side: Side) {
 		if (!side.pokemonLeft) return [];
 
+		// should only be relevant for Gen 3
+		const queuedSwitchIns = this.queue.getSwitches(side).map(action => action.target);
+
 		const canSwitchIn = [];
 		for (let i = side.active.length; i < side.pokemon.length; i++) {
 			const pokemon = side.pokemon[i];
-			if (!pokemon.fainted) {
+			if (!pokemon.fainted && !queuedSwitchIns.includes(pokemon)) {
 				canSwitchIn.push(pokemon);
 			}
 		}
