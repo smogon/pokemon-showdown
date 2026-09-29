@@ -208,7 +208,7 @@ describe('Switching in', () => {
 			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
 				{ species: "alakazam", level: 100, moves: ['spikes'] },
 				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
-				{ species: "snorlax", moves: ['sleeptalk'] },
+				{ species: "groudon", ability: 'drought', moves: ['sleeptalk'] },
 				{ species: "weavile", moves: ['sleeptalk'] },
 			], [
 				{ species: "alakazam", level: 99, moves: ['sleeptalk'] },
@@ -224,16 +224,18 @@ describe('Switching in', () => {
 			battle.makeChoices('switch 3', 'switch 3');
 			assert.equal(battle.p1.requestState, 'switch');
 			assert.equal(battle.p2.requestState, 'switch');
+			assert.equal(battle.field.weather, '');
 
 			battle.makeChoices('switch 4', 'switch 4');
 			assert.equal(battle.p1.requestState, '');
 			assert(battle.p1.activeRequest.wait);
 			assert.equal(battle.p2.requestState, 'switch');
+			assert.equal(battle.field.weather, '');
 
 			battle.makeChoices('', 'switch 5');
-
 			assert.equal(battle.p1.requestState, 'move');
 			assert.equal(battle.p2.requestState, 'move');
+			assert.equal(battle.field.weather, 'sunnyday');
 		});
 	});
 
@@ -261,7 +263,7 @@ describe('Switching in', () => {
 			assert.equal(battle.p1.requestState, 'switch');
 			assert.equal(battle.p2.requestState, '');
 			assert(battle.p2.activeRequest.wait);
-			assert(battle.field.isWeather('raindance'));
+			assert.equal(battle.field.weather, 'raindance');
 
 			assert.throws(() => battle.choose('p1', 'switch 4'));
 			assert.throws(() => battle.choose('p1', 'switch 5, switch 6'));
@@ -278,11 +280,10 @@ describe('Switching in', () => {
 			assert(battle.p2.activeRequest.wait);
 
 			battle.makeChoices('switch 6'); // Switch-in Groudon
-			assert(battle.field.isWeather('sunnyday'));
+			assert.equal(battle.field.weather, 'sunnyday');
 			assert.species(battle.p1.active[0], 'Castform-Sunny');
 			assert.equal(battle.p1.active[0].boosts.atk, -1);
 			assert.equal(battle.p1.active[1].boosts.atk, -1);
-
 			assert.equal(battle.p1.requestState, 'move');
 			assert.equal(battle.p2.requestState, 'move');
 		});

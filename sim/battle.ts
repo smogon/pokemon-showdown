@@ -2868,9 +2868,15 @@ export class Battle {
 		if (this.gen === 3 && action.choice === 'instaswitch' && action.target.fainted) {
 			// in gen 3, switching in after a Pokemon faints is done after every switch
 			this.checkFainted(action.target);
-		} else if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
-			// in gen 3 or earlier, switching in after a Pokemon faints is done after
-			// every move, rather than only at the end of the turn.
+		} else if (
+			!this.queue.peek() ||
+			(this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice)) ||
+			(this.gen === 4 && action.choice === 'instaswitch' &&
+				this.queue.list.every(queuedAction => queuedAction.choice === 'runSwitch'))
+		) {
+			// in gen 3 or earlier, switching in after a Pokemon faints is done after every move,
+			// rather than only at the end of the turn.
+			// in gen 4, finish replacing fainted Pokemon before running queued switch-in effects
 			this.checkFainted();
 		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
