@@ -2533,26 +2533,23 @@ export class Battle {
 		return pokemon.side.randomFoe() || pokemon.side.foe.active[0];
 	}
 
-	checkFainted(pokemon?: Pokemon | Pokemon[]) {
-		if (!pokemon) {
-			pokemon = this.getAllActive(true);
-		} else if (Array.isArray(pokemon)) {
-			pokemon = pokemon.slice();
-		} else {
-			pokemon = [pokemon];
-		}
-
+	checkFainted() {
 		// In Gen 4, you can only switch one Pokémon per side at a time
 		const switches = this.gen === 4 ? Array(this.sides.length).fill(false) : [];
 
-		for (const poke of pokemon) {
-			if (poke.fainted) {
-				if (this.gen === 4) {
-					if (switches[poke.side.n]) continue;
-					switches[poke.side.n] = true;
+		// should only be relevant for Gen 3
+		const queuedSwitchOuts = this.queue.getSwitches().map(action => action.pokemon);
+
+		for (const side of this.sides) {
+			for (const poke of side.active) {
+				if (poke.fainted && !queuedSwitchOuts.includes(poke)) {
+					if (this.gen === 4) {
+						if (switches[poke.side.n]) continue;
+						switches[poke.side.n] = true;
+					}
+					poke.status = 'fnt' as ID;
+					poke.switchFlag = true;
 				}
-				poke.status = 'fnt' as ID;
-				poke.switchFlag = true;
 			}
 		}
 	}
@@ -2865,15 +2862,14 @@ export class Battle {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (this.gen === 3 && action.choice === 'instaswitch' && action.target.fainted) {
-			// in gen 3, switching in after a Pokemon faints is done after every switch
-			this.checkFainted(action.target);
-		} else if (
+		if (
 			!this.queue.peek() ||
+			(this.gen === 3 && action.choice === 'instaswitch' && action.target.fainted) ||
 			(this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice)) ||
 			(this.gen === 4 && action.choice === 'instaswitch' &&
 				this.queue.list.every(queuedAction => queuedAction.choice === 'runSwitch'))
 		) {
+			// in gen 3, switching in after a Pokemon faints is done after every switch
 			// in gen 3 or earlier, switching in after a Pokemon faints is done after every move,
 			// rather than only at the end of the turn.
 			// in gen 4, finish replacing fainted Pokemon before running queued switch-in effects

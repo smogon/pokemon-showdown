@@ -361,9 +361,9 @@ export class BattleQueue {
 		return null;
 	}
 
-	getSwitches(side: Side) {
+	getSwitches(side?: Side) {
 		return this.list.filter(
-			action => ['switch', 'instaswitch'].includes(action.choice) && (action as SwitchAction).pokemon.side === side
+			action => ['switch', 'instaswitch'].includes(action.choice) && (!side || (action as SwitchAction).pokemon.side === side)
 		) as SwitchAction[];
 	}
 
