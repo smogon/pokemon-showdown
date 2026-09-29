@@ -2541,14 +2541,14 @@ export class Battle {
 		const queuedSwitchOuts = this.queue.getSwitches().map(action => action.pokemon);
 
 		for (const side of this.sides) {
-			for (const poke of side.active) {
-				if (poke.fainted && !queuedSwitchOuts.includes(poke)) {
+			for (const pokemon of side.active) {
+				if (pokemon.fainted && !queuedSwitchOuts.includes(pokemon)) {
 					if (this.gen === 4) {
-						if (switches[poke.side.n]) continue;
-						switches[poke.side.n] = true;
+						if (switches[pokemon.side.n]) continue;
+						switches[pokemon.side.n] = true;
 					}
-					poke.status = 'fnt' as ID;
-					poke.switchFlag = true;
+					pokemon.status = 'fnt' as ID;
+					pokemon.switchFlag = true;
 				}
 			}
 		}
