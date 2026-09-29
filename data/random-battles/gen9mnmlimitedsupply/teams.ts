@@ -1,7 +1,135 @@
 import { RandomTeams, type MoveCounter } from '../gen9/teams';
 
 export class RandomMNMLS extends RandomTeams {
-	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
+	override randomSet(
+		s: string | Species,
+		teamDetails: RandomTeamsTypes.TeamDetails = {},
+		isLead = false,
+		isDoubles = false
+	): RandomTeamsTypes.RandomSet {
+		const species = this.dex.species.get(s);
+		const forme = this.getForme(species);
+		const sets = this.randomSets[species.id]["sets"];
+		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
+
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
+		for (const set of sets) {
+			// Prevent Fast Bulky Setup on lead Paradox Pokemon, since it generates Booster Energy.
+			const abilities = set.abilities!;
+			if (
+				isLead && (abilities.includes('Protosynthesis') || abilities.includes('Quark Drive')) &&
+				set.role === 'Fast Bulky Setup'
+			) continue;
+			// Prevent Tera Blast user if the team already has one, or if Terastallizion is prevented.
+			if ((teamDetails.teraBlast || ruleTable.has('terastalclause')) && set.role === 'Tera Blast user') {
+				continue;
+			}
+			possibleSets.push(set);
+		}
+		const set = this.sampleIfArray(possibleSets);
+		const role = set.role;
+		const movePool: string[] = [];
+		for (const movename of set.movepool) {
+			movePool.push(this.dex.moves.get(movename).id);
+		}
+		const teraTypes = set.teraTypes!;
+		let teraType = this.sampleIfArray(teraTypes);
+
+		let ability = '';
+		let item = '';
+
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
+
+		const types = new Set(species.types);
+		const abilities = set.abilities!;
+
+		// Get moves
+		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool, teraType, role, isDoubles);
+		const counter = this.queryMoves(moves, species, teraType, abilities);
+
+		// Get ability
+		ability = this.getAbility(types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role);
+
+		// Get item
+		item = set.items ? set.items[0] : '';
+
+		// Get level
+		const level = this.getLevel(species, isDoubles);
+
+		// Prepare optimal HP
+		const srImmunity = ability === 'Magic Guard' || ability === 'Frost Cloak' || item === 'Heavy-Duty Boots';
+		let srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
+		// Crash damage move users want an odd HP to survive two misses
+		if (['axekick', 'highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
+		while (evs.hp > 1) {
+			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			if ((moves.has('substitute') && ['Sitrus Berry', 'Salac Berry'].includes(item))) {
+				// Two Substitutes should activate Sitrus Berry
+				if (hp % 4 === 0) break;
+			} else if ((moves.has('bellydrum') || moves.has('filletaway')) && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
+				// Belly Drum should activate Sitrus Berry
+				if (hp % 2 === 0) break;
+			} else if (moves.has('substitute') && moves.has('endeavor')) {
+				// Luvdisc should be able to Substitute down to very low HP
+				if (hp % 4 > 0) break;
+			} else {
+				// Maximize number of Stealth Rock switch-ins
+				if (srWeakness <= 0 || ability === 'Regenerator' || ['Leftovers', 'Life Orb'].includes(item)) break;
+				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
+				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
+				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
+			}
+			evs.hp -= 4;
+		}
+
+		// Minimize confusion damage
+		const noAttackStatMoves = [...moves].every(m => {
+			const move = this.dex.moves.get(m);
+			if (move.damageCallback || move.damage) return true;
+			if (move.id === 'shellsidearm') return false;
+			// Magearna and doubles Dragonite, though these can work well as a general rule
+			if (move.id === 'terablast' && (
+				species.id === 'porygon2' || moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
+			) return false;
+			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
+		});
+		// prevents Illumise (who can turn into Volbeat with Physical moves) from having 0 Atk EVs
+		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime' &&
+			species.id !== 'illumise') {
+			evs.atk = 0;
+			ivs.atk = 0;
+		}
+
+		if (moves.has('gyroball') || moves.has('trickroom') || moves.has('archaicglare')) {
+			evs.spe = 0;
+			ivs.spe = 0;
+		}
+
+		// Enforce Tera Type after all set generation is done to prevent infinite generation
+		if (this.forceTeraType) teraType = this.forceTeraType;
+
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
+		return {
+			name: species.baseSpecies,
+			species: forme,
+			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
+			shiny: this.randomChance(1, 1024),
+			level,
+			moves: shuffledMoves,
+			ability,
+			evs,
+			ivs,
+			item,
+			teraType,
+			role,
+		};
+	}
+
+	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
 	randomMnMLSTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -200,118 +328,6 @@ export class RandomMNMLS extends RandomTeams {
 		string | undefined {
 		return;
 	};
-
-	override getItem(
-		ability: string,
-		types: Set<string>,
-		moves: Set<string>,
-		counter: MoveCounter,
-		teamDetails: RandomTeamsTypes.TeamDetails,
-		species: Species,
-		isLead: boolean,
-		teraType: string,
-		role: RandomTeamsTypes.Role,
-	): string {
-		if (species.id === 'dragonite') return 'Scizorite';
-		if (species.id === 'garganacl') return 'Scraftinite';
-		if (species.id === 'greattusk') return 'Lopunnite';
-		if (species.id === 'heatran') return 'Garchompite Z';
-		if (species.id === 'pecharunt') return 'Gyaradosite';
-		if (
-			(species.id === 'ragingbolt') ||
-			(species.id === 'landorustherian')
-		) return 'Manectite';
-		if (species.id === 'annihilape') return 'Crabominite';
-		if (species.id === 'archaludon') return 'Blue Orb';
-		if (species.id === 'ceruledge') return 'Eelektrossite';
-		if (species.id === 'gholdengo') return 'Magearnite';
-		if (
-			(species.id === 'gougingfire') ||
-			(species.id === 'revavroom')
-		) return 'Pinsirite';
-		if (species.id === 'magearna') return 'Metagrossite';
-		if (species.id === 'roaringmoon') return 'Sharpedonite';
-		if (species.id === 'walkingwake') return 'Charizardite Y';
-		if (species.id === 'darkrai') return 'Hawluchanite';
-		if (
-			(species.id === 'dragapult') ||
-			(species.id === 'zamazenta')
-		) return 'Red Orb';
-		if (species.id === 'gengar') return 'Dragoninite';
-		if (species.id === 'ironboulder') return 'Aerodactylite';
-		if (
-			(species.id === 'regieleki') ||
-			(species.id === 'flygon')
-		) return 'Altarianite';
-		if (
-			(species.id === 'shayminsky') ||
-			(species.id === 'umbreon')
-		) return 'Meganiumite';
-		if (species.id === 'weavile') return 'Zygardite';
-		if (species.id === 'mandibuzz') return 'Mawilite';
-		if (species.id === 'skarmory') return 'Starminite';
-		if (species.id === 'salazzle') return 'Beedrillite';
-		if (species.id === 'mamoswine') return 'Lucarionite Z';
-		if (
-			(species.id === 'fezandipiti') ||
-			(species.id === 'jirachi')
-		) return 'Clefablite';
-		if (
-			(species.id === 'hippowdon') ||
-			(species.id === 'rhyperior')
-		) return 'Steelixite';
-		if (species.id === 'drifblim') return 'Victreebelite';
-		if (species.id === 'tinkaton') return 'Banettite';
-		if (
-			(species.id === 'hydreigon') ||
-			(species.id === 'ironmoth')
-		) return 'Chimechite';
-		if (species.id === 'lugia') return 'Wellspring Mask';
-		if (species.id === 'kyuremblack') return 'Zap Plate';
-		if (species.id === 'regigigas') return 'Iron Plate';
-		if (species.id === 'palossand') return 'Kangaskhanite';
-		if (species.id === 'vikavolt') return 'Aggronite';
-		if (species.id === 'fluttermane') return 'Cornerstone Mask';
-		if (species.id === 'rotomwash') return 'Pidgeotite';
-		if (
-			(species.id === 'hariyama') ||
-			(species.id === 'bronzong')
-		) return 'Scolipite';
-		if (species.id === 'ursalunabloodmoon') return 'Sablenite';
-		if (species.id === 'screamtail') return 'Gardevoirite';
-		if (species.id === 'politoed') return 'Swampertite';
-		if (species.id === 'cryogonal') return 'Froslassite';
-		if (species.id === 'tinglu') return 'Tyranitarite';
-		if (species.id === 'brutebonnet') return 'Staraptite';
-		if (
-			(species.id === 'arcanine') ||
-			(species.id === 'hoopaunbound')
-		) return 'Absolite';
-		if (species.id === 'zapdos') return 'Raichunite X';
-		if (species.id === 'dialga') return 'Griseous Core';
-		if (species.id === 'overqwil') return 'Falinksite';
-		if (species.id === 'mimikyu') return 'Garchompite';
-		if (species.id === 'appletun') return 'Ampharosite';
-		if (species.id === 'lucario') return 'Feraligite';
-		if (species.id === 'baxcalibur') return 'Heracronite';
-		if (species.id === 'floatzel') return 'Barbaracite';
-		if (species.id === 'ironhands') return 'Dragalgite';
-		if (species.id === 'empoleon') return 'Abomasite';
-		if (
-			(species.id === 'gastrodon') ||
-			(species.id === 'primarina')
-		) return 'Chandelurite';
-		if (species.id === 'slitherwing') return 'Drampanite';
-		if (species.id === 'corviknight') return 'Venusaurite';
-		if (species.id === 'lunala') return 'Pixie Plate';
-		if (species.id === 'groudon') return 'Hearthflame Mask';
-		if (species.id === 'zacian') return 'Fighting Memory';
-		if (species.id === 'goodra') return 'Audinite';
-		if (species.id === 'milotic') return 'Excadrite';
-		if (species.id === 'glimmora') return 'Gengarite';
-
-		else return 'Life Orb';
-	}
 }
 
 export default RandomMNMLS;
