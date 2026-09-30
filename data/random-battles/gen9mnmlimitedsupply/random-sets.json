@@ -684,10 +684,28 @@
 		]
 	},
 	"rillaboom": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Grassy Glide", "High Horsepower", "Drain Punch", "Wood Hammer"],
+				"abilities": ["Grassy Surge"]
+			}
+		]
+	},
+	"golisopod": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["First Impression", "Leech Life", "Liquidation", "Swords Dance"],
+				"abilities": ["Emergency Exit"]
+			}
+		]
+	},
+	"metagross": {
 		"level": 84,
 		"sets": [
 			{
-				"movepool": ["Grassy Glide", "High Horsepower", "Drain Punch", "Wood Hammer", "First Impression", "Leech Life", "Liquidation", "Swords Dance", "Psychic Fangs", "Steel Roller", "Earthquake", "Stealth Rock"],
+				"movepool": ["Psychic Fangs", "Steel Roller", "Earthquake", "Stealth Rock"],
 				"abilities": ["Clear Body"]
 			}
 		]

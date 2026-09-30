@@ -325,12 +325,13 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'milotic') return 'Excadrite';
 		if (species.id === 'glimmora') return 'Gengarite';
 		if (species.id === 'ditto') return 'Choice Scarf';
+		if (species.id === 'golisopod') return 'Vile Vial';
+		if (species.id === 'metagross') return 'Alakazite';
 		if (species.id === 'talonflame') return 'Crucibellite';
 		if (species.id === 'audino') return 'Mewtwonite X';
 		if (species.id === 'incineroar') return 'Blazikenite';
 		if (species.id === 'aegislash') return 'Mewtwonite-X';
 		if (species.id === 'pincurchin') return 'Zeraorite';
-
 		// Fallback
 		return 'Life Orb';
 	}
