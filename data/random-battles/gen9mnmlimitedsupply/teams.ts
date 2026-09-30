@@ -1,7 +1,7 @@
 import { RandomTeams, type MoveCounter } from '../gen9/teams';
 
 export class RandomMNMLS extends RandomTeams {
-	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
+	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
 	randomMnMLSTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
