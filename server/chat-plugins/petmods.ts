@@ -83,7 +83,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target || cmd === 'petmodrandbats') return this.parse(`/help petmodrandbats`);
 		const format = Dex.formats.get(Dex.getAlias(cmd as ID) || cmd);
 		if (!format) return this.errorReply(`No format ${cmd} was found.`);
-		if (format.id === 'gen9randomtandem') return this.parse(`!tandems ${target}`);
+		if (format.id === 'gen9randomtandem') return this.parse(`/help tandems`);
 
 		if (!this.runBroadcast()) return;
 
