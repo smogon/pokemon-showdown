@@ -409,7 +409,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 */
 	onLogMessage(message: string, user: User) {}
 
-	getUserByAlias(_aliasid: ID, _requester: User): User | null {
+	getUserByAlias(aliasid: ID, requester: User): User | null {
 		return null;
 	}
 
