@@ -2852,8 +2852,10 @@ export class Battle {
 
 		// fainting
 
-		if (!(this.gen <= 2 && ['instaswitch', 'switch'].includes(this.queue.peek()?.choice ?? ''))) {
-			// in gen 2, there are not faint checks between switches
+		const nextAction = this.queue.peek();
+
+		if (!(this.gen <= 2 && nextAction && ['instaswitch', 'switch'].includes(nextAction.choice))) {
+			// in gen 2, there are no faint checks between switches
 			this.faintMessages();
 		}
 		if (this.ended) return true;
@@ -2861,9 +2863,9 @@ export class Battle {
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
 		if (
-			!this.queue.peek() ||
-			(this.gen === 3 && ['instaswitch', 'switch'].includes(action.choice) && (action as SwitchAction).target.fainted) ||
-			(this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice)) ||
+			!nextAction ||
+			(this.gen === 3 && ['switch', 'instaswitch'].includes(action.choice) && (action as SwitchAction).target.fainted) ||
+			(this.gen <= 3 && ['move', 'residual'].includes(nextAction.choice)) ||
 			(this.gen === 4 && action.choice === 'instaswitch' &&
 				this.queue.list.every(queuedAction => queuedAction.choice === 'runSwitch'))
 		) {
@@ -2884,7 +2886,7 @@ export class Battle {
 				}
 			}
 			return false;
-		} else if (this.queue.peek()?.choice === 'instaswitch') {
+		} else if (nextAction.choice === 'instaswitch') {
 			return false;
 		}
 
@@ -2947,7 +2949,7 @@ export class Battle {
 
 		if (this.gen < 5) this.eachEvent('Update');
 
-		if (this.gen >= 8 && (this.queue.peek()?.choice === 'move' || this.queue.peek()?.choice === 'runDynamax')) {
+		if (this.gen >= 8 && nextAction && ['move', 'runDynamax'].includes(nextAction.choice)) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {
