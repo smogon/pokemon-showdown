@@ -565,7 +565,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			return { key: targetID, name: this.cohosts[cohostIndex] };
 		}
 
-		const player = this.getPlayerByAlias(targetID);
+		const player = this.getPlayerByAlias(targetID) ||
+			this.players.find(player => player.getAnonymized() && toID(player.alias) === targetID);
 		if (!player) return null;
 		const realNames = player.hydra && player.partnerid ?
 			[player, this.getPlayer(player.partnerid)].filter((p): p is MafiaPlayer => !!p).map(p => p.safeName) :
@@ -711,6 +712,26 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	getPlayersByAlias(aliasid: ID) {
 		return this.players.filter(p => p.getNameId() === aliasid);
+	}
+
+	override getUserByAlias(aliasid: ID, requester: User) {
+		if (!this.started) return null;
+		const matches = this.players.filter(player =>
+			player.getAnonymized() && (player.getNameId() === aliasid || toID(player.alias) === aliasid)
+		);
+		if (!matches.length) return null;
+
+		const isHost = this.hostid === requester.id || this.cohostids.includes(requester.id);
+		if (!isHost && (!requester.can('mute', null, this.room) || this.getPlayer(requester.id))) return null;
+		if (matches.length > 1) {
+			const alias = matches[0].alias?.replace('[Hydra] ', '') || matches[0].getDisplayName();
+			throw new Chat.ErrorMessage(
+				`${matches[0].getDisplayName()} is shared by multiple players (Hydra). ` +
+				`Use /mafia staffiso ${alias} to see who sent each message, then use a real username.`
+			);
+		}
+
+		return matches[0].getUser();
 	}
 
 	setRoles(user: User, roleString: string, force = false, reset = false) {

@@ -334,9 +334,13 @@ export abstract class MessageContext {
 
 		return this.extractFormat();
 	}
+	getAnonymizedUser(_inputUsername: string): User | null {
+		return null;
+	}
 	splitUser(target: string, { exactName }: { exactName?: boolean } = {}) {
 		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
-		const targetUser = Users.get(inputUsername, exactName);
+		const targetUser = Users.get(inputUsername, exactName) ||
+			(!exactName ? this.getAnonymizedUser(inputUsername) : null);
 
 		return {
 			targetUser,
@@ -570,6 +574,15 @@ export class CommandContext extends MessageContext {
 		this.broadcastToRoom = true;
 		this.broadcastPrefix = options.broadcastPrefix || '';
 		this.broadcastMessage = '';
+	}
+	override getAnonymizedUser(inputUsername: string): User | null {
+		const aliasid = toID(inputUsername);
+		if (!aliasid || !this.room) return null;
+		for (const game of [this.room.game, this.room.subGame]) {
+			const user = game?.getUserByAlias(aliasid, this.user);
+			if (user) return user;
+		}
+		return null;
 	}
 
 	// TODO: return should be void | boolean | Promise<void | boolean>
