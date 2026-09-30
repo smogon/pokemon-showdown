@@ -2854,11 +2854,13 @@ export class Battle {
 
 		const nextAction = this.queue.peek();
 
-		if (!(this.gen <= 2 && ['switch', 'instaswitch'].includes(action.choice) &&
-			nextAction && ['switch', 'instaswitch'].includes(nextAction.choice))) {
+		if (this.gen <= 2 && ['switch', 'instaswitch', 'runSwitch'].includes(action.choice) &&
+			nextAction && ['switch', 'instaswitch', 'runSwitch'].includes(nextAction.choice)) {
 			// in gen 2, there are no faint checks between switches
-			this.faintMessages();
+			return false;
 		}
+
+		this.faintMessages();
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
