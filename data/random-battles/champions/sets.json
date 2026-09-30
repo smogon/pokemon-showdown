@@ -1325,6 +1325,11 @@
                 "role": "Fast Attacker",
                 "movepool": ["Close Combat", "Ice Punch", "Poison Jab", "Trick", "Zen Headbutt"],
                 "abilities": ["Pure Power"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Bullet Punch", "Close Combat", "Ice Punch", "Poison Jab", "Zen Headbutt"],
+                "abilities": ["Pure Power"]
             }
         ]
     },
@@ -1460,7 +1465,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Double-Edge", "Dragon Dance", "Earthquake", "Roost"],
+                "movepool": ["Body Slam", "Double-Edge", "Dragon Dance", "Earthquake", "Roost"],
                 "abilities": ["Natural Cure"]
             }
         ]
@@ -1835,6 +1840,11 @@
                 "movepool": ["Draco Meteor", "Earthquake", "Fire Blast", "Iron Head", "Stealth Rock"],
                 "abilities": ["Rough Skin"],
                 "preferredTypes": ["Fire"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Iron Head", "Outrage", "Swords Dance"],
+                "abilities": ["Rough Skin"]
             }
         ]
     },
@@ -2278,7 +2288,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Slam", "Encore", "Protect", "Wish"],
+                "movepool": ["Body Slam", "Fire Blast", "Encore", "Protect", "Wish"],
                 "abilities": ["Regenerator"]
             }
         ]
@@ -2989,7 +2999,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Draco Meteor", "Dragon Tail", "Flip Turn", "Focus Blast", "Sludge Bomb", "Toxic Spikes"],
-                "abilities": ["Poison Point"]
+                "abilities": ["Adaptability", "Poison Point"]
             }
         ]
     },
@@ -3585,7 +3595,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Boomburst", "Gunk Shot", "Overdrive", "Volt Switch"],
+                "movepool": ["Boomburst", "Gunk Shot", "Overdrive", "Sludge Wave", "Volt Switch"],
                 "abilities": ["Punk Rock"]
             },
             {
@@ -3630,8 +3640,8 @@
         "level": 53,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Light Screen", "Parting Shot", "Reflect", "Spirit Break", "Taunt"],
+                "role": "Bulky Support",
+                "movepool": ["Light Screen", "Parting Shot", "Reflect", "Spirit Break", "Sucker Punch", "Taunt"],
                 "abilities": ["Prankster"]
             }
         ]
@@ -3742,8 +3752,13 @@
         "level": 54,
         "sets": [
             {
+                "role": "Setup Sweeper",
+                "movepool": ["Calm Mind", "Hyper Voice", "Mystical Fire", "Psychic", "Psyshock"],
+                "abilities": ["Psychic Surge"]
+            },
+            {
                 "role": "Fast Attacker",
-                "movepool": ["Calm Mind", "Healing Wish", "Hyper Voice", "Mystical Fire", "Psychic", "Psyshock"],
+                "movepool": ["Hyper Voice", "Mystical Fire", "Psyshock", "Terrain Pulse"],
                 "abilities": ["Psychic Surge"]
             }
         ]
