@@ -35,6 +35,7 @@ export interface EventMethods {
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
 	onBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void;
 	onBeforeMove?: CommonHandlers['VoidSourceMove'];
+	onBeforeSelection?: (this: Battle, pokemon: Pokemon) => void;
 	onBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onBeforeTurn?: (this: Battle, pokemon: Pokemon) => void;

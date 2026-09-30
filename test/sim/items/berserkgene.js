@@ -16,6 +16,9 @@ describe('Berserk Gene', () => {
 		], [
 			{ species: 'Charmander', moves: ['sleeptalk'] },
 		]]);
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.equal(battle.p1.activeRequest.side.pokemon[0].item, '');
+		assert.statStage(battle.p1.active[0], 'atk', 2);
 		for (let i = 0; i < 256; i++) {
 			assert(battle.p1.active[0].volatiles['confusion']);
 			battle.makeChoices();
@@ -24,6 +27,22 @@ describe('Berserk Gene', () => {
 			battle.p2.active[0].moveSlots[0].pp += 1; // you get a car
 		}
 		assert.false(battle.p1.active[0].volatiles['confusion']);
+	});
+
+	it(`should activate at the beginning of next turn after a mid-turn switch`, () => {
+		battle = common.gen(2).createBattle([[
+			{ species: 'Jolteon', moves: ['batonpass'] },
+			{ species: 'Abra', item: 'berserkgene', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Snorlax', moves: ['splash'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2');
+		const log = battle.getDebugLog();
+		const turn = log.indexOf('|turn|2')
+		const berserkGene = log.indexOf('item: Berserk Gene');
+		assert(turn > 0);
+		assert(berserkGene > turn);
 	});
 
 	it(`should inherit the confusion counter of the last confused Pokemon`, () => {
