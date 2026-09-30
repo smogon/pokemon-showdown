@@ -1713,7 +1713,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Protect", "Tailwind", "Wide Guard"],
+                "movepool": ["Hurricane", "Muddy Water", "Protect", "Tailwind", "Weather Ball", "Wide Guard"],
                 "abilities": ["Drizzle"],
                 "teraTypes": ["Ground", "Steel"]
             }
@@ -6087,39 +6087,6 @@
         ]
     },
     "squawkabilly": {
-        "level": 91,
-        "sets": [
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Double-Edge", "Parting Shot", "Protect", "Quick Attack"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Flying", "Normal", "Steel"]
-            }
-        ]
-    },
-    "squawkabillywhite": {
-        "level": 91,
-        "sets": [
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Double-Edge", "Parting Shot", "Protect", "Quick Attack"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Flying", "Normal", "Steel"]
-            }
-        ]
-    },
-    "squawkabillyblue": {
-        "level": 91,
-        "sets": [
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Double-Edge", "Parting Shot", "Protect", "Quick Attack"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Flying", "Normal", "Steel"]
-            }
-        ]
-    },
-    "squawkabillyyellow": {
         "level": 91,
         "sets": [
             {

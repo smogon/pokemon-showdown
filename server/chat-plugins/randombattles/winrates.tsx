@@ -108,10 +108,9 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Polteageist';
 	} else if (species === 'Sinistcha-Masterpiece') {
 		return 'Sinistcha';
-	} else if (species === "Squawkabilly-Blue") {
-		return "Squawkabilly";
-	} else if (species === "Squawkabilly-White") {
-		return "Squawkabilly-Yellow";
+	} else if (species.startsWith("Squawkabilly-")) {
+		if (species === "Squawkabilly-Blue") return "Squawkabilly";
+		return format.id === 'gen9randombattle' ? "Squawkabilly-Yellow" : "Squawkabilly";
 	} else if (species.startsWith("Basculin-")) {
 		return "Basculin";
 	} else if (species.startsWith("Sawsbuck-")) {
@@ -181,7 +180,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const format = Dex.formats.get(battle.format);
 	if (format.mod.startsWith('champions')) {
 		// ladder is inactive, so use a lower threshold
-		eloFloor = (format.gameType === 'doubles') ? 1150 : 1250;
+		eloFloor = (format.gameType === 'doubles') ? 1200 : 1250;
 	} else if (format.mod === 'gen2') {
 		eloFloor = 1150;
 	} else if (format.team === 'randomBaby') {
