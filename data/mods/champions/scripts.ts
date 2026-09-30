@@ -53,7 +53,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			return speed;
 		},
 		// Don't revert Mega Evolutions after fainting
-		// TODO: confirm interaction with Revival Blessing
 		formeChange(speciesId, source, isPermanent, abilitySlot = '0', message) {
 			const rawSpecies = this.battle.dex.species.get(speciesId);
 
@@ -311,7 +310,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
 		},
-		// Run `AfterHit` events even if the source fainted
+		// Run `AfterHit` events even if the source fainted: Rapid Spin, Ceaseless Edge, etc.
 		spreadMoveHit(targets, pokemon, moveOrMoveName, hitEffect?, isSecondary?, isSelf?) {
 			// Hardcoded for single-target purposes
 			// (no spread moves have any kind of onTryHit handler)
@@ -425,7 +424,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return [damage, targets];
 		},
 		// Parental Bond shouldn't announce hit count if it only hits once
-		hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
+		hitStepMoveHitLoop(targets, pokemon, move) {
 			let damage: (number | boolean | undefined)[] = [];
 			for (const i of targets.keys()) {
 				damage[i] = 0;
@@ -591,6 +590,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return damage;
+		},
+		// Sheer Force doesn't suppress AfterMoveSecondary events: Berserk, Pickpocket, Eject Button, etc.
+		afterMoveSecondaryEvent(targets, pokemon, move) {
+			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
+			return undefined;
 		},
 	},
 };
