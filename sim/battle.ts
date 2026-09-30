@@ -2854,7 +2854,7 @@ export class Battle {
 
 		const nextAction = this.queue.peek();
 
-		if (!(this.gen <= 2 && nextAction && ['instaswitch', 'switch'].includes(nextAction.choice))) {
+		if (!(this.gen <= 2 && nextAction && ['switch', 'instaswitch'].includes(nextAction.choice))) {
 			// in gen 2, there are no faint checks between switches
 			this.faintMessages();
 		}
