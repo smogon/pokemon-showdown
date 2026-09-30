@@ -365,6 +365,44 @@ describe('Switching in', () => {
 			assert(hpIndex < tyranitarSwitchIndex, 'Spikes damage should be applied before Tyranitar switches in');
 			assert(tyranitarSwitchIndex < faintingIndex, 'Tyranitar should switch in before Abra faints');
 		});
+
+		it(`fainting should only happen after all Pokemon have switched in, even if one side will eventually lose`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+			], [
+				{ species: "snorlax", moves: ['spikes', 'selfdestruct'] },
+				{ species: "tyranitar", moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('auto', 'move selfdestruct');
+			battle.makeChoices();
+			const log = battle.getDebugLog();
+			const hpIndex = log.lastIndexOf('|-damage|p1a: Shedinja|0 fnt');
+			const tyranitarSwitchIndex = log.indexOf('|switch|p2a: Tyranitar');
+			const faintingIndex = log.lastIndexOf('|faint|p1a: Shedinja');
+			assert(hpIndex > 0);
+			assert(tyranitarSwitchIndex > 0);
+			assert(faintingIndex > 0);
+			assert(hpIndex < tyranitarSwitchIndex, 'Spikes damage should be applied before Tyranitar switches in');
+			assert(tyranitarSwitchIndex < faintingIndex, 'Tyranitar should switch in before Abra faints');
+			assert(battle.ended);
+		});
+
+		it(`should result in a tie if both sides faint simultaneously`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: "alakazam", moves: ['spikes'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+			], [
+				{ species: "snorlax", moves: ['spikes', 'selfdestruct'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('auto', 'move selfdestruct');
+			battle.makeChoices();
+			assert(battle.ended);
+			assert.equal(battle.winner, '');
+		});
 	});
 });
 
