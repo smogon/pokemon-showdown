@@ -330,7 +330,7 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'incineroar') return 'Blazikenite';
 		if (species.id === 'aegislash') return 'Mewtwonite-X';
 		if (species.id === 'pincurchin') return 'Zeraorite';
-		
+
 		// Fallback
 		return 'Life Orb';
 	}
