@@ -39,5 +39,5 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		desc: "If Sandstorm is active, this Pokemon's Ground-, Rock-, and Steel-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Sandstorm. If this Pokemon is a Rhyperior, it will summon Sandstorm on switch-in.",
-	}
+	},
 };
