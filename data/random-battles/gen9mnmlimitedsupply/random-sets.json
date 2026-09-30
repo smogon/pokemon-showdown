@@ -4,8 +4,7 @@
 		"sets": [
 			{
 				"movepool": ["Dragon Dance", "Breaking Swipe", "Wing Attack", "Earthquake"],
-				"abilities": ["Multiscale"],
-				"items": ["Scizorite"]
+				"abilities": ["Multiscale"]
 			}
 		]
 	},
@@ -14,8 +13,7 @@
 		"sets": [
 			{
 				"movepool": ["Iron Defense", "Body Press", "Salt Cure", "Recover"],
-				"abilities": ["Purifying Salt"],
-				"items": ["Scraftinite"]
+				"abilities": ["Purifying Salt"]
 			}
 		]
 	},
@@ -24,8 +22,7 @@
 		"sets": [
 			{
 				"movepool": ["Rapid Spin", "Close Combat", "Headlong Rush", "Ice Spinner"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Lopunnite"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -34,8 +31,7 @@
 		"sets": [
 			{
 				"movepool": ["Magma Storm", "Dragon Pulse", "Earth Power", "Will-O-Wisp"],
-				"abilities": ["Flash Fire"],
-				"items": ["Garchompite Z"]
+				"abilities": ["Flash Fire"]
 			}
 		]
 	},
@@ -44,8 +40,7 @@
 		"sets": [
 			{
 				"movepool": ["Foul Play", "Malignant Chain", "Recover", "Parting Shot"],
-				"abilities": ["Poison Puppeteer"],
-				"items": ["Gyaradosite"]
+				"abilities": ["Poison Puppeteer"]
 			}
 		]
 	},
@@ -54,8 +49,7 @@
 		"sets": [
 			{
 				"movepool": ["Thunderbolt", "Draco Meteor", "Thunderclap", "Volt Switch"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Manectite"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -64,8 +58,7 @@
 		"sets": [
 			{
 				"movepool": ["Rage Fist", "Bulk Up", "Drain Punch", "Ice Punch"],
-				"abilities": ["Defiant"],
-				"items": ["Crabominite"]
+				"abilities": ["Defiant"]
 			}
 		]
 	},
@@ -74,8 +67,7 @@
 		"sets": [
 			{
 				"movepool": ["Flash Cannon", "Dragon Pulse", "Electro Shot", "Stealth Rock"],
-				"abilities": ["Stamina"],
-				"items": ["Blue Orb"]
+				"abilities": ["Stamina"]
 			}
 		]
 	},
@@ -84,8 +76,7 @@
 		"sets": [
 			{
 				"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Close Combat"],
-				"abilities": ["Weak Armor"],
-				"items": ["Eelektrossite"]
+				"abilities": ["Weak Armor"]
 			}
 		]
 	},
@@ -94,8 +85,7 @@
 		"sets": [
 			{
 				"movepool": ["Focus Blast", "Recover", "Make It Rain", "Shadow Ball"],
-				"abilities": ["Good as Gold"],
-				"items": ["Magearnite"]
+				"abilities": ["Good as Gold"]
 			}
 		]
 	},
@@ -104,8 +94,7 @@
 		"sets": [
 			{
 				"movepool": ["Flare Blitz", "Double-Edge", "Burning Bulwark", "Dragon Dance"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Pinsirite"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -114,8 +103,7 @@
 		"sets": [
 			{
 				"movepool": ["Draining Kiss", "Flash Cannon", "Calm Mind", "Grass Knot"],
-				"abilities": ["Soul-Heart"],
-				"items": ["Metagrossite"]
+				"abilities": ["Soul-Heart"]
 			}
 		]
 	},
@@ -124,8 +112,7 @@
 		"sets": [
 			{
 				"movepool": ["Jaw Lock", "Fire Fang", "Thunder Fang", "U-turn"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Sharpedonite"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -134,8 +121,7 @@
 		"sets": [
 			{
 				"movepool": ["Hydro Steam", "Draco Meteor", "Flamethrower", "Flip Turn"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Charizardite Y"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -144,8 +130,7 @@
 		"sets": [
 			{
 				"movepool": ["Dark Pulse", "Focus Blast", "Blizzard", "Thunder"],
-				"abilities": ["Bad Dreams"],
-				"items": ["Hawluchanite"]
+				"abilities": ["Bad Dreams"]
 			}
 		]
 	},
@@ -154,8 +139,7 @@
 		"sets": [
 			{
 				"movepool": ["Draco Meteor", "Flamethrower", "Thunderbolt", "U-turn"],
-				"abilities": ["Clear Body"],
-				"items": ["Red Orb"]
+				"abilities": ["Clear Body"]
 			}
 		]
 	},
@@ -164,8 +148,7 @@
 		"sets": [
 			{
 				"movepool": ["Nasty Plot", "Shadow Ball", "Sludge Wave", "Giga Drain"],
-				"abilities": ["Cursed Body"],
-				"items": ["Dragoninite"]
+				"abilities": ["Cursed Body"]
 			}
 		]
 	},
@@ -174,8 +157,7 @@
 		"sets": [
 			{
 				"movepool": ["Mighty Cleave", "Zen Headbutt", "Close Combat", "Swords Dance"],
-				"abilities": ["Quark Drive"],
-				"items": ["Aerodactylite"]
+				"abilities": ["Quark Drive"]
 			}
 		]
 	},
@@ -184,8 +166,7 @@
 		"sets": [
 			{
 				"movepool": ["Body Slam", "Volt Switch", "Rapid Spin", "Explosion"],
-				"abilities": ["Transistor"],
-				"items": ["Altarianite"]
+				"abilities": ["Transistor"]
 			}
 		]
 	},
@@ -194,8 +175,7 @@
 		"sets": [
 			{
 				"movepool": ["Solar Beam", "Dazzling Gleam", "Earth Power", "Synthesis"],
-				"abilities": ["Serene Grace"],
-				"items": ["Meganiumite"]
+				"abilities": ["Serene Grace"]
 			}
 		]
 	},
@@ -204,8 +184,7 @@
 		"sets": [
 			{
 				"movepool": ["Dark Pulse", "Ice Beam", "Focus Blast", "Nasty Plot"],
-				"abilities": ["Pressure"],
-				"items": ["Zygardite"]
+				"abilities": ["Pressure"]
 			}
 		]
 	},
@@ -214,8 +193,7 @@
 		"sets": [
 			{
 				"movepool": ["Close Combat", "Fire Fang", "Heavy Slam", "Crunch"],
-				"abilities": ["Dauntless Shield"],
-				"items": ["Red Orb"]
+				"abilities": ["Dauntless Shield"]
 			}
 		]
 	},
@@ -224,8 +202,7 @@
 		"sets": [
 			{
 				"movepool": ["Foul Play", "Toxic", "Roost", "Defog"],
-				"abilities": ["Overcoat"],
-				"items": ["Mawilite"]
+				"abilities": ["Overcoat"]
 			}
 		]
 	},
@@ -234,8 +211,7 @@
 		"sets": [
 			{
 				"movepool": ["Roost", "Brave Bird", "Iron Head", "Drill Run"],
-				"abilities": ["Weak Armor"],
-				"items": ["Starminite"]
+				"abilities": ["Weak Armor"]
 			}
 		]
 	},
@@ -244,8 +220,7 @@
 		"sets": [
 			{
 				"movepool": ["Fire Lash", "Poison Jab", "Will-O-Wisp", "Encore"],
-				"abilities": ["Oblivious"],
-				"items": ["Beedrillite"]
+				"abilities": ["Oblivious"]
 			}
 		]
 	},
@@ -254,8 +229,7 @@
 		"sets": [
 			{
 				"movepool": ["Icicle Crash", "Freeze-Dry", "Earthquake", "Ice Shard"],
-				"abilities": ["Oblivious"],
-				"items": ["Lucarionite"]
+				"abilities": ["Oblivious"]
 			}
 		]
 	},
@@ -264,8 +238,7 @@
 		"sets": [
 			{
 				"movepool": ["Sludge Bomb", "Brave Bird", "U-turn", "Roost"],
-				"abilities": ["Toxic Chain"],
-				"items": ["Clefablite"]
+				"abilities": ["Toxic Chain"]
 			}
 		]
 	},
@@ -274,8 +247,7 @@
 		"sets": [
 			{
 				"movepool": ["Thunder Wave", "Flash Cannon", "Wish", "U-turn"],
-				"abilities": ["Serene Grace"],
-				"items": ["Clefablite"]
+				"abilities": ["Serene Grace"]
 			}
 		]
 	},
@@ -284,8 +256,7 @@
 		"sets": [
 			{
 				"movepool": ["Earthquake", "Stone Edge", "Stealth Rock", "Slack Off"],
-				"abilities": ["Sand Stream"],
-				"items": ["Steelixite"]
+				"abilities": ["Sand Stream"]
 			}
 		]
 	},
@@ -294,8 +265,7 @@
 		"sets": [
 			{
 				"movepool": ["Hex", "Will-O-Wisp", "Strength Sap", "Defog"],
-				"abilities": ["Aftermath"],
-				"items": ["Victreebelite"]
+				"abilities": ["Aftermath"]
 			}
 		]
 	},
@@ -304,8 +274,7 @@
 		"sets": [
 			{
 				"movepool": ["Stealth Rock", "Encore", "Gigaton Hammer", "Thunder Wave"],
-				"abilities": ["Mold Breaker"],
-				"items": ["Banettite"]
+				"abilities": ["Mold Breaker"]
 			}
 		]
 	},
@@ -314,8 +283,7 @@
 		"sets": [
 			{
 				"movepool": ["Stealth Rock", "Sandsear Storm", "U-turn", "Taunt"],
-				"abilities": ["Intimidate"],
-				"items": ["Manectite"]
+				"abilities": ["Intimidate"]
 			}
 		]
 	},
@@ -324,8 +292,7 @@
 		"sets": [
 			{
 				"movepool": ["Dark Pulse", "Flash Cannon", "Fire Blast", "Nasty Plot"],
-				"abilities": ["Levitate"],
-				"items": ["Chimechite"]
+				"abilities": ["Levitate"]
 			}
 		]
 	},
@@ -334,8 +301,7 @@
 		"sets": [
 			{
 				"movepool": ["Surf", "Psychic Noise", "Whirlwind", "Recover"],
-				"abilities": ["Water Absorb"],
-				"items": ["Wellspring Mask"]
+				"abilities": ["Water Absorb"]
 			}
 		]
 	},
@@ -344,8 +310,7 @@
 		"sets": [
 			{
 				"movepool": ["Fusion Bolt", "Icicle Spear", "Substitute", "Dragon Dance"],
-				"abilities": ["Multitype"],
-				"items": ["Zap Plate"]
+				"abilities": ["Multitype"]
 			}
 		]
 	},
@@ -354,8 +319,7 @@
 		"sets": [
 			{
 				"movepool": ["Iron Head", "Earthquake", "Drain Punch", "Thunder Punch"],
-				"abilities": ["Slow Start"],
-				"items": ["Iron Plate"]
+				"abilities": ["Slow Start"]
 			}
 		]
 	},
@@ -364,8 +328,7 @@
 		"sets": [
 			{
 				"movepool": ["Night Shade", "Scorching Sands", "Shore Up", "Stealth Rock"],
-				"abilities": ["Water Compaction"],
-				"items": ["Kangaskhanite"]
+				"abilities": ["Water Compaction"]
 			}
 		]
 	},
@@ -374,8 +337,7 @@
 		"sets": [
 			{
 				"movepool": ["Shift Gear", "Iron Head", "Double-Edge", "Temper Flare"],
-				"abilities": ["Filter"],
-				"items": ["Pinsirite"]
+				"abilities": ["Filter"]
 			}
 		]
 	},
@@ -384,8 +346,7 @@
 		"sets": [
 			{
 				"movepool": ["Sticky Web", "Volt Switch", "Bug Buzz", "Flash Cannon"],
-				"abilities": ["Levitate"],
-				"items": ["Aggronite"]
+				"abilities": ["Levitate"]
 			}
 		]
 	},
@@ -394,8 +355,7 @@
 		"sets": [
 			{
 				"movepool": ["Alluring Voice", "Weather Ball", "Toxic", "Moonlight"],
-				"abilities": ["Synchronize"],
-				"items": ["Meganiumite"]
+				"abilities": ["Synchronize"]
 			}
 		]
 	},
@@ -404,8 +364,7 @@
 		"sets": [
 			{
 				"movepool": ["Fiery Dance", "Flash Cannon", "Energy Ball", "Dazzling Gleam"],
-				"abilities": ["Quark Drive"],
-				"items": ["Chimechite"]
+				"abilities": ["Quark Drive"]
 			}
 		]
 	},
@@ -414,8 +373,7 @@
 		"sets": [
 			{
 				"movepool": ["Power Gem", "Shadow Ball", "Moonblast", "Psyshock"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Cornerstone Mask"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -424,8 +382,7 @@
 		"sets": [
 			{
 				"movepool": ["Will-O-Wisp", "Thunder", "Volt Switch", "Hydro Pump"],
-				"abilities": ["Levitate"],
-				"items": ["Pidgeotite"]
+				"abilities": ["Levitate"]
 			}
 		]
 	},
@@ -434,8 +391,7 @@
 		"sets": [
 			{
 				"movepool": ["Boomburst", "Earthquake", "Fire Blast", "Quick Attack"],
-				"abilities": ["Levitate"],
-				"items": ["Altarianite"]
+				"abilities": ["Levitate"]
 			}
 		]
 	},
@@ -444,8 +400,7 @@
 		"sets": [
 			{
 				"movepool": ["Bulk Up", "Drain Punch", "Bullet Punch", "Throat Chop"],
-				"abilities": ["Guts"],
-				"items": ["Scolipite"]
+				"abilities": ["Guts"]
 			}
 		]
 	},
@@ -454,8 +409,7 @@
 		"sets": [
 			{
 				"movepool": ["Earth Power", "Blood Moon", "Moonblast", "Moonlight"],
-				"abilities": ["Mind's Eye"],
-				"items": ["Sablenite"]
+				"abilities": ["Mind's Eye"]
 			}
 		]
 	},
@@ -464,8 +418,7 @@
 		"sets": [
 			{
 				"movepool": ["Boomburst", "Wish", "Thunder Wave", "Encore"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Gardevoirite"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -474,8 +427,7 @@
 		"sets": [
 			{
 				"movepool": ["Liquidation", "Earthquake", "Ice Punch", "Belly Drum"],
-				"abilities": ["Drizzle"],
-				"items": ["Swampertite"]
+				"abilities": ["Drizzle"]
 			}
 		]
 	},
@@ -484,8 +436,7 @@
 		"sets": [
 			{
 				"movepool": ["Blizzard", "Rapid Spin", "Aurora Veil", "Recover"],
-				"abilities": ["Levitate"],
-				"items": ["Froslassite"]
+				"abilities": ["Levitate"]
 			}
 		]
 	},
@@ -494,8 +445,7 @@
 		"sets": [
 			{
 				"movepool": ["Body Press", "Spikes", "Whirlwind", "Ruination"],
-				"abilities": ["Vessel of Ruin"],
-				"items": ["Tyranitarite"]
+				"abilities": ["Vessel of Ruin"]
 			}
 		]
 	},
@@ -504,8 +454,7 @@
 		"sets": [
 			{
 				"movepool": ["Close Combat", "Sucker Punch", "Leaf Storm", "Synthesis"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Staraptite"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -514,8 +463,7 @@
 		"sets": [
 			{
 				"movepool": ["Flare Blitz", "Extreme Speed", "Will-O-Wisp", "Morning Sun"],
-				"abilities": ["Intimidate"],
-				"items": ["Absolite"]
+				"abilities": ["Intimidate"]
 			}
 		]
 	},
@@ -524,8 +472,7 @@
 		"sets": [
 			{
 				"movepool": ["Discharge", "Hurricane", "Roost", "U-turn"],
-				"abilities": ["Static"],
-				"items": ["Raichunite X"]
+				"abilities": ["Static"]
 			}
 		]
 	},
@@ -534,8 +481,7 @@
 		"sets": [
 			{
 				"movepool": ["Throat Chop", "Psychic Noise", "Drain Punch", "Thunderbolt"],
-				"abilities": ["Magician"],
-				"items": ["Absolite"]
+				"abilities": ["Magician"]
 			}
 		]
 	},
@@ -544,8 +490,7 @@
 		"sets": [
 			{
 				"movepool": ["Draco Meteor", "Heavy Slam", "Fire Blast", "Thunder Wave"],
-				"abilities": ["Pressure"],
-				"items": ["Griseous Core"]
+				"abilities": ["Pressure"]
 			}
 		]
 	},
@@ -554,8 +499,7 @@
 		"sets": [
 			{
 				"movepool": ["Barb Barrage", "Crunch", "Spikes", "Pain Split"],
-				"abilities": ["Intimidate"],
-				"items": ["Falinksite"]
+				"abilities": ["Intimidate"]
 			}
 		]
 	},
@@ -564,8 +508,7 @@
 		"sets": [
 			{
 				"movepool": ["Hone Claws", "Play Rough", "Shadow Claw", "Shadow Sneak"],
-				"abilities": ["Disguise"],
-				"items": ["Garchompite"]
+				"abilities": ["Disguise"]
 			}
 		]
 	},
@@ -574,8 +517,7 @@
 		"sets": [
 			{
 				"movepool": ["Apple Acid", "Draco Meteor", "Leech Seed", "Recover"],
-				"abilities": ["Thick Fat"],
-				"items": ["Ampharosite"]
+				"abilities": ["Thick Fat"]
 			}
 		]
 	},
@@ -584,8 +526,7 @@
 		"sets": [
 			{
 				"movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Earthquake"],
-				"abilities": ["Inner Focus"],
-				"items": ["Feraligite"]
+				"abilities": ["Inner Focus"]
 			}
 		]
 	},
@@ -594,8 +535,7 @@
 		"sets": [
 			{
 				"movepool": ["Scale Shot", "Icicle Spear", "Iron Head", "Earthquake"],
-				"abilities": ["Thermal Exchange"],
-				"items": ["Heracronite"]
+				"abilities": ["Thermal Exchange"]
 			}
 		]
 	},
@@ -604,8 +544,7 @@
 		"sets": [
 			{
 				"movepool": ["Wave Crash", "Low Kick", "Bulk Up", "Ice Spinner"],
-				"abilities": ["Water Veil"],
-				"items": ["Barbaracite"]
+				"abilities": ["Water Veil"]
 			}
 		]
 	},
@@ -614,8 +553,7 @@
 		"sets": [
 			{
 				"movepool": ["Volt Switch", "Drain Punch", "Supercell Slam", "Ice Punch"],
-				"abilities": ["Quark Drive"],
-				"items": ["Dragalgite"]
+				"abilities": ["Quark Drive"]
 			}
 		]
 	},
@@ -624,8 +562,7 @@
 		"sets": [
 			{
 				"movepool": ["Surf", "Flash Cannon", "Ice Beam", "Roost"],
-				"abilities": ["Competitive"],
-				"items": ["Abomasite"]
+				"abilities": ["Competitive"]
 			}
 		]
 	},
@@ -634,8 +571,7 @@
 		"sets": [
 			{
 				"movepool": ["Earth Power", "Ice Beam", "Recover", "Spikes"],
-				"abilities": ["Storm Drain"],
-				"items": ["Chandelurite"]
+				"abilities": ["Storm Drain"]
 			}
 		]
 	},
@@ -644,8 +580,7 @@
 		"sets": [
 			{
 				"movepool": ["Draining Kiss", "Surf", "Flip Turn", "Moonblast"],
-				"abilities": ["Torrent"],
-				"items": ["Chandelurite"]
+				"abilities": ["Torrent"]
 			}
 		]
 	},
@@ -654,8 +589,7 @@
 		"sets": [
 			{
 				"movepool": ["Gyro Ball", "Trick Room", "Zen Headbutt", "Body Press"],
-				"abilities": ["Levitate"],
-				"items": ["Scolipite"]
+				"abilities": ["Levitate"]
 			}
 		]
 	},
@@ -664,8 +598,7 @@
 		"sets": [
 			{
 				"movepool": ["Curse", "Earthquake", "Stone Edge", "Temper Flare"],
-				"abilities": ["Solid Rock"],
-				"items": ["Steelixite"]
+				"abilities": ["Solid Rock"]
 			}
 		]
 	},
@@ -674,8 +607,7 @@
 		"sets": [
 			{
 				"movepool": ["First Impression", "Morning Sun", "Close Combat", "U-Turn"],
-				"abilities": ["Protosynthesis"],
-				"items": ["Drampanite"]
+				"abilities": ["Protosynthesis"]
 			}
 		]
 	},
@@ -684,8 +616,7 @@
 		"sets": [
 			{
 				"movepool": ["Brave Bird", "U-turn", "Roost", "Defog"],
-				"abilities": ["Mirror Armor"],
-				"items": ["Venusaurite"]
+				"abilities": ["Mirror Armor"]
 			}
 		]
 	},
@@ -694,8 +625,7 @@
 		"sets": [
 			{
 				"movepool": ["Moonblast", "Moongeist Beam", "Moonlight", "Calm Mind"],
-				"abilities": ["Shadow Shield"],
-				"items": ["Pixie Plate"]
+				"abilities": ["Shadow Shield"]
 			}
 		]
 	},
@@ -704,8 +634,7 @@
 		"sets": [
 			{
 				"movepool": ["Swords Dance", "Earthquake", "Fire Punch", "Thunder Wave"],
-				"abilities": ["Drought"],
-				"items": ["Hearthflame Mask"]
+				"abilities": ["Drought"]
 			}
 		]
 	},
@@ -714,8 +643,7 @@
 		"sets": [
 			{
 				"movepool": ["Swords Dance", "Play Rough", "Close Combat", "Psychic Fangs"],
-				"abilities": ["Intrepid Sword"],
-				"items": ["Fighting Memory"]
+				"abilities": ["Intrepid Sword"]
 			}
 		]
 	},
@@ -724,8 +652,7 @@
 		"sets": [
 			{
 				"movepool": ["Draco Meteor", "Flamethrower", "Ice Beam", "Dragon Tail"],
-				"abilities": ["Gooey"],
-				"items": ["Audinite"]
+				"abilities": ["Gooey"]
 			}
 		]
 	},
@@ -734,8 +661,7 @@
 		"sets": [
 			{
 				"movepool": ["Scald", "Haze", "Recover", "Flip Turn"],
-				"abilities": ["Competitive"],
-				"items": ["Excadrite"]
+				"abilities": ["Competitive"]
 			}
 		]
 	},
@@ -744,8 +670,7 @@
 		"sets": [
 			{
 				"movepool": ["Mortal Spin", "Power Gem", "Sludge Bomb", "Earth Power"],
-				"abilities": ["Toxic Debris"],
-				"items": ["Gengarite"]
+				"abilities": ["Toxic Debris"]
 			}
 		]
 	},
@@ -754,8 +679,7 @@
 		"sets": [
 			{
 				"movepool": ["Transform"],
-				"abilities": ["Imposter"],
-				"items": ["Choice Scarf"]
+				"abilities": ["Imposter"]
 			}
 		]
 	},
@@ -764,8 +688,7 @@
 		"sets": [
 			{
 				"movepool": ["Grassy Glide", "High Horsepower", "Drain Punch", "Wood Hammer", "First Impression", "Leech Life", "Liquidation", "Swords Dance", "Psychic Fangs", "Steel Roller", "Earthquake", "Stealth Rock"],
-				"abilities": ["Clear Body"],
-				"items": ["Metagrossite"]
+				"abilities": ["Clear Body"]
 			}
 		]
 	},
@@ -774,8 +697,7 @@
 		"sets": [
 			{
 				"movepool": ["Defog", "Brave Bird", "Flare Blitz", "Roost"],
-				"abilities": ["Flame Body"],
-				"items": ["Crucibellite"]
+				"abilities": ["Flame Body"]
 			}
 		]
 	},
@@ -784,8 +706,7 @@
 		"sets": [
 			{
 				"movepool": ["Leaf Blade", "Triple Arrows", "Trailblaze", "Shadow Claw"],
-				"abilities": ["Scrappy"],
-				"items": ["Kangaskhanite"]
+				"abilities": ["Scrappy"]
 			}
 		]
 	},
@@ -794,8 +715,7 @@
 		"sets": [
 			{
 				"movepool": ["Scald", "Alluring Voice", "Ice Beam", "Flip Turn"],
-				"abilities": ["Water Absorb"],
-				"items": ["Audinite"]
+				"abilities": ["Water Absorb"]
 			}
 		]
 	},
@@ -804,8 +724,7 @@
 		"sets": [
 			{
 				"movepool": ["Body Slam", "Fire Punch", "Wish", "Protect"],
-				"abilities": ["Regenerator"],
-				"items": ["Mewtwonite X"]
+				"abilities": ["Regenerator"]
 			}
 		]
 	},
@@ -814,8 +733,7 @@
 		"sets": [
 			{
 				"movepool": ["Bulk Up", "Power Trip", "Flare Blitz", "Drain Punch"],
-				"abilities": ["Intimidate"],
-				"items": ["Blazikenite"]
+				"abilities": ["Intimidate"]
 			}
 		]
 	},
@@ -824,8 +742,7 @@
 		"sets": [
 			{
 				"movepool": ["Swords Dance", "Sacred Sword", "Iron Head", "Shadow Sneak"],
-				"abilities": ["Stance Change"],
-				"items": ["Mewtwonite-X"]
+				"abilities": ["Stance Change"]
 			}
 		]
 	},
@@ -834,8 +751,7 @@
 		"sets": [
 			{
 				"movepool": ["Bullet Punch", "Close Combat", "Roost", "U-turn"],
-				"abilities": ["Technician"],
-				"items": ["Barbaracite"]
+				"abilities": ["Technician"]
 			}
 		]
 	},
@@ -844,8 +760,7 @@
 		"sets": [
 			{
 				"movepool": ["Protect", "Waterfall", "Crunch", "Destiny Bond"],
-				"abilities": ["Speed Boost"],
-				"items": ["Lucarionite"]
+				"abilities": ["Speed Boost"]
 			}
 		]
 	},
@@ -854,8 +769,7 @@
 		"sets": [
 			{
 				"movepool": ["Rising Voltage", "Zing Zap", "Sucker Punch", "Scald"],
-				"abilities": ["Electric Surge"],
-				"items": ["Zeraorite"]
+				"abilities": ["Electric Surge"]
 			}
 		]
 	}

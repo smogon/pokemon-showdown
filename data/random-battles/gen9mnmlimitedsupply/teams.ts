@@ -229,7 +229,10 @@ export class RandomMNMLS extends RandomTeams {
 			(species.id === 'gougingfire') ||
 			(species.id === 'revavroom')
 		) return 'Pinsirite';
-		if (species.id === 'magearna') return 'Metagrossite';
+		if (
+			(species.id === 'magearna') ||
+			(species.id === 'rillaboom')
+		) return 'Metagrossite';
 		if (species.id === 'roaringmoon') return 'Sharpedonite';
 		if (species.id === 'walkingwake') return 'Charizardite Y';
 		if (species.id === 'darkrai') return 'Hawluchanite';
@@ -251,7 +254,10 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'mandibuzz') return 'Mawilite';
 		if (species.id === 'skarmory') return 'Starminite';
 		if (species.id === 'salazzle') return 'Beedrillite';
-		if (species.id === 'mamoswine') return 'Lucarionite Z';
+		if (
+			(species.id === 'mamoswine') ||
+			(species.id === 'sharpedo')
+		) return 'Lucarionite';
 		if (
 			(species.id === 'fezandipiti') ||
 			(species.id === 'jirachi')
@@ -269,7 +275,10 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'lugia') return 'Wellspring Mask';
 		if (species.id === 'kyuremblack') return 'Zap Plate';
 		if (species.id === 'regigigas') return 'Iron Plate';
-		if (species.id === 'palossand') return 'Kangaskhanite';
+		if (
+			(species.id === 'palossand') ||
+			(species.id === 'decidueyehisui')
+		) return 'Kangaskhanite';
 		if (species.id === 'vikavolt') return 'Aggronite';
 		if (species.id === 'fluttermane') return 'Cornerstone Mask';
 		if (species.id === 'rotomwash') return 'Pidgeotite';
@@ -294,7 +303,10 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'appletun') return 'Ampharosite';
 		if (species.id === 'lucario') return 'Feraligite';
 		if (species.id === 'baxcalibur') return 'Heracronite';
-		if (species.id === 'floatzel') return 'Barbaracite';
+		if (
+			(species.id === 'floatzel') ||
+			(species.id === 'scizor')
+		) return 'Barbaracite';
 		if (species.id === 'ironhands') return 'Dragalgite';
 		if (species.id === 'empoleon') return 'Abomasite';
 		if (
@@ -306,10 +318,20 @@ export class RandomMNMLS extends RandomTeams {
 		if (species.id === 'lunala') return 'Pixie Plate';
 		if (species.id === 'groudon') return 'Hearthflame Mask';
 		if (species.id === 'zacian') return 'Fighting Memory';
-		if (species.id === 'goodra') return 'Audinite';
+		if (
+			(species.id === 'goodra') ||
+			(species.id === 'vaporeon')
+		) return 'Audinite';
 		if (species.id === 'milotic') return 'Excadrite';
 		if (species.id === 'glimmora') return 'Gengarite';
-
+		if (species.id === 'ditto') return 'Choice Scarf';
+		if (species.id === 'talonflame') return 'Crucibellite';
+		if (species.id === 'audino') return 'Mewtwonite X';
+		if (species.id === 'incineroar') return 'Blazikenite';
+		if (species.id === 'aegislash') return 'Mewtwonite-X';
+		if (species.id === 'pincurchin') return 'Zeraorite';
+		
+		// Fallback
 		return 'Life Orb';
 	}
 }
