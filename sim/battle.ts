@@ -1782,7 +1782,9 @@ export class Battle {
 				}
 			}
 		}
-		this.eachEvent('BeforeSelection');
+		this.eachEvent('BeforeSelection'); // Berserk Gene activation
+		// Gen 2 roll happens at 'BeforeTurn'
+		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
 		this.makeRequest('move');
 	}
@@ -2805,7 +2807,7 @@ export class Battle {
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
 			if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
-			if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
+			// Gen 3 roll happens at 'BeforeSelection'
 			break;
 		case 'residual':
 			this.add('');

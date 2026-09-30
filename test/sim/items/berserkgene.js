@@ -39,7 +39,7 @@ describe('Berserk Gene', () => {
 		battle.makeChoices();
 		battle.makeChoices('switch 2');
 		const log = battle.getDebugLog();
-		const turn = log.indexOf('|turn|2')
+		const turn = log.indexOf('|turn|2');
 		const berserkGene = log.indexOf('item: Berserk Gene');
 		assert(turn > 0);
 		assert(berserkGene > turn);
