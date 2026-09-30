@@ -314,7 +314,7 @@
 			"teraTypes": ["Water", "Fairy"],
 			"forcedMoves": ["focusenergy", "dracometeor"],
 			"moves": ["agility", "snipeshot"],
-			"nature": "Timid"
+			"nature": "Modest"
 		}
 	],
 	"ironjugulis": [
@@ -610,7 +610,7 @@
 			"teraTypes": ["Steel"],
 			"forcedMoves": ["foulplay", "roost"],
 			"moves": ["uturn", "toxic"],
-			"nature": "Careful"
+			"nature": "Impish"
 		},
 		{
 			"species": "latios",
@@ -800,7 +800,7 @@
 			"teraTypes": ["Ice", "Grass"],
 			"forcedMoves": ["icicle spear", "earthquake"],
 			"moves": ["iceshard", "rockblast", "trailblaze"],
-			"nature": "Jolly"
+			"nature": "Adamant"
 		},
 		{
 			"species": "miraidon",
@@ -952,7 +952,7 @@
 			"teraTypes": ["Dark"],
 			"forcedMoves": ["recover", "mortalspin"],
 			"moves": ["earthquake", "spikes", "amnesia"],
-			"nature": "Bold"
+			"nature": "Careful"
 		},
 		{
 			"species": "gliscor",
@@ -1236,7 +1236,7 @@
 			"teraTypes": ["Ghost"],
 			"forcedMoves": ["knockoff", "dragontail"],
 			"moves": ["ironhead", "uturn"],
-			"nature": "Jolly"
+			"nature": "Careful"
 		}
 	],
 	"hippowdon": [
