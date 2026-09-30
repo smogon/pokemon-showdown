@@ -3276,7 +3276,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				move.target = 'self';
-			} else if (source.isAlly(target)) {
+			} else if (!target || source.isAlly(target)) {
 				move.target = 'randomNormal';
 			}
 		},
