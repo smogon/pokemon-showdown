@@ -1804,7 +1804,7 @@ export class Battle {
 				}
 			}
 		}
-		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
+		// Gen 2 and 4 rolls happen at 'BeforeTurn'
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
 		this.makeRequest('move');
@@ -2815,6 +2815,8 @@ export class Battle {
 
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
+			// Gen 3 roll happens at 'BeforeSelection'
+			if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 			if (this.gen === 4) {
 				// Determine Quick Claw priority for the rest of this turn and switch/move order of the next turn
 				for (const pokemon of this.getAllActive(true)) pokemon.quickClawRoll = this.randomChance(1, 5);
