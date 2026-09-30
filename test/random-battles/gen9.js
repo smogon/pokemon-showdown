@@ -24,18 +24,3 @@ describe('[Gen 9] Monotype Random Battle (slow)', () => {
 		});
 	});
 });
-
-describe('[Gen 9 Champions] Random Doubles Battle (slow)', () => {
-	const setsJSON = require(`../../dist/data/random-battles/champions/doubles-sets.json`);
-	const dex = Dex.forFormat('gen9championsrandomdoublesbattle');
-	const mod = dex.currentMod;
-	for (const [id, sets] of Object.entries(setsJSON)) {
-		const species = dex.species.get(id);
-		// Pokemon that learn Detect should run it instead of Protect, unless it is alongside Imprison.
-		if (validateLearnset(dex.moves.get('Detect'), { species }, 'ou', mod)) {
-			for (const set of sets.sets) {
-				assert.false(set.movepool.includes('Protect') && !set.movepool.includes('Imprison'), `${species.name} runs Protect despite learning Detect`);
-			}
-		}
-	}
-});

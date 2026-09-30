@@ -357,12 +357,12 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Bullet Punch", "Detect", "Dynamic Punch", "Knock Off", "Stone Edge"],
+                "movepool": ["Bullet Punch", "Dynamic Punch", "Knock Off", "Protect", "Stone Edge"],
                 "abilities": ["No Guard"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Bullet Punch", "Detect", "Dynamic Punch", "Knock Off", "Stone Edge"],
+                "movepool": ["Bullet Punch", "Dynamic Punch", "Knock Off", "Protect", "Stone Edge"],
                 "abilities": ["No Guard"]
             }
         ]
@@ -530,7 +530,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "High Horsepower", "Lunge", "Rock Slide", "Stone Edge"],
+                "movepool": ["Close Combat", "High Horsepower", "Lunge", "Protect", "Rock Slide", "Stone Edge"],
                 "abilities": ["Hyper Cutter"],
                 "preferredTypes": ["Rock"]
             },
@@ -546,12 +546,12 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Body Slam", "Detect", "Feint", "High Horsepower"],
+                "movepool": ["Body Slam", "Feint", "High Horsepower", "Protect"],
                 "abilities": ["Hyper Cutter"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Body Slam", "Close Combat", "Detect", "Feint"],
+                "movepool": ["Body Slam", "Close Combat", "Feint", "Protect"],
                 "abilities": ["Hyper Cutter"]
             }
         ]
@@ -648,12 +648,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Detect", "Icy Wind", "Scald", "Wish"],
+                "movepool": ["Icy Wind", "Protect", "Scald", "Wish"],
                 "abilities": ["Water Absorb"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Detect", "Helping Hand", "Icy Wind", "Scald", "Yawn"],
+                "movepool": ["Helping Hand", "Icy Wind", "Protect", "Scald", "Yawn"],
                 "abilities": ["Water Absorb"]
             }
         ]
@@ -663,12 +663,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Alluring Voice", "Calm Mind", "Detect", "Thunderbolt"],
+                "movepool": ["Alluring Voice", "Calm Mind", "Protect", "Thunderbolt"],
                 "abilities": ["Volt Absorb"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Alluring Voice", "Detect", "Thunder Wave", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Alluring Voice", "Protect", "Thunder Wave", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Volt Absorb"]
             }
         ]
@@ -678,7 +678,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Detect", "Flare Blitz", "Superpower", "Will-O-Wisp"],
+                "movepool": ["Flare Blitz", "Protect", "Superpower", "Will-O-Wisp"],
                 "abilities": ["Flash Fire"]
             }
         ]
@@ -906,7 +906,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Alluring Voice", "Detect", "Psychic", "Shadow Ball"],
+                "movepool": ["Alluring Voice", "Protect", "Psychic", "Shadow Ball"],
                 "abilities": ["Magic Bounce"]
             }
         ]
@@ -1036,7 +1036,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Close Combat", "Detect", "Pin Missile", "Rock Blast"],
+                "movepool": ["Close Combat", "Pin Missile", "Protect", "Rock Blast"],
                 "abilities": ["Moxie"]
             }
         ]
@@ -1126,12 +1126,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Detect", "Earth Power", "Leaf Storm", "Shed Tail"],
+                "movepool": ["Earth Power", "Leaf Storm", "Protect", "Shed Tail"],
                 "abilities": ["Overgrow"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Acrobatics", "Breaking Swipe", "Detect", "Earth Power", "Leaf Storm"],
+                "movepool": ["Acrobatics", "Breaking Swipe", "Earth Power", "Leaf Storm", "Protect"],
                 "abilities": ["Unburden"],
                 "preferredTypes": ["Ground"]
             }
@@ -1142,7 +1142,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Detect", "Dragon Pulse", "Earth Power", "Leaf Storm"],
+                "movepool": ["Dragon Pulse", "Earth Power", "Leaf Storm", "Protect"],
                 "abilities": ["Overgrow"]
             }
         ]
@@ -1152,12 +1152,12 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Knock Off", "Overheat"],
+                "movepool": ["Close Combat", "Knock Off", "Overheat", "Protect"],
                 "abilities": ["Speed Boost"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Close Combat", "Detect", "Heat Wave", "Vacuum Wave"],
+                "movepool": ["Close Combat", "Heat Wave", "Protect", "Vacuum Wave"],
                 "abilities": ["Speed Boost"]
             }
         ]
@@ -1167,7 +1167,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Close Combat", "Detect", "Flare Blitz", "Swords Dance"],
+                "movepool": ["Close Combat", "Flare Blitz", "Protect", "Swords Dance"],
                 "abilities": ["Speed Boost"]
             }
         ]
@@ -1302,12 +1302,12 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Bullet Punch", "Close Combat", "Detect", "Ice Punch", "Zen Headbutt"],
+                "movepool": ["Bullet Punch", "Close Combat", "Ice Punch", "Protect", "Zen Headbutt"],
                 "abilities": ["Pure Power"]
             },
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Close Combat", "Detect", "Fake Out", "Zen Headbutt"],
+                "movepool": ["Close Combat", "Fake Out", "Protect", "Zen Headbutt"],
                 "abilities": ["Pure Power"]
             }
         ]
@@ -1317,7 +1317,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Fake Out", "Zen Headbutt"],
+                "movepool": ["Close Combat", "Fake Out", "Protect", "Zen Headbutt"],
                 "abilities": ["Telepathy"]
             }
         ]
@@ -1510,7 +1510,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Detect", "Knock Off", "Play Rough", "Sucker Punch"],
+                "movepool": ["Knock Off", "Play Rough", "Protect", "Sucker Punch"],
                 "abilities": ["Justified"]
             }
         ]
@@ -1520,7 +1520,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Knock Off", "Play Rough", "Sucker Punch"],
+                "movepool": ["Close Combat", "Knock Off", "Play Rough", "Protect", "Sucker Punch"],
                 "abilities": ["Justified"],
                 "preferredTypes": ["Fairy"]
             }
@@ -1531,7 +1531,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Shadow Claw", "Sucker Punch", "Swords Dance"],
+                "movepool": ["Close Combat", "Protect", "Shadow Claw", "Sucker Punch", "Swords Dance"],
                 "abilities": ["Justified"]
             }
         ]
@@ -1793,7 +1793,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Extreme Speed", "Meteor Mash"],
+                "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Protect"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -1803,7 +1803,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Extreme Speed", "Meteor Mash", "Vacuum Wave"],
+                "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Protect", "Vacuum Wave"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -1813,7 +1813,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Aura Sphere", "Dark Pulse", "Detect", "Flash Cannon", "Nasty Plot", "Vacuum Wave"],
+                "movepool": ["Aura Sphere", "Dark Pulse", "Flash Cannon", "Nasty Plot", "Protect", "Vacuum Wave"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -1893,7 +1893,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Detect", "Double-Edge", "Knock Off", "Leaf Blade", "Swords Dance", "Synthesis"],
+                "movepool": ["Double-Edge", "Knock Off", "Leaf Blade", "Protect", "Swords Dance", "Synthesis"],
                 "abilities": ["Chlorophyll"],
                 "preferredTypes": ["Dark"]
             }
@@ -1904,12 +1904,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Calm Mind", "Detect", "Freeze-Dry", "Mud Shot"],
+                "movepool": ["Calm Mind", "Freeze-Dry", "Mud Shot", "Protect"],
                 "abilities": ["Ice Body"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Detect", "Freeze-Dry", "Icy Wind", "Mud Shot"],
+                "movepool": ["Freeze-Dry", "Icy Wind", "Mud Shot", "Protect"],
                 "abilities": ["Ice Body"]
             }
         ]
@@ -2085,7 +2085,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Aqua Jet", "Detect", "Knock Off", "Liquidation", "Megahorn", "Sacred Sword", "Swords Dance"],
+                "movepool": ["Aqua Jet", "Knock Off", "Liquidation", "Megahorn", "Protect", "Sacred Sword", "Swords Dance"],
                 "abilities": ["Torrent"]
             },
             {
@@ -2095,7 +2095,7 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Aqua Jet", "Detect", "Flip Turn", "Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off", "Megahorn"],
+                "movepool": ["Aqua Jet", "Flip Turn", "Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off", "Megahorn", "Protect"],
                 "abilities": ["Torrent"]
             }
         ]
@@ -2105,7 +2105,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Ceaseless Edge", "Detect", "Razor Shell", "Sucker Punch"],
+                "movepool": ["Ceaseless Edge", "Protect", "Razor Shell", "Sucker Punch"],
                 "abilities": ["Sharpness"]
             },
             {
@@ -2120,7 +2120,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Crunch", "Detect", "Double-Edge", "Stomping Tantrum"],
+                "movepool": ["Crunch", "Double-Edge", "Protect", "Stomping Tantrum"],
                 "abilities": ["Analytic"]
             }
         ]
@@ -2260,7 +2260,7 @@
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Detect", "Drain Punch", "Knock Off", "Mach Punch"],
+                "movepool": ["Drain Punch", "Knock Off", "Mach Punch", "Protect"],
                 "abilities": ["Iron Fist"],
                 "preferredTypes": ["Fighting"]
             }
@@ -2326,7 +2326,7 @@
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Bulk Up", "Detect", "Drain Punch", "Knock Off"],
+                "movepool": ["Bulk Up", "Drain Punch", "Knock Off", "Protect"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -2376,7 +2376,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Detect", "Focus Blast", "Night Daze", "Psychic", "Sludge Bomb", "Snarl"],
+                "movepool": ["Focus Blast", "Night Daze", "Protect", "Psychic", "Sludge Bomb", "Snarl"],
                 "abilities": ["Illusion"],
                 "preferredTypes": ["Poison"]
             }
@@ -2387,7 +2387,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Bitter Malice", "Detect", "Flamethrower", "Focus Blast", "Hyper Voice", "Nasty Plot", "Will-O-Wisp"],
+                "movepool": ["Bitter Malice", "Flamethrower", "Focus Blast", "Hyper Voice", "Nasty Plot", "Protect", "Will-O-Wisp"],
                 "abilities": ["Illusion"]
             }
         ]
@@ -2766,7 +2766,7 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Knock Off", "Parting Shot"],
+                "movepool": ["Close Combat", "Knock Off", "Parting Shot", "Protect"],
                 "abilities": ["Scrappy"]
             }
         ]
@@ -3001,12 +3001,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Calm Mind", "Detect", "Hyper Voice", "Mystical Fire"],
+                "movepool": ["Calm Mind", "Hyper Voice", "Mystical Fire", "Protect"],
                 "abilities": ["Pixilate"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Detect", "Hyper Voice", "Mystical Fire", "Quick Attack"],
+                "movepool": ["Hyper Voice", "Mystical Fire", "Protect", "Quick Attack"],
                 "abilities": ["Pixilate"],
                 "preferredTypes": ["Fairy"]
             }
@@ -3017,7 +3017,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Brave Bird", "Close Combat", "Detect", "Swords Dance"],
+                "movepool": ["Brave Bird", "Close Combat", "Protect", "Swords Dance"],
                 "abilities": ["Unburden"]
             }
         ]
@@ -3027,12 +3027,12 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Brave Bird", "Close Combat", "Detect", "Rock Slide", "Stone Edge", "Swords Dance"],
+                "movepool": ["Brave Bird", "Close Combat", "Protect", "Rock Slide", "Stone Edge", "Swords Dance"],
                 "abilities": ["Limber"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Close Combat", "Detect", "Encore", "Taunt"],
+                "movepool": ["Brave Bird", "Close Combat", "Encore", "Protect", "Taunt"],
                 "abilities": ["Limber"]
             }
         ]
@@ -3579,7 +3579,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Detect", "Mach Punch", "Payback", "Storm Throw"],
+                "movepool": ["Mach Punch", "Payback", "Protect", "Storm Throw"],
                 "abilities": ["Technician"],
                 "preferredTypes": ["Fighting"]
             }
@@ -3630,7 +3630,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Close Combat", "Detect", "First Impression", "Knock Off", "Poison Jab"],
+                "movepool": ["Brave Bird", "Close Combat", "First Impression", "Knock Off", "Poison Jab", "Protect"],
                 "abilities": ["Scrappy"]
             }
         ]
@@ -3875,7 +3875,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Aqua Jet", "Aqua Step", "Close Combat", "Detect", "Knock Off", "Triple Axel"],
+                "movepool": ["Aqua Jet", "Aqua Step", "Close Combat", "Knock Off", "Protect", "Triple Axel"],
                 "abilities": ["Moxie"]
             }
         ]
