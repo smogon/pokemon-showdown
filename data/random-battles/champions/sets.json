@@ -2288,7 +2288,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Slam", "Fire Blast", "Encore", "Protect", "Wish"],
+                "movepool": ["Body Slam", "Encore", "Fire Blast", "Protect", "Wish"],
                 "abilities": ["Regenerator"]
             }
         ]
