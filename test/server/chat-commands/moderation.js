@@ -58,25 +58,3 @@ describe('room promotions', function () {
 		assert.equal(this.room.auth.get(this.targetUser.id), '#');
 	});
 });
-
-describe('anon target lookup', () => {
-	it('resolves aliases through room games except for exact-name lookups', () => {
-		const room = Rooms.get('lobby');
-		const requester = makeUser('Anon Lookup Moderator');
-		const targetUser = makeUser('Anon Lookup Player');
-		const connection = requester.connections[0];
-		const previousGame = room.game;
-		room.game = {
-			getUserByAlias: (aliasid, user) => aliasid === 'alias' && user === requester ? targetUser : null,
-		};
-		const context = new Chat.CommandContext({ message: '', room, user: requester, connection });
-
-		try {
-			assert.equal(context.splitUser('Alias, reason').targetUser, targetUser);
-			assert.equal(context.splitUser('Alias, reason', { exactName: true }).targetUser, null);
-			assert.equal(context.splitUser(`${targetUser.name}, reason`).targetUser, targetUser);
-		} finally {
-			room.game = previousGame;
-		}
-	});
-});

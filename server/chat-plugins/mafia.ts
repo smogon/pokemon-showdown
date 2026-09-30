@@ -714,15 +714,15 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return this.players.filter(p => p.getNameId() === aliasid);
 	}
 
-	override getUserByAlias(aliasid: ID, requester: User) {
+	override getUserByAlias(aliasid: ID, requester: User, mafiacommand: boolean = false) {
 		if (!this.started) return null;
 		const matches = this.players.filter(player =>
-			player.getAnonymized() && (player.getNameId() === aliasid || toID(player.alias) === aliasid)
+			player.getAnonymized() && ((mafiacommand && player.getNameId() === aliasid) || toID(player.alias) === aliasid)
 		);
 		if (!matches.length) return null;
 
 		const isHost = this.hostid === requester.id || this.cohostids.includes(requester.id);
-		if (!isHost && (!requester.can('mute', null, this.room) || this.getPlayer(requester.id))) return null;
+		if (!isHost && !requester.can('mute', null, this.room)) return null;
 		if (matches.length > 1) {
 			const alias = matches[0].alias?.replace('[Hydra] ', '') || matches[0].getDisplayName();
 			throw new Chat.ErrorMessage(
@@ -2013,7 +2013,6 @@ const unvoteMessage = voter.voting === 'novote' ?
 		// If Hydra: partner users up, generate aliases.
 		// Else If Anon: generate aliases.
 		// If Darkness: clouds
-
 		const prefix = this.hydra ? "[Hydra]" : this.anon ? "[Anon]" : " ";
 
 		let shuffledPlayers = Utils.shuffle(this.players).filter(player => player.hydra && !player.partnerid);
@@ -2040,12 +2039,8 @@ const unvoteMessage = voter.voting === 'novote' ?
 	}
 
 	setHydra(user: User, setting: boolean) {
-		if ((this.hydra) === setting) {
-			return this.sendUser(user, `|error|Game is already ${setting ? 'a Hydra' : 'not a Hydra'}.`);
-		}
 		this.hydra = setting;
 		if (setting && this.started) this.usedHydra = true;
-		this.sendDeclare(`The game was set to be ${setting ? 'a Hydra' : 'not a Hydra'}.`);
 
 		for (let player of Utils.shuffle(this.players)) {
 			player.hydra = setting;
@@ -2055,28 +2050,19 @@ const unvoteMessage = voter.voting === 'novote' ?
 	}
 
 	setAnon(user: User, setting: boolean) {
-		if ((this.anon) === setting) {
-			return this.sendUser(user, `|error|Game is already ${setting ? 'Anon' : 'not Anon'}.`);
-		}
 		this.anon = setting;
 		if (setting && this.started) this.usedAnon = true;
-		this.sendDeclare(`The game was set to be ${setting ? 'Anon' : 'not Anon'}.`);
 
 		for (let player of Utils.shuffle(this.players)) {
-			player.anon = this.anon;
+			player.anon = setting;
 		}
 
 		this.updateAnonModule();
 	}
 
 	setDarkness(user: User, setting: boolean) {
-		if ((this.darkness) === setting) {
-			return this.sendUser(user, `|error|Game is already shrouded ${setting ? 'in Darkness' : 'not in Darkness'}.`);
-		}
 		this.darkness = setting;
 		if (setting && this.started) this.usedDarkness = true;
-
-		this.sendDeclare(`The game was set to be shrouded ${setting ? 'in Darkness' : 'not in Darkness'}.`);
 
 		for (let player of Utils.shuffle(this.players)) {
 			player.darkness = setting;
@@ -2838,13 +2824,18 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			if (this.meansYes(action)) {
-				game.setHydra(user, true);
+				if (game.hydra) return game.sendUser(user, `|error|Game is already a Hydra.`);
+				else if (game.phase !== 'day' && game.phase !== 'night') game.hydra = true;
+				else game.setHydra(user, true);
 			} else if (this.meansNo(action)) {
-				game.setHydra(user, false);
+				if (!game.hydra) return game.sendUser(user, `|error|Game is already not a Hydra.`);
+				else if (game.phase !== 'day' && game.phase !== 'night') game.hydra = false;
+				else game.setHydra(user, false);
 			} else {
 				return this.parse('/help mafia hydra');
 			}
 			game.logAction(user, `changed hydra status`);
+			game.sendDeclare(`The game was set to be ${this.meansYes(action) ? 'a Hydra' : 'not a Hydra'}.`);
 		},
 		hydrahelp: [
 			`/mafia hydra [on|off] - Turns the game into a Hydra. Requires host % @ # ~`,
@@ -2856,13 +2847,18 @@ export const commands: Chat.ChatCommands = {
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			const action = toID(target);
 			if (this.meansYes(action)) {
-				game.setAnon(user, true);
+				if (game.anon) return game.sendUser(user, `|error|Game is already Anon.`);
+				else if (game.phase !== 'day' && game.phase !== 'night') game.anon = true;
+				else game.setAnon(user, true);
 			} else if (this.meansNo(action)) {
-				game.setAnon(user, false);
+				if (!game.anon) return game.sendUser(user, `|error|Game is already not Anon.`);
+				else if (game.phase !== 'day' && game.phase !== 'night') game.anon = false;
+				else game.setAnon(user, false);
 			} else {
 				return this.parse('/help mafia anon');
 			}
 			game.logAction(user, `changed anon status`);
+			game.sendDeclare(`The game was set to be ${this.meansYes(action) ? 'Anon' : 'not Anon'}.`);
 		},
 		anonhelp: [
 			`/mafia anon [on|off] - Turns the game into a Anon. Requires host % @ # ~`,
@@ -2874,13 +2870,18 @@ export const commands: Chat.ChatCommands = {
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			const action = toID(target);
 			if (this.meansYes(action)) {
-				game.setDarkness(user, true);
+				if (game.darkness) return game.sendUser(user, `|error|Game is already shrouded in Darkness.`);
+				else if (game.phase !== 'day' && game.phase !== 'night') game.darkness = true;
+				else game.setDarkness(user, true);
 			} else if (this.meansNo(action)) {
-				game.setDarkness(user, false);
+				if (!game.darkness) return game.sendUser(user, `|error|Game is already not shrouded in Darkness.`);
+				else if (game.phase !== 'day' && game.phase !== 'night') game.darkness = false;
+				else game.setDarkness(user, false);
 			} else {
 				return this.parse('/help mafia darkness');
 			}
 			game.logAction(user, `changed darkness status`);
+			game.sendDeclare(`The game was set to be shrouded ${this.meansYes(action) ? 'in Darkness' : 'not in Darkness'}.`);
 		},
 		darknesshelp: [
 			`/mafia darkness [on|off] - Shrouds the game in Darkness. Requires host % @ # ~`,
@@ -3074,6 +3075,11 @@ export const commands: Chat.ChatCommands = {
 				this.parse(`/mafia ${cmd}`);
 				return;
 			}
+			console.log(game.anon);
+			console.log(game.hydra);
+			if (game.hydra) game.setHydra(user, game.hydra);
+			if (game.anon) game.setAnon(user, game.anon);
+			if (game.darkness) game.setDarkness(user, game.darkness);
 			game.start(user, cmd === 'daystart');
 			game.logAction(user, `started the game`);
 		},
@@ -3790,6 +3796,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 
+		aliases: 'realplayers',
 		realplayers(target, room, user) {
 			if (!room) return this.errorReply("This command can't be used in PMs.");
 
