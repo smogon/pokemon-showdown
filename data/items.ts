@@ -7925,7 +7925,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Ground",
 		},
-		onUpdate(pokemon) {
+		// FIXME
+		// onAfterSetVolatile(status, pokemon) {
+		// 	if (status.id === 'confusion') {
+		// 		pokemon.eatItem();
+		// 	}
+		// },
+		onResidualOrder: 10,
+		onResidual(pokemon) {
 			if (pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
 			}
@@ -7945,7 +7952,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Ice",
 		},
-		onUpdate(pokemon) {
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'frz') {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 10,
+		onResidual(pokemon) {
 			if (pokemon.status === 'frz') {
 				pokemon.eatItem();
 			}
@@ -7991,7 +8004,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Grass",
 		},
-		onUpdate(pokemon) {
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'brn') {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 10,
+		onResidual(pokemon) {
 			if (pokemon.status === 'brn') {
 				pokemon.eatItem();
 			}
@@ -8013,7 +8032,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Water",
 		},
-		onUpdate(pokemon) {
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'slp') {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 10,
+		onResidual(pokemon) {
 			if (pokemon.status === 'slp') {
 				pokemon.eatItem();
 			}
@@ -8035,7 +8060,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Flying",
 		},
-		onUpdate(pokemon) {
+		onAfterSetStatus(status, pokemon) {
+			pokemon.eatItem();
+		},
+		// FIXME
+		// onAfterSetVolatile(status, pokemon) {
+		// 	if (status.id === 'confusion') {
+		// 		pokemon.eatItem();
+		// 	}
+		// },
+		onResidualOrder: 10,
+		onResidual(pokemon) {
 			if (pokemon.status || pokemon.volatiles['confusion']) {
 				pokemon.eatItem();
 			}
@@ -8056,32 +8091,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Fighting",
 		},
-		onUpdate(pokemon) {
+		onResidualOrder: 6,
+		onResidual(pokemon) {
 			if (!pokemon.hp) return;
-			const moveSlot = pokemon.lastMove && pokemon.getMoveData(pokemon.lastMove.id);
-			if (moveSlot && moveSlot.pp === 0) {
-				pokemon.addVolatile('leppaberry');
-				pokemon.volatiles['leppaberry'].moveSlot = moveSlot;
-				pokemon.eatItem();
-			}
+			pokemon.eatItem();
 		},
 		onEat(pokemon) {
-			let moveSlot;
-			if (pokemon.volatiles['leppaberry']) {
-				moveSlot = pokemon.volatiles['leppaberry'].moveSlot;
-				pokemon.removeVolatile('leppaberry');
-			} else {
-				let pp = 99;
-				for (const possibleMoveSlot of pokemon.moveSlots) {
-					if (possibleMoveSlot.pp < pp) {
-						moveSlot = possibleMoveSlot;
-						pp = moveSlot.pp;
-					}
-				}
-			}
-			moveSlot.pp += 5;
-			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
-			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move);
+			const moveSlot = pokemon.moveSlots.find(move => move.pp === 0);
+			if (!moveSlot) return;
+			moveSlot.pp = Math.min(5, moveSlot.maxpp);
+			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move, '[consumed]');
 		},
 		num: 154,
 		gen: 2,
@@ -8119,7 +8138,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Fire",
 		},
-		onUpdate(pokemon) {
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'par') {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 10,
+		onResidual(pokemon) {
 			if (pokemon.status === 'par') {
 				pokemon.eatItem();
 			}
@@ -8141,7 +8166,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Electric",
 		},
-		onUpdate(pokemon) {
+		onAfterSetStatus(status, pokemon) {
+			if (status.id === 'psn' || status.id === 'tox') {
+				pokemon.eatItem();
+			}
+		},
+		onResidualOrder: 10,
+		onResidual(pokemon) {
 			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
 				pokemon.eatItem();
 			}
