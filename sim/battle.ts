@@ -21,7 +21,7 @@ import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
 import { PRNG, type PRNGSeed } from './prng';
 import { type MoveRequest, type ChoiceRequest, Side } from './side';
 import { State } from './state';
-import { BattleQueue, SwitchAction, type Action } from './battle-queue';
+import { BattleQueue, type SwitchAction, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
 declare const __version: any;
