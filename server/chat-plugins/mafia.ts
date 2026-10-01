@@ -716,17 +716,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	getPlayersByTarget(target: string) {
-		const targetName = target.trim();
-		const targetid = toID(targetName);
+		const targetid = toID(target.trim());
 		if (!targetid) return [];
-
-		const isDecoratedAlias = /^\[(anon|hydra)\]\s/i.test(targetName);
-		if (!isDecoratedAlias) {
-			const targetUser = Users.get(targetName);
-			const player = targetUser && this.getPlayer(targetUser.id);
-			if (player) return [player];
-		}
-
 		return this.getPlayersByAlias(targetid);
 	}
 
@@ -1514,19 +1505,18 @@ const unvoteMessage = voter.voting === 'novote' ?
 		this.updatePlayers();
 	}
 
-	revealRole(user: User, toReveal: MafiaPlayer, revealAs: string, announce = true) {
+	revealRole(user: User, toReveal: MafiaPlayer[], revealAs: string) {
 		if (!this.started) {
 			return this.sendUser(user, `|error|You may only reveal roles once the game has started.`);
 		}
-		if (!toReveal.role) {
-			return this.sendUser(user, `|error|The user ${toReveal.id} is not assigned a role.`);
+		for (const player of toReveal) {
+			if (!player.role) {
+				return this.sendUser(user, `|error|The user ${player.id} is not assigned a role.`);
+			}
 		}
-		toReveal.revealed = revealAs;
-		if (announce) {
-			this.sendDeclare(
-				`${toReveal.getDisplayName()}'s role ${toReveal.isEliminated() ? `was` : `is`} ${revealAs}.`
-			);
-		}
+		for (const player of toReveal) player.revealed = revealAs;
+		const firstPlayer = toReveal[0];
+		this.sendDeclare(`${firstPlayer.getDisplayName()}'s role ${firstPlayer.isEliminated() ? `was` : `is`} ${revealAs}.`);
 		this.updatePlayers();
 	}
 
@@ -2511,7 +2501,7 @@ export const pages: Chat.PageTable = {
 			buf += `<p>To set a deadline, use <strong>/mafia deadline [minutes]</strong>.<br />To clear the deadline use <strong>/mafia deadline off</strong>.</p><hr/></details></p>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Player Options</summary>`;
 			buf += `<h3>Player Options</h3>`;
-			for (const player of game.getRemainingSlots().map(alias => game.getPlayerByAlias(toID(alias))).filter(alias => alias !== null)) {
+			for (const player of game.getRemainingSlots()) {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block"><span style="font-weight:bold;">`;
 				buf += `${player.getDisplayName()} (${player.role ? player.getStylizedRole(true) : ''})`;
 				buf += game.voteModifiers[player.id] !== undefined ? `(votes worth ${game.getVoteValue(player)})` : '';
@@ -2526,7 +2516,10 @@ export const pages: Chat.PageTable = {
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia spiritstump ${player.getNameId()}">Make a Restless Treestump (Kill)</button> `;
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub next, ${player.getNameId()}">Force sub</button></span></details></p>`;
 			}
+			const shownEliminatedHydras = new Set<ID>();
 			for (const eliminated of game.getEliminatedPlayers()) {
+				if (game.hydra && shownEliminatedHydras.has(eliminated.getNameId())) continue;
+				if (game.hydra) shownEliminatedHydras.add(eliminated.getNameId());
 				buf += `<p style="font-weight:bold;">${eliminated.getDisplayName()} (${eliminated.role ? eliminated.getStylizedRole() : ''})`;
 				if (eliminated.isTreestump()) buf += ` (is a Treestump)`;
 				if (eliminated.isSpirit()) buf += ` (is a Restless Spirit)`;
@@ -3225,9 +3218,11 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage(`You cannot add or remove players while IDEA roles are being picked.`); // needs to be here since eliminate doesn't pass the user
 			}
 			if (!target) return this.parse('/help mafia kill');
-			const players = game.getPlayersByTarget(target);
+			const kickPlayer = cmd === 'kick' ? game.getPlayer(toID(target.trim())) : null;
+			const players = cmd === 'kick' ? (kickPlayer ? [kickPlayer] : []) : game.getPlayersByTarget(target);
 			if (!players.length) {
-				throw new Chat.ErrorMessage(`${target.trim()} is not a player.`);
+				throw new Chat.ErrorMessage(cmd === 'kick' ?
+					`${target.trim()} is not a player's username in the game.` : `${target.trim()} is not a player.`);
 			}
 
 			let elimType: MafiaEliminateType;
@@ -3249,28 +3244,23 @@ export const commands: Chat.ChatCommands = {
 				break;
 			}
 
-			const repeatedPlayer = players.find(player => {
-				switch (cmd) {
-				case 'treestump': return player.isTreestump() && !player.isSpirit();
-				case 'spirit': return !player.isTreestump() && player.isSpirit();
-				case 'spiritstump': return player.isTreestump() && player.isSpirit();
-				case 'kick': return false;
-				default: return player.eliminated === MafiaEliminateType.ELIMINATE;
-				}
-			});
-			if (repeatedPlayer) throw new Chat.ErrorMessage(`${repeatedPlayer.safeName} has already been ${cmd}ed.`);
-
-			for (const player of players) game.eliminate(player, elimType, false);
-			if (!game.started) {
-				game.sendDeclare(`${players[0].getDisplayName()} was kicked from the game!`);
-			} else {
-				const player = players[0];
-				game.sendDeclare(`${player.getDisplayName()} ${elimType}! ${!game.noReveal && elimType === MafiaEliminateType.ELIMINATE ? `${player.getDisplayName()}'s role was ${player.getStylizedRole()}.` : ''}`);
+			const targetPlayer = players[0]!;
+			let repeat = false;
+			switch (cmd) {
+			case 'treestump': repeat = targetPlayer.isTreestump() && !targetPlayer.isSpirit(); break;
+			case 'spirit': repeat = !targetPlayer.isTreestump() && targetPlayer.isSpirit(); break;
+			case 'spiritstump': repeat = targetPlayer.isTreestump() && targetPlayer.isSpirit(); break;
+			case 'kick': break;
+			default: repeat = targetPlayer.eliminated === MafiaEliminateType.ELIMINATE; break;
 			}
+			if (repeat) throw new Chat.ErrorMessage(`${targetPlayer.safeName} has already been ${cmd}ed.`);
+
+			for (const [index, player] of players.entries()) game.eliminate(player, elimType, index === 0);
 			game.logAction(user, `${cmd}ed ${players.map(player => player.getDisplayName()).join(', ')}`);
 		},
 		killhelp: [
 			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ # ~`,
+			`/mafia kick [username] - Kicks that specific account from the game without revealing their role. Aliases are not accepted. Requires host % @ # ~`,
 			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still.`,
 			`/mafia spirit [player] - Kills a player, but allows them to vote still.`,
 			`/mafia spiritstump [player] Kills a player, but allows them to talk and vote during the day.`,
@@ -3300,8 +3290,8 @@ export const commands: Chat.ChatCommands = {
 			for (const targetUsername of args) {
 				const players = game.getPlayersByTarget(targetUsername);
 				if (players.length) {
-					for (const [index, player] of players.entries()) {
-						game.revealRole(user, player, `${revealAs || player.getStylizedRole()}`, index === 0);
+					game.revealRole(user, players, `${revealAs || players[0].getStylizedRole()}`);
+					for (const player of players) {
 						game.logAction(user, `revealed ${player.getDisplayName()}`);
 						if (revealedRole) {
 							game.secretLogAction(user, `fakerevealed ${player.getDisplayName()} as ${revealedRole.role.name}`);
@@ -3340,8 +3330,8 @@ export const commands: Chat.ChatCommands = {
 			for (const targetUsername of args) {
 				const players = game.getPlayersByTarget(targetUsername);
 				if (players.length) {
-					for (const [index, player] of players.entries()) {
-						game.revealAlias(user, player, `${revealAs || player.getDisplayName()}`, index === 0);
+					for (const player of players) {
+						game.revealAlias(user, player, `${revealAs || player.getDisplayName()}`, player === players[0]);
 						game.logAction(user, `revealed alias ${player.name}`);
 						if (revealedRole) {
 							game.secretLogAction(user, `fakerevealed ${player.name} alias as ${revealedRole.role.name}`);
@@ -3444,8 +3434,9 @@ export const commands: Chat.ChatCommands = {
 			const eliminatedPlayers = players.filter(player => player.isEliminated());
 			if (!eliminatedPlayers.length) throw new Chat.ErrorMessage(`${players[0].name} has not been eliminated.`);
 
-			for (const player of eliminatedPlayers) game.revive(user, player, false);
-			game.sendDeclare(`${players[0].getDisplayName()} was revived!`);
+			for (const player of eliminatedPlayers) {
+				game.revive(user, player, player === eliminatedPlayers[0]);
+			}
 		},
 		revivehelp: [
 			`/mafia revive [player] - Revives a player who was eliminated. Requires host % @ # ~`,
@@ -4989,7 +4980,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still. Requires host % @ # ~`,
 			`/mafia spirit [player] - Kills a player, but allows them to vote still. Requires host % @ # ~`,
 			`/mafia spiritstump [player] - Kills a player, but allows them to talk and vote during the day. Requires host % @ # ~`,
-			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ # ~`,
+			`/mafia kick [username] - Kicks that specific account from the game without revealing their role. Aliases are not accepted. Requires host % @ # ~`,
 			`/mafia revive [player] - Revives a player who was eliminated. Requires host % @ # ~`,
 			`/mafia add [player] - Adds a new player to the game. Requires host % @ # ~`,
 			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # ~`,
