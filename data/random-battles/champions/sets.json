@@ -3758,7 +3758,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Hyper Voice", "Mystical Fire", "Psyshock", "Terrain Pulse"],
+                "movepool": ["Healing Wish", "Hyper Voice", "Mystical Fire", "Terrain Pulse"],
                 "abilities": ["Psychic Surge"]
             }
         ]
