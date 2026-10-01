@@ -638,13 +638,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen4',
 		searchShow: false,
 		ruleset: ['Standard Draft', 'DryPass Clause', '!Team Preview', '!Evasion Abilities Clause', 'Accuracy Moves Clause'],
-		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Swagger', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak', 'No Guard + Dynamic Punch'],
+		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Swagger', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak', 'No Guard + Dynamic Punch', 'Baton Pass + Magnet Rise'],
 	},
 	{
 		name: "[Gen 3] Draft",
 		mod: 'gen3',
 		searchShow: false,
 		ruleset: ['Standard Draft'],
+		banlist: ['Assist'],
 	},
 
 	// Ladder Spotlight
