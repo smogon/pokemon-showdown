@@ -2548,8 +2548,16 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false, forceCheck = false, checkWin = true, pursuitFainted = false) {
+	faintMessages(lastFirst = false, forceCheck = false, checkWin = true, recheckDestinyBond = true) {
 		if (this.ended) return;
+		if (this.activeMove && this.gen <= 4) {
+			// don't check for wins in the middle of a move resolution
+			// don't check for fainted Pokémon at all during U-turn
+			if (this.getAllActive().some(pokemon => pokemon.switchFlag)) return;
+			forceCheck = false;
+			checkWin = false;
+			recheckDestinyBond = false;
+		}
 		const length = this.faintQueue.length;
 		if (!length) {
 			if (forceCheck && this.checkWin()) return true;
@@ -2591,7 +2599,7 @@ export class Battle {
 				}
 				pokemon.side.faintedThisTurn = pokemon;
 				// in Gen 2-4, don't check for a win if Destiny Bond activates during a Pursuit faint
-				if (this.faintQueue.length >= faintQueueLeft && !pursuitFainted) checkWin = true;
+				if (this.faintQueue.length >= faintQueueLeft && recheckDestinyBond) checkWin = true;
 			}
 		}
 
@@ -2780,19 +2788,16 @@ export class Battle {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
+			while (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
 				// a pokemon fainted from Pursuit before it could switch
-				if (this.gen <= 4) {
-					this.faintMessages(false, false, false, true);
-					// in gen 2-4, the switch still happens
-					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
-					this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
-					break;
-				} else {
+				if (this.gen >= 5) {
 					// in gen 5+, the switch is cancelled
 					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
 					break;
 				}
+				// in gen 2-4, the switch still happens
+				this.faintMessages(false, false, false, false);
+				this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
 			}
 			break;
 		case 'revivalblessing':
@@ -2854,14 +2859,20 @@ export class Battle {
 
 		let nextAction = this.queue.peek();
 
-		if (this.gen === 2 && ['switch', 'instaswitch', 'runSwitch'].includes(action.choice) &&
-			nextAction && ['switch', 'instaswitch', 'runSwitch'].includes(nextAction.choice)) {
+		if (
+			!(this.gen === 2 && ['switch', 'instaswitch'].includes(action.choice) &&
+				nextAction && ['switch', 'instaswitch'].includes(nextAction.choice)) &&
+				!(this.gen === 4 && action.choice === 'instaswitch' && nextAction?.choice === 'instaswitch')
+		) {
 			// in gen 2, there are no faint checks between switches
-			return false;
+			// in gen 4, there are no faint checks between simultaneous switches replacing fainted Pokemon
+			const checkWin = !(
+				// in gen 4, between a U-turn switch and ability activation, there are faint checks, but there are no win checks
+				this.gen === 4 && action.choice === 'instaswitch' && action.sourceEffect && nextAction?.choice === 'runSwitch'
+			);
+			this.faintMessages(false, checkWin, checkWin);
+			if (this.ended) return true;
 		}
-
-		this.faintMessages();
-		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 

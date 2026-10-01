@@ -178,6 +178,22 @@ assert.hurtsBy = function (pokemon, damage, fn, message) {
 	});
 };
 
+assert.logOrder = function (battle, ...logs) {
+	const log = battle.getDebugLog();
+	let lastIndex = -1;
+	for (const [i, entry] of logs.entries()) {
+		const index = log.indexOf(entry);
+		if (index <= lastIndex) {
+			throw new AssertionError({
+				message: index < 0 ? `Entry "${entry}" was not found.` :
+				`Entry "${entry}" was found before entry "${logs[i - 1]}".`,
+				stackStartFunction: assert.logOrder,
+			});
+		}
+		lastIndex = index;
+	}
+};
+
 assert.constant = function (getter, fn, message) {
 	const initialValue = getter();
 	fn();

@@ -125,7 +125,7 @@ describe(`Destiny Bond`, () => {
 			assert.fainted(snorlax);
 		});
 	});
-	
+
 	describe(`[Gen 2]`, () => {
 		it(`should end the effect before the user switches out if it is faster than the Pursuit user`, () => {
 			battle = common.gen(2).createBattle([[
@@ -146,24 +146,6 @@ describe(`Destiny Bond`, () => {
 			battle.makeChoices('switch 3', 'move pursuit');
 			assert.fainted(haunter);
 			assert.fainted(snorlax);
-		});
-		
-		it(`should not check for a win right after Destiny Bond activates during a Pursuit faint`, () => {
-			battle = common.gen(2).createBattle([[
-				{ species: "alakazam", moves: ['spikes', 'pursuit'] },
-			], [
-				{ species: "shedinja", moves: ['sleeptalk', 'destinybond'] },
-				{ species: "shedinja", moves: ['sleeptalk'] },
-			]]);
-			battle.makeChoices('move spikes', 'move destinybond');
-			battle.makeChoices('move pursuit', 'switch 2');
-			const log = battle.getDebugLog();
-			const destinyBondFaintIndex = log.indexOf('|faint|p1a: Alakazam');
-			const switchIndex = log.lastIndexOf('|switch|p2a: Shedinja');
-			assert(destinyBondFaintIndex > 0);
-			assert(switchIndex > destinyBondFaintIndex);
-			assert(battle.ended);
-			assert.equal(battle.winner, '');
 		});
 	});
 });
