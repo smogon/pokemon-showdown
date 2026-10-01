@@ -1,7 +1,6 @@
-import { RandomTeams, type MoveCounter } from '../gen9/teams';
+import { RandomTeams } from '../gen9/teams';
 
 export class RandomMNMLS extends RandomTeams {
-
 	override randomSet(
 		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
