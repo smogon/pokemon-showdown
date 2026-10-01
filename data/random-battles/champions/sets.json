@@ -2631,7 +2631,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Knock Off", "Iron Defense", "Spikes", "Synthesis", "Wood Hammer"],
+                "movepool": ["Body Press", "Iron Defense", "Knock Off", "Spikes", "Synthesis", "Wood Hammer"],
                 "abilities": ["Bulletproof"]
             }
         ]
