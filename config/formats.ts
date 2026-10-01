@@ -685,7 +685,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Spectrier', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock',
 			'Razor Fang', 'Baton Pass', 'Last Respects', 'Rage Fist', 'Shed Tail',
 		],
-		restricted: ['Shift Gear'],
+		restricted: ['Belly Drum', 'Extreme Speed', 'Population Bomb', 'Quiver Dance', 'Revival Blessing','Shell Smash', 'Tail Glow'],
 	},
 	{
 		name: "[Gen 9] National Dex Mix and Mega",
