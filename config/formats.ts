@@ -433,34 +433,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		unbanlist: ['Archaludon', 'Volcarona', 'Tera Blast'],
 	},
 	{
-		name: "[Gen 9] Statmons",
-		desc: `All Pok&eacute;mon on a team must have the same base stat be higher than 100.`,
-		mod: `gen9`,
+		name: "[Gen 9] NFE",
+		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
+		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
-		banlist: ['AG', 'Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Tera Blast', 'Shed Tail'],
-		onValidateTeam(team) {
-			let statsTable: string[] = [];
-			for (const [i, set] of team.entries()) {
-				let species = this.dex.species.get(set.species);
-				if (!species.types) return [`Invalid pokemon ${set.name || set.species}`];
-				if (i === 0) {
-					statsTable = Object.keys(species.baseStats).filter(stat => species.baseStats[stat as StatID] > 100);
-				} else {
-					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] > 100);
-				}
-				const item = this.dex.items.get(set.item);
-				if (item.megaStone?.[species.name]) {
-					species = this.dex.species.get(item.megaStone[species.name]);
-					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] > 100);
-				}
-				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
-					species = this.dex.species.get("Necrozma-Ultra");
-					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] > 100);
-				}
-				if (!statsTable.length) return [`All Pok\u00e9mon on your team must have the same base stat over 100.`];
-			}
-		},
+		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Basculin-White-Striped', 'Bisharp', 'Chansey', 'Combusken', 'Dipplin', 'Duraludon', 'Dusclops', 'Electabuzz', 'Gligar', 'Gurdurr',
+			'Haunter', 'Magmar', 'Magneton', 'Misdreavus', 'Porygon2', 'Primeape', 'Qwilfish-Hisui', 'Rhydon', 'Scraggy', 'Scyther', 'Sneasel',
+			'Sneasel-Hisui', 'Ursaring', 'Vigoroth', 'Vulpix-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Toxic Debris', 'Baton Pass',
+			'Toxic Spikes',
+		],
 	},
 	{
 		name: "[Gen 9] Ubers UU",
@@ -683,423 +666,128 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] No Holds Barred!",
-		desc: `Pok&eacute;mon combine their Attack and Special Attack stats, as well as their Defense and Special Defense stats.`,
-		mod: 'gen9',
+		name: "[Gen 9] Bad 'n Boosted",
+		desc: `All base stats of 70 and lower are doubled.`,
 		// searchShow: false,
-		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause'],
-		banlist: [
-			'Annihilape', 'Arceus', 'Archaludon', 'Blissey', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Dialga-Origin',
-			'Dondozo', 'Espathra', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate',
-			'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin',
-			'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Terapagos', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody',
-			'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
-		],
-		actions: {
-			getDamage(source, target, move, suppressMessages = false) {
-				if (typeof move === 'string') move = this.dex.getActiveMove(move);
-
-				if (typeof move === 'number') {
-					const basePower = move;
-					move = new Dex.Move({
-						basePower,
-						type: '???',
-						category: 'Physical',
-						willCrit: false,
-					}) as ActiveMove;
-					move.hit = 0;
-				}
-
-				if (!target.runImmunity(move, !suppressMessages)) {
-					return false;
-				}
-
-				if (move.ohko) return this.battle.gen === 3 ? target.hp : target.maxhp;
-				if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
-				if (move.damage === 'level') {
-					return source.level;
-				} else if (move.damage) {
-					return move.damage;
-				}
-
-				const category = this.battle.getCategory(move);
-
-				let basePower: number | false | null = move.basePower;
-				if (move.basePowerCallback) {
-					basePower = move.basePowerCallback.call(this.battle, source, target, move);
-				}
-				if (!basePower) return basePower === 0 ? undefined : basePower;
-				basePower = this.battle.clampIntRange(basePower, 1);
-
-				let critMult;
-				let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
-				if (this.battle.gen <= 5) {
-					critRatio = this.battle.clampIntRange(critRatio, 0, 5);
-					critMult = [0, 16, 8, 4, 3, 2];
-				} else {
-					critRatio = this.battle.clampIntRange(critRatio, 0, 4);
-					if (this.battle.gen === 6) {
-						critMult = [0, 16, 8, 2, 1];
-					} else {
-						critMult = [0, 24, 8, 2, 1];
-					}
-				}
-
-				const moveHit = target.getMoveHitData(move);
-				moveHit.crit = move.willCrit || false;
-				if (move.willCrit === undefined) {
-					if (critRatio) {
-						moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
-					}
-				}
-
-				if (moveHit.crit) {
-					moveHit.crit = this.battle.runEvent('CriticalHit', target, null, move);
-				}
-
-				// happens after crit calculation
-				basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
-
-				if (!basePower) return 0;
-				basePower = this.battle.clampIntRange(basePower, 1);
-				// Hacked Max Moves have 0 base power, even if you Dynamax
-				if ((!source.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
-					basePower = 0;
-				}
-
-				const dexMove = this.dex.moves.get(move.id);
-				if (source.terastallized && (source.terastallized === 'Stellar' ?
-					!source.stellarBoostedTypes.includes(move.type) : source.hasType(move.type)) &&
-					basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
-					// Hard move.basePower check for moves like Dragon Energy that have variable BP
-					!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
-				) {
-					basePower = 60;
-				}
-
-				const level = source.level;
-
-				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
-				const defender = move.overrideDefensivePokemon === 'source' ? source : target;
-
-				const isPhysical = move.category === 'Physical';
-				let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
-				const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
-
-				const statTable = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
-
-				const otherHalf: { [k: string]: StatIDExceptHP & Omit <StatIDExceptHP, "spe"> } = {
-					'atk': 'spa',
-					'def': 'spd',
-					'spa': 'atk',
-					'spd': 'def',
-				};
-
-				let atkBoosts = attacker.boosts[attackStat];
-				let defBoosts = defender.boosts[defenseStat];
-
-				let otherAtkBoosts = attackStat === 'spe' ? 0 : attacker.boosts[otherHalf[attackStat] as StatIDExceptHP];
-				let otherDefBoosts = defenseStat === 'spe' ? 0 : defender.boosts[otherHalf[defenseStat] as StatIDExceptHP];
-
-				let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
-				let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
-
-				if (moveHit.crit) {
-					ignoreNegativeOffensive = true;
-					ignorePositiveDefensive = true;
-				}
-				const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && (atkBoosts < 0 || otherAtkBoosts < 0)));
-				const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && (defBoosts > 0 || otherDefBoosts > 0)));
-
-				if (ignoreOffensive) {
-					this.battle.debug('Negating (sp)atk boost/penalty.');
-					if (atkBoosts < 0) atkBoosts = 0;
-					if (otherAtkBoosts < 0) otherAtkBoosts = 0;
-				}
-				if (ignoreDefensive) {
-					this.battle.debug('Negating (sp)def boost/penalty.');
-					if (defBoosts > 0) defBoosts = 0;
-					if (otherDefBoosts > 0) otherDefBoosts = 0;
-				}
-
-				let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
-				let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
-
-				if (otherHalf[attackStat]) attack += attacker.calculateStat(otherHalf[attackStat], otherAtkBoosts, 1, source);
-				if (otherHalf[defenseStat]) defense += defender.calculateStat(otherHalf[defenseStat], otherDefBoosts, 1, target);
-
-				attackStat = (category === 'Physical' ? 'atk' : 'spa');
-
-				// Apply Stat Modifiers
-				// Apply both onModifyX - requested by Delibird Heart
-				// ^ After further deliberation, do not do this (yet)
-				attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-				// attack = this.battle.runEvent(
-				// 	'Modify' + statTable[otherHalf[attackStat] as StatIDExceptHP], source, target, move, attack
-				// );
-				defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
-				// defense = this.battle.runEvent(
-				// 	'Modify' + statTable[otherHalf[defenseStat] as StatIDExceptHP], target, source, move, defense
-				// );
-
-				if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
-					defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
-				}
-
-				const tr = this.battle.trunc;
-
-				// int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
-				const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
-
-				// Calculate damage modifiers separately (order differs between generations)
-				return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
-			},
-		},
+		ruleset: ['Standard OMs', 'Bad \'n Boosted Mod', 'Sleep Moves Clause'],
+		banlist: ['AG', 'Araquanid', 'Cyclizar', 'Espathra', 'Espeon', 'Pawmot', 'Polteageist', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Eviolite', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
 	},
 	{
-		name: "[Gen 9] Fortemons",
-		desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
-		mod: 'gen9',
+		name: "[Gen 9] Force of the Fallen",
+		desc: `Fainted Pok&eacute;mon give the move in their last moveslot to the rest of their teammates.`,
 		// searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause'],
+		ruleset: ['Standard OMs', 'Force of the Fallen Mod', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Archaludon', 'Azumarill', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Cobalion', 'Comfey', 'Deoxys-Normal',
-			'Deoxys-Attack', 'Dialga-Base', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina-Altered', 'Great Tusk', 'Groudon', 'Ho-Oh', 'Iron Bundle',
-			'Iron Treads', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Meowscarada', 'Mewtwo', 'Miraidon',
-			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin', 'Quaquaval', 'Raging Bolt', 'Rayquaza', 'Reshiram', 'Riolu', 'Samurott-Hisui',
-			'Shaymin-Sky', 'Skeledirge', 'Smeargle', 'Solgaleo', 'Spectrier', 'Sneasler', 'Terapagos', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian',
-			'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag', 'Damp Rock', 'Heat Rock', 'Light Clay',
-			'Baton Pass', 'Beat Up', 'Fake Out', 'Last Respects', 'move:Metronome', 'Shed Tail',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Deoxys-Attack', 'Deoxys-Normal', 'Deoxys-Speed', 'Dialga', 'Dialga-Origin', 'Enamorus-Incarnate',
+			'Espathra', 'Eternatus', 'Falinks', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Komala', 'Kommo-o', 'Koraidon',
+			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lilligant-Hisui', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings',
+			'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Reshiram', 'Shaymin-Sky', 'Smeargle', 'Sneasler', 'Solgaleo',
+			'Spectrier', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock',
+			'Razor Fang', 'Baton Pass', 'Last Respects', 'Rage Fist', 'Shed Tail',
+		],
+		restricted: ['Shift Gear'],
+	},
+	{
+		name: "[Gen 9] National Dex Mix and Mega",
+		desc: `Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
+		mod: 'mixandmega',
+		ruleset: ['Standard OMs', 'NatDex Mod', 'Mega Rayquaza Clause', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Calyrex-Shadow', 'Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite Z',
+			'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Raichunite Y', 'Scovillainite', 'Starminite', 'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
-			'Doom Desire', 'Dynamic Punch', 'Electro Ball', 'Explosion', 'Gyro Ball', 'Final Gambit', 'Flail', 'Flip Turn', 'Fury Cutter', 'Future Sight', 'Grass Knot',
-			'Grassy Glide', 'Hard Press', 'Heavy Slam', 'Heat Crash', 'Inferno', 'Low Kick', 'Misty Explosion', 'Nuzzle', 'Power Trip', 'Reversal', 'Self-Destruct',
-			'Spit Up', 'Stored Power', 'Tera Blast', 'U-turn', 'Volt Switch', 'Weather Ball', 'Zap Cannon',
+			'Arceus', 'Calyrex-Ice', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black',
+			'Kyurem-White', 'Lugia', 'Lunala', 'Iron Bundle', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
+			'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Xerneas', 'Yveltal', 'Zacian', 'Zekrom',
 		],
 		onValidateTeam(team) {
-			const itemTable = new Set<string>();
+			const itemTable = new Set<ID>();
 			for (const set of team) {
-				const forte = this.toID(set.item);
-				if (!forte) continue;
-				const move = this.dex.moves.get(forte);
-				if (move.exists && move.id !== 'metronome') {
-					if (itemTable.has(forte)) {
-						return [
-							`You are limited to one of each move in the item slot per team.`,
-							`(You have more than one ${move.name}.)`,
-						];
-					}
-					itemTable.add(forte);
+				const item = this.dex.items.get(set.item);
+				if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
+					!item.isPrimalOrb && !item.name.startsWith('Rusted') &&
+					item.id !== 'ultranecroziumz') continue;
+				const species = this.dex.species.get(set.species);
+				if (species.isNonstandard && !this.ruleTable.has(`+tag:${this.toID(species.isNonstandard)}`)) {
+					return [`${species.baseSpecies} does not exist in gen 9.`];
 				}
+				if ((this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`) ||
+					this.ruleTable.isRestricted(`ability:${this.dex.abilities.get(set.ability).id}`)) &&
+					!(((item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies) ||
+						((item.forcedForme && !item.zMove) || item.name.startsWith('Rusted')) ||
+						(item.id === 'ultranecroziumz' && species.name.startsWith('Necrozma-'))))) {
+					return [`${species.name} is not allowed to hold ${item.name}.`];
+				}
+				if (itemTable.has(item.id)) {
+					return [
+						`You are limited to one of each Mega Stone/Primal Orb/Rusted item/Origin item/Ogerpon Mask/Arceus Plate/Silvally Memory.`,
+						`(You have more than one ${item.name})`,
+					];
+				}
+				itemTable.add(item.id);
 			}
-		},
-		validateSet(set, teamHas) {
-			const item = set.item;
-			const species = this.dex.species.get(set.species);
-			const move = this.dex.moves.get(item);
-			if (!move.exists || move.id === 'metronome' || move.category === 'Status') {
-				return this.validateSet(set, teamHas);
-			}
-			set.item = '';
-			const problems = this.validateSet(set, teamHas) || [];
-			set.item = item;
-			if (this.ruleTable.has('obtainablemoves') && this.checkCanLearn(move, species, this.allSources(species), set)) {
-				problems.push(`${species.name} can't learn ${move.name}.`);
-			}
-			if (set.moves.map(this.toID).includes(move.id)) {
-				problems.push(`Moves in the item slot can't be in the moveslots as well.`);
-			}
-			if (this.ruleTable.has(`-move:${move.id}`)) {
-				problems.push(`The move ${move.name} is fully banned.`);
-			}
-			const accuracyLoweringMove =
-				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
-			const flinchMove = move.secondaries?.some(secondary => secondary.volatileStatus === 'flinch');
-			const freezeMove = move.secondaries?.some(secondary => secondary.status === 'frz') || move.id === 'triattack';
-			if (
-				this.ruleTable.isRestricted(`move:${move.id}`) ||
-				((accuracyLoweringMove || move.ohko || move.multihit || move.id === 'beatup' || move.flags['charge'] ||
-					move.priority > 0 || move.damageCallback || flinchMove || freezeMove) &&
-					!this.ruleTable.has(`+move:${move.id}`))
-			) {
-				problems.push(`The move ${move.name} can't be used as an item.`);
-			}
-			return problems.length ? problems : null;
 		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				const move = this.dex.getActiveMove(pokemon.set.item);
-				if (move.exists && move.category !== 'Status') {
-					pokemon.m.forte = move;
-					pokemon.item = 'mail' as ID;
+				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+			}
+		},
+		onSwitchIn(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				// Place volatiles on the Pokémon to show its mega-evolved condition and details
+				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
+					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: National Dex Mix and Mega');
 				}
 			}
 		},
-		onModifyMovePriority: 1,
-		onModifyMove(move, pokemon, target) {
-			const forte: ActiveMove = pokemon.m.forte;
-			if (move.category !== 'Status' && forte) {
-				move.flags = { ...move.flags, ...forte.flags };
-				if (forte.self) {
-					if (forte.self.onHit && move.self?.onHit) {
-						for (const i in forte.self) {
-							if (i.startsWith('onHit')) continue;
-							(move.self as any)[i] = (forte.self as any)[i];
-						}
-					} else {
-						move.self = { ...move.self, ...forte.self };
-					}
-				}
-				if (forte.selfBoost?.boosts) {
-					if (!move.selfBoost?.boosts) move.selfBoost = { boosts: {} };
-					let boostid: BoostID;
-					for (boostid in forte.selfBoost.boosts) {
-						if (!move.selfBoost.boosts![boostid]) move.selfBoost.boosts![boostid] = 0;
-						move.selfBoost.boosts![boostid]! += forte.selfBoost.boosts[boostid]!;
-					}
-				}
-				if (forte.secondaries) {
-					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
-				}
-				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
-				const VALID_PROPERTIES = [
-					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'chloroblastRecoil', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage',
-					'hasSheerForce', 'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil',
-					'noDamageVariance', 'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat',
-					'pseudoWeather', 'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus',
-					'willCrit',
-				] as const;
-				for (const property of VALID_PROPERTIES) {
-					if (forte[property]) {
-						move[property] = forte[property] as any;
-					}
-				}
-				// Added here because onEffectiveness doesn't have an easy way to reference the source
-				if (forte.onEffectiveness) {
-					move.onEffectiveness = function (typeMod, t, type, m) {
-						return forte.onEffectiveness!.call(this, typeMod, t, type, m);
-					};
-				}
-				forte.onModifyMove?.call(this, move, pokemon, target);
+		onSwitchOut(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				this.add('-end', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
 			}
-		},
-		onModifyPriority(priority, source, target, move) {
-			const forte = source?.m.forte;
-			if (move.category !== 'Status' && forte) {
-				if (source.hasAbility('Triage') && forte.flags['heal']) {
-					return priority + (move.flags['heal'] ? 0 : 3);
-				}
-				return priority + forte.priority;
-			}
-		},
-		onModifyTypePriority: 1,
-		onModifyType(move, pokemon, target) {
-			const forte = pokemon.m.forte;
-			if (move.category !== 'Status' && forte) {
-				this.singleEvent('ModifyType', forte, null, pokemon, target, move, move);
-			}
-		},
-		onHitPriority: 1,
-		onHit(target, source, move) {
-			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte) {
-				this.singleEvent('Hit', forte, {}, target, source, move);
-				if (forte.self) this.singleEvent('Hit', forte.self, {}, source, source, move);
-				this.singleEvent('AfterHit', forte, {}, target, source, move);
-			}
-		},
-		onAfterSubDamage(damage, target, source, move) {
-			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte) {
-				this.singleEvent('AfterSubDamage', forte, null, target, source, move, damage);
-			}
-		},
-		onModifySecondaries(secondaries, target, source, move) {
-			if (secondaries.some(s => !!s.self)) move.selfDropped = false;
-		},
-		onAfterMoveSecondaryPriority: 1,
-		onAfterMoveSecondarySelf(source, target, move) {
-			const forte = source.m.forte;
-			if (move?.category !== 'Status' && forte) {
-				this.singleEvent('AfterMoveSecondarySelf', forte, null, source, target, move);
-			}
-		},
-		onBasePowerPriority: 1,
-		onBasePower(basePower, source, target, move) {
-			const forte = source.m.forte;
-			if (move.category !== 'Status' && forte?.onBasePower) {
-				forte.onBasePower.call(this, basePower, source, target, move);
-			}
-		},
-		pokemon: {
-			getItem() {
-				const move = this.battle.dex.moves.get(this.m.forte);
-				if (!move.exists) return Object.getPrototypeOf(this).getItem.call(this);
-				return {
-					...this.battle.dex.items.get('mail'),
-					name: move.name, id: move.id, ignoreKlutz: true, onTakeItem: false,
-				};
-			},
 		},
 	},
 	{
-		name: "[Gen 9] Tier Shift AAA",
-		desc: `Pok&eacute;mon have access to almost any ability. Additionally, Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +15, RU/NUBL get +20, NU/PUBL get +25, and PU or lower get +30.`,
-		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', '!Obtainable Abilities', 'Ability Clause = 2', 'Tier Shift Mod', 'Terastal Clause'],
-		banlist: [
-			'Arceus', 'Calyrex-Shadow', 'Decidueye-Hisui', 'Deoxys-Attack', 'Electrode-Hisui', 'Eternatus', 'Ho-Oh', 'Hoopa-Confined', 'Kyurem-Black', 'Miraidon',
-			'Necrozma-Dusk-Mane', 'Noivern', 'Rayquaza', 'Regigigas', 'Slaking', 'Weavile', 'Arena Trap', 'Comatose', 'Contrary', 'Fur Coat', 'Good as Gold', 'Gorilla Tactics',
-			'Huge Power', 'Ice Scales', 'Illusion', 'Imposter', 'Innards Out', 'Magic Bounce', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse',
-			'Parental Bond', 'Poison Heal', 'Pure Power', 'Quick Draw', 'Shadow Tag', 'Simple', 'Speed Boost', 'Stakeout', 'Toxic Debris', 'Triage', 'Unburden',
-			'Water Bubble', 'Wonder Guard', 'Light Ball', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
-		],
-	},
-	{
-		name: "[Gen 9] NFE",
-		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
-		mod: 'gen9',
-		// searchShow: false,
-		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause'],
-		banlist: [
-			'Basculin-White-Striped', 'Bisharp', 'Chansey', 'Combusken', 'Dipplin', 'Duraludon', 'Dusclops', 'Electabuzz', 'Gligar', 'Gurdurr',
-			'Haunter', 'Magmar', 'Magneton', 'Misdreavus', 'Porygon2', 'Primeape', 'Qwilfish-Hisui', 'Rhydon', 'Scraggy', 'Scyther', 'Sneasel',
-			'Sneasel-Hisui', 'Ursaring', 'Vigoroth', 'Vulpix-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Toxic Debris', 'Baton Pass',
-			'Toxic Spikes',
-		],
-	},
-	{
-		name: "[Gen 9] National Dex 35 Pokes",
-		desc: `Only 35 Pok&eacute;mon are legal.`,
-		mod: 'gen9',
-		// searchShow: false,
-		ruleset: [
-			'Standard NatDex',
-			'!Species Clause', 'Forme Clause', 'Sleep Moves Clause', 'Terastal Clause', 'DryPass Clause', 'Mega Rayquaza Clause',
-		],
-		banlist: [
-			'ND Uber', 'ND AG', 'ND OU', 'ND UUBL', 'ND UU', 'ND RUBL', 'ND RU', 'ND NFE', 'ND LC',
-			'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Tangled Feet', 'Berserk Gene', 'Booster Energy', 'King\'s Rock', 'Quick Claw',
-			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
-		],
-		unbanlist: [
-			'Araquanid-Base', 'Archeops', 'Bellossom', 'Boltund', 'Escavalier', 'Farigiraf', 'Fezandipiti', 'Gothitelle', 'Gyarados-Base', 'Kabutops',
-			'Kilowattrel', 'Klawf', 'Magmortar', 'Mamoswine', 'Metagross-Base', 'Miltank', 'Oricorio-Base', 'Orthworm', 'Persian-Base', 'Pinsir-Base',
-			'Polteageist', 'Pyukumuku', 'Rotom-Mow', 'Scizor-Base', 'Shiftry', 'Simisear', 'Skarmory-Base', 'Slowbro-Galar', 'Slurpuff', 'Thievul', 'Torkoal',
-			'Toxtricity-Base', 'Turtonator', 'Tyranitar-Base', 'Wailord', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
-		],
-		// Stupid hardcode
-		onValidateSet(set, format, setHas, teamHas) {
-			if (set.item) {
+		name: "[Gen 9] Statmons",
+		desc: `All Pok&eacute;mon on a team must have the same base stat be higher than 100.`,
+		mod: `gen9`,
+		searchShow: false,
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
+		banlist: ['AG', 'Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Tera Blast', 'Shed Tail'],
+		onValidateTeam(team) {
+			let statsTable: string[] = [];
+			for (const [i, set] of team.entries()) {
+				let species = this.dex.species.get(set.species);
+				if (!species.types) return [`Invalid pokemon ${set.name || set.species}`];
+				if (i === 0) {
+					statsTable = Object.keys(species.baseStats).filter(stat => species.baseStats[stat as StatID] > 100);
+				} else {
+					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] > 100);
+				}
 				const item = this.dex.items.get(set.item);
-				if (item.megaStone && !(this.ruleTable.has(`+item:${item.id}`) || this.ruleTable.has(`+tag:mega`))) {
-					return [`Mega Evolution is banned.`];
+				if (item.megaStone?.[species.name]) {
+					species = this.dex.species.get(item.megaStone[species.name]);
+					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] > 100);
 				}
-				if (item.zMove && !(this.ruleTable.has(`+item:${item.id}`))) {
-					return [`${item.name} is banned.`];
+				if (item.id === "ultranecroziumz" && species.baseSpecies === "Necrozma") {
+					species = this.dex.species.get("Necrozma-Ultra");
+					statsTable = statsTable.filter(stat => species.baseStats[stat as StatID] > 100);
 				}
+				if (!statsTable.length) return [`All Pok\u00e9mon on your team must have the same base stat over 100.`];
 			}
 		},
+	},
+	{
+		name: "[Gen 9] National Dex Doubles Ubers",
+		mod: 'gen9',
+		gameType: 'doubles',
+		// searchShow: false,
+		ruleset: ['Standard Doubles', 'NatDex Mod', '!Gravity Sleep Clause'],
+		banlist: ['Shedinja', 'Assist'],
 	},
 	{
 		name: "[Gen 9] Random Tandem",
@@ -1140,19 +828,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 2] UU",
-		mod: 'gen2',
+		name: "[Gen 3] UU",
+		mod: 'gen3',
 		// searchShow: false,
-		ruleset: ['[Gen 2] OU'],
-		banlist: ['OU', 'UUBL', 'Agility + Baton Pass'],
-		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Arena Trap', 'Baton Pass', 'Swagger'],
 	},
 	{
-		name: "[Gen 1] NU",
-		mod: 'gen1',
+		name: "[Gen 2] UUBL",
+		mod: 'gen2',
 		// searchShow: false,
-		ruleset: ['[Gen 1] UU'],
-		banlist: ['UU', 'NUBL'],
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'OU'],
 	},
 	{
 		name: "[Gen 9] VGC 2024 Reg G",
@@ -1522,13 +1209,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Belly Drum', 'Burning Bulwark', 'Ceaseless Edge', 'Clangorous Soul', 'Dire Claw', 'Extreme Speed', 'Fillet Away', 'Glacial Lance', 'Glare', 'Lumina Crash', 'Rage Fist',
 			'Revival Blessing', 'Sacred Fire', 'Salt Cure', 'Shell Smash', 'Shift Gear', 'Surging Strikes', 'Tail Glow', 'Triple Arrows',
 		],
-	},
-	{
-		name: "[Gen 9] Bad 'n Boosted",
-		desc: `All base stats of 70 and lower are doubled.`,
-		searchShow: false,
-		ruleset: ['Standard', 'Bad \'n Boosted Mod', 'Sleep Moves Clause', '!Sleep Clause Mod'],
-		banlist: ['AG', 'Araquanid', 'Cyclizar', 'Espathra', 'Espeon', 'Pawmot', 'Polteageist', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Eviolite', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
 	},
 	{
 		name: "[Gen 9] Battlefields",
@@ -2066,6 +1746,192 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Fortemons",
+		desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Annihilape', 'Arceus', 'Archaludon', 'Azumarill', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Cobalion', 'Comfey', 'Deoxys-Normal',
+			'Deoxys-Attack', 'Dialga-Base', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina-Altered', 'Great Tusk', 'Groudon', 'Ho-Oh', 'Iron Bundle',
+			'Iron Treads', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Meowscarada', 'Mewtwo', 'Miraidon',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin', 'Quaquaval', 'Raging Bolt', 'Rayquaza', 'Reshiram', 'Riolu', 'Samurott-Hisui',
+			'Shaymin-Sky', 'Skeledirge', 'Smeargle', 'Solgaleo', 'Spectrier', 'Sneasler', 'Terapagos', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian',
+			'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag', 'Damp Rock', 'Heat Rock', 'Light Clay',
+			'Baton Pass', 'Beat Up', 'Fake Out', 'Last Respects', 'move:Metronome', 'Shed Tail',
+		],
+		restricted: [
+			'Doom Desire', 'Dynamic Punch', 'Electro Ball', 'Explosion', 'Gyro Ball', 'Final Gambit', 'Flail', 'Flip Turn', 'Fury Cutter', 'Future Sight', 'Grass Knot',
+			'Grassy Glide', 'Hard Press', 'Heavy Slam', 'Heat Crash', 'Inferno', 'Low Kick', 'Misty Explosion', 'Nuzzle', 'Power Trip', 'Reversal', 'Self-Destruct',
+			'Spit Up', 'Stored Power', 'Tera Blast', 'U-turn', 'Volt Switch', 'Weather Ball', 'Zap Cannon',
+		],
+		onValidateTeam(team) {
+			const itemTable = new Set<string>();
+			for (const set of team) {
+				const forte = this.toID(set.item);
+				if (!forte) continue;
+				const move = this.dex.moves.get(forte);
+				if (move.exists && move.id !== 'metronome') {
+					if (itemTable.has(forte)) {
+						return [
+							`You are limited to one of each move in the item slot per team.`,
+							`(You have more than one ${move.name}.)`,
+						];
+					}
+					itemTable.add(forte);
+				}
+			}
+		},
+		validateSet(set, teamHas) {
+			const item = set.item;
+			const species = this.dex.species.get(set.species);
+			const move = this.dex.moves.get(item);
+			if (!move.exists || move.id === 'metronome' || move.category === 'Status') {
+				return this.validateSet(set, teamHas);
+			}
+			set.item = '';
+			const problems = this.validateSet(set, teamHas) || [];
+			set.item = item;
+			if (this.ruleTable.has('obtainablemoves') && this.checkCanLearn(move, species, this.allSources(species), set)) {
+				problems.push(`${species.name} can't learn ${move.name}.`);
+			}
+			if (set.moves.map(this.toID).includes(move.id)) {
+				problems.push(`Moves in the item slot can't be in the moveslots as well.`);
+			}
+			if (this.ruleTable.has(`-move:${move.id}`)) {
+				problems.push(`The move ${move.name} is fully banned.`);
+			}
+			const accuracyLoweringMove =
+				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
+			const flinchMove = move.secondaries?.some(secondary => secondary.volatileStatus === 'flinch');
+			const freezeMove = move.secondaries?.some(secondary => secondary.status === 'frz') || move.id === 'triattack';
+			if (
+				this.ruleTable.isRestricted(`move:${move.id}`) ||
+				((accuracyLoweringMove || move.ohko || move.multihit || move.id === 'beatup' || move.flags['charge'] ||
+					move.priority > 0 || move.damageCallback || flinchMove || freezeMove) &&
+					!this.ruleTable.has(`+move:${move.id}`))
+			) {
+				problems.push(`The move ${move.name} can't be used as an item.`);
+			}
+			return problems.length ? problems : null;
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				const move = this.dex.getActiveMove(pokemon.set.item);
+				if (move.exists && move.category !== 'Status') {
+					pokemon.m.forte = move;
+					pokemon.item = 'mail' as ID;
+				}
+			}
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move, pokemon, target) {
+			const forte: ActiveMove = pokemon.m.forte;
+			if (move.category !== 'Status' && forte) {
+				move.flags = { ...move.flags, ...forte.flags };
+				if (forte.self) {
+					if (forte.self.onHit && move.self?.onHit) {
+						for (const i in forte.self) {
+							if (i.startsWith('onHit')) continue;
+							(move.self as any)[i] = (forte.self as any)[i];
+						}
+					} else {
+						move.self = { ...move.self, ...forte.self };
+					}
+				}
+				if (forte.selfBoost?.boosts) {
+					if (!move.selfBoost?.boosts) move.selfBoost = { boosts: {} };
+					let boostid: BoostID;
+					for (boostid in forte.selfBoost.boosts) {
+						if (!move.selfBoost.boosts![boostid]) move.selfBoost.boosts![boostid] = 0;
+						move.selfBoost.boosts![boostid]! += forte.selfBoost.boosts[boostid]!;
+					}
+				}
+				if (forte.secondaries) {
+					move.secondaries = [...(move.secondaries || []), ...forte.secondaries];
+				}
+				move.critRatio = (move.critRatio || 1) + (forte.critRatio || 1) - 1;
+				const VALID_PROPERTIES = [
+					'alwaysHit', 'basePowerCallback', 'breaksProtect', 'chloroblastRecoil', 'drain', 'forceSTAB', 'forceSwitch', 'hasCrashDamage',
+					'hasSheerForce', 'ignoreAbility', 'ignoreAccuracy', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'mindBlownRecoil',
+					'noDamageVariance', 'ohko', 'overrideDefensivePokemon', 'overrideDefensiveStat', 'overrideOffensivePokemon', 'overrideOffensiveStat',
+					'pseudoWeather', 'recoil', 'selfdestruct', 'selfSwitch', 'sleepUsable', 'smartTarget', 'stealsBoosts', 'thawsTarget', 'volatileStatus',
+					'willCrit',
+				] as const;
+				for (const property of VALID_PROPERTIES) {
+					if (forte[property]) {
+						move[property] = forte[property] as any;
+					}
+				}
+				// Added here because onEffectiveness doesn't have an easy way to reference the source
+				if (forte.onEffectiveness) {
+					move.onEffectiveness = function (typeMod, t, type, m) {
+						return forte.onEffectiveness!.call(this, typeMod, t, type, m);
+					};
+				}
+				forte.onModifyMove?.call(this, move, pokemon, target);
+			}
+		},
+		onModifyPriority(priority, source, target, move) {
+			const forte = source?.m.forte;
+			if (move.category !== 'Status' && forte) {
+				if (source.hasAbility('Triage') && forte.flags['heal']) {
+					return priority + (move.flags['heal'] ? 0 : 3);
+				}
+				return priority + forte.priority;
+			}
+		},
+		onModifyTypePriority: 1,
+		onModifyType(move, pokemon, target) {
+			const forte = pokemon.m.forte;
+			if (move.category !== 'Status' && forte) {
+				this.singleEvent('ModifyType', forte, null, pokemon, target, move, move);
+			}
+		},
+		onHitPriority: 1,
+		onHit(target, source, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte) {
+				this.singleEvent('Hit', forte, {}, target, source, move);
+				if (forte.self) this.singleEvent('Hit', forte.self, {}, source, source, move);
+				this.singleEvent('AfterHit', forte, {}, target, source, move);
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte) {
+				this.singleEvent('AfterSubDamage', forte, null, target, source, move, damage);
+			}
+		},
+		onModifySecondaries(secondaries, target, source, move) {
+			if (secondaries.some(s => !!s.self)) move.selfDropped = false;
+		},
+		onAfterMoveSecondaryPriority: 1,
+		onAfterMoveSecondarySelf(source, target, move) {
+			const forte = source.m.forte;
+			if (move?.category !== 'Status' && forte) {
+				this.singleEvent('AfterMoveSecondarySelf', forte, null, source, target, move);
+			}
+		},
+		onBasePowerPriority: 1,
+		onBasePower(basePower, source, target, move) {
+			const forte = source.m.forte;
+			if (move.category !== 'Status' && forte?.onBasePower) {
+				forte.onBasePower.call(this, basePower, source, target, move);
+			}
+		},
+		pokemon: {
+			getItem() {
+				const move = this.battle.dex.moves.get(this.m.forte);
+				if (!move.exists) return Object.getPrototypeOf(this).getItem.call(this);
+				return {
+					...this.battle.dex.items.get('mail'),
+					name: move.name, id: move.id, ignoreKlutz: true, onTakeItem: false,
+				};
+			},
+		},
+	},
+	{
 		name: "[Gen 9] Frantic Fusions",
 		desc: `Pok&eacute;mon nicknamed after another Pok&eacute;mon get their stats buffed by 1/4 of that Pok&eacute;mon's stats, barring HP, and access to one of their abilities.`,
 		mod: 'gen9',
@@ -2377,6 +2243,180 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					stat = tr(tr(stat * 110, 16) / 100);
 				}
 				return stat;
+			},
+		},
+	},
+	{
+		name: "[Gen 9] No Holds Barred!",
+		desc: `Pok&eacute;mon combine their Attack and Special Attack stats, as well as their Defense and Special Defense stats.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause'],
+		banlist: [
+			'Annihilape', 'Arceus', 'Archaludon', 'Blissey', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Dialga-Origin',
+			'Dondozo', 'Espathra', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate',
+			'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin',
+			'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Terapagos', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody',
+			'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
+		],
+		actions: {
+			getDamage(source, target, move, suppressMessages = false) {
+				if (typeof move === 'string') move = this.dex.getActiveMove(move);
+
+				if (typeof move === 'number') {
+					const basePower = move;
+					move = new Dex.Move({
+						basePower,
+						type: '???',
+						category: 'Physical',
+						willCrit: false,
+					}) as ActiveMove;
+					move.hit = 0;
+				}
+
+				if (!target.runImmunity(move, !suppressMessages)) {
+					return false;
+				}
+
+				if (move.ohko) return this.battle.gen === 3 ? target.hp : target.maxhp;
+				if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
+				if (move.damage === 'level') {
+					return source.level;
+				} else if (move.damage) {
+					return move.damage;
+				}
+
+				const category = this.battle.getCategory(move);
+
+				let basePower: number | false | null = move.basePower;
+				if (move.basePowerCallback) {
+					basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				}
+				if (!basePower) return basePower === 0 ? undefined : basePower;
+				basePower = this.battle.clampIntRange(basePower, 1);
+
+				let critMult;
+				let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
+				if (this.battle.gen <= 5) {
+					critRatio = this.battle.clampIntRange(critRatio, 0, 5);
+					critMult = [0, 16, 8, 4, 3, 2];
+				} else {
+					critRatio = this.battle.clampIntRange(critRatio, 0, 4);
+					if (this.battle.gen === 6) {
+						critMult = [0, 16, 8, 2, 1];
+					} else {
+						critMult = [0, 24, 8, 2, 1];
+					}
+				}
+
+				const moveHit = target.getMoveHitData(move);
+				moveHit.crit = move.willCrit || false;
+				if (move.willCrit === undefined) {
+					if (critRatio) {
+						moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
+					}
+				}
+
+				if (moveHit.crit) {
+					moveHit.crit = this.battle.runEvent('CriticalHit', target, null, move);
+				}
+
+				// happens after crit calculation
+				basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
+
+				if (!basePower) return 0;
+				basePower = this.battle.clampIntRange(basePower, 1);
+				// Hacked Max Moves have 0 base power, even if you Dynamax
+				if ((!source.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
+					basePower = 0;
+				}
+
+				const dexMove = this.dex.moves.get(move.id);
+				if (source.terastallized && (source.terastallized === 'Stellar' ?
+					!source.stellarBoostedTypes.includes(move.type) : source.hasType(move.type)) &&
+					basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
+					// Hard move.basePower check for moves like Dragon Energy that have variable BP
+					!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
+				) {
+					basePower = 60;
+				}
+
+				const level = source.level;
+
+				const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
+				const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+
+				const isPhysical = move.category === 'Physical';
+				let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
+				const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
+
+				const statTable = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
+
+				const otherHalf: { [k: string]: StatIDExceptHP & Omit <StatIDExceptHP, "spe"> } = {
+					'atk': 'spa',
+					'def': 'spd',
+					'spa': 'atk',
+					'spd': 'def',
+				};
+
+				let atkBoosts = attacker.boosts[attackStat];
+				let defBoosts = defender.boosts[defenseStat];
+
+				let otherAtkBoosts = attackStat === 'spe' ? 0 : attacker.boosts[otherHalf[attackStat] as StatIDExceptHP];
+				let otherDefBoosts = defenseStat === 'spe' ? 0 : defender.boosts[otherHalf[defenseStat] as StatIDExceptHP];
+
+				let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
+				let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
+
+				if (moveHit.crit) {
+					ignoreNegativeOffensive = true;
+					ignorePositiveDefensive = true;
+				}
+				const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && (atkBoosts < 0 || otherAtkBoosts < 0)));
+				const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && (defBoosts > 0 || otherDefBoosts > 0)));
+
+				if (ignoreOffensive) {
+					this.battle.debug('Negating (sp)atk boost/penalty.');
+					if (atkBoosts < 0) atkBoosts = 0;
+					if (otherAtkBoosts < 0) otherAtkBoosts = 0;
+				}
+				if (ignoreDefensive) {
+					this.battle.debug('Negating (sp)def boost/penalty.');
+					if (defBoosts > 0) defBoosts = 0;
+					if (otherDefBoosts > 0) otherDefBoosts = 0;
+				}
+
+				let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
+				let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
+
+				if (otherHalf[attackStat]) attack += attacker.calculateStat(otherHalf[attackStat], otherAtkBoosts, 1, source);
+				if (otherHalf[defenseStat]) defense += defender.calculateStat(otherHalf[defenseStat], otherDefBoosts, 1, target);
+
+				attackStat = (category === 'Physical' ? 'atk' : 'spa');
+
+				// Apply Stat Modifiers
+				// Apply both onModifyX - requested by Delibird Heart
+				// ^ After further deliberation, do not do this (yet)
+				attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
+				// attack = this.battle.runEvent(
+				// 	'Modify' + statTable[otherHalf[attackStat] as StatIDExceptHP], source, target, move, attack
+				// );
+				defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+				// defense = this.battle.runEvent(
+				// 	'Modify' + statTable[otherHalf[defenseStat] as StatIDExceptHP], target, source, move, defense
+				// );
+
+				if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
+					defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
+				}
+
+				const tr = this.battle.trunc;
+
+				// int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
+				const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
+
+				// Calculate damage modifiers separately (order differs between generations)
+				return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
 			},
 		},
 	},
@@ -3725,14 +3765,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] National Dex Doubles Ubers",
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Standard Doubles', 'NatDex Mod', '!Gravity Sleep Clause'],
-		banlist: ['Shedinja', 'Assist'],
-	},
-	{
 		name: "[Gen 9] National Dex 1v1",
 		mod: 'gen9',
 		searchShow: false,
@@ -3744,6 +3776,39 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Snorlax', 'Solgaleo', 'Terapagos', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
 			'Zamazenta-Crowned', 'Zekrom', 'Moody', 'Custap Berry', 'Focus Band', 'Focus Sash', 'Fightinium Z + Detect', 'Perish Song',
 		],
+	},
+	{
+		name: "[Gen 9] National Dex 35 Pokes",
+		desc: `Only 35 Pok&eacute;mon are legal.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: [
+			'Standard NatDex',
+			'!Species Clause', 'Forme Clause', 'Sleep Moves Clause', 'Terastal Clause', 'DryPass Clause', 'Mega Rayquaza Clause',
+		],
+		banlist: [
+			'ND Uber', 'ND AG', 'ND OU', 'ND UUBL', 'ND UU', 'ND RUBL', 'ND RU', 'ND NFE', 'ND LC',
+			'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Tangled Feet', 'Berserk Gene', 'Booster Energy', 'King\'s Rock', 'Quick Claw',
+			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
+		],
+		unbanlist: [
+			'Araquanid-Base', 'Archeops', 'Bellossom', 'Boltund', 'Escavalier', 'Farigiraf', 'Fezandipiti', 'Gothitelle', 'Gyarados-Base', 'Kabutops',
+			'Kilowattrel', 'Klawf', 'Magmortar', 'Mamoswine', 'Metagross-Base', 'Miltank', 'Oricorio-Base', 'Orthworm', 'Persian-Base', 'Pinsir-Base',
+			'Polteageist', 'Pyukumuku', 'Rotom-Mow', 'Scizor-Base', 'Shiftry', 'Simisear', 'Skarmory-Base', 'Slowbro-Galar', 'Slurpuff', 'Thievul', 'Torkoal',
+			'Toxtricity-Base', 'Turtonator', 'Tyranitar-Base', 'Wailord', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
+		],
+		// Stupid hardcode
+		onValidateSet(set, format, setHas, teamHas) {
+			if (set.item) {
+				const item = this.dex.items.get(set.item);
+				if (item.megaStone && !(this.ruleTable.has(`+item:${item.id}`) || this.ruleTable.has(`+tag:mega`))) {
+					return [`Mega Evolution is banned.`];
+				}
+				if (item.zMove && !(this.ruleTable.has(`+item:${item.id}`))) {
+					return [`${item.name} is banned.`];
+				}
+			}
+		},
 	},
 	{
 		name: "[Gen 9] National Dex AG",
@@ -5674,13 +5739,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers', 'Baton Pass'],
 	},
 	{
-		name: "[Gen 3] UU",
-		mod: 'gen3',
-		searchShow: false,
-		ruleset: ['Standard'],
-		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Arena Trap', 'Baton Pass', 'Swagger'],
-	},
-	{
 		name: "[Gen 3] RU",
 		mod: 'gen3',
 		searchShow: false,
@@ -5824,6 +5882,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard'],
 	},
 	{
+		name: "[Gen 2] UU",
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] OU'],
+		banlist: ['OU', 'UUBL', 'Agility + Baton Pass'],
+		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
+	},
+	{
 		name: "[Gen 2] NU",
 		mod: 'gen2',
 		searchShow: false,
@@ -5902,6 +5968,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 1] OU'],
 		banlist: ['OU', 'UUBL', 'Bind', 'Clamp', 'Confuse Ray', 'Fire Spin', 'Supersonic', 'Wrap'],
+	},
+	{
+		name: "[Gen 1] NU",
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['[Gen 1] UU'],
+		banlist: ['UU', 'NUBL'],
 	},
 	{
 		name: "[Gen 1] PU",
