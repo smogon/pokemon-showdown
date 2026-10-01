@@ -249,6 +249,8 @@ export class RandomChampionsTeams extends RandomTeams {
 			['closecombat', 'drainpunch'],
 			[['dragonpulse', 'ficklebeam'], 'dracometeor'],
 			['risingvoltage', 'volttackle'],
+			['bodyslam', 'doubleedge'],
+			['gunkshot', 'sludgewave'],
 			['rockslide', 'stoneedge'],
 			['foulplay', 'knockoff'],
 
