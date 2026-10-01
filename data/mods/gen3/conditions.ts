@@ -51,6 +51,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	sandstorm: {
 		inherit: true,
-		onModifySpD() {},
+		onModifySpD: undefined, // no inherit
 	},
 };

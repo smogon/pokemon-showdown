@@ -37,4 +37,23 @@ describe('No Retreat', () => {
 		const wynaut = battle.p1.active[0];
 		assert.statStage(wynaut, 'atk', 2);
 	});
+
+	it(`should not trap the user if it is already trapped`, () => {
+		battle = common.createBattle([[
+			{ species: "Wynaut", moves: ['noretreat', 'splash'] },
+			{ species: "Magikarp", moves: ['splash'] },
+		], [
+			{ species: "Caterpie", moves: ['block'] },
+			{ species: "Weedle", moves: ['splash'] },
+		]]);
+
+		const wynaut = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.statStage(wynaut, 'atk', 2);
+
+		// Should not be trapped after caterpie switches out
+		battle.makeChoices('move splash', 'switch 2');
+		battle.makeChoices('switch 2', 'move splash');
+	});
 });

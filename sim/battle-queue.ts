@@ -260,6 +260,11 @@ export class BattleQueue {
 			let target = null;
 			action.move = this.battle.dex.getActiveMove(action.move);
 
+			if (this.battle.dex.currentMod.startsWith('champions') &&
+				action.move.id === 'curse' && !action.pokemon.hasType('Ghost')) {
+				action.move.target = 'self';
+			}
+
 			if (!action.targetLoc) {
 				target = this.battle.getRandomTarget(action.pokemon, action.move);
 				// TODO: what actually happens here?
@@ -304,11 +309,6 @@ export class BattleQueue {
 		for (const choice of choices) {
 			const resolvedChoices = this.resolveAction(choice);
 			this.list.push(...resolvedChoices);
-			for (const resolvedChoice of resolvedChoices) {
-				if (resolvedChoice && resolvedChoice.choice === 'move' && resolvedChoice.move.id !== 'recharge') {
-					resolvedChoice.pokemon.side.lastSelectedMove = resolvedChoice.move.id;
-				}
-			}
 		}
 	}
 

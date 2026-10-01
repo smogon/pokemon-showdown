@@ -25,6 +25,30 @@ export const Scripts: ModdedBattleScriptsData = {
 	// BattlePokemon scripts.
 	pokemon: {
 		inherit: true,
+		deductPP(move, amount) {
+			// deduct PP based on side.lastSelectedMoveSlot
+			const ppData = this.getMoveSlot(this.side.lastSelectedMoveSlot);
+			if (!ppData) return 0;
+			ppData.used = true;
+
+			if (!amount) amount = 1;
+			ppData.pp -= amount;
+
+			if (ppData.pp < 0) {
+				this.battle.hint(
+					"In Gen 1, if a Pokémon is forced to use a move with 0 PP, the move will underflow to have 63 PP.",
+					undefined, this.side,
+				);
+			}
+			ppData.pp = this.battle.trunc(ppData.pp, 6);
+
+			if (ppData.virtual && !this.transformed) {
+				// sync PP from Mimic's slot, or Metronome/Mirror Move that called Mimic
+				this.baseMoveSlots[this.side.lastSelectedMoveSlot].pp = ppData.pp;
+			}
+
+			return amount;
+		},
 		getStat(statName, unmodified) {
 			// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
@@ -136,12 +160,30 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn,
-			// the user of Hyper Beam will automatically use Hyper Beam during that turn.
-			if (move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']) {
-				move = this.battle.dex.getActiveMove('hyperbeam');
-				this.battle.hint(`In Gen 1, partial trapping moves like Wrap remove Hyper Beam recharges. ` +
-					`If the target would have recharged, it will automatically use Hyper Beam instead.`, true);
+			const abortMove = () => {
+				this.battle.clearActiveMove(true);
+				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+			};
+
+			if (move.id === 'cannotmove') {
+				if (pokemon.status === 'slp') {
+					this.battle.hint(
+						"In Gen 1, if a Pokémon spends a turn partially trapped and switches to a Pokémon that is asleep, " +
+						"the sleep counter will not decrease until you select a move with a different Pokémon."
+					);
+				} else if (pokemon.getLockedMove()) {
+					this.battle.hint(
+						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during a multi-turn move, " +
+						"that Pokémon will become soft-locked."
+					);
+				} else if (pokemon.getSemiLockedMove()) {
+					this.battle.hint(
+						"In Gen 1, when Haze cures the sleep/freeze status of a Pokémon during Bide, " +
+						"the move execution will never resolve."
+					);
+				}
+				abortMove();
+				return;
 			}
 
 			if (target?.subFainted) target.subFainted = null;
@@ -149,37 +191,50 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				this.battle.clearActiveMove(true);
-				// This is only run for sleep.
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+				abortMove();
 				return;
 			}
 			if (move.beforeMoveCallback?.call(this.battle, pokemon, target, move)) {
-				this.battle.clearActiveMove(true);
+				abortMove();
 				return;
 			}
 
-			const lockedMove = pokemon.getLockedMove();
-			if (lockedMove) sourceEffect = move;
+			if (move.id !== 'struggle') {
+				const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
+				if (lockedMove) sourceEffect = move;
 
-			// Locked moves don't deduct PP
-			// Two-turn moves like Sky Attack deduct PP on their second turn.
-			if (!lockedMove || pokemon.volatiles['twoturnmove']) {
-				const ppMove = pokemon.volatiles['twoturnmove']?.ppMove || move.id;
-				pokemon.deductPP(ppMove, null, target);
-				const moveSlot = pokemon.getMoveData(ppMove);
-				if (moveSlot && moveSlot.pp < 0) {
-					moveSlot.pp += 64;
-					this.battle.hint("In Gen 1, if a pokemon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
+				// Locked moves don't deduct PP
+				// Two-turn moves like Sky Attack deduct PP on their second turn.
+				if ((!lockedMove && !TWO_TURN_MOVES.includes(move.id)) || pokemon.volatiles['twoturnmove']) {
+					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
+					if (moveSlot) pokemon.deductPP(moveSlot.id, null, target);
+				}
+
+				if (!lockedMove && move.id !== pokemon.side.lastEnemySelectedMove) {
+					this.battle.hint("Desync Clause Mod activated!");
+					this.battle.hint(
+						"In Gen 1, if both players would see the same Pokémon using different moves, " +
+						"the Pokemon defaults to the move shown from the perspective of the player controlling that Pokémon."
+					);
 				}
 			}
 
-			this.useMove(move, pokemon, { target, sourceEffect });
-
-			if (pokemon.volatiles['twoturnmove']) {
-				pokemon.deductPP(move, -1, target);
-				pokemon.volatiles['twoturnmove'].ppMove = move.id;
+			if (move.id === 'nomove') {
+				this.battle.hint(
+					"In Gen 1, if a Pokémon is thawed from freeze and no move has been selected yet, " +
+					"the Pokémon will use a move with Fissure's animation, 102 base power, ??? type, Special category, and around 31.6% accuracy."
+				);
+				move = Object.assign(this.battle.dex.getActiveMove('fissure'), {
+					// name: "", Technically, the move's name is an empty string, but we keep Fissure's name for the client's animation
+					basePower: 102,
+					ohko: false, flags: {},
+					type: '???', category: 'Special',
+					accuracy: 100 * 81 / 256,
+					pp: 10,
+				});
 			}
+
+			this.useMove(move, pokemon, { target, sourceEffect });
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
@@ -195,6 +250,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
+			if (sourceEffect?.id === 'metronome' || sourceEffect?.id === 'mirrormove') {
+				if (TWO_TURN_MOVES.includes(move.id)) {
+					const moveSlot = pokemon.getMoveSlot(pokemon.side.lastSelectedMoveSlot);
+					if (moveSlot) pokemon.deductPP(moveSlot.id, -1, target);
+				}
+				// FIXME: this should happen even if the slot was empty before Transform
+				// https://bulbapedia.bulbagarden.net/wiki/List_of_Transform_glitches#Transform_.2B_Mirror_Move.2FMetronome_PP_error
+				if (pokemon.transformed && pokemon.side.lastSelectedMoveSlot < pokemon.baseMoveSlots.length) {
+					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp += 1;
+					pokemon.baseMoveSlots[pokemon.side.lastSelectedMoveSlot].pp %= 64;
+				}
+			}
+
 			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			if (baseMove.target !== move.target) {
 				// Target changed in ModifyMove, so we must adjust it here
@@ -205,17 +273,17 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Check again, this shouldn't ever happen on Gen 1.
 				target = this.battle.getRandomTarget(pokemon, move);
 			}
+
+			pokemon.side.lastMove = move;
+			pokemon.side.lastEnemyMove = move;
 			// The charging turn of a two-turn move does not update pokemon.lastMove
-			if (!TWO_TURN_MOVES.includes(move.id) || pokemon.volatiles['twoturnmove']) pokemon.lastMove = move;
+			if (!TWO_TURN_MOVES.includes(move.id) || pokemon.volatiles['twoturnmove']) pokemon.moveUsed(move);
 
 			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, { target, sourceEffect });
 
 			if (move.id !== 'metronome') {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
-					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
-					pokemon.side.lastMove = move;
-
 					this.battle.runEvent('AfterMove', pokemon, target, move);
 					if (!target || target.hp > 0) {
 						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -414,7 +482,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					let i: number;
 					for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 						move.hit = i + 1;
-						if (move.hit === hits) move.lastHit = true;
+						move.lastHit = move.hit === hits;
 						moveDamage = this.moveHit(target, pokemon, move);
 						if (moveDamage === false) break;
 						damage = (moveDamage || 0);
@@ -537,6 +605,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if ((damage || damage === 0) && !target.fainted) {
 					damage = this.battle.damage(damage, target, pokemon, move);
+					if (damage) this.applyRecoilDamage(damage, move, pokemon);
 					if (!(damage || damage === 0)) return false;
 					didSomething = true;
 				} else if (damage === false && typeof hitResult === 'undefined') {
@@ -812,6 +881,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				level *= 2;
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
+			level = this.battle.trunc(level, 8);
 
 			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
@@ -830,9 +900,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (attack >= 1024 || defense >= 1024) {
 					this.battle.hint("In Gen 1, a stat will roll over to a small number if it is larger than 1024.");
 				}
-				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
+				attack = this.battle.clampIntRange(this.battle.trunc(Math.floor(attack / 4), 8), 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-				defense = Math.floor(defense / 4) % 256;
+				defense = this.battle.trunc(Math.floor(defense / 4), 8);
 				if (defense === 0) {
 					this.battle.hint('Pokemon Showdown avoids division by zero by rounding defense up to 1. ' +
 						'In game, the battle would have crashed.');

@@ -181,4 +181,38 @@ describe('Team Validator', () => {
 		];
 		assert.legalTeam(team, 'gen4anythinggoes');
 	});
+
+	it(`should allow Hall of Origin Arceus with Full Arceus Clause`, () => {
+		let team = [
+			{ species: 'arceus', level: 80, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.false.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
+
+		team = [
+			{ species: 'arceus', level: 100, ability: 'multitype', moves: ['judgment'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen4anythinggoes');
+		assert.legalTeam(team, 'gen4anythinggoes@@@fullarceusclause');
+	});
+
+	it(`should properly validate Rock Head Basculin-Blue-Striped in gen5bw1`, () => {
+		// only available from an in-game trade - it must be male, at least level 25, have Adamant nature, and IVs 20/31/20/20/20/20
+		let team = [
+			{ species: 'basculinbluestriped', ability: 'rockhead', moves: ['aquajet'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen5bw1ou');
+
+		// legal
+		team = [
+			{ species: 'basculinbluestriped', ability: 'rockhead', moves: ['aquajet'], evs: { hp: 1 }, nature: 'Adamant', ivs: { hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20 } },
+		];
+		assert.legalTeam(team, 'gen5bw1ou');
+
+		// can't have egg moves
+		team = [
+			{ species: 'basculinbluestriped', ability: 'rockhead', moves: ['agility'], evs: { hp: 1 }, nature: 'Adamant', ivs: { hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20 } },
+		];
+		assert.false.legalTeam(team, 'gen5bw1ou');
+	});
 });

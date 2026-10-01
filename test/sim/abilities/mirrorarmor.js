@@ -11,13 +11,11 @@ describe("Mirror Armor", () => {
 	});
 
 	it("should bounce boosts back to the source", () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Corviknight', ability: 'mirrorarmor', moves: ['endure'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Machop', ability: 'noguard', moves: ['rocktomb', 'leer'] },
-		] });
+		]]);
 		battle.makeChoices('auto', 'move rocktomb');
 		const corv = battle.p1.active[0];
 		const machop = battle.p2.active[0];

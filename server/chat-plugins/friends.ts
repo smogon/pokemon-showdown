@@ -33,19 +33,24 @@ export const Friends = new class {
 		if (pendingCount === 1) {
 			const sender = [...friendRequests.received][0];
 			const senderName = Users.getExact(sender)?.name || sender;
-			let buf = Utils.html`/uhtml sent,<button class="button" name="send" value="/friends accept ${sender}">Accept</button> | `;
+			let buf = Utils.html`/uhtml sent-${sender},<button class="button" name="send" value="/friends accept ${sender}">Accept</button> | `;
 			buf += Utils.html`<button class="button" name="send" value="/friends reject ${sender}">Deny</button><br /> `;
 			buf += `<small>(You can also stop this user from sending you friend requests with <code>/ignore</code>)</small>`;
-			sendPM(Utils.html`/raw <span class="username">${senderName}</span> sent you a friend request!`, user.id);
-			sendPM(buf, user.id);
+			sendPM(Utils.html`/raw <span class="username">${senderName}</span> sent you a friend request!`, user.id, sender);
+			sendPM(buf, user.id, sender);
 			sendPM(
 				`/raw <small>Note: If this request is accepted, your friend will be notified when you come online, ` +
 				`and you will be notified when they do, unless you opt out of receiving them.</small>`,
-				user.id
+				user.id,
+				sender
 			);
 		} else {
-			sendPM(`/nonotify You have ${pendingCount} friend requests pending!`, user.id);
-			sendPM(`/raw <button class="button" name="send" value="/j view-friends-received">View</button></div>`, user.id);
+			sendPM(`/nonotify You have ${pendingCount} friend requests pending!`, user.id, '~');
+			sendPM(
+				`/raw <button class="button" name="send" value="/j view-friends-received">View</button></div>`,
+				user.id,
+				'~'
+			);
 		}
 	}
 	async notifyConnection(user: User) {
@@ -92,7 +97,7 @@ export const Friends = new class {
 		if (sorted.length > 0) {
 			buf += `<small> Total (${friends.length}) | ${sorted.join(' | ')}</small></h3> `;
 		} else {
-			buf += `</h3><em>you have no friends added on Showdown lol</em><br /><br /><br />`;
+			buf += `</h3><em>You currently have no friends added on Showdown.</em><br /><br /><br />`;
 			buf += `<strong>To add a friend, use </strong><code>/friend add [username]</code>.<br /><br />`;
 			return buf;
 		}
@@ -157,7 +162,7 @@ export const Friends = new class {
 		const user = context.user;
 		if (!user.autoconfirmed) {
 			throw new Chat.ErrorMessage(
-				context.tr`To use the friends feature you must be autoconfirmed, which means being registered for at least one week and winning one rated game.`
+				context.TL`To use the friends feature you must be autoconfirmed, which means being registered for at least one week and winning one rated game.`
 			);
 		}
 		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
@@ -215,25 +220,25 @@ function headerButtons(type: string, user: User) {
 		spectate: '<i class="fa fa-binoculars"></i>',
 	};
 	const titles: { [k: string]: string } = {
-		all: 'All Friends',
-		spectate: 'Spectate',
-		sent: 'Sent',
-		received: 'Received',
-		help: 'Help',
-		settings: 'Settings',
+		all: user.TL`All Friends`,
+		spectate: user.TL`Spectate`,
+		sent: user.TL`Sent`,
+		received: user.TL`Received`,
+		help: user.TL`Help`,
+		settings: user.TL`Settings`,
 	};
 	for (const page in titles) {
 		const title = titles[page];
 		const icon = icons[page];
 		if (page === type) {
-			buf.push(`${icon} <strong>${user.tr(title)}</strong>`);
+			buf.push(`${icon} <strong>${title}</strong>`);
 		} else {
-			buf.push(`${icon} <a roomid="view-friends-${page}">${user.tr(title)}</a>`);
+			buf.push(`${icon} <a roomid="view-friends-${page}">${title}</a>`);
 		}
 	}
 	const refresh = (
 		`<button class="button" name="send" value="/j view-friends${type?.trim() ? `-${type}` : ''}" style="float: right">` +
-		` <i class="fa fa-refresh"></i> ${user.tr('Refresh')}</button>`
+		` <i class="fa fa-refresh"></i> ${user.TL('Refresh')}</button>`
 	);
 	return `<div style="line-height:25px">${buf.join(' / ')}${refresh}</div><hr />`;
 }
@@ -263,12 +268,14 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (target.length > 18) {
-				throw new Chat.ErrorMessage(this.tr`That name is too long - choose a valid name.`);
+				throw new Chat.ErrorMessage(this.TL`That name is too long - choose a valid name.`);
 			}
 			if (!target) return this.parse('/help friends');
 			await Friends.request(user, target as ID);
 			this.refreshPage('friends-sent');
-			return this.sendReply(`You sent a friend request to '${target}'.`);
+			if (toID(this.pmTargetName) !== target) {
+				this.sendReply(`You sent a friend request to '${target}'.`);
+			}
 		},
 		unfriend: 'remove',
 		async remove(target, room, user) {
@@ -294,17 +301,17 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (user.settings.blockFriendRequests) {
-				throw new Chat.ErrorMessage(this.tr`You are currently blocking friend requests, and so cannot accept your own.`);
+				throw new Chat.ErrorMessage(this.TL`You are currently blocking friend requests, and so cannot accept your own.`);
 			}
 			if (!target) return this.parse('/help friends');
 			await Friends.approveRequest(user.id, target as ID);
 			const targetUser = Users.get(target);
-			sendPM(`You accepted a friend request from "${target}".`, user.id);
+			sendPM(`/text You accepted a friend request from "${target}".`, user.id, target);
+			sendPM(`/uhtmlchange sent-${target},`, user.id, target);
 			this.refreshPage('friends-received');
 			if (targetUser) {
-				sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id);
-				sendPM(`/uhtmlchange sent-${targetUser.id},`, targetUser.id);
-				sendPM(`/uhtmlchange undo-${targetUser.id},`, targetUser.id);
+				sendPM(`/text ${user.name} accepted your friend request!`, targetUser.id, user.id);
+				sendPM(`/uhtmlchange undo-${user.id},`, targetUser.id, user.id);
 			}
 			await Chat.Friends.updateUserCache(user);
 			if (targetUser) await Chat.Friends.updateUserCache(targetUser);
@@ -318,25 +325,28 @@ export const commands: Chat.ChatCommands = {
 			if (!res.changes) {
 				throw new Chat.ErrorMessage(`You do not have a friend request pending from '${target}'.`);
 			}
+			const targetUser = Users.get(target);
 			this.refreshPage('friends-received');
-			return sendPM(`You denied a friend request from '${target}'.`, user.id);
+			sendPM(`/text You denied a friend request from '${target}'.`, user.id, target);
+			sendPM(`/uhtmlchange sent-${target},`, user.id, target);
+			if (targetUser) sendPM(`/uhtmlchange undo-${user.id},`, targetUser.id, user.id);
 		},
 		toggle(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			const setting = user.settings.blockFriendRequests;
 			target = target.trim();
 			if (this.meansYes(target)) {
-				if (!setting) throw new Chat.ErrorMessage(this.tr`You already are allowing friend requests.`);
+				if (!setting) throw new Chat.ErrorMessage(this.TL`You already are allowing friend requests.`);
 				user.settings.blockFriendRequests = false;
-				this.sendReply(this.tr`You are now allowing friend requests.`);
+				this.sendReply(this.TL`You are now allowing friend requests.`);
 			} else if (this.meansNo(target)) {
-				if (setting) throw new Chat.ErrorMessage(this.tr`You already are blocking incoming friend requests.`);
+				if (setting) throw new Chat.ErrorMessage(this.TL`You already are blocking incoming friend requests.`);
 				user.settings.blockFriendRequests = true;
-				this.sendReply(this.tr`You are now blocking incoming friend requests.`);
+				this.sendReply(this.TL`You are now blocking incoming friend requests.`);
 			} else {
-				if (target) this.errorReply(this.tr`Unrecognized setting.`);
+				if (target) this.errorReply(this.TL`Unrecognized setting.`);
 				this.sendReply(
-					this.tr(setting ? `You are currently blocking friend requests.` : `You are not blocking friend requests.`)
+					setting ? this.TL`You are currently blocking friend requests.` : this.TL`You are not blocking friend requests.`
 				);
 			}
 			this.refreshPage('friends-settings');
@@ -346,8 +356,11 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			await Friends.removeRequest(target as ID, user.id);
+			const targetUser = Users.get(target);
 			this.refreshPage('friends-sent');
-			return sendPM(`You removed your friend request to '${target}'.`, user.id);
+			sendPM(`/text You removed your friend request to '${target}'.`, user.id, target);
+			sendPM(`/uhtmlchange undo-${target},`, user.id, target);
+			if (targetUser) sendPM(`/uhtmlchange sent-${user.id},`, targetUser.id, user.id);
 		},
 		hidenotifs: 'viewnotifications',
 		hidenotifications: 'viewnotifications',
@@ -357,17 +370,17 @@ export const commands: Chat.ChatCommands = {
 			const setting = user.settings.allowFriendNotifications;
 			target = target.trim();
 			if (!cmd.includes('hide') || target && this.meansYes(target)) {
-				if (setting) throw new Chat.ErrorMessage(this.tr(`You are already allowing friend notifications.`));
+				if (setting) throw new Chat.ErrorMessage(this.TL(`You are already allowing friend notifications.`));
 				user.settings.allowFriendNotifications = true;
-				this.sendReply(this.tr(`You will now receive friend notifications.`));
+				this.sendReply(this.TL(`You will now receive friend notifications.`));
 			} else if (cmd.includes('hide') || target && this.meansNo(target)) {
-				if (!setting) throw new Chat.ErrorMessage(this.tr`You are already not receiving friend notifications.`);
+				if (!setting) throw new Chat.ErrorMessage(this.TL`You are already not receiving friend notifications.`);
 				user.settings.allowFriendNotifications = false;
-				this.sendReply(this.tr`You will not receive friend notifications.`);
+				this.sendReply(this.TL`You will not receive friend notifications.`);
 			} else {
-				if (target) this.errorReply(this.tr`Unrecognized setting.`);
+				if (target) this.errorReply(this.TL`Unrecognized setting.`);
 				this.sendReply(
-					this.tr(setting ? `You are currently allowing friend notifications.` : `Your friend notifications are disabled.`)
+					setting ? this.TL`You are currently allowing friend notifications.` : this.TL`Your friend notifications are disabled.`
 				);
 			}
 			this.refreshPage('friends-settings');
@@ -379,12 +392,12 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			const setting = user.settings.hideLogins;
 			if (cmd.includes('hide')) {
-				if (setting) throw new Chat.ErrorMessage(this.tr`You are already hiding your logins from friends.`);
+				if (setting) throw new Chat.ErrorMessage(this.TL`You are already hiding your logins from friends.`);
 				user.settings.hideLogins = true;
 				await Chat.Friends.hideLoginData(user.id);
 				this.sendReply(`You are now hiding your login times from your friends.`);
 			} else if (cmd.includes('show')) {
-				if (!setting) throw new Chat.ErrorMessage(this.tr`You are already allowing friends to see your login times.`);
+				if (!setting) throw new Chat.ErrorMessage(this.TL`You are already allowing friends to see your login times.`);
 				user.settings.hideLogins = false;
 				await Chat.Friends.allowLoginData(user.id);
 				this.sendReply(`You are now allowing your friends to see your login times.`);
@@ -400,18 +413,18 @@ export const commands: Chat.ChatCommands = {
 			const { public_list: setting } = await Chat.Friends.getSettings(user.id);
 			if (this.meansYes(target)) {
 				if (setting) {
-					throw new Chat.ErrorMessage(this.tr`You are already allowing other people to view your friends list.`);
+					throw new Chat.ErrorMessage(this.TL`You are already allowing other people to view your friends list.`);
 				}
 				await Chat.Friends.setHideList(user.id, true);
 				this.refreshPage('friends-settings');
-				return this.sendReply(this.tr`You are now allowing other people to view your friends list.`);
+				return this.sendReply(this.TL`You are now allowing other people to view your friends list.`);
 			} else if (this.meansNo(target)) {
 				if (!setting) {
-					throw new Chat.ErrorMessage(this.tr`You are already hiding your friends list.`);
+					throw new Chat.ErrorMessage(this.TL`You are already hiding your friends list.`);
 				}
 				await Chat.Friends.setHideList(user.id, false);
 				this.refreshPage('friends-settings');
-				return this.sendReply(this.tr`You are now hiding your friends list.`);
+				return this.sendReply(this.TL`You are now hiding your friends list.`);
 			}
 			this.sendReply(`You are currently ${setting ? 'displaying' : 'hiding'} your friends list.`);
 		},
@@ -431,13 +444,13 @@ export const commands: Chat.ChatCommands = {
 			target = toID(target);
 			if (this.meansYes(target)) {
 				if (user.settings.displayBattlesToFriends) {
-					throw new Chat.ErrorMessage(this.tr`You are already sharing your battles with friends.`);
+					throw new Chat.ErrorMessage(this.TL`You are already sharing your battles with friends.`);
 				}
 				user.settings.displayBattlesToFriends = true;
 				this.sendReply(`You are now allowing your friends to see your ongoing battles.`);
 			} else if (this.meansNo(target)) {
 				if (!user.settings.displayBattlesToFriends) {
-					throw new Chat.ErrorMessage(this.tr`You are already not sharing your battles with friends.`);
+					throw new Chat.ErrorMessage(this.TL`You are already not sharing your battles with friends.`);
 				}
 				user.settings.displayBattlesToFriends = false;
 				this.sendReply(`You are now hiding your ongoing battles from your friends.`);
@@ -485,7 +498,7 @@ export const pages: Chat.PageTable = {
 			this.title = `[Friends] Sent`;
 			buf += headerButtons('sent', user);
 			if (user.settings.blockFriendRequests) {
-				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
+				buf += `<h3>${this.TL(`You are currently blocking friend requests`)}.</h3>`;
 			}
 			const { sent } = await Chat.Friends.getRequests(user);
 			if (sent.size < 1) {
@@ -499,7 +512,7 @@ export const pages: Chat.PageTable = {
 				buf += `<br /><div class="infobox">`;
 				buf += `<strong>${request}</strong>`;
 				buf += ` <button class="button" name="send" value="/friends undorequest ${request}">`;
-				buf += `<i class="fa fa-undo"></i> ${this.tr('Undo')}</button>`;
+				buf += `<i class="fa fa-undo"></i> ${this.TL('Undo')}</button>`;
 				buf += `</div>`;
 			}
 			break;
@@ -516,8 +529,8 @@ export const pages: Chat.PageTable = {
 			for (const request of received) {
 				buf += `<br /><div class="infobox">`;
 				buf += `<strong>${request}</strong>`;
-				buf += ` <button class="button" name="send" value="/friends accept ${request}">${this.tr('Accept')}</button> |`;
-				buf += ` <button class="button" name="send" value="/friends reject ${request}">${this.tr('Deny')}</button>`;
+				buf += ` <button class="button" name="send" value="/friends accept ${request}">${this.TL('Accept')}</button> |`;
+				buf += ` <button class="button" name="send" value="/friends reject ${request}">${this.TL('Deny')}</button>`;
 				buf += `</div>`;
 			}
 			break;

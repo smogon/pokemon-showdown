@@ -654,6 +654,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return;
 		}
 		request.isWait = false;
+		request.choice = '';
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
@@ -856,7 +857,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		// If the room's replay was hidden, don't let users join after the game is over
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
-			this.room.setPrivate('hidden');
+			this.room.setPrivate('hidden', this.password);
 		}
 		this.room.update();
 
@@ -1233,9 +1234,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			player.id ? (
 				`<form><label>Player ${player.num}: <strong>${player.name}</strong></label></form>`
 			) : player.invite ? (
-				`<form data-submitsend="/msgroom ${this.roomid},/uninvitebattle ${player.invite}"><label>Player ${player.num}: <strong>${player.invite}</strong> (invited) <button>Uninvite</button></label></form>`
+				`<form data-submitsend="/msgroom ${this.roomid},/uninvitebattle ${player.invite}"><label>Player ${player.num}: <strong>${player.invite}</strong> (invited) <button type="submit">Uninvite</button></label></form>`
 			) : (
-				`<form data-submitsend="/msgroom ${this.roomid},/invitebattle {username}, p${player.num}"><label>Player ${player.num}: <input name="username" class="textbox" placeholder="Username" /></label> <button class="button">Add Player</button></form>`
+				`<form data-submitsend="/msgroom ${this.roomid},/invitebattle {username}, p${player.num}"><label>Player ${player.num}: <input name="username" class="textbox" placeholder="Username" /></label> <button class="button" type="submit">Add Player</button></form>`
 			)
 		));
 		if (this.gameType === 'multi') {
@@ -1382,7 +1383,7 @@ if (!PM.isParentProcess) {
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
-	};
+	} as typeof Monitor;
 	global.__version = { head: '' };
 	try {
 		const head = execSync('git rev-parse HEAD', {

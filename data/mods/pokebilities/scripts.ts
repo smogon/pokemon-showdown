@@ -14,27 +14,26 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	pokemon: {
 		ignoringAbility() {
+			if (this.battle.gen >= 5 && !this.isActive) return true;
+
+			// Certain Abilities won't activate while Transformed, even if they ordinarily couldn't be suppressed (e.g. Disguise)
+			if (this.getAbility().flags['notransform'] && this.transformed) return true;
+			if (this.getAbility().flags['cantsuppress']) return false;
+			if (this.volatiles['gastroacid']) return true;
+
 			// Check if any active pokemon have the ability Neutralizing Gas
-			let neutralizinggas = false;
+			if (this.hasItem('Ability Shield') || this.m.innates?.includes('neutralizinggas') ||
+				this.ability === ('neutralizinggas' as ID)) return false;
 			for (const pokemon of this.battle.getAllActive()) {
 				// can't use hasAbility because it would lead to infinite recursion
-				if (
-					(pokemon.ability === ('neutralizinggas' as ID) || pokemon.m.innates?.some((k: string) => k === 'neutralizinggas')) &&
-					!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
-				) {
-					neutralizinggas = true;
-					break;
+				if ((pokemon.m.innates?.includes('neutralizinggas') || pokemon.ability === ('neutralizinggas' as ID)) &&
+					!pokemon.volatiles['gastroacid'] && !pokemon.transformed &&
+					!pokemon.abilityState.ending && !this.volatiles['commanding']) {
+					return true;
 				}
 			}
 
-			return !!(
-				(this.battle.gen >= 5 && !this.isActive) ||
-				((this.volatiles['gastroacid'] ||
-					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-						this.m.innates?.some((k: string) => k === 'neutralizinggas'))
-					)) && !this.getAbility().flags['cantsuppress']
-				)
-			);
+			return false;
 		},
 		hasAbility(ability) {
 			if (this.ignoringAbility()) return false;
@@ -71,16 +70,18 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 			this.timesAttacked = pokemon.timesAttacked;
-			for (const moveSlot of pokemon.moveSlots) {
+			for (const [i, moveSlot] of pokemon.moveSlots.entries()) {
 				let moveName = moveSlot.move;
 				if (moveSlot.id === 'hiddenpower') {
 					moveName = 'Hidden Power ' + this.hpType;
 				}
+				const move = this.battle.dex.moves.get(moveSlot.id);
+				const pp = Math.min(5, move.pp);
 				this.moveSlots.push({
 					move: moveName,
 					id: moveSlot.id,
-					pp: moveSlot.maxpp === 1 ? 1 : 5,
-					maxpp: this.battle.gen >= 5 ? (moveSlot.maxpp === 1 ? 1 : 5) : moveSlot.maxpp,
+					pp,
+					maxpp: this.battle.gen >= 5 ? pp : this.battle.calculatePP(move, this.ppUps[i] || 0),
 					target: moveSlot.target,
 					disabled: false,
 					used: false,

@@ -11,9 +11,6 @@
 import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
 import type { FormatData } from '../../sim/dex-formats';
-import { TeamValidator } from '../../sim/team-validator';
-import { Chat } from '../chat';
-import { DataMove } from "../../sim/dex-moves";
 
 interface DexOrGroup {
 	abilities: { [k: string]: boolean };
@@ -1236,7 +1233,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 					if (inequalityString.startsWith('>')) directions.push('greater');
 					if (statKey in allStatAliases) statKey = allStatAliases[statKey];
 					if (compareType in allStatAliases) compareType = allStatAliases[compareType];
-					if (!allStats.slice(0, 6).includes(statKey) || !allStats.slice(0, 6).includes(compareType))
+					if (!allStats.includes(statKey) || !allStats.includes(compareType))
 						return { error: `'${target}' did not contain a valid stat to compare with another stat.` };
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
@@ -1592,7 +1589,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			mon.battleOnly! : null : null;
 		if (teraFormeChangesFrom && results.includes(mod.species.get(teraFormeChangesFrom)) &&
 			getSortValue(mon) === getSortValue(mod.species.get(teraFormeChangesFrom))) continue;
-		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
+		if (mon.forme.endsWith('Gmax') && !allowGmax) continue;
 		results.push(mon);
 	}
 
@@ -2102,8 +2099,8 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		const move = mod.moves.get(moveid);
 		if (move.gen <= mod.gen) {
 			if (
-				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
-				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past", "Unobtainable"].includes(move.isNonstandard)) ||
+				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gmax") ||
+				(nationalSearch && move.isNonstandard && !["Gmax", "Past", "Unobtainable"].includes(move.isNonstandard)) ||
 				(move.isMax && mod.gen !== 8)
 			) {
 				continue;
@@ -2145,7 +2142,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 
 			for (const flag in alts.flags) {
 				if (flag === 'secondary') {
-					if (!(move.secondary || move.secondaries || move.hasSheerForce) === !alts.flags[flag]) {
+					if (!(move.secondary || move.secondaries || move.hasSheerForceBoost) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
@@ -2602,7 +2599,7 @@ function runItemsearch(target: string, cmd: string, message: string) {
 		for (const item of dex.items.all()) {
 			let matched = 0;
 			// splits words in the description into a toID()-esk format except retaining / and . in numbers
-			let descWords = item.desc || '';
+			let descWords = dex.text.get(item).desc || '';
 			// add more general quantifier words to descriptions
 			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 			if (item.isBerry) descWords += ' berry';
@@ -2786,11 +2783,11 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 	for (const ability of dex.abilities.all()) {
 		let matched = 0;
 		// splits words in the description into a toID()-esque format except retaining / and . in numbers
-		let descWords = ability.desc || ability.shortDesc || '';
+		let descWords = dex.text.get(ability).desc;
 		// add more general quantifier words to descriptions
 		if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
 		descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
-		const descWordsArray = Chat.normalize(descWords).split(' ');
+		const descWordsArray = Utils.normalize(descWords).split(' ');
 
 		for (const word of searchedWords) {
 			switch (word) {
@@ -3139,6 +3136,7 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require('../../sim/dex').Dex;
+	global.TeamValidator = require('../../sim/team-validator').TeamValidator;
 	global.toID = Dex.toID;
 	Dex.includeData();
 

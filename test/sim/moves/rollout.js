@@ -16,10 +16,11 @@ for (const move of moves) {
 		});
 
 		it('should double its Base Power every turn for five turns, then resets to 30 BP', () => {
-			battle = common.createBattle([
-				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
-				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Shuckle', ability: 'gluttony', moves: [id] },
+			], [
+				{ species: 'Steelix', ability: 'noguard', moves: ['recover'] },
+			]]);
 
 			let ebp = 30;
 			let count = 0;
@@ -40,10 +41,11 @@ for (const move of moves) {
 		});
 
 		it('should reset its Base Power if the move misses', () => {
-			battle = common.createBattle([
-				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
-				[{ species: 'Steelix', ability: 'furcoat', moves: ['recover'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Shuckle', ability: 'gluttony', moves: [id] },
+			], [
+				{ species: 'Steelix', ability: 'furcoat', moves: ['recover'] },
+			]]);
 
 			let ebp = 30;
 			let count = 0;
@@ -70,10 +72,11 @@ for (const move of moves) {
 		});
 
 		it('should reset its Base Power if the Pokemon is immobilized', () => {
-			battle = common.createBattle([
-				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
-				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Shuckle', ability: 'gluttony', moves: [id] },
+			], [
+				{ species: 'Steelix', ability: 'noguard', moves: ['recover'] },
+			]]);
 
 			let ebp = 30;
 			let count = 0;
@@ -98,10 +101,11 @@ for (const move of moves) {
 		});
 
 		it('should have double Base Power if the Pokemon used Defense Curl earlier', () => {
-			battle = common.createBattle([
-				[{ species: 'Shuckle', ability: 'gluttony', moves: [id, 'defensecurl'] }],
-				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Shuckle', ability: 'gluttony', moves: [id, 'defensecurl'] },
+			], [
+				{ species: 'Steelix', ability: 'noguard', moves: ['recover'] },
+			]]);
 
 			let runCount = 0;
 			battle.onEvent('BasePower', battle.format, basePower => {
@@ -115,10 +119,11 @@ for (const move of moves) {
 		});
 
 		it('should not be affected by Parental Bond', () => {
-			battle = common.createBattle([
-				[{ species: 'Shuckle', ability: 'parentalbond', moves: [id] }],
-				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
-			]);
+			battle = common.createBattle([[
+				{ species: 'Shuckle', ability: 'parentalbond', moves: [id] },
+			], [
+				{ species: 'Steelix', ability: 'noguard', moves: ['recover'] },
+			]]);
 
 			let hitCount = 0;
 			battle.onEvent('BasePower', battle.format, basePower => {
