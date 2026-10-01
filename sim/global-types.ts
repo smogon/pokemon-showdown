@@ -418,6 +418,8 @@ interface PlayerOptions {
 	rating?: number;
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
+	/** Collected shiny species (see shinyCollectionKey); forced shiny on a generated team */
+	shinies?: string[];
 }
 
 type TranslationString = string | null;

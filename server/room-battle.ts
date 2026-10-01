@@ -1067,6 +1067,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				avatar: user ? `${user.avatar}` : '',
 				team: playerOpts.team || undefined,
 				rating: Math.round(playerOpts.rating || 0),
+				shinies: this.getCollectedShinies(user),
 			};
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 			player.hasTeam = true;
@@ -1077,6 +1078,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		if (user?.inRooms.has(this.roomid)) this.onConnect(user);
 		return player;
+	}
+
+	/** Shiny species this user has collected, or undefined if the shiny collection doesn't apply */
+	getCollectedShinies(user: User | null): string[] | undefined {
+		return Chat.plugins['shiny-collection']?.getShinies?.(user, this);
 	}
 
 	checkPrivacySettings(options: RoomBattleOptions & Partial<RoomSettings>) {
@@ -1159,6 +1165,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				name: player.name,
 				avatar: user.avatar,
 				team: playerOpts?.team,
+				shinies: playerOpts ? this.getCollectedShinies(user) : undefined,
 			};
 			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 			if (playerOpts) player.hasTeam = true;

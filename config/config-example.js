@@ -381,6 +381,16 @@ exports.laddermodchat = false;
 exports.forcetimer = false;
 
 /**
+ * shiny collection - registered users keep every shiny they roll in random
+ *   formats (gen 3+, except Super Staff Bros), and collected Pokemon are always
+ *   shiny on their future random teams. View with /shinies.
+ *   Needs the optional dependency better-sqlite3; stored in databases/shinies.db.
+ *
+ * @type {boolean}
+ */
+exports.shinycollection = true;
+
+/**
  * force register ELO - unregistered users cannot search for ladder battles
  * in formats where their ELO is at or above this value.
  * @type {false | number}

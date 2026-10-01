@@ -32,6 +32,21 @@ export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
 
 const splitRegex = /^\|split\|p([1234])\n(.*)\n(.*)|.+/gm;
 
+/**
+ * Key used by the shiny collection. Formes that only change appearance
+ * (Gastrodon-East, Maushold-Four) share their base species' entry; formes that
+ * change the battle (Rotom-Wash, Dugtrio-Alola) get their own.
+ */
+export function shinyCollectionKey(species: Species, dex: ModdedDex) {
+	if (species.name === species.baseSpecies) return species.name;
+	if (species.isCosmeticForme) return species.baseSpecies;
+	const base = dex.species.get(species.baseSpecies);
+	const sameInBattle = species.types.join('/') === base.types.join('/') &&
+		JSON.stringify(species.baseStats) === JSON.stringify(base.baseStats) &&
+		JSON.stringify(species.abilities) === JSON.stringify(base.abilities);
+	return sameInBattle ? species.baseSpecies : species.name;
+}
+
 export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
 	const channelIdSet = new Set(channelIds);
 	const channelMessages: ChannelMessages<ChannelID | -1> = {
@@ -3177,8 +3192,16 @@ export class Battle {
 			this.teamGenerator.setSeed(options.seed);
 		}
 
-		team = this.teamGenerator.getTeam(options);
-		return team as PokemonSet[];
+		team = this.teamGenerator.getTeam(options) as PokemonSet[];
+		// gen 1 has no shinies, and gen 2 shininess depends on DVs, so forcing it would leave impossible stats
+		if (options.shinies?.length && this.gen >= 3) {
+			// applied after generation so no PRNG calls change and the rest of the team rolls the same
+			const owned = new Set(options.shinies);
+			for (const set of team) {
+				if (owned.has(shinyCollectionKey(this.dex.species.get(set.species), this.dex))) set.shiny = true;
+			}
+		}
+		return team;
 	}
 
 	showOpenTeamSheets() {
