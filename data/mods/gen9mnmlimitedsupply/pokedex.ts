@@ -10,7 +10,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	falinksmega: {
 		inherit: true,
-		baseStats: { hp: 65, atk: 135, def: 110, spa: 75, spd: 70, spe: 110 },
+		baseStats: { hp: 65, atk: 135, def: 110, spa: 75, spd: 70, spe: 115 },
 		abilities: { 0: "Brass Bond" },
 	},
 	abomasnowmega: {
@@ -49,7 +49,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 108, atk: 175, def: 113, spa: 100, spd: 75, spe: 129 },
 		abilities: { 0: "Hustle" },
 	},
-	tatsugirimega: {
+	tatsugiricurlymega: {
 		inherit: true,
 		baseStats: { hp: 68, atk: 75, def: 90, spa: 135, spd: 125, spe: 92 },
 		abilities: { 0: "Supreme Overlord" },
@@ -115,14 +115,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 78, atk: 70, def: 120, spa: 155, spd: 121, spe: 46 },
 		abilities: { 0: "Fluffy" },
 	},
-	lucariomegaz: {
-		inherit: true,
-		abilities: { 0: "Adaptability" },
-	},
-	garchompmegaz: {
-		inherit: true,
-		abilities: { 0: "Sand Force" },
-	},
 	zaciancrowned: {
 		inherit: true,
 		baseStats: { hp: 92, atk: 160, def: 115, spa: 80, spd: 115, spe: 148 },
@@ -142,9 +134,5 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	audinomega: {
 		inherit: true,
 		abilities: { 0: "Regenerator" },
-	},
-	steelixmega: {
-		inherit: true,
-		abilities: { 0: "Sandy Force" },
 	},
 };
