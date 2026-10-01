@@ -87,7 +87,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		super(room);
 		this.gameid = 'bestof' as ID;
 		this.format = Dex.formats.get(options.format);
-		this.bestOf = Number(Dex.formats.getRuleTable(this.format).valueRules.get('bestof'))!;
+		this.bestOf = Dex.formats.getRuleTable(this.format).getRuleValue<number>('bestof')!;
 		this.winThreshold = Math.floor(this.bestOf / 2) + 1;
 		this.title = this.format.name;
 		if (!toID(this.title).includes('bestof')) {
