@@ -2266,7 +2266,6 @@ export class Battle {
 			this.add('-damage', target, target.getHealth);
 			break;
 		}
-		if (target.fainted) this.faint(target);
 		return damage;
 	}
 
@@ -2549,7 +2548,7 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
+	faintMessages(lastFirst = false, forceCheck = false, checkWin = true, pursuitFainted = false) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
 		if (!length) {
@@ -2591,7 +2590,8 @@ export class Battle {
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
-				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
+				// in Gen 2-4, don't check for a win if Destiny Bond activates during a Pursuit faint
+				if (this.faintQueue.length >= faintQueueLeft && !pursuitFainted) checkWin = true;
 			}
 		}
 
@@ -2783,10 +2783,10 @@ export class Battle {
 			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
 				// a pokemon fainted from Pursuit before it could switch
 				if (this.gen <= 4) {
+					this.faintMessages(false, false, false, true);
 					// in gen 2-4, the switch still happens
 					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
-					action.priority = -101;
-					this.queue.unshift(action);
+					this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 					break;
 				} else {
 					// in gen 5+, the switch is cancelled
@@ -2852,9 +2852,9 @@ export class Battle {
 
 		// fainting
 
-		const nextAction = this.queue.peek();
+		let nextAction = this.queue.peek();
 
-		if (this.gen <= 2 && ['switch', 'instaswitch', 'runSwitch'].includes(action.choice) &&
+		if (this.gen === 2 && ['switch', 'instaswitch', 'runSwitch'].includes(action.choice) &&
 			nextAction && ['switch', 'instaswitch', 'runSwitch'].includes(nextAction.choice)) {
 			// in gen 2, there are no faint checks between switches
 			return false;
@@ -2864,6 +2864,8 @@ export class Battle {
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
+
+		nextAction = this.queue.peek();
 
 		if (
 			!nextAction ||
@@ -2951,6 +2953,8 @@ export class Battle {
 		}
 
 		if (this.gen < 5) this.eachEvent('Update');
+
+		nextAction = this.queue.peek();
 
 		if (this.gen >= 8 && nextAction && ['move', 'runDynamax'].includes(nextAction.choice)) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
