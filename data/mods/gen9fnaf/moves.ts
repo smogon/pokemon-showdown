@@ -1,4 +1,5 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
+	// FNAF World moves
 	armorsong: {
 		isNonstandard: "FNAF",
 		num: -1,
@@ -192,8 +193,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	eyebeam: {
 		isNonstandard: "FNAF",
 		num: -11,
-		accuracy: 80,
-		basePower: 100,
+		accuracy: 85,
+		basePower: 110,
 		category: "Special",
 		name: "Eye Beam",
 		pp: 5,
@@ -451,22 +452,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mictoss: {
 		isNonstandard: "FNAF",
 		num: -21,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
 		name: "Mic Toss",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch',
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Electric', type);
 		},
 		target: "allAdjacentFoes",
 		type: "Steel",
 		contestType: "Tough",
-		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to make the target flinch.",
+		desc: "This move combines Electric in its type effectiveness against the target.",
+		shortDesc: "Combines Electric in its type effectiveness.",
 	},
 	mimicball: {
 		isNonstandard: "FNAF",
@@ -600,18 +600,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pizzawheel: {
 		isNonstandard: "FNAF",
 		num: -27,
-		accuracy: 100,
+		accuracy: 60,
 		basePower: 100,
 		category: "Physical",
 		name: "Pizza Wheel",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		secondary: {
+			chance: 50,
+			status: 'brn',
+		},
 		target: "normal",
 		type: "Steel",
 		contestType: "Tough",
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
+		desc: "Has a 50% chance to burn the target.",
+		shortDesc: "Has a 50% chance to burn the target.",
 	},
 	poppers: {
 		isNonstandard: "FNAF",
@@ -686,23 +690,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
-		onHit(target) {
+		onHit(target, source) {
 			// Filter for metronome-valid, single-target attacking moves
+			// matching the user's higher attacking stat (boosted, unmodified, like Photon Geyser; ties allow both)
+			const atk = source.getStat('atk', false, true);
+			const spa = source.getStat('spa', false, true);
+			const categories = atk > spa ? ['Physical'] : spa > atk ? ['Special'] : ['Physical', 'Special'];
 			const validMoves = this.dex.moves.all().filter(move => (
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['metronome'] && move.target === 'normal' &&
-				(move.category === 'Physical' || move.category === 'Special')
+				categories.includes(move.category)
 			));
 
 			// Further filter for moves super effective on the target
-			const superEffectiveMoves = validMoves.filter(move => {
-				for (const targetType of target.types) {
-					if (this.dex.getEffectiveness(move.type, targetType) > 1) {
-						return true;
-					}
-				}
-				return false;
-			});
+			// (getEffectiveness returns a summed step, not a multiplier: >0 means super effective overall)
+			const superEffectiveMoves = validMoves.filter(move => (
+				this.dex.getImmunity(move.type, target) && this.dex.getEffectiveness(move.type, target) > 0
+			));
 
 			// Use super effective moves if available, otherwise fall back to all valid moves
 			const movesToChooseFrom = superEffectiveMoves.length > 0 ? superEffectiveMoves : validMoves;
@@ -713,13 +717,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				randomMove = this.sample(movesToChooseFrom).id;
 			}
 			if (!randomMove) return false;
-			this.actions.useMove(randomMove, target);
+			// The user attacks the target with the selected move
+			this.actions.useMove(randomMove, source, { target });
 		},
 		callsMove: true,
 		target: "normal",
 		type: "Normal",
 		contestType: "Cool",
-		desc: "A random single-target damaging move that is super effective against the target is selected for use, other than After You, Apple Acid, Armor Cannon, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Chilling Water, Chilly Reception, Clangorous Soul, Collision Course, Combat Torque, Comeuppance, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Doodle, Double Iron Bash, Double Shock, Dragon Ascent, Dragon Energy, Drum Beating, Dynamax Cannon, Electro Drift, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fillet Away, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyper Drill, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jet Punch, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Magical Torque, Make It Rain, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Noxious Torque, Obstruct, Order Up, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Population Bomb, Pounce, Power Shift, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Fist, Rage Powder, Raging Bull, Raging Fury, Relic Song, Revival Blessing, Ruination, Salt Cure, Secret Sword, Shed Tail, Shell Trap, Silk Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Snowscape, Spectral Thief, Spicy Extract, Spiky Shield, Spirit Break, Spotlight, Springtide Storm, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Tera Starstorm, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Tidy Up, Trailblaze, Transform, Trick, Twin Beam, V-create, Wicked Blow, Wicked Torque, or Wide Guard.",
+		desc: "A random single-target damaging move that is super effective against the target is selected for use. The move is physical if the user's Attack is higher than its Special Attack, special if its Special Attack is higher, and either if they are equal, including stat stage changes. The selected move can be any such move other than After You, Apple Acid, Armor Cannon, Assist, Astral Barrage, Aura Wheel, Baneful Bunker, Beak Blast, Behemoth Bash, Behemoth Blade, Belch, Bestow, Blazing Torque, Body Press, Branch Poke, Breaking Swipe, Celebrate, Chatter, Chilling Water, Chilly Reception, Clangorous Soul, Collision Course, Combat Torque, Comeuppance, Copycat, Counter, Covet, Crafty Shield, Decorate, Destiny Bond, Detect, Diamond Storm, Doodle, Double Iron Bash, Double Shock, Dragon Ascent, Dragon Energy, Drum Beating, Dynamax Cannon, Electro Drift, Endure, Eternabeam, False Surrender, Feint, Fiery Wrath, Fillet Away, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Freezing Glare, Glacial Lance, Grav Apple, Helping Hand, Hold Hands, Hyper Drill, Hyperspace Fury, Hyperspace Hole, Ice Burn, Instruct, Jet Punch, Jungle Healing, King's Shield, Life Dew, Light of Ruin, Magical Torque, Make It Rain, Mat Block, Me First, Meteor Assault, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Moongeist Beam, Nature Power, Nature's Madness, Noxious Torque, Obstruct, Order Up, Origin Pulse, Overdrive, Photon Geyser, Plasma Fists, Population Bomb, Pounce, Power Shift, Precipice Blades, Protect, Pyro Ball, Quash, Quick Guard, Rage Fist, Rage Powder, Raging Bull, Raging Fury, Relic Song, Revival Blessing, Ruination, Salt Cure, Secret Sword, Shed Tail, Shell Trap, Silk Trap, Sketch, Sleep Talk, Snap Trap, Snarl, Snatch, Snore, Snowscape, Spectral Thief, Spicy Extract, Spiky Shield, Spirit Break, Spotlight, Springtide Storm, Steam Eruption, Steel Beam, Strange Steam, Struggle, Sunsteel Strike, Surging Strikes, Switcheroo, Techno Blast, Tera Starstorm, Thief, Thousand Arrows, Thousand Waves, Thunder Cage, Thunderous Kick, Tidy Up, Trailblaze, Transform, Trick, Twin Beam, V-create, Wicked Blow, Wicked Torque, or Wide Guard.",
 		shortDesc: "Picks a random super effective single-target move.",
 	},
 	rainyday: {
@@ -867,7 +872,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
-		name: "Bad Pizza",
+		name: "Toxic Bite",
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
@@ -1032,7 +1037,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Deals damage to the target based on its Defense instead of Special Defense.",
 		shortDesc: "Damages target based on Defense, not Sp. Def.",
 	},
-
+	// Custom moves
 	givegiftsgivelife: {
 		isNonstandard: "FNAF",
 		num: -46,

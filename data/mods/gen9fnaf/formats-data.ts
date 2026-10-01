@@ -3,7 +3,7 @@
 export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 
 	// ── Fakemon (Original) ─────────────────────────────────────────────
-	freddyfazbear: {
+	freddy: {
 		isNonstandard: "FNAF",
 	},
 	bonnie: {
@@ -13,6 +13,18 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "FNAF",
 	},
 	foxy: {
+		isNonstandard: "FNAF",
+	},
+	freddywithered: {
+		isNonstandard: "FNAF",
+	},
+	bonniewithered: {
+		isNonstandard: "FNAF",
+	},
+	chicawithered: {
+		isNonstandard: "FNAF",
+	},
+	foxywithered: {
 		isNonstandard: "FNAF",
 	},
 	goldenfreddy: {
@@ -37,6 +49,30 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "FNAF",
 	},
 	jj: {
+		isNonstandard: "FNAF",
+	},
+	paperpals: {
+		isNonstandard: "FNAF",
+	},
+	shadowfreddy: {
+		isNonstandard: "FNAF",
+	},
+	phantomfreddy: {
+		isNonstandard: "FNAF",
+	},
+	phantomchica: {
+		isNonstandard: "FNAF",
+	},
+	phantomfoxy: {
+		isNonstandard: "FNAF",
+	},
+	phantomballoonboy: {
+		isNonstandard: "FNAF",
+	},
+	phantommangle: {
+		isNonstandard: "FNAF",
+	},
+	phantompuppet: {
 		isNonstandard: "FNAF",
 	},
 	nightmarionne: {

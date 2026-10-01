@@ -70,7 +70,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -2,
 		isNonstandard: "FNAF",
 		desc: "When this holder switches in, it appears as the last unfainted Pokemon in its party until it takes direct damage from another Pokemon's attack or until the end of the turn, upon either of which this item is consumed. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
-		shortDesc: "Holder appears as last Pokemon in party until taking damage or end of turn. Single use.",
+		shortDesc: "Holder disguised until taking damage or end of turn. Single use.",
 	},
 	musicbox: {
 		name: "Music Box",
@@ -85,5 +85,61 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "FNAF",
 		desc: "When the holder switches in, it falls asleep. Then, its Attack, Special Attack, and Speed rise by 1 stage if it is asleep.",
 		shortDesc: "On switch-in: holder falls asleep; +1 Atk, SpA, and Spe",
+	},
+	missingbeak: {
+		name: "Missing Beak",
+		spritenum: 0,
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (['peck', 'drillpeck', 'pluck', 'beakblast', 'boltbeak'].includes(move.id)) {
+				return this.chainModify(1.5);
+			}
+		},
+		num: -4,
+		isNonstandard: "FNAF",
+		shortDesc: "Holder's beak moves have 1.5x power.",
+		desc: "Holder's Peck, Drill Peck, Pluck, Beak Blast, and Bolt Beak have 1.5x power.",
+	},
+	freddymask: {
+		name: "Freddy Mask",
+		spritenum: 0,
+		fling: {
+			basePower: 30,
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				if (this.dex.moves.get(moveSlot.id).category !== 'Status') {
+					pokemon.disableMove(moveSlot.id);
+				}
+			}
+		},
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (effect?.effectType === 'Move' && target.useItem()) {
+				this.damage(target.baseMaxhp / 8, target, target);
+				return 0;
+			}
+		},
+		onCriticalHit(target, source, move) {
+			if (!target?.hasItem('freddymask')) return;
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+			if (!target.runImmunity(move)) return;
+			return false;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target || move.category === 'Status' || !target.hasItem('freddymask')) return;
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+			if (!target.runImmunity(move)) return;
+			return 0;
+		},
+		num: -5,
+		isNonstandard: "FNAF",
+		shortDesc: "Blocks first damaging hit. Holder cannot attack.",
+		desc: "The first time the holder would take damage from a move, this item is consumed and the holder loses 1/8 of its maximum HP instead of taking the damage. While holding this item, the holder can only select status moves.",
 	},
 };

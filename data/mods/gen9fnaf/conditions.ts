@@ -43,4 +43,36 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.damage(pokemon.baseMaxhp / 4);
 		},
 	},
+	audiodisturbance: {
+		// Audio Disturbance ability. Same effect as Throat Chop.
+		name: 'audiodisturbance',
+		duration: 2,
+		onStart(target) {
+			this.add('-start', target, 'Audio Disturbance', '[silent]');
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				if (this.dex.moves.get(moveSlot.id).flags['sound']) {
+					pokemon.disableMove(moveSlot.id);
+				}
+			}
+		},
+		onBeforeMovePriority: 6,
+		onBeforeMove(pokemon, target, move) {
+			if (!move.isZOrMaxPowered && move.flags['sound']) {
+				this.add('cant', pokemon, 'ability: Audio Disturbance');
+				return false;
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (!move.isZOrMaxPowered && move.flags['sound']) {
+				this.add('cant', pokemon, 'ability: Audio Disturbance');
+				return false;
+			}
+		},
+		onResidualOrder: 22,
+		onEnd(target) {
+			this.add('-end', target, 'Audio Disturbance', '[silent]');
+		},
+	},
 };

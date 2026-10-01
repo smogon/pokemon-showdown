@@ -23,11 +23,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSwitchIn(pokemon) {
 			for (const foe of pokemon.adjacentFoes()) {
 				let move: Move | ActiveMove | null = foe.lastMove;
-				if (!move || move.isZ) return false;
+				if (!move || move.isZ) continue;
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
 				const ppDeducted = foe.deductPP(move.id, 4);
-				if (!ppDeducted) return false;
+				if (!ppDeducted) continue;
 				this.add("-activate", foe, 'ability: Hello', move.name, ppDeducted);
 			}
 		},
@@ -37,5 +37,38 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		rating: 4,
 		shortDesc: "On switch-in, reduces the PP of each foe's last move by 4.",
 		desc: "When this Pokemon switches in, it reduces the PP of the each opposing Pokemon's last move by 4. If the foe has no last move or if the last move is a Z-Move, this ability does nothing.",
+	},
+	followme: {
+		isNonstandard: "FNAF",
+		onStart(pokemon) {
+			if (this.activePerHalf <= 1) return;
+			this.add('-ability', pokemon, 'Follow Me');
+			pokemon.addVolatile('followme');
+		},
+		flags: {},
+		name: "Follow Me",
+		num: -3,
+		rating: 3,
+		shortDesc: "On switch-in, foes' single-target moves target this Pokemon.",
+		desc: "When this Pokemon switches in, it becomes the center of attention until the end of the turn: opposing Pokemon's single-target moves are redirected to it, as if it had used Follow Me. Has no effect in single battles.",
+	},
+	audiodisturbance: {
+		isNonstandard: "FNAF",
+		onStart(pokemon) {
+			let activated = false;
+			for (const foe of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Audio Disturbance');
+					activated = true;
+				}
+				foe.addVolatile('audiodisturbance', pokemon);
+			}
+		},
+		flags: {},
+		name: "Audio Disturbance",
+		num: -4,
+		rating: 3,
+		shortDesc: "On switch-in, adjacent foes can't use sound moves for 2 turns.",
+		desc: "When this Pokemon switches in, each adjacent opposing Pokemon is prevented from using sound-based moves for 2 turns, including the turn it switched in.",
 	},
 };
