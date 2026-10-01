@@ -164,21 +164,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	curse: {
 		inherit: true,
-		tracksTarget: true,
 		volatileStatus: undefined, // no inherit
 		onModifyMove(move, source, target) {
+			this.debug('Curse onModifyMove triggered', source, target);
 			if (!source.hasType('Ghost')) {
 				move.target = 'self';
-			} else if (source !== target && source.isAlly(target)) {
+			} else if (!target || (source !== target && source.isAlly(target))) {
 				move.target = 'randomNormal';
 			}
 		},
 		onTryHit(target, source, move) {
+			this.debug('Curse onTryHit triggered', target, source);
 			if (source.hasType('Ghost') && target.volatiles['curse']) {
 				return false;
 			}
 		},
 		onHit(target, source) {
+			this.debug('Curse onHit triggered', source, target);
 			if (!source.hasType('Ghost')) {
 				return !!this.boost({ spe: -1, atk: 1, def: 1 }, source, source);
 			}
@@ -324,21 +326,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const action = this.queue.willMove(target);
 				if (!action) {
 					this.effectState.duration!++;
-					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
 				} else if (action.moveid !== move.id && !target.hasItem('mentalherb')) {
-					const priority = action.priority -
-						this.dex.moves.get(action.moveid).priority +
-						this.dex.moves.get(move.id).priority;
 					this.queue.changeAction(target, {
 						choice: 'move',
 						// target: undefined,
 						// targetLoc: undefined,
 						moveid: move.id,
-						order: action.order,
 					});
-					this.queue.willMove(target)!.priority = priority;
 				}
 			},
+			onOverrideAction: undefined, // no inherit
 		},
 	},
 	esperwing: {
