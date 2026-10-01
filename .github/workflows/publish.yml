@@ -5,6 +5,8 @@ on:
       - master
     paths:
       - 'package.json'
+permissions:
+  contents: read
 jobs:
   test:
     uses: ./.github/workflows/test.yml
@@ -13,7 +15,6 @@ jobs:
     outputs:
       current_version: ${{ steps.current_version.outputs.version }}
       last_version: ${{ steps.last_version.outputs.version }}
-      token_exists: ${{ steps.check_token.outputs.token }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -28,26 +29,24 @@ jobs:
         run: |
           git checkout ${{ github.event.before }}
           echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
-      - name: Check if NPM_TOKEN exists
-        id: check_token
-        run: |
-          echo "token=$(if [ -n "${{ secrets.NPM_TOKEN }}" ]; then echo true; else echo false; fi)" >> "$GITHUB_OUTPUT"
   npm-publish:
     needs:
       - test
       - get-version
     runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
     # We only want to publish if the package.json version field has changed
-    if: needs.get-version.outputs.current_version != needs.get-version.outputs.last_version && needs.get-version.outputs.token_exists == 'true'
+    if: needs.get-version.outputs.current_version != needs.get-version.outputs.last_version
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: 18
-          cache: 'npm'
+          node-version: 24
           registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
       - run: npm ci
       - run: npm run build-npm
       - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

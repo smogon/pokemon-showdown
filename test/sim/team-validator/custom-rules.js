@@ -128,6 +128,77 @@ describe("Custom Rules", () => {
 			{ species: 'Moltres-Galar', ability: 'Berserk', moves: ['protect'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen8customgame@@@-sublegendary');
+
+		team = [
+			{ species: 'Shaymin', moves: ['Swords Dance'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen1ou@@@+mythical',
+			"Nonexistent should override +Mythical for Pokemon that do not exist in Gen 1");
+	});
+
+	it('should support banning generic tags from items and moves', () => {
+		let team = [
+			{ species: 'Mewtwo', ability: 'Pressure', item: 'Berserk Gene', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes@@@+Past,-True Past');
+
+		team = [
+			{ species: 'Eternatus-Eternamax', ability: 'Pressure', moves: ['Light of Ruin'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@+Past,+Eternatus-Eternamax,-Past Unobtainable');
+	});
+
+	it('should support banning Gigantamax tags', () => {
+		let team = [
+			{ species: 'Charizard', ability: 'Blaze', moves: ['Ember'], evs: { hp: 1 }, gigantamax: true },
+		];
+		assert.legalTeam(team, 'gen8customgame');
+		assert.false.legalTeam(team, 'gen8customgame@@@-Gigantamax');
+
+		team = [
+			{ species: 'Charizard-Gmax', ability: 'Blaze', moves: ['Ember'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen8customgame');
+		assert.false.legalTeam(team, 'gen8customgame@@@-Gigantamax');
+	});
+
+	it('should support banning move tags', () => {
+		let team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Tackle'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-Contact');
+
+		team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9customgame@@@-Contact');
+	});
+
+	it('should support numeric tag filters', () => {
+		Dex.formats.validate('gen9customgame@@@-BST > 600');
+		Dex.formats.validate('gen9customgame@@@-Base Power > 100');
+
+		let team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-BST > 600');
+		assert.legalTeam(team, 'gen9customgame@@@-BST > 700');
+		assert.legalTeam(team, 'gen9customgame@@@-allpokemon,+BST > 600');
+
+		team = [
+			{ species: 'Pikachu', ability: 'Static', moves: ['Confusion'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-allpokemon,+BST > 600');
+
+		team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Hyper Beam'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-Base Power > 100');
+
+		team = [
+			{ species: 'Mewtwo', ability: 'Pressure', moves: ['Tackle'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9customgame@@@-Base Power > 100');
 	});
 
 	it('should support restrictions', () => {
@@ -200,6 +271,22 @@ describe("Custom Rules", () => {
 		assert.legalTeam(team, 'gen7ou@@@+Shadow Tag');
 	});
 
+	it('should allow types and Tera types to be banned', () => {
+		let team = [
+			{ species: 'charizard', ability: 'blaze', moves: ['ember'], teraType: 'Water', evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-type: Fire');
+		assert.legalTeam(team, 'gen9customgame@@@-teratype: Fire');
+
+		team = [
+			{ species: 'squirtle', ability: 'torrent', moves: ['watergun'], teraType: 'Fire', evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9customgame@@@-type: Fire');
+		assert.false.legalTeam(team, 'gen9customgame@@@-teratype: Fire');
+
+		assert.throws(() => Dex.formats.validate('gen9customgame@@@-Fire'));
+	});
+
 	it('should allow complex bans to be added', () => {
 		let team = [
 			{ species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: { hp: 1 } },
@@ -211,6 +298,17 @@ describe("Custom Rules", () => {
 			{ species: 'pikachu', ability: 'static', moves: ['thunderbolt'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen7doublesou@@@-Gravity ++ Thunderbolt');
+
+		team = [
+			{ species: 'charizard', ability: 'blaze', moves: ['ember'], teraType: 'Water', evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-type: Fire + ability: Blaze');
+
+		team = [
+			{ species: 'charizard', ability: 'blaze', moves: ['ember'], teraType: 'Water', evs: { hp: 1 } },
+			{ species: 'squirtle', ability: 'torrent', moves: ['watergun'], teraType: 'Fire', evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen9customgame@@@-type: Fire ++ teratype: Fire');
 	});
 
 	it('should allow complex bans to be altered', () => {
