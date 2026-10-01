@@ -2630,13 +2630,8 @@
         "level": 52,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Body Press", "Iron Defense", "Synthesis", "Trailblaze"],
-                "abilities": ["Bulletproof"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["Body Press", "Knock Off", "Spikes", "Synthesis", "Wood Hammer"],
+                "role": "Bulky Attacker",
+                "movepool": ["Body Press", "Knock Off", "Iron Defense", "Spikes", "Synthesis", "Wood Hammer"],
                 "abilities": ["Bulletproof"]
             }
         ]
