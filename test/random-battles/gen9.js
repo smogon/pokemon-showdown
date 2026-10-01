@@ -5,8 +5,6 @@
 
 const { testTeam, testAlwaysHasMove } = require('./tools');
 const assert = require('../assert');
-const { validateLearnset } = require('./tools');
-const { default: Dex } = require('../../dist/sim/dex');
 
 describe('[Gen 9] Random Battle (slow)', () => {
 	const options = { format: 'gen9randombattle' };
