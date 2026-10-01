@@ -11,6 +11,7 @@
 import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
 import type { FormatData } from '../../sim/dex-formats';
+import { DataMove } from "../../sim/dex-moves";
 
 interface DexOrGroup {
 	abilities: { [k: string]: boolean };
