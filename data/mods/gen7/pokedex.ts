@@ -35,6 +35,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Levitate" },
 	},
+	espeon: {
+		inherit: true,
+		evoCondition: "during the day w/o knowing a Fairy-type move with 2+ levels of Affection and not near a Moss or Ice rock",
+	},
+	umbreon: {
+		inherit: true,
+		evoCondition: "during the night w/o knowing a Fairy-type move with 2+ levels of Affection and not near a Moss or Ice rock",
+	},
 	ralts: {
 		inherit: true,
 		eggGroups: ["Amorphous"],
@@ -202,6 +210,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	gourgeistlarge: {
 		inherit: true,
 		abilities: { 0: "Pickup", 1: "Frisk" },
+	},
+	sylveon: {
+		inherit: true,
+		evoType: "levelExtra",
+		evoCondition: "with a Fairy-type move and 2+ levels of Affection",
 	},
 	hawlucha: {
 		inherit: true,

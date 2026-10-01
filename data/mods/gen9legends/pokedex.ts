@@ -11,4 +11,23 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: { hp: 60, atk: 140, def: 85, spa: 80, spd: 85, spe: 100 },
 	},
+	runerigus: {
+		inherit: true,
+		evoType: "other",
+		evoCondition: "take 49+ damage w/o fainting and stand under a bridge at Coulant Waterway",
+	},
+	overqwil: {
+		inherit: true,
+		evoLevel: undefined,
+		evoType: "other",
+		evoMove: "Barb Barrage",
+		evoCondition: "land 20 hits with Barb Barrage",
+	},
+	annihilape: {
+		inherit: true,
+		evoLevel: undefined,
+		evoType: "other",
+		evoMove: "Rage Fist",
+		evoCondition: "land 20 hits with Rage Fist",
+	},
 };
