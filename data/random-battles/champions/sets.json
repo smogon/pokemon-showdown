@@ -2151,7 +2151,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bulk Up", "Drain Punch", "Flame Charge", "Flare Blitz"],
+                "movepool": ["Bulk Up", "Drain Punch", "Flame Charge", "Flare Blitz", "Sucker Punch"],
                 "abilities": ["Reckless"]
             }
         ]
