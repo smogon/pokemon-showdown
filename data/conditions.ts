@@ -11,7 +11,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				this.add('-status', target, 'brn');
 			}
 		},
-		// Damage reduction is handled directly in the sim/battle.js damage function
+		// Damage reduction is handled in sim/battle-actions.ts#modifyDamage
 		onResidualOrder: 10,
 		onResidual(pokemon) {
 			this.damage(pokemon.baseMaxhp / 16);
