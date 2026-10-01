@@ -1500,7 +1500,12 @@ export const commands: Chat.ChatCommands = {
 
 	async rebuild() {
 		this.canUseConsole();
+		if (Monitor.rebuildLock) {
+			throw new Chat.ErrorMessage(`Wait for the current rebuild to finish before rebuilding.`);
+		}
+		Monitor.rebuildLock = true;
 		const [, , stderr] = await bash('node ./build', this);
+		Monitor.rebuildLock = false;
 		if (stderr) {
 			throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
 		}
