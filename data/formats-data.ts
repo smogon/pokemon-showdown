@@ -1534,9 +1534,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "NFE",
 	},
 	sneaselhisui: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	weavile: {
 		tier: "UU",
