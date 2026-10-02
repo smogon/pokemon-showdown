@@ -7,7 +7,6 @@
  */
 
 import { FS } from '../../lib';
-import { toID } from "../../sim/dex-data";
 
 interface Tandem {
 	species: string;
@@ -36,7 +35,7 @@ function formatAbility(ability: Ability | string, format: Format) {
 	const dex = Dex.forFormat(format);
 	const parentDex = Dex.forFormat(dex.parentMod);
 	ability = dex.abilities.get(ability);
-	const id = toID(ability.name);
+	const id = Dex.toID(ability.name);
 	const custom = (dex.data.Abilities[id] as any) !== (parentDex.data.Abilities[id] as any);
 	return custom ? `<button name="send" value="/dt ${ability.name}, ${format.mod}"\
 		style="display: inline; padding: 0; border: 0; font: inherit;\
@@ -49,7 +48,7 @@ function formatItem(item: Item | string, format: Format) {
 	const dex = Dex.forFormat(format);
 	const parentDex = Dex.forFormat(dex.parentMod);
 	item = dex.items.get(item);
-	const id = toID(item.name);
+	const id = Dex.toID(item.name);
 	const custom = (dex.data.Items[id] as any) !== (parentDex.data.Items[id] as any);
 	return custom ? `<button name="send" value="/dt ${item.name}, ${format.mod}"\
 		style="display: inline; padding: 0; border: 0; font: inherit;\
