@@ -823,7 +823,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	scizormega: {
-		tier: "(OU)",
+		tier: "UU",
 	},
 	kleavor: {
 		tier: "UU",
