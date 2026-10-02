@@ -134,6 +134,7 @@ export class BattleActions {
 			oldActive.usedItemThisTurn = false;
 			oldActive.statsRaisedThisTurn = false;
 			oldActive.statsLoweredThisTurn = false;
+			oldActive.skipBeforeSwitchOutEventFlag = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
 			if (this.battle.gen <= 4) {

@@ -1549,7 +1549,6 @@ export class Pokemon {
 		this.attackedBy = [];
 		this.hurtThisTurn = null;
 		this.pursuitActivated = false;
-		this.skipBeforeSwitchOutEventFlag = false;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
