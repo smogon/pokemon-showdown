@@ -79,6 +79,7 @@ export class BattleActions {
 			}
 			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
 				this.battle.runEvent('BeforeSwitchOut', oldActive);
+				this.battle.clearActiveMove();
 				if (this.battle.gen >= 5) {
 					this.battle.eachEvent('Update');
 				}
