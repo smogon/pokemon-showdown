@@ -1116,10 +1116,13 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (this.phase !== 'day') return this.sendUser(voter, `|error|You can only vote during the day.`);
 		if (!voter || (voter.isEliminated() && !voter.isSpirit())) return;
 
-		const target = this.getPlayerByAlias(targetId);
-		if (target) targetId = target.getNameId();
-		if ((!target || target.isEliminated()) && targetId !== 'novote') {
-			return this.sendUser(voter, `|error|${targetId} is not a valid player.`);
+		let target: MafiaPlayer | null = null;
+		if (targetId !== 'novote') {
+			target = this.getPlayerByAlias(targetId);
+			if (!target || target.isEliminated()) {
+				return this.sendUser(voter, `|error|${targetId} is not a valid player.`);
+			}
+			targetId = target.getNameId();
 		}
 
 		if (!this.enableNV && targetId === 'novote') return this.sendUser(voter, `|error|No Vote is not allowed.`);
@@ -3225,34 +3228,31 @@ export const commands: Chat.ChatCommands = {
 					`${target.trim()} is not a player's username in the game.` : `${target.trim()} is not a player.`);
 			}
 
+			const targetPlayer = players[0]!;
 			let elimType: MafiaEliminateType;
+			let repeat = false;
 			switch (cmd) {
 			case 'treestump':
 				elimType = MafiaEliminateType.TREESTUMP;
+				repeat = targetPlayer.isTreestump() && !targetPlayer.isSpirit();
 				break;
 			case 'spirit':
 				elimType = MafiaEliminateType.SPIRIT;
+				repeat = !targetPlayer.isTreestump() && targetPlayer.isSpirit();
 				break;
 			case 'spiritstump':
 				elimType = MafiaEliminateType.SPIRITSTUMP;
+				repeat = targetPlayer.isTreestump() && targetPlayer.isSpirit();
 				break;
 			case 'kick':
 				elimType = MafiaEliminateType.KICK;
 				break;
 			default:
 				elimType = MafiaEliminateType.ELIMINATE;
+				repeat = targetPlayer.eliminated === MafiaEliminateType.ELIMINATE;
 				break;
 			}
 
-			const targetPlayer = players[0]!;
-			let repeat = false;
-			switch (cmd) {
-			case 'treestump': repeat = targetPlayer.isTreestump() && !targetPlayer.isSpirit(); break;
-			case 'spirit': repeat = !targetPlayer.isTreestump() && targetPlayer.isSpirit(); break;
-			case 'spiritstump': repeat = targetPlayer.isTreestump() && targetPlayer.isSpirit(); break;
-			case 'kick': break;
-			default: repeat = targetPlayer.eliminated === MafiaEliminateType.ELIMINATE; break;
-			}
 			if (repeat) throw new Chat.ErrorMessage(`${targetPlayer.safeName} has already been ${cmd}ed.`);
 
 			for (const [index, player] of players.entries()) game.eliminate(player, elimType, index === 0);
