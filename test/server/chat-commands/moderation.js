@@ -58,3 +58,4 @@ describe('room promotions', function () {
 		assert.equal(this.room.auth.get(this.targetUser.id), '#');
 	});
 });
+
