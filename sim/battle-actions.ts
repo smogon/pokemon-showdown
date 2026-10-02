@@ -59,6 +59,16 @@ export class BattleActions {
 	// #region SWITCH
 	// ==================================================================
 
+	runPursuitActivation(pokemon: Pokemon) {
+		if (pokemon.skipBeforeSwitchOutEventFlag) return;
+		this.battle.runEvent('BeforeSwitchOut', pokemon);
+		if (this.battle.gen >= 5) {
+			this.battle.eachEvent('Update');
+		}
+		pokemon.skipBeforeSwitchOutEventFlag = true;
+		this.battle.faintMessages(false, false, this.battle.gen >= 5);
+	}
+
 	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
 		if (!pokemon || pokemon.isActive) {
 			this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
@@ -77,12 +87,8 @@ export class BattleActions {
 			if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 				switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 			}
-			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
-				this.battle.runEvent('BeforeSwitchOut', oldActive);
-				this.battle.clearActiveMove();
-				if (this.battle.gen >= 5) {
-					this.battle.eachEvent('Update');
-				}
+			if (!isDrag) {
+				this.runPursuitActivation(oldActive);
 			}
 			oldActive.skipBeforeSwitchOutEventFlag = false;
 			if (!this.battle.runEvent('SwitchOut', oldActive)) {
@@ -101,7 +107,6 @@ export class BattleActions {
 					this.battle.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
 					return false;
 				}
-				this.battle.faintMessages(false, false, false, false);
 				this.battle.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
 			} else {
 				// will definitely switch out at this point

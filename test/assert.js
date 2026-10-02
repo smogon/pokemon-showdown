@@ -178,7 +178,7 @@ assert.hurtsBy = function (pokemon, damage, fn, message) {
 	});
 };
 
-assert.logOrder = function (battle, ...logs) {
+assert.logOrder = function (battle, logs) {
 	const log = battle.getDebugLog();
 	let lastIndex = -1;
 	for (const [i, entry] of logs.entries()) {

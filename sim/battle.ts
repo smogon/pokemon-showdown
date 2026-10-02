@@ -2548,15 +2548,16 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false, forceCheck = false, checkWin = true, recheckDestinyBond = true) {
+	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
 		if (this.ended) return;
-		if (this.activeMove && this.gen <= 4) {
-			// don't check for wins in the middle of a move resolution
+		if (this.gen <= 4) {
 			// don't check for fainted Pokémon at all during U-turn
-			if (this.getAllActive().some(pokemon => pokemon.switchFlag)) return;
-			forceCheck = false;
-			checkWin = false;
-			recheckDestinyBond = false;
+			if (this.getAllActive().some(pokemon => typeof pokemon.switchFlag === 'string')) return;
+			// don't check for wins in the middle of a move resolution
+			if (this.activeMove) {
+				forceCheck = false;
+				checkWin = false;
+			}
 		}
 		const length = this.faintQueue.length;
 		if (!length) {
@@ -2579,6 +2580,10 @@ export class Battle {
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
+				// in Gen 2-4, don't check for a win if Destiny Bond activates during a Pursuit faint
+				if (this.faintQueue.length >= faintQueueLeft && !(this.gen <= 4 && pokemon.beingCalledBack)) {
+					checkWin = true;
+				}
 				if (pokemon.formeRegression && !pokemon.transformed) {
 					// before clearing volatiles
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
@@ -2598,8 +2603,6 @@ export class Battle {
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
-				// in Gen 2-4, don't check for a win if Destiny Bond activates during a Pursuit faint
-				if (this.faintQueue.length >= faintQueueLeft && recheckDestinyBond) checkWin = true;
 			}
 		}
 
@@ -2930,13 +2933,8 @@ export class Battle {
 				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (
-						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						!pokemon.skipBeforeSwitchOutEventFlag
-					) {
-						this.runEvent('BeforeSwitchOut', pokemon);
-						pokemon.skipBeforeSwitchOutEventFlag = true;
-						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing') {
+						this.actions.runPursuitActivation(pokemon);
 						if (this.ended) return true;
 						if (pokemon.fainted) {
 							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);

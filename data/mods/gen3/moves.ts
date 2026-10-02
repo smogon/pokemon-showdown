@@ -517,6 +517,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					source.getItem().isChoice) {
 					source.addVolatile('choicelock');
 				}
+				this.clearActiveMove();
 			},
 		},
 	},

@@ -355,15 +355,11 @@ describe('Switching in', () => {
 			battle.makeChoices();
 			battle.makeChoices('auto', 'move selfdestruct');
 			battle.makeChoices();
-			const log = battle.getDebugLog();
-			const hpIndex = log.lastIndexOf('|-damage|p1a: Shedinja|0 fnt');
-			const tyranitarSwitchIndex = log.indexOf('|switch|p2a: Tyranitar');
-			const faintingIndex = log.lastIndexOf('|faint|p1a: Shedinja');
-			assert(hpIndex > 0);
-			assert(tyranitarSwitchIndex > 0);
-			assert(faintingIndex > 0);
-			assert(hpIndex < tyranitarSwitchIndex, 'Spikes damage should be applied before Tyranitar switches in');
-			assert(tyranitarSwitchIndex < faintingIndex, 'Tyranitar should switch in before Abra faints');
+			assert.logOrder(battle, [
+				'|-damage|p1a: Shedinja|0 fnt',
+				'|switch|p2a: Tyranitar',
+				'|faint|p1a: Shedinja',
+			]);
 		});
 	});
 
@@ -373,20 +369,17 @@ describe('Switching in', () => {
 				battle = common.gen(4).createBattle([[
 					{ species: "alakazam", moves: ['spikes', 'pursuit'] },
 				], [
-					{ species: "shedinja", moves: ['destinybond'] },
+					{ species: "gastly", level: 1, moves: ['destinybond'] },
 					{ species: "shedinja", moves: ['sleeptalk'] },
 				]]);
 				battle.makeChoices('move spikes', 'move destinybond');
 				battle.makeChoices('move pursuit', 'switch 2');
-				const log = battle.getDebugLog();
-				const destinyBondFaintIndex = log.indexOf('|faint|p1a: Alakazam');
-				const switchIndex = log.lastIndexOf('|switch|p2a: Shedinja');
-				assert(destinyBondFaintIndex > 0);
-				assert(switchIndex > destinyBondFaintIndex);
-				const spikesIndex = log.indexOf('|-damage|p2a: Shedinja|0 fnt|[from] Spikes');
-				const replacementFaintIndex = log.lastIndexOf('|faint|p2a: Shedinja');
-				assert(spikesIndex > switchIndex);
-				assert(replacementFaintIndex > spikesIndex);
+				assert.logOrder(battle, [
+					'|faint|p1a: Alakazam',
+					'|switch|p2a: Shedinja',
+					'|-damage|p2a: Shedinja|0 fnt|[from] Spikes',
+					'|faint|p2a: Shedinja',
+				]);
 				assert(battle.ended);
 				assert.equal(battle.winner, '');
 			});
@@ -405,10 +398,12 @@ describe('Switching in', () => {
 				battle.makeChoices('switch 3, switch 4', 'move pursuit 1, pass');
 				assert(battle.ended);
 				assert.equal(battle.winner, 'Player 1');
-				const log = battle.getDebugLog();
-				const switchIndex = log.indexOf('|switch|p1a: Pikachu');
-				assert(switchIndex > log.indexOf('|faint|p2a: Snorlax'));
-				assert(!log.includes('|switch|p1b: Eevee'));
+				assert.logOrder(battle, [
+					'|faint|p2a: Snorlax',
+					'|switch|p1a: Pikachu',
+					'|win|Player 1',
+				]);
+				assert(!battle.getDebugLog().includes('|switch|p1b: Eevee'));
 			});
 
 			it(`should check the outcome before requesting a replacement batch`, () => {
@@ -510,11 +505,12 @@ describe('Switching in', () => {
 				assert(steelix.fainted);
 				assert(battle.ended);
 				assert.equal(battle.winner, 'Player 1');
-				assert.logOrder(battle,
+				assert.logOrder(battle, [
 					'|switch|p1a: Tyranitar',
 					'|faint|p2a: Steelix',
-					'|-weather|Sandstorm|[from] ability: Sand Stream'
-				);
+					'|-weather|Sandstorm|[from] ability: Sand Stream',
+					'|win|Player 1',
+				]);
 			});
 		});
 
@@ -543,20 +539,17 @@ describe('Switching in', () => {
 				battle = common.gen(3).createBattle([[
 					{ species: "alakazam", moves: ['spikes', 'pursuit'] },
 				], [
-					{ species: "shedinja", moves: ['destinybond'] },
+					{ species: "gastly", level: 1, moves: ['destinybond'] },
 					{ species: "shedinja", moves: ['sleeptalk'] },
 				]]);
 				battle.makeChoices('move spikes', 'move destinybond');
 				battle.makeChoices('move pursuit', 'switch 2');
-				const log = battle.getDebugLog();
-				const destinyBondFaintIndex = log.indexOf('|faint|p1a: Alakazam');
-				const switchIndex = log.lastIndexOf('|switch|p2a: Shedinja');
-				assert(destinyBondFaintIndex > 0);
-				assert(switchIndex > destinyBondFaintIndex);
-				const spikesIndex = log.indexOf('|-damage|p2a: Shedinja|0 fnt|[from] Spikes');
-				const replacementFaintIndex = log.lastIndexOf('|faint|p2a: Shedinja');
-				assert(spikesIndex > switchIndex);
-				assert(replacementFaintIndex > spikesIndex);
+				assert.logOrder(battle, [
+					'|faint|p1a: Alakazam',
+					'|switch|p2a: Shedinja',
+					'|-damage|p2a: Shedinja|0 fnt|[from] Spikes',
+					'|faint|p2a: Shedinja',
+				]);
 				assert(battle.ended);
 				assert.equal(battle.winner, '');
 			});
@@ -575,10 +568,12 @@ describe('Switching in', () => {
 				battle.makeChoices('switch 3, switch 4', 'move pursuit 1, pass');
 				assert(battle.ended);
 				assert.equal(battle.winner, 'Player 1');
-				const log = battle.getDebugLog();
-				const switchIndex = log.indexOf('|switch|p1a: Pikachu');
-				assert(switchIndex > log.indexOf('|faint|p2a: Snorlax'));
-				assert(!log.includes('|switch|p1b: Eevee'));
+				assert.logOrder(battle, [
+					'|faint|p2a: Snorlax',
+					'|switch|p1a: Pikachu',
+					'|win|Player 1',
+				]);
+				assert(!battle.getDebugLog().includes('|switch|p1b: Eevee'));
 			});
 		});
 
@@ -594,15 +589,11 @@ describe('Switching in', () => {
 				battle.makeChoices();
 				battle.makeChoices('auto', 'move selfdestruct');
 				battle.makeChoices();
-				const log = battle.getDebugLog();
-				const hpIndex = log.lastIndexOf('|-damage|p1a: Shedinja|0 fnt');
-				const tyranitarSwitchIndex = log.indexOf('|switch|p2a: Tyranitar');
-				const faintingIndex = log.lastIndexOf('|faint|p1a: Shedinja');
-				assert(hpIndex > 0);
-				assert(tyranitarSwitchIndex > 0);
-				assert(faintingIndex > 0);
-				assert(hpIndex < tyranitarSwitchIndex, 'Spikes damage should be applied before Tyranitar switches in');
-				assert(tyranitarSwitchIndex < faintingIndex, 'Tyranitar should switch in before Abra faints');
+				assert.logOrder(battle, [
+					'|-damage|p1a: Shedinja|0 fnt',
+					'|switch|p2a: Tyranitar',
+					'|faint|p1a: Shedinja',
+				]);
 				assert(battle.ended);
 			});
 
@@ -625,20 +616,17 @@ describe('Switching in', () => {
 				battle = common.gen(2).createBattle([[
 					{ species: "alakazam", moves: ['spikes', 'pursuit'] },
 				], [
-					{ species: "shedinja", moves: ['destinybond'] },
+					{ species: "gastly", level: 1, moves: ['destinybond'] },
 					{ species: "shedinja", moves: ['sleeptalk'] },
 				]]);
 				battle.makeChoices('move spikes', 'move destinybond');
 				battle.makeChoices('move pursuit', 'switch 2');
-				const log = battle.getDebugLog();
-				const destinyBondFaintIndex = log.indexOf('|faint|p1a: Alakazam');
-				const switchIndex = log.lastIndexOf('|switch|p2a: Shedinja');
-				assert(destinyBondFaintIndex > 0);
-				assert(switchIndex > destinyBondFaintIndex);
-				const spikesIndex = log.indexOf('|-damage|p2a: Shedinja|0 fnt|[from] Spikes');
-				const replacementFaintIndex = log.lastIndexOf('|faint|p2a: Shedinja');
-				assert(spikesIndex > switchIndex);
-				assert(replacementFaintIndex > spikesIndex);
+				assert.logOrder(battle, [
+					'|faint|p1a: Alakazam',
+					'|switch|p2a: Shedinja',
+					'|-damage|p2a: Shedinja|0 fnt|[from] Spikes',
+					'|faint|p2a: Shedinja',
+				]);
 				assert(battle.ended);
 				assert.equal(battle.winner, '');
 			});
