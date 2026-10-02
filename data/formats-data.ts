@@ -626,7 +626,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	slowking: {
 		tier: "UU",
 		doublesTier: "(DUU)",
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	slowkinggalar: {
 		tier: "OU",
@@ -868,7 +868,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	chansey: {
 		tier: "PU",
 		doublesTier: "NFE",
-		natDexTier: "UU",
+		natDexTier: "RU",
 	},
 	blissey: {
 		tier: "RU",
@@ -903,7 +903,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	kingdra: {
 		tier: "ZUBL",
-		doublesTier: "DUU",
+		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	goldeen: {
@@ -5253,7 +5253,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	regidrago: {
 		tier: "NUBL",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
 	glastrier: {
@@ -5667,7 +5667,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	ironbundle: {
 		tier: "Uber",
-		doublesTier: "DUU",
+		doublesTier: "(DUU)",
 		natDexTier: "Uber",
 	},
 	ironvaliant: {
