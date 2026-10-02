@@ -72,31 +72,31 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	custapberry: {
 		inherit: true,
-		onFractionalPriority: undefined, // no inherit
-		onBeforeTurn(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
-				const action = this.queue.willMove(pokemon);
-				if (!action) return;
-				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
-				if (!otherAction) return;
-				this.queue.insertChoice({
-					choice: 'event',
-					event: 'Custap',
-					priority: action.priority + 0.1,
-					pokemon: action.pokemon,
-					move: action.move,
-					targetLoc: action.targetLoc,
-				});
+		onFractionalPriorityPriority: 2,
+		onFractionalPriority(priority, pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				return 0.1;
 			}
 		},
-		onCustap(pokemon) {
-			const action = this.queue.willMove(pokemon);
-			this.debug(`custap action: ${action?.moveid}`);
-			if (action && pokemon.eatItem()) {
-				this.queue.cancelAction(pokemon);
-				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
-				this.runAction(action);
+		onBeforeTurn(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+				const action = this.queue.willMove(pokemon);
+				if (!action) return;
+				const moveActions = this.queue.list.filter(a => a.choice === 'move' && a.move);
+				if (moveActions.length > 1) pokemon.custapBerryFlag = true;
 			}
+		},
+		onBeforeMovePriority: 100,
+		onBeforeMove(pokemon) {
+			if (pokemon.custapBerryFlag) {
+				if (pokemon.eatItem()) this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
+				pokemon.custapBerryFlag = false;
+			}
+		},
+		onTakeItem(item, source) {
+			return !source.custapBerryFlag;
 		},
 	},
 	deepseascale: {
@@ -363,30 +363,27 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	quickclaw: {
 		inherit: true,
-		onFractionalPriority: undefined, // no inherit
+		onFractionalPriorityPriority: 3,
+		onFractionalPriority(priority, pokemon) {
+			if (pokemon.quickClawRoll) return 0.1;
+		},
 		onBeforeTurn(pokemon) {
-			if (this.randomChance(1, 5)) {
+			if (pokemon.quickClawRoll) {
 				const action = this.queue.willMove(pokemon);
 				if (!action) return;
-				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
-				if (!otherAction) return;
-				this.queue.insertChoice({
-					choice: 'event',
-					event: 'Custap',
-					priority: action.priority + 0.1,
-					pokemon: action.pokemon,
-					move: action.move,
-					targetLoc: action.targetLoc,
-				});
+				const moveActions = this.queue.list.filter(a => a.choice === 'move' && a.move);
+				if (moveActions.length > 1) pokemon.quickClawFlag = true;
 			}
 		},
-		onCustap(pokemon) {
-			const action = this.queue.willMove(pokemon);
-			if (action) {
-				this.queue.cancelAction(pokemon);
+		onBeforeMovePriority: 100,
+		onBeforeMove(pokemon) {
+			if (pokemon.quickClawFlag) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
-				this.runAction(action);
+				pokemon.quickClawFlag = false;
 			}
+		},
+		onTakeItem(item, source) {
+			return !source.quickClawFlag;
 		},
 	},
 	quickpowder: {

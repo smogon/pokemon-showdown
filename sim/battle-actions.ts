@@ -124,6 +124,7 @@ export class BattleActions {
 			oldActive.statsLoweredThisTurn = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
+			if (this.battle.gen === 4) pokemon.quickClawRoll = oldActive.quickClawRoll;
 			if (this.battle.gen <= 4) {
 				pokemon.lastItem = oldActive.lastItem;
 				oldActive.lastItem = '';
@@ -385,7 +386,6 @@ export class BattleActions {
 		const zMove = options?.zMove;
 		const maxMove = options?.maxMove;
 		if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
-		if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
 		let move = this.dex.getActiveMove(moveOrMoveName);
 		pokemon.lastMoveUsed = move;
