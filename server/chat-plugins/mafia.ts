@@ -721,7 +721,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return this.getPlayersByAlias(targetid);
 	}
 
-	override getUserByAlias(aliasid: ID, requester: User, mafiacommand: boolean = false) {
+	override getUserByAlias(aliasid: ID, requester: User) {
 		if (!this.started) return null;
 		const matches = this.players.filter(player =>
 			player.getAnonymized() && toID(player.alias) === aliasid
