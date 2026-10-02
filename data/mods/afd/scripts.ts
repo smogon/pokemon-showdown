@@ -101,7 +101,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (!oldActive.hp) {
 					// a pokemon fainted from Pursuit before it could switch
-					return 'pursuitfaint';
+					return false;
 				}
 
 				// will definitely switch out at this point

@@ -222,7 +222,7 @@ interface ModdedBattleActions {
 	) => [SpreadMoveDamage, SpreadMoveTargets];
 	switchIn?: (
 		this: BattleActions, pokemon: Pokemon, pos: number, sourceEffect: Effect | null, isDrag?: boolean
-	) => boolean | "pursuitfaint";
+	) => boolean;
 	targetTypeChoices?: (this: BattleActions, targetType: string) => boolean;
 	terastallize?: (this: BattleActions, pokemon: Pokemon) => void;
 	tryMoveHit?: (

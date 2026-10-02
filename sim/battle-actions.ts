@@ -95,26 +95,32 @@ export class BattleActions {
 			}
 			if (!oldActive.hp) {
 				// a pokemon fainted from Pursuit before it could switch
-				return 'pursuitfaint';
+				if (this.battle.gen >= 5) {
+					// in gen 5+, the switch is cancelled
+					this.battle.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
+					return false;
+				}
+				this.battle.faintMessages(false, false, false, false);
+				this.battle.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
+			} else {
+				// will definitely switch out at this point
+
+				this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
+				this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
+
+				// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
+				this.battle.queue.cancelAction(oldActive);
+
+				let newMove = null;
+				if (this.battle.gen === 4 && sourceEffect) {
+					newMove = oldActive.lastMove;
+				}
+				if (switchCopyFlag) {
+					pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
+				}
+				if (newMove) pokemon.lastMove = newMove;
+				oldActive.clearVolatile();
 			}
-
-			// will definitely switch out at this point
-
-			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
-			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
-
-			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
-			this.battle.queue.cancelAction(oldActive);
-
-			let newMove = null;
-			if (this.battle.gen === 4 && sourceEffect) {
-				newMove = oldActive.lastMove;
-			}
-			if (switchCopyFlag) {
-				pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
-			}
-			if (newMove) pokemon.lastMove = newMove;
-			oldActive.clearVolatile();
 		}
 		if (oldActive) {
 			oldActive.isActive = false;
@@ -197,8 +203,7 @@ export class BattleActions {
 		if (!this.battle.runEvent('DragOut', oldActive)) {
 			return false;
 		}
-		if (!this.switchIn(pokemon, pos, null, true)) return false;
-		return true;
+		return this.switchIn(pokemon, pos, null, true);
 	}
 	runSwitch(pokemon: Pokemon) {
 		const switchersIn = [pokemon];
