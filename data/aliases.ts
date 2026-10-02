@@ -93,10 +93,12 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
 	omotm: "[Gen 9] Bad 'n Boosted",
-	lcotm: "[Gen 9] Fortemons",
-	ommotm: "[Gen 9] Tier Shift AAA",
-	ommspotlight: "[Gen 9] Tier Shift AAA",
-	pmotm: "[Gen 9] Deltamon Random Battle",
+	lcotm: "[Gen 9] Force of the Fallen",
+	ommotm: "[Gen 9] National Dex Mix and Mega",
+	ommspotlight: "[Gen 9] National Dex Mix and Mega",
+	pmotm: "[Gen 9] Random Tandem",
+	randtand: "[Gen 9] Random Tandem",
+	pmlc: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
 	mnmls: "[Gen 9] Mix and Mega: Limited Supply Random Battle",
 
 	// mega evos --- 1st ordered alphabetically by species, 2nd by alias

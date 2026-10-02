@@ -262,7 +262,7 @@ export class BattleQueue {
 
 			if (this.battle.dex.currentMod.startsWith('champions') &&
 				action.move.id === 'curse' && !action.pokemon.hasType('Ghost')) {
-				action.targetLoc = action.pokemon.getLocOf(action.pokemon);
+				action.move.target = 'self';
 			}
 
 			if (!action.targetLoc) {

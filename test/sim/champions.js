@@ -15,6 +15,82 @@ const createChampionsBattle = (options, teams) => {
 	return common.createBattle({ formatid, ...options }, teams);
 };
 
+describe('Mega Sol', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it('should apply Sunny Day damage boosts', () => {
+		battle = createChampionsBattle([[
+			{ species: "Meganium", item: 'meganiumite', moves: ['weatherball'] },
+		], [
+			{ species: "Pelipper", ability: 'drizzle', moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move weatherball mega', 'move sleeptalk');
+		const pelipper = battle.p2.active[0];
+		assert.bounded(pelipper.maxhp - pelipper.hp, [98, 116]);
+	});
+
+	it('should bypass weather defensive boosts', () => {
+		battle = createChampionsBattle([[
+			{ species: "Meganium", item: 'meganiumite', moves: ['weatherball'] },
+		], [
+			{ species: "Tyranitar", item: 'tyranitarite', moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move weatherball mega', 'move sleeptalk mega');
+		const tyranitar = battle.p2.active[0];
+		assert.bounded(tyranitar.maxhp - tyranitar.hp, [63, 75]);
+	});
+
+	it('should force Electro Shot to charge under rain', () => {
+		battle = createChampionsBattle([[
+			{ species: "Meganium", item: 'meganiumite', moves: ['electroshot'] },
+		], [
+			{ species: "Pelipper", ability: 'drizzle', moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move electroshot mega', 'move sleeptalk');
+		const pelipper = battle.p2.active[0];
+		assert.false.fainted(pelipper);
+		battle.makeChoices('move electroshot', 'move sleeptalk');
+		assert.fainted(pelipper);
+	});
+});
+
+describe('Prankster', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it('should cause Status moves forced by Encore to fail against Dark Pokémon', () => {
+		battle = createChampionsBattle([[
+			{ species: "Liepard", ability: 'prankster', moves: ['encore'] },
+		], [
+			{ species: "Riolu", ability: 'prankster', moves: ['confide', 'return'] },
+		]]);
+		battle.makeChoices('move encore', 'move confide');
+		battle.makeChoices('move encore', 'move return');
+		assert.statStage(battle.p1.active[0], 'spa', 0);
+	});
+
+	it('should not cause damaging moves forced by Encore to fail against Dark Pokémon even if the attacker intended to use a Status move', () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: "Liepard", ability: 'prankster', moves: ['encore', 'nastyplot'] },
+			{ species: "Tapu Fini", ability: 'mistysurge', moves: ['calmmind'] },
+		], [
+			{ species: "Meowstic", ability: 'prankster', moves: ['frustration', 'leer'] },
+			{ species: "Lopunny", ability: 'limber', moves: ['agility'] },
+		]]);
+
+		battle.makeChoices('move encore 1, move calmmind', 'move frustration 2, move agility');
+		battle.makeChoices('move encore 1, move calmmind', 'move leer, move agility');
+		assert(battle.p2.active[0].volatiles['encore'], `Meowstic should be encored`);
+		assert.false.fullHP(battle.p1.active[0]);
+	});
+});
+
 describe('Curse', () => {
 	afterEach(() => {
 		battle.destroy();
@@ -36,7 +112,7 @@ describe('Curse', () => {
 		);
 	});
 
-	it(`should redirect to a foe when targeting an ally`, () => {
+	it(`should redirect to a foe when targeting an ally already affected by Curse`, () => {
 		battle = createChampionsBattle({ gameType: 'doubles' }, [[
 			{ species: 'Gengar', moves: ['curse'] },
 			{ species: 'Magikarp', moves: ['splash'] },
@@ -71,7 +147,7 @@ describe('Curse', () => {
 		assert.equal(caterpie.hp, caterpie.maxhp - curseResidual * 2);
 	});
 
-	it(`should be affected by Pressure if targeting an ally`, () => {
+	it(`should be affected by opposing Pressure if targeting an ally`, () => {
 		battle = createChampionsBattle({ gameType: 'doubles' }, [[
 			{ species: 'Gengar', moves: ['curse'] },
 			{ species: 'Magikarp', moves: ['splash'] },
@@ -111,7 +187,7 @@ describe('Curse', () => {
 		assert.equal(greninja.moveSlots[0].pp, greninja.moveSlots[0].maxpp - 3);
 	});
 
-	it(`should not hit a target mid-fly`, () => {
+	it(`should not hit a semi-invulnerable target`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Gengar', moves: ['curse'] },
 		], [
@@ -122,7 +198,7 @@ describe('Curse', () => {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should be able to hit a target mid-fly if a non-Ghost user has Protean`, () => {
+	it(`should be able to hit a semi-invulnerable target if a non-Ghost user has Protean`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Greninja', ability: 'protean', moves: ['curse'] },
 		], [
@@ -136,7 +212,7 @@ describe('Curse', () => {
 		assert.equal(aerodactyl.hp, aerodactyl.maxhp - curseResidual);
 	});
 
-	it(`should be able to hit a target mid-fly if the user became a Ghost due to Trick-or-Treat`, () => {
+	it(`should be able to hit a semi-invulnerable target if the user became a Ghost due to Trick-or-Treat`, () => {
 		battle = createChampionsBattle({ gameType: 'doubles' }, [[
 			{ species: 'Kecleon', ability: 'protean', moves: ['curse'] },
 			{ species: 'Magikarp', moves: ['splash'] },
@@ -230,6 +306,88 @@ describe('Curse', () => {
 		assert.fullHP(aerodactyl);
 	});
 
+	it(`should target a random opponent if the target is a semi-invulnerable ally`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Deoxys', moves: ['fly'] },
+			{ species: 'Gengar', moves: ['curse'] },
+		], [
+			{ species: 'Caterpie', moves: ['sleeptalk'] },
+			{ species: 'Metapod', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move fly 1, move curse -1', 'auto');
+		assert.fullHP(battle.p1.active[0]);
+		assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
+	});
+
+	it(`should boost its stats if a Ghost user has Protean and was hit by Electrify`, () => {
+		battle = createChampionsBattle([[
+			{ species: 'Gengar', ability: 'protean', moves: ['curse'] },
+		], [
+			{ species: 'Aerodactyl', moves: ['electrify'] },
+		]]);
+		const gengar = battle.p1.active[0];
+		const aerodactyl = battle.p2.active[0];
+		battle.makeChoices();
+		assert.fullHP(gengar);
+		assert.equal(gengar.boosts.atk, 1);
+		assert.fullHP(aerodactyl);
+	});
+
+	it(`should not be affected by Pressure if a Ghost user has Protean and was hit by Electrify`, () => {
+		battle = createChampionsBattle([[
+			{ species: 'Gengar', ability: 'protean', moves: ['curse'] },
+		], [
+			{ species: 'Aerodactyl', moves: ['electrify'] },
+		]]);
+		const gengar = battle.p1.active[0];
+		const aerodactyl = battle.p2.active[0];
+		battle.makeChoices();
+		assert.fullHP(gengar);
+		assert.equal(gengar.boosts.atk, 1);
+		assert.fullHP(aerodactyl);
+		assert.equal(aerodactyl.moveSlots[0].pp, aerodactyl.moveSlots[0].maxpp - 1);
+	});
+
+	it(`should target a random opponent if the target is an ally that uses Ally Switch`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', moves: ['allyswitch'] },
+			{ species: 'Gengar', moves: ['curse'] },
+		], [
+			{ species: 'Caterpie', moves: ['sleeptalk'] },
+			{ species: 'Metapod', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move allyswitch, move curse -1', 'auto');
+		assert.fullHP(battle.p1.active[1]);
+		assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
+	});
+
+	it(`should not be able to hit an opposing semi-invulnerable target if targeted an ally`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Gengar', moves: ['curse'] },
+			{ species: 'Gourgeist', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Aerodactyl', moves: ['fly'] },
+			{ species: 'Aerodactyl', moves: ['fly'] },
+		]]);
+		battle.makeChoices();
+		assert.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
+	});
+
+	it(`should not be able to hit an opposing semi-invulnerable target if targeted an ally that uses Ally Switch`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'Gengar', moves: ['curse'] },
+			{ species: 'Gourgeist', moves: ['allyswitch'] },
+		], [
+			{ species: 'Aerodactyl', moves: ['fly'] },
+			{ species: 'Aerodactyl', moves: ['fly'] },
+		]]);
+
+		battle.makeChoices('move curse -2, move allyswitch', 'auto');
+		assert.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
+	});
+
 	it(`should boost its stats if the target is already afflicted with Curse and the user stops being a Ghost-type mid-turn`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Gengar', moves: ['curse'] },
@@ -249,7 +407,7 @@ describe('Curse', () => {
 		assert.equal(gengar.boosts.atk, 1);
 	});
 
-	it(`should boost not be affected by Pressure if the user stops being a Ghost-type mid-turn`, () => {
+	it(`should not be affected by Pressure if the user stops being a Ghost-type mid-turn`, () => {
 		battle = createChampionsBattle([[
 			{ species: 'Gengar', moves: ['curse'] },
 		], [
@@ -280,5 +438,62 @@ describe('Curse', () => {
 		battle.makeChoices();
 		assert.equal(gengar.hp, gengar.maxhp - Math.floor(gengar.maxhp / 2));
 		assert.equal(aerodactyl.hp, aerodactyl.maxhp - curseResidual * 2);
+	});
+});
+
+describe('Encore', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it(`should restore the priority of the originally selected move`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'regieleki', moves: ['sleeptalk', 'substitute'] },
+			{ species: 'pichu', moves: ['sleeptalk'] },
+		], [
+			{ species: 'whimsicott', ability: 'prankster', moves: ['sleeptalk', 'encore'] },
+			{ species: 'terrakion', moves: ['quickattack', 'headlongrush'] },
+		]]);
+
+		const eleki = battle.p1.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move headlongrush 2');
+		battle.makeChoices('move substitute', 'move encore -2, move quickattack 1');
+
+		assert.false.fainted(eleki);
+	});
+
+	it(`should restore the priority of the originally selected move once and get blocked when appropriate`, () => {
+		battle = createChampionsBattle({ gameType: 'doubles' }, [[
+			{ species: 'regieleki', moves: ['psychicterrain'] },
+			{ species: 'pichu', moves: ['sleeptalk'] },
+		], [
+			{ species: 'whimsicott', ability: 'prankster', moves: ['sleeptalk', 'encore'] },
+			{ species: 'terrakion', moves: ['quickattack', 'headlongrush'] },
+		]]);
+
+		const eleki = battle.p1.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move quickattack 2');
+		battle.makeChoices('auto', 'move encore -2, move headlongrush 1');
+		assert.fullHP(eleki);
+	});
+});
+
+describe('No Retreat', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it.skip(`should not allow usage multiple times in a row even if it has the trapped volatile`, () => {
+		battle = createChampionsBattle([[
+			{ species: "Wynaut", moves: ['noretreat'] },
+		], [
+			{ species: "Caterpie", moves: ['block'] },
+		]]);
+
+		const wynaut = battle.p1.active[0];
+		battle.makeChoices();
+		assert.statStage(wynaut, 'atk', 1);
+		battle.makeChoices();
+		assert.statStage(wynaut, 'atk', 1);
 	});
 });

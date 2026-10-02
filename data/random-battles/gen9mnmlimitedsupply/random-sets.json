@@ -9,7 +9,7 @@
 		]
 	},
 	"garganacl": {
-		"level": 87,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Iron Defense", "Body Press", "Salt Cure", "Recover"],
@@ -27,7 +27,7 @@
 		]
 	},
 	"heatran": {
-		"level": 86,
+		"level": 83,
 		"sets": [
 			{
 				"movepool": ["Magma Storm", "Dragon Pulse", "Earth Power", "Will-O-Wisp"],
@@ -45,7 +45,7 @@
 		]
 	},
 	"ragingbolt": {
-		"level": 84,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Thunderbolt", "Draco Meteor", "Thunderclap", "Volt Switch"],
@@ -54,7 +54,7 @@
 		]
 	},
 	"annihilape": {
-		"level": 82,
+		"level": 83,
 		"sets": [
 			{
 				"movepool": ["Rage Fist", "Bulk Up", "Drain Punch", "Ice Punch"],
@@ -72,7 +72,7 @@
 		]
 	},
 	"ceruledge": {
-		"level": 84,
+		"level": 83,
 		"sets": [
 			{
 				"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Close Combat"],
@@ -81,7 +81,7 @@
 		]
 	},
 	"gholdengo": {
-		"level": 84,
+		"level": 83,
 		"sets": [
 			{
 				"movepool": ["Focus Blast", "Recover", "Make It Rain", "Shadow Ball"],
@@ -90,7 +90,7 @@
 		]
 	},
 	"gougingfire": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Flare Blitz", "Double-Edge", "Burning Bulwark", "Dragon Dance"],
@@ -108,7 +108,7 @@
 		]
 	},
 	"roaringmoon": {
-		"level": 85,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Jaw Lock", "Fire Fang", "Thunder Fang", "U-turn"],
@@ -135,7 +135,7 @@
 		]
 	},
 	"dragapult": {
-		"level": 82,
+		"level": 80,
 		"sets": [
 			{
 				"movepool": ["Draco Meteor", "Flamethrower", "Thunderbolt", "U-turn"],
@@ -144,7 +144,7 @@
 		]
 	},
 	"gengar": {
-		"level": 86,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Nasty Plot", "Shadow Ball", "Sludge Wave", "Giga Drain"],
@@ -153,7 +153,7 @@
 		]
 	},
 	"ironboulder": {
-		"level": 80,
+		"level": 81,
 		"sets": [
 			{
 				"movepool": ["Mighty Cleave", "Zen Headbutt", "Close Combat", "Swords Dance"],
@@ -180,7 +180,7 @@
 		]
 	},
 	"weavile": {
-		"level": 88,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Dark Pulse", "Ice Beam", "Focus Blast", "Nasty Plot"],
@@ -198,7 +198,7 @@
 		]
 	},
 	"mandibuzz": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Foul Play", "Toxic", "Roost", "Defog"],
@@ -207,7 +207,7 @@
 		]
 	},
 	"skarmory": {
-		"level": 90,
+		"level": 89,
 		"sets": [
 			{
 				"movepool": ["Roost", "Brave Bird", "Iron Head", "Drill Run"],
@@ -216,7 +216,7 @@
 		]
 	},
 	"salazzle": {
-		"level": 84,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Fire Lash", "Poison Jab", "Will-O-Wisp", "Encore"],
@@ -225,16 +225,16 @@
 		]
 	},
 	"mamoswine": {
-		"level": 86,
+		"level": 89,
 		"sets": [
 			{
-				"movepool": ["Ice Beam", "Freeze-Dry", "Earthquake", "Stealth Rock"],
+				"movepool": ["Icicle Crash", "Freeze-Dry", "Earthquake", "Ice Shard"],
 				"abilities": ["Oblivious"]
 			}
 		]
 	},
 	"fezandipiti": {
-		"level": 87,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Sludge Bomb", "Brave Bird", "U-turn", "Roost"],
@@ -243,7 +243,7 @@
 		]
 	},
 	"jirachi": {
-		"level": 86,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Thunder Wave", "Flash Cannon", "Wish", "U-turn"],
@@ -252,7 +252,7 @@
 		]
 	},
 	"hippowdon": {
-		"level": 90,
+		"level": 93,
 		"sets": [
 			{
 				"movepool": ["Earthquake", "Stone Edge", "Stealth Rock", "Slack Off"],
@@ -261,7 +261,7 @@
 		]
 	},
 	"drifblim": {
-		"level": 90,
+		"level": 93,
 		"sets": [
 			{
 				"movepool": ["Hex", "Will-O-Wisp", "Strength Sap", "Defog"],
@@ -270,7 +270,7 @@
 		]
 	},
 	"tinkaton": {
-		"level": 86,
+		"level": 87,
 		"sets": [
 			{
 				"movepool": ["Stealth Rock", "Encore", "Gigaton Hammer", "Thunder Wave"],
@@ -279,7 +279,7 @@
 		]
 	},
 	"landorustherian": {
-		"level": 88,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Stealth Rock", "Sandsear Storm", "U-turn", "Taunt"],
@@ -288,7 +288,7 @@
 		]
 	},
 	"hydreigon": {
-		"level": 86,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Dark Pulse", "Flash Cannon", "Fire Blast", "Nasty Plot"],
@@ -297,7 +297,7 @@
 		]
 	},
 	"lugia": {
-		"level": 88,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Surf", "Psychic Noise", "Whirlwind", "Recover"],
@@ -306,7 +306,7 @@
 		]
 	},
 	"kyuremblack": {
-		"level": 85,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Fusion Bolt", "Icicle Spear", "Substitute", "Dragon Dance"],
@@ -324,7 +324,7 @@
 		]
 	},
 	"palossand": {
-		"level": 84,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Night Shade", "Scorching Sands", "Shore Up", "Stealth Rock"],
@@ -333,16 +333,16 @@
 		]
 	},
 	"revavroom": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Shift Gear", "Iron Head", "Double-Edge", "Temper Flare"],
-				"abilities": ["Overcoat"]
+				"abilities": ["Filter"]
 			}
 		]
 	},
 	"vikavolt": {
-		"level": 89,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Sticky Web", "Volt Switch", "Bug Buzz", "Flash Cannon"],
@@ -351,7 +351,7 @@
 		]
 	},
 	"umbreon": {
-		"level": 86,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Alluring Voice", "Weather Ball", "Toxic", "Moonlight"],
@@ -369,7 +369,7 @@
 		]
 	},
 	"fluttermane": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Power Gem", "Shadow Ball", "Moonblast", "Psyshock"],
@@ -378,7 +378,7 @@
 		]
 	},
 	"rotomwash": {
-		"level": 86,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Will-O-Wisp", "Thunder", "Volt Switch", "Hydro Pump"],
@@ -396,7 +396,7 @@
 		]
 	},
 	"hariyama": {
-		"level": 89,
+		"level": 90,
 		"sets": [
 			{
 				"movepool": ["Bulk Up", "Drain Punch", "Bullet Punch", "Throat Chop"],
@@ -405,7 +405,7 @@
 		]
 	},
 	"ursalunabloodmoon": {
-		"level": 79,
+		"level": 80,
 		"sets": [
 			{
 				"movepool": ["Earth Power", "Blood Moon", "Moonblast", "Moonlight"],
@@ -414,7 +414,7 @@
 		]
 	},
 	"screamtail": {
-		"level": 85,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Boomburst", "Wish", "Thunder Wave", "Encore"],
@@ -423,7 +423,7 @@
 		]
 	},
 	"politoed": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Liquidation", "Earthquake", "Ice Punch", "Belly Drum"],
@@ -432,7 +432,7 @@
 		]
 	},
 	"cryogonal": {
-		"level": 88,
+		"level": 89,
 		"sets": [
 			{
 				"movepool": ["Blizzard", "Rapid Spin", "Aurora Veil", "Recover"],
@@ -450,7 +450,7 @@
 		]
 	},
 	"brutebonnet": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Close Combat", "Sucker Punch", "Leaf Storm", "Synthesis"],
@@ -459,7 +459,7 @@
 		]
 	},
 	"arcanine": {
-		"level": 88,
+		"level": 89,
 		"sets": [
 			{
 				"movepool": ["Flare Blitz", "Extreme Speed", "Will-O-Wisp", "Morning Sun"],
@@ -468,7 +468,7 @@
 		]
 	},
 	"zapdos": {
-		"level": 83,
+		"level": 81,
 		"sets": [
 			{
 				"movepool": ["Discharge", "Hurricane", "Roost", "U-turn"],
@@ -477,7 +477,7 @@
 		]
 	},
 	"hoopaunbound": {
-		"level": 86,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Throat Chop", "Psychic Noise", "Drain Punch", "Thunderbolt"],
@@ -486,7 +486,7 @@
 		]
 	},
 	"dialga": {
-		"level": 87,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Draco Meteor", "Heavy Slam", "Fire Blast", "Thunder Wave"],
@@ -495,7 +495,7 @@
 		]
 	},
 	"overqwil": {
-		"level": 88,
+		"level": 89,
 		"sets": [
 			{
 				"movepool": ["Barb Barrage", "Crunch", "Spikes", "Pain Split"],
@@ -504,7 +504,7 @@
 		]
 	},
 	"mimikyu": {
-		"level": 84,
+		"level": 86,
 		"sets": [
 			{
 				"movepool": ["Hone Claws", "Play Rough", "Shadow Claw", "Shadow Sneak"],
@@ -513,7 +513,7 @@
 		]
 	},
 	"appletun": {
-		"level": 90,
+		"level": 92,
 		"sets": [
 			{
 				"movepool": ["Apple Acid", "Draco Meteor", "Leech Seed", "Recover"],
@@ -522,7 +522,7 @@
 		]
 	},
 	"lucario": {
-		"level": 87,
+		"level": 89,
 		"sets": [
 			{
 				"movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Earthquake"],
@@ -531,7 +531,7 @@
 		]
 	},
 	"baxcalibur": {
-		"level": 81,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Scale Shot", "Icicle Spear", "Iron Head", "Earthquake"],
@@ -540,7 +540,7 @@
 		]
 	},
 	"floatzel": {
-		"level": 86,
+		"level": 89,
 		"sets": [
 			{
 				"movepool": ["Wave Crash", "Low Kick", "Bulk Up", "Ice Spinner"],
@@ -549,7 +549,7 @@
 		]
 	},
 	"ironhands": {
-		"level": 83,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Volt Switch", "Drain Punch", "Supercell Slam", "Ice Punch"],
@@ -558,10 +558,10 @@
 		]
 	},
 	"empoleon": {
-		"level": 84,
+		"level": 87,
 		"sets": [
 			{
-				"movepool": ["Hydro Pump", "Flash Cannon", "Ice Beam", "Roost"],
+				"movepool": ["Surf", "Flash Cannon", "Ice Beam", "Roost"],
 				"abilities": ["Competitive"]
 			}
 		]
@@ -594,7 +594,7 @@
 		]
 	},
 	"rhyperior": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Curse", "Earthquake", "Stone Edge", "Temper Flare"],
@@ -603,7 +603,7 @@
 		]
 	},
 	"slitherwing": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["First Impression", "Morning Sun", "Close Combat", "U-Turn"],
@@ -621,7 +621,7 @@
 		]
 	},
 	"lunala": {
-		"level": 87,
+		"level": 84,
 		"sets": [
 			{
 				"movepool": ["Moonblast", "Moongeist Beam", "Moonlight", "Calm Mind"],
@@ -630,7 +630,7 @@
 		]
 	},
 	"groudon": {
-		"level": 87,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Swords Dance", "Earthquake", "Fire Punch", "Thunder Wave"],
@@ -639,7 +639,7 @@
 		]
 	},
 	"zacian": {
-		"level": 84,
+		"level": 85,
 		"sets": [
 			{
 				"movepool": ["Swords Dance", "Play Rough", "Close Combat", "Psychic Fangs"],
@@ -648,7 +648,7 @@
 		]
 	},
 	"goodra": {
-		"level": 83,
+		"level": 86,
 		"sets": [
 			{
 				"movepool": ["Draco Meteor", "Flamethrower", "Ice Beam", "Dragon Tail"],
@@ -657,7 +657,7 @@
 		]
 	},
 	"milotic": {
-		"level": 87,
+		"level": 88,
 		"sets": [
 			{
 				"movepool": ["Scald", "Haze", "Recover", "Flip Turn"],
@@ -671,6 +671,123 @@
 			{
 				"movepool": ["Mortal Spin", "Power Gem", "Sludge Bomb", "Earth Power"],
 				"abilities": ["Toxic Debris"]
+			}
+		]
+	},
+	"ditto": {
+		"level": 80,
+		"sets": [
+			{
+				"movepool": ["Transform"],
+				"abilities": ["Imposter"]
+			}
+		]
+	},
+	"rillaboom": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Grassy Glide", "High Horsepower", "Drain Punch", "Wood Hammer"],
+				"abilities": ["Grassy Surge"]
+			}
+		]
+	},
+	"golisopod": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["First Impression", "Leech Life", "Liquidation", "Swords Dance"],
+				"abilities": ["Emergency Exit"]
+			}
+		]
+	},
+	"metagross": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Psychic Fangs", "Steel Roller", "Earthquake", "Stealth Rock"],
+				"abilities": ["Clear Body"]
+			}
+		]
+	},
+	"talonflame": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Defog", "Brave Bird", "Flare Blitz", "Roost"],
+				"abilities": ["Flame Body"]
+			}
+		]
+	},
+	"decidueyehisui": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["Leaf Blade", "Triple Arrows", "Trailblaze", "Shadow Claw"],
+				"abilities": ["Scrappy"]
+			}
+		]
+	},
+	"vaporeon": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Scald", "Alluring Voice", "Ice Beam", "Flip Turn"],
+				"abilities": ["Water Absorb"]
+			}
+		]
+	},
+	"audino": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Body Slam", "Fire Punch", "Wish", "Protect"],
+				"abilities": ["Regenerator"]
+			}
+		]
+	},
+	"incineroar": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Bulk Up", "Power Trip", "Flare Blitz", "Drain Punch"],
+				"abilities": ["Intimidate"]
+			}
+		]
+	},
+	"aegislash": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Swords Dance", "Sacred Sword", "Iron Head", "Shadow Sneak"],
+				"abilities": ["Stance Change"]
+			}
+		]
+	},
+	"scizor": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Bullet Punch", "Close Combat", "Roost", "U-turn"],
+				"abilities": ["Technician"]
+			}
+		]
+	},
+	"sharpedo": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Protect", "Waterfall", "Crunch", "Destiny Bond"],
+				"abilities": ["Speed Boost"]
+			}
+		]
+	},
+	"pincurchin": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Rising Voltage", "Zing Zap", "Sucker Punch", "Scald"],
+				"abilities": ["Electric Surge"]
 			}
 		]
 	}
