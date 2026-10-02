@@ -578,6 +578,23 @@ describe('Switching in', () => {
 		});
 
 		describe('[Gen 2]', () => {
+			it(`should defer hazard faints between voluntary switches`, () => {
+				battle = common.gen(2).createBattle([[
+					{ species: "shedinja", moves: ['sleeptalk'] },
+					{ species: "shedinja", moves: ['sleeptalk'] },
+				], [
+					{ species: "forretress", moves: ['spikes'] },
+					{ species: "snorlax", moves: ['sleeptalk'] },
+				]]);
+				battle.makeChoices('move sleeptalk', 'move spikes');
+				battle.makeChoices('switch 2', 'switch 2');
+				assert.logOrder(battle, [
+					'|-damage|p1a: Shedinja|0 fnt|[from] Spikes',
+					'|switch|p2a: Snorlax',
+					'|faint|p1a: Shedinja',
+				]);
+			});
+
 			it(`fainting should only happen after all Pokemon have switched in, even if one side will eventually lose`, () => {
 				battle = common.gen(2).createBattle([[
 					{ species: "alakazam", moves: ['sleeptalk'] },

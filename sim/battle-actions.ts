@@ -62,11 +62,12 @@ export class BattleActions {
 	runPursuitActivation(pokemon: Pokemon) {
 		if (pokemon.skipBeforeSwitchOutEventFlag) return;
 		this.battle.runEvent('BeforeSwitchOut', pokemon);
+		this.battle.clearActiveMove();
 		if (this.battle.gen >= 5) {
 			this.battle.eachEvent('Update');
 		}
-		pokemon.skipBeforeSwitchOutEventFlag = true;
-		this.battle.faintMessages(false, false, this.battle.gen >= 5);
+		if (pokemon.pursuitActivated) this.battle.faintMessages(false, false, this.battle.gen >= 5);
+		pokemon.skipBeforeSwitchOutEventFlag = true; // don't activate Pursuit again
 	}
 
 	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
@@ -90,7 +91,6 @@ export class BattleActions {
 			if (!isDrag) {
 				this.runPursuitActivation(oldActive);
 			}
-			oldActive.skipBeforeSwitchOutEventFlag = false;
 			if (!this.battle.runEvent('SwitchOut', oldActive)) {
 				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)

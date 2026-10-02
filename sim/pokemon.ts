@@ -161,6 +161,7 @@ export class Pokemon {
 	 */
 	switchFlag: ID | boolean;
 	forceSwitchFlag: boolean;
+	pursuitActivated: boolean;
 	skipBeforeSwitchOutEventFlag: boolean;
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
@@ -452,6 +453,7 @@ export class Pokemon {
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
+		this.pursuitActivated = false;
 		this.skipBeforeSwitchOutEventFlag = false;
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
@@ -1546,6 +1548,8 @@ export class Pokemon {
 		this.lastDamage = 0;
 		this.attackedBy = [];
 		this.hurtThisTurn = null;
+		this.pursuitActivated = false;
+		this.skipBeforeSwitchOutEventFlag = false;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
