@@ -329,6 +329,17 @@ export const LogViewer = new class {
 			if (message.startsWith(`/log `)) {
 				return `<div ${getClass('chat')}><small>[${timeLink}] </small><q>${Chat.formatText(message.slice(5))}</q></div>`;
 			}
+			if (name === toID(name) && message.startsWith(`/mafiaanon `)) {
+				const [alias, realName, chatMessage] = Utils.splitFirst(message.slice(11), '|', 2);
+				return `<div ${getClass('chat')}><small>[${timeLink}] </small>` +
+					`<username>${Utils.escapeHTML(alias)}</username> (<username>${Utils.escapeHTML(realName)}</username>): ` +
+					`<q>${Chat.formatText(chatMessage)}</q></div>`;
+			}
+			if (name === toID(name) && message.startsWith(`/mafiadarkness `)) {
+				const [realName, chatMessage] = Utils.splitFirst(message.slice(15), '|', 1);
+				return `<div ${getClass('chat')}><small>[${timeLink}] </small>` +
+					`<username>${Utils.escapeHTML(realName)}</username>: <q>${Chat.formatText(chatMessage)}</q></div>`;
+			}
 			if (message.startsWith(`/raw `)) {
 				return `<div ${getClass('notice')}>${message.slice(5)}</div>`;
 			}

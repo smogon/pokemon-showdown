@@ -159,8 +159,8 @@ export class Roomlog {
 		} catch {} // OS might not support symlinks or atomic rename
 		if (!Roomlogs.rollLogTimer) Roomlogs.rollLogs();
 	}
-	add(message: string) {
-		this.roomlog(message);
+	add(message: string, logMessage = message) {
+		this.roomlog(logMessage);
 		// |uhtml gets both uhtml and uhtmlchange
 		// which are visible and so should be counted
 		if (['|c|', '|c:|', '|raw|', '|html|', '|uhtml'].some(k => message.startsWith(k))) {
