@@ -5455,7 +5455,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			trick: ["3E"],
 			uproar: ["3L5"],
 			waterpulse: ["3M"],
-			wish: ["3E"],
 		},
 	},
 	trapinch: {
