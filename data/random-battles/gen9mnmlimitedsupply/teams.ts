@@ -1,4 +1,4 @@
-import { RandomTeams, type MoveCounter } from '../gen9/teams';
+import { RandomTeams } from '../gen9/teams';
 
 export class RandomMNMLS extends RandomTeams {
 	override randomSet(
@@ -52,8 +52,8 @@ export class RandomMNMLS extends RandomTeams {
 		// Get ability
 		ability = this.getAbility(types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role);
 
-		// Get item
-		item = set.items ? set.items[0] : '';
+		// Get items
+		item = set.items ? set.items[0] : 'Life Orb';
 
 		// Get level
 		const level = this.getLevel(species, isDoubles);
@@ -326,14 +326,6 @@ export class RandomMNMLS extends RandomTeams {
 		}
 
 		return pokemon;
-	};
-
-	/* All items are generated in getItem, so we shouldn't override anything */
-	override getPriorityItem(ability: string, types: Set<string>, moves: Set<string>,
-		counter: MoveCounter, teamDetails: RandomTeamsTypes.TeamDetails, species: Species,
-		isLead: boolean, teraType: string, role: RandomTeamsTypes.Role, isDoubles: boolean):
-		string | undefined {
-		return;
 	};
 }
 

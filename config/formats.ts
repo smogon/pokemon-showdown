@@ -638,13 +638,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen4',
 		searchShow: false,
 		ruleset: ['Standard Draft', 'DryPass Clause', '!Team Preview', '!Evasion Abilities Clause', 'Accuracy Moves Clause'],
-		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Swagger', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak', 'No Guard + Dynamic Punch'],
+		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Swagger', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak', 'No Guard + Dynamic Punch', 'Baton Pass + Magnet Rise'],
 	},
 	{
 		name: "[Gen 3] Draft",
 		mod: 'gen3',
 		searchShow: false,
 		ruleset: ['Standard Draft'],
+		banlist: ['Assist'],
 	},
 
 	// Ladder Spotlight
@@ -678,14 +679,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Force of the Fallen Mod', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Deoxys-Attack', 'Deoxys-Normal', 'Deoxys-Speed', 'Dialga', 'Dialga-Origin', 'Enamorus-Incarnate',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Deoxys-Attack', 'Deoxys-Normal', 'Deoxys-Speed', 'Dialga', 'Dialga-Origin',
 			'Espathra', 'Eternatus', 'Falinks', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Komala', 'Kommo-o', 'Koraidon',
 			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lilligant-Hisui', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings',
 			'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Reshiram', 'Shaymin-Sky', 'Smeargle', 'Sneasler', 'Solgaleo',
-			'Spectrier', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Booster Energy', 'King\'s Rock',
-			'Razor Fang', 'Baton Pass', 'Last Respects', 'Rage Fist', 'Shed Tail',
+			'Spectrier', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Contrary', 'Moody', 'Shadow Tag', 'Booster Energy',
+			'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Rage Fist', 'Shed Tail',
 		],
-		restricted: ['Shift Gear'],
+		restricted: ['Belly Drum', 'Destiny Bond', 'Extreme Speed', 'Population Bomb', 'Quiver Dance', 'Revival Blessing', 'Shell Smash', 'Tail Glow'],
 	},
 	{
 		name: "[Gen 9] National Dex Mix and Mega",
@@ -3792,10 +3793,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Araquanid-Base', 'Archeops', 'Bellossom', 'Boltund', 'Escavalier', 'Farigiraf', 'Fezandipiti', 'Gothitelle', 'Gyarados-Base', 'Kabutops',
-			'Kilowattrel', 'Klawf', 'Magmortar', 'Mamoswine', 'Metagross-Base', 'Miltank', 'Oricorio-Base', 'Orthworm', 'Persian-Base', 'Pinsir-Base',
-			'Polteageist', 'Pyukumuku', 'Rotom-Mow', 'Scizor-Base', 'Shiftry', 'Simisear', 'Skarmory-Base', 'Slowbro-Galar', 'Slurpuff', 'Thievul', 'Torkoal',
-			'Toxtricity-Base', 'Turtonator', 'Tyranitar-Base', 'Wailord', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
+			'Abomasnow-Base', 'Altaria-Base', 'Ampharos-Base', 'Appletun', 'Arboliva', 'Avalugg-Base', 'Brambleghast', 'Dewgong', 'Dusknoir', 'Eelektross-Base',
+			'Florges', 'Gastrodon', 'Golem-Base', 'Grafaiai', 'Granbull', 'Grumpig', 'Hariyama', 'Hitmontop', 'Honchkrow', 'Klefki', 'Luvdisc', 'Lycanroc-Base',
+			'Maushold', 'Mimikyu-Base', 'Morpeko-Base', 'Oinkologne-M', 'Primeape', 'Raticate-Base', 'Spidops', 'Spiritomb', 'Sudowoodo', 'Swalot',
+			'Tatsugiri-Curly', 'Tatsugiri-Droopy', 'Tatsugiri-Stretchy', 'Thwackey', 'Wyrdeer', 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z',
+			'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
