@@ -9,9 +9,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
-		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
 	},
 	par: {
 		name: 'par',
@@ -53,11 +50,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onBeforeMove(pokemon, target, move) {
 			pokemon.statusState.time--;
 			this.add('cant', pokemon, 'slp');
+			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 			pokemon.lastMove = null;
 			return false;
-		},
-		onAfterMoveSelf(pokemon) {
-			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
 	},
 	frz: {
@@ -86,9 +81,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
-		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
