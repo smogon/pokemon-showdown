@@ -146,6 +146,31 @@ function writeFile(path: string, data: AnyObject) {
 	));
 }
 
+function getMafiaDataSource(
+	dataType: string, data: MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm
+) {
+	if (dataType === 'role') {
+		const role = data as MafiaDataRole;
+		return `/mafia addrole ${role.name}|${role.alignment || ''}|${role.image || ''}|${role.memo.join('|')}`;
+	} else if (dataType === 'alignment') {
+		const alignment = data as MafiaDataAlignment;
+		return `/mafia addalignment ${alignment.name}|${alignment.plural}|${alignment.color || ''}|${alignment.buttonColor || ''}|${alignment.image || ''}|${alignment.memo.join('|')}`;
+	} else if (dataType === 'theme') {
+		const theme = data as MafiaDataTheme;
+		const rolelists = Object.keys(theme)
+			.filter(key => !isNaN(Number(key)))
+			.sort((a, b) => Number(a) - Number(b))
+			.map(players => `${players}:${theme[Number(players)]}`);
+		return `/mafia addtheme ${theme.name}|${theme.desc}|${rolelists.join('|')}`;
+	} else if (dataType === 'idea') {
+		const idea = data as MafiaDataIDEA;
+		return `/mafia addidea ${idea.name}|${idea.choices}|${idea.picks.join('|')}\n${idea.roles.join('\n')}`;
+	} else {
+		const term = data as MafiaDataTerm;
+		return `/mafia addterm ${term.name}|${term.memo.join('|')}`;
+	}
+}
+
 function mafiaSearch(
 	entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][],
 	searchTarget: string, searchType: keyof MafiaData
@@ -3655,6 +3680,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!result) throw new Chat.ErrorMessage(`"${target}" is not a valid mafia alignment, role, theme, or IDEA.`);
 
+			const showSource = !!room && !this.broadcasting && user.can('mute', null, room);
 			// @ts-expect-error property access
 			let buf = `<h3${result.color ? ` style="color: ${result.color}"` : ``}>${result.name}</h3><b>Type</b>: ${dataType}<br/>`;
 			if (dataType === 'theme') {
@@ -3687,7 +3713,12 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				if (result.memo) buf += `${result.memo.join('<br/>')}`;
 			}
-			return this.sendReplyBox(buf);
+			const reply = this.sendReplyBox(buf);
+			if (showSource) {
+				const source = Utils.escapeHTML(getMafiaDataSource(dataType, result)).replace(/\n/g, '<br />');
+				this.sendReplyBox(`<details open><summary>Source:</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">${source}</code></details>`);
+			}
+			return reply;
 		},
 		datahelp: [
 			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
