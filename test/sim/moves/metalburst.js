@@ -69,4 +69,29 @@ describe('Metal Burst', () => {
 		assert.fullHP(blissey);
 		assert.equal(manectric.hp, manectric.maxhp - battle.dex.moves.get('dragonrage').damage * 1.5);
 	});
+
+	describe('[Gen 4]', () => {
+		// https://www.smogon.com/forums/threads/counter-mirror-coat-with-resist-berries-in-gen-4.3752244/
+		it.skip(`should deal damage ignoring damage reducing berries consumed`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Abra', moves: ['quickattack'] },
+				{ species: 'Abra', item: 'chilanberry', moves: ['metalburst'] },
+			], [
+				{ species: 'Abra', moves: ['quickattack'] },
+				{ species: 'Abra', moves: ['metalburst'] },
+			]]);
+			battle.makeChoices('move quickattack 2, move metalburst', 'move quickattack 2, move metalburst');
+			let abra = battle.p1.active[0];
+			assert.bounded(abra.maxhp - abra.hp, [51, 60]);
+
+			abra = battle.p1.active[1];
+			assert.bounded(abra.maxhp - abra.hp, [17, 20]);
+
+			abra = battle.p2.active[0];
+			assert.bounded(abra.maxhp - abra.hp, [51, 60]);
+
+			abra = battle.p2.active[1];
+			assert.bounded(abra.maxhp - abra.hp, [34, 40]);
+		});
+	});
 });
