@@ -138,6 +138,7 @@ export class Battle {
 		target: Pokemon,
 		source: Pokemon | null,
 		effect: Effect | null,
+		faintEventDone?: boolean,
 	}[];
 
 	readonly log: string[];
@@ -2550,13 +2551,12 @@ export class Battle {
 
 	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
 		if (this.ended) return;
-		if (this.gen <= 4) {
-			// don't check for fainted Pokémon at all during U-turn
-			if (this.getAllActive().some(pokemon => typeof pokemon.switchFlag === 'string')) return;
-			// don't check for wins in the middle of a move resolution
-			if (this.activeMove) {
-				forceCheck = false;
-				checkWin = false;
+		if (this.gen <= 4 && this.getAllActive().some(pokemon => typeof pokemon.switchFlag === 'string')) {
+			// Keep pivot faints pending, except during the pivot's own initial blackout check
+			const pokemon = this.activePokemon;
+			if (!pokemon?.hp || this.activeMove?.id !== pokemon.switchFlag ||
+				!this.sides.every(side => side.hasAlly(pokemon) || side.pokemon.every(foe => !foe.hp))) {
+				return false;
 			}
 		}
 		const length = this.faintQueue.length;
@@ -2574,16 +2574,17 @@ export class Battle {
 			faintData = this.faintQueue.shift()!;
 			const pokemon: Pokemon = faintData.target;
 			if (!pokemon.fainted && this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
+				if (this.gen <= 4 && !faintData.faintEventDone) {
+					this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				}
 				this.add('faint', pokemon);
 				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
-				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				if (this.gen >= 5 && !faintData.faintEventDone) {
+					this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				}
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
-				// in Gen 2-4, don't check for a win if Destiny Bond activates during a Pursuit faint
-				if (this.faintQueue.length >= faintQueueLeft && !(this.gen <= 4 && pokemon.beingCalledBack)) {
-					checkWin = true;
-				}
 				if (pokemon.formeRegression && !pokemon.transformed) {
 					// before clearing volatiles
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
@@ -2603,6 +2604,12 @@ export class Battle {
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
+				if (this.faintQueue.length >= faintQueueLeft) {
+					// in Gen 2, if Destiny Bond activates during Pursuit, only process the target
+					if (pokemon.pursuitActivated && this.gen <= 2) break;
+					// in Gens 3-4, don't check for a win if Destiny Bond activates during a Pursuit faint
+					if (!(pokemon.pursuitActivated && this.gen <= 4)) checkWin = true;
+				}
 			}
 		}
 

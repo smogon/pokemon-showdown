@@ -134,6 +134,7 @@ export class BattleActions {
 			oldActive.usedItemThisTurn = false;
 			oldActive.statsRaisedThisTurn = false;
 			oldActive.statsLoweredThisTurn = false;
+			oldActive.pursuitActivated = false;
 			oldActive.skipBeforeSwitchOutEventFlag = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
@@ -388,6 +389,13 @@ export class BattleActions {
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
+		if (this.battle.gen <= 4) {
+			for (const faintData of this.battle.faintQueue) {
+				if (faintData.faintEventDone) continue;
+				faintData.faintEventDone = true;
+				this.battle.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
+			}
+		}
 		this.battle.faintMessages();
 		this.battle.checkWin();
 
@@ -576,6 +584,8 @@ export class BattleActions {
 			}
 			return false;
 		}
+
+		if (this.battle.gen <= 4) this.battle.faintMessages(false, false, false);
 
 		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
 			const originalHp = pokemon.hp;
@@ -1017,7 +1027,7 @@ export class BattleActions {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		this.battle.faintMessages(false, false, !pokemon.hp);
+		if (this.battle.gen >= 5) this.battle.faintMessages(false, false, !pokemon.hp);
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
@@ -1352,7 +1362,8 @@ export class BattleActions {
 				}
 			}
 			this.battle.debug('move failed because it did nothing');
-		} else if (move.selfSwitch && source.hp && !source.volatiles['commanded']) {
+		} else if (move.selfSwitch && source.hp && !source.volatiles['commanded'] &&
+			(this.battle.canSwitch(source.side) || move.id === 'revivalblessing')) {
 			source.switchFlag = move.id;
 		}
 

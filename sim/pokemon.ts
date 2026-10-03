@@ -1548,7 +1548,6 @@ export class Pokemon {
 		this.lastDamage = 0;
 		this.attackedBy = [];
 		this.hurtThisTurn = null;
-		this.pursuitActivated = false;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 

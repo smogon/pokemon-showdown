@@ -121,6 +121,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onResidual: undefined, // no inherit
 		},
 	},
+	destinybond: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onFaint(target, source, effect) {
+				if (!source || !effect || target.isAlly(source)) return;
+				if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
+					if (source.volatiles['dynamax']) {
+						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
+						return;
+					}
+					this.add('-activate', target, 'move: Destiny Bond');
+					source.faint();
+				}
+			},
+		},
+	},
 	detect: {
 		inherit: true,
 		priority: 2,

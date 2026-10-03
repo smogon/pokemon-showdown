@@ -791,6 +791,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				oldActive.skipBeforeSwitchOutEventFlag = false;
+				oldActive.pursuitActivated = false;
 				if (!this.battle.runEvent('SwitchOut', oldActive)) {
 					// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 					// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
