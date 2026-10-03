@@ -69,7 +69,7 @@ describe('Fainting', () => {
 			assert(!battle.getDebugLog().includes('|switch|p2a: Shedinja'));
 		});
 
-		it(`should tie after both last replacements faint in the same batch`, () => {
+		it(`should process hazard faints between replacements but check the outcome after the batch`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "alakazam", moves: ['spikes', 'sleeptalk'] },
 				{ species: "shedinja", moves: ['sleeptalk'] },
@@ -88,6 +88,91 @@ describe('Fainting', () => {
 			assert.fainted(battle.p2.active[0]);
 			assert(battle.ended);
 			assert.equal(battle.winner, '');
+			assert.logOrder(battle, [
+				'|switch|p1a: Shedinja',
+				'|faint|p1a: Shedinja',
+				'|switch|p2a: Shedinja',
+				'|faint|p2a: Shedinja',
+			]);
+		});
+
+		it(`should declare a win after two hazard-faint batches without requesting more Pokemon`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: "alakazam", moves: ['spikes', 'splash'] },
+				{ species: "abra", level: 1, moves: ['splash'] },
+				{ species: "shedinja", moves: ['splash'] },
+				{ species: "shedinja", moves: ['splash'] },
+			], [
+				{ species: "snorlax", moves: ['spikes', 'explosion'] },
+				{ species: "magikarp", level: 1, moves: ['splash'] },
+				{ species: "shedinja", moves: ['splash'] },
+				{ species: "shedinja", moves: ['splash'] },
+				{ species: "blissey", moves: ['splash'] },
+			]]);
+			battle.makeChoices('move spikes, move splash', 'move spikes, move splash');
+			battle.makeChoices('move splash, move splash', 'move explosion, move splash');
+
+			battle.makeChoices('switch 3', 'switch 3');
+			assert.fainted(battle.p1.active[0]);
+			assert.fainted(battle.p2.active[0]);
+			assert(!battle.ended);
+			assert.deepEqual(battle.p1.activeRequest.forceSwitch, [true, false]);
+			assert.deepEqual(battle.p2.activeRequest.forceSwitch, [true, false]);
+
+			battle.makeChoices('switch 4', 'switch 4');
+			assert.fainted(battle.p1.active[0]);
+			assert.fainted(battle.p2.active[0]);
+			assert.equal(battle.p1.pokemonLeft, 0);
+			assert.equal(battle.p2.pokemonLeft, 1);
+			assert(battle.ended);
+			assert.equal(battle.winner, 'Player 2');
+			assert.equal(battle.p2.activeRequest, null);
+			assert.equal(battle.p2.pokemon[4].previouslySwitchedIn, 0);
+		});
+
+		it(`should finish each doubles replacement batch before requesting the next and defer entry abilities`, () => {
+			battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+				{ species: "alakazam", moves: ['spikes', 'splash'] },
+				{ species: "abra", level: 1, moves: ['splash'] },
+				{ species: "shedinja", evs: { spe: 252 }, moves: ['splash'] },
+				{ species: "vaporeon", moves: ['splash'] },
+				{ species: "espeon", moves: ['splash'] },
+			], [
+				{ species: "snorlax", moves: ['spikes', 'explosion'] },
+				{ species: "magikarp", level: 1, moves: ['splash'] },
+				{ species: "tyranitar", ability: 'sandstream', moves: ['splash'] },
+				{ species: "dusknoir", moves: ['splash'] },
+			]]);
+			battle.makeChoices('move spikes, move splash', 'move spikes, move splash');
+			battle.makeChoices('move splash, move splash', 'move explosion, move splash');
+			assert.deepEqual(battle.p1.activeRequest.forceSwitch, [true, false]);
+			assert.deepEqual(battle.p2.activeRequest.forceSwitch, [true, false]);
+
+			// Both left slots enter; Shedinja faints, so only Player 2 advances to the right slot.
+			battle.makeChoices('switch 3', 'switch 3');
+			assert.fainted(battle.p1.active[0]);
+			assert.species(battle.p2.active[0], 'Tyranitar');
+			assert.deepEqual(battle.p1.activeRequest.forceSwitch, [true, false]);
+			assert.deepEqual(battle.p2.activeRequest.forceSwitch, [false, true]);
+			assert.equal(battle.field.weather, '');
+
+			// Both entrants must arrive before Player 1 is asked to fill its right slot.
+			battle.makeChoices('switch 4', 'switch 4');
+			assert.species(battle.p1.active[0], 'Vaporeon');
+			assert.species(battle.p2.active[1], 'Dusknoir');
+			assert.deepEqual(battle.p1.activeRequest.forceSwitch, [false, true]);
+			assert.equal(battle.p2.requestState, '');
+			assert.equal(battle.field.weather, '');
+
+			battle.makeChoices('switch 5', '');
+			assert.species(battle.p1.active[1], 'Espeon');
+			assert.equal(battle.field.weather, 'sandstorm');
+			assert.logOrder(battle, [
+				'|switch|p2a: Tyranitar',
+				'|switch|p2b: Dusknoir',
+				'|switch|p1b: Espeon',
+				'|-weather|Sandstorm|[from] ability: Sand Stream',
+			]);
 		});
 
 		it(`should finish the replacement batch before declaring a win when one side has reserves`, () => {

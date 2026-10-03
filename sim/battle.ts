@@ -2859,20 +2859,18 @@ export class Battle {
 
 		let nextAction = this.queue.peek();
 
-		if (
-			!(this.gen === 2 && ['switch', 'instaswitch'].includes(action.choice) &&
-				nextAction && ['switch', 'instaswitch'].includes(nextAction.choice)) &&
-				!(this.gen === 4 && action.choice === 'instaswitch' && nextAction?.choice === 'instaswitch')
-		) {
+		if (!(this.gen === 2 && ['switch', 'instaswitch'].includes(action.choice) &&
+			nextAction && ['switch', 'instaswitch'].includes(nextAction.choice))) {
 			// in gen 2, there are no faint checks between switches
-			// in gen 4, there are no faint checks between simultaneous switches replacing fainted Pokemon
 			const checkWin = !(
-				// in gen 4, between a U-turn switch and ability activation, there are faint checks, but there are no win checks
+				// in gen 4, there are no win checks between simultaneous switches replacing fainted Pokemon
+				(this.gen === 4 && action.choice === 'instaswitch' && nextAction?.choice === 'instaswitch') ||
+				// in gen 4, there are no win checks during a U-turn switch until its ability activates
 				this.gen === 4 && action.choice === 'instaswitch' && action.sourceEffect && nextAction?.choice === 'runSwitch'
 			);
 			this.faintMessages(false, checkWin, checkWin);
-			if (this.ended) return true;
 		}
+		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
@@ -2882,8 +2880,8 @@ export class Battle {
 			!nextAction ||
 			(this.gen === 3 && ['switch', 'instaswitch'].includes(action.choice) && (action as SwitchAction).target.fainted) ||
 			(this.gen <= 3 && ['move', 'residual'].includes(nextAction.choice)) ||
-			(this.gen === 4 && action.choice === 'instaswitch' &&
-				this.queue.list.every(queuedAction => queuedAction.choice === 'runSwitch'))
+			(this.gen === 4 && action.choice === 'instaswitch' && nextAction.choice !== 'instaswitch' &&
+				this.queue.peek(true)?.choice === 'runSwitch')
 		) {
 			// in gen 3, switching in after a Pokemon faints is done after every switch
 			// in gen 3 or earlier, switching in after a Pokemon faints is done after every move,

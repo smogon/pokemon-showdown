@@ -10,15 +10,16 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 			// 1-4 turns
 			this.effectState.time = this.random(2, 6);
-			// Sleep Talk and Snore don't update the persistent sleep timer
-			this.effectState.persistentTime = this.effectState.time;
+			// Turns spent using Sleep Talk/Snore immediately before switching out while asleep
+			this.effectState.skippedTime = 0;
 
 			if (target.removeVolatile('nightmare')) {
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
-		onSwitchOut() {
-			this.effectState.time = this.effectState.persistentTime;
+		onSwitchOut(target) {
+			this.effectState.time += this.effectState.skippedTime;
+			this.effectState.skippedTime = 0;
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
@@ -32,9 +33,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			}
 			this.add('cant', pokemon, 'slp');
 			if (move.sleepUsable) {
+				this.effectState.skippedTime++;
 				return;
 			}
-			this.effectState.persistentTime = this.effectState.time;
+			this.effectState.skippedTime = 0;
 			return false;
 		},
 	},
