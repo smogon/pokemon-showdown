@@ -835,7 +835,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	darkaura: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
 		onAnyBasePowerPriority: 20,
@@ -1265,7 +1264,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	fairyaura: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
 		onAnyBasePowerPriority: 20,
