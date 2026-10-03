@@ -29,6 +29,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		zEffect: "  {POKEMON} unleashes its full-force Z-Move!",
 		move: "{POKEMON} used **{MOVE}**!",
 		abilityActivation: "[{POKEMON}'s {ABILITY}]",
+		partialProtect: "  {POKEMON} couldn't fully protect itself and got hurt!",
 
 		mega: "  {POKEMON}'s {ITEM} is reacting to the Key Stone!",
 		megaNoItem: "  {POKEMON} is reacting to {TRAINER}'s Key Stone!",
@@ -36,7 +37,6 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		transformMega: "{POKEMON} has Mega Evolved into Mega {SPECIES}!",
 		primal: "{POKEMON}'s Primal Reversion! It reverted to its primal state!",
 		zPower: "  {POKEMON} surrounded itself with its Z-Power!",
-		zBroken: "  {POKEMON} couldn't fully protect itself and got hurt!",
 		terastallize: "  ({POKEMON} has Terastallized into the {TYPE}-type!)",
 
 		// in case the different default messages didn't make it obvious, the difference
