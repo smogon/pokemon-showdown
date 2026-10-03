@@ -164,13 +164,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagingHit: undefined, // no inherit
-			onDamagePriority: -101,
-			onDamage(damage, target, source, effect) {
+			onDamagingHit(damage, target, source, effect) {
 				if (
 					effect.effectType === 'Move' && !source.isAlly(target) &&
 					(effect.category === 'Physical' || effect.id === 'hiddenpower')
@@ -408,13 +402,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagingHit: undefined, // no inherit
-			onDamagePriority: -101,
-			onDamage(damage, target, source, effect) {
+			onDamagingHit(damage, target, source, effect) {
 				if (
 					effect.effectType === 'Move' && !source.isAlly(target) &&
 					effect.category === 'Special' && effect.id !== 'hiddenpower'
