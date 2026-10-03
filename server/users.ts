@@ -389,6 +389,7 @@ export class User extends Chat.MessageContext {
 	isSysop: boolean;
 	isStaff: boolean;
 	isPublicBot: boolean;
+	isUserBot: boolean;
 	lastDisconnected: number;
 	lastConnected: number;
 	foodfight?: { generatedTeam: string[], dish: string, ingredients: string[], timestamp: number };
@@ -484,6 +485,7 @@ export class User extends Chat.MessageContext {
 		this.isSysop = false;
 		this.isStaff = false;
 		this.isPublicBot = false;
+		this.isUserBot = false;
 		this.lastDisconnected = 0;
 		this.lastConnected = connection.connectedAt;
 
@@ -821,6 +823,7 @@ export class User extends Chat.MessageContext {
 		//   4: autoconfirmed
 		//   5: permalocked
 		//   6: permabanned
+		//   10: bot
 		if (registered) {
 			if (userType === '3') {
 				this.isSysop = true;
@@ -835,6 +838,9 @@ export class User extends Chat.MessageContext {
 			} else if (userType === '6') {
 				void Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, true, `Permabanned as ${name}`, true);
 				this.disconnectAll();
+			} else if (userType === '10') {
+				this.autoconfirmed = userid;
+				this.isUserBot = true;
 			}
 		}
 		if (Users.isTrusted(userid)) {
