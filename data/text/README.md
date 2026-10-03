@@ -9,6 +9,8 @@ Egg groups are basically never mentioned by name, unfortunately, so egg group na
 
 Unofficial in-battle text is usually surrounded by parentheses, but not always.
 
+CAP names are currently written in English - someone will need to talk to them to figure out what to do about translated names.
+
 Translated names and descriptions sourced from PokeAPI/pokeapi commit c0a9bc75af3a455cdfa27dde21e4ec95aedd3f25
 
 Translated battle messages in Champions sourced from projectpokemon/champout commit 0c1141656e1a66ae304ac3ee1e7126a00914d1f2

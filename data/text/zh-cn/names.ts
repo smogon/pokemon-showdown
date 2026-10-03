@@ -36,7 +36,7 @@ export const TypeNames: { [id: string]: TranslationString } = {
 	Steel: "钢",
 	Stellar: "星晶",
 	Water: "水",
-	"???": null, // NEEDS TRANSLATION
+	"???": "？？？",
 };
 
 export const NatureNames: { [id: string]: TranslationString } = {
@@ -70,7 +70,7 @@ export const NatureNames: { [id: string]: TranslationString } = {
 export const GenderNames: { [id: string]: TranslationString } = {
 	M: "雄性",
 	F: "雌性",
-	N: null, // NEEDS TRANSLATION
+	N: "无性别", // NEEDS QC
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
@@ -85,51 +85,51 @@ export const StatusNames: { [id: string]: TranslationString } = {
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "可以瞄准相邻的同伴或对手", // NEEDS QC
+	normalDoubles: "可以瞄准同伴或任意对手", // NEEDS QC
+	normalSingles: "命中对手", // NEEDS QC
+	normalFFA: "可以瞄准任意对手", // NEEDS QC
+	self: "以自己为对象", // NEEDS QC
+	adjacentAlly: "可以瞄准相邻的同伴", // NEEDS QC
+	adjacentAllyDoubles: "命中我方同伴", // NEEDS QC
+	adjacentAllySingles: "单打对战中必定失败", // NEEDS QC
+	adjacentAllyOrSelf: "可以瞄准自己或相邻的同伴", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "可以瞄准自己或同伴", // NEEDS QC
+	adjacentFoe: "可以瞄准相邻的对手", // NEEDS QC
+	allAdjacentFoes: "命中相邻的对手", // NEEDS QC
+	allAdjacentFoesDoubles: "命中两只对手", // NEEDS QC
+	foeSide: "以对手的场地为对象", // NEEDS QC
+	allySide: "以我方的场地为对象", // NEEDS QC
+	allyTeam: "以我方全队为对象", // NEEDS QC
+	allAdjacent: "命中相邻的同伴和对手", // NEEDS QC
+	allAdjacentDoubles: "命中我方同伴和两只对手", // NEEDS QC
+	allAdjacentFFA: "命中所有对手", // NEEDS QC
+	any: "三打对战中可以瞄准较远的宝可梦", // NEEDS QC
+	all: "命中场上所有宝可梦", // NEEDS QC
+	scripted: "自动选择对象", // NEEDS QC
+	randomNormal: "随机命中相邻的对手", // NEEDS QC
+	randomNormalDoubles: "随机命中对手", // NEEDS QC
+	allies: "以自己和同伴为对象", // NEEDS QC
 };
 
 // no official Chinese egg group names exist (Pokédex 3D Pro predates official Chinese)
 // names from 52poke
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	Monster: null, // NEEDS TRANSLATION
-	"Water 1": null, // NEEDS TRANSLATION
-	Bug: null, // NEEDS TRANSLATION
-	Flying: null, // NEEDS TRANSLATION
-	Field: null, // NEEDS TRANSLATION
-	Fairy: null, // NEEDS TRANSLATION
-	Grass: null, // NEEDS TRANSLATION
-	"Human-Like": null, // NEEDS TRANSLATION
-	"Water 3": null, // NEEDS TRANSLATION
-	Mineral: null, // NEEDS TRANSLATION
-	Amorphous: null, // NEEDS TRANSLATION
-	"Water 2": null, // NEEDS TRANSLATION
-	Ditto: null, // NEEDS TRANSLATION
-	Dragon: null, // NEEDS TRANSLATION
-	Undiscovered: null, // NEEDS TRANSLATION
+	Monster: "怪兽", // NEEDS QC
+	"Water 1": "水中1", // NEEDS QC
+	Bug: "虫", // NEEDS QC
+	Flying: "飞行", // NEEDS QC
+	Field: "陆上", // NEEDS QC
+	Fairy: "妖精", // NEEDS QC
+	Grass: "植物", // NEEDS QC
+	"Human-Like": "人型", // NEEDS QC
+	"Water 3": "水中3", // NEEDS QC
+	Mineral: "矿物", // NEEDS QC
+	Amorphous: "不定形", // NEEDS QC
+	"Water 2": "水中2", // NEEDS QC
+	Ditto: "百变怪", // NEEDS QC
+	Dragon: "龙", // NEEDS QC
+	Undiscovered: "蛋未发现", // NEEDS QC
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
