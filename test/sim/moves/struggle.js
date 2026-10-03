@@ -10,8 +10,23 @@ describe('Struggle', () => {
 		battle.destroy();
 	});
 
-	it(`should KO Shedinja in Gen 4 (and every other gen)`, () => {
-		battle = common.gen(4).createBattle([[
+	it(`should do recoil damage even if it does no damage to the target`, () => {
+		battle = common.createBattle([[
+			{ species: 'Salamence', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Shedinja', ability: 'sturdy', moves: ['taunt'] },
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices();
+		const salamence = battle.p1.active[0];
+		const shedinja = battle.p2.active[0];
+		assert.false.equal(salamence.hp, salamence.maxhp);
+		assert.equal(shedinja.hp, 1);
+	});
+
+	it(`should KO Shedinja`, () => {
+		battle = common.createBattle([[
 			{ species: 'Shedinja', moves: ['sleeptalk'] },
 		], [
 			{ species: 'Salamence', moves: ['taunt'] },

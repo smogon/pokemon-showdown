@@ -978,7 +978,7 @@ export class BattleActions {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
 
-		if (move.totalDamage) {
+		if (move.totalDamage || (move.struggleRecoil && damage.some((val, i) => val === 0 && !!targetsCopy[i]))) {
 			this.applyRecoilDamage(move.totalDamage, move, pokemon);
 		}
 
