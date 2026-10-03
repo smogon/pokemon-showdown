@@ -410,6 +410,16 @@ export class Battle {
 			0;
 	}
 
+	/**
+	 * Prioritizes foes over allies, then by speed.
+	 */
+	comparePriorityFoesFirst(this: void, pokemon: Pokemon) {
+		return (a: Pokemon, b: Pokemon) =>
+			Number(a.isAlly(pokemon)) - Number(b.isAlly(pokemon)) ||
+			b.speed - a.speed ||
+			0;
+	}
+
 	static compareRedirectOrder(this: void, a: AnyObject, b: AnyObject) {
 		return ((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
