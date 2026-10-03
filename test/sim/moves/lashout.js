@@ -25,7 +25,7 @@ describe('Lash Out', () => {
 	it(`should double in base power if the user's stats were lowered this turn by an ally`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Wynaut', moves: ['lashout'] },
-			{ species: 'Blissey', moves: ['faketears'] },
+			{ species: 'Blissey', ability: 'shellarmor', moves: ['faketears'] },
 		], [
 			{ species: 'Tyrogue', moves: ['sleeptalk'] },
 			{ species: 'Tyrogue', moves: ['sleeptalk'] },
@@ -66,7 +66,7 @@ describe('Lash Out', () => {
 	it(`should double in base power even if stat resets are reset by Haze`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Wynaut', moves: ['lashout'] },
-			{ species: 'Blissey', moves: ['faketears'] },
+			{ species: 'Blissey', ability: 'shellarmor', moves: ['faketears'] },
 		], [
 			{ species: 'Tyrogue', moves: ['haze'] },
 			{ species: 'Tyrogue', moves: ['sleeptalk'] },

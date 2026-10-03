@@ -7881,7 +7881,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	berserkgene: {
 		name: "Berserk Gene",
 		spritenum: 388,
-		onUpdate(pokemon) {
+		onBeforeSelection(pokemon) {
 			if (pokemon.useItem()) {
 				pokemon.addVolatile('confusion');
 			}
