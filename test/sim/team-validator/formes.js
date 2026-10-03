@@ -32,7 +32,7 @@ describe('Team Validator', () => {
 			{ species: 'deoxysdefense', ability: 'pressure', moves: ['wrap'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen3ubers@@@!speciesclause');
-		assert.legalTeam(team, 'gen3ubers@@@!speciesclause,+nonexistent');
+		assert.legalTeam(team, 'gen3ubers@@@!speciesclause,!obtainablemutuallyexclusiveformes');
 	});
 
 	it('should correctly validate USUM Rockruff', () => {
