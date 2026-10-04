@@ -653,7 +653,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		item = this.getPriorityItem(
 			ability, types, moves, counter, teamDetails, species, isLead, teraType, role, isDoubles
 		) || '';
-		if (item === undefined) {
+		if (item === '') {
 			item = set.items ? this.sample(set.items) :
 				this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
 		}
