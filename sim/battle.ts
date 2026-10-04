@@ -89,6 +89,7 @@ interface EventListenerWithoutPriority {
 interface EventListener extends EventListenerWithoutPriority {
 	order: number | false;
 	priority: number;
+	fractionalPriority?: number; // Gen 4 only
 	subOrder: number;
 	effectOrder?: number;
 	speed?: number;
@@ -395,15 +396,17 @@ export class Battle {
 	 *
 	 * 1. Order, low to high (default last)
 	 * 2. Priority, high to low (default 0)
-	 * 3. Speed, high to low (default 0)
-	 * 4. SubOrder, low to high (default 0)
-	 * 5. EffectOrder, low to high (default 0)
+	 * 3. Fractional Priority, high to low (default 0 - Gen 4 only)
+	 * 4. Speed, high to low (default 0)
+	 * 5. SubOrder, low to high (default 0)
+	 * 6. EffectOrder, low to high (default 0)
 	 *
 	 * Doesn't reference `this` so doesn't need to be bound.
 	 */
 	comparePriority(this: void, a: AnyObject, b: AnyObject) {
 		return -((b.order || 4294967296) - (a.order || 4294967296)) ||
 			((b.priority || 0) - (a.priority || 0)) ||
+			((b.fractionalPriority || 0) - (a.fractionalPriority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			-((b.subOrder || 0) - (a.subOrder || 0)) ||
 			-((b.effectOrder || 0) - (a.effectOrder || 0)) ||
@@ -412,6 +415,7 @@ export class Battle {
 
 	static compareRedirectOrder(this: void, a: AnyObject, b: AnyObject) {
 		return ((b.priority || 0) - (a.priority || 0)) ||
+			((b.fractionalPriority || 0) - (a.fractionalPriority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			((a.effectHolder?.abilityState && b.effectHolder?.abilityState) ?
 				-(b.effectHolder.abilityState.effectOrder - a.effectHolder.abilityState.effectOrder) : 0) ||
@@ -605,7 +609,8 @@ export class Battle {
 			return relayVar;
 		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && eventid !== 'SetAbility' && effect.effectType === 'Item' &&
-			(target instanceof Pokemon) && target.ignoringItem()) {
+			(target instanceof Pokemon) && target.ignoringItem() &&
+			!(eventid === 'BeforeMove' && (target.quickClawFlag || target.custapBerryFlag))) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
@@ -872,7 +877,8 @@ export class Battle {
 				}
 			}
 			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' &&
-				effect.effectType === 'Item' && (effectHolder instanceof Pokemon) && effectHolder.ignoringItem()) {
+				effect.effectType === 'Item' && (effectHolder instanceof Pokemon) && effectHolder.ignoringItem() &&
+				!(eventid === 'BeforeMove' && (effectHolder.quickClawFlag || effectHolder.custapBerryFlag))) {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
@@ -1010,6 +1016,10 @@ export class Battle {
 				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
 				// unique field position in a pre-sorted-by-speed array
 				handler.speed -= this.speedOrder.indexOf(pokemon.getFieldPositionValue()) / (this.activePerHalf * 2);
+			}
+
+			if (this.gen === 4 && !callbackName.endsWith('FractionalPriority')) {
+				handler.fractionalPriority = pokemon.getFractionalPriority();
 			}
 		}
 		return handler;
@@ -1794,7 +1804,7 @@ export class Battle {
 				}
 			}
 		}
-		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
+		// Gen 2 and 4 rolls happen at 'BeforeTurn'
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
 		this.makeRequest('move');
@@ -2652,13 +2662,8 @@ export class Battle {
 		if (!action.pokemon) {
 			action.speed = 1;
 		} else {
-			if (this.gen <= 4 && action.choice === 'move' && action.fractionalPriority < 0) {
-				// in Gen 4, Pokemon with decrease fractional priority act in reverse speed order
-				// ignores Trick Room, does not ignore boosts and Simple
-				action.speed = -action.pokemon.getStat('spe', false, false);
-			} else {
-				action.speed = action.pokemon.getActionSpeed();
-			}
+			action.speed = action.pokemon.getActionSpeed();
+			if (this.gen === 4) action.fractionalPriority = action.pokemon.getFractionalPriority();
 		}
 	}
 
@@ -2697,6 +2702,9 @@ export class Battle {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
+			}
+			if (this.gen === 4) {
+				for (const pokemon of this.getAllActive(true)) pokemon.quickClawRoll = this.randomChance(1, 5);
 			}
 			this.midTurn = true;
 			break;
@@ -2807,6 +2815,12 @@ export class Battle {
 
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
+			// Gen 3 roll happens at 'BeforeSelection'
+			if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
+			if (this.gen === 4) {
+				// Determine Quick Claw priority for the rest of this turn and switch/move order of the next turn
+				for (const pokemon of this.getAllActive(true)) pokemon.quickClawRoll = this.randomChance(1, 5);
+			}
 			break;
 		case 'residual':
 			this.add('');
