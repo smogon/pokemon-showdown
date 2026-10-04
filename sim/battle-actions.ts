@@ -531,13 +531,13 @@ export class BattleActions {
 			return false;
 		}
 
-		const originalHp = pokemon.hp;
 		if (!this.battle.suppressingSecondaries() && !move.flags['futuremove']) {
+			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-		}
-		if (pokemon && pokemon !== target && move.category !== 'Status') {
-			this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, originalHp);
+			if (pokemon && pokemon !== target && move.category !== 'Status') {
+				this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, originalHp);
+			}
 		}
 
 		return true;
