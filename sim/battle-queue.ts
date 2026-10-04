@@ -334,7 +334,7 @@ export class BattleQueue {
 	cancelAction(pokemon: Pokemon) {
 		const oldLength = this.list.length;
 		for (let i = 0; i < this.list.length; i++) {
-			if (this.list[i].pokemon === pokemon) {
+			if (this.list[i].pokemon === pokemon && this.list[i].choice !== 'runSwitch') {
 				this.list.splice(i, 1);
 				i--;
 			}
@@ -359,6 +359,12 @@ export class BattleQueue {
 			}
 		}
 		return null;
+	}
+
+	getSwitches(side?: Side) {
+		return this.list.filter(
+			action => ['switch', 'instaswitch'].includes(action.choice) && (!side || (action as SwitchAction).pokemon.side === side)
+		) as SwitchAction[];
 	}
 
 	/**

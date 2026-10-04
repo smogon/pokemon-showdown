@@ -59,6 +59,17 @@ export class BattleActions {
 	// #region SWITCH
 	// ==================================================================
 
+	runPursuitActivation(pokemon: Pokemon) {
+		if (pokemon.skipBeforeSwitchOutEventFlag) return;
+		this.battle.runEvent('BeforeSwitchOut', pokemon);
+		this.battle.clearActiveMove();
+		if (this.battle.gen >= 5) {
+			this.battle.eachEvent('Update');
+		}
+		if (pokemon.pursuitActivated) this.battle.faintMessages(false, false, this.battle.gen >= 5);
+		pokemon.skipBeforeSwitchOutEventFlag = true; // don't activate Pursuit again
+	}
+
 	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
 		if (!pokemon || pokemon.isActive) {
 			this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
@@ -77,13 +88,9 @@ export class BattleActions {
 			if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 				switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 			}
-			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
-				this.battle.runEvent('BeforeSwitchOut', oldActive);
-				if (this.battle.gen >= 5) {
-					this.battle.eachEvent('Update');
-				}
+			if (!isDrag) {
+				this.runPursuitActivation(oldActive);
 			}
-			oldActive.skipBeforeSwitchOutEventFlag = false;
 			if (!this.battle.runEvent('SwitchOut', oldActive)) {
 				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
@@ -95,26 +102,31 @@ export class BattleActions {
 			}
 			if (!oldActive.hp) {
 				// a pokemon fainted from Pursuit before it could switch
-				return 'pursuitfaint';
+				if (this.battle.gen >= 5) {
+					// in gen 5+, the switch is cancelled
+					this.battle.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
+					return false;
+				}
+				this.battle.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
+			} else {
+				// will definitely switch out at this point
+
+				this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
+				this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
+
+				// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
+				this.battle.queue.cancelAction(oldActive);
+
+				let newMove = null;
+				if (this.battle.gen === 4 && sourceEffect) {
+					newMove = oldActive.lastMove;
+				}
+				if (switchCopyFlag) {
+					pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
+				}
+				if (newMove) pokemon.lastMove = newMove;
+				oldActive.clearVolatile();
 			}
-
-			// will definitely switch out at this point
-
-			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
-			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
-
-			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
-			this.battle.queue.cancelAction(oldActive);
-
-			let newMove = null;
-			if (this.battle.gen === 4 && sourceEffect) {
-				newMove = oldActive.lastMove;
-			}
-			if (switchCopyFlag) {
-				pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
-			}
-			if (newMove) pokemon.lastMove = newMove;
-			oldActive.clearVolatile();
 		}
 		if (oldActive) {
 			oldActive.isActive = false;
@@ -122,6 +134,8 @@ export class BattleActions {
 			oldActive.usedItemThisTurn = false;
 			oldActive.statsRaisedThisTurn = false;
 			oldActive.statsLoweredThisTurn = false;
+			oldActive.pursuitActivated = false;
+			oldActive.skipBeforeSwitchOutEventFlag = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
 			if (this.battle.gen <= 4) {
@@ -139,6 +153,23 @@ export class BattleActions {
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
+		if (this.battle.gen <= 2) {
+			// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
+			for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+			if (this.battle.gen === 1) {
+				pokemon.side.lastSelectedMoveSlot = 0;
+				for (const poke of pokemon.foes()) {
+					if (poke.volatiles['partialtrappinglock'] && poke.moveSlots[poke.side.lastSelectedMoveSlot].id === 'metronome') {
+						// this is not done for Mirror Move, potentially resulting in a desync
+						poke.side.lastSelectedMove = 'metronome' as ID;
+						poke.side.lastEnemySelectedMove = 'metronome' as ID;
+						if (this.battle.queue.willMove(poke)) {
+							this.battle.queue.changeAction(poke, { choice: 'move', poke, moveid: 'metronome' });
+						}
+					}
+				}
+			}
+		}
 		pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
 		pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
@@ -147,17 +178,28 @@ export class BattleActions {
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
-		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
-		if (isDrag && this.battle.gen >= 5) {
-			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+		if (this.battle.gen <= 4) {
+			// Gen 4 Healing Wish and Lunar Dance activate here
+			this.battle.runEvent('EntryHazard', pokemon);
+			if (this.battle.gen <= 2 && !pokemon.side.faintedThisTurn && !isDrag) {
+				this.battle.runEvent('AfterSwitchInSelf', pokemon);
+			}
+			if (!pokemon.hp) return false;
+			if (this.battle.gen === 3 && this.battle.turn > 0) {
+				// Gen 3 Weather-related abilities activate before other Pokemon switch in
+				this.battle.runEvent('AfterEntryHazard', pokemon);
+			}
+		}
+
+		if (isDrag) {
 			this.runSwitch(pokemon);
 		} else {
 			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
 		}
 
-		return true;
+		return !!pokemon.hp;
 	}
 	dragIn(side: Side, pos: number) {
 		const pokemon = this.battle.getRandomSwitchable(side);
@@ -169,8 +211,7 @@ export class BattleActions {
 		if (!this.battle.runEvent('DragOut', oldActive)) {
 			return false;
 		}
-		if (!this.switchIn(pokemon, pos, null, true)) return false;
-		return true;
+		return this.switchIn(pokemon, pos, null, true);
 	}
 	runSwitch(pokemon: Pokemon) {
 		const switchersIn = [pokemon];
@@ -186,7 +227,11 @@ export class BattleActions {
 		for (const poke of switchersIn) {
 			if (!poke.hp) continue;
 			poke.isStarted = true;
-			poke.draggedIn = null;
+		}
+		if (this.battle.gen === 4) {
+			for (const poke of this.battle.getAllActive()) {
+				poke.removeVolatile('substitutebroken');
+			}
 		}
 		return true;
 	}
@@ -344,6 +389,13 @@ export class BattleActions {
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
+		if (this.battle.gen <= 4) {
+			for (const faintData of this.battle.faintQueue) {
+				if (faintData.faintEventDone) continue;
+				faintData.faintEventDone = true;
+				this.battle.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
+			}
+		}
 		this.battle.faintMessages();
 		this.battle.checkWin();
 
@@ -532,6 +584,8 @@ export class BattleActions {
 			}
 			return false;
 		}
+
+		if (this.battle.gen <= 4) this.battle.faintMessages(false, false, false);
 
 		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
 			const originalHp = pokemon.hp;
@@ -973,7 +1027,7 @@ export class BattleActions {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		this.battle.faintMessages(false, false, !pokemon.hp);
+		if (this.battle.gen >= 5) this.battle.faintMessages(false, false, !pokemon.hp);
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
@@ -1308,7 +1362,8 @@ export class BattleActions {
 				}
 			}
 			this.battle.debug('move failed because it did nothing');
-		} else if (move.selfSwitch && source.hp && !source.volatiles['commanded']) {
+		} else if (move.selfSwitch && source.hp && !source.volatiles['commanded'] &&
+			(this.battle.canSwitch(source.side) || move.id === 'revivalblessing')) {
 			source.switchFlag = move.id;
 		}
 

@@ -90,6 +90,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				oldActive.skipBeforeSwitchOutEventFlag = false;
+				oldActive.pursuitActivated = false;
 				if (!this.battle.runEvent('SwitchOut', oldActive)) {
 					// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 					// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
@@ -101,7 +102,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (!oldActive.hp) {
 					// a pokemon fainted from Pursuit before it could switch
-					return 'pursuitfaint';
+					return false;
 				}
 
 				// will definitely switch out at this point
@@ -153,7 +154,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else {
 				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 			}
-			if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 			pokemon.previouslySwitchedIn++;
 
 			if (isDrag && this.battle.gen >= 5) {
