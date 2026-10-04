@@ -1299,7 +1299,7 @@
       "teraTypes": ["Fairy", "Dark"],
       "forcedMoves": ["hurricane", "fierywrath"],
       "moves": ["nastyplot", "roost"],
-      "nature": "Timid"
+      "nature": "Timid",
       "gender": "N"
     },
     {
