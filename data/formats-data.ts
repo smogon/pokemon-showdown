@@ -3641,7 +3641,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	vullaby: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	mandibuzz: {
 		tier: "UU",
