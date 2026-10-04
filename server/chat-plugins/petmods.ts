@@ -114,7 +114,7 @@ export const commands: Chat.ChatCommands = {
 			const sets = data.sets;
 			const level = data.level;
 			let buf = `<span class="gray">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
-			buf += `<b>Level</b>: ${level}<br/>`;
+			buf += `<b>Level</b>: ${level}`;
 			for (const set of sets) {
 				if (set.role) buf += `<details class="details"><summary>${set.role}</summary><br/>`;
 				if (dex.gen === 9 && set.teraTypes) {
