@@ -113,8 +113,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Basculin-White-Striped', 'Cutiefly', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Flittle', 'Gastly', 'Girafarig', 'Gligar',
 			'Magby', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Shellder', 'Sneasel',
-			'Sneasel-Hisui', 'Snivy', 'Stantler', 'Torchic', 'Voltorb-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Heat Rock', 'Baton Pass',
-			'Sticky Web',
+			'Sneasel-Hisui', 'Snivy', 'Stantler', 'Torchic', 'Voltorb-Hisui', 'Vullaby', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Heat Rock',
+			'Baton Pass', 'Sticky Web',
 		],
 	},
 	{
