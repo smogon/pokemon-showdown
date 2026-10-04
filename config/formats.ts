@@ -792,6 +792,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Random Tandem",
+		desc: "A Bring 9, Pick 6 style format where your 3 Pokemon generate Tandems when you battle.",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3775975/">Random Tandem Thread</a>`,
 			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/edit">Tandem Compendium</a>`,
@@ -800,7 +801,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9randomtandem',
 		bestOfDefault: true,
 		// searchShow: false,
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause'],
 		banlist: [
 			'Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
 			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt', 'Kingambit',
@@ -824,7 +825,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 		onBegin() {
 			this.ruleTable.pickedTeamSize = 6;
-			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Random Tandem!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3711007/post-11052905" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
+			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Random Tandem!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3775975/" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
 			this.add(`raw|<b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b>`);
 		},
 	},
