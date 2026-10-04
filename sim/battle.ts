@@ -21,7 +21,7 @@ import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
 import { PRNG, type PRNGSeed } from './prng';
 import { type MoveRequest, type ChoiceRequest, Side } from './side';
 import { State } from './state';
-import { BattleQueue, type SwitchAction, type Action } from './battle-queue';
+import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
 declare const __version: any;
@@ -2537,13 +2537,30 @@ export class Battle {
 		// should only be relevant for Gen 3
 		const queuedSwitchOuts = this.queue.getSwitches().map(action => action.pokemon);
 
+		let sidesSwitching = 0;
+		if (this.gen === 3) {
+			for (const side of this.sides) {
+				if (!this.canSwitch(side)) continue;
+				for (const pokemon of side.active) {
+					if (pokemon.fainted && !queuedSwitchOuts.includes(pokemon)) {
+						sidesSwitching++;
+						break;
+					}
+				}
+				if (sidesSwitching > 1) break;
+			}
+		}
+
 		for (const side of this.sides) {
+			if (!this.canSwitch(side)) continue;
 			for (const pokemon of side.active) {
 				if (pokemon.fainted && !queuedSwitchOuts.includes(pokemon)) {
 					pokemon.status = 'fnt' as ID;
 					pokemon.switchFlag = true;
 					// In Gen 4, you can only switch one Pokémon per side at a time
 					if (this.gen === 4) break;
+					// In Gen 3, you can only switch one Pokémon per side at a time if only one side needs replacements
+					if (sidesSwitching === 1) return;
 				}
 			}
 		}
@@ -2878,7 +2895,7 @@ export class Battle {
 
 		if (
 			!nextAction ||
-			(this.gen === 3 && ['switch', 'instaswitch'].includes(action.choice) && (action as SwitchAction).target.fainted) ||
+			(this.gen === 3 && ['switch', 'instaswitch'].includes(action.choice)) ||
 			(this.gen <= 3 && ['move', 'residual'].includes(nextAction.choice)) ||
 			(this.gen === 4 && action.choice === 'instaswitch' && nextAction.choice !== 'instaswitch' &&
 				this.queue.peek(true)?.choice === 'runSwitch')
@@ -2900,11 +2917,9 @@ export class Battle {
 				}
 			}
 			return false;
-		} else if (nextAction.choice === 'instaswitch') {
-			return false;
 		}
 
-		if (this.gen >= 5 && action.choice !== 'start') {
+		if (this.gen >= 5 && !['start', 'instaswitch'].includes(action.choice)) {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
@@ -2956,7 +2971,9 @@ export class Battle {
 			}
 		}
 
-		if (this.gen < 5) this.eachEvent('Update');
+		if (this.gen < 5 && !['start', 'instaswitch'].includes(action.choice)) {
+			this.eachEvent('Update');
+		}
 
 		nextAction = this.queue.peek();
 
