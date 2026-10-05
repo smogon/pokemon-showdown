@@ -427,6 +427,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 	},
+	endure: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onDamage(damage, target, source, effect) {
+				if (effect?.effectType === 'Move' && !effect?.flags['futuremove'] && damage >= target.hp) {
+					this.add('-activate', target, 'move: Endure');
+					return target.hp - 1;
+				}
+			},
+		},
+	},
 	extremespeed: {
 		inherit: true,
 		priority: 1,

@@ -401,8 +401,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 
 			this.add('-end', target, 'move: ' + move.name);
-			target.removeVolatile('Protect');
-			target.removeVolatile('Endure');
 
 			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
 				data.moveData.infiltrates = true;
