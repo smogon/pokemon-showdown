@@ -19,6 +19,13 @@ interface Tandem {
 	nature?: string;
 }
 
+/* interface Entries {
+	redName: string;
+	greenName?: string;
+	redEntry: string;
+	greenEntry?: string;
+} */
+
 function formatMove(move: Move | string, format: Format) {
 	const dex = Dex.forFormat(format);
 	const parentDex = Dex.forFormat(dex.parentMod);
@@ -109,13 +116,13 @@ export const commands: Chat.ChatCommands = {
 			let buf = `<span class="gray">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
 			buf += `<b>Level</b>: ${level}`;
 			for (const set of sets) {
-				if (set.role) buf += `<details class="details"><summary>${set.role}</summary>`;
+				if (set.role) buf += `<details class="details"><summary>${set.role}</summary><br/>`;
 				if (dex.gen === 9 && set.teraTypes) {
 					buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
 				}
 				buf += `<b>Moves</b>: ${set.movepool.sort().map((move: any) => formatMove(move, format)).join(', ')}<br/>`;
 				if (set.abilities) {
-					buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().map((abil: any) => formatAbility(abil, format)).join(', ')}<br>`;
+					buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().map((abil: any) => formatAbility(abil, format)).join(', ')}<br/>`;
 				}
 				if (set.items) {
 					buf += `<b>Item${Chat.plural(set.items, 's', '')}</b>: ${set.items.sort().map((item: any) => formatItem(item, format)).join(', ')}`;
@@ -146,6 +153,15 @@ export const commands: Chat.ChatCommands = {
 			FS(`data/mods/gen9randomtandem/tandems.json`)
 				.readIfExistsSync()
 		);
+
+		/* "all" should return all Heads, then end early */
+		if (target === 'all') {
+			const heads = Object.keys(tandemData)
+				.sort()
+				.map(id => Dex.species.get(id).name)
+				.join(', ');
+			return this.sendReplyBox(`<span class="gray">All Heads:</span><br />${heads}`);
+		}
 
 		const searchResults = Dex.dataSearch(target, ['Pokedex']);
 
@@ -209,6 +225,32 @@ export const commands: Chat.ChatCommands = {
 	},
 	tandemshelp: [
 		`/tandems [pokemon] - Show the possible Tandems of a Head Pokemon in [Gen 9] Random Tandem.`,
+		`/tandems all - Shows a list of all Head Pokemon in [Gen 9] Random Tandem.`,
 		`!tandems [pokemon] - Shows everyone that information. Requires: + % @ ~`,
 	],
+	/* dexentry(target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help dexentry');
+
+		const dex = Dex.forFormat('gen9randombattle');
+		const dexEntry: { [species: string]: Entries } = require('./../../data/mods/gen9randomtandem/entries.json');
+
+		const pokemon = dex.species.get(target);
+		const entry = dexEntry[pokemon.id];
+
+		if (!pokemon.exists || !entry) return this.parse('/help dexentry');
+		if (!this.runBroadcast()) return;
+
+		let buf = `<span class="gray">Flavor for ${pokemon.name}:</span><br/>`;
+		// we COULD guard against nonexistence but that should never happen anyway
+		buf += `<b>${entry.redName} Red:</b> ${entry.redEntry}`;
+		if (entry.greenName && entry.greenEntry) {
+			buf += `<br/><b>${entry.greenName} Green:</b> ${entry.greenEntry}`;
+		}
+
+		this.sendReplyBox(buf);
+	},
+	dexentryhelp: [
+		`/dexentry [pokemon] - Show the Dex flavor for the [pokemon] in [FILL].`,
+		`!dexentry [pokemon] - Shows everyone that information. Requires: + % @ ~`,
+	], */
 };
