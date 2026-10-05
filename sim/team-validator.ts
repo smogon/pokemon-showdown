@@ -1541,14 +1541,11 @@ export class TeamValidator {
 	}
 
 	/**
-	 * We could, if we wanted, do a complete move validation of the father's
-	 * moveset to see if it's valid. This would recurse and be NP-Hard so
-	 * instead we won't. We'll instead use a simplified algorithm: The father
-	 * is allowed to have multiple egg moves and a maximum of one move from
-	 * any other restrictive source; recursion is done only if there are less
-	 * egg moves to validate or if the father has an egg group it doesn't
-	 * share with the egg Pokemon. Recursion is also limited to two iterations
-	 * of calling findEggMoveFathers.
+	 * This uses a miniature form of validateMoves to check if the father can
+	 * legitimately pass down the given egg moves. To prevent unnecessary
+	 * recursion, a maximum of three iterations of calling findEggMoveFathers
+	 * is allowed (this limit can be raised if a more complex chainbreed is
+	 * discovered)
 	 */
 	fatherCanLearn(baseSpecies: Species, species: Species, moves: ID[], eggGen: number, pokemonBlacklist: ID[],
 		recurse: number) {
