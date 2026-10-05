@@ -1461,7 +1461,8 @@ export class TeamValidator {
 
 	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
 		getAll?: false, pokemonBlacklist?: ID[]): boolean;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number, getAll?: true): ID[] | null;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+		getAll?: true): ID[] | null;
 	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
 		getAll?: boolean, pokemonBlacklist?: ID[]) {
 		if (!pokemonBlacklist) pokemonBlacklist = [];
@@ -1608,7 +1609,8 @@ export class TeamValidator {
 			if (!hasOtherEggGroup && !hasLessEggMoves) return false;
 			const setSources = new PokemonSources();
 			setSources.limitedEggMoves = allEggSources.limitedEggMoves;
-			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, recurse - 1, false, hasLessEggMoves ? [] : pokemonBlacklist);
+			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, recurse - 1, false,
+				hasLessEggMoves ? [] : pokemonBlacklist);
 		}
 		return true;
 	}
