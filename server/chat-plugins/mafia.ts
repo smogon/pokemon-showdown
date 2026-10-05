@@ -2574,7 +2574,7 @@ export const pages: Chat.PageTable = {
 			buf += `<p style="font-weight:bold;">Players who will be subbed unless they talk: ${game.hostRequestedSub.join(', ')}</p>`;
 			buf += `<p style="font-weight:bold;">Players who are requesting a sub: ${game.requestedSub.join(', ')}</p>`;
 		}
-		buf += game.hydraIdentityBox(userid);
+		buf += game.hydraIdentityBox(user.id);
 		buf += `<p style="font-weight:bold;">Sub List: ${game.subs.join(', ')}</p>`;
 		if (!isHost) {
 			if (game.phase === 'signups') {
