@@ -375,8 +375,8 @@ export abstract class BasicRoom {
 	 * for everyone, and appears in the scrollback for new users who
 	 * join.
 	 */
-	add(message: string) {
-		this.log.add(message);
+	add(message: string, logMessage?: string) {
+		this.log.add(message, logMessage);
 		return this;
 	}
 	roomlog(message: string) {

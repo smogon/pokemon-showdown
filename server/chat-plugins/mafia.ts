@@ -2224,14 +2224,22 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (player.darkness) {
 			if (message.startsWith("!")) return "You cannot send commands.";
 			this.recordMessage(message, player.getNameId(), player.getDisplayName(), player.safeName);
-			this.room.add(`|c:|${Date.now() / 1000}| ████████|${message}`).update();
+			const timestamp = Date.now() / 1000;
+			this.room.add(
+				`|c:|${timestamp}| ████████|${message}`,
+				`|c|${player.id}|/mafiadarkness ${player.name}|${message}`
+			).update();
 			return ``;
 		}
 
 		if (player.getAnonymized()) {
 			if (message.startsWith("!")) return "You cannot send commands.";
 			this.recordMessage(message, player.getNameId(), player.getDisplayName(), player.safeName);
-			this.room.add(`|c:|${Date.now() / 1000}| ${player.alias}|${message}`).update();
+			const timestamp = Date.now() / 1000;
+			this.room.add(
+				`|c:|${timestamp}| ${player.alias}|${message}`,
+				`|c|${player.id}|/mafiaanon ${player.getDisplayName()}|${player.name}|${message}`
+			).update();
 			return ``;
 		}
 
