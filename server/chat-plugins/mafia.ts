@@ -1,5 +1,6 @@
 import { Utils, FS } from '../../lib';
 import { formatText } from '../chat-formatter';
+import { Chat } from "../chat";
 
 interface MafiaData {
 	// keys for all of these are IDs
@@ -336,7 +337,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		return this.safeName;
 	}
 
-	getNameId() : ID {
+	getNameId() {
 		if (this.getAnonymized() && this.aliasid) return this.aliasid;
 		return this.id;
 	}
@@ -566,7 +567,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		const player = this.getPlayerByAlias(targetID) ||
-			this.players.find(player => player.getAnonymized() && toID(player.alias) === targetID);
+			this.players.find(p => p.getAnonymized() && toID(p.alias) === targetID);
 		if (!player) return null;
 		const realNames = player.hydra && player.partnerid ?
 			[player, this.getPlayer(player.partnerid)].filter((p): p is MafiaPlayer => !!p).map(p => p.safeName) :
@@ -581,7 +582,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	recordMessage(message: string, keys: ID | ID[], name: string, staffName?: string) {
 		const order = Date.now();
-		const codeMatch = message.match(/^[\/]?code(?:\s|$)/i) || message.match(/^!code(?:\s|$)/i);
+		const codeMatch = /^[/]?code(?:\s|$)/i.exec(message) || /^!code(?:\s|$)/i.exec(message);
 		const content = codeMatch ? message.slice(codeMatch[0].length) : message;
 		this.messages.push({
 			message: codeMatch ? Chat.getReadmoreBlock(`Code\n${content}`, true, 1) : formatText(message, false, true),
@@ -1126,7 +1127,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		if (!this.enableNV && targetId === 'novote') return this.sendUser(voter, `|error|No Vote is not allowed.`);
-		if (targetId === voter.getNameId() && !this.selfEnabled) return this.sendUser(voter, `|error|Self voting is not allowed.`);
+		if (targetId === voter.getNameId() && !this.selfEnabled)
+			return this.sendUser(voter, `|error|Self voting is not allowed.`);
 
 		if (this.voteLock && voter.voting) {
 			return this.sendUser(voter, `|error|You cannot switch your vote because votes are locked.`);
@@ -1249,7 +1251,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		if (!force) {
-const unvoteMessage = voter.voting === 'novote' ?
+			const unvoteMessage = voter.voting === 'novote' ?
 				`${voter.getDisplayName()} is no longer abstaining from voting.` :
 				`${voter.getDisplayName()} has unvoted ${target?.getDisplayName()}.`;
 			this.sendTimestamp(unvoteMessage);
@@ -2042,14 +2044,15 @@ const unvoteMessage = voter.voting === 'novote' ?
 				shuffledPlayers.filter(player => player.hydra)[i].partnerid = shuffledPlayers.filter(player => player.hydra)[i + 1].id;
 			} else {
 				shuffledPlayers.filter(player => player.hydra)[i].alias = shuffledPlayers.filter(player => player.hydra)[i - 1].alias;
-				shuffledPlayers.filter(player => player.hydra)[i].aliasid = shuffledPlayers.filter(player => player.hydra)[i - 1].aliasid;
+				shuffledPlayers.filter(player => player.hydra)[i].aliasid = shuffledPlayers
+					.filter(player => player.hydra)[i - 1].aliasid;
 				shuffledPlayers.filter(player => player.hydra)[i].partnerid = shuffledPlayers.filter(player => player.hydra)[i - 1].id;
 			}
 		}
 		shuffledPlayers = Utils.shuffle(this.players).filter(player => player.anon && !player.hydra && !player.aliasid);
 
-		for (let player of shuffledPlayers) {
-			let randPoke = Utils.randomElement(this.getPokemonNamePool().filter(name => !this.getPlayerByAlias(toID(name))));
+		for (const player of shuffledPlayers) {
+			const randPoke = Utils.randomElement(this.getPokemonNamePool().filter(name => !this.getPlayerByAlias(toID(name))));
 			player.alias = `${prefix} ${randPoke}`;
 			player.aliasid = toID(randPoke);
 		}
@@ -2059,7 +2062,7 @@ const unvoteMessage = voter.voting === 'novote' ?
 		this.hydra = setting;
 		if (setting && this.started) this.usedHydra = true;
 
-		for (let player of Utils.shuffle(this.players)) {
+		for (const player of Utils.shuffle(this.players)) {
 			player.hydra = setting;
 		}
 
@@ -2070,7 +2073,7 @@ const unvoteMessage = voter.voting === 'novote' ?
 		this.anon = setting;
 		if (setting && this.started) this.usedAnon = true;
 
-		for (let player of Utils.shuffle(this.players)) {
+		for (const player of Utils.shuffle(this.players)) {
 			player.anon = setting;
 		}
 
@@ -2081,7 +2084,7 @@ const unvoteMessage = voter.voting === 'novote' ?
 		this.darkness = setting;
 		if (setting && this.started) this.usedDarkness = true;
 
-		for (let player of Utils.shuffle(this.players)) {
+		for (const player of Utils.shuffle(this.players)) {
 			player.darkness = setting;
 		}
 	}
@@ -2179,7 +2182,6 @@ const unvoteMessage = voter.voting === 'novote' ?
 				this.sendUser(hostid, `${user.id} has spoken and been removed from the host sublist.`);
 			}
 		}
-
 
 		if (this.hostid === user.id || this.cohostids.includes(user.id)) {
 			this.recordMessage(message, user.id, Utils.escapeHTML(user.name));
@@ -2317,7 +2319,6 @@ export const pages: Chat.PageTable = {
 
 		const isPlayer = game.getPlayer(user.id);
 		const isHost = user.id === game.hostid || game.cohostids.includes(user.id);
-		const players = game.getRemainingPlayers();
 		const slots = game.getRemainingSlots();
 		this.title = game.title;
 		let buf = `<div class="pad broadcast-blue">`;
@@ -2401,13 +2402,15 @@ export const pages: Chat.PageTable = {
 			let previousActionsPL = `<br/>`;
 			if (role) {
 				buf += `<h3>${isPlayer.safeName}, you are a ${isPlayer.getStylizedRole()}.</h3>`;
-				buf += isPlayer.hydra && isPlayer.partnerid ? `<h3>Your Hydra partner is ${game.getPlayer(isPlayer.partnerid)?.safeName}.</h3>` : ``;
+				buf += isPlayer.hydra && isPlayer.partnerid ?
+					`<h3>Your Hydra partner is ${game.getPlayer(isPlayer.partnerid)?.safeName}.</h3>` : ``;
 				buf += isPlayer.getAnonymized() ? `<h3>Your alias is ${isPlayer.getDisplayName()}.</h3>` : ``;
 				if (!['town', 'solo'].includes(role.alignment)) {
 					buf += `<p><span style="font-weight:bold">Partners</span>: ${game.getPartners(role.alignment, isPlayer)}</p>`;
 				}
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
-				buf += `<table><tr><td style="text-align:center;"><img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png"></td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
+				buf += `<table><tr><td style="text-align:center;"><img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png">
+					</td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
 				buf += `</details></p>`;
 				for (let i = 0; i < game.dayNum; i++) {
 					previousActionsPL += `<b>Night ${i}</b><br/>`;
@@ -2831,8 +2834,15 @@ export const commands: Chat.ChatCommands = {
 
 		hydra(target, room, user, connection, cmd) {
 			room = this.requireRoom();
+			if ((room.parent || room).roomid !== 'mafia')
+				throw new Chat.ErrorMessage(`This command can only be used in the Mafia room.`);
+
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			if (!Users.get(game.hostid)?.can('mute', null, room) && !game.cohostids
+				.some(cohostid => Users.get(cohostid)?.can('mute', null, room)))
+				throw new Chat.ErrorMessage(`A staff must (co)host to run this command.`);
+
 			const action = toID(target);
 
 			if (game.started) {
@@ -2858,13 +2868,20 @@ export const commands: Chat.ChatCommands = {
 			game.sendDeclare(`The game was set to be ${this.meansYes(action) ? 'a Hydra' : 'not a Hydra'}.`);
 		},
 		hydrahelp: [
-			`/mafia hydra [on|off] - Turns the game into a Hydra. Requires host % @ # ~`,
+			`/mafia hydra [on|off] - Turns the game into a Hydra. Requires % @ # ~`,
 		],
 
 		anon(target, room, user, connection, cmd) {
 			room = this.requireRoom();
+			if ((room.parent || room).roomid !== 'mafia')
+				throw new Chat.ErrorMessage(`This command can only be used in the Mafia room.`);
+
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			if (!Users.get(game.hostid)?.can('mute', null, room) && !game.cohostids
+				.some(cohostid => Users.get(cohostid)?.can('mute', null, room)))
+				throw new Chat.ErrorMessage(`A staff must (co)host to run this command.`);
+
 			const action = toID(target);
 			if (this.meansYes(action)) {
 				if (game.anon) return game.sendUser(user, `|error|Game is already Anon.`);
@@ -2881,13 +2898,21 @@ export const commands: Chat.ChatCommands = {
 			game.sendDeclare(`The game was set to be ${this.meansYes(action) ? 'Anon' : 'not Anon'}.`);
 		},
 		anonhelp: [
-			`/mafia anon [on|off] - Turns the game into a Anon. Requires host % @ # ~`,
+			`/mafia anon [on|off] - Turns the game into a Anon. Requires % @ # ~`,
 		],
 
 		darkness(target, room, user, connection, cmd) {
 			room = this.requireRoom();
+			if ((room.parent || room).roomid !== 'mafia')
+				throw new Chat.ErrorMessage(`This command can only be used in the Mafia room.`);
+
 			const game = this.requireGame(Mafia);
+
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			if (!Users.get(game.hostid)?.can('mute', null, room) && !game.cohostids
+				.some(cohostid => Users.get(cohostid)?.can('mute', null, room)))
+				throw new Chat.ErrorMessage(`A staff must (co)host to run this command.`);
+
 			const action = toID(target);
 			if (this.meansYes(action)) {
 				if (game.darkness) return game.sendUser(user, `|error|Game is already shrouded in Darkness.`);
@@ -2904,7 +2929,7 @@ export const commands: Chat.ChatCommands = {
 			game.sendDeclare(`The game was set to be shrouded ${this.meansYes(action) ? 'in Darkness' : 'not in Darkness'}.`);
 		},
 		darknesshelp: [
-			`/mafia darkness [on|off] - Shrouds the game in Darkness. Requires host % @ # ~`,
+			`/mafia darkness [on|off] - Shrouds the game in Darkness. Requires % @ # ~`,
 		],
 
 		reveal(target, room, user) {
@@ -3228,7 +3253,7 @@ export const commands: Chat.ChatCommands = {
 					`${target.trim()} is not a player's username in the game.` : `${target.trim()} is not a player.`);
 			}
 
-			const targetPlayer = players[0]!;
+			const targetPlayer = players[0];
 			let elimType: MafiaEliminateType;
 			let repeat = false;
 			switch (cmd) {
@@ -3758,7 +3783,7 @@ export const commands: Chat.ChatCommands = {
 			for (const targetName of targetNames) {
 				const isoTarget = game.getIsoTarget(targetName, staffIso);
 				if (!isoTarget) throw new Chat.ErrorMessage(`${targetName} is not a valid iso target.`);
-				if (!targets.some(target => target.key === isoTarget.key)) targets.push(isoTarget);
+				if (!targets.some(t => t.key === isoTarget.key)) targets.push(isoTarget);
 			}
 			this.sendReplyBox(game.createIso(targets, staffIso));
 
@@ -3848,7 +3873,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		realplayershelp: [
 			`/mafia realplayers - Privately lists each alias and the real player behind it. Requires host % @ # ~.`,
-			],
+		],
 
 		originalrolelist: 'rolelist',
 		orl: 'rolelist',
