@@ -1325,15 +1325,35 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return buf;
 	}
 
-	hydraIdentityBox(userid: ID) {
+	identityBox(userid: ID) {
 		let buf = '';
 		const isHost = userid === this.hostid || this.cohostids.includes(userid);
 		if ((this.anon && isHost) || (this.hydra && !this.anon)) {
+			const identities = new Map<string, { alias: string, realNames: string[] }>();
+			for (const player of this.players) {
+				const key = player.hydra && player.aliasid ? `hydra:${player.aliasid}` : `player:${player.id}`;
+				let identity = identities.get(key);
+				if (!identity) {
+					identity = { alias: player.getDisplayName(), realNames: [] };
+					identities.set(key, identity);
+				}
+				identity.realNames.push(player.safeName);
+			}
+
+			const cellStyle = `border:1px solid #c5cfd6;padding:7px 10px;text-align:left`;
+			const bodyCellStyle = `${cellStyle};background-color:#eaf3f8`;
+			const rows = [...identities.values()].map(identity =>
+				`<tr><td style="${bodyCellStyle}"><strong><username>${identity.alias}</username></strong></td><td style="${bodyCellStyle}">${identity.realNames.map(name => `<username>${name}</username>`).join(', ')}</td></tr>`
+			).join('');
+
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Player Identities</summary>`;
-			buf += `<b>Mafia Player Identities:</b><br />`;
-			buf += this.players.map(player =>
-				`${player.getDisplayName()}: ${Utils.escapeHTML(player.name)}`
-			).join('<br />');
+			buf += `<div class="infobox"><h3>Mafia Player Identities</h3><table style="border-collapse:collapse;width:100%;margin-top:8px"><thead><tr style="background-color:#496a81;color:white"><th style="`;
+			buf += cellStyle;
+			buf += `">Alias</th><th style="`;
+			buf += cellStyle;
+			buf += `">Real Player(s)</th></tr></thead><tbody>`;
+			buf += rows;
+			buf += `</tbody></table></div>`;
 			buf += `</span></details></p>`;
 		}
 		return buf;
@@ -2574,7 +2594,7 @@ export const pages: Chat.PageTable = {
 			buf += `<p style="font-weight:bold;">Players who will be subbed unless they talk: ${game.hostRequestedSub.join(', ')}</p>`;
 			buf += `<p style="font-weight:bold;">Players who are requesting a sub: ${game.requestedSub.join(', ')}</p>`;
 		}
-		buf += game.hydraIdentityBox(user.id);
+		buf += game.identityBox(user.id);
 		buf += `<p style="font-weight:bold;">Sub List: ${game.subs.join(', ')}</p>`;
 		if (!isHost) {
 			if (game.phase === 'signups') {
@@ -3908,7 +3928,7 @@ export const commands: Chat.ChatCommands = {
 
 			game.sendUser(
 				user,
-				`|html|<div class="infobox"><h3>Mafia Player Identities</h3><table style="border-collapse:collapse;width:100%;margin-top:8px"><thead><tr style="background-color:#496a81;color:white"><th style="${cellStyle}">Alias</th><th style="${cellStyle}">Real player(s)</th></tr></thead><tbody>${rows}</tbody></table></div>`
+				`|html|<div class="infobox"><h3>Mafia Player Identities</h3><table style="border-collapse:collapse;width:100%;margin-top:8px"><thead><tr style="background-color:#496a81;color:white"><th style="${cellStyle}">Alias</th><th style="${cellStyle}">Real Player(s)</th></tr></thead><tbody>${rows}</tbody></table></div>`
 			);
 		},
 		realplayershelp: [
