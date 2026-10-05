@@ -1446,7 +1446,7 @@ export class TeamValidator {
 				isHidden: !!this.dex.mod('gen5').species.get(species.id).abilities['H'],
 			};
 		} else if (source.charAt(1) === 'E') {
-			if (this.findEggMoveFathers(source, species, setSources)) {
+			if (this.findEggMoveFathers(source, species, setSources, 2)) {
 				return undefined;
 			}
 			if (because) throw new Error(`Wrong place to get an egg incompatibility message`);
@@ -1459,11 +1459,12 @@ export class TeamValidator {
 		return this.validateEvent(set, setSources, eventData, eventSpecies, because as any) as any;
 	}
 
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
-		getAll?: false, pokemonBlacklist?: ID[], noRecurse?: true): boolean;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, getAll?: true): ID[] | null;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
-		getAll?: boolean, pokemonBlacklist?: ID[], noRecurse?: boolean) {
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+		getAll?: false, pokemonBlacklist?: ID[]): boolean;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+		getAll?: true): ID[] | null;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+		getAll?: boolean, pokemonBlacklist?: ID[]) {
 		if (!pokemonBlacklist) pokemonBlacklist = [];
 		if (!pokemonBlacklist.includes(species.id)) pokemonBlacklist.push(species.id);
 		// tradebacks have an eggGen of 2 even though the source is 1ET
@@ -1529,7 +1530,7 @@ export class TeamValidator {
 			if (!father.eggGroups.some(eggGroup => eggGroups.includes(eggGroup))) continue;
 
 			// father must be able to learn the move
-			if (!this.fatherCanLearn(species, father, eggMoves, eggGen, pokemonBlacklist, noRecurse)) continue;
+			if (!this.fatherCanLearn(species, father, eggMoves, eggGen, pokemonBlacklist, recurse)) continue;
 
 			// father found!
 			if (!getAll) return true;
@@ -1540,17 +1541,14 @@ export class TeamValidator {
 	}
 
 	/**
-	 * We could, if we wanted, do a complete move validation of the father's
-	 * moveset to see if it's valid. This would recurse and be NP-Hard so
-	 * instead we won't. We'll instead use a simplified algorithm: The father
-	 * is allowed to have multiple egg moves and a maximum of one move from
-	 * any other restrictive source; recursion is done only if there are less
-	 * egg moves to validate or if the father has an egg group it doesn't
-	 * share with the egg Pokemon. Recursion is also limited to two iterations
-	 * of calling findEggMoveFathers.
+	 * This uses a miniature form of validateMoves to check if the father can
+	 * legitimately pass down the given egg moves. To prevent unnecessary
+	 * recursion, a maximum of three iterations of calling findEggMoveFathers
+	 * is allowed (this limit can be raised if a more complex chainbreed is
+	 * discovered)
 	 */
 	fatherCanLearn(baseSpecies: Species, species: Species, moves: ID[], eggGen: number, pokemonBlacklist: ID[],
-		noRecurse: boolean | undefined) {
+		recurse: number) {
 		if (!this.dex.species.getLearnsetData(species.id).learnset) return false;
 
 		if (species.id === 'smeargle') return true;
@@ -1595,18 +1593,21 @@ export class TeamValidator {
 		}
 		pokemonBlacklist.push(species.id);
 		if (allEggSources.limitedEggMoves && allEggSources.limitedEggMoves.length > 1) {
-			if (noRecurse) return false;
-			let canChainbreed = false;
+			if (recurse <= 0) return false;
+			let hasOtherEggGroup = false;
 			for (const fatherEggGroup of species.eggGroups) {
 				if (!baseSpecies.eggGroups.includes(fatherEggGroup)) {
-					canChainbreed = true;
+					hasOtherEggGroup = true;
 					break;
 				}
 			}
-			if (!canChainbreed && allEggSources.limitedEggMoves.length === moves.length) return false;
+			const hasLessEggMoves = allEggSources.limitedEggMoves.length < moves.length;
+			// Waste of time to check Pokemon without a different egg group and the same amount of egg moves
+			if (!hasOtherEggGroup && !hasLessEggMoves) return false;
 			const setSources = new PokemonSources();
 			setSources.limitedEggMoves = allEggSources.limitedEggMoves;
-			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, false, pokemonBlacklist, true);
+			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, recurse - 1, false,
+				hasLessEggMoves ? [] : pokemonBlacklist);
 		}
 		return true;
 	}
