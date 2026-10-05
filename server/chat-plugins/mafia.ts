@@ -1328,7 +1328,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	hydraIdentityBox(userid: ID) {
 		let buf = '';
 		const isHost = userid === this.hostid || this.cohostids.includes(userid);
-		if ((this.anon && isHost) || (this.hydra && !this.anon)){
+		if ((this.anon && isHost) || (this.hydra && !this.anon)) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Player Identities</summary>`;
 			buf += `<b>Mafia Player Identities:</b><br />`;
 			buf += this.players.map(player =>
@@ -3783,14 +3783,19 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (!game.started) throw new Chat.ErrorMessage(`The game hasn't started yet.`);
-			const staffIso = cmd === 'staffiso' || cmd === 'siso' || cmd === 'anoniso' || cmd === 'hydraiso' || cmd === 'darknessiso';
+			const staffIso = cmd === 'staffiso' || cmd === 'siso' || cmd === 'anoniso' ||
+				cmd === 'hydraiso' || cmd === 'darknessiso';
 			if (staffIso && game.hostid !== user.id && !game.cohostids.includes(user.id)) {
 				this.checkCan('mute', null, room);
 				if (game.getPlayer(user.id)) {
 					throw new Chat.ErrorMessage(`You cannot use staffiso while you are in the game.`);
 				}
 			}
-			if (!target) return this.parse(`/help mafia ${staffIso ? 'staffiso' : 'iso'}`);
+			if (!target) {
+				if (!staffIso) return this.parse(`/help mafia iso`);
+				game.logAction(user, `checked non-anon isos`);
+				return this.sendReplyBox(game.createStaffIso());
+			}
 
 			if (!staffIso && (game.hostid === user.id || game.cohostids.includes(user.id))) {
 				this.broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
@@ -3817,7 +3822,7 @@ export const commands: Chat.ChatCommands = {
 			`!mafia iso [player1, player2, ...] - Broadcasts the selected players' messages.`,
 		],
 		staffisohelp: [
-			`/mafia staffiso [player1, player2, ...] - Shows the selected players' messages with real usernames beside anonymous aliases. Staff players cannot use this command; hosts and cohosts can.`,
+			`/mafia staffiso [player1, player2, ...] - Shows the selected players' messages with real usernames beside anonymous aliases. Omit players to view the full game ISO privately. Staff players cannot use this command; hosts and cohosts can.`,
 		],
 
 		forcevote(target, room, user) {
@@ -3886,13 +3891,24 @@ export const commands: Chat.ChatCommands = {
 				game.logAction(user, `checked player aliases`);
 			}
 
-			const players = game.players.map(player =>
-				`${player.getDisplayName()}: ${Utils.escapeHTML(player.name)}`
-			).join('<br />');
+			const identities = new Map<string, { alias: string, realNames: string[] }>();
+			for (const player of game.players) {
+				const key = player.hydra && player.aliasid ? `hydra:${player.aliasid}` : `player:${player.id}`;
+				let identity = identities.get(key);
+				if (!identity) {
+					identity = { alias: player.getDisplayName(), realNames: [] };
+					identities.set(key, identity);
+				}
+				identity.realNames.push(player.safeName);
+			}
+			const cellStyle = `border:1px solid #c5cfd6;padding:7px 10px;text-align:left`;
+			const rows = [...identities.values()].map(identity =>
+				`<tr><td style="${cellStyle}"><strong><username>${identity.alias}</username></strong></td><td style="${cellStyle}">${identity.realNames.map(name => `<username>${name}</username>`).join(', ')}</td></tr>`
+			).join('');
 
 			game.sendUser(
 				user,
-				`|html|<b>Mafia Player Identities:</b><br />${players}`
+				`|html|<div class="infobox"><h3>Mafia Player Identities</h3><table style="border-collapse:collapse;width:100%;margin-top:8px"><thead><tr style="background-color:#496a81;color:white"><th style="${cellStyle}">Alias</th><th style="${cellStyle}">Real player(s)</th></tr></thead><tbody>${rows}</tbody></table></div>`
 			);
 		},
 		realplayershelp: [
