@@ -578,23 +578,19 @@ export class BattleActions {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
 			if (pokemon && pokemon !== target && move.category !== 'Status') {
-				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
+				this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, originalHp);
 			}
 			return false;
 		}
 
 		if (this.battle.gen <= 4) this.battle.faintMessages(false, false, false);
 
-		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
+		if (!this.battle.suppressingSecondaries() && !move.flags['futuremove']) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			if (pokemon && pokemon !== target && move.category !== 'Status') {
-				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
+				this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, originalHp);
 			}
 		}
 
@@ -863,11 +859,8 @@ export class BattleActions {
 		return undefined;
 	}
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
-		// console.log(`${targets}, ${pokemon}, ${move}`)
-		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
-			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
-			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
-		}
+		this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
+		this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
 		return undefined;
 	}
 	/** NOTE: used only for moves that target sides/fields rather than pokemon */
@@ -1056,18 +1049,16 @@ export class BattleActions {
 
 		this.battle.eachEvent('Update');
 
-		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
+		if (!this.battle.suppressingSecondaries()) {
+			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {
 				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
 				const curDamage = targets.length === 1 ? move.totalDamage : d;
 				if (typeof curDamage === 'number' && targets[i].hp) {
 					const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
-					if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
-						this.battle.runEvent('EmergencyExit', targets[i], pokemon);
-					}
+					this.battle.runEvent('EmergencyExit', targets[i], pokemon, undefined, targetHPBeforeDamage);
 				}
 			}
 		}
@@ -1182,9 +1173,7 @@ export class BattleActions {
 			if (this.battle.gen < 5) {
 				this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 			}
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
-				this.battle.runEvent('EmergencyExit', pokemon);
-			}
+			this.battle.runEvent('EmergencyExit', pokemon, undefined, undefined, pokemonOriginalHP);
 		}
 
 		return [damage, targets];
@@ -1446,9 +1435,7 @@ export class BattleActions {
 			const effect = move.mindBlownRecoil ? this.dex.conditions.get(move.name) : 'recoil';
 			this.battle.damage(recoilDamage, pokemon, pokemon, effect);
 		}
-		if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-			this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-		}
+		this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
 
 		return recoilDamage;
 	}

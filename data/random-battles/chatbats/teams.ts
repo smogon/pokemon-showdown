@@ -597,138 +597,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 		return moves;
 	}
 
-	override getPriorityItem(
-		ability: string,
-		types: Set<string>,
-		moves: Set<string>,
-		counter: MoveCounter,
-		teamDetails: RandomTeamsTypes.TeamDetails,
-		species: Species,
-		isLead: boolean,
-		teraType: string,
-		role: RandomTeamsTypes.Role,
-		isDoubles: boolean,
-	) {
-		if (!isDoubles) {
-			if (role === 'Fast Bulky Setup' && (ability === 'Quark Drive' || ability === 'Protosynthesis')) {
-				return 'Booster Energy';
-			}
-			if (species.id === 'lokix') {
-				return (role === 'Fast Attacker') ? 'Silver Powder' : 'Life Orb';
-			}
-		}
-		if (species.requiredItems) {
-			// Z-Crystals aren't available in Gen 9, so require Plates
-			if (species.baseSpecies === 'Arceus') {
-				return species.requiredItems[0];
-			}
-			return this.sample(species.requiredItems);
-		}
-		if (role === 'AV Pivot') return 'Assault Vest';
-		if (species.id === 'pikachu') return 'Light Ball';
-		if (species.id === 'regieleki') return 'Magnet';
-		if (species.id === 'smeargle') return 'Focus Sash';
-
-		// PMCM hardcodes
-		if (species.id === 'volcarona') return 'Heavy-Duty Boots';
-		if (species.id === 'golemalola') return 'Life Orb';
-		if (species.id === 'ironcrown') return moves.has('rest') ? 'Chesto Berry' : 'Leftovers';
-		if (species.id === 'lurantis') return this.sample(['Life Orb', 'Leftovers']);
-		if (species.id === 'carbink') return 'Leftovers';
-		if (species.id === 'moltres') return 'Life Orb';
-		if (species.id === 'kommoo') return 'Throat Spray';
-		if (species.id === 'volbeat') return 'Focus Sash';
-		if (species.id === 'illumise') return 'Focus Sash';
-		if (species.id === 'abomasnow') return 'Light Clay';
-		if (species.id === 'dugtrio' && moves.has("swordsdance")) return 'Focus Sash';
-		if (species.id === 'dugtrio') return 'Choice Band';
-		if (species.id === 'tyranitar') return 'Choice Scarf';
-		if (species.id === 'mimikyu') return 'Red Card';
-		if (species.id === 'mesprit' && moves.has("aquaring")) return 'Leftovers';
-		if (species.id === 'mesprit') return 'Throat Spray';
-		if (species.id === 'electrode' && moves.has("rapidspin")) return 'Heavy-Duty Boots';
-		if (species.id === 'electrode') return this.sample(['Normal Gem', 'Heavy-Duty Boots']);
-		if (species.id === 'taurospaldeacombat') return 'Expert Belt';
-		if (species.id === 'chiyu') return 'Normalium Z';
-		if (species.id === 'wochien') return 'Big Root';
-		if (species.id === 'staraptor') return 'Choice Scarf';
-		if (species.id === 'archaludon' && ability === 'Hydroelectric Dam') return 'Assault Vest';
-		if (species.id === 'archaludon' && ability === 'Stamina') return 'Leftovers';
-		if (species.id === 'malamar') return this.sample(['Mirror Herb', 'Leftovers']);
-		if (species.id === 'empoleon') return moves.has('watershuriken') ? 'Loaded Dice' : 'Leftovers';
-		if (species.id === 'glastrier' && moves.has('swordsdance')) return 'Heavy-Duty Boots';
-		if (species.id === 'glastrier') return 'Assault Vest';
-		if (species.id === 'lycanrocmidnight') return 'Loaded Dice';
-		if (species.id === 'lycanroc') return this.sample(['Leftovers', 'Heavy-Duty Boots']);
-		if (species.id === 'lycanrocdusk') return 'Expert Belt';
-		if (species.id === 'dodrio' && moves.has('drillpeck')) return 'Life Orb';
-		if (species.id === 'dodrio' && moves.has('bravebird')) return 'Heavy-Duty Boots';
-		if (species.id === 'whiscash') return 'Rocky Helmet';
-		if (species.id === 'hippowdon') return this.sample(['Leftovers', 'Rocky Helmet']);
-		if (species.id === 'cramorant') return 'Heavy-Duty Boots';
-		if (species.id === 'grafaiai') return this.sample(['Red Card', 'Mirror Herb']);
-		if (species.id === 'tatsugiri') return 'Choice Scarf';
-		if (species.id === 'kyurem') return 'Heavy-Duty Boots';
-		if (species.id === 'roaringmoon') return 'Heavy-Duty Boots';
-		if (species.id === 'milotic') return 'Rocky Helmet';
-		if (species.id === 'gogoat') return 'Leftovers';
-		if (species.id === 'clodsire') return this.sample(['Leftovers', 'Rocky Helmet']);
-		if (species.id === 'masquerain') return 'Heavy-Duty Boots';
-		if (species.id === 'kyuremblack' && moves.has('roost')) return 'Heavy-Duty Boots';
-		if (species.id === 'kyuremblack') return this.sample(['Choice Band', 'Heavy-Duty Boots']);
-		if (species.id === 'ironthorns') return 'Rocky Helmet';
-		if (species.id === 'dudunsparce') return 'Leftovers';
-		if (species.id === 'chienpao') return 'Heavy Duty Boots';
-		if (species.id === 'pelipper' && moves.has('roost')) return 'Heavy-Duty Boots';
-		if (species.id === 'pelipper') return 'Choice Specs';
-		if (species.id === 'kleavor') return 'Choice Scarf';
-		if (species.id === 'araquanid') return 'Heavy-Duty Boots';
-		if (species.id === 'avalugghisui') return 'Heavy-Duty Boots';
-		if (species.id === 'swalot') return 'Leftovers';
-		if (species.id === 'zapdosgalar') return this.sample(['Choice Scarf', 'Expert Belt']);
-		if (species.id === 'phione') return 'Leftovers';
-		if (species.id === 'sudowoodo') return 'Choice Band';
-		if (species.id === 'dondozo') return 'Leftovers';
-		if (species.id === 'golurk') return this.sample(['Life Orb', 'Punching Glove', 'Colbur Berry']);
-		if (species.id === 'meowscarada') return 'Heavy-Duty Boots';
-		if (species.id === 'infernape') return this.sample(['Life Orb', 'Sitrus Berry', 'Air Balloon']);
-		if (species.id === 'urshifu') return this.sample(['Life Orb', 'Protective Pads']);
-		if (species.id === 'urshifurapidstrike') return this.sample(['Life Orb', 'Protective Pads']);
-		if (species.id === 'salamence') return this.sample(['Life Orb', 'Heavy-Duty Boots', 'Sky Plate']);
-		if (species.id === 'stonjourner') return 'Choice Scarf';
-		if (species.id === 'veluza') return 'Sitrus Berry';
-		if (species.id === 'ogerponhearthflame') return 'Hearthflame Mask';
-		if (species.id === 'dachsbun') return 'Rocky Helmet';
-		if (species.id === 'mew') return 'Starf Berry';
-		if (species.id === 'magneton') return this.sample(['Air Balloon', 'Chople Berry']);
-		if (species.id === 'delibird') return 'Heavy-Duty Boots';
-		if (species.id === 'hitmontop') return this.sample(['Protective Pads', 'Wide Lens']);
-		if (species.id === 'articunogalar' && moves.has('roost')) return 'Heavy-Duty Boots';
-		if (species.id === 'articunogalar' && moves.has('aurasphere')) return 'Choice Specs';
-		if (species.id === 'vaporeon') return 'Flame Orb';
-		if (species.id === 'garganacl') return 'Poisonium Z';
-		if (species.id === 'swanna') return 'Heavy-Duty Boots';
-		if (species.id === 'terapagos') return 'Leftovers';
-		if (species.id === 'flapple') return 'Tart Apple';
-		if (species.id === 'genesectburn' && moves.has('sunsteelstrike')) return 'Burn Drive';
-		if (species.id === 'genesectchill' && moves.has('behemothblade')) return 'Chill Drive';
-		if (species.id === 'genesectdouse' && moves.has('makeitrain')) return 'Douse Drive';
-		if (species.id === 'genesectshock' && moves.has('tachyoncutter')) return 'Shock Drive';
-		if (species.id === 'honchkrow') return 'Heavy-Duty Boots';
-		if (species.id === 'primeape') return 'Eviolite';
-		if (species.id === 'rillaboom') return 'Heavy-Duty Boots';
-		if (species.id === 'mandibuzz') return 'Thick Club';
-		if (species.id === 'feraligatr') return 'Life Orb';
-		if (species.id === 'salazzle') return 'Heavy-Duty Boots';
-		if (species.id === 'kyogre') return 'Waterium Z';
-		if (species.id === 'azelf') return 'Focus Band';
-		if (species.id === 'decidueye') return this.sample(['Life Orb', 'Heavy-Duty Boots', "Leftovers"]);
-		if (species.id === 'ogerponcornerstone') return 'Cornerstone Mask';
-		if (species.id === 'glimmora' && moves.has('meteorbeam')) return 'Power Herb';
-		if (species.id === 'glimmora') return 'Air Balloon';
-		if (species.id === 'wobbuffet') return 'Covert Cloak';
-	}
-
 	override randomSet(
 		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -765,7 +633,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		let teraType = this.sampleIfArray(teraTypes);
 
 		let ability = '';
-		let item = undefined;
+		let item = '';
 
 		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
 		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
@@ -782,13 +650,12 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 		// Get items
 		// First, the priority items
-		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role, isDoubles);
-		if (item === undefined) {
-			if (isDoubles) {
-				item = this.getDoublesItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
-			} else {
-				item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
-			}
+		item = this.getPriorityItem(
+			ability, types, moves, counter, teamDetails, species, isLead, teraType, role, isDoubles
+		) || '';
+		if (item === '') {
+			item = set.items ? this.sample(set.items) :
+				this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
 		}
 
 		// Get level
@@ -863,6 +730,33 @@ export class RandomChatBatsTeams extends RandomTeams {
 			teraType,
 			role,
 		};
+	}
+
+	override getPriorityItem(
+		ability: string,
+		types: Set<string>,
+		moves: Set<string>,
+		counter: MoveCounter,
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+		isLead: boolean,
+		teraType: string,
+		role: RandomTeamsTypes.Role,
+		isDoubles: boolean
+	): string | undefined {
+		if (species.id === 'ironcrown') return moves.has('rest') ? 'Chesto Berry' : 'Leftovers';
+		if (species.id === 'dugtrio') return moves.has("swordsdance") ? 'Focus Sash' : 'Choice Band';
+		if (species.id === 'mesprit' && moves.has("aquaring")) return 'Leftovers';
+		if (species.id === 'electrode') return moves.has("rapidspin") ? 'Heavy-Duty Boots' :
+			this.sample(['Normal Gem', 'Heavy-Duty Boots']);
+		if (species.id === 'empoleon') return moves.has('watershuriken') ? 'Loaded Dice' : 'Leftovers';
+		if (species.id === 'glastrier') return moves.has('swordsdance') ? 'Heavy-Duty Boots' : 'Assault Vest';
+		if (species.id === 'dodrio' && moves.has('drillpeck')) return 'Life Orb';
+		if (species.id === 'dodrio' && moves.has('bravebird')) return 'Heavy-Duty Boots';
+		if (species.id === 'kyuremblack' && moves.has('roost')) return 'Heavy-Duty Boots';
+		if (species.id === 'pelipper' && moves.has('roost')) return 'Heavy-Duty Boots';
+		if (species.id === 'articunogalar') return moves.has('roost') ? 'Heavy-Duty Boots' : 'Choice Specs';
+		if (species.id === 'glimmora') return moves.has('meteorbeam') ? 'Power Herb' : 'Air Balloon';
 	}
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');

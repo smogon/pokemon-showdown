@@ -34,7 +34,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	sandforce: {
 		inherit: true,
 		onStart(pokemon) {
-			if (pokemon.species.name === 'Rhyperior') {
+			if (pokemon.species.name === 'Rhyperior' || pokemon.baseSpecies.name === 'Hippowdon') {
 				this.field.setWeather('sandstorm');
 			}
 		},

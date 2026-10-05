@@ -621,6 +621,8 @@ declare namespace RandomTeamsTypes {
 		abilities?: string[];
 		teraTypes?: string[];
 		preferredTypes?: string[];
+		/** Allows for hardcoded items, currently only used by Pet Mods */
+		items?: string[];
 	}
 	export interface RandomSpeciesData {
 		level?: number;

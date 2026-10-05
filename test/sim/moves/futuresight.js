@@ -383,6 +383,19 @@ describe('Future Sight', () => {
 		assert.fullHP(wynaut);
 	});
 
+	it(`should not ignore Endure`, () => {
+		battle = common.createBattle([[
+			{ species: 'xatu', moves: ['futuresight', 'sleeptalk'] },
+		], [
+			{ species: 'toxicroak', ability: 'noguard', moves: ['sleeptalk', 'endure'] },
+		]]);
+
+		battle.makeChoices('move futuresight', 'move sleeptalk');
+		battle.makeChoices('move sleeptalk', 'move sleeptalk');
+		battle.makeChoices('move sleeptalk', 'move endure');
+		assert.equal(battle.p2.active[0].hp, 1);
+	});
+
 	describe(`[Gen 4]`, () => {
 		it(`should not be affected by Life Orb`, () => {
 			battle = common.gen(4).createBattle([[
@@ -399,6 +412,19 @@ describe('Future Sight', () => {
 			assert.fullHP(wynaut, `Wynaut should not have taken any damage`);
 			const damage = mew.maxhp - mew.hp;
 			assert.bounded(damage, [21, 25]); // [27-32] if Life Orb was applied
+		});
+
+		it(`should ignore Endure`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'xatu', moves: ['futuresight', 'sleeptalk'] },
+			], [
+				{ species: 'toxicroak', ability: 'noguard', level: 1, moves: ['sleeptalk', 'endure'] },
+			]]);
+
+			battle.makeChoices('move futuresight', 'move sleeptalk');
+			battle.makeChoices('move sleeptalk', 'move sleeptalk');
+			battle.makeChoices('move sleeptalk', 'move endure');
+			assert.fainted(battle.p2.active[0]);
 		});
 	});
 
