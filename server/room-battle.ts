@@ -667,7 +667,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const validSlots = this.players.filter(player => !player.id).map(player => player.slot);
 
 		if (slot && !validSlots.includes(slot)) {
-			user.popup(`This battle already has a user in slot ${slot}.`);
+			if (this.players.some(player => player.slot === slot)) {
+				user.popup(`This battle already has a user in slot ${slot}.`);
+			} else {
+				user.popup(`Slot "${slot}" doesn't exist in this battle.`);
+			}
 			return false;
 		}
 
@@ -676,12 +680,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return false;
 		}
 
-		slot ??= this.players.find(player => player.invite === user.id)?.slot;
+		slot ||= this.players.find(player => player.invite === user.id)?.slot;
 		if (!slot && validSlots.length > 1) {
 			user.popup(`Which slot would you like to join into? Use something like \`/joingame ${validSlots[0]}\``);
 			return false;
 		}
-		slot ??= validSlots[0];
+		slot ||= validSlots[0];
 
 		if (this[slot].invite === user.id) {
 			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
