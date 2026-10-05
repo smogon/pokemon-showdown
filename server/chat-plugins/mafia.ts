@@ -632,7 +632,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	createStaffIso() {
 		const keys = new Set(this.messages.flatMap(message => message.keys));
-		return this.createIso([...keys].map(key => ({ key, name: '' })), true, 'Staff ISO');
+		return this.createIso([...keys].map(key => ({ key, name: '' })), true, 'De-Anonymized Logs');
 	}
 
 	leave(user: User) {
@@ -3774,13 +3774,16 @@ export const commands: Chat.ChatCommands = {
 		],
 
 		iso: 'isolate',
+		anoniso: 'isolate',
+		hydraiso: 'isolate',
+		darknessiso: 'isolate',
 		staffiso: 'isolate',
 		siso: 'isolate',
 		isolate(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (!game.started) throw new Chat.ErrorMessage(`The game hasn't started yet.`);
-			const staffIso = cmd === 'staffiso' || cmd === 'siso';
+			const staffIso = cmd === 'staffiso' || cmd === 'siso' || cmd === 'anoniso' || cmd === 'hydraiso' || cmd === 'darknessiso';
 			if (staffIso && game.hostid !== user.id && !game.cohostids.includes(user.id)) {
 				this.checkCan('mute', null, room);
 				if (game.getPlayer(user.id)) {
