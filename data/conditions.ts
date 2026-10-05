@@ -754,7 +754,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Dynamax',
 		noCopy: true,
 		onStart(pokemon) {
-			this.effectState.turns = 0;
+			this.effectState.turns = 3;
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
@@ -793,7 +793,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onResidualPriority: -100,
 		onResidual() {
-			this.effectState.turns++;
+			this.effectState.turns--;
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');
