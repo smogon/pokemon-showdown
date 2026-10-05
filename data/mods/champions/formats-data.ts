@@ -1046,7 +1046,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	meganiummega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	cyndaquil: {
 		isNonstandard: "Past",
@@ -2035,7 +2035,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	metagrossmega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	regirock: {
 		isNonstandard: "Past",
@@ -2272,7 +2272,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	lopunnymega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	glameow: {
 		isNonstandard: "Past",
@@ -3345,7 +3345,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	floettemega: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	florges: {
 		tier: "RU",
