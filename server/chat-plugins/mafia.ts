@@ -1112,7 +1112,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	vote(voter: MafiaPlayer, targetId: ID) {
 		voter = this.getPlayerByAlias(voter.getNameId()) || voter;
-		console.log(voter);
 		if (!this.votingEnabled) return this.sendUser(voter, `|error|Voting is not allowed.`);
 		if (this.phase !== 'day') return this.sendUser(voter, `|error|You can only vote during the day.`);
 		if (!voter || (voter.isEliminated() && !voter.isSpirit())) return;
@@ -1322,6 +1321,20 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				}
 			}
 			buf += `</p>`;
+		}
+		return buf;
+	}
+
+	hydraIdentityBox(userid: ID) {
+		let buf = '';
+		const isHost = userid === this.hostid || this.cohostids.includes(userid);
+		if ((this.anon && isHost) || (this.hydra && !this.anon)){
+			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Player Identities</summary>`;
+			buf += `<b>Mafia Player Identities:</b><br />`;
+			buf += this.players.map(player =>
+				`${player.getDisplayName()}: ${Utils.escapeHTML(player.name)}`
+			).join('<br />');
+			buf += `</span></details></p>`;
 		}
 		return buf;
 	}
@@ -2032,8 +2045,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		// If Hydra: partner users up, generate aliases.
 		// Else If Anon: generate aliases.
 		// If Darkness: clouds
-		const prefix = this.hydra ? "[Hydra]" : this.anon ? "[Anon]" : " ";
-
+		const prefix = this.anon ? "[Anon]" : this.hydra ? "[Hydra]" : " ";
 		let shuffledPlayers = Utils.shuffle(this.players).filter(player => player.hydra && !player.partnerid);
 
 		for (let i = 0; i < shuffledPlayers.length; i++) {
@@ -2417,8 +2429,9 @@ export const pages: Chat.PageTable = {
 					buf += `<p><span style="font-weight:bold">Partners</span>: ${game.getPartners(role.alignment, isPlayer)}</p>`;
 				}
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
-				buf += `<table><tr><td style="text-align:center;"><img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png">
-					</td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
+				buf += `<table><tr><td style="text-align:center;">`;
+				buf += `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png"></td>`;
+				buf += `<td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
 				buf += `</details></p>`;
 				for (let i = 0; i < game.dayNum; i++) {
 					previousActionsPL += `<b>Night ${i}</b><br/>`;
@@ -2561,6 +2574,7 @@ export const pages: Chat.PageTable = {
 			buf += `<p style="font-weight:bold;">Players who will be subbed unless they talk: ${game.hostRequestedSub.join(', ')}</p>`;
 			buf += `<p style="font-weight:bold;">Players who are requesting a sub: ${game.requestedSub.join(', ')}</p>`;
 		}
+		buf += game.hydraIdentityBox(userid);
 		buf += `<p style="font-weight:bold;">Sub List: ${game.subs.join(', ')}</p>`;
 		if (!isHost) {
 			if (game.phase === 'signups') {
@@ -3128,8 +3142,6 @@ export const commands: Chat.ChatCommands = {
 				this.parse(`/mafia ${cmd}`);
 				return;
 			}
-			console.log(game.anon);
-			console.log(game.hydra);
 			if (game.hydra) game.setHydra(user, game.hydra);
 			if (game.anon) game.setAnon(user, game.anon);
 			if (game.darkness) game.setDarkness(user, game.darkness);
@@ -3866,7 +3878,10 @@ export const commands: Chat.ChatCommands = {
 			if (!room) return this.errorReply("This command can't be used in PMs.");
 
 			const game = this.requireGame(Mafia);
-			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
+			if (game.anon && (game.hostid !== user.id && !game.cohostids.includes(user.id))) {
+				this.checkCan('mute', null, room);
+				game.logAction(user, `checked player aliases`);
+			}
 
 			const players = game.players.map(player =>
 				`${player.getDisplayName()}: ${Utils.escapeHTML(player.name)}`
@@ -3874,10 +3889,8 @@ export const commands: Chat.ChatCommands = {
 
 			game.sendUser(
 				user,
-				`|html|<b>Mafia player identities:</b><br />${players}`
+				`|html|<b>Mafia Player Identities:</b><br />${players}`
 			);
-
-			game.logAction(user, `checked player aliases`);
 		},
 		realplayershelp: [
 			`/mafia realplayers - Privately lists each alias and the real player behind it. Requires host % @ # ~.`,
