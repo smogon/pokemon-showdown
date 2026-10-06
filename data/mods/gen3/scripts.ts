@@ -173,7 +173,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
 
-			if (!sourceEffect || sourceEffect.id === 'pursuit') {
+			const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
+			if (!sourceEffect || callerMoveForPressure) {
 				let extraPP = 0;
 				for (const source of pressureTargets) {
 					const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);
@@ -182,13 +183,12 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (extraPP > 0) {
-					pokemon.deductPP(move, extraPP);
+					pokemon.deductPP(callerMoveForPressure || move, extraPP);
 				}
 			}
 
 			if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
 				!this.battle.runEvent('TryMove', pokemon, target, move)) {
-				move.mindBlownRecoil = false;
 				return false;
 			}
 
@@ -256,7 +256,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			if (!this.battle.suppressingSecondaries()) {
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			}
@@ -457,8 +457,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.totalDamage = damage;
 			}
 
-			if (move.recoil && move.totalDamage) {
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, target, 'recoil');
+			if (move.totalDamage) {
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 
 			if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
@@ -475,10 +475,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			return damage;
-		},
-
-		calcRecoilDamage(damageDealt, move) {
-			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 		},
 	},
 };

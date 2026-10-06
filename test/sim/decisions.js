@@ -661,6 +661,23 @@ describe('Choices', () => {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
+		it('should privately log the target of targeted chosen moves in FFA', () => {
+			battle = common.createBattle({ gameType: 'freeforall' }, [[
+				{ species: "Bulbasaur", ability: 'overgrow', moves: ['tackle'] },
+			], [
+				{ species: "Charmander", ability: 'blaze', moves: ['scratch'] },
+			], [
+				{ species: "Squirtle", ability: 'torrent', moves: ['tackle'] },
+			], [
+				{ species: "Pikachu", ability: 'static', moves: ['scratch'] },
+			]]);
+			battle.makeChoices('move tackle +1', 'move scratch +2', 'move tackle +1', 'move scratch +2');
+
+			const logText = battle.inputLog.join('\n');
+			const subString = '>p1 move tackle +1\n>p2 move scratch +2\n>p3 move tackle +1\n>p4 move scratch +2';
+			assert(logText.includes(subString), `${logText} does not include ${subString}`);
+		});
+
 		it('should privately log the user intention of mega evolving', () => {
 			battle = common.createBattle([[
 				{ species: "Venusaur", item: 'venusaurite', ability: 'overgrow', moves: ['tackle'] },

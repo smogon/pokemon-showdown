@@ -177,45 +177,44 @@ describe('Counter', () => {
 	});
 
 	it(`[Gen 1] Counter Desync Clause`, () => {
-		// seed chosen so Water Gun succeeds and Pound full paras
-		battle = common.gen(1).createBattle({ seed: [1, 2, 3, 3] }, [[
-			{ species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave'] },
-		], [
-			{ species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave'] },
-		]]);
-		battle.makeChoices('move watergun', 'move thunderwave');
-		battle.makeChoices('move pound', 'move counter');
-		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
-
-		// seed chosen so Pound succeeds and Water Gun full paras
-		battle = common.gen(1).createBattle({ seed: [1, 2, 3, 3] }, [[
-			{ species: 'Mew', moves: ['pound', 'watergun', 'counter', 'thunderwave'] },
-		], [
-			{ species: 'Persian', moves: ['pound', 'watergun', 'counter', 'thunderwave'] },
-		]]);
-		battle.makeChoices('move pound', 'move thunderwave');
-		battle.makeChoices('move watergun', 'move counter');
-		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
-
+		// target switched in, is sleeping and has Counter in its first slot
 		battle = common.gen(1).createBattle([[
-			{ species: 'Mew', moves: ['pound', 'watergun', 'counter', 'splash'] },
+			{ species: 'Mew', moves: ['spore', 'pound', 'counter'] },
 		], [
-			{ species: 'Persian', moves: ['pound', 'watergun', 'counter', 'splash'] },
+			{ species: 'Snorlax', moves: ['counter', 'pound'] },
+			{ species: 'Chansey', moves: ['splash'] },
 		]]);
-		battle.makeChoices('move watergun', 'move splash');
-		battle.makeChoices('move pound', 'move counter');
-		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
-		assert.false.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move pound', 'move pound');
+		battle.makeChoices('move spore', 'move pound');
+		battle.makeChoices('move pound', 'switch 2');
+		assert(battle.lastDamage > 0);
+		battle.lastDamage = 1; // avoid KO's
+		battle.makeChoices('move counter', 'switch 2');
+		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move fight'));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert(battle.log.some(line => line.includes("In Gen 1, if Counter is used against a target that switched in and spent the turn sleeping, from the Counter user's perspective, it will fail if the move in the target's first slot is also Counter.")));
 
-		battle = common.gen(1).createBattle([[
-			{ species: 'Mew', moves: ['pound', 'watergun', 'counter', 'splash'] },
+		// seed chosen so the second move full paras
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
+			{ species: 'Mew', moves: ['thunderwave', 'counter'] },
 		], [
-			{ species: 'Persian', moves: ['pound', 'watergun', 'counter', 'splash'] },
+			{ species: 'Persian', moves: ['pound', 'watergun'] },
 		]]);
-		battle.makeChoices('move pound', 'move splash');
-		battle.makeChoices('move watergun', 'move counter');
-		assert(!battle.log.some(line => line.includes('Desync Clause Mod activated')));
-		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('move thunderwave', 'move pound');
+		assert.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move watergun'));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the target's team to determine if it will succeed.")));
+
+		// seed chosen so the second move full paras
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
+			{ species: 'Mew', moves: ['thunderwave', 'counter'] },
+		], [
+			{ species: 'Persian', moves: ['pound', 'watergun'] },
+		]]);
+		battle.makeChoices('move thunderwave', 'move watergun');
+		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move pound'));
+		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the target's team to determine if it will succeed.")));
 	});
 
 	it(`[Gen 1] should counter attacks made against substitutes`, () => {

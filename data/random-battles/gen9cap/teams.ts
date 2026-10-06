@@ -214,6 +214,7 @@ export class RandomCAPTeams extends RandomTeams {
 		const [capPokemonPool, capBaseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, capPokemonList);
 
 		let leadsRemaining = 1;
+		if (ruleTable.has('pickedteamsize') || ruleTable.has('teampreview')) leadsRemaining = 0;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			let baseSpecies, species;
 			// Always generate a CAP Pokemon in slot 2; other slots can randomly generate CAP Pokemon.

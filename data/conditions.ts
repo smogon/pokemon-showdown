@@ -401,8 +401,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 
 			this.add('-end', target, 'move: ' + move.name);
-			target.removeVolatile('Protect');
-			target.removeVolatile('Endure');
 
 			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
 				data.moveData.infiltrates = true;
@@ -754,7 +752,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Dynamax',
 		noCopy: true,
 		onStart(pokemon) {
-			this.effectState.turns = 0;
+			this.effectState.turns = 3;
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
@@ -793,7 +791,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onResidualPriority: -100,
 		onResidual() {
-			this.effectState.turns++;
+			this.effectState.turns--;
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');

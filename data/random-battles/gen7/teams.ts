@@ -87,6 +87,11 @@ const PRIORITY_POKEMON = [
 	'aegislash', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
 ];
 
+/** Pokemon who should never be in the lead slot */
+const NO_LEAD_POKEMON = [
+	'dugtrio', 'gothitelle', 'wobbuffet',
+];
+
 export class RandomGen7Teams extends RandomGen8Teams {
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
@@ -371,10 +376,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			}
 		}
 
-		// Enforce Thunder Wave on Prankster users
-		if (movePool.includes('thunderwave') && abilities.includes('Prankster')) {
-			counter = this.addMove('thunderwave', moves, types, abilities, teamDetails, species, isLead,
-				movePool, preferredType, role);
+		// Enforce Thunder Wave and Encore on Prankster users
+		for (const moveid of ['encore', 'thunderwave']) {
+			if (movePool.includes(moveid) && abilities.includes('Prankster')) {
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
+					movePool, preferredType, role);
+			}
 		}
 
 		// Enforce Shadow Sneak on Kecleon
@@ -671,8 +678,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (species.name === 'Mew') return 'Mewnium Z';
 			if (species.name === 'Mimikyu') return 'Mimikium Z';
 			if (species.name === 'Necrozma-Dusk-Mane' || species.name === 'Necrozma-Dawn-Wings') {
-				if (moves.has('autotomize') && moves.has('sunsteelstrike')) return 'Solganium Z';
-				if (moves.has('autotomize') && moves.has('moongeistbeam')) return 'Lunalium Z';
+				if (!moves.has('outrage')) return (species.name === 'Necrozma-Dusk-Mane') ? 'Solganium Z' : 'Lunalium Z';
 				return 'Ultranecrozium Z';
 			}
 			// General Z-Crystals
@@ -689,7 +695,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
 		if (species.name === 'Unfezant' || moves.has('focusenergy')) return 'Scope Lens';
-		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
 		if (species.name === 'Honchkrow') return 'Life Orb';
@@ -907,11 +912,13 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		}
 
 		// Fix IVs for non-Bottle Cap-able sets
-		if (hasHiddenPower && level < 100) {
+		if ((hasHiddenPower || species.id === 'ditto') && level < 100) {
 			let hpType;
 			for (const move of moves) {
 				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
 			}
+			// Ditto gets IVs to copy Hidden Power Ice
+			if (species.id === 'ditto') hpType = 'ice';
 			if (!hpType) throw new Error(`hasHiddenPower is true, but no Hidden Power move was found.`);
 			const HPivs = ivs.atk === 0 ? ZeroAttackHPIVs[hpType] : this.dex.types.get(hpType).HPivs;
 			let iv: StatID;
@@ -1173,7 +1180,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				const set = this.randomSet(
 					species,
 					teamDetails,
-					pokemon.length === this.maxTeamSize - 1
+					pokemon.length === this.maxTeamSize - 1 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
 				);
 
 				const item = this.dex.items.get(set.item);
@@ -1184,8 +1191,18 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				// Zoroark copies the last Pokemon and should not be generated in that slot
 				if (set.ability === 'Illusion' && pokemon.length < 1) continue;
 
-				// Okay, the set passes, add it to our team
-				pokemon.unshift(set);
+				// Prevent Shedinja from generating for Chimera 1v1 (for Randomized Format Spotlight)
+				if (set.ability === 'Wonder Guard' && ruleTable.has('chimera1v1rule')) continue;
+
+				// Some Pokemon should not be in the lead slot; otherwise, the set passes, add it to the team.
+				if (
+					NO_LEAD_POKEMON.includes(species.id) &&
+					pokemon.length === this.maxTeamSize - 1 && !ruleTable.has('pickedteamsize') && !ruleTable.has('teampreview')
+				) {
+					pokemon.push(set);
+				} else {
+					pokemon.unshift(set);
+				}
 
 				// Don't bother tracking details for the last Pokemon
 				if (pokemon.length === this.maxTeamSize) break;

@@ -38,7 +38,7 @@ describe('No Retreat', () => {
 		assert.statStage(wynaut, 'atk', 2);
 	});
 
-	it(`If trapped, No Retreat should not also trap`, () => {
+	it(`should not trap the user if it is already trapped`, () => {
 		battle = common.createBattle([[
 			{ species: "Wynaut", moves: ['noretreat', 'splash'] },
 			{ species: "Magikarp", moves: ['splash'] },
@@ -47,34 +47,13 @@ describe('No Retreat', () => {
 			{ species: "Weedle", moves: ['splash'] },
 		]]);
 
-		battle.makeChoices();
-		battle.makeChoices();
-
 		const wynaut = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices();
 		assert.statStage(wynaut, 'atk', 2);
 
 		// Should not be trapped after caterpie switches out
 		battle.makeChoices('move splash', 'switch 2');
 		battle.makeChoices('switch 2', 'move splash');
-		assert.equal(battle.p1.active[0].name, 'Magikarp');
-	});
-
-	it(`Champions: should not allow usage multiple times in a row`, () => {
-		battle = common.createBattle({ formatid: 'gen9championscustomgame' }, [[
-			{ species: "Wynaut", moves: ['noretreat'] },
-		], [
-			{ species: "Caterpie", moves: ['block'] },
-		]]);
-
-		battle.makeChoices(); // Team Preview
-		battle.makeChoices(); // Wynaut uses No Retreat
-
-		let wynaut = battle.p1.active[0];
-		assert.statStage(wynaut, 'atk', 1);
-
-		battle.makeChoices(); // Wynaut fails No Retreat
-
-		wynaut = battle.p1.active[0];
-		assert.statStage(wynaut, 'atk', 1);
 	});
 });

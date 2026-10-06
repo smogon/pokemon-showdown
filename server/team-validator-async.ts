@@ -85,7 +85,7 @@ if (!PM.isParentProcess) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
-	};
+	} as typeof Monitor;
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', (err: Error) => {
@@ -102,6 +102,8 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	PM.startRepl((cmd: string) => eval(cmd));
 }
+
+export { TeamValidator };
 
 export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	PM.spawn(processCount['validator'] ?? 1);
