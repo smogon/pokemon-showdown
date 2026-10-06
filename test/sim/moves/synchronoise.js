@@ -36,8 +36,12 @@ describe('Synchronoise', () => {
 		], [
 			{ species: "Arcanine", moves: ['burnup', 'synchronoise'] },
 		]]);
+		const arcanines = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices();
-		assert.fullHP(battle.p1.active[0]);
-		assert.fullHP(battle.p2.active[0]);
+		arcanines[0].hp = arcanines[0].maxhp;
+		arcanines[1].hp = arcanines[1].maxhp;
+		battle.makeChoices('move synchronoise', 'move synchronoise');
+		assert.fullHP(arcanines[0]);
+		assert.fullHP(arcanines[1]);
 	});
 });
