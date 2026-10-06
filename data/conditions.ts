@@ -395,12 +395,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			const data = this.effectState;
 			// time's up; time to hit! :D
 			const move = this.dex.moves.get(data.move);
+			this.add('-end', target, 'move: ' + move.name);
 			if (target.fainted || target === data.source) {
 				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
 				return;
 			}
-
-			this.add('-end', target, 'move: ' + move.name);
 			target.removeVolatile('Protect');
 			target.removeVolatile('Endure');
 

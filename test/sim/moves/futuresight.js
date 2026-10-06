@@ -418,4 +418,45 @@ describe('Future Sight', () => {
 		const wynaut = battle.p1.active[0];
 		assert.fullHP(wynaut);
 	});
+
+	it(`should place the Future Sight (2 Turns) UI at the top left of the screen even after a previous use of Future Sight failed because the target was fainted`, () => {
+		battle = common.createBattle([[
+			{ species: 'Slowking-Galar', ability: 'Curious Medicine', moves: ['futuresight', 'slackoff'] },
+			{ species: 'Urshifu-Rapid-Strike', ability: 'Unseen Fist', moves: ['surgingstrikes'] },
+		], [
+			{ species: 'Landorus-Therian', ability: 'Intimidate', moves: ['splash'] },
+			{ species: 'Heatran', ability: 'Flash Fire', moves: ['splash'] },
+		]]);
+
+		battle.makeChoices('move futuresight', 'auto');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('move surgingstrikes', 'auto');
+		battle.makeChoices('', 'switch 2');
+
+		const p2slotConditions = battle.p2.slotConditions[0];
+		assert.equal(
+			p2slotConditions['futuremove'],
+			undefined,
+			'futuremove slot condition should be gone because it fails to hit a fainted mon'
+		);
+
+		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('move futuresight', 'move splash');
+
+		const log = battle.getDebugLog(); // get the log so we can check the flags
+		// we have to check if the change we made actually worked, does the |-end| flag actually get emitted?
+		const checkEndFlag = (log.match(/\|-end\|[^|]+\|move: Future Sight/g) || []).length;
+		assert.equal(
+			checkEndFlag,
+			1,
+			'Future Sight should emit |-end| when it expires, even if the target is fainted'
+		);
+		// checking if future sight had |-start| both times now since it was used twice.
+		const checkStartFlags = (log.match(/\|-start\|[^|]+\|move: Future Sight/g) || []).length;
+		assert.equal(
+			checkStartFlags,
+			2,
+			'Future Sight should emit |-start| both times it is used'
+		);
+	});
 });
