@@ -38,8 +38,9 @@ describe('Synchronoise', () => {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move morningsun', 'move morningsun');
+		battle.makeChoices('move morningsun', 'move morningsun');
 		battle.makeChoices('move synchronoise', 'move synchronoise');
 		assert.fullHP(battle.p1.active[0]);
-		assert.fullHP(battle.p1.active[1]);
+		assert.fullHP(battle.p2.active[0]);
 	});
 });
