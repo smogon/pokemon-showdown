@@ -1,11 +1,10 @@
 # see: http://EditorConfig.org
 
-# end_of_line is unspecified so Windows users can use the repo in crlf mode
-
 root = true
 
 [*]
 charset = utf-8
+end_of_line = lf
 indent_style = tab
 indent_size = 3
 trim_trailing_whitespace = true
