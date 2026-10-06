@@ -729,7 +729,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				const item = this.dex.items.get(set.item);
 				if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
 					!item.isPrimalOrb && !item.name.startsWith('Rusted') &&
-					!item.name.endsWith('Plate') && !item.name.endsWith('Memory') && !item.name.startsWith('Mask') && 
+					!item.name.endsWith('Plate') && !item.name.endsWith('Memory') && !item.name.startsWith('Mask') &&
 					!item.name.endsWith('Drive') && !item.name.endsWith('Core') && !item.name.endsWith('Crystal') &&
 					!item.name.endsWith('Globe') && item.id !== 'ultranecroziumz') continue;
 				const species = this.dex.species.get(set.species);
