@@ -776,7 +776,6 @@ export const commands: Chat.ChatCommands = {
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${pokes[0]}' not found.`);
 		if (!crossSpecies.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${pokes[1]}' not found.`);
 
-		if (!species.evos.length) throw new Chat.ErrorMessage(`Error: ${species.name} does not evolve.`);
 		if (!crossSpecies.prevo) throw new Chat.ErrorMessage(`Error: ${crossSpecies.name} does not have a prevolution.`);
 
 		let setStage = 1;
@@ -793,9 +792,6 @@ export const commands: Chat.ChatCommands = {
 			if (prevo.prevo) {
 				crossStage++;
 			}
-		}
-		if (setStage + 1 !== crossStage) {
-			throw new Chat.ErrorMessage(`Error: Cross evolution must follow evolutionary stages. (${species.name} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
 		}
 		const mixedSpecies = Utils.deepClone(species);
 		mixedSpecies.abilities = Utils.deepClone(crossSpecies.abilities);
@@ -844,6 +840,10 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`|raw|<font size="1">` + Object.entries(details).map(([detail, value]) => (
 			value === '' ? detail : `<span class="gray">${detail}:</span> ${value}`
 		)).join("&nbsp;|&ThickSpace;") + `</font>`);
+		if (!species.evos.length) throw new Chat.ErrorMessage(`Warning: ${species.name} does not evolve.`);
+		if (setStage + 1 !== crossStage) {
+			throw new Chat.ErrorMessage(`Warning: Cross evolution must follow evolutionary stages. (${species.name} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
+		}
 	},
 	crossevolvehelp: [
 		"/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pok\u00e9mon.",
