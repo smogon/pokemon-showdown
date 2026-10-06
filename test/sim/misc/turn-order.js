@@ -505,6 +505,33 @@ describe('Switching in', () => {
 			assert.equal(battle.p2.requestState, 'move');
 		});
 	});
+
+	describe('[Gen 1]', () => {
+		afterEach(() => battle.destroy());
+
+		it(`should cancel the other switch and request a replacement after a switch-in faints to poison`, () => {
+			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Snorlax', moves: ['splash'] },
+				{ species: 'Alakazam', moves: ['splash'] },
+			], [
+				{ species: 'Slowbro', moves: ['toxic', 'splash'] },
+				{ species: 'Chansey', moves: ['splash'] },
+			]]);
+			const snorlax = battle.p1.active[0];
+			battle.makeChoices('move splash', 'move toxic');
+			battle.makeChoices('switch alakazam', 'move splash');
+			snorlax.hp = 1;
+
+			// Alakazam switches out before Slowbro
+			battle.makeChoices('switch snorlax', 'switch chansey');
+			assert.fainted(snorlax);
+			assert.species(battle.p2.active[0], 'Slowbro');
+			assert.equal(battle.p1.requestState, 'switch');
+			battle.makeChoices('switch alakazam', '');
+			assert.species(battle.p1.active[0], 'Alakazam');
+			assert.equal(battle.p1.requestState, 'move');
+		});
+	});
 });
 
 describe('Speed ties', () => {
