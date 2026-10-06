@@ -32,16 +32,14 @@ describe('Synchronoise', () => {
 
 	it('should not damage Pokemon that share the ??? type with the user', () => {
 		battle = common.createBattle([[
-			{ species: "Arcanine", moves: ['burnup', 'synchronoise'] },
+			{ species: "Arcanine", moves: ['burnup', 'morningsun', 'synchronoise'] },
 		], [
-			{ species: "Arcanine", moves: ['burnup', 'synchronoise'] },
+			{ species: "Arcanine", moves: ['burnup', 'morningsun', 'synchronoise'] },
 		]]);
-		const arcanines = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices();
-		arcanines[0].hp = arcanines[0].maxhp;
-		arcanines[1].hp = arcanines[1].maxhp;
+		battle.makeChoices('move morningsun', 'move morningsun');
 		battle.makeChoices('move synchronoise', 'move synchronoise');
-		assert.fullHP(arcanines[0]);
-		assert.fullHP(arcanines[1]);
+		assert.fullHP(battle.p1.active[0]);
+		assert.fullHP(battle.p1.active[1]);
 	});
 });
