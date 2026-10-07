@@ -1501,6 +1501,13 @@ export class GlobalRoomState {
 			if (format.teraPreviewDefault) displayCode |= 128;
 			if (format.itemClauseDefault) displayCode |= 256;
 			this.formatList += ',' + displayCode.toString(16);
+
+			for (const formatAlias in Ladders.virtualFormats) {
+				const entry = Ladders.virtualFormats[formatAlias];
+				if (entry.format === format.id) {
+					this.formatList += `|${entry.name},${displayCode.toString(16)}`;
+				}
+			}
 		}
 		return this.formatList;
 	}
