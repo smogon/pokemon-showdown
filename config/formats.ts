@@ -808,23 +808,22 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		onValidateTeam(team, format, teamHas) {
 			const heads: { [speciesid: string]: any[] } = require('../data/mods/gen9randomtandem/tandems.json');
-			// Need 2 Heads
-			let headCount = 0;
-			for (const set of team) {
-				let species = this.toID(this.dex.species.get(set.species));
-				// hardcode, not like any other species will increment headCount
-				if (species === 'keldeoresolute') species = 'keldeo' as ID;
-				if (species === 'dudunsparcethreesegment') species = 'dudunsparce' as ID;
-				if (heads[species]) headCount++;
-			}
-			if (headCount < 2) return [`You must have at least 2 Head Pokemon.`];
+			// // Need 2 Heads
+			// let headCount = 0;
+			// for (const set of team) {
+			// 	let species = this.toID(this.dex.species.get(set.species));
+			// 	// hardcode, not like any other species will increment headCount
+			// 	if (species === 'keldeoresolute') species = 'keldeo' as ID;
+			// 	if (species === 'dudunsparcethreesegment') species = 'dudunsparce' as ID;
+			// 	if (heads[species]) headCount++;
+			// }
+			// if (headCount < 2) return [`You must have at least 2 Head Pokemon.`];
 			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
 		},
 		onValidateSet(set, format, setHas, teamHas) {
 			if (set.shiny) return [`You cannot bring Shiny Pokemon. (${set.name} is shiny).`];
 		},
 		onBegin() {
-			this.ruleTable.pickedTeamSize = 6;
 			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Random Tandem!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3775975/" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
 			this.add(`raw|<b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b>`);
 		},

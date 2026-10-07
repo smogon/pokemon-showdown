@@ -45,6 +45,7 @@ function getBaseSpeciesId(this: Battle, speciesName: string): ID {
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	start(this: Battle) {
+		if (!this.ruleTable.pickedTeamSize) this.ruleTable.pickedTeamSize = 6;
 		for (const side of this.sides) {
 			for (const pokemon of side.pokemon) {
 				let baseSpecies = this.toID(pokemon.species.name);
