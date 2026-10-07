@@ -139,7 +139,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			const hitResults = this.battle.runEvent('Invulnerability', targets, pokemon, move);
 			for (const [i, target] of targets.entries()) {
 				if (hitResults[i] === false) {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+					if (!move.spreadHit && !move.flags['futuremove']) {
+						this.battle.attrLastMove('[miss]');
+					}
 					this.battle.add('-miss', pokemon, target);
 				}
 			}
@@ -193,7 +195,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 				}
 				if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+					if (!move.spreadHit && !move.flags['futuremove']) {
+						this.battle.attrLastMove('[miss]');
+					}
 					this.battle.add('-miss', pokemon, target);
 					hitResults[i] = false;
 					continue;

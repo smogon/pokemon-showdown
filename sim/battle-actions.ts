@@ -629,7 +629,7 @@ export class BattleActions {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+					if (!move.spreadHit && !move.flags['futuremove']) this.battle.attrLastMove('[miss]');
 					this.battle.add('-miss', pokemon, target);
 				}
 			}
@@ -735,7 +735,9 @@ export class BattleActions {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+					if (!move.spreadHit && !move.flags['futuremove']) {
+						this.battle.attrLastMove('[miss]');
+					}
 					this.battle.add('-miss', pokemon, target);
 				}
 				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
