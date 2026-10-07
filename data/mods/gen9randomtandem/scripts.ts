@@ -16,9 +16,14 @@ function buildTandemSet(this: Battle, tandem: Tandem): PokemonSet {
 	const move2 = this.sample(tandem.moves.filter(move => move !== move1));
 	const moves = [...tandem.forcedMoves, move1, move2];
 
+	let tandomDexSpecies = this.dex.species.get(tandem.species);
+	if (tandomDexSpecies.battleOnly) {
+		tandomDexSpecies = typeof tandomDexSpecies.battleOnly === 'string' ?
+		this.dex.species.get(tandomDexSpecies.battleOnly) : this.dex.species.get(tandomDexSpecies.baseSpecies);
+	}
 	return {
-		name: tandem.species,
-		species: tandem.species,
+		name: tandomDexSpecies.baseSpecies,
+		species: tandomDexSpecies.name,
 		item: this.sample(tandem.items),
 		ability: this.sample(tandem.abilities),
 		gender: tandem.gender || this.sample(['M', 'F']),
@@ -45,7 +50,6 @@ function getBaseSpeciesId(this: Battle, speciesName: string): ID {
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	start(this: Battle) {
-		if (!this.ruleTable.pickedTeamSize) this.ruleTable.pickedTeamSize = 6;
 		for (const side of this.sides) {
 			for (const pokemon of side.pokemon) {
 				let baseSpecies = this.toID(pokemon.species.name);

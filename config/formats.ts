@@ -824,6 +824,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (set.shiny) return [`You cannot bring Shiny Pokemon. (${set.name} is shiny).`];
 		},
 		onBegin() {
+			this.ruleTable.pickedTeamSize = 6;
 			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Random Tandem!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3775975/" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
 			this.add(`raw|<b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b>`);
 		},
