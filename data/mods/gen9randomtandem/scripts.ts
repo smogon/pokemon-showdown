@@ -19,7 +19,7 @@ function buildTandemSet(this: Battle, tandem: Tandem): PokemonSet {
 	let tandomDexSpecies = this.dex.species.get(tandem.species);
 	if (tandomDexSpecies.battleOnly) {
 		tandomDexSpecies = typeof tandomDexSpecies.battleOnly === 'string' ?
-		this.dex.species.get(tandomDexSpecies.battleOnly) : this.dex.species.get(tandomDexSpecies.baseSpecies);
+			this.dex.species.get(tandomDexSpecies.battleOnly) : this.dex.species.get(tandomDexSpecies.baseSpecies);
 	}
 	return {
 		name: tandomDexSpecies.baseSpecies,
