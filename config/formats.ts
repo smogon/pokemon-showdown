@@ -716,12 +716,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard OMs', 'NatDex Mod', 'Mega Rayquaza Clause', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
 			'Calyrex-Shadow', 'Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite Z',
-			'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Raichunite Y', 'Scovillainite', 'Starminite', 'Baton Pass', 'Shed Tail',
+			'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Raichunite Y', 'Scovillainite', 'Starminite', 'Zygardite', 'Assist', 'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
 			'Arceus', 'Calyrex-Ice', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black',
 			'Kyurem-White', 'Lugia', 'Lunala', 'Iron Bundle', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
-			'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Xerneas', 'Yveltal', 'Zacian', 'Zekrom',
+			'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Solgaleo', 'Urshifu-Single-Strike', 'Victini', 'Xerneas', 'Yveltal', 'Zacian', 'Zekrom',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
@@ -729,21 +729,28 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				const item = this.dex.items.get(set.item);
 				if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
 					!item.isPrimalOrb && !item.name.startsWith('Rusted') &&
-					item.id !== 'ultranecroziumz') continue;
+					!item.name.endsWith('Plate') && !item.name.endsWith('Memory') && !item.name.startsWith('Mask') &&
+					!item.name.endsWith('Drive') && !item.name.endsWith('Core') && !item.name.endsWith('Crystal') &&
+					!item.name.endsWith('Globe') && item.id !== 'ultranecroziumz') continue;
 				const species = this.dex.species.get(set.species);
 				if (species.isNonstandard && !this.ruleTable.has(`+tag:${this.toID(species.isNonstandard)}`)) {
 					return [`${species.baseSpecies} does not exist in gen 9.`];
 				}
-				if ((this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`) ||
-					this.ruleTable.isRestricted(`ability:${this.dex.abilities.get(set.ability).id}`)) &&
-					!(((item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies) ||
-						((item.forcedForme && !item.zMove) || item.name.startsWith('Rusted')) ||
-						(item.id === 'ultranecroziumz' && species.name.startsWith('Necrozma-'))))) {
-					return [`${species.name} is not allowed to hold ${item.name}.`];
+				if (this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`) ||
+					this.ruleTable.isRestricted(`ability:${this.dex.abilities.get(set.ability).id}`)) {
+					const nativeMegaPrimal = (item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies);
+					const nativeRusted = item.name.startsWith('Rusted') &&
+						(item.itemUser?.includes(species.baseSpecies) || item.name.includes(species.baseSpecies));
+					const isForcedForme = !!item.forcedForme &&
+						(species.baseSpecies === this.dex.species.get(item.forcedForme).baseSpecies);
+					const isUNecro = item.id === 'Ultranecrozium Z' && species.baseSpecies === 'Necrozma';
+					if (!nativeMegaPrimal && !nativeRusted && !isForcedForme && !isUNecro) {
+						return [`${species.name} is not allowed to hold ${item.name}.`];
+					}
 				}
 				if (itemTable.has(item.id)) {
 					return [
-						`You are limited to one of each Mega Stone/Primal Orb/Rusted item/Origin item/Ogerpon Mask/Arceus Plate/Silvally Memory.`,
+						`You are limited to one of each Mega Stone/Primal Orb/Rusted item/Origin item/Genesect Drive/Ogerpon Mask/Arceus Plate/Silvally Memory.`,
 						`(You have more than one ${item.name})`,
 					];
 				}
