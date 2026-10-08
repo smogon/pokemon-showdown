@@ -808,17 +808,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		onValidateTeam(team, format, teamHas) {
 			// head count is due to a softlock, but said softlock doesn't seem to exist anymore?
-			const heads: { [speciesid: string]: any[] } = require('../data/mods/gen9randomtandem/tandems.json');
-			// Need 2 Heads
-			let headCount = 0;
-			for (const set of team) {
-				let species = this.toID(this.dex.species.get(set.species));
-				// hardcode, not like any other species will increment headCount
-				if (species === 'keldeoresolute') species = 'keldeo' as ID;
-				if (species === 'dudunsparcethreesegment') species = 'dudunsparce' as ID;
-				if (heads[species]) headCount++;
-			}
-			if (headCount < 2) return [`You must have at least 2 Head Pokemon.`];
+			// const heads: { [speciesid: string]: any[] } = require('../data/mods/gen9randomtandem/tandems.json');
+			// // Need 2 Heads
+			// let headCount = 0;
+			// for (const set of team) {
+			// 	let species = this.toID(this.dex.species.get(set.species));
+			// 	// hardcode, not like any other species will increment headCount
+			// 	if (species === 'keldeoresolute') species = 'keldeo' as ID;
+			// 	if (species === 'dudunsparcethreesegment') species = 'dudunsparce' as ID;
+			// 	if (heads[species]) headCount++;
+			// }
+			// if (headCount < 2) return [`You must have at least 2 Head Pokemon.`];
 			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
 		},
 		onValidateSet(set, format, setHas, teamHas) {
