@@ -1899,47 +1899,46 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[anim] Pursuit');
 		},
 		beforeTurnCallback(pokemon) {
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('trivialpursuit', pokemon);
-				const data = side.getSideConditionData('trivialpursuit');
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
+			pokemon.addVolatile(
+				'trivialpursuit', pokemon, this.dex.getActiveMove('trivialpursuit')
+			);
 		},
 		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
-		},
-		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('trivialpursuit');
+			if (target?.beingCalledBack || target?.switchFlag) {
+				move.accuracy = true;
+				move.tracksTarget = true;
+			}
 		},
 		condition: {
 			duration: 1,
-			onBeforeSwitchOut(pokemon) {
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
 				this.debug('Trivial Pursuit start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
+				if (!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'trivialpursuit') ||
+					!this.queue.cancelMove(source)) return;
+				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+				// If it is, then Mega Evolve before moving.
+				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source) {
+							if (action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
+							} else if (action.choice === 'terastallize') {
+								this.actions.terastallize(source);
+							} else {
+								continue;
 							}
+							this.queue.list.splice(actionIndex, 1);
+							break;
 						}
 					}
-					this.actions.runMove('trivialpursuit', source, source.getLocOf(pokemon));
 				}
+				pokemon.removeVolatile('destinybond');
+				this.actions.runMove(
+					'trivialpursuit', source, source.getLocOf(pokemon),
+					{ sourceEffect: this.effectState.sourceEffect }
+				);
 			},
 		},
 		onDamagePriority: -20,
@@ -2674,7 +2673,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				break;
 			}
 			let team = [] as PokemonSet[];
-			const unModdedDex = Dex.mod('base');
+			const unModdedDex = this.dex.mod('gen9');
 			let depth = 0;
 			while (!team.length) {
 				team = Teams.generate(randFormat, { name: target.side.name });
@@ -3219,19 +3218,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Behemoth Blade', target);
 		},
 		beforeTurnCallback(pokemon) {
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('attackofopportunity', pokemon);
-				const data = side.getSideConditionData('attackofopportunity');
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
+			pokemon.addVolatile(
+				'attackofopportunity', pokemon, this.dex.getActiveMove('attackofopportunity')
+			);
 		},
 		onModifyMove(move, source, target) {
 			if (target?.beingCalledBack || target?.switchFlag) {
 				move.accuracy = true;
+				move.tracksTarget = true;
 				move.onAfterMoveSecondarySelf = function (s, t, m) {
 					if (!t || t.fainted || t.hp <= 0) {
 						this.boost({ atk: 1 }, s, s, m);
@@ -3239,32 +3233,34 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				};
 			}
 		},
-		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('attackofopportunity');
-		},
 		condition: {
 			duration: 1,
-			onBeforeSwitchOut(pokemon) {
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
 				this.debug('Attack of Opportunity start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					if (source.canMegaEvo) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
+				if (!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'attackofopportunity') ||
+					!this.queue.cancelMove(source)) return;
+				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source) {
+							if (action.choice === 'megaEvo') {
 								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
+							} else if (action.choice === 'terastallize') {
+								this.actions.terastallize(source);
+							} else {
+								continue;
 							}
+							this.queue.list.splice(actionIndex, 1);
+							break;
 						}
 					}
-					this.actions.runMove('attackofopportunity', source, source.getLocOf(pokemon));
 				}
+				pokemon.removeVolatile('destinybond');
+				this.actions.runMove(
+					'attackofopportunity', source, source.getLocOf(pokemon),
+					{ sourceEffect: this.effectState.sourceEffect }
+				);
 			},
 		},
 		target: "normal",
@@ -6917,7 +6913,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, effect) {
 			const moves = [];
 			for (const move of this.dex.moves.all()) {
-				if (move.realMove || move.id.includes('metronome')) continue;
+				if (move.placeholderFor || move.id.includes('metronome')) continue;
 				// Calling 1 BP move is somewhat lame and disappointing. However,
 				// signature Z moves are fine, as they actually have a base power.
 				if (move.isZ && move.basePower === 1) continue;

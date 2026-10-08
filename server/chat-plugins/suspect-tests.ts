@@ -32,6 +32,34 @@ if (!suspectTests.whitelist && !suspectTests.suspects) {
 	saveSuspectTests();
 }
 
+export function makeVirtualFormats() {
+	let forceUpdate = false;
+	for (const key in Ladders.virtualFormats) {
+		const entry = Ladders.virtualFormats[key];
+		if (entry.custom === 'suspect') {
+			if (!suspectTests.suspects[entry.format]) {
+				delete Ladders.virtualFormats[key];
+				forceUpdate = true;
+				continue;
+			}
+		}
+	}
+
+	for (const format in suspectTests.suspects) {
+		const fKey = `${format}suspecttest`;
+		if (!Ladders.virtualFormats[fKey]) forceUpdate = true;
+		Ladders.virtualFormats[fKey] = {
+			format: toID(format), name: `${Dex.formats.get(format)} (Suspect Test)`, custom: 'suspect',
+		};
+	}
+	if (forceUpdate) {
+		Rooms.global.formatList = '';
+		Rooms.global.sendAll(Rooms.global.formatListText);
+	}
+}
+
+makeVirtualFormats();
+
 function checkPermissions(context: Chat.CommandContext) {
 	const user = context.user;
 	if (suspectTests.whitelist?.includes(user.id)) return true;
@@ -120,6 +148,7 @@ export const commands: Chat.ChatCommands = {
 				url: out.url || prevSuspect.url,
 			};
 			saveSuspectTests();
+			makeVirtualFormats();
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
 			if (reqData.coil) this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setbvalue.');
 		},
@@ -145,6 +174,7 @@ export const commands: Chat.ChatCommands = {
 
 			delete suspectTests.suspects[format];
 			saveSuspectTests();
+			makeVirtualFormats();
 			this.sendReply(`Removed a suspect test notice for ${test.suspect} in ${test.tier}.`);
 			this.sendReply(`Remember to remove COIL settings with /suspects deletecoil if you had them enabled.`);
 		},

@@ -81,6 +81,47 @@ describe('Follow Me', () => {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
+	it(`should redirect charging moves if used on the resolution turn`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Wynaut", moves: ['solarbeam'] },
+		], [
+			{ species: "Blissey", moves: ['sleeptalk', 'followme'] },
+			{ species: "Accelgor", moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move sleeptalk, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move followme, move sleeptalk');
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
+	});
+
+	it(`should not redirect charging moves if used on the charnging turn`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Wynaut", moves: ['solarbeam'] },
+		], [
+			{ species: "Blissey", moves: ['sleeptalk', 'followme'] },
+			{ species: "Accelgor", moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move followme, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move sleeptalk, move sleeptalk');
+		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[1]);
+	});
+
+	it(`should redirect charging moves that skip the charging turn`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Wynaut", moves: ['sleeptalk'] },
+			{ species: "Wynaut", ability: 'drought', moves: ['solarbeam'] },
+		], [
+			{ species: "Blissey", moves: ['sleeptalk', 'followme'] },
+			{ species: "Accelgor", moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move sleeptalk, move solarbeam 2', 'move followme, move sleeptalk');
+		assert.false.fullHP(battle.p2.active[0]);
+		assert.fullHP(battle.p2.active[1]);
+	});
+
 	it(`[Gen 3] should continue to redirect moves after the user is knocked out and replaced`, () => {
 		battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
 			{ species: "Swellow", moves: ['aerialace'] },

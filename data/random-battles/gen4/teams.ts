@@ -524,7 +524,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'shedinja' || species.id === 'smeargle') return 'Focus Sash';
 		if (species.id === 'delibird' && moves.has('counter')) return 'Focus Sash';
-		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (species.id === 'ditto') return this.sample(['Choice Scarf', 'Quick Powder', 'Sitrus Berry']);
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';

@@ -11,10 +11,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		const tr = this.trunc;
 		let stat = baseStats[statName];
 		const evs = set.evs[statName];
-		if (statName === 'hp') {
-			return stat + evs + 75;
+		if (this.ruleTable.has('levelclausemod')) {
+			// Stat calculation is modified to depend on level
+			// We use the formula from main line formats
+			// The first stat point gives 4 EVs and the others give 8 EVs.
+			const level = set.level;
+			if (statName === 'hp') {
+				return tr((2 * stat + 31 + Math.max(2 * evs - 1, 0)) * level / 100) + level + 10;
+			}
+			stat = tr((2 * stat + 31 + Math.max(2 * evs - 1, 0)) * level / 100) + 5;
+		} else {
+			if (statName === 'hp') {
+				return stat + evs + 75;
+			}
+			stat = stat + evs + 20;
 		}
-		stat = stat + evs + 20;
 		const nature = this.dex.natures.get(set.nature);
 		// Natures are calculated with 16-bit truncation.
 		// This only affects Eternatus-Eternamax in Pure Hackmons.
@@ -42,7 +53,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			return speed;
 		},
 		// Don't revert Mega Evolutions after fainting
-		// TODO: confirm interaction with Revival Blessing
 		formeChange(speciesId, source, isPermanent, abilitySlot = '0', message) {
 			const rawSpecies = this.battle.dex.species.get(speciesId);
 
@@ -109,6 +119,61 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return true;
 		},
+		// reset timesAttacked
+		clearVolatile(includeSwitchFlags = true) {
+			this.boosts = {
+				atk: 0,
+				def: 0,
+				spa: 0,
+				spd: 0,
+				spe: 0,
+				accuracy: 0,
+				evasion: 0,
+			};
+
+			this.moveSlots = this.baseMoveSlots.slice();
+
+			this.transformed = false;
+			this.ability = this.baseAbility;
+			this.hpType = this.baseHpType;
+			this.hpPower = this.baseHpPower;
+			if (this.canTerastallize === false) this.canTerastallize = this.teraType;
+			for (const i in this.volatiles) {
+				if (this.volatiles[i].linkedStatus) {
+					this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
+				}
+			}
+			if (this.species.name === 'Eternatus-Eternamax' && this.volatiles['dynamax']) {
+				this.volatiles = { dynamax: this.volatiles['dynamax'] };
+			} else {
+				this.volatiles = {};
+			}
+			if (includeSwitchFlags) {
+				this.switchFlag = false;
+				this.forceSwitchFlag = false;
+			}
+
+			this.lastMove = null;
+			this.lastMoveEncore = null;
+			this.lastMoveUsed = null;
+			this.moveThisTurn = '';
+			this.moveLastTurnResult = undefined;
+			this.moveThisTurnResult = undefined;
+
+			this.lastDamage = 0;
+			this.attackedBy = [];
+			this.hurtThisTurn = null;
+			this.newlySwitched = true;
+			this.beingCalledBack = false;
+			this.timesAttacked = 0;
+
+			this.volatileStaleness = undefined;
+
+			delete this.abilityState.started;
+			delete this.itemState.started;
+
+			this.setSpecies(this.baseSpecies);
+		},
 	},
 	actions: {
 		canTerastallize(pokemon) {
@@ -119,10 +184,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 			const item = pokemon.getItem();
 			// Mega Rayquaza
-			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') ||
-				this.battle.ruleTable.has('+pokemontag:future')) &&
+			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+tag:past') ||
+				this.battle.ruleTable.has('+tag:future')) &&
 				altForme?.isMega && altForme?.requiredMove &&
-				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
 			return item.megaStone?.[species.name] || null;
@@ -245,7 +310,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
 		},
-		// Run `AfterHit` events even if the source fainted
+		// Run `AfterHit` events even if the source fainted: Rapid Spin, Ceaseless Edge, etc.
 		spreadMoveHit(targets, pokemon, moveOrMoveName, hitEffect?, isSecondary?, isSelf?) {
 			// Hardcoded for single-target purposes
 			// (no spread moves have any kind of onTryHit handler)
@@ -351,15 +416,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.battle.gen < 5) {
 					this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 				}
-				if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon);
-				}
+				this.battle.runEvent('EmergencyExit', pokemon, undefined, undefined, pokemonOriginalHP);
 			}
 
 			return [damage, targets];
 		},
+		// Sheer Force doesn't suppress AfterMoveSecondary events: Berserk, Pickpocket, Emergency Exit, Eject Button, etc.
 		// Parental Bond shouldn't announce hit count if it only hits once
-		hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
+		hitStepMoveHitLoop(targets, pokemon, move) {
 			let damage: (number | boolean | undefined)[] = [];
 			for (const i of targets.keys()) {
 				damage[i] = 0;
@@ -469,14 +533,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 					move.totalDamage += damage[i];
 				}
-				if (move.mindBlownRecoil) {
-					const hpBeforeRecoil = pokemon.hp;
-					this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get(move.id), true);
-					move.mindBlownRecoil = false;
-					if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-					}
-				}
 				this.battle.eachEvent('Update');
 				if (!pokemon.hp && targets.length === 1) {
 					hit++; // report the correct number of hits for multihit moves
@@ -492,26 +548,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-hitcount', targets[0], hit - 1);
 			}
 
-			if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
-				const hpBeforeRecoil = pokemon.hp;
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
-			}
-
-			if (move.struggleRecoil) {
-				const hpBeforeRecoil = pokemon.hp;
-				let recoilDamage;
-				if (this.dex.gen >= 5) {
-					recoilDamage = this.battle.clampIntRange(Math.round(pokemon.baseMaxhp / 4), 1);
-				} else {
-					recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
-				}
-				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
+			if (move.totalDamage) {
+				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 
 			// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
@@ -536,17 +574,13 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
-				for (const [i, d] of damage.entries()) {
-					// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
-					// The previous check was for `move.multihit`, but that fails for Dragon Darts
-					const curDamage = targets.length === 1 ? move.totalDamage : d;
-					if (typeof curDamage === 'number' && targets[i].hp) {
-						const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
-						if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
-							this.battle.runEvent('EmergencyExit', targets[i], pokemon);
-						}
-					}
+			for (const [i, d] of damage.entries()) {
+				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
+				// The previous check was for `move.multihit`, but that fails for Dragon Darts
+				const curDamage = targets.length === 1 ? move.totalDamage : d;
+				if (typeof curDamage === 'number' && targets[i].hp) {
+					const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
+					this.battle.runEvent('EmergencyExit', targets[i], pokemon, undefined, targetHPBeforeDamage);
 				}
 			}
 
