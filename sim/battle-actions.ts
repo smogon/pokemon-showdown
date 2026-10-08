@@ -66,7 +66,7 @@ export class BattleActions {
 		if (this.battle.gen >= 5) {
 			this.battle.eachEvent('Update');
 		}
-		if (pokemon.pursuitActivated) this.battle.faintMessages(false, false, this.battle.gen >= 5);
+		if (pokemon.pursuitActivated) this.battle.resolveFaints({ checkWin: this.battle.gen >= 5 });
 		pokemon.skipBeforeSwitchOutEventFlag = true; // don't activate Pursuit again
 	}
 
@@ -384,7 +384,7 @@ export class BattleActions {
 			);
 			const targetOf1stDance = this.battle.activeTarget!;
 			for (const dancer of dancers) {
-				if (this.battle.faintMessages()) break;
+				if (this.battle.resolveFaints()) break;
 				if (dancer.fainted) continue;
 				this.battle.add('-activate', dancer, 'ability: Dancer');
 				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
@@ -402,7 +402,7 @@ export class BattleActions {
 				this.battle.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
 			}
 		}
-		this.battle.faintMessages();
+		this.battle.resolveFaints();
 		this.battle.checkWin();
 
 		if (this.battle.gen <= 4) {
@@ -589,7 +589,7 @@ export class BattleActions {
 			return false;
 		}
 
-		if (this.battle.gen <= 4) this.battle.faintMessages(false, false, false);
+		if (this.battle.gen <= 4) this.battle.resolveFaints({ checkWin: false });
 
 		if (!this.battle.suppressingSecondaries() && !move.flags['futuremove']) {
 			const originalHp = pokemon.hp;
@@ -1026,7 +1026,7 @@ export class BattleActions {
 		// hit is 1 higher than the actual hit count
 		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		if (this.battle.gen >= 5) this.battle.faintMessages(false, false, !pokemon.hp);
+		if (this.battle.gen >= 5) this.battle.resolveFaints({ checkWin: !pokemon.hp });
 		if (move.multihit && typeof move.smartTarget !== 'boolean') {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}

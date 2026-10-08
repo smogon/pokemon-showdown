@@ -277,16 +277,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.speed = action.pokemon.getActionSpeed();
 		}
 	},
-	// For some god forsaken reason removing the boolean declarations causes the "battles dont end automatically" bug
-	// I don't know why but in any case please don't touch this unless you know how to fix this
-	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
+	resolveFaints({ lastFaintFirst = false, checkWinIfNoFaints = false, checkWin = true } = {}) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
 		if (!length) {
-			if (forceCheck && this.checkWin()) return true;
+			if (checkWinIfNoFaints && this.checkWin()) return true;
 			return false;
 		}
-		if (lastFirst) {
+		if (lastFaintFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
 		}
@@ -524,7 +522,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// fainting
 
-		this.faintMessages();
+		this.resolveFaints();
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
@@ -584,7 +582,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						pokemon.switchFlag !== 'scapegoat' && !pokemon.skipBeforeSwitchOutEventFlag) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
-						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+						this.resolveFaints(); // Pokemon may have fainted in BeforeSwitchOut
 						if (this.ended) return true;
 						if (pokemon.fainted) {
 							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
@@ -1160,7 +1158,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				);
 				const targetOf1stDance = this.battle.activeTarget!;
 				for (const dancer of dancers) {
-					if (this.battle.faintMessages()) break;
+					if (this.battle.resolveFaints()) break;
 					if (dancer.fainted) continue;
 					this.battle.add('-activate', dancer, 'ability: ' + dancer.getAbility().name);
 					const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
@@ -1171,7 +1169,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
-			this.battle.faintMessages();
+			this.battle.resolveFaints();
 			this.battle.checkWin();
 
 			if (this.battle.gen <= 4) {
@@ -1297,7 +1295,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// hit is 1 higher than the actual hit count
 			if (hit === 1) return damage.fill(false);
 			if (nullDamage) damage.fill(false);
-			this.battle.faintMessages(false, false, !pokemon.hp);
+			this.battle.resolveFaints({ checkWin: !pokemon.hp });
 			if (move.multihit && typeof move.smartTarget !== 'boolean') {
 				this.battle.add('-hitcount', targets[0], hit - 1);
 			}

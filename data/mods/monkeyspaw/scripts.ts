@@ -338,7 +338,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// fainting
 
-		this.faintMessages();
+		this.resolveFaints();
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
@@ -397,7 +397,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
-						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+						this.resolveFaints(); // Pokemon may have fainted in BeforeSwitchOut
 						if (this.ended) return true;
 						if (pokemon.fainted) {
 							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);

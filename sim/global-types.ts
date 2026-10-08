@@ -390,7 +390,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	suppressingWeather?: (this: Battle) => boolean;
 	trunc?: (n: number) => number;
 	win?: (this: Battle, side?: SideID | '' | Side | null) => boolean;
-	faintMessages?: (this: Battle, lastFirst?: boolean, forceCheck?: boolean, checkWin?: boolean) => boolean | undefined;
+	resolveFaints?: (this: Battle, ...args: Parameters<Battle['resolveFaints']>) => boolean | undefined;
 	tiebreak?: (this: Battle) => boolean;
 	calculatePP?: (this: Battle, move: Move, ppUps?: number) => number;
 	checkMoveMakesContact?: (

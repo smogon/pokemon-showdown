@@ -569,7 +569,7 @@ export class Battle {
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
 			}
 
-			this.faintMessages();
+			this.resolveFaints();
 			if (this.ended) return;
 		}
 	}
@@ -1568,7 +1568,7 @@ export class Battle {
 
 		side.pokemonLeft = 0;
 		side.active[0]?.faint();
-		this.faintMessages(false, true);
+		this.resolveFaints({ checkWinIfNoFaints: true });
 		if (!this.ended && side.requestState) {
 			side.emitRequest({ wait: true, side: side.getRequestData() });
 			side.clearChoice();
@@ -2197,7 +2197,7 @@ export class Battle {
 
 				if (target.hp <= 0) {
 					this.debug(`instafaint: ${this.faintQueue.map(entry => entry.target.name)}`);
-					this.faintMessages(true);
+					this.resolveFaints({ lastFaintFirst: true });
 					if (this.gen <= 2) {
 						target.faint();
 						if (this.gen <= 1) this.queue.clear();
@@ -2570,7 +2570,25 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
+	/**
+	 * Resolves the faint queue (with Gen 2–4 weirdness)
+	 * - run `BeforeFaint` and `Faint` events
+	 * - show faint messages
+	 * - sets `pokemon.fainted` etc
+	 * - cancel actions as required by the generation
+	 * - ends the battle if a side has no pokemon left
+	 * @returns true: battle ended from fainting, false: otherwise, undefined: battle already ended
+	 */
+	resolveFaints({ lastFaintFirst = false, checkWinIfNoFaints = false, checkWin = true }: {
+		/** Makes the faint queue's last element skip the queue (doesn't reverse the queue). */
+		lastFaintFirst?: boolean,
+		checkWinIfNoFaints?: boolean,
+		/**
+		 * Note: a faint that queues another faint (like Destiny Bond) will check even if this is false,
+		 * except during Pursuit in Gens 2–4.
+		 */
+		checkWin?: boolean,
+	} = {}): boolean | undefined {
 		if (this.ended) return;
 		if (this.gen <= 4 && this.getAllActive().some(pokemon => typeof pokemon.switchFlag === 'string')) {
 			// Keep pivot faints pending, except during the pivot's own initial blackout check
@@ -2582,10 +2600,10 @@ export class Battle {
 		}
 		const length = this.faintQueue.length;
 		if (!length) {
-			if (forceCheck && this.checkWin()) return true;
+			if (checkWinIfNoFaints && this.checkWin()) return true;
 			return false;
 		}
-		if (lastFirst) {
+		if (lastFaintFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
 		}
@@ -2889,7 +2907,7 @@ export class Battle {
 				// in gen 4, there are no win checks during a U-turn switch until its ability activates
 				this.gen === 4 && action.choice === 'instaswitch' && action.sourceEffect && nextAction?.choice === 'runSwitch'
 			);
-			this.faintMessages(false, checkWin, checkWin);
+			this.resolveFaints({ checkWinIfNoFaints: checkWin, checkWin });
 		}
 		if (this.ended) return true;
 
