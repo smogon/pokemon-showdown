@@ -409,6 +409,10 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 */
 	onLogMessage(message: string, user: User) {}
 
+	getUserByAlias(aliasid: ID, requester: User): User | null {
+		return null;
+	}
+
 	/**
 	 * Called when a game's timer needs to be started. Used mainly for tours.
 	 */
