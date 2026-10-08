@@ -220,7 +220,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	raichumegay: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	sandshrew: {
 		isNonstandard: "Past",
