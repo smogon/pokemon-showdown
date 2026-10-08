@@ -69,7 +69,6 @@ describe('Pickpocket', () => {
 		const sylveon = battle.p2.active[0];
 
 		battle.makeChoices();
-		console.log(battle.log);
 		assert.equal(weavile.item, 'choicescarf');
 		assert.false.holdsItem(sylveon);
 	});
