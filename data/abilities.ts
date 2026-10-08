@@ -3240,7 +3240,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	pickpocket: {
 		onAfterMoveSecondaryLastPriority: 1,
 		onAfterMoveSecondaryLast(target, source, move) {
-			if (source && source !== target && move?.flags['contact'] && !move.hasSheerForce) {
+			if (source && source !== target && move?.flags['contact'] && !this.suppressingSecondaries()) {
 				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
 					return;
 				}
@@ -4208,7 +4208,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				// Technically not a secondary effect, but it is negated
 				delete move.self;
 				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
-				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
+				// Actual negation of `AfterMoveSecondary` and `AfterMoveSecondarySelf` implemented in Battle#suppressingSecondaries
 				move.hasSheerForce = true;
 			}
 		},
