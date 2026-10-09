@@ -17,7 +17,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.add('-end', target, 'Nightmare', '[silent]');
 			}
 		},
-		onSwitchIn(target) {
+		onSwitchOut(target) {
 			this.effectState.time += this.effectState.skippedTime;
 			this.effectState.skippedTime = 0;
 		},

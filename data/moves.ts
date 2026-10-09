@@ -3498,7 +3498,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
-				if (!source || !effect || target.isAlly(source)) return;
+				if (!source?.hp || !effect || target.isAlly(source)) return;
 				if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
@@ -7896,7 +7896,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-singlemove', pokemon, 'Grudge');
 			},
 			onFaint(target, source, effect) {
-				if (!source || source.fainted || !effect) return;
+				if (!source?.hp || !effect) return;
 				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && source.lastMove) {
 					let move: Move = source.lastMove;
 					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
@@ -14405,9 +14405,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				) {
 					return;
 				}
-				if (!this.event.pursuitMessageShown) {
+				if (!pokemon.pursuitActivated) {
 					this.add('-activate', pokemon, 'move: Pursuit');
-					this.event.pursuitMessageShown = true;
+					pokemon.pursuitActivated = true;
 				}
 				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 				// If it is, then Mega Evolve before moving.

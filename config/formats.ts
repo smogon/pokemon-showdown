@@ -2777,7 +2777,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					}
 					if (!oldActive.hp) {
 						// a pokemon fainted from Pursuit before it could switch
-						return 'pursuitfaint';
+						return false;
 					}
 
 					// will definitely switch out at this point
@@ -2826,7 +2826,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				} else {
 					this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 				}
-				if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 				pokemon.previouslySwitchedIn++;
 
 				if (isDrag && this.battle.gen >= 5) {

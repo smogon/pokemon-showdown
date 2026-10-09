@@ -57,6 +57,31 @@ describe('Revival Blessing', () => {
 		assert.equal(battle.p1.pokemonLeft, 2);
 	});
 
+	it(`should allow Pursuit to intercept a revived Pokemon's next withdrawal`, () => {
+		battle = common.gen(9).createBattle([[
+			{ species: 'Tyranitar', ability: 'unnerve', moves: ['pursuit', 'sleeptalk'] },
+		], [
+			{ species: 'Alakazam', moves: ['sleeptalk'] },
+			{ species: 'Pawmot', moves: ['revivalblessing', 'sleeptalk'] },
+			{ species: 'Blissey', moves: ['sleeptalk'] },
+		]]);
+		const [alakazam, , blissey] = battle.p2.pokemon;
+		alakazam.hp = 1;
+		battle.makeChoices('move pursuit', 'switch blissey');
+		assert.fainted(alakazam);
+		assert.fullHP(blissey);
+
+		battle.makeChoices('', 'switch pawmot');
+		battle.makeChoices('move sleeptalk', 'move revivalblessing');
+		battle.makeChoices('', 'switch alakazam');
+		assert.false.fainted(alakazam);
+		battle.makeChoices('move sleeptalk', 'switch alakazam');
+		battle.makeChoices('move pursuit', 'switch blissey');
+		assert.fainted(alakazam);
+		assert.fullHP(blissey);
+		assert.equal(battle.p2.requestState, 'switch');
+	});
+
 	it(`should send the Pokemon back in immediately if in an active slot in Doubles`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'pawmot', ability: 'naturalcure', moves: ['revivalblessing'] },
