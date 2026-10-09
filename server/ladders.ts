@@ -8,15 +8,33 @@
  * @license MIT
  */
 
-const LadderStore: typeof import('./ladders-remote').LadderStore = (
-	typeof Config === 'object' && Config.remoteladder ? require('./ladders-remote') : require('./ladders-local')
-).LadderStore;
+import { LadderStore as RemoteLadderStore } from './ladders-remote';
+import { LadderStore as LocalLadderStore } from './ladders-local';
+
+const LadderStore: typeof RemoteLadderStore = (
+	typeof Config === 'object' && Config.remoteladder ? RemoteLadderStore : LocalLadderStore
+);
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
 import type { ChallengeType } from './room-battle';
 import { BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges } from './ladders-challenges';
+
+export interface LadderRating {
+	elo: number;
+	oldelo?: number | string;
+	gxe?: number;
+	rpr?: number;
+	rprd?: number;
+	formatid?: string;
+	username?: string;
+	sigma?: number | string;
+	rpsigma?: number | string;
+	isBot?: boolean;
+}
+
+export type LadderUpdate = [score: number, p1rating: LadderRating | null, p2rating: LadderRating | null];
 
 export interface VirtualFormat {
 	format: ID;

@@ -1017,6 +1017,7 @@ export class User extends Chat.MessageContext {
 			this.locked = oldUser.locked;
 		}
 		if (oldUser.autoconfirmed) this.autoconfirmed = oldUser.autoconfirmed;
+		if (oldUser.isUserBot) this.isUserBot = true;
 
 		this.updateGroup(this.registered, true);
 		if (oldLocked !== this.locked || oldSemilocked !== this.semilocked) this.updateIdentity();

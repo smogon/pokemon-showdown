@@ -26,6 +26,7 @@ To reload chat commands:
 import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
+import type { LadderRating } from './ladders';
 import type * as ConfigLoader from './config-loader';
 import * as Friends from './friends';
 import { FS, Utils } from '../lib';
@@ -93,7 +94,7 @@ interface Handlers {
 	onBattleCreate: (battle: RoomBattle, players: ID[]) => void;
 	onLadderSearch: (user: User, connection: Connection, format: ID) => void;
 	onBattleRanked: (
-		battle: Rooms.RoomBattle, winner: ID, ratings: (AnyObject | null | undefined)[], players: ID[]
+		battle: Rooms.RoomBattle, winner: ID, ratings: (LadderRating | null)[], players: ID[]
 	) => void;
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
