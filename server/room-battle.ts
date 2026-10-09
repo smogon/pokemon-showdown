@@ -20,6 +20,7 @@ import type { Tournament } from './tournaments/index';
 import type { RoomSettings } from './rooms';
 import type { BestOfGame } from './room-battle-bestof';
 import type { GameTimerSettings } from '../sim/dex-formats';
+import type { LadderRating } from './ladders';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 export type PlayerIndex = 1 | 2 | 3 | 4;
@@ -888,15 +889,20 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		const p1 = this.p1.name;
 		const p2 = this.p2.name;
-		const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(
+		/** stored here because players can rename after the battle, while awaiting updateRating */
+		const playerIsBot = this.players.map(player => player.getUser()?.isUserBot);
+		const [score, ...ratings] = await Ladders(this.ladder).updateRating(
 			p1, p2, p1score, this.room
 		);
-		void this.logBattle(score, p1rating, p2rating);
-		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1, p2].map(toID));
+		for (const [i, rating] of ratings.entries()) {
+			if (rating) rating.isBot = playerIsBot[i];
+		}
+		void this.logBattle(score, ...ratings);
+		Chat.runHandlers('onBattleRanked', this, winnerid, ratings, [p1, p2].map(toID));
 	}
 	async logBattle(
-		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
-		p3rating: AnyObject | null = null, p4rating: AnyObject | null = null
+		p1score: number, p1rating: LadderRating | null = null, p2rating: LadderRating | null = null,
+		p3rating: LadderRating | null = null, p4rating: LadderRating | null = null
 	) {
 		if (Dex.formats.get(this.format, true).noLog) return;
 		const logData = this.logData;
@@ -905,15 +911,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		logData.log = this.room.getLog(-1).split('\n'); // replay log (exact damage)
 
 		// clean up
-		for (const [player, rating] of [
-			[this.p1, p1rating], [this.p2, p2rating], [this.p3, p3rating], [this.p4, p4rating],
-		] as const) {
+		for (const rating of [p1rating, p2rating, p3rating, p4rating]) {
 			if (rating) {
 				delete rating.formatid;
 				delete rating.username;
 				delete rating.rpsigma;
 				delete rating.sigma;
-				rating.isBot = player?.getUser()?.isUserBot;
 			}
 		}
 
