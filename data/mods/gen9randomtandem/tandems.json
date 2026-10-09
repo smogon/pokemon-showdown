@@ -836,7 +836,7 @@
     {
       "species": "Calyrex-Ice",
       "items": ["weaknesspolicy"],
-      "abilities": ["asoneicerider"],
+      "abilities": ["asoneglastrier"],
       "teraTypes": ["Water", "Steel"],
       "forcedMoves": ["iciclecrash", "agility"],
       "moves": ["highhorsepower", "closecombat"],

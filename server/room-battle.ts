@@ -913,8 +913,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 
 		logData.p1rating = p1rating;
+		logData.p1rating.isBot = this.p1.getUser()?.isUserBot;
 		if (this.replaySaved) logData.replaySaved = this.replaySaved;
 		logData.p2rating = p2rating;
+		logData.p2rating.isBot = this.p2.getUser()?.isUserBot;
 		if (this.playerCap > 2) {
 			logData.p3rating = p3rating;
 			logData.p4rating = p4rating;
