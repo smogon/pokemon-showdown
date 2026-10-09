@@ -155,7 +155,7 @@ export class BattleActions {
 		}
 		if (this.battle.gen <= 4) {
 			if (pokemon.itemKnockedOff && pokemon.item) {
-				this.battle.hint("In Gens 3-4, Knock Off makes a Pokémon lose its held item every time it switches in.", true);
+				this.battle.hint("In Gens 3-4, Knock Off makes a Pokémon lose its held item every time it switches in.");
 				pokemon.item = '';
 			}
 			if (this.battle.gen <= 2) {
