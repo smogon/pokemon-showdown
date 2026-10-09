@@ -1191,6 +1191,9 @@ export const commands: Chat.ChatCommands = {
 		if (!player) {
 			throw new Chat.ErrorMessage(`This battle does not support having players in ${slot}`);
 		}
+		if (player.eliminated) {
+			throw new Chat.ErrorMessage(this.TL`The player in slot ${slot} has already been eliminated.`);
+		}
 		if (!targetUser) {
 			battle.sendInviteForm(connection);
 			throw new Chat.ErrorMessage(this.TL`User ${name} not found.`);
