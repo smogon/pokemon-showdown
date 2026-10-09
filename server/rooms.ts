@@ -253,6 +253,8 @@ export abstract class BasicRoom {
 
 		this.roomid = roomid;
 		this.title = (title || roomid);
+		// should happen before making a roomlog, so we don't leave an orphaned roomlog
+		this.validateTitle(this.title, this.roomid);
 		this.parent = null;
 
 		this.userCount = 0;
@@ -331,7 +333,6 @@ export abstract class BasicRoom {
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
-		this.validateTitle(this.title, this.roomid);
 	}
 
 	toString() {
