@@ -664,10 +664,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return false;
 		}
 
-		const validSlots = this.players.filter(player => !player.id).map(player => player.slot);
+		const validSlots = this.players.filter(player => !player.id && !player.eliminated).map(player => player.slot);
 
 		if (slot && !validSlots.includes(slot)) {
-			if (this.players.some(player => player.slot === slot)) {
+			if (this[slot]?.eliminated) {
+				user.popup(`The player in slot ${slot} has already been eliminated.`);
+			} else if (this.players.some(player => player.slot === slot)) {
 				user.popup(`This battle already has a user in slot ${slot}.`);
 			} else {
 				user.popup(`Slot "${slot}" doesn't exist in this battle.`);
@@ -676,11 +678,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 
 		if (!validSlots.length) {
-			user.popup(`This battle already has ${this.playerCap} players.`);
+			user.popup(`This battle has no available player slots.`);
 			return false;
 		}
 
-		slot ||= this.players.find(player => player.invite === user.id)?.slot;
+		slot ||= validSlots.find(validSlot => this[validSlot].invite === user.id);
 		if (!slot && validSlots.length > 1) {
 			user.popup(`Which slot would you like to join into? Use something like \`/joingame ${validSlots[0]}\``);
 			return false;
