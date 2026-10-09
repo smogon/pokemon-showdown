@@ -139,6 +139,10 @@ export class BattleActions {
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
+		if (this.battle.gen <= 4 && pokemon.itemKnockedOff && pokemon.item) {
+			this.battle.hint("In Gens 3-4, Knock Off makes a Pokémon lose its held item every time it switches in.", true);
+			pokemon.item = '';
+		}
 		pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
 		pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
