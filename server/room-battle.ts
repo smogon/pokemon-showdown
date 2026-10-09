@@ -904,25 +904,26 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		this.logData = null; // deallocate to save space
 		logData.log = this.room.getLog(-1).split('\n'); // replay log (exact damage)
 
-		// delete some redundant data
-		for (const rating of [p1rating, p2rating, p3rating, p4rating]) {
+		// clean up
+		for (const [player, rating] of [
+			[this.p1, p1rating], [this.p2, p2rating], [this.p3, p3rating], [this.p4, p4rating],
+		] as const) {
 			if (rating) {
 				delete rating.formatid;
 				delete rating.username;
 				delete rating.rpsigma;
 				delete rating.sigma;
+				rating.isBot = player?.getUser()?.isUserBot;
 			}
 		}
 
 		logData.p1rating = p1rating;
-		logData.p1rating.isBot = this.p1.getUser()?.isUserBot;
-		if (this.replaySaved) logData.replaySaved = this.replaySaved;
 		logData.p2rating = p2rating;
-		logData.p2rating.isBot = this.p2.getUser()?.isUserBot;
 		if (this.playerCap > 2) {
 			logData.p3rating = p3rating;
 			logData.p4rating = p4rating;
 		}
+		if (this.replaySaved) logData.replaySaved = this.replaySaved;
 		logData.endType = this.endType;
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
