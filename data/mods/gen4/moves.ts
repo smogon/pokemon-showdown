@@ -724,7 +724,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.item = '';
 				target.itemKnockedOff = true;
 				this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
-				this.hint("In Gens 3-4, Knock Off only makes the target's item unusable; it cannot obtain a new item.", true);
+				if (this.gen === 4) {
+					this.hint("In Gen 4, Knock Off makes the Pokémon unable to obtain a new item.", true);
+				}
 			}
 		},
 	},
