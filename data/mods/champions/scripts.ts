@@ -110,7 +110,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Ogerpon's forme change doesn't override permanent abilities
 				if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
 				// However, its ability does reset upon switching out
-				this.baseAbility = toID(ability);
+				this.baseAbility = this.battle.toID(ability);
 			}
 			if (this.terastallized) {
 				this.knownType = true;
@@ -136,7 +136,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.ability = this.baseAbility;
 			this.hpType = this.baseHpType;
 			this.hpPower = this.baseHpPower;
-			if (this.canTerastallize === false) this.canTerastallize = this.teraType;
 			for (const i in this.volatiles) {
 				if (this.volatiles[i].linkedStatus) {
 					this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
