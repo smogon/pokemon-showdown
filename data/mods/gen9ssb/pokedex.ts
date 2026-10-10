@@ -770,6 +770,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Rainy's Aura" },
 	},
 
+	xerneasactive: {
+		inherit: true,
+		abilities: { 0: "Rainy's Aura" },
+	},
+
 	// Ransei
 	audinomega: {
 		inherit: true,

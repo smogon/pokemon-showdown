@@ -4152,9 +4152,8 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 		natDexTier: "AG",
 	},
-	xerneasneutral: {
-		isNonstandard: "Custom", // can't be used in battle
-		tier: "Illegal",
+	xerneasactive: {
+		isNonstandard: "Past",
 	},
 	yveltal: {
 		isNonstandard: "Past",
