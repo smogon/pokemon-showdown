@@ -5408,15 +5408,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['[Gen 5] UU', 'Baton Pass Clause', '!Sleep Clause Mod', 'Sleep Moves Clause'],
-		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Shell Smash + Baton Pass'],
-		unbanlist: ['Prankster + Assist', 'Prankster + Copycat', 'Baton Pass'],
+		banlist: ['UU', 'RUBL', 'Shadow Tag', 'Assist', 'Shell Smash + Baton Pass'],
+		unbanlist: ['Prankster + Copycat', 'Baton Pass'],
 	},
 	{
 		name: "[Gen 5] NU",
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['[Gen 5] RU', '!Sleep Moves Clause', 'Sleep Clause Mod'],
-		banlist: ['RU', 'NUBL', 'Assist', 'Copycat'],
+		banlist: ['RU', 'NUBL', 'Copycat'],
 	},
 	{
 		name: "[Gen 5] PU",
