@@ -19,9 +19,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onSwitchIn(pokemon) {
 			pokemon.addVolatile('brnattackdrop');
 		},
-		onAfterSwitchInSelf(pokemon) {
-			residualdmg(this, pokemon);
-		},
 	},
 	par: {
 		name: 'par',
@@ -116,9 +113,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onAfterMoveSelfPriority: 100,
 		onAfterMoveSelf(pokemon) {
-			if (['brn', 'psn', 'tox'].includes(pokemon.status)) pokemon.volatiles['residualdmg'].counter++;
-		},
-		onAfterSwitchInSelf(pokemon) {
 			if (['brn', 'psn', 'tox'].includes(pokemon.status)) pokemon.volatiles['residualdmg'].counter++;
 		},
 	},
