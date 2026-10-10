@@ -58,7 +58,22 @@ describe('Pickpocket', () => {
 		assert.holdsItem(battle.p2.active[0]);
 	});
 
-	it.skip(`should steal items back and forth when hit by a Magician user`, () => {
+	it(`should steal a foe's item if the Pickpocket user was forced out by Red Card`, () => {
+		battle = common.createBattle([[
+			{ species: 'Weavile', ability: 'pickpocket', item: 'redcard', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Sylveon', item: 'choicescarf', moves: ['quickattack'] },
+			{ species: 'Chansey', moves: ['softboiled'] },
+		]]);
+		const weavile = battle.p1.active[0];
+		const sylveon = battle.p2.active[0];
+
+		battle.makeChoices();
+		assert.equal(weavile.item, 'choicescarf');
+		assert.false.holdsItem(sylveon);
+	});
+
+	it(`should steal items back and forth when hit by a Magician user`, () => {
 		battle = common.createBattle([[
 			{ species: 'Weavile', ability: 'pickpocket', item: 'cheriberry', moves: ['agility'] },
 		], [
