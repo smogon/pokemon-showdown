@@ -1786,7 +1786,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'#sandslashalola+icescales+mountaingale',
 			'#wigglytuff+sheerforce+moonblast',
 			'#poliwrath+drizzle+stealthrock',
-			'#alakazam+courtchange',
+			'#kadabra+courtchange',
 			'#muk+regenerator',
 			'#cloyster+snowwarning',
 			'#rapidash+orichalcumpulse',
@@ -1821,7 +1821,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		banlist: ['Light Clay', 'Shell Smash', 'Belly Drum'],
 		unbanlist: [
-			'Aggron-Base', 'Alakazam-Base', 'Ampharos-Base', 'Armaldo', 'Azumarill', 'Cloyster', 'Diancie-Base', 'Donphan', 'Drampa-Base', 'Electivire', 'Electrode-Hisui', 'Empoleon', 'Exeggutor-Base', 'Houndoom-Base', 'Houndstone', 'Kabutops', 'Lickilicky', 'Meganium-Base', 'Mismagius', 'Muk-Base', 'Noivern', 'Palossand', 'Pangoro', 'Pinsir-Base', 'Poliwrath', 'Rabsca', 'Rapidash-Base', 'Sandslash-Alola', 'Sneasel-Base', 'Torterra', 'Toxicroak', 'Turtonator', 'Weezing-Galar', 'Wigglytuff', 'Yanmega',
+			'Aggron-Base', 'Kadabra', 'Ampharos-Base', 'Armaldo', 'Azumarill', 'Cloyster', 'Diancie-Base', 'Donphan', 'Drampa-Base', 'Electivire', 'Electrode-Hisui', 'Empoleon', 'Exeggutor-Base', 'Houndoom-Base', 'Houndstone', 'Kabutops', 'Lickilicky', 'Meganium-Base', 'Mismagius', 'Muk-Base', 'Noivern', 'Palossand', 'Pangoro', 'Pinsir-Base', 'Poliwrath', 'Rabsca', 'Rapidash-Base', 'Sandslash-Alola', 'Sneasel-Base', 'Torterra', 'Toxicroak', 'Turtonator', 'Weezing-Galar', 'Wigglytuff', 'Yanmega',
 		],
 	},
 
