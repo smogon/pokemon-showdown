@@ -4056,6 +4056,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
+	xerneasactive: {
+		isNonstandard: null,
+	},
 	yveltal: {
 		tier: "Uber",
 		doublesTier: "DUber",

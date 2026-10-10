@@ -116,7 +116,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else if (item.id === 'rustedshield') {
 					rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, 'Zamazenta-Crowned', pokemon);
 				}
-				if (!rawSpecies) continue;
+				if (!rawSpecies) {
+					this.singleEvent('BattleStart', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
+					continue;
+				}
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
@@ -163,9 +166,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.actions.switchIn(side.pokemon[i], i);
 					}
 				}
-			}
-			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
 			this.midTurn = true;
 			break;
