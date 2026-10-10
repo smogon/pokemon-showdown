@@ -44,14 +44,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 5,
 	},
-	barbbarrage: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	beakblast: {
 		inherit: true,
 		basePower: 120,
 		pp: 5,
+	},
+	belch: {
+		inherit: true,
+		onDisableMove: undefined, // no inherit
 	},
 	behemothbash: {
 		inherit: true,
@@ -150,10 +150,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	courtchange: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	crabhammer: {
 		inherit: true,
 		accuracy: 95,
@@ -165,6 +161,38 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	crushgrip: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	curse: {
+		inherit: true,
+		volatileStatus: undefined, // no inherit
+		onModifyMove(move, source, target) {
+			this.debug('Curse onModifyMove triggered', source, target);
+			if (!source.hasType('Ghost')) {
+				move.target = 'self';
+			} else if (!target || (source !== target && source.isAlly(target))) {
+				move.target = 'randomNormal';
+			}
+		},
+		onTryHit(target, source, move) {
+			this.debug('Curse onTryHit triggered', target, source);
+			if (source.hasType('Ghost') && target.volatiles['curse']) {
+				return false;
+			}
+		},
+		onHit(target, source) {
+			this.debug('Curse onHit triggered', source, target);
+			if (!source.hasType('Ghost')) {
+				return !!this.boost({ spe: -1, atk: 1, def: 1 }, source, source);
+			}
+			this.directDamage(source.maxhp / 2, source, source);
+			if (source.isAlly(target)) {
+				const random = this.getRandomTarget(source, 'Curse');
+				if (!random) return false;
+				target = random;
+			}
+			delete target.volatiles['curse'];
+			target.addVolatile('curse');
+		},
 	},
 	cut: {
 		inherit: true,
@@ -196,8 +224,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.trySetStatus(status, source);
 			},
 		},
-		desc: "Has a 30% chance to cause the target to either fall asleep, become poisoned, or become paralyzed.",
-		shortDesc: "30% chance to sleep, poison, or paralyze target.",
+	},
+	disable: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onBeforeMove(attacker, defender, move) {
+				if (!(move.isZ && move.isZOrMaxPowered) && move.id === this.effectState.move && !move.flags['cantusetwice']) {
+					this.add('cant', attacker, 'Disable', move);
+					return false;
+				}
+			},
+		},
 	},
 	disarmingvoice: {
 		inherit: true,
@@ -217,7 +255,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	doubleshock: {
 		inherit: true,
-		isNonstandard: "Custom",
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
 	},
 	dragonascent: {
 		inherit: true,
@@ -245,10 +283,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: "Past",
 	},
 	dreameater: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	drumbeating: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -292,17 +326,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const action = this.queue.willMove(target);
 				if (!action) {
 					this.effectState.duration!++;
-					// TODO: this is a quick fix, check if move priority is changed when Mental Herb cures Encore
-				} else if (!target.hasItem('mentalherb')) {
+				} else if (action.moveid !== move.id && !target.hasItem('mentalherb')) {
 					this.queue.changeAction(target, {
 						choice: 'move',
 						// target: undefined,
 						// targetLoc: undefined,
 						moveid: move.id,
-						order: action.order, // TODO: check Quash + Encore interaction
 					});
 				}
 			},
+			onOverrideAction: undefined, // no inherit
 		},
 	},
 	esperwing: {
@@ -312,6 +345,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fairywind: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	fakeout: {
+		inherit: true,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions) {
+				pokemon.disableMove('fakeout');
+			}
+		},
 	},
 	falsesurrender: {
 		inherit: true,
@@ -340,6 +381,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	firstimpression: {
 		inherit: true,
 		basePower: 100,
+		onDisableMove(pokemon) {
+			if (pokemon.activeMoveActions) {
+				pokemon.disableMove('firstimpression');
+			}
+		},
 	},
 	fishiousrend: {
 		inherit: true,
@@ -360,6 +406,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	forcepalm: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	freezedry: {
+		inherit: true,
+		secondary: undefined, // no inherit
 	},
 	freezeshock: {
 		inherit: true,
@@ -399,10 +449,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: "Past",
 	},
 	glaciate: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	glaiverush: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -458,6 +504,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	howl: {
+		inherit: true,
+		flags: { snatch: 1, sound: 1, bypasssub: 1, metronome: 1 },
+	},
 	hydrosteam: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -493,14 +543,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			chance: 20,
 			volatileStatus: 'flinch',
 		},
-		desc: "Has a 20% chance to make the target flinch.",
-		shortDesc: "20% chance to make the target flinch.",
 	},
 	ivycudgel: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	jawlock: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -560,7 +604,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	makeitrain: {
 		inherit: true,
 		accuracy: 95,
-		isNonstandard: "Past",
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
 	},
 	malignantchain: {
 		inherit: true,
@@ -579,6 +627,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: "Past",
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 	},
+	meteorassault: {
+		inherit: true,
+		basePower: 170,
+		isNonstandard: null,
+	},
 	metronome: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -586,6 +639,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mightycleave: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	milkdrink: {
+		inherit: true,
+		target: "adjacentAllyOrSelf",
 	},
 	mimic: {
 		inherit: true,
@@ -607,8 +664,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				spa: -1,
 			},
 		},
-		desc: "Has a 10% chance to lower the target's Special Attack by 1 stage.",
-		shortDesc: "10% chance to lower the target's Sp. Atk by 1.",
 	},
 	moongeistbeam: {
 		inherit: true,
@@ -634,10 +689,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 5,
 	},
-	noretreat: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	noxioustorque: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -646,15 +697,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 5,
 	},
+	octolock: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	orderup: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	originpulse: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	overdrive: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -734,18 +785,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 5,
 	},
-	pyroball: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	ragefist: {
 		inherit: true,
-		isNonstandard: "Past",
+		// Hit counter reset is implemented in Pokemon#clearVolatile
 	},
-	// ragepowder: {
-	// 	inherit: true,
-	// 	flags: { noassist: 1, failcopycat: 1 },
-	// },
 	razorleaf: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -762,10 +805,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 100,
 		isNonstandard: "Past",
-	},
-	revivalblessing: {
-		inherit: true,
-		isNonstandard: "Custom",
 	},
 	roaroftime: {
 		inherit: true,
@@ -799,8 +838,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 8 : 16));
 			},
 		},
-		desc: "Causes damage to the target equal to 1/16 of its maximum HP (1/8 if the target is Steel or Water type), rounded down, at the end of each turn during effect. This effect ends when the target is no longer active.",
-		shortDesc: "Deals 1/16 max HP each turn; 1/8 on Steel, Water.",
 	},
 	sandattack: {
 		inherit: true,
@@ -838,10 +875,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		pp: 10,
 	},
-	shiftgear: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	shockwave: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -864,7 +897,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	slash: {
 		inherit: true,
-		isNonstandard: "Past",
+		basePower: 80,
 	},
 	sludge: {
 		inherit: true,
@@ -886,7 +919,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	snipeshot: {
 		inherit: true,
 		basePower: 85,
-		isNonstandard: "Past",
 	},
 	snowscape: {
 		inherit: true,
@@ -908,10 +940,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 		pp: 10,
-	},
-	spiritbreak: {
-		inherit: true,
-		isNonstandard: "Past",
 	},
 	spiritshackle: {
 		inherit: true,
@@ -944,6 +972,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	strength: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	strengthsap: {
+		inherit: true,
+		pp: 5,
+	},
+	stuffcheeks: {
+		inherit: true,
+		onDisableMove: undefined, // no inherit
 	},
 	sunsteelstrike: {
 		inherit: true,
@@ -1021,17 +1057,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	topsyturvy: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	toxicthread: {
 		inherit: true,
 		boosts: {
 			spe: -2,
 		},
-		desc: "Lowers the target's Speed by 2 stages and poisons it.",
-		shortDesc: "Lowers the target's Speed by 2 and poisons it.",
 	},
 	trickortreat: {
 		inherit: true,
@@ -1094,15 +1124,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	wish: {
+		inherit: true,
+		pp: 5,
+	},
 	withdraw: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	workup: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	zingzap: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

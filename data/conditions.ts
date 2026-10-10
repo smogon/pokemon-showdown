@@ -401,8 +401,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 
 			this.add('-end', target, 'move: ' + move.name);
-			target.removeVolatile('Protect');
-			target.removeVolatile('Endure');
 
 			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
 				data.moveData.infiltrates = true;
@@ -639,7 +637,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		// So we give it increased priority.
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasType('Rock') && this.field.isWeather('sandstorm')) {
+			if (pokemon.hasType('Rock') && pokemon.effectiveWeather() === 'sandstorm') {
 				return this.modify(spd, 1.5);
 			}
 		},
@@ -705,7 +703,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Ice') && this.field.isWeather('snowscape')) {
+			if (pokemon.hasType('Ice') && pokemon.effectiveWeather() === 'snowscape') {
 				return this.modify(def, 1.5);
 			}
 		},
@@ -754,7 +752,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'Dynamax',
 		noCopy: true,
 		onStart(pokemon) {
-			this.effectState.turns = 0;
+			this.effectState.turns = 3;
 			pokemon.removeVolatile('minimize');
 			pokemon.removeVolatile('substitute');
 			if (pokemon.volatiles['torment']) {
@@ -793,7 +791,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onResidualPriority: -100,
 		onResidual() {
-			this.effectState.turns++;
+			this.effectState.turns--;
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Dynamax');

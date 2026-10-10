@@ -5,7 +5,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		const dynamaxEnding: Pokemon[] = [];
 		for (const pokemon of this.getAllActive()) {
-			if (pokemon.volatiles['dynamax']?.turns === 3) {
+			if (pokemon.volatiles['dynamax']?.turns <= 0) {
 				dynamaxEnding.push(pokemon);
 			}
 		}
@@ -331,7 +331,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
+			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.hp] as const);
 			this.fieldEvent('Residual');
 			if (!this.ended) this.add('upkeep');
 			break;
@@ -379,18 +379,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
+				this.runEvent('EmergencyExit', pokemon, undefined, undefined, originalHP);
 			}
 		}
 
 		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
+			this.runEvent('EmergencyExit', action.pokemon, undefined, undefined, pokemonOriginalHP!);
 		}
 
 		const switches = this.sides.map(

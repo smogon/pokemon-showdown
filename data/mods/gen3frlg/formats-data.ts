@@ -24,7 +24,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	blastoise: {
-		tier: "OU",
+		tier: "UU",
 	},
 	caterpie: {
 		tier: "LC",
@@ -117,7 +117,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	ninetales: {
-		tier: "OU",
+		tier: "UU",
 	},
 	igglybuff: {
 		tier: "LC",
@@ -198,7 +198,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	poliwrath: {
-		tier: "OU",
+		tier: "UU",
 	},
 	politoed: {
 		tier: "UU",
@@ -438,7 +438,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	lapras: {
-		tier: "OU",
+		tier: "UU",
 	},
 	ditto: {
 		tier: "UU",
@@ -494,7 +494,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	moltres: {
-		tier: "OU",
+		tier: "UU",
 	},
 	dratini: {
 		tier: "LC",
@@ -613,7 +613,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	azumarill: {
-		tier: "OU",
+		tier: "UU",
 	},
 	sudowoodo: {
 		tier: "Unreleased",
@@ -626,7 +626,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	jumpluff: {
-		tier: "OU",
+		tier: "UU",
 	},
 	aipom: {
 		tier: "Unreleased",
@@ -653,7 +653,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	misdreavus: {
-		tier: "OU",
+		tier: "UU",
 	},
 	unown: {
 		tier: "UU",

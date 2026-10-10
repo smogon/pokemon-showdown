@@ -37,6 +37,90 @@ describe('Simulator abstraction layer features', () => {
 		});
 	});
 
+	describe('Free-for-all player replacement', () => {
+		let players, replacement, room, battle;
+		beforeEach(() => {
+			const packedTeam = 'Weavile||lifeorb||swordsdance,knockoff,iceshard,iciclecrash|Jolly|,252,,,4,252|||||';
+			players = [1, 2, 3, 4].map(num => makeUser(`FFA Player ${num}`));
+			replacement = makeUser('FFA Replacement');
+			room = Rooms.createBattle({
+				format: 'gen9freeforall',
+				players: players.map(user => ({ user, team: packedTeam })),
+			});
+			battle = room.battle;
+			assert(battle.forfeit(players[0]));
+			assert(battle.p1.eliminated);
+			assert.equal(battle.p1.id, '');
+			assert.equal(battle.ended, false);
+		});
+		afterEach(() => {
+			for (const challenge of [...Ladders.challenges.get(replacement.id) || []]) {
+				Ladders.challenges.remove(challenge);
+			}
+			room.destroy();
+			for (const user of [...players, replacement]) {
+				user.disconnectAll();
+				user.destroy();
+			}
+		});
+
+		for (const slot of ['p1', undefined]) {
+			it(`should reject joining an eliminated slot ${slot ? 'explicitly' : 'automatically'}`, () => {
+				room.auth.set(replacement.id, Users.PLAYER_SYMBOL);
+				assert.equal(battle.joinGame(replacement, slot), false);
+				assert.equal(battle.p1.id, '');
+				assert.equal(battle.p1.name, players[0].name);
+				assert.equal(battle.playerTable[replacement.id], undefined);
+				assert.equal(replacement.games.has(room.roomid), false);
+			});
+		}
+
+		for (const inRoom of [false, true]) {
+			it(`should reject /addplayer into an eliminated slot for a user ${inRoom ? 'inside' : 'outside'} the room`, async () => {
+				if (inRoom) replacement.joinRoom(room);
+				await Chat.parse(`/addplayer ${replacement.name}, p1`, room, players[1], players[1].connections[0]);
+				assert.equal(battle.p1.invite, '');
+				assert.equal(Ladders.challenges.search(players[1].id, replacement.id), null);
+				assert.equal(battle.p1.id, '');
+				assert.equal(battle.p1.name, players[0].name);
+				assert.equal(battle.playerTable[replacement.id], undefined);
+				assert.notEqual(room.auth.get(replacement.id), Users.PLAYER_SYMBOL);
+			});
+		}
+
+		for (const slot of ['p2', undefined]) {
+			it(`should still replace a player who left ${slot ? 'explicitly' : 'automatically'}`, () => {
+				assert(battle.leaveGame(players[1]));
+				room.auth.set(replacement.id, Users.PLAYER_SYMBOL);
+				assert.equal(battle.joinGame(replacement, slot), true);
+				assert.equal(battle.playerTable[replacement.id]?.slot, 'p2');
+				assert.equal(battle.p1.id, '');
+				assert.equal(battle.p2.eliminated, false);
+			});
+		}
+
+		it('should ignore stale invitations to eliminated slots when choosing a slot', () => {
+			assert(battle.leaveGame(players[1]));
+			battle.p1.invite = replacement.id;
+			room.auth.set(replacement.id, Users.PLAYER_SYMBOL);
+			assert.equal(battle.joinGame(replacement), true);
+			assert.equal(battle.playerTable[replacement.id]?.slot, 'p2');
+			assert.equal(battle.p1.id, '');
+		});
+
+		it('should still invite a replacement for a player who left', async () => {
+			assert(battle.leaveGame(players[1]));
+			await Chat.parse(`/addplayer ${replacement.name}, p2`, room, players[2], players[2].connections[0]);
+			assert.equal(battle.p2.invite, replacement.id);
+			assert(Ladders.challenges.search(players[2].id, replacement.id));
+			await Chat.parse(`/acceptbattle ${players[2].id}`, null, replacement, replacement.connections[0]);
+			assert.equal(battle.playerTable[replacement.id]?.slot, 'p2');
+			assert.equal(battle.p2.invite, '');
+			assert.equal(Ladders.challenges.search(players[2].id, replacement.id), null);
+			assert.equal(battle.p1.id, '');
+		});
+	});
+
 	describe('BattleStream', () => {
 		it('should work (slow)', async () => {
 			Config.simulatorprocesses = 1;

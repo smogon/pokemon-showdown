@@ -122,7 +122,7 @@ function cacheSubProcesses(config: ConfigType) {
 			'warning' as const,
 			`You are using \`${compatKey}\`, which is deprecated\n` +
 			`Support for this may be removed.\n` +
-			`Please ensure that you update your config.js to use \`subprocesses\` (see config-example.js, line 80).\n`
+			`Please ensure that you update your config.js to use \`subprocesses\` (see config-example.js, line 89).\n`
 		);
 	}
 }

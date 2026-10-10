@@ -25,9 +25,11 @@ describe('Belch', () => {
 	});
 
 	it('should count berries as consumed with Bug Bite or Pluck', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'bugbite'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'pluck'] }] });
+		battle = common.createBattle([[
+			{ species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'bugbite'] },
+		], [
+			{ species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'pluck'] },
+		]]);
 		battle.makeChoices('move Bugbite', 'move Pluck');
 		battle.makeChoices('move Belch', 'move Belch');
 		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
@@ -35,23 +37,25 @@ describe('Belch', () => {
 	});
 
 	it('should count berries as consumed when they are Flung', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Swalot', ability: 'gluttony', moves: ['belch', 'stockpile'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Machamp', ability: 'noguard', item: 'salacberry', moves: ['fling'] }] });
+		battle = common.createBattle([[
+			{ species: 'Swalot', ability: 'gluttony', moves: ['belch', 'stockpile'] },
+		], [
+			{ species: 'Machamp', ability: 'noguard', item: 'salacberry', moves: ['fling'] },
+		]]);
 		battle.makeChoices('move Stockpile', 'move Fling');
 		battle.makeChoices('move Belch', 'move Fling');
 		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
 	});
 
 	it('should still count berries as consumed after switch out', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Swalot', item: 'lumberry', moves: ['belch', 'uturn'] },
 			{ species: 'Swalot', moves: ['toxic'] },
-		] });
-		battle.setPlayer('p2', { team: [{
-			species: 'Rotom', moves: ['rest', 'willowisp'],
-		}] });
+		], [
+			{
+				species: 'Rotom', moves: ['rest', 'willowisp'],
+			},
+		]]);
 		battle.makeChoices('move Uturn', 'move Will-o-Wisp');
 		battle.makeChoices('switch 2', ''); // For U-Turn
 		battle.makeChoices('switch 2', 'move Will-o-Wisp');

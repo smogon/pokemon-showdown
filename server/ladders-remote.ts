@@ -12,10 +12,16 @@
  * @license MIT
  */
 import { Utils } from '../lib';
+import type { LadderRating, LadderUpdate } from './ladders';
+
+function parseRating(rating: unknown): LadderRating | null {
+	if (!rating || typeof rating !== 'object' || !('elo' in rating) || typeof rating.elo !== 'number') return null;
+	return rating as LadderRating;
+}
 
 export class LadderStore {
 	formatid: string;
-	static readonly formatsListPrefix = '';
+	static readonly formatsListPrefix: string = '';
 
 	constructor(formatid: string) {
 		this.formatid = formatid;
@@ -61,9 +67,7 @@ export class LadderStore {
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
 	 */
-	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject): Promise<[
-		number, AnyObject | undefined | null, AnyObject | undefined | null,
-	]> {
+	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject): Promise<LadderUpdate> {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
 			return [p1score, null, null];
@@ -134,7 +138,7 @@ export class LadderStore {
 			return [p1score, null, null];
 		}
 
-		return [p1score, data?.p1rating, data?.p2rating];
+		return [p1score, parseRating(data?.p1rating), parseRating(data?.p2rating)];
 	}
 
 	/**

@@ -11,24 +11,26 @@ describe('Stealth Rock', () => {
 	});
 
 	it('should succeed against Substitute', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Smeargle", moves: ['stealthrock'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Ninjask", moves: ['substitute'] }] });
+		battle = common.createBattle([[
+			{ species: "Smeargle", moves: ['stealthrock'] },
+		], [
+			{ species: "Ninjask", moves: ['substitute'] },
+		]]);
 		battle.makeChoices('move stealthrock', 'move substitute');
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
 	it('should deal damage to Pokemon switching in based on their type effectiveness against Rock-type', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Smeargle", moves: ['splash', 'stealthrock'] }] });
-		battle.setPlayer('p2', { team: [
+		battle = common.createBattle([[
+			{ species: "Smeargle", moves: ['splash', 'stealthrock'] },
+		], [
 			{ species: "Ninjask", moves: ['protect'] },
 			{ species: "Volcarona", moves: ['roost'] },
 			{ species: "Staraptor", moves: ['roost'] },
 			{ species: "Chansey", moves: ['wish'] },
 			{ species: "Hitmonchan", moves: ['rest'] },
 			{ species: "Steelix", moves: ['rest'] },
-		] });
+		]]);
 		battle.makeChoices('move stealthrock', 'move protect');
 		let pokemon;
 		for (let i = 2; i <= 6; i++) {

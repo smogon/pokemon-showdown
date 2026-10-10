@@ -273,7 +273,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				delete move.volatileStatus;
 				delete move.onHit;
 				move.self = { boosts: { atk: 1, def: 1, spe: -1 } };
-				move.target = move.nonGhostTarget!;
+				move.target = 'self';
 			} else if (target?.volatiles['substitute']) {
 				delete move.volatileStatus;
 				delete move.onHit;
@@ -402,6 +402,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(4, 9);
 			},
+			onStart(target, source) {
+				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
+				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
+					// it failed
+					return false;
+				}
+				this.effectState.move = target.lastMove.id;
+				this.add('-start', target, 'Encore');
+				if (this.effectState.move === 'pursuit') {
+					target.addVolatile('pursuit', target, this.dex.getActiveMove('pursuit'));
+				}
+			},
 			onResidualOrder: 10,
 			onResidualSubOrder: 14,
 		},
@@ -413,6 +425,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-fail', pokemon);
 				return null;
 			}
+		},
+	},
+	endure: {
+		inherit: true,
+		condition: {
+			inherit: true,
+			onDamage(damage, target, source, effect) {
+				if (effect?.effectType === 'Move' && !effect?.flags['futuremove'] && damage >= target.hp) {
+					this.add('-activate', target, 'move: Endure');
+					return target.hp - 1;
+				}
+			},
 		},
 	},
 	extremespeed: {
@@ -700,7 +724,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.item = '';
 				target.itemKnockedOff = true;
 				this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
-				this.hint("In Gens 3-4, Knock Off only makes the target's item unusable; it cannot obtain a new item.", true);
+				if (this.gen === 4) {
+					this.hint("In Gen 4, Knock Off makes the Pokémon unable to obtain a new item.", true);
+				}
 			}
 		},
 	},
@@ -1036,46 +1062,40 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	pursuit: {
 		inherit: true,
-		beforeTurnCallback(pokemon) {
-			if (['frz', 'slp'].includes(pokemon.status) ||
-				(pokemon.hasAbility('truant') && pokemon.volatiles['truant'])) return;
-			for (const target of pokemon.foes()) {
-				target.addVolatile('pursuit');
-				const data = target.volatiles['pursuit'];
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
-		},
 		condition: {
 			inherit: true,
-			onBeforeSwitchOut(pokemon) {
+			onFoeBeforeSwitchOut(pokemon) {
+				const source: Pokemon = this.effectState.source;
 				this.debug('Pursuit start');
-				let alreadyAdded = false;
-				for (const source of this.effectState.sources) {
-					if (!this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Pursuit');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (this.actions.canMegaEvo(source) || this.actions.canUltraBurst(source)) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
-								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
-							}
+				if (
+					['frz', 'slp'].includes(source.status) || (source.hasAbility('truant') && source.volatiles['truant']) ||
+					!source.isAdjacent(pokemon) || !source.hp ||
+					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit') ||
+					!this.queue.cancelMove(source)
+				) {
+					return;
+				}
+				if (!this.event.pursuitMessageShown) {
+					this.add('-activate', pokemon, 'move: Pursuit');
+					this.event.pursuitMessageShown = true;
+				}
+				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
+				// If it is, then Mega Evolve before moving.
+				if (this.actions.canMegaEvo(source) || this.actions.canUltraBurst(source) || this.actions.canTerastallize(source)) {
+					for (const [actionIndex, action] of this.queue.entries()) {
+						if (action.pokemon === source && action.choice === 'megaEvo') {
+							this.actions.runMegaEvo(source);
+							this.queue.list.splice(actionIndex, 1);
+							break;
 						}
 					}
-					const move = this.dex.getActiveMove('pursuit');
-					source.deductPP(move.id);
-					source.moveUsed(move, pokemon.position);
-					if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
-						source.addVolatile('choicelock');
-					}
+				}
+				const move = this.dex.getActiveMove('pursuit');
+				source.deductPP(move.id);
+				source.moveUsed(move, pokemon.position);
+				if (this.actions.useMove(move, source, { target: pokemon, sourceEffect: this.effectState.sourceEffect }) &&
+					source.getItem().isChoice) {
+					source.addVolatile('choicelock');
 				}
 			},
 		},
@@ -1307,8 +1327,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.ohko) this.add('-ohko');
-				if (move.recoil && damage) {
-					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
+				if (damage) {
+					this.actions.applyRecoilDamage(damage, move, source);
 				}
 				if (move.drain) {
 					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
