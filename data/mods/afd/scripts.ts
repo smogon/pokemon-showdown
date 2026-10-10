@@ -58,6 +58,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!speciesid) return false;
 
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
+			pokemon.m.megaEvoUsed = true;
 
 			this.battle.runEvent('AfterMega', pokemon);
 			return true;
@@ -171,6 +172,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			return pokemon.teraType;
 		},
 		canMegaEvo(pokemon) {
+			if (pokemon.m.megaEvoUsed) return false;
+
 			const species = pokemon.baseSpecies;
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 			const item = pokemon.getItem();

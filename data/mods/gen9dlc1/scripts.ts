@@ -12,6 +12,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			const item = pokemon.getItem();
 			if (item.megaStone || this.canMegaEvo(pokemon) || item.isPrimalOrb || item.zMove) return false;
 
+			const species = pokemon.baseSpecies;
+			if ((pokemon.formeRegression || this.battle.ruleTable.has('natdexmod')) &&
+				(species.isMega || species.isPrimal || species.forme === 'Ultra')) {
+				return false;
+			}
+
 			return pokemon.teraType;
 		},
 		terastallize(pokemon) {

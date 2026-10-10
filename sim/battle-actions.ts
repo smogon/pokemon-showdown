@@ -1949,6 +1949,12 @@ export class BattleActions {
 		const item = pokemon.getItem();
 		if (item.megaStone || this.canMegaEvo(pokemon) || item.isPrimalOrb || item.zMove) return false;
 
+		const species = pokemon.baseSpecies;
+		if ((pokemon.formeRegression || this.battle.ruleTable.has('natdexmod')) &&
+			(species.isMega || species.isPrimal || species.forme === 'Ultra')) {
+			return false;
+		}
+
 		if (pokemon.transformed && ['Ogerpon', 'Terapagos'].includes(pokemon.species.baseSpecies)) {
 			return false;
 		}

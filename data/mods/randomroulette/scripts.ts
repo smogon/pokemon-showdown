@@ -50,6 +50,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				side.pokemon[i].position = i;
 			}
 			side.dynamaxUsed = this.gen !== 8;
+			side.terastallizationUsed = this.gen !== 9;
 		}
 
 		// Everything below is copied from sim/battle.ts

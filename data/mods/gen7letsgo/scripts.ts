@@ -9,6 +9,18 @@ function checkMegaForme(species: Species, forme: string, battle: Battle) {
 	return null;
 }
 
+function runMegaEvolution(pokemon: Pokemon, speciesid: string | false) {
+	if (!speciesid) return false;
+
+	pokemon.formeChange(speciesid, null, true);
+	pokemon.battle.add('-mega', pokemon, pokemon.battle.dex.species.get(speciesid).baseSpecies);
+	pokemon.formeRegression = true;
+	pokemon.side.megaEvoUsed = true;
+
+	pokemon.battle.runEvent('AfterMega', pokemon);
+	return true;
+}
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
@@ -34,21 +46,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		runMegaEvo(pokemon) {
 			const speciesid = this.canMegaEvo(pokemon) || this.canMegaEvoX!(pokemon) || this.canMegaEvoY!(pokemon);
-			if (!speciesid) return false;
-
-			pokemon.formeChange(speciesid, null, true);
-			this.battle.add('-mega', pokemon, this.dex.species.get(speciesid).baseSpecies);
-			pokemon.formeRegression = true;
-			pokemon.side.megaEvoUsed = true;
-
-			this.battle.runEvent('AfterMega', pokemon);
-			return true;
+			return runMegaEvolution(pokemon, speciesid);
 		},
 		runMegaEvoX(pokemon: Pokemon) {
-			return this.canMegaEvoX!(pokemon) ? this.runMegaEvo(pokemon) : false;
+			return runMegaEvolution(pokemon, this.canMegaEvoX!(pokemon));
 		},
 		runMegaEvoY(pokemon: Pokemon) {
-			return this.canMegaEvoY!(pokemon) ? this.runMegaEvo(pokemon) : false;
+			return runMegaEvolution(pokemon, this.canMegaEvoY!(pokemon));
 		},
 	},
 	/**

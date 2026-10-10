@@ -269,7 +269,7 @@ export class Side {
 		this.ultraBurstUsed = false;
 		this.zMoveUsed = false;
 		this.dynamaxUsed = this.battle.gen !== 8;
-		this.terastallizationUsed = this.battle.gen !== 9;
+		this.terastallizationUsed = this.battle.gen !== 9 || this.battle.dex.currentMod.startsWith('champions');
 
 		this.sideConditions = {};
 		this.slotConditions = [];
