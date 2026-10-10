@@ -18716,7 +18716,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onTryImmunity(target, source) {
-			return target.hasType(source.getTypes());
+			return target.hasType(source.getTypes().filter(type => type !== '???'));
 		},
 		target: "allAdjacent",
 		type: "Psychic",
