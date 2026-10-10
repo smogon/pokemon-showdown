@@ -39,4 +39,21 @@ describe('Shell Bell', () => {
 		const cloyster = battle.p2.active[0];
 		assert.equal(cloyster.hp, 1 + Math.floor(landorus.maxhp / 8));
 	});
+
+	describe('[Gen 3]', () => {
+		it(`should heal from the damage against all targets of the move`, () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'tornadus', ability: 'compoundeyes', moves: ['superfang'] },
+				{ species: 'landorus', item: 'shellbell', moves: ['earthquake'] },
+			], [
+				{ species: 'roggenrola', level: 1, moves: ['sleeptalk'] },
+				{ species: 'aron', level: 1, moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move superfang -2, move earthquake', 'auto');
+			assert.equal(
+				battle.getDebugLog().split('\n').filter(line => line.endsWith('|[from] item: Shell Bell')).length,
+				2
+			);
+		});
+	});
 });

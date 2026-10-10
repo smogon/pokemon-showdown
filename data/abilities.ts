@@ -76,7 +76,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 184,
 	},
 	aftermath: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 4, source, target);
@@ -1186,7 +1186,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 226,
 	},
 	electromorphosis: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			target.addVolatile('charge');
 		},
@@ -2139,7 +2139,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 151,
 	},
 	innardsout: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (!target.hp) {
 				if (!move.smartTarget) damage += Number(move.totalDamage);
@@ -2223,7 +2223,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 234,
 	},
 	ironbarbs: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
@@ -3937,7 +3937,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 276,
 	},
 	roughskin: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
@@ -5510,7 +5510,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 193,
 	},
 	windpower: {
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (move.flags['wind']) {
 				target.addVolatile('charge');

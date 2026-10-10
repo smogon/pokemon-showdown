@@ -2968,7 +2968,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				status: 'brn',
 			});
 		},
-		onDamagingHitOrder: 1,
+		onDamagingHitPriority: -1,
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.damage(source.baseMaxhp / 8, source, target);
