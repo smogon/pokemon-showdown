@@ -21,14 +21,16 @@ describe(`Memento`, () => {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it(`should not cause the user to faint if used into Substitute`, () => {
+	it(`should not cause the user to faint if used into Substitute or Protect`, () => {
 		battle = common.createBattle([[
 			{ species: 'whimsicott', moves: ['memento'] },
 			{ species: 'landorus', moves: ['sleeptalk'] },
 		], [
-			{ species: 'wynaut', ability: 'prankster', moves: ['substitute'] },
+			{ species: 'wynaut', ability: 'prankster', moves: ['protect', 'substitute'] },
 		]]);
 		battle.makeChoices();
+		assert.equal(battle.requestState, 'move');
+		battle.makeChoices('move memento', 'move substitute');
 		assert.equal(battle.requestState, 'move');
 	});
 
@@ -46,6 +48,27 @@ describe(`Memento`, () => {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it(`should cause the user to faint even if the target's stats are already at -6`, () => {
+		battle = common.createBattle([[
+			{ species: 'whimsicott', moves: ['memento'] },
+			{ species: 'whimsicott', moves: ['memento'] },
+			{ species: 'whimsicott', moves: ['memento'] },
+			{ species: 'whimsicott', moves: ['memento'] },
+			{ species: 'landorus', moves: ['sleeptalk'] },
+		], [
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+		]]);
+		for (let i = 0; i < 3; i++) {
+			battle.makeChoices();
+			battle.makeChoices();
+		}
+		const wynaut = battle.p2.active[0];
+		assert.equal(wynaut.boosts.atk, -6);
+		assert.equal(wynaut.boosts.spa, -6);
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it(`should set the Z-Memento healing flag even if the Memento itself was not successful`, () => {
 		battle = common.createBattle([[
 			{ species: 'landorus', moves: ['sleeptalk'] },
@@ -58,5 +81,45 @@ describe(`Memento`, () => {
 		battle.makeChoices('move memento zmove', 'auto');
 		const landorus = battle.p1.active[0];
 		assert.fullHP(landorus);
+	});
+
+	describe(`[Gen 4]`, () => {
+		it(`should cause the user to faint if used into Substitute or Protect`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'whimsicott', moves: ['memento'] },
+				{ species: 'whimsicott', moves: ['memento'] },
+				{ species: 'landorus', moves: ['sleeptalk'] },
+			], [
+				{ species: 'wynaut', ability: 'prankster', moves: ['protect', 'substitute'] },
+			]]);
+			battle.makeChoices();
+			assert.equal(battle.requestState, 'switch');
+			battle.makeChoices();
+			battle.makeChoices('move memento', 'move substitute');
+			assert.equal(battle.requestState, 'switch');
+		});
+	});
+
+	describe(`[Gen 3]`, () => {
+		it(`should not cause the user to faint if the target's stats are already at -6`, () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'whimsicott', moves: ['memento'] },
+				{ species: 'whimsicott', moves: ['memento'] },
+				{ species: 'whimsicott', moves: ['memento'] },
+				{ species: 'whimsicott', moves: ['memento'] },
+				{ species: 'landorus', moves: ['sleeptalk'] },
+			], [
+				{ species: 'wynaut', moves: ['sleeptalk'] },
+			]]);
+			for (let i = 0; i < 3; i++) {
+				battle.makeChoices();
+				battle.makeChoices();
+			}
+			const wynaut = battle.p2.active[0];
+			assert.equal(wynaut.boosts.atk, -6);
+			assert.equal(wynaut.boosts.spa, -6);
+			battle.makeChoices();
+			assert.equal(battle.requestState, 'move');
+		});
 	});
 });
