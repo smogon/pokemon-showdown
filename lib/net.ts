@@ -17,6 +17,7 @@ export interface NetRequestOptions extends https.RequestOptions {
 	body?: string | PostData;
 	writable?: boolean;
 	query?: PostData;
+	headers?: http.OutgoingHttpHeaders & NodeJS.Dict<unknown>; // Node 22 lets headers be readonly string[]
 }
 
 export class HttpError extends Error {

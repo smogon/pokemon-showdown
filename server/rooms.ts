@@ -253,6 +253,8 @@ export abstract class BasicRoom {
 
 		this.roomid = roomid;
 		this.title = (title || roomid);
+		// should happen before making a roomlog, so we don't leave an orphaned roomlog
+		this.validateTitle(this.title, this.roomid);
 		this.parent = null;
 
 		this.userCount = 0;
@@ -301,7 +303,7 @@ export abstract class BasicRoom {
 		if (!options.isPersonal) this.persist = true;
 
 		this.minorActivity = null;
-		this.minorActivityQueue = null;
+		this.minorActivityQueue = this.settings.minorActivityQueue || null;
 		if (options.parentid) {
 			this.setParent(Rooms.get(options.parentid) || null);
 		}
@@ -331,7 +333,6 @@ export abstract class BasicRoom {
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
-		this.validateTitle(this.title, this.roomid);
 	}
 
 	toString() {
@@ -532,6 +533,7 @@ export abstract class BasicRoom {
 		if (!this.minorActivityQueue) this.minorActivityQueue = [];
 		this.minorActivityQueue.push(activity);
 		this.settings.minorActivityQueue = this.minorActivityQueue;
+		this.saveSettings();
 	}
 	clearMinorActivityQueue(slot?: number, depth = 1) {
 		if (!this.minorActivityQueue) return;
@@ -824,7 +826,7 @@ export abstract class BasicRoom {
 		// this doesn't update parentid or subroom user symbols because it's
 		// intended to be used for cleanup only
 	}
-	setPrivate(privacy: PrivacySetting) {
+	setPrivate(privacy: PrivacySetting, password?: string) {
 		this.settings.isPrivate = privacy;
 		this.saveSettings();
 
@@ -841,10 +843,12 @@ export abstract class BasicRoom {
 			if (privacy) {
 				if (this.roomid.endsWith('pw')) return true;
 
-				// This is the same password generation approach as genPassword in the client replays.lib.php
-				// but obviously will not match given mt_rand there uses a different RNG and seed.
-				let password = '';
-				for (let i = 0; i < 31; i++) password += ALPHABET[crypto.randomInt(0, ALPHABET.length - 1)];
+				if (!password) {
+					// This is the same password generation approach as genPassword in the client replays.lib.php
+					// but obviously will not match given mt_rand there uses a different RNG and seed.
+					password = '';
+					for (let i = 0; i < 31; i++) password += ALPHABET[crypto.randomInt(0, ALPHABET.length - 1)];
+				}
 
 				this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
 			} else {
@@ -1078,7 +1082,7 @@ export abstract class BasicRoom {
 	runAutoModchat() {
 		if (!this.settings.autoModchat || this.settings.autoModchat.active) return;
 		// they are staff and online
-		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%') && u.statusType === 'online');
+		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%'));
 		if (!staff.length) {
 			const { time } = this.settings.autoModchat;
 			if (!time || time < 5) {
@@ -1182,8 +1186,8 @@ export abstract class BasicRoom {
 		Rooms.rooms.delete(this.roomid);
 		if (this.roomid === 'lobby') Rooms.lobby = null;
 	}
-	tr(strings: string | TemplateStringsArray, ...keys: any[]) {
-		return Chat.tr(this.settings.language || 'english' as ID, strings, ...keys);
+	TL(strings: string | TemplateStringsArray, ...keys: any[]) {
+		return Chat.TLto(this.settings.language || 'english' as ID, strings, ...keys);
 	}
 }
 
@@ -1496,7 +1500,17 @@ export class GlobalRoomState {
 			// 32 was previously used for Multi Battles
 			if (format.bestOfDefault) displayCode |= 64;
 			if (format.teraPreviewDefault) displayCode |= 128;
+			if (format.itemClauseDefault) displayCode |= 256;
 			this.formatList += ',' + displayCode.toString(16);
+
+			// virtual formats don't support challengeShow or tournamentShow
+			const virtualDisplayCode = displayCode & ~(4 | 8);
+			for (const formatAlias in Ladders.virtualFormats) {
+				const entry = Ladders.virtualFormats[formatAlias];
+				if (entry.format === format.id) {
+					this.formatList += `|${entry.name},${virtualDisplayCode.toString(16)}`;
+				}
+			}
 		}
 		return this.formatList;
 	}
@@ -2067,7 +2081,7 @@ export class GameRoom extends BasicRoom {
 			options === 'forpunishment' || (this as any).unlistReplay ? 2 :
 			isPrivate ? 1 :
 			0;
-		if (isPrivate && hidden === 10) {
+		if (isPrivate && hidden !== 2) {
 			password = (battle.password ||= Replays.generatePassword());
 		}
 		if (battle.replaySaved !== true && hidden === 10) {

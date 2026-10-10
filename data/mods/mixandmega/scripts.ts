@@ -1,6 +1,10 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	init() {
+		this.modData('Abilities', 'dragonize').isNonstandard = null;
+		this.modData('Abilities', 'megasol').isNonstandard = null;
+		this.modData('Abilities', 'piercingdrill').isNonstandard = null;
+		this.modData('Abilities', 'spicyspray').isNonstandard = null;
 		for (const i in this.data.Items) {
 			const item = this.data.Items[i];
 			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
@@ -123,14 +127,15 @@ export const Scripts: ModdedBattleScriptsData = {
 				const behemothMove: { [k: string]: string } = {
 					'Rusted Sword': 'behemothblade', 'Rusted Shield': 'behemothbash',
 				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
+				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+				if (ironHeadIndex >= 0) {
 					const move = this.dex.moves.get(behemothMove[pokemon.getItem().name]);
-					pokemon.baseMoveSlots[ironHead] = {
+					const pp = this.calculatePP(move, pokemon.ppUps[ironHeadIndex]);
+					pokemon.baseMoveSlots[ironHeadIndex] = {
 						move: move.name,
 						id: move.id,
-						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
-						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						pp,
+						maxpp: pp,
 						target: move.target,
 						disabled: false,
 						disabledSource: '',
@@ -270,7 +275,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
+			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.hp] as const);
 			this.fieldEvent('Residual');
 			this.add('upkeep');
 			break;
@@ -318,18 +323,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
+				this.runEvent('EmergencyExit', pokemon, undefined, undefined, originalHP);
 			}
 		}
 
 		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
+			this.runEvent('EmergencyExit', action.pokemon, undefined, undefined, pokemonOriginalHP!);
 		}
 
 		const switches = this.sides.map(
@@ -393,22 +392,27 @@ export const Scripts: ModdedBattleScriptsData = {
 		runMegaEvo(pokemon) {
 			if (pokemon.species.isMega) return false;
 
-			const species: Species = (this as any).getMixedSpecies(pokemon.m.originalSpecies, pokemon.canMegaEvo, pokemon);
+			const isUltraBurst = !pokemon.canMegaEvo;
 
-			/* Do we have a proper sprite for it? Code for when megas actually exist
-			if (this.dex.species.get(pokemon.canMegaEvo!).baseSpecies === pokemon.m.originalSpecies) {
+			const species: Species = (this as any).getMixedSpecies(pokemon.m.originalSpecies,
+				pokemon.canMegaEvo || pokemon.canUltraBurst, pokemon);
+
+			/// Do we have a proper sprite for it? Code for when megas actually exist
+			if (this.battle.ruleTable.has('natdexmod') &&
+				(isUltraBurst || this.dex.species.get(pokemon.canMegaEvo as any).baseSpecies === pokemon.m.originalSpecies)) {
 				pokemon.formeChange(species, pokemon.getItem(), true);
-			} else { */
-			const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
-			const oMegaSpecies = this.dex.species.get((species as any).originalSpecies);
-			pokemon.formeChange(species, pokemon.getItem(), true);
-			this.battle.add('-start', pokemon, oMegaSpecies.requiredItem, '[silent]');
-			if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
-				this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+			} else {
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+				const oMegaSpecies = this.dex.species.get((species as any).originalSpecies);
+				pokemon.formeChange(species, pokemon.getItem(), true);
+				this.battle.add('-start', pokemon, oMegaSpecies.requiredItem, '[silent]');
+				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
+					this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: Mix and Mega');
+				}
 			}
-			// }
 
 			pokemon.canMegaEvo = false;
+			if (this.battle.ruleTable.has('natdexmod') && isUltraBurst) pokemon.canUltraBurst = null;
 			return true;
 		},
 		terastallize(pokemon) {
@@ -455,9 +459,11 @@ export const Scripts: ModdedBattleScriptsData = {
 		getMixedSpecies(originalForme, formeChange, pokemon) {
 			const originalSpecies = this.dex.species.get(originalForme);
 			const formeChangeSpecies = this.dex.species.get(formeChange);
-			if (originalSpecies.baseSpecies === formeChangeSpecies.baseSpecies &&
-				!formeChangeSpecies.isMega && !formeChangeSpecies.isPrimal) {
-				return formeChangeSpecies;
+			if (originalSpecies.baseSpecies === formeChangeSpecies.baseSpecies) {
+				if (this.battle.ruleTable.has('natdexmod') ||
+					(!formeChangeSpecies.isMega && !formeChangeSpecies.isPrimal)) {
+					return formeChangeSpecies;
+				}
 			}
 			const deltas = (this as any).getFormeChangeDeltas(formeChangeSpecies, pokemon);
 			const species = (this as any).mutateOriginalSpecies(originalSpecies, deltas);

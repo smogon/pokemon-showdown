@@ -376,8 +376,25 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			console.log('Could not start static server');
 		}
 
-		// SockJS server
+		this.setupSockJS(config.wsdeflate);
 
+		process.once('disconnect', () => this.cleanup());
+		process.once('exit', () => this.cleanup());
+
+		this.server.listen(config.port, config.bindaddress);
+		console.log(`Worker ${PM.workerid} now listening on ${config.bindaddress}:${config.port}`);
+
+		if (this.serverSsl) {
+			// @ts-expect-error if appssl exists, then `config.ssl` must also exist
+			this.serverSsl.listen(config.ssl.port, config.bindaddress);
+			// @ts-expect-error if appssl exists, then `config.ssl` must also exist
+			console.log(`Worker ${PM.workerid} now listening for SSL on port ${config.ssl.port}`);
+		}
+
+		console.log(`Test your server at http://${config.bindaddress === '0.0.0.0' ? 'localhost' : config.bindaddress}:${config.port}`);
+	}
+
+	setupSockJS(wsdeflate?: typeof Config.wsdeflate) {
 		// This is the main server that handles users connecting to our server
 		// and doing things on our server.
 
@@ -390,9 +407,9 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			},
 		};
 
-		if (config.wsdeflate !== null) {
+		if (wsdeflate !== null) {
 			try {
-				const deflate = (require as any)('permessage-deflate').configure(config.wsdeflate);
+				const deflate = (require as any)('permessage-deflate').configure(wsdeflate);
 				options.faye_server_options = { extensions: [deflate] };
 			} catch {
 				crashlogger(
@@ -404,24 +421,30 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 		const server = sockjs.createServer(options);
 
-		process.once('disconnect', () => this.cleanup());
-		process.once('exit', () => this.cleanup());
-
-		// this is global so it can be hotpatched if necessary
 		server.on('connection', connection => this.onConnection(connection));
-		server.installHandlers(this.server, {});
-		this.server.listen(config.port, config.bindaddress);
-		console.log(`Worker ${PM.workerid} now listening on ${config.bindaddress}:${config.port}`);
 
-		if (this.serverSsl) {
-			server.installHandlers(this.serverSsl, {});
-			// @ts-expect-error if appssl exists, then `config.ssl` must also exist
-			this.serverSsl.listen(config.ssl.port, config.bindaddress);
-			// @ts-expect-error if appssl exists, then `config.ssl` must also exist
-			console.log(`Worker ${PM.workerid} now listening for SSL on port ${config.ssl.port}`);
+		for (const httpServer of [this.server, this.serverSsl]) {
+			if (!httpServer) continue;
+			server.installHandlers(httpServer, {});
+			/** SockJS's `upgrade` handler, which we're replacing with our own */
+			const upgradeHandler = httpServer.listeners('upgrade')[0];
+			httpServer.removeAllListeners('upgrade');
+			httpServer.on('upgrade', (req, socket, head) => {
+				// don't crash when sockets get `ECONNRESET`
+				socket.on('error', () => socket.destroy());
+
+				const pathname = (req.url || '').split('?', 1)[0];
+				if (
+					req.method !== 'GET' || req.headers.upgrade?.toLowerCase() !== 'websocket' ||
+					!/^\/showdown(?:\/[^/.]+\/[^/.]+)?\/websocket\/?$/.test(pathname)
+				) {
+					// don't crash with `write after end`
+					socket.end('HTTP/1.1 400 Bad Request\r\nConnection: close\r\nContent-Length: 0\r\n\r\n', () => socket.destroy());
+					return;
+				}
+				upgradeHandler.call(httpServer, req, socket, head);
+			});
 		}
-
-		console.log(`Test your server at http://${config.bindaddress === '0.0.0.0' ? 'localhost' : config.bindaddress}:${config.port}`);
 	}
 
 	/**

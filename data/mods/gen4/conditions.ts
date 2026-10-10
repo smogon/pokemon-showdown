@@ -118,13 +118,21 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	lockedmove: {
 		inherit: true,
-		onAfterMove() {},
+		onAfterMove: undefined, // no inherit
 	},
 	choicelock: {
 		inherit: true,
 		onStart(pokemon) {
 			if (!pokemon.lastMove) return false;
 			this.effectState.move = pokemon.lastMove.id;
+		},
+	},
+	mustrecharge: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			this.add('cant', pokemon, 'recharge');
+			pokemon.removeVolatile('mustrecharge');
+			return null;
 		},
 	},
 	futuremove: {
