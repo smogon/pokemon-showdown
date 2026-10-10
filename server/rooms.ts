@@ -1503,10 +1503,12 @@ export class GlobalRoomState {
 			if (format.itemClauseDefault) displayCode |= 256;
 			this.formatList += ',' + displayCode.toString(16);
 
+			// virtual formats don't support challengeShow or tournamentShow
+			const virtualDisplayCode = displayCode & ~(4 | 8);
 			for (const formatAlias in Ladders.virtualFormats) {
 				const entry = Ladders.virtualFormats[formatAlias];
 				if (entry.format === format.id) {
-					this.formatList += `|${entry.name},${displayCode.toString(16)}`;
+					this.formatList += `|${entry.name},${virtualDisplayCode.toString(16)}`;
 				}
 			}
 		}
