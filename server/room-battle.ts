@@ -1049,7 +1049,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (this.ended || !this.started || player.eliminated) return false;
 
 		player.eliminated = true;
-		this.room.add(`|-message|${player.name}${message || ' forfeited.'}`);
+		this.room.add(`|-message|${player.name}${message || ' was made to forfeit.'}`);
 		this.endType = 'forfeit';
 		if (this.playerCap > 2) {
 			player.sendRoom(`|request|null`);

@@ -1093,7 +1093,7 @@ export const commands: Chat.ChatCommands = {
 		if (!room.game.forfeit) {
 			throw new Chat.ErrorMessage(this.TL`This kind of game can't be forfeited.`);
 		}
-		room.game.forfeit(user);
+		room.game.forfeit(user, room.bestOf ? ' forfeited the series.' : ' forfeited.');
 	},
 	forfeithelp: [
 		`/forfeit - Forfeits your currently active game, if it supports that.`,
