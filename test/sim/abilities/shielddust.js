@@ -15,7 +15,7 @@ describe('Shield Dust', () => {
 			{ species: 'Latios', ability: 'noguard', moves: ['snarl'] },
 			{ species: 'Latias', ability: 'levitate', moves: ['roost'] },
 		], [
-			{ species: 'Xerneas', ability: 'shielddust', moves: ['roost'] },
+			{ species: 'Xerneas-Active', ability: 'shielddust', moves: ['roost'] },
 			{ species: 'Yveltal', ability: 'pressure', moves: ['roost'] },
 		]]);
 		battle.makeChoices('move snarl, move roost', 'move roost, move roost');

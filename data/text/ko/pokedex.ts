@@ -3405,7 +3405,7 @@ export const PokedexText: { [id: IDEntry]: SpeciesText } = {
 		name: "제르네아스",
 		forme: null, // NEEDS TRANSLATION
 	},
-	xerneasneutral: {
+	xerneasactive: {
 		name: null, // NEEDS TRANSLATION
 		forme: null, // NEEDS TRANSLATION
 	},
