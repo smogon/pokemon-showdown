@@ -747,24 +747,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	quash: {
-		inherit: true,
-		onHit(target) {
-			if (this.activePerHalf === 1) return false; // fails in singles
-			const action = this.queue.willMove(target);
-			if (!action) return false;
-
-			action.priority = -7.1;
-			this.queue.cancelMove(target);
-			for (let i = this.queue.list.length - 1; i >= 0; i--) {
-				if (this.queue.list[i].choice === 'residual') {
-					this.queue.list.splice(i, 0, action);
-					break;
-				}
-			}
-			this.add('-activate', target, 'move: Quash');
-		},
-	},
 	rage: {
 		inherit: true,
 		isNonstandard: null,
