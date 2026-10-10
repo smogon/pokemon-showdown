@@ -1468,12 +1468,6 @@ export const commands: Chat.ChatCommands = {
 				this.popupReply(this.TL`This server requires you to be rank ${groupName} or higher to search for a battle.`);
 				return false;
 			}
-			let custom;
-			const virtual = Ladders.virtualFormats[toID(target)];
-			if (virtual) {
-				target = virtual.format;
-				custom = virtual.custom;
-			}
 			const ladder = Ladders(target);
 			if (!user.registered && Config.forceregisterelo && await ladder.getRating(user.id) >= Config.forceregisterelo) {
 				user.send(
@@ -1482,7 +1476,7 @@ export const commands: Chat.ChatCommands = {
 				return false;
 			}
 			Chat.runHandlers('onLadderSearch', user, connection, ladder.formatid as ID);
-			return ladder.searchBattle(user, connection, custom);
+			return ladder.searchBattle(user, connection);
 		}
 		return Ladders.cancelSearches(user);
 	},
