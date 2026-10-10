@@ -18,10 +18,10 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Pokémon fabuleux",
 	},
 	sublegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "Semi-Légendaire", // NEEDS QC
 	},
 	restrictedlegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "Légendaire restreint", // NEEDS QC
 	},
 	ultrabeast: {
 		name: "Ultra-Chimère",
@@ -30,7 +30,7 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Paradoxe",
 	},
 	pokestar: {
-		name: null, // NEEDS TRANSLATION
+		name: "Pokéwood", // NEEDS QC
 	},
 	zmove: {
 		name: "Capacité Z",
@@ -40,114 +40,114 @@ export const TagsText: { [id: string]: TagText } = {
 	},
 	contact: {
 		name: "Contact",
-		hint: null, // NEEDS TRANSLATION
+		hint: "déclenche Épine de Fer, Pico-Défense, etc.", // NEEDS QC
 	},
 	sound: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Son", // NEEDS QC
+		hint: "sans effet sur les Pokémon avec Anti-Bruit", // NEEDS QC
 	},
 	powder: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Poudre", // NEEDS QC
+		hint: "sans effet sur le type Plante, Envelocape, Lunettes Filtre", // NEEDS QC
 	},
 	fist: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Poing", // NEEDS QC
+		hint: "renforcée par Poing de Fer", // NEEDS QC
 	},
 	pulse: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Onde", // NEEDS QC
+		hint: "renforcée par Méga Blaster", // NEEDS QC
 	},
 	bite: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Morsure", // NEEDS QC
+		hint: "renforcée par Prognathe", // NEEDS QC
 	},
 	bullet: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Projectile", // NEEDS QC
+		hint: "sans effet sur les Pokémon avec Pare-Balles", // NEEDS QC
 	},
 	dance: {
-		name: null, // NEEDS TRANSLATION
+		name: "Danse", // NEEDS QC
 	},
 	slicing: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Tranchant", // NEEDS QC
+		hint: "renforcée par Incisif", // NEEDS QC
 	},
 	wind: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Vent", // NEEDS QC
+		hint: "active Turbine Éolienne et Aéroporté", // NEEDS QC
 	},
 	defrost: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Dégel", // NEEDS QC
+		hint: "dégèle l'utilisateur s'il est gelé", // NEEDS QC
 	},
 	recoil: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Contrecoup", // NEEDS QC
+		hint: "renforcée par Téméraire", // NEEDS QC
 	},
 	twoturnmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "Capacité en deux tours", // NEEDS QC
 	},
 	recharge: {
-		name: null, // NEEDS TRANSLATION
+		name: "Doit se reposer ensuite", // NEEDS QC
 	},
 	suppressedbygravity: {
-		name: null, // NEEDS TRANSLATION
+		name: "Bloquée par Gravité", // NEEDS QC
 	},
 	boostedbysheerforce: {
-		name: null, // NEEDS TRANSLATION
+		name: "Renforcée par Sans Limite", // NEEDS QC
 	},
 	bypassprotect: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Ignore la protection", // NEEDS QC
+		hint: "et Détection, Bouclier Royal, Pico-Défense", // NEEDS QC
 	},
 	nonreflectable: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Ignore Miroir Magik", // NEEDS QC
+		hint: "et Reflet Magik", // NEEDS QC
 	},
 	nonmirror: {
-		name: null, // NEEDS TRANSLATION
+		name: "Non imitable", // NEEDS QC
 	},
 	nonsnatchable: {
-		name: null, // NEEDS TRANSLATION
+		name: "Non saisissable", // NEEDS QC
 	},
 	bypasssubstitute: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "Ignore le clone", // NEEDS QC
+		hint: "mais ne le détruit pas", // NEEDS QC
 	},
 	gmaxmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "Capacité Gigamax", // NEEDS QC
 	},
 	past: {
-		name: null, // NEEDS TRANSLATION
+		name: "Passé", // NEEDS QC
 	},
 	truepast: {
-		name: null, // NEEDS TRANSLATION
+		name: "Passé uniquement", // NEEDS QC
 	},
 	pastunobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "Passé introuvable", // NEEDS QC
 	},
 	future: {
-		name: null, // NEEDS TRANSLATION
+		name: "Futur", // NEEDS QC
 	},
 	lgpe: {
 		name: "LGPE",
 	},
 	unobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "Introuvable", // NEEDS QC
 	},
 	cap: {
 		name: "CAP",
 	},
 	custom: {
-		name: null, // NEEDS TRANSLATION
+		name: "Personnalisé", // NEEDS QC
 	},
 	nonexistent: {
-		name: null, // NEEDS TRANSLATION
+		name: "Inexistant", // NEEDS QC
 	},
 
 	introducedgen: {
-		name: null, // NEEDS TRANSLATION
+		name: "Génération", // NEEDS QC
 	},
 	height: {
 		name: "Taille",
@@ -156,22 +156,22 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Poids",
 	},
 	hp: {
-		name: null, // NEEDS TRANSLATION
+		name: "PV", // NEEDS QC
 	},
 	atk: {
-		name: null, // NEEDS TRANSLATION
+		name: "Atq", // NEEDS QC
 	},
 	def: {
-		name: null, // NEEDS TRANSLATION
+		name: "Déf", // NEEDS QC
 	},
 	spa: {
-		name: null, // NEEDS TRANSLATION
+		name: "Atq. Spé", // NEEDS QC
 	},
 	spd: {
-		name: null, // NEEDS TRANSLATION
+		name: "Déf. Spé", // NEEDS QC
 	},
 	spe: {
-		name: null, // NEEDS TRANSLATION
+		name: "Vit.", // NEEDS QC
 	},
 	bst: {
 		name: "BST",
@@ -180,12 +180,12 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "Puissance",
 	},
 	priority: {
-		name: null, // NEEDS TRANSLATION
+		name: "Priorité", // NEEDS QC
 	},
 	accuracy: {
 		name: "Précision",
 	},
 	maxpp: {
-		name: null, // NEEDS TRANSLATION
+		name: "PP Max", // NEEDS QC
 	},
 };
