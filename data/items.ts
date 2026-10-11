@@ -8187,7 +8187,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			return !item.megaStone?.[source.baseSpecies.baseSpecies];
 		},
 		num: -100,
-		gen: 6,
+		gen: 9,
 		isNonstandard: "CAP",
 	},
 };

@@ -5708,7 +5708,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.field.addPseudoWeather('trickroom');
 		},
 		flags: {},
-		name: "Regresión Primigenia",
+		name: "Regresion Primigenia",
 		rating: 4.5,
 		num: -100,
 	},
