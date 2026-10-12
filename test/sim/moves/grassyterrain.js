@@ -130,6 +130,22 @@ describe('Grassy Terrain', () => {
 		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should still be active turn 5, ending turn 6.`);
 	});
 
+	it(`should not heal Pokemon after being replaced by another terrain earlier in the same end-of-turn step`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'shedinja', ability: 'psychicsurge', moves: ['sleeptalk'] },
+			{ species: 'passimian', ability: 'receiver', moves: ['sleeptalk'] },
+		], [
+			{ species: 'hippowdon', ability: 'sandstream', moves: ['sleeptalk'] },
+			{ species: 'garchomp', moves: ['grassyterrain'] },
+		]]);
+
+		// Sandstorm KOs Shedinja, then Receiver copies Psychic Surge, which replaces Grassy Terrain
+		battle.makeChoices();
+		const passimian = battle.p1.active[1];
+		assert(battle.field.isTerrain('psychicterrain'));
+		assert.equal(passimian.hp, passimian.maxhp - Math.floor(passimian.maxhp / 16), `Passimian should not have been healed by Grassy Terrain.`);
+	});
+
 	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, () => {
 		battle = common.createBattle([[
 			{ species: 'coalossal', ability: 'grassysurge', moves: ['sleeptalk', 'rockthrow'] },

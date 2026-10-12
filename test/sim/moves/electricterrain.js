@@ -112,6 +112,22 @@ describe('Electric Terrain', () => {
 		assert.equal(resultMove, 'thunderbolt');
 	});
 
+	it(`should not end a terrain that replaced it on its last turn`, () => {
+		battle = common.createBattle([[
+			{ species: 'arboliva', ability: 'seedsower', moves: ['sleeptalk', 'electricterrain'] },
+		], [
+			{ species: 'wynaut', moves: ['sleeptalk', 'futuresight'] },
+		]]);
+
+		battle.makeChoices('move electricterrain', 'auto');
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		// Future Sight hits on Electric Terrain's last turn, before terrains count down, and activates Seed Sower
+		battle.makeChoices();
+		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should not have been ended by Electric Terrain expiring.`);
+	});
+
 	it.skip(`should block Sleep before the move would have missed`, () => {
 		battle = common.createBattle([[
 			{ species: 'tapukoko', moves: ['electricterrain'] },

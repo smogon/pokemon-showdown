@@ -516,15 +516,6 @@ export class Battle {
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
-			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
-				handler.state.duration--;
-				if (!handler.state.duration) {
-					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
-					handler.end.call(...endCallArgs as [any, ...any[]]);
-					if (this.ended) return;
-					continue;
-				}
-			}
 
 			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
 			if (handler.state?.target instanceof Pokemon) {
@@ -555,6 +546,16 @@ export class Battle {
 					expectedStateLocation = handler.state.target.pseudoWeather[effect.id];
 				}
 				if (expectedStateLocation !== handler.state) {
+					continue;
+				}
+			}
+
+			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
+				handler.state.duration--;
+				if (!handler.state.duration) {
+					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
+					handler.end.call(...endCallArgs as [any, ...any[]]);
+					if (this.ended) return;
 					continue;
 				}
 			}

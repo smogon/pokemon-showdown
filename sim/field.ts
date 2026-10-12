@@ -67,7 +67,8 @@ export class Field {
 		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
-		this.weatherState = this.battle.initEffectState({ id: status.id });
+		// field conditions have no creation order (effectOrder 0)
+		this.weatherState = this.battle.initEffectState({ id: status.id, target: this }, 0);
 		if (source) {
 			this.weatherState.source = source;
 			this.weatherState.sourceSlot = source.getSlot();
@@ -138,12 +139,14 @@ export class Field {
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
+		// field conditions have no creation order (effectOrder 0)
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
+			target: this,
 			source,
 			sourceSlot: source.getSlot(),
 			duration: status.duration,
-		});
+		}, 0);
 		if (status.durationCallback) {
 			this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
@@ -197,12 +200,14 @@ export class Field {
 			if (!(status as any).onFieldRestart) return false;
 			return this.battle.singleEvent('FieldRestart', status, state, this, source, sourceEffect);
 		}
+		// field conditions have no creation order (effectOrder 0)
 		state = this.pseudoWeather[status.id] = this.battle.initEffectState({
 			id: status.id,
+			target: this,
 			source,
 			sourceSlot: source?.getSlot(),
 			duration: status.duration,
-		});
+		}, 0);
 		if (status.durationCallback) {
 			if (!source) throw new Error(`setting fieldcond without a source`);
 			state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
