@@ -8188,6 +8188,5 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: -100,
 		gen: 9,
-		isNonstandard: "CAP",
 	},
 };

@@ -28,8 +28,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Super Effective",
 		desc: "All damaging moves are super effective!",
 		mod: 'supereffective',
-		ruleset: ['Standard', 'Super Effective Mod'],
-		banlist: ['Uber', 'AG', 'Baton Pass'],
+		ruleset: ['Standard NatDex', 'Super Effective Mod', 'Terastal Clause'],
+		banlist: ['ND Uber', 'ND AG', 'Baton Pass'],
+		unbanlist: ['Future', 'froslassite', 'absolitez', 'absolitez', 'barbaracite', 'baxcalibrite', 'chandelurite',
+		 'chesnaughtite', 'chimechite', 'clefablite', 'crabominite', 'delphoxite', 'dragalgite', 'dragoninite', 'drampanite', 'eelektrossite',
+		 'emboarite', 'excadrite', 'falinksite', 'feraligite', 'garchompitez', 'glimmoranite', 'golisopite', 'golurkite', 'greninjite',
+		 'hawluchanite', 'lucarionitez', 'malamarite', 'meganiumite', 'meowsticite', 'pyroarite', 'raichunitex', 'raichunitey', 'scolipite',
+		 'scovillainite', 'scraftinite', 'skarmorite', 'staraptite', 'starminite', 'victreebelite']
 	},
 	{
 		name: "[Gen 9] No Effectivenes",

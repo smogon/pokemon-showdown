@@ -13098,7 +13098,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Tyrantrum",
 		forme: "Mega",
 		types: ["Rock", "Dragon"],
-		baseStats: { hp: 82, atk: 151, def: 139, spa: 49, spd: 99, spe: 31 },
+		baseStats: { hp: 82, atk: 171, def: 139, spa: 49, spd: 119, spe: 31 },
 		abilities: { 0: "Regresion Primigenia" },
 		heightm: 2.5,
 		weightkg: 290,
