@@ -1723,6 +1723,10 @@ export const pages: Chat.PageTable = {
 					buf += `<p>${this.TL`If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!`}</p>`;
 					buf += `<p><Button>confirmroomhelp</Button></p>`;
 					break;
+				case 'registerbot':
+					buf += `<p>${this.TL`If you are a bot developer, and would like to register your bot on the ladder, please fill out the form below and we'll be happy to assist!`}</p>`;
+					buf += `<p><Button>confirmregisterbot</Button></p>`;
+					break;
 				case 'other':
 					buf += `<p>${this.TL`If your issue is not handled above, click the button below to talk to a global staff member. Please be ready to explain the situation.`}</p>`;
 					if (!isLast) break;
