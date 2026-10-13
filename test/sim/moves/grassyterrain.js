@@ -146,8 +146,8 @@ describe('Grassy Terrain', () => {
 		assert.equal(passimian.hp, passimian.maxhp - Math.floor(passimian.maxhp / 16), `Passimian should not have been healed by Grassy Terrain.`);
 	});
 
-	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, () => {
-		battle = common.createBattle([[
+	it(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, () => {
+		battle = common.gen(8).createBattle([[
 			{ species: 'coalossal', ability: 'grassysurge', moves: ['sleeptalk', 'rockthrow'] },
 		], [
 			{ species: 'shedinja', ability: 'neutralizinggas', item: 'focussash', moves: ['dragonrage'] },
@@ -157,11 +157,43 @@ describe('Grassy Terrain', () => {
 		battle.makeChoices('move rockthrow dynamax', 'auto');
 		const coalossal = battle.p1.active[0];
 		assert.equal(coalossal.hp, coalossal.maxhp - 40 + Math.floor(coalossal.maxhp / 2 / 16), `Coalossal should have recovered HP from Grassy Terrain.`);
-		battle.makeChoices();
-		// Kill turns with Wynaut and Coalossal
-		for (let i = 0; i < 4; i++) {
+		assert.equal(battle.field.terrainState.duration, 4, `Grassy Terrain should count down on the turn it was set.`);
+		for (let duration = 3; duration > 0; duration--) {
 			battle.makeChoices();
+			assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should last through turn ${5 - duration}.`);
+			assert.equal(battle.field.terrainState.duration, duration);
 		}
-		assert.false(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should have ended turn 5.`);
+		battle.makeChoices();
+		assert.false(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should end at the end of turn 5.`);
+	});
+
+	it(`should heal from Grassy Terrain set by Receiver during the same Residual event`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'shedinja', ability: 'grassysurge', moves: ['sleeptalk'] },
+			{ species: 'passimian', ability: 'receiver', item: 'safetygoggles', moves: ['sleeptalk'] },
+		], [
+			{ species: 'hippowdon', ability: 'sandstream', moves: ['sleeptalk'] },
+			{ species: 'garchomp', moves: ['electricterrain'] },
+		]]);
+		const shedinja = battle.p1.active[0];
+		const passimian = battle.p1.active[1];
+		passimian.hp -= 50;
+		const hpBeforeResidual = passimian.hp;
+
+		// Electric Terrain replaces the initial Grassy Terrain before Sandstorm KOs Shedinja.
+		// Receiver then copies Grassy Surge and sets a new terrain during Residual.
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move electricterrain');
+
+		assert.equal(shedinja.hp, 0, `Sandstorm should KO Shedinja during Residual.`);
+		assert.equal(passimian.ability, 'grassysurge');
+		assert(battle.field.isTerrain('grassyterrain'));
+		assert.equal(passimian.hp, hpBeforeResidual + Math.floor(passimian.maxhp / 16));
+		assert.equal(battle.field.terrainState.duration, 4, `The terrain should count down after it is set during Residual.`);
+		const log = battle.getDebugLog();
+		const sandstormIndex = log.indexOf('|-damage|p1a: Shedinja|');
+		const terrainStartIndex = log.lastIndexOf('|-fieldstart|move: Grassy Terrain|[from] ability: Grassy Surge');
+		const healIndex = log.lastIndexOf('|-heal|p1b: Passimian|');
+		assert(sandstormIndex < terrainStartIndex, `Sandstorm should KO Shedinja before Receiver starts Grassy Terrain.`);
+		assert(terrainStartIndex < healIndex, `The new Grassy Terrain should heal after Receiver starts it.`);
 	});
 });
