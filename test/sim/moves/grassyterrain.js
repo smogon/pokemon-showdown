@@ -207,4 +207,42 @@ describe('Grassy Terrain', () => {
 		battle.makeChoices(); // End of turn 5
 		assert.equal(battle.field.terrain, '');
 	});
+
+	it('should heal only later targets when Receiver starts terrain inside the recovery block', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'shedinja', ability: 'grassysurge', item: 'blacksludge', moves: ['sleeptalk'] },
+			{ species: 'passimian', ability: 'receiver', moves: ['sleeptalk'] },
+		], [
+			{ species: 'alakazam', moves: ['sleeptalk', 'electricterrain'] },
+			{ species: 'snorlax', moves: ['sleeptalk'] },
+		]]);
+		const [shedinja, passimian] = battle.p1.active;
+		const [alakazam, snorlax] = battle.p2.active;
+		assert(passimian.speed > shedinja.speed && alakazam.speed > shedinja.speed && shedinja.speed > snorlax.speed);
+		for (const pokemon of [passimian, alakazam, snorlax]) pokemon.hp -= 50;
+		const hp = [passimian.hp, alakazam.hp, snorlax.hp];
+		const start = battle.log.length;
+		// Black Sludge KOs Shedinja at order 5/subOrder 4. Faster targets have
+		// passed their recovery position, but Snorlax's position is still ahead.
+		battle.makeChoices('auto', 'move electricterrain, move sleeptalk');
+		assert.equal(shedinja.hp, 0);
+		assert.equal(passimian.ability, 'grassysurge');
+		assert.equal(passimian.hp, hp[0]);
+		assert.equal(alakazam.hp, hp[1]);
+		assert.equal(snorlax.hp, hp[2] + Math.floor(snorlax.baseMaxhp / 16));
+		assert.equal(battle.field.terrain, 'grassyterrain');
+		assert.equal(battle.field.terrainState.duration, 4);
+		const log = battle.log.slice(start);
+		const faint = log.findIndex(line => line.startsWith('|faint|p1a: Shedinja'));
+		const terrain = log.findIndex(line => line.startsWith('|-fieldstart|move: Grassy Terrain'));
+		const heal = log.findIndex(line => line.startsWith('|-heal|p2b: Snorlax|'));
+		assert(faint >= 0 && faint < terrain && terrain < heal);
+		assert(log.filter(line => line.startsWith('|-heal|')).every(line => line.startsWith('|-heal|p2b: Snorlax|')));
+		for (let turn = 2; turn <= 4; turn++) {
+			battle.makeChoices();
+			assert.equal(battle.field.terrainState.duration, 5 - turn);
+		}
+		battle.makeChoices();
+		assert.equal(battle.field.terrain, '');
+	});
 });

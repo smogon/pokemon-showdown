@@ -278,6 +278,43 @@ describe('Residual terrain lifecycle', () => {
 		assert.false(battle.field.getPseudoWeather('trickroom'));
 	});
 
+	it('should skip the old weather callback when terrain is added after clearing weather', () => {
+		const source = createBattle();
+		const hp = source.hp;
+		battle.field.setWeather('sandstorm', source);
+		const old = battle.field.weatherState;
+		battle.onEvent('Residual', battle.format, { order: 1, priority: 1 }, target => {
+			if (target !== source) return;
+			battle.field.clearWeather();
+			battle.field.setTerrain('grassyterrain', source);
+		});
+		const start = battle.log.length;
+		battle.makeChoices();
+		assert.equal(battle.field.weather, '');
+		assert.equal(old.id, '');
+		assert.equal(old.duration, undefined);
+		assert.equal(source.hp, hp + Math.floor(source.baseMaxhp / 16));
+		assert.equal(battle.field.terrainState.duration, 4);
+		assert.false(battle.log.slice(start).some(line => line === '|-weather|Sandstorm|[upkeep]'));
+	});
+
+	it('should keep a pseudo-weather replacement outside terrain-only reconciliation', () => {
+		const source = createBattle();
+		battle.field.addPseudoWeather('trickroom', source);
+		const old = battle.field.pseudoWeather.trickroom;
+		battle.onEvent('Residual', battle.format, { order: 3 }, target => {
+			if (target !== source) return;
+			battle.field.removePseudoWeather('trickroom');
+			battle.field.addPseudoWeather('trickroom', source);
+			battle.field.setTerrain('grassyterrain', source);
+		});
+		battle.makeChoices();
+		assert.notEqual(battle.field.pseudoWeather.trickroom, old);
+		assert.equal(old.duration, 5);
+		assert.equal(battle.field.pseudoWeather.trickroom.duration, 5, 'Only terrain lifecycle is registered dynamically');
+		assert.equal(battle.field.terrainState.duration, 4);
+	});
+
 	for (const [gen, terrain] of [[6, 'grassyterrain'], [7, 'psychicterrain'], [8, 'electricterrain'], [9, 'mistyterrain']]) {
 		it(`should schedule ${terrain} with its existing duration rules in Gen ${gen}`, () => {
 			battle = common.gen(gen).createBattle([[
