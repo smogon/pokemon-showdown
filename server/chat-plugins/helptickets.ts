@@ -1047,6 +1047,7 @@ const ticketPages: { [k: string]: string } = {
 	misc: TLkey`Something else`,
 	password: TLkey`I lost my password`,
 	roomhelp: TLkey`I need global staff to help watch a public room`,
+	registerbot: TLkey`I want to register my bot`,
 	other: TLkey`Other`,
 
 	confirmpmharassment: TLkey`Report harassment in a private message (PM)`,
@@ -1434,6 +1435,34 @@ export const textTickets: { [k: string]: TextTicketInfo } = {
 			writeTickets();
 		},
 	},
+	registerbot: {
+		title: "What is the username of the bot you wish to register?",
+		contextMessage: "What is a username we can contact you as the bot owner at?",
+		checker(input, context, pageId, user) {
+			input = toID(input);
+			context = toID(context);
+			if (!input || !context || input.length > 18 || context.length > 18) {
+				return [
+					'You must provide both the username of the bot and a username we can contact you at.',
+					'You have not provided both a valid bot and a valid owner name.',
+				];
+			}
+			if (user.locked || user.semilocked || user.namelocked) {
+				return ['Punished users may not register bots.'];
+			}
+			return true;
+		},
+		getReviewDisplay(ticket, staff, conn, state) {
+			if (!staff.can('rangeban')) throw new Chat.ErrorMessage(`Only upper staff can handle these tickets.`);
+			const [bot, owner] = ticket.text.map(toID);
+			let buf = `Request made by: ${owner}${owner !== ticket.userid ? ` (ticket by ${ticket.userid})` : ''}`;
+			buf += `<button name="send" value="/modlog global,user=${owner}">Modlog</button><br />`;
+			buf += `Bot user: ${bot} <button name="send" value="/modlog global,user=${bot}">Modlog</button><br />`;
+			buf += `Confirmed they're indeed a bot? Confirmed the user is well-behaved? `;
+			buf += `<button name="send" value="/setbot ${owner},${bot}">Register</button><br />`;
+			return buf;
+		},
+	},
 };
 
 export const pages: Chat.PageTable = {
@@ -1684,6 +1713,7 @@ export const pages: Chat.PageTable = {
 					if (!isLast) break;
 					buf += `<p><Button>password</Button></p>`;
 					if (user.trusted || isStaff) buf += `<p><Button>roomhelp</Button></p>`;
+					buf += `<p><Button>registerbot</Button></p>`;
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
