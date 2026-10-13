@@ -1292,6 +1292,21 @@ export const commands: Chat.ChatCommands = {
 		`/endemergency - Turns off emergency mode. Requires: ~`,
 	],
 
+	async setbot(target, room, user) {
+		this.checkCan('rangeban');
+		const [owner, bot] = target.split(',').map(toID);
+		if (!owner || !bot) return this.popupReply(`Invalid owner/bot usernames specified.`);
+		const [res, error] = await LoginServer.request('setbot', {
+			bot, owner,
+		});
+		if (error) {
+			this.popupReply(error.message);
+			return null;
+		}
+		if (res.success) return this.popupReply(`User ${bot} successfully registered as ${owner}'s bot.`);
+		return this.popupReply(`Registration for ${bot} and ${owner} failed without an error message. Try again later.`);
+	},
+
 	remainingbattles() {
 		this.checkCan('lockdown');
 
