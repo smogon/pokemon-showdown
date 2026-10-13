@@ -1299,8 +1299,8 @@ export const commands: Chat.ChatCommands = {
 		const [res, error] = await LoginServer.request('setbot', {
 			bot, owner,
 		});
-		if (error) {
-			this.popupReply(error.message);
+		if (error || res.actionerror) {
+			this.popupReply(error?.message || res?.actionerror);
 			return null;
 		}
 		if (res.success) return this.popupReply(`User ${bot} successfully registered as ${owner}'s bot.`);
