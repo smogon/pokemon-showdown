@@ -490,7 +490,7 @@ export class PageContext extends MessageContext {
 			}
 			Monitor.crashlog(err, 'A chat page', {
 				user: this.user.name,
-				room: this.room && this.room.roomid,
+				room: this.room?.roomid ?? null,
 				pageid: this.pageid,
 			});
 			this.setHTML(
@@ -550,7 +550,7 @@ export class CommandContext extends MessageContext {
 		recursionDepth?: number, isQuiet?: boolean, broadcastPrefix?: string, bypassRoomCheck?: boolean,
 	}) {
 		super(
-			options.user, options.room && options.room.settings.language ?
+			options.user, options.room?.settings.language ?
 				options.room.settings.language : options.user.language
 		);
 
@@ -1088,7 +1088,7 @@ export class CommandContext extends MessageContext {
 		const cooldownMessage = overrideCooldown === true ? null : (overrideCooldown || broadcastMessage);
 
 		if (
-			cooldownMessage && this.room && this.room.lastBroadcast === cooldownMessage &&
+			cooldownMessage && this.room?.lastBroadcast === cooldownMessage &&
 			this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN
 		) {
 			throw new Chat.ErrorMessage(`You can't broadcast this because it was just broadcasted. If this was intentional, use !rebroadcast ${this.message}`);
@@ -1189,7 +1189,7 @@ export class CommandContext extends MessageContext {
 							this.TL`Because moderated chat is set, your account must be staff in a public room or have a global rank to speak in this room.`
 						);
 					}
-					const groupName = Config.groups[room.settings.modchat] && Config.groups[room.settings.modchat].name ||
+					const groupName = Config.groups[room.settings.modchat]?.name ||
 						room.settings.modchat;
 					throw new Chat.ErrorMessage(
 						this.TL`Because moderated chat is set, you must be of rank ${groupName} or higher to speak in this room.`
@@ -1225,7 +1225,7 @@ export class CommandContext extends MessageContext {
 				}
 				if (Config.pmmodchat && !Users.globalAuth.atLeast(user, Config.pmmodchat) &&
 					!Users.Auth.hasPermission(targetUser, 'promote', Config.pmmodchat as GroupSymbol)) {
-					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
+					const groupName = Config.groups[Config.pmmodchat]?.name || Config.pmmodchat;
 					throw new Chat.ErrorMessage(this.TL`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
 				if (!this.checkCanPM(targetUser)) {
@@ -1761,7 +1761,7 @@ export const Chat = new class {
 		Chat.languages.set('english' as ID, 'English');
 		for (const dirname of directories) {
 			const language = Dex.text.findLanguage(dirname);
-			if (!language || language.code !== dirname) continue;
+			if (language?.code !== dirname) continue;
 			const files = await FS(`${TRANSLATION_DIRECTORY}/${dirname}`).readdir();
 			const catalogs: TranslationCatalog[] = [];
 			for (const filename of files.sort()) {

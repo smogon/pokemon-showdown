@@ -1180,7 +1180,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			let [teamName, leader] = target.split(',');
 			teamName = teamName.trim();
@@ -1201,7 +1201,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			if (!game.teams[target]) throw new Chat.ErrorMessage(`The team ${target} does not exist.`);
 
@@ -1212,7 +1212,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		addplayer(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
 			let userTeam;
@@ -1247,7 +1247,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		editplayers(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 			this.checkCan('mute', null, room);
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
@@ -1298,7 +1298,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			room = this.requireRoom();
 
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			const display = [];
 			for (const teamID in game.teams) {
@@ -1312,7 +1312,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		guesses(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			const team = game.getPlayerTeam(user);
 			if (!team) throw new Chat.ErrorMessage('You are not currently part of this Team Scavs game.');
@@ -1324,7 +1324,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		note(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			const team = game.getPlayerTeam(user);
 			if (!team) throw new Chat.ErrorMessage('You are not currently part of this Team Scavs game.');

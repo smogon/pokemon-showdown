@@ -1572,7 +1572,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
-		if (!chall || chall.from !== user.id) {
+		if (chall?.from !== user.id) {
 			connection.popup(`You are not challenging ${this.pmTarget.name}. Maybe they accepted/rejected before you cancelled?`);
 			return false;
 		}
@@ -1592,7 +1592,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
-		if (!chall || chall.to !== user.id) {
+		if (chall?.to !== user.id) {
 			connection.popup(`${this.pmTarget.id} is not challenging you. Maybe they cancelled before you accepted?`);
 			return false;
 		}
@@ -1615,7 +1615,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
-		if (!chall || chall.to !== user.id) {
+		if (chall?.to !== user.id) {
 			connection.popup(`${this.pmTarget.id} is not challenging you. Maybe they cancelled before you rejected?`);
 			return false;
 		}

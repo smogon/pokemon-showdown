@@ -356,7 +356,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				if (moveData.boosts && !target.fainted) {
 					if (
-						pokemon.volatiles['lockon'] && target === pokemon.volatiles['lockon'].source &&
+						target === pokemon.volatiles['lockon']?.source &&
 						target.isSemiInvulnerable() && !isSelf
 					) {
 						if (!isSecondary) this.battle.add('-fail', target);

@@ -57,7 +57,7 @@ export class LadderStore {
 		}
 		if (isNaN(mmr)) return 1000;
 
-		if (user && user.id === userid) {
+		if (user?.id === userid) {
 			user.mmrCache[formatid] = mmr;
 		}
 		return mmr;

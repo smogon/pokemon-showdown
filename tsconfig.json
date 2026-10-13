@@ -8,7 +8,8 @@
         "target": "es2020",
         "skipLibCheck": true,
         "module": "CommonJS",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
+        "types": ["node"],
         "strict": true,
         "allowJs": true,
         "checkJs": true,
@@ -19,7 +20,6 @@
         "noImplicitOverride": true,
         "useDefineForClassFields": false
     },
-    "types": ["node"],
     "exclude": [
         "/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/node_modules/typescript/lib/lib.dom.d.ts",
         "./dist/**/*",

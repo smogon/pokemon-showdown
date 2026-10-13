@@ -204,7 +204,7 @@ export abstract class Database<Pool extends mysql.Pool | pg.Pool = mysql.Pool | 
 		return this._queryExec(query, values);
 	}
 	getTable<Row>(name: string, primaryKeyName: keyof Row & string | null = null): DatabaseTable<Row, this> {
-		return new DatabaseTable<Row, this>(this, name, primaryKeyName);
+		return new DatabaseTable(this, name, primaryKeyName);
 	}
 	close() {
 		void this.connection.end();

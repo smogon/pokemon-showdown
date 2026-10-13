@@ -869,7 +869,7 @@ export class Battle {
 					if (eventid in AttackingEvents) {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
 						continue;
-					} else if (eventid === 'Damage' && sourceEffect && sourceEffect.effectType === 'Move') {
+					} else if (eventid === 'Damage' && sourceEffect?.effectType === 'Move') {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
 						continue;
 					}

@@ -10,7 +10,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onAfterSubDamage(damage, target, source, move) {
 			if (!target.hp) return;
-			if (move && move.effectType === 'Move' && target.getMoveHitData(move).crit) {
+			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
 				target.setBoost({ atk: 6 });
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
@@ -235,7 +235,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	leafguard: {
 		inherit: true,
 		onSetStatus(status, target, source, effect) {
-			if (effect && effect.id === 'rest') {
+			if (effect?.id === 'rest') {
 				// do nothing
 			} else if (this.field.isWeather('sunnyday')) {
 				return false;
@@ -261,7 +261,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	magicguard: {
 		inherit: true,
 		onSetStatus(status, target, source, effect) {
-			if (effect && effect.id === 'toxicspikes') {
+			if (effect?.id === 'toxicspikes') {
 				return false;
 			}
 		},
@@ -438,7 +438,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	stickyhold: {
 		inherit: true,
 		onTakeItem(item, pokemon, source) {
-			if ((source && source !== pokemon) || (this.activeMove && this.activeMove.id === 'knockoff')) {
+			if ((source && source !== pokemon) || (this.activeMove?.id === 'knockoff')) {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
 			}
@@ -470,7 +470,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onAfterSetStatus(status, target, source, effect) {
 			if (!source || source === target) return;
-			if (effect && effect.id === 'toxicspikes') return;
+			if (effect?.id === 'toxicspikes') return;
 			let id: string = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';

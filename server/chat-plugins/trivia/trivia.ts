@@ -2464,7 +2464,9 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		user.lastCommand = '';
 
+		// Database implementations can finish synchronously or return a Promise.
 		await Promise.all(
+			// eslint-disable-next-line @typescript-eslint/await-thenable
 			(Object.keys(LEADERBOARD_ENUM) as Leaderboard[])
 				.map(lb => database.deleteLeaderboardEntry(userid, lb))
 		);

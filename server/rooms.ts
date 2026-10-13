@@ -516,8 +516,8 @@ export abstract class BasicRoom {
 	}
 	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T, subGame = false): T | null {
 		// TODO: switch to `static readonly gameid` when all game files are TypeScripted
-		if (subGame && this.subGame && this.subGame.constructor.name === constructor.name) return this.subGame as T;
-		if (this.game && this.game.constructor.name === constructor.name) return this.game as T;
+		if (subGame && this.subGame?.constructor.name === constructor.name) return this.subGame as T;
+		if (this.game?.constructor.name === constructor.name) return this.game as T;
 		return null;
 	}
 	getMinorActivity<T extends MinorActivity>(constructor: new (...args: any[]) => T): T | null {
@@ -631,7 +631,7 @@ export abstract class BasicRoom {
 
 		for (const [i, entry] of this.muteQueue.entries()) {
 			if (entry.userid === userid ||
-				(user && entry.guestNum === user.guestNum) ||
+				(entry.guestNum === user?.guestNum) ||
 				(autoconfirmed && entry.autoconfirmed === autoconfirmed)) {
 				if (i === 0) {
 					this.muteQueue.splice(0, 1);

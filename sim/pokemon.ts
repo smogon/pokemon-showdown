@@ -2167,7 +2167,7 @@ export class Pokemon {
 	isSkyDropped() {
 		if (this.volatiles['skydrop']) return true;
 		for (const foeActive of this.side.foe.active) {
-			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === this) {
+			if (foeActive.volatiles['skydrop']?.source === this) {
 				return true;
 			}
 		}

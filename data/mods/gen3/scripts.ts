@@ -121,7 +121,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let sourceEffect = options?.sourceEffect;
 			let target = options?.target;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
-			if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
+			if (sourceEffect?.id === 'instruct') sourceEffect = null;
 
 			let move = this.dex.getActiveMove(moveOrMoveName);
 			pokemon.lastMoveUsed = move;

@@ -790,7 +790,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-			if (source.volatiles['partialtrappinglock'] && (target === source.volatiles['partialtrappinglock'].locked)) {
+			if (target === source.volatiles['partialtrappinglock']?.locked) {
 				return source.volatiles['partialtrappinglock'].damage;
 			}
 

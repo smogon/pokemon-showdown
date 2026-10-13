@@ -1640,7 +1640,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onEffectivenessPriority: 1,
 		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
-			if (move && move.id === 'freezedry' && type === 'Water') return;
+			if (move?.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.dex.getImmunity(move, type)) return 1;
 			// Ignore normal effectiveness, prevents bug with Tera Shell
 			if (typeMod) return -typeMod;
@@ -2403,7 +2403,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (noModifyType.includes(move.id)) return;
 			for (const [i, type] of types.entries()) {
 				if (!this.dex.types.isName(type)) continue;
-				if (pokemon.moveSlots[i] && move.id === pokemon.moveSlots[i].id) move.type = type;
+				if (move.id === pokemon.moveSlots[i]?.id) move.type = type;
 			}
 		},
 	},

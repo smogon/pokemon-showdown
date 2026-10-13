@@ -898,7 +898,7 @@ export const commands: Chat.ChatCommands = {
 			target = target.toLowerCase().trim().replace(/ +/g, '');
 			let [roomid, rawResult] = Utils.splitFirst(target, ',').map(f => f.trim());
 			const tarRoom = Rooms.get(roomid);
-			if (!tarRoom || !cache[tarRoom.roomid] || !cache[tarRoom.roomid]?.staffNotified) {
+			if (!tarRoom || !cache[tarRoom.roomid]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
 			}
 			if (roomid.includes('-') && roomid.endsWith('pw')) {

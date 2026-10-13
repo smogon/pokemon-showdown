@@ -2270,7 +2270,7 @@ export class TeamValidator {
 			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
-			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
+			if (dex.gen <= 5 && eventData.abilities?.length === 1 && !eventData.isHidden) {
 				if (species.name === eventSpecies.name) {
 					// has not evolved, abilities must match
 					const requiredAbility = dex.abilities.get(eventData.abilities[0]).name;

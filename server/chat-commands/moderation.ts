@@ -548,7 +548,7 @@ export const commands: Chat.ChatCommands = {
 		// If used in pms, staff, help tickets or battles, log the warn to the global modlog.
 		const globalWarn = (
 			!room || ['staff', 'adminlog'].includes(room.roomid) ||
-			room.roomid.startsWith('help-') || (room.battle && (!room.parent || room.parent.type !== 'chat'))
+			room.roomid.startsWith('help-') || (room.battle && (room.parent?.type !== 'chat'))
 		);
 
 		const { targetUser, inputUsername, targetUsername, rest: reason } = this.splitUser(target);
@@ -1284,7 +1284,7 @@ export const commands: Chat.ChatCommands = {
 		Punishments.punishRange(ip, reason, time, 'BAN');
 
 		const duration = year ? 'year' : 'hour';
-		if (!this.room || this.room.roomid !== 'staff') {
+		if (this.room?.roomid !== 'staff') {
 			this.sendReply(`You ${duration}-banned the ${ipDesc}.`);
 		}
 		this.room = Rooms.get('staff') || null;
@@ -2117,7 +2117,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`This room is not going to last long enough for a blacklist to matter - just ban the user`);
 		}
 		const punishment = Punishments.isRoomBanned(targetUser, room.roomid);
-		if (punishment && punishment.type === 'BLACKLIST') {
+		if (punishment?.type === 'BLACKLIST') {
 			throw new Chat.ErrorMessage(`This user is already blacklisted from this room.`);
 		}
 		const force = cmd === 'forceblacklist' || cmd === 'forcebl';

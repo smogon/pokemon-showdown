@@ -330,6 +330,8 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		} else if (!this.pendingRelease) {
 			this.pendingRelease = Promise.resolve();
 		}
+		// Stream destruction can finish synchronously or return a Promise.
+		// eslint-disable-next-line @typescript-eslint/await-thenable
 		return Promise.all(destroyed);
 	}
 }

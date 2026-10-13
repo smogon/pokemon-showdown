@@ -431,7 +431,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users.get(otherPlayer.id);
-				if (otherUser && otherUser.latestIp === user.latestIp) {
+				if (otherUser?.latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
 				}
@@ -506,7 +506,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users.get(otherPlayer.id);
-				if (otherUser && otherUser.latestIp === replacementUser.latestIp &&
+				if (otherUser?.latestIp === replacementUser.latestIp &&
 					replacementUser.latestIp !== user.latestIp) {
 					throw new Chat.ErrorMessage(`${replacementUser.name} already has an alt in the tournament.`);
 				}
@@ -529,7 +529,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			matchPlayer = player;
 		} else {
 			for (const p of this.players) {
-				if (p.inProgressMatch && p.inProgressMatch.to === player) {
+				if (p.inProgressMatch?.to === player) {
 					matchPlayer = p;
 					break;
 				}
@@ -771,7 +771,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		let matchTo = null;
 		for (const playerFrom of this.players) {
 			const match = playerFrom.inProgressMatch;
-			if (match && match.to === player) matchTo = playerFrom;
+			if (match?.to === player) matchTo = playerFrom;
 		}
 		if (matchTo) {
 			matchTo.isBusy = false;
@@ -1094,7 +1094,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		if (user.can('makeroom')) return;
 		for (const otherPlayer of this.getRemainingPlayers()) {
 			const otherUser = Users.get(otherPlayer.id);
-			if (otherUser && otherUser.latestIp === user.latestIp) {
+			if (otherUser?.latestIp === user.latestIp) {
 				return "Scouting is banned: tournament players can't watch other tournament battles.";
 			}
 		}

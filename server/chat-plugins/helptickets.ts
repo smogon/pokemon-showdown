@@ -2619,7 +2619,7 @@ export const commands: Chat.ChatCommands = {
 			ticket.notes[user.id] = note;
 			writeTickets();
 			notifyStaff();
-			if (!room || room.roomid !== 'staff') this.sendReply(`Added the note "${note}" to ${ticketId}'s ticket.`);
+			if (room?.roomid !== 'staff') this.sendReply(`Added the note "${note}" to ${ticketId}'s ticket.`);
 			this.room = Rooms.get('staff') || null;
 			this.addGlobalModAction(`${user.name} added the note "${note}" to ${ticket.userid}'s helpticket.`);
 			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
@@ -2644,7 +2644,7 @@ export const commands: Chat.ChatCommands = {
 			if (!note) {
 				throw new Chat.ErrorMessage(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
 			}
-			if (!room || room.roomid !== 'staff') {
+			if (room?.roomid !== 'staff') {
 				this.sendReply(`You removed the note '${note}' (by ${staff}) on ${ticket.userid}'s ticket.`);
 			}
 			delete ticket.notes[staff];

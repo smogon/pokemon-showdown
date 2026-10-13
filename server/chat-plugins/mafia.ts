@@ -852,7 +852,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		for (const p of this.players) {
 			if (p.id === player.id) continue;
 			const role = p.role;
-			if (role && role.alignment === player.role.alignment) partners.push(p.name);
+			if (role?.alignment === player.role.alignment) partners.push(p.name);
 		}
 		return partners.join(", ");
 	}

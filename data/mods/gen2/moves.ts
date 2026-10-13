@@ -89,7 +89,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
 			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 			const lastMove = lastAttackedBy.source.lastMove;
-			if (!lastMove || lastAttackedBy.move !== lastMove.id) return false;
+			if (lastAttackedBy.move !== lastMove?.id) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Physical') {
@@ -140,7 +140,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// Oversight in the interaction between these moves and the Lock-On effect
 					return false;
 				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (target === source.volatiles['lockon']?.source) return;
 				return false;
 			},
 			onSourceModifyDamage: undefined, // no inherit
@@ -208,7 +208,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// Oversight in the interaction between these moves and the Lock-On effect
 					return false;
 				}
-				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (target === source.volatiles['lockon']?.source) return;
 				return false;
 			},
 			onSourceModifyDamage: undefined, // no inherit
@@ -357,7 +357,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
 			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 			const lastMove = lastAttackedBy.source.lastMove;
-			if (!lastMove || lastAttackedBy.move !== lastMove.id) return false;
+			if (lastAttackedBy.move !== lastMove?.id) return false;
 
 			// Hidden Power counts as physical
 			if (this.getCategory(lastAttackedBy.move) === 'Special') {

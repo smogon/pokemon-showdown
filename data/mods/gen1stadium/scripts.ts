@@ -96,7 +96,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 			if (
 				!lockedMove &&
-				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
+				(pokemon.volatiles['partialtrappinglock']?.locked !== target)
 			) {
 				pokemon.deductPP(move, null, target);
 			} else {
@@ -578,7 +578,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-			if (source.volatiles['partialtrappinglock'] && (target === source.volatiles['partialtrappinglock'].locked)) {
+			if (target === source.volatiles['partialtrappinglock']?.locked) {
 				return source.volatiles['partialtrappinglock'].damage;
 			}
 

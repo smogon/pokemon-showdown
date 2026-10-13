@@ -6454,7 +6454,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
-				if (effect && effect.name === "Puffy Spiky Destruction") {
+				if (effect?.name === "Puffy Spiky Destruction") {
 					this.add('-activate', target, 'move: Misty Terrain');
 					return null;
 				}

@@ -252,7 +252,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	freezedry: {
 		inherit: true,
 		onEffectiveness(typeMod, target, type) {
-			if (target && type === target.side.foe.active[0].teraType) return 1;
+			if (type === target?.side.foe.active[0].teraType) return 1;
 		},
 	},
 	gmaxcannonade: {
@@ -766,7 +766,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (target.side.active.length === 2 && target.position === 1) {
 				// Curse Glitch
 				const action = this.queue.willMove(target);
-				if (action && action.move.id === 'curse') {
+				if (action?.move.id === 'curse') {
 					action.targetLoc = -1;
 				}
 			}

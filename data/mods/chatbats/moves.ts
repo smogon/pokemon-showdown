@@ -303,7 +303,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			// gets attack of foe this turn
 			const action = this.queue.willMove(foe);
-			if (!action || action.choice !== 'move') {
+			if (action?.choice !== 'move') {
 				return priority;
 			}
 			const move = action.move;
@@ -320,7 +320,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return basePower;
 			}
 			const action = this.queue.willMove(foe);
-			if (!action || action.choice !== 'move') {
+			if (action?.choice !== 'move') {
 				return basePower;
 			}
 			const move = action.move;

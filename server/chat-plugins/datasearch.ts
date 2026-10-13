@@ -2283,7 +2283,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 
 			for (const searchStatus in alts.volatileStatus) {
 				let canStatus = !!(
-					(move.secondary && move.secondary.volatileStatus === searchStatus) ||
+					(move.secondary?.volatileStatus === searchStatus) ||
 					(move.secondaries?.some(entry => entry.volatileStatus === searchStatus)) ||
 					(move.volatileStatus === searchStatus) ||
 					// This is slightly hacky, but none of the proper trapping moves in moves.ts mechanically use 'trapped' as

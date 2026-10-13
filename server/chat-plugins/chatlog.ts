@@ -843,7 +843,7 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 				results[date][user] += isNaN(parsed) ? 0 : parsed;
 			} else {
 				const parts = line?.split('|').map(toID);
-				if (!parts || parts[1] !== 'c') continue;
+				if (parts?.[1] !== 'c') continue;
 				const id = parts[2];
 				if (!id) continue;
 				if (!results[date][id]) results[date][id] = 0;
