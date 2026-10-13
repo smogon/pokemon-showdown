@@ -1017,6 +1017,7 @@ const ticketTitles: { [k: string]: string } = {
 	appeal: TLkey`Appeal`,
 	ipappeal: TLkey`IP-Appeal`,
 	roomhelp: TLkey`Public Room Assistance Request`,
+	registerbot: TLkey`Bot Registration Request`,
 	other: TLkey`Other`,
 };
 const ticketPages: { [k: string]: string } = {
@@ -1057,6 +1058,7 @@ const ticketPages: { [k: string]: string } = {
 	confirmappeal: TLkey`Appeal your lock`,
 	confirmipappeal: TLkey`Appeal IP lock`,
 	confirmroomhelp: TLkey`Call a Global Staff member to help`,
+	confirmregisterbot: TLkey`I want to register my bot`,
 	confirmother: TLkey`Call a Global Staff member`,
 };
 const cheatingScenarios = [

@@ -47,6 +47,7 @@ export const translations: TranslationCatalog = {
 	"IP-Appeal": "IP-Widerspruch",
 	"ISP-Appeal": "ISP-Widerspruch",
 	"Public Room Assistance Request": "Anfrage zur Unterstützung in einem öffentlichen Raum",
+	"Bot Registration Request": null, // NEEDS TRANSLATION
 	"Other": "Anderes",
 	"I want to report someone": "Ich möchte jemanden melden",
 	"Someone is harassing me in PMs": "Jemand belästigt mich in einer privaten Nachricht",
