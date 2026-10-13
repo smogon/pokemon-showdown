@@ -155,7 +155,7 @@ describe('Dex data', () => {
 		}
 	});
 
-	it.skip('should only have necessary baseSpecies text on base species entries', () => {
+	it('should only have necessary baseSpecies text on base species entries', () => {
 		const languages = ['en', ...fs.readdirSync(`${Dex.dataDir}/text`, { withFileTypes: true })
 			.filter(entry => entry.isDirectory())
 			.map(entry => entry.name)];
