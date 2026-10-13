@@ -692,6 +692,11 @@ export class DexFormats {
 	 * Returns a sanitized format ID if valid, or throws if invalid.
 	 */
 	validate(name: string) {
+		if (name.length > 32 * 1024) {
+			// technically UTF-16 code units, but close enough
+			// chosen arbitrarily. feel free to increase this limit if you need more
+			throw new Error(`Custom formats must be at most 32 KB long.`);
+		}
 		const [formatName, customRulesString] = name.split('@@@', 2);
 		const format = this.get(formatName);
 		if (format.effectType !== 'Format') throw new Error(`Unrecognized format "${formatName}"`);
