@@ -2538,34 +2538,23 @@ export class Battle {
 	}
 
 	checkFainted() {
-		// should only be relevant for Gen 3
+		// Gen 3 can request replacements while other switches are still queued.
 		const queuedSwitchOuts = this.queue.getSwitches().map(action => action.pokemon);
+		const candidatesBySide = this.sides
+			.filter(side => this.canSwitch(side))
+			.map(side => side.active.filter(pokemon => pokemon.fainted && !queuedSwitchOuts.includes(pokemon)))
+			.filter(candidates => candidates.length);
 
-		let sidesSwitching = 0;
-		if (this.gen === 3) {
-			for (const side of this.sides) {
-				if (!this.canSwitch(side)) continue;
-				for (const pokemon of side.active) {
-					if (pokemon.fainted && !queuedSwitchOuts.includes(pokemon)) {
-						sidesSwitching++;
-						break;
-					}
-				}
-				if (sidesSwitching > 1) break;
-			}
-		}
-
-		for (const side of this.sides) {
-			if (!this.canSwitch(side)) continue;
-			for (const pokemon of side.active) {
-				if (pokemon.fainted && !queuedSwitchOuts.includes(pokemon)) {
-					pokemon.status = 'fnt' as ID;
-					pokemon.switchFlag = true;
-					// In Gen 4, you can only switch one Pokémon per side at a time
-					if (this.gen === 4) break;
-					// In Gen 3, you can only switch one Pokémon per side at a time if only one side needs replacements
-					if (sidesSwitching === 1) return;
-				}
+		// Gen 3-4 requests replacements simultaneously for each side's fainted pokemon, one at a time.
+		// (so p1a and p2a simultaneously, then p1b and p2b simultaneously.)
+		// Gen 3 doesn't do this when multiple sides have fainted pokemon.
+		// (it instead requests p1a/p1b/p2a/p2b simultaneously)
+		const onePerSide = this.gen === 4 || (this.gen === 3 && candidatesBySide.length === 1);
+		for (const candidates of candidatesBySide) {
+			for (const pokemon of candidates) {
+				pokemon.status = 'fnt' as ID;
+				pokemon.switchFlag = true;
+				if (onePerSide) break;
 			}
 		}
 	}
