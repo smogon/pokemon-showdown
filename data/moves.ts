@@ -1107,7 +1107,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		self: {
 			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
+				source.skipPursuit = true;
 			},
 		},
 		selfSwitch: 'copyvolatile',
@@ -16187,7 +16187,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		self: {
 			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
+				source.skipPursuit = true;
 			},
 		},
 		selfSwitch: 'shedtail',

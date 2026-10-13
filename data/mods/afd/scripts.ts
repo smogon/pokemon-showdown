@@ -83,13 +83,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 					switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 				}
-				if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
+				if (!oldActive.skipPursuit && !isDrag) {
 					this.battle.runEvent('BeforeSwitchOut', oldActive);
 					if (this.battle.gen >= 5) {
 						this.battle.eachEvent('Update');
 					}
 				}
-				oldActive.skipBeforeSwitchOutEventFlag = false;
+				oldActive.skipPursuit = false;
 				oldActive.pursuitActivated = false;
 				if (!this.battle.runEvent('SwitchOut', oldActive)) {
 					// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.

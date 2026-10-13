@@ -393,10 +393,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				for (const pokemon of this.sides[i].active) {
 					if (
 						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						!pokemon.skipBeforeSwitchOutEventFlag
+						!pokemon.skipPursuit
 					) {
 						this.runEvent('BeforeSwitchOut', pokemon);
-						pokemon.skipBeforeSwitchOutEventFlag = true;
+						pokemon.skipPursuit = true;
 						this.resolveFaints(); // Pokemon may have fainted in BeforeSwitchOut
 						if (this.ended) return true;
 						if (pokemon.fainted) {

@@ -60,14 +60,14 @@ export class BattleActions {
 	// ==================================================================
 
 	runPursuitActivation(pokemon: Pokemon) {
-		if (pokemon.skipBeforeSwitchOutEventFlag) return;
+		if (pokemon.skipPursuit) return;
 		this.battle.runEvent('BeforeSwitchOut', pokemon);
 		this.battle.clearActiveMove();
 		if (this.battle.gen >= 5) {
 			this.battle.eachEvent('Update');
 		}
 		if (pokemon.pursuitActivated) this.battle.resolveFaints({ checkWin: this.battle.gen >= 5 });
-		pokemon.skipBeforeSwitchOutEventFlag = true; // don't activate Pursuit again
+		pokemon.skipPursuit = true; // don't activate Pursuit again
 	}
 
 	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
@@ -135,7 +135,7 @@ export class BattleActions {
 			oldActive.statsRaisedThisTurn = false;
 			oldActive.statsLoweredThisTurn = false;
 			oldActive.pursuitActivated = false;
-			oldActive.skipBeforeSwitchOutEventFlag = false;
+			oldActive.skipPursuit = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
 			if (this.battle.gen <= 4) {

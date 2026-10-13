@@ -579,9 +579,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
 					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						pokemon.switchFlag !== 'scapegoat' && !pokemon.skipBeforeSwitchOutEventFlag) {
+						pokemon.switchFlag !== 'scapegoat' && !pokemon.skipPursuit) {
 						this.runEvent('BeforeSwitchOut', pokemon);
-						pokemon.skipBeforeSwitchOutEventFlag = true;
+						pokemon.skipPursuit = true;
 						this.resolveFaints(); // Pokemon may have fainted in BeforeSwitchOut
 						if (this.ended) return true;
 						if (pokemon.fainted) {
@@ -776,13 +776,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 					switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 				}
-				if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
+				if (!oldActive.skipPursuit && !isDrag) {
 					this.battle.runEvent('BeforeSwitchOut', oldActive);
 					if (this.battle.gen >= 5) {
 						this.battle.eachEvent('Update');
 					}
 				}
-				oldActive.skipBeforeSwitchOutEventFlag = false;
+				oldActive.skipPursuit = false;
 				oldActive.pursuitActivated = false;
 				if (!this.battle.runEvent('SwitchOut', oldActive)) {
 					// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
