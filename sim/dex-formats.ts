@@ -46,8 +46,8 @@ export interface GameTimerSettings {
  * The value is the name of the parent rule (blank for the active format).
  */
 export class RuleTable extends Map<string, string> {
-	complexBans: ComplexBan[];
-	complexTeamBans: ComplexTeamBan[];
+	complexBans: Map<ID, ComplexBan>;
+	complexTeamBans: Map<ID, ComplexTeamBan>;
 	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
 	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
@@ -71,8 +71,8 @@ export class RuleTable extends Map<string, string> {
 
 	constructor() {
 		super();
-		this.complexBans = [];
-		this.complexTeamBans = [];
+		this.complexBans = new Map();
+		this.complexTeamBans = new Map();
 		this.checkCanLearn = null;
 		this.onChooseTeam = null;
 		this.timer = null;
@@ -235,36 +235,16 @@ export class RuleTable extends Map<string, string> {
 		return source ? ` from ${source}` : ``;
 	}
 
-	getComplexBanIndex(complexBans: ComplexBan[], rule: string): number {
-		const ruleId = toID(rule);
-		let complexBanIndex = -1;
-		for (let i = 0; i < complexBans.length; i++) {
-			if (toID(complexBans[i][0]) === ruleId) {
-				complexBanIndex = i;
-				break;
-			}
-		}
-		return complexBanIndex;
-	}
-
 	addComplexBan(rule: string, source: string, limit: number, bans: string[]) {
-		const complexBanIndex = this.getComplexBanIndex(this.complexBans, rule);
-		if (complexBanIndex !== -1) {
-			if (this.complexBans[complexBanIndex][2] === Infinity) return;
-			this.complexBans[complexBanIndex] = [rule, source, limit, bans];
-		} else {
-			this.complexBans.push([rule, source, limit, bans]);
-		}
+		const ruleId = toID(rule);
+		if (this.complexBans.get(ruleId)?.[2] === Infinity) return;
+		this.complexBans.set(ruleId, [rule, source, limit, bans]);
 	}
 
 	addComplexTeamBan(rule: string, source: string, limit: number, bans: string[]) {
-		const complexBanTeamIndex = this.getComplexBanIndex(this.complexTeamBans, rule);
-		if (complexBanTeamIndex !== -1) {
-			if (this.complexTeamBans[complexBanTeamIndex][2] === Infinity) return;
-			this.complexTeamBans[complexBanTeamIndex] = [rule, source, limit, bans];
-		} else {
-			this.complexTeamBans.push([rule, source, limit, bans]);
-		}
+		const ruleId = toID(rule);
+		if (this.complexTeamBans.get(ruleId)?.[2] === Infinity) return;
+		this.complexTeamBans.set(ruleId, [rule, source, limit, bans]);
 	}
 
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
@@ -435,7 +415,7 @@ export class RuleTable extends Map<string, string> {
 	}
 
 	hasComplexBans() {
-		return (this.complexBans?.length > 0) || (this.complexTeamBans?.length > 0);
+		return this.complexBans.size > 0 || this.complexTeamBans.size > 0;
 	}
 }
 
@@ -1006,10 +986,10 @@ export class DexFormats {
 				}
 				ruleTable.set(ruleid, sourceFormat || subformat.name);
 			}
-			for (const [subRule, source, limit, bans] of subRuleTable.complexBans) {
+			for (const [subRule, source, limit, bans] of subRuleTable.complexBans.values()) {
 				ruleTable.addComplexBan(subRule, source || subformat.name, limit, bans);
 			}
-			for (const [subRule, source, limit, bans] of subRuleTable.complexTeamBans) {
+			for (const [subRule, source, limit, bans] of subRuleTable.complexTeamBans.values()) {
 				ruleTable.addComplexTeamBan(subRule, source || subformat.name, limit, bans);
 			}
 			if (subRuleTable.checkCanLearn) {

@@ -469,7 +469,7 @@ export class TeamValidator {
 			}
 		}
 
-		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
+		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans.values()) {
 			let count = 0;
 			for (const ban of bans) {
 				if (teamHas[ban] > 0) {
@@ -1094,7 +1094,7 @@ export class TeamValidator {
 				}
 			}
 		}
-		for (const [rule, source, limit, bans] of ruleTable.complexBans) {
+		for (const [rule, source, limit, bans] of ruleTable.complexBans.values()) {
 			let count = 0;
 			for (const ban of bans) {
 				if (setHas[ban]) count++;
