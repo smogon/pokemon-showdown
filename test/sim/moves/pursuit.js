@@ -202,6 +202,30 @@ describe(`Pursuit`, () => {
 		assert.equal(battle.log.filter(line => line === activation).length, 2);
 	});
 
+	it(`should intercept the next switch after a previous switch during a Pursuit activation is cancelled`, () => {
+		battle = common.createBattle([[
+			{ species: 'Crobat', item: 'rockyhelmet', moves: ['uturn'] },
+			{ species: 'Blissey', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Golisopod', ability: 'emergencyexit', moves: ['pursuit'] },
+			{ species: 'Tyranitar', moves: ['pursuit'] },
+		]]);
+		const [crobat, blissey] = battle.p1.pokemon;
+		const golisopod = battle.p2.active[0];
+		golisopod.hp = Math.floor(golisopod.maxhp / 2) + 42;
+		battle.makeChoices('move uturn', 'move pursuit');
+		assert.false.fullHP(crobat);
+		assert.equal(battle.p1.requestState, '');
+		assert.equal(battle.p2.requestState, 'switch');
+
+		battle.makeChoices('', 'switch 2');
+		assert.species(battle.p1.active[0], 'Crobat');
+		const hpBeforeSwitch = crobat.hp;
+		battle.makeChoices('switch 2', 'move pursuit');
+		assert(crobat.hp < hpBeforeSwitch, 'Pursuit should intercept Crobat again');
+		assert.fullHP(blissey);
+	});
+
 	it(`should only activate before switches on adjacent foes`, () => {
 		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
 			{ species: 'Beedrill', moves: ['pursuit'] },

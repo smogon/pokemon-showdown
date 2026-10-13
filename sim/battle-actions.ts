@@ -67,7 +67,13 @@ export class BattleActions {
 			this.battle.eachEvent('Update');
 		}
 		if (pokemon.pursuitActivated) this.battle.resolveFaints({ checkWin: this.battle.gen >= 5 });
-		pokemon.skipPursuit = true; // don't activate Pursuit again
+		if (pokemon.hp && !pokemon.switchFlag) {
+			// if the switch was cancelled, e.g., due to Emergency Exit
+			pokemon.pursuitActivated = false;
+			pokemon.skipPursuit = false;
+		} else {
+			pokemon.skipPursuit = true; // don't activate Pursuit again
+		}
 	}
 
 	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {

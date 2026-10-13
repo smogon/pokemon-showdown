@@ -2932,7 +2932,7 @@ export class Battle {
 			return false;
 		}
 
-		if (this.gen >= 5 && !['start', 'instaswitch'].includes(action.choice)) {
+		if (this.gen >= 5 && action.choice !== 'start' && nextAction?.choice !== 'instaswitch') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				this.runEvent('EmergencyExit', pokemon, undefined, undefined, originalHP);
@@ -2978,7 +2978,7 @@ export class Battle {
 			}
 		}
 
-		if (this.gen < 5 && !['start', 'instaswitch'].includes(action.choice)) {
+		if (this.gen < 5 && action.choice !== 'start' && !isSwitch) {
 			this.eachEvent('Update');
 		}
 
