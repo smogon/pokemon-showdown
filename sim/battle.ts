@@ -2886,16 +2886,19 @@ export class Battle {
 		// fainting
 
 		let nextAction = this.queue.peek();
+		const isSwitch = ['switch', 'instaswitch'].includes(action.choice);
+		// In Gen 2, there are no faint checks between switches.
+		const deferFaintsUntilAfterSwitches = this.gen === 2 && isSwitch &&
+			!!nextAction && ['switch', 'instaswitch'].includes(nextAction.choice);
 
-		if (!(this.gen === 2 && ['switch', 'instaswitch'].includes(action.choice) &&
-			nextAction && ['switch', 'instaswitch'].includes(nextAction.choice))) {
-			// in gen 2, there are no faint checks between switches
-			const checkWin = !(
-				// in gen 4, there are no win checks between simultaneous switches replacing fainted Pokemon
-				(this.gen === 4 && action.choice === 'instaswitch' && nextAction?.choice === 'instaswitch') ||
-				// in gen 4, there are no win checks during a U-turn switch until its ability activates
-				this.gen === 4 && action.choice === 'instaswitch' && action.sourceEffect && nextAction?.choice === 'runSwitch'
-			);
+		if (!deferFaintsUntilAfterSwitches) {
+			// In Gen 4, there are no win checks between simultaneous switches replacing fainted Pokemon.
+			const deferWinForReplacementBatch = this.gen === 4 &&
+				action.choice === 'instaswitch' && nextAction?.choice === 'instaswitch';
+			// In Gen 4, there are no win checks during a U-turn switch until its ability activates.
+			const deferWinForPivotAbility = this.gen === 4 && action.choice === 'instaswitch' &&
+				!!action.sourceEffect && nextAction?.choice === 'runSwitch';
+			const checkWin = !(deferWinForReplacementBatch || deferWinForPivotAbility);
 			this.resolveFaints({ checkWinIfNoFaints: checkWin, checkWin });
 		}
 		if (this.ended) return true;
@@ -2904,17 +2907,16 @@ export class Battle {
 
 		nextAction = this.queue.peek();
 
-		if (
-			!nextAction ||
-			(this.gen === 3 && ['switch', 'instaswitch'].includes(action.choice)) ||
-			(this.gen <= 3 && ['move', 'residual'].includes(nextAction.choice)) ||
-			(this.gen === 4 && action.choice === 'instaswitch' && nextAction.choice !== 'instaswitch' &&
-				this.queue.peek(true)?.choice === 'runSwitch')
-		) {
-			// in gen 3, switching in after a Pokemon faints is done after every switch
-			// in gen 3 or earlier, switching in after a Pokemon faints is done after every move,
-			// rather than only at the end of the turn.
-			// in gen 4, finish replacing fainted Pokemon before running queued switch-in effects
+		// In Gen 3, switching in after a Pokemon faints is done after every switch.
+		const checkFaintedAfterSwitch = this.gen === 3 && isSwitch;
+		// In Gen 3 or earlier, switching in after a Pokemon faints is done after every move,
+		// rather than only at the end of the turn.
+		const checkFaintedAfterMoves = this.gen <= 3 && !!nextAction && ['move', 'residual'].includes(nextAction.choice);
+		// In Gen 4, finish replacing fainted Pokemon before running queued switch-in effects.
+		const replacementBatchFinished = this.gen === 4 && action.choice === 'instaswitch' &&
+			!!nextAction && nextAction.choice !== 'instaswitch' && this.queue.peek(true)?.choice === 'runSwitch';
+
+		if (!nextAction || checkFaintedAfterSwitch || checkFaintedAfterMoves || replacementBatchFinished) {
 			this.checkFainted();
 		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
