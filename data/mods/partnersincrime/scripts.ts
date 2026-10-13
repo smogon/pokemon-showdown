@@ -1,5 +1,4 @@
-import { Pokemon, Side } from "../../../sim";
-import { Field } from "../../../sim/field";
+import { type Pokemon } from "../../../sim";
 
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
@@ -51,67 +50,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				handlers = handlers.concat(this.findBattleEventHandlers(callbackName, getKey, active));
 			}
 		}
-		this.speedSort(handlers);
-		while (handlers.length) {
-			const handler = handlers[0];
-			handlers.shift();
-			const effect = handler.effect;
-			if ((handler.effectHolder as Pokemon).fainted || (handler.state?.pic as Pokemon)?.fainted) {
-				if (!(handler.state?.isSlotCondition)) continue;
-			}
-			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
-				handler.state.duration--;
-				if (!handler.state.duration) {
-					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
-					handler.end.call(...endCallArgs as [any, ...any[]]);
-					if (this.ended) return;
-					continue;
-				}
-			}
-
-			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
-			if (handler.state?.target instanceof Pokemon) {
-				let expectedStateLocation;
-				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
-					expectedStateLocation = handler.state.target.abilityState;
-				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
-					expectedStateLocation = handler.state.target.itemState;
-				} else if (effect.effectType === 'Status') {
-					expectedStateLocation = handler.state.target.statusState;
-				} else {
-					expectedStateLocation = handler.state.target.volatiles[effect.id];
-				}
-				if (expectedStateLocation !== handler.state) {
-					continue;
-				}
-			} else if (handler.state?.target instanceof Side && !handler.state.isSlotCondition) {
-				if ((handler.state.target.sideConditions[effect.id] !== handler.state)) {
-					continue;
-				}
-			} else if (handler.state?.target instanceof Field) {
-				let expectedStateLocation;
-				if (effect.effectType === 'Weather') {
-					expectedStateLocation = handler.state.target.weatherState;
-				} else if (effect.effectType === 'Terrain') {
-					expectedStateLocation = handler.state.target.terrainState;
-				} else {
-					expectedStateLocation = handler.state.target.pseudoWeather[effect.id];
-				}
-				if (expectedStateLocation !== handler.state) {
-					continue;
-				}
-			}
-
-			let handlerEventid = eventid;
-			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
-			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
-			if (handler.callback) {
-				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
-			}
-
-			this.faintMessages();
-			if (this.ended) return;
-		}
+		this.runFieldEventHandlers(eventid, handlers, targets, true);
 	},
 	endTurn() {
 		this.turn++;

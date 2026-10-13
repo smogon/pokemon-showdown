@@ -158,6 +158,7 @@ describe('Grassy Terrain', () => {
 		const coalossal = battle.p1.active[0];
 		assert.equal(coalossal.hp, coalossal.maxhp - 40 + Math.floor(coalossal.maxhp / 2 / 16), `Coalossal should have recovered HP from Grassy Terrain.`);
 		assert.equal(battle.field.terrainState.duration, 4, `Grassy Terrain should count down on the turn it was set.`);
+		battle.makeChoices(); // Replace the fainted Shedinja without advancing the turn
 		for (let duration = 3; duration > 0; duration--) {
 			battle.makeChoices();
 			assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should last through turn ${5 - duration}.`);
@@ -173,11 +174,12 @@ describe('Grassy Terrain', () => {
 			{ species: 'passimian', ability: 'receiver', item: 'safetygoggles', moves: ['sleeptalk'] },
 		], [
 			{ species: 'hippowdon', ability: 'sandstream', moves: ['sleeptalk'] },
-			{ species: 'garchomp', moves: ['electricterrain'] },
+			{ species: 'garchomp', moves: ['sleeptalk', 'electricterrain'] },
 		]]);
 		const shedinja = battle.p1.active[0];
 		const passimian = battle.p1.active[1];
-		passimian.hp -= 50;
+		const survivors = [passimian, ...battle.p2.active];
+		for (const pokemon of survivors) pokemon.hp -= 50;
 		const hpBeforeResidual = passimian.hp;
 
 		// Electric Terrain replaces the initial Grassy Terrain before Sandstorm KOs Shedinja.
@@ -188,12 +190,21 @@ describe('Grassy Terrain', () => {
 		assert.equal(passimian.ability, 'grassysurge');
 		assert(battle.field.isTerrain('grassyterrain'));
 		assert.equal(passimian.hp, hpBeforeResidual + Math.floor(passimian.maxhp / 16));
+		for (const pokemon of survivors) assert.equal(pokemon.hp, pokemon.maxhp - 50 + Math.floor(pokemon.baseMaxhp / 16));
 		assert.equal(battle.field.terrainState.duration, 4, `The terrain should count down after it is set during Residual.`);
 		const log = battle.getDebugLog();
 		const sandstormIndex = log.indexOf('|-damage|p1a: Shedinja|');
 		const terrainStartIndex = log.lastIndexOf('|-fieldstart|move: Grassy Terrain|[from] ability: Grassy Surge');
 		const healIndex = log.lastIndexOf('|-heal|p1b: Passimian|');
+		assert(sandstormIndex >= 0 && terrainStartIndex >= 0 && healIndex >= 0);
 		assert(sandstormIndex < terrainStartIndex, `Sandstorm should KO Shedinja before Receiver starts Grassy Terrain.`);
 		assert(terrainStartIndex < healIndex, `The new Grassy Terrain should heal after Receiver starts it.`);
+		for (let turn = 2; turn <= 4; turn++) {
+			battle.makeChoices();
+			assert.equal(battle.field.terrain, 'grassyterrain');
+			assert.equal(battle.field.terrainState.duration, 5 - turn);
+		}
+		battle.makeChoices(); // End of turn 5
+		assert.equal(battle.field.terrain, '');
 	});
 });

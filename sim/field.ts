@@ -155,6 +155,7 @@ export class Field {
 			this.terrainState = prevTerrainState;
 			return false;
 		}
+		this.battle.updateResidualTerrain();
 		this.battle.eachEvent('TerrainChange', sourceEffect);
 		return true;
 	}
@@ -165,6 +166,7 @@ export class Field {
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		this.terrain = '';
 		this.battle.clearEffectState(this.terrainState);
+		this.battle.updateResidualTerrain();
 		this.battle.eachEvent('TerrainChange');
 		return true;
 	}

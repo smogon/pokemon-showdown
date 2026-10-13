@@ -136,11 +136,21 @@ describe('Electric Terrain', () => {
 		assert.equal(arboliva.hp, hpAfterFutureSight + grassyHeal,
 			`Arboliva should take Future Sight damage and then recover 1/16 of its max HP.`);
 		const grassyHealIndex = log.lastIndexOf('|-heal|p1a: Arboliva|');
+		const terrainStartIndex = log.lastIndexOf('|-fieldstart|move: Grassy Terrain');
 		const grassyHealLine = log.slice(grassyHealIndex, log.indexOf('\n', grassyHealIndex));
 		assert(grassyHealLine.includes('[from] Grassy Terrain'), `Arboliva should recover from Grassy Terrain.`);
+		assert(futureSightEndIndex >= 0 && futureSightIndex >= 0 && terrainStartIndex >= 0 && grassyHealIndex >= 0);
 		assert(futureSightEndIndex < futureSightIndex, `Future Sight should resolve before dealing damage to Arboliva.`);
 		assert(futureSightIndex < grassyHealIndex, `Future Sight should hit before Grassy Terrain heals Arboliva.`);
+		assert(futureSightIndex < terrainStartIndex && terrainStartIndex < grassyHealIndex);
 		assert.equal(battle.field.terrainState.duration, 4, `The new terrain should independently count down once after being set.`);
+		for (let turn = 6; turn <= 8; turn++) {
+			battle.makeChoices();
+			assert.equal(battle.field.terrain, 'grassyterrain');
+			assert.equal(battle.field.terrainState.duration, 9 - turn);
+		}
+		battle.makeChoices(); // End of turn 9, five residuals including the turn it started
+		assert.equal(battle.field.terrain, '');
 	});
 
 	it.skip(`should block Sleep before the move would have missed`, () => {

@@ -94,6 +94,16 @@ interface EventListener extends EventListenerWithoutPriority {
 	speed?: number;
 }
 
+interface ResidualEventContext {
+	handlers: EventListener[];
+	targets?: Pokemon[];
+	current?: EventListener;
+	passed: Set<EventListener['effectHolder']>;
+	terrainHandlers: Map<EffectState, Map<EventListener['effectHolder'], Set<string>>>;
+	terrainChanged: boolean;
+	parent?: ResidualEventContext;
+}
+
 type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | undefined;
 
 // The current request state of the Battle:
@@ -160,6 +170,7 @@ export class Battle {
 	event: AnyObject;
 	events: AnyObject | null;
 	eventDepth: number;
+	private residualEvent?: ResidualEventContext;
 
 	activeMove: ActiveMove | null;
 	activePokemon: Pokemon | null;
@@ -508,67 +519,163 @@ export class Battle {
 				handlers = handlers.concat(this.findBattleEventHandlers(callbackName, getKey, active));
 			}
 		}
+		this.runFieldEventHandlers(eventid, handlers, targets);
+	}
+
+	/** Mark only terrain handlers for reconciliation after the current residual handler finishes. */
+	updateResidualTerrain() {
+		for (let context = this.residualEvent; context; context = context.parent) {
+			context.terrainChanged = true;
+		}
+	}
+
+	private rememberResidualTerrainHandler(context: ResidualEventContext, handler: EventListener, callbackName: string) {
+		const state = handler.state!;
+		let targets = context.terrainHandlers.get(state);
+		if (!targets) context.terrainHandlers.set(state, targets = new Map());
+		let callbacks = targets.get(handler.effectHolder);
+		if (!callbacks) targets.set(handler.effectHolder, callbacks = new Set());
+		if (callbacks.has(callbackName)) return false;
+		callbacks.add(callbackName);
+		return true;
+	}
+
+	private resolveResidualTerrain(context: ResidualEventContext) {
+		context.terrainChanged = false;
+		// FieldStart/TerrainChange may recursively replace terrain or roll a failed start back.
+		// Wait until the current handler (including faintMessages) finishes, then use the final instance.
+		const state = this.field.terrainState;
+		for (let i = context.handlers.length - 1; i >= 0; i--) {
+			const handler = context.handlers[i];
+			if (handler.state && context.terrainHandlers.has(handler.state) &&
+				(handler.state !== state || handler.state.id !== this.field.terrain)) {
+				context.handlers.splice(i, 1);
+			}
+		}
+		if (!this.field.terrain) return;
+		const handlers = this.findTerrainEventHandlers(this.field, 'onFieldResidual', 'duration');
+		for (const side of this.sides) {
+			for (const active of side.active) {
+				if (!active || (context.targets && !context.targets.includes(active))) continue;
+				handlers.push(...this.findTerrainEventHandlers(this.field, 'onResidual', undefined, active));
+			}
+		}
+		for (const handler of handlers) {
+			const callbackName = handler.effectHolder === this.field ? 'onFieldResidual' : 'onResidual';
+			if (!this.rememberResidualTerrainHandler(context, handler, callbackName)) continue;
+			if (context.current) {
+				const delta = this.comparePriority(handler, context.current);
+				// Speed and subOrder matter inside a block. At an exact tie, a holder that
+				// already reached this position must not heal or count down a second time.
+				if (delta < 0 || (!delta && context.passed.has(handler.effectHolder))) continue;
+			}
+			// Insert only the new handler, keeping the already-resolved order of existing ties.
+			let left = 0;
+			let right = context.handlers.length;
+			while (left < right) {
+				const mid = (left + right) >>> 1;
+				if (this.comparePriority(context.handlers[mid], handler) < 0) {
+					left = mid + 1;
+				} else {
+					right = mid;
+				}
+			}
+			let tieEnd = left;
+			while (tieEnd < context.handlers.length && !this.comparePriority(context.handlers[tieEnd], handler)) tieEnd++;
+			const index = tieEnd > left ? this.random(left, tieEnd + 1) : left;
+			context.handlers.splice(index, 0, handler);
+		}
+	}
+
+	/** Shared execution for fieldEvent, including formats with their own handler collection. */
+	runFieldEventHandlers(eventid: string, handlers: EventListener[], targets?: Pokemon[], skipFaintedPartner = false) {
 		this.speedSort(handlers);
-		while (handlers.length) {
-			const handler = handlers[0];
-			handlers.shift();
-			const effect = handler.effect;
-			if ((handler.effectHolder as Pokemon).fainted) {
-				if (!(handler.state?.isSlotCondition)) continue;
+		let context: ResidualEventContext | undefined;
+		if (eventid === 'Residual') {
+			context = {
+				handlers, targets, passed: new Set(), terrainHandlers: new Map(), terrainChanged: false,
+				parent: this.residualEvent,
+			};
+			for (const handler of handlers) {
+				if (handler.state !== this.field.terrainState) continue;
+				this.rememberResidualTerrainHandler(
+					context, handler, handler.effectHolder === this.field ? 'onFieldResidual' : 'onResidual'
+				);
 			}
+			this.residualEvent = context;
+		}
+		try {
+			while (handlers.length || context?.terrainChanged) {
+				if (context?.terrainChanged) this.resolveResidualTerrain(context);
+				const handler = handlers.shift();
+				if (!handler) break;
+				const effect = handler.effect;
+				// Partners in Crime's shared abilities also belong to their original holder.
+				if ((handler.effectHolder as Pokemon).fainted || (skipFaintedPartner && (handler.state?.pic as Pokemon)?.fainted)) {
+					if (!(handler.state?.isSlotCondition)) continue;
+				}
 
-			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
-			if (handler.state?.target instanceof Pokemon) {
-				let expectedStateLocation;
-				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
-					expectedStateLocation = handler.state.target.abilityState;
-				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
-					expectedStateLocation = handler.state.target.itemState;
-				} else if (effect.effectType === 'Status') {
-					expectedStateLocation = handler.state.target.statusState;
-				} else {
-					expectedStateLocation = handler.state.target.volatiles[effect.id];
+				// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
+				if (handler.state?.target instanceof Pokemon) {
+					let expectedStateLocation;
+					if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
+						expectedStateLocation = handler.state.target.abilityState;
+					} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
+						expectedStateLocation = handler.state.target.itemState;
+					} else if (effect.effectType === 'Status') {
+						expectedStateLocation = handler.state.target.statusState;
+					} else {
+						expectedStateLocation = handler.state.target.volatiles[effect.id];
+					}
+					if (expectedStateLocation !== handler.state) {
+						continue;
+					}
+				} else if (handler.state?.target instanceof Side && !handler.state.isSlotCondition) {
+					if ((handler.state.target.sideConditions[effect.id] !== handler.state)) {
+						continue;
+					}
+				} else if (handler.state?.target instanceof Field) {
+					let expectedStateLocation;
+					if (effect.effectType === 'Weather') {
+						expectedStateLocation = handler.state.target.weatherState;
+					} else if (effect.effectType === 'Terrain') {
+						expectedStateLocation = handler.state.target.terrainState;
+					} else {
+						expectedStateLocation = handler.state.target.pseudoWeather[effect.id];
+					}
+					if (expectedStateLocation !== handler.state || (eventid === 'Residual' && handler.state.id !== effect.id)) {
+						continue;
+					}
 				}
-				if (expectedStateLocation !== handler.state) {
-					continue;
+
+				if (context) {
+					if (context.current && this.comparePriority(context.current, handler)) context.passed.clear();
+					context.current = handler;
+					context.passed.add(handler.effectHolder);
 				}
-			} else if (handler.state?.target instanceof Side && !handler.state.isSlotCondition) {
-				if ((handler.state.target.sideConditions[effect.id] !== handler.state)) {
-					continue;
+
+				if (eventid === 'Residual' && handler.end && handler.state?.duration) {
+					handler.state.duration--;
+					if (!handler.state.duration) {
+						const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
+						handler.end.call(...endCallArgs as [any, ...any[]]);
+						if (this.ended) return;
+						continue;
+					}
 				}
-			} else if (handler.state?.target instanceof Field) {
-				let expectedStateLocation;
-				if (effect.effectType === 'Weather') {
-					expectedStateLocation = handler.state.target.weatherState;
-				} else if (effect.effectType === 'Terrain') {
-					expectedStateLocation = handler.state.target.terrainState;
-				} else {
-					expectedStateLocation = handler.state.target.pseudoWeather[effect.id];
+
+				let handlerEventid = eventid;
+				if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
+				if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
+				if (handler.callback) {
+					this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
 				}
-				if (expectedStateLocation !== handler.state) {
-					continue;
-				}
+
+				this.faintMessages();
+				if (this.ended) return;
 			}
-
-			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
-				handler.state.duration--;
-				if (!handler.state.duration) {
-					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
-					handler.end.call(...endCallArgs as [any, ...any[]]);
-					if (this.ended) return;
-					continue;
-				}
-			}
-
-			let handlerEventid = eventid;
-			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
-			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
-			if (handler.callback) {
-				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
-			}
-
-			this.faintMessages();
-			if (this.ended) return;
+		} finally {
+			if (context) this.residualEvent = context.parent;
 		}
 	}
 
@@ -1206,8 +1313,15 @@ export class Battle {
 				end: customHolder ? null : field.clearWeather, effectHolder: customHolder || field,
 			}, callbackName));
 		}
+		handlers.push(...this.findTerrainEventHandlers(field, callbackName, getKey, customHolder));
+
+		return handlers;
+	}
+
+	findTerrainEventHandlers(field: Field, callbackName: string, getKey?: 'duration', customHolder?: Pokemon) {
+		const handlers: EventListener[] = [];
 		const terrain = field.getTerrain();
-		callback = this.getCallback(field, terrain, callbackName);
+		const callback = this.getCallback(field, terrain, callbackName);
 		if (callback !== undefined || (getKey && field.terrainState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: terrain, callback, state: field.terrainState,
