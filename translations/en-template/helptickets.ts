@@ -47,6 +47,7 @@ export const translations: TranslationCatalog = {
 	"IP-Appeal": null,
 	"ISP-Appeal": null, // NOT USED
 	"Public Room Assistance Request": null,
+	"Bot Registration Request": null,
 	"Other": null,
 	"I want to report someone": null,
 	"Someone is harassing me in PMs": null,

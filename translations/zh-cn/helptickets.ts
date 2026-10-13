@@ -47,6 +47,7 @@ export const translations: TranslationCatalog = {
 	"IP-Appeal": "IP申诉",
 	"ISP-Appeal": "ISP申诉",
 	"Public Room Assistance Request": "公共房间助理的请求",
+	"Bot Registration Request": null, // NEEDS TRANSLATION
 	"Other": "其他",
 	"I want to report someone": "我想要举报某人。",
 	"Someone is harassing me in PMs": "有人在私聊中骚扰我",
