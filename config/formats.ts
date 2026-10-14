@@ -418,9 +418,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
 			'Chinchou', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Growlithe-Hisui', 'Impidimp', 'Mareanie', 'Mienfoo', 'Mudbray',
-			'Sandshrew-Alola', 'Tinkatink', 'Toedscool', 
+			'Sandshrew-Alola', 'Tinkatink', 'Toedscool',
 			// LC UUBL
-			'Deerling', 'Minccino', 'Light Clay', 'Wingull'
+			'Deerling', 'Minccino', 'Light Clay', 'Wingull',
 		],
 	},
 	{
