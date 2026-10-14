@@ -13,6 +13,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			return speed;
 		},
 	},
+	checkFainted() {
+		// Gen 4 requests replacements simultaneously for each side's fainted pokemon, one at a time
+		for (const side of this.sides) {
+			if (!this.canSwitch(side)) continue;
+			for (const pokemon of side.active) {
+				if (pokemon.fainted) {
+					pokemon.status = 'fnt' as ID;
+					pokemon.switchFlag = true;
+					break;
+				}
+			}
+		}
+	},
 	actions: {
 		inherit: true,
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
