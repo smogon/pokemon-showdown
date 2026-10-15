@@ -60,6 +60,17 @@ describe('Team Validator', () => {
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
+	it('should allow specific underleveled Pokemon from Gen 7 SOS battles.', () => {
+		const team = [
+			{ species: 'salamence', level: 9, ability: 'intimidate', moves: ['crunch'], evs: { hp: 1 } },
+			{ species: 'dragonite', level: 10, ability: 'innerfocus', moves: ['waterfall'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen7ou');
+
+		team[1].level = 9;
+		assert.false.legalTeam(team, 'gen7ou');
+	});
+
 	it('should require Pokémon transferred from Gens 1 and 2 to be above Level 2', () => {
 		const team = [
 			{ species: 'pidgey', level: 1, ability: 'bigpecks', moves: ['curse'], evs: { hp: 1 } },
