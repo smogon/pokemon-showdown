@@ -928,7 +928,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			let data = '';
 			try {
-				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
+				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()!}`).get();
 			} catch {}
 			if (!data) throw new Chat.ErrorMessage('Error fetching data from pastebin.');
 

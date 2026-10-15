@@ -854,7 +854,7 @@ export class DexFormats {
 					const complexBan: ComplexBan = ruleSpec.slice(1) as ComplexBan;
 					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
 				} else {
-					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
+					throw new Error(`Unrecognized rule spec ${ruleSpec.join(',')}`);
 				}
 				continue;
 			}
@@ -944,7 +944,7 @@ export class DexFormats {
 						throw new Error(`Rule "${ruleSpec}" conflicts with "${subformat.id}=${oldValue}"${ruleTable.blame(subformat.id)} (Use "!! ${ruleSpec}" to override "${subformat.id}=${oldValue}".)`);
 					}
 					if (subformat.mutuallyExclusiveWith && ruleTable.valueRules.has(subformat.mutuallyExclusiveWith)) {
-						const oldRule = `"${subformat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subformat.mutuallyExclusiveWith)}"`;
+						const oldRule = `"${subformat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subformat.mutuallyExclusiveWith)!}"`;
 						throw new Error(`Format can't simultaneously have "${ruleSpec}" and ${oldRule}${ruleTable.blame(subformat.mutuallyExclusiveWith)} (Use "!! ${ruleSpec}" to override ${oldRule}.)`);
 					}
 				}
@@ -958,7 +958,7 @@ export class DexFormats {
 			}
 			ruleTable.set(subformat.id, '');
 			if (depth > 16) {
-				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset}`);
+				throw new Error(`Excessive ruleTable recursion in ${format.name}: ${ruleSpec} of ${format.ruleset.join(',')}`);
 			}
 			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
 			for (const [ruleid, sourceFormat] of subRuleTable) {
@@ -979,7 +979,7 @@ export class DexFormats {
 					const subSubFormat = this.get(ruleid);
 					if (subSubFormat.mutuallyExclusiveWith && ruleTable.valueRules.has(subSubFormat.mutuallyExclusiveWith)) {
 						// mutually exclusive conflict!
-						throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${subSubFormat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subSubFormat.mutuallyExclusiveWith)}"${ruleTable.blame(subSubFormat.mutuallyExclusiveWith)} (Repeal one with ! before adding another)`);
+						throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${subSubFormat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subSubFormat.mutuallyExclusiveWith)!}"${ruleTable.blame(subSubFormat.mutuallyExclusiveWith)} (Repeal one with ! before adding another)`);
 					}
 					if (newValue !== oldValue) {
 						if (oldValue !== undefined) {

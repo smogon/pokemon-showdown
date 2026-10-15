@@ -81,7 +81,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn}`);
+				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn as DebugOutput}`);
 				this.battle.clearActiveMove(true);
 				// This is only run for sleep
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -199,7 +199,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (sourceEffect) attrs += `|[from] ${this.battle.dex.conditions.get(sourceEffect).name}`;
-			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
+			this.battle.addMove('move', pokemon, move.name, `${target!}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return true;

@@ -404,7 +404,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onStart(target, source) {
 				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
-				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
+				if (target.lastMove === null || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}

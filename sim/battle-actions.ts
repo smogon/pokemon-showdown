@@ -458,7 +458,7 @@ export class BattleActions {
 			attrs = `|[anim]${movename}${attrs}`;
 			movename = `Z-${movename}`;
 		}
-		this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
+		this.battle.addMove('move', pokemon, movename, `${target!}${attrs}`);
 
 		if (zMove) this.runZPower(move, pokemon);
 

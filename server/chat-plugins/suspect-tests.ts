@@ -284,11 +284,11 @@ export const commands: Chat.ChatCommands = {
 			if (!res || res.actionerror) {
 				throw new Chat.ErrorMessage(res?.actionerror || "The loginserver is currently disabled.");
 			}
-			this.globalModlog(`${source ? 'SET' : 'REMOVE'}BVALUE`, null, `${format.id}${bVal ? ` to ${bVal}` : ""}`);
+			this.globalModlog(`${bVal ? 'SET' : 'REMOVE'}BVALUE`, null, `${format.id}${bVal ? ` to ${bVal}` : ""}`);
 			this.addGlobalModAction(
 				`${user.name} ${bVal ? `set B value for ${format.name} to ${bVal}` : `removed B value for ${format.name}`}.`
 			);
-			if (source) {
+			if (bVal) {
 				return this.sendReply(`COIL B value for ${format.name} set to ${bVal}.`);
 			} else {
 				return this.sendReply(`Removed COIL B value for ${format.name}.`);

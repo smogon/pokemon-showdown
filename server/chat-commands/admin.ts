@@ -33,7 +33,7 @@ function bash(command: string, context: Chat.CommandContext, cwd?: string): Prom
 	return new Promise(resolve => {
 		child_process.exec(command, { cwd }, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
-			if (error) log = `[c] ${error.code}\n${log}`;
+			if (error) log = `[c] ${error.code!}\n${log}`;
 			context.stafflog(log);
 			resolve([error?.code || 0, stdout, stderr]);
 		});
@@ -874,7 +874,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching modlog...");
 
 				void Rooms.Modlog.restart();
-				// eslint-disable-next-line @typescript-eslint/await-thenable
+				// oxlint-disable-next-line typescript/await-thenable
 				await Rooms.Modlog.readyPromise;
 				this.sendReply("DONE");
 			} else if (target.startsWith('disable')) {
@@ -974,7 +974,7 @@ export const commands: Chat.ChatCommands = {
 				for (const row of rows) {
 					if (!row.trim()) continue;
 					const [pid, cpu, time, ram, ...rest] = row.split(' ').filter(Boolean);
-					if (pid === `${child.pid}`) continue; // ignore this process
+					if (pid === `${child.pid!}`) continue; // ignore this process
 					const entry: ProcessData = { cmd: rest.join(' ') };
 					// at the point of 0:00.[num], it's in so few seconds we don't care, so
 					// we don't need to clutter the display
@@ -1007,23 +1007,23 @@ export const commands: Chat.ChatCommands = {
 
 		for (const manager of ProcessManager.processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
-				const pid = process.getProcess().pid;
+				const pid = process.getProcess().pid ?? 'ERROR';
 				let managerName = manager.basename;
 				if (managerName.startsWith('index.')) { // doesn't actually tell us anything abt the process
 					managerName = manager.filename.split(path.sep).slice(-2).join(path.sep);
 				}
 				buf += `<strong>${pid}</strong> - ${managerName} ${i} (load ${process.getLoad()}`;
-				const info = processes.get(`${pid}`)!;
+				const info = processes.get(`${pid}`);
 				const display = [];
-				if (info.cpu) display.push(`CPU: ${info.cpu}`);
-				if (info.time) display.push(`time: ${info.time}`);
-				if (info.ram) display.push(`RAM: ${info.ram}`);
-				if (display.length) buf += `, ${display.join(', ')})`;
-				buf += `<br />`;
+				if (info?.cpu) display.push(`CPU: ${info.cpu}`);
+				if (info?.time) display.push(`time: ${info.time}`);
+				if (info?.ram) display.push(`RAM: ${info.ram}`);
+				if (display.length) buf += `, ${display.join(', ')}`;
+				buf += `)<br />`;
 				processes.delete(`${pid}`);
 			}
 			for (const [i, process] of manager.releasingProcesses.entries()) {
-				const pid = process.getProcess().pid;
+				const pid = process.getProcess().pid ?? 'ERROR';
 				buf += `<strong>${pid}</strong> - PENDING RELEASE ${manager.basename} ${i} (load ${process.getLoad()}`;
 				const info = processes.get(`${pid}`);
 				if (info) {
@@ -1031,9 +1031,9 @@ export const commands: Chat.ChatCommands = {
 					if (info.cpu) display.push(`CPU: ${info.cpu}`);
 					if (info.time) display.push(`time: ${info.time}`);
 					if (info.ram) display.push(`RAM: ${info.ram}`);
-					if (display.length) buf += `, ${display.join(', ')})`;
+					if (display.length) buf += `, ${display.join(', ')}`;
 				}
-				buf += `<br />`;
+				buf += `)<br />`;
 				processes.delete(`${pid}`);
 			}
 		}
@@ -1554,11 +1554,11 @@ export const commands: Chat.ChatCommands = {
 		logRoom?.roomlog(`>> ${target}`);
 		let uhtmlId = null;
 		try {
-			/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
+			/* oxlint-disable no-eval, no-unused-vars */
 			const battle = room?.battle;
 			const me = user;
 			let result = eval(target);
-			/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
+			/* oxlint-enable no-eval, no-unused-vars */
 
 			if (result?.then) {
 				uhtmlId = `eval-${Date.now().toString().slice(-6)}-${Math.random().toFixed(6).slice(-6)}`;
@@ -1714,7 +1714,7 @@ export const pages: Chat.PageTable = {
 		}
 		const bot = Users.get(botid);
 		if (!bot) {
-			return `<div class="pad"><h2>The bot "${bot}" is not available.</h2></div>`;
+			return Utils.html`<div class="pad"><h2>The bot "${botid}" is not available.</h2></div>`;
 		}
 		let canSend = Users.globalAuth.get(bot) === '*';
 		let room;

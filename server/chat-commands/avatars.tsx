@@ -800,11 +800,11 @@ export const commands: Chat.ChatCommands = {
 						allowed.filter(Boolean).map(avatar => (
 							<p>
 								{hasButton ? (
-									<button name="send" value={`/avatar ${avatar}`} class="button">{Avatars.img(avatar!)}</button>
+									<button name="send" value={`/avatar ${avatar}`} class="button">{Avatars.img(avatar)}</button>
 								) : (
-									Avatars.img(avatar!)
+									Avatars.img(avatar)
 								)} {}
-								<code>/avatar {avatar!.replace('#', '')}</code>
+								<code>/avatar {avatar.replace('#', '')}</code>
 							</p>
 						))
 					);
@@ -928,7 +928,7 @@ export const commands: Chat.ChatCommands = {
 			Avatars.save();
 			this.globalModlog('REMOVE AVATARS', userid, allowed.join(','));
 			this.sendReplyBox(<div>
-				{allowed.map(curAvatar => [Avatars.img(curAvatar!), ' '])}<br />
+				{allowed.map(curAvatar => [Avatars.img(curAvatar), ' '])}<br />
 				Removed from <username class="username">{inputUsername}</username>
 			</div>);
 		}

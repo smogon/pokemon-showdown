@@ -257,19 +257,19 @@ export const commands: Chat.ChatCommands = {
 			spotlights[room.roomid][key].shift();
 			spotlights[room.roomid][key].unshift(obj);
 
-			this.modlog('SETDAILY', key, `${img ? `${img}, ` : ''}${desc}`);
+			this.modlog('SETDAILY', key, `${img ? `${img.join(',')}, ` : ''}${desc}`);
 			this.privateModAction(`${user.name} set the daily ${key}.`);
 		} else if (cmd === 'queuedailyat') {
 			spotlights[room.roomid][key].splice(index, 0, obj);
-			this.modlog('QUEUEDAILY', key, `queue number ${index}: ${img ? `${img}, ` : ''}${desc}`);
+			this.modlog('QUEUEDAILY', key, `queue number ${index}: ${img ? `${img.join(',')}, ` : ''}${desc}`);
 			this.privateModAction(`${user.name} queued a daily ${key} at queue number ${index}.`);
 		} else {
 			spotlights[room.roomid][key][index] = obj;
 			if (indexString) {
-				this.modlog('REPLACEDAILY', key, `queue number ${index}: ${img ? `${img}, ` : ''}${desc}`);
+				this.modlog('REPLACEDAILY', key, `queue number ${index}: ${img ? `${img.join(',')}, ` : ''}${desc}`);
 				this.privateModAction(`${user.name} replaced the daily ${key} at queue number ${index}.`);
 			} else {
-				this.modlog('QUEUEDAILY', key, `${img ? `${img}, ` : ''}${desc}`);
+				this.modlog('QUEUEDAILY', key, `${img ? `${img.join(',')}, ` : ''}${desc}`);
 				this.privateModAction(`${user.name} queued a daily ${key}.`);
 			}
 		}

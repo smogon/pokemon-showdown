@@ -45,7 +45,7 @@
  */
 try {
 	require('source-map-support').install();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// oxlint-disable-next-line no-unused-vars
 } catch (e) {
 }
 // NOTE: This file intentionally doesn't use too many modern JavaScript
@@ -65,7 +65,7 @@ if (typeof fetch === 'undefined') {
 
 try {
 	require.resolve('ts-chacha20');
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// oxlint-disable-next-line no-unused-vars
 } catch (e) {
 	throw new Error("Dependencies are unmet; run `npm ci` before launching Pokemon Showdown again.");
 }

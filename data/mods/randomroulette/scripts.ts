@@ -57,7 +57,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		// Deserialized games should use restart()
 		if (this.deserialized) return;
 		// need all players to start
-		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides}`);
+		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides.join(',')}`);
 
 		if (this.started) throw new Error(`Battle already started`);
 

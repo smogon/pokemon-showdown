@@ -718,7 +718,7 @@ export abstract class BasicRoom {
 		}
 		if (this.settings.modjoin) {
 			const modjoin = this.settings.modjoin === true ? this.settings.modchat : this.settings.modjoin;
-			message += ` [${modjoin} or higher to join]`;
+			if (modjoin) message += ` [${modjoin} or higher to join]`;
 		}
 		if (this.settings.slowchat) {
 			message += ` [Slowchat ${this.settings.slowchat}s]`;
@@ -2230,15 +2230,15 @@ export const Rooms = {
 		}
 
 		const p1Special = players.length ? players[0].battleSettings.special : undefined;
-		let mismatch = `"${p1Special}"`;
+		let mismatch = `"${p1Special!}"`;
 		for (const user of players) {
 			if (user.battleSettings.special !== p1Special) {
-				mismatch += ` vs. "${user.battleSettings.special}"`;
+				mismatch += ` vs. "${user.battleSettings.special!}"`;
 			}
 			user.battleSettings.special = undefined;
 		}
 
-		if (mismatch !== `"${p1Special}"`) {
+		if (mismatch !== `"${p1Special!}"`) {
 			for (const user of players) {
 				user.popup(`Your special battle settings don't match: ${mismatch}`);
 			}

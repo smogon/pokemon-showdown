@@ -91,7 +91,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onCustap(pokemon) {
 			const action = this.queue.willMove(pokemon);
-			this.debug(`custap action: ${action?.moveid}`);
+			this.debug(`custap action: ${action?.moveid as DebugOutput}`);
 			if (action && pokemon.eatItem()) {
 				this.queue.cancelAction(pokemon);
 				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');

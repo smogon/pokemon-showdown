@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* oxlint-disable max-len */
 
 export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 	bulbasaur: {

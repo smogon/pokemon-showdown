@@ -873,7 +873,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Prevents teams from having Pok&eacute;mon with the same ability than allowed",
 		hasValue: 'positive-integer',
 		onBegin() {
-			const num = this.ruleTable.valueRules.get('abilityclause');
+			const num = this.ruleTable.valueRules.get('abilityclause')!;
 			this.add('rule', `${num} Ability Clause: Limit ${num} of each ability`);
 		},
 		onValidateRule(value) {
@@ -2152,7 +2152,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			let totalLevel = 0;
 			for (const pos of positions) totalLevel += pokemon[pos].level;
 			if (totalLevel > this.ruleTable.maxTotalLevel!) {
-				return `Your selected team has a total level of ${totalLevel}, but it can't be above ${this.ruleTable.maxTotalLevel}.`;
+				return `Your selected team has a total level of ${totalLevel}, but it can't be above ${this.ruleTable.maxTotalLevel!}.`;
 			}
 		},
 	},

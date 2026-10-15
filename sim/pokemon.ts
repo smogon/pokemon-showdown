@@ -1822,7 +1822,7 @@ export class Pokemon {
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
-				this.battle.add('-enditem', this, item, `[of] ${source}`);
+				this.battle.add('-enditem', this, item, `[of] ${source!}`);
 				break;
 			default:
 				if (item.isGem) {

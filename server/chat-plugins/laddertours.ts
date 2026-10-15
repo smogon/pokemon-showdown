@@ -95,7 +95,7 @@ export class LadderTracker {
 		// repeatedly do process.nextTick checks for accuracy
 		this.final = setTimeout(() => {
 			this.stop();
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
+			// oxlint-disable-next-line typescript/no-floating-promises
 			this.captureFinalLeaderboard();
 		}, timeDiff);
 
@@ -399,7 +399,7 @@ export class LadderTracker {
 		if (this.started) return;
 
 		this.togglePrefix();
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
+		// oxlint-disable-next-line typescript/no-misused-promises
 		this.started = setInterval(async () => {
 			// Leaderboard
 			const leaderboard = await this.getLeaderboard();
@@ -487,7 +487,7 @@ export const commands: Chat.ChatCommands = {
 			LadderTracker.save();
 
 			this.sendReply("Ladder tracking started.");
-			this.modlog('LADDERTRACK', null, Object.entries(config).map(([k, v]) => `${k}=${v}`).join(', '));
+			this.modlog('LADDERTRACK', null, Object.entries(config).map(([k, v]) => `${k}=${v as DebugOutput}`).join(', '));
 		},
 		top: 'leaderboard',
 		async leaderboard(target, room, user, sf, cmd) {

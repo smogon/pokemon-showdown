@@ -13,7 +13,6 @@
  * @license MIT
  */
 
-/* eslint no-else-return: "error" */
 import { Utils, ProcessManager } from '../../lib';
 import type { UserSettings } from '../users';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
@@ -433,6 +432,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				targetRoom = room;
 			}
+			if (!targetRoom) return this.parse('/help invite');
 			if (users.length > 1 && !user.trusted) {
 				throw new Chat.ErrorMessage("You do not have permission to mass-invite users.");
 			}
@@ -539,7 +539,7 @@ export const commands: Chat.ChatCommands = {
 		if (isOffline) {
 			await Chat.PrivateMessages.deleteSettings(user.id);
 		} else {
-			// eslint-disable-next-line require-atomic-updates
+			// oxlint-disable-next-line ps/require-atomic-updates
 			user.settings.blockPMs = false;
 		}
 		user.update();

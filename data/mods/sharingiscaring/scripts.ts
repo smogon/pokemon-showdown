@@ -38,7 +38,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.runEvent('UseItem', this, null, null, item)) {
 				switch (item.id.startsWith('item:') ? item.id.slice(5) : item.id) {
 				case 'redcard':
-					this.battle.add('-enditem', this, item.fullname, `[of] ${source}`);
+					this.battle.add('-enditem', this, item.fullname, `[of] ${source!}`);
 					break;
 				default:
 					if (item.isGem) {

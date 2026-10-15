@@ -11,8 +11,6 @@
 import { Utils } from '../../lib';
 import { type RoomSection, RoomSections } from './room-settings';
 
-/* eslint no-else-return: "error" */
-
 const MAX_REASON_LENGTH = 600;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
@@ -481,7 +479,7 @@ export const commands: Chat.ChatCommands = {
 		);
 
 		await Promise.all(promises);
-		// eslint-disable-next-line require-atomic-updates
+		// oxlint-disable-next-line ps/require-atomic-updates
 		connection.autojoins = autojoins.join(',');
 	},
 	autojoinhelp: [`/autojoin [rooms] - Automatically joins all the given rooms.`],
@@ -1474,11 +1472,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!Users.Auth.hasPermission(user, 'promote', currentGroup)) {
 			throw new Chat.ErrorMessage([`/${cmd} - Access denied for promoting from ${currentGroup}`,
-				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`]);
+				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote').join(',')}`]);
 		}
 		if (!Users.Auth.hasPermission(user, 'promote', nextGroup)) {
 			throw new Chat.ErrorMessage([`/${cmd} - Access denied for promoting to ${groupName}`,
-				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`]);
+				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote').join(',')}`]);
 		}
 
 		if (!Users.isUsernameKnown(userid)) {
@@ -2006,7 +2004,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`User '${target}' is not namelocked.`);
 		}
 
-		this.addGlobalModAction(`${unlocked} was unnamelocked by ${user.name}.${reason}`);
+		this.addGlobalModAction(`${unlocked.join(',')} was unnamelocked by ${user.name}.${reason}`);
 		this.globalModlog("UNNAMELOCK", toID(target));
 		this.parse(`/allowname ${toID(target)}`);
 		if (targetUser) targetUser.popup(`${user.name} has unnamelocked you.`);

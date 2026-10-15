@@ -91,7 +91,7 @@ class SSBMoveHTML extends Chat.JSX.Component<{ sigMove: Move, dex: ModdedDex, la
 			const boost = sigMove.zMove.boost;
 			let statid: BoostID;
 			for (statid in boost) {
-				details["Z-Effect"] += ` ${Dex.stats.mediumNames[statid as StatID]} +${boost[statid]}`;
+				details["Z-Effect"] += ` ${Dex.stats.mediumNames[statid as StatID]} +${boost[statid]!}`;
 			}
 		} else if (sigMove.isZ && typeof sigMove.isZ === 'string') {
 			details["Z-Move"] = "";
@@ -273,22 +273,22 @@ class SSBPokemonHTML extends Chat.JSX.Component<{
 					evos.push(`${evo.name} (level-up with high Friendship${condition})`);
 					break;
 				case 'levelHold':
-					evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
+					evos.push(`${evo.name} (level-up holding ${evo.evoItem!}${condition})`);
 					break;
 				case 'useItem':
-					evos.push(`${evo.name} (${evo.evoItem})`);
+					evos.push(`${evo.name} (${evo.evoItem!})`);
 					break;
 				case 'levelMove':
-					evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
+					evos.push(`${evo.name} (level-up with ${evo.evoMove!}${condition})`);
 					break;
 				case 'other':
-					evos.push(`${evo.name} (${evo.evoCondition})`);
+					evos.push(`${evo.name} (${evo.evoCondition!})`);
 					break;
 				case 'trade':
 					evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
 					break;
 				default:
-					evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
+					evos.push(`${evo.name} (${evo.evoLevel!}${condition})`);
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 'use strict';
-/* eslint-disable no-template-curly-in-string */
+/* oxlint-disable no-template-curly-in-string */
 
 const assert = require('assert').strict;
 

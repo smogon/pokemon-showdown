@@ -848,7 +848,10 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				if (game) {
 					game.setTimer(duration); // auto timer for queue'd games.
 					room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
-					room.modlog({ action: 'SCAV NEW', note: `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id)}` });
+					room.modlog({
+						action: 'SCAV NEW',
+						note: `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id).join(',')}`,
+					});
 				}
 
 				// update the saved queue.
@@ -1457,7 +1460,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		});
 
 		this.privateModAction(`A new scavenger hunt was created by ${user.name}.`);
-		this.modlog('SCAV NEW', null, `${gameType.toUpperCase()}: creators - ${hosts.map(h => h.id)}`);
+		this.modlog('SCAV NEW', null, `${gameType.toUpperCase()}: creators - ${hosts.map(h => h.id).join(',')}`);
 	},
 
 	status(target, room, user) {
@@ -1882,7 +1885,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		);
 
 		if (huntId) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.settings.scavQueue, user, room)}`);
-		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.id)}`);
+		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.id).join(',')}`);
 
 		// update the saved queue.
 		room.saveSettings();
@@ -2042,7 +2045,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
 			const points = [];
-			const source = Object.entries(Object.assign(DEFAULT_BLITZ_POINTS, room.settings.scavSettings.blitzPoints || {}));
+			const source = Object.entries({ ...DEFAULT_BLITZ_POINTS, ...room.settings.scavSettings.blitzPoints });
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1]}`);
 			}
@@ -2124,7 +2127,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			const points = [];
 			const source = Object.entries({
 				...DEFAULT_POINTS,
-				...(room.settings.scavSettings.winPoints as typeof DEFAULT_POINTS || {}),
+				...(room.settings.scavSettings.winPoints as typeof DEFAULT_POINTS),
 			});
 
 			for (const entry of source) {

@@ -3656,7 +3656,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZOrMaxPowered || target.lastMove.isMax || target.lastMove.id === 'struggle') {
+			if (
+				target.lastMove === null || target.lastMove.isZOrMaxPowered ||
+				target.lastMove.isMax || target.lastMove.id === 'struggle'
+			) {
 				return false;
 			}
 		},
@@ -13260,7 +13263,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 24,
 			onResidual(pokemon) {
-				const duration = pokemon.volatiles['perishsong'].duration;
+				const duration = pokemon.volatiles['perishsong'].duration!;
 				this.add('-start', pokemon, `perish${duration}`);
 			},
 		},
