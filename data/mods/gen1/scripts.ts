@@ -770,7 +770,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// We edit the damage through move's damage callback if necessary.
-			if (move.damageCallback) {
+			if (move.damageCallback && move.id !== 'counter') {
 				return move.damageCallback.call(this.battle, source, target);
 			}
 
@@ -882,6 +882,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!suppressMessages) this.battle.add('-crit', target);
 			}
 			level = this.battle.trunc(level, 8);
+
+			if (move.damageCallback && move.id === 'counter') {
+				return move.damageCallback.call(this.battle, source, target);
+			}
 
 			if (move.ignoreOffensive) {
 				this.battle.debug('Negating (sp)atk boost/penalty.');
