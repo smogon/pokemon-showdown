@@ -532,7 +532,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 					// Technically not a secondary effect, but it is negated
 					delete move.self;
 					if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
-					// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
+					// Actual negation of `AfterMoveSecondary` effects implemented sim/battle-actions.ts#useMoveInner
 					move.hasSheerForce = true;
 				}
 			}
@@ -3239,7 +3239,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				}
 			}
 		},
-		// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
+		// groundedness implemented in sim/pokemon.ts#isGrounded
 		onBeforeMovePriority: 6,
 		onBeforeMove(pokemon, target, move) {
 			if (move.flags['gravity'] && !move.isZ) {
