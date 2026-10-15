@@ -1667,7 +1667,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		user: 'self',
 	};
 	// "spread" isn't a real move target, just a wrapper
-	const spreadTargets = ['all', 'allAdjacent', 'allAdjacentFoes', 'allies', 'foeSide'];
+	const spreadTargets = ['all', 'allAdjacent', 'allAdjacentFoes'];
 	const allTypes: { [k: string]: string } = Object.create(null);
 	for (const type of mod.types.all()) {
 		allTypes[type.id] = type.name;
