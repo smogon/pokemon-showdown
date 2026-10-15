@@ -172,4 +172,23 @@ describe("Tera Stellar", () => {
 		battle.makeChoices('move absorb', 'auto');
 		assert.bounded(hp - chansey.hp, [12, 15], `Absorb should be a 20 BP with regular damage on its second use`);
 	});
+
+	it(`should boost the base power on every target of a spread move's first-use activation`, () => {
+		battle = common.gen(9).createBattle({ gameType: 'doubles', seed: [2, 3, 4, 5] }, [[
+			{ species: 'Comfey', moves: ['razorleaf'], teraType: 'Stellar' },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Chansey', ability: 'shellarmor', moves: ['sleeptalk'] },
+			{ species: 'Chansey', ability: 'shellarmor', moves: ['sleeptalk'] },
+		]]);
+
+		const t1 = battle.p2.active[0];
+		const t2 = battle.p2.active[1];
+		const s1 = t1.hp, s2 = t2.hp;
+		battle.makeChoices('move razorleaf terastallize, move sleeptalk', 'auto');
+		const d1 = s1 - t1.hp;
+		const d2 = s2 - t2.hp;
+		assert.bounded(d1, [118, 139], `Razor Leaf should hit target 1 at 60 BP with ~1.2x Stellar and 0.75 spread`);
+		assert.bounded(d2, [118, 139], `Razor Leaf should hit target 2 at the same 60 BP because Stellar is still resolving its first use of Grass`);
+	});
 });
