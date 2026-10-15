@@ -44,7 +44,7 @@ SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 					\[ ( [^\s()<>&[\]] | &amp; )* ]
 				)*
 				# URLs usually don't end with punctuation, so don't allow
-				# punctuation symbols that probably arent related to URL.
+				# punctuation symbols that probably aren't related to URL.
 				(
 					[^\s()[\]{}\".,!?;:&<>*`^~\\]
 				|
