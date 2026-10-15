@@ -3767,4 +3767,13 @@ export const PokedexText: { [id: IDEntry]: PokedexText } = {
 	pokestarufopropu2: {
 		name: "Pokestar UFO-PropU2",
 	},
+	tairanofumikado: {
+        name: "Taira no Fumikado",
+    },
+    tairanofumikadoemperor: {
+        name: "Taira no Fumikado-Emperor",
+    },
+    tairanofumikadoswapped: {
+        name: "Taira no Fumikado-Swapped",
+    },
 };

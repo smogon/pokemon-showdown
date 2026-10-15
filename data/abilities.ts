@@ -6851,6 +6851,165 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 1876,
 	},
-	
-};
+	homonculusdream: {
+        onStart(pokemon) {
+            if (pokemon.ameCollectee === undefined) {
+                pokemon.ameCollectee = 1000;
+                this.add('-start', pokemon, 'Ame a collecter: 1000');
+            } else if (pokemon.ameCollectee > 0) {
+                this.add('-start', pokemon, `Ame a collecter: ${pokemon.ameCollectee}`);
+            }
+        },
+		onAnyDamage(damage, target, source, effect) {
+			// On vérifie si on doit retirer des âmes
+			if (!(damage > 0) || !target.hp) return;
+            const holder = this.effectState.target;
+            if (target === holder) return;
+            if (holder.ameCollectee <= 0) return;
 
+			// On retire les âmes d'une valeur égale au nombre de HP perdus
+            holder.ameCollectee -= Math.min(damage, target.hp);
+			if (holder.ameCollectee > 0) return;
+            holder.ameCollectee = 0;
+
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) { 
+			// Les âmes doivent être toutes collectées
+			if (pokemon.ameCollectee !== 0) return;
+			if (!pokemon.hp || !pokemon.isActive) return;
+            this.add('-activate', pokemon, 'Ame collectee');
+			this.add('-end', pokemon, `Ame a collecter: ${pokemon.ameCollectee}`);
+
+			// On copie les statistiques brutes du Pokémon
+            const currentStats = {
+				'hp': pokemon.maxhp,
+                'atk': pokemon.storedStats.atk, 
+				'def': pokemon.storedStats.def,
+                'spa': pokemon.storedStats.spa, 
+				'spd': pokemon.storedStats.spd, 
+				'spe': pokemon.storedStats.spe,
+            };
+			
+			// Si on est toujours en forme Fumikado on change simplement de forme !
+            if (pokemon.species.id === 'tairanofumikado' && !pokemon.transformed) {
+                pokemon.formeChange('tairanofumikadoemperor', this.effect, true);
+            } 
+			
+			// Sinon on clone le Pokémon actuel, on double ses stats et on modifie nom, forme et abilities pour pouvoir changer de forme
+			else {
+                const newSpecies = this.dex.deepClone(pokemon.species);
+                newSpecies.name = 'Taira no Fumikado-Emperor';
+                newSpecies.forme = 'Emperor';
+                newSpecies.abilities = { 0: 'True Emperor' };
+				
+        	    pokemon.formeChange(newSpecies, this.effect, true);
+
+				const listeIdStat = ["hp", "atk", "def", "spa", "spd", "spe"];
+                for (const idStat of listeIdStat) {
+                    pokemon.baseStoredStats[idStat] = currentStats[idStat] * 2;
+                }
+                pokemon.updateSpeed();
+            }
+
+            pokemon.clearBoosts();
+            this.add('-clearboost', pokemon);
+            for (const i of Object.keys(pokemon.volatiles)) {
+                if (i === 'dynamax') continue;
+                pokemon.removeVolatile(i);
+            }
+            if (pokemon.status) pokemon.cureStatus(true);
+            this.add('-message', `${pokemon.name} a collecté 1000 âmes et révèle sa vraie nature : le Vrai Empereur ! Citoyens de la capitale, inclinez-vous ! Une nouvelle ère s'annonce pour Mugenri !`);
+		},
+        flags: {},
+        name: "Homonculus Dream",
+        rating: 3,
+        num: 9000,
+    },
+    homonculusnightmare: {
+        onResidualOrder: 29,
+        onResidual(pokemon) {
+            const usable = pokemon.moveSlots.filter(slot => slot.pp > 0 && !slot.disabled);
+            if (!usable.length) {
+                this.debug('Homonculus Nightmare: no PP left to lose');
+                return;
+            }
+            const slot = this.sample(usable);
+            slot.pp = Math.max(0, slot.pp - 64);
+            this.add('-activate', pokemon, 'ability: Homonculus Nightmare');
+            this.add('-message', `${pokemon.name} oublie comment utiliser ${slot.move} !`);
+        },
+        flags: {},
+        name: "Homonculus Nightmare",
+        rating: 0,
+        num: 9001,
+    },
+	trueemperor: {
+        onStart(pokemon) {
+            this.add('-ability', pokemon, 'True Emperor');
+            if (pokemon.addedType !== 'Stellar') {
+                pokemon.addedType = 'Stellar';
+                this.add('-start', pokemon, 'typeadd', 'Stellar');
+            }
+        },
+        onSetStatus(status, target, source, effect) {
+            if (effect as Move && (effect as Move).status) {
+                this.add('-immune', target, '[from] ability: True Emperor');
+            }
+            return false;
+        },
+        onTryAddVolatile(status, target) {
+            this.add('-immune', target, '[from] ability: True Emperor');
+            return null;
+        },
+        onTryBoost(boost, target, source, effect) {
+            if (source && target === source) return;
+            let showMsg = false;
+            let i: BoostID;
+            for (i in boost) {
+                if (boost[i]! < 0) {
+                    delete boost[i];
+                    showMsg = true;
+                }
+            }
+            if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+                this.add("-fail", target, "unboost", "[from] ability: True Emperor", `[of] ${target}`);
+            }
+        },
+        onDamage(damage, target, source, effect) {
+            if (effect.effectType !== 'Move') {
+                this.add('-immune', target, '[from] ability: True Emperor', '[silent]');
+                return false;
+            }
+        },
+        onDragOut(pokemon) {
+            this.add('-activate', pokemon, '[from] ability: True Emperor');
+            return null;
+        },
+		flags: {},
+        name: "True Emperor",
+        rating: 5,
+        num: 9002,
+	},
+	drip:{
+		onAfterBoost(boost, target, source, effect) {
+			let boostPositif = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					boostPositif = true;
+				}
+			}
+			if (boostPositif) {
+				this.add('-activate', target, '[from] ability: Drip')
+				this.add('-message', `${target.name} a du drip !`);
+				this.actions.useMove('batonpass', target);
+			}
+		},
+		flags: {},
+		name: "Drip",
+		rating: 5,
+		num: 155,
+	},
+};

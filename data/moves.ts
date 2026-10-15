@@ -23330,5 +23330,110 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Tough",
 	},
+    soulswap: {
+        num: 10000,
+        accuracy: true,
+        basePower: 0,
+        category: "Status",
+        name: "Soul Swap",
+        pp: 5,
+        priority: 0,
+        flags: { protect: 1, mirror: 1, bypasssub: 1, noassist: 1, failcopycat: 1, failinstruct: 1, shitpost: 1 },
+        onHit(target, source) {
+            if (!target.hp) return false;
+            this.add('-activate', source, 'move: Soul Swap', target);
 
+            for (const poke of [source, target]) {
+                if (poke.volatiles['dynamax']) delete poke.volatiles['dynamax'];
+            }
+
+			// Items
+            const sourceItem = source.takeItem();
+            const targetItem = target.takeItem();
+            if (sourceItem) {
+                target.setItem(sourceItem, source);
+                this.add('-item', target, sourceItem, '[from] move: Soul Swap');
+            }
+            if (targetItem) {
+                source.setItem(targetItem, target);
+                this.add('-item', source, targetItem, '[from] move: Soul Swap');
+            }
+			
+			// Il faudra aussi inverser les niveaux
+
+			// Stats
+            const statsOf = (poke: Pokemon) => ({
+                atk: poke.storedStats.atk, def: poke.storedStats.def,
+                spa: poke.storedStats.spa, spd: poke.storedStats.spd, spe: poke.storedStats.spe,
+            });
+            const sourceStats = statsOf(source);
+            const targetStats = statsOf(target);
+            target.storedStats = sourceStats;
+			source.storedStats = targetStats;
+			
+			// Changements de statistiques
+            const sourceBoosts = { ...source.boosts };
+            const targetBoosts = { ...target.boosts };
+            let i: BoostID;
+            for (i in source.boosts) {
+                source.boosts[i] = targetBoosts[i] || 0;
+                target.boosts[i] = sourceBoosts[i] || 0;
+            }
+            this.add('-swapboost', source, target, '[from] move: Soul Swap');
+			
+			// Status
+			const sourceStatus = source.status;
+			const targetStatus = target.status;
+			target.status = sourceStatus;
+			source.status = targetStatus;
+			this.add('-swapstatus', source, target, '[from] move: Soul Swap');
+
+			// Volatiles => ne fct pas encore
+            const volatilesOf = (pokemon: Pokemon) => {
+				const pokemonVolatiles: {[k: string]: typeof pokemon.volatiles[ID]} = {}; // vibecode
+                for (const k in pokemon.volatiles) {
+                    if (this.dex.conditions.getByID(k as ID).noCopy) continue;
+                    pokemonVolatiles[k] = pokemon.volatiles[k];
+                }
+                return pokemonVolatiles;
+            };
+            const sourceVolatiles = volatilesOf(source);
+            const targetVolatiles = volatilesOf(target);
+            for (const k in sourceVolatiles) source.removeVolatile(k);
+            for (const k in targetVolatiles) target.removeVolatile(k);
+            for (const k in targetVolatiles) {
+                source.volatiles[k] = this.initEffectState({ ...targetVolatiles[k], target: source });
+            }
+            for (const k in sourceVolatiles) {
+                target.volatiles[k] = this.initEffectState({ ...sourceVolatiles[k], target: target });
+			}
+
+			// A REPRENDRE VRMT FORT
+            if (source.species.baseSpecies === 'Taira no Fumikado') {
+                const swapped = this.dex.deepClone(source.species);
+                swapped.name = 'Taira no Fumikado-Swapped';
+                swapped.forme = 'Swapped';
+                swapped.spriteid = 'tairanofumikadoswapped';
+                swapped.types = [...target.getTypes()];
+                // swapped.abilities = { 0: source.getAbility().name };
+                source.formeChange(swapped, this.effect, false);
+                source.transformed = true;
+                let statName: StatIDExceptHP;
+                for (statName in source.storedStats) {
+                    source.storedStats[statName] = targetStats[statName];
+                }
+                this.add('-transform', source, target, '[from] move: Soul Swap');
+            }
+			
+			target.setAbility('homonculusnightmare', source, this.effect);
+            this.add('-message', `${target.name} est piege dans le cauchemar de l'homoncule !`); // je laisse ça car le chat a slay avec cette phrase ptdr
+
+            source.updateSpeed();
+            target.updateSpeed();
+            this.add('-message', `${source.name} et ${target.name} ont échangé de corps !`);
+        },
+        target: "normal",
+        type: "Ghost",
+        contestType: "Clever",
+    },
 };

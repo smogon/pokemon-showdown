@@ -6347,5 +6347,14 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	mewtow1g: {
 		tier: "shitpostuber"
-	}
+	},
+	tairanofumikado: {
+        tier: "shitpostou"
+    },
+    tairanofumikadoemperor: {
+        tier: "shitpostuber"
+    },
+    tairanofumikadoswapped: {
+        tier: "shitpostou"
+    },
 };
