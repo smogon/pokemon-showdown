@@ -5067,7 +5067,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Mew', 'Mewtwo',
 			'Mimikyu', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky',
 			'Snorlax', 'Solgaleo', 'Tapu Koko', 'Xerneas', 'Yveltal', 'Zekrom', 'Moody', 'Focus Sash', 'Grass Whistle', 'Hypnosis',
-			'Perish Song', 'Sing', 'Swagger', 'Detect + Fightinium Z',
+			'Lovely Kiss', 'Sleep Powder', 'Spore', 'Perish Song', 'Sing', 'Swagger', 'Yawn', 'Detect + Fightinium Z',
 		],
 	},
 	{
