@@ -269,6 +269,39 @@ describe('Sky Drop', () => {
 		battle.makeChoices();
 		assert(battle.log.indexOf('|-end|p1a: Wynaut|Sky Drop|[interrupt]') < 0, `Sky Drop should only announce that it failed, not that any Pokemon was freed.`);
 	});
+
+	it(`should return the target to the ground if the move fails on the way down.`, () => {
+		battle = common.createBattle([[
+			{ species: 'Skarmory', ability: 'sturdy', moves: ['skydrop'] },
+		], [
+			{ species: 'Manectric', moves: ['raindance'] },
+		]]);
+		assert.equal(battle.turn, 1);
+		battle.makeChoices('move skydrop', 'move raindance');
+		assert.equal(battle.turn, 2);
+		battle.forceRandomChance = false;
+		battle.makeChoices('move skydrop', 'move raindance');
+		assert(battle.log.some(line => line.includes('-miss|p1a: Skarmory|p2a: Manectric')));
+		assert(battle.log.some(line => line.includes('-end|p2a: Manectric|Sky Drop|[interrupt]')));
+	});
+
+	it(`should return the target to the ground if the second turn of the move is not executed.`, () => {
+		battle = common.createBattle({ forceRandomChance: true }, [[
+			{ species: 'Skarmory', ability: 'sturdy', moves: ['skydrop', 'curse'] },
+		], [
+			{ species: 'Jolteon', moves: ['yawn'] },
+		]]);
+		assert.equal(battle.turn, 1);
+		battle.makeChoices('move curse', 'move yawn');
+		assert.equal(battle.turn, 2);
+		battle.makeChoices('move skydrop', 'move yawn');
+		assert(battle.log.some(line => line.includes('|move|p1a: Skarmory|Sky Drop')));
+		assert.equal(battle.turn, 3);
+		assert.equal(battle.p1.active[0].status, 'slp');
+		battle.makeChoices('move skydrop', 'move yawn');
+		assert(battle.log.some(line => line.includes('cant|p1a: Skarmory|slp')));
+		assert(battle.log.some(line => line.includes('-end|p2a: Jolteon|Sky Drop|[interrupt]')));
+	});
 });
 
 describe('Sky Drop [Gen 5]', () => {
