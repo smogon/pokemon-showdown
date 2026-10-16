@@ -15,7 +15,7 @@ import { Teams } from './teams';
 import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
 
-const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
+const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'legends', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -1944,6 +1944,9 @@ export class TeamValidator {
 			}
 			if (thing.isNonstandard === 'LGPE') {
 				return `${displayName} does not exist in this game, only in Let's Go Pikachu/Eevee.`;
+			}
+			if (thing.isNonstandard === 'Legends') {
+				return `${displayName} does not exist in this game, only in Pokémon Legends: Arceus/Z-A.`;
 			}
 			return `${displayName} does not exist in this game.`;
 		}

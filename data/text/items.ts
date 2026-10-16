@@ -149,6 +149,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Binding Band",
 		shortDesc: "Holder's partial-trapping moves deal 1/6 max HP per turn instead of 1/8.",
 	},
+	blackaugurite: {
+		name: "Black Augurite",
+		shortDesc: "Evolves Scyther into Kleavor when used.",
+	},
 	blackbelt: {
 		name: "Black Belt",
 		shortDesc: "Holder's Fighting-type attacks have 1.2× power.",

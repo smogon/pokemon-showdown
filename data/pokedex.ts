@@ -17501,7 +17501,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		prevo: "Scyther",
 		evoType: "useItem",
-		evoCondition: "Black Augurite",
+		evoItem: "Black Augurite",
 		eggGroups: ["Bug"],
 	},
 	ursaluna: {

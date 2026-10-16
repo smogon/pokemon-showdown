@@ -505,6 +505,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 544,
 		gen: 5,
 	},
+	blackaugurite: {
+		name: "Black Augurite",
+		num: 1691,
+		gen: 8,
+		isNonstandard: "Legends",
+	},
 	blackbelt: {
 		name: "Black Belt",
 		spritenum: 32,
