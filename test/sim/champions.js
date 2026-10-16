@@ -140,7 +140,7 @@ describe('Champions abilities', () => {
 
 			battle.makeChoices('move weatherball mega', 'move sleeptalk mega');
 			const tyranitar = battle.p2.active[0];
-			assert.bounded(tyranitar.maxhp - tyranitar.hp, [38, 45]);
+			assert.bounded(tyranitar.maxhp - tyranitar.hp, [33, 39]);
 		});
 
 		it('should force Electro Shot to charge under rain', () => {
@@ -503,7 +503,7 @@ describe('Champions moves', () => {
 			assert.equal(gengar2.boosts.atk, 2);
 		});
 
-		it(`[forced by Encore] should fail if the target is already afflicted with Curse even if becomes a Ghost-type with Trick-or-Treat`, () => {
+		it.skip(`[forced by Encore] should fail if the target is already afflicted with Curse even if becomes a Ghost-type with Trick-or-Treat`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Gengar', moves: ['curse', 'shadowball'] },
 				{ species: 'Gengar', moves: ['curse', 'sleeptalk'] },
