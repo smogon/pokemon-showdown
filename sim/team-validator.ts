@@ -1139,7 +1139,7 @@ export class TeamValidator {
 		if (!problems.length) {
 			if (!set.gender) {
 				if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
-					set.gender = species.gender || (Math.random() <= species.genderRatio.M ? 'M' : 'F');
+					set.gender = species.gender || (Math.random() < 0.5 ? 'M' : 'F');
 				} else {
 					set.gender = 'N';
 				}

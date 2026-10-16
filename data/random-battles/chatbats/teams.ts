@@ -719,7 +719,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
+			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || this.sample(['M', 'F'])),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,
