@@ -491,7 +491,7 @@ if (!PM.isParentProcess) {
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
-	};
+	} as typeof Monitor;
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
 			Monitor.crashlog(err, 'A battle search child process');

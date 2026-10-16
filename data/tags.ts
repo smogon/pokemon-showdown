@@ -1,6 +1,5 @@
-interface TagData {
+export interface TagData {
 	name: string;
-	desc?: string;
 	speciesFilter?: (species: Species) => boolean;
 	moveFilter?: (move: Move) => boolean;
 	genericFilter?: (thing: Species | Move | Item | Ability) => boolean;
@@ -14,17 +13,14 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// ----------
 	physical: {
 		name: "Physical",
-		desc: "Move deals damage with the Attack and Defense stats.",
 		moveFilter: move => move.category === 'Physical',
 	},
 	special: {
 		name: "Special",
-		desc: "Move deals damage with the Special Attack and Special Defense stats.",
 		moveFilter: move => move.category === 'Special',
 	},
 	status: {
 		name: "Status",
-		desc: "Move does not deal damage.",
 		moveFilter: move => move.category === 'Status',
 	},
 
@@ -33,6 +29,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	mega: {
 		name: "Mega",
 		speciesFilter: species => !!species.isMega,
+	},
+	gigantamax: {
+		name: "Gigantamax",
+		speciesFilter: species => !!species.placeholderFor,
 	},
 	mythical: {
 		name: "Mythical",
@@ -54,6 +54,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "Paradox",
 		speciesFilter: species => species.tags.includes("Paradox"),
 	},
+	pokestar: {
+		name: "Pokestar",
+		speciesFilter: species => species.tags.includes("Pokestar"),
+	},
 
 	// Move tags
 	// ---------
@@ -67,62 +71,78 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	contact: {
 		name: "Contact",
-		desc: "Affected by a variety of moves, abilities, and items. Moves affected by contact moves include: Spiky Shield, King's Shield. Abilities affected by contact moves include: Iron Barbs, Rough Skin, Gooey, Flame Body, Static, Tough Claws. Items affected by contact moves include: Rocky Helmet, Sticky Barb.",
 		moveFilter: move => 'contact' in move.flags,
 	},
 	sound: {
 		name: "Sound",
-		desc: "Doesn't affect Soundproof Pokémon. (All sound moves also bypass Substitute.)",
 		moveFilter: move => 'sound' in move.flags,
 	},
 	powder: {
 		name: "Powder",
-		desc: "Doesn't affect Grass-type Pokémon, Overcoat Pokémon, or Safety Goggles holders.",
 		moveFilter: move => 'powder' in move.flags,
 	},
 	fist: {
 		name: "Fist",
-		desc: "Boosted 1.2x by Iron Fist.",
 		moveFilter: move => 'punch' in move.flags,
 	},
 	pulse: {
 		name: "Pulse",
-		desc: "Boosted 1.5x by Mega Launcher.",
 		moveFilter: move => 'pulse' in move.flags,
 	},
 	bite: {
 		name: "Bite",
-		desc: "Boosted 1.5x by Strong Jaw.",
 		moveFilter: move => 'bite' in move.flags,
 	},
-	ballistic: {
-		name: "Ballistic",
-		desc: "Doesn't affect Bulletproof Pokémon.",
+	bullet: {
+		name: "Bullet",
 		moveFilter: move => 'bullet' in move.flags,
 	},
+	dance: {
+		name: "Dance",
+		moveFilter: move => 'dance' in move.flags,
+	},
+	slicing: {
+		name: "Slicing",
+		moveFilter: move => 'slicing' in move.flags,
+	},
+	wind: {
+		name: "Wind",
+		moveFilter: move => 'wind' in move.flags,
+	},
+	twoturnmove: {
+		name: "Two-turn move",
+		moveFilter: move => 'charge' in move.flags,
+	},
+	recharge: {
+		name: "Recharge",
+		moveFilter: move => 'recharge' in move.flags,
+	},
+	suppressedbygravity: {
+		name: "Suppressed by Gravity",
+		moveFilter: move => 'gravity' in move.flags,
+	},
+	boostedbysheerforce: {
+		name: "Boosted by Sheer Force",
+		moveFilter: move => !!(move.secondary || move.secondaries || move.hasSheerForceBoost),
+	},
 	bypassprotect: {
-		name: "Bypass Protect",
-		desc: "Bypasses Protect, Detect, King's Shield, and Spiky Shield.",
+		name: "Bypasses Protect",
 		moveFilter: move => move.target !== 'self' && !('protect' in move.flags),
 	},
 	nonreflectable: {
 		name: "Nonreflectable",
-		desc: "Can't be bounced by Magic Coat or Magic Bounce.",
 		moveFilter: move => move.target !== 'self' && move.category === 'Status' && !('reflectable' in move.flags),
 	},
 	nonmirror: {
 		name: "Nonmirror",
-		desc: "Can't be copied by Mirror Move.",
 		moveFilter: move => move.target !== 'self' && !('mirror' in move.flags),
 	},
 	nonsnatchable: {
 		name: "Nonsnatchable",
-		desc: "Can't be copied by Snatch.",
 		moveFilter: move => ['allyTeam', 'self', 'adjacentAllyOrSelf'].includes(move.target) && !('snatch' in move.flags),
 	},
 	bypasssubstitute: {
-		name: "Bypass Substitute",
-		desc: "Bypasses but does not break a Substitute.",
+		name: "Bypasses Substitutes",
 		moveFilter: move => 'bypasssub' in move.flags,
 	},
 	gmaxmove: {
@@ -134,7 +154,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// -----
 	uber: {
 		name: "Uber",
-		speciesFilter: species => species.tier === 'Uber' || species.tier === '(Uber)' || species.tier === 'AG',
+		speciesFilter: species => species.tier === 'Uber' || species.tier === 'AG' || species.tier === '(AG)',
 	},
 	ou: {
 		name: "OU",
@@ -170,7 +190,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	pu: {
 		name: "PU",
-		speciesFilter: species => species.tier === 'PU' || species.tier === '(NU)',
+		speciesFilter: species => species.tier === 'PU',
 	},
 	zubl: {
 		name: "ZUBL",
@@ -178,7 +198,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	zu: {
 		name: "ZU",
-		speciesFilter: species => species.tier === '(PU)' || species.tier === 'ZU',
+		speciesFilter: species => species.tier === 'ZU',
 	},
 	nfe: {
 		name: "NFE",
@@ -202,7 +222,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	ag: {
 		name: "AG",
-		speciesFilter: species => species.tier === 'AG',
+		speciesFilter: species => species.tier === 'AG' || species.tier === '(AG)',
 	},
 
 	// Doubles tiers
@@ -232,11 +252,11 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	// -------------
 	ndag: {
 		name: "ND AG",
-		speciesFilter: species => species.natDexTier === 'AG',
+		speciesFilter: species => species.natDexTier === 'AG' || species.natDexTier === '(AG)',
 	},
 	nduber: {
 		name: "ND Uber",
-		speciesFilter: species => species.natDexTier === 'Uber' || species.natDexTier === '(Uber)',
+		speciesFilter: species => species.natDexTier === 'Uber',
 	},
 	ndou: {
 		name: "ND OU",
@@ -272,6 +292,14 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "Past",
 		genericFilter: thing => thing.isNonstandard === 'Past',
 	},
+	truepast: {
+		name: "True Past",
+		genericFilter: thing => !!thing.tags?.includes("True Past"),
+	},
+	pastunobtainable: {
+		name: "Past Unobtainable",
+		genericFilter: thing => !!thing.tags?.includes("Past Unobtainable"),
+	},
 	future: {
 		name: "Future",
 		genericFilter: thing => thing.isNonstandard === 'Future',
@@ -286,7 +314,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	cap: {
 		name: "CAP",
-		speciesFilter: thing => thing.isNonstandard === 'CAP',
+		genericFilter: thing => thing.isNonstandard === 'CAP',
 	},
 	custom: {
 		name: "Custom",
@@ -314,37 +342,30 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	hp: {
 		name: "HP",
-		desc: "Hit Points",
 		speciesNumCol: species => species.baseStats.hp,
 	},
 	atk: {
 		name: "Atk",
-		desc: "Attack",
 		speciesNumCol: species => species.baseStats.atk,
 	},
 	def: {
 		name: "Def",
-		desc: "Defense",
 		speciesNumCol: species => species.baseStats.def,
 	},
 	spa: {
 		name: "SpA",
-		desc: "Special Attack",
 		speciesNumCol: species => species.baseStats.spa,
 	},
 	spd: {
 		name: "SpD",
-		desc: "Special Defense",
 		speciesNumCol: species => species.baseStats.spd,
 	},
 	spe: {
 		name: "Spe",
-		desc: "Speed",
 		speciesNumCol: species => species.baseStats.spe,
 	},
 	bst: {
 		name: "BST",
-		desc: "Base Stat Total",
 		speciesNumCol: species => species.bst,
 	},
 

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["es2020"],
+        "lib": ["ESNext"],
         "noEmit": true,
         "jsx": "react",
         "jsxFactory": "Chat.h",
@@ -28,7 +28,7 @@
     "include": [
         "./config/*.ts",
         "./data/*",
-        "./data/text/*",
+        "./data/text/**/*",
         "./data/random-battles/**/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",

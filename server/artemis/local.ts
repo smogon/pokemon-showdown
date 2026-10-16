@@ -166,7 +166,7 @@ if (!PM.isParentProcess) {
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
-	};
+	} as typeof Monitor;
 	global.toID = toID;
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {

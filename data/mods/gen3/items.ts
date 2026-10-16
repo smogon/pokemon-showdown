@@ -300,7 +300,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	quickclaw: {
 		inherit: true,
-		onFractionalPriority: undefined, // no inherit
+		onBeforeTurn: undefined, // no inherit
+		onCustap: undefined, // no inherit
 		// implemented in Pokemon#getActionSpeed()
 	},
 	salacberry: {
