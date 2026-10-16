@@ -39,7 +39,7 @@ Its entry point is [server/index.ts](./server/index.ts), which launches several 
 Client
 ------
 
-The client is built in a mix of TypeScript and JavaScript, with a mostly hand-rolled framework built on Backbone. There’s a rewrite to migrate it to Preact but it’s very stalled.
+The client is built in a mix of TypeScript and JavaScript, with a mostly hand-rolled framework built on Backbone. There’s a rewrite to migrate it to Preact, whose progress can be tracked in the [GitHub Project](https://github.com/orgs/smogon/projects/2/views/2).
 
 Its entry point is [index.template.html](https://github.com/smogon/pokemon-showdown-client/blob/master/play.pokemonshowdown.com/index.template.html)
 

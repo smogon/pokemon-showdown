@@ -1,4 +1,4 @@
-import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 import { Utils } from '../lib/utils';
 import { isDeepStrictEqual } from 'node:util';
 
@@ -8,8 +8,6 @@ interface SpeciesAbility {
 	H?: string;
 	S?: string;
 }
-
-type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Ultra Beast" | "Paradox";
 
 export interface SpeciesData extends Partial<Species> {
 	name: string;
@@ -30,9 +28,9 @@ export interface CosmeticFormeData {
 	color: string;
 }
 
-export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
+export type ModdedSpeciesData = (SpeciesData | CosmeticFormeData |
 	Partial<Omit<SpeciesData, 'name'>> & { inherit: true } |
-	Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true };
+	Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true }) & ModdedEffectText;
 
 export interface SpeciesFormatsData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
@@ -214,9 +212,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** Color. */
 	readonly color: string;
 	/**
-	 * Tags, boolean data. Currently just legendary/mythical status.
+	 * Tags, boolean "are you or are you not on this list" data.
 	 */
-	readonly tags: SpeciesTag[];
+	override readonly tags: (TableGenericTag | TableSpeciesTag)[];
 	/** Does this Pokemon have an unreleased hidden ability? */
 	readonly unreleasedHidden: boolean | 'Past';
 	/**
@@ -577,7 +575,7 @@ export class DexSpecies {
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
 			if (this.dex.currentMod === 'gen8bdsp' &&
-				(!species.isNonstandard || ["Gigantamax", "CAP"].includes(species.isNonstandard))) {
+				(!species.isNonstandard || species.isNonstandard === 'CAP')) {
 				if (species.gen > 4 || (species.num < 1 && species.isNonstandard !== 'CAP') ||
 					species.id === 'pichuspikyeared') {
 					species.isNonstandard = 'Future';
@@ -747,7 +745,7 @@ export class DexSpecies {
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
-			if (this.dex.currentMod === 'champions') return null;
+			if (this.dex.currentMod.startsWith('champions')) return null;
 			species = this.get(species.prevo);
 			if (species.gen > Math.max(2, this.dex.gen)) return null;
 			return species;

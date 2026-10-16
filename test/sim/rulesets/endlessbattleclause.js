@@ -9,9 +9,11 @@ describe('Endless Battle Clause (slow)', () => {
 	afterEach(() => battle.destroy());
 
 	it('should trigger on an infinite loop', () => {
-		battle = common.createBattle({ endlessBattleClause: true });
-		battle.setPlayer('p1', { team: [{ species: "Caterpie", moves: ['tackle'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Slowbro", item: 'leppaberry', moves: ['slackoff', 'healpulse', 'recycle'] }] });
+		battle = common.createBattle({ endlessBattleClause: true }, [[
+			{ species: "Caterpie", moves: ['tackle'] },
+		], [
+			{ species: "Slowbro", item: 'leppaberry', moves: ['slackoff', 'healpulse', 'recycle'] },
+		]]);
 		const [victim, memeSlowbro] = [battle.p1.active[0], battle.p2.active[0]];
 		skipTurns(battle, 100);
 		for (let i = 0; i < 100; i++) {
@@ -33,9 +35,11 @@ describe('Endless Battle Clause (slow)', () => {
 	});
 
 	it('should not trigger by both Pokemon eating a Leppa Berry they started with', () => {
-		battle = common.createBattle({ endlessBattleClause: true });
-		battle.setPlayer('p1', { team: [{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] }] });
+		battle = common.createBattle({ endlessBattleClause: true }, [[
+			{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] },
+		], [
+			{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] },
+		]]);
 		skipTurns(battle, 100);
 		for (let i = 0; i < 10; i++) {
 			battle.makeChoices('move synthesis', 'move synthesis');
@@ -44,15 +48,13 @@ describe('Endless Battle Clause (slow)', () => {
 	});
 
 	it('should only cause the battle to end if either side cannot switch to a non-stale Pokemon and at least one staleness is externally inflicted', () => {
-		battle = common.createBattle({ endlessBattleClause: true });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ endlessBattleClause: true }, [[
 			{ species: "Blissey", level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'floralhealing', 'block'] },
 			{ species: "Magikarp", moves: ['splash'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Magikarp", moves: ['splash'] },
 			{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] },
-		] });
+		]]);
 		skipTurns(battle, 100);
 		for (let i = 0; i < 8; i++) {
 			battle.makeChoices('move extremespeed', 'move splash');
@@ -77,15 +79,13 @@ describe('Endless Battle Clause (slow)', () => {
 	});
 
 	it('Fling should cause externally inflicted staleness', () => {
-		battle = common.createBattle({ endlessBattleClause: true });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ endlessBattleClause: true }, [[
 			{ species: "Blissey", level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'fling', 'block'] },
 			{ species: "Magikarp", moves: ['splash'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Magikarp", moves: ['splash'] },
 			{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] },
-		] });
+		]]);
 		skipTurns(battle, 100);
 		// Blissey inflicts external staleness on Magikarp.
 		battle.makeChoices('move fling', 'move splash');
@@ -104,15 +104,13 @@ describe('Endless Battle Clause (slow)', () => {
 	});
 
 	it('Entrainment should cause externally inflicted staleness', () => {
-		battle = common.createBattle({ endlessBattleClause: true });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ endlessBattleClause: true }, [[
 			{ species: "Blissey", ability: 'Levitate', level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'entrainment', 'block'] },
 			{ species: "Magikarp", moves: ['splash'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Magikarp", ability: 'Illuminate', moves: ['splash'] },
 			{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] },
-		] });
+		]]);
 		skipTurns(battle, 100);
 		// Blissey inflicts external staleness on Magikarp.
 		battle.makeChoices('move entrainment', 'move splash');
@@ -138,15 +136,13 @@ describe('Endless Battle Clause (slow)', () => {
 	});
 
 	it('Entrainment\'s externally inflicted staleness should go away on switch', () => {
-		battle = common.createBattle({ endlessBattleClause: true });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ endlessBattleClause: true }, [[
 			{ species: "Blissey", ability: 'Levitate', level: 1, item: 'leppaberry', moves: ['recycle', 'extremespeed', 'entrainment', 'block'] },
 			{ species: "Magikarp", moves: ['splash'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Magikarp", ability: 'Illuminate', moves: ['splash'] },
 			{ species: "Sunkern", item: 'leppaberry', moves: ['synthesis'] },
-		] });
+		]]);
 		skipTurns(battle, 100);
 		// Blissey inflicts external staleness on Magikarp.
 		battle.makeChoices('move entrainment', 'move splash');
@@ -173,15 +169,13 @@ describe('Endless Battle Clause (slow)', () => {
 
 	it('should allow for a maximum of 1000 turns', function () {
 		this.timeout(0);
-		battle = common.createBattle({ endlessBattleClause: true });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ endlessBattleClause: true }, [[
 			{ species: "Gengar", moves: ['splash'] },
 			{ species: "Clefable", moves: ['splash'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Blissey", moves: ['splash'] },
 			{ species: "Vaporeon", moves: ['splash'] },
-		] });
+		]]);
 		for (let i = 0; i < 999; i++) {
 			battle.makeChoices('switch 2', 'switch 2');
 		}

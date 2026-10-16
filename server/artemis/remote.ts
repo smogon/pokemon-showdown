@@ -97,11 +97,21 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 				// 429: too many requests, we already freeze for 10s above so. not much more we can do
 				return null;
 			}
-			Monitor.crashlog(e, 'A Perspective API request', { request: JSON.stringify(requestData) });
+			if (e.statusCode === 503) {
+				Monitor.adminlog(`A Perspective API request failed: ${e.name}: ${e.message}`);
+			} else {
+				Monitor.crashlog(e, 'A Perspective API request', { request: JSON.stringify(requestData) });
+			}
 			return null;
 		}
 	},
-	PM_TIMEOUT
+	PM_TIMEOUT, message => {
+		if (message.startsWith('ADMINLOG\n')) {
+			Monitor.adminlog(message.slice(9));
+		} else if (message.startsWith('SLOW\n')) {
+			Monitor.slow(message.slice(5));
+		}
+	}
 );
 
 export class RemoteClassifier {
@@ -159,6 +169,9 @@ if (!PM.isParentProcess) {
 		crashlog(error: Error, source = 'A remote Artemis child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		adminlog(text: string) {
+			process.send!(`CALLBACK\nADMINLOG\n${text}`);
 		},
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);

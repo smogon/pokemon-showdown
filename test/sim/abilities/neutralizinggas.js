@@ -11,51 +11,62 @@ describe('Neutralizing Gas', () => {
 	});
 
 	it('should prevent switch-in abilities from activating', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Gyarados", ability: 'intimidate', moves: ['splash'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Weezing", ability: 'neutralizinggas', moves: ['toxicspikes'] }] });
+		battle = common.createBattle([[
+			{ species: "Gyarados", ability: 'intimidate', moves: ['splash'] },
+		], [
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['toxicspikes'] },
+		]]);
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
 	it('should ignore damage-reducing abilities', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Weezing", ability: 'neutralizinggas', item: 'expertbelt', moves: ['sludgebomb'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Mr. Mime", ability: 'filter', item: 'laggingtail', moves: ['substitute'] }] });
+		battle = common.createBattle([[
+			{ species: "Weezing", ability: 'neutralizinggas', item: 'expertbelt', moves: ['sludgebomb'] },
+		], [
+			{ species: "Mr. Mime", ability: 'filter', item: 'laggingtail', moves: ['substitute'] },
+		]]);
 		battle.makeChoices('move sludgebomb', 'move substitute');
 		assert(!battle.p1.active[0].volatiles['substitute']);
 	});
 
 	it('should negate self-healing abilities', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Weezing", ability: 'neutralizinggas', moves: ['toxic'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Breloom", ability: 'poisonheal', moves: ['swordsdance'] }] });
+		battle = common.createBattle([[
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['toxic'] },
+		], [
+			{ species: "Breloom", ability: 'poisonheal', moves: ['swordsdance'] },
+		]]);
 		battle.makeChoices('move toxic', 'move swordsdance');
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it('should negate abilities that suppress item effects', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Weezing", ability: 'neutralizinggas', moves: ['reflect'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Reuniclus", ability: 'magicguard', item: 'lifeorb', moves: ['shadowball'] }] });
+		battle = common.createBattle([[
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['reflect'] },
+		], [
+			{ species: "Reuniclus", ability: 'magicguard', item: 'lifeorb', moves: ['shadowball'] },
+		]]);
 		battle.makeChoices('move reflect', 'move shadowball');
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
 	it('should negate abilities that modify boosts', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Weezing", ability: 'neutralizinggas', moves: ['spore'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Shuckle", ability: 'contrary', moves: ['sleeptalk', 'superpower'] }] });
+		battle = common.createBattle([[
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['spore'] },
+		], [
+			{ species: "Shuckle", ability: 'contrary', moves: ['sleeptalk', 'superpower'] },
+		]]);
 		battle.makeChoices('move spore', 'move sleeptalk');
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
 	it(`should negate abilities that activate on switch-out`, () => {
-		battle = common.createBattle([
-			[{ species: "Weezing", ability: 'neutralizinggas', moves: ['toxic'] },
-				{ species: "Type: Null", ability: 'battlearmor', moves: ['facade'] }],
-			[{ species: "Corsola", ability: 'naturalcure', moves: ['uturn'] },
-				{ species: "Magikarp", ability: 'rattled', moves: ['splash'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: "Weezing", ability: 'neutralizinggas', moves: ['toxic'] },
+			{ species: "Type: Null", ability: 'battlearmor', moves: ['facade'] },
+		], [
+			{ species: "Corsola", ability: 'naturalcure', moves: ['uturn'] },
+			{ species: "Magikarp", ability: 'rattled', moves: ['splash'] },
+		]]);
 		battle.makeChoices('move toxic', 'move uturn');
 		battle.makeChoices('', 'switch 2');
 		battle.makeChoices('switch 2', 'switch 2');
@@ -63,21 +74,21 @@ describe('Neutralizing Gas', () => {
 	});
 
 	it('should negate abilities that modify move type', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Gengar", ability: 'neutralizinggas', moves: ['laserfocus'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Sylveon", ability: 'pixilate', moves: ['hypervoice'] }] });
+		battle = common.createBattle([[
+			{ species: "Gengar", ability: 'neutralizinggas', moves: ['laserfocus'] },
+		], [
+			{ species: "Sylveon", ability: 'pixilate', moves: ['hypervoice'] },
+		]]);
 		battle.makeChoices('move laserfocus', 'move hypervoice');
 		assert.fullHP(battle.p1.active[0]);
 	});
 
 	it("should negate abilities that damage the attacker", () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['payback'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: 'Ferrothorn', ability: 'ironbarbs', moves: ['rockpolish'] },
-		] });
+		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
 	});
@@ -97,14 +108,12 @@ describe('Neutralizing Gas', () => {
 	});
 
 	it('should not activate Imposter if Neutralizing Gas leaves the field', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle([[
 			{ species: "Weezing", ability: 'neutralizinggas', moves: ['snore'] },
 			{ species: "Greninja", ability: 'torrent', moves: ['teleport'] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Ditto", ability: 'imposter', moves: ['sleeptalk'] },
-		] });
+		]]);
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 		battle.makeChoices('switch greninja', 'move sleeptalk');
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);

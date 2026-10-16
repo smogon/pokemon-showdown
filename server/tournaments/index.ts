@@ -765,7 +765,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			player.inProgressMatch = null;
 			matchFrom.room.setParent(null);
 			this.completedMatches.add(matchFrom.room.roomid);
-			matchFrom.room.game?.forfeit?.(player.name);
+			matchFrom.room.game?.forfeit?.(player.name, ' was disqualified from the tournament.');
 		}
 
 		let matchTo = null;
@@ -778,7 +778,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			const matchRoom = matchTo.inProgressMatch!.room;
 			matchRoom.setParent(null);
 			this.completedMatches.add(matchRoom.roomid);
-			if (matchRoom.game) matchRoom.game.forfeit?.(player.id);
+			matchRoom.game?.forfeit?.(player.id, ' was disqualified from the tournament.');
 			matchTo.inProgressMatch = null;
 		}
 
