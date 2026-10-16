@@ -349,8 +349,8 @@ export const commands: Chat.ChatCommands = {
 			`- Z-stat boosts must be preceded with <code>zboosts </code>; e.g. <code>zboosts accuracy</code> searches for all Status moves with Z-Effects that boost the user's accuracy. Moves that have a Z-Effect of fully restoring the user's health can be searched for with <code>zrecovery</code>.<br/>` +
 			`- <code>zmove</code>, <code>max</code>, or <code>gmax</code> as parameters will search for Z-Moves, Max Moves, and G-Max Moves respectively.<br/>` +
 			`- Move targets must be preceded with <code>targets </code>; e.g. <code>targets user</code> searches for moves that target the user.<br/>` +
-			`- Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.<br/>` +
-			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, metronome, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosketch, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
+			`- Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, spread, and user.<br/>` +
+			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, metronome, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosketch, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, spread, sound, and wind.<br/>` +
 			`- <code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`- A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`</details><br/>` +
@@ -1644,7 +1644,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 
 		// Not flags directly from move data, but still useful to sort by
 		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',
-		'zmove', 'maxmove', 'gmaxmove',
+		'zmove', 'maxmove', 'gmaxmove', 'spread',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped', 'trapped'];
@@ -1728,7 +1728,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 				continue;
 			}
 
-			if (target.startsWith('targets ')) {
+			if (target.startsWith('targets ') && target !== 'targets spread') {
 				target = toID(target.substr('targets '.length));
 				if (target === 'allpokemon' || target === 'anypokemon' || target.includes('adjacent')) {
 					target = target.replace('pokemon', '');
@@ -1752,6 +1752,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 			if (target === 'z') target = 'zmove';
 			if (target === 'max') target = 'maxmove';
 			if (target === 'gmax') target = 'gmaxmove';
+			if (target === 'targets spread') target = 'spread';
 			if (target === 'multi' || toID(target) === 'multihit') target = 'multihit';
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
@@ -2143,6 +2144,11 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 					}
 				} else if (flag === 'gmaxmove') {
 					if (!(typeof move.isMax === 'string') === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'spread') {
+					if (!(['all', 'allAdjacent', 'allAdjacentFoes'].includes(move.target)) === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
