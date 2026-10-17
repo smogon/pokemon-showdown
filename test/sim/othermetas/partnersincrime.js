@@ -68,4 +68,38 @@ describe('Partners in Crime', () => {
 		battle.makeChoices('switch 3, move sleeptalk', 'auto');
 		assert.statStage(cresselia, 'spa', 1, 'Cresselia should not have gained another Download boost after Shedinja fainted');
 	});
+
+	it('should heal and count down a terrain started during residuals', () => {
+		battle = common.createBattle({ formatid: 'gen9partnersincrime' }, [[
+			{ species: 'Mew', ability: 'pressure', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', ability: 'telepathy', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Slowpoke', ability: 'telepathy', moves: ['sleeptalk'] },
+			{ species: 'Snorlax', ability: 'pressure', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices(); // Team Preview
+		const pokemon = battle.getAllActive();
+		for (const mon of pokemon) mon.hp -= 50;
+		const source = pokemon[0];
+		battle.onEvent('Residual', battle.format, { order: 3 }, target => {
+			if (battle.turn === 1 && target === source) battle.field.setTerrain('grassyterrain', source);
+		});
+		const start = battle.log.length;
+		battle.makeChoices();
+		assert.equal(battle.field.terrain, 'grassyterrain');
+		assert.equal(battle.field.terrainState.duration, 4);
+		for (const mon of pokemon) assert.equal(mon.hp, mon.maxhp - 50 + Math.floor(mon.baseMaxhp / 16));
+		const log = battle.log.slice(start);
+		const terrainStart = log.findIndex(line => line.startsWith('|-fieldstart|move: Grassy Terrain'));
+		const heals = log.filter(line => line.startsWith('|-heal|') && line.endsWith('[from] Grassy Terrain'));
+		assert.equal(heals.length, 8); // Exact and public HP lines for each of four Pokemon
+		assert(log.findIndex(line => line.startsWith('|-heal|')) > terrainStart);
+		for (let turn = 2; turn <= 4; turn++) {
+			battle.makeChoices();
+			assert.equal(battle.field.terrainState.duration, 5 - turn);
+		}
+		assert.equal(battle.field.terrain, 'grassyterrain');
+		battle.makeChoices(); // End of turn 5
+		assert.equal(battle.field.terrain, '');
+	});
 });

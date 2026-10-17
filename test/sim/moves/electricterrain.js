@@ -112,6 +112,47 @@ describe('Electric Terrain', () => {
 		assert.equal(resultMove, 'thunderbolt');
 	});
 
+	it(`should not end a terrain that replaced it on its last turn`, () => {
+		battle = common.createBattle([[
+			{ species: 'arboliva', ability: 'seedsower', moves: ['sleeptalk', 'electricterrain'] },
+		], [
+			{ species: 'wynaut', moves: ['sleeptalk', 'futuresight'] },
+		]]);
+
+		battle.makeChoices('move electricterrain', 'auto');
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		const arboliva = battle.p1.active[0];
+		// Future Sight hits on Electric Terrain's last turn, before terrains count down, and activates Seed Sower
+		battle.makeChoices();
+		const grassyHeal = Math.floor(arboliva.maxhp / 16);
+		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should not have been ended by Electric Terrain expiring.`);
+		const log = battle.getDebugLog();
+		const futureSightIndex = log.lastIndexOf('|-damage|p1a: Arboliva|');
+		const futureSightLine = log.slice(futureSightIndex, log.indexOf('\n', futureSightIndex));
+		const futureSightEndIndex = log.lastIndexOf('|-end|p1a: Arboliva|move: Future Sight');
+		const hpAfterFutureSight = Number(futureSightLine.split('|')[3].split('/')[0]);
+		assert.equal(arboliva.hp, hpAfterFutureSight + grassyHeal,
+			`Arboliva should take Future Sight damage and then recover 1/16 of its max HP.`);
+		const grassyHealIndex = log.lastIndexOf('|-heal|p1a: Arboliva|');
+		const terrainStartIndex = log.lastIndexOf('|-fieldstart|move: Grassy Terrain');
+		const grassyHealLine = log.slice(grassyHealIndex, log.indexOf('\n', grassyHealIndex));
+		assert(grassyHealLine.includes('[from] Grassy Terrain'), `Arboliva should recover from Grassy Terrain.`);
+		assert(futureSightEndIndex >= 0 && futureSightIndex >= 0 && terrainStartIndex >= 0 && grassyHealIndex >= 0);
+		assert(futureSightEndIndex < futureSightIndex, `Future Sight should resolve before dealing damage to Arboliva.`);
+		assert(futureSightIndex < grassyHealIndex, `Future Sight should hit before Grassy Terrain heals Arboliva.`);
+		assert(futureSightIndex < terrainStartIndex && terrainStartIndex < grassyHealIndex);
+		assert.equal(battle.field.terrainState.duration, 4, `The new terrain should independently count down once after being set.`);
+		for (let turn = 6; turn <= 8; turn++) {
+			battle.makeChoices();
+			assert.equal(battle.field.terrain, 'grassyterrain');
+			assert.equal(battle.field.terrainState.duration, 9 - turn);
+		}
+		battle.makeChoices(); // End of turn 9, five residuals including the turn it started
+		assert.equal(battle.field.terrain, '');
+	});
+
 	it.skip(`should block Sleep before the move would have missed`, () => {
 		battle = common.createBattle([[
 			{ species: 'tapukoko', moves: ['electricterrain'] },
