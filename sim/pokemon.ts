@@ -167,8 +167,10 @@ export class Pokemon {
 	 * still switches before checking for winners if Destiny Bond
 	 * KOs the Pursuit user in Gen 2-4.
 	 *
-	 * Not cleared by fainting or clearVolatile. Only cleared on its replacement's
+	 * Not cleared by fainting or clearVolatile. Cleared on its replacement's
 	 * switchIn, whether or not a Pursuit KO made you choose a new replacement.
+	 * Also cleared by runPursuitActivation if the switch was canceled, e.g. when
+	 * Emergency Exit cancels U-turn.
 	 */
 	pursuitActivated: boolean;
 	/**
@@ -176,8 +178,10 @@ export class Pokemon {
 	 * Also set on the target trying to switch out during `BeforeSwitchOut`
 	 * to prevent the event from running twice during U-turn switches.
 	 *
-	 * Not cleared by fainting or clearVolatile. Only cleared on its replacement's
+	 * Not cleared by fainting or clearVolatile. Cleared on its replacement's
 	 * switchIn, whether or not a Pursuit KO made you choose a new replacement.
+	 * Also cleared by runPursuitActivation if the switch was canceled, e.g. when
+	 * Emergency Exit cancels U-turn.
 	 */
 	skipPursuit: boolean;
 	newlySwitched: boolean;
