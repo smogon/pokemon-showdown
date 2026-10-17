@@ -322,13 +322,13 @@ class Ladder extends LadderStore {
 		for (const roomid of user.games) {
 			const room = Rooms.get(roomid);
 			if (!room) {
-				Monitor.warn(`while searching, room ${roomid} expired for user ${user.id} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
+				Monitor.warn(`while searching, room ${roomid} expired for user ${user.id} in rooms ${[...user.inRooms].join(',')} and games ${[...user.games].join(',')}`);
 				user.games.delete(roomid);
 				continue;
 			}
 			const game = room.game;
 			if (!game) {
-				Monitor.warn(`while searching, room ${roomid} has no game for user ${user.id} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
+				Monitor.warn(`while searching, room ${roomid} has no game for user ${user.id} in rooms ${[...user.inRooms].join(',')} and games ${[...user.games].join(',')}`);
 				user.games.delete(roomid);
 				continue;
 			}

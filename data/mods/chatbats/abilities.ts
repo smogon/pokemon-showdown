@@ -300,7 +300,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	kingofthehill: {
 		// sharpness + mountaineer + prevents hazard immunity
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.id === 'stealthrock') {
+			if (effect?.id === 'stealthrock') {
 				return false;
 			}
 		},

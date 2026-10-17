@@ -293,7 +293,7 @@ export class Side {
 	}
 
 	get requestState(): RequestState {
-		if (!this.activeRequest || this.activeRequest.wait) return '';
+		if (this.activeRequest === null || this.activeRequest.wait) return '';
 		if (this.activeRequest.teamPreview) return 'teampreview';
 		if (this.activeRequest.forceSwitch) return 'switch';
 		return 'move';
@@ -337,7 +337,7 @@ export class Side {
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
 				if (action.terastallize) details += ` terastallize`;
-				return `move ${action.moveid}${details}`;
+				return `move ${action.moveid!}${details}`;
 			case 'switch':
 			case 'instaswitch':
 			case 'revivalblessing':
@@ -950,7 +950,7 @@ export class Side {
 				}
 			}
 			if (slot < 0) {
-				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
+				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText!}" to switch to`);
 			}
 		}
 		if (slot >= this.pokemon.length) {

@@ -787,8 +787,6 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 			cachedLadder.invalidateCache();
 		}
 
-		if (typeof this.game.length === 'number') this.game.length = `${this.game.length} questions`;
-
 		const scores = Object.fromEntries(this.getTopPlayers({ max: null })
 			.map(player => [player.player.id, player.player.points]));
 		if (this.game.givesPoints) {
@@ -824,7 +822,7 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		return options.max === null ? ranks : ranks.slice(0, options.max);
 	}
 
-	getWinningMessage(winners: TopPlayer[]) {
+	getWinningMessage(winners: TopPlayer[]): string {
 		const prizes = this.getPrizes();
 		const [p1, p2, p3] = winners;
 
@@ -845,6 +843,8 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		case 3:
 			return initialPart + Utils.html`${this.room.TL`${p2.name} and ${p3.name} were runners-up. `}` +
 				this.room.TL`Their leaderboard score has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
+		default:
+			throw new Error(`Too many Trivia winners: ${winners.length}`);
 		}
 	}
 
@@ -1816,7 +1816,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 		let innerBuffer = '';
 		for (const [index, question] of submissions.entries()) {
-			innerBuffer += `<tr><td><strong>${index + 1}</strong></td><td>${question.category}</td><td>${question.question}</td><td>${question.answers.join(", ")}</td><td>${question.user}</td></tr>`;
+			innerBuffer += `<tr><td><strong>${index + 1}</strong></td><td>${question.category}</td><td>${question.question}</td><td>${question.answers.join(", ")}</td><td>${question.user || 'unknown user'}</td></tr>`;
 		}
 
 		const buffer = `|raw|<div class="ladder"><table>` +
@@ -2074,7 +2074,7 @@ const triviaCommands: Chat.ChatCommands = {
 		);
 
 		let actionString = `edited question '${oldQuestionText}' in ${category}`;
-		if (!isAnswersOnly) actionString += ` to '${newQuestionText}'`;
+		if (!isAnswersOnly) actionString += ` to '${newQuestionText!}'`;
 		if (answers.length) {
 			actionString += ` and changed the answers to ${answers.join(', ')}`;
 		}
@@ -2464,7 +2464,9 @@ const triviaCommands: Chat.ChatCommands = {
 		}
 		user.lastCommand = '';
 
+		// Database implementations can finish synchronously or return a Promise.
 		await Promise.all(
+			// oxlint-disable-next-line typescript/await-thenable
 			(Object.keys(LEADERBOARD_ENUM) as Leaderboard[])
 				.map(lb => database.deleteLeaderboardEntry(userid, lb))
 		);

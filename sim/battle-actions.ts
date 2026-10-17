@@ -310,7 +310,7 @@ export class BattleActions {
 		const oldActiveMove = move;
 
 		const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
-		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
+		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove?.id ?? null : null;
 		if (this.battle.activeMove) move = this.battle.activeMove;
 		this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.battle.runEvent('AfterMove', pokemon, target, move);
@@ -458,7 +458,7 @@ export class BattleActions {
 			attrs = `|[anim]${movename}${attrs}`;
 			movename = `Z-${movename}`;
 		}
-		this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
+		this.battle.addMove('move', pokemon, movename, `${target!}${attrs}`);
 
 		if (zMove) this.runZPower(move, pokemon);
 

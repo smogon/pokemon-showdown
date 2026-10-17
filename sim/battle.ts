@@ -869,7 +869,7 @@ export class Battle {
 					if (eventid in AttackingEvents) {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
 						continue;
-					} else if (eventid === 'Damage' && sourceEffect && sourceEffect.effectType === 'Move') {
+					} else if (eventid === 'Damage' && sourceEffect?.effectType === 'Move') {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
 						continue;
 					}
@@ -1910,7 +1910,7 @@ export class Battle {
 		// Deserialized games should use restart()
 		if (this.deserialized) return;
 		// need all players to start
-		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides}`);
+		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides.join(',')}`);
 
 		if (this.started) throw new Error(`Battle already started`);
 
@@ -2183,7 +2183,7 @@ export class Battle {
 				if (!retVals[i] || !target) continue;
 
 				if (target.hp <= 0) {
-					this.debug(`instafaint: ${this.faintQueue.map(entry => entry.target.name)}`);
+					this.debug(`instafaint: ${this.faintQueue.map(entry => entry.target.name).join(',')}`);
 					this.faintMessages(true);
 					if (this.gen <= 2) {
 						target.faint();
@@ -2284,7 +2284,7 @@ export class Battle {
 			this.add('-heal', target, target.getHealth, '[silent]');
 			break;
 		case 'drain':
-			this.add('-heal', target, target.getHealth, '[from] drain', `[of] ${source}`);
+			this.add('-heal', target, target.getHealth, '[from] drain', `[of] ${source!}`);
 			break;
 		case 'wish':
 			break;
@@ -3114,7 +3114,7 @@ export class Battle {
 
 	addMove(...args: (string | number | Function | AnyObject)[]) {
 		this.lastMoveLine = this.log.length;
-		// eslint-disable-next-line @typescript-eslint/no-base-to-string
+		// oxlint-disable-next-line typescript/no-base-to-string
 		this.log.push(`|${args.join('|')}`);
 	}
 
@@ -3132,7 +3132,7 @@ export class Battle {
 			parts[4] = '';
 			this.log[this.lastMoveLine] = parts.join('|');
 		}
-		// eslint-disable-next-line @typescript-eslint/no-base-to-string
+		// oxlint-disable-next-line typescript/no-base-to-string
 		this.log[this.lastMoveLine] += `|${args.join('|')}`;
 	}
 

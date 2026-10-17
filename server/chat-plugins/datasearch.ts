@@ -1551,7 +1551,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 	}
 
 	let results: Species[] = [];
-	for (const mon of Object.values(dex).sort()) {
+	for (const mon of Utils.sortBy(Object.values(dex), species => species.name)) {
 		if (singleTypeSearch !== null && (mon.types.length === 1) !== singleTypeSearch) continue;
 		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(mon.forme) || mon.forme.startsWith("Paldea")) &&
 			mon.baseSpecies !== "Pikachu";
@@ -1590,7 +1590,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 	let resultsStr = (message === "" ? message :
 		`<span class="gray">${Utils.escapeHTML(message)}:</span><br/>`);
 	if (results.length > 1) {
-		results.sort();
+		Utils.sortBy(results, species => species.name);
 		if (sort) {
 			const direction = sort.slice(-1);
 			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
@@ -2283,7 +2283,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 
 			for (const searchStatus in alts.volatileStatus) {
 				let canStatus = !!(
-					(move.secondary && move.secondary.volatileStatus === searchStatus) ||
+					(move.secondary?.volatileStatus === searchStatus) ||
 					(move.secondaries?.some(entry => entry.volatileStatus === searchStatus)) ||
 					(move.volatileStatus === searchStatus) ||
 					// This is slightly hacky, but none of the proper trapping moves in moves.ts mechanically use 'trapped' as
@@ -2343,13 +2343,11 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		}
 
 		function mapMoveResults(inputArray: string[]) {
-			return inputArray.map(
-				result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
-					(sort ?
-						// eslint-disable-next-line @typescript-eslint/no-base-to-string
-						` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
-						'')
-			).join(", ");
+			return inputArray.map(result => {
+				const value = sort ? dex[toID(result)][sort.slice(0, -1) as keyof Move] as number | true : '';
+				return `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+					(sort ? ` (${value === true ? '-' : value})` : '');
+			}).join(", ");
 		}
 
 		if (results.length > MAX_RANDOM_RESULTS) {
@@ -3100,7 +3098,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A datasearch process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
 		},
 	} as any;
 	if (Config.crashguard) {
@@ -3114,7 +3112,7 @@ if (!PM.isParentProcess) {
 	global.toID = Dex.toID;
 	Dex.includeData();
 
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl((cmd: string) => eval(cmd));
 }
 

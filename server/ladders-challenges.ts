@@ -180,7 +180,7 @@ export class Challenges extends Map<ID, Challenge[]> {
 	resolveAcceptCommand(context: Chat.CommandContext) {
 		const targetid = context.target as ID;
 		const chall = this.search(context.user.id, targetid);
-		if (!chall || chall.to !== context.user.id || chall.acceptCommand !== context.message) {
+		if (chall?.to !== context.user.id || chall.acceptCommand !== context.message) {
 			throw new Chat.ErrorMessage(`Challenge not found. You are using the wrong command. Challenges should be accepted with /accept`);
 		}
 		return chall;

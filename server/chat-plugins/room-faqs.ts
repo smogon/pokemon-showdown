@@ -144,8 +144,9 @@ export const commands: Chat.ChatCommands = {
 		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) {
 			throw new Chat.ErrorMessage(`The topic ${topic} was not found in this room's faq list.`);
 		}
-		if (getAlias(room.roomid, topic)) {
-			throw new Chat.ErrorMessage(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
+		const topic2 = getAlias(room.roomid, topic);
+		if (topic2) {
+			throw new Chat.ErrorMessage(`You cannot make an alias of an alias. Use /addalias ${alias}, ${topic2} instead.`);
 		}
 		roomFaqs[room.roomid][alias] = {
 			alias: true,

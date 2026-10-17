@@ -1285,7 +1285,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move' || !source) return;
+				if (move?.effectType !== 'Move' || !source) return;
 				this.effectState.totalDamage += damage;
 				this.effectState.lastDamageSource = source;
 			},
@@ -3656,7 +3656,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZOrMaxPowered || target.lastMove.isMax || target.lastMove.id === 'struggle') {
+			if (
+				target.lastMove === null || target.lastMove.isZOrMaxPowered ||
+				target.lastMove.isMax || target.lastMove.id === 'struggle'
+			) {
 				return false;
 			}
 		},
@@ -9269,8 +9272,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMove(source, target, move) {
 			const iceballData = source.volatiles["iceball"];
 			if (
-				iceballData &&
-				iceballData.hitCount === 5 &&
+				iceballData?.hitCount === 5 &&
 				iceballData.contactHitCount < 5
 				// this conditions can only be met in gen7 and gen8dlc1
 				// see `disguise` and `iceface` abilities in the resp mod folders
@@ -9289,7 +9291,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.contactHitCount = 0;
 			},
 			onResidual(target) {
-				if (target.lastMove && target.lastMove.id === 'struggle') {
+				if (target.lastMove?.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['iceball'];
 				}
@@ -13261,7 +13263,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 24,
 			onResidual(pokemon) {
-				const duration = pokemon.volatiles['perishsong'].duration;
+				const duration = pokemon.volatiles['perishsong'].duration!;
 				this.add('-start', pokemon, `perish${duration}`);
 			},
 		},
@@ -15391,8 +15393,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMove(source, target, move) {
 			const rolloutData = source.volatiles["rollout"];
 			if (
-				rolloutData &&
-				rolloutData.hitCount === 5 &&
+				rolloutData?.hitCount === 5 &&
 				rolloutData.contactHitCount < 5
 				// this conditions can only be met in gen7 and gen8dlc1
 				// see `disguise` and `iceface` abilities in the resp mod folders
@@ -15410,7 +15411,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.contactHitCount = 0;
 			},
 			onResidual(target) {
-				if (target.lastMove && target.lastMove.id === 'struggle') {
+				if (target.lastMove?.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['rollout'];
 				}
@@ -16693,7 +16694,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onMoveFail(target, source) {
-			if (source.volatiles['twoturnmove'] && source.volatiles['twoturnmove'].duration === 1) {
+			if (source.volatiles['twoturnmove']?.duration === 1) {
 				source.removeVolatile('skydrop');
 				source.removeVolatile('twoturnmove');
 				if (target === this.effectState.target) {
@@ -19922,7 +19923,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.side.active.length === 2 && target.position === 1) {
 				// Curse Glitch
 				const action = this.queue.willMove(target);
-				if (action && action.move.id === 'curse') {
+				if (action?.move.id === 'curse') {
 					action.targetLoc = -1;
 				}
 			}
@@ -20218,9 +20219,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const activeTeam = target.side.activeTeam();
 			const foeActiveTeam = target.side.foe.activeTeam();
 			for (const [i, allyActive] of activeTeam.entries()) {
-				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
+				if (allyActive?.status === 'slp') allyActive.cureStatus();
 				const foeActive = foeActiveTeam[i];
-				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
+				if (foeActive?.status === 'slp') foeActive.cureStatus();
 			}
 		},
 		condition: {
@@ -20233,7 +20234,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					target.removeVolatile('uproar');
 					return;
 				}
-				if (target.lastMove && target.lastMove.id === 'struggle') {
+				if (target.lastMove?.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['uproar'];
 				}

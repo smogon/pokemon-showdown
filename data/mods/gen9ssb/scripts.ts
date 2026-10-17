@@ -1150,7 +1150,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const oldActiveMove = move;
 
 			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
-			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
+			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove?.id ?? null : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMove', pokemon, target, move);
@@ -1605,7 +1605,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (action.zmove) details += ` zmove`;
 					if (action.maxMove) details += ` dynamax`;
 					if (action.terastallize) details += ` terastallize`;
-					return `move ${action.moveid}${details}`;
+					return `move ${action.moveid!}${details}`;
 				case 'switch':
 				case 'instaswitch':
 				case 'revivalblessing':
@@ -1658,7 +1658,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (slot < 0) {
-					return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
+					return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText!}" to switch to`);
 				}
 			}
 			if (slot >= this.pokemon.length) {

@@ -239,11 +239,13 @@ export const commands: Chat.ChatCommands = {
 		switch (possibleParam) {
 		case 'id':
 			const id = targets.shift();
+			if (!id) return this.parse('/help modlog');
 			searchCmd = `user='${id}'${searchCmd.length ? `, ${searchCmd}` : ``}`;
 			targets.unshift(`user='${id}'`);
 			break;
 		case 'ip':
 			const ip = targets.shift();
+			if (!ip) return this.parse('/help modlog');
 			searchCmd = `ip=${ip}${searchCmd.length ? `, ${searchCmd}` : ``}`;
 			targets.unshift(`ip=${ip}`);
 			break;

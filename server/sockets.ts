@@ -152,7 +152,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 	receivers: { [k: string]: (this: ServerStream, data: string) => void } = {
 		'$'(data) {
 			// $code
-			// eslint-disable-next-line no-eval
+			// oxlint-disable-next-line no-eval
 			eval(data.substr(1));
 		},
 		'!'(data) {
@@ -579,7 +579,7 @@ if (!PM.isParentProcess) {
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
 	if (process.env.PSNOSSL && parseInt(process.env.PSNOSSL)) Config.ssl = null;
 
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl({ filename: `sockets-${PM.workerid}-${process.pid}`, eval: cmd => eval(cmd) });
 }
 

@@ -702,7 +702,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			// all players have joined, start the battle
 			// onCreateBattleRoom crashes if some users are unavailable at start of battle
 			// what do we do??? no clue but I guess just exclude them from the array for now
-			const users = this.players.map(player => player.getUser()).filter(Boolean) as User[];
+			const users = this.players.map(player => player.getUser()).filter(Boolean);
 			Rooms.global.onCreateBattleRoom(users, this.room, { rated: this.rated });
 			this.started = true;
 			this.room.add(`|uhtmlchange|invites|`);
@@ -1390,7 +1390,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
 		},
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
@@ -1419,6 +1419,6 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl(cmd => eval(cmd));
 }

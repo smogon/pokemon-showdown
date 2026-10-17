@@ -1,8 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* oxlint-disable no-unused-vars */
+
+// force .filter(Boolean) to work
+// workaround for https://github.com/microsoft/TypeScript/issues/16655
+interface Array<T> {
+	filter(predicate: BooleanConstructor, thisArg?: any): Exclude<T, false | null | undefined | '' | 0>[];
+}
+interface ReadonlyArray<T> {
+	filter(predicate: BooleanConstructor, thisArg?: any): Exclude<T, false | null | undefined | '' | 0>[];
+}
 
 type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
+
+/**
+ * Use `${value as DebugOutput}` to tell oxlint to stop complaining about booleans.
+ * Needs to be explicit because booleans in string interpolation is frequently a bug.
+ * Prefer `!` for null/undefined, but you'll still need this after optional chains.
+ */
+type DebugOutput = unknown;
 
 type Battle = import('./battle').Battle;
 type BattleQueue = import('./battle-queue').BattleQueue;
