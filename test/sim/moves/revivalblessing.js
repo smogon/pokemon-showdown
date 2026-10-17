@@ -82,4 +82,42 @@ describe('Revival Blessing', () => {
 		battle.makeChoices('switch 2', '');
 		assert.equal(battle.p1.active[1].boosts.evasion, 0, "Lycanroc should not have used Double Team");
 	});
+
+	it(`should not allow passing the revive when the bench is empty`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', moves: ['memento'] },
+			{ species: 'snorlax', moves: ['splash'] },
+			{ species: 'pawmot', moves: ['revivalblessing'] },
+		], [
+			{ species: 'chansey', moves: ['splash'] },
+			{ species: 'blissey', moves: ['splash'] },
+		]]);
+		battle.makeChoices('move memento 1, move splash', 'auto');
+		battle.makeChoices('switch 3, pass', '');
+		// The bench is now empty, but Wynaut has fainted and can be revived
+		battle.makeChoices('move revivalblessing, move splash', 'auto');
+		assert.throws(() => battle.makeChoices('pass', ''), /\[Invalid choice\] Can't pass: You need to choose a fainted Pokémon to revive/);
+		battle.makeChoices('switch wynaut', '');
+		const wynaut = battle.p1.pokemon.find(pokemon => pokemon.species.id === 'wynaut');
+		assert.false(wynaut.fainted);
+		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2));
+	});
+
+	it(`should revive a fainted Pokemon when the choice is made automatically`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', moves: ['memento'] },
+			{ species: 'snorlax', moves: ['splash'] },
+			{ species: 'pawmot', moves: ['revivalblessing'] },
+		], [
+			{ species: 'chansey', moves: ['splash'] },
+			{ species: 'blissey', moves: ['splash'] },
+		]]);
+		battle.makeChoices('move memento 1, move splash', 'auto');
+		battle.makeChoices('switch 3, pass', '');
+		// The bench is now empty, but Wynaut has fainted and can be revived
+		battle.makeChoices('move revivalblessing, move splash', 'auto');
+		battle.makeChoices('default', '');
+		const wynaut = battle.p1.pokemon.find(pokemon => pokemon.species.id === 'wynaut');
+		assert.false(wynaut.fainted);
+	});
 });

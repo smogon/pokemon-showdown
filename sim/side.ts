@@ -1335,6 +1335,10 @@ export class Side {
 		switch (this.requestState) {
 		case 'switch':
 			if (pokemon.switchFlag) { // This condition will always happen if called by Battle#choose()
+				if (this.slotConditions[pokemon.position]['revivalblessing']) {
+					// Revival Blessing fails without a fainted party member, so there is always one to choose
+					return this.emitChoiceError(`Can't pass: You need to choose a fainted Pokémon to revive`);
+				}
 				if (!this.choice.forcedPassesLeft) {
 					return this.emitChoiceError(`Can't pass: You need to switch in a Pokémon to replace ${pokemon.name}`);
 				}
