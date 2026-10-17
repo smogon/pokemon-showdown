@@ -104,10 +104,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			const damage = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter;
 			this.damage(damage, pokemon, pokemon);
 		},
-		onSwitchIn(pokemon) {
-			// Regular poison status and damage after a switchout -> switchin.
+		onSwitchOut(pokemon) {
+			// Regular poison status and damage after a switchout
+			// The flag that distinguishes between regular poison and toxic is battle-only
 			pokemon.status = 'psn' as ID;
-			this.add('-status', pokemon, 'psn', '[silent]');
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
