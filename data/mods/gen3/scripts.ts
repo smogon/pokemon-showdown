@@ -21,7 +21,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			.map(side => side.active.filter(pokemon => pokemon.fainted && !queuedSwitchOuts.includes(pokemon)))
 			.filter(candidates => candidates.length);
 
-		// Gen 3 requests replacements happen one at a time when multiple sides have fainted pokemon
+		// Gen 3 requests replacements one at a time when only one side has fainted pokemon
 		const onePerSide = candidatesBySide.length === 1;
 		for (const candidates of candidatesBySide) {
 			for (const pokemon of candidates) {
