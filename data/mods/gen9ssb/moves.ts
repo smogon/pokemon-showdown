@@ -1079,7 +1079,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const success = this.boost({ [statDebuff]: -1 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
 				if (success) {
 					target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
-					target.canMegaEvo = 'Sableye-Mega';
+					target.m.megaEvoUsed = false;
 					target.switchFlag = 'shatterandscatter' as ID;
 				}
 				return this.NOT_FAIL;
@@ -1092,7 +1092,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const success = this.boost({ [statDebuff]: -2 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
 					if (success) {
 						target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
-						target.canMegaEvo = 'Sableye-Mega';
+						target.m.megaEvoUsed = false;
 						target.switchFlag = 'shatterandscatter' as ID;
 					}
 				}
@@ -1919,7 +1919,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					!this.queue.cancelMove(source)) return;
 				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 				// If it is, then Mega Evolve before moving.
-				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+				if (this.actions.canMegaEvo(source) || this.actions.canUltraBurst(source) || this.actions.canTerastallize(source)) {
 					for (const [actionIndex, action] of this.queue.entries()) {
 						if (action.pokemon === source) {
 							if (action.choice === 'megaEvo') {
@@ -3241,7 +3241,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!source.isAdjacent(pokemon) || !source.hp ||
 					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'attackofopportunity') ||
 					!this.queue.cancelMove(source)) return;
-				if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
+				if (this.actions.canMegaEvo(source) || this.actions.canUltraBurst(source) || this.actions.canTerastallize(source)) {
 					for (const [actionIndex, action] of this.queue.entries()) {
 						if (action.pokemon === source) {
 							if (action.choice === 'megaEvo') {

@@ -383,23 +383,31 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canMegaEvo(pokemon) {
-			if (pokemon.species.isMega) return null;
+			if (pokemon.species.isMega || pokemon.m.megaEvoUsed) return false;
 
 			const item = pokemon.getItem();
-			if (!item.megaStone) return null;
+			if (!item.megaStone) return false;
 			return Object.values(item.megaStone)[0];
+		},
+		canUltraBurst(pokemon: Pokemon) {
+			if (pokemon.m.ultraBurstUsed) return false;
+			if (['Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane'].includes(pokemon.baseSpecies.name) &&
+				pokemon.getItem().id === 'ultranecroziumz') {
+				return "Necrozma-Ultra";
+			}
+			return false;
 		},
 		runMegaEvo(pokemon) {
 			if (pokemon.species.isMega) return false;
 
-			const isUltraBurst = !pokemon.canMegaEvo;
+			const isUltraBurst = !this.canMegaEvo(pokemon);
 
 			const species: Species = (this as any).getMixedSpecies(pokemon.m.originalSpecies,
-				pokemon.canMegaEvo || pokemon.canUltraBurst, pokemon);
+				!isUltraBurst ? this.canMegaEvo(pokemon) : this.canUltraBurst(pokemon), pokemon);
 
 			/// Do we have a proper sprite for it? Code for when megas actually exist
 			if (this.battle.ruleTable.has('natdexmod') &&
-				(isUltraBurst || this.dex.species.get(pokemon.canMegaEvo as any).baseSpecies === pokemon.m.originalSpecies)) {
+				(isUltraBurst || this.dex.species.get(this.canMegaEvo(pokemon) as any).baseSpecies === pokemon.m.originalSpecies)) {
 				pokemon.formeChange(species, pokemon.getItem(), true);
 			} else {
 				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
@@ -411,8 +419,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			pokemon.canMegaEvo = false;
-			if (this.battle.ruleTable.has('natdexmod') && isUltraBurst) pokemon.canUltraBurst = null;
+			pokemon.m.megaEvoUsed = true;
+			if (this.battle.ruleTable.has('natdexmod') && isUltraBurst) pokemon.m.ultraBurstUsed = true;
 			return true;
 		},
 		terastallize(pokemon) {
@@ -429,9 +437,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.battle.add('-terastallize', pokemon, type);
 			pokemon.terastallized = type;
-			for (const ally of pokemon.side.pokemon) {
-				ally.canTerastallize = null;
-			}
+			pokemon.side.terastallizationUsed = true;
 			pokemon.addedType = '';
 			pokemon.knownType = true;
 			pokemon.apparentType = type;
@@ -455,6 +461,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.formeChange('Terapagos-Stellar', null, true);
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
+			return true;
 		},
 		getMixedSpecies(originalForme, formeChange, pokemon) {
 			const originalSpecies = this.dex.species.get(originalForme);
