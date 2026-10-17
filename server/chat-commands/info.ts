@@ -711,7 +711,7 @@ export const commands: Chat.ChatCommands = {
 								evos.push(`${name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
 							case 'useItem':
-								evos.push(`${name} (${evo.evoItem})`);
+								evos.push(`${name} (${evo.evoItem}${condition})`);
 								break;
 							case 'levelMove':
 								evos.push(`${name} (level-up with ${evo.evoMove}${condition})`);

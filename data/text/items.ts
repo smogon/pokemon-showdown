@@ -173,6 +173,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			shortDesc: "Holder's Dark-type attacks have 1.1× power.",
 		},
 	},
+	blankplate: {
+		name: "Blank Plate",
+		shortDesc: "Changes Arceus to the Normal type when used in Legends: Arceus.",
+	},
 	blastoisinite: {
 		name: "Blastoisinite",
 		shortDesc: "If held by a Blastoise, this item allows it to Mega Evolve in battle.",
@@ -1061,6 +1065,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 
 		heal: "  {POKEMON} restored a little HP using its Leftovers!",
 	},
+	legendplate: {
+		name: "Legend Plate",
+		desc: "When used on Arceus in Legends: Arceus, changes it to the Normal type. When Arceus uses Judgment, Arceus and the move change to a type that is most effective against the target.",
+		shortDesc: "In Legends: Arceus, Arceus's Judgment changes type to be supereffective.",
+	},
 	leppaberry: {
 		name: "Leppa Berry",
 		shortDesc: "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use.",
@@ -1415,6 +1424,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	payapaberry: {
 		name: "Payapa Berry",
 		shortDesc: "Halves damage taken from a supereffective Psychic-type attack. Single use.",
+	},
+	peatblock: {
+		name: "Peat Block",
+		shortDesc: "Evolves Ursaring into Ursaluna when used during a full moon.",
 	},
 	pechaberry: {
 		name: "Pecha Berry",
