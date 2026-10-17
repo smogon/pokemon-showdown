@@ -25,6 +25,15 @@ export interface PerspectiveRequest {
 	comment: { text: string };
 }
 
+/**
+ * Google's Perspective API, or a Perspective-compatible service set in
+ * `Config.perspectiveUrl` (Google's API ends after 2026).
+ */
+function perspectiveUrl(method: 'analyze' | 'suggestscore') {
+	const base = Config.perspectiveUrl || 'https://commentanalyzer.googleapis.com/v1alpha1';
+	return `${base.replace(/\/+$/, '')}/comments:${method}`;
+}
+
 function time() {
 	return Math.floor(Math.floor(Date.now() / 1000) / 60);
 }
@@ -70,7 +79,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 			comment: { text },
 		};
 		try {
-			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
+			const raw = await Net(perspectiveUrl('analyze')).post({
 				query: {
 					key: Config.perspectiveKey,
 				},
@@ -131,7 +140,7 @@ export class RemoteClassifier {
 			body.attributeScores[k] = { summaryScore: { value: data[k] } };
 		}
 		try {
-			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:suggestscore`).post({
+			const raw = await Net(perspectiveUrl('suggestscore')).post({
 				query: {
 					key: Config.perspectiveKey,
 				},
