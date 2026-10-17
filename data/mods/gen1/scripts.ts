@@ -738,8 +738,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			if (move.selfSwitch && pokemon.hp) {
-				pokemon.switchFlag = move.selfSwitch === true ? true : this.dex.toID(move.selfSwitch);
+			if (move.selfSwitch && pokemon.hp && !pokemon.volatiles['commanded'] &&
+				(this.battle.canSwitch(pokemon.side) || move.id === 'revivalblessing')) {
+				pokemon.switchFlag = move.id;
 			}
 
 			return damage;

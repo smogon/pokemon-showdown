@@ -161,8 +161,25 @@ export class Pokemon {
 	 */
 	switchFlag: ID | boolean;
 	forceSwitchFlag: boolean;
-	skipBeforeSwitchOutEventFlag: boolean;
-	draggedIn: number | null;
+	/**
+	 * Set on the target trying to switch out if Pursuit activates.
+	 * Prevents duplicate activation messages and makes sure the target
+	 * still switches before checking for winners if Destiny Bond
+	 * KOs the Pursuit user in Gen 2-4.
+	 *
+	 * Not cleared by fainting or clearVolatile. Only cleared on its replacement's
+	 * switchIn, whether or not a Pursuit KO made you choose a new replacement.
+	 */
+	pursuitActivated: boolean;
+	/**
+	 * Set by Baton Pass and Shed Tail to avoid Pursuit.
+	 * Also set on the target trying to switch out during `BeforeSwitchOut`
+	 * to prevent the event from running twice during U-turn switches.
+	 *
+	 * Not cleared by fainting or clearVolatile. Only cleared on its replacement's
+	 * switchIn, whether or not a Pursuit KO made you choose a new replacement.
+	 */
+	skipPursuit: boolean;
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
 
@@ -453,8 +470,8 @@ export class Pokemon {
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
-		this.skipBeforeSwitchOutEventFlag = false;
-		this.draggedIn = null;
+		this.pursuitActivated = false;
+		this.skipPursuit = false;
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
 

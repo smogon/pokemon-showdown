@@ -16,7 +16,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			residualdmg(this, pokemon);
 		},
-		onSwitchIn(pokemon) {
+		onEntryHazard(pokemon) {
 			pokemon.addVolatile('brnattackdrop');
 		},
 		onAfterSwitchInSelf(pokemon) {
@@ -37,7 +37,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				return false;
 			}
 		},
-		onSwitchIn(pokemon) {
+		onEntryHazard(pokemon) {
 			pokemon.addVolatile('parspeeddrop');
 		},
 	},
