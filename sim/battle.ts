@@ -1053,7 +1053,9 @@ export class Battle {
 		// events that target a Pokemon normally bubble up to the Side
 		const shouldBubbleDown = target instanceof Side;
 		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
-		const prefixedHandlers = !['BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange'].includes(eventName);
+		const prefixedHandlers = ![
+			'BeforeSelection', 'BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange',
+		].includes(eventName);
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
 			handlers = this.findPokemonEventHandlers(target, `on${eventName}`);
 			if (prefixedHandlers) {
@@ -1798,7 +1800,8 @@ export class Battle {
 				}
 			}
 		}
-		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
+		this.eachEvent('BeforeSelection'); // Berserk Gene activation
+		// Gen 2 roll happens at 'BeforeTurn'
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
 		this.makeRequest('move');
@@ -2811,6 +2814,8 @@ export class Battle {
 
 		case 'beforeTurn':
 			this.eachEvent('BeforeTurn');
+			if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
+			// Gen 3 roll happens at 'BeforeSelection'
 			break;
 		case 'residual':
 			this.add('');
