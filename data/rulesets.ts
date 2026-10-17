@@ -98,6 +98,15 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod',
 		],
 	},
+	standardcustomgame: {
+		effectType: 'ValidatorRule',
+		name: 'Standard Custom Game',
+		desc: "The standard ruleset for all Custom Game formats",
+		battle: { trunc: Math.trunc },
+		debug: true,
+		// no restrictions, for serious (other than team preview)
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+	},
 	natdexmod: {
 		effectType: 'ValidatorRule',
 		name: 'NatDex Mod',
