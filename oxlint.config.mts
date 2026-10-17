@@ -12,7 +12,6 @@ export default configure({
 		'logs/',
 		'node_modules/',
 		'dist/',
-		'data/**/learnsets.ts',
 		'tools/set-import/importer.js',
 		'tools/set-import/sets',
 		'tools/modlog/converter.js',
@@ -153,6 +152,12 @@ export default configure({
 					})),
 				],
 			},
+		},
+		{
+			files: ['data/**/learnsets.ts'],
+			// Don't run Stylistic on learnsets
+			rules: Object.fromEntries(Object.keys(configs.ts.rules)
+				.filter(rule => rule.startsWith('@stylistic/')).map(rule => [rule, 'off'])),
 		},
 		{
 			files: ['server/chat-commands/core.ts', 'server/chat-commands/moderation.ts'],

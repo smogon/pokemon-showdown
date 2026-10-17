@@ -42,9 +42,8 @@
     "full-lint": "npm run lint",
     "pretest": "npm run lint",
     "test": "mocha",
-    "posttest": "npm run tsc",
-    "full-test": "oxlint --max-warnings 0 && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\" && npm run test-npm",
-    "full-test-ci": "oxlint --max-warnings 0 && tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm"
+    "full-test": "oxlint --max-warnings 0 && mocha --timeout 8000 --forbid-only -g \".*\" && npm run test-npm",
+    "full-test-ci": "oxlint --max-warnings 0 && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm"
   },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",

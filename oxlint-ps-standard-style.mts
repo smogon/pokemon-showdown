@@ -405,7 +405,7 @@ export default {
 export const configs = {
 	base: defineConfig({
 		jsPlugins: ['@stylistic/eslint-plugin', { name: 'ps', specifier: import.meta.filename }],
-		options: { typeAware: true, reportUnusedDisableDirectives: 'warn' },
+		options: { typeAware: true, typeCheck: true, reportUnusedDisableDirectives: 'warn' },
 		env: { builtin: true },
 		rules: defaultRules,
 	}),
