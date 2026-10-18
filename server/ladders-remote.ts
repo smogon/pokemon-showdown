@@ -33,7 +33,7 @@ export class LadderStore {
 	 * client.
 	 */
 	// This requires to be `async` because it must conform with the `LadderStore` interface
-	// eslint-disable-next-line @typescript-eslint/require-await
+	// oxlint-disable-next-line typescript/require-await
 	async getTop(prefix?: string): Promise<[string, string] | null> {
 		return null;
 	}
@@ -57,7 +57,7 @@ export class LadderStore {
 		}
 		if (isNaN(mmr)) return 1000;
 
-		if (user && user.id === userid) {
+		if (user?.id === userid) {
 			user.mmrCache[formatid] = mmr;
 		}
 		return mmr;
@@ -145,7 +145,7 @@ export class LadderStore {
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
 	 */
 	// This requires to be `async` because it must conform with the `LadderStore` interface
-	// eslint-disable-next-line @typescript-eslint/require-await
+	// oxlint-disable-next-line typescript/require-await
 	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}

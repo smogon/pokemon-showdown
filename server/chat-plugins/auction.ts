@@ -558,7 +558,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	nominate(user: User, target: string) {
 		if (this.state !== 'nom') throw new Chat.ErrorMessage(`You cannot nominate players right now.`);
 		const manager = this.managers.get(user.id);
-		if (!manager || manager.team !== this.nominatingTeam) this.checkOwner(user);
+		if (manager?.team !== this.nominatingTeam) this.checkOwner(user);
 
 		// For undo
 		this.lastQueue = this.queue.slice();
@@ -928,7 +928,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			let data = '';
 			try {
-				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
+				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()!}`).get();
 			} catch {}
 			if (!data) throw new Chat.ErrorMessage('Error fetching data from pastebin.');
 

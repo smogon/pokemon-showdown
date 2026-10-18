@@ -1011,7 +1011,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"]!)
 				.filter(ability => ability !== set.ability);
 			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
 				for (const abilityName of unSeenAbilities) {
@@ -2083,7 +2083,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 			// Protocol: Include the data of the donor species in the `pokeball` data slot.
 			// Afterwards, we are going to reset the name to what the user intended.
-			set.pokeball = `${set.pokeball}0${canonicalSource}`;
+			set.pokeball = `${set.pokeball || ''}0${canonicalSource}`;
 			return null;
 		},
 		onValidateTeam(team, f, teamHas) {
@@ -2532,7 +2532,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"]!)
 				.filter(ability => ability !== set.ability);
 			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
 				for (const abilityName of unSeenAbilities) {
@@ -2759,13 +2759,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					} else {
 						if (!isDrag && !sourceEffect) switchCopyFlag = 'copyvolatile';
 					}
-					if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
+					if (!oldActive.skipPursuit && !isDrag) {
 						this.battle.runEvent('BeforeSwitchOut', oldActive);
 						if (this.battle.gen >= 5) {
 							this.battle.eachEvent('Update');
 						}
 					}
-					oldActive.skipBeforeSwitchOutEventFlag = false;
+					oldActive.skipPursuit = false;
 					if (!this.battle.runEvent('SwitchOut', oldActive)) {
 						// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 						// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
@@ -2777,7 +2777,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					}
 					if (!oldActive.hp) {
 						// a pokemon fainted from Pursuit before it could switch
-						return 'pursuitfaint';
+						return false;
 					}
 
 					// will definitely switch out at this point
@@ -2826,7 +2826,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				} else {
 					this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 				}
-				if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 				pokemon.previouslySwitchedIn++;
 
 				if (isDrag && this.battle.gen >= 5) {

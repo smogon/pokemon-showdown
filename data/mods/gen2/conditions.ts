@@ -28,7 +28,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.effectType === 'Move') {
+			if (sourceEffect?.effectType === 'Move') {
 				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
@@ -65,7 +65,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onModifyMove: undefined, // no inherit
 		onDamagingHit: undefined, // no inherit
 		onAfterMoveSecondary(target, source, move) {
-			if ((move.secondary && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
+			if ((move.secondary?.status === 'brn') || move.statusRoll === 'brn') {
 				target.cureStatus();
 			}
 		},
@@ -104,10 +104,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			const damage = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter;
 			this.damage(damage, pokemon, pokemon);
 		},
-		onSwitchIn(pokemon) {
-			// Regular poison status and damage after a switchout -> switchin.
+		onSwitchOut(pokemon) {
+			// Regular poison status and damage after a switchout
+			// The flag that distinguishes between regular poison and toxic is battle-only
 			pokemon.status = 'psn' as ID;
-			this.add('-status', pokemon, 'psn', '[silent]');
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
@@ -116,12 +116,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	confusion: {
 		inherit: true,
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');
 			} else {
 				this.add('-start', target, 'confusion');
 			}
-			if (sourceEffect && sourceEffect.id === 'berserkgene') {
+			if (sourceEffect?.id === 'berserkgene') {
 				this.effectState.time = 256;
 			} else {
 				this.effectState.time = this.random(2, 6);
@@ -169,7 +169,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return this.random(2, 4);
 		},
 		onResidual(target) {
-			if ((target.lastMove && target.lastMove.id === 'struggle') || target.status === 'slp') {
+			if ((target.lastMove?.id === 'struggle') || target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}

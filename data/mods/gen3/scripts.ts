@@ -13,6 +13,24 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 	},
+	checkFainted() {
+		// Gen 3 can request replacements while other switches are still queued
+		const queuedSwitchOuts = this.queue.getSwitches().map(action => action.pokemon);
+		const candidatesBySide = this.sides
+			.filter(side => this.canSwitch(side))
+			.map(side => side.active.filter(pokemon => pokemon.fainted && !queuedSwitchOuts.includes(pokemon)))
+			.filter(candidates => candidates.length);
+
+		// Gen 3 requests replacements one at a time when only one side has fainted pokemon
+		const onePerSide = candidatesBySide.length === 1;
+		for (const candidates of candidatesBySide) {
+			for (const pokemon of candidates) {
+				pokemon.status = 'fnt' as ID;
+				pokemon.switchFlag = true;
+				if (onePerSide) break;
+			}
+		}
+	},
 	pokemon: {
 		inherit: true,
 		getActionSpeed() {
@@ -121,7 +139,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let sourceEffect = options?.sourceEffect;
 			let target = options?.target;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
-			if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
+			if (sourceEffect?.id === 'instruct') sourceEffect = null;
 
 			let move = this.dex.getActiveMove(moveOrMoveName);
 			pokemon.lastMoveUsed = move;
@@ -163,7 +181,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
 			if (sourceEffect) attrs += `|[from] ${this.dex.conditions.get(sourceEffect).name}`;
-			this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
+			this.battle.addMove('move', pokemon, movename, `${target!}${attrs}`);
 
 			if (!target) {
 				this.battle.attrLastMove('[notarget]');

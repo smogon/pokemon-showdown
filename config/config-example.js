@@ -479,6 +479,7 @@ exports.ratedtours = false;
  * appealurl - specify a URL containing information on how users can appeal
  * disciplinary actions on your section. You can also leave this blank, in
  * which case users won't be given any information on how to appeal.
+ * @type {string}
  */
 exports.appealurl = '';
 

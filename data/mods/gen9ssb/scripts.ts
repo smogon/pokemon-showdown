@@ -277,16 +277,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.speed = action.pokemon.getActionSpeed();
 		}
 	},
-	// For some god forsaken reason removing the boolean declarations causes the "battles dont end automatically" bug
-	// I don't know why but in any case please don't touch this unless you know how to fix this
-	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
+	resolveFaints({ lastFaintFirst = false, checkWinIfNoFaints = false, checkWin = true } = {}) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
 		if (!length) {
-			if (forceCheck && this.checkWin()) return true;
+			if (checkWinIfNoFaints && this.checkWin()) return true;
 			return false;
 		}
-		if (lastFirst) {
+		if (lastFaintFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
 		}
@@ -449,20 +447,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
-				// a pokemon fainted from Pursuit before it could switch
-				if (this.gen <= 4) {
-					// in gen 2-4, the switch still happens
-					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
-					action.priority = -101;
-					this.queue.unshift(action);
-					break;
-				} else {
-					// in gen 5+, the switch is cancelled
-					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
-					break;
-				}
-			}
+			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
@@ -537,7 +522,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// fainting
 
-		this.faintMessages();
+		this.resolveFaints();
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
@@ -594,10 +579,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
 					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						pokemon.switchFlag !== 'scapegoat' && !pokemon.skipBeforeSwitchOutEventFlag) {
+						pokemon.switchFlag !== 'scapegoat' && !pokemon.skipPursuit) {
 						this.runEvent('BeforeSwitchOut', pokemon);
-						pokemon.skipBeforeSwitchOutEventFlag = true;
-						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+						pokemon.skipPursuit = true;
+						this.resolveFaints(); // Pokemon may have fainted in BeforeSwitchOut
 						if (this.ended) return true;
 						if (pokemon.fainted) {
 							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
@@ -791,13 +776,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 					switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 				}
-				if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
+				if (!oldActive.skipPursuit && !isDrag) {
 					this.battle.runEvent('BeforeSwitchOut', oldActive);
 					if (this.battle.gen >= 5) {
 						this.battle.eachEvent('Update');
 					}
 				}
-				oldActive.skipBeforeSwitchOutEventFlag = false;
+				oldActive.skipPursuit = false;
+				oldActive.pursuitActivated = false;
 				if (!this.battle.runEvent('SwitchOut', oldActive)) {
 					// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
 					// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
@@ -809,7 +795,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (!oldActive.hp) {
 					// a pokemon fainted from Pursuit before it could switch
-					return 'pursuitfaint';
+					return false;
 				}
 
 				// will definitely switch out at this point
@@ -859,7 +845,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
 			pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
-			if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 			pokemon.previouslySwitchedIn++;
 
 			if (isDrag && this.battle.gen >= 5) {
@@ -1150,7 +1135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const oldActiveMove = move;
 
 			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
-			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
+			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove?.id ?? null : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMove', pokemon, target, move);
@@ -1173,7 +1158,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				);
 				const targetOf1stDance = this.battle.activeTarget!;
 				for (const dancer of dancers) {
-					if (this.battle.faintMessages()) break;
+					if (this.battle.resolveFaints()) break;
 					if (dancer.fainted) continue;
 					this.battle.add('-activate', dancer, 'ability: ' + dancer.getAbility().name);
 					const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
@@ -1184,7 +1169,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
-			this.battle.faintMessages();
+			this.battle.resolveFaints();
 			this.battle.checkWin();
 
 			if (this.battle.gen <= 4) {
@@ -1310,7 +1295,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// hit is 1 higher than the actual hit count
 			if (hit === 1) return damage.fill(false);
 			if (nullDamage) damage.fill(false);
-			this.battle.faintMessages(false, false, !pokemon.hp);
+			this.battle.resolveFaints({ checkWin: !pokemon.hp });
 			if (move.multihit && typeof move.smartTarget !== 'boolean') {
 				this.battle.add('-hitcount', targets[0], hit - 1);
 			}
@@ -1605,7 +1590,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (action.zmove) details += ` zmove`;
 					if (action.maxMove) details += ` dynamax`;
 					if (action.terastallize) details += ` terastallize`;
-					return `move ${action.moveid}${details}`;
+					return `move ${action.moveid!}${details}`;
 				case 'switch':
 				case 'instaswitch':
 				case 'revivalblessing':
@@ -1658,7 +1643,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (slot < 0) {
-					return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
+					return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText!}" to switch to`);
 				}
 			}
 			if (slot >= this.pokemon.length) {

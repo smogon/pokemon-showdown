@@ -124,7 +124,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 		this.process.on('message', (message: string) => {
 			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = `[${this.process.pid}] ${message.slice(6)}`;
+				error.stack = `[${this.process.pid!}] ${message.slice(6)}`;
 				throw error;
 			}
 
@@ -238,7 +238,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		this.process.on('message', (message: string) => {
 			if (message.startsWith('THROW\n')) {
 				const error = new Error();
-				error.stack = `[${this.process.pid}] ${message.slice(6)}`;
+				error.stack = `[${this.process.pid!}] ${message.slice(6)}`;
 				throw error;
 			}
 
@@ -330,6 +330,8 @@ export class StreamProcessWrapper implements ProcessWrapper {
 		} else if (!this.pendingRelease) {
 			this.pendingRelease = Promise.resolve();
 		}
+		// Stream destruction can finish synchronously or return a Promise.
+		// oxlint-disable-next-line typescript/await-thenable
 		return Promise.all(destroyed);
 	}
 }
@@ -470,7 +472,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		this.crashRespawnCount += 1;
 		// Notify any global crash logger
 		void Promise.reject(
-			new Error(`Process ${this.basename} ${process.getProcess().pid} crashed and had to be restarted`)
+			new Error(`Process ${this.basename} ${process.getProcess().pid!} crashed and had to be restarted`)
 		);
 		this.releasingProcesses.push(process);
 		this.crashedProcesses.push(process);
@@ -595,7 +597,7 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				// eslint-disable-next-line no-eval
+				// oxlint-disable-next-line no-eval
 				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
@@ -638,11 +640,10 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 		return new StreamProcessWrapper(this.filename, this.messageCallback);
 	}
 	async pipeStream(taskId: string, stream: Streams.ObjectReadStream<string>) {
-		let done = false;
-		while (!done) {
+		while (true) {
 			try {
-				let value;
-				({ value, done } = await stream.next());
+				const { value, done } = await stream.next();
+				if (done) break;
 				process.send!(`${taskId}\nPUSH\n${value}`);
 			} catch (err: any) {
 				process.send!(`${taskId}\nTHROW\n${err.stack}`);
@@ -671,7 +672,7 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
-				// eslint-disable-next-line no-eval
+				// oxlint-disable-next-line no-eval
 				process.send!(`${taskId}\n` + eval(message));
 				return;
 			}
@@ -764,11 +765,10 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 		this.unspawnSubscription?.(process);
 	}
 	async pipeStream(stream: Streams.ObjectReadStream<string>) {
-		let done = false;
-		while (!done) {
+		while (true) {
 			try {
-				let value;
-				({ value, done } = await stream.next());
+				const { value, done } = await stream.next();
+				if (done) break;
 				process.send!(value);
 			} catch (err: any) {
 				process.send!(`THROW\n${err.stack}`);

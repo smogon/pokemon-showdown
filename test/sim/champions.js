@@ -751,7 +751,7 @@ describe('Champions moves', () => {
 	});
 
 	describe('No Retreat', () => {
-		it.skip(`should not allow usage multiple times in a row even if it has the trapped volatile`, () => {
+		it(`should not allow usage multiple times in a row even if it has the trapped volatile`, () => {
 			battle = createChampionsBattle([[
 				{ species: "Wynaut", moves: ['noretreat'] },
 			], [

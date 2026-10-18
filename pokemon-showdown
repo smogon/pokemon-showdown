@@ -3,7 +3,7 @@
 // no-var is disabled since this is supposed to support old versions of node
 // block scoped var is just because idk what the fuck is going on there since it wasn't
 // failing before
-/* eslint-disable block-scoped-var, no-var, no-redeclare*/
+/* oxlint-disable block-scoped-var, no-var, no-redeclare*/
 
 // Before running, ensure that the Typescript files have been compiled.
 //

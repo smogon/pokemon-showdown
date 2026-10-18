@@ -66,6 +66,13 @@ describe('Dex#getSpecies', () => {
 });
 
 describe('Dex#getItem', () => {
+	it('should only assign Plate Fling power to held Plates', () => {
+		assert.equal(Dex.items.get('Flame Plate').fling.basePower, 90);
+		assert.equal(Dex.items.get('Blank Plate').fling, undefined);
+		assert.equal(Dex.items.get('Legend Plate').fling, undefined);
+		assert.equal(Dex.items.get('Firium Z').fling, undefined);
+	});
+
 	it(`should correctly mark Gem legality`, () => {
 		assert.false(Dex.forGen(5).items.get('Normal Gem').isNonstandard);
 		assert.false(Dex.forGen(5).items.get('Rock Gem').isNonstandard);

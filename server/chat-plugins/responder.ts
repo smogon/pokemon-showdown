@@ -289,7 +289,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			return message;
 		} else {
 			this.sendReply(`|uhtml|askhelp-${user}-${toID(message)}|<div class="infobox">${reply}</div>`);
-			const trimmedMessage = `<div class="infobox">${responder.visualize(message, true)}</div>`;
+			const trimmedMessage = `<div class="infobox">${responder.visualize(message, true)!}</div>`;
 			setTimeout(() => {
 				this.sendReply(`|uhtmlchange|askhelp-${user}-${toID(message)}|${trimmedMessage}`);
 			}, 10 * 1000);

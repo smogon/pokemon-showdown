@@ -23,6 +23,19 @@ describe("Custom Rules", () => {
 		assert.false.legalTeam(team, 'gen7ou@@@!obtainableabilities');
 	});
 
+	it('should support Legends item legality', () => {
+		const team = [
+			{ species: 'pikachu', ability: 'static', item: 'Black Augurite', moves: ['thunderbolt'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen8ou');
+		assert.false.legalTeam(team, 'gen9ou');
+		assert.false.legalTeam(team, 'gen9nationaldex');
+		assert.legalTeam(team, 'gen9ou@@@+Legends');
+		assert.false.legalTeam(team, 'gen7ou@@@+Legends');
+		assert.legalTeam(team, 'gen9customgame');
+		assert.false.legalTeam(team, 'gen9customgame@@@-Legends');
+	});
+
 	it('should allow Pokemon to be banned', () => {
 		let team = [
 			{ species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: { hp: 1 } },
