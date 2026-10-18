@@ -109,7 +109,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
 			}
 
-			this.faintMessages();
+			this.resolveFaints();
 			if (this.ended) return;
 		}
 	},

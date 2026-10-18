@@ -1251,7 +1251,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onAfterMoveSecondarySelf(source) {
 			if (this.canSwitch(source.side)) {
 				this.actions.useMove('batonpass', source);
-				source.skipBeforeSwitchOutEventFlag = false;
+				source.skipPursuit = false;
 			}
 		},
 		target: "self",
