@@ -66,6 +66,24 @@ describe('Matchmaker', () => {
 		assert.equal(Ladders.searches.get(FORMATID).searches.size, 2);
 	});
 
+	it('should not matchmake a bot with a user who blocks bots on the ladder', function () {
+		this.p2.isUserBot = true;
+		this.p1.settings.blockBotLadder = true;
+		addSearch(this.p1);
+		addSearch(this.p2);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 2);
+	});
+
+	it('should matchmake a bot with users who do not block bots on the ladder', function () {
+		this.p2.isUserBot = true;
+		addSearch(this.p1);
+		addSearch(this.p2);
+		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
+
+		const [roomid] = [...this.p1.games];
+		Rooms.get(roomid).destroy();
+	});
+
 	it('should cancel searches', function () {
 		addSearch(this.p1);
 		Ladders(FORMATID).cancelSearch(this.p1);

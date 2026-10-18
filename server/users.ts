@@ -332,6 +332,7 @@ export interface UserSettings {
 	allowFriendNotifications: boolean;
 	displayBattlesToFriends: boolean;
 	hideLogins: boolean;
+	blockBotLadder: boolean;
 }
 
 // User
@@ -475,6 +476,7 @@ export class User extends Chat.MessageContext {
 			allowFriendNotifications: false,
 			displayBattlesToFriends: false,
 			hideLogins: false,
+			blockBotLadder: false,
 		};
 		this.battleSettings = {
 			team: '',

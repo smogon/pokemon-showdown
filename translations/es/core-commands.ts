@@ -156,4 +156,9 @@ export const translations: TranslationCatalog = {
 	"unlocked": null, // NEEDS TRANSLATION
 	"friended": null, // NEEDS TRANSLATION
 	"The player in slot {SLOT} has already been eliminated.": null, // NEEDS TRANSLATION
+	"You are already avoiding bots on the ladder!": null, // NEEDS TRANSLATION
+	"You will no longer be matched against registered bots in ladder searches.": null, // NEEDS TRANSLATION
+	"You are already allowing bots on the ladder!": null, // NEEDS TRANSLATION
+	"You can be matched against registered bots in ladder searches again.": null, // NEEDS TRANSLATION
+
 };

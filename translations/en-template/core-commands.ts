@@ -157,4 +157,9 @@ export const translations: TranslationCatalog = {
 	"unlocked": null,
 	"friended": null,
 	"The player in slot {SLOT} has already been eliminated.": null,
+	"You are already avoiding bots on the ladder!": null,
+	"You will no longer be matched against registered bots in ladder searches.": null,
+	"You are already allowing bots on the ladder!": null,
+	"You can be matched against registered bots in ladder searches again.": null,
+
 };
