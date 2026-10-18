@@ -166,7 +166,8 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	}
 	setPrivacyOfGames(privacy: PrivacySetting) {
 		for (let i = 0; i < this.games.length; i++) {
-			const room = Rooms.get(this.games[i].room)!;
+			const room = Rooms.get(this.games[i].room);
+			if (!room) continue;
 			const prevRoom = Rooms.get(this.games[i - 1]?.room);
 			const gameNum = i + 1;
 

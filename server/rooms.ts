@@ -980,6 +980,8 @@ export abstract class BasicRoom {
 			(this as any).parent.subRooms.delete(oldID);
 			(this as any).parent.subRooms.set(newID, this as ChatRoom);
 		}
+		const bestOfGame = this.parent?.bestOf?.games.find(game => game.room === oldID);
+		if (bestOfGame) bestOfGame.room = newID;
 		if (this.subRooms) {
 			for (const subRoom of this.subRooms.values()) {
 				(subRoom as any).parent = this as ChatRoom;
