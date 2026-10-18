@@ -1563,6 +1563,27 @@ export const commands: Chat.ChatCommands = {
 	allowchallengeshelp: [
 		`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`,
 	],
+	blockbotladder(target, room, user) {
+		if (user.settings.blockBotLadder) throw new Chat.ErrorMessage(this.TL`You are already avoiding bots on the ladder!`);
+		user.settings.blockBotLadder = true;
+		user.update();
+		this.sendReply(this.TL`You will no longer be matched against registered bots in ladder searches.`);
+	},
+	blockbotladderhelp: [
+		`/blockbotladder - Avoid being matched against registered bots in ladder searches. Undo with /unblockbotladder.`,
+	],
+
+	unblockbotladder: 'allowbotladder',
+	allowbotladder(target, room, user) {
+		if (!user.settings.blockBotLadder) throw new Chat.ErrorMessage(this.TL`You are already allowing bots on the ladder!`);
+		user.settings.blockBotLadder = false;
+		user.update();
+		this.sendReply(this.TL`You can be matched against registered bots in ladder searches again.`);
+	},
+	allowbotladderhelp: [
+		`/unblockbotladder - Allow being matched against registered bots in ladder searches again. Undo with /blockbotladder.`,
+	],
+
 	cchall: 'cancelchallenge',
 	cancelchallenge(target, room, user, connection) {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);

@@ -403,6 +403,8 @@ class Ladder extends LadderStore {
 			const bots = users.filter(x => x.isUserBot && x.id !== user.id);
 			if (search.custom === 'suspect' && bots.length) return false;
 			if (Config.forcedprefixes?.some((p: any) => user.id.startsWith(p.prefix)) && bots.length) return false;
+			// users can opt out of being matched against bots
+			if (user.settings.blockBotLadder && bots.length) return false;
 		}
 
 		// search must be within range
