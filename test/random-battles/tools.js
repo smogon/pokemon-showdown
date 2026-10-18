@@ -37,9 +37,9 @@ function testSet(pokemon, options, test) {
  *
  * @param {ID} pokemon
  * @param {{format?: string, rounds?: number, isDoubles?: boolean, isLead?: boolean, isDynamax?: boolean, seed?: PRNGSeed}} options
- * @param {string[] | undefined} types
+ * @param {string[]} [types]
  */
-function testHasSTAB(pokemon, options, types = undefined) {
+function testHasSTAB(pokemon, options, types) {
 	const dex = Dex.forFormat(options.format || 'gen8randombattle');
 	types = types || dex.species.get(pokemon).types;
 	testSet(pokemon, options, set => {

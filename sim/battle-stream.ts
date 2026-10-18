@@ -135,7 +135,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
 			try {
-				/* eslint-disable no-eval, @typescript-eslint/no-unused-vars */
+				/* oxlint-disable no-eval, no-unused-vars */
 				const p1 = battle.sides[0];
 				const p2 = battle.sides[1];
 				const p3 = battle.sides[2];
@@ -162,7 +162,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 					return side.pokemon.find(p => p.baseSpecies.id === input || p.species.id === input);
 				};
 				let result = eval(message);
-				/* eslint-enable no-eval, @typescript-eslint/no-unused-vars */
+				/* oxlint-enable no-eval, no-unused-vars */
 
 				if (result?.then) {
 					result.then((unwrappedResult: any) => {

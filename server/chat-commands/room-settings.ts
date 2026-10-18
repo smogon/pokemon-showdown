@@ -349,8 +349,9 @@ export const commands: Chat.ChatCommands = {
 		room.settings.language = targetLanguage === 'english' ? false : targetLanguage;
 
 		room.saveSettings();
-		this.modlog(`LANGUAGE`, null, Chat.languages.get(targetLanguage));
-		this.sendReply(`The room's language has been set to ${Chat.languages.get(targetLanguage)}`);
+		const languageName = Chat.languages.get(targetLanguage)!;
+		this.modlog(`LANGUAGE`, null, languageName);
+		this.sendReply(`The room's language has been set to ${languageName}`);
 	},
 	roomlanguagehelp: [
 		`/roomlanguage [language] - Sets the the language for the room, which changes language of a few commands. Requires # ~`,
@@ -777,7 +778,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/help hightraffic');
 		}
 		room.saveSettings();
-		this.modlog(`HIGHTRAFFIC`, null, `${!!room.settings.highTraffic}`);
+		this.modlog(`HIGHTRAFFIC`, null, `${!!room.settings.highTraffic as DebugOutput}`);
 		this.addModAction(`This room was marked as ${room.settings.highTraffic ? 'high' : 'low'} traffic by ${user.name}.`);
 	},
 	hightraffichelp: [
@@ -1535,12 +1536,14 @@ export const commands: Chat.ChatCommands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			return this.sendReplyBox(
-				`This room is currently displaying ${room.settings.dataCommandTierDisplay} as the tier when using /data.`
+				room.settings.dataCommandTierDisplay ?
+					`This room is currently displaying ${room.settings.dataCommandTierDisplay} as the tier when using /data.` :
+					`This room does not have a tier set for /data.`
 			);
 		}
 		this.checkCan('declare', null, room);
 
-		const displayIDToName: { [k: string]: Room['settings']['dataCommandTierDisplay'] } = {
+		const displayIDToName: { [k: string]: NonNullable<Room['settings']['dataCommandTierDisplay']> } = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
 			nationaldextiers: 'National Dex tiers',

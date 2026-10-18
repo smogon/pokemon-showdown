@@ -289,8 +289,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			(this.isTournamentStarted && this.isAvailableMatchesInvalidated)) {
 			this.room.add(
 				"Error: update() called with a target user when data invalidated: " +
-				`${!this.bracketUpdateTimer && this.isBracketInvalidated}, ` +
-				`${this.isTournamentStarted && this.isAvailableMatchesInvalidated}` +
+				`${(!this.bracketUpdateTimer && this.isBracketInvalidated) as DebugOutput}, ` +
+				`${(this.isTournamentStarted && this.isAvailableMatchesInvalidated) as DebugOutput}` +
 				"; Please report this to an admin."
 			);
 			return;
@@ -431,7 +431,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users.get(otherPlayer.id);
-				if (otherUser && otherUser.latestIp === user.latestIp) {
+				if (otherUser?.latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
 				}
@@ -506,7 +506,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			for (const otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users.get(otherPlayer.id);
-				if (otherUser && otherUser.latestIp === replacementUser.latestIp &&
+				if (otherUser?.latestIp === replacementUser.latestIp &&
 					replacementUser.latestIp !== user.latestIp) {
 					throw new Chat.ErrorMessage(`${replacementUser.name} already has an alt in the tournament.`);
 				}
@@ -529,7 +529,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			matchPlayer = player;
 		} else {
 			for (const p of this.players) {
-				if (p.inProgressMatch && p.inProgressMatch.to === player) {
+				if (p.inProgressMatch?.to === player) {
 					matchPlayer = p;
 					break;
 				}
@@ -574,7 +574,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		if (data.type === 'tree') {
 			if (!data.rootNode) {
-				data.users = usersToNames(this.players.sort());
+				data.users = usersToNames(Utils.sortBy(this.players, player => player.id));
 				return data;
 			}
 			const queue = [data.rootNode];
@@ -669,7 +669,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		return true;
 	}
 	getAvailableMatches() {
-		const matches = this.generator.getAvailableMatches() as [TournamentPlayer, TournamentPlayer][];
+		const matches = this.generator.getAvailableMatches();
 		if (typeof matches === 'string') throw new Error(`Error from getAvailableMatches(): ${matches}`);
 
 		const challenges = new Map<TournamentPlayer, TournamentPlayer[]>();
@@ -771,7 +771,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		let matchTo = null;
 		for (const playerFrom of this.players) {
 			const match = playerFrom.inProgressMatch;
-			if (match && match.to === player) matchTo = playerFrom;
+			if (match?.to === player) matchTo = playerFrom;
 		}
 		if (matchTo) {
 			matchTo.isBusy = false;
@@ -1094,7 +1094,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		if (user.can('makeroom')) return;
 		for (const otherPlayer of this.getRemainingPlayers()) {
 			const otherUser = Users.get(otherPlayer.id);
-			if (otherUser && otherUser.latestIp === user.latestIp) {
+			if (otherUser?.latestIp === user.latestIp) {
 				return "Scouting is banned: tournament players can't watch other tournament battles.";
 			}
 		}
@@ -1148,7 +1148,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			const error = this.generator.setMatchResult([p1, p2], result as 'win' | 'loss', score);
 			if (error) {
 				// Should never happen
-				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.id}, ${room.p2.id}], ${result}, ${score}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`).update();
+				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.id}, ${room.p2.id}], ${result}, ${score.join(',')}) in onBattleWin(${room.roomid}, ${winnerid}). Please report this to an admin.`).update();
 			}
 		}
 		this.room.add(`|tournament|battleend|${p1.name}|${p2.name}|${result}|${score.join(',')}|success|${room.roomid}`);
@@ -1202,7 +1202,7 @@ function getGenerator(generator: string | undefined) {
 }
 
 function createTournamentGenerator(
-	generatorName: string | undefined, modifier: string | undefined
+	generatorName: string, modifier: string | undefined
 ) {
 	const TourGenerator = getGenerator(generatorName);
 	if (!TourGenerator) {
@@ -1212,7 +1212,7 @@ function createTournamentGenerator(
 	return new TourGenerator(modifier || '');
 }
 function createTournament(
-	room: Room, formatId: string | undefined, generator: string | undefined, playerCap: string | undefined,
+	room: Room, formatId: string | undefined, generator: string, playerCap: string | undefined,
 	isRated: boolean, generatorMod: string | undefined, name: string | undefined, output: Chat.CommandContext
 ) {
 	if (room.type !== 'chat') {
@@ -1514,7 +1514,7 @@ const commands: Chat.ChatCommands = {
 			if (!this.runBroadcast()) return;
 			room = this.requireRoom();
 			const tournament = this.requireGame(Tournament);
-			const users = usersToNames(tournament.getRemainingPlayers().sort());
+			const users = usersToNames(Utils.sortBy(tournament.getRemainingPlayers(), player => player.id));
 			this.sendReplyBox(
 				`<strong>${users.length}/${tournament.players.length}` +
 				Utils.html` users remain in this tournament:</strong><br />${users.join(', ')}`
@@ -1669,7 +1669,7 @@ const commands: Chat.ChatCommands = {
 				this.sendReply("Rules can be: -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule");
 				this.parse('/tour viewrules');
 				if (tournament.customRules.length) {
-					return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
+					return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules.join(',')}</code></details>`);
 				}
 				return;
 			}
@@ -1683,7 +1683,7 @@ const commands: Chat.ChatCommands = {
 				);
 				this.privateModAction(`${user.name} updated the tournament's custom rules.`);
 				this.modlog('TOUR RULES', null, tournament.customRules.join(', '));
-				this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
+				this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules.join(',')}</code></details>`);
 			}
 		},
 		clearruleset: 'clearcustomrules',
@@ -1778,9 +1778,11 @@ const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('tournaments', null, room);
 			const tournament = this.requireGame(Tournament);
-			const [oldUser, newUser] = target.split(',').map(item => Users.get(item.trim()));
-			if (!oldUser) throw new Chat.ErrorMessage(`User ${oldUser} not found.`);
-			if (!newUser) throw new Chat.ErrorMessage(`User ${newUser} not found.`);
+			const [oldName, newName = ''] = target.split(',').map(item => item.trim());
+			const oldUser = Users.get(oldName);
+			const newUser = Users.get(newName);
+			if (!oldUser) throw new Chat.ErrorMessage(`User ${oldName} not found.`);
+			if (!newUser) throw new Chat.ErrorMessage(`User ${newName} not found.`);
 
 			tournament.replaceUser(oldUser, newUser, this);
 		},

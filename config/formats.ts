@@ -1011,7 +1011,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"]!)
 				.filter(ability => ability !== set.ability);
 			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
 				for (const abilityName of unSeenAbilities) {
@@ -2083,7 +2083,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 			// Protocol: Include the data of the donor species in the `pokeball` data slot.
 			// Afterwards, we are going to reset the name to what the user intended.
-			set.pokeball = `${set.pokeball}0${canonicalSource}`;
+			set.pokeball = `${set.pokeball || ''}0${canonicalSource}`;
 			return null;
 		},
 		onValidateTeam(team, f, teamHas) {
@@ -2532,7 +2532,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const species = this.dex.species.get(set.species);
 			const unSeenAbilities = Object.keys(species.abilities)
 				.filter(key => key !== 'S' && (key !== 'H' || !species.unreleasedHidden))
-				.map(key => species.abilities[key as "0" | "1" | "H" | "S"])
+				.map(key => species.abilities[key as "0" | "1" | "H" | "S"]!)
 				.filter(ability => ability !== set.ability);
 			if (unSeenAbilities.length && this.toID(set.ability) !== this.toID(species.abilities['S'])) {
 				for (const abilityName of unSeenAbilities) {

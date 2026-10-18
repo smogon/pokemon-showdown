@@ -574,7 +574,7 @@ const TWISTS: { [k: string]: Twist } = {
 				}
 			}
 
-			for (const mineSet of mines) mineSet.sort();
+			for (const mineSet of mines) Utils.sortBy(mineSet, mine => mine.mine);
 
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
@@ -662,7 +662,7 @@ const MODES: { [k: string]: GameMode | string } = {
 					let eliminated = [];
 					const completed = this.completed.map(entry => toID(entry.name)) as string[];
 					if (completed.length === game.playerlist.length) {
-						eliminated.push(completed.pop()); // eliminate one
+						eliminated.push(completed.pop()!); // eliminate one
 						game.playerlist = game.playerlist.filter(userid => completed.includes(userid));
 					} else {
 						eliminated = game.playerlist.filter(userid => !completed.includes(userid));
