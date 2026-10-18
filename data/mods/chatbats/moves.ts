@@ -502,7 +502,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// reapplies volatiles and stat boosts
 					if ((pokemon as any).storedVolatiles) {
 						for (const volatile in (pokemon as any).storedVolatiles) {
-							pokemon.addVolatile(volatile);
+							if (volatile === 'choicelock') {
+								pokemon.volatiles[volatile] = (pokemon as any).storedVolatiles[volatile];
+							} else {
+								pokemon.addVolatile(volatile);
+							}
 						}
 					}
 					if ((pokemon as any).storedBoosts) {
