@@ -670,6 +670,9 @@ export const pages: Chat.PageTable = {
 			if (!data) {
 				throw new Chat.ErrorMessage(`Team ${teamID} not found.`);
 			}
+			if (data.ownerid !== user.id && !user.can('rangeban')) {
+				throw new Chat.ErrorMessage(`Access denied.`);
+			}
 			let buf = `<div class="ladder pad"><h2>Edit team ${teamID}</h2>${refresh(this)}<hr />`;
 			// let [teamName, formatid, rawPrivacy, rawTeam] = Utils.splitFirst(target, ',', 4);
 			buf += `<form data-submitsend="/teams update ${teamID},{name},{format},{privacy},{team}">`;
