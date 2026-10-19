@@ -257,7 +257,7 @@ export const TeamsHandler = new class {
 			connection.popup(`You have too many teams stored. If you wish to upload this team, delete some first.`);
 			return null;
 		}
-		// eslint-disable-next-line require-atomic-updates
+		// oxlint-disable-next-line ps/require-atomic-updates
 		team.packedTeam = Teams.pack(sets);
 		if (!team.packedTeam.trim()) { // extra sanity check
 			connection.popup("Invalid team provided.");
@@ -291,12 +291,12 @@ export const TeamsHandler = new class {
 				ownerid: user.id, team: team.packedTeam, date: new Date().toISOString(), format: format.id,
 				views: 0, title: team.name, private: team.privacy,
 			}}) RETURNING teamid`;
-			return { teamid: loaded?.teamid, teamName: team.name, privacy: team.privacy };
+			return { teamid: loaded!.teamid, teamName: team.name, privacy: team.privacy };
 		}
 	}
 	generatePassword(len = 20) {
 		let pw = '';
-		for (let i = 0; i < len; i++) pw += ALPHABET[crypto.randomInt(0, ALPHABET.length - 1)];
+		for (let i = 0; i < len; i++) pw += ALPHABET[crypto.randomInt(0, ALPHABET.length)];
 		return pw;
 	}
 	updateViews(teamid: string) {
@@ -670,6 +670,9 @@ export const pages: Chat.PageTable = {
 			if (!data) {
 				throw new Chat.ErrorMessage(`Team ${teamID} not found.`);
 			}
+			if (data.ownerid !== user.id && !user.can('rangeban')) {
+				throw new Chat.ErrorMessage(`Access denied.`);
+			}
 			let buf = `<div class="ladder pad"><h2>Edit team ${teamID}</h2>${refresh(this)}<hr />`;
 			// let [teamName, formatid, rawPrivacy, rawTeam] = Utils.splitFirst(target, ',', 4);
 			buf += `<form data-submitsend="/teams update ${teamID},{name},{format},{privacy},{team}">`;
@@ -687,7 +690,7 @@ export const pages: Chat.PageTable = {
 				privacy.reverse(); // first option is the one shown by default so we gotta match it
 			}
 			buf += `<select name="privacy" />`;
-			buf += `${privacy.map(v => `<option value="${v}">${Number(v) ? 'Yes' : 'No'}</option>`)}`;
+			buf += privacy.map(v => `<option value="${v}">${Number(v) ? 'Yes' : 'No'}</option>`).join('');
 			buf += `</select><br />`;
 
 			buf += `<strong>Team:</strong><br />`;

@@ -149,6 +149,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Binding Band",
 		shortDesc: "Holder's partial-trapping moves deal 1/6 max HP per turn instead of 1/8.",
 	},
+	blackaugurite: {
+		name: "Black Augurite",
+		shortDesc: "Evolves Scyther into Kleavor when used.",
+	},
 	blackbelt: {
 		name: "Black Belt",
 		shortDesc: "Holder's Fighting-type attacks have 1.2× power.",
@@ -168,6 +172,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		gen3: {
 			shortDesc: "Holder's Dark-type attacks have 1.1× power.",
 		},
+	},
+	blankplate: {
+		name: "Blank Plate",
+		shortDesc: "Changes Arceus to the Normal type when used in Legends: Arceus.",
 	},
 	blastoisinite: {
 		name: "Blastoisinite",
@@ -1057,6 +1065,11 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 
 		heal: "  {POKEMON} restored a little HP using its Leftovers!",
 	},
+	legendplate: {
+		name: "Legend Plate",
+		desc: "When used on Arceus in Legends: Arceus, changes it to the Normal type. When Arceus uses Judgment, Arceus and the move change to a type that is most effective against the target.",
+		shortDesc: "In Legends: Arceus, Arceus's Judgment changes type to be supereffective.",
+	},
 	leppaberry: {
 		name: "Leppa Berry",
 		shortDesc: "Restores 10 PP to the first of the holder's moves to reach 0 PP. Single use.",
@@ -1411,6 +1424,10 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	payapaberry: {
 		name: "Payapa Berry",
 		shortDesc: "Halves damage taken from a supereffective Psychic-type attack. Single use.",
+	},
+	peatblock: {
+		name: "Peat Block",
+		shortDesc: "Evolves Ursaring into Ursaluna when used during a full moon.",
 	},
 	pechaberry: {
 		name: "Pecha Berry",

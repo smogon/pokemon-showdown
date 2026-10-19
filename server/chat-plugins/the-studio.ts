@@ -326,7 +326,7 @@ class RecommendationsInterface {
 		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
 		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
 		if (!rec.videoInfo) {
-			// eslint-disable-next-line require-atomic-updates
+			// oxlint-disable-next-line ps/require-atomic-updates
 			rec.videoInfo = await YouTube.getVideoData(YouTube.getId(rec.url));
 			saveRecommendations();
 		}

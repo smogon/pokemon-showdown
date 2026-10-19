@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-shadow */
+/* oxlint-disable no-unused-vars, no-shadow */
 
 type GroupSymbol = import('./user-groups').GroupSymbol;
 type AuthLevel = import('./user-groups').AuthLevel;

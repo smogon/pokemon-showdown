@@ -161,8 +161,29 @@ export class Pokemon {
 	 */
 	switchFlag: ID | boolean;
 	forceSwitchFlag: boolean;
-	skipBeforeSwitchOutEventFlag: boolean;
-	draggedIn: number | null;
+	/**
+	 * Set on the target trying to switch out if Pursuit activates.
+	 * Prevents duplicate activation messages and makes sure the target
+	 * still switches before checking for winners if Destiny Bond
+	 * KOs the Pursuit user in Gen 2-4.
+	 *
+	 * Not cleared by fainting or clearVolatile. Cleared on its replacement's
+	 * switchIn, whether or not a Pursuit KO made you choose a new replacement.
+	 * Also cleared by runPursuitActivation if the switch was canceled, e.g. when
+	 * Emergency Exit cancels U-turn.
+	 */
+	pursuitActivated: boolean;
+	/**
+	 * Set by Baton Pass and Shed Tail to avoid Pursuit.
+	 * Also set on the target trying to switch out during `BeforeSwitchOut`
+	 * to prevent the event from running twice during U-turn switches.
+	 *
+	 * Not cleared by fainting or clearVolatile. Cleared on its replacement's
+	 * switchIn, whether or not a Pursuit KO made you choose a new replacement.
+	 * Also cleared by runPursuitActivation if the switch was canceled, e.g. when
+	 * Emergency Exit cancels U-turn.
+	 */
+	skipPursuit: boolean;
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
 
@@ -453,8 +474,8 @@ export class Pokemon {
 
 		this.switchFlag = false;
 		this.forceSwitchFlag = false;
-		this.skipBeforeSwitchOutEventFlag = false;
-		this.draggedIn = null;
+		this.pursuitActivated = false;
+		this.skipPursuit = false;
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
 
@@ -1822,7 +1843,7 @@ export class Pokemon {
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
-				this.battle.add('-enditem', this, item, `[of] ${source}`);
+				this.battle.add('-enditem', this, item, `[of] ${source!}`);
 				break;
 			default:
 				if (item.isGem) {
@@ -1850,7 +1871,7 @@ export class Pokemon {
 
 	takeItem(source?: Pokemon) {
 		if (!source) source = this;
-		if (this.battle.gen <= 4 && (this.itemKnockedOff || source.itemKnockedOff)) return false;
+		if (this.battle.gen === 4 && (this.itemKnockedOff || source.itemKnockedOff)) return false;
 		if (!this.item) return;
 		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
@@ -2167,7 +2188,7 @@ export class Pokemon {
 	isSkyDropped() {
 		if (this.volatiles['skydrop']) return true;
 		for (const foeActive of this.side.foe.active) {
-			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === this) {
+			if (foeActive.volatiles['skydrop']?.source === this) {
 				return true;
 			}
 		}
@@ -2191,8 +2212,7 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const weather = this.battle.field.effectiveWeather();
 		if (this.battle.activePokemon?.hasAbility('megasol') && sourceEffect &&
-			(sourceEffect.id === 'megasol' || sourceEffect.effectType === 'Move' || sourceEffect.effectType === 'Weather') &&
-			sourceEffect.id !== 'electroshot') {
+			(sourceEffect.id === 'megasol' || sourceEffect.effectType === 'Move' || sourceEffect.effectType === 'Weather')) {
 			if (weather !== 'sunnyday' && message) this.battle.add('-activate', this, 'ability: Mega Sol');
 			return 'sunnyday' as ID;
 		}

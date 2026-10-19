@@ -99,7 +99,7 @@ export function visualize(value: any, depth = 0): string {
 	if (value === undefined) return `undefined`;
 	if (value === null) return `null`;
 	if (typeof value === 'number' || typeof value === 'boolean') {
-		return `${value}`;
+		return `${value as DebugOutput}`;
 	}
 	if (typeof value === 'string') {
 		return `"${value}"`; // NOT ESCAPED

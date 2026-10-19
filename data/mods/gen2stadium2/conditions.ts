@@ -16,7 +16,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			residualdmg(this, pokemon);
 		},
-		onSwitchIn(pokemon) {
+		onEntryHazard(pokemon) {
 			pokemon.addVolatile('brnattackdrop');
 		},
 	},
@@ -34,7 +34,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				return false;
 			}
 		},
-		onSwitchIn(pokemon) {
+		onEntryHazard(pokemon) {
 			pokemon.addVolatile('parspeeddrop');
 		},
 	},
@@ -42,7 +42,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.effectType === 'Move') {
+			if (sourceEffect?.effectType === 'Move') {
 				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
@@ -72,7 +72,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		// Stadium 2 fixed Berserk Gene afflicting Confusion for 255 turns.
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');
 			} else {
 				this.add('-start', target, 'confusion');

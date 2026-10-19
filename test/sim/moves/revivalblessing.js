@@ -82,4 +82,58 @@ describe('Revival Blessing', () => {
 		battle.makeChoices('switch 2', '');
 		assert.equal(battle.p1.active[1].boosts.evasion, 0, "Lycanroc should not have used Double Team");
 	});
+
+	it(`should allow Pursuit to intercept a revived Pokemon's next withdrawal`, () => {
+		battle = common.createBattle([[
+			{ species: 'Tyranitar', ability: 'unnerve', moves: ['pursuit', 'sleeptalk'] },
+		], [
+			{ species: 'Alakazam', moves: ['sleeptalk'] },
+			{ species: 'Pawmot', moves: ['revivalblessing', 'sleeptalk'] },
+			{ species: 'Blissey', moves: ['sleeptalk'] },
+		]]);
+		const [alakazam, , blissey] = battle.p2.pokemon;
+		alakazam.hp = 1;
+		battle.makeChoices('move pursuit', 'switch blissey');
+		assert.fainted(alakazam);
+		assert.fullHP(blissey);
+
+		battle.makeChoices('', 'switch pawmot');
+		battle.makeChoices('move sleeptalk', 'move revivalblessing');
+		battle.makeChoices('', 'switch alakazam');
+		assert.false.fainted(alakazam);
+		battle.makeChoices('move sleeptalk', 'switch alakazam');
+		battle.makeChoices('move pursuit', 'switch blissey');
+		assert.fainted(alakazam);
+		assert.fullHP(blissey);
+		assert.equal(battle.p2.requestState, 'switch');
+	});
+
+	it(`should allow Pursuit to intercept a Pokemon revived in an active slot in Doubles`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Tyranitar', moves: ['pursuit', 'sleeptalk'] },
+			{ species: 'Tyranitar', moves: ['knockoff', 'sleeptalk'] },
+		], [
+			{ species: 'Alakazam', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', moves: ['sleeptalk'] },
+			{ species: 'Pawmot', item: 'leppaberry', moves: ['revivalblessing', 'sleeptalk'] },
+		]]);
+		const [alakazam, shedinja] = battle.p2.pokemon;
+		battle.makeChoices('move pursuit 2, move knockoff 1', 'move sleeptalk, switch 3');
+		assert.fainted(alakazam);
+		assert.fainted(shedinja);
+
+		battle.makeChoices('', 'switch 3, pass');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move revivalblessing, pass');
+		battle.makeChoices('', 'switch 2, pass');
+		assert.false.fainted(shedinja);
+		assert.equal(battle.p2.active[1], shedinja);
+
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move revivalblessing, move sleeptalk');
+		battle.makeChoices('', 'switch 3, pass');
+		assert.false.fainted(alakazam);
+		battle.makeChoices('move pursuit 2, move sleeptalk', 'move sleeptalk, switch 3');
+		assert.fainted(shedinja);
+		assert.false(alakazam.isActive);
+		assert.equal(battle.p2.requestState, 'switch');
+	});
 });

@@ -70,21 +70,41 @@ describe('Levitate', () => {
 		]]);
 		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move spikes', 'move tackle'));
 	});
-});
 
-describe('Levitate [Gen 4]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
+	describe('[Gen 4]', () => {
+		it('should not have its airborne property suppressed by Mold Breaker if it is forced out by a move', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] },
+				{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes'] },
+			]]);
+			battle.makeChoices('move sleeptalk', 'move spikes');
+			assert.false.hurts(battle.p1.pokemon[1], () => battle.makeChoices('move sleeptalk', 'move roar'));
+		});
 
-	it('should not have its airborne property suppressed by Mold Breaker if it is forced out by a move', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] },
-			{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] },
-		], [
-			{ species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes'] },
-		]]);
-		battle.makeChoices('move sleeptalk', 'move spikes');
-		assert.false.hurts(battle.p1.pokemon[1], () => battle.makeChoices('move sleeptalk', 'move roar'));
+		it(`should not have its airborne property suppressed by Mold Breaker during a Pursuit activation`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "rampardos", ability: 'moldbreaker', moves: ['spikes', 'pursuit'] },
+			], [
+				{ species: "gastly", moves: ['sleeptalk'] },
+				{ species: "gengar", ability: 'levitate', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move spikes', 'move sleeptalk');
+			battle.makeChoices('move pursuit', 'switch 2');
+			assert.species(battle.p2.active[0], 'Gengar');
+			assert.fullHP(battle.p2.active[0]);
+
+			battle = common.gen(4).createBattle([[
+				{ species: "rampardos", ability: 'moldbreaker', moves: ['spikes', 'pursuit'] },
+			], [
+				{ species: "gastly", level: 1, moves: ['sleeptalk'] },
+				{ species: "gengar", ability: 'levitate', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move spikes', 'move sleeptalk');
+			battle.makeChoices('move pursuit', 'switch 2');
+			assert.species(battle.p2.active[0], 'Gengar');
+			assert.fullHP(battle.p2.active[0]);
+		});
 	});
 });

@@ -1,6 +1,6 @@
 {
     "venusaur": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -80,7 +80,7 @@
         ]
     },
     "beedrill": {
-        "level": 60,
+        "level": 63,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -95,7 +95,7 @@
         ]
     },
     "beedrillmega": {
-        "level": 53,
+        "level": 51,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -160,7 +160,7 @@
         ]
     },
     "raichu": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -170,7 +170,7 @@
         ]
     },
     "raichumegax": {
-        "level": 47,
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -184,7 +184,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Fake Out", "Focus Blast", "Protect", "Volt Switch", "Zap Cannon"],
+                "movepool": ["Encore", "Fake Out", "Focus Blast", "Protect", "Volt Switch", "Zap Cannon"],
                 "abilities": ["Lightning Rod"]
             }
         ]
@@ -250,6 +250,16 @@
             }
         ]
     },
+    "wigglytuff": {
+        "level": 55,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Dazzling Gleam", "Encore", "Fire Blast", "Helping Hand", "Icy Wind", "Moonblast", "Thunder Wave"],
+                "abilities": ["Competitive"]
+            }
+        ]
+    },
     "vileplume": {
         "level": 55,
         "sets": [
@@ -267,6 +277,33 @@
                 "role": "Doubles Bulky Setup",
                 "movepool": ["Leech Seed", "Pollen Puff", "Protect", "Sludge Bomb"],
                 "abilities": ["Effect Spore"]
+            }
+        ]
+    },
+    "persian": {
+        "level": 57,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Double-Edge", "Fake Out", "Helping Hand", "Icy Wind", "Taunt", "U-turn"],
+                "abilities": ["Technician"],
+                "preferredTypes": ["Normal"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Double-Edge", "Fake Out", "Icy Wind", "Knock Off"],
+                "abilities": ["Technician"],
+                "preferredTypes": ["Normal"]
+            }
+        ]
+    },
+    "persianalola": {
+        "level": 54,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Fake Out", "Foul Play", "Helping Hand", "Icy Wind", "Knock Off", "Parting Shot", "Snarl", "Taunt"],
+                "abilities": ["Fur Coat"]
             }
         ]
     },
@@ -316,16 +353,16 @@
         ]
     },
     "machamp": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Bullet Punch", "Detect", "Dynamic Punch", "Knock Off", "Stone Edge"],
+                "movepool": ["Bullet Punch", "Dynamic Punch", "Knock Off", "Protect", "Stone Edge"],
                 "abilities": ["No Guard"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Bullet Punch", "Detect", "Dynamic Punch", "Knock Off", "Stone Edge"],
+                "movepool": ["Bullet Punch", "Dynamic Punch", "Knock Off", "Protect", "Stone Edge"],
                 "abilities": ["No Guard"]
             }
         ]
@@ -345,7 +382,12 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Giga Drain", "Knock Off", "Protect", "Sludge Bomb", "Strength Sap", "Sucker Punch"],
+                "movepool": ["Giga Drain", "Knock Off", "Protect", "Sludge Bomb", "Sucker Punch"],
+                "abilities": ["Chlorophyll"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Giga Drain", "Knock Off", "Sludge Bomb", "Strength Sap", "Sucker Punch"],
                 "abilities": ["Chlorophyll"]
             }
         ]
@@ -385,6 +427,17 @@
             }
         ]
     },
+    "farfetchd": {
+        "level": 60,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Brave Bird", "Close Combat", "Knock Off", "Leaf Blade", "Protect", "Slash"],
+                "abilities": ["Defiant"],
+                "preferredTypes": ["Fighting"]
+            }
+        ]
+    },
     "gengar": {
         "level": 52,
         "sets": [
@@ -396,7 +449,7 @@
         ]
     },
     "gengarmega": {
-        "level": 46,
+        "level": 47,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -428,7 +481,7 @@
         ]
     },
     "kangaskhanmega": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -438,7 +491,7 @@
         ]
     },
     "starmie": {
-        "level": 51,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -457,12 +510,27 @@
             }
         ]
     },
+    "mrmime": {
+        "level": 55,
+        "sets": [
+            {
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Dazzling Gleam", "Fake Out", "Icy Wind", "Psychic", "Thunder Wave"],
+                "abilities": ["Filter"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Dazzling Gleam", "Encore", "Mystical Fire", "Protect", "Psychic"],
+                "abilities": ["Filter"]
+            }
+        ]
+    },
     "pinsir": {
-        "level": 53,
+        "level": 54,
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "High Horsepower", "Lunge", "Rock Slide", "Stone Edge"],
+                "movepool": ["Close Combat", "High Horsepower", "Lunge", "Protect", "Rock Slide", "Stone Edge"],
                 "abilities": ["Hyper Cutter"],
                 "preferredTypes": ["Rock"]
             },
@@ -474,22 +542,22 @@
         ]
     },
     "pinsirmega": {
-        "level": 47,
+        "level": 48,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Body Slam", "Detect", "Feint", "High Horsepower"],
+                "movepool": ["Body Slam", "Feint", "High Horsepower", "Protect"],
                 "abilities": ["Hyper Cutter"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Body Slam", "Close Combat", "Detect", "Feint"],
+                "movepool": ["Body Slam", "Close Combat", "Feint", "Protect"],
                 "abilities": ["Hyper Cutter"]
             }
         ]
     },
     "tauros": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -500,7 +568,7 @@
         ]
     },
     "taurospaldeacombat": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -535,7 +603,12 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dragon Dance", "Power Whip", "Protect", "Temper Flare", "Waterfall"],
+                "movepool": ["Dragon Dance", "Protect", "Temper Flare", "Waterfall"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Dragon Dance", "Power Whip", "Protect", "Waterfall"],
                 "abilities": ["Intimidate"]
             },
             {
@@ -571,41 +644,41 @@
         ]
     },
     "vaporeon": {
-        "level": 54,
+        "level": 53,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Detect", "Icy Wind", "Scald", "Wish"],
+                "movepool": ["Icy Wind", "Protect", "Scald", "Wish"],
                 "abilities": ["Water Absorb"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Detect", "Helping Hand", "Icy Wind", "Scald", "Yawn"],
+                "movepool": ["Helping Hand", "Icy Wind", "Protect", "Scald", "Yawn"],
                 "abilities": ["Water Absorb"]
             }
         ]
     },
     "jolteon": {
-        "level": 54,
+        "level": 53,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Alluring Voice", "Calm Mind", "Detect", "Thunderbolt"],
+                "movepool": ["Alluring Voice", "Calm Mind", "Protect", "Thunderbolt"],
                 "abilities": ["Volt Absorb"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Alluring Voice", "Detect", "Thunder Wave", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Alluring Voice", "Protect", "Thunder Wave", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Volt Absorb"]
             }
         ]
     },
     "flareon": {
-        "level": 58,
+        "level": 57,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Detect", "Flare Blitz", "Superpower", "Will-O-Wisp"],
+                "movepool": ["Flare Blitz", "Protect", "Superpower", "Will-O-Wisp"],
                 "abilities": ["Flash Fire"]
             }
         ]
@@ -693,7 +766,7 @@
         ]
     },
     "meganiummega": {
-        "level": 50,
+        "level": 47,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -758,7 +831,7 @@
         ]
     },
     "ariados": {
-        "level": 60,
+        "level": 61,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -773,7 +846,7 @@
         ]
     },
     "ampharos": {
-        "level": 55,
+        "level": 53,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -829,11 +902,11 @@
         ]
     },
     "espeon": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Alluring Voice", "Detect", "Psychic", "Shadow Ball"],
+                "movepool": ["Alluring Voice", "Protect", "Psychic", "Shadow Ball"],
                 "abilities": ["Magic Bounce"]
             }
         ]
@@ -899,7 +972,7 @@
         ]
     },
     "steelixmega": {
-        "level": 49,
+        "level": 50,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -963,7 +1036,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Close Combat", "Detect", "Pin Missile", "Rock Blast"],
+                "movepool": ["Close Combat", "Pin Missile", "Protect", "Rock Blast"],
                 "abilities": ["Moxie"]
             }
         ]
@@ -999,7 +1072,7 @@
         ]
     },
     "houndoom": {
-        "level": 54,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1014,7 +1087,7 @@
         ]
     },
     "houndoommega": {
-        "level": 50,
+        "level": 48,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -1049,16 +1122,16 @@
         ]
     },
     "sceptile": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Detect", "Earth Power", "Leaf Storm", "Shed Tail"],
+                "movepool": ["Earth Power", "Leaf Storm", "Protect", "Shed Tail"],
                 "abilities": ["Overgrow"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Acrobatics", "Breaking Swipe", "Detect", "Earth Power", "Leaf Storm"],
+                "movepool": ["Acrobatics", "Breaking Swipe", "Earth Power", "Leaf Storm", "Protect"],
                 "abilities": ["Unburden"],
                 "preferredTypes": ["Ground"]
             }
@@ -1069,7 +1142,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Detect", "Dragon Pulse", "Earth Power", "Leaf Storm"],
+                "movepool": ["Dragon Pulse", "Earth Power", "Leaf Storm", "Protect"],
                 "abilities": ["Overgrow"]
             }
         ]
@@ -1079,22 +1152,22 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Knock Off", "Overheat"],
+                "movepool": ["Close Combat", "Knock Off", "Overheat", "Protect"],
                 "abilities": ["Speed Boost"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Close Combat", "Detect", "Heat Wave", "Vacuum Wave"],
+                "movepool": ["Close Combat", "Heat Wave", "Protect", "Vacuum Wave"],
                 "abilities": ["Speed Boost"]
             }
         ]
     },
     "blazikenmega": {
-        "level": 46,
+        "level": 47,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Close Combat", "Detect", "Flare Blitz", "Swords Dance"],
+                "movepool": ["Close Combat", "Flare Blitz", "Protect", "Swords Dance"],
                 "abilities": ["Speed Boost"]
             }
         ]
@@ -1110,7 +1183,7 @@
         ]
     },
     "swampertmega": {
-        "level": 49,
+        "level": 50,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -1124,7 +1197,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Protect", "Tailwind", "Wide Guard"],
+                "movepool": ["Hurricane", "Muddy Water", "Protect", "Tailwind", "Weather Ball", "Wide Guard"],
                 "abilities": ["Drizzle"]
             }
         ]
@@ -1145,7 +1218,7 @@
         ]
     },
     "gardevoirmega": {
-        "level": 48,
+        "level": 47,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1180,7 +1253,7 @@
         ]
     },
     "mawile": {
-        "level": 55,
+        "level": 58,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1190,7 +1263,7 @@
         ]
     },
     "mawilemega": {
-        "level": 48,
+        "level": 47,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1210,7 +1283,7 @@
         ]
     },
     "aggronmega": {
-        "level": 50,
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -1220,7 +1293,7 @@
         ]
     },
     "medicham": {
-        "level": 52,
+        "level": 54,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1229,12 +1302,12 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Bullet Punch", "Close Combat", "Detect", "Ice Punch", "Zen Headbutt"],
+                "movepool": ["Bullet Punch", "Close Combat", "Ice Punch", "Protect", "Zen Headbutt"],
                 "abilities": ["Pure Power"]
             },
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Close Combat", "Detect", "Fake Out", "Zen Headbutt"],
+                "movepool": ["Close Combat", "Fake Out", "Protect", "Zen Headbutt"],
                 "abilities": ["Pure Power"]
             }
         ]
@@ -1244,7 +1317,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Fake Out", "Zen Headbutt"],
+                "movepool": ["Close Combat", "Fake Out", "Protect", "Zen Headbutt"],
                 "abilities": ["Telepathy"]
             }
         ]
@@ -1266,6 +1339,16 @@
                 "role": "Offensive Protect",
                 "movepool": ["Flamethrower", "Overheat", "Protect", "Snarl", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Lightning Rod"]
+            }
+        ]
+    },
+    "swalot": {
+        "level": 57,
+        "sets": [
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Encore", "Gunk Shot", "Helping Hand", "Knock Off", "Thunder Wave", "Toxic Spikes"],
+                "abilities": ["Liquid Ooze"]
             }
         ]
     },
@@ -1305,7 +1388,7 @@
         ]
     },
     "cameruptmega": {
-        "level": 52,
+        "level": 50,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1319,7 +1402,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Body Press", "Fire Blast", "Heat Wave", "Protect", "Solar Beam", "Will-O-Wisp"],
+                "movepool": ["Body Press", "Heat Wave", "Protect", "Solar Beam", "Weather Ball", "Will-O-Wisp"],
                 "abilities": ["Drought"],
                 "preferredTypes": ["Grass"]
             },
@@ -1357,7 +1440,7 @@
         ]
     },
     "milotic": {
-        "level": 50,
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -1366,13 +1449,13 @@
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Coil", "Hypnosis", "Muddy Water", "Recover"],
+                "movepool": ["Blizzard", "Coil", "Muddy Water", "Recover"],
                 "abilities": ["Competitive"]
             }
         ]
     },
     "castform": {
-        "level": 60,
+        "level": 61,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1393,7 +1476,7 @@
         ]
     },
     "banettemega": {
-        "level": 52,
+        "level": 54,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1413,7 +1496,7 @@
         ]
     },
     "chimechomega": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1423,23 +1506,33 @@
         ]
     },
     "absol": {
-        "level": 53,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Detect", "Knock Off", "Play Rough", "Sucker Punch"],
+                "movepool": ["Knock Off", "Play Rough", "Protect", "Sucker Punch"],
                 "abilities": ["Justified"]
             }
         ]
     },
     "absolmega": {
-        "level": 50,
+        "level": 52,
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Knock Off", "Play Rough", "Sucker Punch"],
+                "movepool": ["Close Combat", "Knock Off", "Play Rough", "Protect", "Sucker Punch"],
                 "abilities": ["Justified"],
                 "preferredTypes": ["Fairy"]
+            }
+        ]
+    },
+    "absolmegaz": {
+        "level": 46,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Close Combat", "Protect", "Shadow Claw", "Sucker Punch", "Swords Dance"],
+                "abilities": ["Justified"]
             }
         ]
     },
@@ -1454,12 +1547,42 @@
         ]
     },
     "glaliemega": {
-        "level": 50,
+        "level": 52,
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Body Slam", "Explosion", "Icy Wind", "Protect"],
+                "movepool": ["Body Slam", "Freeze-Dry", "Icy Wind", "Protect"],
                 "abilities": ["Inner Focus"]
+            }
+        ]
+    },
+    "salamence": {
+        "level": 50,
+        "sets": [
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Draco Meteor", "Dual Wingbeat", "Fire Blast", "Protect", "Tailwind"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
+    "salamencemega": {
+        "level": 47,
+        "sets": [
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Double-Edge", "Draco Meteor", "Fire Blast", "Protect", "Tailwind"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Double-Edge", "Fire Blast", "Hyper Voice", "Protect", "Tailwind"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Double-Edge", "Hyper Voice", "Protect", "Tailwind"],
+                "abilities": ["Intimidate"]
             }
         ]
     },
@@ -1524,7 +1647,7 @@
         ]
     },
     "staraptor": {
-        "level": 51,
+        "level": 50,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1540,7 +1663,7 @@
         ]
     },
     "staraptormega": {
-        "level": 48,
+        "level": 44,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1550,7 +1673,7 @@
         ]
     },
     "luxray": {
-        "level": 55,
+        "level": 53,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1570,7 +1693,7 @@
         ]
     },
     "rampardos": {
-        "level": 53,
+        "level": 54,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1591,12 +1714,17 @@
         ]
     },
     "lopunny": {
-        "level": 54,
+        "level": 57,
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Close Combat", "Encore", "Fake Out", "Protect", "Thunder Wave", "U-turn"],
+                "movepool": ["Encore", "Fake Out", "Thunder Wave", "U-turn"],
                 "abilities": ["Limber"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Encore", "Fake Out", "Switcheroo", "Thunder Wave"],
+                "abilities": ["Klutz"]
             }
         ]
     },
@@ -1626,7 +1754,7 @@
         ]
     },
     "garchomp": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1645,22 +1773,47 @@
             }
         ]
     },
+    "garchompmegaz": {
+        "level": 48,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Draco Meteor", "Dragon Pulse", "Earth Power", "Iron Head", "Protect"],
+                "abilities": ["Rough Skin"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Draco Meteor", "Dragon Pulse", "Earth Power", "Protect"],
+                "abilities": ["Rough Skin"]
+            }
+        ]
+    },
     "lucario": {
         "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Extreme Speed", "Meteor Mash"],
+                "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Protect"],
                 "abilities": ["Inner Focus"]
             }
         ]
     },
     "lucariomega": {
+        "level": 48,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Protect", "Vacuum Wave"],
+                "abilities": ["Inner Focus"]
+            }
+        ]
+    },
+    "lucariomegaz": {
         "level": 47,
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Extreme Speed", "Meteor Mash", "Vacuum Wave"],
+                "movepool": ["Aura Sphere", "Dark Pulse", "Flash Cannon", "Nasty Plot", "Protect", "Vacuum Wave"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -1726,7 +1879,7 @@
         ]
     },
     "rhyperior": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1740,7 +1893,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Detect", "Double-Edge", "Knock Off", "Leaf Blade", "Swords Dance", "Synthesis"],
+                "movepool": ["Double-Edge", "Knock Off", "Leaf Blade", "Protect", "Swords Dance", "Synthesis"],
                 "abilities": ["Chlorophyll"],
                 "preferredTypes": ["Dark"]
             }
@@ -1751,18 +1904,18 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Calm Mind", "Detect", "Freeze-Dry", "Mud Shot"],
+                "movepool": ["Calm Mind", "Freeze-Dry", "Mud Shot", "Protect"],
                 "abilities": ["Ice Body"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Detect", "Freeze-Dry", "Icy Wind", "Mud Shot"],
+                "movepool": ["Freeze-Dry", "Icy Wind", "Mud Shot", "Protect"],
                 "abilities": ["Ice Body"]
             }
         ]
     },
     "gliscor": {
-        "level": 53,
+        "level": 52,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1802,7 +1955,7 @@
         ]
     },
     "gallademega": {
-        "level": 47,
+        "level": 48,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -1822,7 +1975,7 @@
         ]
     },
     "froslassmega": {
-        "level": 48,
+        "level": 45,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1842,7 +1995,7 @@
         ]
     },
     "rotomheat": {
-        "level": 52,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1861,13 +2014,13 @@
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Hydro Pump", "Nasty Plot", "Protect", "Thunderbolt", "Will-O-Wisp"],
+                "movepool": ["Hydro Pump", "Nasty Plot", "Protect", "Thunderbolt"],
                 "abilities": ["Levitate"]
             }
         ]
     },
     "rotomfrost": {
-        "level": 55,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1877,7 +2030,7 @@
         ]
     },
     "rotomfan": {
-        "level": 54,
+        "level": 53,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1887,7 +2040,7 @@
         ]
     },
     "rotommow": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1908,7 +2061,7 @@
         ]
     },
     "emboar": {
-        "level": 54,
+        "level": 53,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1918,7 +2071,7 @@
         ]
     },
     "emboarmega": {
-        "level": 49,
+        "level": 50,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1932,7 +2085,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Aqua Jet", "Detect", "Knock Off", "Liquidation", "Megahorn", "Sacred Sword", "Swords Dance"],
+                "movepool": ["Aqua Jet", "Knock Off", "Liquidation", "Megahorn", "Protect", "Sacred Sword", "Swords Dance"],
                 "abilities": ["Torrent"]
             },
             {
@@ -1942,7 +2095,7 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Aqua Jet", "Detect", "Flip Turn", "Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off", "Megahorn"],
+                "movepool": ["Aqua Jet", "Flip Turn", "Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off", "Megahorn", "Protect"],
                 "abilities": ["Torrent"]
             }
         ]
@@ -1952,7 +2105,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Ceaseless Edge", "Detect", "Razor Shell", "Sucker Punch"],
+                "movepool": ["Ceaseless Edge", "Protect", "Razor Shell", "Sucker Punch"],
                 "abilities": ["Sharpness"]
             },
             {
@@ -1963,11 +2116,11 @@
         ]
     },
     "watchog": {
-        "level": 59,
+        "level": 62,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Crunch", "Detect", "Double-Edge", "Stomping Tantrum"],
+                "movepool": ["Crunch", "Double-Edge", "Protect", "Stomping Tantrum"],
                 "abilities": ["Analytic"]
             }
         ]
@@ -1988,17 +2141,22 @@
         ]
     },
     "simisage": {
-        "level": 56,
+        "level": 58,
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Fake Out", "Leaf Storm", "Protect", "Taunt"],
+                "movepool": ["Energy Ball", "Fake Out", "Protect", "Superpower", "Taunt"],
+                "abilities": ["Overgrow"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Gunk Shot", "Leaf Storm", "Protect", "Superpower"],
                 "abilities": ["Overgrow"]
             }
         ]
     },
     "simisear": {
-        "level": 55,
+        "level": 53,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2028,7 +2186,7 @@
         ]
     },
     "musharna": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2043,7 +2201,7 @@
         ]
     },
     "excadrill": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2063,7 +2221,7 @@
         ]
     },
     "audino": {
-        "level": 59,
+        "level": 60,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2078,11 +2236,11 @@
         ]
     },
     "audinomega": {
-        "level": 58,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Dazzling Gleam", "Encore", "Heal Pulse", "Helping Hand", "Trick Room", "Yawn"],
+                "movepool": ["Dazzling Gleam", "Encore", "Heal Pulse", "Helping Hand", "Life Dew", "Trick Room", "Yawn"],
                 "abilities": ["Regenerator"]
             },
             {
@@ -2102,7 +2260,7 @@
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Detect", "Drain Punch", "Knock Off", "Mach Punch"],
+                "movepool": ["Drain Punch", "Knock Off", "Mach Punch", "Protect"],
                 "abilities": ["Iron Fist"],
                 "preferredTypes": ["Fighting"]
             }
@@ -2163,7 +2321,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Close Combat", "Coaching", "Encore", "Fake Out", "Knock Off", "Snarl"],
+                "movepool": ["Close Combat", "Encore", "Fake Out", "Knock Off", "Snarl"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Bulk Up", "Drain Punch", "Knock Off", "Protect"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -2179,7 +2342,7 @@
         ]
     },
     "cofagrigus": {
-        "level": 54,
+        "level": 53,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -2213,7 +2376,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Detect", "Flamethrower", "Focus Blast", "Night Daze", "Psychic", "Sludge Bomb"],
+                "movepool": ["Focus Blast", "Night Daze", "Protect", "Psychic", "Sludge Bomb", "Snarl"],
                 "abilities": ["Illusion"],
                 "preferredTypes": ["Poison"]
             }
@@ -2224,7 +2387,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Bitter Malice", "Detect", "Flamethrower", "Focus Blast", "Hyper Voice", "Nasty Plot", "Will-O-Wisp"],
+                "movepool": ["Bitter Malice", "Flamethrower", "Focus Blast", "Hyper Voice", "Nasty Plot", "Protect", "Will-O-Wisp"],
                 "abilities": ["Illusion"]
             }
         ]
@@ -2241,7 +2404,7 @@
         ]
     },
     "vanilluxe": {
-        "level": 51,
+        "level": 48,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2322,7 +2485,7 @@
         ]
     },
     "stunfisk": {
-        "level": 57,
+        "level": 55,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2362,7 +2525,7 @@
         ]
     },
     "golurkmega": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -2402,7 +2565,7 @@
         ]
     },
     "chesnaught": {
-        "level": 54,
+        "level": 55,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -2417,7 +2580,7 @@
         ]
     },
     "chesnaughtmega": {
-        "level": 50,
+        "level": 52,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -2442,7 +2605,7 @@
         ]
     },
     "delphoxmega": {
-        "level": 46,
+        "level": 44,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -2467,17 +2630,17 @@
         ]
     },
     "greninjamega": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Grass Knot", "Gunk Shot", "Hydro Pump", "Ice Beam", "Protect", "U-turn"],
+                "movepool": ["Dark Pulse", "Gunk Shot", "Hydro Pump", "Protect"],
                 "abilities": ["Protean"]
             }
         ]
     },
     "diggersby": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -2527,7 +2690,7 @@
         ]
     },
     "pyroarmega": {
-        "level": 48,
+        "level": 45,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2568,12 +2731,27 @@
         ]
     },
     "florges": {
-        "level": 54,
+        "level": 52,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
                 "movepool": ["Calm Mind", "Dazzling Gleam", "Moonblast", "Protect", "Synthesis"],
                 "abilities": ["Flower Veil"]
+            }
+        ]
+    },
+    "gogoat": {
+        "level": 54,
+        "sets": [
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["High Horsepower", "Horn Leech", "Milk Drink", "Protect"],
+                "abilities": ["Sap Sipper"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["High Horsepower", "Horn Leech", "Milk Drink", "Rock Slide"],
+                "abilities": ["Sap Sipper"]
             }
         ]
     },
@@ -2588,7 +2766,7 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Detect", "Knock Off", "Parting Shot"],
+                "movepool": ["Close Combat", "Knock Off", "Parting Shot", "Protect"],
                 "abilities": ["Scrappy"]
             }
         ]
@@ -2609,7 +2787,7 @@
         ]
     },
     "meowstic": {
-        "level": 56,
+        "level": 55,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2619,7 +2797,7 @@
         ]
     },
     "meowsticmmega": {
-        "level": 49,
+        "level": 50,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2652,7 +2830,7 @@
         ]
     },
     "aegislash": {
-        "level": 49,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -2677,7 +2855,7 @@
         ]
     },
     "slurpuff": {
-        "level": 56,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2709,7 +2887,7 @@
         ]
     },
     "barbaracle": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -2719,7 +2897,7 @@
         ]
     },
     "barbaraclemega": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -2744,7 +2922,7 @@
         ]
     },
     "dragalgemega": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2754,7 +2932,7 @@
         ]
     },
     "clawitzer": {
-        "level": 54,
+        "level": 53,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -2789,7 +2967,7 @@
         ]
     },
     "tyrantrum": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -2809,7 +2987,7 @@
         ]
     },
     "aurorus": {
-        "level": 53,
+        "level": 52,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2823,23 +3001,23 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Calm Mind", "Detect", "Hyper Voice", "Mystical Fire"],
+                "movepool": ["Calm Mind", "Hyper Voice", "Mystical Fire", "Protect"],
                 "abilities": ["Pixilate"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Detect", "Hyper Voice", "Mystical Fire", "Quick Attack"],
+                "movepool": ["Hyper Voice", "Mystical Fire", "Protect", "Quick Attack"],
                 "abilities": ["Pixilate"],
                 "preferredTypes": ["Fairy"]
             }
         ]
     },
     "hawlucha": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Brave Bird", "Close Combat", "Detect", "Swords Dance"],
+                "movepool": ["Brave Bird", "Close Combat", "Protect", "Swords Dance"],
                 "abilities": ["Unburden"]
             }
         ]
@@ -2849,12 +3027,12 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Brave Bird", "Close Combat", "Detect", "Rock Slide", "Stone Edge", "Swords Dance"],
+                "movepool": ["Brave Bird", "Close Combat", "Protect", "Rock Slide", "Stone Edge", "Swords Dance"],
                 "abilities": ["Limber"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Brave Bird", "Close Combat", "Detect", "Encore", "Taunt"],
+                "movepool": ["Brave Bird", "Close Combat", "Encore", "Protect", "Taunt"],
                 "abilities": ["Limber"]
             }
         ]
@@ -2906,7 +3084,7 @@
         ]
     },
     "trevenant": {
-        "level": 57,
+        "level": 56,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2960,13 +3138,13 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Avalanche", "Body Press", "Protect", "Recover"],
+                "movepool": ["Body Press", "Ice Spinner", "Protect", "Recover"],
                 "abilities": ["Sturdy"]
             }
         ]
     },
     "avalugghisui": {
-        "level": 57,
+        "level": 56,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -3036,7 +3214,7 @@
         ]
     },
     "toucannon": {
-        "level": 56,
+        "level": 55,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3051,7 +3229,7 @@
         ]
     },
     "crabominable": {
-        "level": 56,
+        "level": 55,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -3091,7 +3269,7 @@
         ]
     },
     "lycanrocdusk": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3132,7 +3310,7 @@
         ]
     },
     "salazzle": {
-        "level": 52,
+        "level": 51,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -3142,7 +3320,7 @@
         ]
     },
     "tsareena": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -3151,7 +3329,7 @@
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Helping Hand", "High Jump Kick", "Knock Off", "Protect", "Triple Axel", "Trop Kick"],
+                "movepool": ["Helping Hand", "High Jump Kick", "Knock Off", "Protect", "Rapid Spin", "Triple Axel", "Trop Kick"],
                 "abilities": ["Queenly Majesty"]
             },
             {
@@ -3178,6 +3356,26 @@
                 "role": "Choice Item user",
                 "movepool": ["Close Combat", "Gunk Shot", "Knock Off", "Rock Slide", "U-turn"],
                 "abilities": ["Defiant"]
+            }
+        ]
+    },
+    "golisopod": {
+        "level": 52,
+        "sets": [
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["First Impression", "Leech Life", "Liquidation", "Protect", "U-turn"],
+                "abilities": ["Emergency Exit"]
+            }
+        ]
+    },
+    "golisopodmega": {
+        "level": 48,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Drill Run", "First Impression", "Iron Head", "Leech Life", "Protect", "U-turn"],
+                "abilities": ["Emergency Exit"]
             }
         ]
     },
@@ -3241,8 +3439,58 @@
             }
         ]
     },
-    "corviknight": {
+    "rillaboom": {
         "level": 50,
+        "sets": [
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Fake Out", "Grassy Glide", "High Horsepower", "Wood Hammer"],
+                "abilities": ["Grassy Surge"],
+                "preferredTypes": ["Grass"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Fake Out", "Grassy Glide", "U-turn", "Wood Hammer"],
+                "abilities": ["Grassy Surge"],
+                "preferredTypes": ["Grass"]
+            }
+        ]
+    },
+    "cinderace": {
+        "level": 50,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["High Jump Kick", "Protect", "Pyro Ball", "Sucker Punch", "U-turn"],
+                "abilities": ["Blaze"],
+                "preferredTypes": ["Fighting"]
+            },
+            {
+                "role": "Doubles Fast Attacker",
+                "movepool": ["High Jump Kick", "Protect", "Pyro Ball", "Sucker Punch", "U-turn"],
+                "abilities": ["Blaze"],
+                "preferredTypes": ["Fighting"]
+            }
+        ]
+    },
+    "inteleon": {
+        "level": 49,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Hydro Pump", "Ice Beam", "Muddy Water", "Protect", "Scald"],
+                "abilities": ["Torrent"],
+                "preferredTypes": ["Water"]
+            },
+            {
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Hydro Pump", "Icy Wind", "Muddy Water", "Protect", "Scald"],
+                "abilities": ["Torrent"]
+            }
+        ]
+    },
+    "corviknight": {
+        "level": 49,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -3253,6 +3501,16 @@
                 "role": "Doubles Bulky Setup",
                 "movepool": ["Body Press", "Brave Bird", "Iron Defense", "Roost", "Tailwind"],
                 "abilities": ["Mirror Armor"]
+            }
+        ]
+    },
+    "thievul": {
+        "level": 56,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Dark Pulse", "Parting Shot", "Snarl", "Taunt"],
+                "abilities": ["Stakeout"]
             }
         ]
     },
@@ -3282,7 +3540,7 @@
         ]
     },
     "sandaconda": {
-        "level": 55,
+        "level": 56,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -3296,8 +3554,39 @@
             }
         ]
     },
-    "polteageist": {
+    "toxtricity": {
+        "level": 51,
+        "sets": [
+            {
+                "role": "Choice Item user",
+                "movepool": ["Overdrive", "Sludge Bomb", "Snarl", "Volt Switch"],
+                "abilities": ["Punk Rock"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Overdrive", "Psychic Noise", "Sludge Bomb", "Volt Switch"],
+                "abilities": ["Punk Rock"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Overdrive", "Protect", "Psychic Noise", "Sludge Bomb", "Volt Switch"],
+                "abilities": ["Punk Rock"]
+            }
+        ]
+    },
+    "grapploct": {
         "level": 53,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Mach Punch", "Payback", "Protect", "Storm Throw"],
+                "abilities": ["Technician"],
+                "preferredTypes": ["Fighting"]
+            }
+        ]
+    },
+    "polteageist": {
+        "level": 52,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -3323,6 +3612,26 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Fake Out", "Light Screen", "Parting Shot", "Reflect", "Spirit Break"],
                 "abilities": ["Prankster"]
+            }
+        ]
+    },
+    "perrserker": {
+        "level": 55,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Close Combat", "Fake Out", "Helping Hand", "Iron Head", "Knock Off", "Protect", "U-turn"],
+                "abilities": ["Tough Claws"]
+            }
+        ]
+    },
+    "sirfetchd": {
+        "level": 54,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Brave Bird", "Close Combat", "First Impression", "Knock Off", "Poison Jab", "Protect"],
+                "abilities": ["Scrappy"]
             }
         ]
     },
@@ -3391,6 +3700,41 @@
             }
         ]
     },
+    "pincurchin": {
+        "level": 54,
+        "sets": [
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Electroweb", "Recover", "Rising Voltage", "Scald"],
+                "abilities": ["Electric Surge"]
+            }
+        ]
+    },
+    "indeedee": {
+        "level": 49,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Encore", "Expanding Force", "Hyper Voice", "Mystical Fire", "Protect"],
+                "abilities": ["Psychic Surge"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Expanding Force", "Hyper Voice", "Mystical Fire", "Trick"],
+                "abilities": ["Psychic Surge"]
+            }
+        ]
+    },
+    "indeedeef": {
+        "level": 56,
+        "sets": [
+            {
+                "role": "Doubles Support",
+                "movepool": ["Follow Me", "Heal Pulse", "Helping Hand", "Hyper Voice", "Mystical Fire", "Protect", "Psychic"],
+                "abilities": ["Psychic Surge"]
+            }
+        ]
+    },
     "morpeko": {
         "level": 56,
         "sets": [
@@ -3401,7 +3745,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Aura Wheel", "Electroweb", "Fake Out", "Knock Off"],
+                "movepool": ["Aura Wheel", "Fake Out", "Knock Off", "Protect"],
                 "abilities": ["Hunger Switch"]
             }
         ]
@@ -3426,12 +3770,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Body Slam", "Earth Power", "Megahorn", "Protect", "Psyshield Bash", "Thunder Wave"],
+                "movepool": ["Body Slam", "Earth Power", "Megahorn", "Psyshield Bash", "Thunder Wave"],
                 "abilities": ["Intimidate"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Double-Edge", "Earth Power", "Psyshield Bash", "Trick Room"],
+                "movepool": ["Double-Edge", "Earth Power", "Psychic", "Trick Room"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -3472,7 +3816,7 @@
         ]
     },
     "sneasler": {
-        "level": 49,
+        "level": 48,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -3487,7 +3831,7 @@
         ]
     },
     "overqwil": {
-        "level": 51,
+        "level": 50,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -3502,7 +3846,7 @@
         ]
     },
     "meowscarada": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -3531,8 +3875,23 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Aqua Jet", "Aqua Step", "Close Combat", "Detect", "Knock Off", "Triple Axel"],
+                "movepool": ["Aqua Jet", "Aqua Step", "Close Combat", "Knock Off", "Protect", "Triple Axel"],
                 "abilities": ["Moxie"]
+            }
+        ]
+    },
+    "pawmot": {
+        "level": 50,
+        "sets": [
+            {
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Close Combat", "Double Shock", "Fake Out", "Revival Blessing"],
+                "abilities": ["Iron Fist"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Close Combat", "Double Shock", "Protect", "Revival Blessing"],
+                "abilities": ["Iron Fist"]
             }
         ]
     },
@@ -3551,8 +3910,33 @@
             }
         ]
     },
+    "arboliva": {
+        "level": 55,
+        "sets": [
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Earth Power", "Energy Ball", "Hyper Voice", "Pollen Puff", "Protect", "Strength Sap"],
+                "abilities": ["Seed Sower"]
+            }
+        ]
+    },
+    "squawkabilly": {
+        "level": 56,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Brave Bird", "Double-Edge", "Parting Shot", "Protect", "Tailwind"],
+                "abilities": ["Intimidate"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Brave Bird", "Double-Edge", "Final Gambit", "Parting Shot"],
+                "abilities": ["Intimidate"]
+            }
+        ]
+    },
     "garganacl": {
-        "level": 51,
+        "level": 54,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -3582,7 +3966,7 @@
         ]
     },
     "ceruledge": {
-        "level": 46,
+        "level": 48,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -3601,8 +3985,19 @@
             }
         ]
     },
+    "mabosstiff": {
+        "level": 52,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Crunch", "Play Rough", "Protect", "Psychic Fangs", "Wild Charge"],
+                "abilities": ["Intimidate"],
+                "preferredTypes": ["Fairy"]
+            }
+        ]
+    },
     "scovillain": {
-        "level": 57,
+        "level": 56,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -3700,6 +4095,11 @@
                 "role": "Choice Item user",
                 "movepool": ["Body Press", "Last Respects", "Shadow Sneak", "Trick"],
                 "abilities": ["Fluffy"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Body Press", "Last Respects", "Trick", "Will-O-Wisp"],
+                "abilities": ["Fluffy"]
             }
         ]
     },
@@ -3719,7 +4119,7 @@
         ]
     },
     "farigiraf": {
-        "level": 53,
+        "level": 52,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3748,8 +4148,28 @@
             }
         ]
     },
+    "baxcalibur": {
+        "level": 49,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Glaive Rush", "High Horsepower", "Ice Shard", "Icicle Crash", "Protect"],
+                "abilities": ["Thermal Exchange"]
+            }
+        ]
+    },
+    "baxcaliburmega": {
+        "level": 49,
+        "sets": [
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Glaive Rush", "High Horsepower", "Ice Shard", "Icicle Crash", "Protect"],
+                "abilities": ["Thermal Exchange"]
+            }
+        ]
+    },
     "gholdengo": {
-        "level": 47,
+        "level": 48,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -3794,7 +4214,7 @@
         ]
     },
     "hydrapple": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Offensive Protect",

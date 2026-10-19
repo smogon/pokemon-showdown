@@ -310,7 +310,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		if (button && MafiaData.alignments[this.role.alignment].buttonColor) {
 			color = MafiaData.alignments[this.role.alignment].buttonColor;
 		}
-		return `<span style="font-weight:bold;color:${color}">${this.role.safeName}</span>`;
+		return `<span style="font-weight:bold;color:${color || '#FFF'}">${this.role.safeName}</span>`;
 	}
 
 	isEliminated() {
@@ -852,7 +852,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		for (const p of this.players) {
 			if (p.id === player.id) continue;
 			const role = p.role;
-			if (role && role.alignment === player.role.alignment) partners.push(p.name);
+			if (role?.alignment === player.role.alignment) partners.push(p.name);
 		}
 		return partners.join(", ");
 	}
@@ -977,12 +977,12 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		const name = voter.voting === 'novote' ? 'No Vote' : target?.name;
 		if (previousVote) {
-			this.sendTimestamp(`${voter.name} has shifted their vote from ${previousVote === 'novote' ? 'No Vote' : this.getPlayer(previousVote)?.name} to ${name}`);
+			this.sendTimestamp(`${voter.name} has shifted their vote from ${previousVote === 'novote' ? 'No Vote' : this.getPlayer(previousVote)!.name} to ${name!}`);
 		} else {
 			this.sendTimestamp(
 				name === 'No Vote' ?
 					`${voter.name} has abstained from voting.` :
-					`${voter.name} has voted ${name}.`
+					`${voter.name} has voted ${name!}.`
 			);
 		}
 
@@ -1037,17 +1037,14 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			vote.voters.splice(vote.voters.indexOf(voter.id), 1);
 		}
 
-		const target = this.getPlayer(voter.voting);
-		if (!target && voter.voting !== 'novote') {
-			throw new Error(`Unable to find target when unvoting. Voter: ${voter.id}, Target: ${voter.voting}`);
-		}
-
-		if (!force) {
-			this.sendTimestamp(
-				voter.voting === 'novote' ?
-					`${voter.name} is no longer abstaining from voting.` :
-					`${voter.name} has unvoted ${target?.name}.`
-			);
+		if (voter.voting === 'novote') {
+			if (!force) this.sendTimestamp(`${voter.name} is no longer abstaining from voting.`);
+		} else {
+			const target = this.getPlayer(voter.voting);
+			if (!target) {
+				throw new Error(`Unable to find target when unvoting. Voter: ${voter.id}, Target: ${voter.voting}`);
+			}
+			if (!force) this.sendTimestamp(`${voter.name} has unvoted ${target.name}.`);
 		}
 		voter.voting = '';
 		voter.lastVote = Date.now();
@@ -1115,7 +1112,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	applyVoteModifier(requester: User, targetPlayer: MafiaPlayer, mod: number) {
-		if (!targetPlayer) return this.sendUser(requester, `|error|${targetPlayer} is not in the game of mafia.`);
+		if (!targetPlayer) return this.sendUser(requester, `|error|That player is not in the game of mafia.`);
 		const oldMod = this.voteModifiers[targetPlayer.id];
 		if (mod === oldMod || ((isNaN(mod) || mod === 1) && oldMod === undefined)) {
 			if (isNaN(mod) || mod === 1) return this.sendUser(requester, `|error|${targetPlayer} already has no vote modifier.`);
@@ -1268,7 +1265,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		toEliminate.eliminated = ability;
 
 		if (toEliminate.voting) this.unvote(toEliminate, true);
-		this.sendDeclare(`${toEliminate.safeName} ${ability}! ${!this.noReveal && ability === MafiaEliminateType.ELIMINATE ? `${toEliminate.safeName}'s role was ${toEliminate.getStylizedRole()}.` : ''}`);
+		this.sendDeclare(`${toEliminate.safeName} ${ability}! ${!this.noReveal && ability === MafiaEliminateType.ELIMINATE ? `${toEliminate.safeName}'s role was ${toEliminate.getStylizedRole()!}.` : ''}`);
 		if (toEliminate.role && !this.noReveal && ability === MafiaEliminateType.ELIMINATE) {
 			toEliminate.revealed = toEliminate.getStylizedRole()!;
 		}
@@ -1303,6 +1300,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!toReveal.role) {
 			return this.sendUser(user, `|error|The user ${toReveal.id} is not assigned a role.`);
 		}
+		revealAs ||= toReveal.getStylizedRole()!;
 		toReveal.revealed = revealAs;
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.isEliminated() ? `was` : `is`} ${revealAs}.`);
 		this.updatePlayers();
@@ -1625,7 +1623,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				if (!pick) throw new Error('Pick not found when parsing role selected in IDEA module.');
 				const parsedRole = Mafia.parseRole(pick);
 				if (parsedRole.problems.length) {
-					this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
+					this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]!}. Please report this to a mod.`);
 				}
 				player.role = parsedRole.role;
 			} else {
@@ -1983,7 +1981,7 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!query.length) return this.close();
 		let roomid = query.shift();
-		if (roomid === 'groupchat') roomid += `-${query.shift()}-${query.shift()}`;
+		if (roomid === 'groupchat') roomid += `-${query.shift()!}-${query.shift()!}`;
 		const room = Rooms.get(roomid);
 		const game = room?.getGame(Mafia);
 		if (!room?.users[user.id] || !game || game.ended) {
@@ -2074,7 +2072,7 @@ export const pages: Chat.PageTable = {
 			const role = isPlayer.role;
 			let previousActionsPL = `<br/>`;
 			if (role) {
-				buf += `<h3>${isPlayer.safeName}, you are a ${isPlayer.getStylizedRole()}</h3>`;
+				buf += `<h3>${isPlayer.safeName}, you are a ${isPlayer.getStylizedRole()!}</h3>`;
 				if (!['town', 'solo'].includes(role.alignment)) {
 					buf += `<p><span style="font-weight:bold">Partners</span>: ${game.getPartners(role.alignment, isPlayer)}</p>`;
 				}
@@ -2176,7 +2174,7 @@ export const pages: Chat.PageTable = {
 			buf += `<h3>Player Options</h3>`;
 			for (const player of game.getRemainingPlayers()) {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block"><span style="font-weight:bold;">`;
-				buf += `${player.safeName} (${player.role ? player.getStylizedRole(true) : ''})`;
+				buf += `${player.safeName} (${player.role ? player.getStylizedRole(true)! : ''})`;
 				buf += game.voteModifiers[player.id] !== undefined ? `(votes worth ${game.getVoteValue(player)})` : '';
 				buf += player.hammerRestriction !== null ? `(${player.hammerRestriction ? 'actor' : 'priest'})` : '';
 				buf += player.silenced ? '(silenced)' : '';
@@ -2189,7 +2187,7 @@ export const pages: Chat.PageTable = {
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub next, ${player.id}">Force sub</button></span></details></p>`;
 			}
 			for (const eliminated of game.getEliminatedPlayers()) {
-				buf += `<p style="font-weight:bold;">${eliminated.safeName} (${eliminated.role ? eliminated.getStylizedRole() : ''})`;
+				buf += `<p style="font-weight:bold;">${eliminated.safeName} (${eliminated.role ? eliminated.getStylizedRole()! : ''})`;
 				if (eliminated.isTreestump()) buf += ` (is a Treestump)`;
 				if (eliminated.isSpirit()) buf += ` (is a Restless Spirit)`;
 				if (game.voteModifiers[eliminated.id] !== undefined) buf += ` (votes worth ${game.getVoteValue(eliminated)})`;
@@ -2861,14 +2859,14 @@ export const commands: Chat.ChatCommands = {
 						return this.sendReply(`|error|Role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
 					revealedRole = Mafia.parseRole(roleName);
 					const color = MafiaData.alignments[revealedRole.role.alignment].color;
-					revealAs = `<span style="font-weight:bold;color:${color}">${revealedRole.role.safeName}</span>`;
+					revealAs = `<span style="font-weight:bold;color:${color || '#FFF'}">${revealedRole.role.safeName}</span>`;
 				}
 			}
 			if (!args[0]) return this.parse('/help mafia revealas');
 			for (const targetUsername of args) {
 				const player = game.getPlayer(toID(targetUsername));
 				if (player) {
-					game.revealRole(user, player, `${revealAs || player.getStylizedRole()}`);
+					game.revealRole(user, player, revealAs);
 					game.logAction(user, `revealed ${player.name}`);
 					if (revealedRole) {
 						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole.role.name}`);
@@ -3061,7 +3059,7 @@ export const commands: Chat.ChatCommands = {
 				mod = 0;
 				break;
 			}
-			this.parse(`/mafia applyhammermodifier ${target}, ${mod}`);
+			this.parse(`/mafia applyhammermodifier ${target}, ${mod!}`);
 		},
 		doublevoter: 'mayor',
 		voteless: 'mayor',
@@ -3081,7 +3079,7 @@ export const commands: Chat.ChatCommands = {
 				mod = 1;
 				break;
 			}
-			this.parse(`/mafia applyvotemodifier ${target}, ${mod}`);
+			this.parse(`/mafia applyvotemodifier ${target}, ${mod!}`);
 		},
 
 		unsilence: 'silence',
@@ -3418,7 +3416,8 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'next':
 				if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-				const toSub = args.shift();
+				const toSub = args.shift()?.trim();
+				if (!toSub) return this.parse('/help mafia sub');
 				if (!game.getPlayer(toID(toSub))) throw new Chat.ErrorMessage(`${toSub} is not in the game.`);
 				if (!game.subs.length) {
 					if (game.hostRequestedSub.includes(toID(toSub))) {
@@ -3466,7 +3465,7 @@ export const commands: Chat.ChatCommands = {
 				if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 				const toSubOut = game.getPlayer(action);
 				const toSubIn = toID(args.shift());
-				if (!toSubOut) throw new Chat.ErrorMessage(`${toSubOut} is not in the game.`);
+				if (!toSubOut) throw new Chat.ErrorMessage(`${action} is not in the game.`);
 
 				const targetUser = Users.get(toSubIn);
 				if (!targetUser) throw new Chat.ErrorMessage(`The user "${toSubIn}" was not found.`);
@@ -4320,7 +4319,7 @@ export const commands: Chat.ChatCommands = {
 					// Create a table for a pleasant viewing experience
 					let table = `<div style="max-height:300px;overflow:auto;"><table border="1" style="border: 1px solid black;width: 100%">`;
 					let entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][] =
-						Object.entries(dataSource).sort();
+						Utils.sortBy(Object.entries(dataSource), entry => entry[0]);
 
 					for (const targetString of targets) {
 						entries = targetString.split('|').map(x => x.trim())

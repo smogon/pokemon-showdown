@@ -36,6 +36,7 @@ export const translations: TranslationCatalog = {
 	"If you lost your password, click the button below to request a password reset. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.": "Falls du dein Passwort vergessen hast, klicke unten auf die Schaltfläche, um dein Passwort zurückzusetzen. Wir müssen zunächst einige Details abklären, bevor wir dein Passwort zurücksetzen können. Bitte beachte, dass das Zurücksetzen von Passwörtern keine vorrangige Aufgabe für uns ist, weshalb dieser Prozess etwas Zeit in Anspruch nehmen könnte. Deshalb empfehlen wir, in der Zwischenzeit einen neuen Acccount zu verwenden.",
 	"Request a password reset": "Beantrage ein Zurücksetzen deines Passwortes",
 	"If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!": "Falls du Roomdriver oder höher in einem öffentlichen Raum bist und Unterstützung dabei brauchst, den Chatraum zu überwachen, wird dir der globale Staff gerne behilflich sein!",
+	"If you are a bot developer, and would like to register your bot on the ladder, please fill out the form below and we'll be happy to assist!": null, // NEEDS TRANSLATION
 	"If your issue is not handled above, click the button below to talk to a global staff member. Please be ready to explain the situation.": "Falls dein Problem nicht mit den gerade genannten Maßnahmen lösbar ist, klicke unten auf die Schaltfläche, um ein globales Staffmitglied zu kontaktieren. Bitte stelle dich darauf ein, die Situation genau zu beschreiben.",
 	"Malformed help request.": "Fehlerhafte Hilfeanfrage.",
 	"PM Harassment": "Belästigung in einer privaten Nachricht",
@@ -46,6 +47,7 @@ export const translations: TranslationCatalog = {
 	"IP-Appeal": "IP-Widerspruch",
 	"ISP-Appeal": "ISP-Widerspruch",
 	"Public Room Assistance Request": "Anfrage zur Unterstützung in einem öffentlichen Raum",
+	"Bot Registration Request": null, // NEEDS TRANSLATION
 	"Other": "Anderes",
 	"I want to report someone": "Ich möchte jemanden melden",
 	"Someone is harassing me in PMs": "Jemand belästigt mich in einer privaten Nachricht",
@@ -64,6 +66,7 @@ export const translations: TranslationCatalog = {
 	"Something else": "Etwas anderes",
 	"I lost my password": "Ich habe mein Passwort vergessen",
 	"I need global staff to help watch a public room": "Ich benötige den globalen Staff, damit ein öffentlicher Raum beaufsichtigt wird",
+	"I want to register my bot": null, // NEEDS TRANSLATION
 	"Report harassment in a private message (PM)": "Melde Belästigung in einer privaten Nachricht",
 	"Report harassment in a battle": "Melde Belästigung in einem Kampf",
 	"Report an inappropriate username": "Melde einen unangemessenen Nutzernamen",

@@ -119,7 +119,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// hit is 1 higher than the actual hit count
 			if (hit === 1) return damage.fill(false);
 			if (nullDamage) damage.fill(false);
-			this.battle.faintMessages(false, false, !pokemon.hp);
+			this.battle.resolveFaints({ checkWin: !pokemon.hp });
 			if (move.multihit && typeof move.smartTarget !== 'boolean') {
 				this.battle.add('-hitcount', targets[0], hit - 1);
 			}
@@ -148,18 +148,16 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.eachEvent('Update');
 
-			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
+			if (!this.battle.suppressingSecondaries()) {
+				this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 				for (const [i, d] of damage.entries()) {
 					// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 					// The previous check was for `move.multihit`, but that fails for Dragon Darts
 					const curDamage = targets.length === 1 ? move.totalDamage : d;
 					if (typeof curDamage === 'number' && targets[i].hp) {
 						const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
-						if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
-							this.battle.runEvent('EmergencyExit', targets[i], pokemon);
-						}
+						this.battle.runEvent('EmergencyExit', targets[i], pokemon, undefined, targetHPBeforeDamage);
 					}
 				}
 			}
@@ -184,9 +182,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const effect = move.mindBlownRecoil ? this.dex.conditions.get(move.name) : 'recoil';
 				this.battle.damage(recoilDamage, pokemon, pokemon, effect);
 			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-			}
+			this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
 
 			return recoilDamage;
 		},
