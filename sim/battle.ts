@@ -138,6 +138,7 @@ export class Battle {
 		target: Pokemon,
 		source: Pokemon | null,
 		effect: Effect | null,
+		faintEventDone?: boolean,
 	}[];
 
 	readonly log: string[];
@@ -363,8 +364,12 @@ export class Battle {
 	}
 
 	suppressingAbility(target?: Pokemon) {
-		return this.activePokemon && this.activePokemon.isActive && (this.activePokemon !== target || this.gen < 8) &&
-			this.activeMove && this.activeMove.ignoreAbility && !target?.hasItem('Ability Shield');
+		return this.activePokemon?.isActive && (this.activePokemon !== target || this.gen < 8) &&
+			this.activeMove?.ignoreAbility && !target?.hasItem('Ability Shield');
+	}
+
+	suppressingSecondaries() {
+		return this.activeMove?.hasSheerForce && this.activePokemon?.hasAbility('sheerforce');
 	}
 
 	setActiveMove(move?: ActiveMove | null, pokemon?: Pokemon | null, target?: Pokemon | null) {
@@ -531,6 +536,8 @@ export class Battle {
 					expectedStateLocation = handler.state.target.itemState;
 				} else if (effect.effectType === 'Status') {
 					expectedStateLocation = handler.state.target.statusState;
+				} else if (effect.effectType === 'Pokemon') {
+					expectedStateLocation = handler.state.target.speciesState;
 				} else {
 					expectedStateLocation = handler.state.target.volatiles[effect.id];
 				}
@@ -562,7 +569,7 @@ export class Battle {
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
 			}
 
-			this.faintMessages();
+			this.resolveFaints();
 			if (this.ended) return;
 		}
 	}
@@ -865,7 +872,7 @@ export class Battle {
 					if (eventid in AttackingEvents) {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
 						continue;
-					} else if (eventid === 'Damage' && sourceEffect && sourceEffect.effectType === 'Move') {
+					} else if (eventid === 'Damage' && sourceEffect?.effectType === 'Move') {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
 						continue;
 					}
@@ -1017,18 +1024,25 @@ export class Battle {
 
 	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
 		let callback: Function | undefined = (effect as any)[callbackName];
+
 		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
 		// during the SwitchIn event instead of running the Start event during switch-ins
-		// gens 4 and before still use the old system, though
-		if (
-			callback === undefined && target instanceof Pokemon && this.gen >= 5 && callbackName === 'onSwitchIn' &&
-			!(effect as any).onAnySwitchIn && (['Ability', 'Item'].includes(effect.effectType) || (
-				// Innate abilities/items
-				effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0])
-			))
-		) {
-			callback = (effect as any).onStart;
+		if (target instanceof Pokemon && callbackName === 'onSwitchIn') {
+			if (callback === undefined && !(effect as any).onAnySwitchIn && (
+				['Ability', 'Item'].includes(effect.effectType) ||
+				(effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0]))
+			)) {
+				callback = (effect as any).onStart;
+			}
+			// In Gen 3, on turn 0, Weather related abilities that usually activate right after entry hazards
+			// need to be triggered during the SwitchIn event
+			if (this.gen === 3 && (effect as any).onAfterEntryHazard && (effect.effectType === 'Ability' ||
+				(effect.effectType === 'Status' && effect.id.split(':')[0] === 'ability')
+			)) {
+				callback = this.turn === 0 ? (effect as any).onAfterEntryHazard : undefined;
+			}
 		}
+
 		return callback;
 	}
 
@@ -1324,6 +1338,9 @@ export class Battle {
 
 		if (this.gen <= 4 || source.isAlly(target)) {
 			this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
+			if (this.gen > 4) {
+				this.hint("Skill Swap does not announce the abilities of the Pokémon when used between allies.");
+			}
 		} else {
 			this.add('-activate', source, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${target}`);
 		}
@@ -1551,7 +1568,7 @@ export class Battle {
 
 		side.pokemonLeft = 0;
 		side.active[0]?.faint();
-		this.faintMessages(false, true);
+		this.resolveFaints({ checkWinIfNoFaints: true });
 		if (!this.ended && side.requestState) {
 			side.emitRequest({ wait: true, side: side.getRequestData() });
 			side.clearChoice();
@@ -1572,10 +1589,13 @@ export class Battle {
 	private possibleSwitches(side: Side) {
 		if (!side.pokemonLeft) return [];
 
+		// should only be relevant for Gen 3
+		const queuedSwitchIns = this.queue.getSwitches(side).map(action => action.target);
+
 		const canSwitchIn = [];
 		for (let i = side.active.length; i < side.pokemon.length; i++) {
 			const pokemon = side.pokemon[i];
-			if (!pokemon.fainted) {
+			if (!pokemon.fainted && !queuedSwitchIns.includes(pokemon)) {
 				canSwitchIn.push(pokemon);
 			}
 		}
@@ -1623,7 +1643,7 @@ export class Battle {
 
 		const dynamaxEnding: Pokemon[] = [];
 		for (const pokemon of this.getAllActive()) {
-			if (pokemon.volatiles['dynamax']?.turns === 3) {
+			if (pokemon.volatiles['dynamax']?.turns <= 0) {
 				dynamaxEnding.push(pokemon);
 			}
 		}
@@ -1850,7 +1870,7 @@ export class Battle {
 
 		if (!this.ruleTable.has('endlessbattleclause')) return;
 		// for now, FFA doesn't support Endless Battle Clause
-		if (this.format.gameType === 'freeforall') return;
+		if (this.gameType === 'freeforall') return;
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
 		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;
@@ -1903,7 +1923,7 @@ export class Battle {
 		// Deserialized games should use restart()
 		if (this.deserialized) return;
 		// need all players to start
-		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides}`);
+		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides.join(',')}`);
 
 		if (this.started) throw new Error(`Battle already started`);
 
@@ -2109,7 +2129,7 @@ export class Battle {
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
-			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
+			if (effect.id !== 'strugglerecoil') { // Struggle recoil is not affected by effects
 				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
 					this.debug('weather immunity');
 					retVals[i] = 0;
@@ -2158,12 +2178,6 @@ export class Battle {
 			}
 
 			if (targetDamage && effect.effectType === 'Move') {
-				if (this.gen <= 1 && effect.recoil && source) {
-					if (this.dex.currentMod !== 'gen1stadium' || target.hp > 0) {
-						const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
-						this.damage(amount, source, target, 'recoil');
-					}
-				}
 				if (this.gen <= 4 && effect.drain && source) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
 					// Draining can be countered in gen 1
@@ -2182,21 +2196,11 @@ export class Battle {
 				if (!retVals[i] || !target) continue;
 
 				if (target.hp <= 0) {
-					this.debug(`instafaint: ${this.faintQueue.map(entry => entry.target.name)}`);
-					this.faintMessages(true);
+					this.debug(`instafaint: ${this.faintQueue.map(entry => entry.target.name).join(',')}`);
+					this.resolveFaints({ lastFaintFirst: true });
 					if (this.gen <= 2) {
 						target.faint();
-						if (this.gen <= 1) {
-							this.queue.clear();
-							// Fainting clears accumulated Bide damage
-							for (const pokemon of this.getAllActive()) {
-								if (pokemon.volatiles['bide']?.damage) {
-									pokemon.volatiles['bide'].damage = 0;
-									this.hint("Desync Clause Mod activated!");
-									this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
-								}
-							}
-						}
+						if (this.gen <= 1) this.queue.clear();
 					}
 				}
 			}
@@ -2267,7 +2271,6 @@ export class Battle {
 			this.add('-damage', target, target.getHealth);
 			break;
 		}
-		if (target.fainted) this.faint(target);
 		return damage;
 	}
 
@@ -2293,7 +2296,7 @@ export class Battle {
 			this.add('-heal', target, target.getHealth, '[silent]');
 			break;
 		case 'drain':
-			this.add('-heal', target, target.getHealth, '[from] drain', `[of] ${source}`);
+			this.add('-heal', target, target.getHealth, '[from] drain', `[of] ${source!}`);
 			break;
 		case 'wish':
 			break;
@@ -2536,6 +2539,7 @@ export class Battle {
 
 	checkFainted() {
 		for (const side of this.sides) {
+			if (!this.canSwitch(side)) continue;
 			for (const pokemon of side.active) {
 				if (pokemon.fainted) {
 					pokemon.status = 'fnt' as ID;
@@ -2545,14 +2549,40 @@ export class Battle {
 		}
 	}
 
-	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
+	/**
+	 * Resolves the faint queue (with Gen 2–4 weirdness)
+	 * - run `BeforeFaint` and `Faint` events
+	 * - show faint messages
+	 * - sets `pokemon.fainted` etc
+	 * - cancel actions as required by the generation
+	 * - ends the battle if a side has no pokemon left
+	 * @returns true: battle ended from fainting, false: otherwise, undefined: battle already ended
+	 */
+	resolveFaints({ lastFaintFirst = false, checkWinIfNoFaints = false, checkWin = true }: {
+		/** Makes the faint queue's last element skip the queue (doesn't reverse the queue). */
+		lastFaintFirst?: boolean,
+		checkWinIfNoFaints?: boolean,
+		/**
+		 * Note: a faint that queues another faint (like Destiny Bond) will check even if this is false,
+		 * except during Pursuit in Gens 2–4.
+		 */
+		checkWin?: boolean,
+	} = {}): boolean | undefined {
 		if (this.ended) return;
+		if (this.gen <= 4 && this.getAllActive().some(pokemon => typeof pokemon.switchFlag === 'string')) {
+			// Keep pivot faints pending, except during the pivot's own initial blackout check
+			const pokemon = this.activePokemon;
+			if (!pokemon?.hp || this.activeMove?.id !== pokemon.switchFlag ||
+				!this.sides.every(side => side.hasAlly(pokemon) || side.pokemon.every(foe => !foe.hp))) {
+				return false;
+			}
+		}
 		const length = this.faintQueue.length;
 		if (!length) {
-			if (forceCheck && this.checkWin()) return true;
+			if (checkWinIfNoFaints && this.checkWin()) return true;
 			return false;
 		}
-		if (lastFirst) {
+		if (lastFaintFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
 		}
@@ -2562,10 +2592,15 @@ export class Battle {
 			faintData = this.faintQueue.shift()!;
 			const pokemon: Pokemon = faintData.target;
 			if (!pokemon.fainted && this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
+				if (this.gen <= 4 && !faintData.faintEventDone) {
+					this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				}
 				this.add('faint', pokemon);
 				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
-				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				if (this.gen >= 5 && !faintData.faintEventDone) {
+					this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				}
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 				if (pokemon.formeRegression && !pokemon.transformed) {
@@ -2587,7 +2622,12 @@ export class Battle {
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
-				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
+				if (this.faintQueue.length >= faintQueueLeft) {
+					// in Gen 2, if Destiny Bond activates during Pursuit, only process the target
+					if (pokemon.pursuitActivated && this.gen <= 2) break;
+					// in Gens 3-4, don't check for a win if Destiny Bond activates during a Pursuit faint
+					if (!(pokemon.pursuitActivated && this.gen <= 4)) checkWin = true;
+				}
 			}
 		}
 
@@ -2595,14 +2635,6 @@ export class Battle {
 			// in gen 1, fainting skips the rest of the turn
 			// residuals don't exist in gen 1
 			this.queue.clear();
-			// Fainting clears accumulated Bide damage
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.volatiles['bide']?.damage) {
-					pokemon.volatiles['bide'].damage = 0;
-					this.hint("Desync Clause Mod activated!");
-					this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
-				}
-			}
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
 			for (const pokemon of this.getAllActive()) {
@@ -2784,20 +2816,7 @@ export class Battle {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
-				// a pokemon fainted from Pursuit before it could switch
-				if (this.gen <= 4) {
-					// in gen 2-4, the switch still happens
-					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
-					action.priority = -101;
-					this.queue.unshift(action);
-					break;
-				} else {
-					// in gen 5+, the switch is cancelled
-					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
-					break;
-				}
-			}
+			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
@@ -2833,11 +2852,14 @@ export class Battle {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
+			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.hp] as const);
 			this.fieldEvent('Residual');
 			if (!this.ended) this.add('upkeep');
 			break;
 		}
+
+		// Gen 4 and earlier: clear active move so Mold Breaker doesn't allow hazards to bypass Clear Body and Levitate
+		if (this.gen <= 4) this.clearActiveMove();
 
 		// phazing (Roar, etc)
 		for (const side of this.sides) {
@@ -2849,18 +2871,42 @@ export class Battle {
 			}
 		}
 
-		this.clearActiveMove();
+		if (this.gen > 4) this.clearActiveMove();
 
 		// fainting
 
-		this.faintMessages();
+		let nextAction = this.queue.peek();
+		const isSwitch = ['switch', 'instaswitch'].includes(action.choice);
+		// In Gen 2, there are no faint checks between switches.
+		const deferFaintsUntilAfterSwitches = this.gen === 2 && isSwitch &&
+			!!nextAction && ['switch', 'instaswitch'].includes(nextAction.choice);
+
+		if (!deferFaintsUntilAfterSwitches) {
+			// In Gen 4, there are no win checks between simultaneous switches replacing fainted Pokemon.
+			const deferWinForReplacementBatch = this.gen === 4 &&
+				action.choice === 'instaswitch' && nextAction?.choice === 'instaswitch';
+			// In Gen 4, there are no win checks during a U-turn switch until its ability activates.
+			const deferWinForPivotAbility = this.gen === 4 && action.choice === 'instaswitch' &&
+				!!action.sourceEffect && nextAction?.choice === 'runSwitch';
+			const checkWin = !(deferWinForReplacementBatch || deferWinForPivotAbility);
+			this.resolveFaints({ checkWinIfNoFaints: checkWin, checkWin });
+		}
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
-			// in gen 3 or earlier, switching in fainted pokemon is done after
-			// every move, rather than only at the end of the turn.
+		nextAction = this.queue.peek();
+
+		// In Gen 3, switching in after a Pokemon faints is done after every switch.
+		const checkFaintedAfterSwitch = this.gen === 3 && isSwitch;
+		// In Gen 3 or earlier, switching in after a Pokemon faints is done after every move,
+		// rather than only at the end of the turn.
+		const checkFaintedAfterMoves = this.gen <= 3 && !!nextAction && ['move', 'residual'].includes(nextAction.choice);
+		// In Gen 4, finish replacing fainted Pokemon before running queued switch-in effects.
+		const replacementBatchFinished = this.gen === 4 && action.choice === 'instaswitch' &&
+			!!nextAction && nextAction.choice !== 'instaswitch' && this.queue.peek(true)?.choice === 'runSwitch';
+
+		if (!nextAction || checkFaintedAfterSwitch || checkFaintedAfterMoves || replacementBatchFinished) {
 			this.checkFainted();
 		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
@@ -2874,25 +2920,17 @@ export class Battle {
 				}
 			}
 			return false;
-		} else if (this.queue.peek()?.choice === 'instaswitch') {
-			return false;
 		}
 
-		if (this.gen >= 5 && action.choice !== 'start') {
+		if (this.gen >= 5 && action.choice !== 'start' && nextAction?.choice !== 'instaswitch') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
+				this.runEvent('EmergencyExit', pokemon, undefined, undefined, originalHP);
 			}
 		}
 
 		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
+			this.runEvent('EmergencyExit', action.pokemon, undefined, undefined, pokemonOriginalHP!);
 		}
 
 		const switches = this.sides.map(
@@ -2912,13 +2950,8 @@ export class Battle {
 				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (
-						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						!pokemon.skipBeforeSwitchOutEventFlag
-					) {
-						this.runEvent('BeforeSwitchOut', pokemon);
-						pokemon.skipBeforeSwitchOutEventFlag = true;
-						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing') {
+						this.actions.runPursuitActivation(pokemon);
 						if (this.ended) return true;
 						if (pokemon.fainted) {
 							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
@@ -2935,9 +2968,13 @@ export class Battle {
 			}
 		}
 
-		if (this.gen < 5) this.eachEvent('Update');
+		if (this.gen < 5 && action.choice !== 'start' && !isSwitch) {
+			this.eachEvent('Update');
+		}
 
-		if (this.gen >= 8 && (this.queue.peek()?.choice === 'move' || this.queue.peek()?.choice === 'runDynamax')) {
+		nextAction = this.queue.peek();
+
+		if (this.gen >= 8 && nextAction && ['move', 'runDynamax'].includes(nextAction.choice)) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {
@@ -3137,7 +3174,7 @@ export class Battle {
 
 	addMove(...args: (string | number | Function | AnyObject)[]) {
 		this.lastMoveLine = this.log.length;
-		// eslint-disable-next-line @typescript-eslint/no-base-to-string
+		// oxlint-disable-next-line typescript/no-base-to-string
 		this.log.push(`|${args.join('|')}`);
 	}
 
@@ -3155,7 +3192,7 @@ export class Battle {
 			parts[4] = '';
 			this.log[this.lastMoveLine] = parts.join('|');
 		}
-		// eslint-disable-next-line @typescript-eslint/no-base-to-string
+		// oxlint-disable-next-line typescript/no-base-to-string
 		this.log[this.lastMoveLine] += `|${args.join('|')}`;
 	}
 
@@ -3213,7 +3250,7 @@ export class Battle {
 					item: set.item,
 					ability: set.ability,
 					moves: set.moves,
-					nature: '',
+					nature: this.format.mod.startsWith('champions') ? set.nature : '',
 					gender: pokemon.gender,
 					evs: null!,
 					ivs: null!,
@@ -3337,7 +3374,7 @@ export class Battle {
 	 * https://www.smogon.com/forums/threads/10352797
 	 */
 	getOverflowedTurnCount(): number {
-		return this.gen >= 8 ? (this.turn - 1) % 256 : this.turn - 1;
+		return this.gen >= 8 ? this.trunc(this.turn - 1, 8) : this.turn - 1;
 	}
 
 	initEffectState(obj: Partial<EffectState>, effectOrder?: number): EffectState {

@@ -11,6 +11,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	absolitez: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	absorbbulb: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -36,10 +40,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: null,
 	},
 	aguavberry: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	airballoon: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -75,6 +75,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	barbaracite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	baxcalibrite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	beastball: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -91,19 +99,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	bigroot: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	bindingband: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	blacksludge: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	blastoisinite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	blazikenite: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -191,14 +195,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	damprock: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	darkranite: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	dawnstone: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -221,7 +217,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dragalgite: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	dragoninite: {
 		inherit: true,
@@ -261,21 +257,29 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	eelektrossite: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	ejectbutton: {
 		inherit: true,
-		isNonstandard: "Past",
+		onAfterMoveSecondary(target, source, move) {
+			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
+				if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.switchFlag === true) return;
+				}
+				target.switchFlag = true;
+				if (!target.useItem()) {
+					target.switchFlag = false;
+				}
+			}
+		},
 	},
 	ejectpack: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	electirizer: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	electricseed: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -295,13 +299,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	expertbelt: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	falinksite: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	fastball: {
 		inherit: true,
@@ -371,6 +371,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	garchompitez: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	gardevoirite: {
 		inherit: true,
 		isNonstandard: null,
@@ -393,15 +397,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	golisopite: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	golurkite: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	grassyseed: {
-		inherit: true,
-		isNonstandard: "Past",
 	},
 	greatball: {
 		inherit: true,
@@ -443,14 +443,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	heatranite: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	heatrock: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	heavyball: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -483,15 +475,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	icyrock: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	insectplate: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	ironball: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -527,19 +511,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	leek: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	levelball: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	liechiberry: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	lifeorb: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	lightclay: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -560,6 +540,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	lucarionite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	lucarionitez: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -591,6 +575,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	malamarite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	maliciousarmor: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -610,6 +598,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	masterpieceteacup: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	mawilite: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	meadowplate: {
 		inherit: true,
@@ -631,9 +623,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	metronome: {
+	metagrossite: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	micleberry: {
 		inherit: true,
@@ -647,10 +639,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	mistyseed: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	moonball: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -659,19 +647,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	muscleband: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	nestball: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	netball: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	normalgem: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -755,13 +735,13 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	psychicseed: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	punchingglove: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	pyroarite: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	qualotberry: {
 		inherit: true,
@@ -770,6 +750,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	quickball: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	raichunitex: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	raichunitey: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	rarebone: {
 		inherit: true,
@@ -787,10 +775,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	redcard: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	repeatball: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -800,10 +784,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	ringtarget: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	rockyhelmet: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -839,7 +819,19 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	salamencite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	sceptilite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	scizorite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	scolipite: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -847,13 +839,13 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	sharpedonite: {
+	scraftinite: {
 		inherit: true,
 		isNonstandard: null,
 	},
-	shedshell: {
+	sharpedonite: {
 		inherit: true,
-		isNonstandard: "Past",
+		isNonstandard: null,
 	},
 	shinystone: {
 		inherit: true,
@@ -870,10 +862,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	slowbronite: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	smoothrock: {
-		inherit: true,
-		isNonstandard: "Past",
 	},
 	snowball: {
 		inherit: true,
@@ -898,6 +886,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	sportball: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	staraptite: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	starfberry: {
 		inherit: true,
@@ -943,15 +935,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	swampertite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	tamatoberry: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	tartapple: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	terrainextender: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -1015,38 +1007,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	whiteherb: {
-		inherit: true,
-		onAnyAfterMove() {
-			// Desync: proceed from Parting Shot's point of view
-			this.queue.insertChoice({
-				choice: 'event',
-				event: 'WhiteHerb',
-				order: 99, // before switches
-				pokemon: this.effectState.target,
-			});
-		},
-		onWhiteHerb(pokemon) {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
-		},
-	},
-	widelens: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	wikiberry: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	wiseglasses: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	zapplate: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	zoomlens: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

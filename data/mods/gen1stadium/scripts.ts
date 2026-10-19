@@ -81,7 +81,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn}`);
+				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn as DebugOutput}`);
 				this.battle.clearActiveMove(true);
 				// This is only run for sleep
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -96,7 +96,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 			if (
 				!lockedMove &&
-				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
+				(pokemon.volatiles['partialtrappinglock']?.locked !== target)
 			) {
 				pokemon.deductPP(move, null, target);
 			} else {
@@ -199,7 +199,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (sourceEffect) attrs += `|[from] ${this.battle.dex.conditions.get(sourceEffect).name}`;
-			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
+			this.battle.addMove('move', pokemon, move.name, `${target!}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return true;
@@ -433,6 +433,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if ((damage || damage === 0) && !target.fainted) {
 					damage = this.battle.damage(damage, target, pokemon, move);
+					if (damage && target.hp > 0) this.applyRecoilDamage(damage, move, pokemon);
 					if (!(damage || damage === 0)) return false;
 					didSomething = true;
 				} else if (damage === false && typeof hitResult === 'undefined') {
@@ -526,8 +527,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			if (move.selfSwitch && pokemon.hp) {
-				pokemon.switchFlag = move.selfSwitch === true ? true : this.dex.toID(move.selfSwitch);
+			if (move.selfSwitch && pokemon.hp && !pokemon.volatiles['commanded'] &&
+				(this.battle.canSwitch(pokemon.side) || move.id === 'revivalblessing')) {
+				pokemon.switchFlag = move.id;
 			}
 
 			return damage;
@@ -577,7 +579,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-			if (source.volatiles['partialtrappinglock'] && (target === source.volatiles['partialtrappinglock'].locked)) {
+			if (target === source.volatiles['partialtrappinglock']?.locked) {
 				return source.volatiles['partialtrappinglock'].damage;
 			}
 
@@ -694,9 +696,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
 			// This is what causes the rollover bugs.
 			if (attack >= 256 || defense >= 256) {
-				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
+				attack = this.battle.clampIntRange(this.battle.trunc(Math.floor(attack / 4), 8), 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.
-				defense = this.battle.clampIntRange(Math.floor(defense / 4) % 256, 1);
+				defense = this.battle.clampIntRange(this.battle.trunc(Math.floor(defense / 4), 8), 1);
 			}
 
 			// Self destruct moves halve defense at this point.

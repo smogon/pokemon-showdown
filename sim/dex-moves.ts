@@ -1,6 +1,6 @@
 import { Utils } from '../lib/utils';
 import type { ConditionData, ModdedConditionData } from './dex-conditions';
-import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -155,12 +155,13 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	priority: number;
 	target: MoveTarget;
 	flags: MoveFlags;
-	/** Hidden Power */
-	realMove?: string;
 
 	damage?: number | 'level' | false | null;
 	contestType?: string;
 	noPPBoosts?: boolean;
+
+	status?: string;
+	weather?: string;
 
 	// Z-move data
 	// -----------
@@ -205,6 +206,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	recoil?: [number, number];
 	drain?: [number, number];
 	mindBlownRecoil?: boolean;
+	chloroblastRecoil?: boolean;
 	stealsBoosts?: boolean;
 	struggleRecoil?: boolean;
 	secondary?: SecondaryEffect;
@@ -252,7 +254,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: 'parentalbond';
 	noDamageVariance?: boolean;
-	nonGhostTarget?: MoveTarget;
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
@@ -275,7 +276,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	baseMove?: ID;
 }
 
-export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
+export type ModdedMoveData = (MoveData | Partial<Omit<MoveData, 'name'>> & {
 	inherit: true,
 	igniteBoosted?: boolean,
 	settleBoosted?: boolean,
@@ -283,7 +284,7 @@ export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
 	longWhipBoost?: boolean,
 	gen?: number,
 	condition?: ModdedConditionData,
-};
+}) & ModdedEffectText;
 
 export interface MoveDataTable { [moveid: IDEntry]: MoveData }
 export interface ModdedMoveDataTable { [moveid: IDEntry]: ModdedMoveData }
@@ -433,6 +434,10 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly pp: number;
 	/** Whether or not this move can receive PP boosts. */
 	readonly noPPBoosts: boolean;
+	/** What status does this move set? */
+	readonly status?: ID | undefined;
+	/** What weather does this move set? */
+	readonly weather?: ID | undefined;
 	/** How many times does this move hit? */
 	declare readonly multihit?: number | number[];
 	/** Is this move a Z-Move? */
@@ -452,8 +457,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
-	/** Move target used if the user is not a Ghost type (for Curse). */
-	readonly nonGhostTarget: MoveTarget;
 	/** Whether or not the move ignores abilities. */
 	readonly ignoreAbility: boolean;
 	/**
@@ -477,6 +480,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	constructor(data: AnyObject) {
 		super(data);
 
+		if (data.placeholderFor) this.id = toID(data.placeholderFor); // Hidden Power hack
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';
 		this.type = Utils.getString(data.type);
@@ -501,11 +505,12 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.ignoreImmunity = (data.ignoreImmunity !== undefined ? data.ignoreImmunity : this.category === 'Status');
 		this.pp = Number(data.pp);
 		this.noPPBoosts = !!(data.noPPBoosts ?? data.isZ);
+		this.status = data.status as ID || undefined;
+		this.weather = data.weather as ID || undefined;
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
-		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;
 		this.damage = data.damage!;
 		this.spreadHit = data.spreadHit || false;
@@ -640,11 +645,9 @@ export class DexMoves {
 		}
 		if (id && this.dex.data.Moves.hasOwnProperty(id)) {
 			const moveData = this.dex.data.Moves[id] as any;
-			const moveTextData = this.dex.getDescs('Moves', id, moveData);
 			move = new DataMove({
 				name: id,
 				...moveData,
-				...moveTextData,
 			});
 			if (move.gen > this.dex.gen) {
 				(move as any).isNonstandard = 'Future';
@@ -654,10 +657,7 @@ export class DexMoves {
 				const parentMod = this.dex.mod(this.dex.parentMod);
 				if (moveData === parentMod.data.Moves[id]) {
 					const parentMove = parentMod.moves.getByID(id);
-					if (
-						move.isNonstandard === parentMove.isNonstandard &&
-						move.desc === parentMove.desc && move.shortDesc === parentMove.shortDesc
-					) {
+					if (move.isNonstandard === parentMove.isNonstandard) {
 						move = parentMove;
 					}
 				}

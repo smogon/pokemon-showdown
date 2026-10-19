@@ -54,7 +54,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.effectType === 'Move') {
+			if (sourceEffect?.effectType === 'Move') {
 				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
@@ -97,7 +97,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return false;
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (move.secondary && move.secondary.status === 'brn') {
+			if (move.secondary?.status === 'brn') {
 				target.cureStatus();
 			}
 		},
@@ -131,7 +131,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'confusion',
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');
 			} else {
 				this.add('-start', target, 'confusion');
@@ -296,13 +296,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onLockMove() {
 			return this.effectState.move;
-		},
-		onBeforeTurn(pokemon) {
-			const move = this.dex.moves.get(this.effectState.move);
-			if (move.id) {
-				this.debug('Forcing into ' + move.id);
-				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
-			}
 		},
 		onAfterMove(pokemon) {
 			if (pokemon.volatiles['lockedmove'].time <= 0) {

@@ -1,6 +1,7 @@
 config/formats.ts @KrisXV @Marty-D
+data/mods/gen1/ @andrebastosdias
 data/mods/gen9ssb/ @HoeenCoder @HisuianZoroark @KrisXV
-data/random-battles/ @KrisXV @MathyFurret @ACakeWearingAHat @livid-washed @adrivrie
+data/random-battles/ @KrisXV @ACakeWearingAHat @livid-washed @adrivrie
 data/text/ @Marty-D
 databases/ @monsanto
 lib/sql.ts @mia-pi-git
@@ -17,6 +18,7 @@ server/chat-plugins/laddertours.ts @mia-pi-git
 server/chat-plugins/mafia.ts @HoeenCoder
 server/chat-plugins/othermetas.ts @KrisXV
 server/chat-plugins/permalocks.ts @mia-pi-git
+server/chat-plugins/petmods.ts @Snaq-PS @iforgetwhyimhere
 server/chat-plugins/quotes.ts @mia-pi-git @KrisXV
 server/chat-plugins/repeats.ts @AnnikaCodes
 server/chat-plugins/responder.ts @mia-pi-git

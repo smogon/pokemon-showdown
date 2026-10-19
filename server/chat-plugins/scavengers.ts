@@ -848,7 +848,10 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				if (game) {
 					game.setTimer(duration); // auto timer for queue'd games.
 					room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
-					room.modlog({ action: 'SCAV NEW', note: `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id)}` });
+					room.modlog({
+						action: 'SCAV NEW',
+						note: `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id).join(',')}`,
+					});
 				}
 
 				// update the saved queue.
@@ -1180,7 +1183,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			let [teamName, leader] = target.split(',');
 			teamName = teamName.trim();
@@ -1201,7 +1204,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			if (!game.teams[target]) throw new Chat.ErrorMessage(`The team ${target} does not exist.`);
 
@@ -1212,7 +1215,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		addplayer(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
 			let userTeam;
@@ -1247,7 +1250,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		editplayers(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 			this.checkCan('mute', null, room);
 			// if (room.getGame(ScavengerHunt)) throw new Chat.ErrorMessage('Teams cannot be modified after the hunt starts.');
 
@@ -1298,7 +1301,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			room = this.requireRoom();
 
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			const display = [];
 			for (const teamID in game.teams) {
@@ -1312,7 +1315,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		guesses(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			const team = game.getPlayerTeam(user);
 			if (!team) throw new Chat.ErrorMessage('You are not currently part of this Team Scavs game.');
@@ -1324,7 +1327,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		note(target, room, user) {
 			room = this.requireRoom();
 			const game = room.scavgame;
-			if (!game || game.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
+			if (game?.id !== 'teamscavs') throw new Chat.ErrorMessage('There is currently no game of Team Scavs going on.');
 
 			const team = game.getPlayerTeam(user);
 			if (!team) throw new Chat.ErrorMessage('You are not currently part of this Team Scavs game.');
@@ -1457,7 +1460,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		});
 
 		this.privateModAction(`A new scavenger hunt was created by ${user.name}.`);
-		this.modlog('SCAV NEW', null, `${gameType.toUpperCase()}: creators - ${hosts.map(h => h.id)}`);
+		this.modlog('SCAV NEW', null, `${gameType.toUpperCase()}: creators - ${hosts.map(h => h.id).join(',')}`);
 	},
 
 	status(target, room, user) {
@@ -1882,7 +1885,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		);
 
 		if (huntId) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.settings.scavQueue, user, room)}`);
-		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.id)}`);
+		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.id).join(',')}`);
 
 		// update the saved queue.
 		room.saveSettings();
@@ -2042,7 +2045,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		if (!room.settings.scavSettings) room.settings.scavSettings = {};
 		if (!target) {
 			const points = [];
-			const source = Object.entries(Object.assign(DEFAULT_BLITZ_POINTS, room.settings.scavSettings.blitzPoints || {}));
+			const source = Object.entries({ ...DEFAULT_BLITZ_POINTS, ...room.settings.scavSettings.blitzPoints });
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1]}`);
 			}
@@ -2124,7 +2127,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			const points = [];
 			const source = Object.entries({
 				...DEFAULT_POINTS,
-				...(room.settings.scavSettings.winPoints as typeof DEFAULT_POINTS || {}),
+				...(room.settings.scavSettings.winPoints as typeof DEFAULT_POINTS),
 			});
 
 			for (const entry of source) {

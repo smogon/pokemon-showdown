@@ -86,7 +86,8 @@ describe(`Hyper Beam [Gen 1]`, () => {
 	});
 
 	it(`Hyper Beam Wrap underflow glitch`, () => {
-		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 4] }, [[
+		// set format to avoid truncation changes
+		battle = common.gen(1).createBattle({ formatid: 'gen1ou', seed: [0, 0, 0, 4] }, [[
 			{ species: 'dragonite', moves: ['agility', 'wrap'] },
 		], [
 			{ species: 'alakazam', moves: ['hyperbeam'] },

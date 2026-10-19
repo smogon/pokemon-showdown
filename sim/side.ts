@@ -24,6 +24,7 @@ import type { RequestState } from './battle';
 import { Pokemon, type EffectState } from './pokemon';
 import { State } from './state';
 import { toID } from './dex';
+import { type Move } from './dex-moves';
 
 /** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
@@ -199,18 +200,31 @@ export class Side {
 	choice: Choice;
 
 	/**
-	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon
-	 * (this is for Counter and Mirror Move)
+	 * In gen 1, all lastMove stuff is tracked on Side rather than Pokemon (this is for Counter)
 	 * This is also used for checking Self-KO clause in Pokemon Stadium 2.
 	 */
 	lastMove: Move | null;
 	/**
-	 * The move and the slot are chosen during move selection
-	 * lastSelectedMove never resets
-	 * lastSelectedMoveSlot resets on every switch
+	 * Same as lastMove but from the opponent's POV.
 	 */
-	lastSelectedMove: ID = '00' as ID;
+	lastEnemyMove: Move | null;
+	/**
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMove (wPlayerSelectedMove) never resets
+	 */
+	lastSelectedMove: ID = 'nomove' as ID;
+	/**
+	 * In gen 1, the move and the slot are chosen during move selection
+	 * lastSelectedMoveSlot (wPlayerMoveListIndex) resets on every switch
+	 */
 	lastSelectedMoveSlot = 0;
+	/**
+	 * Same as lastSelectedMove but from the opponent's POV (wEnemySelectedMove).
+	 * There can be discrepancies between this and lastSelectedMove:
+	 * if the opponent switches to a Pokemon that is frozen or asleep, lastSelectedMove will not be updated,
+	 * but lastEnemySelectedMove will be updated to the move on the opponent's first slot during the next move selection.
+	 */
+	lastEnemySelectedMove: ID = 'nomove' as ID;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
 		const sideScripts = battle.dex.data.Scripts.side;
@@ -271,6 +285,7 @@ export class Side {
 
 		// old-gens
 		this.lastMove = null;
+		this.lastEnemyMove = null;
 	}
 
 	toJSON(): AnyObject {
@@ -278,7 +293,7 @@ export class Side {
 	}
 
 	get requestState(): RequestState {
-		if (!this.activeRequest || this.activeRequest.wait) return '';
+		if (this.activeRequest === null || this.activeRequest.wait) return '';
 		if (this.activeRequest.teamPreview) return 'teampreview';
 		if (this.activeRequest.forceSwitch) return 'switch';
 		return 'move';
@@ -313,14 +328,16 @@ export class Side {
 			switch (action.choice) {
 			case 'move':
 				let details = ``;
-				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
+				if (action.targetLoc && this.battle.activePerHalf > 1) {
+					details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
+				}
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.megax) details += ` megax`;
 				if (action.megay) details += ` megay`;
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
 				if (action.terastallize) details += ` terastallize`;
-				return `move ${action.moveid}${details}`;
+				return `move ${action.moveid!}${details}`;
 			case 'switch':
 			case 'instaswitch':
 			case 'revivalblessing':
@@ -933,7 +950,7 @@ export class Side {
 				}
 			}
 			if (slot < 0) {
-				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
+				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText!}" to switch to`);
 			}
 		}
 		if (slot >= this.pokemon.length) {
@@ -1017,13 +1034,21 @@ export class Side {
 		}
 
 		const ruleTable = this.battle.ruleTable;
-		let positions = data ? data.split(data.includes(',') ? ',' : '').map(datum => parseInt(datum) - 1) :
+		let isBracketed = false;
+		let teamData = data;
+		if (data?.startsWith('[') && data.endsWith(']')) {
+			isBracketed = true;
+			teamData = data.slice(1, -1).trim();
+		}
+		let positions = teamData ?
+			teamData.split(isBracketed || teamData.includes(',') || this.pokemon.length >= 10 ? ',' : '')
+				.map(datum => parseInt(datum) - 1) :
 			[...this.pokemon.keys()]; // autoChoose
 		const pickedTeamSize = this.pickedTeamSize();
 
 		// make sure positions is exactly of length pickedTeamSize
 		// - If too big: the client automatically sends a full list, so we just trim it down to size
-		positions.splice(pickedTeamSize);
+		if (!isBracketed) positions.splice(pickedTeamSize);
 		// - If too small: we intentionally support only sending leads and having the sim fill in the rest
 		if (positions.length < pickedTeamSize) {
 			for (let i = 0; i < pickedTeamSize; i++) {
@@ -1033,6 +1058,9 @@ export class Side {
 			}
 		}
 
+		if (positions.length !== pickedTeamSize) {
+			return this.emitChoiceError(`Can't choose for Team Preview: You must choose exactly ${pickedTeamSize} Pokémon`);
+		}
 		for (const [index, pos] of positions.entries()) {
 			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
 				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
@@ -1092,17 +1120,21 @@ export class Side {
 		let forcedPasses = 0;
 		if (this.battle.requestState === 'switch') {
 			const canSwitchOut = this.active.filter(pokemon => pokemon?.switchFlag).length;
-			const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
+			const canSwitchIn = this.battle.canSwitch(this);
 			forcedSwitches = Math.min(canSwitchOut, canSwitchIn);
 			forcedPasses = canSwitchOut - forcedSwitches;
 		}
+
+		// should only be relevant for Gen 3
+		const switchIns = this.battle.queue.getSwitches(this).map(action => action.target.position);
+
 		this.choice = {
 			cantUndo: false,
 			error: ``,
 			actions: [],
 			forcedSwitchesLeft: forcedSwitches,
 			forcedPassesLeft: forcedPasses,
-			switchIns: new Set(),
+			switchIns: new Set(switchIns),
 			zMove: false,
 			mega: false,
 			ultra: false,
@@ -1114,23 +1146,34 @@ export class Side {
 	commitChoices() {
 		if (this.battle.gen === 1) {
 			for (const choice of this.choice.actions) {
-				if (choice.choice !== 'move' || !choice.pokemon) continue;
+				const pokemon = choice.pokemon;
+				if (choice.choice !== 'move' || !pokemon) continue;
 				const move = choice.moveid;
 				if (move === 'fight') {
-					const pokemon = choice.pokemon;
 					if (['frz', 'slp'].includes(pokemon.status)) {
-						// do nothing
+						// do nothing to lastSelectedMove
+						const moveSlot = pokemon.getMoveSlot(this.lastSelectedMoveSlot);
+						if (moveSlot === null) throw new Error(`moveSlot is null which shouldn't happen`);
+						this.lastEnemySelectedMove = moveSlot.id;
 					} else if (pokemon.volatiles['partiallytrapped']) {
 						// 'cannotmove' is what is set in the cartridge
 						this.lastSelectedMove = 'cannotmove' as ID;
+						this.lastEnemySelectedMove = 'cannotmove' as ID;
 					}
 				} else if (move === 'struggle') {
 					// saves Struggle
 					this.lastSelectedMove = move as ID;
-				} else if (typeof choice.moveSlot === 'number') {
-					// not locked
-					this.lastSelectedMove = move as ID;
-					this.lastSelectedMoveSlot = choice.moveSlot;
+					this.lastEnemySelectedMove = move as ID;
+				} else {
+					if (typeof choice.moveSlot === 'number') {
+						// not locked
+						this.lastSelectedMove = move as ID;
+						this.lastSelectedMoveSlot = choice.moveSlot;
+						this.lastMove = this.battle.dex.moves.get(move);
+					}
+					const moveSlot = pokemon.getMoveSlot(this.lastSelectedMoveSlot);
+					if (moveSlot === null) throw new Error(`moveSlot is null which shouldn't happen`);
+					this.lastEnemySelectedMove = moveSlot.id;
 				}
 				/**
 				 * choice.moveid should be synced with lastSelectedMove

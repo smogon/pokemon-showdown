@@ -204,7 +204,7 @@ export abstract class Database<Pool extends mysql.Pool | pg.Pool = mysql.Pool | 
 		return this._queryExec(query, values);
 	}
 	getTable<Row>(name: string, primaryKeyName: keyof Row & string | null = null): DatabaseTable<Row, this> {
-		return new DatabaseTable<Row, this>(this, name, primaryKeyName);
+		return new DatabaseTable(this, name, primaryKeyName);
 	}
 	close() {
 		void this.connection.end();
@@ -364,6 +364,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 		for (let i = 0; i < query.values.length; i++) {
 			const value = query.values[i];
 			if (query.sql[i + 1].startsWith('`') || query.sql[i + 1].startsWith('"')) {
+				if (value === null) throw new Error(`SQL identifiers cannot be null`);
 				sql = sql.slice(0, -1) + this.escapeId(`${value}`) + query.sql[i + 1].slice(1);
 			} else {
 				sql += '?' + query.sql[i + 1];
@@ -376,7 +377,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 		return new Promise((resolve, reject) => {
 			this.connection.query(query, values, (e, results: any) => {
 				if (e) {
-					return reject(new Error(`${e.message} (${query}) (${values}) [${e.code}]`));
+					return reject(new Error(`${e.message} (${query}) (${values.join(',')}) [${e.code}]`));
 				}
 				if (Array.isArray(results)) {
 					for (const row of results) {
@@ -411,6 +412,7 @@ export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null 
 		for (let i = 0; i < query.values.length; i++) {
 			const value = query.values[i];
 			if (query.sql[i + 1].startsWith('`') || query.sql[i + 1].startsWith('"')) {
+				if (value === null) throw new Error(`SQL identifiers cannot be null`);
 				sql = sql.slice(0, -1) + this.escapeId(`${value}`) + query.sql[i + 1].slice(1);
 			} else {
 				paramCount++;
