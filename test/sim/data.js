@@ -108,11 +108,6 @@ describe('Dex data', () => {
 				}
 			}
 
-			if (entry.evoItem) {
-				const item = Dex.items.get(entry.evoItem);
-				assert.equal(entry.evoItem, item.exists && item.name, `Misspelled/nonexistent evo item "${entry.evoItem}" of ${entry.name}`);
-			}
-
 			const battleOnly = (entry.forme || '').includes('Mega') || entry.forme === 'Primal' ? entry.baseSpecies : entry.battleOnly;
 			if (entry.requiredAbility) {
 				assert(entry.battleOnly, `Forme ${entry.name} with requiredAbility must have battleOnly`);
@@ -122,6 +117,38 @@ describe('Dex data', () => {
 			}
 			if (entry.requiredMove) {
 				assert(battleOnly || entry.changesFrom, `Forme ${entry.name} with requiredMove must have battleOnly or changesFrom`);
+			}
+
+			// evolution
+			switch (entry.evoType) {
+			case 'useItem':
+			case 'levelHold':
+				assert(entry.evoItem, `${entry.name} with evoType ${entry.evoType} must have an evoItem`);
+				break;
+			case 'levelMove':
+				assert(entry.evoMove, `${entry.name} with evoType levelMove must have an evoMove`);
+				break;
+			case 'levelExtra':
+			case 'other':
+				assert(typeof entry.evoCondition === 'string' && entry.evoCondition.trim(), `${entry.name} with evoType ${entry.evoType} must have an evoCondition`);
+				break;
+			case 'trade':
+			case 'levelFriendship':
+				break;
+			default:
+				assert.equal(entry.evoType, undefined, `${entry.name} has an unrecognized evoType ${entry.evoType}`);
+				if (entry.prevo) assert(entry.evoLevel, `${entry.name} without an evoType must have an evoLevel`);
+			}
+			if (entry.evoItem) {
+				const item = Dex.items.get(entry.evoItem);
+				assert.equal(entry.evoItem, item.exists && item.name, `Misspelled/nonexistent evo item "${entry.evoItem}" of ${entry.name}`);
+			}
+			if (entry.evoMove) {
+				const move = Dex.moves.get(entry.evoMove);
+				assert.equal(entry.evoMove, move.exists && move.name, `Misspelled/nonexistent evo move "${entry.evoMove}" of ${entry.name}`);
+			}
+			if (entry.evoLevel !== undefined) {
+				assert(Number.isInteger(entry.evoLevel) && entry.evoLevel >= 1 && entry.evoLevel <= 100, `Evolution level of ${entry.name} must be an integer between 1 and 100`);
 			}
 		}
 	});

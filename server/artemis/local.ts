@@ -161,7 +161,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A local Artemis child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
 		},
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
@@ -173,7 +173,7 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, 'A local Artemis child process');
 		}
 	});
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl(cmd => eval(cmd));
 }
 

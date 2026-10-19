@@ -116,7 +116,7 @@ export class DexText {
 		return table;
 	}
 
-	private static resolveNameTable(
+	static resolveNameTable(
 		englishTable: Record<string, TranslationString>, localizedTable: Record<string, TranslationString>
 	): Record<string, string> {
 		const table: Record<string, string> = {};
@@ -323,10 +323,7 @@ function createTL(language: string) {
 		stat: text.StatNames,
 		statShort: text.StatShortNames,
 		statMedium: text.StatMediumNames,
-		ui: {
-			...english.Default.ui,
-			...localized.Default.ui,
-		} as Record<string, string>,
+		ui: DexText.resolveNameTable(english.Default.ui, localized.Default.ui ?? {}),
 	});
 	return TL;
 }

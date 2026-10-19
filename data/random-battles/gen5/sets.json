@@ -538,7 +538,7 @@
         ]
     },
     "gengar": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1402,7 +1402,7 @@
         ]
     },
     "shuckle": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Staller",
@@ -1548,7 +1548,7 @@
         ]
     },
     "donphan": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1568,7 +1568,7 @@
         ]
     },
     "stantler": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2140,7 +2140,7 @@
         ]
     },
     "sharpedo": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Staller",
@@ -2391,7 +2391,7 @@
         ]
     },
     "castform": {
-        "level": 98,
+        "level": 97,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2700,7 +2700,7 @@
         ]
     },
     "jirachi": {
-        "level": 74,
+        "level": 75,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2810,7 +2810,7 @@
         ]
     },
     "staraptor": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3109,7 +3109,7 @@
         ]
     },
     "bronzong": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3338,7 +3338,7 @@
         ]
     },
     "magmortar": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3659,7 +3659,7 @@
         ]
     },
     "giratinaorigin": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3699,7 +3699,7 @@
         ]
     },
     "manaphy": {
-        "level": 74,
+        "level": 75,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3735,7 +3735,7 @@
         ]
     },
     "shayminsky": {
-        "level": 70,
+        "level": 69,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -4175,7 +4175,7 @@
         ]
     },
     "excadrill": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -4205,7 +4205,7 @@
         ]
     },
     "seismitoad": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4250,7 +4250,7 @@
         ]
     },
     "scolipede": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -4504,7 +4504,7 @@
         ]
     },
     "sawsbuck": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Setup Sweeper",

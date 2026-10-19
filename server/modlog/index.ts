@@ -473,7 +473,7 @@ if (!database.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
 		},
 	} as typeof Monitor;
 	process.on('uncaughtException', err => {

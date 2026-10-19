@@ -253,6 +253,8 @@ export abstract class BasicRoom {
 
 		this.roomid = roomid;
 		this.title = (title || roomid);
+		// should happen before making a roomlog, so we don't leave an orphaned roomlog
+		this.validateTitle(this.title, this.roomid);
 		this.parent = null;
 
 		this.userCount = 0;
@@ -331,7 +333,6 @@ export abstract class BasicRoom {
 		this.tour = null;
 		this.game = null;
 		this.battle = null;
-		this.validateTitle(this.title, this.roomid);
 	}
 
 	toString() {
@@ -515,8 +516,8 @@ export abstract class BasicRoom {
 	}
 	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T, subGame = false): T | null {
 		// TODO: switch to `static readonly gameid` when all game files are TypeScripted
-		if (subGame && this.subGame && this.subGame.constructor.name === constructor.name) return this.subGame as T;
-		if (this.game && this.game.constructor.name === constructor.name) return this.game as T;
+		if (subGame && this.subGame?.constructor.name === constructor.name) return this.subGame as T;
+		if (this.game?.constructor.name === constructor.name) return this.game as T;
 		return null;
 	}
 	getMinorActivity<T extends MinorActivity>(constructor: new (...args: any[]) => T): T | null {
@@ -630,7 +631,7 @@ export abstract class BasicRoom {
 
 		for (const [i, entry] of this.muteQueue.entries()) {
 			if (entry.userid === userid ||
-				(user && entry.guestNum === user.guestNum) ||
+				(entry.guestNum === user?.guestNum) ||
 				(autoconfirmed && entry.autoconfirmed === autoconfirmed)) {
 				if (i === 0) {
 					this.muteQueue.splice(0, 1);
@@ -717,7 +718,7 @@ export abstract class BasicRoom {
 		}
 		if (this.settings.modjoin) {
 			const modjoin = this.settings.modjoin === true ? this.settings.modchat : this.settings.modjoin;
-			message += ` [${modjoin} or higher to join]`;
+			if (modjoin) message += ` [${modjoin} or higher to join]`;
 		}
 		if (this.settings.slowchat) {
 			message += ` [Slowchat ${this.settings.slowchat}s]`;
@@ -1501,6 +1502,15 @@ export class GlobalRoomState {
 			if (format.teraPreviewDefault) displayCode |= 128;
 			if (format.itemClauseDefault) displayCode |= 256;
 			this.formatList += ',' + displayCode.toString(16);
+
+			// virtual formats don't support challengeShow or tournamentShow
+			const virtualDisplayCode = displayCode & ~(4 | 8);
+			for (const formatAlias in Ladders.virtualFormats) {
+				const entry = Ladders.virtualFormats[formatAlias];
+				if (entry.format === format.id) {
+					this.formatList += `|${entry.name},${virtualDisplayCode.toString(16)}`;
+				}
+			}
 		}
 		return this.formatList;
 	}
@@ -2220,15 +2230,15 @@ export const Rooms = {
 		}
 
 		const p1Special = players.length ? players[0].battleSettings.special : undefined;
-		let mismatch = `"${p1Special}"`;
+		let mismatch = `"${p1Special!}"`;
 		for (const user of players) {
 			if (user.battleSettings.special !== p1Special) {
-				mismatch += ` vs. "${user.battleSettings.special}"`;
+				mismatch += ` vs. "${user.battleSettings.special!}"`;
 			}
 			user.battleSettings.special = undefined;
 		}
 
-		if (mismatch !== `"${p1Special}"`) {
+		if (mismatch !== `"${p1Special!}"`) {
 			for (const user of players) {
 				user.popup(`Your special battle settings don't match: ${mismatch}`);
 			}
