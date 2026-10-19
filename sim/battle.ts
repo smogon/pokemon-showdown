@@ -1029,7 +1029,7 @@ export class Battle {
 		// during the SwitchIn event instead of running the Start event during switch-ins
 		if (target instanceof Pokemon && callbackName === 'onSwitchIn') {
 			if (callback === undefined && !(effect as any).onAnySwitchIn && (
-				['Ability', 'Item'].includes(effect.effectType) ||
+				['Ability', 'Item', 'Species'].includes(effect.effectType) ||
 				(effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0]))
 			)) {
 				callback = (effect as any).onStart;
