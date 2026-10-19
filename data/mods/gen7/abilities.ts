@@ -3,7 +3,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onDamage(damage, target, source, effect) {
 			if (
-				effect && effect.effectType === 'Move' &&
+				effect?.effectType === 'Move' &&
 				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
 			) {
 				if (["rollout", "iceball"].includes(effect.id)) {
@@ -34,7 +34,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	innerfocus: {
 		inherit: true,
 		rating: 1,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	moody: {
 		inherit: true,
@@ -65,19 +65,19 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	oblivious: {
 		inherit: true,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	owntempo: {
 		inherit: true,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	rattled: {
 		inherit: true,
-		onAfterBoost() {},
+		onAfterBoost: undefined, // no inherit
 	},
 	scrappy: {
 		inherit: true,
-		onTryBoost() {},
+		onTryBoost: undefined, // no inherit
 	},
 	slowstart: {
 		inherit: true,

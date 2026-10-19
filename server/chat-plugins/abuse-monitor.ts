@@ -898,7 +898,7 @@ export const commands: Chat.ChatCommands = {
 			target = target.toLowerCase().trim().replace(/ +/g, '');
 			let [roomid, rawResult] = Utils.splitFirst(target, ',').map(f => f.trim());
 			const tarRoom = Rooms.get(roomid);
-			if (!tarRoom || !cache[tarRoom.roomid] || !cache[tarRoom.roomid]?.staffNotified) {
+			if (!tarRoom || !cache[tarRoom.roomid]?.staffNotified) {
 				return this.popupReply(`That room has not been flagged by the abuse monitor.`);
 			}
 			if (roomid.includes('-') && roomid.endsWith('pw')) {
@@ -1235,12 +1235,12 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			let buf = settings.punishments.map(punishment => {
 				const line = [];
-				if ('modlogCount' in punishment) line.push(`mlc=${punishment.modlogCount}`);
+				if (punishment.modlogCount !== undefined) line.push(`mlc=${punishment.modlogCount}`);
 				if (punishment.modlogActions) line.push(`${punishment.modlogActions.map(f => `mla=${f}`).join(', ')}`);
 				line.push(`p=${punishment.punishment}`);
-				if ('type' in punishment) line.push(`t=${punishment.type}`);
-				if ('count' in punishment) line.push(`c=${punishment.count}`);
-				if ('certainty' in punishment) line.push(`ct=${punishment.certainty}`);
+				if (punishment.type !== undefined) line.push(`t=${punishment.type}`);
+				if (punishment.count !== undefined) line.push(`c=${punishment.count}`);
+				if (punishment.certainty !== undefined) line.push(`ct=${punishment.certainty}`);
 				if ('secondaryTypes' in punishment) {
 					for (const type in punishment.secondaryTypes) {
 						line.push(`st=${type}|${punishment.secondaryTypes[type]}`);
@@ -1394,11 +1394,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} removed the abuse-monitor punishment indexed at ${idx + 1}.`);
-			this.stafflog(
-				`Punishment: ` +
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
-				`${Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ')}`
-			);
+			this.stafflog(`Punishment: ${visualizePunishment(punishment)}`);
 			this.globalModlog(`ABUSEMONITOR REMOVEPUNISHMENT`, null, `${idx + 1}`);
 		},
 		vs: 'viewsettings',
@@ -2072,7 +2068,7 @@ export const pages: Chat.PageTable = {
 				byDay: {} as Record<string, { total: number, inaccurate: number }>,
 				types: {} as Record<string, number>,
 			};
-			const inaccurate = new Set();
+			const inaccurate = new Set<string>();
 			const logPath = Monitor.logPath(`artemis/punishments/${dateString}.jsonl`);
 			if (await logPath.exists()) {
 				const stream = logPath.createReadStream();
@@ -2315,7 +2311,7 @@ export const pages: Chat.PageTable = {
 			buf += modlogEntries.results.map(result => {
 				const day = Chat.toTimestamp(new Date(result.time)).split(' ')[0];
 				let innerBuf = Utils.html`<td><small>#${result.entryID}</small> [${day}] `;
-				innerBuf += `${result.action}${result.note ? ` (${result.note.trim()})` : ``}</td>`;
+				innerBuf += Utils.html`${result.action}${result.note ? Utils.html` (${result.note.trim()})` : ``}</td>`;
 				const existingIgnore = metadata.modlogIgnores?.[targetUser];
 				const todayMatch = existingIgnore === day;
 				const entryMatch = (

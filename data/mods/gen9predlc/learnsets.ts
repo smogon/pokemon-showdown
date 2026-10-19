@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 
 export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 	bulbasaur: {
@@ -82360,8 +82359,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			zenheadbutt: ["9M", "8M"],
 		},
 		eventData: [
-			// TODO get actual event data
-			{generation: 8, level: 10, perfectIVs: 3, moves: ["rocksmash", "leer", "endure", "focusenergy"]},
+			{generation: 8, level: 10, perfectIVs: 3, moves: ["rocksmash", "leer", "endure", "focusenergy"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
 	},

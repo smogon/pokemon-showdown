@@ -587,7 +587,7 @@ function retrying<I, O>(fn: (args: I) => Promise<O>, retries: number, wait: numb
 				attempt++;
 				if (attempt > retries) return Promise.reject(err);
 				const timeout = Math.round(attempt * wait * (1 + Math.random() / 2));
-				warn(`Retrying ${args} in ${timeout}ms (${attempt}):`, err);
+				warn(`Retrying ${args as DebugOutput} in ${timeout}ms (${attempt}):`, err);
 				return new Promise(resolve => {
 					setTimeout(() => {
 						resolve(retry(args, attempt++));

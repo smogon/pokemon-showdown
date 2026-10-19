@@ -11,10 +11,11 @@ describe('Trump Card', () => {
 	});
 
 	it('should power-up the less PP the move has', () => {
-		battle = common.createBattle([
-			[{ species: 'Eevee', ability: 'runaway', moves: ['trumpcard'] }],
-			[{ species: 'Lugia', ability: 'multiscale', moves: ['recover'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Eevee', ability: 'runaway', moves: ['trumpcard'] },
+		], [
+			{ species: 'Lugia', ability: 'multiscale', moves: ['recover'] },
+		]]);
 
 		const basePowers = [];
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
@@ -31,10 +32,11 @@ describe('Trump Card', () => {
 	});
 
 	it('should get its base power calculated from a move calling it', () => {
-		battle = common.createBattle([
-			[{ species: 'Komala', ability: 'comatose', moves: ['sleeptalk', 'trumpcard'] }],
-			[{ species: 'Lugia', ability: 'multiscale', moves: ['recover'] }],
-		]);
+		battle = common.createBattle([[
+			{ species: 'Komala', ability: 'comatose', moves: ['sleeptalk', 'trumpcard'] },
+		], [
+			{ species: 'Lugia', ability: 'multiscale', moves: ['recover'] },
+		]]);
 
 		const basePowers = [];
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
@@ -53,10 +55,11 @@ describe('Trump Card', () => {
 	});
 
 	it('should work if called via Custap Berry in Gen 4', () => {
-		battle = common.gen(4).createBattle([
-			[{ species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard'] }],
-			[{ species: 'Scizor', ability: 'technician', moves: ['falseswipe'] }],
-		]);
+		battle = common.gen(4).createBattle([[
+			{ species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard'] },
+		], [
+			{ species: 'Scizor', ability: 'technician', moves: ['falseswipe'] },
+		]]);
 
 		const basePowers = [];
 		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {

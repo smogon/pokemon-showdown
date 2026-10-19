@@ -31,8 +31,8 @@ export function visualizeRangeList(ranges: AddressRange[]) {
 	let html = `<tr><th>Lowest IP address</th><th>Highest IP address</th><th>Host</th></tr>`;
 	for (const range of ranges) {
 		html += `<tr>`;
-		html += `<td>${IPTools.numberToIP(range.minIP)}</td>`;
-		html += `<td>${IPTools.numberToIP(range.maxIP)}</td>`;
+		html += `<td>${IPTools.numberToIP(range.minIP)!}</td>`;
+		html += `<td>${IPTools.numberToIP(range.maxIP)!}</td>`;
 		html += Utils.html`<td>${range.host}</td>`;
 		html += `</tr>`;
 	}
@@ -43,8 +43,8 @@ function formatRange(range: AddressRange, includeModlogBrackets?: boolean) {
 	const startBracket = includeModlogBrackets ? '[' : '';
 	const endBracket = includeModlogBrackets ? ']' : '';
 
-	let result = `${startBracket}${IPTools.numberToIP(range.minIP)}${endBracket}`;
-	result += `-${startBracket}${IPTools.numberToIP(range.maxIP)}${endBracket}`;
+	let result = `${startBracket}${IPTools.numberToIP(range.minIP)!}${endBracket}`;
+	result += `-${startBracket}${IPTools.numberToIP(range.maxIP)!}${endBracket}`;
 	if (range.host) result += ` (${range.host})`;
 
 	return result;

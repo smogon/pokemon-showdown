@@ -11,8 +11,6 @@
 import { Utils } from '../../lib';
 import { type RoomSection, RoomSections } from './room-settings';
 
-/* eslint no-else-return: "error" */
-
 const MAX_REASON_LENGTH = 600;
 const MUTE_LENGTH = 7 * 60 * 1000;
 const HOURMUTE_LENGTH = 60 * 60 * 1000;
@@ -216,7 +214,11 @@ export const commands: Chat.ChatCommands = {
 			// weird ts bug (?) - 7022
 			// it implicitly is 'any' because it has no annotation and is "is referenced directly or indirectly in its own initializer."
 			// dunno why this happens, but for now we can just cast over it.
-			const oldSymbol: GroupSymbol = room.auth.getDirect(userid);
+			let oldSymbol: GroupSymbol | 'whitelist' = room.auth.getDirect(userid);
+			if (room.auth.has(userid) && oldSymbol === Users.Auth.defaultSymbol()) {
+				oldSymbol = 'whitelist';
+			}
+
 			let shouldPopup;
 			try {
 				shouldPopup = runPromote(user, room, userid, nextSymbol, toPromote, force);
@@ -477,7 +479,7 @@ export const commands: Chat.ChatCommands = {
 		);
 
 		await Promise.all(promises);
-		// eslint-disable-next-line require-atomic-updates
+		// oxlint-disable-next-line ps/require-atomic-updates
 		connection.autojoins = autojoins.join(',');
 	},
 	autojoinhelp: [`/autojoin [rooms] - Automatically joins all the given rooms.`],
@@ -544,7 +546,7 @@ export const commands: Chat.ChatCommands = {
 		// If used in pms, staff, help tickets or battles, log the warn to the global modlog.
 		const globalWarn = (
 			!room || ['staff', 'adminlog'].includes(room.roomid) ||
-			room.roomid.startsWith('help-') || (room.battle && (!room.parent || room.parent.type !== 'chat'))
+			room.roomid.startsWith('help-') || (room.battle && (room.parent?.type !== 'chat'))
 		);
 
 		const { targetUser, inputUsername, targetUsername, rest: reason } = this.splitUser(target);
@@ -1280,7 +1282,7 @@ export const commands: Chat.ChatCommands = {
 		Punishments.punishRange(ip, reason, time, 'BAN');
 
 		const duration = year ? 'year' : 'hour';
-		if (!this.room || this.room.roomid !== 'staff') {
+		if (this.room?.roomid !== 'staff') {
 			this.sendReply(`You ${duration}-banned the ${ipDesc}.`);
 		}
 		this.room = Rooms.get('staff') || null;
@@ -1470,11 +1472,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!Users.Auth.hasPermission(user, 'promote', currentGroup)) {
 			throw new Chat.ErrorMessage([`/${cmd} - Access denied for promoting from ${currentGroup}`,
-				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`]);
+				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote').join(',')}`]);
 		}
 		if (!Users.Auth.hasPermission(user, 'promote', nextGroup)) {
 			throw new Chat.ErrorMessage([`/${cmd} - Access denied for promoting to ${groupName}`,
-				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote')}`]);
+				`You can only promote to/from: ${Users.Auth.listJurisdiction(user, 'promote').join(',')}`]);
 		}
 
 		if (!Users.isUsernameKnown(userid)) {
@@ -1904,10 +1906,10 @@ export const commands: Chat.ChatCommands = {
 		const { targetUser, rest: reason } = this.requireUser(target, { allowOffline: true });
 		this.checkCan('forcerename', targetUser);
 
-		if (!targetUser.userMessage) throw new Chat.ErrorMessage(this.tr`${targetUser.name} does not have a status set.`);
+		if (!targetUser.userMessage) throw new Chat.ErrorMessage(this.TL`${targetUser.name} does not have a status set.`);
 
 		const displayReason = reason ? `: ${reason}` : ``;
-		this.privateGlobalModAction(this.tr`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
+		this.privateGlobalModAction(this.TL`${targetUser.name}'s status "${targetUser.userMessage}" was cleared by ${user.name}${displayReason}.`);
 		this.globalModlog('CLEARSTATUS', targetUser, ` from "${targetUser.userMessage}"${displayReason}`);
 		targetUser.clearStatus();
 		targetUser.popup(`${user.name} has cleared your status message for being inappropriate${displayReason || '.'}`);
@@ -2002,7 +2004,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`User '${target}' is not namelocked.`);
 		}
 
-		this.addGlobalModAction(`${unlocked} was unnamelocked by ${user.name}.${reason}`);
+		this.addGlobalModAction(`${unlocked.join(',')} was unnamelocked by ${user.name}.${reason}`);
 		this.globalModlog("UNNAMELOCK", toID(target));
 		this.parse(`/allowname ${toID(target)}`);
 		if (targetUser) targetUser.popup(`${user.name} has unnamelocked you.`);
@@ -2113,7 +2115,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`This room is not going to last long enough for a blacklist to matter - just ban the user`);
 		}
 		const punishment = Punishments.isRoomBanned(targetUser, room.roomid);
-		if (punishment && punishment.type === 'BLACKLIST') {
+		if (punishment?.type === 'BLACKLIST') {
 			throw new Chat.ErrorMessage(`This user is already blacklisted from this room.`);
 		}
 		const force = cmd === 'forceblacklist' || cmd === 'forcebl';

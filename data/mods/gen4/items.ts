@@ -32,24 +32,24 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	choiceband: {
 		inherit: true,
-		onStart() {},
-		onModifyMove() {},
+		onStart: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 	},
 	choicescarf: {
 		inherit: true,
-		onStart() {},
-		onModifyMove() {},
+		onStart: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
 	},
 	choicespecs: {
 		inherit: true,
-		onStart() {},
-		onModifyMove() {},
+		onStart: undefined, // no inherit
+		onModifyMove: undefined, // no inherit
 		onAfterMove(pokemon) {
 			pokemon.addVolatile('choicelock');
 		},
@@ -72,11 +72,13 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	custapberry: {
 		inherit: true,
-		onFractionalPriority() {},
+		onFractionalPriority: undefined, // no inherit
 		onBeforeTurn(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				const action = this.queue.willMove(pokemon);
 				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
 				this.queue.insertChoice({
 					choice: 'event',
 					event: 'Custap',
@@ -89,10 +91,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onCustap(pokemon) {
 			const action = this.queue.willMove(pokemon);
-			this.debug(`custap action: ${action?.moveid}`);
+			this.debug(`custap action: ${action?.moveid as DebugOutput}`);
 			if (action && pokemon.eatItem()) {
 				this.queue.cancelAction(pokemon);
-				this.add('-message', "Custap Berry activated.");
+				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
 				this.runAction(action);
 			}
 		},
@@ -144,7 +146,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	focussash: {
 		inherit: true,
-		onDamage() {},
+		onDamage: undefined, // no inherit
 		onTryHit(target, source, move) {
 			if (target !== source && target.hp === target.maxhp) {
 				target.addVolatile('focussash');
@@ -153,7 +155,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			duration: 1,
 			onDamage(damage, target, source, effect) {
-				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+				if (effect?.effectType === 'Move' && damage >= target.hp) {
 					this.effectState.activated = true;
 					return target.hp - 1;
 				}
@@ -164,6 +166,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			},
 		},
 	},
+	fullincense: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
+	},
 	griseousorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -171,6 +178,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return this.chainModify(1.2);
 			}
 		},
+		onTakeItem: false,
+		onSetAbility: false,
 	},
 	heavyball: {
 		inherit: true,
@@ -186,7 +195,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ironball: {
 		inherit: true,
-		onEffectiveness() {},
+		onEffectiveness: undefined, // no inherit
 	},
 	ironplate: {
 		inherit: true,
@@ -206,6 +215,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				});
 			}
 		},
+	},
+	laggingtail: {
+		inherit: true,
+		onFractionalPriorityPriority: 1,
+		onFractionalPriority: -0.2,
 	},
 	laxincense: {
 		inherit: true,
@@ -227,8 +241,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lifeorb: {
 		inherit: true,
-		onModifyDamage() {},
-		onAfterMoveSecondarySelf() {},
+		onModifyDamage: undefined, // no inherit
+		onAfterMoveSecondarySelf: undefined, // no inherit
 		onBasePower(basePower, user, target) {
 			if (!target.volatiles['substitute']) {
 				user.addVolatile('lifeorb');
@@ -241,7 +255,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
-				if (move && move.effectType === 'Move' && source?.volatiles['lifeorb']) {
+				if (move?.effectType === 'Move' && source?.volatiles['lifeorb']) {
 					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
@@ -250,8 +264,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lightball: {
 		inherit: true,
-		onModifyAtk() {},
-		onModifySpA() {},
+		onModifyAtk: undefined, // no inherit
+		onModifySpA: undefined, // no inherit
 		onBasePower(basePower, pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
 				return this.chainModify(2);
@@ -319,7 +333,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				}
 				this.effectState.lastMove = move.id;
 			},
-			onModifyDamage() {},
+			onModifyDamage: undefined, // no inherit
 			onModifyDamagePhase2(damage, source, target, move) {
 				return damage * (1 + (this.effectState.numConsecutive / 10));
 			},
@@ -346,6 +360,42 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	moonball: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	quickclaw: {
+		inherit: true,
+		onFractionalPriority: undefined, // no inherit
+		onBeforeTurn(pokemon) {
+			if (this.randomChance(1, 5)) {
+				const action = this.queue.willMove(pokemon);
+				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
+				this.queue.insertChoice({
+					choice: 'event',
+					event: 'Custap',
+					priority: action.priority + 0.1,
+					pokemon: action.pokemon,
+					move: action.move,
+					targetLoc: action.targetLoc,
+				});
+			}
+		},
+		onCustap(pokemon) {
+			const action = this.queue.willMove(pokemon);
+			if (action) {
+				this.queue.cancelAction(pokemon);
+				this.add('-activate', pokemon, 'item: Quick Claw');
+				this.runAction(action);
+			}
+		},
+	},
+	quickpowder: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (pokemon.species.name === 'Ditto') {
+				return this.chainModify(2);
+			}
+		},
 	},
 	razorfang: {
 		inherit: true,
@@ -411,6 +461,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	toxicplate: {
 		inherit: true,
 		onTakeItem: true,
+	},
+	whiteherb: {
+		inherit: true,
+		onAnySwitchInPriority: undefined, // no inherit
 	},
 	widelens: {
 		inherit: true,

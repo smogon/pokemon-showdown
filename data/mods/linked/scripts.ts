@@ -123,13 +123,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				// @ts-expect-error modded
 				const linkedMoves: ActiveMove[] = action.linked;
 				for (let i = linkedMoves.length - 1; i >= 0; i--) {
-					const isValidTarget = this.validTargetLoc(action.targetLoc, action.pokemon, linkedMoves[i].target);
-					const randomTarget = this.getRandomTarget(action.pokemon, linkedMoves[i]);
-					const targetLoc = isValidTarget || !randomTarget ? action.targetLoc : action.pokemon.getLocOf(randomTarget);
+					// @ts-expect-error modded
+					const targetLoc = this.resolveTargetLoc(action.targetLoc, action, linkedMoves[i]);
 					const pseudoAction: Action = {
 						choice: 'move', priority: action.priority, speed: action.speed, pokemon: action.pokemon,
 						targetLoc, moveid: linkedMoves[i].id, move: linkedMoves[i], mega: action.mega,
-						order: action.order, fractionalPriority: action.fractionalPriority, originalTarget: action.originalTarget,
+						order: action.order, fractionalPriority: action.fractionalPriority,
+						// @ts-expect-error modded
+						originalTarget: action.linkedTargets[i],
+						// @ts-expect-error modded
+						sorted: i === 1,
 					};
 					this.queue.unshift(pseudoAction);
 				}
@@ -193,20 +196,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
-				// a pokemon fainted from Pursuit before it could switch
-				if (this.gen <= 4) {
-					// in gen 2-4, the switch still happens
-					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
-					action.priority = -101;
-					this.queue.unshift(action);
-					break;
-				} else {
-					// in gen 5+, the switch is cancelled
-					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
-					break;
-				}
-			}
+			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
@@ -242,7 +232,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
+			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.hp] as const);
 			this.fieldEvent('Residual');
 			if (!this.ended) this.add('upkeep');
 			break;
@@ -262,7 +252,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// fainting
 
-		this.faintMessages();
+		this.resolveFaints();
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
@@ -290,18 +280,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
+				this.runEvent('EmergencyExit', pokemon, undefined, undefined, originalHP);
 			}
 		}
 
 		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
+			this.runEvent('EmergencyExit', action.pokemon, undefined, undefined, pokemonOriginalHP!);
 		}
 
 		const switches = this.sides.map(
@@ -323,11 +307,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				for (const pokemon of this.sides[i].active) {
 					if (
 						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						!pokemon.skipBeforeSwitchOutEventFlag
+						!pokemon.skipPursuit
 					) {
 						this.runEvent('BeforeSwitchOut', pokemon);
-						pokemon.skipBeforeSwitchOutEventFlag = true;
-						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+						pokemon.skipPursuit = true;
+						this.resolveFaints(); // Pokemon may have fainted in BeforeSwitchOut
 						if (this.ended) return true;
 						if (pokemon.fainted) {
 							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
@@ -348,7 +332,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		const nextAction = this.queue.peek();
 		if (this.gen >= 8 &&
-			(nextAction?.choice === 'move' || nextAction?.choice === 'runDynamax') && nextAction?.pokemon !== action.pokemon) {
+			// @ts-expect-error modded
+			(nextAction?.choice === 'move' || nextAction?.choice === 'runDynamax') && !nextAction?.sorted) {
 			// In gen 8, speed is updated dynamically so update the queue's speed properties and sort it.
 			this.updateSpeed();
 			for (const queueAction of this.queue.list) {
@@ -359,50 +344,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		return false;
 	},
-	getTarget(pokemon, move, targetLoc, originalTarget) {
-		move = this.dex.moves.get(move);
-
-		// Delete tracksTarget stuff because it's useless in Linked anyway
-
-		// banning Dragon Darts from directly targeting itself is done in side.ts, but
-		// Dragon Darts can target itself if Ally Switch is used afterwards
-		if (move.smartTarget) {
-			const curTarget = pokemon.getAtLoc(targetLoc);
-			return curTarget && !curTarget.fainted ? curTarget : this.getRandomTarget(pokemon, move);
-		}
-
-		// Fails if the target is the user and the move can't target its own position
-		const selfLoc = pokemon.getLocOf(pokemon);
-		if (
-			['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
-			!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']
-		) {
-			return move.flags['futuremove'] ? pokemon : null;
-		}
-		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
-			const target = pokemon.getAtLoc(targetLoc);
-			if (target?.fainted) {
-				if (this.gameType === 'freeforall') {
-					// Target is a fainted opponent in a free-for-all battle; attack shouldn't retarget
-					return target;
-				}
-				if (target.isAlly(pokemon)) {
-					if (move.target === 'adjacentAllyOrSelf' && this.gen !== 5) {
-						return pokemon;
-					}
-					// Target is a fainted ally: attack shouldn't retarget
-					return target;
-				}
-			}
-			if (target && !target.fainted) {
-				// Target is unfainted: use selected target location
-				return target;
-			}
-
-			// Chosen target not valid,
-			// retarget randomly with getRandomTarget
-		}
-		return this.getRandomTarget(pokemon, move);
+	resolveTargetLoc(targetLoc: number, action: Action, move: ActiveMove) {
+		const isValidTarget = this.validTargetLoc(targetLoc, action.pokemon!, move.target);
+		if (isValidTarget) return targetLoc;
+		const randomTarget = this.getRandomTarget(action.pokemon!, move);
+		if (!randomTarget) return targetLoc;
+		return action.pokemon!.getLocOf(randomTarget);
 	},
 	actions: {
 		runMove(moveOrMoveName, pokemon, targetLoc, options) {
@@ -500,7 +447,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const oldActiveMove = move;
 
 			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
-			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
+			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove?.id ?? null : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMove', pokemon, target, move);
@@ -527,7 +474,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				);
 				const targetOf1stDance = this.battle.activeTarget!;
 				for (const dancer of dancers) {
-					if (this.battle.faintMessages()) break;
+					if (this.battle.resolveFaints()) break;
 					if (dancer.fainted) continue;
 					this.battle.add('-activate', dancer, 'ability: Dancer');
 					const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
@@ -538,7 +485,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
-			this.battle.faintMessages();
+			this.battle.resolveFaints();
 			this.battle.checkWin();
 
 			if (this.battle.gen <= 4) {
@@ -642,13 +589,20 @@ export const Scripts: ModdedBattleScriptsData = {
 						const decisionMove = this.battle.toID(action.move);
 						if (linkedMoves.some(x => x.id === decisionMove)) {
 							action.linked = linkedMoves;
-							const linkedOtherMove = action.linked[1 - linkedMoves.findIndex(x => x.id === decisionMove)];
+							action.linkedTargets = [];
+							for (const move of linkedMoves) {
+								// @ts-expect-error modded
+								const targetLoc = this.battle.resolveTargetLoc(action.targetLoc, action, move);
+								action.linkedTargets.push(action.pokemon.getAtLoc(targetLoc));
+							}
+							const linkedOtherIndex = 1 - linkedMoves.findIndex(x => x.id === decisionMove);
+							const linkedOtherMove = action.linked[linkedOtherIndex];
 							if (linkedOtherMove.beforeTurnCallback) {
 								this.addChoice({
 									choice: 'beforeTurnMove',
 									pokemon: action.pokemon,
 									move: linkedOtherMove,
-									targetLoc: action.targetLoc,
+									targetLoc: action.linkedTargets[linkedOtherIndex],
 								});
 							}
 							if (linkedOtherMove.priorityChargeCallback) {
@@ -656,7 +610,7 @@ export const Scripts: ModdedBattleScriptsData = {
 									choice: 'priorityChargeMove',
 									pokemon: action.pokemon,
 									move: linkedOtherMove,
-									targetLoc: action.targetLoc,
+									targetLoc: action.linkedTargets[linkedOtherIndex],
 								});
 							}
 						}

@@ -1,36 +1,33 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen5',
 	gen: 4,
-
+	pokemon: {
+		inherit: true,
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			const trickRoomCheck = this.battle.ruleTable.has('twisteddimensionmod') ?
+				!this.battle.field.getPseudoWeather('trickroom') : this.battle.field.getPseudoWeather('trickroom');
+			if (trickRoomCheck) {
+				speed = -speed;
+			}
+			return speed;
+		},
+	},
+	checkFainted() {
+		// Gen 4 requests replacements simultaneously for each side's fainted pokemon, one at a time
+		for (const side of this.sides) {
+			if (!this.canSwitch(side)) continue;
+			for (const pokemon of side.active) {
+				if (pokemon.fainted) {
+					pokemon.status = 'fnt' as ID;
+					pokemon.switchFlag = true;
+					break;
+				}
+			}
+		}
+	},
 	actions: {
 		inherit: true,
-		runSwitch(pokemon) {
-			this.battle.runEvent('EntryHazard', pokemon);
-
-			this.battle.runEvent('SwitchIn', pokemon);
-
-			if (this.battle.gen <= 2) {
-				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
-				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
-				if (this.battle.gen === 1) pokemon.side.lastSelectedMoveSlot = 0;
-				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
-					this.battle.runEvent('AfterSwitchInSelf', pokemon);
-				}
-			}
-			if (!pokemon.hp) return false;
-			pokemon.isStarted = true;
-			if (!pokemon.fainted) {
-				this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-				this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
-			}
-			if (this.battle.gen === 4) {
-				for (const foeActive of pokemon.foes()) {
-					foeActive.removeVolatile('substitutebroken');
-				}
-			}
-			pokemon.draggedIn = null;
-			return true;
-		},
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 			// DPP divides modifiers into several mathematically important stages
 			// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
@@ -54,7 +51,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Weather
-			baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 			baseDamage += 2;
 
@@ -179,8 +176,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-		calcRecoilDamage(damageDealt, move) {
-			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
+		applyRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number | null {
+			let recoilDamage = 0;
+			if (move.struggleRecoil) recoilDamage = this.battle.clampIntRange(Math.floor(pokemon.baseMaxhp / 4), 1);
+			else if (move.mindBlownRecoil || move.chloroblastRecoil) recoilDamage = Math.round(pokemon.maxhp / 2);
+			else if (move.recoil) {
+				recoilDamage = this.battle.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
+			} else return null;
+
+			if (move.struggleRecoil) {
+				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
+			} else {
+				const effect = move.mindBlownRecoil ? this.dex.conditions.get(move.name) : 'recoil';
+				this.battle.damage(recoilDamage, pokemon, pokemon, effect);
+			}
+			return recoilDamage;
 		},
 	},
 };

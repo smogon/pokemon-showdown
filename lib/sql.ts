@@ -5,7 +5,7 @@
 import { QueryProcessManager } from './process-manager';
 import type * as sqlite from 'better-sqlite3';
 import { FS } from './fs';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// oxlint-disable-next-line typescript/ban-ts-comment
 // @ts-ignore in case not installed
 import type { SQLStatement } from 'sql-template-strings';
 
@@ -62,7 +62,7 @@ type ErrorHandler = (error: Error, data: DatabaseQuery, isParentProcess: boolean
 
 function getModule() {
 	try {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// oxlint-disable-next-line typescript/ban-ts-comment
 		// @ts-ignore does not exist while building NPM package???
 		return require('better-sqlite3') as typeof sqlite.default;
 	} catch {
@@ -458,7 +458,7 @@ export declare namespace SQL {
 	export type DatabaseManager = import('./sql').SQLDatabaseManager;
 	export type Statement = import('./sql').Statement;
 	export type Options = import('./sql').SQLOptions;
-	// eslint-disable-next-line @typescript-eslint/no-shadow
+	// oxlint-disable-next-line no-shadow
 	export type TransactionEnvironment = import('./sql').TransactionEnvironment;
 	export type Query = import('./sql').DatabaseQuery;
 	export type DatabaseTable<T> = import('./sql').DatabaseTable<T>;

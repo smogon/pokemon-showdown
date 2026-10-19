@@ -36,8 +36,8 @@ describe('Intimidate', () => {
 			{ species: "Gengar", level: 1, item: 'leftovers', ability: 'levitate', moves: ['substitute'] },
 			{ species: "Suicune", level: 1, item: 'leftovers', ability: 'pressure', moves: ['substitute'] },
 		], [
-			{ species: "Gliscor", item: 'laggingtail', ability: 'sandveil', moves: ['uturn'] },
-			{ species: "Scizor", item: 'laggingtail', ability: 'technician', moves: ['batonpass'] },
+			{ species: "Scizor", item: 'laggingtail', ability: 'sandveil', moves: ['uturn'] },
+			{ species: "Gliscor", item: 'laggingtail', ability: 'technician', moves: ['batonpass'] },
 			{ species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash'] },
 			{ species: "Salamence", item: 'leftovers', ability: 'intimidate', moves: ['splash'] },
 		]]);

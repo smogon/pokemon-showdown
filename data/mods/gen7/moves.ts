@@ -273,7 +273,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	grassknot: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	grasswhistle: {
 		inherit: true,
@@ -367,11 +367,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	heatcrash: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	heavyslam: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	hiddenpower: {
 		inherit: true,
@@ -498,10 +498,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
+				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
 				this.add('-activate', target, 'move: Protect');
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
@@ -536,7 +533,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	lowkick: {
 		inherit: true,
-		onTryHit() {},
+		onTryHit: undefined, // no inherit
 	},
 	luckychant: {
 		inherit: true,
@@ -775,7 +772,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	rapidspin: {
 		inherit: true,
 		basePower: 20,
-		secondary: null,
+		secondary: undefined, // no inherit
 	},
 	razorwind: {
 		inherit: true,
@@ -1081,6 +1078,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 50,
 		pp: 15,
 		willCrit: true,
-		secondary: null,
+		secondary: undefined, // no inherit
 	},
 };

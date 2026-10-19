@@ -283,7 +283,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * called.
 	 *
 	 * @param user
-	 * @param reason if a forced forfeit; should start with space
+	 * @param reason; should start with space
 	 */
 	forfeit?(user: User | string, reason?: string): void;
 

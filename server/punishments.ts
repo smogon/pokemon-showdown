@@ -694,7 +694,7 @@ export const Punishments = new class {
 		return affected;
 	}
 
-	unpunish(id: string, punishType: string) {
+	unpunish(id: string, punishType: string): string | false {
 		id = toID(id);
 		const punishment = Punishments.userids.getByType(id, punishType);
 		if (punishment) {
@@ -1678,7 +1678,7 @@ export const Punishments = new class {
 
 			if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== userid && Punishments.isSharedIp(user.latestIp)) {
 				if (!user.autoconfirmed) {
-					user.semilocked = `#sharedip ${user.locked}` as PunishType;
+					user.semilocked = `#sharedip ${punishUserid}` as PunishType;
 				}
 				user.locked = null;
 				user.namelocked = null;
@@ -1873,6 +1873,7 @@ export const Punishments = new class {
 			expiresText = `soon`;
 		}
 		if (expiresIn > 1) return ` (expires ${expiresText})`;
+		return ``;
 	}
 
 	isRoomBanned(user: User, roomid: RoomID): Punishment | undefined {

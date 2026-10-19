@@ -301,9 +301,10 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			for (const potentialCategory of getAllCategories(room)) {
+				const category = room.settings.events[potentialCategory] as RoomEventCategory;
 				if (
 					events.map(event => toID(event.eventName))
-						.filter(id => (room.settings.events?.[potentialCategory] as RoomEventCategory).events.includes(id)).length
+						.filter(id => category.events.includes(id)).length
 				) hasCategories = true; break;
 			}
 

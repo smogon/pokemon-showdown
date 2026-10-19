@@ -54,7 +54,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.effectType === 'Move') {
+			if (sourceEffect?.effectType === 'Move') {
 				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
@@ -80,6 +80,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
+		},
 	},
 	frz: {
 		name: 'frz',
@@ -94,9 +97,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return false;
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (move.secondary && move.secondary.status === 'brn') {
+			if (move.secondary?.status === 'brn') {
 				target.cureStatus();
 			}
+		},
+		onDisableMove(target) {
+			target.maybeLocked = false; // the player knows it is locked
 		},
 	},
 	psn: {
@@ -125,7 +131,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'confusion',
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');
 			} else {
 				this.add('-start', target, 'confusion');
@@ -202,8 +208,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAccuracy(accuracy, target, source, move) {
 			if (source === this.effectState.source) return true;
 		},
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
 		onDisableMove(target) {
-			target.maybeLocked = true;
+			if (this.effectState.maybeLocked) {
+				target.maybeLocked = true;
+			}
 		},
 	},
 	fakepartiallytrapped: {
@@ -211,6 +220,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// Wrap ended this turn, but you don't know that
 		// until you try to use an attack
 		duration: 2,
+		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
 		onDisableMove(target) {
 			target.maybeLocked = true;
 		},
@@ -229,9 +239,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.effectState.damage = this.lastDamage;
 			this.effectState.locked = foe;
 			foe.addVolatile('partiallytrapped', target, effect);
-		},
-		onOverrideAction(pokemon, target, move) {
-			return this.effectState.move;
 		},
 		onBeforeMove(pokemon, target, move) {
 			if (target !== this.effectState.locked) {
@@ -252,20 +259,25 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				}
 			} else {
 				target.addVolatile('partiallytrapped', pokemon, move);
+				if (this.effectState.totalDuration - this.effectState.duration! > 0) {
+					target.volatiles['partiallytrapped'].maybeLocked = true;
+				}
 			}
 		},
-		onLockMove() {
+		onSemiLockMove() {
 			return this.effectState.move;
 		},
 		onDisableMove(pokemon) {
-			pokemon.maybeLocked = true;
+			if (this.effectState.totalDuration - this.effectState.duration! > 1) {
+				pokemon.maybeLocked = true;
+			}
 		},
 	},
 	mustrecharge: {
 		inherit: true,
 		duration: 0,
 		onBeforeMovePriority: 7,
-		onStart() {},
+		onStart: undefined, // no inherit
 		onAfterMove(pokemon, target, move) {
 			if (target && target.hp <= 0) {
 				delete pokemon.volatiles['mustrecharge'];
@@ -284,13 +296,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onLockMove() {
 			return this.effectState.move;
-		},
-		onBeforeTurn(pokemon) {
-			const move = this.dex.moves.get(this.effectState.move);
-			if (move.id) {
-				this.debug('Forcing into ' + move.id);
-				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
-			}
 		},
 		onAfterMove(pokemon) {
 			if (pokemon.volatiles['lockedmove'].time <= 0) {

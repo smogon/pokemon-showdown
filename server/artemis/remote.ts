@@ -90,18 +90,28 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 			}
 			return result;
 		} catch (e: any) {
-			// eslint-disable-next-line require-atomic-updates
+			// oxlint-disable-next-line ps/require-atomic-updates
 			throttleTime = Date.now();
 			if (e.message.startsWith('Request timeout') || e.statusCode === 429 || e.code === 'ETIMEDOUT') {
 				// request timeout: just ignore this. error on their end not ours.
 				// 429: too many requests, we already freeze for 10s above so. not much more we can do
 				return null;
 			}
-			Monitor.crashlog(e, 'A Perspective API request', { request: JSON.stringify(requestData) });
+			if (e.statusCode === 503) {
+				Monitor.adminlog(`A Perspective API request failed: ${e.name}: ${e.message}`);
+			} else {
+				Monitor.crashlog(e, 'A Perspective API request', { request: JSON.stringify(requestData) });
+			}
 			return null;
 		}
 	},
-	PM_TIMEOUT
+	PM_TIMEOUT, message => {
+		if (message.startsWith('ADMINLOG\n')) {
+			Monitor.adminlog(message.slice(9));
+		} else if (message.startsWith('SLOW\n')) {
+			Monitor.slow(message.slice(5));
+		}
+	}
 );
 
 export class RemoteClassifier {
@@ -158,7 +168,10 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A remote Artemis child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
+		},
+		adminlog(text: string) {
+			process.send!(`CALLBACK\nADMINLOG\n${text}`);
 		},
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
@@ -170,7 +183,7 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, 'A remote Artemis child process');
 		}
 	});
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl(cmd => eval(cmd));
 }
 

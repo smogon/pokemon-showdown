@@ -64,10 +64,13 @@ describe('Focus Punch', () => {
 	});
 
 	it(`should cause the user to lose focus if hit by an attacking move followed by a status move in one turn`, () => {
-		battle = common.createBattle({ gameType: 'doubles' }, [
-			[{ species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch'] }, { species: 'Blissey', ability: 'naturalcure', moves: ['softboiled'] }],
-			[{ species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf'] }, { species: 'Ivysaur', ability: 'overgrow', moves: ['toxic'] }],
-		]);
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch'] },
+			{ species: 'Blissey', ability: 'naturalcure', moves: ['softboiled'] },
+		], [
+			{ species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf'] },
+			{ species: 'Ivysaur', ability: 'overgrow', moves: ['toxic'] },
+		]]);
 		battle.makeChoices('move focuspunch 1, move softboiled', 'move magicalleaf 1, move toxic 1');
 		assert.equal(battle.p1.active[0].status, 'tox');
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);

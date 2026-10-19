@@ -22,7 +22,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onDamage(damage, target, source, move) {
 				if (!source || source.isAlly(target)) return;
-				if (!move || move.effectType !== 'Move') return;
+				if (move?.effectType !== 'Move') return;
 				if (!damage && this.effectState.lastDamage > 0) {
 					damage = this.effectState.totalDamage;
 				}
@@ -97,7 +97,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
 			// - Counter succeeds if the target used a Counterable move earlier this turn
 
-			const lastMoveThisTurn = target.side.lastMove && target.side.lastMove.id === target.side.lastSelectedMove &&
+			const lastMoveThisTurn = target.side.lastMove?.id === target.side.lastSelectedMove &&
 				!this.queue.willMove(target) && this.dex.moves.get(target.side.lastMove.id);
 			if (!lastMoveThisTurn) {
 				this.debug("Stadium 1 Counter: last move was not this turn");
@@ -174,7 +174,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	recover: {
 		inherit: true,
-		heal: null,
 		onHit(target) {
 			if (target.hp === target.maxhp) {
 				return false;
@@ -197,7 +196,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	softboiled: {
 		inherit: true,
-		heal: null,
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === target.maxhp) {
@@ -271,7 +269,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return 0;
 			},
 		},
-		secondary: null,
 		target: "self",
 		type: "Normal",
 	},
