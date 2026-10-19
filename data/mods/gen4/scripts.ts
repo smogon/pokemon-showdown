@@ -119,13 +119,17 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let atLeastOneFailure = false;
 			for (const [i, target] of targetsCopy.entries()) {
-				// spread moves hit for 100% of the damage if there is only one target left and all the other targets have fainted
-				// if the move hits all adjacent Pokemon, the threshold is 2 targets counting the user
-				if (move.spreadHit && (
-					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length <= 2) ||
-					targets.filter(t => t && !t.fainted).length <= 1
-				)) {
-					move.spreadModifier = 1;
+				if (move.spreadHit) {
+					/**
+					 * Spread moves hit for 100% of the damage if:
+					 * - the move hits all foes, but there is only one foe alive
+					 * - the move hits all adjacent Pokemon, but there is only one Pokemon alive on the field,
+					 *   including the attacker and not including the current target
+					 */
+					const spreadModifierTargets = move.target === 'allAdjacent' ?
+						this.battle.getAllActive().filter(t => t && t !== target && t.hp) :
+						pokemon.foes().filter(t => t && t.hp);
+					if (spreadModifierTargets.length <= 1) move.spreadModifier = 1;
 				}
 				move.totalDamage = undefined;
 				for (const step of moveSteps) {
