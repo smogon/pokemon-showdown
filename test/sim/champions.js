@@ -121,11 +121,11 @@ describe('Champions abilities', () => {
 	describe('Magician', () => {
 		it.skip(`should not take recoil damage if it steals a Life Orb`, () => {
 			battle = createChampionsBattle([[
-   			{ species: 'delphox', ability: 'magician', moves: ['flamethrower'] },
-   		], [
-      		{ species: 'latios', item: 'lifeorb', moves: ['sleeptalk'] },
-   		]]);
-   		battle.makeChoices();
+				{ species: 'delphox', ability: 'magician', moves: ['flamethrower'] },
+			], [
+				{ species: 'latios', item: 'lifeorb', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
 			assert.equal(battle.p1.active[0].item, 'lifeorb');
 			assert.fullHP(battle.p1.active[0]);
 		});
