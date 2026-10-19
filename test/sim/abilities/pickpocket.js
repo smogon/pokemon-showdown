@@ -22,6 +22,18 @@ describe('Pickpocket', () => {
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
 
+	it(`should be suppressed by Sheer Force`, () => {
+		battle = common.createBattle([[
+			{ species: 'Weavile', ability: 'pickpocket', moves: ['agility'] },
+		], [
+			{ species: 'Sylveon', ability: 'sheerforce', item: 'choicescarf', moves: ['bodyslam'] },
+		]]);
+
+		battle.makeChoices();
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.holdsItem(battle.p2.active[0], 'choicescarf');
+	});
+
 	it(`should not steal a foe's item if the Pickpocket user switched out through Eject Button`, () => {
 		battle = common.createBattle([[
 			{ species: 'Weavile', ability: 'pickpocket', item: 'ejectbutton', moves: ['agility'] },

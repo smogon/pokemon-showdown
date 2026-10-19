@@ -83,7 +83,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A team validator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
 		},
 	} as typeof Monitor;
 
@@ -99,7 +99,7 @@ if (!PM.isParentProcess) {
 	global.Dex = require('../sim/dex').Dex.includeData();
 	global.Teams = require('../sim/teams').Teams;
 
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl((cmd: string) => eval(cmd));
 }
 

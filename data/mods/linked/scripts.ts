@@ -196,20 +196,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			if (this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect) === 'pursuitfaint') {
-				// a pokemon fainted from Pursuit before it could switch
-				if (this.gen <= 4) {
-					// in gen 2-4, the switch still happens
-					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
-					action.priority = -101;
-					this.queue.unshift(action);
-					break;
-				} else {
-					// in gen 5+, the switch is cancelled
-					this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
-					break;
-				}
-			}
+			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
@@ -245,7 +232,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
+			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.hp] as const);
 			this.fieldEvent('Residual');
 			if (!this.ended) this.add('upkeep');
 			break;
@@ -265,7 +252,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		// fainting
 
-		this.faintMessages();
+		this.resolveFaints();
 		if (this.ended) return true;
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
@@ -293,18 +280,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
+				this.runEvent('EmergencyExit', pokemon, undefined, undefined, originalHP);
 			}
 		}
 
 		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
-			}
+			this.runEvent('EmergencyExit', action.pokemon, undefined, undefined, pokemonOriginalHP!);
 		}
 
 		const switches = this.sides.map(
@@ -326,11 +307,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				for (const pokemon of this.sides[i].active) {
 					if (
 						pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						!pokemon.skipBeforeSwitchOutEventFlag
+						!pokemon.skipPursuit
 					) {
 						this.runEvent('BeforeSwitchOut', pokemon);
-						pokemon.skipBeforeSwitchOutEventFlag = true;
-						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
+						pokemon.skipPursuit = true;
+						this.resolveFaints(); // Pokemon may have fainted in BeforeSwitchOut
 						if (this.ended) return true;
 						if (pokemon.fainted) {
 							switches[i] = this.sides[i].active.some(sidePokemon => sidePokemon && !!sidePokemon.switchFlag);
@@ -466,7 +447,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const oldActiveMove = move;
 
 			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
-			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
+			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove?.id ?? null : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMove', pokemon, target, move);
@@ -493,7 +474,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				);
 				const targetOf1stDance = this.battle.activeTarget!;
 				for (const dancer of dancers) {
-					if (this.battle.faintMessages()) break;
+					if (this.battle.resolveFaints()) break;
 					if (dancer.fainted) continue;
 					this.battle.add('-activate', dancer, 'ability: Dancer');
 					const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
@@ -504,7 +485,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
-			this.battle.faintMessages();
+			this.battle.resolveFaints();
 			this.battle.checkWin();
 
 			if (this.battle.gen <= 4) {

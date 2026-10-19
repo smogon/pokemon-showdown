@@ -76,7 +76,8 @@ export const Friends = new class {
 			offline: [],
 		};
 		const loginTimes: { [k: string]: number } = {};
-		for (const { friend: friendID, last_login, allowing_login: hideLogin } of [...friends].sort()) {
+		const sortedFriends = Utils.sortBy([...friends], friend => friend.friend);
+		for (const { friend: friendID, last_login, allowing_login: hideLogin } of sortedFriends) {
 			const friend = Users.getExact(friendID);
 			if (friend?.connected) {
 				categorized[friend.statusType].push(friend.id);
@@ -149,11 +150,9 @@ export const Friends = new class {
 		} else if (curUser && curUser.id !== userid) {
 			buf += `<small>On an alternate account</small><br />`;
 		}
-		if (login && typeof login === 'number' && !user?.connected) {
-			buf += `Last seen: <time>${new Date(Number(login)).toISOString()}</time>`;
+		if (login && !user?.connected) {
+			buf += `Last seen: <time>${new Date(login).toISOString()}</time>`;
 			buf += ` (${Chat.toDurationString(Date.now() - login, { precision: 1 })} ago)`;
-		} else if (typeof login === 'string') {
-			buf += `${login}`;
 		}
 		buf = `<div class="infobox">${buf}</div>`;
 		return toLink(buf);

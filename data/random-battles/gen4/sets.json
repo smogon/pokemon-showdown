@@ -50,7 +50,7 @@
         ]
     },
     "butterfree": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -611,7 +611,7 @@
         ]
     },
     "weezing": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -687,7 +687,7 @@
         ]
     },
     "jynx": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -702,7 +702,7 @@
         ]
     },
     "pinsir": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1408,7 +1408,7 @@
         ]
     },
     "skarmory": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1652,7 +1652,7 @@
         ]
     },
     "blaziken": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2028,7 +2028,7 @@
         ]
     },
     "swalot": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2165,7 +2165,7 @@
         ]
     },
     "altaria": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2238,7 +2238,7 @@
         ]
     },
     "crawdaunt": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2838,7 +2838,7 @@
         ]
     },
     "wormadamtrash": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Staller",
@@ -2960,7 +2960,7 @@
         ]
     },
     "mismagius": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3463,7 +3463,7 @@
         ]
     },
     "rotommow": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3611,7 +3611,7 @@
         ]
     },
     "phione": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Staller",

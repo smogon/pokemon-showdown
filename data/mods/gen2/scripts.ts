@@ -107,7 +107,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// THIS IS PURELY A SANITY CHECK
 				// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 				// USE this.battle.queue.cancelMove INSTEAD
-				this.battle.debug(`${pokemon.fullname} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn}`);
+				this.battle.debug(`${pokemon.fullname} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn as DebugOutput}`);
 				this.battle.clearActiveMove(true);
 				return;
 			}
@@ -356,7 +356,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				if (moveData.boosts && !target.fainted) {
 					if (
-						pokemon.volatiles['lockon'] && target === pokemon.volatiles['lockon'].source &&
+						target === pokemon.volatiles['lockon']?.source &&
 						target.isSemiInvulnerable() && !isSelf
 					) {
 						if (!isSecondary) this.battle.add('-fail', target);
@@ -471,7 +471,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.add('-fail', target);
 				}
 			}
-			if (move.selfSwitch && pokemon.hp) {
+			if (move.selfSwitch && pokemon.hp && !pokemon.volatiles['commanded'] &&
+				(this.battle.canSwitch(pokemon.side) || move.id === 'revivalblessing')) {
 				pokemon.switchFlag = move.id;
 			}
 			return damage;

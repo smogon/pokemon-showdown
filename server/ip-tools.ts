@@ -31,8 +31,8 @@ function removeNohost(hostname: string) {
 	// Convert from old domain.tld.type-nohost format to new domain.tld?/type format
 	if (hostname?.includes('-nohost')) {
 		const parts = hostname.split('.');
-		const suffix = parts.pop();
-		return `${parts.join('.')}?/${suffix?.replace('-nohost', '')}`;
+		const suffix = parts.pop()!;
+		return `${parts.join('.')}?/${suffix.replace('-nohost', '')}`;
 	}
 	return hostname;
 }
@@ -185,7 +185,7 @@ export const IPTools = new class {
 		return { minIP, maxIP };
 	}
 	rangeToString(range: AddressRange, sep = '-') {
-		return `${this.numberToIP(range.minIP)}${sep}${this.numberToIP(range.maxIP)}`;
+		return `${this.numberToIP(range.minIP)!}${sep}${this.numberToIP(range.maxIP)!}`;
 	}
 
 	/******************************
@@ -377,7 +377,7 @@ export const IPTools = new class {
 	checkRangeConflicts(insertion: AddressRange, sortedRanges: AddressRange[], widen?: boolean) {
 		if (insertion.maxIP < insertion.minIP) {
 			throw new Error(
-				`Invalid data for address range ${IPTools.rangeToString(insertion)} (${insertion.host})`
+				`Invalid data for address range ${IPTools.rangeToString(insertion)} (${insertion.host!})`
 			);
 		}
 
@@ -394,7 +394,7 @@ export const IPTools = new class {
 		if (iMin < sortedRanges.length) {
 			const next = sortedRanges[iMin];
 			if (insertion.minIP === next.minIP && insertion.maxIP === next.maxIP) {
-				throw new Error(`The address range ${IPTools.rangeToString(insertion)} (${insertion.host}) already exists`);
+				throw new Error(`The address range ${IPTools.rangeToString(insertion)} (${insertion.host!}) already exists`);
 			}
 			if (insertion.minIP <= next.minIP && insertion.maxIP >= next.maxIP) {
 				if (widen) {
@@ -404,14 +404,14 @@ export const IPTools = new class {
 					return iMin;
 				}
 				throw new Error(
-					`Too wide: ${IPTools.rangeToString(insertion)} (${insertion.host})\n` +
-					`Intersects with: ${IPTools.rangeToString(next)} (${next.host})`
+					`Too wide: ${IPTools.rangeToString(insertion)} (${insertion.host!})\n` +
+					`Intersects with: ${IPTools.rangeToString(next)} (${next.host!})`
 				);
 			}
 			if (insertion.maxIP >= next.minIP) {
 				throw new Error(
-					`Could not insert: ${IPTools.rangeToString(insertion)} ${insertion.host}\n` +
-					`Intersects with: ${IPTools.rangeToString(next)} (${next.host})`
+					`Could not insert: ${IPTools.rangeToString(insertion)} ${insertion.host!}\n` +
+					`Intersects with: ${IPTools.rangeToString(next)} (${next.host!})`
 				);
 			}
 		}
@@ -419,14 +419,14 @@ export const IPTools = new class {
 			const prev = sortedRanges[iMin - 1];
 			if (insertion.minIP >= prev.minIP && insertion.maxIP <= prev.maxIP) {
 				throw new Error(
-					`Too narrow: ${IPTools.rangeToString(insertion)} (${insertion.host})\n` +
-					`Intersects with: ${IPTools.rangeToString(prev)} (${prev.host})`
+					`Too narrow: ${IPTools.rangeToString(insertion)} (${insertion.host!})\n` +
+					`Intersects with: ${IPTools.rangeToString(prev)} (${prev.host!})`
 				);
 			}
 			if (insertion.minIP <= prev.maxIP) {
 				throw new Error(
-					`Could not insert: ${IPTools.rangeToString(insertion)} (${insertion.host})\n` +
-					`Intersects with: ${IPTools.rangeToString(prev)} (${prev.host})`
+					`Could not insert: ${IPTools.rangeToString(insertion)} (${insertion.host!})\n` +
+					`Intersects with: ${IPTools.rangeToString(prev)} (${prev.host!})`
 				);
 			}
 		}

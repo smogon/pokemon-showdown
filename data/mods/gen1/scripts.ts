@@ -327,7 +327,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (sourceEffect) attrs += `|[from] ${this.battle.dex.conditions.get(sourceEffect).name}`;
-			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
+			this.battle.addMove('move', pokemon, move.name, `${target!}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return true;
@@ -738,8 +738,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			if (move.selfSwitch && pokemon.hp) {
-				pokemon.switchFlag = move.selfSwitch === true ? true : this.dex.toID(move.selfSwitch);
+			if (move.selfSwitch && pokemon.hp && !pokemon.volatiles['commanded'] &&
+				(this.battle.canSwitch(pokemon.side) || move.id === 'revivalblessing')) {
+				pokemon.switchFlag = move.id;
 			}
 
 			return damage;
@@ -790,7 +791,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-			if (source.volatiles['partialtrappinglock'] && (target === source.volatiles['partialtrappinglock'].locked)) {
+			if (target === source.volatiles['partialtrappinglock']?.locked) {
 				return source.volatiles['partialtrappinglock'].damage;
 			}
 

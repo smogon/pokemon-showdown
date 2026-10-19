@@ -495,9 +495,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				) {
 					return;
 				}
-				if (!this.event.pursuitMessageShown) {
+				if (!pokemon.pursuitActivated) {
 					this.add('-activate', pokemon, 'move: Pursuit');
-					this.event.pursuitMessageShown = true;
+					pokemon.pursuitActivated = true;
 				}
 				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 				// If it is, then Mega Evolve before moving.
@@ -513,7 +513,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const move = this.dex.getActiveMove('pursuit');
 				source.deductPP(move.id);
 				source.moveUsed(move, pokemon.position);
-				if (this.actions.useMove(move, source, { target: pokemon }) && source.getItem().isChoice) {
+				if (this.actions.useMove(move, source, { target: pokemon, sourceEffect: this.effectState.sourceEffect }) &&
+					source.getItem().isChoice) {
 					source.addVolatile('choicelock');
 				}
 			},

@@ -54,7 +54,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.effectType === 'Move') {
+			if (sourceEffect?.effectType === 'Move') {
 				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
@@ -97,7 +97,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return false;
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (move.secondary && move.secondary.status === 'brn') {
+			if (move.secondary?.status === 'brn') {
 				target.cureStatus();
 			}
 		},
@@ -131,7 +131,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'confusion',
 		// this is a volatile status
 		onStart(target, source, sourceEffect) {
-			if (sourceEffect && sourceEffect.id === 'lockedmove') {
+			if (sourceEffect?.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');
 			} else {
 				this.add('-start', target, 'confusion');

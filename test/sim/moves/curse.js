@@ -124,123 +124,204 @@ describe('Curse', () => {
 		assert(caterpie.maxhp !== caterpie.hp || metapod.maxhp !== metapod.hp, `Either Caterpie or Metapod should have lost HP from Curse`);
 	});
 
-	it(`[Gen 7] should target the ally if the target is an ally`, () => {
-		battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
-			{ species: 'Wynaut', moves: ['sleeptalk'] },
+	it(`should target a random opponent if the target is a semi-invulnerable ally`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Deoxys', moves: ['fly'] },
 			{ species: 'Gengar', moves: ['curse'] },
 		], [
 			{ species: 'Caterpie', moves: ['sleeptalk'] },
 			{ species: 'Metapod', moves: ['sleeptalk'] },
 		]]);
-		battle.makeChoices('move sleeptalk, move curse -1', 'auto');
-
-		const wynaut = battle.p1.active[0];
-		assert.false.fullHP(wynaut);
-	});
-});
-
-describe('XY/ORAS Curse targeting when becoming Ghost the same turn', () => {
-	afterEach(() => {
-		battle.destroy();
+		battle.makeChoices('move fly 1, move curse -1', 'auto');
+		assert.fullHP(battle.p1.active[0]);
+		assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
 	});
 
-	const doublesTeams = [[
-		{ species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind'] },
-		{ species: "Sableye", ability: 'prankster', item: '', moves: ['lightscreen', 'mudsport'] },
-	], [
-		{ species: "Raikou", ability: 'pressure', item: '', moves: ['aurasphere', 'calmmind'] },
-		{ species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind'] },
-	]];
-
-	const triplesTeams = [
-		doublesTeams[0].concat({ species: "Metapod", ability: 'shedskin', item: '', moves: ['harden', 'stringshot'] }),
-		doublesTeams[1].concat({ species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot'] }),
-	];
-
-	function runDoublesTest(battle, curseUser) {
-		const p2active = battle.p2.active;
-		const cursePartner = curseUser.side.active[1 - curseUser.position];
-
-		battle.makeChoices(
-			// p1: Kecleon uses Curse last in the turn.
-			// p2: Fighting attack on Kecleon, then Ghost.
-			`move 1, move 1`,
-			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}`
-		);
-
-		assert(curseUser.hasType('Ghost')); // Curse user must be Ghost
-		assert(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
-
-		const foeHP = [p2active[0].hp, p2active[1].hp];
-		battle.makeChoices(`move 2, move 2`, `move 2, move 2`);
-
-		assert.notEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
-		if (curseUser.position === 0) {
-			// Expected behavior
-			assert.equal(cursePartner.hp, cursePartner.maxhp); // Partner unaffected by Curse
-			assert(foeHP[0] !== p2active[0].maxhp || foeHP[1] !== p2active[1].maxhp); // Foe afflicted by Curse
-		} else {
-			// Cartridge glitch
-			assert.false.fullHP(cursePartner); // Partner afflicted by Curse
-
-			// Foes unaffected by Curse
-			assert.fullHP(p2active[0]);
-			assert.fullHP(p2active[1]);
-		}
-	}
-
-	function runTriplesTest(battle, curseUser) {
-		const p1active = battle.p1.active;
-		const p2active = battle.p2.active;
-
-		battle.makeChoices(
-			// p1: Kecleon uses Curse last in the turn.
-			// p2: Electric attack on Kecleon, then Ghost.
-			`move 1, move 1, move 1`,
-			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}, move harden`
-		);
-
-		assert(curseUser.hasType('Ghost')); // Curse user must be Ghost
-		assert(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
-
-		let cursedFoe = false;
-		for (let i = 0; i < 3; i++) {
-			const allyPokemon = p1active[i];
-			if (allyPokemon === curseUser) {
-				assert.notEqual(allyPokemon.hp, allyPokemon.maxhp); // Curse user cut its HP down
-			} else {
-				assert.equal(allyPokemon.hp, allyPokemon.maxhp); // Partners unaffected by Curse
-			}
-
-			const foePokemon = p2active[i];
-			if (foePokemon.hp !== foePokemon.maxhp) {
-				cursedFoe = true;
-			}
-		}
-		assert(cursedFoe);
-	}
-
-	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', () => {
-		battle = common.gen(6).createBattle({ gameType: 'doubles' }, doublesTeams.slice());
-		runDoublesTest(battle, battle.p1.active[0]);
+	it(`should boost its stats if a Ghost user has Protean and was hit by Electrify`, () => {
+		battle = common.createBattle([[
+			{ species: 'Gengar', ability: 'protean', moves: ['curse'] },
+		], [
+			{ species: 'Aerodactyl', moves: ['electrify'] },
+		]]);
+		const gengar = battle.p1.active[0];
+		const aerodactyl = battle.p2.active[0];
+		battle.makeChoices();
+		assert.fullHP(gengar);
+		assert.equal(gengar.boosts.atk, 1);
+		assert.fullHP(aerodactyl);
 	});
 
-	it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', () => {
-		battle = common.gen(6).createBattle({ gameType: 'doubles' }, [
-			[doublesTeams[0][1], doublesTeams[0][0]],
-			doublesTeams[1],
-		]);
-		runDoublesTest(battle, battle.p1.active[1]);
+	it(`should target a random opponent if the target is an ally that uses Ally Switch`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', moves: ['allyswitch'] },
+			{ species: 'Gengar', moves: ['curse'] },
+		], [
+			{ species: 'Caterpie', moves: ['sleeptalk'] },
+			{ species: 'Metapod', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move allyswitch, move curse -1', 'auto');
+		assert.fullHP(battle.p1.active[1]);
+		assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
 	});
 
-	for (const cursePos of [0, 1, 2]) {
-		it('should target an opponent in Triples even if the user is on position ' + cursePos, () => {
-			const p1team = triplesTeams[0].slice(1);
-			p1team.splice(cursePos, 0, triplesTeams[0][0]);
-			const p2team = triplesTeams[1].slice();
+	describe('[Gen 7]', () => {
+		it(`should target the ally if the target is an ally`, () => {
+			battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
+				{ species: 'Gengar', moves: ['curse'] },
+			], [
+				{ species: 'Caterpie', moves: ['sleeptalk'] },
+				{ species: 'Metapod', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move sleeptalk, move curse -1', 'auto');
 
-			battle = common.gen(5).createBattle({ gameType: 'triples' }, [p1team, p2team]);
-			runTriplesTest(battle, battle.p1.active[cursePos]);
+			const wynaut = battle.p1.active[0];
+			assert.false.fullHP(wynaut);
 		});
-	}
+
+		it(`should fail if the target is a semi-invulnerable ally`, () => {
+			battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Deoxys', moves: ['fly'] },
+				{ species: 'Gengar', moves: ['curse'] },
+			], [
+				{ species: 'Caterpie', moves: ['sleeptalk'] },
+				{ species: 'Metapod', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move fly 1, move curse -1', 'auto');
+			assert.fullHP(battle.p1.active[0]);
+			assert.fullHP(battle.p2.active[0]);
+			assert.fullHP(battle.p2.active[1]);
+		});
+
+		// same tests
+
+		it(`should boost its stats if a Ghost user has Protean and was hit by Electrify`, () => {
+			battle = common.gen(7).createBattle([[
+				{ species: 'Gengar', ability: 'protean', moves: ['curse'] },
+			], [
+				{ species: 'Aerodactyl', moves: ['electrify'] },
+			]]);
+			const gengar = battle.p1.active[0];
+			const aerodactyl = battle.p2.active[0];
+			battle.makeChoices();
+			assert.fullHP(gengar);
+			assert.equal(gengar.boosts.atk, 1);
+			assert.fullHP(aerodactyl);
+		});
+
+		it(`should target a random opponent if the target is an ally that uses Ally Switch`, () => {
+			battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wynaut', moves: ['allyswitch'] },
+				{ species: 'Gengar', moves: ['curse'] },
+			], [
+				{ species: 'Caterpie', moves: ['sleeptalk'] },
+				{ species: 'Metapod', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move allyswitch, move curse -1', 'auto');
+			assert.fullHP(battle.p1.active[1]);
+			assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
+		});
+	});
+
+	describe('[Gen 6] Curse targeting when becoming Ghost the same turn', () => {
+		const doublesTeams = [[
+			{ species: "Kecleon", ability: 'colorchange', item: 'laggingtail', moves: ['curse', 'calmmind'] },
+			{ species: "Sableye", ability: 'prankster', item: '', moves: ['lightscreen', 'mudsport'] },
+		], [
+			{ species: "Raikou", ability: 'pressure', item: '', moves: ['aurasphere', 'calmmind'] },
+			{ species: "Gastly", ability: 'levitate', item: '', moves: ['lick', 'calmmind'] },
+		]];
+
+		const triplesTeams = [
+			doublesTeams[0].concat({ species: "Metapod", ability: 'shedskin', item: '', moves: ['harden', 'stringshot'] }),
+			doublesTeams[1].concat({ species: "Kakuna", ability: 'shedskin', item: '', moves: ['harden', 'stringshot'] }),
+		];
+
+		function runDoublesTest(battle, curseUser) {
+			const p2active = battle.p2.active;
+			const cursePartner = curseUser.side.active[1 - curseUser.position];
+
+			battle.makeChoices(
+				// p1: Kecleon uses Curse last in the turn.
+				// p2: Fighting attack on Kecleon, then Ghost.
+				`move 1, move 1`,
+				`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}`
+			);
+
+			assert(curseUser.hasType('Ghost')); // Curse user must be Ghost
+			assert(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
+
+			const foeHP = [p2active[0].hp, p2active[1].hp];
+			battle.makeChoices(`move 2, move 2`, `move 2, move 2`);
+
+			assert.notEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
+			if (curseUser.position === 0) {
+				// Expected behavior
+				assert.equal(cursePartner.hp, cursePartner.maxhp); // Partner unaffected by Curse
+				assert(foeHP[0] !== p2active[0].maxhp || foeHP[1] !== p2active[1].maxhp); // Foe afflicted by Curse
+			} else {
+				// Cartridge glitch
+				assert.false.fullHP(cursePartner); // Partner afflicted by Curse
+
+				// Foes unaffected by Curse
+				assert.fullHP(p2active[0]);
+				assert.fullHP(p2active[1]);
+			}
+		}
+
+		function runTriplesTest(battle, curseUser) {
+			const p1active = battle.p1.active;
+			const p2active = battle.p2.active;
+
+			battle.makeChoices(
+				// p1: Kecleon uses Curse last in the turn.
+				// p2: Electric attack on Kecleon, then Ghost.
+				`move 1, move 1, move 1`,
+				`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}, move harden`
+			);
+
+			assert(curseUser.hasType('Ghost')); // Curse user must be Ghost
+			assert(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
+
+			let cursedFoe = false;
+			for (let i = 0; i < 3; i++) {
+				const allyPokemon = p1active[i];
+				if (allyPokemon === curseUser) {
+					assert.notEqual(allyPokemon.hp, allyPokemon.maxhp); // Curse user cut its HP down
+				} else {
+					assert.equal(allyPokemon.hp, allyPokemon.maxhp); // Partners unaffected by Curse
+				}
+
+				const foePokemon = p2active[i];
+				if (foePokemon.hp !== foePokemon.maxhp) {
+					cursedFoe = true;
+				}
+			}
+			assert(cursedFoe);
+		}
+
+		it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', () => {
+			battle = common.gen(6).createBattle({ gameType: 'doubles' }, doublesTeams.slice());
+			runDoublesTest(battle, battle.p1.active[0]);
+		});
+
+		it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', () => {
+			battle = common.gen(6).createBattle({ gameType: 'doubles' }, [
+				[doublesTeams[0][1], doublesTeams[0][0]],
+				doublesTeams[1],
+			]);
+			runDoublesTest(battle, battle.p1.active[1]);
+		});
+
+		for (const cursePos of [0, 1, 2]) {
+			it('should target an opponent in Triples even if the user is on position ' + cursePos, () => {
+				const p1team = triplesTeams[0].slice(1);
+				p1team.splice(cursePos, 0, triplesTeams[0][0]);
+				const p2team = triplesTeams[1].slice();
+
+				battle = common.gen(5).createBattle({ gameType: 'triples' }, [p1team, p2team]);
+				runTriplesTest(battle, battle.p1.active[cursePos]);
+			});
+		}
+	});
 });

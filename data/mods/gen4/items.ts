@@ -155,7 +155,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			duration: 1,
 			onDamage(damage, target, source, effect) {
-				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+				if (effect?.effectType === 'Move' && damage >= target.hp) {
 					this.effectState.activated = true;
 					return target.hp - 1;
 				}
@@ -255,7 +255,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
-				if (move && move.effectType === 'Move' && source?.volatiles['lifeorb']) {
+				if (move?.effectType === 'Move' && source?.volatiles['lifeorb']) {
 					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
@@ -458,6 +458,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	toxicplate: {
 		inherit: true,
 		onTakeItem: true,
+	},
+	whiteherb: {
+		inherit: true,
+		onAnySwitchInPriority: undefined, // no inherit
 	},
 	widelens: {
 		inherit: true,

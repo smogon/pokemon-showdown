@@ -2,7 +2,7 @@
  * Friends chat-plugin database handler.
  * @author mia-pi-git
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// oxlint-disable-next-line typescript/ban-ts-comment
 // @ts-ignore in case it isn't installed
 import type * as Database from 'better-sqlite3';
 import { Utils, FS, ProcessManager } from '../lib';
@@ -438,7 +438,7 @@ if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
 		},
 		slow(message: string) {
 			process.send!(`CALLBACK\nSLOW\n${message}`);
@@ -449,7 +449,7 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, 'A friends child process');
 		}
 	});
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl(cmd => eval(cmd));
 }
 

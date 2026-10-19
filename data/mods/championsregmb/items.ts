@@ -203,10 +203,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	darkranite: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	dawnstone: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -448,10 +444,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: "Past",
 	},
 	hearthflamemask: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
-	heatranite: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

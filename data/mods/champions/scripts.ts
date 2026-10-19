@@ -53,7 +53,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			return speed;
 		},
 		// Don't revert Mega Evolutions after fainting
-		// TODO: confirm interaction with Revival Blessing
 		formeChange(speciesId, source, isPermanent, abilitySlot = '0', message) {
 			const rawSpecies = this.battle.dex.species.get(speciesId);
 
@@ -311,7 +310,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
 		},
-		// Run `AfterHit` events even if the source fainted
+		// Run `AfterHit` events even if the source fainted: Rapid Spin, Ceaseless Edge, etc.
 		spreadMoveHit(targets, pokemon, moveOrMoveName, hitEffect?, isSecondary?, isSelf?) {
 			// Hardcoded for single-target purposes
 			// (no spread moves have any kind of onTryHit handler)
@@ -417,15 +416,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.battle.gen < 5) {
 					this.battle.runEvent('DamagingHit', damagedTargets, pokemon, move, damagedDamage);
 				}
-				if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon);
-				}
+				this.battle.runEvent('EmergencyExit', pokemon, undefined, undefined, pokemonOriginalHP);
 			}
 
 			return [damage, targets];
 		},
+		// Sheer Force doesn't suppress AfterMoveSecondary events: Berserk, Pickpocket, Emergency Exit, Eject Button, etc.
 		// Parental Bond shouldn't announce hit count if it only hits once
-		hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) { // Temporary name
+		hitStepMoveHitLoop(targets, pokemon, move) {
 			let damage: (number | boolean | undefined)[] = [];
 			for (const i of targets.keys()) {
 				damage[i] = 0;
@@ -544,7 +542,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// hit is 1 higher than the actual hit count
 			if (hit === 1) return damage.fill(false);
 			if (nullDamage) damage.fill(false);
-			this.battle.faintMessages(false, false, !pokemon.hp);
+			this.battle.resolveFaints({ checkWin: !pokemon.hp });
 			if (move.multihit && typeof move.smartTarget !== 'boolean' &&
 				!(move.hit === 1 && move.multihitType === 'parentalbond')) {
 				this.battle.add('-hitcount', targets[0], hit - 1);
@@ -576,17 +574,13 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
-				for (const [i, d] of damage.entries()) {
-					// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
-					// The previous check was for `move.multihit`, but that fails for Dragon Darts
-					const curDamage = targets.length === 1 ? move.totalDamage : d;
-					if (typeof curDamage === 'number' && targets[i].hp) {
-						const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
-						if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
-							this.battle.runEvent('EmergencyExit', targets[i], pokemon);
-						}
-					}
+			for (const [i, d] of damage.entries()) {
+				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
+				// The previous check was for `move.multihit`, but that fails for Dragon Darts
+				const curDamage = targets.length === 1 ? move.totalDamage : d;
+				if (typeof curDamage === 'number' && targets[i].hp) {
+					const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
+					this.battle.runEvent('EmergencyExit', targets[i], pokemon, undefined, targetHPBeforeDamage);
 				}
 			}
 

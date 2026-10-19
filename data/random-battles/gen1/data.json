@@ -53,7 +53,7 @@
         "exclusiveMoves": ["doubleedge", "hyperbeam", "megadrain", "substitute"]
     },
     "beedrill": {
-        "level": 81,
+        "level": 84,
         "moves": ["hyperbeam", "swordsdance", "twineedle"],
         "exclusiveMoves": ["agility", "agility", "megadrain"]
     },

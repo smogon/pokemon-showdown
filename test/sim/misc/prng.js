@@ -104,6 +104,7 @@ describe(`PRNG`, () => {
 		it(`should eventually throw for a somewhat sparse array`, () => {
 			const prng = new PRNG(testSeed);
 			const items = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+			// oxlint-disable-next-line typescript/no-array-delete
 			delete items[9];
 			assert.throws(() => {
 				for (let i = 0; i < 100; ++i) {

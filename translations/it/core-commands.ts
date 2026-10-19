@@ -155,5 +155,5 @@ export const translations: TranslationCatalog = {
 	"{TARGETUSER} was kicked from a battle by {USER}.{REASON}": null, // NEEDS TRANSLATION
 	"unlocked": null, // NEEDS TRANSLATION
 	"friended": null, // NEEDS TRANSLATION
-
+	"The player in slot {SLOT} has already been eliminated.": null, // NEEDS TRANSLATION
 };

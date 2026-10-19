@@ -12,7 +12,7 @@ if (!pluginDatabase.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack ?? error}`);
 		},
 	} as any;
 	process.on('uncaughtException', err => {
@@ -21,6 +21,6 @@ if (!pluginDatabase.isParentProcess) {
 	process.on('unhandledRejection', err => {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	pluginDatabase.startRepl(cmd => eval(cmd));
 }
