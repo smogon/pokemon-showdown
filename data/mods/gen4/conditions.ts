@@ -183,7 +183,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	cherrim: {
 		name: "Cherrim",
-		onSwitchIn(pokemon) {
+		onSwitchInPriority: 2,
+		onStart(pokemon) {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
