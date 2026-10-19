@@ -1,11 +1,19 @@
 export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
 	standard: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
+		],
+		banlist: ['Moody'],
 	},
 	standarddoubles: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause',
+		],
+		banlist: ['Moody'],
 	},
 	obtainablemoves: {
 		inherit: true,
@@ -24,7 +32,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	gravitysleepclause: {
 		effectType: 'ValidatorRule',
 		name: 'Gravity Sleep Clause',
-		desc: "Bans Gravity + sleep moves below 100% accuracy",
+		desc: "Bans teams with any sleep move below 100% accuracy along with Gravity",
 		banlist: ['Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
 		onBegin() {
 			this.add('rule', 'Gravity Sleep Clause: The combination of Gravity and sleep-inducing moves with imperfect accuracy are banned');

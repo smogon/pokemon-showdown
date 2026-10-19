@@ -28,7 +28,10 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Obtainable', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: [
+			'Standard AG',
+			'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
+		],
 		banlist: [
 			'Hypnosis + Mean Look',
 			'Hypnosis + Spider Web',
@@ -45,7 +48,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	nc2000movelegality: {
 		effectType: 'ValidatorRule',
 		name: 'NC 2000 Move Legality',
-		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
+		desc: "Prevents Pokemon from having moves that would only be obtainable in Pok&eacute;mon Crystal.",
 		onValidateSet(set) {
 			const illegalCombos: { [speciesid: string]: { [moveid: string]: 'E' | 'L' | 'S' } } = {
 				arbok: { crunch: 'E' },

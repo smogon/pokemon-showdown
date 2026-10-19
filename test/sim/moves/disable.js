@@ -86,12 +86,42 @@ describe('Disable', () => {
 				{ species: 'Muk', moves: ['hyperbeam', 'fireblast', 'blizzard', 'tackle'] },
 			]]);
 			const muk = battle.p2.active[0];
-			muk.deductPP('hyperbeam', 8);
-			muk.deductPP('fireblast', 8);
-			muk.deductPP('blizzard', 8);
+			muk.moveSlots[0].pp = 0;
+			muk.moveSlots[1].pp = 0;
+			muk.moveSlots[2].pp = 0;
 			battle.makeChoices('auto', 'move tackle');
-			assert('disable' in muk.volatiles);
-			assert.equal(muk.volatiles.disable.move, 'tackle');
+			assert(!!muk.volatiles['disable']);
+			assert.equal(muk.volatiles.disable.slotIndex, 3);
+		});
+
+		it(`should keep the slot disabled even if the move is replaced by Mimic`, () => {
+			battle = common.gen(1).createBattle({ seed: [2, 0, 0, 0] }, [[
+				{ species: 'Drowzee', moves: ['mimic', 'tackle'] },
+			], [
+				{ species: 'Abra', moves: ['tackle', 'disable'] },
+			]]);
+			const disabled = battle.p1.active[0];
+			battle.makeChoices('move mimic', 'move disable');
+			assert.equal(disabled.moveSlots[0].id, 'tackle');
+			assert.equal(disabled.volatiles['disable'].slotIndex, 1);
+			assert.equal(disabled.volatiles['disable'].move, 'tackle');
+			assert.cantMove(() => battle.p1.choose('move 2'));
+			// can select the Tackle in the first slot, but the move will still fail
+			battle.makeChoices('move 1', 'move tackle');
+			assert.fullHP(battle.p2.active[0]);
+		});
+
+		it(`should keep the slot disabled even if the move is replaced by Transform`, () => {
+			battle = common.gen(1).createBattle({ seed: [2, 0, 0, 0] }, [[
+				{ species: 'Drowzee', moves: ['transform', 'tackle'] },
+			], [
+				{ species: 'Abra', moves: ['tackle', 'disable'] },
+			]]);
+			battle.makeChoices('move tackle', 'move disable');
+			assert.cantMove(() => battle.p1.choose('move tackle'));
+			battle.makeChoices('move transform', 'move tackle');
+			assert.cantMove(() => battle.p1.choose('move disable'));
+			battle.makeChoices('move tackle', 'move tackle');
 		});
 
 		it(`Disable should build Rage, even if it misses/fails`, () => {

@@ -83,7 +83,7 @@ describe(`Poison Touch`, () => {
 		battle.onEvent('ModifyMove', battle.format, -99, move => {
 			if (move.id === 'falseswipe') {
 				// If False Swipe had a psn secondary, it would have a 60% chance to activate
-				assert.equal(move.secondaries, null);
+				assert.equal(move.secondaries, undefined);
 			}
 		});
 

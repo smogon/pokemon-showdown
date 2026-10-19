@@ -1,13 +1,22 @@
 export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
+	standardag: {
+		inherit: true,
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Exact HP Mod', 'Cancel Mod', 'Beat Up Nicknames Mod',
+		],
+	},
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		ruleset: ['Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Self-KO Clause', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Exact HP Mod', 'Cancel Mod', 'Stadium Items Clause'],
+		ruleset: [
+			'Standard AG',
+			'Stadium Sleep Clause', 'Freeze Clause Mod', 'Self-KO Clause', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Stadium Items Clause',
+		],
 	},
 	selfkoclause: {
 		effectType: 'Rule',
 		name: 'Self-KO Clause',
-		desc: "If a player's last Pokemon uses Self-Destruct or Explosion, they automatically lose the battle.",
+		desc: "Causes a player to lose the battle if their last Pokemon uses Self-Destruct or Explosion",
 		onBegin() {
 			this.add('rule', 'Self-KO Clause: If a player\'s last Pokemon uses Self-Destruct/Explosion, they automatically lose');
 		},

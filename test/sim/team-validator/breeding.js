@@ -192,6 +192,7 @@ describe('Team Validator', () => {
 	it("should allow previously illegal level up egg moves in Gen 7", () => {
 		team = [
 			{ species: 'smoochum', level: 5, ability: 'hydration', moves: ['powdersnow'], evs: { hp: 1 } },
+			{ species: 'staryu', level: 5, ability: 'illuminate', moves: ['hydropump'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen7lc');
 	});
@@ -200,7 +201,8 @@ describe('Team Validator', () => {
 		team = [
 			{ species: 'zigzagoon', level: 5, ability: 'pickup', moves: ['bellydrum', 'extremespeed'], evs: { hp: 1 } },
 		];
-		assert.legalTeam(team, 'gen3ou');
+		assert.false.legalTeam(team, 'gen3ou');
+		assert.legalTeam(team, 'gen3ou@@@pomegglitchclause');
 	});
 
 	it("should disallow illegal egg move combinations containing past gen universal moves", () => {
@@ -220,6 +222,17 @@ describe('Team Validator', () => {
 			{ species: 'corphish', ability: 'hypercutter', moves: ['dragondance', 'metalclaw'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen4ou');
+
+		// These sets require an extra iteration of recursive chainbreed checking
+		team = [
+			{ species: 'paras', moves: ['flail', 'lightscreen', 'counter'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen2ou');
+
+		team = [
+			{ species: 'charmander', ability: 'blaze', moves: ['dragondance', 'outrage', 'bite'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen3ou');
 	});
 
 	it('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', () => {

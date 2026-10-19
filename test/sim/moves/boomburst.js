@@ -11,9 +11,11 @@ describe('Boomburst', () => {
 	});
 
 	it('should pierce through substitutes', () => {
-		battle = common.createBattle();
-		battle.setPlayer('p1', { team: [{ species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'boomburst'] }] });
-		battle.setPlayer('p2', { team: [{ species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest'] }] });
+		battle = common.createBattle([[
+			{ species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'boomburst'] },
+		], [
+			{ species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest'] },
+		]]);
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move boomburst', 'move rest');
 		assert.equal(battle.p2.active[0].item, '');

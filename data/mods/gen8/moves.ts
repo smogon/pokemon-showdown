@@ -2,7 +2,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	allyswitch: {
 		inherit: true,
 		// Prevents setting the volatile used to check for Ally Switch failure
-		onPrepareHit() {},
+		onPrepareHit: undefined, // no inherit
 	},
 	anchorshot: {
 		inherit: true,
@@ -59,19 +59,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	charge: {
 		inherit: true,
 		condition: {
-			onStart(pokemon, source, effect) {
-				this.add('-start', pokemon, 'Charge');
-			},
-			onRestart(pokemon, source, effect) {
-				this.add('-start', pokemon, 'Charge');
-			},
-			onBasePowerPriority: 9,
-			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Electric') {
-					this.debug('charge boost');
-					return this.chainModify(2);
-				}
-			},
+			inherit: true,
 			onMoveAborted(pokemon, target, move) {
 				if (move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
@@ -81,9 +69,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Charge', '[silent]');
 			},
 		},
 	},
@@ -114,7 +99,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
-				move.target = move.nonGhostTarget!;
+				move.target = 'self';
+			} else if (!target) {
+				move.target = 'randomNormal';
 			}
 		},
 		target: "randomNormal",
@@ -201,6 +188,138 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	glaciallance: {
 		inherit: true,
 		basePower: 130,
+	},
+	gmaxbefuddle: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxcannonade: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxcentiferno: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxchistrike: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxcuddle: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxdepletion: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxdrumsolo: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxfinale: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxfireball: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxfoamburst: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxgoldrush: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxgravitas: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxhydrosnipe: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxmalodor: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxmeltdown: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxoneblow: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxrapidflow: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxreplenish: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxresonance: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsandblast: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsmite: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsnooze: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsteelsurge: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxstonesurge: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxstunshock: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxsweetness: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxtartness: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxterror: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxvinelash: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxvolcalith: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxvoltcrash: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxwildfire: {
+		inherit: true,
+		isNonstandard: "Gmax",
+	},
+	gmaxwindrage: {
+		inherit: true,
+		isNonstandard: "Gmax",
 	},
 	grassyglide: {
 		inherit: true,
@@ -526,9 +645,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	stickyweb: {
 		inherit: true,
 		condition: {
-			onSideStart(side) {
-				this.add('-sidestart', side, 'move: Sticky Web');
-			},
+			inherit: true,
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');

@@ -1,5 +1,5 @@
 import { Utils } from '../lib/utils';
-import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 import type { SecondaryEffect, MoveEventMethods } from './dex-moves';
 
 /**
@@ -12,12 +12,13 @@ import type { SecondaryEffect, MoveEventMethods } from './dex-moves';
 
 export interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
-	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void;
+	onEmergencyExit?: (this: Battle, originalHp: number, pokemon: Pokemon) => void;
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterHit?: MoveEventMethods['onAfterHit'];
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
+	onAfterEntryHazard?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterTerastallization?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
@@ -53,10 +54,11 @@ export interface EventMethods {
 	onEntryHazard?: (this: Battle, pokemon: Pokemon) => void;
 	onFaint?: CommonHandlers['VoidEffect'];
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean;
-	onFractionalPriority?: CommonHandlers['ModifierSourceMove'] | -0.1;
+	onFractionalPriority?: CommonHandlers['ModifierSourceMove'] | -0.1 | -0.2;
 	onHit?: MoveEventMethods['onHit'];
 	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
 	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string);
+	onSemiLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string);
 	onMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
 	onModifyAccuracy?: CommonHandlers['ModifierMove'];
 	onModifyAtk?: CommonHandlers['ModifierSourceMove'];
@@ -86,8 +88,8 @@ export interface EventMethods {
 	) => Pokemon | void;
 	onResidual?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onSetAbility?: (
-		this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect
-	) => null | void;
+		(this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => null | void
+	) | boolean;
 	onSetStatus?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect
 	) => boolean | null | void;
@@ -106,6 +108,7 @@ export interface EventMethods {
 	onTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
+	onHitProtect?: MoveEventMethods['onTryHit'];
 	onTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	onTryHeal?: (
 		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void)
@@ -449,7 +452,9 @@ export interface EventMethods {
 	onChangeBoostPriority?: number;
 	onDamagePriority?: number;
 	onDragOutPriority?: number;
+	onDisableMovePriority?: number;
 	onEffectivenessPriority?: number;
+	onEntryHazardPriority?: number;
 	onFoeBasePowerPriority?: number;
 	onFoeBeforeMovePriority?: number;
 	onFoeModifyDefPriority?: number;
@@ -492,6 +497,7 @@ export interface EventMethods {
 	onTryMovePriority?: number;
 	onTryPrimaryHitPriority?: number;
 	onTypePriority?: number;
+	onWeatherModifyDamagePriority?: number;
 }
 
 export interface PokemonEventMethods extends EventMethods {
@@ -620,7 +626,7 @@ export interface FieldConditionData extends
 
 export type ConditionData = PokemonConditionData | SideConditionData | FieldConditionData;
 
-export type ModdedConditionData = ConditionData & { inherit?: true };
+export type ModdedConditionData = ConditionData & ModdedEffectText & { inherit?: true };
 export interface ConditionDataTable { [id: IDEntry]: ConditionData }
 export interface ModdedConditionDataTable { [id: IDEntry]: ModdedConditionData }
 

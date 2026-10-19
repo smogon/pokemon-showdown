@@ -4,8 +4,18 @@ export const Scripts: ModdedBattleScriptsData = {
 
 	checkWin(faintData?: Battle['faintQueue'][0]) {
 		if (this.sides.every(side => !side.pokemonLeft)) {
-			this.win(faintData ? faintData.target.side : null);
-			return true;
+			let isSelfKo = false;
+			if (faintData?.effect) {
+				isSelfKo = isSelfKo || this.dex.moves.getByID(faintData?.effect?.id).selfdestruct !== undefined;
+				isSelfKo = isSelfKo || this.dex.moves.getByID(faintData?.effect?.id).recoil !== undefined;
+			}
+			if (isSelfKo) {
+				this.win(faintData ? faintData.target.side : null);
+				return true;
+			} else {
+				this.win(undefined);
+				return true;
+			}
 		}
 		for (const side of this.sides) {
 			if (!side.foePokemonLeft()) {

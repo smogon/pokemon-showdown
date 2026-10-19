@@ -133,15 +133,13 @@ describe('Dragon Darts', () => {
 	});
 
 	it('should hit one target twice if the other is protected by an ability', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Grimmsnarl", ability: "Prankster", moves: ["electrify"] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
 			{ species: "Emolga", ability: "Motor Drive", moves: ["sleeptalk"] },
-		] });
+		]]);
 		battle.makeChoices('move dragondarts 2, move electrify -1', 'move sleeptalk, move sleeptalk');
 
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
@@ -152,15 +150,13 @@ describe('Dragon Darts', () => {
 	});
 
 	it('should hit one target twice if the other is immunue', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
 			{ species: "Clefairy", ability: "Ripen", moves: ["sleeptalk"] },
-		] });
+		]]);
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
 
 		assert.statStage(battle.p2.active[0], 'def', 2);
@@ -168,15 +164,13 @@ describe('Dragon Darts', () => {
 	});
 
 	it('should hit one target twice if the other is semi-invulnerable', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", item: "Lagging Tail", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
 			{ species: "Golurk", ability: "Ripen", moves: ["phantomforce"] },
-		] });
+		]]);
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move phantomforce 1');
 
 		assert.statStage(battle.p2.active[0], 'def', 2);
@@ -184,15 +178,13 @@ describe('Dragon Darts', () => {
 	});
 
 	it('should hit one target twice if the other is fainted', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
 			{ species: "Snom", ability: "Ripen", moves: ["sleeptalk"] },
-		] });
+		]]);
 
 		battle.p2.active[1].faint();
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -202,15 +194,13 @@ describe('Dragon Darts', () => {
 	});
 
 	it('should hit one target twice if the other is Dark type and Dragon Darts is Prankster boosted', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["sleeptalk", "dragondarts"] },
 			{ species: "Liepard", ability: "Prankster", moves: ["assist"] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"] },
 			{ species: "Spiritomb", ability: "Infiltrator", moves: ["sleeptalk"] },
-		] });
+		]]);
 
 		battle.makeChoices();
 
@@ -219,16 +209,14 @@ describe('Dragon Darts', () => {
 	});
 
 	it('should fail if both targets are fainted', () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Ludicolo", ability: "Dancer", moves: ["celebrate"] },
-		] });
-		battle.setPlayer('p2', { team: [
+		], [
 			{ species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"] },
 			{ species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"] },
 			{ species: "Arcanine", ability: "Flash Fire", moves: ["celebrate"] },
-		] });
+		]]);
 
 		battle.p2.active[0].faint();
 		battle.p2.active[1].faint();

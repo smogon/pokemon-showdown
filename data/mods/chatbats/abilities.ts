@@ -20,7 +20,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	callillumise: {
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp) {
+			if (damage >= target.hp && !target.m.called) {
 				this.add('-ability', target, 'Call Illumise');
 				this.effectState.callillumise = true;
 				return target.hp - 1;
@@ -62,6 +62,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// sets new ability
 			pokemon.setAbility('Tinted Lens', null, null, true);
 			pokemon.baseAbility = pokemon.ability;
+			pokemon.m.called = true;
 			this.add('-ability', pokemon, 'Tinted Lens');
 		},
 		flags: {
@@ -75,7 +76,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	callvolbeat: {
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp) {
+			if (damage >= target.hp && !target.m.called) {
 				this.add('-ability', target, 'Call Volbeat');
 				this.effectState.callvolbeat = true;
 				return target.hp - 1;
@@ -117,6 +118,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// sets new ability
 			pokemon.setAbility('Dancer', null, null, true);
 			pokemon.baseAbility = pokemon.ability;
+			pokemon.m.called = true;
 			this.add('-ability', pokemon, 'Dancer');
 		},
 		flags: {
@@ -298,7 +300,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	kingofthehill: {
 		// sharpness + mountaineer + prevents hazard immunity
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.id === 'stealthrock') {
+			if (effect?.id === 'stealthrock') {
 				return false;
 			}
 		},
@@ -612,8 +614,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			while (newMoves.length < 8) {
 				const newMove = this.sample(moves);
 				if (newMove.basePower === 1) continue;
-				if (newMove.isMax === true) continue;
-				if (newMove.isNonstandard === "Gigantamax") continue;
+				if (newMove.isMax) continue;
 				if (newMoves.map(x => x.id).includes(newMove.id)) continue;
 				newMoves.push(newMove);
 			}
