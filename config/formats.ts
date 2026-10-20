@@ -264,6 +264,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['OU', 'UUBL', 'Drought'],
 	},
 	{
+		name: "[Gen 9 Champions] Doubles",
+		mod: 'champions',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Standard Doubles'],
+		banlist: ['DUber'],
+	},
+	{
 		name: "[Gen 9 Champions] BSS Reg M-C",
 		mod: 'champions',
 		bestOfDefault: true,
