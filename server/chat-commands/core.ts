@@ -583,6 +583,28 @@ export const commands: Chat.ChatCommands = {
 		`/unblockinvites - Allows anyone to invite you to rooms.`,
 	],
 
+	blockbots: 'allowbots',
+	allowbots(target, room, user, connection, cmd) {
+		if (cmd.includes('block')) {
+			if (!user.settings.allowLadderBots) {
+				return this.errorReply(this.TL`You are not opted-in to playing against bots on the ladder.`);
+			}
+			user.settings.allowLadderBots = false;
+			this.sendReply(this.TL`You have opted out of playing against bots on the ladder.`);
+		} else {
+			if (user.settings.allowLadderBots) {
+				return this.errorReply(this.TL`You are already opted-in to playing against bots on the ladder.`);
+			}
+			user.settings.allowLadderBots = true;
+			this.sendReply(this.TL`You have opted in to matching against bots on the ladder.`);
+		}
+		return user.update();
+	},
+	allowbotshelp: [
+		`/allowbots - Opt in to matchmaking against bots on the ladder.`,
+		`/blockbots - Opt out of matchmaking against bots on the ladder.`,
+	],
+
 	status(target, room, user, connection, cmd) {
 		if (user.locked || user.semilocked) {
 			throw new Chat.ErrorMessage(this.TL`Your status cannot be updated while you are locked or semilocked.`);

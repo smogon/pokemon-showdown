@@ -399,9 +399,12 @@ class Ladder extends LadderStore {
 		}
 
 		// if one user is a bot and one is a suspect user or a ladder tour player, do not match
+		// if one user is a bot and the other non-bot users have not all opted in to matchmaking bots, do not match
 		for (const [search, user] of matches) {
-			const bots = users.filter(x => x.isUserBot && x.id !== user.id);
+			const bots = users.filter(x => x.isUserBot && x.id !== user.id).map(x => x.id);
+			const allOptedIn = users.every(x => x.settings.allowLadderBots && !x.isUserBot);
 			if (search.custom === 'suspect' && bots.length) return false;
+			if (bots.length && !allOptedIn) return false;
 			if (Config.forcedprefixes?.some((p: any) => user.id.startsWith(p.prefix)) && bots.length) return false;
 		}
 
