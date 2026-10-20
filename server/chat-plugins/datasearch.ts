@@ -98,7 +98,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
-		if (!target.includes('mod=')) {
+		if (!getMod(target).count) {
 			const dex = defaultFormat.dex;
 			if (dex) target += `, mod=${dex.currentMod}`;
 		}
@@ -172,7 +172,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
-		if (!target.includes('mod=')) {
+		if (!getMod(target).count) {
 			const dex = defaultFormat.dex;
 			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
 		}
@@ -222,7 +222,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!qty) targetsBuffer.push("random1");
 		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
-		if (!target.includes('mod=')) {
+		if (!getMod(target).count) {
 			const dex = defaultFormat.dex;
 			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
 		}
@@ -318,7 +318,7 @@ export const commands: Chat.ChatCommands = {
 				target = split.join(',');
 			}
 		}
-		if (!target.includes('mod=')) {
+		if (!getMod(target).count) {
 			const dex = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex;
 			if (dex) target += `, mod=${dex.currentMod}`;
 		}
