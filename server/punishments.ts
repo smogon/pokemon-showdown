@@ -23,7 +23,7 @@ const WHITELISTED_NAMES_FILE = 'config/name-whitelist.tsv';
 const RANGELOCK_DURATION = 60 * 60 * 1000; // 1 hour
 const LOCK_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 const GLOBALBAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
-const BATTLEBAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
+const BATTLEBAN_DURATION = 4 * 7 * 24 * 60 * 60 * 1000; // 4 weeks
 const GROUPCHATBAN_DURATION = 7 * 24 * 60 * 60 * 1000; // 1 week
 const MOBILE_PUNISHMENT_DURATIION = 6 * 60 * 60 * 1000; // 6 hours
 
@@ -1131,18 +1131,20 @@ export const Punishments = new class {
 		}
 		return success;
 	}
-	battleban(user: User, expireTime: number | null, id: ID | null, ...reason: string[]) {
+	battleban(user: User | ID, expireTime: number | null, id: ID | null, ...reason: string[]) {
 		if (!expireTime) expireTime = Date.now() + BATTLEBAN_DURATION;
 		const punishment = { type: 'BATTLEBAN', id, expireTime, reason: reason.join(' ') } as Punishment;
 
-		// Handle tournaments the user was in before being battle banned
-		for (const games of user.games.keys()) {
-			const game = Rooms.get(games)!.getGame(Tournaments.Tournament);
-			if (!game) continue; // this should never happen
-			if (game.isTournamentStarted) {
-				game.disqualifyUser(user.id, null, null);
-			} else if (!game.isTournamentStarted) {
-				game.removeUser(user.id);
+		// Handle tournaments the user was in before being battle bannedl, if they exist
+		if (typeof user === 'object') {
+			for (const games of user.games.keys()) {
+				const game = Rooms.get(games)!.getGame(Tournaments.Tournament);
+				if (!game) continue; // this should never happen
+				if (game.isTournamentStarted) {
+					game.disqualifyUser(user.id, null, null);
+				} else if (!game.isTournamentStarted) {
+					game.removeUser(user.id);
+				}
 			}
 		}
 
@@ -1156,22 +1158,25 @@ export const Punishments = new class {
 		}
 		return Punishments.unpunish(userid, 'BATTLEBAN');
 	}
-	isBattleBanned(user: User) {
+	isBattleBanned(user: User | ID) {
 		if (!user) throw new Error(`Trying to check if a non-existent user is battlebanned.`);
 
-		let punishment = Punishments.userids.getByType(user.id, 'BATTLEBAN');
+		const id = toID(user);
+		let punishment = Punishments.userids.getByType(id, 'BATTLEBAN');
 		if (punishment) return punishment;
 
-		if (user.autoconfirmed) {
-			punishment = Punishments.userids.getByType(user.autoconfirmed, 'BATTLEBAN');
-			if (punishment) return punishment;
-		}
+		if (typeof user === 'object') {
+			if (user.autoconfirmed) {
+				punishment = Punishments.userids.getByType(user.autoconfirmed, 'BATTLEBAN');
+				if (punishment) return punishment;
+			}
 
-		for (const ip of user.ips) {
-			punishment = Punishments.ips.getByType(ip, 'BATTLEBAN');
-			if (punishment) {
-				if (Punishments.isSharedIp(ip) && user.autoconfirmed) return;
-				return punishment;
+			for (const ip of user.ips) {
+				punishment = Punishments.ips.getByType(ip, 'BATTLEBAN');
+				if (punishment) {
+					if (Punishments.isSharedIp(ip) && user.autoconfirmed) return;
+					return punishment;
+				}
 			}
 		}
 	}

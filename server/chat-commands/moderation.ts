@@ -2190,10 +2190,19 @@ export const commands: Chat.ChatCommands = {
 	forcebattleban: 'battleban',
 	async battleban(target, room, user, connection, cmd) {
 		room = this.requireRoom();
+		const force = cmd.includes('force');
 		if (!target) return this.parse(`/help battleban`);
+		this.checkCan('rangeban');
 
 		const { targetUser, targetUsername, rest: reason } = this.splitUser(target);
-		if (!targetUser) throw new Chat.ErrorMessage(`User ${targetUsername} not found.`);
+		const targetID = toID(targetUsername);
+		if (!targetUser) {
+			if (!force) throw new Chat.ErrorMessage(`User ${targetUsername} not found. Use /forcebattleban to ban anyway.`);
+			if (user.lastCommand !== 'battleban') {
+				user.lastCommand = 'battleban';
+				throw new Chat.ErrorMessage(`User ${targetID} not found. Check spelling? If you're sure, use /forcebattleban ${targetID} again.`);
+			}
+		}
 		if (target.length > MAX_REASON_LENGTH) {
 			throw new Chat.ErrorMessage(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
@@ -2204,38 +2213,30 @@ export const commands: Chat.ChatCommands = {
 		if (!room.battle && !includesUrl && cmd !== 'forcebattleban') {
 			throw new Chat.ErrorMessage(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
-		if (!user.can('rangeban', targetUser)) {
-			throw new Chat.ErrorMessage([
-				`Battlebans have been deprecated. Alternatives:`,
-				`- timerstalling and bragging about it: lock`,
-				`- other timerstalling: they're not timerstalling, leave them alone`,
-				`- bad nicknames: lock, locks prevent nicknames from appearing; you should always have been locking for this`,
-				`- ladder cheating: gban, get a moderator if necessary`,
-				`- serious ladder cheating: permaban, get an administrator`,
-				`- other: get an administrator`,
-			]);
-		}
-		if (Punishments.isBattleBanned(targetUser)) {
-			throw new Chat.ErrorMessage(`User '${targetUser.name}' is already banned from battling.`);
-		}
-		this.privateGlobalModAction(`${targetUser.name} was banned from starting new battles by ${user.name} (${reason})`);
 
-		if (targetUser.trusted) {
+		if (Punishments.isBattleBanned(targetID)) {
+			throw new Chat.ErrorMessage(`User '${targetID}' is already banned from battling.`);
+		}
+		this.privateGlobalModAction(`${targetUser?.name || targetID} was banned from starting new battles by ${user.name} (${reason})`);
+
+		if (targetUser?.trusted) {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} was banned from battling by ${user.name}, and should probably be demoted.`);
 		}
 
 		this.globalModlog("BATTLEBAN", targetUser, reason);
-		Ladders.cancelSearches(targetUser);
-		await Punishments.battleban(targetUser, null, null, reason);
-		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days (${reason})`);
+		if (targetUser) {
+			Ladders.cancelSearches(targetUser);
+			targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days (${reason})`);
+		}
+		await Punishments.battleban(targetUser || targetID, null, null, reason);
 
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room.battle) this.parse('/savereplay forpunishment');
 		return true;
 	},
 	battlebanhelp: [
-		`/battleban [username], [reason] - [DEPRECATED]`,
-		`Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: ~`,
+		`/battleban [username], [reason] - ` +
+		`Prevents the user from starting new battles for one month and shows them the [reason]. Requires: ~`,
 	],
 
 	unbattleban(target, room, user) {
