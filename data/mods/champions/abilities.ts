@@ -5,6 +5,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.effectState.checkedAngerShell = !(effect.effectType === "Move" && !effect.multihit);
 		},
 	},
+	auraguard: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	berserk: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
