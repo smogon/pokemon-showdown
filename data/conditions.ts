@@ -382,9 +382,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart(target) {
 			this.effectState.targetSlot = target.getSlot();
 			this.effectState.endingTurn = (this.turn - 1) + 2;
-			if (this.effectState.endingTurn >= 254) {
+			if (this.gen >= 8 && this.effectState.endingTurn >= 256) {
 				this.hint(`In Gen 8+, Future attacks will never resolve when used on the 255th turn or later.`);
 			}
+		},
+		onRestart() {
+			if (this.gen >= 8 && this.effectState.endingTurn >= 256) {
+				this.hint(`A previous future attack is stuck on this slot and will never resolve.`);
+			}
+			return false;
 		},
 		onResidualOrder: 3,
 		onResidual(target: Pokemon) {

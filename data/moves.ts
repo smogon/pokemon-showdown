@@ -20922,9 +20922,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
 				this.effectState.startingTurn = this.getOverflowedTurnCount();
-				if (this.effectState.startingTurn === 255) {
+				if (this.gen >= 8 && this.effectState.startingTurn === 255) {
 					this.hint(`In Gen 8+, Wish will never resolve when used on the ${this.turn}th turn.`);
 				}
+			},
+			onRestart() {
+				if (this.gen >= 8 && this.effectState.startingTurn === 255) {
+					this.hint(`A previous Wish is stuck on this slot and will never resolve.`);
+				}
+				return false;
 			},
 			onResidualOrder: 4,
 			onResidual(target: Pokemon) {
