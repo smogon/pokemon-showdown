@@ -1439,8 +1439,11 @@ export const textTickets: { [k: string]: TextTicketInfo } = {
 	},
 	registerbot: {
 		title: "What is the username of the bot you wish to register?",
-		contextMessage: "What is a username we can contact you as the bot owner at?",
-		checker(input, context, pageId, user) {
+		contextMessage: (
+			"What is a Pokemon Showdown username we can contact you as the bot owner at? " +
+			"It is required, and cannot be the same as the bot's username."
+		),
+		async checker(input, context, pageId, user) {
 			input = toID(input);
 			context = toID(context);
 			if (!input || !context || input.length > 18 || context.length > 18) {
@@ -1451,6 +1454,16 @@ export const textTickets: { [k: string]: TextTicketInfo } = {
 			}
 			if (user.locked || user.semilocked || user.namelocked) {
 				return ['Punished users may not register bots.'];
+			}
+			const exists = (userid: string) => Net(`https://${Config.routes.root}/users/${userid}.json`).get().catch(() => false);
+			if (input === context) {
+				return ['Bot username and owner username must not be the same.'];
+			}
+			if (!(await exists(input))) {
+				return ['Bot username must first be registered (given a password) with /register.'];
+			}
+			if (!(await exists(context))) {
+				return ['Owner username must first be registered (given a password) with /register.'];
 			}
 			return true;
 		},
