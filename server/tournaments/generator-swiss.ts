@@ -40,7 +40,7 @@ export class Swiss {
 	getPendingBracketData(players: TournamentPlayer[]) {
 		return {
 			type: "swiss",
-			roundLimit: this.roundLimit,
+			roundLimit: this.roundLimit === -1 ? null : this.roundLimit,
 			rounds: [],
 			players: players.map(player => ({
 				name: player.name,
