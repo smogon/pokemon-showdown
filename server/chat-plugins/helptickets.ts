@@ -2335,10 +2335,6 @@ export const commands: Chat.ChatCommands = {
 				this.popupReply(`You already have a pending ticket, please wait.`);
 				return this.parse(`/join help-${ticket.userid}`);
 			}
-			if (Monitor.countTickets(user.latestIp)) {
-				const maxTickets = Punishments.isSharedIp(user.latestIp) ? `50` : `5`;
-				return this.popupReply(this.TL`Due to high load, you are limited to creating ${maxTickets} tickets every hour.`);
-			}
 			let [
 				ticketType, reportTargetType, reportTarget, text, contextString,
 			] = Utils.splitFirst(target, '|', 4).map(s => s.trim());
@@ -2393,6 +2389,10 @@ export const commands: Chat.ChatCommands = {
 				if (Array.isArray(validation) && validation.length) {
 					this.parse(`/join view-${pageId}`);
 					return this.popupReply(`|html|` + validation.join('<br />'));
+				}
+				if (Monitor.countTickets(user.latestIp)) {
+					const maxTickets = Punishments.isSharedIp(user.latestIp) ? `50` : `5`;
+					return this.popupReply(this.TL`Due to high load, you are limited to creating ${maxTickets} tickets every hour.`);
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
