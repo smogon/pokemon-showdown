@@ -843,6 +843,7 @@ export class User extends Chat.MessageContext {
 			} else if (userType === '10') {
 				this.autoconfirmed = userid;
 				this.isUserBot = true;
+				this.settings.allowLadderBots = true;
 			}
 		}
 		if (Users.isTrusted(userid)) {
