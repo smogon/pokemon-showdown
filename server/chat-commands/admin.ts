@@ -1303,7 +1303,12 @@ export const commands: Chat.ChatCommands = {
 			this.popupReply(error?.message || res?.actionerror);
 			return null;
 		}
-		if (res.success) return this.popupReply(`User ${bot} successfully registered as ${owner}'s bot.`);
+		if (res.success) {
+			// sometimes they don't log out after getting registered, so this needs to be set
+			const botUser = Users.get(bot);
+			if (botUser) botUser.isUserBot = true;
+			return this.popupReply(`User ${bot} successfully registered as ${owner}'s bot.`);
+		}
 		return this.popupReply(`Registration for ${bot} and ${owner} failed without an error message. Try again later.`);
 	},
 	setbothelp: [`/setbot [owner], [bot] - Registers the [bot] account as a bot belonging to [owner]. Requires: ~`],
