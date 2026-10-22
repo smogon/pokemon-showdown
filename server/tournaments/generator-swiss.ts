@@ -57,7 +57,10 @@ export class Swiss {
 			roundLimit: this.roundLimit,
 			rounds: this.rounds.map(round => ({
 				matches: round.matches.map(match => ({
-					...match,
+					player1: match.player1,
+					player2: match.player2,
+					state: match.state,
+					result: match.result,
 					score: match.score?.slice(),
 				})),
 				bye: round.bye,
