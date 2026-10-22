@@ -36,7 +36,7 @@ export const TypeNames: { [id: string]: TranslationString } = {
 	Steel: "はがね",
 	Stellar: "ステラ",
 	Water: "みず",
-	"???": null, // NEEDS TRANSLATION
+	"???": "？？？",
 };
 
 export const NatureNames: { [id: string]: TranslationString } = {
@@ -86,51 +86,51 @@ export const StatusNames: { [id: string]: TranslationString } = {
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "隣接する味方や相手を狙える", // NEEDS QC
+	normalDoubles: "味方やどちらの相手も狙える", // NEEDS QC
+	normalSingles: "相手に当たる", // NEEDS QC
+	normalFFA: "どの相手も狙える", // NEEDS QC
+	self: "自分が対象", // NEEDS QC
+	adjacentAlly: "隣接する味方を狙える", // NEEDS QC
+	adjacentAllyDoubles: "味方に当たる", // NEEDS QC
+	adjacentAllySingles: "シングルバトルでは必ず失敗する", // NEEDS QC
+	adjacentAllyOrSelf: "自分か隣接する味方を狙える", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "自分か味方を狙える", // NEEDS QC
+	adjacentFoe: "隣接する相手を狙える", // NEEDS QC
+	allAdjacentFoes: "隣接する相手全体に当たる", // NEEDS QC
+	allAdjacentFoesDoubles: "相手2体に当たる", // NEEDS QC
+	foeSide: "相手の場が対象", // NEEDS QC
+	allySide: "自分の場が対象", // NEEDS QC
+	allyTeam: "自分の手持ち全体が対象", // NEEDS QC
+	allAdjacent: "隣接する味方と相手全体に当たる", // NEEDS QC
+	allAdjacentDoubles: "味方と相手2体に当たる", // NEEDS QC
+	allAdjacentFFA: "相手全員に当たる", // NEEDS QC
+	any: "トリプルバトルでは離れたポケモンも狙える", // NEEDS QC
+	all: "場の全員に当たる", // NEEDS QC
+	scripted: "対象は自動で決まる", // NEEDS QC
+	randomNormal: "隣接する相手にランダムで当たる", // NEEDS QC
+	randomNormalDoubles: "相手にランダムで当たる", // NEEDS QC
+	allies: "自分と味方全体が対象", // NEEDS QC
 };
 
 // veekun (presumably from Pokédex 3D Pro) uses kana (かいじゅう, タマゴみはっけん, ...)
 // these are Kanji forms, presumably from guidebooks
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	Monster: null, // NEEDS TRANSLATION
-	"Water 1": null, // NEEDS TRANSLATION
-	Bug: null, // NEEDS TRANSLATION
-	Flying: null, // NEEDS TRANSLATION
-	Field: null, // NEEDS TRANSLATION
-	Fairy: null, // NEEDS TRANSLATION
-	Grass: null, // NEEDS TRANSLATION
-	"Human-Like": null, // NEEDS TRANSLATION
-	"Water 3": null, // NEEDS TRANSLATION
-	Mineral: null, // NEEDS TRANSLATION
-	Amorphous: null, // NEEDS TRANSLATION
-	"Water 2": null, // NEEDS TRANSLATION
-	Ditto: null, // NEEDS TRANSLATION
-	Dragon: null, // NEEDS TRANSLATION
-	Undiscovered: null, // NEEDS TRANSLATION
+	Monster: "怪獣", // NEEDS QC
+	"Water 1": "水中1", // NEEDS QC
+	Bug: "虫", // NEEDS QC
+	Flying: "飛行", // NEEDS QC
+	Field: "陸上", // NEEDS QC
+	Fairy: "妖精", // NEEDS QC
+	Grass: "植物", // NEEDS QC
+	"Human-Like": "人型", // NEEDS QC
+	"Water 3": "水中3", // NEEDS QC
+	Mineral: "鉱物", // NEEDS QC
+	Amorphous: "不定形", // NEEDS QC
+	"Water 2": "水中2", // NEEDS QC
+	Ditto: "メタモン", // NEEDS QC
+	Dragon: "ドラゴン", // NEEDS QC
+	Undiscovered: "タマゴ未発見", // NEEDS QC
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {

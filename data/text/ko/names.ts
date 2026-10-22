@@ -36,7 +36,7 @@ export const TypeNames: { [id: string]: TranslationString } = {
 	Steel: "강철",
 	Stellar: "스텔라",
 	Water: "물",
-	"???": null, // NEEDS TRANSLATION
+	"???": "???",
 };
 
 export const NatureNames: { [id: string]: TranslationString } = {
@@ -74,62 +74,62 @@ export const GenderNames: { [id: string]: TranslationString } = {
 };
 
 export const StatusNames: { [id: string]: TranslationString } = {
-	brn: null, // NEEDS TRANSLATION
-	par: null, // NEEDS TRANSLATION
-	slp: null, // NEEDS TRANSLATION
-	frz: null, // NEEDS TRANSLATION
-	psn: null, // NEEDS TRANSLATION
-	tox: null, // NEEDS TRANSLATION
-	fnt: null, // NEEDS TRANSLATION
-	confusion: null, // NEEDS TRANSLATION
+	brn: "화상", // NEEDS QC
+	par: "마비", // NEEDS QC
+	slp: "잠듦", // NEEDS QC
+	frz: "얼음", // NEEDS QC
+	psn: "독", // NEEDS QC
+	tox: "맹독", // NEEDS QC
+	fnt: "기절", // NEEDS QC
+	confusion: "혼란", // NEEDS QC
 };
 
 export const TargetNames: { [id: string]: TranslationString } = {
-	normal: null, // NEEDS TRANSLATION
-	normalDoubles: null, // NEEDS TRANSLATION
-	normalSingles: null, // NEEDS TRANSLATION
-	normalFFA: null, // NEEDS TRANSLATION
-	self: null, // NEEDS TRANSLATION
-	adjacentAlly: null, // NEEDS TRANSLATION
-	adjacentAllyDoubles: null, // NEEDS TRANSLATION
-	adjacentAllySingles: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelf: null, // NEEDS TRANSLATION
-	adjacentAllyOrSelfDoubles: null, // NEEDS TRANSLATION
-	adjacentFoe: null, // NEEDS TRANSLATION
-	allAdjacentFoes: null, // NEEDS TRANSLATION
-	allAdjacentFoesDoubles: null, // NEEDS TRANSLATION
-	foeSide: null, // NEEDS TRANSLATION
-	allySide: null, // NEEDS TRANSLATION
-	allyTeam: null, // NEEDS TRANSLATION
-	allAdjacent: null, // NEEDS TRANSLATION
-	allAdjacentDoubles: null, // NEEDS TRANSLATION
-	allAdjacentFFA: null, // NEEDS TRANSLATION
-	any: null, // NEEDS TRANSLATION
-	all: null, // NEEDS TRANSLATION
-	scripted: null, // NEEDS TRANSLATION
-	randomNormal: null, // NEEDS TRANSLATION
-	randomNormalDoubles: null, // NEEDS TRANSLATION
-	allies: null, // NEEDS TRANSLATION
+	normal: "인접한 아군이나 상대를 노릴 수 있다", // NEEDS QC
+	normalDoubles: "아군이나 어느 상대든 노릴 수 있다", // NEEDS QC
+	normalSingles: "상대에게 명중한다", // NEEDS QC
+	normalFFA: "어느 상대든 노릴 수 있다", // NEEDS QC
+	self: "자신이 대상", // NEEDS QC
+	adjacentAlly: "인접한 아군을 노릴 수 있다", // NEEDS QC
+	adjacentAllyDoubles: "아군에게 명중한다", // NEEDS QC
+	adjacentAllySingles: "싱글배틀에서는 반드시 실패한다", // NEEDS QC
+	adjacentAllyOrSelf: "자신이나 인접한 아군을 노릴 수 있다", // NEEDS QC
+	adjacentAllyOrSelfDoubles: "자신이나 아군을 노릴 수 있다", // NEEDS QC
+	adjacentFoe: "인접한 상대를 노릴 수 있다", // NEEDS QC
+	allAdjacentFoes: "인접한 상대 전체에게 명중한다", // NEEDS QC
+	allAdjacentFoesDoubles: "상대 2마리에게 명중한다", // NEEDS QC
+	foeSide: "상대 필드가 대상", // NEEDS QC
+	allySide: "자신의 필드가 대상", // NEEDS QC
+	allyTeam: "자신의 파티 전원이 대상", // NEEDS QC
+	allAdjacent: "인접한 아군과 상대에게 명중한다", // NEEDS QC
+	allAdjacentDoubles: "아군과 상대 2마리에게 명중한다", // NEEDS QC
+	allAdjacentFFA: "상대 전원에게 명중한다", // NEEDS QC
+	any: "트리플배틀에서는 떨어져 있는 포켓몬도 노릴 수 있다", // NEEDS QC
+	all: "전원에게 명중한다", // NEEDS QC
+	scripted: "대상이 자동으로 정해진다", // NEEDS QC
+	randomNormal: "인접한 상대에게 랜덤으로 명중한다", // NEEDS QC
+	randomNormalDoubles: "상대에게 랜덤으로 명중한다", // NEEDS QC
+	allies: "자신과 아군 전체가 대상", // NEEDS QC
 };
 
 // from veekun/Bulbapedia who presumably got it from Pokédex 3D Pro
 // note spaced 수중 1 and 알미발견.
 export const EggGroupNames: { [id: string]: TranslationString } = {
-	Monster: null, // NEEDS TRANSLATION
-	"Water 1": null, // NEEDS TRANSLATION
-	Bug: null, // NEEDS TRANSLATION
-	Flying: null, // NEEDS TRANSLATION
-	Field: null, // NEEDS TRANSLATION
-	Fairy: null, // NEEDS TRANSLATION
-	Grass: null, // NEEDS TRANSLATION
-	"Human-Like": null, // NEEDS TRANSLATION
-	"Water 3": null, // NEEDS TRANSLATION
-	Mineral: null, // NEEDS TRANSLATION
-	Amorphous: null, // NEEDS TRANSLATION
-	"Water 2": null, // NEEDS TRANSLATION
-	Ditto: null, // NEEDS TRANSLATION
-	Dragon: null, // NEEDS TRANSLATION
-	Undiscovered: null, // NEEDS TRANSLATION
+	Monster: "괴수", // NEEDS QC
+	"Water 1": "수중 1", // NEEDS QC
+	Bug: "벌레", // NEEDS QC
+	Flying: "비행", // NEEDS QC
+	Field: "육상", // NEEDS QC
+	Fairy: "요정", // NEEDS QC
+	Grass: "식물", // NEEDS QC
+	"Human-Like": "인간형", // NEEDS QC
+	"Water 3": "수중 3", // NEEDS QC
+	Mineral: "광물", // NEEDS QC
+	Amorphous: "부정형", // NEEDS QC
+	"Water 2": "수중 2", // NEEDS QC
+	Ditto: "메타몽", // NEEDS QC
+	Dragon: "드래곤", // NEEDS QC
+	Undiscovered: "알미발견", // NEEDS QC
 };
 
 export const ColorNames: { [id: string]: TranslationString } = {
