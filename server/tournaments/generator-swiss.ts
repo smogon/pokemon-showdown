@@ -32,7 +32,7 @@ export class Swiss {
 		this.name = "Swiss";
 		this.isDrawingSupported = true;
 		this.isBracketFrozen = false;
-		this.players = []
+		this.players = [];
 		this.rounds = [];
 		this.roundLimit = -1;
 	}
@@ -47,7 +47,7 @@ export class Swiss {
 				score: player.score,
 				isDisqualified: player.isDisqualified,
 			})),
-		}
+		};
 	}
 
 	getBracketData() {
@@ -58,7 +58,7 @@ export class Swiss {
 			rounds: this.rounds.map(round => ({
 				matches: round.matches.map(match => ({
 					...match,
-					score: match.score?.slice()
+					score: match.score?.slice(),
 				})),
 				bye: round.bye,
 			})),
@@ -67,14 +67,14 @@ export class Swiss {
 				score: player.score,
 				isDisqualified: player.isDisqualified,
 			})),
-		}
+		};
 	}
 
 	pairPlayers(players: TournamentPlayer[], allowRematches: true): Match[];
 	pairPlayers(players: TournamentPlayer[], allowRematches?: false): Match[] | null;
 	pairPlayers(
 		players: TournamentPlayer[],
-		allowRematches: boolean = false
+		allowRematches = false
 	): Match[] | null {
 		// The caller must assign any bye before requesting pairings.
 		if (players.length % 2) {
@@ -106,7 +106,7 @@ export class Swiss {
 				// Sort by the difference in their scores
 				player => [
 					opponents.get(player1)!.has(player) ? 1 : 0,
-					Math.abs(player1.score - player.score)
+					Math.abs(player1.score - player.score),
 				]
 			);
 			for (const player2 of candidates) {
@@ -139,7 +139,7 @@ export class Swiss {
 
 		if (activePlayers.length % 2) {
 			const playersWhoHadABye = new Set(
-				this.rounds.flatMap(round => round.bye ? [round.bye] : [])
+				this.rounds.flatMap(r => r.bye ? [r.bye] : [])
 			);
 
 			// Sort players by those who have had a bye,
@@ -148,7 +148,7 @@ export class Swiss {
 				Utils.shuffle([...activePlayers]),
 				player => [
 					playersWhoHadABye.has(player) ? 1 : 0,
-					player.score
+					player.score,
 				]
 			);
 
@@ -175,7 +175,7 @@ export class Swiss {
 			round.bye = byePlayer;
 			return round;
 		} else {
-			let matches = this.pairPlayers(activePlayers) ??
+			const matches = this.pairPlayers(activePlayers) ??
 				this.pairPlayers(activePlayers, true);
 			round.matches = matches;
 			return round;
@@ -246,7 +246,7 @@ export class Swiss {
 
 		const round = this.rounds[this.rounds.length - 1];
 
-		let targetMatch = round.getMatch(p1);
+		const targetMatch = round.getMatch(p1);
 
 		if (targetMatch === undefined) return 'InvalidMatch';
 
@@ -261,7 +261,7 @@ export class Swiss {
 
 		if (
 			round.matches.every(match => match.state === 'finished') &&
-				!this.isTournamentEnded()
+			!this.isTournamentEnded()
 		) {
 			const nextRound = this.createNextRound();
 			this.rounds.push(nextRound);
