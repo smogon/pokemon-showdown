@@ -2541,10 +2541,10 @@ export class Battle {
 		for (const side of this.sides) {
 			if (!this.canSwitch(side)) continue;
 			for (const pokemon of side.active) {
-				if (pokemon.fainted) {
-					pokemon.status = 'fnt' as ID;
-					pokemon.switchFlag = true;
-				}
+				if (!pokemon) continue;
+				if (!pokemon.fainted) continue;
+				pokemon.status = 'fnt' as ID;
+				pokemon.switchFlag = true;
 			}
 		}
 	}
