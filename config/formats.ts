@@ -729,7 +729,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		restricted: [
 			'Arceus', 'Calyrex-Ice', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black',
 			'Kyurem-White', 'Lugia', 'Lunala', 'Iron Bundle', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
-			'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Solgaleo', 'Urshifu-Single-Strike', 'Victini', 'Xerneas', 'Yveltal', 'Zacian', 'Zekrom',
+			'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shedinja', 'Slaking', 'Sneasler', 'Solgaleo', 'Urshifu-Single-Strike', 'Victini', 'Xerneas', 'Yveltal',
+			'Zacian', 'Zekrom',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
@@ -739,7 +740,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					!item.isPrimalOrb && !item.name.startsWith('Rusted') &&
 					!item.name.endsWith('Plate') && !item.name.endsWith('Memory') && !item.name.startsWith('Mask') &&
 					!item.name.endsWith('Drive') && !item.name.endsWith('Core') && !item.name.endsWith('Crystal') &&
-					!item.name.endsWith('Globe') && item.id !== 'ultranecroziumz') continue;
+					!item.name.endsWith('Globe')) continue;
 				const species = this.dex.species.get(set.species);
 				if (species.isNonstandard && !this.ruleTable.has(`+tag:${this.toID(species.isNonstandard)}`)) {
 					return [`${species.baseSpecies} does not exist in gen 9.`];
@@ -751,8 +752,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						(item.itemUser?.includes(species.baseSpecies) || item.name.includes(species.baseSpecies));
 					const isForcedForme = !!item.forcedForme &&
 						(species.baseSpecies === this.dex.species.get(item.forcedForme).baseSpecies);
-					const isUNecro = item.id === 'Ultranecrozium Z' && species.baseSpecies === 'Necrozma';
-					if (!nativeMegaPrimal && !nativeRusted && !isForcedForme && !isUNecro) {
+					if (!nativeMegaPrimal && !nativeRusted && !isForcedForme) {
 						return [`${species.name} is not allowed to hold ${item.name}.`];
 					}
 				}
