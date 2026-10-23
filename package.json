@@ -65,7 +65,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^5.2.2",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/better-sqlite3": "7.6.3",
     "@types/cloud-env": "^0.2.2",
     "@types/node": "^22.x",
