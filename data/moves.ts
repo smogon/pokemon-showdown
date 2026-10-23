@@ -9279,7 +9279,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			) {
 				source.addVolatile("rolloutstorage");
 				source.volatiles["rolloutstorage"].contactHitCount =
-				iceballData.contactHitCount;
+					iceballData.contactHitCount;
 			}
 		},
 
