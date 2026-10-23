@@ -1225,7 +1225,7 @@ function getGenerator(generator: string | undefined) {
 	case 'elim': generator = 'elimination'; break;
 	case 'rr': generator = 'roundrobin'; break;
 	}
-	return TournamentGenerators[generator as 'elimination' | 'roundrobin'];
+	return TournamentGenerators[generator as 'elimination' | 'roundrobin' | 'swiss'];
 }
 
 function createTournamentGenerator(
