@@ -3,7 +3,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSourceDamagingHit(damage, target, source, move) {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
-			if (this.checkMoveMakesContact(move, target, source)) {
+			if (this.checkMoveMakesContact(move, source, target)) {
 				if (this.randomChance(2, 10)) {
 					target.trySetStatus('par', source);
 				}
