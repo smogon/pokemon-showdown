@@ -33,7 +33,7 @@ describe('Burn', () => {
 	});
 
 	it(`should halve damage after fainting`, () => {
-		battle = common.gen(4).createBattle([[
+		battle = common.gen(4).createBattle({ seed: [0, 0, 0, 0] }, [[
 			{ species: 'Electrode', ability: 'noguard', moves: ['explosion'] },
 		], [
 			{ species: 'Wailord', ability: 'prankster', moves: ['willowisp'] },
@@ -354,6 +354,7 @@ describe('Freeze', () => {
 
 	it('should not linger after fainting from switch-out', () => {
 		battle = common.createBattle({
+			seed: [0, 0, 0, 1],
 			formatid: 'gen4customgame@@@freezeclausemod,guaranteedsecondarymod',
 		}, [[
 			{ species: 'weavile', moves: ['icebeam', 'pursuit'] },
@@ -362,6 +363,7 @@ describe('Freeze', () => {
 			{ species: 'seaking', moves: ['splash'] },
 		]]);
 		battle.makeChoices('move icebeam', 'auto');
+		assert.equal(battle.p2.active[0].status, 'frz');
 		battle.makeChoices('move pursuit', 'switch seaking');
 		// battle.makeChoices('', 'switch seaking'); // in modern gens
 		battle.makeChoices('move icebeam', 'auto');
