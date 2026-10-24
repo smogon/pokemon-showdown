@@ -160,11 +160,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			const abortMove = () => {
-				this.battle.clearActiveMove(true);
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
-			};
-
 			if (move.id === 'cannotmove') {
 				if (pokemon.status === 'slp') {
 					this.battle.hint(
@@ -182,7 +177,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						"the move execution will never resolve."
 					);
 				}
-				abortMove();
+				this.battle.clearActiveMove(true);
 				return;
 			}
 
@@ -191,11 +186,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				abortMove();
+				this.battle.clearActiveMove(true);
 				return;
 			}
 			if (move.beforeMoveCallback?.call(this.battle, pokemon, target, move)) {
-				abortMove();
+				this.battle.clearActiveMove(true);
 				return;
 			}
 
@@ -285,9 +280,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.id !== 'mirrormove' ||
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					this.battle.runEvent('AfterMove', pokemon, target, move);
-					if (!target || target.hp > 0) {
-						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
-					}
 				}
 			}
 			return moveResult;
