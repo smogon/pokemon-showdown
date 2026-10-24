@@ -76,7 +76,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					// Ogerpon/Terapagos text goes here
 					this.formeRegression = true;
 				} else if (source.effectType === 'Item') {
-					this.canTerastallize = null; // National Dex behavior
 					if (source.zMove) {
 						this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
@@ -137,7 +136,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.ability = this.baseAbility;
 			this.hpType = this.baseHpType;
 			this.hpPower = this.baseHpPower;
-			if (this.canTerastallize === false) this.canTerastallize = this.teraType;
 			for (const i in this.volatiles) {
 				if (this.volatiles[i].linkedStatus) {
 					this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
@@ -177,9 +175,11 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canTerastallize(pokemon) {
-			return null;
+			return false;
 		},
 		canMegaEvo(pokemon: Pokemon) {
+			if (pokemon.side.megaEvoUsed) return false;
+
 			const species = pokemon.baseSpecies;
 			const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 			const item = pokemon.getItem();
@@ -190,7 +190,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.baseMoves.includes(this.battle.toID(altForme.requiredMove)) && !item.zMove) {
 				return altForme.name;
 			}
-			return item.megaStone?.[species.name] || null;
+			return item.megaStone?.[species.name] || false;
 		},
 		// Announce 4x and 0.25x effectiveness
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
