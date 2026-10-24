@@ -1138,8 +1138,12 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (this.gen > 5 && !ruleTable.has('obtainablemisc')) {
-				set.gender ||= 'N';
+			if (!set.gender) {
+				if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
+					set.gender = species.gender || (Math.random() < 0.5 ? 'M' : 'F');
+				} else {
+					set.gender = 'N';
+				}
 			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;

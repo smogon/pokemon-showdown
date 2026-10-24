@@ -1625,7 +1625,7 @@ export class RandomTeams {
 			name: species.baseSpecies,
 			species: forme,
 			speciesId: species.id,
-			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
+			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || this.sample(['M', 'F'])),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,
@@ -2114,7 +2114,7 @@ export class RandomTeams {
 			const set: RandomTeamsTypes.RandomSet = {
 				name: species.baseSpecies,
 				species: species.name,
-				gender: species.gender || (this.random(2) ? 'F' : 'M'),
+				gender: species.gender || this.sample(['M', 'F']),
 				item,
 				ability,
 				moves,
@@ -2451,7 +2451,7 @@ export class RandomTeams {
 			const set: PokemonSet = {
 				name: species.baseSpecies,
 				species: species.name,
-				gender: species.gender || (this.random(2) ? 'F' : 'M'),
+				gender: species.gender || this.sample(['M', 'F']),
 				item,
 				ability,
 				moves: m,
