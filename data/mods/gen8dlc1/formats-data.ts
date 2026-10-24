@@ -554,6 +554,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Unreleased",
 		natDexTier: "Uber",
 	},
+	xerneasactive: {
+		isNonstandard: "Unobtainable",
+	},
 	yveltal: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
