@@ -791,7 +791,7 @@ export class User extends Chat.MessageContext {
 		}
 
 		this.handleRename(name, userid, newlyRegistered, userType);
-		void Punishments.checkIp(this, connection); // namelock enforcement and the like after merge
+		void Punishments.checkIp(connection.user || this, connection); // namelock enforcement and the like after merge
 	}
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
