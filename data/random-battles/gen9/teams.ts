@@ -3287,9 +3287,9 @@ export class RandomTeams {
 			const physMoveCount = set.moves.map(x => this.dex.moves.get(x).category).filter(x => x === 'Physical').length;
 			const specMoveCount = set.moves.map(x => this.dex.moves.get(x).category).filter(x => x === 'Special').length;
 			const atkBoostingMoves = set.moves.map(x => this.dex.moves.get(x))
-				.filter(x => (x.target === 'self' && x.boosts?.atk) || (x.id === 'curse' && !species.types.includes('Ghost'))).length;
+				.filter(x => (x.defender === 'self' && x.boosts?.atk) || (x.id === 'curse' && !species.types.includes('Ghost'))).length;
 			const spaBoostingMoves = set.moves.map(x => this.dex.moves.get(x))
-				.filter(x => (x.target === 'self' && x.boosts?.spa) || x.id === 'takeheart').length;
+				.filter(x => (x.defender === 'self' && x.boosts?.spa) || x.id === 'takeheart').length;
 			if (teamData.has['physical'] && (atkEVs || physMoveCount >= 2 || atkBoostingMoves)) continue;
 			if (teamData.has['special'] && (spaEVs || specMoveCount >= 2 || spaBoostingMoves)) continue;
 			if (!teamData.has['physical']) teamData.has['physical'] = 0;

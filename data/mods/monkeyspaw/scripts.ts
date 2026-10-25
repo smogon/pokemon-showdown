@@ -21,14 +21,14 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen === 1) {
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.volatiles['partialtrappinglock']) {
-					const target = pokemon.volatiles['partialtrappinglock'].locked;
-					if (target.hp <= 0 || !target.volatiles['partiallytrapped']) {
+					const defender = pokemon.volatiles['partialtrappinglock'].locked;
+					if (defender.hp <= 0 || !defender.volatiles['partiallytrapped']) {
 						delete pokemon.volatiles['partialtrappinglock'];
 					}
 				}
 				if (pokemon.volatiles['partiallytrapped']) {
-					const source = pokemon.volatiles['partiallytrapped'].source;
-					if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
+					const attacker = pokemon.volatiles['partiallytrapped'].attacker;
+					if (attacker.hp <= 0 || !attacker.volatiles['partialtrappinglock']) {
 						delete pokemon.volatiles['partiallytrapped'];
 					}
 				}
@@ -75,7 +75,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				for (let i = pokemon.attackedBy.length - 1; i >= 0; i--) {
 					const attack = pokemon.attackedBy[i];
-					if (attack.source.isActive) {
+					if (attack.attacker.isActive) {
 						attack.thisTurn = false;
 					} else {
 						pokemon.attackedBy.splice(pokemon.attackedBy.indexOf(attack), 1);
@@ -104,12 +104,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				// canceling switches would leak information
 				// if a foe might have a trapping ability
 				if (this.gen > 2) {
-					for (const source of pokemon.foes()) {
-						const species = (source.illusion || source).species;
+					for (const attacker of pokemon.foes()) {
+						const species = (attacker.illusion || attacker).species;
 						if (!species.abilities) continue;
 						for (const abilitySlot in species.abilities) {
 							const abilityName = species.abilities[abilitySlot as keyof Species['abilities']];
-							if (abilityName === source.ability) {
+							if (abilityName === attacker.ability) {
 								// pokemon event was already run above so we don't need
 								// to run it again.
 								continue;
@@ -125,7 +125,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							const ability = this.dex.abilities.get(abilityName);
 							if (ruleTable.has('-ability:' + ability.id)) continue;
 							if (pokemon.knownType && !this.dex.getImmunity('trapped', pokemon)) continue;
-							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);
+							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, attacker);
 						}
 					}
 				}
@@ -249,10 +249,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
-			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
-			if (!target) return false;
+			const defender = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			if (!defender) return false;
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
-			action.move.beforeTurnCallback.call(this, action.pokemon, target);
+			action.move.beforeTurnCallback.call(this, action.pokemon, defender);
 			break;
 		case 'priorityChargeMove':
 			if (!action.pokemon.isActive) return false;
@@ -281,25 +281,25 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
+			this.actions.switchIn(action.defender, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
-			if (action.target.position < action.pokemon.side.active.length) {
+			if (action.defender.position < action.pokemon.side.active.length) {
 				this.queue.addChoice({
 					choice: 'instaswitch',
-					pokemon: action.target,
-					target: action.target,
+					pokemon: action.defender,
+					defender: action.defender,
 				});
 			}
-			action.target.fainted = false;
-			action.target.faintQueued = false;
-			action.target.subFainted = false;
-			action.target.status = '';
-			action.target.hp = 1; // Needed so hp functions works
-			action.target.sethp(action.target.maxhp / 2);
-			if (!action.sourceEffect) action.target.m.revivedByMonkeysPaw = true;
-			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.defender.fainted = false;
+			action.defender.faintQueued = false;
+			action.defender.subFainted = false;
+			action.defender.status = '';
+			action.defender.hp = 1; // Needed so hp functions works
+			action.defender.sethp(action.defender.maxhp / 2);
+			if (!action.sourceEffect) action.defender.m.revivedByMonkeysPaw = true;
+			this.add('-heal', action.defender, action.defender.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		case 'runSwitch':
@@ -564,7 +564,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (foeActive) {
 				const move = this.dex.getActiveMove(this.battle.sample(foeActive.moveSlots).id);
 				this.useMove(move, foeActive,
-					{ target: pokemon, zMove: move.category === 'Status' ? move.name : this.Z_MOVES[move.type] });
+					{ defender: pokemon, zMove: move.category === 'Status' ? move.name : this.Z_MOVES[move.type] });
 			}
 
 			this.battle.runEvent('AfterTerastallization', pokemon);

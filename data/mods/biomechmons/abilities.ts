@@ -1,16 +1,16 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	magician: {
 		inherit: true,
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
+		onAfterMoveSecondarySelf(attacker, defender, move) {
+			if (!move || attacker.switchFlag === true || !move.hitTargets || attacker.item || attacker.volatiles['gem'] ||
 				move.id === 'fling' || move.category === 'Status') return;
 			const hitTargets = move.hitTargets;
 			this.speedSort(hitTargets);
 			for (const pokemon of hitTargets) {
-				if (pokemon !== source) {
-					const yourItem = pokemon.takeItem(source);
+				if (pokemon !== attacker) {
+					const yourItem = pokemon.takeItem(attacker);
 					if (!yourItem) continue;
-					if (!source.setItem(yourItem)) {
+					if (!attacker.setItem(yourItem)) {
 						if (!this.dex.items.get(yourItem.id).exists) {
 							pokemon.setItem(yourItem.id);
 							continue;
@@ -18,7 +18,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 						continue;
 					}
-					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
+					this.add('-item', attacker, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
 					return;
 				}
 			}
@@ -30,45 +30,45 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			for (const target of this.getAllActive()) {
-				if (target.hasItem('Ability Shield')) {
-					this.add('-block', target, 'item: Ability Shield');
+			for (const defender of this.getAllActive()) {
+				if (defender.hasItem('Ability Shield')) {
+					this.add('-block', defender, 'item: Ability Shield');
 					continue;
 				}
 				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (target.volatiles['commanding']) {
+				if (defender.volatiles['commanding']) {
 					continue;
 				}
-				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+				if (defender.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), defender.abilityState, defender, pokemon, 'neutralizinggas');
 				}
-				if (target.volatiles['slowstart']) {
-					delete target.volatiles['slowstart'];
-					this.add('-end', target, 'Slow Start', '[silent]');
+				if (defender.volatiles['slowstart']) {
+					delete defender.volatiles['slowstart'];
+					this.add('-end', defender, 'Slow Start', '[silent]');
 				}
-				if (strongWeathers.includes(target.getAbility().id)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
+				if (strongWeathers.includes(defender.getAbility().id)) {
+					this.singleEvent('End', this.dex.abilities.get(defender.getAbility().id), defender.abilityState, defender, pokemon, 'neutralizinggas');
 				}
-				if (!this.dex.abilities.get(target.ability).exists) {
-					const isItem = (target.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+				if (!this.dex.abilities.get(defender.ability).exists) {
+					const isItem = (defender.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 					if (isItem >= 0) {
-						target.removeVolatile('item:' + this.toID(target.m.scrambled.items[isItem].thing));
-					} else if ((target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
-						const isMove = (target.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
-						const indexOfMove = target.moveSlots.findIndex(m => this.toID(target.m.scrambled.moves[isMove].thing) === m.id);
-						if (indexOfMove >= 0) target.moveSlots.splice(indexOfMove, 1);
+						defender.removeVolatile('item:' + this.toID(defender.m.scrambled.items[isItem].thing));
+					} else if ((defender.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability') >= 0) {
+						const isMove = (defender.m.scrambled.moves as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
+						const indexOfMove = defender.moveSlots.findIndex(m => this.toID(defender.m.scrambled.moves[isMove].thing) === m.id);
+						if (indexOfMove >= 0) defender.moveSlots.splice(indexOfMove, 1);
 					}
 				}
 			}
 		},
-		onEnd(source) {
-			if (source.transformed) return;
+		onEnd(attacker) {
+			if (attacker.transformed) return;
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
+				if (pokemon !== attacker && pokemon.hasAbility('Neutralizing Gas')) {
 					return;
 				}
 			}
-			this.add('-end', source, 'ability: Neutralizing Gas');
+			this.add('-end', attacker, 'ability: Neutralizing Gas');
 
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
 			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
@@ -76,12 +76,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// (If you're tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-			if (source.abilityState.ending) return;
-			source.abilityState.ending = true;
+			if (attacker.abilityState.ending) return;
+			attacker.abilityState.ending = true;
 			const sortedActive = this.getAllActive();
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
-				if (pokemon !== source) {
+				if (pokemon !== attacker) {
 					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
 
@@ -106,25 +106,25 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	pickpocket: {
 		inherit: true,
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move?.flags['contact']) {
-				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
+		onAfterMoveSecondary(defender, attacker, move) {
+			if (attacker && attacker !== defender && move?.flags['contact']) {
+				if (defender.item || defender.switchFlag || defender.forceSwitchFlag || attacker.switchFlag === true) {
 					return;
 				}
-				const yourItem = source.takeItem(target);
+				const yourItem = attacker.takeItem(defender);
 				if (!yourItem) {
 					return;
 				}
-				if (!target.setItem(yourItem)) {
+				if (!defender.setItem(yourItem)) {
 					if (!this.dex.items.get(yourItem.id).exists) {
-						target.setItem(yourItem.id);
+						defender.setItem(yourItem.id);
 						return;
 					}
-					source.item = yourItem.id;
+					attacker.item = yourItem.id;
 					return;
 				}
-				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', `[of] ${source}`);
-				this.add('-item', target, yourItem, '[from] ability: Pickpocket', `[of] ${source}`);
+				this.add('-enditem', attacker, yourItem, '[silent]', '[from] ability: Pickpocket', `[of] ${attacker}`);
+				this.add('-item', defender, yourItem, '[from] ability: Pickpocket', `[of] ${attacker}`);
 			}
 		},
 	},
@@ -150,12 +150,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!this.effectState.seek) return;
 
 			const possibleTargets = pokemon.adjacentFoes().filter(
-				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
+				defender => !defender.getAbility().flags['notrace'] && defender.ability !== 'noability'
 			);
 			if (!possibleTargets.length) return;
 
-			const target = this.sample(possibleTargets);
-			const ability = target.getAbility();
+			const defender = this.sample(possibleTargets);
+			const ability = defender.getAbility();
 			if (this.toID(pokemon.item) === 'trace') {
 				this.add('-ability', pokemon, ability.name, 'Trace');
 				pokemon.setItem(ability.name);
@@ -192,7 +192,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 							id: move.id,
 							pp: basePP,
 							maxpp: basePP,
-							target: move.target,
+							defender: move.defender,
 							disabled: false,
 							used: false,
 						};
@@ -203,7 +203,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 				return;
 			}
-			pokemon.setAbility(ability, target);
+			pokemon.setAbility(ability, defender);
 		},
 	},
 };

@@ -63,10 +63,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	jabocaberry: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical' && !source.hasAbility('magicguard')) {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.category === 'Physical' && !attacker.hasAbility('magicguard')) {
+				if (defender.eatItem()) {
+					this.damage(attacker.baseMaxhp / 8, attacker, defender, null, true);
 				}
 			}
 		},
@@ -77,9 +77,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lifeorb: {
 		inherit: true,
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
-				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+		onAfterMoveSecondarySelf(attacker, defender, move) {
+			if (attacker && attacker !== defender && move && move.category !== 'Status' && !move.ohko) {
+				this.damage(attacker.baseMaxhp / 10, attacker, attacker, this.dex.items.get('lifeorb'));
 			}
 		},
 	},
@@ -143,18 +143,18 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	rockyhelmet: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.flags['contact']) {
-				this.damage(source.baseMaxhp / 6, source, target, null, true);
+				this.damage(attacker.baseMaxhp / 6, attacker, defender, null, true);
 			}
 		},
 	},
 	rowapberry: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Special' && !source.hasAbility('magicguard')) {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / 8, source, target, null, true);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.category === 'Special' && !attacker.hasAbility('magicguard')) {
+				if (defender.eatItem()) {
+					this.damage(attacker.baseMaxhp / 8, attacker, defender, null, true);
 				}
 			}
 		},

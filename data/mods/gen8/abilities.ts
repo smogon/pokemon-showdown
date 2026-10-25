@@ -103,16 +103,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	battlebond: {
 		inherit: true,
-		onSourceAfterFaint(length, target, source, effect) {
-			if (source.bondTriggered) return;
+		onSourceAfterFaint(length, defender, attacker, effect) {
+			if (attacker.bondTriggered) return;
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
-			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
-				this.add('-activate', source, 'ability: Battle Bond');
-				source.formeChange('Greninja-Ash', this.effect, true);
-				source.formeRegression = true;
-				source.bondTriggered = true;
+			if (attacker.species.id === 'greninjabond' && attacker.hp && !attacker.transformed && attacker.side.foePokemonLeft()) {
+				this.add('-activate', attacker, 'ability: Battle Bond');
+				attacker.formeChange('Greninja-Ash', this.effect, true);
+				attacker.formeRegression = true;
+				attacker.bondTriggered = true;
 			}
 		},
 		isNonstandard: null,
@@ -168,10 +168,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	competitive: {
 		inherit: true,
-		onAfterEachBoost(boost, target, source, effect) {
-			if (!source || target.isAlly(source)) {
+		onAfterEachBoost(boost, defender, attacker, effect) {
+			if (!attacker || defender.isAlly(attacker)) {
 				if (effect.id === 'stickyweb') {
-					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, source.side);
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, attacker.side);
 				}
 				return;
 			}
@@ -183,7 +183,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (statsLowered) {
-				this.boost({ spa: 2 }, target, target, null, false, true);
+				this.boost({ spa: 2 }, defender, defender, null, false, true);
 			}
 		},
 		rating: 2.5,
@@ -245,10 +245,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	defiant: {
 		inherit: true,
-		onAfterEachBoost(boost, target, source, effect) {
-			if (!source || target.isAlly(source)) {
+		onAfterEachBoost(boost, defender, attacker, effect) {
+			if (!attacker || defender.isAlly(attacker)) {
 				if (effect.id === 'stickyweb') {
-					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, source.side);
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, attacker.side);
 				}
 				return;
 			}
@@ -260,7 +260,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (statsLowered) {
-				this.boost({ atk: 2 }, target, target, null, false, true);
+				this.boost({ atk: 2 }, defender, defender, null, false, true);
 			}
 		},
 		rating: 2.5,
@@ -555,12 +555,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	libero: {
 		inherit: true,
-		onPrepareHit(source, target, move) {
+		onPrepareHit(attacker, defender, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
-			if (type && type !== '???' && source.getTypes().join() !== type) {
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
+			if (type && type !== '???' && attacker.getTypes().join() !== type) {
+				if (!attacker.setType(type)) return;
+				this.add('-start', attacker, 'typechange', type, '[from] ability: Libero');
 			}
 		},
 		rating: 4.5,
@@ -775,12 +775,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	protean: {
 		inherit: true,
-		onPrepareHit(source, target, move) {
+		onPrepareHit(attacker, defender, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
-			if (type && type !== '???' && source.getTypes().join() !== type) {
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
+			if (type && type !== '???' && attacker.getTypes().join() !== type) {
+				if (!attacker.setType(type)) return;
+				this.add('-start', attacker, 'typechange', type, '[from] ability: Protean');
 			}
 		},
 		rating: 4.5,
@@ -951,7 +951,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	snowwarning: {
 		inherit: true,
-		onStart(source) {
+		onStart(attacker) {
 			this.field.setWeather('hail');
 		},
 		rating: 4,

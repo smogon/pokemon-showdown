@@ -2,7 +2,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	unaware: {
 		inherit: true,
 		onAnyModifyBoost(boosts, pokemon) {
-			const unawareUser = this.effectState.target;
+			const unawareUser = this.effectState.defender;
 			if (unawareUser === pokemon) return;
 			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
 				boosts['def'] = 0;

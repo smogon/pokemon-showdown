@@ -48,7 +48,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		inherit: true,
-		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
+		modifyDamage(baseDamage, pokemon, defender, move, suppressMessages = false) {
 			// RSE divides modifiers into several mathematically important stages
 			// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
 
@@ -61,19 +61,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Other modifiers (Reflect/Light Screen/etc)
-			baseDamage = this.battle.runEvent('ModifyDamagePhase1', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.runEvent('ModifyDamagePhase1', pokemon, defender, move, baseDamage);
 
 			// Double battle multi-hit
 			// In Generation 3, the spread move modifier is 0.5x instead of 0.75x. Moves that hit both foes
 			// and the user's ally, like Earthquake and Explosion, don't get affected by spread modifiers
-			if (move.spreadHit && move.target === 'allAdjacentFoes') {
+			if (move.spreadHit && move.defender === 'allAdjacentFoes') {
 				const spreadModifier = 0.5;
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			}
 
 			// Weather
-			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, defender, move, baseDamage);
 
 			if (move.category === 'Physical' && !Math.floor(baseDamage)) {
 				baseDamage = 1;
@@ -81,13 +81,13 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			baseDamage += 2;
 
-			const isCrit = target.getMoveHitData(move).crit;
+			const isCrit = defender.getMoveHitData(move).crit;
 			if (isCrit) {
 				baseDamage = this.battle.modify(baseDamage, move.critModifier || 2);
 			}
 
 			// Mod 2 (Damage is floored after all multipliers are in)
-			baseDamage = Math.floor(this.battle.runEvent('ModifyDamagePhase2', pokemon, target, move, baseDamage));
+			baseDamage = Math.floor(this.battle.runEvent('ModifyDamagePhase2', pokemon, defender, move, baseDamage));
 
 			// STAB
 			// The "???" type never gets STAB
@@ -99,32 +99,32 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.forceSTAB || pokemon.hasType(type)) {
 					stab = 1.5;
 				}
-				stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+				stab = this.battle.runEvent('ModifySTAB', pokemon, defender, move, stab);
 				baseDamage = this.battle.modify(baseDamage, stab);
 			}
 			// types
-			let typeMod = target.runEffectiveness(move);
+			let typeMod = defender.runEffectiveness(move);
 			typeMod = this.battle.clampIntRange(typeMod, -6, 6);
-			target.getMoveHitData(move).typeMod = typeMod;
+			defender.getMoveHitData(move).typeMod = typeMod;
 			if (typeMod > 0) {
-				if (!suppressMessages) this.battle.add('-supereffective', target);
+				if (!suppressMessages) this.battle.add('-supereffective', defender);
 
 				for (let i = 0; i < typeMod; i++) {
 					baseDamage *= 2;
 				}
 			}
 			if (typeMod < 0) {
-				if (!suppressMessages) this.battle.add('-resisted', target);
+				if (!suppressMessages) this.battle.add('-resisted', defender);
 
 				for (let i = 0; i > typeMod; i--) {
 					baseDamage = Math.floor(baseDamage / 2);
 				}
 			}
 
-			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+			if (isCrit && !suppressMessages) this.battle.add('-crit', defender);
 
 			// Final modifier.
-			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, defender, move, baseDamage);
 
 			// this is not a modifier
 			baseDamage = this.battle.randomizer(baseDamage);
@@ -137,7 +137,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		useMoveInner(moveOrMoveName, pokemon, options) {
 			let sourceEffect = options?.sourceEffect;
-			let target = options?.target;
+			let defender = options?.defender;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			if (sourceEffect?.id === 'instruct') sourceEffect = null;
 
@@ -147,10 +147,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.activeMove) {
 				move.priority = this.battle.activeMove.priority;
 			}
-			const baseTarget = move.target;
-			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
-			if (move.target === 'self' || move.target === 'allies') {
-				target = pokemon;
+			const baseTarget = move.defender;
+			if (defender === undefined) defender = this.battle.getRandomTarget(pokemon, move);
+			if (move.defender === 'self' || move.defender === 'allies') {
+				defender = pokemon;
 			}
 			if (sourceEffect) {
 				move.sourceEffect = sourceEffect.id;
@@ -158,19 +158,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			let moveResult = false;
 
-			this.battle.setActiveMove(move, pokemon, target);
+			this.battle.setActiveMove(move, pokemon, defender);
 
-			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-			if (baseTarget !== move.target) {
+			this.battle.singleEvent('ModifyMove', move, null, pokemon, defender, move, move);
+			if (baseTarget !== move.defender) {
 				// Target changed in ModifyMove, so we must adjust it here
-				// Adjust before the next event so the correct target is passed to the
+				// Adjust before the next event so the correct defender is passed to the
 				// event
-				target = this.battle.getRandomTarget(pokemon, move);
+				defender = this.battle.getRandomTarget(pokemon, move);
 			}
-			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
-			if (baseTarget !== move.target) {
+			move = this.battle.runEvent('ModifyMove', pokemon, defender, move, move);
+			if (baseTarget !== move.defender) {
 				// Adjust again
-				target = this.battle.getRandomTarget(pokemon, move);
+				defender = this.battle.getRandomTarget(pokemon, move);
 			}
 			if (!move || pokemon.fainted) {
 				return false;
@@ -181,21 +181,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
 			if (sourceEffect) attrs += `|[from] ${this.dex.conditions.get(sourceEffect).name}`;
-			this.battle.addMove('move', pokemon, movename, `${target!}${attrs}`);
+			this.battle.addMove('move', pokemon, movename, `${defender!}${attrs}`);
 
-			if (!target) {
+			if (!defender) {
 				this.battle.attrLastMove('[notarget]');
 				this.battle.add('-notarget', pokemon);
 				return false;
 			}
 
-			const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
+			const { targets, pressureTargets } = pokemon.getMoveTargets(move, defender);
 
 			const callerMoveForPressure = sourceEffect && (sourceEffect as ActiveMove).pp ? sourceEffect as ActiveMove : null;
 			if (!sourceEffect || callerMoveForPressure) {
 				let extraPP = 0;
-				for (const source of pressureTargets) {
-					const ppDrop = this.battle.runEvent('DeductPP', source, pokemon, move);
+				for (const attacker of pressureTargets) {
+					const ppDrop = this.battle.runEvent('DeductPP', attacker, pokemon, move);
 					if (ppDrop !== true) {
 						extraPP += ppDrop || 0;
 					}
@@ -205,12 +205,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
-				!this.battle.runEvent('TryMove', pokemon, target, move)) {
+			if (!this.battle.singleEvent('TryMove', move, null, pokemon, defender, move) ||
+				!this.battle.runEvent('TryMove', pokemon, defender, move)) {
 				return false;
 			}
 
-			this.battle.singleEvent('UseMoveMessage', move, null, pokemon, target, move);
+			this.battle.singleEvent('UseMoveMessage', move, null, pokemon, defender, move);
 
 			if (move.ignoreImmunity === undefined) {
 				move.ignoreImmunity = (move.category === 'Status');
@@ -221,11 +221,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			let damage: number | false | undefined | '' = false;
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-				damage = this.tryMoveHit(target, pokemon, move);
+			if (move.defender === 'all' || move.defender === 'foeSide' || move.defender === 'allySide' || move.defender === 'allyTeam') {
+				damage = this.tryMoveHit(defender, pokemon, move);
 				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 				if (damage || damage === 0 || damage === undefined) moveResult = true;
-			} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
+			} else if (move.defender === 'allAdjacent' || move.defender === 'allAdjacentFoes') {
 				if (!targets.length) {
 					this.battle.attrLastMove('[notarget]');
 					this.battle.add('-notarget', pokemon);
@@ -233,11 +233,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (targets.length > 1) move.spreadHit = true;
 				const hitSlots = [];
-				for (const source of targets) {
-					const hitResult = this.tryMoveHit(source, pokemon, move);
+				for (const attacker of targets) {
+					const hitResult = this.tryMoveHit(attacker, pokemon, move);
 					if (hitResult || hitResult === 0 || hitResult === undefined) {
 						moveResult = true;
-						hitSlots.push(source.getSlot());
+						hitSlots.push(attacker.getSlot());
 					}
 					if (damage) {
 						damage += hitResult || 0;
@@ -248,11 +248,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (move.spreadHit) this.battle.attrLastMove('[spread] ' + hitSlots.join(','));
 			} else {
-				target = targets[0];
-				let lacksTarget = !target || target.fainted;
+				defender = targets[0];
+				let lacksTarget = !defender || defender.fainted;
 				if (!lacksTarget) {
-					if (['adjacentFoe', 'adjacentAlly', 'normal', 'randomNormal'].includes(move.target)) {
-						lacksTarget = !target.isAdjacent(pokemon);
+					if (['adjacentFoe', 'adjacentAlly', 'normal', 'randomNormal'].includes(move.defender)) {
+						lacksTarget = !defender.isAdjacent(pokemon);
 					}
 				}
 				if (lacksTarget && !move.flags['futuremove']) {
@@ -260,7 +260,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.add('-notarget', pokemon);
 					return false;
 				}
-				damage = this.tryMoveHit(target, pokemon, move);
+				damage = this.tryMoveHit(defender, pokemon, move);
 				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 				if (damage || damage === 0 || damage === undefined) moveResult = true;
 			}
@@ -270,23 +270,23 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (!moveResult) {
-				this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
+				this.battle.singleEvent('MoveFail', move, null, defender, pokemon, move);
 				return false;
 			}
 
 			if (!this.battle.suppressingSecondaries()) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, defender, move);
+				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, defender, move);
 			}
 			return true;
 		},
-		tryMoveHit(target, pokemon, move) {
-			this.battle.setActiveMove(move, pokemon, target);
+		tryMoveHit(defender, pokemon, move) {
+			this.battle.setActiveMove(move, pokemon, defender);
 			let naturalImmunity = false;
 			let accPass = true;
 
-			let hitResult = this.battle.singleEvent('PrepareHit', move, {}, target, pokemon, move) &&
-				this.battle.runEvent('PrepareHit', pokemon, target, move);
+			let hitResult = this.battle.singleEvent('PrepareHit', move, {}, defender, pokemon, move) &&
+				this.battle.runEvent('PrepareHit', pokemon, defender, move);
 			if (!hitResult) {
 				if (hitResult === false) {
 					this.battle.add('-fail', pokemon);
@@ -295,15 +295,15 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
+			if (!this.battle.singleEvent('Try', move, null, pokemon, defender, move)) {
 				return false;
 			}
 
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
-				if (move.target === 'all') {
-					hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
+			if (move.defender === 'all' || move.defender === 'foeSide' || move.defender === 'allySide' || move.defender === 'allyTeam') {
+				if (move.defender === 'all') {
+					hitResult = this.battle.runEvent('TryHitField', defender, pokemon, move);
 				} else {
-					hitResult = this.battle.runEvent('TryHitSide', target, pokemon, move);
+					hitResult = this.battle.runEvent('TryHitSide', defender, pokemon, move);
 				}
 				if (!hitResult) {
 					if (hitResult === false) {
@@ -312,13 +312,13 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 					return false;
 				}
-				return this.moveHit(target, pokemon, move);
+				return this.moveHit(defender, pokemon, move);
 			}
 
-			hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
+			hitResult = this.battle.runEvent('Invulnerability', defender, pokemon, move);
 			if (hitResult === false) {
 				if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-				this.battle.add('-miss', pokemon, target);
+				this.battle.add('-miss', pokemon, defender);
 				return false;
 			}
 
@@ -326,10 +326,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreImmunity = (move.category === 'Status');
 			}
 
-			if (!target.runImmunity(move)) {
+			if (!defender.runImmunity(move)) {
 				naturalImmunity = true;
 			} else {
-				hitResult = this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move);
+				hitResult = this.battle.singleEvent('TryImmunity', move, {}, defender, pokemon, move);
 				if (hitResult === false) {
 					naturalImmunity = true;
 				}
@@ -352,7 +352,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (!move.ignoreEvasion) {
-					boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+					boosts = this.battle.runEvent('ModifyBoost', defender, null, null, { ...defender.boosts });
 					boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 					if (boost > 0) {
 						accuracy /= boostTable[boost];
@@ -362,29 +362,29 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (move.ohko) { // bypasses accuracy modifiers
-				if (!target.isSemiInvulnerable()) {
+				if (!defender.isSemiInvulnerable()) {
 					accuracy = 30;
-					if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
-						accuracy += (pokemon.level - target.level);
+					if (pokemon.level >= defender.level && (move.ohko === true || !defender.hasType(move.ohko))) {
+						accuracy += (pokemon.level - defender.level);
 					} else {
-						this.battle.add('-immune', target, '[ohko]');
+						this.battle.add('-immune', defender, '[ohko]');
 						return false;
 					}
 				}
 			} else {
-				accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+				accuracy = this.battle.runEvent('ModifyAccuracy', defender, pokemon, move, accuracy);
 			}
 			if (move.alwaysHit) {
 				accuracy = true; // bypasses ohko accuracy modifiers
 			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+				accuracy = this.battle.runEvent('Accuracy', defender, pokemon, move, accuracy);
 			}
 			if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
 				accPass = false;
 			}
 
 			if (accPass) {
-				hitResult = this.battle.runEvent('TryHit', target, pokemon, move);
+				hitResult = this.battle.runEvent('TryHit', defender, pokemon, move);
 				if (!hitResult) {
 					if (hitResult === false) {
 						this.battle.add('-fail', pokemon);
@@ -392,15 +392,15 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 					return false;
 				} else if (naturalImmunity) {
-					this.battle.add('-immune', target);
+					this.battle.add('-immune', defender);
 					return false;
 				}
 			} else {
 				if (naturalImmunity) {
-					this.battle.add('-immune', target);
+					this.battle.add('-immune', defender);
 				} else {
 					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
+					this.battle.add('-miss', pokemon, defender);
 				}
 				return false;
 			}
@@ -424,7 +424,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 				const isSleepUsable = move.sleepUsable || this.dex.moves.get(move.sourceEffect).sleepUsable;
 				let i: number;
-				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
+				for (i = 0; i < hits && defender.hp && pokemon.hp; i++) {
 					if (pokemon.status === 'slp' && !isSleepUsable) break;
 					move.hit = i + 1;
 					move.lastHit = move.hit === hits;
@@ -442,7 +442,7 @@ export const Scripts: ModdedBattleScriptsData = {
 								}
 							}
 							if (!move.ignoreEvasion) {
-								boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+								boosts = this.battle.runEvent('ModifyBoost', defender, null, null, { ...defender.boosts });
 								boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 								if (boost > 0) {
 									accuracy /= boostTable[boost];
@@ -451,14 +451,14 @@ export const Scripts: ModdedBattleScriptsData = {
 								}
 							}
 						}
-						accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+						accuracy = this.battle.runEvent('ModifyAccuracy', defender, pokemon, move, accuracy);
 						if (!move.alwaysHit) {
-							accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+							accuracy = this.battle.runEvent('Accuracy', defender, pokemon, move, accuracy);
 							if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
 						}
 					}
 
-					moveDamage = this.moveHit(target, pokemon, move);
+					moveDamage = this.moveHit(defender, pokemon, move);
 					if (moveDamage === false) break;
 					if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
 					// Damage from each hit is individually counted for the
@@ -469,9 +469,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				if (i === 0) return false;
 				if (nullDamage) damage = false;
-				this.battle.add('-hitcount', target, i);
+				this.battle.add('-hitcount', defender, i);
 			} else {
-				damage = this.moveHit(target, pokemon, move);
+				damage = this.moveHit(defender, pokemon, move);
 				move.totalDamage = damage;
 			}
 
@@ -479,17 +479,17 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.applyRecoilDamage(move.totalDamage, move, pokemon);
 			}
 
-			if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
+			if (defender && pokemon !== defender) defender.gotAttacked(move, damage, pokemon);
 
-			if (move.ohko && !target.hp) this.battle.add('-ohko');
+			if (move.ohko && !defender.hp) this.battle.add('-ohko');
 
 			if (!damage && damage !== 0) return damage;
 
 			this.battle.eachEvent('Update');
 
-			if (target) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
+			if (defender) {
+				this.battle.singleEvent('AfterMoveSecondary', move, null, defender, pokemon, move);
+				this.battle.runEvent('AfterMoveSecondary', defender, pokemon, move);
 			}
 
 			return damage;

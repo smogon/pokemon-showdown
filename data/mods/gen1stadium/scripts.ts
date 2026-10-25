@@ -75,20 +75,20 @@ export const Scripts: ModdedBattleScriptsData = {
 		runMove(moveOrMoveName, pokemon, targetLoc, options) {
 			let sourceEffect = options?.sourceEffect;
 			const move = this.dex.getActiveMove(moveOrMoveName);
-			const target = this.battle.getTarget(pokemon, move, targetLoc);
-			if (target?.subFainted) target.subFainted = null;
+			const defender = this.battle.getTarget(pokemon, move, targetLoc);
+			if (defender?.subFainted) defender.subFainted = null;
 
-			this.battle.setActiveMove(move, pokemon, target);
+			this.battle.setActiveMove(move, pokemon, defender);
 
-			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
+			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, defender, move)) {
 				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn as DebugOutput}`);
 				this.battle.clearActiveMove(true);
 				// This is only run for sleep
-				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+				this.battle.runEvent('AfterMoveSelf', pokemon, defender, move);
 				return;
 			}
 			if (move.beforeMoveCallback) {
-				if (move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
+				if (move.beforeMoveCallback.call(this.battle, pokemon, defender, move)) {
 					this.battle.clearActiveMove(true);
 					return;
 				}
@@ -96,39 +96,39 @@ export const Scripts: ModdedBattleScriptsData = {
 			const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 			if (
 				!lockedMove &&
-				(pokemon.volatiles['partialtrappinglock']?.locked !== target)
+				(pokemon.volatiles['partialtrappinglock']?.locked !== defender)
 			) {
-				pokemon.deductPP(move, null, target);
+				pokemon.deductPP(move, null, defender);
 			} else {
 				sourceEffect = move;
 			}
-			this.battle.actions.useMove(move, pokemon, { target, sourceEffect });
+			this.battle.actions.useMove(move, pokemon, { defender, sourceEffect });
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
 		useMove(moveOrMoveName, pokemon, options) {
 			let sourceEffect = options?.sourceEffect;
-			let target = options?.target;
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, { target, sourceEffect });
+			let defender = options?.defender;
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, { defender, sourceEffect });
 
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
-			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
-			if (move.target === 'self') {
-				target = pokemon;
+			if (defender === undefined) defender = this.battle.getRandomTarget(pokemon, move);
+			if (move.defender === 'self') {
+				defender = pokemon;
 			}
 			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
+			this.battle.singleEvent('ModifyMove', move, null, pokemon, defender, move, move);
+			if (baseMove.defender !== move.defender) {
 				// Target changed in ModifyMove, so we must adjust it here
-				target = this.battle.getRandomTarget(pokemon, move);
+				defender = this.battle.getRandomTarget(pokemon, move);
 			}
-			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
+			move = this.battle.runEvent('ModifyMove', pokemon, defender, move, move);
+			if (baseMove.defender !== move.defender) {
 				// Check again, this shouldn't ever happen on Gen 1.
-				target = this.battle.getRandomTarget(pokemon, move);
+				defender = this.battle.getRandomTarget(pokemon, move);
 			}
 
 			if (move.id !== 'metronome') {
@@ -137,26 +137,26 @@ export const Scripts: ModdedBattleScriptsData = {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
 					pokemon.lastMove = move;
-					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
+					this.battle.singleEvent('AfterMove', move, null, pokemon, defender, move);
 
-					// If target fainted
-					if (target && target.hp <= 0) {
+					// If defender fainted
+					if (defender && defender.hp <= 0) {
 						delete pokemon.volatiles['partialtrappinglock'];
 					} else {
-						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+						this.battle.runEvent('AfterMoveSelf', pokemon, defender, move);
 					}
 					if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
 
-					// For partial trapping moves, we are saving the target.
-					if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
+					// For partial trapping moves, we are saving the defender.
+					if (move.volatileStatus === 'partiallytrapped' && defender && defender.hp > 0) {
 						// It hit, so let's remove must recharge volatile. Yup, this happens on Stadium.
-						target.removeVolatile('mustrecharge');
+						defender.removeVolatile('mustrecharge');
 						// Let's check if the lock exists
-						if (pokemon.volatiles['partialtrappinglock'] && target.volatiles['partiallytrapped']) {
+						if (pokemon.volatiles['partialtrappinglock'] && defender.volatiles['partiallytrapped']) {
 							// Here the partialtrappinglock volatile has been already applied
 							if (!pokemon.volatiles['partialtrappinglock'].locked) {
-								// If it's the first hit, we save the target
-								pokemon.volatiles['partialtrappinglock'].locked = target;
+								// If it's the first hit, we save the defender
+								pokemon.volatiles['partialtrappinglock'].locked = defender;
 							}
 						} // If we move to here, the move failed and there's no partial trapping lock
 					}
@@ -168,27 +168,27 @@ export const Scripts: ModdedBattleScriptsData = {
 		// It uses the move and then deals with the effects after the move.
 		useMoveInner(moveOrMoveName, pokemon, options) {
 			let sourceEffect = options?.sourceEffect;
-			let target = options?.target;
+			let defender = options?.defender;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
-			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
-			if (move.target === 'self') {
-				target = pokemon;
+			if (defender === undefined) defender = this.battle.getRandomTarget(pokemon, move);
+			if (move.defender === 'self') {
+				defender = pokemon;
 			}
 			if (sourceEffect) move.sourceEffect = sourceEffect.id;
 
-			this.battle.setActiveMove(move, pokemon, target);
+			this.battle.setActiveMove(move, pokemon, defender);
 
-			this.battle.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
+			this.battle.singleEvent('ModifyMove', move, null, pokemon, defender, move, move);
+			if (baseMove.defender !== move.defender) {
 				// Target changed in ModifyMove, so we must adjust it here
-				target = this.battle.getRandomTarget(pokemon, move);
+				defender = this.battle.getRandomTarget(pokemon, move);
 			}
-			move = this.battle.runEvent('ModifyMove', pokemon, target, move, move);
-			if (baseMove.target !== move.target) {
+			move = this.battle.runEvent('ModifyMove', pokemon, defender, move, move);
+			if (baseMove.defender !== move.defender) {
 				// Check again, this shouldn't ever happen on Gen 1.
-				target = this.battle.getRandomTarget(pokemon, move);
+				defender = this.battle.getRandomTarget(pokemon, move);
 				this.battle.debug('not a gen 1 mechanic');
 			}
 			if (!move) return false;
@@ -199,13 +199,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (sourceEffect) attrs += `|[from] ${this.battle.dex.conditions.get(sourceEffect).name}`;
-			this.battle.addMove('move', pokemon, move.name, `${target!}${attrs}`);
+			this.battle.addMove('move', pokemon, move.name, `${defender!}${attrs}`);
 
-			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
+			if (!this.battle.singleEvent('Try', move, null, pokemon, defender, move)) {
 				return true;
 			}
-			if (!this.battle.singleEvent('TryMove', move, null, pokemon, target, move) ||
-				!this.battle.runEvent('TryMove', pokemon, target, move)) {
+			if (!this.battle.singleEvent('TryMove', move, null, pokemon, defender, move) ||
+				!this.battle.runEvent('TryMove', pokemon, defender, move)) {
 				return true;
 			}
 
@@ -214,7 +214,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			let damage: number | undefined | false | '' = false;
-			if (!target || target.fainted) {
+			if (!defender || defender.fainted) {
 				this.battle.attrLastMove('[notarget]');
 				this.battle.add('-notarget');
 				return true;
@@ -222,23 +222,23 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Store 0 damage for last damage if the move is not in the array.
 			if (!SKIP_LASTDAMAGE.has(move.id)) this.battle.lastDamage = 0;
 
-			damage = this.tryMoveHit(target, pokemon, move);
+			damage = this.tryMoveHit(defender, pokemon, move);
 
 			// Go ahead with results of the used move.
 			if (damage === false) {
-				this.battle.singleEvent('MoveFail', move, null, target, pokemon, move);
+				this.battle.singleEvent('MoveFail', move, null, defender, pokemon, move);
 				return true;
 			}
 
-			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, defender, move);
+			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, defender, move);
 			return true;
 		},
-		tryMoveHit(target, pokemon, move) {
+		tryMoveHit(defender, pokemon, move) {
 			let damage: number | false | undefined = 0;
 
-			// First, check if the target is semi-invulnerable
-			let hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
+			// First, check if the defender is semi-invulnerable
+			let hitResult = this.battle.runEvent('Invulnerability', defender, pokemon, move);
 			if (hitResult === false) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
@@ -249,15 +249,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Then, check if the Pokemon is immune to this move.
-			if (!target.runImmunity(move, true)) {
+			if (!defender.runImmunity(move, true)) {
 				if (move.selfdestruct) {
 					this.battle.faint(pokemon, pokemon, move);
 				}
 				return false;
 			}
-			hitResult = this.battle.singleEvent('TryImmunity', move, null, target, pokemon, move);
+			hitResult = this.battle.singleEvent('TryImmunity', move, null, defender, pokemon, move);
 			if (hitResult === false) {
-				this.battle.add('-immune', target);
+				this.battle.add('-immune', defender);
 				return false;
 			}
 
@@ -266,19 +266,19 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Partial trapping moves: true accuracy while it lasts
 			if (pokemon.volatiles['partialtrappinglock']) {
-				if (move.volatileStatus === 'partiallytrapped' && target === pokemon.volatiles['partialtrappinglock'].locked) {
+				if (move.volatileStatus === 'partiallytrapped' && defender === pokemon.volatiles['partialtrappinglock'].locked) {
 					accuracy = true;
-				} else if (pokemon.volatiles['partialtrappinglock'].locked !== target) {
-					// The target switched, therefor, you fail using wrap.
+				} else if (pokemon.volatiles['partialtrappinglock'].locked !== defender) {
+					// The defender switched, therefor, you fail using wrap.
 					delete pokemon.volatiles['partialtrappinglock'];
 					return false;
 				}
 			}
 
-			// OHKO moves only have a chance to hit if the user is at least as fast as the target
+			// OHKO moves only have a chance to hit if the user is at least as fast as the defender
 			if (move.ohko) {
-				if (target.speed > pokemon.speed) {
-					this.battle.add('-immune', target, '[ohko]');
+				if (defender.speed > pokemon.speed) {
+					this.battle.add('-immune', defender, '[ohko]');
 					return false;
 				}
 			}
@@ -293,11 +293,11 @@ export const Scripts: ModdedBattleScriptsData = {
 					accuracy = Math.floor(accuracy * boostTable[pokemon.boosts.accuracy + 6]);
 				}
 				if (!move.ignoreEvasion) {
-					accuracy = Math.floor(accuracy * boostTable[-target.boosts.evasion + 6]);
+					accuracy = Math.floor(accuracy * boostTable[-defender.boosts.evasion + 6]);
 				}
 				accuracy = Math.min(accuracy, 255);
 			}
-			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+			accuracy = this.battle.runEvent('Accuracy', defender, pokemon, move, accuracy);
 
 			// Stadium attempts to fix the 1/256 miss by rerolling if the first value
 			// would trigger the 1/256 miss.
@@ -329,28 +329,28 @@ export const Scripts: ModdedBattleScriptsData = {
 					// In gen 1, all the hits have the same damage for multihits move
 					let moveDamage: number | false | undefined = 0;
 					let i: number;
-					for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
+					for (i = 0; i < hits && defender.hp && pokemon.hp; i++) {
 						move.hit = i + 1;
 						move.lastHit = move.hit === hits;
-						moveDamage = this.moveHit(target, pokemon, move);
+						moveDamage = this.moveHit(defender, pokemon, move);
 						if (moveDamage === false) break;
 						damage = (moveDamage || 0);
 						// Move damage is fixed to be the first move's damage
 						if (i === 0) move.damage = damage;
-						if (target.subFainted) {
+						if (defender.subFainted) {
 							i++;
 							break;
 						}
 					}
 					move.damage = null;
 					if (i === 0) return 1;
-					this.battle.add('-hitcount', target, i);
+					this.battle.add('-hitcount', defender, i);
 				} else {
-					damage = this.moveHit(target, pokemon, move);
+					damage = this.moveHit(defender, pokemon, move);
 				}
 			}
 
-			if (move.category !== 'Status') target.gotAttacked(move, damage, pokemon);
+			if (move.category !== 'Status') defender.gotAttacked(move, damage, pokemon);
 
 			if (move.selfdestruct) {
 				this.battle.faint(pokemon, pokemon, move);
@@ -365,16 +365,16 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ohko) this.battle.add('-ohko');
 
-			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
+			this.battle.singleEvent('AfterMoveSecondary', move, null, defender, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', defender, pokemon, move);
 
 			return damage;
 		},
-		moveHit(target, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
+		moveHit(defender, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
 			let damage: number | false | null | undefined = 0;
 			const move = this.dex.getActiveMove(moveOrMoveName);
 
-			if (!isSecondary && !isSelf) this.battle.setActiveMove(move, pokemon, target);
+			if (!isSecondary && !isSelf) this.battle.setActiveMove(move, pokemon, defender);
 			let hitResult: number | boolean = true;
 			if (!moveData) moveData = move;
 
@@ -382,104 +382,104 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreImmunity = (move.category === 'Status');
 			}
 
-			if (target) {
-				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+			if (defender) {
+				hitResult = this.battle.singleEvent('TryHit', moveData, {}, defender, pokemon, move);
 
 				// Partial trapping moves still apply their volatile to Pokémon behind a Sub
-				const targetHadSub = !!target.volatiles['substitute'];
+				const targetHadSub = !!defender.volatiles['substitute'];
 				if (targetHadSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
-					target.addVolatile(moveData.volatileStatus, pokemon, move);
+					defender.addVolatile(moveData.volatileStatus, pokemon, move);
 					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration! > 1) {
-						target.volatiles[moveData.volatileStatus].duration = 2;
+						defender.volatiles[moveData.volatileStatus].duration = 2;
 					}
 				}
 
 				if (!hitResult) {
-					if (hitResult === false) this.battle.add('-fail', target);
+					if (hitResult === false) this.battle.add('-fail', defender);
 					return false;
 				}
 
 				// Only run the hit events for the hit itself, not the secondary or self hits
 				if (!isSelf && !isSecondary) {
-					hitResult = this.battle.runEvent('TryHit', target, pokemon, move);
+					hitResult = this.battle.runEvent('TryHit', defender, pokemon, move);
 					if (!hitResult) {
-						if (hitResult === false) this.battle.add('-fail', target);
+						if (hitResult === false) this.battle.add('-fail', defender);
 						// Special Substitute hit flag
 						if (hitResult !== 0) {
 							return false;
 						}
 					}
-					if (!this.battle.runEvent('TryFieldHit', target, pokemon, move)) {
+					if (!this.battle.runEvent('TryFieldHit', defender, pokemon, move)) {
 						return false;
 					}
 				} else if (isSecondary && !moveData.self) {
-					hitResult = this.battle.runEvent('TrySecondaryHit', target, pokemon, moveData);
+					hitResult = this.battle.runEvent('TrySecondaryHit', defender, pokemon, moveData);
 				}
 
 				if (hitResult === 0) {
-					target = null;
+					defender = null;
 				} else if (!hitResult) {
-					if (hitResult === false) this.battle.add('-fail', target);
+					if (hitResult === false) this.battle.add('-fail', defender);
 					return false;
 				}
 			}
 
-			if (target) {
+			if (defender) {
 				let didSomething = false;
 
-				damage = this.getDamage(pokemon, target, moveData);
-				if (damage && damage > target.hp) {
-					damage = target.hp;
+				damage = this.getDamage(pokemon, defender, moveData);
+				if (damage && damage > defender.hp) {
+					damage = defender.hp;
 				}
-				if ((damage || damage === 0) && !target.fainted) {
-					damage = this.battle.damage(damage, target, pokemon, move);
-					if (damage && target.hp > 0) this.applyRecoilDamage(damage, move, pokemon);
+				if ((damage || damage === 0) && !defender.fainted) {
+					damage = this.battle.damage(damage, defender, pokemon, move);
+					if (damage && defender.hp > 0) this.applyRecoilDamage(damage, move, pokemon);
 					if (!(damage || damage === 0)) return false;
 					didSomething = true;
 				} else if (damage === false && typeof hitResult === 'undefined') {
-					this.battle.add('-fail', target);
+					this.battle.add('-fail', defender);
 				}
 				if (damage === false || damage === null) {
 					return false;
 				}
-				if (moveData.boosts && !target.fainted) {
-					this.battle.boost(moveData.boosts, target, pokemon, move);
+				if (moveData.boosts && !defender.fainted) {
+					this.battle.boost(moveData.boosts, defender, pokemon, move);
 				}
-				if (moveData.heal && !target.fainted) {
-					const d = target.heal(Math.floor(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+				if (moveData.heal && !defender.fainted) {
+					const d = defender.heal(Math.floor(defender.maxhp * moveData.heal[0] / moveData.heal[1]));
 					if (!d) {
-						this.battle.add('-fail', target);
+						this.battle.add('-fail', defender);
 						return false;
 					}
-					this.battle.add('-heal', target, target.getHealth);
+					this.battle.add('-heal', defender, defender.getHealth);
 					didSomething = true;
 				}
 				if (moveData.status) {
-					if (!target.status) {
-						target.setStatus(moveData.status, pokemon, move);
-						target.recalculateStats!();
+					if (!defender.status) {
+						defender.setStatus(moveData.status, pokemon, move);
+						defender.recalculateStats!();
 					} else if (!isSecondary) {
-						if (target.status === moveData.status) {
-							this.battle.add('-fail', target, target.status);
+						if (defender.status === moveData.status) {
+							this.battle.add('-fail', defender, defender.status);
 						} else {
-							this.battle.add('-fail', target);
+							this.battle.add('-fail', defender);
 						}
 					}
 					didSomething = true;
 				}
 				if (moveData.forceStatus) {
-					if (target.setStatus(moveData.forceStatus, pokemon, move)) {
-						target.recalculateStats!();
+					if (defender.setStatus(moveData.forceStatus, pokemon, move)) {
+						defender.recalculateStats!();
 						didSomething = true;
 					}
 				}
 				if (moveData.volatileStatus) {
-					if (target.addVolatile(moveData.volatileStatus, pokemon, move)) {
+					if (defender.addVolatile(moveData.volatileStatus, pokemon, move)) {
 						didSomething = true;
 					}
 				}
 				if (moveData.sideCondition) {
-					if (target.side.addSideCondition(moveData.sideCondition, pokemon, move)) {
+					if (defender.side.addSideCondition(moveData.sideCondition, pokemon, move)) {
 						didSomething = true;
 					}
 				}
@@ -489,12 +489,12 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				// Hit events
-				hitResult = this.battle.singleEvent('Hit', moveData, {}, target, pokemon, move);
+				hitResult = this.battle.singleEvent('Hit', moveData, {}, defender, pokemon, move);
 				if (!isSelf && !isSecondary) {
-					this.battle.runEvent('Hit', target, pokemon, move);
+					this.battle.runEvent('Hit', defender, pokemon, move);
 				}
 				if (!hitResult && !didSomething) {
-					if (hitResult === false) this.battle.add('-fail', target);
+					if (hitResult === false) this.battle.add('-fail', defender);
 					return false;
 				}
 			}
@@ -510,18 +510,18 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Apply move secondaries.
-			if (moveData.secondaries && target && target.hp > 0) {
+			if (moveData.secondaries && defender && defender.hp > 0) {
 				for (const secondary of moveData.secondaries) {
 					// Multi-hit moves only roll for status once
 					if (!move.multihit || move.lastHit) {
 						// We check here whether to negate the probable secondary status if it's para, burn, or freeze.
 						// In the game, this is checked and if true, the random number generator is not called.
-						// That means that a move that does not share the type of the target can status it.
+						// That means that a move that does not share the type of the defender can status it.
 						// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
-						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target.hasType(move.type))) {
+						if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && defender.hasType(move.type))) {
 							const effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 							if (typeof secondary.chance === 'undefined' || this.battle.randomChance(effectChance + 1, 256)) {
-								this.moveHit(target, pokemon, move, secondary, true, isSelf);
+								this.moveHit(defender, pokemon, move, secondary, true, isSelf);
 							}
 						}
 					}
@@ -534,7 +534,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return damage;
 		},
-		getDamage(source, target, move, suppressMessages) {
+		getDamage(attacker, defender, move, suppressMessages) {
 			// First of all, we get the move.
 			if (typeof move === 'string') {
 				move = this.dex.getActiveMove(move);
@@ -548,8 +548,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				} as ActiveMove;
 			}
 
-			// Let's see if the target is immune to the move.
-			if (!target.runImmunity(move, true)) {
+			// Let's see if the defender is immune to the move.
+			if (!defender.runImmunity(move, true)) {
 				return false;
 			}
 
@@ -560,12 +560,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We edit the damage through move's damage callback if necessary.
 			if (move.damageCallback) {
-				return move.damageCallback.call(this.battle, source, target);
+				return move.damageCallback.call(this.battle, attacker, defender);
 			}
 
 			// We take damage from damage=level moves (seismic toss).
 			if (move.damage === 'level') {
-				return source.level;
+				return attacker.level;
 			}
 
 			// If there's a fix move damage, we return that.
@@ -574,13 +574,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// If it's the first hit on a Normal-type partially trap move, it hits Ghosts anyways but damage is 0.
-			if (move.volatileStatus === 'partiallytrapped' && move.type === 'Normal' && target.hasType('Ghost')) {
+			if (move.volatileStatus === 'partiallytrapped' && move.type === 'Normal' && defender.hasType('Ghost')) {
 				return 0;
 			}
 
 			// Let's check if we are in middle of a partial trap sequence to return the previous damage.
-			if (target === source.volatiles['partialtrappinglock']?.locked) {
-				return source.volatiles['partialtrappinglock'].damage;
+			if (defender === attacker.volatiles['partialtrappinglock']?.locked) {
+				return attacker.volatiles['partialtrappinglock'].damage;
 			}
 
 			// We check the category and typing to calculate later on the damage.
@@ -592,7 +592,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// We get the base power and apply basePowerCallback if necessary.
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				basePower = move.basePowerCallback.call(this.battle, attacker, defender, move);
 			}
 			if (!basePower) {
 				return basePower === 0 ? undefined : basePower;
@@ -604,13 +604,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!isCrit) {
 				// In Stadium, the critical chance is based on speed.
 				// First, we get the base speed and store it. Then we add 76. This is our current crit chance.
-				let critChance = source.species.baseStats['spe'] + 76;
+				let critChance = attacker.species.baseStats['spe'] + 76;
 
 				// Now we right logical shift it two places, essentially dividing by 4 and flooring it.
 				critChance >>= 2;
 
 				// Now we check for focus energy volatile.
-				if (source.volatiles['focusenergy']) {
+				if (attacker.volatiles['focusenergy']) {
 					// If it exists, crit chance is multiplied by 4 and floored with a logical left shift.
 					critChance <<= 2;
 					// Then we add 160.
@@ -640,13 +640,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			// There is a critical hit.
-			if (isCrit && this.battle.runEvent('CriticalHit', target, null, move)) {
-				target.getMoveHitData(move).crit = true;
+			if (isCrit && this.battle.runEvent('CriticalHit', defender, null, move)) {
+				defender.getMoveHitData(move).crit = true;
 			}
 
 			// Happens after crit calculation.
 			if (basePower) {
-				basePower = this.battle.runEvent('BasePower', source, target, move, basePower);
+				basePower = this.battle.runEvent('BasePower', attacker, defender, move, basePower);
 				if (basePower && move.basePowerModifier) {
 					basePower *= move.basePowerModifier;
 				}
@@ -655,9 +655,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			// We now check attacker's and defender's stats.
-			let level = source.level;
-			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
-			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+			let level = attacker.level;
+			const attacker = move.overrideOffensivePokemon === 'defender' ? defender : attacker;
+			const defender = move.overrideDefensivePokemon === 'attacker' ? attacker : defender;
 
 			const isPhysical = move.category === 'Physical';
 			const atkType: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
@@ -680,7 +680,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreOffensive = true;
 				move.ignoreDefensive = true;
 				level *= 2;
-				if (!suppressMessages) this.battle.add('-crit', target);
+				if (!suppressMessages) this.battle.add('-crit', defender);
 			}
 
 			if (move.ignoreOffensive) {
@@ -690,7 +690,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ignoreDefensive) {
 				this.battle.debug('Negating (sp)def boost/penalty.');
-				defense = target.getStat(defType, true);
+				defense = defender.getStat(defType, true);
 			}
 
 			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
@@ -718,13 +718,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			damage += 2;
 
 			// STAB damage bonus, the "???" type never gets STAB
-			if (type !== '???' && source.hasType(type)) {
+			if (type !== '???' && attacker.hasType(type)) {
 				damage += Math.floor(damage / 2);
 			}
 
 			// Type effectiveness.
-			// In Gen 1, type effectiveness is applied against each of the target's types.
-			for (const targetType of target.types) {
+			// In Gen 1, type effectiveness is applied against each of the defender's types.
+			for (const targetType of defender.types) {
 				const typeMod = this.battle.dex.getEffectiveness(type, targetType);
 				if (typeMod > 0) {
 					// Super effective against targetType
@@ -737,16 +737,16 @@ export const Scripts: ModdedBattleScriptsData = {
 					damage = Math.floor(damage / 10);
 				}
 			}
-			const totalTypeMod = target.runEffectiveness(move);
+			const totalTypeMod = defender.runEffectiveness(move);
 			if (totalTypeMod > 0) {
-				if (!suppressMessages) this.battle.add('-supereffective', target);
+				if (!suppressMessages) this.battle.add('-supereffective', defender);
 			}
 			if (totalTypeMod < 0) {
-				if (!suppressMessages) this.battle.add('-resisted', target);
+				if (!suppressMessages) this.battle.add('-resisted', defender);
 			}
 
 			// If damage becomes 0, the move is made to miss.
-			// This occurs when damage was either 2 or 3 prior to applying STAB/Type matchup, and target is 4x resistant to the move.
+			// This occurs when damage was either 2 or 3 prior to applying STAB/Type matchup, and defender is 4x resistant to the move.
 			if (damage === 0) return damage;
 
 			// Apply random factor if damage is greater than 1

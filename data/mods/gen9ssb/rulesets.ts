@@ -1,16 +1,16 @@
 export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
 	sleepclausemod: {
 		inherit: true,
-		onSetStatus(status, target, source) {
-			if (source?.isAlly(target)) {
+		onSetStatus(status, defender, attacker) {
+			if (attacker?.isAlly(defender)) {
 				return;
 			}
 			if (status.id === 'slp') {
-				for (const pokemon of target.side.pokemon) {
+				for (const pokemon of defender.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusState.source?.isAlly(pokemon)) {
-							if (source.hasAbility('ididitagain')) {
-								this.add('-ability', source, 'I Did It Again');
+						if (!pokemon.statusState.attacker?.isAlly(pokemon)) {
+							if (attacker.hasAbility('ididitagain')) {
+								this.add('-ability', attacker, 'I Did It Again');
 								return;
 							}
 							this.add('-message', 'Sleep Clause Mod activated.');

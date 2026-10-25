@@ -1,18 +1,18 @@
 export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	slp: {
 		inherit: true,
-		onSwitchIn(target) {
+		onSwitchIn(defender) {
 			this.effectState.time = this.effectState.startTime;
 		},
 	},
 	partiallytrapped: {
 		inherit: true,
-		onStart(pokemon, source) {
-			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
-			this.effectState.boundDivisor = source.hasItem('bindingband') ? 8 : 16;
+		onStart(pokemon, attacker) {
+			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${attacker}`);
+			this.effectState.boundDivisor = attacker.hasItem('bindingband') ? 8 : 16;
 		},
 		onResidual(pokemon) {
-			const trapper = this.effectState.source;
+			const trapper = this.effectState.attacker;
 			if (trapper && (!trapper.isActive || trapper.hp <= 0 || !trapper.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
 				this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
@@ -48,7 +48,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	gem: {
 		duration: 1,
 		affectsFainted: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			this.debug('Gem Boost');
 			return this.chainModify(1.5);
 		},

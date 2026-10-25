@@ -2,14 +2,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	acupressure: {
 		inherit: true,
 		flags: { snatch: 1, metronome: 1 },
-		onHit(target) {
-			if (target.volatiles['substitute']) {
+		onHit(defender) {
+			if (defender.volatiles['substitute']) {
 				return false;
 			}
 			const stats: BoostID[] = [];
 			let stat: BoostID;
-			for (stat in target.boosts) {
-				if (target.boosts[stat] < 6) {
+			for (stat in defender.boosts) {
+				if (defender.boosts[stat] < 6) {
 					stats.push(stat);
 				}
 			}
@@ -25,9 +25,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	aromatherapy: {
 		inherit: true,
-		onHit(target, source) {
-			this.add('-cureteam', source, '[from] move: Aromatherapy');
-			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+		onHit(defender, attacker) {
+			this.add('-cureteam', attacker, '[from] move: Aromatherapy');
+			const allies = [...defender.side.pokemon, ...defender.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				ally.clearStatus();
 			}
@@ -44,17 +44,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	assist: {
 		inherit: true,
-		onHit(target) {
+		onHit(defender) {
 			const moves = [];
-			for (const pokemon of target.side.pokemon) {
-				if (pokemon === target) continue;
+			for (const pokemon of defender.side.pokemon) {
+				if (pokemon === defender) continue;
 				for (const moveSlot of pokemon.moveSlots) {
 					const moveid = moveSlot.id;
 					const move = this.dex.moves.get(moveid);
 					if (
 						move.flags['noassist'] ||
 						(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
-						(target.volatiles['healblock'] && move.flags['heal'])
+						(defender.volatiles['healblock'] && move.flags['heal'])
 					) {
 						continue;
 					}
@@ -66,13 +66,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!randomMove) {
 				return false;
 			}
-			this.actions.useMove(randomMove, target);
+			this.actions.useMove(randomMove, defender);
 		},
 	},
 	beatup: {
 		inherit: true,
 		basePower: 10,
-		basePowerCallback(pokemon, target, move) {
+		basePowerCallback(pokemon, defender, move) {
 			if (!move.allies?.length) return null;
 			return 10;
 		},
@@ -109,25 +109,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					pokemon.removeVolatile('bide');
 				}
 			},
-			onBeforeMove(pokemon, target, move) {
+			onBeforeMove(pokemon, defender, move) {
 				if (this.effectState.duration === 1) {
 					this.add('-end', pokemon, 'move: Bide');
 					if (!this.effectState.totalDamage) {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					target = this.effectState.lastDamageSource;
-					if (!target) {
+					defender = this.effectState.lastDamageSource;
+					if (!defender) {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					if (!target.isActive) {
+					if (!defender.isActive) {
 						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
 						if (!possibleTarget) {
 							this.add('-miss', pokemon);
 							return false;
 						}
-						target = possibleTarget;
+						defender = possibleTarget;
 					}
 					const moveData = {
 						id: 'bide',
@@ -141,7 +141,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						effectType: 'Move',
 						type: 'Normal',
 					} as unknown as ActiveMove;
-					this.actions.tryMoveHit(target, pokemon, moveData);
+					this.actions.tryMoveHit(defender, pokemon, moveData);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -167,9 +167,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	camouflage: {
 		inherit: true,
-		onHit(target) {
-			if (target.hasType('Normal') || !target.setType('Normal')) return false;
-			this.add('-start', target, 'typechange', 'Normal');
+		onHit(defender) {
+			if (defender.hasType('Normal') || !defender.setType('Normal')) return false;
+			this.add('-start', defender, 'typechange', 'Normal');
 		},
 	},
 	chatter: {
@@ -187,10 +187,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	conversion: {
 		inherit: true,
 		flags: { metronome: 1 },
-		onHit(target) {
-			const possibleTypes = target.moveSlots.map(moveSlot => {
+		onHit(defender) {
+			const possibleTypes = defender.moveSlots.map(moveSlot => {
 				const move = this.dex.moves.get(moveSlot.id);
-				if (move.id !== 'conversion' && move.id !== 'curse' && !target.hasType(move.type)) {
+				if (move.id !== 'conversion' && move.id !== 'curse' && !defender.hasType(move.type)) {
 					return move.type;
 				}
 				return '';
@@ -200,21 +200,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			const type = this.sample(possibleTypes);
 
-			if (!target.setType(type)) return false;
-			this.add('-start', target, 'typechange', type);
+			if (!defender.setType(type)) return false;
+			this.add('-start', defender, 'typechange', type);
 		},
 	},
 	conversion2: {
 		inherit: true,
-		onHit(target, source) {
-			if (!target.lastMoveUsed) {
+		onHit(defender, attacker) {
+			if (!defender.lastMoveUsed) {
 				return false;
 			}
 			const possibleTypes = [];
-			const lastMoveUsed = target.lastMoveUsed;
+			const lastMoveUsed = defender.lastMoveUsed;
 			const attackType = lastMoveUsed.id === 'struggle' ? 'Normal' : lastMoveUsed.type;
 			for (const typeName of this.dex.types.names()) {
-				if (source.hasType(typeName)) continue;
+				if (attacker.hasType(typeName)) continue;
 				const typeCheck = this.dex.types.get(typeName).damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
 					possibleTypes.push(typeName);
@@ -225,8 +225,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			const randomType = this.sample(possibleTypes);
 
-			if (!source.setType(randomType)) return false;
-			this.add('-start', source, 'typechange', randomType);
+			if (!attacker.setType(randomType)) return false;
+			this.add('-start', attacker, 'typechange', randomType);
 		},
 	},
 	copycat: {
@@ -259,22 +259,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	crushgrip: {
 		inherit: true,
-		basePowerCallback(pokemon, target) {
-			const bp = Math.floor(target.hp * 120 / target.maxhp) + 1;
-			this.debug(`BP for ${target.hp}/${target.maxhp} HP: ${bp}`);
+		basePowerCallback(pokemon, defender) {
+			const bp = Math.floor(defender.hp * 120 / defender.maxhp) + 1;
+			this.debug(`BP for ${defender.hp}/${defender.maxhp} HP: ${bp}`);
 			return bp;
 		},
 	},
 	curse: {
 		inherit: true,
 		flags: { metronome: 1 },
-		onModifyMove(move, source, target) {
-			if (!source.hasType('Ghost')) {
+		onModifyMove(move, attacker, defender) {
+			if (!attacker.hasType('Ghost')) {
 				delete move.volatileStatus;
 				delete move.onHit;
 				move.self = { boosts: { atk: 1, def: 1, spe: -1 } };
-				move.target = 'self';
-			} else if (target?.volatiles['substitute']) {
+				move.defender = 'self';
+			} else if (defender?.volatiles['substitute']) {
 				delete move.volatileStatus;
 				delete move.onHit;
 			}
@@ -332,8 +332,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 85,
 		basePower: 120,
-		onTry(source, target) {
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+		onTry(attacker, defender) {
+			if (!defender.side.addSlotCondition(defender, 'futuremove')) return false;
 			const moveData = {
 				name: "Doom Desire",
 				basePower: 120,
@@ -342,11 +342,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				willCrit: false,
 				type: '???',
 			} as unknown as ActiveMove;
-			const damage = this.actions.getDamage(source, target, moveData, true);
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+			const damage = this.actions.getDamage(attacker, defender, moveData, true);
+			Object.assign(defender.side.slotConditions[defender.position]['futuremove'], {
 				duration: 3,
 				move: 'doomdesire',
-				source,
+				attacker,
 				moveData: {
 					id: 'doomdesire',
 					name: "Doom Desire",
@@ -359,7 +359,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					type: '???',
 				},
 			});
-			this.add('-start', source, 'Doom Desire');
+			this.add('-start', attacker, 'Doom Desire');
 			return null;
 		},
 	},
@@ -374,8 +374,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	dreameater: {
 		inherit: true,
-		onTryImmunity(target) {
-			return target.status === 'slp' && !target.volatiles['substitute'];
+		onTryImmunity(defender) {
+			return defender.status === 'slp' && !defender.volatiles['substitute'];
 		},
 	},
 	embargo: {
@@ -402,16 +402,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(4, 9);
 			},
-			onStart(target, source) {
-				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
-				if (target.lastMove === null || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
+			onStart(defender, attacker) {
+				const moveSlot = defender.lastMove ? defender.getMoveData(defender.lastMove.id) : null;
+				if (defender.lastMove === null || defender.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
-				this.effectState.move = target.lastMove.id;
-				this.add('-start', target, 'Encore');
+				this.effectState.move = defender.lastMove.id;
+				this.add('-start', defender, 'Encore');
 				if (this.effectState.move === 'pursuit') {
-					target.addVolatile('pursuit', target, this.dex.getActiveMove('pursuit'));
+					defender.addVolatile('pursuit', defender, this.dex.getActiveMove('pursuit'));
 				}
 			},
 			onResidualOrder: 10,
@@ -420,8 +420,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	endeavor: {
 		inherit: true,
-		onTry(pokemon, target) {
-			if (pokemon.hp >= target.hp) {
+		onTry(pokemon, defender) {
+			if (pokemon.hp >= defender.hp) {
 				this.add('-fail', pokemon);
 				return null;
 			}
@@ -431,10 +431,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onDamage(damage, target, source, effect) {
-				if (effect?.effectType === 'Move' && !effect?.flags['futuremove'] && damage >= target.hp) {
-					this.add('-activate', target, 'move: Endure');
-					return target.hp - 1;
+			onDamage(damage, defender, attacker, effect) {
+				if (effect?.effectType === 'Move' && !effect?.flags['futuremove'] && damage >= defender.hp) {
+					this.add('-activate', defender, 'move: Endure');
+					return defender.hp - 1;
 				}
 			},
 		},
@@ -450,9 +450,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	feint: {
 		inherit: true,
 		basePower: 50,
-		onTry(source, target) {
-			if (!target.volatiles['protect']) {
-				this.add('-fail', source);
+		onTry(attacker, defender) {
+			if (!defender.volatiles['protect']) {
+				this.add('-fail', attacker);
 				return null;
 			}
 		},
@@ -490,17 +490,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	fling: {
 		inherit: true,
-		onPrepareHit(target, source, move) {
-			if (source.ignoringItem(true)) return false;
-			const item = source.getItem();
-			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
+		onPrepareHit(defender, attacker, move) {
+			if (attacker.ignoringItem(true)) return false;
+			const item = attacker.getItem();
+			if (!this.singleEvent('TakeItem', item, attacker.itemState, attacker, attacker, move, item)) return false;
 			if (!item.fling) return false;
 			move.basePower = item.fling.basePower;
 			this.debug(`BP: ${move.basePower}`);
 			if (item.isBerry) {
 				move.onHit = function (foe) {
-					if (this.singleEvent('Eat', item, source.itemState, foe, source, move)) {
-						this.runEvent('EatItem', foe, source, move, item);
+					if (this.singleEvent('Eat', item, attacker.itemState, foe, attacker, move)) {
+						this.runEvent('EatItem', foe, attacker, move, item);
 						if (item.id === 'leppaberry') foe.staleness = 'external';
 					}
 					if (item.onEat) foe.ateBerry = true;
@@ -515,7 +515,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					move.secondaries.push({ volatileStatus: item.fling.volatileStatus });
 				}
 			}
-			source.addVolatile('fling');
+			attacker.addVolatile('fling');
 		},
 	},
 	focuspunch: {
@@ -555,8 +555,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 90,
 		basePower: 80,
 		pp: 15,
-		onTry(source, target) {
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+		onTry(attacker, defender) {
+			if (!defender.side.addSlotCondition(defender, 'futuremove')) return false;
 			const moveData = {
 				name: "Future Sight",
 				basePower: 80,
@@ -565,11 +565,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				willCrit: false,
 				type: '???',
 			} as unknown as ActiveMove;
-			const damage = this.actions.getDamage(source, target, moveData, true);
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+			const damage = this.actions.getDamage(attacker, defender, moveData, true);
+			Object.assign(defender.side.slotConditions[defender.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',
-				source,
+				attacker,
 				moveData: {
 					id: 'futuresight',
 					name: "Future Sight",
@@ -582,7 +582,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					type: '???',
 				},
 			});
-			this.add('-start', source, 'Future Sight');
+			this.add('-start', attacker, 'Future Sight');
 			return null;
 		},
 	},
@@ -621,9 +621,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healbell: {
 		inherit: true,
-		onHit(target, source) {
-			this.add('-activate', source, 'move: Heal Bell');
-			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+		onHit(defender, attacker) {
+			this.add('-activate', attacker, 'move: Heal Bell');
+			const allies = [...defender.side.pokemon, ...defender.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally.hasAbility('soundproof') && !this.suppressingAbility(ally)) {
 					if (ally.isActive) this.add('-immune', ally, '[from] ability: Soundproof');
@@ -640,7 +640,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			inherit: true,
 			onResidualOrder: 10,
 			onResidualSubOrder: 17,
-			onTryHeal(damage, pokemon, source, effect) {
+			onTryHeal(damage, pokemon, attacker, effect) {
 				if (effect && (effect.id === 'drain' || effect.id === 'leechseed' || effect.id === 'wish')) {
 					return false;
 				}
@@ -656,15 +656,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 1,
 			onEntryHazardPriority: -1,
-			onEntryHazard(target) {
-				if (target.hp > 0) {
-					target.heal(target.maxhp);
-					target.clearStatus();
-					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					target.side.removeSlotCondition(target, 'healingwish');
-					target.lastMove = this.lastMove;
+			onEntryHazard(defender) {
+				if (defender.hp > 0) {
+					defender.heal(defender.maxhp);
+					defender.clearStatus();
+					this.add('-heal', defender, defender.getHealth, '[from] move: Healing Wish');
+					defender.side.removeSlotCondition(defender, 'healingwish');
+					defender.lastMove = this.lastMove;
 				} else {
-					target.switchFlag = true;
+					defender.switchFlag = true;
 				}
 			},
 		},
@@ -673,11 +673,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 100,
 		pp: 20,
-		onMoveFail(target, source, move) {
+		onMoveFail(defender, attacker, move) {
 			move.causedCrashDamage = true;
-			let damage = this.actions.getDamage(source, target, move, true);
-			if (!damage) damage = target.maxhp;
-			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
+			let damage = this.actions.getDamage(attacker, defender, move, true);
+			if (!damage) damage = defender.maxhp;
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(defender.maxhp / 2)), attacker, attacker, move);
 		},
 	},
 	iciclespear: {
@@ -688,9 +688,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { bypasssub: 1, metronome: 1 },
 		onTryHit(pokemon) {
-			for (const target of pokemon.foes()) {
+			for (const defender of pokemon.foes()) {
 				for (const move of pokemon.moves) {
-					if (target.moves.includes(move)) return;
+					if (defender.moves.includes(move)) return;
 				}
 			}
 			return false;
@@ -708,22 +708,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 85,
 		pp: 25,
-		onMoveFail(target, source, move) {
+		onMoveFail(defender, attacker, move) {
 			move.causedCrashDamage = true;
-			let damage = this.actions.getDamage(source, target, move, true);
-			if (!damage) damage = target.maxhp;
-			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
+			let damage = this.actions.getDamage(attacker, defender, move, true);
+			if (!damage) damage = defender.maxhp;
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(defender.maxhp / 2)), attacker, attacker, move);
 		},
 	},
 	knockoff: {
 		inherit: true,
-		onAfterHit(target, source, move) {
-			if (!target.item) return;
-			const item = target.getItem();
-			if (this.runEvent('TakeItem', target, source, move, item)) {
-				target.item = '';
-				target.itemKnockedOff = true;
-				this.add('-enditem', target, item.name, '[from] move: Knock Off', `[of] ${source}`);
+		onAfterHit(defender, attacker, move) {
+			if (!defender.item) return;
+			const item = defender.getItem();
+			if (this.runEvent('TakeItem', defender, attacker, move, item)) {
+				defender.item = '';
+				defender.itemKnockedOff = true;
+				this.add('-enditem', defender, item.name, '[from] move: Knock Off', `[of] ${attacker}`);
 				if (this.gen === 4) {
 					this.hint("In Gen 4, Knock Off makes the Pokémon unable to obtain a new item.", true);
 				}
@@ -747,11 +747,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onAnyModifyDamage: undefined, // no inherit
-			onAnyModifyDamagePhase1(damage, source, target, move) {
-				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Special') {
-					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+			onAnyModifyDamagePhase1(damage, attacker, defender, move) {
+				if (defender !== attacker && this.effectState.defender.hasAlly(defender) && this.getCategory(move) === 'Special') {
+					if (!defender.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.alliesAndSelf().length > 1) return this.chainModify(2, 3);
+						if (defender.alliesAndSelf().length > 1) return this.chainModify(2, 3);
 						return this.chainModify(0.5);
 					}
 				}
@@ -784,25 +784,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			duration: 1,
-			onStart(target) {
-				this.debug('Lunar Dance started on ' + target.getSlot());
+			onStart(defender) {
+				this.debug('Lunar Dance started on ' + defender.getSlot());
 			},
 			onEntryHazardPriority: -1,
-			onEntryHazard(target) {
-				if (target.getSlot() !== this.effectState.sourceSlot) {
+			onEntryHazard(defender) {
+				if (defender.getSlot() !== this.effectState.sourceSlot) {
 					return;
 				}
-				if (target.hp > 0) {
-					target.heal(target.maxhp);
-					target.clearStatus();
-					for (const moveSlot of target.moveSlots) {
+				if (defender.hp > 0) {
+					defender.heal(defender.maxhp);
+					defender.clearStatus();
+					for (const moveSlot of defender.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
-					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-					target.side.removeSlotCondition(target, 'lunardance');
-					target.lastMove = this.lastMove;
+					this.add('-heal', defender, defender.getHealth, '[from] move: Lunar Dance');
+					defender.side.removeSlotCondition(defender, 'lunardance');
+					defender.lastMove = this.lastMove;
 				} else {
-					target.switchFlag = true;
+					defender.switchFlag = true;
 				}
 			},
 		},
@@ -811,14 +811,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (target === source || move.hasBounced || !move.flags['reflectable']) {
+			onTryHit(defender, attacker, move) {
+				if (defender === attacker || move.hasBounced || !move.flags['reflectable']) {
 					return;
 				}
-				target.removeVolatile('magiccoat');
+				defender.removeVolatile('magiccoat');
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
-				this.actions.useMove(newMove, target, { target: source });
+				this.actions.useMove(newMove, defender, { defender: attacker });
 				return null;
 			},
 			onAllyTryHitSide: undefined, // no inherit
@@ -834,9 +834,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		volatileStatus: 'magnetrise',
 		condition: {
 			inherit: true,
-			onStart(target) {
-				if (target.volatiles['ingrain'] || target.ability === 'levitate') return false;
-				this.add('-start', target, 'Magnet Rise');
+			onStart(defender) {
+				if (defender.volatiles['ingrain'] || defender.ability === 'levitate') return false;
+				this.add('-start', defender, 'Magnet Rise');
 			},
 			onResidualOrder: 10,
 			onResidualSubOrder: 16,
@@ -881,26 +881,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: {
 			protect: 1, allyanim: 1, noassist: 1, failcopycat: 1, failencore: 1, failinstruct: 1, failmimic: 1,
 		},
-		onHit(target, source) {
-			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
+		onHit(defender, attacker) {
+			if (attacker.transformed || !defender.lastMove || defender.volatiles['substitute']) {
 				return false;
 			}
-			if (target.lastMove.flags['failmimic'] || source.moves.includes(target.lastMove.id)) {
+			if (defender.lastMove.flags['failmimic'] || attacker.moves.includes(defender.lastMove.id)) {
 				return false;
 			}
-			const mimicIndex = source.moves.indexOf('mimic');
+			const mimicIndex = attacker.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
-			const move = this.dex.moves.get(target.lastMove.id);
-			source.moveSlots[mimicIndex] = {
+			const move = this.dex.moves.get(defender.lastMove.id);
+			attacker.moveSlots[mimicIndex] = {
 				move: move.name,
 				id: move.id,
 				pp: Math.min(5, move.pp),
-				maxpp: this.calculatePP(move, source.ppUps[mimicIndex] || 0),
+				maxpp: this.calculatePP(move, attacker.ppUps[mimicIndex] || 0),
 				disabled: false,
 				used: false,
 				virtual: true,
 			};
-			this.add('-activate', source, 'move: Mimic', move.name);
+			this.add('-activate', attacker, 'move: Mimic', move.name);
 		},
 	},
 	minimize: {
@@ -918,13 +918,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onTryHit: undefined, // no inherit
 		onHit(pokemon) {
 			const lastAttackedBy = pokemon.getLastAttackedBy();
-			if (!lastAttackedBy?.source.lastMove || !lastAttackedBy.move) {
+			if (!lastAttackedBy?.attacker.lastMove || !lastAttackedBy.move) {
 				return false;
 			}
 			const noMirror = [
 				'acupressure', 'aromatherapy', 'assist', 'chatter', 'copycat', 'counter', 'curse', 'doomdesire', 'feint', 'focuspunch', 'futuresight', 'gravity', 'hail', 'haze', 'healbell', 'helpinghand', 'lightscreen', 'luckychant', 'magiccoat', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'mist', 'mudsport', 'naturepower', 'perishsong', 'psychup', 'raindance', 'reflect', 'roleplay', 'safeguard', 'sandstorm', 'sketch', 'sleeptalk', 'snatch', 'spikes', 'spitup', 'stealthrock', 'struggle', 'sunnyday', 'tailwind', 'toxicspikes', 'transform', 'watersport',
 			];
-			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
+			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.attacker.hasMove(lastAttackedBy.move)) {
 				return false;
 			}
 			this.actions.useMove(lastAttackedBy.move, pokemon);
@@ -969,7 +969,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			inherit: true,
 			noCopy: false,
 			onAnyBasePowerPriority: 3,
-			onAnyBasePower(basePower, user, target, move) {
+			onAnyBasePower(basePower, user, defender, move) {
 				if (move.type === 'Electric') {
 					this.debug('Mud Sport weaken');
 					return this.chainModify(0.5);
@@ -1002,8 +1002,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	payback: {
 		inherit: true,
-		basePowerCallback(pokemon, target) {
-			if (this.queue.willMove(target)) {
+		basePowerCallback(pokemon, defender) {
+			if (this.queue.willMove(defender)) {
 				return 50;
 			}
 			this.debug('BP doubled');
@@ -1042,14 +1042,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 3,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target)) return;
-				this.add('-activate', target, 'Protect');
-				const lockedmove = source.getVolatile('lockedmove');
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender)) return;
+				this.add('-activate', defender, 'Protect');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is NOT reset
-					if (source.volatiles['lockedmove'].trueDuration >= 2) {
-						source.volatiles['lockedmove'].duration = 2;
+					if (attacker.volatiles['lockedmove'].trueDuration >= 2) {
+						attacker.volatiles['lockedmove'].duration = 2;
 					}
 				}
 				return null;
@@ -1065,13 +1065,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onFoeBeforeSwitchOut(pokemon) {
-				const source: Pokemon = this.effectState.source;
+				const attacker: Pokemon = this.effectState.attacker;
 				this.debug('Pursuit start');
 				if (
-					['frz', 'slp'].includes(source.status) || (source.hasAbility('truant') && source.volatiles['truant']) ||
-					!source.isAdjacent(pokemon) || !source.hp ||
-					(source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit') ||
-					!this.queue.cancelMove(source)
+					['frz', 'slp'].includes(attacker.status) || (attacker.hasAbility('truant') && attacker.volatiles['truant']) ||
+					!attacker.isAdjacent(pokemon) || !attacker.hp ||
+					(attacker.volatiles['encore'] && attacker.volatiles['encore'].move !== 'pursuit') ||
+					!this.queue.cancelMove(attacker)
 				) {
 					return;
 				}
@@ -1081,21 +1081,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 				// If it is, then Mega Evolve before moving.
-				if (source.canMegaEvo || source.canUltraBurst) {
+				if (attacker.canMegaEvo || attacker.canUltraBurst) {
 					for (const [actionIndex, action] of this.queue.entries()) {
-						if (action.pokemon === source && action.choice === 'megaEvo') {
-							this.actions.runMegaEvo(source);
+						if (action.pokemon === attacker && action.choice === 'megaEvo') {
+							this.actions.runMegaEvo(attacker);
 							this.queue.list.splice(actionIndex, 1);
 							break;
 						}
 					}
 				}
 				const move = this.dex.getActiveMove('pursuit');
-				source.deductPP(move.id);
-				source.moveUsed(move, pokemon.position);
-				if (this.actions.useMove(move, source, { target: pokemon, sourceEffect: this.effectState.sourceEffect }) &&
-					source.getItem().isChoice) {
-					source.addVolatile('choicelock');
+				attacker.deductPP(move.id);
+				attacker.moveUsed(move, pokemon.position);
+				if (this.actions.useMove(move, attacker, { defender: pokemon, sourceEffect: this.effectState.sourceEffect }) &&
+					attacker.getItem().isChoice) {
+					attacker.addVolatile('choicelock');
 				}
 			},
 		},
@@ -1128,11 +1128,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			onAnyModifyDamage: undefined, // no inherit
-			onAnyModifyDamagePhase1(damage, source, target, move) {
-				if (target !== source && this.effectState.target.hasAlly(target) && this.getCategory(move) === 'Physical') {
-					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
+			onAnyModifyDamagePhase1(damage, attacker, defender, move) {
+				if (defender !== attacker && this.effectState.defender.hasAlly(defender) && this.getCategory(move) === 'Physical') {
+					if (!defender.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.alliesAndSelf().length > 1) return this.chainModify(2, 3);
+						if (defender.alliesAndSelf().length > 1) return this.chainModify(2, 3);
 						return this.chainModify(0.5);
 					}
 				}
@@ -1201,27 +1201,27 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1,
 			failcopycat: 1, failinstruct: 1, failmimic: 1, nosketch: 1,
 		},
-		onHit(target, source) {
-			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
+		onHit(defender, attacker) {
+			if (attacker.transformed || !defender.lastMove || defender.volatiles['substitute']) {
 				return false;
 			}
-			if (target.lastMove.flags['nosketch'] || source.moves.includes(target.lastMove.id)) {
+			if (defender.lastMove.flags['nosketch'] || attacker.moves.includes(defender.lastMove.id)) {
 				return false;
 			}
-			const sketchIndex = source.moves.indexOf('sketch');
+			const sketchIndex = attacker.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
-			const move = this.dex.moves.get(target.lastMove.id);
+			const move = this.dex.moves.get(defender.lastMove.id);
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
 				pp: move.pp,
-				maxpp: this.calculatePP(move, source.ppUps[sketchIndex] || 0),
+				maxpp: this.calculatePP(move, attacker.ppUps[sketchIndex] || 0),
 				disabled: false,
 				used: false,
 			};
-			source.moveSlots[sketchIndex] = sketchedMove;
-			source.baseMoveSlots[sketchIndex] = sketchedMove;
-			this.add('-activate', source, 'move: Mimic', move.name);
+			attacker.moveSlots[sketchIndex] = sketchedMove;
+			attacker.baseMoveSlots[sketchIndex] = sketchedMove;
+			this.add('-activate', attacker, 'move: Mimic', move.name);
 		},
 	},
 	sleeptalk: {
@@ -1235,17 +1235,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { bypasssub: 1, noassist: 1, failcopycat: 1 },
 		condition: {
 			inherit: true,
-			onAnyPrepareHit(source, target, move) {
-				const snatchUser = this.effectState.source;
+			onAnyPrepareHit(attacker, defender, move) {
+				const snatchUser = this.effectState.attacker;
 				if (snatchUser.isSkyDropped()) return;
 				if (!move || move.isZ || move.isMax || !move.flags['snatch']) {
 					return;
 				}
 				snatchUser.removeVolatile('snatch');
-				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
+				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${attacker}`);
 
 				// check Pressure
-				const ppDrop = this.runEvent('DeductPP', source, snatchUser, this.effectState.sourceEffect);
+				const ppDrop = this.runEvent('DeductPP', attacker, snatchUser, this.effectState.sourceEffect);
 				const extraPP = ppDrop !== true ? ppDrop : 0;
 				if (extraPP > 0) {
 					snatchUser.deductPP(this.effectState.sourceEffect.id, extraPP);
@@ -1306,54 +1306,54 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryPrimaryHit(target, source, move) {
-				if (target === source || move.flags['bypasssub']) {
+			onTryPrimaryHit(defender, attacker, move) {
+				if (defender === attacker || move.flags['bypasssub']) {
 					return;
 				}
-				let damage = this.actions.getDamage(source, target, move);
+				let damage = this.actions.getDamage(attacker, defender, move);
 				if (!damage && damage !== 0) {
-					this.add('-fail', source);
+					this.add('-fail', attacker);
 					this.attrLastMove('[still]');
 					return null;
 				}
-				if (damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp as number;
+				if (damage > defender.volatiles['substitute'].hp) {
+					damage = defender.volatiles['substitute'].hp as number;
 				}
-				target.volatiles['substitute'].hp -= damage;
-				source.lastDamage = damage;
-				if (target.volatiles['substitute'].hp <= 0) {
-					target.removeVolatile('substitute');
-					target.addVolatile('substitutebroken');
-					if (target.volatiles['substitutebroken']) target.volatiles['substitutebroken'].move = move.id;
+				defender.volatiles['substitute'].hp -= damage;
+				attacker.lastDamage = damage;
+				if (defender.volatiles['substitute'].hp <= 0) {
+					defender.removeVolatile('substitute');
+					defender.addVolatile('substitutebroken');
+					if (defender.volatiles['substitutebroken']) defender.volatiles['substitutebroken'].move = move.id;
 				} else {
-					this.add('-activate', target, 'Substitute', '[damage]');
+					this.add('-activate', defender, 'Substitute', '[damage]');
 				}
 				if (move.ohko) this.add('-ohko');
 				if (damage) {
-					this.actions.applyRecoilDamage(damage, move, source);
+					this.actions.applyRecoilDamage(damage, move, attacker);
 				}
 				if (move.drain) {
-					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), attacker, defender, 'drain');
 				}
-				this.runEvent('AfterSubDamage', target, source, move, damage);
+				this.runEvent('AfterSubDamage', defender, attacker, move, damage);
 				return this.HIT_SUBSTITUTE;
 			},
 		},
 	},
 	suckerpunch: {
 		inherit: true,
-		onTry(source, target) {
-			const action = this.queue.willMove(target);
-			if (action?.choice !== 'move' || action.move.category === 'Status' || target.volatiles['mustrecharge']) {
-				this.add('-fail', source);
+		onTry(attacker, defender) {
+			const action = this.queue.willMove(defender);
+			if (action?.choice !== 'move' || action.move.category === 'Status' || defender.volatiles['mustrecharge']) {
+				this.add('-fail', attacker);
 				return null;
 			}
 		},
 	},
 	swallow: {
 		inherit: true,
-		onTry(source) {
-			return !!source.volatiles['stockpile'];
+		onTry(attacker) {
+			return !!attacker.volatiles['stockpile'];
 		},
 	},
 	synthesis: {
@@ -1384,9 +1384,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			duration: 3,
-			durationCallback(target, source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
+			durationCallback(defender, attacker, effect) {
+				if (attacker?.hasAbility('persistent')) {
+					this.add('-activate', attacker, 'ability: Persistent', '[move] Tailwind');
 					return 5;
 				}
 				return 3;
@@ -1407,8 +1407,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			durationCallback() {
 				return this.random(3, 6);
 			},
-			onStart(target) {
-				this.add('-start', target, 'move: Taunt');
+			onStart(defender) {
+				this.add('-start', defender, 'move: Taunt');
 			},
 			onResidualOrder: 10,
 			onResidualSubOrder: 15,
@@ -1498,7 +1498,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			inherit: true,
 			noCopy: false,
 			onAnyBasePowerPriority: 3,
-			onAnyBasePower(basePower, user, target, move) {
+			onAnyBasePower(basePower, user, defender, move) {
 				if (move.type === 'Fire') {
 					this.debug('Water Sport weaken');
 					return this.chainModify(0.5);
@@ -1522,11 +1522,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 2,
 			onResidualOrder: 7,
-			onEnd(target) {
-				if (!target.fainted) {
-					const source = this.effectState.source;
-					const damage = this.heal(target.baseMaxhp / 2, target, target);
-					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + source.name);
+			onEnd(defender) {
+				if (!defender.fainted) {
+					const attacker = this.effectState.attacker;
+					const damage = this.heal(defender.baseMaxhp / 2, defender, defender);
+					if (damage) this.add('-heal', defender, defender.getHealth, '[from] move: Wish', '[wisher] ' + attacker.name);
 				}
 			},
 		},
@@ -1541,9 +1541,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	wringout: {
 		inherit: true,
-		basePowerCallback(pokemon, target) {
-			const bp = Math.floor(target.hp * 120 / target.maxhp) + 1;
-			this.debug(`BP for ${target.hp}/${target.maxhp} HP: ${bp}`);
+		basePowerCallback(pokemon, defender) {
+			const bp = Math.floor(defender.hp * 120 / defender.maxhp) + 1;
+			this.debug(`BP for ${defender.hp}/${defender.maxhp} HP: ${bp}`);
 			return bp;
 		},
 	},

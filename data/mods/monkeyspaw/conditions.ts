@@ -6,19 +6,19 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		name: 'confusion',
 		// this is a volatile status
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.id === 'lockedmove') {
-				this.add('-start', target, 'confusion', '[fatigue]');
+				this.add('-start', defender, 'confusion', '[fatigue]');
 			} else if (sourceEffect?.effectType === 'Ability') {
-				this.add('-start', target, 'confusion', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add('-start', defender, 'confusion', '[from] ability: ' + sourceEffect.name, `[of] ${attacker}`);
 			} else {
-				this.add('-start', target, 'confusion');
+				this.add('-start', defender, 'confusion');
 			}
 			const min = sourceEffect?.id === 'axekick' ? 3 : 2;
-			if (!target.m.monkeyPawLuck) this.effectState.time = this.random(min, 6);
+			if (!defender.m.monkeyPawLuck) this.effectState.time = this.random(min, 6);
 		},
-		onEnd(target) {
-			this.add('-end', target, 'confusion');
+		onEnd(defender) {
+			this.add('-end', defender, 'confusion');
 		},
 		onBeforeMovePriority: 3,
 		onBeforeMove(pokemon) {

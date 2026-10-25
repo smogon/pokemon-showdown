@@ -15,8 +15,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		spritenum: 111,
 		itemUser: ["Flygon"],
 		megaStone: { "Flygon": "Trapinch" },
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		desc: "If held by a Flygon, this item allows it to Mega Evolve in battle.",
 	},
@@ -79,11 +79,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	// modified for nya's ability
 	focusband: {
 		inherit: true,
-		onDamage(damage, target, source, effect) {
-			const chance = target.hasAbility('adorablegrace') ? 2 : 1;
-			if (this.randomChance(chance, 10) && damage >= target.hp && effect?.effectType === 'Move') {
-				this.add("-activate", target, "item: Focus Band");
-				return target.hp - 1;
+		onDamage(damage, defender, attacker, effect) {
+			const chance = defender.hasAbility('adorablegrace') ? 2 : 1;
+			if (this.randomChance(chance, 10) && damage >= defender.hp && effect?.effectType === 'Move') {
+				this.add("-activate", defender, "item: Focus Band");
+				return defender.hp - 1;
 			}
 		},
 	},
@@ -101,12 +101,12 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	// modified for SexyMalasada's ability
 	lifeorb: {
 		inherit: true,
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
-				if (source.hasAbility('Ancestry Ritual')) {
-					this.heal(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+		onAfterMoveSecondarySelf(attacker, defender, move) {
+			if (attacker && attacker !== defender && move && move.category !== 'Status' && !attacker.forceSwitchFlag) {
+				if (attacker.hasAbility('Ancestry Ritual')) {
+					this.heal(attacker.baseMaxhp / 10, attacker, attacker, this.dex.items.get('lifeorb'));
 				} else {
-					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+					this.damage(attacker.baseMaxhp / 10, attacker, attacker, this.dex.items.get('lifeorb'));
 				}
 			}
 		},

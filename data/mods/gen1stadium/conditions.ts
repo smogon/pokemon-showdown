@@ -2,8 +2,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'brn');
+		onStart(defender) {
+			this.add('-status', defender, 'brn');
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
@@ -16,8 +16,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	par: {
 		name: 'par',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'par');
+		onStart(defender) {
+			this.add('-status', defender, 'par');
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
@@ -35,22 +35,22 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				this.add('-status', defender, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
-				this.add('-status', target, 'slp');
+				this.add('-status', defender, 'slp');
 			}
 			// 1-3 turns
 			this.effectState.startTime = this.random(1, 4);
 			this.effectState.time = this.effectState.startTime;
 
-			if (target.removeVolatile('nightmare')) {
-				this.add('-end', target, 'Nightmare', '[silent]');
+			if (defender.removeVolatile('nightmare')) {
+				this.add('-end', defender, 'Nightmare', '[silent]');
 			}
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			pokemon.statusState.time--;
 			this.add('cant', pokemon, 'slp');
 			pokemon.lastMove = null;
@@ -63,26 +63,26 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	frz: {
 		name: 'frz',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'frz');
+		onStart(defender) {
+			this.add('-status', defender, 'frz');
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			this.add('cant', pokemon, 'frz');
 			pokemon.lastMove = null;
 			return false;
 		},
-		onHit(target, source, move) {
+		onHit(defender, attacker, move) {
 			if (move.type === 'Fire' && move.category !== 'Status') {
-				target.cureStatus();
+				defender.cureStatus();
 			}
 		},
 	},
 	psn: {
 		name: 'psn',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'psn');
+		onStart(defender) {
+			this.add('-status', defender, 'psn');
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
@@ -94,8 +94,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	confusion: {
 		inherit: true,
-		onStart(target) {
-			this.add('-start', target, 'confusion');
+		onStart(defender) {
+			this.add('-start', defender, 'confusion');
 			this.effectState.time = this.random(2, 6);
 		},
 	},
@@ -107,11 +107,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'partiallytrapped',
 		duration: 2,
 		onBeforeMovePriority: 1,
-		onStart(target, source, effect) {
-			this.add('-activate', target, `move: ${effect}`, `[of] ${source}`);
+		onStart(defender, attacker, effect) {
+			this.add('-activate', defender, `move: ${effect}`, `[of] ${attacker}`);
 		},
 		onBeforeMove(pokemon) {
-			if (this.effectState.source && (!this.effectState.source.isActive || this.effectState.source.hp <= 0)) {
+			if (this.effectState.attacker && (!this.effectState.attacker.isActive || this.effectState.attacker.hp <= 0)) {
 				pokemon.removeVolatile('partiallytrapped');
 				return;
 			}

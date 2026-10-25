@@ -7,7 +7,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	burnup: {
 		inherit: true,
-		onTryMove(pokemon, target, move) {
+		onTryMove(pokemon, defender, move) {
 			if (pokemon.hasType(pokemon.teraType)) return;
 			this.add('-fail', pokemon, 'move: Burn Up');
 			this.attrLastMove('[still]');
@@ -17,14 +17,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	charge: {
 		inherit: true,
 		condition: {
-			onStart(pokemon, source, effect) {
+			onStart(pokemon, attacker, effect) {
 				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
 					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else {
 					this.add('-start', pokemon, 'Charge');
 				}
 			},
-			onRestart(pokemon, source, effect) {
+			onRestart(pokemon, attacker, effect) {
 				if (effect && ['Electromorphosis', 'Wind Power'].includes(effect.name)) {
 					this.add('-start', pokemon, 'Charge', this.activeMove!.name, '[from] ability: ' + effect.name);
 				} else {
@@ -38,12 +38,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					return this.chainModify(2);
 				}
 			},
-			onMoveAborted(pokemon, target, move) {
+			onMoveAborted(pokemon, defender, move) {
 				if (move.type === pokemon.teraType && move.id !== 'tailwind' && move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
 			},
-			onAfterMove(pokemon, target, move) {
+			onAfterMove(pokemon, defender, move) {
 				if (move.type === pokemon.teraType && move.id !== 'tailwind' && move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
@@ -55,26 +55,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	curse: {
 		inherit: true,
-		onModifyMove(move, source, target) {
-			if (!source.hasType(source.teraType)) {
-				move.target = 'self';
-			} else if (source.isAlly(target)) {
-				move.target = 'randomNormal';
+		onModifyMove(move, attacker, defender) {
+			if (!attacker.hasType(attacker.teraType)) {
+				move.defender = 'self';
+			} else if (attacker.isAlly(defender)) {
+				move.defender = 'randomNormal';
 			}
 		},
-		onTryHit(target, source, move) {
-			if (!source.hasType(source.teraType)) {
+		onTryHit(defender, attacker, move) {
+			if (!attacker.hasType(attacker.teraType)) {
 				delete move.volatileStatus;
 				delete move.onHit;
 				move.self = { boosts: { spe: -1, atk: 1, def: 1 } };
-			} else if (move.volatileStatus && target.volatiles['curse']) {
+			} else if (move.volatileStatus && defender.volatiles['curse']) {
 				return false;
 			}
 		},
 	},
 	doubleshock: {
 		inherit: true,
-		onTryMove(pokemon, target, move) {
+		onTryMove(pokemon, defender, move) {
 			if (pokemon.hasType(pokemon.teraType)) return;
 			this.add('-fail', pokemon, 'move: Double Shock');
 			this.attrLastMove('[still]');
@@ -84,20 +84,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	dragoncheer: {
 		inherit: true,
 		condition: {
-			onStart(target, source, effect) {
-				if (target.volatiles['focusenergy']) return false;
+			onStart(defender, attacker, effect) {
+				if (defender.volatiles['focusenergy']) return false;
 				if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
-					this.add('-start', target, 'move: Dragon Cheer', '[silent]');
+					this.add('-start', defender, 'move: Dragon Cheer', '[silent]');
 				} else {
-					this.add('-start', target, 'move: Dragon Cheer');
+					this.add('-start', defender, 'move: Dragon Cheer');
 				}
 				// Store at the start because the boost doesn't change if a Pokemon
 				// Terastallizes into Dragon while having this volatile
 				// Found by DarkFE:
 				// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9894139
-				this.effectState.hasDragonType = target.hasType(source.teraType);
+				this.effectState.hasDragonType = defender.hasType(attacker.teraType);
 			},
-			onModifyCritRatio(critRatio, source) {
+			onModifyCritRatio(critRatio, attacker) {
 				return critRatio + (this.effectState.hasDragonType ? 2 : 1);
 			},
 		},
@@ -107,37 +107,37 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			effectType: 'Terrain',
 			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+			durationCallback(attacker, effect) {
+				if (attacker?.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
 			},
-			onSetStatus(status, target, source, effect) {
-				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+			onSetStatus(status, defender, attacker, effect) {
+				if (status.id === 'slp' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
-						this.add('-activate', target, 'move: Electric Terrain');
+						this.add('-activate', defender, 'move: Electric Terrain');
 					}
 					return false;
 				}
 			},
-			onTryAddVolatile(status, target) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+			onTryAddVolatile(status, defender) {
+				if (!defender.isGrounded() || defender.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
-					this.add('-activate', target, 'move: Electric Terrain');
+					this.add('-activate', defender, 'move: Electric Terrain');
 					return null;
 				}
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === this.effectState.source.teraType && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+				if (move.type === this.effectState.attacker.teraType && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onFieldStart(field, source, effect) {
+			onFieldStart(field, attacker, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect.name, `[of] ${attacker}`);
 				} else {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
@@ -153,11 +153,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onStart(target) {
-				this.add('-singleturn', target, 'move: Electrify');
+			onStart(defender) {
+				this.add('-singleturn', defender, 'move: Electrify');
 			},
 			onModifyTypePriority: -2,
-			onModifyType(move, pokemon, target) {
+			onModifyType(move, pokemon, defender) {
 				if (move.id !== 'struggle') {
 					this.debug('Electrify making move type electric');
 					move.type = pokemon.teraType;
@@ -187,7 +187,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(pokemon) {
-				if (!pokemon.hasType(this.effectState.source.teraType)) this.damage(pokemon.baseMaxhp / 8, pokemon);
+				if (!pokemon.hasType(this.effectState.attacker.teraType)) this.damage(pokemon.baseMaxhp / 8, pokemon);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 8,
@@ -198,30 +198,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	flowershield: {
 		inherit: true,
-		onHitField(t, source, move) {
+		onHitField(t, attacker, move) {
 			const targets: Pokemon[] = [];
 			for (const pokemon of this.getAllActive()) {
 				if (
-					pokemon.hasType(source.teraType) &&
+					pokemon.hasType(attacker.teraType) &&
 					(!pokemon.volatiles['maxguard'] ||
-						this.runEvent('TryHit', pokemon, source, move))
+						this.runEvent('TryHit', pokemon, attacker, move))
 				) {
 					// This move affects every Grass-type Pokemon in play.
 					targets.push(pokemon);
 				}
 			}
 			let success = false;
-			for (const target of targets) {
-				success = this.boost({ def: 1 }, target, source, move) || success;
+			for (const defender of targets) {
+				success = this.boost({ def: 1 }, defender, attacker, move) || success;
 			}
 			return success;
 		},
 	},
 	flyingpress: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			return typeMod + this.dex.getEffectiveness(target.side.foe.active[0].teraType, type);
+		onEffectiveness(typeMod, defender, type, move) {
+			if (!defender) return;
+			return typeMod + this.dex.getEffectiveness(defender.side.foe.active[0].teraType, type);
 		},
 	},
 	foresight: {
@@ -232,7 +232,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-start', pokemon, 'Foresight');
 			},
 			onNegateImmunity(pokemon, type) {
-				if (pokemon.hasType(this.effectState.source.teraType) && ['Normal', 'Fighting'].includes(type)) return false;
+				if (pokemon.hasType(this.effectState.attacker.teraType) && ['Normal', 'Fighting'].includes(type)) return false;
 			},
 			onModifyBoost(boosts) {
 				if (boosts.evasion && boosts.evasion > 0) {
@@ -243,16 +243,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	forestscurse: {
 		inherit: true,
-		onHit(target, source) {
-			if (target.hasType(source.teraType)) return false;
-			if (!target.addType(source.teraType)) return false;
-			this.add('-start', target, 'typeadd', source.teraType, '[from] move: Forest\'s Curse');
+		onHit(defender, attacker) {
+			if (defender.hasType(attacker.teraType)) return false;
+			if (!defender.addType(attacker.teraType)) return false;
+			this.add('-start', defender, 'typeadd', attacker.teraType, '[from] move: Forest\'s Curse');
 		},
 	},
 	freezedry: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type) {
-			if (type === target?.side.foe.active[0].teraType) return 1;
+		onEffectiveness(typeMod, defender, type) {
+			if (type === defender?.side.foe.active[0].teraType) return 1;
 		},
 	},
 	gmaxcannonade: {
@@ -264,8 +264,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
-			onResidual(target) {
-				if (!target.hasType(this.effectState.source.teraType)) this.damage(target.baseMaxhp / 6, target);
+			onResidual(defender) {
+				if (!defender.hasType(this.effectState.attacker.teraType)) this.damage(defender.baseMaxhp / 6, defender);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
@@ -287,7 +287,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// They don't get typed damage from Steelsurge because Steelsurge doesn't,
 				// so we're going to test the damage of a Steel-type Stealth Rock instead.
 				const steelHazard = this.dex.getActiveMove('Stealth Rock');
-				steelHazard.type = this.effectState.source.teraType;
+				steelHazard.type = this.effectState.attacker.teraType;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(steelHazard), -6, 6);
 				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
@@ -302,8 +302,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
-			onResidual(target) {
-				if (!target.hasType(this.effectState.source.teraType)) this.damage(target.baseMaxhp / 6, target);
+			onResidual(defender) {
+				if (!defender.hasType(this.effectState.attacker.teraType)) this.damage(defender.baseMaxhp / 6, defender);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
@@ -321,8 +321,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
-			onResidual(target) {
-				if (!target.hasType(this.effectState.source.teraType)) this.damage(target.baseMaxhp / 6, target);
+			onResidual(defender) {
+				if (!defender.hasType(this.effectState.attacker.teraType)) this.damage(defender.baseMaxhp / 6, defender);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
@@ -340,8 +340,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
-			onResidual(target) {
-				if (!target.hasType(this.effectState.source.teraType)) this.damage(target.baseMaxhp / 6, target);
+			onResidual(defender) {
+				if (!defender.hasType(this.effectState.attacker.teraType)) this.damage(defender.baseMaxhp / 6, defender);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
@@ -370,8 +370,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			effectType: 'Terrain',
 			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+			durationCallback(attacker, effect) {
+				if (attacker?.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
@@ -383,14 +383,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.debug('move weakened by grassy terrain');
 					return this.chainModify(0.5);
 				}
-				if (move.type === this.effectState.source.teraType && attacker.isGrounded()) {
+				if (move.type === this.effectState.attacker.teraType && attacker.isGrounded()) {
 					this.debug('grassy terrain boost');
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onFieldStart(field, source, effect) {
+			onFieldStart(field, attacker, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect.name, `[of] ${attacker}`);
 				} else {
 					this.add('-fieldstart', 'move: Grassy Terrain');
 				}
@@ -415,13 +415,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onFieldStart(target, source, sourceEffect) {
+			onFieldStart(defender, attacker, sourceEffect) {
 				this.add('-fieldactivate', 'move: Ion Deluge');
 				this.hint(`Normal-type moves become Electric-type after using ${sourceEffect}.`);
 			},
 			onModifyTypePriority: -2,
-			onModifyType(move, pokemon, target) {
-				if (move.type === this.effectState.source.teraType) {
+			onModifyType(move, pokemon, defender) {
+				if (move.type === this.effectState.attacker.teraType) {
 					move.type = 'Electric';
 					this.debug(move.name + "'s type changed to Electric");
 				}
@@ -430,17 +430,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	leechseed: {
 		inherit: true,
-		onTryImmunity(target, source) {
-			return !target.hasType(source.teraType);
+		onTryImmunity(defender, attacker) {
+			return !defender.hasType(attacker.teraType);
 		},
 	},
 	magicpowder: {
 		inherit: true,
-		onHit(target, source) {
-			if (target.getTypes().join() === source.teraType || !target.setType(source.teraType)) {
+		onHit(defender, attacker) {
+			if (defender.getTypes().join() === attacker.teraType || !defender.setType(attacker.teraType)) {
 				return false;
 			}
-			this.add('-start', target, 'typechange', source.teraType);
+			this.add('-start', defender, 'typechange', attacker.teraType);
 		},
 	},
 	miracleeye: {
@@ -451,7 +451,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-start', pokemon, 'Miracle Eye');
 			},
 			onNegateImmunity(pokemon, type) {
-				if (pokemon.hasType(this.effectState.source.teraType) && type === 'Psychic') return false;
+				if (pokemon.hasType(this.effectState.attacker.teraType) && type === 'Psychic') return false;
 			},
 			onModifyBoost(boosts) {
 				if (boosts.evasion && boosts.evasion > 0) {
@@ -465,36 +465,36 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			effectType: 'Terrain',
 			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+			durationCallback(attacker, effect) {
+				if (attacker?.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
 			},
-			onSetStatus(status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+			onSetStatus(status, defender, attacker, effect) {
+				if (!defender.isGrounded() || defender.isSemiInvulnerable()) return;
 				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
-					this.add('-activate', target, 'move: Misty Terrain');
+					this.add('-activate', defender, 'move: Misty Terrain');
 				}
 				return false;
 			},
-			onTryAddVolatile(status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+			onTryAddVolatile(status, defender, attacker, effect) {
+				if (!defender.isGrounded() || defender.isSemiInvulnerable()) return;
 				if (status.id === 'confusion') {
-					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', defender, 'move: Misty Terrain');
 					return null;
 				}
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === this.effectState.source.teraType && defender.isGrounded() && !defender.isSemiInvulnerable()) {
+				if (move.type === this.effectState.attacker.teraType && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
 			},
-			onFieldStart(field, source, effect) {
+			onFieldStart(field, attacker, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, `[of] ${attacker}`);
 				} else {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
@@ -510,12 +510,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 5,
-			onFieldStart(field, source) {
-				this.add('-fieldstart', 'move: Mud Sport', `[of] ${source}`);
+			onFieldStart(field, attacker) {
+				this.add('-fieldstart', 'move: Mud Sport', `[of] ${attacker}`);
 			},
 			onBasePowerPriority: 1,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === this.effectState.source.teraType) {
+				if (move.type === this.effectState.attacker.teraType) {
 					this.debug('mud sport weaken');
 					return this.chainModify([1352, 4096]);
 				}
@@ -540,12 +540,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onStart(target) {
-				this.add('-singleturn', target, 'Powder');
+			onStart(defender) {
+				this.add('-singleturn', defender, 'Powder');
 			},
 			onTryMovePriority: -1,
-			onTryMove(pokemon, target, move) {
-				if (move.type === this.effectState.source.teraType) {
+			onTryMove(pokemon, defender, move) {
+				if (move.type === this.effectState.attacker.teraType) {
 					this.add('-activate', pokemon, 'move: Powder');
 					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
 					this.attrLastMove('[still]');
@@ -559,38 +559,38 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			effectType: 'Terrain',
 			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+			durationCallback(attacker, effect) {
+				if (attacker?.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
 			},
 			onTryHitPriority: 4,
-			onTryHit(target, source, effect) {
-				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
+			onTryHit(defender, attacker, effect) {
+				if (effect && (effect.priority <= 0.1 || effect.defender === 'self')) {
 					return;
 				}
-				if (target.isSemiInvulnerable() || target.isAlly(source)) return;
-				if (!target.isGrounded()) {
+				if (defender.isSemiInvulnerable() || defender.isAlly(attacker)) return;
+				if (!defender.isGrounded()) {
 					const baseMove = this.dex.moves.get(effect.id);
 					if (baseMove.priority > 0) {
 						this.hint("Psychic Terrain doesn't affect airborne Pokémon.");
 					}
 					return;
 				}
-				this.add('-activate', target, 'move: Psychic Terrain');
+				this.add('-activate', defender, 'move: Psychic Terrain');
 				return null;
 			},
 			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === this.effectState.source.teraType && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+				if (move.type === this.effectState.attacker.teraType && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('psychic terrain boost');
 					return this.chainModify([5325, 4096]);
 				}
 			},
-			onFieldStart(field, source, effect) {
+			onFieldStart(field, attacker, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, `[of] ${attacker}`);
 				} else {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
@@ -610,9 +610,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-start', pokemon, 'Tar Shot');
 			},
 			onEffectivenessPriority: -2,
-			onEffectiveness(typeMod, target, type, move) {
-				if (!target || move.type !== this.effectState.source.teraType) return;
-				if (type !== target.getTypes()[0]) return;
+			onEffectiveness(typeMod, defender, type, move) {
+				if (!defender || move.type !== this.effectState.attacker.teraType) return;
+				if (type !== defender.getTypes()[0]) return;
 				return typeMod + 1;
 			},
 		},
@@ -622,14 +622,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 1,
 			onResidualOrder: 25,
-			onStart(target) {
-				if (target.terastallized) {
-					if (target.hasType(target.teraType)) {
+			onStart(defender) {
+				if (defender.terastallized) {
+					if (defender.hasType(defender.teraType)) {
 						this.add('-hint', "If a Terastallized Pokemon uses Roost, it remains Flying-type.");
 					}
 					return false;
 				}
-				this.add('-singleturn', target, 'move: Roost');
+				this.add('-singleturn', defender, 'move: Roost');
 			},
 			onTypePriority: -1,
 			onType(types, pokemon) {
@@ -640,7 +640,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	rototiller: {
 		inherit: true,
-		onHitField(target, source) {
+		onHitField(defender, attacker) {
 			const targets: Pokemon[] = [];
 			let anyAirborne = false;
 			for (const pokemon of this.getAllActive()) {
@@ -649,14 +649,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					anyAirborne = true;
 					continue;
 				}
-				if (pokemon.hasType(source.teraType)) {
+				if (pokemon.hasType(attacker.teraType)) {
 					// This move affects every grounded Grass-type Pokemon in play.
 					targets.push(pokemon);
 				}
 			}
 			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
 			for (const pokemon of targets) {
-				this.boost({ atk: 1, spa: 1 }, pokemon, source);
+				this.boost({ atk: 1, spa: 1 }, pokemon, attacker);
 			}
 		},
 	},
@@ -669,7 +669,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 13,
 			onResidual(pokemon) {
-				this.damage(pokemon.baseMaxhp / (pokemon.hasType(this.effectState.source.teraType) ? 4 : 8));
+				this.damage(pokemon.baseMaxhp / (pokemon.hasType(this.effectState.attacker.teraType) ? 4 : 8));
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Salt Cure');
@@ -678,14 +678,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	soak: {
 		inherit: true,
-		onHit(target, source) {
-			if (target.getTypes().join() === source.teraType || !target.setType(source.teraType)) {
+		onHit(defender, attacker) {
+			if (defender.getTypes().join() === attacker.teraType || !defender.setType(attacker.teraType)) {
 				// Soak should animate even when it fails.
 				// Returning false would suppress the animation.
-				this.add('-fail', target);
+				this.add('-fail', defender);
 				return null;
 			}
-			this.add('-start', target, 'typechange', source.teraType);
+			this.add('-start', defender, 'typechange', attacker.teraType);
 		},
 	},
 	stealthrock: {
@@ -697,24 +697,24 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
-				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.effectState.source.teraType), -6, 6);
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.effectState.attacker.teraType), -6, 6);
 				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
 		},
 	},
 	stoneaxe: {
 		inherit: true,
-		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('stealthrock', source);
+		onAfterHit(defender, attacker, move) {
+			if (!move.hasSheerForce && attacker.hp) {
+				for (const side of attacker.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock', attacker);
 				}
 			}
 		},
-		onAfterSubDamage(damage, target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('stealthrock', source);
+		onAfterSubDamage(damage, defender, attacker, move) {
+			if (!move.hasSheerForce && attacker.hp) {
+				for (const side of attacker.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock', attacker);
 				}
 			}
 		},
@@ -743,7 +743,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
-				if (pokemon.hasType(this.effectState.source.teraType)) {
+				if (pokemon.hasType(this.effectState.attacker.teraType)) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
@@ -758,14 +758,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	trickortreat: {
 		inherit: true,
-		onHit(target, source) {
-			if (target.hasType(source.teraType)) return false;
-			if (!target.addType(source.teraType)) return false;
-			this.add('-start', target, 'typeadd', source.teraType, '[from] move: Trick-or-Treat');
+		onHit(defender, attacker) {
+			if (defender.hasType(attacker.teraType)) return false;
+			if (!defender.addType(attacker.teraType)) return false;
+			this.add('-start', defender, 'typeadd', attacker.teraType, '[from] move: Trick-or-Treat');
 
-			if (target.side.active.length === 2 && target.position === 1) {
+			if (defender.side.active.length === 2 && defender.position === 1) {
 				// Curse Glitch
-				const action = this.queue.willMove(target);
+				const action = this.queue.willMove(defender);
 				if (action?.move.id === 'curse') {
 					action.targetLoc = -1;
 				}
@@ -791,12 +791,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 5,
-			onFieldStart(field, source) {
-				this.add('-fieldstart', 'move: Water Sport', `[of] ${source}`);
+			onFieldStart(field, attacker) {
+				this.add('-fieldstart', 'move: Water Sport', `[of] ${attacker}`);
 			},
 			onBasePowerPriority: 1,
 			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === this.effectState.source.teraType) {
+				if (move.type === this.effectState.attacker.teraType) {
 					this.debug('water sport weaken');
 					return this.chainModify([1352, 4096]);
 				}

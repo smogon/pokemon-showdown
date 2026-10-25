@@ -1,7 +1,7 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	adamantorb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move && user.species.name === 'Dialga' && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
@@ -9,7 +9,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	bigroot: {
 		inherit: true,
-		onTryHeal(damage, target, source, effect) {
+		onTryHeal(damage, defender, attacker, effect) {
 			const heals = ['drain', 'leechseed', 'ingrain', 'aquaring'];
 			if (heals.includes(effect.id)) {
 				return Math.floor(damage * 1.3);
@@ -56,15 +56,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	chopleberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
+		onSourceModifyDamage(damage, attacker, defender, move) {
 			if (move.causedCrashDamage) return damage;
-			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'];
+			if (move.type === 'Fighting' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'];
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -147,22 +147,22 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	focussash: {
 		inherit: true,
 		onDamage: undefined, // no inherit
-		onTryHit(target, source, move) {
-			if (target !== source && target.hp === target.maxhp) {
-				target.addVolatile('focussash');
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && defender.hp === defender.maxhp) {
+				defender.addVolatile('focussash');
 			}
 		},
 		condition: {
 			duration: 1,
-			onDamage(damage, target, source, effect) {
-				if (effect?.effectType === 'Move' && damage >= target.hp) {
+			onDamage(damage, defender, attacker, effect) {
+				if (effect?.effectType === 'Move' && damage >= defender.hp) {
 					this.effectState.activated = true;
-					return target.hp - 1;
+					return defender.hp - 1;
 				}
 			},
-			onAfterMoveSecondary(target) {
-				if (this.effectState.activated) target.useItem();
-				target.removeVolatile('focussash');
+			onAfterMoveSecondary(defender) {
+				if (this.effectState.activated) defender.useItem();
+				defender.removeVolatile('focussash');
 			},
 		},
 	},
@@ -173,7 +173,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	griseousorb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.species.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
@@ -243,21 +243,21 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onModifyDamage: undefined, // no inherit
 		onAfterMoveSecondarySelf: undefined, // no inherit
-		onBasePower(basePower, user, target) {
-			if (!target.volatiles['substitute']) {
+		onBasePower(basePower, user, defender) {
+			if (!defender.volatiles['substitute']) {
 				user.addVolatile('lifeorb');
 			}
 			return basePower;
 		},
-		onModifyDamagePhase2(damage, source, target, move) {
+		onModifyDamagePhase2(damage, attacker, defender, move) {
 			if (!move.flags['futuremove']) return damage * 1.3;
 		},
 		condition: {
 			duration: 1,
-			onAfterMoveSecondarySelf(source, target, move) {
-				if (move?.effectType === 'Move' && source?.volatiles['lifeorb']) {
-					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
-					source.removeVolatile('lifeorb');
+			onAfterMoveSecondarySelf(attacker, defender, move) {
+				if (move?.effectType === 'Move' && attacker?.volatiles['lifeorb']) {
+					this.damage(attacker.baseMaxhp / 10, attacker, attacker, this.dex.items.get('lifeorb'));
+					attacker.removeVolatile('lifeorb');
 				}
 			},
 		},
@@ -290,7 +290,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lustrousorb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move && user.species.name === 'Palkia' && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify(1.2);
 			}
@@ -321,7 +321,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryMove(pokemon, target, move) {
+			onTryMove(pokemon, defender, move) {
 				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
 					return;
@@ -334,7 +334,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				this.effectState.lastMove = move.id;
 			},
 			onModifyDamage: undefined, // no inherit
-			onModifyDamagePhase2(damage, source, target, move) {
+			onModifyDamagePhase2(damage, attacker, defender, move) {
 				return damage * (1 + (this.effectState.numConsecutive / 10));
 			},
 		},
@@ -344,9 +344,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			inherit: true,
 			onSourceModifyAccuracyPriority: 3,
-			onSourceModifyAccuracy(accuracy, target, source) {
-				this.add('-enditem', source, 'Micle Berry');
-				source.removeVolatile('micleberry');
+			onSourceModifyAccuracy(accuracy, defender, attacker) {
+				this.add('-enditem', attacker, 'Micle Berry');
+				attacker.removeVolatile('micleberry');
 				if (typeof accuracy === 'number') {
 					return accuracy * 1.2;
 				}
@@ -482,8 +482,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	zoomlens: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 4,
-		onSourceModifyAccuracy(accuracy, target) {
-			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
+		onSourceModifyAccuracy(accuracy, defender) {
+			if (typeof accuracy === 'number' && !this.queue.willMove(defender)) {
 				this.debug('Zoom Lens boosting accuracy');
 				return accuracy * 1.2;
 			}

@@ -1,7 +1,7 @@
 export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	choicelock: {
 		inherit: true,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			const choiceItem = pokemon.getItem().isChoice ||
 				Object.keys(pokemon.volatiles).some(v => (
 					v.startsWith('item:') && this.dex.items.get(v.split(':')[1]).isChoice

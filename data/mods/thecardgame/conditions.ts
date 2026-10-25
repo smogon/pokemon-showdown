@@ -1,7 +1,7 @@
 export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	deltastream: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type, move) {
+		onEffectiveness(typeMod, defender, type, move) {
 			if (move?.effectType === 'Move' && move.category !== 'Status' && type === 'Normal' && typeMod > 0) {
 				this.add('-fieldactivate', 'Delta Stream');
 				return 0;

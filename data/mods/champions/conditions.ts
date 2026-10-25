@@ -10,40 +10,40 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	slp: {
 		inherit: true,
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Ability') {
-				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add('-status', defender, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${attacker}`);
 			} else if (sourceEffect?.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				this.add('-status', defender, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
-				this.add('-status', target, 'slp');
+				this.add('-status', defender, 'slp');
 			}
 
 			// 1/3 chance for a Pokemon to wake up on turn 2
 			this.effectState.startTime = this.sample([2, 3, 3]);
 			this.effectState.time = this.effectState.startTime;
 
-			if (target.removeVolatile('nightmare')) {
-				this.add('-end', target, 'Nightmare', '[silent]');
+			if (defender.removeVolatile('nightmare')) {
+				this.add('-end', defender, 'Nightmare', '[silent]');
 			}
 		},
 	},
 	frz: {
 		inherit: true,
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Ability') {
-				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				this.add('-status', defender, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${attacker}`);
 			} else {
-				this.add('-status', target, 'frz');
+				this.add('-status', defender, 'frz');
 			}
-			if (target.species.name === 'Shaymin-Sky' && target.baseSpecies.baseSpecies === 'Shaymin') {
-				target.formeChange('Shaymin', this.effect, true);
+			if (defender.species.name === 'Shaymin-Sky' && defender.baseSpecies.baseSpecies === 'Shaymin') {
+				defender.formeChange('Shaymin', this.effect, true);
 			}
 
 			this.effectState.startTime = 3;
 			this.effectState.time = this.effectState.startTime;
 		},
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time <= 0 || this.randomChance(1, 4)) {

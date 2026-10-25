@@ -1,16 +1,16 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	disguise: {
 		inherit: true,
-		onDamage(damage, target, source, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			if (
 				effect?.effectType === 'Move' &&
-				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
+				['mimikyu', 'mimikyutotem'].includes(defender.species.id) && !defender.transformed
 			) {
 				if (["rollout", "iceball"].includes(effect.id)) {
-					source.volatiles[effect.id].contactHitCount--;
+					attacker.volatiles[effect.id].contactHitCount--;
 				}
 
-				this.add("-activate", target, "ability: Disguise");
+				this.add("-activate", defender, "ability: Disguise");
 				this.effectState.busted = true;
 				return 0;
 			}
@@ -81,14 +81,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	slowstart: {
 		inherit: true,
-		onModifyAtk(atk, pokemon, target, move) {
+		onModifyAtk(atk, pokemon, defender, move) {
 			// This is because the game checks the move's category in data, rather than what it is currently, unlike e.g. Huge Power
 			if (this.effectState.counter && this.dex.moves.get(move.id).category === 'Physical') {
 				return this.chainModify(0.5);
 			}
 		},
 		onModifySpAPriority: 5,
-		onModifySpA(spa, pokemon, target, move) {
+		onModifySpA(spa, pokemon, defender, move) {
 			// Ordinary Z-moves like Breakneck Blitz will halve the user's Special Attack as well
 			if (this.effectState.counter && this.dex.moves.get(move.id).category === 'Physical') {
 				return this.chainModify(0.5);
@@ -97,9 +97,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	soundproof: {
 		inherit: true,
-		onTryHit(target, source, move) {
+		onTryHit(defender, attacker, move) {
 			if (move.flags['sound']) {
-				this.add('-immune', target, '[from] ability: Soundproof');
+				this.add('-immune', defender, '[from] ability: Soundproof');
 				return null;
 			}
 		},

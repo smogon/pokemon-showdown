@@ -1,38 +1,38 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	aerilate: {
 		inherit: true,
-		onBasePower(basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, defender, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
 		},
 		rating: 4.5,
 	},
 	aftermath: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.flags['contact'] && !target.hp) {
-				this.damage(source.baseMaxhp / 4, source, target, null, true);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.flags['contact'] && !defender.hp) {
+				this.damage(attacker.baseMaxhp / 4, attacker, defender, null, true);
 			}
 		},
 	},
 	galewings: {
 		inherit: true,
-		onModifyPriority(priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, defender, move) {
 			if (move?.type === 'Flying') return priority + 1;
 		},
 		rating: 4,
 	},
 	ironbarbs: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.flags['contact']) {
-				this.damage(source.baseMaxhp / 8, source, target, null, true);
+				this.damage(attacker.baseMaxhp / 8, attacker, defender, null, true);
 			}
 		},
 	},
 	liquidooze: {
 		inherit: true,
-		onSourceTryHeal(damage, target, source, effect) {
-			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
+		onSourceTryHeal(damage, defender, attacker, effect) {
+			this.debug(`Heal is occurring: ${defender} <- ${attacker} :: ${effect.id}`);
 			const canOoze = ['drain', 'leechseed'];
 			if (canOoze.includes(effect.id)) {
 				this.damage(damage, null, null, null, true);
@@ -42,7 +42,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	magicguard: {
 		inherit: true,
-		onDamage(damage, target, source, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			if (effect.effectType !== 'Move') return false;
 		},
 	},
@@ -64,23 +64,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	pixilate: {
 		inherit: true,
-		onBasePower(basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, defender, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
 		},
 		rating: 4.5,
 	},
 	refrigerate: {
 		inherit: true,
-		onBasePower(basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, defender, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
 		},
 		rating: 4.5,
 	},
 	roughskin: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.flags['contact']) {
-				this.damage(source.baseMaxhp / 8, source, target, null, true);
+				this.damage(attacker.baseMaxhp / 8, attacker, defender, null, true);
 			}
 		},
 	},
@@ -98,24 +98,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	symbiosis: {
 		inherit: true,
 		onAllyAfterUseItem(item, pokemon) {
-			const source = this.effectState.target;
-			const myItem = source.takeItem();
+			const attacker = this.effectState.defender;
+			const myItem = attacker.takeItem();
 			if (!myItem) return;
 			if (
-				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect, myItem) ||
+				!this.singleEvent('TakeItem', myItem, attacker.itemState, pokemon, attacker, this.effect, myItem) ||
 				!pokemon.setItem(myItem)
 			) {
-				source.item = myItem.id;
+				attacker.item = myItem.id;
 				return;
 			}
-			this.add('-activate', source, 'ability: Symbiosis', myItem, `[of] ${pokemon}`);
+			this.add('-activate', attacker, 'ability: Symbiosis', myItem, `[of] ${pokemon}`);
 		},
 	},
 	weakarmor: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.category === 'Physical') {
-				this.boost({ def: -1, spe: 1 }, target, target);
+				this.boost({ def: -1, spe: 1 }, defender, defender);
 			}
 		},
 		rating: 0.5,

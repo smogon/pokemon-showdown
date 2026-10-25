@@ -24,7 +24,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 					id: move.id,
 					pp,
 					maxpp: pp,
-					target: move.target,
+					defender: move.defender,
 					disabled: false,
 					disabledSource: '',
 					used: false,
@@ -54,7 +54,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 					id: move.id,
 					pp,
 					maxpp: pp,
-					target: move.target,
+					defender: move.defender,
 					disabled: false,
 					disabledSource: '',
 					used: false,
@@ -98,10 +98,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 	},
 	aegiibpmsg: {
-		onSwitchIn(target) {
-			if (!target.fainted) {
-				this.add(`c:|${getName('aegii')}|~yes ${target.name}`);
-				target.side.removeSlotCondition(target, 'aegiibpmsg');
+		onSwitchIn(defender) {
+			if (!defender.fainted) {
+				this.add(`c:|${getName('aegii')}|~yes ${defender.name}`);
+				defender.side.removeSlotCondition(defender, 'aegiibpmsg');
 			}
 		},
 	},
@@ -187,15 +187,15 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		innateName: "Ripen",
 		shortDesc: "When this Pokemon eats certain Berries, the effects are doubled.",
-		onTryHeal(damage, target, source, effect) {
-			if (!effect || target.illusion) return;
+		onTryHeal(damage, defender, attacker, effect) {
+			if (!effect || defender.illusion) return;
 			if (effect.name === 'Berry Juice' || effect.name === 'Leftovers') {
-				this.add('-activate', target, 'ability: Ripen');
+				this.add('-activate', defender, 'ability: Ripen');
 			}
 			if ((effect as Item).isBerry) return this.chainModify(2);
 		},
-		onChangeBoost(boost, target, source, effect) {
-			if (target.illusion) return;
+		onChangeBoost(boost, defender, attacker, effect) {
+			if (defender.illusion) return;
 			if (effect && (effect as Item).isBerry) {
 				let b: BoostID;
 				for (b in boost) {
@@ -204,10 +204,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			}
 		},
 		onSourceModifyDamagePriority: -1,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.illusion) return;
-			if (target.abilityState.berryWeaken) {
-				target.abilityState.berryWeaken = false;
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (defender.illusion) return;
+			if (defender.abilityState.berryWeaken) {
+				defender.abilityState.berryWeaken = false;
 				return this.chainModify(0.5);
 			}
 		},
@@ -365,8 +365,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	},
 	artemis: {
 		noCopy: true,
-		onFoeAfterFaint(target, source, effect) {
-			this.add('message', `${source.name} was banned from Pok\u00e9mon Showdown!`);
+		onFoeAfterFaint(defender, attacker, effect) {
+			this.add('message', `${attacker.name} was banned from Pok\u00e9mon Showdown!`);
 		},
 	},
 	arya: {
@@ -435,17 +435,17 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onFaint() {
 			this.add(`c:|${getName('ausma')}|God has punished me for my hubris.`);
 		},
-		onTryMove(source, target, move) {
-			this.effectState.foeMemory = target.name;
+		onTryMove(attacker, defender, move) {
+			this.effectState.foeMemory = defender.name;
 		},
 		onFoeSwitchOut(pokemon) {
 			if (this.effectState.foeMemory && pokemon.species.name === "Fennekin") {
 				changeSet(this, pokemon, ssbSets[this.effectState.foeMemory]);
 			}
 		},
-		onFoeFaint(target, source, effect) {
-			if (this.effectState.foeMemory && target.species.name === "Fennekin") {
-				changeSet(this, target, ssbSets[this.effectState.foeMemory]);
+		onFoeFaint(defender, attacker, effect) {
+			if (this.effectState.foeMemory && defender.species.name === "Fennekin") {
+				changeSet(this, defender, ssbSets[this.effectState.foeMemory]);
 			}
 		},
 	},
@@ -538,7 +538,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			}
 		},
 		onBasePowerPriority: 21,
-		onBasePower(basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, defender, move) {
 			if (move.hasSheerForce) return this.chainModify([5325, 4096]);
 			if (!pokemon.illusion && pokemon.species.name === 'Solgaleo') {
 				if (move.recoil || move.hasCrashDamage) {
@@ -583,8 +583,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onFaint() {
 			this.add(`c:|${getName('Breadey')}|Oh, ma vie... c'est 'pitable'...`);
 		},
-		onFoeFaint(target, source, effect) {
-			if (source === this.effectState.target && effect?.name === 'Painful Exit') {
+		onFoeFaint(defender, attacker, effect) {
+			if (attacker === this.effectState.defender && effect?.name === 'Painful Exit') {
 				this.add(`c:|${getName('Breadey')}|Ashes to ashes, crust to crust.`);
 			} else {
 				this.add(`c:|${getName('Breadey')}|Ope, someone's swallowing fishes.`);
@@ -592,10 +592,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		innateName: "Well-Baked Body",
 		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by a Fire move; Fire immunity.",
-		onTryHit(target, source, move) {
-			if (!target.illusion && target !== source && move.type === 'Fire') {
+		onTryHit(defender, attacker, move) {
+			if (!defender.illusion && defender !== attacker && move.type === 'Fire') {
 				if (!this.boost({ def: 2 })) {
-					this.add('-immune', target, '[from] ability: Well-Baked Body');
+					this.add('-immune', defender, '[from] ability: Well-Baked Body');
 				}
 				return null;
 			}
@@ -622,7 +622,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 					id: replacement.id,
 					pp: replacement.pp,
 					maxpp: replacement.pp,
-					target: replacement.target,
+					defender: replacement.defender,
 					disabled: false,
 					used: false,
 				};
@@ -730,18 +730,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			if (pokemon.illusion) return;
 			if (type === 'attract') return false;
 		},
-		onTryHit(pokemon, target, move) {
+		onTryHit(pokemon, defender, move) {
 			if (pokemon.illusion) return;
 			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt') {
 				this.add('-immune', pokemon, '[from] ability: Oblivious');
 				return null;
 			}
 		},
-		onTryBoost(boost, target, source, effect) {
-			if (target.illusion) return;
+		onTryBoost(boost, defender, attacker, effect) {
+			if (defender.illusion) return;
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'atk', '[from] ability: Oblivious', `[of] ${target}`);
+				this.add('-fail', defender, 'unboost', 'atk', '[from] ability: Oblivious', `[of] ${defender}`);
 			}
 		},
 	},
@@ -868,21 +868,21 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		innateName: "Stealth",
 		shortDesc: "Until using EMP, targeted moves are 25% less accurate, this Pokemon's moves do half damage, and this Pokemon only takes 3/4 damage.",
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy, target, source) {
+		onModifyAccuracy(accuracy, defender, attacker) {
 			if (typeof accuracy !== 'number') return;
-			if (target.illusion) return;
-			if (!target.m.stealth) return;
+			if (defender.illusion) return;
+			if (!defender.m.stealth) return;
 			this.debug('Sand Veil - decreasing accuracy');
 			return this.chainModify(0.75);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.illusion) return;
-			if (!target.m.stealth) return;
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (defender.illusion) return;
+			if (!defender.m.stealth) return;
 			return this.chainModify(0.75);
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (source.illusion) return;
-			if (!source.m.stealth) return this.chainModify(1.1);
+		onModifyDamage(damage, attacker, defender, move) {
+			if (attacker.illusion) return;
+			if (!attacker.m.stealth) return this.chainModify(1.1);
 			return this.chainModify(0.5);
 		},
 	},
@@ -1143,7 +1143,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		innateName: "Prankster",
 		desc: "This Pokemon's non-damaging moves have their priority increased by 1. Opposing Dark-type Pokemon are immune to these moves, and any move called by these moves, if the resulting user of the move has this Ability.",
 		shortDesc: "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
-		onModifyPriority(priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, defender, move) {
 			if (pokemon.illusion) return;
 			if (move?.category === 'Status') {
 				move.pranksterBoosted = true;
@@ -1185,9 +1185,9 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		innateName: "Tinted Lens",
 		shortDesc: "Resisted moves hit with double power.",
-		onModifyDamage(damage, source, target, move) {
-			if (source.illusion) return;
-			if (target.getMoveHitData(move).typeMod < 0) {
+		onModifyDamage(damage, attacker, defender, move) {
+			if (attacker.illusion) return;
+			if (defender.getMoveHitData(move).typeMod < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
 			}
@@ -1236,22 +1236,22 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		noCopy: true,
 		innateName: "Battle Bond",
 		shortDesc: "After KOing a Pokemon: becomes Cinderace-Gmax.",
-		onStart(target, source, effect) {
+		onStart(defender, attacker, effect) {
 			const message = this.sample(['Justice for the 97', 'up the reds']);
 			this.add(`c:|${getName('Kennedy')}|${message}`);
-			if (source?.name === 'Clem') {
-				if (source.volatiles['flipped']) {
-					source.removeVolatile('flipped');
-					changeSet(this, source, ssbSets['Clem']);
+			if (attacker?.name === 'Clem') {
+				if (attacker.volatiles['flipped']) {
+					attacker.removeVolatile('flipped');
+					changeSet(this, attacker, ssbSets['Clem']);
 					this.add(`c:|${getName('Kennedy')}|┬──┬◡ﾉ(° -°ﾉ)`);
 				} else {
-					source.addVolatile('flipped', target, this.effect);
-					changeSet(this, source, ssbSets['Clem-Flipped']);
+					attacker.addVolatile('flipped', defender, this.effect);
+					changeSet(this, attacker, ssbSets['Clem-Flipped']);
 					this.add(`c:|${getName('Kennedy')}|(╯°o°）╯︵ ┻━┻`);
 				}
 			}
-			if (target.species.id === 'cinderacegmax' && !target.terastallized) {
-				this.add('-start', target, 'typechange', target.getTypes(true, true).join('/'), '[silent]');
+			if (defender.species.id === 'cinderacegmax' && !defender.terastallized) {
+				this.add('-start', defender, 'typechange', defender.getTypes(true, true).join('/'), '[silent]');
 			}
 		},
 		onSwitchOut() {
@@ -1264,7 +1264,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				break;
 			case 'dhelmise':
 				this.add(`c:|${getName('Kennedy')}|fuck that`);
-				this.effectState.target.faint();
+				this.effectState.defender.faint();
 				this.add('message', 'Kennedy fainted mysteriously.....');
 				break;
 			}
@@ -1272,20 +1272,20 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onFaint() {
 			this.add(`c:|${getName('Kennedy')}|FUCK OFF, REALLY?????`);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceAfterFaint(length, defender, attacker, effect) {
 			const message = this.sample(['ALLEZZZZZ', 'VAMOSSSSS', 'FORZAAAAA', 'LET\'S GOOOOO']);
 			this.add(`c:|${getName('Kennedy')}|${message}`);
-			if (source.species.id === 'cinderace' && this.field.pseudoWeather['anfieldatmosphere'] &&
-				!source.transformed && effect?.effectType === 'Move' && source.hp && source.side.foePokemonLeft()) {
-				this.add('-activate', source, 'ability: Battle Bond');
-				source.formeChange('Cinderace-Gmax', this.effect, true);
-				source.baseMaxhp = Math.floor(Math.floor(
-					2 * source.species.baseStats['hp'] + source.set.ivs['hp'] + Math.floor(source.set.evs['hp'] / 4) + 100
-				) * source.level / 100 + 10);
-				const newMaxHP = source.volatiles['dynamax'] ? (2 * source.baseMaxhp) : source.baseMaxhp;
-				source.hp = newMaxHP - (source.maxhp - source.hp);
-				source.maxhp = newMaxHP;
-				this.add('-heal', source, source.getHealth, '[silent]');
+			if (attacker.species.id === 'cinderace' && this.field.pseudoWeather['anfieldatmosphere'] &&
+				!attacker.transformed && effect?.effectType === 'Move' && attacker.hp && attacker.side.foePokemonLeft()) {
+				this.add('-activate', attacker, 'ability: Battle Bond');
+				attacker.formeChange('Cinderace-Gmax', this.effect, true);
+				attacker.baseMaxhp = Math.floor(Math.floor(
+					2 * attacker.species.baseStats['hp'] + attacker.set.ivs['hp'] + Math.floor(attacker.set.evs['hp'] / 4) + 100
+				) * attacker.level / 100 + 10);
+				const newMaxHP = attacker.volatiles['dynamax'] ? (2 * attacker.baseMaxhp) : attacker.baseMaxhp;
+				attacker.hp = newMaxHP - (attacker.maxhp - attacker.hp);
+				attacker.maxhp = newMaxHP;
+				this.add('-heal', attacker, attacker.getHealth, '[silent]');
 			}
 		},
 		onUpdate(pokemon) {
@@ -1295,7 +1295,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				this.add('message', 'Kennedy would have been infatuated but fainted mysteriously');
 			}
 		},
-		onSourceCriticalHit(pokemon, source, move) {
+		onSourceCriticalHit(pokemon, attacker, move) {
 			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
 		},
 		onFlinch(pokemon) {
@@ -1327,9 +1327,9 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('kingbaruk')}|Why can't we give love that one more chance?`);
 		},
 		innateName: "Multiscale",
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.illusion) return;
-			if (target.hp >= target.maxhp) {
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (defender.illusion) return;
+			if (defender.hp >= defender.maxhp) {
 				this.debug('Multiscale weaken');
 				return this.chainModify(0.5);
 			}
@@ -1444,10 +1444,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				this.add(`c:|${getName('Loethalion')}|...from Zero`);
 			}
 		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (enemyStaff(source) === 'Swiffix') {
+		onSourceAfterFaint(length, defender, attacker, effect) {
+			if (enemyStaff(attacker) === 'Swiffix') {
 				this.add(`c:|${getName('Loethalion')}|It's still pfp...`);
-			} else if (enemyStaff(source) === 'Appletun a la Mode') {
+			} else if (enemyStaff(attacker) === 'Appletun a la Mode') {
 				this.add(`c:|${getName('Loethalion')}|ᵒᵒᵘᵍʰʰ ᵒᵒᵘᵘʷᵃᵃ`);
 			}
 		},
@@ -1582,16 +1582,16 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		innateName: "Tourban",
 		shortDesc: "Takes half damage from Ghost moves, deals double damage to Ghost-types.",
-		onSourceModifyDamage(damage, source, target, move) {
-			if (source.illusion) return;
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (attacker.illusion) return;
 			if (move.type === 'Ghost') {
 				this.debug('Tourban Ghost weaken');
 				return this.chainModify(0.5);
 			}
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (source.illusion) return;
-			if (target?.hasType('Ghost')) {
+		onModifyDamage(damage, attacker, defender, move) {
+			if (attacker.illusion) return;
+			if (defender?.hasType('Ghost')) {
 				this.debug('Tourban boost');
 				return this.chainModify(2);
 			}
@@ -1828,13 +1828,13 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				this.add(`c:|${getName('PartMan')}|/me pats`);
 			}
 		},
-		onFoeFaint(target, source, effect) {
+		onFoeFaint(defender, attacker, effect) {
 			// Message happens when PartMan is on the enemy team
 			// Handled in Hydro's conditions
-			if (target.name === 'Hydrostatics') return;
+			if (defender.name === 'Hydrostatics') return;
 			this.add(`c:|${getName('PartMan')}|Skill issue`);
 		},
-		onHit(target, source, move) {
+		onHit(defender, attacker, move) {
 			if (!move.num) {
 				this.add(`c:|${getName('PartMan')}|That's what she said!`);
 			}
@@ -1842,10 +1842,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		innateName: "Skill Issue",
 		shortDesc: "Any move that does damage equal to this Pokemon's max HP fails.",
 		// onDamagePriority: 1,
-		onDamage(damage, target, source, effect) {
-			if (target.illusion) return;
-			if (effect?.effectType === 'Move' && damage >= target.maxhp) {
-				this.add('-activate', target, 'ability: Skill Issue');
+		onDamage(damage, defender, attacker, effect) {
+			if (defender.illusion) return;
+			if (effect?.effectType === 'Move' && damage >= defender.maxhp) {
+				this.add('-activate', defender, 'ability: Skill Issue');
 				this.add(`c:|${getName('PartMan')}|THAT'S WHAT SHE SAID!`);
 				return false;
 			}
@@ -1965,15 +1965,15 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onFaint() {
 			this.add(`c:|${getName('PYRO')}|Just remember ALL CAPS when you spell the man name...`);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceAfterFaint(length, defender, attacker, effect) {
 			if (effect?.effectType === 'Move') {
 				if (effect.id === 'meatgrinder') {
 					this.add(`c:|${getName('PYRO')}|Tripping off the beat kinda, dripping off the meat grinder`);
 					return;
 				}
-				if (!source.m.msgPlayed) {
+				if (!attacker.m.msgPlayed) {
 					this.add(`c:|${getName('PYRO')}|This Villain was a ruthless mass conqueror, with aspirations to dominate the universe`);
-					source.m.msgPlayed = true;
+					attacker.m.msgPlayed = true;
 				}
 			}
 		},
@@ -2092,11 +2092,11 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				return this.chainModify(1.5);
 			}
 		},
-		onTryHit(target, source, move) {
-			if (!target.illusion && target !== source && move.type === 'Fire') {
+		onTryHit(defender, attacker, move) {
+			if (!defender.illusion && defender !== attacker && move.type === 'Fire') {
 				move.accuracy = true;
-				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[from] ability: Flash Fire');
+				if (!defender.addVolatile('flashfire')) {
+					this.add('-immune', defender, '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -2377,7 +2377,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('Swiffix')}|Remember: it's pp, not pfp!`);
 		},
 		innateName: "Skill Link",
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, pokemon, defender) {
 			if (pokemon.illusion) return;
 			if (move.multihit && Array.isArray(move.multihit) && move.multihit.length) {
 				move.multihit = move.multihit[1];
@@ -2443,7 +2443,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				id: replacement.id,
 				pp: replacement.pp,
 				maxpp: replacement.pp,
-				target: replacement.target,
+				defender: replacement.defender,
 				disabled: false,
 				used: false,
 			};
@@ -2536,61 +2536,61 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		innateName: "Wonderer",
 		shortDesc: "This Pokemon's secondary type changes based on the active weather or terrain, monotype if neither.",
-		onWeatherChange(target, source, sourceEffect) {
+		onWeatherChange(defender, attacker, sourceEffect) {
 			const currentWeather = this.field.getWeather().id;
 			const currentTerrain = this.field.getTerrain().id;
 			let type;
-			if (!currentWeather && !target.hasType('Dark')) {
+			if (!currentWeather && !defender.hasType('Dark')) {
 				if (currentTerrain) {
-					this.singleEvent('TerrainChange', this.effect, this.effectState, target);
+					this.singleEvent('TerrainChange', this.effect, this.effectState, defender);
 					return;
 				}
 				type = 'Dark';
 			} else if (currentWeather) {
-				if (['raindance', 'primordialsea', 'stormsurge'].includes(currentWeather) && !target.hasType('Water')) {
+				if (['raindance', 'primordialsea', 'stormsurge'].includes(currentWeather) && !defender.hasType('Water')) {
 					type = 'Water';
-				} else if (['sunnyday', 'desolateland'].includes(currentWeather) && !target.hasType('Fire')) {
+				} else if (['sunnyday', 'desolateland'].includes(currentWeather) && !defender.hasType('Fire')) {
 					type = 'Fire';
-				} else if (['sandstorm', 'deserteddunes'].includes(currentWeather) && !target.hasType('Rock')) {
+				} else if (['sandstorm', 'deserteddunes'].includes(currentWeather) && !defender.hasType('Rock')) {
 					type = 'Rock';
-				} else if (['hail', 'snowscape'].includes(currentWeather) && !target.hasType('Ice')) {
+				} else if (['hail', 'snowscape'].includes(currentWeather) && !defender.hasType('Ice')) {
 					type = 'Ice';
 				} else {
 					// do nothing if it's not the 4 primary weathers...unless there are more?
 				}
 			}
-			if (type && !target.terastallized) {
-				target.addType(type);
-				this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
+			if (type && !defender.terastallized) {
+				defender.addType(type);
+				this.add('-start', defender, 'typeadd', type, '[from] ability: Wonderer');
 			}
 		},
-		onTerrainChange(target, source, sourceEffect) {
+		onTerrainChange(defender, attacker, sourceEffect) {
 			const currentWeather = this.field.getWeather().id;
 			const currentTerrain = this.field.getTerrain().id;
 			let type;
-			if (!currentTerrain && !target.hasType('Dark')) {
+			if (!currentTerrain && !defender.hasType('Dark')) {
 				if (currentWeather) {
-					this.singleEvent('WeatherChange', this.effect, this.effectState, target);
+					this.singleEvent('WeatherChange', this.effect, this.effectState, defender);
 					return;
 				}
 				type = 'Dark';
 			} else if (currentTerrain) {
 				if (currentTerrain === 'electricterrain') {
-					target.setType('Electric');
+					defender.setType('Electric');
 					type = '';
-				} else if (currentTerrain === 'psychicterrain' && !target.hasType('Psychic')) {
+				} else if (currentTerrain === 'psychicterrain' && !defender.hasType('Psychic')) {
 					type = 'Psychic';
-				} else if (currentTerrain === 'grassyterrain' && !target.hasType('Grass')) {
+				} else if (currentTerrain === 'grassyterrain' && !defender.hasType('Grass')) {
 					type = 'Grass';
-				} else if (currentTerrain === 'mistyterrain' && !target.hasType('Fairy')) {
+				} else if (currentTerrain === 'mistyterrain' && !defender.hasType('Fairy')) {
 					type = 'Fairy';
-				} else if (!target.hasType('Ghost')) { // custom terrains
+				} else if (!defender.hasType('Ghost')) { // custom terrains
 					type = 'Ghost';
 				}
 			}
-			if (type && !target.terastallized) {
-				target.addType(type);
-				this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
+			if (type && !defender.terastallized) {
+				defender.addType(type);
+				this.add('-start', defender, 'typeadd', type, '[from] ability: Wonderer');
 			}
 		},
 	},
@@ -2632,7 +2632,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		innateName: "Stored Power",
 		shortDesc: "Moves gain 20 additional Base Power per each positive stat boost.",
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, pokemon, defender) {
 			if (move.basePowerCallback) return;
 			if (pokemon.species.baseSpecies !== 'Mantine') return;
 			move.basePowerCallback = function (p, t, m) {
@@ -2739,9 +2739,9 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				return this.chainModify(0.5);
 			}
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (source.illusion) return;
-			if (move && target.getMoveHitData(move).typeMod > 0) {
+		onModifyDamage(damage, attacker, defender, move) {
+			if (attacker.illusion) return;
+			if (move && defender.getMoveHitData(move).typeMod > 0) {
 				return this.chainModify([5120, 4096]);
 			}
 		},
@@ -2820,9 +2820,9 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	yuki: {
 		noCopy: true,
 		innateName: "Snow Warning",
-		onStart(source) {
-			if (source.illusion) return;
-			this.field.setWeather('snowscape', source, this.dex.abilities.get('snowwarning'));
+		onStart(attacker) {
+			if (attacker.illusion) return;
+			this.field.setWeather('snowscape', attacker, this.dex.abilities.get('snowwarning'));
 		},
 	},
 	yveltalnl: {
@@ -2894,11 +2894,11 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	// Clem
 	flipped: {
 		name: 'Flipped',
-		onStart(target) {
-			this.add('-start', target, 'flipped');
+		onStart(defender) {
+			this.add('-start', defender, 'flipped');
 		},
-		onEnd(target) {
-			this.add('-end', target, 'flipped');
+		onEnd(defender) {
+			this.add('-end', defender, 'flipped');
 		},
 	},
 
@@ -2906,8 +2906,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	hacked: {
 		name: "Hacked",
 		duration: 4,
-		onStart(pokemon, source) {
-			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
+		onStart(pokemon, attacker) {
+			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${attacker}`);
 			this.add('-start', pokemon, 'hacked');
 		},
 		onEnd(pokemon) {
@@ -2937,31 +2937,31 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	snack: {
 		name: "Snack",
 		duration: 3,
-		onStart(target) {
-			this.add('-start', target, 'snack');
+		onStart(defender) {
+			this.add('-start', defender, 'snack');
 		},
-		onEnd(target) {
-			this.add('-end', target, 'snack');
+		onEnd(defender) {
+			this.add('-end', defender, 'snack');
 		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
-		onResidual(target, source, effect) {
-			this.heal(target.baseMaxhp / 3);
+		onResidual(defender, attacker, effect) {
+			this.heal(defender.baseMaxhp / 3);
 		},
 	},
 
 	// Elliot
 	beefed: {
 		name: "Beefed",
-		onStart(target) {
-			this.add('-start', target, 'beefed');
+		onStart(defender) {
+			this.add('-start', defender, 'beefed');
 		},
-		onEnd(target) {
-			this.add('-end', target, 'beefed');
+		onEnd(defender) {
+			this.add('-end', defender, 'beefed');
 		},
 		onModifyMovePriority: -1,
-		onModifyMove(move, pokemon, target) {
-			if (!target || !this.checkMoveMakesContact(move, pokemon, target) || move.category === "Status") return;
+		onModifyMove(move, pokemon, defender) {
+			if (!defender || !this.checkMoveMakesContact(move, pokemon, defender) || move.category === "Status") return;
 			if (!move.secondaries) move.secondaries = [];
 			move.secondaries.push({
 				chance: 30,
@@ -2969,36 +2969,36 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			});
 		},
 		onDamagingHitOrder: 1,
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target, true)) {
-				this.damage(source.baseMaxhp / 8, source, target);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (this.checkMoveMakesContact(move, attacker, defender, true)) {
+				this.damage(attacker.baseMaxhp / 8, attacker, defender);
 			}
-			if (this.checkMoveMakesContact(move, source, target) && this.randomChance(3, 10)) {
-				source.trySetStatus('brn', target);
+			if (this.checkMoveMakesContact(move, attacker, defender) && this.randomChance(3, 10)) {
+				attacker.trySetStatus('brn', defender);
 			}
 		},
-		onResidual(target, source, effect) {
-			this.heal(target.baseMaxhp / 8);
+		onResidual(defender, attacker, effect) {
+			this.heal(defender.baseMaxhp / 8);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceAfterFaint(length, defender, attacker, effect) {
 			this.add(`c:|${getName('Elliot')}|Get Bovriled`);
 		},
 	},
 	boiled: {
 		name: "Boiled",
-		onStart(target) {
-			this.add('-start', target, 'boiled');
+		onStart(defender) {
+			this.add('-start', defender, 'boiled');
 		},
-		onEnd(target) {
-			this.add('-end', target, 'boiled');
+		onEnd(defender) {
+			this.add('-end', defender, 'boiled');
 		},
 		onModifySpAPriority: 5,
-		onModifySpA(relayVar, source, target, move) {
+		onModifySpA(relayVar, attacker, defender, move) {
 			return this.chainModify(1.5);
 		},
 		onModifyMovePriority: -1,
-		onModifyMove(move, pokemon, target) {
-			if (!target) return;
+		onModifyMove(move, pokemon, defender) {
+			if (!defender) return;
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
 				move.secondaries.push({
@@ -3014,14 +3014,14 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		name: 'StormSurge',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
-			if (source?.hasItem('damprock')) {
+		durationCallback(attacker, effect) {
+			if (attacker?.hasItem('damprock')) {
 				return 8;
 			}
 			return 5;
 		},
 		onEffectivenessPriority: -1,
-		onEffectiveness(typeMod, target, type, move) {
+		onEffectiveness(typeMod, defender, type, move) {
 			if (move?.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
 				this.add('-fieldactivate', 'Storm Surge');
 				return 0;
@@ -3046,10 +3046,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			if (move?.flags['wind'] && !attacker.hasItem('utilityumbrella')) return true;
 			return accuracy;
 		},
-		onFieldStart(battle, source, effect) {
+		onFieldStart(battle, attacker, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, `[of] ${source}`);
+				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, `[of] ${attacker}`);
 			} else {
 				this.add('-weather', 'StormSurge');
 			}
@@ -3074,7 +3074,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		effectType: 'Weather',
 		duration: 0,
 		onEffectivenessPriority: -1,
-		onEffectiveness(typeMod, target, type, move) {
+		onEffectiveness(typeMod, defender, type, move) {
 			if (move?.effectType === 'Move' && move.category !== 'Status' && type === 'Rock' && typeMod > 0) {
 				this.add('-fieldactivate', 'Deserted Dunes');
 				return 0;
@@ -3086,16 +3086,16 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				return this.modify(spd, 1.25);
 			}
 		},
-		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, `[of] ${source}`);
+		onFieldStart(field, attacker, effect) {
+			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, `[of] ${attacker}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'DesertedDunes', '[upkeep]');
 			this.eachEvent('Weather');
 		},
-		onWeather(target) {
-			this.damage(target.baseMaxhp / 16);
+		onWeather(defender) {
+			this.damage(defender.baseMaxhp / 16);
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -3106,12 +3106,12 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	catstampofapproval: {
 		name: "Cat Stamp of Approval",
 		noCopy: true,
-		onStart(target) {
-			this.add('-start', target, 'Cat Stamp of Approval');
-			this.effectState.bestStat = target.getBestStat(false, true);
+		onStart(defender) {
+			this.add('-start', defender, 'Cat Stamp of Approval');
+			this.effectState.bestStat = defender.getBestStat(false, true);
 		},
-		onEnd(target) {
-			this.add('-end', target, 'Cat Stamp of Approval');
+		onEnd(defender) {
+			this.add('-end', defender, 'Cat Stamp of Approval');
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
@@ -3146,35 +3146,35 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 
 	// Effects needed to be overridden for things to happen
 	attract: {
-		onStart(pokemon, source, effect) {
-			if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
+		onStart(pokemon, attacker, effect) {
+			if (!(pokemon.gender === 'M' && attacker.gender === 'F') && !(pokemon.gender === 'F' && attacker.gender === 'M')) {
 				if (!['The Love Of Christ', ':3'].includes(effect.name)) {
 					this.debug('incompatible gender');
 					return false;
 				}
 			}
-			if (!this.runEvent('Attract', pokemon, source)) {
+			if (!this.runEvent('Attract', pokemon, attacker)) {
 				this.debug('Attract event failed');
 				return false;
 			}
 
 			if (effect.name === 'Cute Charm') {
-				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', `[of] ${source}`);
+				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', `[of] ${attacker}`);
 			} else if (effect.name === 'Destiny Knot') {
-				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', `[of] ${source}`);
+				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', `[of] ${attacker}`);
 			} else {
 				this.add('-start', pokemon, 'Attract');
 			}
 		},
 		onUpdate(pokemon) {
-			if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
+			if (this.effectState.attacker && !this.effectState.attacker.isActive && pokemon.volatiles['attract']) {
 				this.debug(`Removing Attract volatile on ${pokemon}`);
 				pokemon.removeVolatile('attract');
 			}
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove(pokemon, target, move) {
-			this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
+		onBeforeMove(pokemon, defender, move) {
+			this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.attacker);
 			if (this.randomChance(1, 2)) {
 				this.add('cant', pokemon, 'Attract');
 				return false;
@@ -3187,15 +3187,15 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 
 	gravity: {
 		duration: 5,
-		durationCallback(source, effect) {
-			if (source?.hasAbility('persistent')) {
-				this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
+		durationCallback(attacker, effect) {
+			if (attacker?.hasAbility('persistent')) {
+				this.add('-activate', attacker, 'ability: Persistent', '[move] Gravity');
 				return 7;
 			}
 			return 5;
 		},
-		onFieldStart(target, source) {
-			if (source?.hasAbility('persistent')) {
+		onFieldStart(defender, attacker) {
+			if (attacker?.hasAbility('persistent')) {
 				this.add('-fieldstart', 'move: Gravity', '[persistent]');
 			} else {
 				this.add('-fieldstart', 'move: Gravity');
@@ -3211,8 +3211,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 					applies = true;
 					this.queue.cancelMove(pokemon);
 
-					if (pokemon.volatiles['skydrop'].source) {
-						this.add('-end', pokemon.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
+					if (pokemon.volatiles['skydrop'].attacker) {
+						this.add('-end', pokemon.volatiles['twoturnmove'].attacker, 'Sky Drop', '[interrupt]');
 					}
 					pokemon.removeVolatile('skydrop');
 					pokemon.removeVolatile('twoturnmove');
@@ -3241,13 +3241,13 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 		onBeforeMovePriority: 6,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (move.flags['gravity'] && !move.isZ) {
 				this.add('cant', pokemon, 'move: Gravity', move);
 				return false;
 			}
 		},
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, pokemon, defender) {
 			if (move.flags['gravity'] && !move.isZ) {
 				this.add('cant', pokemon, 'move: Gravity', move);
 				return false;
@@ -3312,10 +3312,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			const activeMove = { id: this.toID('confused'), effectType: 'Move', type: '???' };
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			if (this.effectState.sourceEffect?.id === 'cringedadjoke') {
-				for (const target of this.getAllActive()) {
-					if (target === pokemon) continue;
-					if (target.volatiles['cringedadjoke']) {
-						this.boost({ atk: 1, def: 1 }, target);
+				for (const defender of this.getAllActive()) {
+					if (defender === pokemon) continue;
+					if (defender.volatiles['cringedadjoke']) {
+						this.boost({ atk: 1, def: 1 }, defender);
 					}
 				}
 			}
@@ -3324,10 +3324,10 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	},
 	wish: {
 		inherit: true,
-		onStart(pokemon, source, effect) {
-			this.effectState.hp = source.maxhp / 2;
+		onStart(pokemon, attacker, effect) {
+			this.effectState.hp = attacker.maxhp / 2;
 			if (effect.name === 'Anti-Pelau') {
-				this.effectState.hp = source.maxhp / 4;
+				this.effectState.hp = attacker.maxhp / 4;
 			}
 			this.effectState.startingTurn = this.getOverflowedTurnCount();
 			if (this.effectState.startingTurn === 255) {
@@ -3335,15 +3335,15 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			}
 		},
 		onResidualOrder: 4,
-		onResidual(target: Pokemon) {
+		onResidual(defender: Pokemon) {
 			if (this.getOverflowedTurnCount() <= this.effectState.startingTurn) return;
-			target.side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'wish');
+			defender.side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'wish');
 		},
-		onEnd(target) {
-			if (target && !target.fainted) {
-				const damage = this.heal(this.effectState.hp, target, target);
+		onEnd(defender) {
+			if (defender && !defender.fainted) {
+				const damage = this.heal(this.effectState.hp, defender, defender);
 				if (damage) {
-					this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+					this.add('-heal', defender, defender.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.attacker.name);
 				}
 			}
 		},

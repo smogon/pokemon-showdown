@@ -1,14 +1,14 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	chaossaliva: {
-		onSourceDamagingHit(damage, target, source, move) {
+		onSourceDamagingHit(damage, defender, attacker, move) {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
-			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
-			if (this.checkMoveMakesContact(move, target, source)) {
+			if (defender.hasAbility('shielddust') || defender.hasItem('covertcloak')) return;
+			if (this.checkMoveMakesContact(move, defender, attacker)) {
 				if (this.randomChance(2, 10)) {
-					target.trySetStatus('par', source);
+					defender.trySetStatus('par', attacker);
 				}
 				if (this.randomChance(2, 10)) {
-					target.addVolatile('confusion', source);
+					defender.addVolatile('confusion', attacker);
 				}
 			}
 		},
@@ -71,23 +71,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		flags: {},
 		name: "Mega Launcher",
-		desc: "This Pokemon's pulse moves have their power multiplied by 4. Heal Pulse restores 8/4 of a target's maximum HP, rounded half down.",
-		shortDesc: "This Pokemon's pulse moves have 4x power. Heal Pulse heals 8/4 target's max HP.",
+		desc: "This Pokemon's pulse moves have their power multiplied by 4. Heal Pulse restores 8/4 of a defender's maximum HP, rounded half down.",
+		shortDesc: "This Pokemon's pulse moves have 4x power. Heal Pulse heals 8/4 defender's max HP.",
 		rating: 3,
 		gen: 9,
 	},
 	discourage: {
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.adjacentFoes()) {
+			for (const defender of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Discourage', 'boost');
 					activated = true;
 				}
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
+				if (defender.volatiles['substitute']) {
+					this.add('-immune', defender);
 				} else {
-					this.boost({ spa: -1 }, target, pokemon, null, true);
+					this.boost({ spa: -1 }, defender, pokemon, null, true);
 				}
 			}
 		},
@@ -99,9 +99,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	adaptability: {
 		inherit: true,
-		onModifySTAB(stab, source, target, move) {
-			if (move.forceSTAB || source.hasType(move.type)) {
-				const types = source.getTypes();
+		onModifySTAB(stab, attacker, defender, move) {
+			if (move.forceSTAB || attacker.hasType(move.type)) {
+				const types = attacker.getTypes();
 				if (types[0] === move.type) return 2.3;
 				if (types[1] && types[1] === move.type) return 1.6;
 				if (stab === 2.3) {
@@ -113,21 +113,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	icebody: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
+		onDamagingHit(damage, defender, attacker, move) {
+			if (this.checkMoveMakesContact(move, attacker, defender)) {
 				if (this.randomChance(1, 10)) {
-					source.trySetStatus('frz', target);
+					attacker.trySetStatus('frz', defender);
 				}
 			}
 		},
 	},
 	noretreat: {
-		onStart(target) {
-			this.add('-start', target, 'move: No Retreat');
+		onStart(defender) {
+			this.add('-start', defender, 'move: No Retreat');
 		},
 		onFoeBeforeSwitchOut(pokemon) {
 			if (!pokemon || pokemon.fainted || pokemon.hp <= 0 || pokemon.hasAbility('noretreat')) return;
-			const success = !!this.damage(pokemon.maxhp / 4, pokemon, this.effectState.target);
+			const success = !!this.damage(pokemon.maxhp / 4, pokemon, this.effectState.defender);
 			if (success) {
 				pokemon.tryTrap();
 			}
@@ -158,9 +158,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	goodasgold: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (move.category !== 'Special' && target !== source) {
-				this.add('-immune', target, '[from] ability: Good as Gold');
+		onTryHit(defender, attacker, move) {
+			if (move.category !== 'Special' && defender !== attacker) {
+				this.add('-immune', defender, '[from] ability: Good as Gold');
 				return null;
 			}
 		},
@@ -169,15 +169,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			let activated = false;
 			let timesActivated = 0;
-			for (const target of pokemon.adjacentFoes()) {
+			for (const defender of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate 2', 'boost');
 					activated = true;
 				}
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
+				if (defender.volatiles['substitute']) {
+					this.add('-immune', defender);
 				} else {
-					this.boost({ atk: -1 }, target, pokemon, null, true);
+					this.boost({ atk: -1 }, defender, pokemon, null, true);
 					timesActivated++;
 				}
 			}
@@ -215,15 +215,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.adjacentFoes()) {
+			for (const defender of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate', 'boost');
 					activated = true;
 				}
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
+				if (defender.volatiles['substitute']) {
+					this.add('-immune', defender);
 				} else {
-					this.boost({ atk: -2 }, target, pokemon, null, true);
+					this.boost({ atk: -2 }, defender, pokemon, null, true);
 				}
 			}
 		},

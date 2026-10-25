@@ -22,21 +22,21 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				this.add('-status', defender, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
-				this.add('-status', target, 'slp');
+				this.add('-status', defender, 'slp');
 			}
 			// 1-4 turns
 			this.effectState.time = this.random(2, 6);
 
-			if (target.removeVolatile('nightmare')) {
-				this.add('-end', target, 'Nightmare', '[silent]');
+			if (defender.removeVolatile('nightmare')) {
+				this.add('-end', defender, 'Nightmare', '[silent]');
 			}
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusState.time--;
 			}
@@ -86,7 +86,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	frz: {
 		inherit: true,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
@@ -109,8 +109,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	partiallytrapped: {
 		inherit: true,
-		durationCallback(target, source) {
-			if (source.hasItem('gripclaw')) return 6;
+		durationCallback(defender, attacker) {
+			if (attacker.hasItem('gripclaw')) return 6;
 			return this.random(3, 7);
 		},
 		onResidualOrder: 10,

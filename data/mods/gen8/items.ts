@@ -145,8 +145,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	griseousorb: {
 		inherit: true,
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
+		onTakeItem(item, pokemon, attacker) {
+			if (attacker?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
 				return false;
 			}
 			return true;

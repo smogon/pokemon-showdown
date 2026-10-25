@@ -2,12 +2,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Belly Drum no longer boosts attack by 2 stages if under 50% health.
 	bellydrum: {
 		inherit: true,
-		onHit(target) {
-			if (target.boosts.atk >= 6 || target.hp <= target.maxhp / 2) {
+		onHit(defender) {
+			if (defender.boosts.atk >= 6 || defender.hp <= defender.maxhp / 2) {
 				return false;
 			}
-			this.directDamage(target.maxhp / 2);
-			const originalStage = target.boosts.atk;
+			this.directDamage(defender.maxhp / 2);
+			const originalStage = defender.boosts.atk;
 			let currentStage = originalStage;
 			let boosts = 0;
 			let loopStage = 0;
@@ -15,16 +15,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				loopStage = currentStage;
 				currentStage++;
 				if (currentStage < 6) currentStage++;
-				target.boosts.atk = loopStage;
-				if (target.getStat('atk', false, true) < 999) {
-					target.boosts.atk = currentStage;
+				defender.boosts.atk = loopStage;
+				if (defender.getStat('atk', false, true) < 999) {
+					defender.boosts.atk = currentStage;
 					continue;
 				}
-				target.boosts.atk = currentStage - 1;
+				defender.boosts.atk = currentStage - 1;
 				break;
 			}
-			boosts = target.boosts.atk - originalStage;
-			target.boosts.atk = originalStage;
+			boosts = defender.boosts.atk - originalStage;
+			defender.boosts.atk = originalStage;
 			this.boost({ atk: boosts });
 		},
 	},

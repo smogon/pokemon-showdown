@@ -2,9 +2,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	frostbite: {
 		name: 'frostbite',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-start', target, 'Frostbite', '[silent]');
-			this.add('-message', `${target.species.name} is inflicted with frostbite!`);
+		onStart(defender) {
+			this.add('-start', defender, 'Frostbite', '[silent]');
+			this.add('-message', `${defender.species.name} is inflicted with frostbite!`);
 		},
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'Frostbite', '[silent]');
@@ -13,7 +13,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onResidual(pokemon) {
 			this.damage(pokemon.baseMaxhp / 16);
 		},
-		onBasePower(basePower, source, target) {
+		onBasePower(basePower, attacker, defender) {
 			return basePower / 2;
 		},
 	},

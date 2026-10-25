@@ -9,7 +9,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	adamantcrystal: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Steel' || move.type === 'Dragon') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -91,7 +91,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	cornerstonemask: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			return this.chainModify([4915, 4096]);
 		},
 		onTakeItem: false,
@@ -122,7 +122,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	griseouscore: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Ghost' || move.type === 'Dragon') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -135,7 +135,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	hearthflamemask: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			return this.chainModify([4915, 4096]);
 		},
 		onTakeItem: false,
@@ -170,7 +170,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lustrousglobe: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Water' || move.type === 'Dragon') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -291,7 +291,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	vilevial: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (['Poison', 'Flying'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -300,7 +300,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	wellspringmask: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			return this.chainModify([4915, 4096]);
 		},
 		onTakeItem: false,

@@ -1,7 +1,7 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	terablast: {
 		inherit: true,
-		onModifyType(move, pokemon, target) {
+		onModifyType(move, pokemon, defender) {
 			if (pokemon.terastallized) {
 				move.type = pokemon.teraType;
 			} else {

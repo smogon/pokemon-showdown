@@ -1,14 +1,14 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	conversion: {
 		inherit: true,
-		onHit(target) {
-			const moveSlotID = target.moveSlots[0].id;
+		onHit(defender) {
+			const moveSlotID = defender.moveSlots[0].id;
 			let type = this.dex.moves.get(moveSlotID).type;
 			if (this.dex.species.get(moveSlotID).exists) {
 				type = this.dex.species.get(moveSlotID).types[0];
 			}
-			if (target.hasType(type) || !target.setType(type)) return false;
-			this.add('-start', target, 'typechange', type);
+			if (defender.hasType(type) || !defender.setType(type)) return false;
+			this.add('-start', defender, 'typechange', type);
 		},
 	},
 	gastroacid: {

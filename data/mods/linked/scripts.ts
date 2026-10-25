@@ -3,9 +3,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		// Since twoturnmove isn't currently implemented using linked volatiles,
 		// patch related moves so that 'twoturnmove' and e.g. 'skullbash' end simultaneously.
-		const removeTwoTurnMove = function (target: Pokemon) {
-			// Cannot use target.removeVolatile, since it would cause stack overflow.
-			delete target.volatiles['twoturnmove'];
+		const removeTwoTurnMove = function (defender: Pokemon) {
+			// Cannot use defender.removeVolatile, since it would cause stack overflow.
+			delete defender.volatiles['twoturnmove'];
 		};
 		for (const id in this.data.Moves) {
 			if (this.data.Moves[id].flags['charge'] && id !== 'skydrop') {
@@ -164,10 +164,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
-			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
-			if (!target) return false;
+			const defender = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			if (!defender) return false;
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
-			action.move.beforeTurnCallback.call(this, action.pokemon, target);
+			action.move.beforeTurnCallback.call(this, action.pokemon, defender);
 			break;
 		case 'priorityChargeMove':
 			if (!action.pokemon.isActive) return false;
@@ -196,24 +196,24 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
+			this.actions.switchIn(action.defender, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
-			if (action.target.position < action.pokemon.side.active.length) {
+			if (action.defender.position < action.pokemon.side.active.length) {
 				this.queue.addChoice({
 					choice: 'instaswitch',
-					pokemon: action.target,
-					target: action.target,
+					pokemon: action.defender,
+					defender: action.defender,
 				});
 			}
-			action.target.fainted = false;
-			action.target.faintQueued = false;
-			action.target.subFainted = false;
-			action.target.status = '';
-			action.target.hp = 1; // Needed so hp functions works
-			action.target.sethp(action.target.maxhp / 2);
-			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.defender.fainted = false;
+			action.defender.faintQueued = false;
+			action.defender.subFainted = false;
+			action.defender.status = '';
+			action.defender.hp = 1; // Needed so hp functions works
+			action.defender.sethp(action.defender.maxhp / 2);
+			this.add('-heal', action.defender, action.defender.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		case 'runSwitch':
@@ -345,7 +345,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		return false;
 	},
 	resolveTargetLoc(targetLoc: number, action: Action, move: ActiveMove) {
-		const isValidTarget = this.validTargetLoc(targetLoc, action.pokemon!, move.target);
+		const isValidTarget = this.validTargetLoc(targetLoc, action.pokemon!, move.defender);
 		if (isValidTarget) return targetLoc;
 		const randomTarget = this.getRandomTarget(action.pokemon!, move);
 		if (!randomTarget) return targetLoc;
@@ -359,17 +359,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			const externalMove = options?.externalMove;
 			const originalTarget = options?.originalTarget;
 			let sourceEffect = options?.sourceEffect;
-			let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
+			let defender = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 			let baseMove = this.dex.getActiveMove(moveOrMoveName);
 			const priority = baseMove.priority;
 			const pranksterBoosted = baseMove.pranksterBoosted;
 			if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
-				const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, baseMove);
+				const changedMove = this.battle.runEvent('OverrideAction', pokemon, defender, baseMove);
 				if (changedMove && changedMove !== true) {
 					baseMove = this.dex.getActiveMove(changedMove);
 					baseMove.priority = priority;
 					if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
-					target = this.battle.getRandomTarget(pokemon, baseMove);
+					defender = this.battle.getRandomTarget(pokemon, baseMove);
 				}
 			}
 			let move = baseMove;
@@ -381,7 +381,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			move.isExternal = externalMove;
 
-			this.battle.setActiveMove(move, pokemon, target);
+			this.battle.setActiveMove(move, pokemon, defender);
 
 			/* if (pokemon.moveThisTurn) {
 				// THIS IS PURELY A SANITY CHECK
@@ -391,9 +391,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.clearActiveMove(true);
 				return;
 			} */
-			const willTryMove = this.battle.runEvent('BeforeMove', pokemon, target, move);
+			const willTryMove = this.battle.runEvent('BeforeMove', pokemon, defender, move);
 			if (!willTryMove) {
-				this.battle.runEvent('MoveAborted', pokemon, target, move);
+				this.battle.runEvent('MoveAborted', pokemon, defender, move);
 				this.battle.clearActiveMove(true);
 				// The event 'BeforeMove' could have returned false or null
 				// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
@@ -408,7 +408,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.beforeMoveCallback) {
-				if (move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
+				if (move.beforeMoveCallback.call(this.battle, pokemon, defender, move)) {
 					this.battle.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
 					return;
@@ -420,7 +420,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				lockedMove = this.battle.runEvent('LockMove', pokemon);
 				if (lockedMove === true) lockedMove = false;
 				if (!lockedMove) {
-					if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
+					if (!pokemon.deductPP(baseMove, null, defender) && (move.id !== 'struggle')) {
 						this.battle.add('cant', pokemon, 'nopp', move);
 						this.battle.clearActiveMove(true);
 						pokemon.moveThisTurnResult = false;
@@ -446,11 +446,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const oldActiveMove = move;
 
-			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
+			const moveDidSomething = this.useMove(baseMove, pokemon, { defender, sourceEffect, zMove, maxMove });
 			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove?.id ?? null : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
-			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
-			this.battle.runEvent('AfterMove', pokemon, target, move);
+			this.battle.singleEvent('AfterMove', move, null, pokemon, defender, move);
+			this.battle.runEvent('AfterMove', pokemon, defender, move);
 			if (move.flags['cantusetwice'] && pokemon.removeVolatile(move.id)) {
 				this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
 			}
@@ -625,13 +625,13 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const deferPriority = this.battle.gen === 7 && action.mega && action.mega !== 'done';
 			if (action.move) {
-				let target = null;
+				let defender = null;
 				action.move = this.battle.dex.getActiveMove(action.move);
 
 				if (!action.targetLoc) {
-					target = this.battle.getRandomTarget(action.pokemon, action.move);
+					defender = this.battle.getRandomTarget(action.pokemon, action.move);
 					// TODO: what actually happens here?
-					if (target) action.targetLoc = action.pokemon.getLocOf(target);
+					if (defender) action.targetLoc = action.pokemon.getLocOf(defender);
 				}
 				action.originalTarget = action.pokemon.getAtLoc(action.targetLoc);
 			}

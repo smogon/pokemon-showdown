@@ -40,7 +40,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	metronome: {
 		inherit: true,
-		onHit(target) {
+		onHit(defender) {
 			const moves = this.dex.moves.all().filter(move => (
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['metronome'] && move.gen === 1
@@ -51,7 +51,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
-			this.actions.useMove(randomMove, target);
+			this.actions.useMove(randomMove, defender);
 		},
 	},
 	sappyseed: {
@@ -82,8 +82,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		priority: -6,
 		selfSwitch: true,
-		onTry(source) {
-			return !!this.canSwitch(source.side);
+		onTry(attacker) {
+			return !!this.canSwitch(attacker.side);
 		},
 	},
 	zippyzap: {

@@ -29,10 +29,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	darkaura: {
 		inherit: true,
-		onAnyBasePower(basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || move.type !== source.teraType) return;
-			if (!move.auraBooster?.hasAbility('Dark Aura')) move.auraBooster = this.effectState.target;
-			if (move.auraBooster !== this.effectState.target) return;
+		onAnyBasePower(basePower, attacker, defender, move) {
+			if (defender === attacker || move.category === 'Status' || move.type !== attacker.teraType) return;
+			if (!move.auraBooster?.hasAbility('Dark Aura')) move.auraBooster = this.effectState.defender;
+			if (move.auraBooster !== this.effectState.defender) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
 	},
@@ -53,10 +53,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	dryskin: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Dry Skin');
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
+				if (!this.heal(defender.baseMaxhp / 4)) {
+					this.add('-immune', defender, '[from] ability: Dry Skin');
 				}
 				return null;
 			}
@@ -69,10 +69,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	eartheater: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Earth Eater');
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
+				if (!this.heal(defender.baseMaxhp / 4)) {
+					this.add('-immune', defender, '[from] ability: Earth Eater');
 				}
 				return null;
 			}
@@ -80,28 +80,28 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	fairyaura: {
 		inherit: true,
-		onAnyBasePower(basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || move.type !== source.teraType) return;
-			if (!move.auraBooster?.hasAbility('Fairy Aura')) move.auraBooster = this.effectState.target;
-			if (move.auraBooster !== this.effectState.target) return;
+		onAnyBasePower(basePower, attacker, defender, move) {
+			if (defender === attacker || move.category === 'Status' || move.type !== attacker.teraType) return;
+			if (!move.auraBooster?.hasAbility('Fairy Aura')) move.auraBooster = this.effectState.defender;
+			if (move.auraBooster !== this.effectState.defender) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
 	},
 	flashfire: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
 				move.accuracy = true;
-				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[from] ability: Flash Fire');
+				if (!defender.addVolatile('flashfire')) {
+					this.add('-immune', defender, '[from] ability: Flash Fire');
 				}
 				return null;
 			}
 		},
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
-			onStart(target) {
-				this.add('-start', target, 'ability: Flash Fire');
+			onStart(defender) {
+				this.add('-start', defender, 'ability: Flash Fire');
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
@@ -117,15 +117,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					return this.chainModify(1.5);
 				}
 			},
-			onEnd(target) {
-				this.add('-end', target, 'ability: Flash Fire', '[silent]');
+			onEnd(defender) {
+				this.add('-end', defender, 'ability: Flash Fire', '[silent]');
 			},
 		},
 	},
 	flowerveil: {
 		inherit: true,
-		onAllyTryBoost(boost, target, source, effect) {
-			if ((source && target === source) || !target.hasType(this.effectState.target.teraType)) return;
+		onAllyTryBoost(boost, defender, attacker, effect) {
+			if ((attacker && defender === attacker) || !defender.hasType(this.effectState.defender.teraType)) return;
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
@@ -135,41 +135,41 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries) {
-				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
+				const effectHolder = this.effectState.defender;
+				this.add('-block', defender, 'ability: Flower Veil', `[of] ${effectHolder}`);
 			}
 		},
-		onAllySetStatus(status, target, source, effect) {
-			if (target.hasType(this.effectState.target.teraType) && source && target !== source && effect && effect.id !== 'yawn') {
+		onAllySetStatus(status, defender, attacker, effect) {
+			if (defender.hasType(this.effectState.defender.teraType) && attacker && defender !== attacker && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
-					const effectHolder = this.effectState.target;
-					this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
+					const effectHolder = this.effectState.defender;
+					this.add('-block', defender, 'ability: Flower Veil', `[of] ${effectHolder}`);
 				}
 				return null;
 			}
 		},
-		onAllyTryAddVolatile(status, target, source) {
-			if (target.hasType(this.effectState.target.teraType) && status.id === 'yawn') {
+		onAllyTryAddVolatile(status, defender, attacker) {
+			if (defender.hasType(this.effectState.defender.teraType) && status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
-				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
+				const effectHolder = this.effectState.defender;
+				this.add('-block', defender, 'ability: Flower Veil', `[of] ${effectHolder}`);
 				return null;
 			}
 		},
 	},
 	fluffy: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
+		onSourceModifyDamage(damage, attacker, defender, move) {
 			let mod = 1;
-			if (move.type === target.teraType) mod *= 2;
+			if (move.type === defender.teraType) mod *= 2;
 			if (move.flags['contact']) mod /= 2;
 			return this.chainModify(mod);
 		},
 	},
 	galewings: {
 		inherit: true,
-		onModifyPriority(priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, defender, move) {
 			if (move?.type === pokemon.teraType && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 	},
@@ -203,31 +203,31 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	justified: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType) {
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType) {
 				this.boost({ atk: 1 });
 			}
 		},
 	},
 	lightningrod: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
 				if (!this.boost({ spa: 1 })) {
-					this.add('-immune', target, '[from] ability: Lightning Rod');
+					this.add('-immune', defender, '[from] ability: Lightning Rod');
 				}
 				return null;
 			}
 		},
-		onAnyRedirectTarget(target, source, source2, move) {
-			if (move.type !== this.effectState.target.teraType || move.flags['pledgecombo']) return;
-			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
-			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
+		onAnyRedirectTarget(defender, attacker, source2, move) {
+			if (move.type !== this.effectState.defender.teraType || move.flags['pledgecombo']) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.defender) ? 'normal' : move.defender;
+			if (this.validTarget(this.effectState.defender, attacker, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
-				if (this.effectState.target !== target) {
-					this.add('-activate', this.effectState.target, 'ability: Lightning Rod');
+				if (this.effectState.defender !== defender) {
+					this.add('-activate', this.effectState.defender, 'ability: Lightning Rod');
 				}
-				return this.effectState.target;
+				return this.effectState.defender;
 			}
 		},
 	},
@@ -242,14 +242,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	magnetpull: {
 		inherit: true,
 		onFoeTrapPokemon(pokemon) {
-			if (pokemon.hasType(this.effectState.target.teraType) && pokemon.isAdjacent(this.effectState.target)) {
+			if (pokemon.hasType(this.effectState.defender.teraType) && pokemon.isAdjacent(this.effectState.defender)) {
 				pokemon.tryTrap(true);
 			}
 		},
-		onFoeMaybeTrapPokemon(pokemon, source) {
-			if (!source) source = this.effectState.target;
-			if (!source || !pokemon.isAdjacent(source)) return;
-			if (!pokemon.knownType || pokemon.hasType(source.teraType)) {
+		onFoeMaybeTrapPokemon(pokemon, attacker) {
+			if (!attacker) attacker = this.effectState.defender;
+			if (!attacker || !pokemon.isAdjacent(attacker)) return;
+			if (!pokemon.knownType || pokemon.hasType(attacker.teraType)) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -266,10 +266,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	motordrive: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
 				if (!this.boost({ spe: 1 })) {
-					this.add('-immune', target, '[from] ability: Motor Drive');
+					this.add('-immune', defender, '[from] ability: Motor Drive');
 				}
 				return null;
 			}
@@ -334,8 +334,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	rattled: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if ([target.teraType].includes(move.type)) {
+		onDamagingHit(damage, defender, attacker, move) {
+			if ([defender.teraType].includes(move.type)) {
 				this.boost({ spe: 1 });
 			}
 		},
@@ -381,18 +381,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	sapsipper: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
 				if (!this.boost({ atk: 1 })) {
-					this.add('-immune', target, '[from] ability: Sap Sipper');
+					this.add('-immune', defender, '[from] ability: Sap Sipper');
 				}
 				return null;
 			}
 		},
-		onAllyTryHitSide(target, source, move) {
-			if (source === this.effectState.target || !target.isAlly(source)) return;
-			if (move.type === this.effectState.target.teraType) {
-				this.boost({ atk: 1 }, this.effectState.target);
+		onAllyTryHitSide(defender, attacker, move) {
+			if (attacker === this.effectState.defender || !defender.isAlly(attacker)) return;
+			if (move.type === this.effectState.defender.teraType) {
+				this.boost({ atk: 1 }, this.effectState.defender);
 			}
 		},
 	},
@@ -407,8 +407,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	steamengine: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if ([target.teraType].includes(move.type)) {
+		onDamagingHit(damage, defender, attacker, move) {
+			if ([defender.teraType].includes(move.type)) {
 				this.boost({ spe: 6 });
 			}
 		},
@@ -431,7 +431,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	steelyspirit: {
 		inherit: true,
 		onAllyBasePower(basePower, attacker, defender, move) {
-			if (move.type === this.effectState.target.teraType) {
+			if (move.type === this.effectState.defender.teraType) {
 				this.debug('Steely Spirit boost');
 				return this.chainModify(1.5);
 			}
@@ -439,23 +439,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	stormdrain: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
 				if (!this.boost({ spa: 1 })) {
-					this.add('-immune', target, '[from] ability: Storm Drain');
+					this.add('-immune', defender, '[from] ability: Storm Drain');
 				}
 				return null;
 			}
 		},
-		onAnyRedirectTarget(target, source, source2, move) {
-			if (move.type !== this.effectState.target.teraType || move.flags['pledgecombo']) return;
-			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
-			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
+		onAnyRedirectTarget(defender, attacker, source2, move) {
+			if (move.type !== this.effectState.defender.teraType || move.flags['pledgecombo']) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.defender) ? 'normal' : move.defender;
+			if (this.validTarget(this.effectState.defender, attacker, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
-				if (this.effectState.target !== target) {
-					this.add('-activate', this.effectState.target, 'ability: Storm Drain');
+				if (this.effectState.defender !== defender) {
+					this.add('-activate', this.effectState.defender, 'ability: Storm Drain');
 				}
-				return this.effectState.target;
+				return this.effectState.defender;
 			}
 		},
 	},
@@ -476,8 +476,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	thermalexchange: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType) {
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType) {
 				this.boost({ atk: 1 });
 			}
 		},
@@ -530,10 +530,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	voltabsorb: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Volt Absorb');
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
+				if (!this.heal(defender.baseMaxhp / 4)) {
+					this.add('-immune', defender, '[from] ability: Volt Absorb');
 				}
 				return null;
 			}
@@ -541,10 +541,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	waterabsorb: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Water Absorb');
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
+				if (!this.heal(defender.baseMaxhp / 4)) {
+					this.add('-immune', defender, '[from] ability: Water Absorb');
 				}
 				return null;
 			}
@@ -575,18 +575,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	watercompaction: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType) {
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType) {
 				this.boost({ def: 2 });
 			}
 		},
 	},
 	wellbakedbody: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === target.teraType) {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === defender.teraType) {
 				if (!this.boost({ def: 2 })) {
-					this.add('-immune', target, '[from] ability: Well-Baked Body');
+					this.add('-immune', defender, '[from] ability: Well-Baked Body');
 				}
 				return null;
 			}
@@ -594,9 +594,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	mountaineer: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (move.type === target.teraType && !target.activeTurns) {
-				this.add('-immune', target, '[from] ability: Mountaineer');
+		onTryHit(defender, attacker, move) {
+			if (move.type === defender.teraType && !defender.activeTurns) {
+				this.add('-immune', defender, '[from] ability: Mountaineer');
 				return null;
 			}
 		},

@@ -10,6 +10,6 @@ List of major changes:
  * Critical hits happen way less.
  * Substitute now blocks all status ailments and draining.
  * It allows tradebacks.
- * Partial trapping moves miss and stop their duration upon target switch.
+ * Partial trapping moves miss and stop their duration upon defender switch.
  * Focus Energy actually works.
  * Stat calculations are done properly, burn and para drop are lost if you lose status.

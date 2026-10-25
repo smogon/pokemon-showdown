@@ -8,9 +8,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'brn');
-			target.addVolatile('brnattackdrop');
+		onStart(defender) {
+			this.add('-status', defender, 'brn');
+			defender.addVolatile('brnattackdrop');
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
@@ -26,9 +26,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	par: {
 		name: 'par',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'par');
-			target.addVolatile('parspeeddrop');
+		onStart(defender) {
+			this.add('-status', defender, 'par');
+			defender.addVolatile('parspeeddrop');
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
@@ -44,21 +44,21 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				this.add('-status', defender, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
-				this.add('-status', target, 'slp');
+				this.add('-status', defender, 'slp');
 			}
 			// 1-4 turns, guaranteed 1 turn of sleep.
 			this.effectState.time = this.random(2, 5);
 
-			if (target.removeVolatile('nightmare')) {
-				this.add('-end', target, 'Nightmare', '[silent]');
+			if (defender.removeVolatile('nightmare')) {
+				this.add('-end', defender, 'Nightmare', '[silent]');
 			}
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
@@ -74,15 +74,15 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	confusion: {
 		inherit: true,
 		// Stadium 2 fixed Berserk Gene afflicting Confusion for 255 turns.
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.id === 'lockedmove') {
-				this.add('-start', target, 'confusion', '[silent]');
+				this.add('-start', defender, 'confusion', '[silent]');
 			} else {
-				this.add('-start', target, 'confusion');
+				this.add('-start', defender, 'confusion');
 			}
 			this.effectState.time = this.random(2, 6);
 		},
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			pokemon.volatiles['confusion'].time--;
 			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');
@@ -111,8 +111,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	residualdmg: {
 		name: 'residualdmg',
-		onStart(target) {
-			target.volatiles['residualdmg'].counter = 0;
+		onStart(defender) {
+			defender.volatiles['residualdmg'].counter = 0;
 		},
 		onAfterMoveSelfPriority: 100,
 		onAfterMoveSelf(pokemon) {

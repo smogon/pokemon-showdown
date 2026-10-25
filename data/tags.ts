@@ -127,19 +127,19 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	bypassprotect: {
 		name: "Bypasses Protect",
-		moveFilter: move => move.target !== 'self' && !('protect' in move.flags),
+		moveFilter: move => move.defender !== 'self' && !('protect' in move.flags),
 	},
 	nonreflectable: {
 		name: "Nonreflectable",
-		moveFilter: move => move.target !== 'self' && move.category === 'Status' && !('reflectable' in move.flags),
+		moveFilter: move => move.defender !== 'self' && move.category === 'Status' && !('reflectable' in move.flags),
 	},
 	nonmirror: {
 		name: "Nonmirror",
-		moveFilter: move => move.target !== 'self' && !('mirror' in move.flags),
+		moveFilter: move => move.defender !== 'self' && !('mirror' in move.flags),
 	},
 	nonsnatchable: {
 		name: "Nonsnatchable",
-		moveFilter: move => ['allyTeam', 'self', 'adjacentAllyOrSelf'].includes(move.target) && !('snatch' in move.flags),
+		moveFilter: move => ['allyTeam', 'self', 'adjacentAllyOrSelf'].includes(move.defender) && !('snatch' in move.flags),
 	},
 	bypasssubstitute: {
 		name: "Bypasses Substitutes",

@@ -1,10 +1,10 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	aftermath: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
-				const calc = calculate(this, target, source);
-				this.damage(calc * source.baseMaxhp / 4, source, target);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (!defender.hp && this.checkMoveMakesContact(move, attacker, defender, true)) {
+				const calc = calculate(this, defender, attacker);
+				this.damage(calc * attacker.baseMaxhp / 4, attacker, defender);
 			}
 		},
 	},
@@ -12,53 +12,53 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
-			for (const target of pokemon.foes()) {
-				if (target.status === 'slp' || target.hasAbility('comatose')) {
-					const calc = calculate(this, pokemon, target);
-					this.damage(calc * target.baseMaxhp / 8, target, pokemon);
+			for (const defender of pokemon.foes()) {
+				if (defender.status === 'slp' || defender.hasAbility('comatose')) {
+					const calc = calculate(this, pokemon, defender);
+					this.damage(calc * defender.baseMaxhp / 8, defender, pokemon);
 				}
 			}
 		},
 	},
 	gulpmissile: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (!source.hp || !source.isActive || target.isSemiInvulnerable()) return;
-			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
-				const calc = calculate(this, target, source);
-				if (calc) this.damage(calc * source.baseMaxhp / 4, source, target);
-				if (target.species.id === 'cramorantgulping') {
-					this.boost({ def: -1 }, source, target, null, true);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (!attacker.hp || !attacker.isActive || defender.isSemiInvulnerable()) return;
+			if (['cramorantgulping', 'cramorantgorging'].includes(defender.species.id)) {
+				const calc = calculate(this, defender, attacker);
+				if (calc) this.damage(calc * attacker.baseMaxhp / 4, attacker, defender);
+				if (defender.species.id === 'cramorantgulping') {
+					this.boost({ def: -1 }, attacker, defender, null, true);
 				} else {
-					source.trySetStatus('par', target, move);
+					attacker.trySetStatus('par', defender, move);
 				}
-				target.formeChange('cramorant', move);
+				defender.formeChange('cramorant', move);
 			}
 		},
 	},
 	ironbarbs: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target, true)) {
-				const calc = calculate(this, target, source);
-				this.damage(calc * source.baseMaxhp / 8, source, target);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (this.checkMoveMakesContact(move, attacker, defender, true)) {
+				const calc = calculate(this, defender, attacker);
+				this.damage(calc * attacker.baseMaxhp / 8, attacker, defender);
 			}
 		},
 	},
 	roughskin: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target, true)) {
-				const calc = calculate(this, target, source);
-				this.damage(calc * source.baseMaxhp / 8, source, target);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (this.checkMoveMakesContact(move, attacker, defender, true)) {
+				const calc = calculate(this, defender, attacker);
+				this.damage(calc * attacker.baseMaxhp / 8, attacker, defender);
 			}
 		},
 	},
 };
 
-function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon) {
+function calculate(battle: Battle, attacker: Pokemon, pokemon: Pokemon) {
 	const move = battle.dex.getActiveMove('tackle');
-	move.type = source.getTypes()[0];
+	move.type = attacker.getTypes()[0];
 	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
 	if (!pokemon.runImmunity(move)) return 0;
 	return typeMod;

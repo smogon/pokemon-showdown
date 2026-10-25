@@ -2,27 +2,27 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				this.add('-status', defender, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
-				this.add('-status', target, 'slp');
+				this.add('-status', defender, 'slp');
 			}
 			// 1-4 turns
 			this.effectState.time = this.random(2, 6);
 			// Turns spent using Sleep Talk/Snore immediately before switching out while asleep
 			this.effectState.skippedTime = 0;
 
-			if (target.removeVolatile('nightmare')) {
-				this.add('-end', target, 'Nightmare', '[silent]');
+			if (defender.removeVolatile('nightmare')) {
+				this.add('-end', defender, 'Nightmare', '[silent]');
 			}
 		},
-		onSwitchOut(target) {
+		onSwitchOut(defender) {
 			this.effectState.time += this.effectState.skippedTime;
 			this.effectState.skippedTime = 0;
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusState.time--;
 			}
@@ -42,10 +42,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	frz: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			// don't count Hidden Power or Weather Ball as Fire-type
 			if (this.dex.moves.get(move.id).type === 'Fire' && move.category !== 'Status') {
-				target.cureStatus();
+				defender.cureStatus();
 			}
 		},
 	},

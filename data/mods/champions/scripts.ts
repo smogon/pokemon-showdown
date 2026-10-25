@@ -53,10 +53,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			return speed;
 		},
 		// Don't revert Mega Evolutions after fainting
-		formeChange(speciesId, source, isPermanent, abilitySlot = '0', message) {
+		formeChange(speciesId, attacker, isPermanent, abilitySlot = '0', message) {
 			const rawSpecies = this.battle.dex.species.get(speciesId);
 
-			const species = this.setSpecies(rawSpecies, source);
+			const species = this.setSpecies(rawSpecies, attacker);
 			if (!species) return false;
 
 			if (this.battle.gen <= 2) return true;
@@ -71,16 +71,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.terastallized) details += `, tera:${this.terastallized}`;
 				this.battle.add('detailschange', this, details);
 				this.updateMaxHp();
-				if (!source) {
+				if (!attacker) {
 					// Tera forme
 					// Ogerpon/Terapagos text goes here
 					this.formeRegression = true;
-				} else if (source.effectType === 'Item') {
+				} else if (attacker.effectType === 'Item') {
 					this.canTerastallize = null; // National Dex behavior
-					if (source.zMove) {
+					if (attacker.zMove) {
 						this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
-					} else if (source.isPrimalOrb) {
+					} else if (attacker.isPrimalOrb) {
 						if (this.illusion) {
 							this.ability = '';
 							this.battle.add('-primal', this.illusion, species.requiredItem);
@@ -91,25 +91,25 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 						this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 					}
-				} else if (source.effectType === 'Status') {
+				} else if (attacker.effectType === 'Status') {
 					// Shaymin-Sky -> Shaymin
 					this.battle.add('-formechange', this, species.name, message);
 				}
 			} else {
-				if (source?.effectType === 'Ability') {
-					this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
+				if (attacker?.effectType === 'Ability') {
+					this.battle.add('-formechange', this, species.name, message, `[from] ability: ${attacker.name}`);
 				} else {
 					this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : species.name, message);
 				}
 			}
-			if (isPermanent && (!source || !['disguise', 'iceface'].includes(source.id))) {
-				if (this.illusion && source) {
+			if (isPermanent && (!attacker || !['disguise', 'iceface'].includes(attacker.id))) {
+				if (this.illusion && attacker) {
 					// Tera forme by Ogerpon or Terapagos breaks the Illusion
 					this.ability = ''; // Don't allow Illusion to wear off
 				}
 				const ability = species.abilities[abilitySlot] || species.abilities['0'];
 				// Ogerpon's forme change doesn't override permanent abilities
-				if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
+				if (attacker || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
 				// However, its ability does reset upon switching out
 				this.baseAbility = this.battle.toID(ability);
 			}
@@ -193,7 +193,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return item.megaStone?.[species.name] || null;
 		},
 		// Announce 4x and 0.25x effectiveness
-		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
+		modifyDamage(baseDamage, pokemon, defender, move, suppressMessages) {
 			const tr = this.battle.trunc;
 			if (!move.type) move.type = '???';
 			const type = move.type;
@@ -201,7 +201,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			baseDamage += 2;
 
 			if (move.spreadHit) {
-				// multi-target modifier (doubles only)
+				// multi-defender modifier (doubles only)
 				const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
@@ -213,10 +213,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// weather modifier
-			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, defender, move, baseDamage);
 
 			// crit - not a modifier
-			const isCrit = target.getMoveHitData(move).crit;
+			const isCrit = defender.getMoveHitData(move).crit;
 			if (isCrit) {
 				baseDamage = tr(baseDamage * (move.critModifier || (this.battle.gen >= 6 ? 1.5 : 2)));
 			}
@@ -256,32 +256,32 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
 						stab = 2;
 					}
-					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+					stab = this.battle.runEvent('ModifySTAB', pokemon, defender, move, stab);
 				}
 
 				baseDamage = this.battle.modify(baseDamage, stab);
 			}
 
 			// types
-			let typeMod = target.runEffectiveness(move);
+			let typeMod = defender.runEffectiveness(move);
 			typeMod = this.battle.clampIntRange(typeMod, -6, 6);
-			target.getMoveHitData(move).typeMod = typeMod;
+			defender.getMoveHitData(move).typeMod = typeMod;
 			if (typeMod > 0) {
-				if (!suppressMessages) this.battle.add('-supereffective', target, Math.min(typeMod, 2));
+				if (!suppressMessages) this.battle.add('-supereffective', defender, Math.min(typeMod, 2));
 
 				for (let i = 0; i < typeMod; i++) {
 					baseDamage *= 2;
 				}
 			}
 			if (typeMod < 0) {
-				if (!suppressMessages) this.battle.add('-resisted', target, Math.min(-typeMod, 2));
+				if (!suppressMessages) this.battle.add('-resisted', defender, Math.min(-typeMod, 2));
 
 				for (let i = 0; i > typeMod; i--) {
 					baseDamage = tr(baseDamage / 2);
 				}
 			}
 
-			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+			if (isCrit && !suppressMessages) this.battle.add('-crit', defender);
 
 			if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 				if (this.battle.gen < 6 || move.id !== 'facade') {
@@ -293,15 +293,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.gen === 5 && !baseDamage) baseDamage = 1;
 
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
-			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, defender, move, baseDamage);
 
-			const bypassProtect = target.getMoveHitData(move).bypassProtect;
+			const bypassProtect = defender.getMoveHitData(move).bypassProtect;
 			if (bypassProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
 				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
 					this.battle.add('-ability', pokemon, bypassProtect.name);
 				}
-				this.battle.add('-zbroken', target);
+				this.battle.add('-zbroken', defender);
 			}
 
 			// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
@@ -310,11 +310,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
 		},
-		// Run `AfterHit` events even if the source fainted: Rapid Spin, Ceaseless Edge, etc.
+		// Run `AfterHit` events even if the attacker fainted: Rapid Spin, Ceaseless Edge, etc.
 		spreadMoveHit(targets, pokemon, moveOrMoveName, hitEffect?, isSecondary?, isSelf?) {
-			// Hardcoded for single-target purposes
+			// Hardcoded for single-defender purposes
 			// (no spread moves have any kind of onTryHit handler)
-			const target = targets[0];
+			const defender = targets[0];
 			let damage: (number | boolean | undefined)[] = [];
 			for (const i of targets.keys()) {
 				damage[i] = true;
@@ -324,24 +324,24 @@ export const Scripts: ModdedBattleScriptsData = {
 			let moveData = hitEffect!;
 			if (!moveData) moveData = move;
 			if (!moveData.flags) moveData.flags = {};
-			if (move.target === 'all' && !isSelf) {
-				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
-			} else if ((move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') && !isSelf) {
-				hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
-			} else if (target) {
-				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+			if (move.defender === 'all' && !isSelf) {
+				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, defender || null, pokemon, move);
+			} else if ((move.defender === 'foeSide' || move.defender === 'allySide' || move.defender === 'allyTeam') && !isSelf) {
+				hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, defender || null, pokemon, move);
+			} else if (defender) {
+				hitResult = this.battle.singleEvent('TryHit', moveData, {}, defender, pokemon, move);
 			}
 			if (!hitResult) {
 				if (hitResult === false) {
 					this.battle.add('-fail', pokemon);
 					this.battle.attrLastMove('[still]');
 				}
-				return [[false], targets]; // single-target only
+				return [[false], targets]; // single-defender only
 			}
 
 			// 0. check for substitute
 			if (!isSecondary && !isSelf) {
-				if (move.target !== 'all' && move.target !== 'allyTeam' && move.target !== 'allySide' && move.target !== 'foeSide') {
+				if (move.defender !== 'all' && move.defender !== 'allyTeam' && move.defender !== 'allySide' && move.defender !== 'foeSide') {
 					damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 				}
 			}
@@ -459,7 +459,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (hit = 1; hit <= targetHits; hit++) {
 				if (damage.includes(false)) break;
 				if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
-				if (targets.every(target => !target?.hp)) break;
+				if (targets.every(defender => !defender?.hp)) break;
 				move.hit = hit;
 				move.lastHit = move.hit === targetHits;
 				if (move.smartTarget && targets.length > 1) {
@@ -468,17 +468,17 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					targetsCopy = targets.slice(0);
 				}
-				const target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
-				if (target && typeof move.smartTarget === 'boolean') {
+				const defender = targetsCopy[0]; // some relevant-to-single-defender-moves-only things are hardcoded
+				if (defender && typeof move.smartTarget === 'boolean') {
 					if (hit > 1) {
-						this.battle.addMove('-anim', pokemon, move.name, target);
+						this.battle.addMove('-anim', pokemon, move.name, defender);
 					} else {
-						this.battle.retargetLastMove(target);
+						this.battle.retargetLastMove(defender);
 					}
 				}
 
 				// like this (Triple Kick)
-				if (target && move.multiaccuracy && hit > 1) {
+				if (defender && move.multiaccuracy && hit > 1) {
 					let accuracy = move.accuracy;
 					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 					if (accuracy !== true) {
@@ -492,7 +492,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 						if (!move.ignoreEvasion) {
-							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+							const boosts = this.battle.runEvent('ModifyBoost', defender, null, null, { ...defender.boosts });
 							const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];
@@ -501,9 +501,9 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 					}
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					accuracy = this.battle.runEvent('ModifyAccuracy', defender, pokemon, move, accuracy);
 					if (!move.alwaysHit) {
-						accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+						accuracy = this.battle.runEvent('Accuracy', defender, pokemon, move, accuracy);
 						if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
 					}
 				}
@@ -557,11 +557,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				targetsCopy = targets.slice(0);
 			}
 
-			for (const [i, target] of targetsCopy.entries()) {
-				if (target && pokemon !== target) {
-					target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
+			for (const [i, defender] of targetsCopy.entries()) {
+				if (defender && pokemon !== defender) {
+					defender.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
 					if (typeof moveDamage[i] === 'number') {
-						target.timesAttacked += move.smartTarget ? 1 : hit - 1;
+						defender.timesAttacked += move.smartTarget ? 1 : hit - 1;
 					}
 				}
 			}

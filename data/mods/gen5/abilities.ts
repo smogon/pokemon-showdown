@@ -2,8 +2,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	anticipation: {
 		inherit: true,
 		onStart(pokemon) {
-			for (const target of pokemon.foes()) {
-				for (const moveSlot of target.moveSlots) {
+			for (const defender of pokemon.foes()) {
+				for (const moveSlot of defender.moveSlots) {
 					const move = this.dex.moves.get(moveSlot.move);
 					if (move.category !== 'Status' && (
 						this.dex.getImmunity(move.type, pokemon) && this.dex.getEffectiveness(move.type, pokemon) > 0 ||
@@ -19,9 +19,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	frisk: {
 		inherit: true,
 		onStart(pokemon) {
-			const target = pokemon.side.randomFoe();
-			if (target?.item) {
-				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
+			const defender = pokemon.side.randomFoe();
+			if (defender?.item) {
+				this.add('-item', '', defender.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
 	},
@@ -35,14 +35,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	magicbounce: {
 		inherit: true,
-		onAllyTryHitSide(target, source, move) {
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+		onAllyTryHitSide(defender, attacker, move) {
+			if (defender.isAlly(attacker) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			this.actions.useMove(newMove, this.effectState.defender, { defender: attacker });
 			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
 		},
@@ -55,7 +55,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-end', pokemon, 'move: Attract', '[from] ability: Oblivious');
 			}
 		},
-		onTryHit(pokemon, target, move) {
+		onTryHit(pokemon, defender, move) {
 			if (move.id === 'captivate') {
 				this.add('-immune', pokemon, '[from] Oblivious');
 				return null;
@@ -93,16 +93,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	rebound: {
 		inherit: true,
-		onAllyTryHitSide(target, source, move) {
-			if (this.effectState.target.activeTurns) return;
+		onAllyTryHitSide(defender, attacker, move) {
+			if (this.effectState.defender.activeTurns) return;
 
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+			if (defender.isAlly(attacker) || move.hasBounced || !move.flags['reflectable']) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			this.actions.useMove(newMove, this.effectState.defender, { defender: attacker });
 			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
 		},

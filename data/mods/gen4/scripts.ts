@@ -28,7 +28,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		inherit: true,
-		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
+		modifyDamage(baseDamage, pokemon, defender, move, suppressMessages = false) {
 			// DPP divides modifiers into several mathematically important stages
 			// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
 
@@ -41,7 +41,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Other modifiers (Reflect/Light Screen/etc)
-			baseDamage = this.battle.runEvent('ModifyDamagePhase1', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.runEvent('ModifyDamagePhase1', pokemon, defender, move, baseDamage);
 
 			// Double battle multi-hit
 			if (move.spreadHit) {
@@ -51,17 +51,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Weather
-			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, defender, move, baseDamage);
 
 			baseDamage += 2;
 
-			const isCrit = target.getMoveHitData(move).crit;
+			const isCrit = defender.getMoveHitData(move).crit;
 			if (isCrit) {
 				baseDamage = this.battle.modify(baseDamage, move.critModifier || 2);
 			}
 
 			// Mod 2 (Damage is floored after all multipliers are in)
-			baseDamage = Math.floor(this.battle.runEvent('ModifyDamagePhase2', pokemon, target, move, baseDamage));
+			baseDamage = Math.floor(this.battle.runEvent('ModifyDamagePhase2', pokemon, defender, move, baseDamage));
 
 			// this is not a modifier
 			baseDamage = this.battle.randomizer(baseDamage);
@@ -76,32 +76,32 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.forceSTAB || pokemon.hasType(type)) {
 					stab = 1.5;
 				}
-				stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+				stab = this.battle.runEvent('ModifySTAB', pokemon, defender, move, stab);
 				baseDamage = this.battle.modify(baseDamage, stab);
 			}
 			// types
-			let typeMod = target.runEffectiveness(move);
+			let typeMod = defender.runEffectiveness(move);
 			typeMod = this.battle.clampIntRange(typeMod, -6, 6);
-			target.getMoveHitData(move).typeMod = typeMod;
+			defender.getMoveHitData(move).typeMod = typeMod;
 			if (typeMod > 0) {
-				if (!suppressMessages) this.battle.add('-supereffective', target);
+				if (!suppressMessages) this.battle.add('-supereffective', defender);
 
 				for (let i = 0; i < typeMod; i++) {
 					baseDamage *= 2;
 				}
 			}
 			if (typeMod < 0) {
-				if (!suppressMessages) this.battle.add('-resisted', target);
+				if (!suppressMessages) this.battle.add('-resisted', defender);
 
 				for (let i = 0; i > typeMod; i--) {
 					baseDamage = Math.floor(baseDamage / 2);
 				}
 			}
 
-			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+			if (isCrit && !suppressMessages) this.battle.add('-crit', defender);
 
 			// Final modifier.
-			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, defender, move, baseDamage);
 
 			if (!Math.floor(baseDamage)) {
 				return 1;
@@ -111,28 +111,28 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		hitStepInvulnerabilityEvent(targets, pokemon, move) {
 			const hitResults = this.battle.runEvent('Invulnerability', targets, pokemon, move);
-			for (const [i, target] of targets.entries()) {
+			for (const [i, defender] of targets.entries()) {
 				if (hitResults[i] === false) {
 					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
+					this.battle.add('-miss', pokemon, defender);
 				}
 			}
 			return hitResults;
 		},
 		hitStepAccuracy(targets, pokemon, move) {
 			const hitResults = [];
-			for (const [i, target] of targets.entries()) {
-				this.battle.activeTarget = target;
+			for (const [i, defender] of targets.entries()) {
+				this.battle.activeTarget = defender;
 				// calculate true accuracy
 				let accuracy = move.accuracy;
 				if (move.ohko) { // bypasses accuracy modifiers
-					if (!target.isSemiInvulnerable()) {
-						if (pokemon.level < target.level) {
-							this.battle.add('-immune', target, '[ohko]');
+					if (!defender.isSemiInvulnerable()) {
+						if (pokemon.level < defender.level) {
+							this.battle.add('-immune', defender, '[ohko]');
 							hitResults[i] = false;
 							continue;
 						}
-						accuracy = 30 + pokemon.level - target.level;
+						accuracy = 30 + pokemon.level - defender.level;
 					}
 				} else {
 					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
@@ -150,7 +150,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 						if (!move.ignoreEvasion) {
-							boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+							boosts = this.battle.runEvent('ModifyBoost', defender, null, null, { ...defender.boosts });
 							boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];
@@ -159,16 +159,16 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 					}
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					accuracy = this.battle.runEvent('ModifyAccuracy', defender, pokemon, move, accuracy);
 				}
 				if (move.alwaysHit) {
 					accuracy = true; // bypasses ohko accuracy modifiers
 				} else {
-					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+					accuracy = this.battle.runEvent('Accuracy', defender, pokemon, move, accuracy);
 				}
 				if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
 					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-					this.battle.add('-miss', pokemon, target);
+					this.battle.add('-miss', pokemon, defender);
 					hitResults[i] = false;
 					continue;
 				}
