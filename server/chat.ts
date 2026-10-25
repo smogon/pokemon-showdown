@@ -32,6 +32,8 @@ import * as Friends from './friends';
 import { FS, Utils } from '../lib';
 import * as Artemis from './artemis';
 import { PrivateMessages } from './private-messages';
+import * as dns from 'dns';
+import * as net from 'net';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 import { pluginDatabase } from './chat-db';
@@ -168,7 +170,56 @@ const MAX_PLUGIN_LOADING_DEPTH = 3;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
-let probe: null | ((url: string) => Promise<{ width: number, height: number }>) = null;
+const publicImageIPs = new net.BlockList();
+publicImageIPs.addSubnet('2000::', 3, 'ipv6');
+publicImageIPs.addSubnet('::ffff:0:0', 96, 'ipv6');
+const blockedImageIPs = new net.BlockList();
+for (const [family, ranges] of [
+	['ipv4', '0.0.0.0/8 10.0.0.0/8 100.64.0.0/10 127.0.0.0/8 169.254.0.0/16 172.16.0.0/12 ' +
+	'192.0.0.0/24 192.0.2.0/24 192.88.99.0/24 192.168.0.0/16 198.18.0.0/15 ' +
+	'198.51.100.0/24 203.0.113.0/24 224.0.0.0/4 240.0.0.0/4'],
+	['ipv6', '2001::/23 2001:db8::/32 2002::/16'],
+] as const) {
+	for (const range of ranges.split(' ')) {
+		const [address, prefix] = range.split('/');
+		blockedImageIPs.addSubnet(address, Number(prefix), family);
+	}
+}
+const BLOCKED_IMAGE_URL = 'http://blocked.invalid/';
+const imageProbeOptions = {
+	agent: false,
+	uri_modifier(uri: string) {
+		try {
+			const url = new URL(uri);
+			const hostname = url.hostname.replace(/^\[|\]$/g, '');
+			if ((url.protocol === 'http:' || url.protocol === 'https:') &&
+				(!net.isIP(hostname) || isPublicImageIP(hostname))) return url.href;
+		} catch {
+			return BLOCKED_IMAGE_URL;
+		}
+		// Needle invokes this hook again on redirects, outside the initial probe call.
+		return BLOCKED_IMAGE_URL;
+	},
+	lookup: ((hostname, options, callback) => {
+		if (hostname === 'blocked.invalid') return callback(new Error(`Invalid image URL`), []);
+		dns.lookup(hostname, { ...options, all: true }, (error, addresses) => {
+			if (error) return callback(error, []);
+			if (!addresses.length || addresses.some(({ address }) => !isPublicImageIP(address))) {
+				return callback(new Error(`Private image URL`), []);
+			}
+			if (options.all) return callback(null, addresses);
+			const { address, family } = addresses[0];
+			return callback(null, address, family);
+		});
+	}) satisfies net.LookupFunction,
+};
+function isPublicImageIP(address: string) {
+	const family = net.isIP(address);
+	return !!family && (family === 4 || publicImageIPs.check(address, 'ipv6')) &&
+		!blockedImageIPs.check(address, family === 4 ? 'ipv4' : 'ipv6');
+}
+type ImageProbe = (url: string, options?: typeof imageProbeOptions) => Promise<{ width: number, height: number }>;
+let probe: ImageProbe | null = null;
 
 try {
 	probe = require('probe-image-size');
@@ -2509,7 +2560,7 @@ export const Chat = new class {
 		if (!probe) {
 			return Promise.reject(new Error(`Images not supported.`));
 		}
-		return probe(url);
+		return probe(url, imageProbeOptions);
 	}
 
 	parseArguments(
