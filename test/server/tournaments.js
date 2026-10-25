@@ -250,6 +250,50 @@ describe('Tournament automatic pairing', () => {
 		assert(!tour.players[1].isDisqualified);
 	});
 
+	for (const checkWhileReady of [false, true]) {
+		it(`preserves AutoDQ after ready/cancel${checkWhileReady ? ' with a check while ready' : ''}`, async () => {
+			start();
+			tour.autoDisqualifyTimeout = 60000;
+			const player = tour.players[0];
+			const lastActionTime = Date.now() - 45000;
+			player.lastActionTime = lastActionTime;
+			tour.runAutoDisqualify();
+			assert.equal(player.autoDisqualifyWarned, true);
+
+			await ready(player);
+			if (checkWhileReady) tour.runAutoDisqualify();
+			assert.equal(player.isDisqualified, false);
+			tour.cancelReady(users[0], context(users[0]));
+			assert.equal(player.lastActionTime, lastActionTime);
+			assert.equal(player.autoDisqualifyWarned, true);
+
+			// Advance past the deadline without waiting for the real timer.
+			player.lastActionTime = Date.now() - 65000;
+			tour.runAutoDisqualify();
+			assert.equal(player.isDisqualified, true);
+		});
+	}
+
+	it('resets AutoDQ when a new opponent is assigned', async () => {
+		start();
+		tour.autoDisqualifyTimeout = 60000;
+		const player = tour.players[0];
+		const lastActionTime = Date.now() - 45000;
+		player.lastActionTime = lastActionTime;
+		tour.runAutoDisqualify();
+		assert.equal(player.autoDisqualifyWarned, true);
+		await ready(player);
+
+		tour.disqualifyUser(users[1].id);
+		assert(player.pendingMatch.includes(tour.players[2]));
+		assert(player.lastActionTime > lastActionTime);
+		assert.equal(player.autoDisqualifyWarned, false);
+		tour.cancelReady(users[0], context(users[0]));
+		tour.runAutoDisqualify();
+		assert.equal(player.isDisqualified, false);
+		assert.equal(player.autoDisqualifyWarned, false);
+	});
+
 	it('releases both players if battle creation fails', async () => {
 		start();
 		Rooms.createBattle = () => undefined;

@@ -788,10 +788,11 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		const now = Date.now();
 		for (const player of this.players) {
 			const time = player.lastActionTime;
-			if (!player.pendingMatch || player.ready || player.isBusy || player.isDisqualified || player.isEliminated) {
+			if (!player.pendingMatch || player.isBusy || player.isDisqualified || player.isEliminated) {
 				player.autoDisqualifyWarned = false;
 				continue;
 			}
+			if (player.ready) continue;
 
 			if (now > time + this.autoDisqualifyTimeout && player.autoDisqualifyWarned) {
 				this.disqualifyUser(player.id, output, "You failed to ready up for your match in time.");
@@ -880,7 +881,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			!user.connected || player.isBusy || player.isDisqualified || player.isEliminated) return;
 
 		player.ready = ready;
-		player.autoDisqualifyWarned = false;
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 	}
