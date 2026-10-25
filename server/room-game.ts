@@ -188,6 +188,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 		if (player.id === toID(userOrName)) return;
 		if (player.id) {
 			delete this.playerTable[player.id];
+			if (this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) this.room.auth.delete(player.id);
 			const user = Users.getExact(player.id);
 			if (user) {
 				user.games.delete(this.roomid);
