@@ -61,10 +61,17 @@ export interface ModdedEffectText {
 }
 
 /**
- * Every `on*` key of every effect constructed so far. A callback name not in
- * here is on no effect, so the battle can skip looking for it. Only grows.
+ * Every `on*` key of every effect in the loaded data, and of every effect
+ * constructed so far. A callback name not in here is on no effect, so the
+ * battle can skip looking for it. Only grows.
  */
 export const definedCallbackNames = new Set<string>(['onSwitchIn']);
+
+export function addDefinedCallbackNames(data: AnyObject) {
+	for (const key in data) {
+		if (key.startsWith('on')) definedCallbackNames.add(key);
+	}
+}
 
 export abstract class BasicEffect implements EffectData {
 	/**
@@ -138,9 +145,7 @@ export abstract class BasicEffect implements EffectData {
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
 		this.sourceEffect = data.sourceEffect || '';
-		for (const key in data) {
-			if (key.startsWith('on')) definedCallbackNames.add(key);
-		}
+		addDefinedCallbackNames(data);
 	}
 
 	toString() {

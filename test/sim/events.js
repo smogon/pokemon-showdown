@@ -1,5 +1,7 @@
 'use strict';
 
+const { execFileSync } = require('child_process');
+const path = require('path');
 const assert = require('./../assert');
 const common = require('./../common');
 
@@ -63,5 +65,43 @@ describe('Battle#onEvent', () => {
 		assert.throws(() => battle.onEvent(), TypeError);
 		assert.throws(() => { battle.onEvent('Hit'); }, TypeError);
 		assert.throws(() => { battle.onEvent('Hit', battle.format); }, TypeError);
+	});
+});
+
+describe('Battle#findEventHandlers', () => {
+	it('should know every callback in the data before the effects defining them are constructed', function () {
+		this.timeout(0);
+		// effects are constructed when first looked up, so this needs a process that hasn't looked any up
+		const script = `
+			const { Dex } = require('./dist/sim/dex');
+			const { definedCallbackNames } = require('./dist/sim/dex-data');
+			const dexes = Object.values(Dex.includeMods().dexes);
+			for (const dex of dexes) dex.includeData();
+			let constructed = 0;
+			const checked = new Set();
+			const missing = new Set();
+			for (const dex of dexes) {
+				constructed += dex.abilities.abilityCache.size + dex.items.itemCache.size;
+				for (const table of ['Abilities', 'Items', 'Moves', 'Conditions', 'Pokedex', 'Rulesets']) {
+					for (const entry of Object.values(dex.data[table])) {
+						for (const data of [entry, entry.condition]) {
+							for (const key in data) {
+								if (!key.startsWith('on')) continue;
+								checked.add(key);
+								if (!definedCallbackNames.has(key)) missing.add(key);
+							}
+						}
+					}
+				}
+			}
+			console.log(JSON.stringify({ constructed, checked: [...checked], missing: [...missing] }));
+		`;
+		const { constructed, checked, missing } = JSON.parse(execFileSync(process.execPath, ['-e', script], {
+			cwd: path.resolve(__dirname, '../..'), encoding: 'utf8',
+		}));
+		assert.equal(constructed, 0, `No abilities or items should have been constructed yet`);
+		// only abilities define this, so it's only checked if Abilities were read
+		assert(checked.includes('onModifySTAB'));
+		assert.deepEqual(missing, []);
 	});
 });

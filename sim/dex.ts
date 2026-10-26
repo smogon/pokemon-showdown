@@ -758,6 +758,18 @@ export class ModdedDex {
 		// Execute initialization script.
 		if (init) init.call(this);
 
+		// Effects are only constructed when first looked up, which can be after a battle
+		// has looked for their callbacks, so record those callbacks from the data now
+		for (const dataType of ['Abilities', 'Items', 'Moves', 'Conditions', 'Pokedex', 'Rulesets'] as const) {
+			const table = dataCache[dataType];
+			// the parent dex has already recorded its own tables
+			if (table === parentDex?.data[dataType]) continue;
+			for (const id in table) {
+				Data.addDefinedCallbackNames(table[id]);
+				if (table[id].condition) Data.addDefinedCallbackNames(table[id].condition);
+			}
+		}
+
 		return this.dataCache;
 	}
 

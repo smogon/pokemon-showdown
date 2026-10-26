@@ -15,7 +15,7 @@
  */
 
 import { Dex, toID } from './dex';
-import { definedCallbackNames } from './dex-data';
+import { addDefinedCallbackNames, definedCallbackNames } from './dex-data';
 import { Teams } from './teams';
 import { Field } from './field';
 import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
@@ -1068,9 +1068,7 @@ export class Battle {
 			callbacks = new Map();
 			effectCallbacks.set(effect, callbacks);
 			// effects not built from a BasicEffect (made by some mods) define callbacks too
-			for (const key in effect) {
-				if (key.startsWith('on')) definedCallbackNames.add(key);
-			}
+			addDefinedCallbackNames(effect);
 		}
 		let found = callbacks.get(callbackName);
 		if (found === undefined) {
