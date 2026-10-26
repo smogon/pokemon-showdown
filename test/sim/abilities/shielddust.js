@@ -84,7 +84,7 @@ describe('Shield Dust', () => {
 		assert.statStage(battle.p2.active[0], 'spa', -1);
 	});
 
-	it(`should only prevent Sparkling Aria from curing burn if there is only one target`, () => {
+	it(`should only prevent Sparkling Aria from curing burn if there is only one defender`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'wynaut', ability: 'noguard', moves: ['willowisp', 'sparklingaria'] },
 			{ species: 'diglett', moves: ['sleeptalk', 'protect'] },
@@ -94,7 +94,7 @@ describe('Shield Dust', () => {
 		]]);
 		battle.makeChoices('move willowisp 1, move sleeptalk', 'auto');
 		battle.makeChoices('move sparklingaria, move protect', 'move sleeptalk, move protect');
-		assert.equal(battle.p2.active[0].status, 'brn', `Shield Dust should prevent cured burn if it's the only target`);
+		assert.equal(battle.p2.active[0].status, 'brn', `Shield Dust should prevent cured burn if it's the only defender`);
 
 		battle.makeChoices('move sparklingaria, move sleeptalk', 'auto');
 		assert.equal(battle.p2.active[0].status, '', `Shield Dust should not prevent cured burn if it's one of many targets`);

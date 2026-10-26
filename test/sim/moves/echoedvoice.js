@@ -21,7 +21,7 @@ describe('Echoed Voice', () => {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should raise BP even if there is no target', () => {
+	it('should raise BP even if there is no defender', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aurorus', ability: 'refrigerate', moves: ['echoedvoice'], evs: { spa: 252 } },
 			{ species: 'Whimsicott', ability: 'prankster', moves: ['memento'] },

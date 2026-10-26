@@ -10,7 +10,7 @@ describe('Taunt', () => {
 		battle.destroy();
 	});
 
-	it('should prevent the target from using Status moves and disable them', () => {
+	it('should prevent the defender from using Status moves and disable them', () => {
 		battle = common.createBattle([[
 			{ species: 'Sableye', ability: 'prankster', moves: ['taunt'] },
 		], [
@@ -22,7 +22,7 @@ describe('Taunt', () => {
 		battle.makeChoices('move taunt', 'move struggle');
 	});
 
-	it('should not prevent the target from using Z-Powered Status moves', () => {
+	it('should not prevent the defender from using Z-Powered Status moves', () => {
 		battle = common.createBattle([[
 			{ species: 'Sableye', ability: 'prankster', moves: ['taunt'] },
 		], [
@@ -33,7 +33,7 @@ describe('Taunt', () => {
 		assert(battle.field.isWeather('sunnyday'));
 	});
 
-	it('[Hackmons] should prevent the target from using Z-Powered Status moves if not boosted by a Z-crystal', () => {
+	it('[Hackmons] should prevent the defender from using Z-Powered Status moves if not boosted by a Z-crystal', () => {
 		battle = common.createBattle([[
 			{ species: 'Sableye', ability: 'prankster', moves: ['taunt'] },
 		], [

@@ -60,7 +60,7 @@ describe("Accuracy", () => {
 		battle.makeChoices('move sandattack -2, move sleeptalk', 'move doubleteam, move sandattack 2');
 		battle.makeChoices('auto', 'move sleeptalk, move confuseray -1');
 
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
+		battle.onEvent('Accuracy', battle.format, (accuracy, defender, attacker, move) => {
 			if (move.id !== 'fireblast') return;
 			assert.equal(accuracy, 51);
 		});
@@ -79,7 +79,7 @@ describe("Accuracy", () => {
 		battle.makeChoices('move sandattack -2, move sleeptalk', 'move doubleteam, move sandattack 2');
 		battle.makeChoices('auto', 'move sleeptalk, move confuseray -1');
 
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
+		battle.onEvent('Accuracy', battle.format, (accuracy, defender, attacker, move) => {
 			if (move.id !== 'fireblast') return;
 			assert.equal(accuracy, 50);
 		});

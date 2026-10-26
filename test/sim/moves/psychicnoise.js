@@ -10,7 +10,7 @@ describe('Psychic Noise', () => {
 		battle.destroy();
 	});
 
-	it(`should prevent the target from healing, like Heal Block`, () => {
+	it(`should prevent the defender from healing, like Heal Block`, () => {
 		battle = common.createBattle([[
 			{ species: 'Wynaut', ability: 'battlearmor', moves: ['softboiled', 'sleeptalk'] },
 		], [
@@ -22,7 +22,7 @@ describe('Psychic Noise', () => {
 		assert.cantMove(() => battle.choose('p1', 'move softboiled'));
 	});
 
-	it(`should prevent the target's ally from healing it with Life Dew`, () => {
+	it(`should prevent the defender's ally from healing it with Life Dew`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Wynaut', ability: 'battlearmor', moves: ['sleeptalk'] },
 			{ species: 'Blissey', ability: 'battlearmor', moves: ['lifedew'] },

@@ -283,7 +283,7 @@ describe('Dex data', () => {
 				if (species.forme) actualName = species.baseSpecies + ' ' + species.forme;
 			}
 			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
-			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
+			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its defender name (ignoring hyphens)`);
 			assert(name.split('-').length > actualName.split('-').length, `CompoundWordNames entry "${name}" should have at least one more hyphen than "${actualName}" (to mark a word boundary)`);
 		}
 	});
@@ -384,7 +384,7 @@ describe('Dex data', () => {
 								assert.equal(eventMove, toID(eventMove), `${species.name}'s event move "${eventMove}" must be an ID`);
 								assert(entry.learnset, `${species.name} has event moves but no learnset`);
 								const effectiveMod = ['gen8bdsp', 'gen8legends', 'gen9legends'].includes(mod.currentMod) ? mod.currentMod : undefined;
-								if (eventEntry.source === effectiveMod) assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
+								if (eventEntry.attacker === effectiveMod) assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
 							}
 						}
 					}

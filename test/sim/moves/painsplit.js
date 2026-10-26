@@ -10,7 +10,7 @@ describe('Pain Split', () => {
 		battle.destroy();
 	});
 
-	it('should reduce the HP of the target to the average of the user and target', () => {
+	it('should reduce the HP of the defender to the average of the user and defender', () => {
 		battle = common.createBattle([[
 			{ species: 'Shedinja', ability: 'wonderguard', moves: ['painsplit'] },
 		], [
@@ -20,7 +20,7 @@ describe('Pain Split', () => {
 		assert.equal(battle.p2.active[0].hp, (battle.p2.active[0].maxhp + 1) / 2);
 	});
 
-	it('should calculate HP changes against a dynamaxed target properly', () => {
+	it('should calculate HP changes against a dynamaxed defender properly', () => {
 		battle = common.gen(8).createBattle([[
 			{ species: 'Drifblim', ability: 'unburden', moves: ['painsplit'] },
 		], [

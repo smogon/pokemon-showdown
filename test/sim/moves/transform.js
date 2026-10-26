@@ -52,7 +52,7 @@ describe('Transform', () => {
 		}
 	});
 
-	it("should copy the target's focus energy status", () => {
+	it("should copy the defender's focus energy status", () => {
 		battle = common.createBattle([[
 			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
 		], [
@@ -62,7 +62,7 @@ describe('Transform', () => {
 		assert(battle.p1.active[0].volatiles['focusenergy']);
 	});
 
-	it('should copy the target\'s moves with 5 PP each', () => {
+	it('should copy the defender\'s moves with 5 PP each', () => {
 		battle = common.createBattle([[
 			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
 		], [
@@ -81,7 +81,7 @@ describe('Transform', () => {
 		}
 	});
 
-	it(`should copy and activate the target's Ability`, () => {
+	it(`should copy and activate the defender's Ability`, () => {
 		battle = common.createBattle([[
 			{ species: 'Ditto', ability: 'limber', moves: ['transform'] },
 		], [
@@ -91,7 +91,7 @@ describe('Transform', () => {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
-	it(`should copy, but not activate the target's Ability if it is the same as the user's pre-Transform`, () => {
+	it(`should copy, but not activate the defender's Ability if it is the same as the user's pre-Transform`, () => {
 		battle = common.createBattle([[
 			{ species: 'Ditto', ability: 'intimidate', moves: ['transform'] },
 		], [
@@ -121,7 +121,7 @@ describe('Transform', () => {
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
-	it(`should fail if either the user or target have Illusion active`, () => {
+	it(`should fail if either the user or defender have Illusion active`, () => {
 		battle = common.createBattle([[
 			{ species: 'Ditto', ability: 'limber', moves: ['transform'] },
 		], [
@@ -147,7 +147,7 @@ describe('Transform', () => {
 		assert.notEqual(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
-	it(`should copy the target's real type, even if the target is an Arceus`, () => {
+	it(`should copy the defender's real type, even if the defender is an Arceus`, () => {
 		battle = common.createBattle([[
 			{ species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform'] },
 		], [
@@ -186,7 +186,7 @@ describe('Transform [Gen 9]', () => {
 		battle.destroy();
 	});
 
-	it("should copy the target's old types, not the Tera Type", () => {
+	it("should copy the defender's old types, not the Tera Type", () => {
 		battle = common.gen(9).createBattle([[
 			{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
 		], [
@@ -268,7 +268,7 @@ describe('Transform [Gen 5]', () => {
 		battle.destroy();
 	});
 
-	it("should not copy the target's focus energy status", () => {
+	it("should not copy the defender's focus energy status", () => {
 		battle = common.gen(5).createBattle([[
 			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
 		], [
@@ -341,7 +341,7 @@ describe('Transform [Gen 1]', () => {
 		assert(battle.log.every(line => !line.startsWith('|-endability|')));
 	});
 
-	it(`should copy the target's boosted stats`, () => {
+	it(`should copy the defender's boosted stats`, () => {
 		battle = common.gen(1).createBattle({ forceRandomChance: false }, [[ // disable crits
 			{ species: 'Ditto', moves: ['transform'] },
 		], [
@@ -356,7 +356,7 @@ describe('Transform [Gen 1]', () => {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should copy the target's stats (except HP), even if different level`, () => {
+	it(`should copy the defender's stats (except HP), even if different level`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: 'Ditto', moves: ['transform'], level: 5 },
 		], [
@@ -371,7 +371,7 @@ describe('Transform [Gen 1]', () => {
 		}
 	});
 
-	it(`should copy the target's status-modified stats`, () => {
+	it(`should copy the defender's status-modified stats`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: 'Ditto', moves: ['transform', 'thunderwave'] },
 		], [

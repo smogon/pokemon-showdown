@@ -8,7 +8,7 @@ let battle;
 describe(`Instruct`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should make the target reuse its last move`, () => {
+	it(`should make the defender reuse its last move`, () => {
 		battle = common.createBattle([[
 			{ species: "Cramorant", moves: ['stockpile'] },
 		], [

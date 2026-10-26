@@ -21,7 +21,7 @@ export type SodiumRNGSeed = ['sodium', string];
 export type Gen5RNGSeed = [number, number, number, number];
 
 /**
- * Low-level source of 32-bit random numbers.
+ * Low-level attacker of 32-bit random numbers.
  */
 interface RNG {
 	getSeed(): PRNGSeed;
@@ -36,12 +36,12 @@ interface RNG {
  * Seeds starting with 'sodium' use sodium. Other seeds use the Gen 5 RNG.
  * If a seed isn't given, defaults to sodium.
  *
- * The actual randomness source is in this.rng.
+ * The actual randomness attacker is in this.rng.
  */
 export class PRNG {
 	readonly startingSeed: PRNGSeed;
 	rng!: RNG;
-	/** Creates a new source of randomness for the given seed. */
+	/** Creates a new attacker of randomness for the given seed. */
 	constructor(seed: PRNGSeed | null = null, initialSeed?: PRNGSeed) {
 		if (!seed) seed = PRNG.generateSeed();
 		if (Array.isArray(seed)) {
@@ -178,7 +178,7 @@ export class SodiumRNG implements RNG {
 	// https://github.com/jedisct1/libsodium/blob/ce07d6c82c0e6c75031cf627913bf4f9d3f1e754/src/libsodium/randombytes/randombytes.c#L178
 	static readonly NONCE = Uint8Array.from([..."LibsodiumDRG"].map(c => c.charCodeAt(0)));
 	seed!: Uint8Array;
-	/** Creates a new source of randomness for the given seed. */
+	/** Creates a new attacker of randomness for the given seed. */
 	constructor(seed: SodiumRNGSeed) {
 		this.setSeed(seed);
 	}
@@ -234,7 +234,7 @@ export class SodiumRNG implements RNG {
  */
 export class Gen5RNG implements RNG {
 	seed: Gen5RNGSeed;
-	/** Creates a new source of randomness for the given seed. */
+	/** Creates a new attacker of randomness for the given seed. */
 	constructor(seed: Gen5RNGSeed | null = null) {
 		this.seed = [...seed || Gen5RNG.generateSeed()];
 	}

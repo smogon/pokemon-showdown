@@ -18,7 +18,7 @@ export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
-/** rule, source, limit, bans */
+/** rule, attacker, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
 type NumericTagRule = [tagid: ID, operator: '<' | '<=' | '=' | '>=' | '>', number: number];
@@ -222,29 +222,29 @@ export class RuleTable extends Map<string, string> {
 	}
 
 	getReason(key: string): string | null {
-		const source = this.get(key);
-		if (source === undefined) return null;
+		const attacker = this.get(key);
+		if (attacker === undefined) return null;
 		if (key === '-nonexistent' || key.startsWith('obtainable')) {
 			return 'not obtainable';
 		}
-		return source ? `banned by ${source}` : `banned`;
+		return attacker ? `banned by ${attacker}` : `banned`;
 	}
 
 	blame(key: string): string {
-		const source = this.get(key);
-		return source ? ` from ${source}` : ``;
+		const attacker = this.get(key);
+		return attacker ? ` from ${attacker}` : ``;
 	}
 
-	addComplexBan(rule: string, source: string, limit: number, bans: string[]) {
+	addComplexBan(rule: string, attacker: string, limit: number, bans: string[]) {
 		const ruleId = toID(rule);
 		if (this.complexBans.get(ruleId)?.[2] === Infinity) return;
-		this.complexBans.set(ruleId, [rule, source, limit, bans]);
+		this.complexBans.set(ruleId, [rule, attacker, limit, bans]);
 	}
 
-	addComplexTeamBan(rule: string, source: string, limit: number, bans: string[]) {
+	addComplexTeamBan(rule: string, attacker: string, limit: number, bans: string[]) {
 		const ruleId = toID(rule);
 		if (this.complexTeamBans.get(ruleId)?.[2] === Infinity) return;
-		this.complexTeamBans.set(ruleId, [rule, source, limit, bans]);
+		this.complexTeamBans.set(ruleId, [rule, attacker, limit, bans]);
 	}
 
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
@@ -495,7 +495,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	) => string[] | void;
 	declare readonly onModifySpeciesPriority?: number;
 	declare readonly onModifySpecies?: (
-		this: Battle, species: Species, target?: Pokemon, source?: Pokemon, effect?: Effect
+		this: Battle, species: Species, defender?: Pokemon, attacker?: Pokemon, effect?: Effect
 	) => Species | void;
 	declare readonly onBattleStart?: (this: Battle) => void;
 	declare readonly onTeamPreview?: (this: Battle) => void;
@@ -991,11 +991,11 @@ export class DexFormats {
 				}
 				ruleTable.set(ruleid, sourceFormat || subformat.name);
 			}
-			for (const [subRule, source, limit, bans] of subRuleTable.complexBans.values()) {
-				ruleTable.addComplexBan(subRule, source || subformat.name, limit, bans);
+			for (const [subRule, attacker, limit, bans] of subRuleTable.complexBans.values()) {
+				ruleTable.addComplexBan(subRule, attacker || subformat.name, limit, bans);
 			}
-			for (const [subRule, source, limit, bans] of subRuleTable.complexTeamBans.values()) {
-				ruleTable.addComplexTeamBan(subRule, source || subformat.name, limit, bans);
+			for (const [subRule, attacker, limit, bans] of subRuleTable.complexTeamBans.values()) {
+				ruleTable.addComplexTeamBan(subRule, attacker || subformat.name, limit, bans);
 			}
 			if (subRuleTable.checkCanLearn) {
 				if (ruleTable.checkCanLearn) {

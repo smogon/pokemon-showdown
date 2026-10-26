@@ -16,8 +16,8 @@ describe('Burn', () => {
 		], [
 			{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
+		const defender = battle.p1.active[0];
+		assert.hurtsBy(defender, Math.floor(defender.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
 
 	it(`should halve damage from most Physical attacks`, () => {
@@ -72,8 +72,8 @@ describe('Burn', () => {
 			], [
 				{ species: 'Sableye', ability: 'prankster', moves: ['willowisp'] },
 			]]);
-			const target = battle.p1.active[0];
-			assert.hurtsBy(target, Math.floor(target.maxhp / 8), () => battle.makeChoices('move bulkup', 'move willowisp'));
+			const defender = battle.p1.active[0];
+			assert.hurtsBy(defender, Math.floor(defender.maxhp / 8), () => battle.makeChoices('move bulkup', 'move willowisp'));
 		});
 	});
 });
@@ -188,10 +188,10 @@ describe('Toxic Poison', () => {
 		], [
 			{ species: 'Gengar', ability: 'levitate', moves: ['toxic'] },
 		]]);
-		const target = battle.p1.active[0];
+		const defender = battle.p1.active[0];
 		for (let i = 1; i <= 8; i++) {
 			battle.makeChoices('move softboiled', 'move toxic');
-			assert.equal(target.maxhp - target.hp, Math.floor(target.maxhp / 16) * i);
+			assert.equal(defender.maxhp - defender.hp, Math.floor(defender.maxhp / 16) * i);
 		}
 	});
 
@@ -369,7 +369,7 @@ describe('Freeze', () => {
 		assert.equal(battle.p2.active[0].species.name, 'Seaking');
 	});
 
-	it(`should not be possible to burn a frozen target when using a move that thaws that target`, () => {
+	it(`should not be possible to burn a frozen defender when using a move that thaws that defender`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'serenegrace', item: 'widelens', moves: ['sleeptalk', 'sacredfire'] },
 		], [

@@ -58,7 +58,7 @@ describe('Fake Out', () => {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not flinch if the target had prepared to Focus Punch', () => {
+	it('should not flinch if the defender had prepared to Focus Punch', () => {
 		battle = common.createBattle([[
 			{ species: 'Hitmontop', ability: 'steadfast', moves: ['fakeout'] },
 		], [

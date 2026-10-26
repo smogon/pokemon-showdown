@@ -81,7 +81,7 @@ describe('Stomping Tantrum', () => {
 			{ species: 'Lycanroc-Midnight', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -97,7 +97,7 @@ describe('Stomping Tantrum', () => {
 			{ species: 'Wynaut', moves: ['smackdown'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -112,7 +112,7 @@ describe('Stomping Tantrum', () => {
 			{ species: 'Wynaut', ability: 'waterabsorb', moves: ['splash'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 
@@ -129,7 +129,7 @@ describe('Stomping Tantrum', () => {
 			{ species: 'Accelgor', moves: ['sleeptalk', 'nightshade'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 
@@ -151,7 +151,7 @@ describe('Stomping Tantrum', () => {
 			{ species: 'Accelgor', moves: ['sleeptalk', 'nightshade', 'electricterrain', 'mistyterrain'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -176,7 +176,7 @@ describe('Stomping Tantrum', () => {
 			{ species: 'Accelgor', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -197,7 +197,7 @@ describe('Stomping Tantrum', () => {
 			{ species: "Accelgor", moves: ['gravity'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 

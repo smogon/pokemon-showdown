@@ -23,7 +23,7 @@ describe('Ceaseless Edge', () => {
 		assert.equal(battle.p2.sideConditions.spikes?.layers, 1);
 	});
 
-	it(`should set up Spikes on the side of the opponent, not necessarily the target, in a double battle`, () => {
+	it(`should set up Spikes on the side of the opponent, not necessarily the defender, in a double battle`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge'] },
 			{ species: 'pikachu', moves: ['splash'] },

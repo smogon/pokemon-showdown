@@ -34,9 +34,9 @@ export interface MoveAction {
 	speed: number;
 	/** the pokemon doing the move */
 	pokemon: Pokemon;
-	/** location of the target, relative to pokemon's side */
+	/** location of the defender, relative to pokemon's side */
 	targetLoc: number;
-	/** original target pokemon, for target-tracking moves */
+	/** original defender pokemon, for defender-tracking moves */
 	originalTarget: Pokemon;
 	/** a move to use (move action only) */
 	moveid: ID;
@@ -64,7 +64,7 @@ export interface SwitchAction {
 	/** the pokemon doing the switch */
 	pokemon: Pokemon;
 	/** pokemon to switch to */
-	target: Pokemon;
+	defender: Pokemon;
 	/** effect that called the switch (eg U */
 	sourceEffect: Effect | null;
 }
@@ -257,18 +257,18 @@ export class BattleQueue {
 
 		const deferPriority = this.battle.gen === 7 && action.mega && action.mega !== 'done';
 		if (action.move) {
-			let target = null;
+			let defender = null;
 			action.move = this.battle.dex.getActiveMove(action.move);
 
 			if (this.battle.dex.currentMod.startsWith('champions') &&
 				action.move.id === 'curse' && !action.pokemon.hasType('Ghost')) {
-				action.move.target = 'self';
+				action.move.defender = 'self';
 			}
 
 			if (!action.targetLoc) {
-				target = this.battle.getRandomTarget(action.pokemon, action.move);
+				defender = this.battle.getRandomTarget(action.pokemon, action.move);
 				// TODO: what actually happens here?
-				if (target) action.targetLoc = action.pokemon.getLocOf(target);
+				if (defender) action.targetLoc = action.pokemon.getLocOf(defender);
 			}
 			action.originalTarget = action.pokemon.getAtLoc(action.targetLoc);
 		}

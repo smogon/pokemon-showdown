@@ -10,7 +10,7 @@ describe("OHKO moves", () => {
 		battle.destroy();
 	});
 
-	it(`should faint the target`, () => {
+	it(`should faint the defender`, () => {
 		battle = common.createBattle({ forceRandomChance: true }, [[
 			{ species: 'Rhydon', moves: ['horndrill'] },
 		], [
@@ -20,7 +20,7 @@ describe("OHKO moves", () => {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should faint the target's substitute`, () => {
+	it(`should faint the defender's substitute`, () => {
 		battle = common.createBattle({ forceRandomChance: true }, [[
 			{ species: 'Rhydon', moves: ['horndrill'] },
 		], [
@@ -35,7 +35,7 @@ describe("OHKO moves", () => {
 	});
 
 	describe('[Gen 3]', () => {
-		it(`should deal damage equal to the target's HP`, () => {
+		it(`should deal damage equal to the defender's HP`, () => {
 			battle = common.gen(3).createBattle({ forceRandomChance: true }, [[
 				{ species: 'Rhydon', moves: ['horndrill'] },
 			], [
@@ -51,7 +51,7 @@ describe("OHKO moves", () => {
 	});
 
 	describe('[Gen 2]', () => {
-		it(`should faint the target's substitute`, () => {
+		it(`should faint the defender's substitute`, () => {
 			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
 				{ species: 'Rhydon', moves: ['horndrill'] },
 			], [
@@ -76,7 +76,7 @@ describe("OHKO moves", () => {
 	});
 
 	describe('[Gen 1]', () => {
-		it(`should faint the target's substitute`, () => {
+		it(`should faint the defender's substitute`, () => {
 			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 				{ species: 'Tauros', moves: ['horndrill', 'sleeptalk'] },
 			], [
@@ -100,7 +100,7 @@ describe("OHKO moves", () => {
 			assert(battle.log.some(line => line.includes('-supereffective')));
 		});
 
-		it(`should fail if the target has a higher speed`, () => {
+		it(`should fail if the defender has a higher speed`, () => {
 			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 				{ species: 'Rhydon', moves: ['horndrill'] },
 			], [

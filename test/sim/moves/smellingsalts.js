@@ -10,7 +10,7 @@ describe('Smelling Salts', () => {
 		battle.destroy();
 	});
 
-	it('should cure a paralyzed target', () => {
+	it('should cure a paralyzed defender', () => {
 		battle = common.createBattle([[
 			{ species: "Meloetta", ability: 'serenegrace', moves: ['smellingsalts', 'thunderwave'] },
 		], [

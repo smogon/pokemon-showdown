@@ -23,7 +23,7 @@ describe('Stone Axe', () => {
 		assert(battle.p2.sideConditions.stealthrock);
 	});
 
-	it(`should set up Stealth Rock on the side of the opponent, not necessarily the target, in a double battle`, () => {
+	it(`should set up Stealth Rock on the side of the opponent, not necessarily the defender, in a double battle`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'kleavor', ability: 'noguard', moves: ['stoneaxe'] },
 			{ species: 'pikachu', moves: ['splash'] },

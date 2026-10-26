@@ -54,7 +54,7 @@ describe('Trace', () => {
 				{ species: "Kyogre", ability: 'drizzle', nature: 'Timid', evs: { spe: 252 }, moves: ['splash'] },
 			]]);
 
-			// Neither opposing Ability can be copied, so Trace waits for a new target.
+			// Neither opposing Ability can be copied, so Trace waits for a new defender.
 			const ralts = battle.p1.active[0];
 			assert.equal(ralts.ability, 'trace');
 			battle.p2.active[0].hp = 1;

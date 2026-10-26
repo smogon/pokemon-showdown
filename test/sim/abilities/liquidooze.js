@@ -10,7 +10,7 @@ describe('Liquid Ooze', () => {
 		battle.destroy();
 	});
 
-	it('should damage the target after it uses a draining move', () => {
+	it('should damage the defender after it uses a draining move', () => {
 		battle = common.createBattle([[
 			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
@@ -20,7 +20,7 @@ describe('Liquid Ooze', () => {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should damage the target after taking damage from Leech Seed`, () => {
+	it(`should damage the defender after taking damage from Leech Seed`, () => {
 		battle = common.createBattle([[
 			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
@@ -36,7 +36,7 @@ describe('Liquid Ooze [Gen 4]', () => {
 		battle.destroy();
 	});
 
-	it('should damage the target after it uses a draining move', () => {
+	it('should damage the defender after it uses a draining move', () => {
 		battle = common.gen(4).createBattle([[
 			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
@@ -46,7 +46,7 @@ describe('Liquid Ooze [Gen 4]', () => {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should damage the target after taking damage from leech seed`, () => {
+	it(`should damage the defender after taking damage from leech seed`, () => {
 		battle = common.gen(4).createBattle([[
 			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
@@ -56,7 +56,7 @@ describe('Liquid Ooze [Gen 4]', () => {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should not damage the target if the target used Dream Eater', () => {
+	it('should not damage the defender if the defender used Dream Eater', () => {
 		battle = common.gen(4).createBattle([[
 			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [

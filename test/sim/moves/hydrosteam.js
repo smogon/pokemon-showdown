@@ -32,7 +32,7 @@ describe('Hydro Steam', () => {
 		assert.bounded(koraidon.maxhp - koraidon.hp, [27, 32]);
 	});
 
-	it(`should have its damage multiplied by 1.5 if only the target holds Utility Umbrella`, () => {
+	it(`should have its damage multiplied by 1.5 if only the defender holds Utility Umbrella`, () => {
 		battle = common.createBattle([[
 			{ species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam'] },
 		], [
@@ -43,7 +43,7 @@ describe('Hydro Steam', () => {
 		assert.bounded(koraidon.maxhp - koraidon.hp, [81, 96]);
 	});
 
-	it(`should not have its damage changed if both the user and target hold Utility Umbrellas`, () => {
+	it(`should not have its damage changed if both the user and defender hold Utility Umbrellas`, () => {
 		battle = common.createBattle([[
 			{ species: 'Volcanion', ability: 'waterabsorb', item: 'utilityumbrella', moves: ['hydrosteam'] },
 		], [

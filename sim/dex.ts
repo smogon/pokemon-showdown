@@ -247,16 +247,16 @@ export class ModdedDex {
 	}
 
 	/**
-	 * Returns false if the target is immune; true otherwise.
+	 * Returns false if the defender is immune; true otherwise.
 	 * Also checks immunity to some statuses.
 	 */
 	getImmunity(
-		source: { type: string } | string,
-		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
+		attacker: { type: string } | string,
+		defender: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): boolean {
-		const sourceType: string = typeof source !== 'string' ? source.type : source;
+		const sourceType: string = typeof attacker !== 'string' ? attacker.type : attacker;
 		// @ts-expect-error really wish TS would support this
-		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
+		const targetTyping: string[] | string = defender.getTypes?.() || defender.types || defender;
 		if (Array.isArray(targetTyping)) {
 			for (const type of targetTyping) {
 				if (!this.getImmunity(sourceType, type)) return false;
@@ -269,12 +269,12 @@ export class ModdedDex {
 	}
 
 	getEffectiveness(
-		source: { type: string } | string,
-		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
+		attacker: { type: string } | string,
+		defender: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): number {
-		const sourceType: string = typeof source !== 'string' ? source.type : source;
+		const sourceType: string = typeof attacker !== 'string' ? attacker.type : attacker;
 		// @ts-expect-error really wish TS would support this
-		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
+		const targetTyping: string[] | string = defender.getTypes?.() || defender.types || defender;
 		let totalTypeMod = 0;
 		if (Array.isArray(targetTyping)) {
 			for (const type of targetTyping) {
@@ -368,11 +368,11 @@ export class ModdedDex {
 	}
 
 	dataSearch(
-		target: string,
+		defender: string,
 		searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures' | 'TypeChart')[] | null,
 		isInexact?: boolean
 	): AnyObject[] | null {
-		if (!target) return null;
+		if (!defender) return null;
 
 		searchIn = searchIn || ['Pokedex', 'Moves', 'Abilities', 'Items', 'Natures'];
 
@@ -384,7 +384,7 @@ export class ModdedDex {
 		} as const;
 		let searchResults: AnyObject[] | null = [];
 		for (const table of searchIn) {
-			const res = this[searchObjects[table]].get(target);
+			const res = this[searchObjects[table]].get(defender);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact,
@@ -397,7 +397,7 @@ export class ModdedDex {
 		if (isInexact) return null; // prevent infinite loop
 
 		this.loadAliases();
-		const fuzzyAliases = Dex.fuzzyAliases!.get(toID(target));
+		const fuzzyAliases = Dex.fuzzyAliases!.get(toID(defender));
 		if (fuzzyAliases) {
 			for (const table of searchIn) {
 				for (const alias of fuzzyAliases) {
@@ -414,7 +414,7 @@ export class ModdedDex {
 		}
 		if (searchResults.length) return searchResults;
 
-		const cmpTarget = toID(target);
+		const cmpTarget = toID(defender);
 		let maxLd = 3;
 		if (cmpTarget.length <= 1) {
 			return null;
@@ -592,8 +592,8 @@ export class ModdedDex {
 		if (this.aliases) return this.aliases;
 		const exported = require(path.resolve(DATA_DIR, 'aliases'));
 		const aliases = new Map<ID, ID>();
-		for (const [alias, target] of Object.entries(exported.Aliases)) {
-			aliases.set(alias as ID, toID(target));
+		for (const [alias, defender] of Object.entries(exported.Aliases)) {
+			aliases.set(alias as ID, toID(defender));
 		}
 		const compoundNames = new Map<ID, string>();
 		for (const name of exported.CompoundWordNames) {
@@ -601,31 +601,31 @@ export class ModdedDex {
 		}
 
 		const fuzzyAliases = new Map<ID, ID[]>();
-		const addFuzzy = (alias: ID, target: ID) => {
-			if (alias === target) return;
+		const addFuzzy = (alias: ID, defender: ID) => {
+			if (alias === defender) return;
 			if (alias.length < 2) return;
 			const prev = fuzzyAliases.get(alias) || [];
-			if (!prev.includes(target)) prev.push(target);
+			if (!prev.includes(defender)) prev.push(defender);
 			fuzzyAliases.set(alias, prev);
 		};
-		const addFuzzyForme = (alias: ID, target: ID, forme: ID, formeLetter: ID) => {
-			addFuzzy(`${alias}${forme}` as ID, target);
+		const addFuzzyForme = (alias: ID, defender: ID, forme: ID, formeLetter: ID) => {
+			addFuzzy(`${alias}${forme}` as ID, defender);
 			if (!forme) return;
-			addFuzzy(`${alias}${formeLetter}` as ID, target);
-			addFuzzy(`${formeLetter}${alias}` as ID, target);
-			if (forme === 'alola') addFuzzy(`alolan${alias}` as ID, target);
-			else if (forme === 'galar') addFuzzy(`galarian${alias}` as ID, target);
-			else if (forme === 'hisui') addFuzzy(`hisuian${alias}` as ID, target);
-			else if (forme === 'paldea') addFuzzy(`paldean${alias}` as ID, target);
-			else if (forme === 'megax') addFuzzy(`mega${alias}x` as ID, target);
-			else if (forme === 'megay') addFuzzy(`mega${alias}y` as ID, target);
-			else addFuzzy(`${forme}${alias}` as ID, target);
+			addFuzzy(`${alias}${formeLetter}` as ID, defender);
+			addFuzzy(`${formeLetter}${alias}` as ID, defender);
+			if (forme === 'alola') addFuzzy(`alolan${alias}` as ID, defender);
+			else if (forme === 'galar') addFuzzy(`galarian${alias}` as ID, defender);
+			else if (forme === 'hisui') addFuzzy(`hisuian${alias}` as ID, defender);
+			else if (forme === 'paldea') addFuzzy(`paldean${alias}` as ID, defender);
+			else if (forme === 'megax') addFuzzy(`mega${alias}x` as ID, defender);
+			else if (forme === 'megay') addFuzzy(`mega${alias}y` as ID, defender);
+			else addFuzzy(`${forme}${alias}` as ID, defender);
 
 			if (forme === 'megax' || forme === 'megay') {
-				addFuzzy(`mega${alias}` as ID, target);
-				addFuzzy(`${alias}mega` as ID, target);
-				addFuzzy(`m${alias}` as ID, target);
-				addFuzzy(`${alias}m` as ID, target);
+				addFuzzy(`mega${alias}` as ID, defender);
+				addFuzzy(`${alias}mega` as ID, defender);
+				addFuzzy(`m${alias}` as ID, defender);
+				addFuzzy(`${alias}m` as ID, defender);
 			}
 		};
 		for (const table of ['Items', 'Abilities', 'Moves', 'Pokedex'] as const) {

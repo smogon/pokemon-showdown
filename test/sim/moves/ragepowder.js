@@ -11,7 +11,7 @@ describe('Rage Powder', () => {
 		battle.destroy();
 	});
 
-	it('should redirect single-target moves towards it if it is a valid target', function () {
+	it('should redirect single-defender moves towards it if it is a valid defender', function () {
 		this.timeout(5000);
 
 		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[

@@ -17,10 +17,10 @@ describe('Simple', () => {
 			{ species: "Gyarados", ability: 'moxie', moves: ['splash'] },
 		]]);
 		battle.makeChoices('move curse', 'move splash');
-		const target = battle.p1.active[0];
-		assert.statStage(target, 'atk', 2);
-		assert.statStage(target, 'def', 2);
-		assert.statStage(target, 'spe', -2);
+		const defender = battle.p1.active[0];
+		assert.statStage(defender, 'atk', 2);
+		assert.statStage(defender, 'def', 2);
+		assert.statStage(defender, 'spe', -2);
 	});
 });
 
@@ -35,9 +35,9 @@ describe('Simple [Gen 4]', () => {
 		], [
 			{ species: "Gyarados", ability: 'moxie', moves: ['splash'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.getStat('def'), 2 * target.getStat('def'), () => battle.makeChoices('move defensecurl', 'move splash'));
-		assert.statStage(target, 'def', 1);
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.getStat('def'), 2 * defender.getStat('def'), () => battle.makeChoices('move defensecurl', 'move splash'));
+		assert.statStage(defender, 'def', 1);
 	});
 
 	it('should double the effect of stat boosts passed by Baton Pass', () => {
@@ -59,8 +59,8 @@ describe('Simple [Gen 4]', () => {
 		], [
 			{ species: "Haxorus", ability: 'moldbreaker', item: 'laggingtail', moves: ['earthquake'] },
 		]]);
-		const target = battle.p1.active[0];
+		const defender = battle.p1.active[0];
 		battle.makeChoices('move defensecurl', 'move earthquake');
-		assert.bounded(target.maxhp - target.hp, [102, 120]);
+		assert.bounded(defender.maxhp - defender.hp, [102, 120]);
 	});
 });

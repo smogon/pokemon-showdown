@@ -78,7 +78,7 @@ describe('Prankster', () => {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should not leak the ability via hint if the target is immune to the Status move', () => {
+	it('should not leak the ability via hint if the defender is immune to the Status move', () => {
 		battle = common.createBattle([[
 			{ species: "Sableye", ability: 'prankster', moves: ['willowisp'] },
 		], [

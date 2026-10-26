@@ -10,7 +10,7 @@ describe('Clear Smog', () => {
 		battle.destroy();
 	});
 
-	it('should remove all stat boosts from the target', () => {
+	it('should remove all stat boosts from the defender', () => {
 		battle = common.createBattle([[
 			{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog'] },
 		], [
@@ -23,7 +23,7 @@ describe('Clear Smog', () => {
 		assert.equal(battle.p2.pokemon[0].boosts['spd'], 0);
 	});
 
-	it('should not remove stat boosts from a target behind a substitute', () => {
+	it('should not remove stat boosts from a defender behind a substitute', () => {
 		battle = common.createBattle([[
 			{ species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog', 'toxic'] },
 		], [
@@ -37,7 +37,7 @@ describe('Clear Smog', () => {
 		assert.equal(battle.p2.pokemon[0].boosts['spd'], 1);
 	});
 
-	it('should not remove stat boosts if the target is immune to its attack type', () => {
+	it('should not remove stat boosts if the defender is immune to its attack type', () => {
 		battle = common.createBattle([[
 			{ species: "Amoonguss", ability: 'regenerator', item: 'laggingtail', moves: ['clearsmog'] },
 		], [

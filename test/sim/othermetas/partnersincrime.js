@@ -27,7 +27,7 @@ describe('Partners in Crime', () => {
 		assert.statStage(ironvaliant, 'atk', -2);
 		assert.equal(ironvaliant.volatiles.quarkdrive.bestStat, 'spa',
 			`Iron Valiant should be Intimidated exactly once before Quark Drive activates`);
-		assert.equal(battle.field.terrainState.source.name, 'Incineroar', `Incineroar should set Electric Terrain`);
+		assert.equal(battle.field.terrainState.attacker.name, 'Incineroar', `Incineroar should set Electric Terrain`);
 
 		battle.makeChoices('auto', 'move sleeptalk, switch 3');
 		const incineroar = battle.p1.active[0];

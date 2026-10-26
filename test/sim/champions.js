@@ -159,7 +159,7 @@ describe('Champions abilities', () => {
 	});
 
 	describe('Parental Bond', () => {
-		it(`should not announce a hit count if the target faints to the first hit`, () => {
+		it(`should not announce a hit count if the defender faints to the first hit`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Kangaskhan', ability: 'parentalbond', moves: ['bite'] },
 			], [
@@ -215,7 +215,7 @@ describe('Champions abilities', () => {
 	});
 
 	describe('Spicy Spray', () => {
-		it(`should not activate against the source of a future move after it switches out`, () => {
+		it(`should not activate against the attacker of a future move after it switches out`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Wynaut', moves: ['futuresight'] },
 				{ species: 'Wobbuffet', moves: ['sleeptalk'] },
@@ -361,7 +361,7 @@ describe('Champions moves', () => {
 			);
 		});
 
-		it(`should curse a target if a non-Ghost user has Protean`, () => {
+		it(`should curse a defender if a non-Ghost user has Protean`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Greninja', ability: 'protean', moves: ['curse'] },
 			], [
@@ -419,7 +419,7 @@ describe('Champions moves', () => {
 			assert.equal(greninja.moveSlots[0].pp, greninja.moveSlots[0].maxpp - 3);
 		});
 
-		it(`should not hit a semi-invulnerable target`, () => {
+		it(`should not hit a semi-invulnerable defender`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Gengar', moves: ['curse'] },
 			], [
@@ -430,7 +430,7 @@ describe('Champions moves', () => {
 			assert.fullHP(battle.p2.active[0]);
 		});
 
-		it(`should be able to hit a semi-invulnerable target if a non-Ghost user has Protean`, () => {
+		it(`should be able to hit a semi-invulnerable defender if a non-Ghost user has Protean`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Greninja', ability: 'protean', moves: ['curse'] },
 			], [
@@ -444,7 +444,7 @@ describe('Champions moves', () => {
 			assert.equal(aerodactyl.hp, aerodactyl.maxhp - curseResidual);
 		});
 
-		it(`should be able to hit a semi-invulnerable target if the user became a Ghost due to Trick-or-Treat`, () => {
+		it(`should be able to hit a semi-invulnerable defender if the user became a Ghost due to Trick-or-Treat`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Kecleon', ability: 'protean', moves: ['curse'] },
 				{ species: 'Magikarp', moves: ['splash'] },
@@ -460,7 +460,7 @@ describe('Champions moves', () => {
 			assert.equal(aerodactyl.hp, aerodactyl.maxhp - curseResidual);
 		});
 
-		it(`shouldn't fail if the target is already afflicted with Curse, but only became a Ghost-type mid-turn`, () => {
+		it(`shouldn't fail if the defender is already afflicted with Curse, but only became a Ghost-type mid-turn`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Greninja', moves: ['curse', 'sleeptalk'] },
 			], [
@@ -482,7 +482,7 @@ describe('Champions moves', () => {
 			assert.equal(aerodactyl.hp, aerodactyl.maxhp - curseResidual * 3);
 		});
 
-		it(`[forced by Encore] shouldn't fail if the target is already afflicted with Curse and the user has Protean`, () => {
+		it(`[forced by Encore] shouldn't fail if the defender is already afflicted with Curse and the user has Protean`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Gengar', moves: ['curse', 'shadowball'] },
 				{ species: 'Gengar', moves: ['curse', 'sleeptalk'] },
@@ -503,7 +503,7 @@ describe('Champions moves', () => {
 			assert.equal(gengar2.boosts.atk, 2);
 		});
 
-		it(`[forced by Encore] should fail if the target is already afflicted with Curse even if becomes a Ghost-type with Trick-or-Treat`, () => {
+		it(`[forced by Encore] should fail if the defender is already afflicted with Curse even if becomes a Ghost-type with Trick-or-Treat`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Gengar', moves: ['curse', 'shadowball'] },
 				{ species: 'Gengar', moves: ['curse', 'sleeptalk'] },
@@ -538,7 +538,7 @@ describe('Champions moves', () => {
 			assert.fullHP(aerodactyl);
 		});
 
-		it(`should target a random opponent if the target is a semi-invulnerable ally`, () => {
+		it(`should defender a random opponent if the defender is a semi-invulnerable ally`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Deoxys', moves: ['fly'] },
 				{ species: 'Gengar', moves: ['curse'] },
@@ -580,7 +580,7 @@ describe('Champions moves', () => {
 			assert.equal(aerodactyl.moveSlots[0].pp, aerodactyl.moveSlots[0].maxpp - 1);
 		});
 
-		it(`should target a random opponent if the target is an ally that uses Ally Switch`, () => {
+		it(`should defender a random opponent if the defender is an ally that uses Ally Switch`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Wynaut', moves: ['allyswitch'] },
 				{ species: 'Gengar', moves: ['curse'] },
@@ -593,7 +593,7 @@ describe('Champions moves', () => {
 			assert(battle.p2.active[0].maxhp !== battle.p2.active[0].hp || battle.p2.active[1].maxhp !== battle.p2.active[1].hp);
 		});
 
-		it(`should not be able to hit an opposing semi-invulnerable target if targeted an ally`, () => {
+		it(`should not be able to hit an opposing semi-invulnerable defender if targeted an ally`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Gengar', moves: ['curse'] },
 				{ species: 'Gourgeist', moves: ['sleeptalk'] },
@@ -606,7 +606,7 @@ describe('Champions moves', () => {
 			assert.fullHP(battle.p2.active[1]);
 		});
 
-		it(`should not be able to hit an opposing semi-invulnerable target if targeted an ally that uses Ally Switch`, () => {
+		it(`should not be able to hit an opposing semi-invulnerable defender if targeted an ally that uses Ally Switch`, () => {
 			battle = createChampionsBattle({ gameType: 'doubles' }, [[
 				{ species: 'Gengar', moves: ['curse'] },
 				{ species: 'Gourgeist', moves: ['allyswitch'] },
@@ -620,7 +620,7 @@ describe('Champions moves', () => {
 			assert.fullHP(battle.p2.active[1]);
 		});
 
-		it(`should boost its stats if the target is already afflicted with Curse and the user stops being a Ghost-type mid-turn`, () => {
+		it(`should boost its stats if the defender is already afflicted with Curse and the user stops being a Ghost-type mid-turn`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Gengar', moves: ['curse'] },
 			], [
@@ -654,7 +654,7 @@ describe('Champions moves', () => {
 			assert.equal(gengar.moveSlots[0].pp, gengar.moveSlots[0].maxpp - 1);
 		});
 
-		it(`should curse a target if the user stops being a Ghost-type mid-turn, but has Protean`, () => {
+		it(`should curse a defender if the user stops being a Ghost-type mid-turn, but has Protean`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Gengar', ability: 'protean', moves: ['curse'] },
 			], [
@@ -736,7 +736,7 @@ describe('Champions moves', () => {
 	});
 
 	describe('Knock Off', () => {
-		it(`should remove the target's item when the user faints mid-move`, () => {
+		it(`should remove the defender's item when the user faints mid-move`, () => {
 			battle = createChampionsBattle([[
 				{ species: 'Shedinja', moves: ['knockoff'] },
 				{ species: 'Wynaut', moves: ['sleeptalk'] },

@@ -51,7 +51,7 @@ describe(`Pursuit`, () => {
 		});
 	}
 
-	it(`should execute before the target switches out and after the user mega evolves`, () => {
+	it(`should execute before the defender switches out and after the user mega evolves`, () => {
 		battle = common.createBattle([[
 			{ species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit'] },
 		], [
@@ -66,7 +66,7 @@ describe(`Pursuit`, () => {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should execute before the target switches out and after the user Terastallizes`, () => {
+	it(`should execute before the defender switches out and after the user Terastallizes`, () => {
 		battle = common.gen(9).createBattle([[
 			{ species: "Kingambit", ability: 'defiant', moves: ['pursuit'] },
 		], [
@@ -112,7 +112,7 @@ describe(`Pursuit`, () => {
 		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
 	});
 
-	it(`should activate on the first target switching out`, () => {
+	it(`should activate on the first defender switching out`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Beedrill", moves: ['pursuit'] },
 			{ species: "Furret", moves: ['pursuit'] },
@@ -131,7 +131,7 @@ describe(`Pursuit`, () => {
 		assert.equal(battle.log.filter(line => line === '|-activate|p2a: Clefable|move: Pursuit').length, 1);
 	});
 
-	it(`should activate on the second target switching out, if the first fainted`, () => {
+	it(`should activate on the second defender switching out, if the first fainted`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Beedrill", moves: ['pursuit'] },
 			{ species: "Furret", moves: ['pursuit'] },

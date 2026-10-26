@@ -8,7 +8,7 @@ let battle;
 describe('Trick', () => {
 	afterEach(() => battle.destroy());
 
-	it("should exchange the items of the user and target", () => {
+	it("should exchange the items of the user and defender", () => {
 		battle = common.createBattle([[
 			{ species: "Mew", ability: 'synchronize', item: 'leftovers', moves: ['trick'] },
 		], [

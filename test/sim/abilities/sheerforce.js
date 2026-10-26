@@ -52,7 +52,7 @@ describe('Sheer Force', () => {
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it(`should not be possible to thaw a frozen target with a Sheer Force-boosted thawsTarget move`, () => {
+	it(`should not be possible to thaw a frozen defender with a Sheer Force-boosted thawsTarget move`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'sheerforce', moves: ['sleeptalk', 'scald'] },
 		], [
@@ -65,7 +65,7 @@ describe('Sheer Force', () => {
 		assert.equal(frozenMon.status, 'frz');
 	});
 
-	it(`should be possible to thaw a frozen target with a Sheer Force-boosted Fire-type move`, () => {
+	it(`should be possible to thaw a frozen defender with a Sheer Force-boosted Fire-type move`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'sheerforce', moves: ['sleeptalk', 'flamethrower'] },
 		], [

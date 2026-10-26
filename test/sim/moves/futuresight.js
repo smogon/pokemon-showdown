@@ -28,7 +28,7 @@ describe('Future Sight', () => {
 		assert.false.fullHP(girafarig);
 	});
 
-	it(`should fail when already active for the target's position`, () => {
+	it(`should fail when already active for the defender's position`, () => {
 		battle = common.createBattle([[
 			{ species: 'Sneasel', moves: ['sleeptalk'] },
 		], [
@@ -66,7 +66,7 @@ describe('Future Sight', () => {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it(`should be able to set Future Sight against an empty target slot`, () => {
+	it(`should be able to set Future Sight against an empty defender slot`, () => {
 		battle = common.createBattle([[
 			{ species: 'Shedinja', moves: ['finalgambit'] },
 			{ species: 'Roggenrola', moves: ['sleeptalk'] },
@@ -197,7 +197,7 @@ describe('Future Sight', () => {
 		assert.bounded(damage, [96, 114]);
 	});
 
-	it(`should not ignore the target's screens, even when the user is not active on the field`, () => {
+	it(`should not ignore the defender's screens, even when the user is not active on the field`, () => {
 		battle = common.createBattle([[
 			{ species: 'Blissey', ability: 'shellarmor', item: 'lightclay', moves: ['softboiled', 'lightscreen'] },
 		], [
@@ -239,7 +239,7 @@ describe('Future Sight', () => {
 		assert.bounded(damage, [46, 55]); // only boosted by Power Spot
 	});
 
-	it(`should not ignore the target's Unaware`, () => {
+	it(`should not ignore the defender's Unaware`, () => {
 		battle = common.createBattle([[
 			{ species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight'] },
 		], [
@@ -337,7 +337,7 @@ describe('Future Sight', () => {
 		assert.fullHP(stak, `Future Sight should have never resolved.`);
 	});
 
-	it(`should target particular slots in Doubles`, () => {
+	it(`should defender particular slots in Doubles`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
 			{ species: 'Steelix', moves: ['sleeptalk'] },

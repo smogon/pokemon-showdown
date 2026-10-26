@@ -51,7 +51,7 @@ describe('Explosion', () => {
 			{ species: 'aerodactyl', moves: ['rage'] },
 		]]);
 		// Modding accuracy so Explosion always misses
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
+		battle.onEvent('Accuracy', battle.format, (accuracy, defender, pokemon, move) => {
 			return move.id === 'rage';
 		});
 		battle.makeChoices('move explosion', 'move rage');
@@ -67,7 +67,7 @@ describe('Explosion', () => {
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
 	});
 
-	it(`[Gen 1] Explosion should faint the user when the target is semi-invulnerable`, () => {
+	it(`[Gen 1] Explosion should faint the user when the defender is semi-invulnerable`, () => {
 		// Explosion hits
 		battle = common.gen(1).createBattle([[
 			{ species: 'golem', moves: ['explosion'] },

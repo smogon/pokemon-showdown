@@ -28,7 +28,7 @@ describe('Mind Blown', () => {
 		assert.hurtsBy(battle.p1.active[0], Math.ceil(battle.p1.active[0].maxhp / 2), () => battle.makeChoices());
 	});
 
-	it('should not deal damage to the user if there is no target', () => {
+	it('should not deal damage to the user if there is no defender', () => {
 		battle = common.createBattle([[
 			{ species: 'Dugtrio', ability: 'sandveil', moves: ['memento'] },
 			{ species: 'Dugtrio', ability: 'sandveil', moves: ['memento'] },

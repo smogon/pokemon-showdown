@@ -126,7 +126,7 @@ describe(`Pressure`, () => {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it(`should deduct additional PP from submoves that target Pressure`, () => {
+	it(`should deduct additional PP from submoves that defender Pressure`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', moves: ['assist'] },
 			{ species: 'yveltal', moves: ['darkpulse'] },
@@ -154,7 +154,7 @@ describe(`Pressure`, () => {
 		assert.equal(move.pp, move.maxpp - 2, `Stealth Rock should lose 2 PP`);
 	});
 
-	it(`should deduct additional PP from Tera Blast even when not used into the Pressure target`, () => {
+	it(`should deduct additional PP from Tera Blast even when not used into the Pressure defender`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'wynaut', moves: ['terablast'] },
 			{ species: 'magikarp', moves: ['sleeptalk'] },

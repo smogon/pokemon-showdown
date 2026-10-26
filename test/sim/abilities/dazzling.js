@@ -21,7 +21,7 @@ describe('Dazzling', () => {
 		assert.equal(battle.p2.active[0].boosts.atk, 2);
 	});
 
-	it('should not block moves that target all Pokemon, except Perish Song, Rototiller, and Flower Shield', () => {
+	it('should not block moves that defender all Pokemon, except Perish Song, Rototiller, and Flower Shield', () => {
 		battle = common.createBattle([[
 			{ species: "Bruxish", ability: 'dazzling', moves: ['swordsdance', 'sleeptalk'] },
 		], [

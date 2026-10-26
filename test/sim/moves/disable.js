@@ -10,7 +10,7 @@ describe('Disable', () => {
 		battle.destroy();
 	});
 
-	it(`should prevent the use of the target's last move`, () => {
+	it(`should prevent the use of the defender's last move`, () => {
 		battle = common.createBattle([[
 			{ species: "Wynaut", moves: ['disable'] },
 		], [
@@ -142,7 +142,7 @@ describe('Disable', () => {
 				{ species: 'Abra', moves: ['rage'] },
 			]]);
 			// Modding accuracy so Disable always misses
-			battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
+			battle.onEvent('Accuracy', battle.format, (accuracy, defender, pokemon, move) => {
 				return move.id === 'rage';
 			});
 			battle.makeChoices();

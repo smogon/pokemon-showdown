@@ -25,7 +25,7 @@ describe('Cud Chew', () => {
 		assert.equal(tauros.status, 'tox');
 	});
 
-	it(`should re-activate a berry flung in the previous turn, for both the attacker and the target`, () => {
+	it(`should re-activate a berry flung in the previous turn, for both the attacker and the defender`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['fling', 'sleeptalk'] },
 			{ species: 'foongus', moves: ['toxic', 'sleeptalk'] },
@@ -43,7 +43,7 @@ describe('Cud Chew', () => {
 		assert.equal(farigiraf.status, '');
 	});
 
-	it(`should not re-activate a berry eaten by Bug Bite, for either the attacker or the target`, () => {
+	it(`should not re-activate a berry eaten by Bug Bite, for either the attacker or the defender`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'tauros', ability: 'cudchew', moves: ['bugbite', 'sleeptalk'] },
 			{ species: 'foongus', moves: ['toxic', 'sleeptalk'] },

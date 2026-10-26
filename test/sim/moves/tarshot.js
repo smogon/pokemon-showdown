@@ -50,7 +50,7 @@ describe('Tar Shot', () => {
 		assert.bounded(damage, [62, 74]);
 	});
 
-	it(`should add a Fire-type weakness, not make the target 2x weaker to Fire`, () => {
+	it(`should add a Fire-type weakness, not make the defender 2x weaker to Fire`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', moves: ['tarshot', 'flamecharge'] },
 		], [

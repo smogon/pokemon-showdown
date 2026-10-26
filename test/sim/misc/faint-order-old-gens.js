@@ -203,7 +203,7 @@ describe('Fainting', () => {
 			]);
 		});
 
-		it(`should resolve replacement hazards before displaying U-turn's target faint`, () => {
+		it(`should resolve replacement hazards before displaying U-turn's defender faint`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "crobat", moves: ['sleeptalk', 'uturn'] },
 				{ species: "tyranitar", ability: 'sandstream', moves: ['sleeptalk'] },
@@ -227,7 +227,7 @@ describe('Fainting', () => {
 			]);
 		});
 
-		it(`should display a replacement's hazard faint before U-turn's target faint`, () => {
+		it(`should display a replacement's hazard faint before U-turn's defender faint`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "crobat", moves: ['sleeptalk', 'uturn'] },
 				{ species: "shedinja", ability: 'drought', moves: ['sleeptalk'] },
@@ -237,9 +237,9 @@ describe('Fainting', () => {
 				{ species: "blissey", moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices('move sleeptalk', 'move spikes');
-			const target = battle.p2.active[0];
+			const defender = battle.p2.active[0];
 			battle.makeChoices('move uturn', 'move sleeptalk');
-			assert(!target.fainted);
+			assert(!defender.fainted);
 			battle.makeChoices('switch 2', '');
 			assert.logOrder(battle, [
 				'|switch|p1a: Shedinja',
@@ -251,7 +251,7 @@ describe('Fainting', () => {
 			assert.equal(battle.field.weather, '');
 		});
 
-		it(`should display U-turn's target faint before its replacement when the user cannot switch`, () => {
+		it(`should display U-turn's defender faint before its replacement when the user cannot switch`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "crobat", item: 'lifeorb', moves: ['uturn'] },
 			], [
@@ -499,7 +499,7 @@ describe('Fainting', () => {
 			]);
 		});
 
-		it(`should display the Destiny Bond target's faint before the attacker's and then declare a draw`, () => {
+		it(`should display the Destiny Bond defender's faint before the attacker's and then declare a draw`, () => {
 			battle = common.gen(2).createBattle([[
 				{ species: "snorlax", moves: ['strength'] },
 			], [
@@ -519,7 +519,7 @@ describe('Fainting', () => {
 			assert(battle.log.indexOf('|tie') > battle.log.indexOf('|faint|p1a: Snorlax'));
 		});
 
-		it(`should activate Destiny Bond after lethal move recoil and display the target's faint first`, () => {
+		it(`should activate Destiny Bond after lethal move recoil and display the defender's faint first`, () => {
 			battle = common.gen(2).createBattle([[
 				{ species: "snorlax", moves: ['doubleedge'] },
 			], [

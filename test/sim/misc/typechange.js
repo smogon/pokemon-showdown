@@ -17,14 +17,14 @@ describe('Type addition', () => {
 
 	for (const moveData of adderMoves) {
 		describe(moveData.name, () => {
-			it('should add ' + moveData.type + ' type to its target', () => {
+			it('should add ' + moveData.type + ' type to its defender', () => {
 				battle = common.createBattle([[
 					{ species: "Gourgeist", ability: 'frisk', moves: [moveData.name] },
 				], [
 					{ species: "Machamp", ability: 'guts', moves: ['crosschop'] },
 				]]);
-				const target = battle.p2.active[0];
-				assert.sets(() => target.getTypes().join('/'), `Fighting/${moveData.type}`, () => battle.makeChoices('move ' + moveData.name, 'move crosschop'));
+				const defender = battle.p2.active[0];
+				assert.sets(() => defender.getTypes().join('/'), `Fighting/${moveData.type}`, () => battle.makeChoices('move ' + moveData.name, 'move crosschop'));
 			});
 
 			it('should not add ' + moveData.type + ' type to ' + moveData.type + ' targets', () => {
@@ -33,8 +33,8 @@ describe('Type addition', () => {
 				], [
 					{ species: "Trevenant", ability: 'harvest', moves: ['ingrain'] },
 				]]);
-				const target = battle.p2.active[0];
-				assert.constant(() => target.getTypes().join('/'), () => battle.makeChoices('move ' + moveData.name, 'move ingrain'));
+				const defender = battle.p2.active[0];
+				assert.constant(() => defender.getTypes().join('/'), () => battle.makeChoices('move ' + moveData.name, 'move ingrain'));
 			});
 
 			it('should be able to add ' + moveData.type + ' type to Arceus', () => {
@@ -43,8 +43,8 @@ describe('Type addition', () => {
 				], [
 					{ species: "Arceus", ability: 'multitype', moves: ['extremespeed'] },
 				]]);
-				const target = battle.p2.active[0];
-				assert.sets(() => target.getTypes().join('/'), `Normal/${moveData.type}`, () => battle.makeChoices('move ' + moveData.name, 'move extremespeed'));
+				const defender = battle.p2.active[0];
+				assert.sets(() => defender.getTypes().join('/'), `Normal/${moveData.type}`, () => battle.makeChoices('move ' + moveData.name, 'move extremespeed'));
 			});
 
 			for (const moveData2 of adderMoves) {
@@ -55,9 +55,9 @@ describe('Type addition', () => {
 						], [
 							{ species: "Deoxys-Speed", ability: 'pressure', moves: ['spikes'] },
 						]]);
-						const target = battle.p2.active[0];
+						const defender = battle.p2.active[0];
 						battle.makeChoices('move ' + moveData.name, 'move spikes');
-						assert.constant(() => target.getTypes().join('/'), () => battle.makeChoices('move ' + moveData.name, 'move spikes'));
+						assert.constant(() => defender.getTypes().join('/'), () => battle.makeChoices('move ' + moveData.name, 'move spikes'));
 						assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 					});
 				} else {
@@ -67,9 +67,9 @@ describe('Type addition', () => {
 						], [
 							{ species: "Deoxys-Speed", ability: 'pressure', moves: ['spikes'] },
 						]]);
-						const target = battle.p2.active[0];
+						const defender = battle.p2.active[0];
 						battle.makeChoices('move ' + moveData2.name, 'move spikes');
-						assert.sets(() => target.getTypes().join('/'), `Psychic/${moveData.type}`, () => battle.makeChoices('move ' + moveData.name, 'move spikes'));
+						assert.sets(() => defender.getTypes().join('/'), `Psychic/${moveData.type}`, () => battle.makeChoices('move ' + moveData.name, 'move spikes'));
 					});
 				}
 			}

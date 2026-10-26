@@ -10,7 +10,7 @@ describe('High Jump Kick', () => {
 		battle.destroy();
 	});
 
-	it('should damage the user if it does not hit the target', () => {
+	it('should damage the user if it does not hit the defender', () => {
 		battle = common.createBattle([[
 			{ species: 'Gastly', ability: 'levitate', moves: ['sleeptalk'] },
 		], [
@@ -20,7 +20,7 @@ describe('High Jump Kick', () => {
 		assert.hurts(battle.p2.active[0], () => battle.makeChoices());
 	});
 
-	it('should not damage the user if there was no target', () => {
+	it('should not damage the user if there was no defender', () => {
 		battle = common.createBattle([[
 			{ species: 'Dugtrio', ability: 'sandveil', moves: ['memento'] },
 			{ species: 'Dugtrio', ability: 'sandveil', moves: ['memento'] },

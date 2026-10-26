@@ -10,7 +10,7 @@ describe('Encore', () => {
 		battle.destroy();
 	});
 
-	it(`should cause the target to be forced to repeat its move`, () => {
+	it(`should cause the defender to be forced to repeat its move`, () => {
 		battle = common.createBattle([[
 			{ species: 'slowbro', moves: ['tackle', 'irondefense'] },
 		], [
@@ -25,7 +25,7 @@ describe('Encore', () => {
 		assert.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once`, () => {
+	it(`should cause the defender to move with its Encored attack at the priority of the originally selected move once`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'regieleki', moves: ['sleeptalk', 'substitute'] },
 			{ species: 'pichu', moves: ['sleeptalk'] },
@@ -41,7 +41,7 @@ describe('Encore', () => {
 		assert.fainted(eleki, `Encore + Quick Attack being selected gives Headlong Rush priority.`);
 	});
 
-	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once and get blocked when appropriate`, () => {
+	it(`should cause the defender to move with its Encored attack at the priority of the originally selected move once and get blocked when appropriate`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'regieleki', moves: ['psychicterrain'] },
 			{ species: 'pichu', moves: ['sleeptalk'] },
@@ -87,7 +87,7 @@ describe('Encore', () => {
 	});
 
 	it(`should make Focus Punch always succeed if it changes the user's decision`, () => {
-		// Hardcoded RNG seed so the random target from Encored Focus Punch will not attack Zigzagoon
+		// Hardcoded RNG seed so the random defender from Encored Focus Punch will not attack Zigzagoon
 		battle = common.createBattle({ gameType: 'doubles', seed: [1, 2, 3, 4] }, [[
 			{ species: 'Smeargle', level: 50, moves: ['splash', 'focuspunch'] },
 			{ species: 'Abra', level: 1, moves: ['knockoff', 'teleport'] },

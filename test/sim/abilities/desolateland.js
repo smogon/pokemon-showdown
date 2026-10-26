@@ -82,7 +82,7 @@ describe('Desolate Land', () => {
 			{ species: "Venusaur", ability: 'chlorophyll', moves: ['growth'] },
 			{ species: "Toxicroak", ability: 'dryskin', moves: ['bulkup'] },
 		]]);
-		battle.onEvent('Hit', battle.format, (target, pokemon, move) => {
+		battle.onEvent('Hit', battle.format, (defender, pokemon, move) => {
 			if (move.id === 'weatherball') {
 				assert.equal(move.type, 'Fire');
 			}

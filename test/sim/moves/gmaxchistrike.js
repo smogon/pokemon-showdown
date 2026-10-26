@@ -19,7 +19,7 @@ describe('G-Max Chi Strike', () => {
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {
+		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, defender, attacker, move) => {
 			if (move.id === 'tackle') {
 				assert.equal(critRatio, 2, `Wynaut's crit rate should be boosted by G-Max Chi Strike`);
 			}
@@ -37,7 +37,7 @@ describe('G-Max Chi Strike', () => {
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {
+		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, defender, attacker, move) => {
 			if (move.id === 'tackle') {
 				assert.equal(critRatio, 4, `Wynaut's crit rate should be boosted by both G-Max Chi Strike and Focus Energy`);
 			}
@@ -54,7 +54,7 @@ describe('G-Max Chi Strike', () => {
 			{ species: 'Wynaut', moves: ['psychup', 'tackle'] },
 		]]);
 
-		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {
+		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, defender, attacker, move) => {
 			if (move.id === 'tackle') {
 				assert.equal(critRatio, 2, `Wynaut's crit rate should be boosted by Psych Up'd G-Max Chi Strike`);
 			}
@@ -72,7 +72,7 @@ describe('G-Max Chi Strike', () => {
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {
+		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, defender, attacker, move) => {
 			if (move.id === 'tackle') {
 				assert.equal(critRatio, 1, `Magikarp's crit rate should not be boosted by Baton Passed G-Max Chi Strike`);
 			}

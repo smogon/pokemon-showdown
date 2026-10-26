@@ -10,7 +10,7 @@ describe(`Parting Shot`, () => {
 		battle.destroy();
 	});
 
-	it(`should not switch the user out if the target's stats are not changed`, () => {
+	it(`should not switch the user out if the defender's stats are not changed`, () => {
 		battle = common.createBattle([[
 			{ species: 'Silvally', ability: 'prankster', moves: ['partingshot', 'splash'] },
 			{ species: 'Type: Null', ability: 'battlearmor', moves: ['return'] },

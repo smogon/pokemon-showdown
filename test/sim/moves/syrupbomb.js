@@ -27,7 +27,7 @@ describe('Syrup Bomb', () => {
 		assert.false(applin.volatiles['syrupbomb'], `Applin should no longer have the Syrup Bomb volatile`);
 	});
 
-	it(`should end if the source leaves the field`, () => {
+	it(`should end if the attacker leaves the field`, () => {
 		battle = common.createBattle([[
 			{ species: 'Dipplin', ability: 'noguard', moves: ['syrupbomb'] },
 			{ species: 'Furret', moves: ['sleeptalk'] },

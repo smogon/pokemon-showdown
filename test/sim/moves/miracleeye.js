@@ -28,7 +28,7 @@ describe('Miracle Eye', () => {
 			{ species: 'Forretress', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
+		battle.onEvent('Accuracy', battle.format, (accuracy, defender, attacker, move) => {
 			if (move.id === 'tackle') {
 				assert.equal(accuracy, 100, `Miracle Eye should ignore positive evasion boosts`);
 			}
@@ -48,7 +48,7 @@ describe('Miracle Eye', () => {
 			{ species: 'Zapdos', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
+		battle.onEvent('Accuracy', battle.format, (accuracy, defender, attacker, move) => {
 			if (move.id === 'zapcannon') {
 				assert(accuracy >= 100, `Miracle Eye should not ignore negative evasion drops`);
 			}

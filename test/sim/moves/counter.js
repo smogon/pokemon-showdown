@@ -45,7 +45,7 @@ describe('Counter', () => {
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', () => {
+	it('should defender the opposing Pokemon that hit the user with a Physical attack most recently that turn', () => {
 		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
 			{ species: 'Bastiodon', ability: 'sturdy', moves: ['counter'] },
 			{ species: 'Toucannon', ability: 'keeneye', moves: ['beakblast'] },
@@ -74,7 +74,7 @@ describe('Counter', () => {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not have its target changed by Stalwart`, () => {
+	it(`should not have its defender changed by Stalwart`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Duraludon", ability: 'stalwart', moves: ['counter'] },
 			{ species: "Diglett", moves: ['sleeptalk'] },
@@ -129,7 +129,7 @@ describe('Mirror Coat', () => {
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should target the opposing Pokemon that hit the user with a Special attack most recently that turn', () => {
+	it('should defender the opposing Pokemon that hit the user with a Special attack most recently that turn', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat'] },
 			{ species: 'Lucario', ability: 'justified', item: 'laggingtail', moves: ['aurasphere'] },
@@ -156,7 +156,7 @@ describe('Mirror Coat', () => {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not have its target changed by Stalwart`, () => {
+	it(`should not have its defender changed by Stalwart`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Duraludon", ability: 'stalwart', moves: ['mirrorcoat'] },
 			{ species: "Diglett", moves: ['sleeptalk'] },
@@ -177,7 +177,7 @@ describe('Counter', () => {
 	});
 
 	it(`[Gen 1] Counter Desync Clause`, () => {
-		// target switched in, is sleeping and has Counter in its first slot
+		// defender switched in, is sleeping and has Counter in its first slot
 		battle = common.gen(1).createBattle([[
 			{ species: 'Mew', moves: ['spore', 'pound', 'counter'] },
 		], [
@@ -192,7 +192,7 @@ describe('Counter', () => {
 		battle.makeChoices('move counter', 'switch 2');
 		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move fight'));
 		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
-		assert(battle.log.some(line => line.includes("In Gen 1, if Counter is used against a target that switched in and spent the turn sleeping, from the Counter user's perspective, it will fail if the move in the target's first slot is also Counter.")));
+		assert(battle.log.some(line => line.includes("In Gen 1, if Counter is used against a defender that switched in and spent the turn sleeping, from the Counter user's perspective, it will fail if the move in the defender's first slot is also Counter.")));
 
 		// seed chosen so the second move full paras
 		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
@@ -203,7 +203,7 @@ describe('Counter', () => {
 		battle.makeChoices('move thunderwave', 'move pound');
 		assert.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move watergun'));
 		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
-		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the target's team to determine if it will succeed.")));
+		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the defender's team to determine if it will succeed.")));
 
 		// seed chosen so the second move full paras
 		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [[
@@ -214,7 +214,7 @@ describe('Counter', () => {
 		battle.makeChoices('move thunderwave', 'move watergun');
 		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move counter', 'move pound'));
 		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
-		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the target's team to determine if it will succeed.")));
+		assert(battle.log.some(line => line.includes("In Gen 1, from the Counter user's perspective, Counter uses the last announced move by the defender's team to determine if it will succeed.")));
 	});
 
 	it(`[Gen 1] should counter attacks made against substitutes`, () => {
@@ -328,7 +328,7 @@ describe('Counter', () => {
 		assert.equal(pidgeot.maxhp - pidgeot.hp, 300);
 	});
 
-	it(`[Gen 1] Moves with unique damage calculation don't overdamage a target with less HP`, () => {
+	it(`[Gen 1] Moves with unique damage calculation don't overdamage a defender with less HP`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: 'Gengar', moves: ['seismictoss'] },
 		], [

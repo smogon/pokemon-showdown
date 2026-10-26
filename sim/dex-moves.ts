@@ -3,10 +3,10 @@ import type { ConditionData, ModdedConditionData } from './dex-conditions';
 import { assignMissingFields, BasicEffect, toID, type ModdedEffectText } from './dex-data';
 
 /**
- * Describes the acceptable target(s) of a move.
+ * Describes the acceptable defender(s) of a move.
  * adjacentAlly - Only relevant to Doubles or Triples, the move only targets an ally of the user.
- * adjacentAllyOrSelf - The move can target the user or its ally.
- * adjacentFoe - The move can target a foe, but not (in Triples) a distant foe.
+ * adjacentAllyOrSelf - The move can defender the user or its ally.
+ * adjacentFoe - The move can defender a foe, but not (in Triples) a distant foe.
  * all - The move targets the field or all Pokémon at once.
  * allAdjacent - The move is a spread move that also hits the user's ally.
  * allAdjacentFoes - The move is a spread move.
@@ -27,7 +27,7 @@ export type MoveTarget =
 /** Possible move flags. */
 interface MoveFlags {
 	allyanim?: 1; // The move plays its animation when used on an ally.
-	bypasssub?: 1; // Ignores a target's substitute.
+	bypasssub?: 1; // Ignores a defender's substitute.
 	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
 	cantusetwice?: 1; // The user cannot select this move after a previous successful use.
@@ -35,9 +35,9 @@ interface MoveFlags {
 	contact?: 1; // Makes contact.
 	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
 	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
-	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
+	distance?: 1; // Can defender a Pokemon positioned anywhere in a Triple Battle.
 	failcopycat?: 1; // Cannot be selected by Copycat.
-	failencore?: 1; // Encore fails if target used this move.
+	failencore?: 1; // Encore fails if defender used this move.
 	failinstruct?: 1; // Cannot be repeated by Instruct.
 	failmefirst?: 1; // Cannot be selected by Me First.
 	failmimic?: 1; // Cannot be copied by Mimic.
@@ -97,46 +97,46 @@ export interface SecondaryEffect extends HitEffect {
 }
 
 export interface MoveEventMethods {
-	basePowerCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | false | null;
+	basePowerCallback?: (this: Battle, pokemon: Pokemon, defender: Pokemon, move: ActiveMove) => number | false | null;
 	/** Return true to stop the move from being used */
-	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void;
-	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void;
-	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false;
+	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, defender: Pokemon | null, move: ActiveMove) => boolean | void;
+	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, defender: Pokemon) => void;
+	damageCallback?: (this: Battle, pokemon: Pokemon, defender: Pokemon) => number | false;
 	priorityChargeCallback?: (this: Battle, pokemon: Pokemon) => void;
 
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 
 	onAfterHit?: CommonHandlers['VoidSourceMove'];
-	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
+	onAfterSubDamage?: (this: Battle, damage: number, defender: Pokemon, attacker: Pokemon, move: ActiveMove) => void;
 	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove'];
 	onAfterMoveSecondary?: CommonHandlers['VoidMove'];
 	onAfterMove?: CommonHandlers['VoidSourceMove'];
 	onDamagePriority?: number;
 	onDamage?: (
-		this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect
+		this: Battle, damage: number, defender: Pokemon, attacker: Pokemon, effect: Effect
 	) => number | boolean | null | void;
 
 	/* Invoked by the global BasePower event (onEffect = true) */
 	onBasePower?: CommonHandlers['ModifierSourceMove'];
 
 	onEffectiveness?: (
-		this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove
+		this: Battle, typeMod: number, defender: Pokemon | null, type: string, move: ActiveMove
 	) => number | void;
 	onHit?: CommonHandlers['ResultMove'];
 	onHitField?: CommonHandlers['ResultMove'];
-	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
-	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null) => void;
+	onHitSide?: (this: Battle, side: Side, attacker: Pokemon, move: ActiveMove) => boolean | null | "" | void;
+	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, defender: Pokemon | null) => void;
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
 	onMoveFail?: CommonHandlers['VoidMove'];
-	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
+	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, defender: Pokemon) => void;
 	onModifyTarget?: (
-		this: Battle, relayVar: { target: Pokemon }, pokemon: Pokemon, target: Pokemon, move: ActiveMove
+		this: Battle, relayVar: { defender: Pokemon }, pokemon: Pokemon, defender: Pokemon, move: ActiveMove
 	) => void;
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
 	onTryHit?: CommonHandlers['ExtResultSourceMove'];
 	onTryHitField?: CommonHandlers['ResultMove'];
-	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
+	onTryHitSide?: (this: Battle, side: Side, attacker: Pokemon, move: ActiveMove) => boolean | null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
@@ -153,7 +153,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	category: 'Physical' | 'Special' | 'Status';
 	type: string;
 	priority: number;
-	target: MoveTarget;
+	defender: MoveTarget;
 	flags: MoveFlags;
 
 	damage?: number | 'level' | false | null;
@@ -227,7 +227,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	/**
 	 * Pokemon for the attack stat. Ability and Item damage modifiers still come from the real attacker.
 	 */
-	overrideOffensivePokemon?: 'target' | 'source';
+	overrideOffensivePokemon?: 'defender' | 'attacker';
 	/**
 	 * Physical moves use attack stat modifiers, special moves use special attack stat modifiers.
 	 */
@@ -235,7 +235,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	/**
 	 * Pokemon for the defense stat. Ability and Item damage modifiers still come from the real defender.
 	 */
-	overrideDefensivePokemon?: 'target' | 'source';
+	overrideDefensivePokemon?: 'defender' | 'attacker';
 	/**
 	 * uses modifiers that match the new stat
 	 */
@@ -257,11 +257,11 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
-	 * Will change target if current target is unavailable. (Dragon Darts)
+	 * Will change defender if current defender is unavailable. (Dragon Darts)
 	 */
 	smartTarget?: boolean;
 	/**
-	 * Tracks the original target through Ally Switch and other switch-out-and-back-in
+	 * Tracks the original defender through Ally Switch and other switch-out-and-back-in
 	 * situations, rather than just targeting a slot. (Stalwart, Snipe Shot)
 	 */
 	tracksTarget?: boolean;
@@ -295,12 +295,12 @@ export interface Move extends Readonly<BasicEffect & MoveData> {
 
 interface MoveHitData {
 	[targetSlotid: string]: {
-		/** Did this move crit against the target? */
+		/** Did this move crit against the defender? */
 		crit: boolean,
-		/** The type effectiveness of this move against the target */
+		/** The type effectiveness of this move against the defender */
 		typeMod: number,
 		/**
-		 * Is this move a Z-Move that broke the target's protection?
+		 * Is this move a Z-Move that broke the defender's protection?
 		 * (does 0.25x regular damage)
 		 */
 		bypassProtect: boolean | Effect,
@@ -358,8 +358,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	declare readonly effectType: 'Move';
 	/** Move type. */
 	readonly type: string;
-	/** Move target. */
-	readonly target: MoveTarget;
+	/** Move defender. */
+	readonly defender: MoveTarget;
 	/** Move base power. */
 	readonly basePower: number;
 	/** Move base accuracy. True denotes a move that always hits. */
@@ -401,7 +401,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/**
 	 * Pokemon for the attack stat. Ability and Item damage modifiers still come from the real attacker.
 	 */
-	readonly overrideOffensivePokemon?: 'target' | 'source';
+	readonly overrideOffensivePokemon?: 'defender' | 'attacker';
 	/**
 	 * Physical moves use attack stat modifiers, special moves use special attack stat modifiers.
 	 */
@@ -409,7 +409,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/**
 	 * Pokemon for the defense stat. Ability and Item damage modifiers still come from the real defender.
 	 */
-	readonly overrideDefensivePokemon?: 'target' | 'source';
+	readonly overrideDefensivePokemon?: 'defender' | 'attacker';
 	/**
 	 * uses modifiers that match the new stat
 	 */
@@ -460,7 +460,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Whether or not the move ignores abilities. */
 	readonly ignoreAbility: boolean;
 	/**
-	 * Move damage against the current target
+	 * Move damage against the current defender
 	 * false = move will always fail with "But it failed!"
 	 * null = move will always silently fail
 	 * undefined = move does not deal fixed damage
@@ -484,7 +484,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';
 		this.type = Utils.getString(data.type);
-		this.target = data.target;
+		this.defender = data.defender;
 		this.basePower = Number(data.basePower);
 		this.accuracy = data.accuracy!;
 		this.critRatio = Number(data.critRatio) || 1;

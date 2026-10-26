@@ -84,9 +84,9 @@ describe('Poison-inflicting status moves [Gen 2]', () => {
 		// Set all moves to perfect accuracy
 		battle.onEvent('Accuracy', battle.format, true);
 
-		const target = battle.p2.active[0];
+		const defender = battle.p2.active[0];
 		for (const move of POISON_STATUS_MOVES) {
-			assert.constant(() => target.status, () => battle.makeChoices('move ' + move, 'move sleeptalk'));
+			assert.constant(() => defender.status, () => battle.makeChoices('move ' + move, 'move sleeptalk'));
 		}
 	});
 });
