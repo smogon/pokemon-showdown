@@ -244,17 +244,16 @@ export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 		if (!user.autoconfirmed) return null;
 		if (user.locked || user.namelocked || user.semilocked || user.permalocked) return null;
 		if (!trustable) return null;
-		return Chat.Friends.getFriends(user.id).then(friends => {
-			return friends.map(f => {
-				const friend = Users.getExact(f.friend);
-				return {
-					userid: f.friend,
-					name: friend?.name || f.friend,
-					online: !!friend?.connected,
-					status: friend?.statusType || 'offline',
-					last_login: f.allowing_login ? 0 : f.last_login,
-				};
-			});
+		const friends = await Chat.Friends.getFriends(user.id)
+		return friends.map(f => {
+			const friend = Users.getExact(f.friend);
+			return {
+				userid: f.friend,
+				name: friend?.name || f.friend,
+				online: !!friend?.connected,
+				status: friend?.statusType || 'offline',
+				last_login: f.allowing_login ? 0 : f.last_login,
+			};
 		});
 	},
 };
