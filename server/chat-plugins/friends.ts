@@ -244,7 +244,7 @@ export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 		if (!user.autoconfirmed) return null;
 		if (user.locked || user.namelocked || user.semilocked || user.permalocked) return null;
 		if (!trustable) return null;
-		const friends = await Chat.Friends.getFriends(user.id)
+		const friends = await Chat.Friends.getFriends(user.id);
 		return friends.map(f => {
 			const friend = Users.getExact(f.friend);
 			return {
