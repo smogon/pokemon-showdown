@@ -81,7 +81,7 @@ describe('Knock Off', () => {
 	});
 
 	describe('[Gen 4]', () => {
-		it('should make the target unable to gain a new item', () => {
+		it('should make the defender unable to gain a new item', () => {
 			battle = common.gen(4).createBattle([[
 				{ species: 'Wynaut', item: 'pokeball', moves: ['knockoff', 'trick'] },
 			], [
@@ -164,7 +164,7 @@ describe('Knock Off', () => {
 			assert.equal(blissey.item, '');
 		});
 
-		it(`should not knock off the target's item if the target's ability is Sticky Hold or Multitype`, () => {
+		it(`should not knock off the defender's item if the defender's ability is Sticky Hold or Multitype`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: 'Wynaut', moves: ['knockoff'] },
 			], [

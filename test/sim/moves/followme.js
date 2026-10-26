@@ -10,7 +10,7 @@ describe('Follow Me', () => {
 		battle.destroy();
 	});
 
-	it('should redirect single-target moves towards it if it is a valid target', function () {
+	it('should redirect single-defender moves towards it if it is a valid defender', function () {
 		this.timeout(5000);
 
 		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
@@ -63,7 +63,7 @@ describe('Follow Me', () => {
 		assert.fullHP(battle.p1.active[1]);
 	});
 
-	it(`should redirect single-target moves towards it if it is a valid target in FFA`, () => {
+	it(`should redirect single-defender moves towards it if it is a valid defender in FFA`, () => {
 		battle = common.createBattle({ gameType: 'freeforall' }, [[
 			{ species: "Wynaut", moves: ['tackle'] },
 		], [

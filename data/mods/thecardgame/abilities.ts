@@ -13,10 +13,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	eartheater: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Fighting') {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Earth Eater');
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === 'Fighting') {
+				if (!this.heal(defender.baseMaxhp / 4)) {
+					this.add('-immune', defender, '[from] ability: Earth Eater');
 				}
 				return null;
 			}
@@ -24,16 +24,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	fairyaura: {
 		inherit: true,
-		onAnyBasePower(basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || move.type !== 'Psychic') return;
-			if (!move.auraBooster?.hasAbility('Fairy Aura')) move.auraBooster = this.effectState.target;
-			if (move.auraBooster !== this.effectState.target) return;
+		onAnyBasePower(basePower, attacker, defender, move) {
+			if (defender === attacker || move.category === 'Status' || move.type !== 'Psychic') return;
+			if (!move.auraBooster?.hasAbility('Fairy Aura')) move.auraBooster = this.effectState.defender;
+			if (move.auraBooster !== this.effectState.defender) return;
 			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
 		},
 	},
 	galewings: {
 		inherit: true,
-		onModifyPriority(priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, defender, move) {
 			if (move?.type === 'Normal' && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 	},
@@ -96,7 +96,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	rattled: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (['Dark', 'Grass', 'Psychic'].includes(move.type)) {
 				this.boost({ spe: 1 });
 			}
@@ -173,9 +173,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	mountaineer: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (move.type === 'Fighting' && !target.activeTurns) {
-				this.add('-immune', target, '[from] ability: Mountaineer');
+		onTryHit(defender, attacker, move) {
+			if (move.type === 'Fighting' && !defender.activeTurns) {
+				this.add('-immune', defender, '[from] ability: Mountaineer');
 				return null;
 			}
 		},

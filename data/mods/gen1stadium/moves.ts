@@ -4,7 +4,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		accuracy: true,
 		condition: {
-			durationCallback(target, source, effect) {
+			durationCallback(defender, attacker, effect) {
 				return this.random(3, 5);
 			},
 			onStart(pokemon) {
@@ -12,23 +12,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.effectState.lastDamage = 0;
 				this.add('-start', pokemon, 'Bide');
 			},
-			onHit(target, source, move) {
-				if (source && source !== target && move.category !== 'Physical' && move.category !== 'Special') {
+			onHit(defender, attacker, move) {
+				if (attacker && attacker !== defender && move.category !== 'Physical' && move.category !== 'Special') {
 					const damage = this.effectState.totalDamage;
 					this.effectState.totalDamage += damage;
 					this.effectState.lastDamage = damage;
-					this.effectState.sourceSlot = source.getSlot();
+					this.effectState.sourceSlot = attacker.getSlot();
 				}
 			},
-			onDamage(damage, target, source, move) {
-				if (!source || source.isAlly(target)) return;
+			onDamage(damage, defender, attacker, move) {
+				if (!attacker || attacker.isAlly(defender)) return;
 				if (move?.effectType !== 'Move') return;
 				if (!damage && this.effectState.lastDamage > 0) {
 					damage = this.effectState.totalDamage;
 				}
 				this.effectState.totalDamage += damage;
 				this.effectState.lastDamage = damage;
-				this.effectState.sourceSlot = source.getSlot();
+				this.effectState.sourceSlot = attacker.getSlot();
 			},
 			onAfterSetStatus(status, pokemon) {
 				// Sleep, freeze, and partial trap will just pause duration.
@@ -53,13 +53,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					const target = this.getAtSlot(this.effectState.sourceSlot);
-					if (target.isSemiInvulnerable()) {
-						this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
+					const defender = this.getAtSlot(this.effectState.sourceSlot);
+					if (defender.isSemiInvulnerable()) {
+						this.add('-message', 'The foe ' + defender.name + ' can\'t be hit while flying!');
 						pokemon.removeVolatile('bide');
 						return false;
 					}
-					this.actions.moveHit(target, pokemon, move, { damage: this.effectState.totalDamage * 2 } as ActiveMove);
+					this.actions.moveHit(defender, pokemon, move, { damage: this.effectState.totalDamage * 2 } as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -92,13 +92,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		ignoreImmunity: true,
 		willCrit: false,
 		basePower: 1,
-		damageCallback(pokemon, target) {
+		damageCallback(pokemon, defender) {
 			// Counter mechanics in Stadium 1:
 			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
-			// - Counter succeeds if the target used a Counterable move earlier this turn
+			// - Counter succeeds if the defender used a Counterable move earlier this turn
 
-			const lastMoveThisTurn = target.side.lastMove?.id === target.side.lastSelectedMove &&
-				!this.queue.willMove(target) && this.dex.moves.get(target.side.lastMove.id);
+			const lastMoveThisTurn = defender.side.lastMove?.id === defender.side.lastSelectedMove &&
+				!this.queue.willMove(defender) && this.dex.moves.get(defender.side.lastMove.id);
 			if (!lastMoveThisTurn) {
 				this.debug("Stadium 1 Counter: last move was not this turn");
 				this.add('-fail', pokemon);
@@ -127,8 +127,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	haze: {
 		inherit: true,
-		onHit(target, source) {
-			this.add('-activate', target, 'move: Haze');
+		onHit(defender, attacker) {
+			this.add('-activate', defender, 'move: Haze');
 			this.add('-clearallboost', '[silent]');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
@@ -143,8 +143,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	hyperbeam: {
 		inherit: true,
-		onMoveFail(target, source, move) {
-			source.addVolatile('mustrecharge');
+		onMoveFail(defender, attacker, move) {
+			attacker.addVolatile('mustrecharge');
 		},
 	},
 	psywave: {
@@ -162,11 +162,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			inherit: true,
 			// Rage lock
-			onStart(target, source, effect) {
+			onStart(defender, attacker, effect) {
 				this.effectState.move = 'rage';
 			},
-			onHit(target, source, move) {
-				if (target.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
+			onHit(defender, attacker, move) {
+				if (defender.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
 					this.boost({ atk: 1 });
 				}
 			},
@@ -174,94 +174,94 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	recover: {
 		inherit: true,
-		onHit(target) {
-			if (target.hp === target.maxhp) {
+		onHit(defender) {
+			if (defender.hp === defender.maxhp) {
 				return false;
 			}
-			this.heal(Math.floor(target.maxhp / 2), target, target);
+			this.heal(Math.floor(defender.maxhp / 2), defender, defender);
 		},
 	},
 	rest: {
 		inherit: true,
-		onHit(target, source, move) {
+		onHit(defender, attacker, move) {
 			// Fails if the difference between
 			// max HP and current HP is 0, 255, or 511
-			if (target.hp >= target.maxhp) return false;
-			if (!target.setStatus('slp', source, move)) return false;
-			target.statusState.time = 2;
-			target.statusState.startTime = 2;
-			target.recalculateStats!(); // Stadium Rest removes statdrops given by Major Status Conditions.
-			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
+			if (defender.hp >= defender.maxhp) return false;
+			if (!defender.setStatus('slp', attacker, move)) return false;
+			defender.statusState.time = 2;
+			defender.statusState.startTime = 2;
+			defender.recalculateStats!(); // Stadium Rest removes statdrops given by Major Status Conditions.
+			this.heal(defender.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 	},
 	softboiled: {
 		inherit: true,
-		onHit(target) {
+		onHit(defender) {
 			// Fail when health is 255 or 511 less than max
-			if (target.hp === target.maxhp) {
+			if (defender.hp === defender.maxhp) {
 				return false;
 			}
-			this.heal(Math.floor(target.maxhp / 2), target, target);
+			this.heal(Math.floor(defender.maxhp / 2), defender, defender);
 		},
 	},
 	substitute: {
 		inherit: true,
-		onTryHit(target) {
-			if (target.volatiles['substitute']) {
-				this.add('-fail', target, 'move: Substitute');
+		onTryHit(defender) {
+			if (defender.volatiles['substitute']) {
+				this.add('-fail', defender, 'move: Substitute');
 				return null;
 			}
 			// Stadium fixes the 25% = you die gag
-			if (target.hp <= target.maxhp / 4) {
-				this.add('-fail', target, 'move: Substitute', '[weak]');
+			if (defender.hp <= defender.maxhp / 4) {
+				this.add('-fail', defender, 'move: Substitute', '[weak]');
 				return null;
 			}
 		},
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (target === source) {
+			onTryHit(defender, attacker, move) {
+				if (defender === attacker) {
 					this.debug('sub bypass: self hit');
 					return;
 				}
 				if (move.drain) {
-					this.add('-miss', source);
+					this.add('-miss', attacker);
 					return null;
 				}
 				if (move.category === 'Status') {
 					const SubBlocked = ['leechseed', 'lockon', 'mindreader', 'nightmare'];
 					if (move.status || move.boosts || move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)) {
-						this.add('-activate', target, 'Substitute', '[block] ' + move.name);
+						this.add('-activate', defender, 'Substitute', '[block] ' + move.name);
 						return null;
 					}
 					return;
 				}
-				if (move.volatileStatus && target === source) return;
-				let damage = this.actions.getDamage(source, target, move);
-				if (damage && damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
+				if (move.volatileStatus && defender === attacker) return;
+				let damage = this.actions.getDamage(attacker, defender, move);
+				if (damage && damage > defender.volatiles['substitute'].hp) {
+					damage = defender.volatiles['substitute'].hp;
 				}
 				if (!damage && damage !== 0) return null;
-				target.volatiles['substitute'].hp -= damage;
+				defender.volatiles['substitute'].hp -= damage;
 				this.lastDamage = damage;
-				if (target.volatiles['substitute'].hp <= 0) {
+				if (defender.volatiles['substitute'].hp <= 0) {
 					this.debug('Substitute broke');
-					target.removeVolatile('substitute');
-					target.subFainted = true;
+					defender.removeVolatile('substitute');
+					defender.subFainted = true;
 				} else {
-					this.add('-activate', target, 'Substitute', '[damage]');
+					this.add('-activate', defender, 'Substitute', '[damage]');
 				}
 				// Drain/recoil does not happen if the substitute breaks
-				if (target.volatiles['substitute']) {
+				if (defender.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(this.clampIntRange(Math.floor(damage * move.recoil[0] / move.recoil[1]), 1), source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(damage * move.recoil[0] / move.recoil[1]), 1), attacker, defender, 'recoil');
 					}
 				}
-				this.runEvent('AfterSubDamage', target, source, move, damage);
+				this.runEvent('AfterSubDamage', defender, attacker, move, damage);
 				// Add here counter damage
-				const lastAttackedBy = target.getLastAttackedBy();
+				const lastAttackedBy = defender.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({ source, move: move.id, damage, slot: source.getSlot(), thisTurn: true });
+					defender.attackedBy.push({ attacker, move: move.id, damage, slot: attacker.getSlot(), thisTurn: true });
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = damage;

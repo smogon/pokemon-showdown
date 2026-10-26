@@ -1,15 +1,15 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	absorbbulb: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType) {
-				target.useItem();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType) {
+				defender.useItem();
 			}
 		},
 	},
 	adamantcrystal: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 483 && move.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -17,7 +17,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	adamantorb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 483 && move.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -25,14 +25,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	babiriberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -40,7 +40,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	blackbelt: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -48,7 +48,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	blackglasses: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -66,24 +66,24 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	buggem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	cellbattery: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType) {
-				target.useItem();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType) {
+				defender.useItem();
 			}
 		},
 	},
 	charcoal: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -91,14 +91,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	chartiberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -106,14 +106,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	chilanberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
+		onSourceModifyDamage(damage, attacker, defender, move) {
 			if (
-				move.type === target.teraType &&
-				(!target.volatiles['substitute'] || move.flags['bypasssub'] || (move.infiltrates && this.gen >= 6))
+				move.type === defender.teraType &&
+				(!defender.volatiles['substitute'] || move.flags['bypasssub'] || (move.infiltrates && this.gen >= 6))
 			) {
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -121,14 +121,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	chopleberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -136,14 +136,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	cobaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -151,14 +151,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	colburberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -166,16 +166,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	darkgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	dracoplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -183,7 +183,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dragonfang: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -191,16 +191,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dragongem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	dreadplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -208,7 +208,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	earthplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -216,16 +216,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	electricgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	fairyfeather: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -233,34 +233,34 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	fairygem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	fightinggem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	firegem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	fistplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -268,7 +268,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	flameplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -276,34 +276,34 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	flyinggem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	ghostgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	grassgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	griseouscore: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 487 && move.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -311,7 +311,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	griseousorb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 487 && move.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -319,23 +319,23 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	groundgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	habanberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -343,7 +343,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	hardstone: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -351,16 +351,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	icegem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	icicleplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -368,7 +368,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	insectplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -376,15 +376,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ironball: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
-			if (move.type === 'Ground' && target.hasType(target.teraType)) return 0;
+		onEffectiveness(typeMod, defender, type, move) {
+			if (!defender) return;
+			if (defender.volatiles['ingrain'] || defender.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
+			if (move.type === 'Ground' && defender.hasType(defender.teraType)) return 0;
 		},
 	},
 	ironplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -392,14 +392,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	kasibberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -407,14 +407,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	kebiaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -422,15 +422,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	luminousmoss: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType) {
-				target.useItem();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType) {
+				defender.useItem();
 			}
 		},
 	},
 	lustrousglobe: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 484 && move.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -438,7 +438,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	lustrousorb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 484 && move.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -446,7 +446,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	magnet: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -454,7 +454,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	meadowplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -462,7 +462,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	metalcoat: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -470,7 +470,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	mindplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -478,7 +478,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	miracleseed: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -486,7 +486,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	mysticwater: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -494,7 +494,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	nevermeltice: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -502,23 +502,23 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	normalgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	occaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -526,7 +526,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	oddincense: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -534,14 +534,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	passhoberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -549,14 +549,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	payapaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -564,7 +564,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	pixieplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -572,7 +572,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	poisonbarb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -580,32 +580,32 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	poisongem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	psychicgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	rindoberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -613,7 +613,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	rockincense: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -621,16 +621,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	rockgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	roseincense: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -638,14 +638,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	roseliberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -653,7 +653,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	seaincense: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -661,7 +661,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	sharpbeak: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -669,14 +669,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	shucaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -684,7 +684,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	silkscarf: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -692,7 +692,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	silverpowder: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -700,7 +700,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	skyplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -708,15 +708,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	snowball: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType) {
-				target.useItem();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType) {
+				defender.useItem();
 			}
 		},
 	},
 	softsand: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -724,7 +724,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	souldew: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (
 				move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) &&
 				move.type === user.teraType
@@ -735,7 +735,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	spelltag: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -743,7 +743,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	splashplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -751,7 +751,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	spookyplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -759,16 +759,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	steelgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	stoneplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -776,14 +776,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	tangaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -791,7 +791,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	toxicplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -799,7 +799,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	twistedspoon: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -807,14 +807,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	wacanberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -822,16 +822,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	watergem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === source.teraType && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === attacker.teraType && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	waveincense: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -839,14 +839,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	yacheberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === target.teraType && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === defender.teraType && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -854,7 +854,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	zapplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}

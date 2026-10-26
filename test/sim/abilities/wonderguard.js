@@ -50,7 +50,7 @@ describe('Wonder Guard', () => {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move sleeptalk', 'move fusionflare'));
 	});
 
-	it('should activate if the target is immune to the attack', () => {
+	it('should activate if the defender is immune to the attack', () => {
 		battle = common.createBattle([[
 			{ species: 'Alakazam', moves: ['psychic'] },
 		], [

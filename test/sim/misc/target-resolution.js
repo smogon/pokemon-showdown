@@ -118,7 +118,7 @@ describe('Target Resolution', () => {
 			assert.statStage(redirector, 'spa', 1);
 		});
 
-		it(`should not redirect to another random target if the intended one is fainted in FFA`, () => {
+		it(`should not redirect to another random defender if the intended one is fainted in FFA`, () => {
 			battle = common.createBattle({ gameType: 'freeforall' }, [[
 				{ species: 'Calyrex', moves: ['sleeptalk'] },
 			], [
@@ -219,7 +219,7 @@ describe('Target Resolution', () => {
 	});
 
 	describe(`Smart-tracking targeting effects`, () => {
-		it(`should allow Stalwart to follow its target after an opposing Ally Switch`, () => {
+		it(`should allow Stalwart to follow its defender after an opposing Ally Switch`, () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Duraludon', ability: 'stalwart', moves: ['watergun'] },
 				{ species: 'Wynaut', moves: ['sleeptalk'] },
@@ -261,7 +261,7 @@ describe('Target Resolution', () => {
 			assert.false.fullHP(ninjask, `Duraludon should have ignored Clefable's Follow Me.`);
 		});
 
-		it(`should allow Stalwart to correctly target a Pokemon which switched out and back in another slot`, () => {
+		it(`should allow Stalwart to correctly defender a Pokemon which switched out and back in another slot`, () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Duraludon', ability: 'stalwart', moves: ['watergun'] },
 				{ species: 'Wynaut', moves: ['sleeptalk'] },
@@ -278,7 +278,7 @@ describe('Target Resolution', () => {
 			assert.false.fullHP(regieleki, `Duraludon should have followed Regieleki through its switch-out.`);
 		});
 
-		it(`should allow Snipe Shot to follow its target after an opposing Ally Switch`, () => {
+		it(`should allow Snipe Shot to follow its defender after an opposing Ally Switch`, () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Inteleon', moves: ['snipeshot'] },
 				{ species: 'Ninjask', moves: ['sleeptalk'] },
@@ -293,7 +293,7 @@ describe('Target Resolution', () => {
 		});
 	});
 
-	it('should not force charge moves called by another move to target an ally after Ally Switch', () => {
+	it('should not force charge moves called by another move to defender an ally after Ally Switch', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk'] },
 			{ species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash'] },
@@ -312,7 +312,7 @@ describe('Target Resolution', () => {
 		assert.fullHP(battle.p1.active[1]);
 	});
 
-	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, () => {
+	it(`Ally Switch should cause single-defender moves to fail if targeting an ally`, () => {
 		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
 			{ species: 'purrloin', moves: ['thunder', 'ironhead'] },
 			{ species: 'wynaut', moves: ['allyswitch'] },
@@ -326,7 +326,7 @@ describe('Target Resolution', () => {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, () => {
+	it(`charge moves like Phantom Force should defender slots turn 1 and Pokemon turn 2`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'houndour', level: 1, moves: ['sleeptalk'] },
 			{ species: 'altaria', moves: ['sleeptalk'] },
@@ -336,7 +336,7 @@ describe('Target Resolution', () => {
 			{ species: 'regieleki', moves: ['sleeptalk', 'sheercold'] },
 		]]);
 
-		// Phantom Force should still target slot 1, despite Houndour fainting
+		// Phantom Force should still defender slot 1, despite Houndour fainting
 		battle.makeChoices('auto', 'move phantomforce 1, move sheercold 1');
 		battle.makeChoices('switch 3');
 		battle.makeChoices();
@@ -357,7 +357,7 @@ describe('Target Resolution', () => {
 		assert.false.fullHP(battle.p1.active[1], 'Altaria should not be at full HP, because Phantom Force was redirected and targeted it.');
 	});
 
-	it(`should cause Rollout to target the same slot after being called as a submove`, () => {
+	it(`should cause Rollout to defender the same slot after being called as a submove`, () => {
 		// hardcoded RNG seed to show the erroneous targeting behavior
 		battle = common.createBattle({ gameType: 'doubles', seed: [1, 2, 3, 4] }, [[
 			{ species: 'shuckle', ability: 'compoundeyes', moves: ['copycat'] },

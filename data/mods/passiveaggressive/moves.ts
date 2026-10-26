@@ -3,11 +3,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			// this is a side condition
-			onSideStart(side, source) {
+			onSideStart(side, attacker) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn(pokemon) {
-				const calc = calculate(this, this.effectState.source, pokemon, 'stealthrock');
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'stealthrock');
 				if (pokemon.hasItem('heavydutyboots') || !calc) return;
 				this.damage(calc * pokemon.maxhp / 8);
 			},
@@ -17,11 +17,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			// this is a side condition
-			onSideStart(side, source) {
+			onSideStart(side, attacker) {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
 			onSwitchIn(pokemon) {
-				const calc = calculate(this, this.effectState.source, pokemon, 'stealthrock');
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'stealthrock');
 				if (pokemon.hasItem('heavydutyboots') || !calc) return;
 				this.damage(calc * pokemon.maxhp / 8);
 			},
@@ -31,17 +31,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			// this is a side condition
-			onSideStart(side, source) {
+			onSideStart(side, attacker) {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers = 1;
 			},
-			onSideRestart(side, source) {
+			onSideRestart(side, attacker) {
 				if (this.effectState.layers >= 3) return false;
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers++;
 			},
 			onSwitchIn(pokemon) {
-				const calc = calculate(this, this.effectState.source, pokemon, 'spikes');
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'spikes');
 				if (!calc || !pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(calc * damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
@@ -50,20 +50,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	axekick: {
 		inherit: true,
-		onMoveFail(target, source, move) {
-			const calc = calculate(this, source, source, 'axekick');
-			if (calc) this.damage(calc * source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
+		onMoveFail(defender, attacker, move) {
+			const calc = calculate(this, attacker, attacker, 'axekick');
+			if (calc) this.damage(calc * attacker.baseMaxhp / 2, attacker, attacker, this.dex.conditions.get('High Jump Kick'));
 		},
 	},
 	curse: {
 		inherit: true,
 		condition: {
-			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'Curse', `[of] ${source}`);
+			onStart(pokemon, attacker) {
+				this.add('-start', pokemon, 'Curse', `[of] ${attacker}`);
 			},
 			onResidualOrder: 12,
 			onResidual(pokemon) {
-				const calc = calculate(this, this.effectState.source, pokemon, 'curse');
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'curse');
 				if (calc) this.damage(calc * pokemon.baseMaxhp / 4);
 			},
 		},
@@ -72,13 +72,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 4,
-			onSideStart(targetSide, source) {
+			onSideStart(targetSide, attacker) {
 				this.add('-sidestart', targetSide, 'Fire Pledge');
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(pokemon) {
-				const calc = calculate(this, this.effectState.source, pokemon, 'firepledge');
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'firepledge');
 				if (!pokemon.hasType('Fire') && calc) this.damage(calc * pokemon.baseMaxhp / 8, pokemon);
 			},
 			onSideResidualOrder: 26,
@@ -90,76 +90,76 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	flameburst: {
 		inherit: true,
-		onHit(target, source, move) {
-			for (const ally of target.adjacentAllies()) {
-				const calc = calculate(this, source, ally, 'flameburst');
-				if (calc) this.damage(calc * ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
+		onHit(defender, attacker, move) {
+			for (const ally of defender.adjacentAllies()) {
+				const calc = calculate(this, attacker, ally, 'flameburst');
+				if (calc) this.damage(calc * ally.baseMaxhp / 16, ally, attacker, this.dex.conditions.get('Flame Burst'));
 			}
 		},
-		onAfterSubDamage(damage, target, source, move) {
-			for (const ally of target.adjacentAllies()) {
-				const calc = calculate(this, source, ally, 'flameburst');
-				if (calc) this.damage(calc * ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
+		onAfterSubDamage(damage, defender, attacker, move) {
+			for (const ally of defender.adjacentAllies()) {
+				const calc = calculate(this, attacker, ally, 'flameburst');
+				if (calc) this.damage(calc * ally.baseMaxhp / 16, ally, attacker, this.dex.conditions.get('Flame Burst'));
 			}
 		},
 	},
 	highjumpkick: {
 		inherit: true,
-		onMoveFail(target, source, move) {
-			const calc = calculate(this, source, source, 'highjumpkick');
-			if (calc) this.damage(calc * source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
+		onMoveFail(defender, attacker, move) {
+			const calc = calculate(this, attacker, attacker, 'highjumpkick');
+			if (calc) this.damage(calc * attacker.baseMaxhp / 2, attacker, attacker, this.dex.conditions.get('High Jump Kick'));
 		},
 	},
 	jumpkick: {
 		inherit: true,
-		onMoveFail(target, source, move) {
-			const calc = calculate(this, source, source, 'jumpkick');
-			if (calc) this.damage(calc * source.baseMaxhp / 2, source, source, this.dex.conditions.get('Jump Kick'));
+		onMoveFail(defender, attacker, move) {
+			const calc = calculate(this, attacker, attacker, 'jumpkick');
+			if (calc) this.damage(calc * attacker.baseMaxhp / 2, attacker, attacker, this.dex.conditions.get('Jump Kick'));
 		},
 	},
 	leechseed: {
 		inherit: true,
 		condition: {
-			onStart(target, source) {
-				this.add('-start', target, 'move: Leech Seed');
+			onStart(defender, attacker) {
+				this.add('-start', defender, 'move: Leech Seed');
 			},
 			onResidualOrder: 8,
 			onResidual(pokemon) {
-				const target = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
-				if (!target || target.fainted || target.hp <= 0) {
+				const defender = this.getAtSlot(pokemon.volatiles['leechseed'].sourceSlot);
+				if (!defender || defender.fainted || defender.hp <= 0) {
 					this.debug('Nothing to leech into');
 					return;
 				}
-				const calc = calculate(this, this.effectState.source, pokemon, 'leechseed');
-				const damage = this.damage(calc * pokemon.baseMaxhp / 8, pokemon, target);
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'leechseed');
+				const damage = this.damage(calc * pokemon.baseMaxhp / 8, pokemon, defender);
 				if (damage) {
-					this.heal(damage, target, pokemon);
+					this.heal(damage, defender, pokemon);
 				}
 			},
 		},
 	},
 	mindblown: {
 		inherit: true,
-		onMoveFail(target, source, move) {
+		onMoveFail(defender, attacker, move) {
 			if (move.multihit) return;
-			const calc = calculate(this, source, source, 'mindblown');
-			this.damage(Math.round(calc * source.maxhp / 2), source, source, this.dex.conditions.get('Mind Blown'));
+			const calc = calculate(this, attacker, attacker, 'mindblown');
+			this.damage(Math.round(calc * attacker.maxhp / 2), attacker, attacker, this.dex.conditions.get('Mind Blown'));
 		},
 	},
 	nightmare: {
 		inherit: true,
 		condition: {
 			noCopy: true,
-			onStart(pokemon, source) {
+			onStart(pokemon, attacker) {
 				if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
 					return false;
 				}
 				this.add('-start', pokemon, 'Nightmare');
-				this.effectState.source = source;
+				this.effectState.attacker = attacker;
 			},
 			onResidualOrder: 11,
 			onResidual(pokemon) {
-				const calc = calculate(this, this.effectState.source, pokemon, 'nightmare');
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'nightmare');
 				if (calc) this.damage(calc * pokemon.baseMaxhp / 4);
 			},
 		},
@@ -168,14 +168,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onStart(target, source) {
-				this.add('-singleturn', target, 'Powder');
+			onStart(defender, attacker) {
+				this.add('-singleturn', defender, 'Powder');
 			},
 			onTryMovePriority: -1,
-			onTryMove(pokemon, target, move) {
+			onTryMove(pokemon, defender, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
-					const calc = calculate(this, this.effectState.source, pokemon, 'powder');
+					const calc = calculate(this, this.effectState.attacker, pokemon, 'powder');
 					if (calc) this.damage(this.clampIntRange(Math.round(calc * pokemon.maxhp / 4), 1));
 					this.attrLastMove('[still]');
 					return false;
@@ -187,13 +187,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			noCopy: true,
-			onStart(pokemon, source) {
+			onStart(pokemon, attacker) {
 				this.add('-start', pokemon, 'Salt Cure');
-				this.effectState.source = source;
+				this.effectState.attacker = attacker;
 			},
 			onResidualOrder: 13,
 			onResidual(pokemon) {
-				const calc = calculate(this, this.effectState.source, pokemon, 'saltcure');
+				const calc = calculate(this, this.effectState.attacker, pokemon, 'saltcure');
 				if (calc) this.damage(calc * pokemon.baseMaxhp / (pokemon.hasType(['Water', 'Steel']) ? 4 : 8));
 			},
 			onEnd(pokemon) {
@@ -205,51 +205,51 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 1,
-			onStart(target) {
-				this.add('-singleturn', target, 'move: Protect');
+			onStart(defender) {
+				this.add('-singleturn', defender, 'move: Protect');
 			},
 			onTryHitPriority: 3,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
-					this.add('-activate', target, 'move: Protect');
+					this.add('-activate', defender, 'move: Protect');
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				const calc = calculate(this, target, source, 'spikyshield');
-				if (this.checkMoveMakesContact(move, source, target) && calc) {
-					this.damage(calc * source.baseMaxhp / 8, source, target);
+				const calc = calculate(this, defender, attacker, 'spikyshield');
+				if (this.checkMoveMakesContact(move, attacker, defender) && calc) {
+					this.damage(calc * attacker.baseMaxhp / 8, attacker, defender);
 				}
 				return this.NOT_FAIL;
 			},
-			onHit(target, source, move) {
-				const calc = calculate(this, target, source, 'spikyshield');
-				if (calc && move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.damage(calc * source.baseMaxhp / 8, source, target);
+			onHit(defender, attacker, move) {
+				const calc = calculate(this, defender, attacker, 'spikyshield');
+				if (calc && move.isZOrMaxPowered && this.checkMoveMakesContact(move, attacker, defender)) {
+					this.damage(calc * attacker.baseMaxhp / 8, attacker, defender);
 				}
 			},
 		},
 	},
 	steelbeam: {
 		inherit: true,
-		onMoveFail(target, source, move) {
+		onMoveFail(defender, attacker, move) {
 			if (move.multihit) return;
-			const calc = calculate(this, source, source, 'steelbeam');
-			this.damage(Math.round(calc * source.maxhp / 2), source, source, this.dex.conditions.get('Mind Blown'));
+			const calc = calculate(this, attacker, attacker, 'steelbeam');
+			this.damage(Math.round(calc * attacker.maxhp / 2), attacker, attacker, this.dex.conditions.get('Mind Blown'));
 		},
 	},
 	supercellslam: {
 		inherit: true,
-		onMoveFail(target, source, move) {
-			const calc = calculate(this, source, source, 'supercellslam');
-			if (calc) this.damage(calc * source.baseMaxhp / 2, source, source, this.dex.conditions.get('Supercell Slam'));
+		onMoveFail(defender, attacker, move) {
+			const calc = calculate(this, attacker, attacker, 'supercellslam');
+			if (calc) this.damage(calc * attacker.baseMaxhp / 2, attacker, attacker, this.dex.conditions.get('Supercell Slam'));
 		},
 	},
 	toxicspikes: {
@@ -273,18 +273,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
 					// do nothing
 				} else if (this.effectState.layers >= 2) {
-					pokemon.trySetStatus('tox', this.effectState.source);
+					pokemon.trySetStatus('tox', this.effectState.attacker);
 				} else {
-					pokemon.trySetStatus('psn', this.effectState.source);
+					pokemon.trySetStatus('psn', this.effectState.attacker);
 				}
 			},
 		},
 	},
 };
 
-function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon, moveid = 'tackle') {
+function calculate(battle: Battle, attacker: Pokemon, pokemon: Pokemon, moveid = 'tackle') {
 	const move = battle.dex.getActiveMove(moveid);
-	move.type = source.getTypes()[0];
+	move.type = attacker.getTypes()[0];
 	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
 	if (!pokemon.runImmunity(move)) return 0;
 	return typeMod;

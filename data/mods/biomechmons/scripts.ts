@@ -62,7 +62,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				)
 			);
 		},
-		setAbility(ability, source, sourceEffect, isFromFormeChange = false, isTransform = false) {
+		setAbility(ability, attacker, sourceEffect, isFromFormeChange = false, isTransform = false) {
 			const allThings = new Set([
 				...(this.m.scrambled.abilities as { thing: string }[]).map(e => e.thing),
 				...(this.m.scrambled.items as { thing: string }[]).map(e => e.thing),
@@ -101,7 +101,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!abil.exists) {
 					abil = this.battle.dex.moves.getByID(this.ability);
 				} else {
-					if (!this.battle.runEvent('TakeItem', this, source, null, abil as Item)) return false;
+					if (!this.battle.runEvent('TakeItem', this, attacker, null, abil as Item)) return false;
 				}
 				oldAbility = {
 					id: this.ability,
@@ -121,10 +121,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (ability.flags['cantsuppress'] || this.getAbility().flags['cantsuppress']) return false;
 			}
 			if (!isFromFormeChange && !isTransform) {
-				const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, sourceEffect, ability);
+				const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, attacker, sourceEffect, ability);
 				if (!setAbilityEvent) return setAbilityEvent;
 			}
-			this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
+			this.battle.singleEvent('End', oldAbility, this.abilityState, this, attacker);
 			if (isOldBMMAbil) {
 				const isItem = (this.m.scrambled.items as { inSlot: string }[]).findIndex(e => e.inSlot === 'Ability');
 				if (isItem >= 0) {
@@ -146,17 +146,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.ability = ability.id;
 			// ability changes are permanent in BioMechMons
 			if (!isTransform && !this.transformed) this.baseAbility = ability.id;
-			this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
+			this.abilityState = this.battle.initEffectState({ id: ability.id, defender: this });
 			if (sourceEffect && !isFromFormeChange && !isTransform) {
-				if (source) {
-					this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
+				if (attacker) {
+					this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${attacker}`);
 				} else {
 					this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`);
 				}
 			}
 			if (ability.id && this.battle.gen > 3 &&
 				(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
-				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
+				this.battle.singleEvent('Start', ability, this.abilityState, this, attacker);
 			}
 			if (isBMMAbil) {
 				if (this.battle.dex.items.get(ability.id).exists) {
@@ -174,7 +174,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						id: move.id,
 						pp: basePP,
 						maxpp: basePP,
-						target: move.target,
+						defender: move.defender,
 						disabled: false,
 						used: false,
 					};
@@ -207,22 +207,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			const itemId = this.battle.toID(item);
 			return this.item === itemId || !!this.volatiles['item:' + itemId];
 		},
-		takeItem(source) {
+		takeItem(attacker) {
 			if (!this.item) return false;
-			if (!source) source = this;
+			if (!attacker) attacker = this;
 			if (this.battle.gen <= 4) {
-				if (source.itemKnockedOff) return false;
+				if (attacker.itemKnockedOff) return false;
 				if (this.battle.toID(this.ability) === 'multitype' || (this.m.scrambled.abilities as { thing: string }[])
 					.findIndex(e => this.battle.toID(e.thing) === 'multitype') >= 0) {
 					return false;
 				}
-				if (this.battle.toID(source.ability) === 'multitype' || (source.m.scrambled.abilities as { thing: string }[])
+				if (this.battle.toID(attacker.ability) === 'multitype' || (attacker.m.scrambled.abilities as { thing: string }[])
 					.findIndex(e => this.battle.toID(e.thing) === 'multitype') >= 0) {
 					return false;
 				}
 			}
 			const item = this.getItem();
-			if (this.battle.runEvent('TakeItem', this, source, null, item)) {
+			if (this.battle.runEvent('TakeItem', this, attacker, null, item)) {
 				this.item = '';
 				let wrongSlot = (this.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
 				if (wrongSlot >= 0) {
@@ -249,7 +249,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		setItem(item, source, effect) {
+		setItem(item, attacker, effect) {
 			const allThings = new Set([
 				...(this.m.scrambled.abilities as { thing: string }[]).map(e => e.thing),
 				...(this.m.scrambled.items as { thing: string }[]).map(e => e.thing),
@@ -286,7 +286,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const effectid = this.battle.effect ? this.battle.effect.id : '';
 			if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 				const inflicted = ['trick', 'switcheroo'].includes(effectid);
-				const external = inflicted && source && !source.isAlly(this);
+				const external = inflicted && attacker && !attacker.isAlly(this);
 				this.pendingStaleness = external ? 'external' : 'internal';
 			} else {
 				this.pendingStaleness = undefined;
@@ -295,7 +295,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!this.battle.dex.items.get(oldItem).exists) isOldBMMItem = true;
 			const oldItemState = this.itemState;
 			this.item = item.id;
-			this.itemState = this.battle.initEffectState({ id: item.id, target: this });
+			this.itemState = this.battle.initEffectState({ id: item.id, defender: this });
 			if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 			if (isOldBMMItem) {
 				const isAbil = (this.m.scrambled.abilities as { inSlot: string }[]).findIndex(e => e.inSlot === 'Item');
@@ -314,7 +314,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			if (item.id) {
-				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
+				this.battle.singleEvent('Start', item, this.itemState, this, attacker, effect);
 			}
 			if (isBMMItem) {
 				if (this.battle.dex.abilities.get(item.id).exists) {
@@ -332,7 +332,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						id: move.id,
 						pp: basePP,
 						maxpp: basePP,
-						target: move.target,
+						defender: move.defender,
 						disabled: false,
 						used: false,
 					};
@@ -344,7 +344,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		},
 
-		eatItem(force, source, sourceEffect) {
+		eatItem(force, attacker, sourceEffect) {
 			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
 				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
 			if (!item) return false;
@@ -352,8 +352,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				!this.isActive) return false;
 
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event?.target) source = this.battle.event.target;
-			// if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
+			// if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && attacker === this) {
 			// 	// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
 			// 	return false;
 			// }
@@ -363,8 +363,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			) {
 				this.battle.add('-enditem', this, this.battle.dex.items.get(item.name), '[eat]');
 
-				this.battle.singleEvent('Eat', this.battle.dex.items.get(item.name), this.itemState, this, source, sourceEffect);
-				this.battle.runEvent('EatItem', this, source, sourceEffect, this.battle.dex.items.get(item.name));
+				this.battle.singleEvent('Eat', this.battle.dex.items.get(item.name), this.itemState, this, attacker, sourceEffect);
+				this.battle.runEvent('EatItem', this, attacker, sourceEffect, this.battle.dex.items.get(item.name));
 
 				if (RESTORATIVE_BERRIES.has(item.id)) {
 					switch (this.pendingStaleness) {
@@ -399,23 +399,23 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		},
 
-		useItem(source, sourceEffect) {
+		useItem(attacker, sourceEffect) {
 			const item = sourceEffect?.effectType === 'Item' ? sourceEffect :
 				this.battle.effect.effectType === 'Item' ? this.battle.effect : this.getItem();
 			if ((!this.hp && !item.isGem) || !this.isActive) return false;
 			if (!item) return false;
 
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event?.target) source = this.battle.event.target;
+			if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
 			// const item = this.getItem();
-			// if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && attacker === this) {
 			// 	// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
 			// 	return false;
 			// }
 			if (this.battle.runEvent('UseItem', this, null, null, this.battle.dex.items.get(item.name))) {
 				switch (item.id) {
 				case 'redcard':
-					this.battle.add('-enditem', this, this.battle.dex.items.get(item.name), `[of] ${source!}`);
+					this.battle.add('-enditem', this, this.battle.dex.items.get(item.name), `[of] ${attacker!}`);
 					break;
 				default:
 					if (item.isGem) {
@@ -426,10 +426,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					break;
 				}
 				if (item.boosts) {
-					this.battle.boost(item.boosts, this, source, this.battle.dex.items.get(item.name));
+					this.battle.boost(item.boosts, this, attacker, this.battle.dex.items.get(item.name));
 				}
 
-				this.battle.singleEvent('Use', this.battle.dex.items.get(item.name), this.itemState, this, source, sourceEffect);
+				this.battle.singleEvent('Use', this.battle.dex.items.get(item.name), this.itemState, this, attacker, sourceEffect);
 
 				const isBMM = this.volatiles[item.id]?.inSlot;
 				if (isBMM) {
@@ -500,7 +500,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					id: moveSlot.id,
 					pp: Math.min(5, move.pp),
 					maxpp: this.battle.gen >= 5 ? Math.min(5, move.pp) : moveSlot.maxpp,
-					target: moveSlot.target,
+					defender: moveSlot.defender,
 					disabled: false,
 					used: false,
 					virtual: true,

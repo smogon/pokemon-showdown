@@ -10,7 +10,7 @@ describe("Mirror Armor", () => {
 		battle.destroy();
 	});
 
-	it("should bounce boosts back to the source", () => {
+	it("should bounce boosts back to the attacker", () => {
 		battle = common.createBattle([[
 			{ species: 'Corviknight', ability: 'mirrorarmor', moves: ['endure'] },
 		], [
@@ -43,7 +43,7 @@ describe("Mirror Armor", () => {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it("should activate, but silently, if the source has fainted", () => {
+	it("should activate, but silently, if the attacker has fainted", () => {
 		battle = common.createBattle([[
 			{ species: 'corviknight', ability: 'mirrorarmor', moves: ['bravebird'] },
 		], [

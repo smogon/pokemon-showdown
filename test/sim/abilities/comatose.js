@@ -73,7 +73,7 @@ describe('Comatose', () => {
 		]]);
 
 		let bp = 0;
-		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, defender, move) => {
 			bp = basePower;
 		});
 

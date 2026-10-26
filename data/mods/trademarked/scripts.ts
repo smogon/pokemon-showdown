@@ -30,14 +30,14 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen === 1) {
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.volatiles['partialtrappinglock']) {
-					const target = pokemon.volatiles['partialtrappinglock'].locked;
-					if (target.hp <= 0 || !target.volatiles['partiallytrapped']) {
+					const defender = pokemon.volatiles['partialtrappinglock'].locked;
+					if (defender.hp <= 0 || !defender.volatiles['partiallytrapped']) {
 						delete pokemon.volatiles['partialtrappinglock'];
 					}
 				}
 				if (pokemon.volatiles['partiallytrapped']) {
-					const source = pokemon.volatiles['partiallytrapped'].source;
-					if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
+					const attacker = pokemon.volatiles['partiallytrapped'].attacker;
+					if (attacker.hp <= 0 || !attacker.volatiles['partialtrappinglock']) {
 						delete pokemon.volatiles['partiallytrapped'];
 					}
 				}
@@ -84,7 +84,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				for (let i = pokemon.attackedBy.length - 1; i >= 0; i--) {
 					const attack = pokemon.attackedBy[i];
-					if (attack.source.isActive) {
+					if (attack.attacker.isActive) {
 						attack.thisTurn = false;
 					} else {
 						pokemon.attackedBy.splice(pokemon.attackedBy.indexOf(attack), 1);
@@ -113,12 +113,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				// canceling switches would leak information
 				// if a foe might have a trapping ability
 				if (this.gen > 2) {
-					for (const source of pokemon.foes()) {
-						const species = (source.illusion || source).species;
+					for (const attacker of pokemon.foes()) {
+						const species = (attacker.illusion || attacker).species;
 						if (!species.abilities) continue;
 						for (const abilitySlot in species.abilities) {
 							const abilityName = species.abilities[abilitySlot as keyof Species['abilities']];
-							if (abilityName === source.ability) {
+							if (abilityName === attacker.ability) {
 								// pokemon event was already run above so we don't need
 								// to run it again.
 								continue;
@@ -134,7 +134,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							const ability = this.dex.abilities.get(abilityName);
 							if (ruleTable.has('-ability:' + ability.id)) continue;
 							if (pokemon.knownType && !this.dex.getImmunity('trapped', pokemon)) continue;
-							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);
+							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, attacker);
 						}
 					}
 				}
@@ -263,7 +263,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					id: moveSlot.id,
 					pp,
 					maxpp: this.battle.gen >= 5 ? pp : this.battle.calculatePP(move, this.ppUps[i] || 0),
-					target: moveSlot.target,
+					defender: moveSlot.defender,
 					disabled: false,
 					used: false,
 					virtual: true,

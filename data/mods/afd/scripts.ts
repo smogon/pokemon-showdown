@@ -146,8 +146,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (const moveSlot of pokemon.moveSlots) {
 				moveSlot.used = false;
 			}
-			pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, target: pokemon });
-			pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, target: pokemon });
+			pokemon.abilityState = this.battle.initEffectState({ id: pokemon.ability, defender: pokemon });
+			pokemon.itemState = this.battle.initEffectState({ id: pokemon.item, defender: pokemon });
 			this.battle.runEvent('BeforeSwitchIn', pokemon);
 			if (sourceEffect) {
 				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
@@ -192,7 +192,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!item.megaStone) return null;
 			return item.megaStone[species.name];
 		},
-		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
+		modifyDamage(baseDamage, pokemon, defender, move, suppressMessages = false) {
 			const tr = this.battle.trunc;
 			if (!move.type) move.type = '???';
 			const type = move.type;
@@ -200,7 +200,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			baseDamage += 2;
 
 			if (move.spreadHit) {
-				// multi-target modifier (doubles only)
+				// multi-defender modifier (doubles only)
 				const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
@@ -212,10 +212,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// weather modifier
-			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.priorityEvent('WeatherModifyDamage', pokemon, defender, move, baseDamage);
 
 			// crit - not a modifier
-			const isCrit = target.getMoveHitData(move).crit;
+			const isCrit = defender.getMoveHitData(move).crit;
 			if (isCrit) {
 				baseDamage = tr(baseDamage * (move.critModifier || (this.battle.gen >= 6 ? 1.5 : 2)));
 			}
@@ -261,32 +261,32 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (pokemon.terastallized === type && pokeTypes.includes(type)) {
 						stab = 2.3;
 					}
-					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+					stab = this.battle.runEvent('ModifySTAB', pokemon, defender, move, stab);
 				}
 
 				baseDamage = this.battle.modify(baseDamage, stab);
 			}
 
 			// types
-			let typeMod = target.runEffectiveness(move);
+			let typeMod = defender.runEffectiveness(move);
 			typeMod = this.battle.clampIntRange(typeMod, -6, 6);
-			target.getMoveHitData(move).typeMod = typeMod;
+			defender.getMoveHitData(move).typeMod = typeMod;
 			if (typeMod > 0) {
-				if (!suppressMessages) this.battle.add('-supereffective', target);
+				if (!suppressMessages) this.battle.add('-supereffective', defender);
 
 				for (let i = 0; i < typeMod; i++) {
 					baseDamage *= 2;
 				}
 			}
 			if (typeMod < 0) {
-				if (!suppressMessages) this.battle.add('-resisted', target);
+				if (!suppressMessages) this.battle.add('-resisted', defender);
 
 				for (let i = 0; i > typeMod; i--) {
 					baseDamage = tr(baseDamage / 2);
 				}
 			}
 
-			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+			if (isCrit && !suppressMessages) this.battle.add('-crit', defender);
 
 			if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 				if (this.battle.gen < 6 || move.id !== 'facade') {
@@ -304,15 +304,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.gen === 5 && !baseDamage) baseDamage = 1;
 
 			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
-			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, defender, move, baseDamage);
 
-			const bypassProtect = target.getMoveHitData(move).bypassProtect;
+			const bypassProtect = defender.getMoveHitData(move).bypassProtect;
 			if (bypassProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
 				if (bypassProtect !== true && bypassProtect.effectType === 'Ability') {
 					this.battle.add('-ability', pokemon, bypassProtect.name);
 				}
-				this.battle.add('-zbroken', target);
+				this.battle.add('-zbroken', defender);
 			}
 
 			// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
@@ -321,7 +321,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
 		},
-		getDamage(source, target, move, suppressMessages = false) {
+		getDamage(attacker, defender, move, suppressMessages = false) {
 			if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
 			if (typeof move === 'number') {
@@ -335,14 +335,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.hit = 0;
 			}
 
-			if (!target.runImmunity(move, !suppressMessages)) {
+			if (!defender.runImmunity(move, !suppressMessages)) {
 				return false;
 			}
 
-			if (move.ohko) return this.battle.gen === 3 ? target.hp : target.maxhp;
-			if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
+			if (move.ohko) return this.battle.gen === 3 ? defender.hp : defender.maxhp;
+			if (move.damageCallback) return move.damageCallback.call(this.battle, attacker, defender);
 			if (move.damage === 'level') {
-				return source.level;
+				return attacker.level;
 			} else if (move.damage) {
 				return move.damage;
 			}
@@ -351,7 +351,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				basePower = move.basePowerCallback.call(this.battle, attacker, defender, move);
 			}
 			if (!basePower) return basePower === 0 ? undefined : basePower;
 			basePower = this.battle.clampIntRange(basePower, 1);
@@ -361,7 +361,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			let critMult;
-			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
+			let critRatio = this.battle.runEvent('ModifyCritRatio', attacker, defender, move, move.critRatio || 0);
 			if (this.battle.gen <= 5) {
 				critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 				critMult = [0, 16, 8, 4, 3, 2];
@@ -374,7 +374,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			const moveHit = target.getMoveHitData(move);
+			const moveHit = defender.getMoveHitData(move);
 			moveHit.crit = move.willCrit || false;
 			if (move.willCrit === undefined) {
 				if (critRatio) {
@@ -383,22 +383,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (moveHit.crit) {
-				moveHit.crit = this.battle.runEvent('CriticalHit', target, null, move);
+				moveHit.crit = this.battle.runEvent('CriticalHit', defender, null, move);
 			}
 
 			// happens after crit calculation
-			basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
+			basePower = this.battle.runEvent('BasePower', attacker, defender, move, basePower, true);
 
 			if (!basePower) return 0;
 			basePower = this.battle.clampIntRange(basePower, 1);
 			// Hacked Max Moves have 0 base power, even if you Dynamax
-			if ((!source.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
+			if ((!attacker.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
 				basePower = 0;
 			}
 
 			const dexMove = this.dex.moves.get(move.id);
-			if (source.terastallized && (source.terastallized === 'Stellar' ?
-				!source.stellarBoostedTypes.includes(move.type) : source.hasType(move.type)) &&
+			if (attacker.terastallized && (attacker.terastallized === 'Stellar' ?
+				!attacker.stellarBoostedTypes.includes(move.type) : attacker.hasType(move.type)) &&
 				basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
 				// Hard move.basePower check for moves like Dragon Energy that have variable BP
 				!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
@@ -406,10 +406,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				basePower = 60;
 			}
 
-			const level = source.level;
+			const level = attacker.level;
 
-			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
-			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+			const attacker = move.overrideOffensivePokemon === 'defender' ? defender : attacker;
+			const defender = move.overrideDefensivePokemon === 'attacker' ? attacker : defender;
 
 			const isPhysical = move.category === 'Physical';
 			let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
@@ -439,14 +439,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				defBoosts = 0;
 			}
 
-			let attack = attacker.calculateStat(attackStat, atkBoosts, 1, source);
-			let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
+			let attack = attacker.calculateStat(attackStat, atkBoosts, 1, attacker);
+			let defense = defender.calculateStat(defenseStat, defBoosts, 1, defender);
 
 			attackStat = (category === 'Physical' ? 'atk' : 'spa');
 
 			// Apply Stat Modifiers
-			attack = this.battle.runEvent('Modify' + statTable[attackStat], source, target, move, attack);
-			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+			attack = this.battle.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
+			defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
@@ -458,7 +458,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
 
 			// Calculate damage modifiers separately (order differs between generations)
-			return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
+			return this.modifyDamage(baseDamage, attacker, defender, move, suppressMessages);
 		},
 	},
 };

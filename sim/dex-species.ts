@@ -69,7 +69,7 @@ export interface PokemonGoDataTable { [speciesid: IDEntry]: PokemonGoData }
  * Describes a possible way to get a move onto a pokemon.
  *
  * First character is a generation number, 1-9.
- * Second character is a source ID, one of:
+ * Second character is a attacker ID, one of:
  *
  * - M = TM/HM
  * - T = tutor
@@ -397,7 +397,7 @@ export class Learnset {
 		let update = false;
 		if (eventData) {
 			for (const eventInfo of eventData) {
-				if (eventInfo.source === 'gen8legends') {
+				if (eventInfo.attacker === 'gen8legends') {
 					eventInfo.pokeball = 'strangeball';
 					update = true;
 				}
@@ -639,28 +639,28 @@ export class DexSpecies {
 			for (const moveid in learnset) {
 				if (species.isNonstandard !== 'CAP') {
 					if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
-						if (!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 5 &&
-							parseInt(source.charAt(0)) <= this.dex.gen)) continue;
+						if (!learnset[moveid].some(attacker => parseInt(attacker.charAt(0)) >= 5 &&
+							parseInt(attacker.charAt(0)) <= this.dex.gen)) continue;
 					} else if (
 						gen3HMMoves.includes(moveid) && this.dex.gen >= 4 &&
 						!learnset[moveid].some(
-							source => parseInt(source.charAt(0)) >= 4 && parseInt(source.charAt(0)) <= this.dex.gen
+							attacker => parseInt(attacker.charAt(0)) >= 4 && parseInt(attacker.charAt(0)) <= this.dex.gen
 						)
 					) {
 						continue;
 					}
 				}
 				if (eggMovesOnly) {
-					if (learnset[moveid].some(source => source.startsWith('9E'))) {
+					if (learnset[moveid].some(attacker => attacker.startsWith('9E'))) {
 						movePool.add(moveid as ID);
 					}
 				} else if (maxGen >= 9) {
 					// Pokemon Home now strips learnsets on withdrawal
-					if (isNatDex || learnset[moveid].some(source => source.startsWith('9'))) {
+					if (isNatDex || learnset[moveid].some(attacker => attacker.startsWith('9'))) {
 						movePool.add(moveid as ID);
 					}
 				} else {
-					if (learnset[moveid].some(source => parseInt(source.charAt(0)) <= maxGen)) {
+					if (learnset[moveid].some(attacker => parseInt(attacker.charAt(0)) <= maxGen)) {
 						movePool.add(moveid as ID);
 					}
 				}

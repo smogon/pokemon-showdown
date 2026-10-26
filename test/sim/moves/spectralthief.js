@@ -8,7 +8,7 @@ let battle;
 describe(`Spectral Thief`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should steal the target's boosts before hitting`, () => {
+	it(`should steal the defender's boosts before hitting`, () => {
 		battle = common.createBattle([[
 			{ species: "Smeargle", ability: 'technician', moves: ['calmmind', 'spectralthief'] },
 		], [
@@ -67,7 +67,7 @@ describe(`Spectral Thief`, () => {
 		assert.statStage(victim, 'atk', 2);
 	});
 
-	it(`should not steal boosts if the target is immune to the hit`, () => {
+	it(`should not steal boosts if the defender is immune to the hit`, () => {
 		battle = common.createBattle([[
 			{ species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['spectralthief'] },
 		], [
@@ -80,7 +80,7 @@ describe(`Spectral Thief`, () => {
 		assert.statStage(victim, 'atk', 2);
 	});
 
-	it(`should zero target's boosts if the target has Contrary`, () => {
+	it(`should zero defender's boosts if the defender has Contrary`, () => {
 		battle = common.createBattle([[
 			{ species: "Smeargle", ability: 'owntempo', item: 'focussash', moves: ['spectralthief'] },
 		], [
@@ -92,7 +92,7 @@ describe(`Spectral Thief`, () => {
 		assert.false.fainted(victim);
 	});
 
-	it(`should zero target's boosts if the target has Clear Body`, () => {
+	it(`should zero defender's boosts if the defender has Clear Body`, () => {
 		battle = common.createBattle([[
 			{ species: "Smeargle", ability: 'owntempo', moves: ['spectralthief'] },
 		], [
@@ -104,7 +104,7 @@ describe(`Spectral Thief`, () => {
 		assert.false.fainted(victim);
 	});
 
-	it(`should zero target's boosts if the target has Simple`, () => {
+	it(`should zero defender's boosts if the defender has Simple`, () => {
 		battle = common.createBattle([[
 			{ species: "Smeargle", ability: 'owntempo', moves: ['spectralthief'] },
 		], [

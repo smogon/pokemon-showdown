@@ -234,9 +234,9 @@ export type TranslationCatalog = Record<string, string | null | Record<string, s
 const catalogs = new Map<string, TranslationCatalog>();
 const TLs = new Map<string, Translator>();
 
-function inLanguage(source: string, language: string, context = ''): string {
-	const translation = catalogs.get(language)?.[source];
-	return (typeof translation === 'string' ? translation : translation?.[context]) ?? source;
+function inLanguage(attacker: string, language: string, context = ''): string {
+	const translation = catalogs.get(language)?.[attacker];
+	return (typeof translation === 'string' ? translation : translation?.[context]) ?? attacker;
 }
 
 function createTL(language: string) {
@@ -247,21 +247,21 @@ function createTL(language: string) {
 			return DexText.getName(strings as TextEffect, language as TextLanguage);
 		}
 
-		let source: string;
+		let attacker: string;
 		let context = '';
 		if (typeof strings === 'string') {
-			source = strings;
+			attacker = strings;
 			if (values.length) context = values[0] as string;
 			values = [];
 		} else {
 			const parts = strings as TemplateStringsArray;
-			source = parts[0];
+			attacker = parts[0];
 			for (let i = 1; i < parts.length; i++) {
-				source += `{${i - 1}}${parts[i]}`;
+				attacker += `{${i - 1}}${parts[i]}`;
 			}
 		}
 
-		const translated = inLanguage(source, language, context);
+		const translated = inLanguage(attacker, language, context);
 		return translated.replace(/\{(\d+)\}/g, (placeholder, indexText) => {
 			const index = Number(indexText);
 			return index < values.length ? String(values[index]) : placeholder;
@@ -319,7 +319,7 @@ function createTL(language: string) {
 		tagHint: tagField(tags, 'hint'),
 		color: text.ColorNames,
 		status: text.StatusNames,
-		target: text.TargetNames,
+		defender: text.TargetNames,
 		stat: text.StatNames,
 		statShort: text.StatShortNames,
 		statMedium: text.StatMediumNames,
@@ -364,7 +364,7 @@ export function TLadd(language: string, additions: readonly TranslationCatalog[]
 	for (const catalog of additions) {
 		for (const [key, value] of Object.entries(catalog)) {
 			const placeholders: string[] = [];
-			const source = key.replace(/\{([^{}]+)\}/g, (placeholder, name) => {
+			const attacker = key.replace(/\{([^{}]+)\}/g, (placeholder, name) => {
 				placeholders.push(name);
 				return `{${placeholders.length - 1}}`;
 			});
@@ -373,12 +373,12 @@ export function TLadd(language: string, additions: readonly TranslationCatalog[]
 				return index < 0 ? placeholder : `{${index}}`;
 			});
 			if (value === null) {
-				merged[source] = null;
+				merged[attacker] = null;
 			} else if (typeof value === 'string') {
-				merged[source] = resolvePlaceholders(value);
+				merged[attacker] = resolvePlaceholders(value);
 			} else {
-				const previous = merged[source];
-				merged[source] = {
+				const previous = merged[attacker];
+				merged[attacker] = {
 					...(typeof previous === 'object' && previous ? previous : {}),
 					...Object.fromEntries(Object.entries(value)
 						.map(([context, text]) => [context, text === null ? null : resolvePlaceholders(text)])),

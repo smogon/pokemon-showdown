@@ -10,7 +10,7 @@ const WIND_RIDER_MON = { species: 'brambleghast', ability: 'windrider', moves: [
 describe("Wind Rider", () => {
 	afterEach(() => battle.destroy());
 
-	it("should nullify Wind attacks and boost the target's Attack by 1", () => {
+	it("should nullify Wind attacks and boost the defender's Attack by 1", () => {
 		battle = common.createBattle([[
 			{ species: 'azumarill', item: 'widelens', ability: 'thickfat', moves: ['icywind'] },
 		], [

@@ -6,21 +6,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const isAbility = pokemon.ability === 'trace';
 
 			const possibleTargets = pokemon.adjacentFoes().filter(
-				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
+				defender => !defender.getAbility().flags['notrace'] && defender.ability !== 'noability'
 			);
 			if (!possibleTargets.length) return;
 
-			const target = this.sample(possibleTargets);
-			const ability = target.getAbility();
+			const defender = this.sample(possibleTargets);
+			const ability = defender.getAbility();
 
 			if (isAbility) {
 				if (pokemon.setAbility(ability)) {
-					this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
+					this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${defender}`);
 				}
 			} else {
 				pokemon.removeVolatile('ability:trace');
 				pokemon.addVolatile('ability:' + ability.id, pokemon);
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${defender}`);
 			}
 		},
 	},
@@ -31,21 +31,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			// Remove setter's innates before the ability starts
-			for (const target of this.getAllActive()) {
-				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+			for (const defender of this.getAllActive()) {
+				if (defender.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), defender.abilityState, defender, pokemon, 'neutralizinggas');
 				}
-				if (target.volatiles['slowstart']) {
-					delete target.volatiles['slowstart'];
-					this.add('-end', target, 'Slow Start', '[silent]');
+				if (defender.volatiles['slowstart']) {
+					delete defender.volatiles['slowstart'];
+					this.add('-end', defender, 'Slow Start', '[silent]');
 				}
-				if (target.m.pokemove && !this.dex.abilities.get(target.m.pokemove.abilities['0']).flags['cantsuppress']) {
-					target.removeVolatile('ability:' + this.toID(target.m.pokemove.abilities['0']));
+				if (defender.m.pokemove && !this.dex.abilities.get(defender.m.pokemove.abilities['0']).flags['cantsuppress']) {
+					defender.removeVolatile('ability:' + this.toID(defender.m.pokemove.abilities['0']));
 				}
 			}
 		},
-		onEnd(source) {
-			this.add('-end', source, 'ability: Neutralizing Gas');
+		onEnd(attacker) {
+			this.add('-end', attacker, 'ability: Neutralizing Gas');
 
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
 			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
@@ -53,12 +53,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// (If you're tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-			if (source.abilityState.ending) return;
-			source.abilityState.ending = true;
+			if (attacker.abilityState.ending) return;
+			attacker.abilityState.ending = true;
 			const sortedActive = this.getAllActive();
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
-				if (pokemon !== source) {
+				if (pokemon !== attacker) {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				}

@@ -124,21 +124,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	defog: {
 		inherit: true,
-		onHit(target, source, move) {
+		onHit(defender, attacker, move) {
 			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
+			if (!defender.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
-				if (target.side.removeSideCondition(targetCondition)) {
+				if (defender.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', `[of] ${source}`);
+					this.add('-sideend', defender.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', `[of] ${attacker}`);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', `[of] ${source}`);
+				if (attacker.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', attacker.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', `[of] ${attacker}`);
 					success = true;
 				}
 			}
@@ -213,18 +213,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	floralhealing: {
 		inherit: true,
-		onHit(target, source) {
+		onHit(defender, attacker) {
 			let success = false;
 			if (this.field.isTerrain('grassyterrain')) {
-				success = !!this.heal(this.modify(target.baseMaxhp, 0.667));
+				success = !!this.heal(this.modify(defender.baseMaxhp, 0.667));
 			} else {
-				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+				success = !!this.heal(Math.ceil(defender.baseMaxhp * 0.5));
 			}
-			if (success && !target.isAlly(source)) {
-				target.staleness = 'external';
+			if (success && !defender.isAlly(attacker)) {
+				defender.staleness = 'external';
 			}
 			if (!success) {
-				this.add('-fail', target, 'heal');
+				this.add('-fail', defender, 'heal');
 				return null;
 			}
 			return success;
@@ -302,10 +302,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healbell: {
 		inherit: true,
-		onHit(target, source) {
-			this.add('-activate', source, 'move: Heal Bell');
+		onHit(defender, attacker) {
+			this.add('-activate', attacker, 'move: Heal Bell');
 			let success = false;
-			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+			const allies = [...defender.side.pokemon, ...defender.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally.hasAbility('soundproof') && !this.suppressingAbility(ally)) {
 					this.add('-immune', ally, '[from] ability: Soundproof');
@@ -324,12 +324,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 2,
-			onSwitchIn(target) {
-				if (!target.fainted) {
-					target.heal(target.maxhp);
-					target.clearStatus();
-					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					target.side.removeSlotCondition(target, 'healingwish');
+			onSwitchIn(defender) {
+				if (!defender.fainted) {
+					defender.heal(defender.maxhp);
+					defender.clearStatus();
+					this.add('-heal', defender, defender.getHealth, '[from] move: Healing Wish');
+					defender.side.removeSlotCondition(defender, 'healingwish');
 				}
 			},
 		},
@@ -340,18 +340,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healpulse: {
 		inherit: true,
-		onHit(target, source) {
+		onHit(defender, attacker) {
 			let success = false;
-			if (source.hasAbility('megalauncher')) {
-				success = !!this.heal(this.modify(target.baseMaxhp, 0.75));
+			if (attacker.hasAbility('megalauncher')) {
+				success = !!this.heal(this.modify(defender.baseMaxhp, 0.75));
 			} else {
-				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+				success = !!this.heal(Math.ceil(defender.baseMaxhp * 0.5));
 			}
-			if (success && !target.isAlly(source)) {
-				target.staleness = 'external';
+			if (success && !defender.isAlly(attacker)) {
+				defender.staleness = 'external';
 			}
 			if (!success) {
-				this.add('-fail', target, 'heal');
+				this.add('-fail', defender, 'heal');
 				return null;
 			}
 			return success;
@@ -497,24 +497,24 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
-				this.add('-activate', target, 'move: Protect');
-				const lockedmove = source.getVolatile('lockedmove');
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender, false)) return;
+				this.add('-activate', defender, 'move: Protect');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					this.boost({ atk: -2 }, attacker, defender, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;
 			},
-			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
+			onHit(defender, attacker, move) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, attacker, defender)) {
+					this.boost({ atk: -2 }, attacker, defender, this.dex.getActiveMove("King's Shield"));
 				}
 			},
 		},
@@ -543,15 +543,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 2,
-			onSwitchIn(target) {
-				if (!target.fainted) {
-					target.heal(target.maxhp);
-					target.clearStatus();
-					for (const moveSlot of target.moveSlots) {
+			onSwitchIn(defender) {
+				if (!defender.fainted) {
+					defender.heal(defender.maxhp);
+					defender.clearStatus();
+					for (const moveSlot of defender.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
-					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-					target.side.removeSlotCondition(target, 'lunardance');
+					this.add('-heal', defender, defender.getHealth, '[from] move: Lunar Dance');
+					defender.side.removeSlotCondition(defender, 'lunardance');
 				}
 			},
 		},
@@ -691,10 +691,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pollenpuff: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
-		onHit(target, source) {
-			if (source.isAlly(target)) {
-				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
-					this.add('-immune', target);
+		onHit(defender, attacker) {
+			if (attacker.isAlly(defender)) {
+				if (!this.heal(Math.floor(defender.baseMaxhp * 0.5))) {
+					this.add('-immune', defender);
 					return null;
 				}
 			}
@@ -738,9 +738,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	purify: {
 		inherit: true,
-		onHit(target, source) {
-			if (!target.cureStatus()) return false;
-			this.heal(Math.ceil(source.maxhp * 0.5), source);
+		onHit(defender, attacker) {
+			if (!defender.cureStatus()) return false;
+			this.heal(Math.ceil(attacker.maxhp * 0.5), attacker);
 		},
 	},
 	pursuit: {
@@ -749,20 +749,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	quash: {
 		inherit: true,
-		onHit(target) {
+		onHit(defender) {
 			if (this.activePerHalf === 1) return false; // fails in singles
-			const action = this.queue.willMove(target);
+			const action = this.queue.willMove(defender);
 			if (!action) return false;
 
 			action.priority = -7.1;
-			this.queue.cancelMove(target);
+			this.queue.cancelMove(defender);
 			for (let i = this.queue.list.length - 1; i >= 0; i--) {
 				if (this.queue.list[i].choice === 'residual') {
 					this.queue.list.splice(i, 0, action);
 					break;
 				}
 			}
-			this.add('-activate', target, 'move: Quash');
+			this.add('-activate', defender, 'move: Quash');
 		},
 	},
 	rage: {
@@ -951,34 +951,34 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	switcheroo: {
 		inherit: true,
-		onHit(target, source, move) {
-			const yourItem = target.takeItem(source);
-			const myItem = source.takeItem();
-			if (target.item || source.item || (!yourItem && !myItem)) {
-				if (yourItem) target.item = yourItem.id;
-				if (myItem) source.item = myItem.id;
+		onHit(defender, attacker, move) {
+			const yourItem = defender.takeItem(attacker);
+			const myItem = attacker.takeItem();
+			if (defender.item || attacker.item || (!yourItem && !myItem)) {
+				if (yourItem) defender.item = yourItem.id;
+				if (myItem) attacker.item = myItem.id;
 				return false;
 			}
 			if (
-				(myItem && !this.singleEvent('TakeItem', myItem, source.itemState, target, source, move, myItem)) ||
-				(yourItem && !this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem))
+				(myItem && !this.singleEvent('TakeItem', myItem, attacker.itemState, defender, attacker, move, myItem)) ||
+				(yourItem && !this.singleEvent('TakeItem', yourItem, defender.itemState, attacker, defender, move, yourItem))
 			) {
-				if (yourItem) target.item = yourItem.id;
-				if (myItem) source.item = myItem.id;
+				if (yourItem) defender.item = yourItem.id;
+				if (myItem) attacker.item = myItem.id;
 				return false;
 			}
-			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
+			this.add('-activate', attacker, 'move: Trick', `[of] ${defender}`);
 			if (myItem) {
-				target.setItem(myItem);
-				this.add('-item', target, myItem, '[from] move: Switcheroo');
+				defender.setItem(myItem);
+				this.add('-item', defender, myItem, '[from] move: Switcheroo');
 			} else {
-				this.add('-enditem', target, yourItem, '[silent]', '[from] move: Switcheroo');
+				this.add('-enditem', defender, yourItem, '[silent]', '[from] move: Switcheroo');
 			}
 			if (yourItem) {
-				source.setItem(yourItem);
-				this.add('-item', source, yourItem, '[from] move: Switcheroo');
+				attacker.setItem(yourItem);
+				this.add('-item', attacker, yourItem, '[from] move: Switcheroo');
 			} else {
-				this.add('-enditem', source, myItem, '[silent]', '[from] move: Switcheroo');
+				this.add('-enditem', attacker, myItem, '[silent]', '[from] move: Switcheroo');
 			}
 		},
 	},
@@ -1030,18 +1030,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	toxic: {
 		inherit: true,
-		onPrepareHit(target, source, move) {
-			if (source.hasType('Poison')) source.addVolatile('toxic');
+		onPrepareHit(defender, attacker, move) {
+			if (attacker.hasType('Poison')) attacker.addVolatile('toxic');
 		},
 		condition: {
 			noCopy: true,
 			duration: 1,
 			onSourceInvulnerabilityPriority: 1,
-			onSourceInvulnerability(target, source, move) {
-				if (move && source === this.effectState.target) return 0;
+			onSourceInvulnerability(defender, attacker, move) {
+				if (move && attacker === this.effectState.defender) return 0;
 			},
-			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectState.target) return true;
+			onSourceAccuracy(accuracy, defender, attacker, move) {
+				if (move && attacker === this.effectState.defender) return true;
 			},
 		},
 	},

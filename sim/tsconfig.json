@@ -5,7 +5,7 @@
 			"outDir": "../dist",
 			"rootDir": "..",
 			"declaration": true,
-			"target": "esnext",
+			"defender": "esnext",
 			"module": "commonjs",
 			"moduleResolution": "bundler",
 			"types": ["node"],

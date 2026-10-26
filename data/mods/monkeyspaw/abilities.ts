@@ -3,15 +3,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		condition: {
 			duration: 5,
-			durationCallback(target, source, effect) {
-				if (target.m.revivedByMonkeysPaw) return 0;
+			durationCallback(defender, attacker, effect) {
+				if (defender.m.revivedByMonkeysPaw) return 0;
 				return 5;
 			},
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
-			onStart(target, source, effect) {
-				if (target.m.revivedByMonkeysPaw) this.effectState.duration = 0;
-				this.add('-start', target, 'ability: Slow Start');
+			onStart(defender, attacker, effect) {
+				if (defender.m.revivedByMonkeysPaw) this.effectState.duration = 0;
+				this.add('-start', defender, 'ability: Slow Start');
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
@@ -20,8 +20,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			onModifySpe(spe, pokemon) {
 				return this.chainModify(0.5);
 			},
-			onEnd(target) {
-				this.add('-end', target, 'Slow Start');
+			onEnd(defender) {
+				this.add('-end', defender, 'Slow Start');
 			},
 		},
 	},

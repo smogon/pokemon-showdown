@@ -11,11 +11,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	angerpoint: {
 		inherit: true,
-		onAfterSubDamage(damage, target, source, move) {
-			if (!target.hp) return;
-			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
-				target.setBoost({ atk: 6 });
-				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
+		onAfterSubDamage(damage, defender, attacker, move) {
+			if (!defender.hp) return;
+			if (move?.effectType === 'Move' && defender.getMoveHitData(move).crit) {
+				defender.setBoost({ atk: 6 });
+				this.add('-setboost', defender, 'atk', 12, '[from] ability: Anger Point');
 			}
 		},
 		rating: 1.5,
@@ -53,12 +53,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	colorchange: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (!damage || !target.hp) return;
+		onDamagingHit(damage, defender, attacker, move) {
+			if (!damage || !defender.hp) return;
 			const type = move.type;
-			if (target.isActive && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
-				if (!target.setType(type)) return false;
-				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
+			if (defender.isActive && move.category !== 'Status' && type !== '???' && !defender.hasType(type)) {
+				if (!defender.setType(type)) return false;
+				this.add('-start', defender, 'typechange', type, '[from] ability: Color Change');
 			}
 		},
 		onAfterMoveSecondary: undefined, // no inherit
@@ -74,10 +74,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cutecharm: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
-					source.addVolatile('attract', this.effectState.target);
+					attacker.addVolatile('attract', this.effectState.defender);
 				}
 			}
 		},
@@ -88,10 +88,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
-			for (const target of pokemon.foes()) {
-				if (target.volatiles.substitute) continue;
-				totaldef += target.getStat('def', false, true);
-				totalspd += target.getStat('spd', false, true);
+			for (const defender of pokemon.foes()) {
+				if (defender.volatiles.substitute) continue;
+				totaldef += defender.getStat('def', false, true);
+				totalspd += defender.getStat('spd', false, true);
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({ spa: 1 });
@@ -110,32 +110,32 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	effectspore: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact'] && this.randomChance(3, 10)) {
 				const status = this.sample(['slp', 'par', 'psn']);
-				source.trySetStatus(status, target);
+				attacker.trySetStatus(status, defender);
 			}
 		},
 	},
 	flamebody: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
-					source.trySetStatus('brn', target);
+					attacker.trySetStatus('brn', defender);
 				}
 			}
 		},
 	},
 	flashfire: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Fire') {
-				if (target.status === 'frz') {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === 'Fire') {
+				if (defender.status === 'frz') {
 					return;
 				}
-				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[from] ability: Flash Fire');
+				if (!defender.addVolatile('flashfire')) {
+					this.add('-immune', defender, '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -178,8 +178,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			let warnMoves: Move[] = [];
 			let warnBp = 1;
-			for (const target of pokemon.foes()) {
-				for (const moveSlot of target.moveSlots) {
+			for (const defender of pokemon.foes()) {
+				for (const moveSlot of defender.moveSlots) {
 					const move = this.dex.moves.get(moveSlot.move);
 					let bp = move.basePower;
 					if (move.ohko) bp = 160;
@@ -202,16 +202,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onSwitchInPriority: 6,
 		onStart(pokemon) {
-			const target = pokemon.side.randomFoe();
-			if (target?.item) {
-				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
+			const defender = pokemon.side.randomFoe();
+			if (defender?.item) {
+				this.add('-item', '', defender.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
 	},
 	hustle: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 7,
-		onSourceModifyAccuracy(accuracy, target, source, move) {
+		onSourceModifyAccuracy(accuracy, defender, attacker, move) {
 			if (move.category === 'Physical' && typeof accuracy === 'number') {
 				return this.chainModify(0.8);
 			}
@@ -220,10 +220,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	hydration: {
 		inherit: true,
 		onResidual: undefined, // no inherit
-		onWeather(target, source, effect) {
-			if (effect.id === 'raindance' && target.status) {
-				this.add('-activate', target, 'ability: Hydration');
-				target.cureStatus();
+		onWeather(defender, attacker, effect) {
+			if (effect.id === 'raindance' && defender.status) {
+				this.add('-activate', defender, 'ability: Hydration');
+				defender.cureStatus();
 			}
 		},
 	},
@@ -235,30 +235,30 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onSwitchInPriority: 10,
 		onStart(pokemon) {
-			const activated = pokemon.adjacentFoes().some(target => (
-				!(target.volatiles['substitute'] || target.volatiles['substitutebroken']?.move === 'uturn')
+			const activated = pokemon.adjacentFoes().some(defender => (
+				!(defender.volatiles['substitute'] || defender.volatiles['substitutebroken']?.move === 'uturn')
 			));
 
 			if (!activated) {
-				this.hint("In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).", false, pokemon.side);
+				this.hint("In Gen 4, Intimidate does not activate if every defender has a Substitute (or the Substitute was just broken by U-turn).", false, pokemon.side);
 				return;
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.adjacentFoes()) {
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
-				} else if (target.volatiles['substitutebroken']?.move === 'uturn') {
+			for (const defender of pokemon.adjacentFoes()) {
+				if (defender.volatiles['substitute']) {
+					this.add('-immune', defender);
+				} else if (defender.volatiles['substitutebroken']?.move === 'uturn') {
 					this.hint("In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing.");
 				} else {
-					this.boost({ atk: -1 }, target, pokemon, null, true);
+					this.boost({ atk: -1 }, defender, pokemon, null, true);
 				}
 			}
 		},
 	},
 	leafguard: {
 		inherit: true,
-		onSetStatus(status, target, source, effect) {
+		onSetStatus(status, defender, attacker, effect) {
 			if (effect?.id === 'rest') {
 				// do nothing
 			} else if (this.field.isWeather('sunnyday')) {
@@ -273,8 +273,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	liquidooze: {
 		inherit: true,
-		onSourceTryHeal(damage, target, source, effect) {
-			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
+		onSourceTryHeal(damage, defender, attacker, effect) {
+			this.debug(`Heal is occurring: ${defender} <- ${attacker} :: ${effect.id}`);
 			const canOoze = ['drain', 'leechseed'];
 			if (canOoze.includes(effect.id) && this.activeMove?.id !== 'dreameater') {
 				this.damage(damage, null, null, null, true);
@@ -284,7 +284,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	magicguard: {
 		inherit: true,
-		onSetStatus(status, target, source, effect) {
+		onSetStatus(status, defender, attacker, effect) {
 			if (effect?.id === 'toxicspikes') {
 				return false;
 			}
@@ -363,10 +363,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	poisonpoint: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
-					source.trySetStatus('psn', target);
+					attacker.trySetStatus('psn', defender);
 				}
 			}
 		},
@@ -374,17 +374,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	pressure: {
 		inherit: true,
 		onSwitchInPriority: 3,
-		onDeductPP(target, source) {
-			if (target === source) return;
+		onDeductPP(defender, attacker) {
+			if (defender === attacker) return;
 			return 1;
 		},
 		rating: 1.5,
 	},
 	roughskin: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
-				this.damage(source.baseMaxhp / 8, source, target);
+				this.damage(attacker.baseMaxhp / 8, attacker, defender);
 			}
 		},
 	},
@@ -462,10 +462,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	static: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(3, 10)) {
-					source.trySetStatus('par', target);
+					attacker.trySetStatus('par', defender);
 				}
 			}
 		},
@@ -478,8 +478,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	stickyhold: {
 		inherit: true,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source !== pokemon) || (this.activeMove?.id === 'knockoff')) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker && attacker !== pokemon) || (this.activeMove?.id === 'knockoff')) {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
 			}
@@ -509,21 +509,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	synchronize: {
 		inherit: true,
-		onAfterSetStatus(status, target, source, effect) {
-			if (!source || source === target) return;
+		onAfterSetStatus(status, defender, attacker, effect) {
+			if (!attacker || attacker === defender) return;
 			if (effect?.id === 'toxicspikes') return;
 			let id: string = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
-			source.trySetStatus(id, target);
+			attacker.trySetStatus(id, defender);
 		},
 	},
 	tangledfeet: {
 		inherit: true,
 		onModifyAccuracyPriority: 6,
-		onModifyAccuracy(accuracy, target) {
+		onModifyAccuracy(accuracy, defender) {
 			if (typeof accuracy !== 'number') return;
-			if (target?.volatiles['confusion']) {
+			if (defender?.volatiles['confusion']) {
 				this.debug('Tangled Feet - decreasing accuracy');
 				return this.chainModify(0.5);
 			}
@@ -557,11 +557,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSwitchInPriority: 12,
 		onUpdate(pokemon) {
 			if (!this.effectState.seek) return;
-			const target = pokemon.side.randomFoe();
-			if (!target || target.fainted) return;
-			const ability = target.getAbility();
+			const defender = pokemon.side.randomFoe();
+			if (!defender || defender.fainted) return;
+			const ability = defender.getAbility();
 			if (ability.flags['notrace']) return;
-			pokemon.setAbility(ability, target);
+			pokemon.setAbility(ability, defender);
 		},
 		flags: { notrace: 1 },
 	},
@@ -585,15 +585,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	wonderguard: {
 		inherit: true,
-		onTryHit(target, source, move) {
+		onTryHit(defender, attacker, move) {
 			if (move.id === 'firefang') {
-				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.", true, target.side);
+				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.", true, defender.side);
 				return;
 			}
-			if (target === source || move.category === 'Status' || move.type === '???') return;
+			if (defender === attacker || move.category === 'Status' || move.type === '???') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move)) {
-				this.add('-immune', target, '[from] ability: Wonder Guard');
+			if (defender.runEffectiveness(move) <= 0 || !defender.runImmunity(move)) {
+				this.add('-immune', defender, '[from] ability: Wonder Guard');
 				return null;
 			}
 		},

@@ -10,55 +10,55 @@ describe('Curse', () => {
 		battle.destroy();
 	});
 
-	it(`should request the Ghost target if the user is a known Ghost`, () => {
+	it(`should request the Ghost defender if the user is a known Ghost`, () => {
 		battle = common.createBattle([[
 			{ species: 'Gengar', moves: ['curse'] },
 		], [
 			{ species: 'Caterpie', moves: ['sleeptalk'] },
 		]]);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].defender, 'normal');
 	});
 
-	it(`should request the Ghost target after the user becomes Ghost`, () => {
+	it(`should request the Ghost defender after the user becomes Ghost`, () => {
 		battle = common.createBattle([[
 			{ species: 'Rapidash', moves: ['curse'] },
 		], [
 			{ species: 'Trevenant', item: 'laggingtail', moves: ['trickortreat'] },
 		]]);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].defender, 'self');
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		assert.equal(battle.p1.active[0].boosts.spe, -1);
 		assert.equal(!!battle.p2.active[0].volatiles['curse'], false);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].defender, 'normal');
 	});
 
-	it(`should not request a target after the user stops being Ghost`, () => {
+	it(`should not request a defender after the user stops being Ghost`, () => {
 		battle = common.createBattle([[
 			{ species: 'Gengar', moves: ['curse'] },
 		], [
 			{ species: 'Jellicent', moves: ['soak'] },
 		]]);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].defender, 'normal');
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].hp, Math.ceil(battle.p1.active[0].maxhp / 2));
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp - Math.floor(battle.p2.active[0].maxhp / 4));
 		assert.equal(battle.p1.active[0].boosts.spe, 0);
 		assert.equal(!!battle.p2.active[0].volatiles['curse'], true);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].defender, 'self');
 	});
 
-	it(`should not request a target if the user is a known non-Ghost`, () => {
+	it(`should not request a defender if the user is a known non-Ghost`, () => {
 		battle = common.createBattle([[
 			{ species: 'Blastoise', moves: ['curse'] },
 		], [
 			{ species: 'Caterpie', moves: ['sleeptalk'] },
 		]]);
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].defender, 'self');
 	});
 
-	it(`should not request a target if the user is an unknown non-Ghost`, () => {
+	it(`should not request a defender if the user is an unknown non-Ghost`, () => {
 		battle = common.createBattle([[
 			{ species: 'Blastoise', moves: ['curse', 'reflecttype'] },
 		], [
@@ -68,7 +68,7 @@ describe('Curse', () => {
 		battle.makeChoices('move reflecttype', 'auto');
 
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Dark"]); // Copied Zoroark's type instead of Gengar's
-		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
+		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].defender, 'self');
 	});
 
 	it(`should curse a non-Ghost user with Protean`, () => {
@@ -89,7 +89,7 @@ describe('Curse', () => {
 		assert.fullHP(caterpie);
 	});
 
-	it(`should curse the target if a Ghost user has Protean`, () => {
+	it(`should curse the defender if a Ghost user has Protean`, () => {
 		battle = common.createBattle([[
 			{ species: 'Gengar', ability: 'protean', moves: ['curse'] },
 		], [
@@ -107,7 +107,7 @@ describe('Curse', () => {
 		assert.equal(caterpie.hp, caterpie.maxhp - curseResidual * 2);
 	});
 
-	it(`should target either random opponent if the target is an ally`, () => {
+	it(`should defender either random opponent if the defender is an ally`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
 			{ species: 'Gengar', moves: ['curse'] },
@@ -124,7 +124,7 @@ describe('Curse', () => {
 		assert(caterpie.maxhp !== caterpie.hp || metapod.maxhp !== metapod.hp, `Either Caterpie or Metapod should have lost HP from Curse`);
 	});
 
-	it(`should target a random opponent if the target is a semi-invulnerable ally`, () => {
+	it(`should defender a random opponent if the defender is a semi-invulnerable ally`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Deoxys', moves: ['fly'] },
 			{ species: 'Gengar', moves: ['curse'] },
@@ -151,7 +151,7 @@ describe('Curse', () => {
 		assert.fullHP(aerodactyl);
 	});
 
-	it(`should target a random opponent if the target is an ally that uses Ally Switch`, () => {
+	it(`should defender a random opponent if the defender is an ally that uses Ally Switch`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Wynaut', moves: ['allyswitch'] },
 			{ species: 'Gengar', moves: ['curse'] },
@@ -165,7 +165,7 @@ describe('Curse', () => {
 	});
 
 	describe('[Gen 7]', () => {
-		it(`should target the ally if the target is an ally`, () => {
+		it(`should defender the ally if the defender is an ally`, () => {
 			battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Wynaut', moves: ['sleeptalk'] },
 				{ species: 'Gengar', moves: ['curse'] },
@@ -179,7 +179,7 @@ describe('Curse', () => {
 			assert.false.fullHP(wynaut);
 		});
 
-		it(`should fail if the target is a semi-invulnerable ally`, () => {
+		it(`should fail if the defender is a semi-invulnerable ally`, () => {
 			battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Deoxys', moves: ['fly'] },
 				{ species: 'Gengar', moves: ['curse'] },
@@ -209,7 +209,7 @@ describe('Curse', () => {
 			assert.fullHP(aerodactyl);
 		});
 
-		it(`should target a random opponent if the target is an ally that uses Ally Switch`, () => {
+		it(`should defender a random opponent if the defender is an ally that uses Ally Switch`, () => {
 			battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
 				{ species: 'Wynaut', moves: ['allyswitch'] },
 				{ species: 'Gengar', moves: ['curse'] },
@@ -300,12 +300,12 @@ describe('Curse', () => {
 			assert(cursedFoe);
 		}
 
-		it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', () => {
+		it('should defender an opponent in Doubles if the user is on left side and becomes Ghost the same turn', () => {
 			battle = common.gen(6).createBattle({ gameType: 'doubles' }, doublesTeams.slice());
 			runDoublesTest(battle, battle.p1.active[0]);
 		});
 
-		it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', () => {
+		it('should defender the ally in Doubles if the user is on right side and becomes Ghost the same turn', () => {
 			battle = common.gen(6).createBattle({ gameType: 'doubles' }, [
 				[doublesTeams[0][1], doublesTeams[0][0]],
 				doublesTeams[1],
@@ -314,7 +314,7 @@ describe('Curse', () => {
 		});
 
 		for (const cursePos of [0, 1, 2]) {
-			it('should target an opponent in Triples even if the user is on position ' + cursePos, () => {
+			it('should defender an opponent in Triples even if the user is on position ' + cursePos, () => {
 				const p1team = triplesTeams[0].slice(1);
 				p1team.splice(cursePos, 0, triplesTeams[0][0]);
 				const p2team = triplesTeams[1].slice();

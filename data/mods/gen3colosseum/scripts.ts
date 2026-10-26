@@ -10,7 +10,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				isSelfKo = isSelfKo || this.dex.moves.getByID(faintData?.effect?.id).recoil !== undefined;
 			}
 			if (isSelfKo) {
-				this.win(faintData ? faintData.target.side : null);
+				this.win(faintData ? faintData.defender.side : null);
 				return true;
 			} else {
 				this.win(undefined);

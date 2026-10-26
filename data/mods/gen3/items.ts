@@ -39,7 +39,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Fighting') {
 				return this.chainModify(1.1);
 			}
@@ -49,7 +49,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Dark') {
 				return this.chainModify(1.1);
 			}
@@ -59,7 +59,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Fire') {
 				return this.chainModify(1.1);
 			}
@@ -69,7 +69,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Dragon') {
 				return this.chainModify(1.1);
 			}
@@ -114,7 +114,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Rock') {
 				return this.chainModify(1.1);
 			}
@@ -205,7 +205,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Electric') {
 				return this.chainModify(1.1);
 			}
@@ -226,7 +226,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Steel') {
 				return this.chainModify(1.1);
 			}
@@ -236,7 +236,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Grass') {
 				return this.chainModify(1.1);
 			}
@@ -250,7 +250,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Water') {
 				return this.chainModify(1.1);
 			}
@@ -260,7 +260,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Ice') {
 				return this.chainModify(1.1);
 			}
@@ -292,7 +292,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Poison') {
 				return this.chainModify(1.1);
 			}
@@ -319,7 +319,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Water') {
 				return this.chainModify(1.05);
 			}
@@ -329,7 +329,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Flying') {
 				return this.chainModify(1.1);
 			}
@@ -339,7 +339,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Normal') {
 				return this.chainModify(1.1);
 			}
@@ -349,7 +349,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Bug') {
 				return this.chainModify(1.1);
 			}
@@ -373,7 +373,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Ground') {
 				return this.chainModify(1.1);
 			}
@@ -383,7 +383,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifyAtkPriority: 1,
-		onModifyAtk(atk, user, target, move) {
+		onModifyAtk(atk, user, defender, move) {
 			if (move?.type === 'Ghost') {
 				return this.chainModify(1.1);
 			}
@@ -408,7 +408,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onBasePower: undefined, // no inherit
 		onModifySpAPriority: 1,
-		onModifySpA(spa, user, target, move) {
+		onModifySpA(spa, user, defender, move) {
 			if (move?.type === 'Psychic') {
 				return this.chainModify(1.1);
 			}

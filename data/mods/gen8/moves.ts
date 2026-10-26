@@ -60,12 +60,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onMoveAborted(pokemon, target, move) {
+			onMoveAborted(pokemon, defender, move) {
 				if (move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
 			},
-			onAfterMove(pokemon, target, move) {
+			onAfterMove(pokemon, defender, move) {
 				if (move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
@@ -97,11 +97,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	curse: {
 		inherit: true,
-		onModifyMove(move, source, target) {
-			if (!source.hasType('Ghost')) {
-				move.target = 'self';
-			} else if (!target) {
-				move.target = 'randomNormal';
+		onModifyMove(move, attacker, defender) {
+			if (!attacker.hasType('Ghost')) {
+				move.defender = 'self';
+			} else if (!defender) {
+				move.defender = 'randomNormal';
 			}
 		},
 		target: "randomNormal",
@@ -155,10 +155,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return;
 			}
 
-			// In SwSh, Fly's animation leaks the initial target through a camera focus
-			// The animation leak target itself isn't "accurate"; the target it reveals is as if Fly weren't a charge move
-			// (Fly, like all other charge moves, will actually target slots on its charging turn, relevant for things like Follow Me)
-			// We use a generic single-target move to represent this
+			// In SwSh, Fly's animation leaks the initial defender through a camera focus
+			// The animation leak defender itself isn't "accurate"; the defender it reveals is as if Fly weren't a charge move
+			// (Fly, like all other charge moves, will actually defender slots on its charging turn, relevant for things like Follow Me)
+			// We use a generic single-defender move to represent this
 			if (this.sides.length > 2) {
 				const animatedTarget = attacker.getMoveTargets(this.dex.getActiveMove('aerialace'), defender).targets[0];
 				if (animatedTarget) {
@@ -649,7 +649,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
-				this.boost({ spe: -1 }, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
+				this.boost({ spe: -1 }, pokemon, this.effectState.attacker, this.dex.getActiveMove('stickyweb'));
 			},
 		},
 	},

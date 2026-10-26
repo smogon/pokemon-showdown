@@ -2,7 +2,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	bigroot: {
 		inherit: true,
 		onTryHealPriority: 1,
-		onTryHeal(damage, target, source, effect) {
+		onTryHeal(damage, defender, attacker, effect) {
 			const heals = ['drain', 'leechseed', 'ingrain', 'aquaring', 'strengthsap'];
 			if (heals.includes(effect.id)) {
 				return this.chainModify([6144, 4096]);
@@ -15,8 +15,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		spritenum: 1,
 		megaStone: { "Masquerain": "Masquerain-Mega" },
 		itemUser: ["Masquerain"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: -1,
 		gen: 9,
@@ -59,8 +59,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		spritenum: 1,
 		megaStone: { "Typhlosion": "Typhlosion-Mega" },
 		itemUser: ["Typhlosion"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: -2,
 		gen: 9,
@@ -74,7 +74,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (
 				move && (user.baseSpecies.num === 841) &&
 				(move.type === 'Grass' || move.type === 'Ground')
@@ -122,11 +122,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			basePower: 10,
 		},
 		onDamagePriority: -40,
-		onDamage(damage, target, source, effect) {
-			const chance = Math.max(Math.floor(100 - (target.maxhp - target.hp)), 10);
-			if (this.randomChance(chance, 100) && damage >= target.hp && effect?.effectType === 'Move') {
-				this.add("-activate", target, "item: Focus Band");
-				return target.hp - 1;
+		onDamage(damage, defender, attacker, effect) {
+			const chance = Math.max(Math.floor(100 - (defender.maxhp - defender.hp)), 10);
+			if (this.randomChance(chance, 100) && damage >= defender.hp && effect?.effectType === 'Move') {
+				this.add("-activate", defender, "item: Focus Band");
+				return defender.hp - 1;
 			} else {
 				return damage;
 			}
@@ -140,8 +140,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		spritenum: 1,
 		megaStone: { "Raticate": "Raticate-Mega" },
 		itemUser: ["Raticate"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: -3,
 		gen: 9,

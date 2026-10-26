@@ -276,7 +276,7 @@ export const State = new class {
 		for (const [key, value] of Object.entries(base)) {
 			// This should really be a deepEquals check to see if anything on ActiveMove was
 			// modified from the base Move, but that ends up being expensive and mostly unnecessary
-			// as ActiveMove currently only mutates its simple fields (eg. `type`, `target`) anyway.
+			// as ActiveMove currently only mutates its simple fields (eg. `type`, `defender`) anyway.
 			// @ts-expect-error index signature
 			if (typeof value === 'object' || move[key] === value) skip.add(key);
 		}

@@ -116,11 +116,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		runImmunity(source, message) {
-			if (!source) return true;
-			const type: string = typeof source !== 'string' ? source.type : source;
-			if (typeof source !== 'string') {
-				if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
+		runImmunity(attacker, message) {
+			if (!attacker) return true;
+			const type: string = typeof attacker !== 'string' ? attacker.type : attacker;
+			if (typeof attacker !== 'string') {
+				if (attacker.ignoreImmunity && (attacker.ignoreImmunity === true || attacker.ignoreImmunity[type])) {
 					return true;
 				}
 			}

@@ -1,23 +1,23 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	buggem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Grass' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Grass' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	chartiberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Fighting' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -25,14 +25,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	cobaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Normal' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Normal' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -40,7 +40,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	earthplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fighting') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -48,34 +48,34 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	fairygem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Psychic' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Psychic' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	flyinggem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Normal' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Normal' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	ghostgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Psychic' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Psychic' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	griseouscore: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Psychic' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -83,7 +83,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	griseousorb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Psychic' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -91,16 +91,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	groundgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Fighting' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Fighting' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	hardstone: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fighting') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -108,16 +108,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	icegem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Water' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Water' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	icicleplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -125,7 +125,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	insectplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -133,22 +133,22 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ironball: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
-			if (move.type === 'Fighting' && target.hasType('Normal')) return 0;
+		onEffectiveness(typeMod, defender, type, move) {
+			if (!defender) return;
+			if (defender.volatiles['ingrain'] || defender.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
+			if (move.type === 'Fighting' && defender.hasType('Normal')) return 0;
 		},
 	},
 	kasibberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Psychic' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Psychic' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -156,14 +156,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	kebiaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Dark' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Dark' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -171,7 +171,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	nevermeltice: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -179,7 +179,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	pixieplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Psychic') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -187,7 +187,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	poisonbarb: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Dark') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -195,25 +195,25 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	poisongem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Dark' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Dark' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	rockgem: {
 		inherit: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Fighting' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Fighting' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 	},
 	rockincense: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Fighting') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -221,14 +221,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	roseliberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Psychic' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Psychic' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -236,7 +236,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	sharpbeak: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Normal') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -244,14 +244,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	shucaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Fighting' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -259,7 +259,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	silverpowder: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -267,7 +267,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	skyplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Normal') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -275,15 +275,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	snowball: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.type === 'Water') {
-				target.useItem();
+				defender.useItem();
 			}
 		},
 	},
 	softsand: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Fighting') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -291,7 +291,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	spelltag: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -299,7 +299,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	spookyplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -307,7 +307,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	stoneplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Fighting') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -315,14 +315,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	tangaberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Grass' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Grass' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -330,7 +330,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	toxicplate: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Dark') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -338,14 +338,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	yacheberry: {
 		inherit: true,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Water' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Water' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -353,7 +353,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	vilevial: {
 		inherit: true,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === -66 && ['Dark', 'Normal'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}

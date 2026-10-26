@@ -81,7 +81,7 @@ describe('Primordial Sea', () => {
 			{ species: "Toxicroak", ability: 'dryskin', moves: ['bulkup'] },
 			{ species: "Manaphy", ability: 'hydration', item: 'laggingtail', moves: ['rest'] },
 		]]);
-		battle.onEvent('Hit', battle.format, (target, pokemon, move) => {
+		battle.onEvent('Hit', battle.format, (defender, pokemon, move) => {
 			if (move.id === 'weatherball') {
 				assert.equal(move.type, 'Water');
 			}

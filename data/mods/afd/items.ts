@@ -12,7 +12,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	luckycharm: {
 		name: "Lucky Charm",
 		onModifyMovePriority: -2,
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, pokemon, defender) {
 			let trigger = false;
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
@@ -42,13 +42,13 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		name: "Onika Burger",
 		desc: "PP and damage of every move is halved. Gain 25% max HP at the end of each turn.",
 		shortDesc: "PP and damage of every move is halved. Gain 25% max HP at the end of each turn.",
-		onStart(target) {
-			if (target.m.onikaBurger) return;
-			target.m.onikaBurger = true;
-			for (const moveSlot of target.moveSlots) {
-				const deductPP = target.deductPP(moveSlot.id, moveSlot.maxpp / 2, target);
+		onStart(defender) {
+			if (defender.m.onikaBurger) return;
+			defender.m.onikaBurger = true;
+			for (const moveSlot of defender.moveSlots) {
+				const deductPP = defender.deductPP(moveSlot.id, moveSlot.maxpp / 2, defender);
 				if (!deductPP) continue;
-				this.add('-activate', target, 'item: Onika Burger', moveSlot.move, deductPP);
+				this.add('-activate', defender, 'item: Onika Burger', moveSlot.move, deductPP);
 			}
 		},
 		onModifyDamage() {
@@ -64,10 +64,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		name: "Ward Tag",
 		desc: "Reflects back 125% of the damage that would've been dealt. One-time use.",
 		shortDesc: "Reflects back 125% of the damage that would've been dealt. One-time use.",
-		onDamage(damage, target, source, effect) {
-			if (source && target !== source && effect?.effectType === 'Move' && target.useItem()) {
-				this.add('-activate', target, 'item: Ward Tag');
-				this.damage(damage * 5 / 4, source, target);
+		onDamage(damage, defender, attacker, effect) {
+			if (attacker && defender !== attacker && effect?.effectType === 'Move' && defender.useItem()) {
+				this.add('-activate', defender, 'item: Ward Tag');
+				this.damage(damage * 5 / 4, attacker, defender);
 				return 0;
 			}
 		},
@@ -78,9 +78,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (!move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod < 0) {
-				target.useItem();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (!move.damage && !move.damageCallback && defender.getMoveHitData(move).typeMod < 0) {
+				defender.useItem();
 			}
 		},
 		boosts: {

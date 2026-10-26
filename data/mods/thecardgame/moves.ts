@@ -1,7 +1,7 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	camouflage: {
 		inherit: true,
-		onHit(target) {
+		onHit(defender) {
 			let newType = 'Normal';
 			if (this.field.isTerrain('electricterrain')) {
 				newType = 'Electric';
@@ -11,13 +11,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				newType = 'Psychic';
 			}
 
-			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
-			this.add('-start', target, 'typechange', newType);
+			if (defender.getTypes().join() === newType || !defender.setType(newType)) return false;
+			this.add('-start', defender, 'typechange', newType);
 		},
 	},
 	flyingpress: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type, move) {
+		onEffectiveness(typeMod, defender, type, move) {
 			return typeMod + this.dex.getEffectiveness('Normal', type);
 		},
 	},
@@ -42,10 +42,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 1,
 			onResidualOrder: 25,
-			onStart(target) {
-				if (!target.terastallized) {
-					this.add('-singleturn', target, 'move: Roost');
-				} else if (target.terastallized === "Normal") {
+			onStart(defender) {
+				if (!defender.terastallized) {
+					this.add('-singleturn', defender, 'move: Roost');
+				} else if (defender.terastallized === "Normal") {
 					this.add('-hint', "If a Normal Terastallized Pokemon uses Roost, it remains Normal-type.");
 				}
 			},
@@ -76,26 +76,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	thousandarrows: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type, move) {
+		onEffectiveness(typeMod, defender, type, move) {
 			if (move.type !== 'Fighting') return;
-			if (!target) return; // avoid crashing when called from a chat plugin
-			// ignore effectiveness if the target is Flying type and immune to Ground
-			if (!target.runImmunity('Fighting')) {
-				if (target.hasType('Normal')) return 0;
+			if (!defender) return; // avoid crashing when called from a chat plugin
+			// ignore effectiveness if the defender is Flying type and immune to Ground
+			if (!defender.runImmunity('Fighting')) {
+				if (defender.hasType('Normal')) return 0;
 			}
 		},
 		ignoreImmunity: { 'Fighting': true },
 	},
 	trickortreat: {
 		inherit: true,
-		onHit(target) {
-			if (target.hasType('Psychic')) return false;
-			if (!target.addType('Psychic')) return false;
-			this.add('-start', target, 'typeadd', 'Psychic', '[from] move: Trick-or-Treat');
+		onHit(defender) {
+			if (defender.hasType('Psychic')) return false;
+			if (!defender.addType('Psychic')) return false;
+			this.add('-start', defender, 'typeadd', 'Psychic', '[from] move: Trick-or-Treat');
 
-			if (target.side.active.length === 2 && target.position === 1) {
+			if (defender.side.active.length === 2 && defender.position === 1) {
 				// Curse Glitch
-				const action = this.queue.willMove(target);
+				const action = this.queue.willMove(defender);
 				if (action?.move.id === 'curse') {
 					action.targetLoc = -1;
 				}

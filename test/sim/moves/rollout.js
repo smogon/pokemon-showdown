@@ -49,7 +49,7 @@ for (const move of moves) {
 
 			let ebp = 30;
 			let count = 0;
-			battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
+			battle.onEvent('Accuracy', battle.format, (accuracy, defender, pokemon, move) => {
 				if (move.id === 'recover') return;
 
 				count++;
@@ -189,7 +189,7 @@ for (const move of moves) {
 				assert.bounded(damage, [5, 6]); // 1 * 2^4 BP; would be 120 BP otherwise, range 28-34
 			});
 
-			it(`should only apply the Rollout Storage boost to the first target of a spread move`, () => {
+			it(`should only apply the Rollout Storage boost to the first defender of a spread move`, () => {
 				battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
 					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
 					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'snarl'] },

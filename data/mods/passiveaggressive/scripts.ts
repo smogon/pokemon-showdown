@@ -37,7 +37,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (hit = 1; hit <= targetHits; hit++) {
 				if (damage.includes(false)) break;
 				if (hit > 1 && pokemon.status === 'slp' && (!isSleepUsable || this.battle.gen === 4)) break;
-				if (targets.every(target => !target?.hp)) break;
+				if (targets.every(defender => !defender?.hp)) break;
 				move.hit = hit;
 				if (move.smartTarget && targets.length > 1) {
 					targetsCopy = [targets[hit - 1]];
@@ -45,17 +45,17 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					targetsCopy = targets.slice(0);
 				}
-				const target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
-				if (target && typeof move.smartTarget === 'boolean') {
+				const defender = targetsCopy[0]; // some relevant-to-single-defender-moves-only things are hardcoded
+				if (defender && typeof move.smartTarget === 'boolean') {
 					if (hit > 1) {
-						this.battle.addMove('-anim', pokemon, move.name, target);
+						this.battle.addMove('-anim', pokemon, move.name, defender);
 					} else {
-						this.battle.retargetLastMove(target);
+						this.battle.retargetLastMove(defender);
 					}
 				}
 
 				// like this (Triple Kick)
-				if (target && move.multiaccuracy && hit > 1) {
+				if (defender && move.multiaccuracy && hit > 1) {
 					let accuracy = move.accuracy;
 					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 					if (accuracy !== true) {
@@ -69,7 +69,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 						if (!move.ignoreEvasion) {
-							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
+							const boosts = this.battle.runEvent('ModifyBoost', defender, null, null, { ...defender.boosts });
 							const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];
@@ -78,9 +78,9 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 					}
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					accuracy = this.battle.runEvent('ModifyAccuracy', defender, pokemon, move, accuracy);
 					if (!move.alwaysHit) {
-						accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+						accuracy = this.battle.runEvent('Accuracy', defender, pokemon, move, accuracy);
 						if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
 					}
 				}
@@ -133,11 +133,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				targetsCopy = targets.slice(0);
 			}
 
-			for (const [i, target] of targetsCopy.entries()) {
-				if (target && pokemon !== target) {
-					target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
+			for (const [i, defender] of targetsCopy.entries()) {
+				if (defender && pokemon !== defender) {
+					defender.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
 					if (typeof moveDamage[i] === 'number') {
-						target.timesAttacked += move.smartTarget ? 1 : hit - 1;
+						defender.timesAttacked += move.smartTarget ? 1 : hit - 1;
 					}
 				}
 			}
@@ -189,9 +189,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 };
 
-function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon, moveid = 'tackle') {
+function calculate(battle: Battle, attacker: Pokemon, pokemon: Pokemon, moveid = 'tackle') {
 	const move = battle.dex.getActiveMove(moveid);
-	move.type = source.getTypes()[0];
+	move.type = attacker.getTypes()[0];
 	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
 	if (!pokemon.runImmunity(move)) return 0;
 	return typeMod;

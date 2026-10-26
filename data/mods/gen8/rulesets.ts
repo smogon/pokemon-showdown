@@ -36,7 +36,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	tiershiftmod: {
 		inherit: true,
 		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
-		onModifySpecies(species, target, source, effect) {
+		onModifySpecies(species, defender, attacker, effect) {
 			if (!species.baseStats) return;
 			const boosts: { [tier: string]: number } = {
 				uu: 10,
@@ -54,9 +54,9 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			let tier: string = this.toID(species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
-			if (target) {
-				if (target.set.item === 'lightclay') return;
-				if (['drizzle', 'drought', 'slushrush'].includes(target.set.ability) && boosts[tier] > 20) tier = 'nubl';
+			if (defender) {
+				if (defender.set.item === 'lightclay') return;
+				if (['drizzle', 'drought', 'slushrush'].includes(defender.set.ability) && boosts[tier] > 20) tier = 'nubl';
 			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
@@ -76,11 +76,11 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		onBegin() {
 			this.add('rule', 'Bonus Type Mod: Pok\u00e9mon can be nicknamed the name of a type to have that type added onto their current ones.');
 		},
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // Chat command
+		onModifySpecies(species, defender, attacker, effect) {
+			if (!defender) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const typesSet = new Set(species.types);
-			const bonusType = this.dex.types.get(target.set.name);
+			const bonusType = this.dex.types.get(defender.set.name);
 			if (bonusType.exists) typesSet.add(bonusType.name);
 			return { ...species, types: [...typesSet] };
 		},
@@ -114,9 +114,9 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			}
 		},
 		onModifySpeciesPriority: 3,
-		onModifySpecies(species, target, source) {
-			if (source || !target?.side) return;
-			const god = target.side.team.find(set => {
+		onModifySpecies(species, defender, attacker) {
+			if (attacker || !defender?.side) return;
+			const god = defender.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
 				const isNatDex = this.format.ruleTable?.has('natdexmod');
 				const validator = this.dex.formats.getRuleTable(
@@ -136,8 +136,8 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				}
 				const isBanned = validator.isBannedSpecies(godSpecies);
 				return isBanned;
-			}) || target.side.team[0];
-			const stat = this.dex.stats.ids()[target.side.team.indexOf(target.set)];
+			}) || defender.side.team[0];
+			const stat = this.dex.stats.ids()[defender.side.team.indexOf(defender.set)];
 			const newSpecies = this.dex.deepClone(species);
 			let godSpecies = this.dex.species.get(god.species);
 			if (typeof godSpecies.battleOnly === 'string') {

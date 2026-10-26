@@ -17,10 +17,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	cutecharm: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
-					source.addVolatile('attract', target);
+					attacker.addVolatile('attract', defender);
 				}
 			}
 		},
@@ -43,35 +43,35 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	effectspore: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact'] && this.randomChance(1, 10)) {
 				const status = this.sample(['slp', 'par', 'psn']);
-				source.trySetStatus(status, target);
+				attacker.trySetStatus(status, defender);
 			}
 		},
 	},
 	flamebody: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
-					source.trySetStatus('brn', target);
+					attacker.trySetStatus('brn', defender);
 				}
 			}
 		},
 	},
 	flashfire: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Fire') {
-				if (move.id === 'willowisp' && (target.hasType('Fire') || target.status || target.volatiles['substitute'])) {
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === 'Fire') {
+				if (move.id === 'willowisp' && (defender.hasType('Fire') || defender.status || defender.volatiles['substitute'])) {
 					return;
 				}
-				if (target.status === 'frz') {
+				if (defender.status === 'frz') {
 					return;
 				}
-				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[from] ability: Flash Fire');
+				if (!defender.addVolatile('flashfire')) {
+					this.add('-immune', defender, '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -88,7 +88,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	hustle: {
 		inherit: true,
-		onSourceModifyAccuracy(accuracy, target, source, move) {
+		onSourceModifyAccuracy(accuracy, defender, attacker, move) {
 			const physicalTypes = ['Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel'];
 			if (physicalTypes.includes(move.type) && typeof accuracy === 'number') {
 				return this.chainModify([3277, 4096]);
@@ -100,24 +100,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSwitchInPriority: 2, // before Trace
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.adjacentFoes()) {
-				if (!target.volatiles['substitute']) {
+			for (const defender of pokemon.adjacentFoes()) {
+				if (!defender.volatiles['substitute']) {
 					activated = true;
 					break;
 				}
 			}
 
 			if (!activated) {
-				this.hint("In Gen 3, Intimidate does not activate if every target has a Substitute.", false, pokemon.side);
+				this.hint("In Gen 3, Intimidate does not activate if every defender has a Substitute.", false, pokemon.side);
 				return;
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.adjacentFoes()) {
-				if (target.volatiles['substitute']) {
-					this.add('-immune', target);
+			for (const defender of pokemon.adjacentFoes()) {
+				if (defender.volatiles['substitute']) {
+					this.add('-immune', defender);
 				} else {
-					this.boost({ atk: -1 }, target, pokemon, null, true);
+					this.boost({ atk: -1 }, defender, pokemon, null, true);
 				}
 			}
 		},
@@ -125,11 +125,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	lightningrod: {
 		inherit: true,
 		onAnyRedirectTarget: undefined, // no inherit
-		onFoeRedirectTarget(target, source, source2, move) {
+		onFoeRedirectTarget(defender, attacker, source2, move) {
 			// don't count Hidden Power as Electric-type
 			if (this.dex.moves.get(move.id).type !== 'Electric') return;
-			if (this.validTarget(this.effectState.target, source, move.target)) {
-				return this.effectState.target;
+			if (this.validTarget(this.effectState.defender, attacker, move.defender)) {
+				return this.effectState.defender;
 			}
 		},
 	},
@@ -138,13 +138,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onFoeTrapPokemon: undefined, // no inherit
 		onFoeMaybeTrapPokemon: undefined, // no inherit
 		onAnyTrapPokemon(pokemon) {
-			if (pokemon.hasType('Steel') && pokemon.isAdjacent(this.effectState.target)) {
+			if (pokemon.hasType('Steel') && pokemon.isAdjacent(this.effectState.defender)) {
 				pokemon.tryTrap(true);
 			}
 		},
-		onAnyMaybeTrapPokemon(pokemon, source) {
-			if (!source) source = this.effectState.target;
-			if (!source || !pokemon.isAdjacent(source)) return;
+		onAnyMaybeTrapPokemon(pokemon, attacker) {
+			if (!attacker) attacker = this.effectState.defender;
+			if (!attacker || !pokemon.isAdjacent(attacker)) return;
 			if (!pokemon.knownType || pokemon.hasType('Steel')) {
 				pokemon.maybeTrapped = true;
 			}
@@ -172,10 +172,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	poisonpoint: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
-					source.trySetStatus('psn', target);
+					attacker.trySetStatus('psn', defender);
 				}
 			}
 		},
@@ -199,9 +199,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	roughskin: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
-				this.damage(source.baseMaxhp / 16, source, target);
+				this.damage(attacker.baseMaxhp / 16, attacker, defender);
 			}
 		},
 	},
@@ -221,10 +221,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	static: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (damage && move.flags['contact']) {
 				if (this.randomChance(1, 3)) {
-					source.trySetStatus('par', target);
+					attacker.trySetStatus('par', defender);
 				}
 			}
 		},
@@ -234,10 +234,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onUpdate: undefined, // no inherit
 		onSwitchInPriority: 1, // after Intimidate, before items
 		onStart(pokemon) {
-			const target = pokemon.side.randomFoe();
-			if (!target || target.fainted) return;
-			const ability = target.getAbility();
-			pokemon.setAbility(ability, target);
+			const defender = pokemon.side.randomFoe();
+			if (!defender || defender.fainted) return;
+			const ability = defender.getAbility();
+			pokemon.setAbility(ability, defender);
 		},
 		flags: {},
 	},
@@ -265,10 +265,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	voltabsorb: {
 		inherit: true,
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
-				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Volt Absorb');
+		onTryHit(defender, attacker, move) {
+			if (defender !== attacker && move.type === 'Electric' && move.id !== 'thunderwave') {
+				if (!this.heal(defender.baseMaxhp / 4)) {
+					this.add('-immune', defender, '[from] ability: Volt Absorb');
 				}
 				return null;
 			}

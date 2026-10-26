@@ -631,7 +631,7 @@ describe('Choices', () => {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should privately log the target of targeted chosen moves', () => {
+		it('should privately log the defender of targeted chosen moves', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: "Bulbasaur", ability: 'overgrow', moves: ['tackle'] },
 				{ species: "Ivysaur", ability: 'overgrow', moves: ['tackle'] },
@@ -646,7 +646,7 @@ describe('Choices', () => {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should not log the target of targetless chosen moves', () => {
+		it('should not log the defender of targetless chosen moves', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: "Bulbasaur", ability: 'overgrow', moves: ['magnitude'] },
 				{ species: "Ivysaur", ability: 'overgrow', moves: ['rockslide'] },
@@ -661,7 +661,7 @@ describe('Choices', () => {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should privately log the target of targeted chosen moves in FFA', () => {
+		it('should privately log the defender of targeted chosen moves in FFA', () => {
 			battle = common.createBattle({ gameType: 'freeforall' }, [[
 				{ species: "Bulbasaur", ability: 'overgrow', moves: ['tackle'] },
 			], [
@@ -704,7 +704,7 @@ describe('Choices', () => {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should privately log the target of switches', () => {
+		it('should privately log the defender of switches', () => {
 			battle = common.createBattle([[
 				{ species: "Bulbasaur", ability: 'overgrow', moves: ['tackle'] },
 				{ species: "Ivysaur", ability: 'overgrow', moves: ['tackle'] },
@@ -825,8 +825,8 @@ describe('Choice extensions', () => {
 					{ species: "Charmander", ability: 'blaze', moves: ['scratch'] },
 				]]);
 
-				const target = battle.p1.active[0];
-				target.maybeDisabled = true;
+				const defender = battle.p1.active[0];
+				defender.maybeDisabled = true;
 				battle.makeRequest();
 
 				battle.choose('p1', 'move tackle');
@@ -836,7 +836,7 @@ describe('Choice extensions', () => {
 				assert.cantUndo(() => battle.choose('p1', 'move growl'));
 				battle.choose('p2', 'move scratch');
 
-				assert.equal(target.lastMove.id, 'tackle');
+				assert.equal(defender.lastMove.id, 'tackle');
 			});
 
 			it(`should disallow to ${mode} move decisions by default`, () => {
@@ -923,19 +923,19 @@ describe('Choice extensions', () => {
 						{ species: 'Gengar', ability: 'levitate', moves: ['shadowball, focusblast'] },
 					],
 				]);
-				const target = battle.p1.active[0];
+				const defender = battle.p1.active[0];
 
 				battle.makeChoices('move reflecttype', 'switch 3');
 
 				// The real Gengar comes in, but p1 only sees a Gengar being switched by another Gengar, implying Illusion.
 				// For a naive client, Starmie turns into Ghost/Poison, and it will be correct.
-				assert.equal(target.getTypes().join('/'), 'Ghost/Poison');
+				assert.equal(defender.getTypes().join('/'), 'Ghost/Poison');
 
 				// Trapping with Gengar-Mega is a guaranteed trapping, so we are going to get a very meta
 				// Competitive Gothitelle into the battle field (Frisk is revealed on switch-in).
 				battle.makeChoices('move recover', 'switch 2');
 
-				assert(target.maybeTrapped, `${target} should be flagged as maybe trapped`);
+				assert(defender.maybeTrapped, `${defender} should be flagged as maybe trapped`);
 
 				battle.choose('p1', 'switch 2');
 				// NOTE: noCancel is global so it still true even though the Pokemon can't undo.

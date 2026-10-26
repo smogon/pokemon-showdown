@@ -82,7 +82,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					id: moveSlot.id,
 					pp,
 					maxpp: this.battle.gen >= 5 ? pp : this.battle.calculatePP(move, this.ppUps[i] || 0),
-					target: moveSlot.target,
+					defender: moveSlot.defender,
 					disabled: false,
 					used: false,
 					virtual: true,
@@ -155,12 +155,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		 * This function handles all changes to stats, ability, type, species, etc.
 		 * as well as sending all relevant messages sent to the client.
 		 */
-		formeChange(speciesId, source, isPermanent, message) {
-			if (!source) source = this.battle.effect;
+		formeChange(speciesId, attacker, isPermanent, message) {
+			if (!attacker) attacker = this.battle.effect;
 
 			const rawSpecies = this.battle.dex.species.get(speciesId);
 
-			const species = this.setSpecies(rawSpecies, source);
+			const species = this.setSpecies(rawSpecies, attacker);
 			if (!species) return false;
 
 			if (this.battle.gen <= 2) return true;
@@ -172,12 +172,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.baseSpecies = rawSpecies;
 				this.details = this.getUpdatedDetails();
 				this.battle.add('detailschange', this, (this.illusion || this).details);
-				if (source.effectType === 'Item') {
+				if (attacker.effectType === 'Item') {
 					this.canTerastallize = null; // National Dex behavior
-					if (source.zMove) {
+					if (attacker.zMove) {
 						this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
-					} else if (source.isPrimalOrb) {
+					} else if (attacker.isPrimalOrb) {
 						if (this.illusion) {
 							this.ability = '';
 							this.battle.add('-primal', this.illusion);
@@ -188,18 +188,18 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 						this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 					}
-				} else if (source.effectType === 'Status') {
+				} else if (attacker.effectType === 'Status') {
 					// Shaymin-Sky -> Shaymin
 					this.battle.add('-formechange', this, species.name, message);
 				}
 			} else {
-				if (source.effectType === 'Ability') {
-					this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
+				if (attacker.effectType === 'Ability') {
+					this.battle.add('-formechange', this, species.name, message, `[from] ability: ${attacker.name}`);
 				} else {
 					this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : species.name, message);
 				}
 			}
-			if (isPermanent && !['disguise', 'iceface', 'ability:disguise', 'ability:iceface'].includes(source.id)) {
+			if (isPermanent && !['disguise', 'iceface', 'ability:disguise', 'ability:iceface'].includes(attacker.id)) {
 				if (this.illusion) {
 					this.ability = ''; // Don't allow Illusion to wear off
 				}

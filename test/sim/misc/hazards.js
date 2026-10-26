@@ -44,7 +44,7 @@ describe('Hazards', () => {
 		assert(rocksLandorusIndex < abilityLandorusIndex, 'Stealth Rock should damage Landorus before Intimidate activates.');
 	});
 
-	it(`should set up hazards even if there is no target`, () => {
+	it(`should set up hazards even if there is no defender`, () => {
 		battle = common.createBattle([[
 			{ species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit'] },
 			{ species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit'] },
@@ -123,7 +123,7 @@ describe('Hazards', () => {
 		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, true, true, true]);
 	});
 
-	it(`should set up hazards even if there is no target in a Free-for-all battle`, () => {
+	it(`should set up hazards even if there is no defender in a Free-for-all battle`, () => {
 		battle = common.createBattle({ gameType: 'freeforall' }, [[
 			{ species: 'Bronzong', item: 'laggingtail', moves: ['sleeptalk', 'stealthrock'] },
 		], [

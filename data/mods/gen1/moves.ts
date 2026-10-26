@@ -51,8 +51,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						pokemon.removeVolatile('bide');
 						return false;
 					}
-					const target = this.getRandomTarget(pokemon, 'Pound');
-					this.actions.moveHit(target, pokemon, currentMove, { damage: this.effectState.damage * 2 } as ActiveMove);
+					const defender = this.getRandomTarget(pokemon, 'Pound');
+					this.actions.moveHit(defender, pokemon, currentMove, { damage: this.effectState.damage * 2 } as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -60,8 +60,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return false;
 			},
 			onSemiLockMove: 'bide',
-			onDisableMove(target) {
-				target.maybeLocked = false; // the player knows it is locked
+			onDisableMove(defender) {
+				defender.maybeLocked = false; // the player knows it is locked
 			},
 		},
 		type: "???", // Will look as Normal but it's STAB-less
@@ -72,9 +72,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onTryMove(source, target) {
-			if (target.volatiles['mustrecharge']) {
-				target.removeVolatile('mustrecharge');
+		onTryMove(attacker, defender) {
+			if (defender.volatiles['mustrecharge']) {
+				defender.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},
@@ -119,9 +119,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onTryMove(source, target) {
-			if (target.volatiles['mustrecharge']) {
-				target.removeVolatile('mustrecharge');
+		onTryMove(attacker, defender) {
+			if (defender.volatiles['mustrecharge']) {
+				defender.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},
@@ -138,9 +138,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	conversion: {
 		inherit: true,
 		target: "normal",
-		onHit(target, source) {
-			source.setType(target.getTypes(true));
-			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', `[of] ${target}`);
+		onHit(defender, attacker) {
+			attacker.setType(defender.getTypes(true));
+			this.add('-start', attacker, 'typechange', attacker.types.join('/'), '[from] move: Conversion', `[of] ${defender}`);
 		},
 	},
 	counter: {
@@ -148,12 +148,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		ignoreImmunity: true,
 		willCrit: false,
 		basePower: 1,
-		damageCallback(pokemon, target) {
+		damageCallback(pokemon, defender) {
 			// Counter mechanics in gen 1:
 			// - a move is Counterable if it is Normal or Fighting type, has nonzero Base Power, and is not Counter
 			// - if Counter is used by the player, it will succeed if the opponent's last used move is Counterable
 			// - if Counter is used by the opponent, it will succeed if the player's last selected move is Counterable
-			// - (Counter will thus desync if the target's last used move is not as counterable as the target's last selected move)
+			// - (Counter will thus desync if the defender's last used move is not as counterable as the defender's last selected move)
 			// - if Counter succeeds it will deal twice the last move damage dealt in battle (even if it's from a different pokemon because of a switch)
 
 			// With the new Desync Clause Mod, that uses the acting Pokemon Online POV, Counter succeeds if
@@ -166,44 +166,44 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			};
 
 			// These are the Counter user's POV and are used to determine if Counter will succeed
-			const isLastEnemySelectedMoveCounterable = target.side.lastEnemySelectedMove !== 'counter';
-			const isLastEnemyMoveCounterable = isCounterable(target.side.lastEnemyMove);
+			const isLastEnemySelectedMoveCounterable = defender.side.lastEnemySelectedMove !== 'counter';
+			const isLastEnemyMoveCounterable = isCounterable(defender.side.lastEnemyMove);
 
-			// These are the target's POV and are used for the hint messages
-			const isLastSelectedMoveCounterable = target.side.lastSelectedMove !== 'counter';
-			const isLastMoveCounterable = isCounterable(target.side.lastMove);
+			// These are the defender's POV and are used for the hint messages
+			const isLastSelectedMoveCounterable = defender.side.lastSelectedMove !== 'counter';
+			const isLastMoveCounterable = isCounterable(defender.side.lastMove);
 
 			const isLastDamageNonZero = this.lastDamage > 0;
 
 			const willCounterSucceed = isLastEnemySelectedMoveCounterable && isLastEnemyMoveCounterable && isLastDamageNonZero;
 
-			// this.debug("COUNTER: isLastEnemySelectedMoveCounterable:" + isLastEnemySelectedMoveCounterable + " (" + target.side.lastEnemySelectedMove + ")");
-			// this.debug("COUNTER: isLastEnemyMoveCounterable:" + isLastEnemyMoveCounterable + " (" + target.side.lastEnemyMove + ")");
-			// this.debug("COUNTER: isLastSelectedMoveCounterable:" + isLastSelectedMoveCounterable + " (" + target.side.lastSelectedMove + ")");
-			// this.debug("COUNTER: isLastMoveCounterable:" + isLastMoveCounterable + " (" + (target.side.lastMove) + ")");
+			// this.debug("COUNTER: isLastEnemySelectedMoveCounterable:" + isLastEnemySelectedMoveCounterable + " (" + defender.side.lastEnemySelectedMove + ")");
+			// this.debug("COUNTER: isLastEnemyMoveCounterable:" + isLastEnemyMoveCounterable + " (" + defender.side.lastEnemyMove + ")");
+			// this.debug("COUNTER: isLastSelectedMoveCounterable:" + isLastSelectedMoveCounterable + " (" + defender.side.lastSelectedMove + ")");
+			// this.debug("COUNTER: isLastMoveCounterable:" + isLastMoveCounterable + " (" + (defender.side.lastMove) + ")");
 			// this.debug("COUNTER: isLastDamageNonZero:" + isLastDamageNonZero + " (" + this.lastDamage + ")");
 
 			// Hint messages
 			if (!willCounterSucceed) {
 				if (isLastDamageNonZero) {
 					if (!isLastEnemySelectedMoveCounterable && isLastSelectedMoveCounterable) {
-						// the target has Counter in its first slot
+						// the defender has Counter in its first slot
 						if (isLastEnemyMoveCounterable) {
 							// and it didn't fail for other reason
 							this.hint("Desync Clause Mod activated!");
 							this.hint(
-								"In Gen 1, if Counter is used against a target that switched in and spent the turn sleeping, " +
+								"In Gen 1, if Counter is used against a defender that switched in and spent the turn sleeping, " +
 								"from the Counter user's perspective, " +
-								"it will fail if the move in the target's first slot is also Counter.",
+								"it will fail if the move in the defender's first slot is also Counter.",
 							);
 						}
 					} else if (!isLastEnemyMoveCounterable && isLastMoveCounterable) {
-						// the target selected a counterable move that was never announced
-						this.hint("Desync Clause Mod activated!", false, target.side);
+						// the defender selected a counterable move that was never announced
+						this.hint("Desync Clause Mod activated!", false, defender.side);
 						this.hint(
 							"In Gen 1, from the Counter user's perspective, " +
-							"Counter uses the last announced move by the target's team to determine if it will succeed.",
-							false, target.side,
+							"Counter uses the last announced move by the defender's team to determine if it will succeed.",
+							false, defender.side,
 						);
 					}
 				}
@@ -215,12 +215,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!isLastSelectedMoveCounterable) {
 				// too obscure, don't hint
 			} else if (!isLastMoveCounterable) {
-				// the target selected a non-counterable move that was never announced
-				this.hint("Desync Clause Mod activated!", false, target.side);
+				// the defender selected a non-counterable move that was never announced
+				this.hint("Desync Clause Mod activated!", false, defender.side);
 				this.hint(
 					"In Gen 1, from the Counter user's perspective, " +
-					"Counter uses the last announced move by the target's team to determine if it will succeed.",
-					false, target.side,
+					"Counter uses the last announced move by the defender's team to determine if it will succeed.",
+					false, defender.side,
 				);
 			}
 
@@ -249,8 +249,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	disable: {
 		inherit: true,
-		onTryHit(target) {
-			return target.moveSlots.some(ms => ms.pp > 0);
+		onTryHit(defender) {
+			return defender.moveSlots.some(ms => ms.pp > 0);
 		},
 		condition: {
 			inherit: true,
@@ -262,11 +262,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-start', pokemon, 'Disable', moveSlot.move);
 				this.effectState.move = moveSlot.id;
 				this.effectState.slotIndex = slotIndex;
-				// 1-8 turns (which will in effect translate to 0-7 missed turns for the target)
+				// 1-8 turns (which will in effect translate to 0-7 missed turns for the defender)
 				this.effectState.time = this.random(1, 9);
 			},
 			onBeforeMovePriority: 6,
-			onBeforeMove(pokemon, target, move) {
+			onBeforeMove(pokemon, defender, move) {
 				pokemon.volatiles['disable'].time--;
 				if (!pokemon.volatiles['disable'].time) {
 					pokemon.removeVolatile('disable');
@@ -319,9 +319,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onTryMove(source, target) {
-			if (target.volatiles['mustrecharge']) {
-				target.removeVolatile('mustrecharge');
+		onTryMove(attacker, defender) {
+			if (defender.volatiles['mustrecharge']) {
+				defender.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},
@@ -365,12 +365,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	haze: {
 		inherit: true,
-		onHit(target, source) {
-			this.add('-activate', target, 'move: Haze');
+		onHit(defender, attacker) {
+			this.add('-activate', defender, 'move: Haze');
 			this.add('-clearallboost', '[silent]');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
-				if (pokemon !== source) {
+				if (pokemon !== attacker) {
 					if (['frz', 'slp'].includes(pokemon.status)) {
 						pokemon.side.lastSelectedMove = 'cannotmove' as ID;
 						pokemon.side.lastEnemySelectedMove = 'cannotmove' as ID;
@@ -418,14 +418,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	highjumpkick: {
 		inherit: true,
-		onMoveFail(target, source, move) {
-			this.directDamage(1, source, target);
+		onMoveFail(defender, attacker, move) {
+			this.directDamage(1, attacker, defender);
 		},
 	},
 	jumpkick: {
 		inherit: true,
-		onMoveFail(target, source, move) {
-			this.directDamage(1, source, target);
+		onMoveFail(defender, attacker, move) {
+			this.directDamage(1, attacker, defender);
 		},
 	},
 	karatechop: {
@@ -498,23 +498,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mimic: {
 		inherit: true,
 		flags: { protect: 1, bypasssub: 1, metronome: 1 },
-		onHit(target, source) {
-			const moveslot = source.side.lastSelectedMoveSlot;
-			const moves = target.moves;
+		onHit(defender, attacker) {
+			const moveslot = attacker.side.lastSelectedMoveSlot;
+			const moves = defender.moves;
 			const moveid = this.sample(moves);
 			if (!moveid) return false;
 			const move = this.dex.moves.get(moveid);
-			source.moveSlots[moveslot] = {
+			attacker.moveSlots[moveslot] = {
 				move: move.name,
 				id: move.id,
-				pp: source.moveSlots[moveslot].pp,
-				maxpp: this.calculatePP(move, source.ppUps[moveslot] || 0),
-				target: move.target,
+				pp: attacker.moveSlots[moveslot].pp,
+				maxpp: this.calculatePP(move, attacker.ppUps[moveslot] || 0),
+				defender: move.defender,
 				disabled: false,
 				used: false,
 				virtual: true,
 			};
-			this.add('-start', source, 'Mimic', move.name);
+			this.add('-start', attacker, 'Mimic', move.name);
 		},
 	},
 	minimize: {
@@ -540,9 +540,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryBoost(boost, target, source, effect) {
+			onTryBoost(boost, defender, attacker, effect) {
 				if (effect.effectType === 'Move' && effect.category !== 'Status') return;
-				if (source && target !== source) {
+				if (attacker && defender !== attacker) {
 					let showMsg = false;
 					let i: BoostID;
 					for (i in boost) {
@@ -552,7 +552,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					}
 					if (showMsg && !(effect as ActiveMove).secondaries) {
-						this.add('-activate', target, 'move: Mist');
+						this.add('-activate', defender, 'move: Mist');
 					}
 				}
 			},
@@ -604,14 +604,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		condition: {
 			// Rage lock
-			onStart(target, source, effect) {
+			onStart(defender, attacker, effect) {
 				this.effectState.move = 'rage';
 				this.effectState.accuracy = 255;
 			},
 			onLockMove: 'rage',
-			onHit(target, source, move) {
+			onHit(defender, attacker, move) {
 				// Disable and exploding moves boost Rage even if they miss/fail, so they are dealt with separately.
-				if (target.boosts.atk < 6 && (move.category !== 'Status' && !move.selfdestruct)) {
+				if (defender.boosts.atk < 6 && (move.category !== 'Status' && !move.selfdestruct)) {
 					this.boost({ atk: 1 });
 				}
 			},
@@ -639,12 +639,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	recover: {
 		inherit: true,
 		heal: undefined, // no inherit
-		onHit(target) {
-			if (target.hp === target.maxhp) return false;
+		onHit(defender) {
+			if (defender.hp === defender.maxhp) return false;
 			// Fail when health is 255 or 511 less than max, unless it is divisible by 256
 			if (
-				target.hp === target.maxhp ||
-				((target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) && target.hp % 256 !== 0)
+				defender.hp === defender.maxhp ||
+				((defender.hp === (defender.maxhp - 255) || defender.hp === (defender.maxhp - 511)) && defender.hp % 256 !== 0)
 			) {
 				this.hint(
 					"In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256, " +
@@ -652,7 +652,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				);
 				return false;
 			}
-			this.heal(Math.floor(target.maxhp / 2), target, target);
+			this.heal(Math.floor(defender.maxhp / 2), defender, defender);
 		},
 	},
 	reflect: {
@@ -674,12 +674,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	rest: {
 		inherit: true,
 		onTry: undefined, // no inherit
-		onHit(target, source, move) {
-			if (target.hp === target.maxhp) return false;
+		onHit(defender, attacker, move) {
+			if (defender.hp === defender.maxhp) return false;
 			// Fail when health is 255 or 511 less than max, unless it is divisible by 256
 			if (
-				target.hp === target.maxhp ||
-				((target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) && target.hp % 256 !== 0)
+				defender.hp === defender.maxhp ||
+				((defender.hp === (defender.maxhp - 255) || defender.hp === (defender.maxhp - 511)) && defender.hp % 256 !== 0)
 			) {
 				this.hint(
 					"In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256, " +
@@ -687,10 +687,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				);
 				return false;
 			}
-			if (!target.setStatus('slp', source, move)) return false;
-			target.statusState.time = 2;
-			target.statusState.startTime = 2;
-			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
+			if (!defender.setStatus('slp', attacker, move)) return false;
+			defender.statusState.time = 2;
+			defender.statusState.startTime = 2;
+			this.heal(defender.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 	},
 	roar: {
@@ -778,12 +778,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	softboiled: {
 		inherit: true,
 		heal: undefined, // no inherit
-		onHit(target) {
-			if (target.hp === target.maxhp) return false;
+		onHit(defender) {
+			if (defender.hp === defender.maxhp) return false;
 			// Fail when health is 255 or 511 less than max, unless it is divisible by 256
 			if (
-				target.hp === target.maxhp ||
-				((target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) && target.hp % 256 !== 0)
+				defender.hp === defender.maxhp ||
+				((defender.hp === (defender.maxhp - 255) || defender.hp === (defender.maxhp - 511)) && defender.hp % 256 !== 0)
 			) {
 				this.hint(
 					"In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256, " +
@@ -791,7 +791,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				);
 				return false;
 			}
-			this.heal(Math.floor(target.maxhp / 2), target, target);
+			this.heal(Math.floor(defender.maxhp / 2), defender, defender);
 		},
 	},
 	struggle: {
@@ -802,79 +802,79 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	substitute: {
 		inherit: true,
-		onTryHit(target) {
-			if (target.volatiles['substitute']) {
-				this.add('-fail', target, 'move: Substitute');
+		onTryHit(defender) {
+			if (defender.volatiles['substitute']) {
+				this.add('-fail', defender, 'move: Substitute');
 				return null;
 			}
 			// We only prevent when hp is less than one quarter.
 			// If you use substitute at exactly one quarter, you faint.
-			if (target.hp < target.maxhp / 4) {
-				this.add('-fail', target, 'move: Substitute', '[weak]');
+			if (defender.hp < defender.maxhp / 4) {
+				this.add('-fail', defender, 'move: Substitute', '[weak]');
 				return null;
 			}
 		},
-		onHit(target) {
+		onHit(defender) {
 			// If max HP is 3 or less substitute makes no damage
-			if (target.maxhp > 3) {
-				this.directDamage(target.maxhp / 4, target, target);
+			if (defender.maxhp > 3) {
+				this.directDamage(defender.maxhp / 4, defender, defender);
 			}
 		},
 		condition: {
 			inherit: true,
-			onStart(target) {
-				this.add('-start', target, 'Substitute');
-				this.effectState.hp = Math.floor(target.maxhp / 4) + 1;
-				if (target.volatiles['partiallytrapped']) {
-					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
-					delete target.volatiles['partiallytrapped'];
+			onStart(defender) {
+				this.add('-start', defender, 'Substitute');
+				this.effectState.hp = Math.floor(defender.maxhp / 4) + 1;
+				if (defender.volatiles['partiallytrapped']) {
+					this.add('-end', defender, defender.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
+					delete defender.volatiles['partiallytrapped'];
 				}
 			},
 			onTryPrimaryHit: undefined, // no inherit
 			onTryHitPriority: -1,
-			onTryHit(target, source, move) {
+			onTryHit(defender, attacker, move) {
 				if (move.category === 'Status') {
 					// In gen 1 it only blocks:
 					// poison, confusion, secondary effect confusion, stat reducing moves and Leech Seed.
 					const SubBlocked = ['lockon', 'meanlook', 'mindreader', 'nightmare'];
 					if (
-						move.status === 'psn' || move.status === 'tox' || (move.boosts && target !== source) ||
+						move.status === 'psn' || move.status === 'tox' || (move.boosts && defender !== attacker) ||
 						move.volatileStatus === 'confusion' || SubBlocked.includes(move.id)
 					) {
 						return false;
 					}
 					return;
 				}
-				if (move.volatileStatus && target === source) return;
+				if (move.volatileStatus && defender === attacker) return;
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
-				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
-				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
+				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(attacker, defender, move);
+				if (move.id === 'bide') uncappedDamage = attacker.volatiles['bide'].damage * 2;
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
 				this.lastDamage = uncappedDamage;
-				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
-					target.volatiles['substitute'].hp : uncappedDamage;
-				if (target.volatiles['substitute'].hp <= 0) {
-					target.removeVolatile('substitute');
-					target.subFainted = true;
+				defender.volatiles['substitute'].hp -= uncappedDamage > defender.volatiles['substitute'].hp ?
+					defender.volatiles['substitute'].hp : uncappedDamage;
+				if (defender.volatiles['substitute'].hp <= 0) {
+					defender.removeVolatile('substitute');
+					defender.subFainted = true;
 				} else {
-					this.add('-activate', target, 'Substitute', '[damage]');
+					this.add('-activate', defender, 'Substitute', '[damage]');
 				}
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
-				if (target.volatiles['substitute']) {
+				if (defender.volatiles['substitute']) {
 					if (uncappedDamage) {
-						this.actions.applyRecoilDamage(uncappedDamage, move, source);
+						this.actions.applyRecoilDamage(uncappedDamage, move, attacker);
 					}
 					if (move.drain) {
 						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);
 						this.lastDamage = amount;
-						this.heal(amount, source, target, 'drain');
+						this.heal(amount, attacker, defender, 'drain');
 					}
 					if (move.secondary?.volatileStatus === 'confusion') {
 						const secondary = move.secondary;
 						if (secondary.chance === undefined || this.randomChance(Math.ceil(secondary.chance * 256 / 100) - 1, 256)) {
-							target.addVolatile(move.secondary.volatileStatus, source, move);
+							defender.addVolatile(move.secondary.volatileStatus, attacker, move);
 							this.hint(
 								"In Gen 1, moves that inflict confusion as a secondary effect can confuse targets with a Substitute, " +
 								"as long as the move does not break the Substitute."
@@ -882,11 +882,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					}
 				}
-				this.runEvent('AfterSubDamage', target, source, move, uncappedDamage);
+				this.runEvent('AfterSubDamage', defender, attacker, move, uncappedDamage);
 				// Add here counter damage
-				const lastAttackedBy = target.getLastAttackedBy();
+				const lastAttackedBy = defender.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({ source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true });
+					defender.attackedBy.push({ attacker, move: move.id, damage: uncappedDamage, slot: attacker.getSlot(), thisTurn: true });
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = uncappedDamage;
@@ -934,9 +934,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onTryMove(source, target) {
-			if (target.volatiles['mustrecharge']) {
-				target.removeVolatile('mustrecharge');
+		onTryMove(attacker, defender) {
+			if (defender.volatiles['mustrecharge']) {
+				defender.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},

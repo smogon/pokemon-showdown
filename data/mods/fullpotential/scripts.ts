@@ -1,7 +1,7 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	actions: {
-		getDamage(source, target, move, suppressMessages) {
+		getDamage(attacker, defender, move, suppressMessages) {
 			if (typeof move === 'string') move = this.dex.getActiveMove(move);
 
 			if (typeof move === 'number') {
@@ -15,27 +15,27 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.hit = 0;
 			}
 
-			if (!target.runImmunity(move, !suppressMessages)) {
+			if (!defender.runImmunity(move, !suppressMessages)) {
 				return false;
 			}
 
-			if (move.ohko) return target.maxhp;
-			if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
+			if (move.ohko) return defender.maxhp;
+			if (move.damageCallback) return move.damageCallback.call(this.battle, attacker, defender);
 			if (move.damage === 'level') {
-				return source.level;
+				return attacker.level;
 			} else if (move.damage) {
 				return move.damage;
 			}
 
 			let basePower: number | false | null = move.basePower;
 			if (move.basePowerCallback) {
-				basePower = move.basePowerCallback.call(this.battle, source, target, move);
+				basePower = move.basePowerCallback.call(this.battle, attacker, defender, move);
 			}
 			if (!basePower) return basePower === 0 ? undefined : basePower;
 			basePower = this.battle.clampIntRange(basePower, 1);
 
 			let critMult;
-			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
+			let critRatio = this.battle.runEvent('ModifyCritRatio', attacker, defender, move, move.critRatio || 0);
 			if (this.battle.gen <= 5) {
 				critRatio = this.battle.clampIntRange(critRatio, 0, 5);
 				critMult = [0, 16, 8, 4, 3, 2];
@@ -48,7 +48,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			const moveHit = target.getMoveHitData(move);
+			const moveHit = defender.getMoveHitData(move);
 			moveHit.crit = move.willCrit || false;
 			if (move.willCrit === undefined) {
 				if (critRatio) {
@@ -57,23 +57,23 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (moveHit.crit) {
-				moveHit.crit = this.battle.runEvent('CriticalHit', target, null, move);
+				moveHit.crit = this.battle.runEvent('CriticalHit', defender, null, move);
 			}
 
 			// happens after crit calculation
-			basePower = this.battle.runEvent('BasePower', source, target, move, basePower, true);
+			basePower = this.battle.runEvent('BasePower', attacker, defender, move, basePower, true);
 
 			if (!basePower) return 0;
 			basePower = this.battle.clampIntRange(basePower, 1);
 			// Hacked Max Moves have 0 base power, even if you Dynamax
-			if ((!source.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
+			if ((!attacker.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
 				basePower = 0;
 			}
 
-			const level = source.level;
+			const level = attacker.level;
 
-			const attacker = move.overrideOffensivePokemon === 'target' ? target : source;
-			const defender = move.overrideDefensivePokemon === 'source' ? source : target;
+			const attacker = move.overrideOffensivePokemon === 'defender' ? defender : attacker;
+			const defender = move.overrideDefensivePokemon === 'attacker' ? attacker : defender;
 
 			const isPhysical = move.category === 'Physical';
 			const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
@@ -107,15 +107,15 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.debug('Negating (sp)atk boost/penalty.');
 					atkBoosts = 0;
 				}
-				attack = attacker.calculateStat(attackStat as any, atkBoosts, 1, source);
-				attack = this.battle.runEvent('Modify' + (statTable as any)[attackStat], source, target, move, attack);
+				attack = attacker.calculateStat(attackStat as any, atkBoosts, 1, attacker);
+				attack = this.battle.runEvent('Modify' + (statTable as any)[attackStat], attacker, defender, move, attack);
 				if (attack > maxAttack) maxAttack = attack;
 			}
 
-			let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
+			let defense = defender.calculateStat(defenseStat, defBoosts, 1, defender);
 
 			// Apply Stat Modifiers
-			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);
+			defense = this.battle.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 			if (this.battle.gen <= 4 && ['explosion', 'selfdestruct'].includes(move.id) && defenseStat === 'def') {
 				defense = this.battle.clampIntRange(Math.floor(defense / 2), 1);
@@ -127,7 +127,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * maxAttack) / defense) / 50);
 
 			// Calculate damage modifiers separately (order differs between generations)
-			return this.modifyDamage(baseDamage, source, target, move, suppressMessages);
+			return this.modifyDamage(baseDamage, attacker, defender, move, suppressMessages);
 		},
 	},
 };

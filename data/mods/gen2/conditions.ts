@@ -2,8 +2,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'brn');
+		onStart(defender) {
+			this.add('-status', defender, 'brn');
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
@@ -27,21 +27,21 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				this.add('-status', defender, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
-				this.add('-status', target, 'slp');
+				this.add('-status', defender, 'slp');
 			}
 			// 1-6 turns
 			this.effectState.time = this.random(2, 8);
 
-			if (target.removeVolatile('nightmare')) {
-				this.add('-end', target, 'Nightmare', '[silent]');
+			if (defender.removeVolatile('nightmare')) {
+				this.add('-end', defender, 'Nightmare', '[silent]');
 			}
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
@@ -57,19 +57,19 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	frz: {
 		name: 'frz',
 		inherit: true,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (move.flags['defrost']) return;
 			this.add('cant', pokemon, 'frz');
 			return false;
 		},
 		onModifyMove: undefined, // no inherit
 		onDamagingHit: undefined, // no inherit
-		onAfterMoveSecondary(target, source, move) {
+		onAfterMoveSecondary(defender, attacker, move) {
 			if ((move.secondary?.status === 'brn') || move.statusRoll === 'brn') {
-				target.cureStatus();
+				defender.cureStatus();
 			}
 		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, defender, move) {
 			if (move.flags['defrost']) pokemon.cureStatus();
 		},
 		onResidualOrder: 7,
@@ -80,8 +80,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	psn: {
 		name: 'psn',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'psn');
+		onStart(defender) {
+			this.add('-status', defender, 'psn');
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
@@ -94,10 +94,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	tox: {
 		name: 'tox',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'tox');
-			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
-			target.volatiles['residualdmg'].counter = 0;
+		onStart(defender) {
+			this.add('-status', defender, 'tox');
+			if (!defender.volatiles['residualdmg']) defender.addVolatile('residualdmg');
+			defender.volatiles['residualdmg'].counter = 0;
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
@@ -115,11 +115,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	confusion: {
 		inherit: true,
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.id === 'lockedmove') {
-				this.add('-start', target, 'confusion', '[silent]');
+				this.add('-start', defender, 'confusion', '[silent]');
 			} else {
-				this.add('-start', target, 'confusion');
+				this.add('-start', defender, 'confusion');
 			}
 			if (sourceEffect?.id === 'berserkgene') {
 				this.effectState.time = 256;
@@ -127,7 +127,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.effectState.time = this.random(2, 6);
 			}
 		},
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			pokemon.volatiles['confusion'].time--;
 			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');
@@ -156,7 +156,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	partiallytrapped: {
 		inherit: true,
-		durationCallback(target, source) {
+		durationCallback(defender, attacker) {
 			return this.random(3, 6);
 		},
 		onResidualOrder: 3,
@@ -168,13 +168,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		durationCallback() {
 			return this.random(2, 4);
 		},
-		onResidual(target) {
-			if ((target.lastMove?.id === 'struggle') || target.status === 'slp') {
+		onResidual(defender) {
+			if ((defender.lastMove?.id === 'struggle') || defender.status === 'slp') {
 				// don't lock, and bypass confusion for calming
-				delete target.volatiles['lockedmove'];
+				delete defender.volatiles['lockedmove'];
 			}
 		},
-		onStart(target, source, effect) {
+		onStart(defender, attacker, effect) {
 			this.effectState.move = effect.id;
 		},
 		onAfterMove(pokemon) {
@@ -182,10 +182,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				pokemon.removeVolatile('lockedmove');
 			}
 		},
-		onEnd(target) {
+		onEnd(defender) {
 			// Confusion begins even if already confused
-			delete target.volatiles['confusion'];
-			if (!target.side.getSideCondition('safeguard')) target.addVolatile('confusion');
+			delete defender.volatiles['confusion'];
+			if (!defender.side.getSideCondition('safeguard')) defender.addVolatile('confusion');
 		},
 		onLockMove() {
 			return this.effectState.move;
@@ -209,8 +209,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	sandstorm: {
 		inherit: true,
 		onFieldResidualOrder: 2,
-		onWeather(target) {
-			this.damage(target.baseMaxhp / 8);
+		onWeather(defender) {
+			this.damage(defender.baseMaxhp / 8);
 		},
 	},
 	stall: {
@@ -231,8 +231,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	residualdmg: {
 		name: 'residualdmg',
-		onStart(target) {
-			target.volatiles['residualdmg'].counter = 0;
+		onStart(defender) {
+			defender.volatiles['residualdmg'].counter = 0;
 		},
 		onAfterMoveSelfPriority: 100,
 		onAfterMoveSelf(pokemon) {

@@ -966,7 +966,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	accuracymovesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Accuracy Moves Clause',
-		desc: "Bans moves that have a chance to lower the target's accuracy when used",
+		desc: "Bans moves that have a chance to lower the defender's accuracy when used",
 		banlist: [
 			'Flash', 'Kinesis', 'Leaf Tornado', 'Mirror Shot', 'Mud Bomb', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'Octazooka', 'Sand Attack', 'Smokescreen',
 		],
@@ -1364,14 +1364,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
-		onSetStatus(status, target, source) {
-			if (source?.isAlly(target)) {
+		onSetStatus(status, defender, attacker) {
+			if (attacker?.isAlly(defender)) {
 				return;
 			}
 			if (status.id === 'slp') {
-				for (const pokemon of target.side.pokemon) {
+				for (const pokemon of defender.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusState.source?.isAlly(pokemon)) {
+						if (!pokemon.statusState.attacker?.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							this.hint("Sleep Clause Mod prevents players from putting more than one of their opponent's Pokemon to sleep at a time");
 							return false;
@@ -1388,12 +1388,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Stadium Sleep Clause: Limit one foe put to sleep');
 		},
-		onSetStatus(status, target, source) {
-			if (source?.isAlly(target)) {
+		onSetStatus(status, defender, attacker) {
+			if (attacker?.isAlly(defender)) {
 				return;
 			}
 			if (status.id === 'slp') {
-				for (const pokemon of target.side.pokemon) {
+				for (const pokemon of defender.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
 						this.add('-message', "Sleep Clause activated. (In official formats, Sleep Clause activates if any of the opponent's Pokemon are asleep, even if self-inflicted from Rest)");
 						return false;
@@ -1436,12 +1436,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
-		onSetStatus(status, target, source) {
-			if (source?.isAlly(target)) {
+		onSetStatus(status, defender, attacker) {
+			if (attacker?.isAlly(defender)) {
 				return;
 			}
 			if (status.id === 'frz') {
-				for (const pokemon of target.side.pokemon) {
+				for (const pokemon of defender.side.pokemon) {
 					if (pokemon.status === 'frz') {
 						this.add('-message', 'Freeze Clause activated.');
 						return false;
@@ -1457,7 +1457,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'No Freeze Mod: Moves can\'t freeze Pokemon');
 		},
-		onSetStatus(status, target, source) {
+		onSetStatus(status, defender, attacker) {
 			if (status.id === 'frz') {
 				this.add('-message', 'No Freeze Mod activated.');
 				return false;
@@ -1618,7 +1618,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Inverse Mod: Weaknesses become resistances, while resistances and immunities become weaknesses.');
 		},
 		onEffectivenessPriority: 1,
-		onEffectiveness(typeMod, target, type, move) {
+		onEffectiveness(typeMod, defender, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move?.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.dex.getImmunity(move, type)) return 1;
@@ -1763,10 +1763,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Camomons Mod: Pokemon have their types set to match their first two moves.');
 		},
 		onModifySpeciesPriority: 2,
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // Chat command
+		onModifySpecies(species, defender, attacker, effect) {
+			if (!defender) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
-			const types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.moves.get(move.id).type))];
+			const types = [...new Set(defender.baseMoveSlots.slice(0, 2).map(move => this.dex.moves.get(move.id).type))];
 			return { ...species, types };
 		},
 		onSwitchIn(pokemon) {
@@ -2282,11 +2282,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Bonus Type Mod: Pokemon have their Tera Type added onto their current ones.');
 		},
 		onModifySpeciesPriority: 1,
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // Chat command
+		onModifySpecies(species, defender, attacker, effect) {
+			if (!defender) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const typesSet = new Set(species.types);
-			const bonusType = this.dex.types.get(target.teraType);
+			const bonusType = this.dex.types.get(defender.teraType);
 			if (bonusType.exists) typesSet.add(bonusType.name);
 			return { ...species, types: [...typesSet] };
 		},
@@ -2304,8 +2304,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'First Blood Rule: The first team to have a Pokemon faint loses.');
 		},
-		onFaint(target) {
-			this.lose(target.side);
+		onFaint(defender) {
+			this.lose(defender.side);
 		},
 	},
 	tiershiftmod: {
@@ -2316,7 +2316,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Tier Shift Mod: Pokemon get stat buffs depending on their tier, excluding HP.');
 		},
-		onModifySpecies(species, target, source, effect) {
+		onModifySpecies(species, defender, attacker, effect) {
 			if (!species.baseStats) return;
 			const boosts: { [tier: string]: number } = {
 				uu: 15,
@@ -2336,12 +2336,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
-			if (target && !isNatDex) {
-				if (this.toID(target.set.item) === 'lightclay' && tiers.indexOf(tier) > tiers.indexOf('rubl')) tier = 'rubl';
-				if (this.toID(target.set.item) === 'quickclaw' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
-				if (this.toID(target.set.ability) === 'drought' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
-				if (this.toID(target.set.item) === 'damprock' && tiers.indexOf(tier) > tiers.indexOf('publ')) tier = 'publ';
-				if (this.toID(target.set.item) === 'unburden' && tiers.indexOf(tier) > tiers.indexOf('zubl')) tier = 'zubl';
+			if (defender && !isNatDex) {
+				if (this.toID(defender.set.item) === 'lightclay' && tiers.indexOf(tier) > tiers.indexOf('rubl')) tier = 'rubl';
+				if (this.toID(defender.set.item) === 'quickclaw' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
+				if (this.toID(defender.set.ability) === 'drought' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
+				if (this.toID(defender.set.item) === 'damprock' && tiers.indexOf(tier) > tiers.indexOf('publ')) tier = 'publ';
+				if (this.toID(defender.set.item) === 'unburden' && tiers.indexOf(tier) > tiers.indexOf('zubl')) tier = 'zubl';
 			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
@@ -2375,7 +2375,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			return problems;
 		},
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, pokemon, defender) {
 			const types = pokemon.getTypes(true);
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
@@ -2394,7 +2394,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Re-Evolution Mod: Pokemon gain the boosts they would gain from evolving again');
 		},
-		onModifySpecies(species, target) {
+		onModifySpecies(species, defender) {
 			const newSpecies = this.dex.deepClone(species);
 			const baseSpecies = this.dex.species.get(
 				(Array.isArray(species.battleOnly) ? species.battleOnly[0] : species.battleOnly) || species.changesFrom || species.name
@@ -2456,19 +2456,19 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onModifyMove(move) {
 			if (move.id === 'knockoff') {
-				move.onBasePower = function (basePower, source, target, m) {
-					const item = target.getItem();
-					if (!this.singleEvent('TakeItem', item, target.itemState, target, target, m, item)) return;
+				move.onBasePower = function (basePower, attacker, defender, m) {
+					const item = defender.getItem();
+					if (!this.singleEvent('TakeItem', item, defender.itemState, defender, defender, m, item)) return;
 					// Very hardcode but I'd prefer to not make a mod for one damage calculation change
 					if (item.id && !/^tr\d\d/i.test(item.id)) {
 						return this.chainModify(1.5);
 					}
 				};
 			} else if (move.id === 'fling') {
-				move.onPrepareHit = function (target, source, m) {
-					if (source.ignoringItem()) return false;
-					const item = source.getItem();
-					if (!this.singleEvent('TakeItem', item, source.itemState, source, source, m, item)) return false;
+				move.onPrepareHit = function (defender, attacker, m) {
+					if (attacker.ignoringItem()) return false;
+					const item = attacker.getItem();
+					if (!this.singleEvent('TakeItem', item, attacker.itemState, attacker, attacker, m, item)) return false;
 					if (!item.fling) return false;
 					if (/^tr\d\d/i.test(item.id)) return false;
 					m.basePower = item.fling.basePower;
@@ -2490,7 +2490,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							m.secondaries.push({ volatileStatus: item.fling.volatileStatus });
 						}
 					}
-					source.addVolatile('fling');
+					attacker.addVolatile('fling');
 				};
 			}
 		},
@@ -2506,7 +2506,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							move: move.name,
 							pp,
 							maxpp: pp,
-							target: move.target,
+							defender: move.defender,
 							disabled: false,
 							disabledSource: '',
 							used: false,
@@ -2532,10 +2532,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				pokemon.m.trueLastMoveSlot = pokemon.baseMoveSlots[pokemon.baseMoveSlots.length - 1];
 			}
 		},
-		onFaint(target) {
-			const allies = target.side.pokemon.filter(ally => ally && target !== ally);
+		onFaint(defender) {
+			const allies = defender.side.pokemon.filter(ally => ally && defender !== ally);
 			for (const ally of allies) {
-				ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.m.trueLastMoveSlot];
+				ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, defender.m.trueLastMoveSlot];
 			}
 		},
 	},
@@ -2546,7 +2546,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Category Swap Mod: All physical moves become special, and vice versa');
 		},
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, pokemon, defender) {
 			if (move.category === "Status") return;
 
 			if (move.category === "Physical") {
@@ -2557,11 +2557,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 			switch (move.id) {
 			case 'doomdesire': {
-				move.onTry = function (source, subtarget) {
+				move.onTry = function (attacker, subtarget) {
 					if (!subtarget.side.addSlotCondition(subtarget, 'futuremove')) return false;
 					Object.assign(subtarget.side.slotConditions[subtarget.position]['futuremove'], {
 						move: 'doomdesire',
-						source,
+						attacker,
 						moveData: {
 							id: 'doomdesire',
 							name: "Doom Desire",
@@ -2574,18 +2574,18 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							type: 'Steel',
 						},
 					});
-					this.add('-start', source, 'Doom Desire');
+					this.add('-start', attacker, 'Doom Desire');
 					return this.NOT_FAIL;
 				};
 				break;
 			}
 			case 'futuresight': {
-				move.onTry = function (source, subtarget) {
+				move.onTry = function (attacker, subtarget) {
 					if (!subtarget.side.addSlotCondition(subtarget, 'futuremove')) return false;
 					Object.assign(subtarget.side.slotConditions[subtarget.position]['futuremove'], {
 						duration: 3,
 						move: 'futuresight',
-						source,
+						attacker,
 						moveData: {
 							id: 'futuresight',
 							name: "Future Sight",
@@ -2599,7 +2599,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							type: 'Psychic',
 						},
 					});
-					this.add('-start', source, 'move: Future Sight');
+					this.add('-start', attacker, 'move: Future Sight');
 					return this.NOT_FAIL;
 				};
 				break;
@@ -2612,12 +2612,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				break;
 			}
 			case 'shellsidearm': {
-				if (!target) return;
+				if (!defender) return;
 				move.category = 'Special';
 				const atk = pokemon.getStat('atk', false, true);
 				const spa = pokemon.getStat('spa', false, true);
-				const def = target.getStat('def', false, true);
-				const spd = target.getStat('spd', false, true);
+				const def = defender.getStat('def', false, true);
+				const spd = defender.getStat('spd', false, true);
 				const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
 				const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
 				if (physical > special || (physical === special && this.randomChance(1, 2))) {
@@ -2660,9 +2660,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 		onModifySpeciesPriority: 3,
-		onModifySpecies(species, target, source) {
-			if (source || !target?.side) return;
-			const god = target.side.team.find(set => {
+		onModifySpecies(species, defender, attacker) {
+			if (attacker || !defender?.side) return;
+			const god = defender.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
 				if (this.toID(set.ability) === 'powerconstruct' && this.ruleTable.isRestricted('ability:powerconstruct')) {
 					return true;
@@ -2678,8 +2678,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				const isGod = this.ruleTable.isRestrictedSpecies(godSpecies);
 				return isGod;
-			}) || target.side.team[0];
-			const stat = this.dex.stats.ids()[target.side.team.indexOf(target.set)];
+			}) || defender.side.team[0];
+			const stat = this.dex.stats.ids()[defender.side.team.indexOf(defender.set)];
 			const newSpecies = this.dex.deepClone(species);
 			let godSpecies = this.dex.species.get(god.species);
 			if (typeof godSpecies.battleOnly === 'string') {
@@ -2701,9 +2701,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'VoltTurn Mayhem Mod: Every move that targets a foe causes the user to switch out after use');
 		},
-		onModifyMove(move, source, target) {
+		onModifyMove(move, attacker, defender) {
 			const validTargets = ['adjacentFoe', 'allAdjacent', 'allAdjacentFoes', 'any', 'normal', 'randomNormal', 'scripted'];
-			if (!validTargets.includes(move.target)) return;
+			if (!validTargets.includes(move.defender)) return;
 			move.selfSwitch = true;
 		},
 	},
@@ -2852,10 +2852,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 			}
 		},
-		onModifySpecies(species, target, source, effect) {
-			if (!target) return;
+		onModifySpecies(species, defender, attacker, effect) {
+			if (!defender) return;
 			const newSpecies = this.dex.deepClone(species);
-			const fusionName = target.set.name;
+			const fusionName = defender.set.name;
 			if (!fusionName || fusionName === newSpecies.name) return;
 			const fusionSpecies = this.dex.deepClone(this.dex.species.get(fusionName));
 			newSpecies.bst = newSpecies.baseStats.hp;
@@ -2875,12 +2875,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Protean Palace Mod: Pokemon become the type of the move they use.');
 		},
-		onPrepareHit(source, target, move) {
+		onPrepareHit(attacker, defender, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
-			if (type && type !== '???' && source.getTypes().join() !== type) {
-				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
+			if (type && type !== '???' && attacker.getTypes().join() !== type) {
+				if (!attacker.setType(type)) return;
+				this.add('-start', attacker, 'typechange', type, '[from] ability: Protean');
 			}
 		},
 	},
@@ -3060,7 +3060,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			let buf = '<li class="result">';
 			buf += `<span class="col numcol">${species.tier}</span> `;
 			buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
-			buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://dex.pokemonshowdown.com/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+			buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://dex.pokemonshowdown.com/pokemon/${species.id}" defender="_blank">${species.name}</a></span> `;
 			buf += '<span class="col typecol">';
 			if (species.types) {
 				for (const type of species.types) {
@@ -3109,16 +3109,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			this.add(`raw|${buf}`);
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (target.hasAbility('illusion') && !target.m.revealed) {
-				const species = target.species;
+		onDamagingHit(damage, defender, attacker, move) {
+			if (defender.hasAbility('illusion') && !defender.m.revealed) {
+				const species = defender.species;
 				const gen = this.gen;
 
 				// Recreation of Chat.getDataPokemonHTML
 				let buf = '<li class="result">';
 				buf += `<span class="col numcol">${species.tier}</span> `;
 				buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
-				buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://dex.pokemonshowdown.com/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+				buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://dex.pokemonshowdown.com/pokemon/${species.id}" defender="_blank">${species.name}</a></span> `;
 				buf += '<span class="col typecol">';
 				if (species.types) {
 					for (const type of species.types) {
@@ -3161,9 +3161,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				buf += '</li>';
 				buf = `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 
-				this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[silent]');
+				this.add('-start', defender, 'typechange', defender.getTypes(true).join('/'), '[silent]');
 				this.add(`raw|${buf}`);
-				target.m.revealed = true;
+				defender.m.revealed = true;
 			}
 		},
 	},

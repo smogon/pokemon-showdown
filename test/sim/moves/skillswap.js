@@ -24,7 +24,7 @@ describe('Skill Swap', () => {
 		let wynaut = battle.p1.active[0];
 		let ferroseed = battle.p2.active[0];
 
-		// user: Moxie; target: Overcoat; expected: success
+		// user: Moxie; defender: Overcoat; expected: success
 		battle.makeChoices('move skillswap', 'move sleeptalk');
 		assert.equal(wynaut.ability, 'overcoat');
 		assert.equal(ferroseed.ability, 'moxie');
@@ -32,28 +32,28 @@ describe('Skill Swap', () => {
 		// Skill Swap the abilities back
 		battle.makeChoices('move skillswap', 'move sleeptalk');
 
-		// user: Moxie; target: Schooling; expected: failure
+		// user: Moxie; defender: Schooling; expected: failure
 		battle.makeChoices('move skillswap', 'switch 2');
 		wynaut = battle.p1.active[0];
 		ferroseed = battle.p2.active[0];
 		assert.equal(wynaut.ability, 'moxie');
 		assert.equal(ferroseed.ability, 'schooling');
 
-		// user: Moxie; target: Wonder Guard; expected: failure
+		// user: Moxie; defender: Wonder Guard; expected: failure
 		battle.makeChoices('move skillswap', 'switch 3');
 		wynaut = battle.p1.active[0];
 		ferroseed = battle.p2.active[0];
 		assert.equal(wynaut.ability, 'moxie');
 		assert.equal(ferroseed.ability, 'wonderguard');
 
-		// user: Wonder Guard; target: Moxie; expected: failure
+		// user: Wonder Guard; defender: Moxie; expected: failure
 		battle.makeChoices('move sleeptalk', 'move skillswap');
 		wynaut = battle.p1.active[0];
 		ferroseed = battle.p2.active[0];
 		assert.equal(wynaut.ability, 'moxie');
 		assert.equal(ferroseed.ability, 'wonderguard');
 
-		// user: Schooling; target: Moxie; expected: failure
+		// user: Schooling; defender: Moxie; expected: failure
 		battle.makeChoices('move sleeptalk', 'switch 3');
 		battle.makeChoices('move sleeptalk', 'move skillswap');
 		wynaut = battle.p1.active[0];

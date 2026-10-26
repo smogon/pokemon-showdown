@@ -30,11 +30,11 @@ import { type Move } from './dex-moves';
 export interface ChosenAction {
 	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
 	pokemon?: Pokemon; // the pokemon doing the action
-	targetLoc?: number; // relative location of the target to pokemon (move action only)
+	targetLoc?: number; // relative location of the defender to pokemon (move action only)
 	moveid?: string; // a move to use (move action only)
 	move?: ActiveMove; // the active move corresponding to moveid (move action only)
 	moveSlot?: number; // the move's index in the Pokémon's moveset (undefined if submitted through the "Fight" button)
-	target?: Pokemon; // the target of the action
+	defender?: Pokemon; // the defender of the action
 	index?: number; // the chosen index in Team Preview
 	side?: Side; // the action's side
 	mega?: boolean | null; // true if megaing or ultra bursting
@@ -97,7 +97,7 @@ export interface MoveRequestData {
 	id: ID;
 	pp?: number;
 	maxpp?: number;
-	target?: string;
+	defender?: string;
 	disabled?: string | boolean;
 	disabledSource?: string;
 };
@@ -118,7 +118,7 @@ export interface PokemonMoveRequestData {
 	canTerastallize?: string;
 }
 export interface DynamaxOptions {
-	maxMoves: ({ move: string, target: MoveTarget, disabled?: boolean })[];
+	maxMoves: ({ move: string, defender: MoveTarget, disabled?: boolean })[];
 	gigantamax?: string;
 }
 export interface SideRequestData {
@@ -341,7 +341,7 @@ export class Side {
 			case 'switch':
 			case 'instaswitch':
 			case 'revivalblessing':
-				return `switch ${action.target!.position + 1}`;
+				return `switch ${action.defender!.position + 1}`;
 			case 'team':
 				return `team ${action.pokemon!.position + 1}`;
 			default:
@@ -411,34 +411,34 @@ export class Side {
 	}
 
 	addSideCondition(
-		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+		status: string | Condition, attacker: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
 	): boolean {
-		if (!source && this.battle.event?.target) source = this.battle.event.target;
-		if (source === 'debug') source = this.active[0];
-		if (!source) throw new Error(`setting sidecond without a source`);
-		if (!source.getSlot) source = (source as any as Side).active[0];
+		if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
+		if (attacker === 'debug') attacker = this.active[0];
+		if (!attacker) throw new Error(`setting sidecond without a attacker`);
+		if (!attacker.getSlot) attacker = (attacker as any as Side).active[0];
 
 		status = this.battle.dex.conditions.get(status);
 		if (this.sideConditions[status.id]) {
 			if (!(status as any).onSideRestart) return false;
-			return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
+			return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, attacker, sourceEffect);
 		}
 		this.sideConditions[status.id] = this.battle.initEffectState({
 			id: status.id,
-			target: this,
-			source,
-			sourceSlot: source.getSlot(),
+			defender: this,
+			attacker,
+			sourceSlot: attacker.getSlot(),
 			duration: status.duration,
 		});
 		if (status.durationCallback) {
 			this.sideConditions[status.id].duration =
-				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+				status.durationCallback.call(this.battle, this.active[0], attacker, sourceEffect);
 		}
-		if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, source, sourceEffect)) {
+		if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, attacker, sourceEffect)) {
 			delete this.sideConditions[status.id];
 			return false;
 		}
-		this.battle.runEvent('SideConditionStart', this, source, status);
+		this.battle.runEvent('SideConditionStart', this, attacker, status);
 		return true;
 	}
 
@@ -462,51 +462,51 @@ export class Side {
 	}
 
 	addSlotCondition(
-		target: Pokemon | number, status: string | Condition, source: Pokemon | 'debug' | null = null,
+		defender: Pokemon | number, status: string | Condition, attacker: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null
 	) {
-		source ??= this.battle.event?.target || null;
-		if (source === 'debug') source = this.active[0];
-		if (target instanceof Pokemon) target = target.position;
-		if (!source) throw new Error(`setting sidecond without a source`);
+		attacker ??= this.battle.event?.defender || null;
+		if (attacker === 'debug') attacker = this.active[0];
+		if (defender instanceof Pokemon) defender = defender.position;
+		if (!attacker) throw new Error(`setting sidecond without a attacker`);
 
 		status = this.battle.dex.conditions.get(status);
-		if (this.slotConditions[target][status.id]) {
+		if (this.slotConditions[defender][status.id]) {
 			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
+			return this.battle.singleEvent('Restart', status, this.slotConditions[defender][status.id], this, attacker, sourceEffect);
 		}
-		const conditionState = this.slotConditions[target][status.id] = this.battle.initEffectState({
+		const conditionState = this.slotConditions[defender][status.id] = this.battle.initEffectState({
 			id: status.id,
-			target: this,
-			source,
-			sourceSlot: source.getSlot(),
+			defender: this,
+			attacker,
+			sourceSlot: attacker.getSlot(),
 			isSlotCondition: true,
 			duration: status.duration,
 		});
 		if (status.durationCallback) {
 			conditionState.duration =
-				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+				status.durationCallback.call(this.battle, this.active[0], attacker, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, conditionState, this.active[target], source, sourceEffect)) {
-			delete this.slotConditions[target][status.id];
+		if (!this.battle.singleEvent('Start', status, conditionState, this.active[defender], attacker, sourceEffect)) {
+			delete this.slotConditions[defender][status.id];
 			return false;
 		}
 		return true;
 	}
 
-	getSlotCondition(target: Pokemon | number, status: string | Effect) {
-		if (target instanceof Pokemon) target = target.position;
+	getSlotCondition(defender: Pokemon | number, status: string | Effect) {
+		if (defender instanceof Pokemon) defender = defender.position;
 		status = this.battle.dex.conditions.get(status) as Effect;
-		if (!this.slotConditions[target][status.id]) return null;
+		if (!this.slotConditions[defender][status.id]) return null;
 		return status;
 	}
 
-	removeSlotCondition(target: Pokemon | number, status: string | Effect) {
-		if (target instanceof Pokemon) target = target.position;
+	removeSlotCondition(defender: Pokemon | number, status: string | Effect) {
+		if (defender instanceof Pokemon) defender = defender.position;
 		status = this.battle.dex.conditions.get(status) as Effect;
-		if (!this.slotConditions[target][status.id]) return false;
-		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
-		delete this.slotConditions[target][status.id];
+		if (!this.slotConditions[defender][status.id]) return false;
+		this.battle.singleEvent('End', status, this.slotConditions[defender][status.id], this.active[defender]);
+		delete this.slotConditions[defender][status.id];
 		return true;
 	}
 
@@ -580,7 +580,7 @@ export class Side {
 			}
 			moveSlot = moveIndex;
 			moveid = request.moves[moveIndex].id;
-			targetType = request.moves[moveIndex].target!;
+			targetType = request.moves[moveIndex].defender!;
 		} else {
 			// Parse a move ID.
 			// Move names are also allowed, but may cause ambiguity (see client issue #167).
@@ -591,7 +591,7 @@ export class Side {
 			for (const [i, move] of request.moves.entries()) {
 				if (move.id !== moveid) continue;
 				moveSlot = i;
-				targetType = move.target || 'normal';
+				targetType = move.defender || 'normal';
 				break;
 			}
 			if (!targetType && ['', 'dynamax'].includes(event) && request.maxMoves) {
@@ -599,7 +599,7 @@ export class Side {
 					if (moveid === moveRequest.move) {
 						moveid = request.moves[i].id;
 						moveSlot = i;
-						targetType = moveRequest.target;
+						targetType = moveRequest.defender;
 						event = 'dynamax';
 						break;
 					}
@@ -611,7 +611,7 @@ export class Side {
 					if (moveid === toID(moveRequest.move)) {
 						moveid = request.moves[i].id;
 						moveSlot = i;
-						targetType = moveRequest.target;
+						targetType = moveRequest.defender;
 						event = 'zmove';
 						break;
 					}
@@ -631,7 +631,7 @@ export class Side {
 				if (i < moves.length && move.id === moves[i].id && moves[i].disabled) continue;
 				moveid = move.id;
 				moveSlot = i;
-				targetType = move.target!;
+				targetType = move.defender!;
 				break;
 			}
 		}
@@ -645,7 +645,7 @@ export class Side {
 		if (zMove && this.choice.zMove) {
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
-		if (zMove) targetType = this.battle.dex.moves.get(zMove).target;
+		if (zMove) targetType = this.battle.dex.moves.get(zMove).defender;
 
 		// Dynamax
 		// Is dynamaxed or will dynamax this turn.
@@ -654,21 +654,21 @@ export class Side {
 		if (event === 'dynamax' && !maxMove) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Max Move`);
 		}
-		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
+		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).defender;
 
 		// Validate targeting
 		if (autoChoose || moveid === 'testfight') {
 			targetLoc = 0;
 		} else if (this.battle.actions.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
-				return this.emitChoiceError(`Can't move: ${move.name} needs a target`);
+				return this.emitChoiceError(`Can't move: ${move.name} needs a defender`);
 			}
 			if (!this.battle.validTargetLoc(targetLoc, pokemon, targetType)) {
-				return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
+				return this.emitChoiceError(`Can't move: Invalid defender for ${move.name}`);
 			}
 		} else {
 			if (targetLoc) {
-				return this.emitChoiceError(`Can't move: You can't choose a target for ${move.name}`);
+				return this.emitChoiceError(`Can't move: You can't choose a defender for ${move.name}`);
 			}
 		}
 
@@ -863,7 +863,7 @@ export class Side {
 			}
 			for (const m of req.moves) {
 				const disabled = pokemon.getMoveData(m.id)?.disabled;
-				if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
+				if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.defender!))) {
 					m.disabled = true;
 					updated = true;
 				}
@@ -972,7 +972,7 @@ export class Side {
 			this.choice.actions.push({
 				choice: 'revivalblessing',
 				pokemon,
-				target: targetPokemon,
+				defender: targetPokemon,
 			});
 			return true;
 		}
@@ -1010,7 +1010,7 @@ export class Side {
 		this.choice.actions.push({
 			choice: (this.requestState === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon,
-			target: targetPokemon,
+			defender: targetPokemon,
 		});
 
 		return true;
@@ -1126,7 +1126,7 @@ export class Side {
 		}
 
 		// should only be relevant for Gen 3
-		const switchIns = this.battle.queue.getSwitches(this).map(action => action.target.position);
+		const switchIns = this.battle.queue.getSwitches(this).map(action => action.defender.position);
 
 		this.choice = {
 			cantUndo: false,
@@ -1222,9 +1222,9 @@ export class Side {
 				let targetLoc: number | undefined;
 				let event: 'mega' | 'megax' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = '';
 				while (true) {
-					// If data ends with a number, treat it as a target location.
+					// If data ends with a number, treat it as a defender location.
 					// We need to special case 'Conversion 2' so it doesn't get
-					// confused with 'Conversion' erroneously sent with the target
+					// confused with 'Conversion' erroneously sent with the defender
 					// '2' (since Conversion targets 'self', targetLoc can't be 2).
 					if (/\s(?:-|\+)?[1-3]$/.test(data) && toID(data) !== 'conversion2') {
 						if (targetLoc !== undefined) return error();
@@ -1393,7 +1393,7 @@ export class Side {
 		for (const action of this.choice.actions) {
 			delete action.side;
 			delete action.pokemon;
-			delete action.target;
+			delete action.defender;
 		}
 		this.choice.actions = [];
 

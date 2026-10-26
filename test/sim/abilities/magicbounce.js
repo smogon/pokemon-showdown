@@ -23,7 +23,7 @@ describe('Magic Bounce', () => {
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
-	it('should bounce once when target and source share the ability', () => {
+	it('should bounce once when defender and attacker share the ability', () => {
 		battle = common.createBattle([[
 			{ species: "Xatu", ability: 'magicbounce', moves: ['roost'] },
 		], [
@@ -101,7 +101,7 @@ describe('Magic Bounce', () => {
 		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, false, true, true]);
 	});
 
-	it(`[Gen 5] should bounce moves that target the foe's side while semi-invulnerable`, () => {
+	it(`[Gen 5] should bounce moves that defender the foe's side while semi-invulnerable`, () => {
 		battle = common.gen(5).createBattle({ gameType: 'doubles' }, [[
 			{ species: "Bulbasaur", ability: 'overgrow', moves: ['growl'] },
 			{ species: "Geodude", ability: 'rockhead', moves: ['stealthrock'] },

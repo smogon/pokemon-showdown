@@ -45,7 +45,7 @@ describe(`Unnerve`, () => {
 			assert.false.cantMove(() => battle.choose('p1', 'switch wynaut'));
 		});
 
-		it(`should make attacks used against the undead Pokemon fail due to lack of target`, () => {
+		it(`should make attacks used against the undead Pokemon fail due to lack of defender`, () => {
 			battle.makeChoices(); // "KO" Wynaut
 			battle.choose('p1', 'switch aggron');
 			battle.makeChoices('switch wynaut', 'move poweruppunch');

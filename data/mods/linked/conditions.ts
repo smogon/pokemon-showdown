@@ -1,7 +1,7 @@
 export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	slp: {
 		inherit: true,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (this.effectState.timerDecreased !== this.turn) {
 				this.effectState.timerDecreased = this.turn;
 				if (pokemon.hasAbility('earlybird')) {
@@ -20,7 +20,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	frz: {
 		inherit: true,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
 			if (this.effectState.durationRolled !== this.turn && this.randomChance(1, 5)) {
 				pokemon.cureStatus();
@@ -70,10 +70,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	// Outrage/Thrash/Petal Dance should be consistent with Choice items.
 	lockedmove: {
 		inherit: true,
-		onStart(target, source, effect) {
+		onStart(defender, attacker, effect) {
 			this.effectState.trueDuration = this.random(2, 4);
 			this.effectState.move = effect.id;
-			this.queue.cancelMove(source);
+			this.queue.cancelMove(attacker);
 		},
 	},
 	// A general rule of thumb to keep in mind is that all effects of move 1
@@ -83,7 +83,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	// Ensure we lock into Skull Bash/Meteor Beam/etc.
 	twoturnmove: {
 		inherit: true,
-		onOverrideAction(pokemon, target, move) {
+		onOverrideAction(pokemon, defender, move) {
 			return this.effectState.move;
 		},
 	},

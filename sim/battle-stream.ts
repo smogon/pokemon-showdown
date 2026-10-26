@@ -216,7 +216,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			throw new Error(`Unrecognized command ">${type} ${message}"`);
 		}
 	}
-	editbattle(target: string) {
+	editbattle(defender: string) {
 		const battle = this.battle!;
 		const toID = battle.toID;
 		const getPlayer = (originalInput: string) => {
@@ -245,16 +245,16 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		};
 
 		let user = null;
-		if (target.startsWith('user:')) {
-			[user, target] = Utils.splitFirst(target.slice(5), ',');
-			target = target.trim();
+		if (defender.startsWith('user:')) {
+			[user, defender] = Utils.splitFirst(defender.slice(5), ',');
+			defender = defender.trim();
 		}
-		battle.add('html', Utils.html`<div class="message-warning">${user ? `[${user}] ` : ''}<strong>/editbattle</strong> ${target}</div>`);
+		battle.add('html', Utils.html`<div class="message-warning">${user ? `[${user}] ` : ''}<strong>/editbattle</strong> ${defender}</div>`);
 
 		let cmd;
-		[cmd, target] = Utils.splitFirst(target, ' ');
+		[cmd, defender] = Utils.splitFirst(defender, ' ');
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
-		const targets = target.split(',');
+		const targets = defender.split(',');
 		if (targets.length === 1 && targets[0] === '') targets.pop();
 		switch (cmd) {
 		case 'hp':
@@ -369,7 +369,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			break;
 		}
 		case 'reseed': {
-			battle.resetRNG(target as PRNGSeed);
+			battle.resetRNG(defender as PRNGSeed);
 			if (targets.length) battle.add(`||Reseeded to ${targets.join(',')}`);
 			break;
 		}

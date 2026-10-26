@@ -49,8 +49,8 @@ describe('Dragon Darts', () => {
 		const shaymin = battle.p2.active[1];
 
 		// Modding accuracy so Dragon Darts always misses Mew
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
-			return target.species.id !== 'mew';
+		battle.onEvent('Accuracy', battle.format, (accuracy, defender, attacker, move) => {
+			return defender.species.id !== 'mew';
 		});
 
 		battle.makeChoices();
@@ -104,7 +104,7 @@ describe('Dragon Darts', () => {
 		assert.statStage(battle.p2.active[1], 'def', 0);
 	});
 
-	it(`should smart-target the foe that's not Protecting in Doubles`, () => {
+	it(`should smart-defender the foe that's not Protecting in Doubles`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Ninjask", moves: ['dragondarts'] },
 			{ species: "Mew", ability: 'stamina', moves: ['splash'] },
@@ -132,7 +132,7 @@ describe('Dragon Darts', () => {
 		assert.statStage(battle.p2.active[1], 'def', 0);
 	});
 
-	it('should hit one target twice if the other is protected by an ability', () => {
+	it('should hit one defender twice if the other is protected by an ability', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Grimmsnarl", ability: "Prankster", moves: ["electrify"] },
@@ -149,7 +149,7 @@ describe('Dragon Darts', () => {
 		assert.statStage(battle.p2.active[1], 'spe', 1);
 	});
 
-	it('should hit one target twice if the other is immunue', () => {
+	it('should hit one defender twice if the other is immunue', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
@@ -163,7 +163,7 @@ describe('Dragon Darts', () => {
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should hit one target twice if the other is semi-invulnerable', () => {
+	it('should hit one defender twice if the other is semi-invulnerable', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", item: "Lagging Tail", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
@@ -177,7 +177,7 @@ describe('Dragon Darts', () => {
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should hit one target twice if the other is fainted', () => {
+	it('should hit one defender twice if the other is fainted', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"] },
 			{ species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"] },
@@ -193,7 +193,7 @@ describe('Dragon Darts', () => {
 		assert.equal(battle.p2.active[1].hp, 0);
 	});
 
-	it('should hit one target twice if the other is Dark type and Dragon Darts is Prankster boosted', () => {
+	it('should hit one defender twice if the other is Dark type and Dragon Darts is Prankster boosted', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Dragapult", ability: "Clear Body", moves: ["sleeptalk", "dragondarts"] },
 			{ species: "Liepard", ability: "Prankster", moves: ["assist"] },

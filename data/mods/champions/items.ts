@@ -261,16 +261,16 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	ejectbutton: {
 		inherit: true,
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
-				if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
+		onAfterMoveSecondary(defender, attacker, move) {
+			if (attacker && attacker !== defender && defender.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
+				if (!this.canSwitch(defender.side) || defender.forceSwitchFlag || defender.beingCalledBack || defender.isSkyDropped()) return;
+				if (defender.volatiles['commanding'] || defender.volatiles['commanded']) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
-				target.switchFlag = true;
-				if (!target.useItem()) {
-					target.switchFlag = false;
+				defender.switchFlag = true;
+				if (!defender.useItem()) {
+					defender.switchFlag = false;
 				}
 			}
 		},

@@ -56,12 +56,12 @@ export class RandomPlayerAI extends BattlePlayer {
 				));
 
 				if (!canSwitch.length) return `pass`;
-				const target = this.chooseSwitch(
+				const defender = this.chooseSwitch(
 					undefined,
 					canSwitch.map(slot => ({ slot, pokemon: pokemon[slot - 1] }))
 				);
-				chosen.push(target);
-				return `switch ${target}`;
+				chosen.push(defender);
+				return `switch ${defender}`;
 			});
 
 			this.choose(choices.join(`, `));
@@ -98,7 +98,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				)).map(j => ({
 					slot: j,
 					move: possibleMoves[j - 1].move,
-					target: possibleMoves[j - 1].target,
+					defender: possibleMoves[j - 1].defender,
 					zMove: false,
 				}));
 				if (canZMove) {
@@ -107,7 +107,7 @@ export class RandomPlayerAI extends BattlePlayer {
 						.map(j => ({
 							slot: j,
 							move: active.canZMove[j - 1].move,
-							target: active.canZMove[j - 1].target,
+							defender: active.canZMove[j - 1].defender,
 							zMove: true,
 						})));
 				}
@@ -115,20 +115,20 @@ export class RandomPlayerAI extends BattlePlayer {
 				// Filter out adjacentAlly moves if we have no allies left, unless they're our
 				// only possible move options.
 				const hasAlly = pokemon.length > 1 && !pokemon[i ^ 1].condition.endsWith(` fnt`);
-				const filtered = canMove.filter(m => m.target !== `adjacentAlly` || hasAlly);
+				const filtered = canMove.filter(m => m.defender !== `adjacentAlly` || hasAlly);
 				canMove = filtered.length ? filtered : canMove;
 
 				const moves = canMove.map(m => {
 					let move = `move ${m.slot}`;
 					// NOTE: We don't generate all possible targeting combinations.
 					if (request.active.length > 1) {
-						if ([`normal`, `any`, `adjacentFoe`].includes(m.target)) {
+						if ([`normal`, `any`, `adjacentFoe`].includes(m.defender)) {
 							move += ` ${1 + this.prng.random(2)}`;
 						}
-						if (m.target === `adjacentAlly`) {
+						if (m.defender === `adjacentAlly`) {
 							move += ` -${(i ^ 1) + 1}`;
 						}
-						if (m.target === `adjacentAllyOrSelf`) {
+						if (m.defender === `adjacentAllyOrSelf`) {
 							if (hasAlly) {
 								move += ` -${1 + this.prng.random(2)}`;
 							} else {
@@ -152,12 +152,12 @@ export class RandomPlayerAI extends BattlePlayer {
 				const switches = active.trapped ? [] : canSwitch;
 
 				if (switches.length && (!moves.length || this.prng.random() > this.move)) {
-					const target = this.chooseSwitch(
+					const defender = this.chooseSwitch(
 						active,
 						canSwitch.map(slot => ({ slot, pokemon: pokemon[slot - 1] }))
 					);
-					chosen.push(target);
-					return `switch ${target}`;
+					chosen.push(defender);
+					return `switch ${defender}`;
 				} else if (moves.length) {
 					const move = this.chooseMove(active, moves);
 					if (move.endsWith(` zmove`)) {

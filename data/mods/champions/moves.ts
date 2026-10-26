@@ -165,33 +165,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	curse: {
 		inherit: true,
 		volatileStatus: undefined, // no inherit
-		onModifyMove(move, source, target) {
-			this.debug('Curse onModifyMove triggered', source, target);
-			if (!source.hasType('Ghost')) {
-				move.target = 'self';
-			} else if (!target || (source !== target && source.isAlly(target))) {
-				move.target = 'randomNormal';
+		onModifyMove(move, attacker, defender) {
+			this.debug('Curse onModifyMove triggered', attacker, defender);
+			if (!attacker.hasType('Ghost')) {
+				move.defender = 'self';
+			} else if (!defender || (attacker !== defender && attacker.isAlly(defender))) {
+				move.defender = 'randomNormal';
 			}
 		},
-		onTryHit(target, source, move) {
-			this.debug('Curse onTryHit triggered', target, source);
-			if (source.hasType('Ghost') && target.volatiles['curse']) {
+		onTryHit(defender, attacker, move) {
+			this.debug('Curse onTryHit triggered', defender, attacker);
+			if (attacker.hasType('Ghost') && defender.volatiles['curse']) {
 				return false;
 			}
 		},
-		onHit(target, source) {
-			this.debug('Curse onHit triggered', source, target);
-			if (!source.hasType('Ghost')) {
-				return !!this.boost({ spe: -1, atk: 1, def: 1 }, source, source);
+		onHit(defender, attacker) {
+			this.debug('Curse onHit triggered', attacker, defender);
+			if (!attacker.hasType('Ghost')) {
+				return !!this.boost({ spe: -1, atk: 1, def: 1 }, attacker, attacker);
 			}
-			this.directDamage(source.maxhp / 2, source, source);
-			if (source.isAlly(target)) {
-				const random = this.getRandomTarget(source, 'Curse');
+			this.directDamage(attacker.maxhp / 2, attacker, attacker);
+			if (attacker.isAlly(defender)) {
+				const random = this.getRandomTarget(attacker, 'Curse');
 				if (!random) return false;
-				target = random;
+				defender = random;
 			}
-			delete target.volatiles['curse'];
-			target.addVolatile('curse');
+			delete defender.volatiles['curse'];
+			defender.addVolatile('curse');
 		},
 	},
 	cut: {
@@ -219,9 +219,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
 		secondary: {
 			chance: 30,
-			onHit(target, source) {
+			onHit(defender, attacker) {
 				const status = this.sample(['psn', 'par', 'slp']);
-				target.trySetStatus(status, source);
+				defender.trySetStatus(status, attacker);
 			},
 		},
 	},
@@ -310,26 +310,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onStart(target) {
-				let move: Move | ActiveMove | null = target.lastMove;
-				if (!move || target.volatiles['dynamax']) return false;
+			onStart(defender) {
+				let move: Move | ActiveMove | null = defender.lastMove;
+				if (!move || defender.volatiles['dynamax']) return false;
 
 				// Encore only works on Max Moves if the base move is not itself a Max Move
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-				const moveSlot = target.getMoveData(move.id);
+				const moveSlot = defender.getMoveData(move.id);
 				if (move.isZ || move.isMax || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
 				this.effectState.move = move.id;
-				this.add('-start', target, 'Encore');
-				const action = this.queue.willMove(target);
+				this.add('-start', defender, 'Encore');
+				const action = this.queue.willMove(defender);
 				if (!action) {
 					this.effectState.duration!++;
-				} else if (action.moveid !== move.id && !target.hasItem('mentalherb')) {
-					this.queue.changeAction(target, {
+				} else if (action.moveid !== move.id && !defender.hasItem('mentalherb')) {
+					this.queue.changeAction(defender, {
 						choice: 'move',
-						// target: undefined,
+						// defender: undefined,
 						// targetLoc: undefined,
 						moveid: move.id,
 					});

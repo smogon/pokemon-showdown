@@ -239,7 +239,7 @@ message).
 `|move|POKEMON|MOVE|TARGET`
 
 > The specified Pokémon has used move `MOVE` at `TARGET`. If a move has
-> multiple targets or no target, `TARGET` should be ignored. If a move
+> multiple targets or no defender, `TARGET` should be ignored. If a move
 > targets a side, `TARGET` will be a (possibly fainted) Pokémon on that
 > side.
 >
@@ -329,7 +329,7 @@ stat boosts are minor actions.
 
 `|-notarget|POKEMON`
 
-> A move has failed due to their being no target Pokémon `POKEMON`. `POKEMON` is
+> A move has failed due to their being no defender Pokémon `POKEMON`. `POKEMON` is
 > not present in Generation 1. This action is specific to Generations 1-4 as in
 > later Generations a failed move will display using `-fail`.
 
@@ -392,11 +392,11 @@ stat boosts are minor actions.
 
 `|-invertboost|POKEMON`
 
-> Invert the boosts of the target Pokémon `POKEMON`. (For example: Topsy-Turvy).
+> Invert the boosts of the defender Pokémon `POKEMON`. (For example: Topsy-Turvy).
 
 `|-clearboost|POKEMON`
 
-> Clears all of the boosts of the target `POKEMON`. (For example: Clear Smog).
+> Clears all of the boosts of the defender `POKEMON`. (For example: Clear Smog).
 
 `|-clearallboost`
 
@@ -409,7 +409,7 @@ stat boosts are minor actions.
 
 `|-clearnegativeboost|POKEMON`
 
-> Clear the negative boosts from the target Pokémon `POKEMON`. (For example:
+> Clear the negative boosts from the defender Pokémon `POKEMON`. (For example:
 > usually as the result of a `[zeffect]`).
 
 `|-copyboost|SOURCE|TARGET`
@@ -592,7 +592,7 @@ stat boosts are minor actions.
 > (For example: Fire Pledge).
 
 `|-prepare|ATTACKER|MOVE`
-> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on an unknown target.
+> The `ATTACKER` Pokémon is preparing to use a charge `MOVE` on an unknown defender.
 > (For example: Dig, Fly).
 
 `|-prepare|ATTACKER|MOVE|DEFENDER`
@@ -704,7 +704,7 @@ To be exact, `CHOICE` is one of:
 - `MOVESLOTSPEC` or `MOVESLOTSPEC TARGETSPEC`
   - `MOVESLOTSPEC` is a move name (capitalization/spacing-insensitive) or
     1-based move slot number
-  - `TARGETSPEC` is a 1-based target slot number. Add a `-` in front of it to
+  - `TARGETSPEC` is a 1-based defender slot number. Add a `-` in front of it to
     refer to allies, and a `+` to refer to foes. Remember that slots go in
     opposite directions, like this:
 
@@ -712,7 +712,7 @@ To be exact, `CHOICE` is one of:
         +3 +2 +1        +2 +1
         -1 -2 -3        -1 -2
 
-    (Slot numbers are unnecessary in Singles: you can never choose a target in
+    (Slot numbers are unnecessary in Singles: you can never choose a defender in
     Singles.)
 
 `SWITCHSPEC` is:
@@ -772,7 +772,7 @@ Example request object:
           "id": "lightscreen",
           "pp": 48,
           "maxpp": 48,
-          "target": "allySide",
+          "defender": "allySide",
           "disabled": false
         },
         {
@@ -780,7 +780,7 @@ Example request object:
           "id": "uturn",
           "pp": 32,
           "maxpp": 32,
-          "target": "normal",
+          "defender": "normal",
           "disabled": false
         },
         {
@@ -788,7 +788,7 @@ Example request object:
           "id": "knockoff",
           "pp": 32,
           "maxpp": 32,
-          "target": "normal",
+          "defender": "normal",
           "disabled": false
         },
         {
@@ -796,7 +796,7 @@ Example request object:
           "id": "roost",
           "pp": 16,
           "maxpp": 16,
-          "target": "self",
+          "defender": "self",
           "disabled": false
         }
       ]

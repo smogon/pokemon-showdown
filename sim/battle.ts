@@ -78,7 +78,7 @@ interface BattleOptions {
 
 interface EventListenerWithoutPriority {
 	effect: Effect;
-	target?: Pokemon;
+	defender?: Pokemon;
 	index?: number;
 	callback?: Function;
 	state: EffectState | null;
@@ -135,8 +135,8 @@ export class Battle {
 	actions: BattleActions;
 	queue: BattleQueue;
 	readonly faintQueue: {
-		target: Pokemon,
-		source: Pokemon | null,
+		defender: Pokemon,
+		attacker: Pokemon | null,
 		effect: Effect | null,
 		faintEventDone?: boolean,
 	}[];
@@ -363,19 +363,19 @@ export class Battle {
 		this.add('message', "The battle's RNG was reset.");
 	}
 
-	suppressingAbility(target?: Pokemon) {
-		return this.activePokemon?.isActive && (this.activePokemon !== target || this.gen < 8) &&
-			this.activeMove?.ignoreAbility && !target?.hasItem('Ability Shield');
+	suppressingAbility(defender?: Pokemon) {
+		return this.activePokemon?.isActive && (this.activePokemon !== defender || this.gen < 8) &&
+			this.activeMove?.ignoreAbility && !defender?.hasItem('Ability Shield');
 	}
 
 	suppressingSecondaries() {
 		return this.activeMove?.hasSheerForce && this.activePokemon?.hasAbility('sheerforce');
 	}
 
-	setActiveMove(move?: ActiveMove | null, pokemon?: Pokemon | null, target?: Pokemon | null) {
+	setActiveMove(move?: ActiveMove | null, pokemon?: Pokemon | null, defender?: Pokemon | null) {
 		this.activeMove = move || null;
 		this.activePokemon = pokemon || null;
-		this.activeTarget = target || pokemon || null;
+		this.activeTarget = defender || pokemon || null;
 	}
 
 	clearActiveMove(failed?: boolean) {
@@ -465,7 +465,7 @@ export class Battle {
 	}
 
 	/**
-	 * Runs an event with no source on each Pokémon on the field, in Speed order.
+	 * Runs an event with no attacker on each Pokémon on the field, in Speed order.
 	 */
 	eachEvent(eventid: string, effect?: Effect | null, relayVar?: boolean) {
 		const actives = this.getAllActive();
@@ -481,7 +481,7 @@ export class Battle {
 	}
 
 	/**
-	 * Runs an event with no source on each effect on the field, in Speed order.
+	 * Runs an event with no attacker on each effect on the field, in Speed order.
 	 *
 	 * Unlike `eachEvent`, this contains a lot of other handling and is only intended for
 	 * the 'Residual' and 'SwitchIn' events.
@@ -528,34 +528,34 @@ export class Battle {
 			}
 
 			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
-			if (handler.state?.target instanceof Pokemon) {
+			if (handler.state?.defender instanceof Pokemon) {
 				let expectedStateLocation;
 				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
-					expectedStateLocation = handler.state.target.abilityState;
+					expectedStateLocation = handler.state.defender.abilityState;
 				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
-					expectedStateLocation = handler.state.target.itemState;
+					expectedStateLocation = handler.state.defender.itemState;
 				} else if (effect.effectType === 'Status') {
-					expectedStateLocation = handler.state.target.statusState;
+					expectedStateLocation = handler.state.defender.statusState;
 				} else if (effect.effectType === 'Pokemon') {
-					expectedStateLocation = handler.state.target.speciesState;
+					expectedStateLocation = handler.state.defender.speciesState;
 				} else {
-					expectedStateLocation = handler.state.target.volatiles[effect.id];
+					expectedStateLocation = handler.state.defender.volatiles[effect.id];
 				}
 				if (expectedStateLocation !== handler.state) {
 					continue;
 				}
-			} else if (handler.state?.target instanceof Side && !handler.state.isSlotCondition) {
-				if ((handler.state.target.sideConditions[effect.id] !== handler.state)) {
+			} else if (handler.state?.defender instanceof Side && !handler.state.isSlotCondition) {
+				if ((handler.state.defender.sideConditions[effect.id] !== handler.state)) {
 					continue;
 				}
-			} else if (handler.state?.target instanceof Field) {
+			} else if (handler.state?.defender instanceof Field) {
 				let expectedStateLocation;
 				if (effect.effectType === 'Weather') {
-					expectedStateLocation = handler.state.target.weatherState;
+					expectedStateLocation = handler.state.defender.weatherState;
 				} else if (effect.effectType === 'Terrain') {
-					expectedStateLocation = handler.state.target.terrainState;
+					expectedStateLocation = handler.state.defender.terrainState;
 				} else {
-					expectedStateLocation = handler.state.target.pseudoWeather[effect.id];
+					expectedStateLocation = handler.state.defender.pseudoWeather[effect.id];
 				}
 				if (expectedStateLocation !== handler.state) {
 					continue;
@@ -577,7 +577,7 @@ export class Battle {
 	/** The entire event system revolves around this function and runEvent. */
 	singleEvent(
 		eventid: string, effect: Effect, state: EffectState | Record<string, never> | null,
-		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
+		defender: string | Pokemon | Side | Field | Battle | null, attacker?: string | Pokemon | Effect | false | null,
 		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
 	) {
 		if (this.eventDepth >= 8) {
@@ -602,21 +602,21 @@ export class Battle {
 			hasRelayVar = false;
 		}
 
-		if (effect.effectType === 'Status' && (target instanceof Pokemon) && target.status !== effect.id) {
+		if (effect.effectType === 'Status' && (defender instanceof Pokemon) && defender.status !== effect.id) {
 			// it's changed; call it off
 			return relayVar;
 		}
 		if (eventid === 'SwitchIn' && effect.effectType === 'Ability' && effect.flags['breakable'] &&
-			this.suppressingAbility(target as Pokemon)) {
+			this.suppressingAbility(defender as Pokemon)) {
 			this.debug(eventid + ' handler suppressed by Mold Breaker');
 			return relayVar;
 		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && eventid !== 'SetAbility' && effect.effectType === 'Item' &&
-			(target instanceof Pokemon) && target.ignoringItem()) {
+			(defender instanceof Pokemon) && defender.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
-		if (eventid !== 'End' && effect.effectType === 'Ability' && (target instanceof Pokemon) && target.ignoringAbility()) {
+		if (eventid !== 'End' && effect.effectType === 'Ability' && (defender instanceof Pokemon) && defender.ignoringAbility()) {
 			this.debug(eventid + ' handler suppressed by Gastro Acid or Neutralizing Gas');
 			return relayVar;
 		}
@@ -637,10 +637,10 @@ export class Battle {
 
 		this.effect = effect;
 		this.effectState = state as EffectState || this.initEffectState({});
-		this.event = { id: eventid, target, source, effect: sourceEffect };
+		this.event = { id: eventid, defender, attacker, effect: sourceEffect };
 		this.eventDepth++;
 
-		const args = [target, source, sourceEffect];
+		const args = [defender, attacker, sourceEffect];
 		if (hasRelayVar) args.unshift(relayVar);
 
 		let returnVal;
@@ -667,24 +667,24 @@ export class Battle {
 	 *   this.runEvent('Blah')
 	 * will trigger any onBlah global event handlers.
 	 *
-	 *   this.runEvent('Blah', target)
-	 * will additionally trigger any onBlah handlers on the target, onAllyBlah
-	 * handlers on any active pokemon on the target's team, and onFoeBlah
-	 * handlers on any active pokemon on the target's foe's team
+	 *   this.runEvent('Blah', defender)
+	 * will additionally trigger any onBlah handlers on the defender, onAllyBlah
+	 * handlers on any active pokemon on the defender's team, and onFoeBlah
+	 * handlers on any active pokemon on the defender's foe's team
 	 *
-	 *   this.runEvent('Blah', target, source)
-	 * will additionally trigger any onSourceBlah handlers on the source
+	 *   this.runEvent('Blah', defender, attacker)
+	 * will additionally trigger any onSourceBlah handlers on the attacker
 	 *
-	 *   this.runEvent('Blah', target, source, effect)
+	 *   this.runEvent('Blah', defender, attacker, effect)
 	 * will additionally pass the effect onto all event handlers triggered
 	 *
-	 *   this.runEvent('Blah', target, source, effect, relayVar)
+	 *   this.runEvent('Blah', defender, attacker, effect, relayVar)
 	 * will additionally pass the relayVar as the first argument along all event
 	 * handlers
 	 *
 	 * You may leave any of these null. For instance, if you have a relayVar but
-	 * no source or effect:
-	 *   this.runEvent('Damage', target, null, null, 50)
+	 * no attacker or effect:
+	 *   this.runEvent('Damage', defender, null, null, 50)
 	 *
 	 * Event handlers
 	 * ==============
@@ -694,11 +694,11 @@ export class Battle {
 	 * can modify what happens during an event.
 	 *
 	 * event handlers are passed:
-	 *   function (target, source, effect)
+	 *   function (defender, attacker, effect)
 	 * although some of these can be blank.
 	 *
 	 * certain events have a relay variable, in which case they're passed:
-	 *   function (relayVar, target, source, effect)
+	 *   function (relayVar, defender, attacker, effect)
 	 *
 	 * Relay variables are variables that give additional information about the
 	 * event. For instance, the damage event has a relayVar which is the amount
@@ -752,18 +752,18 @@ export class Battle {
 	 * this.effectState:
 	 *   the data store associated with the above Effect. This is a plain Object
 	 *   and you can use it to store data for later event handlers.
-	 * this.effectState.target:
+	 * this.effectState.defender:
 	 *   the Pokemon, Side, or Battle that the event handler's effect was
 	 *   attached to.
 	 * this.event.id:
 	 *   the event ID
-	 * this.event.target, this.event.source, this.event.effect:
-	 *   the target, source, and effect of the event. These are the same
+	 * this.event.defender, this.event.attacker, this.event.effect:
+	 *   the defender, attacker, and effect of the event. These are the same
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
 	runEvent(
-		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
+		eventid: string, defender?: Pokemon | Pokemon[] | Side | Battle | null, attacker?: string | Pokemon | false | null,
 		sourceEffect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean
 	) {
 		// if (Battle.eventCounter) {
@@ -778,17 +778,17 @@ export class Battle {
 			this.add('message', 'Parent event: ' + this.event.id);
 			throw new Error("Stack overflow");
 		}
-		if (!target) target = this;
+		if (!defender) defender = this;
 		let effectSource = null;
-		if (source instanceof Pokemon) effectSource = source;
-		const handlers = this.findEventHandlers(target, eventid, effectSource);
+		if (attacker instanceof Pokemon) effectSource = attacker;
+		const handlers = this.findEventHandlers(defender, eventid, effectSource);
 		if (onEffect) {
 			if (!sourceEffect) throw new Error("onEffect passed without an effect");
 			const callback = (sourceEffect as any)[`on${eventid}`];
 			if (callback !== undefined) {
-				if (Array.isArray(target)) throw new Error("");
+				if (Array.isArray(defender)) throw new Error("");
 				handlers.unshift(this.resolvePriority({
-					effect: sourceEffect, callback, state: this.initEffectState({}), end: null, effectHolder: target,
+					effect: sourceEffect, callback, state: this.initEffectState({}), end: null, effectHolder: defender,
 				}, `on${eventid}`));
 			}
 		}
@@ -801,8 +801,8 @@ export class Battle {
 			this.speedSort(handlers);
 		}
 		let hasRelayVar = 1;
-		const args = [target, source, sourceEffect];
-		// console.log('Event: ' + eventid + ' (depth ' + this.eventDepth + ') t:' + target.id + ' s:' + (!source || source.id) + ' e:' + effect.id);
+		const args = [defender, attacker, sourceEffect];
+		// console.log('Event: ' + eventid + ' (depth ' + this.eventDepth + ') t:' + defender.id + ' s:' + (!attacker || attacker.id) + ' e:' + effect.id);
 		if (relayVar === undefined || relayVar === null) {
 			relayVar = true;
 			hasRelayVar = 0;
@@ -811,15 +811,15 @@ export class Battle {
 		}
 
 		const parentEvent = this.event;
-		this.event = { id: eventid, target, source, effect: sourceEffect, modifier: 1 };
+		this.event = { id: eventid, defender, attacker, effect: sourceEffect, modifier: 1 };
 		this.eventDepth++;
 
 		let targetRelayVars = [];
-		if (Array.isArray(target)) {
+		if (Array.isArray(defender)) {
 			if (Array.isArray(relayVar)) {
 				targetRelayVars = relayVar;
 			} else {
-				for (let i = 0; i < target.length; i++) targetRelayVars[i] = true;
+				for (let i = 0; i < defender.length; i++) targetRelayVars[i] = true;
 			}
 		}
 		for (const handler of handlers) {
@@ -827,9 +827,9 @@ export class Battle {
 				// TODO: find a better way to do this
 				if (!targetRelayVars[handler.index] && !(targetRelayVars[handler.index] === 0 &&
 					eventid === 'DamagingHit')) continue;
-				if (handler.target) {
-					args[hasRelayVar] = handler.target;
-					this.event.target = handler.target;
+				if (handler.defender) {
+					args[hasRelayVar] = handler.defender;
+					this.event.defender = handler.defender;
 				}
 				if (hasRelayVar) args[0] = targetRelayVars[handler.index];
 			}
@@ -906,7 +906,7 @@ export class Battle {
 				const parentEffectState = this.effectState;
 				this.effect = handler.effect;
 				this.effectState = handler.state || this.initEffectState({});
-				this.effectState.target = effectHolder;
+				this.effectState.defender = effectHolder;
 
 				returnVal = handler.callback.apply(this, args);
 
@@ -940,7 +940,7 @@ export class Battle {
 		}
 		this.event = parentEvent;
 
-		return Array.isArray(target) ? targetRelayVars : relayVar;
+		return Array.isArray(defender) ? targetRelayVars : relayVar;
 	}
 
 	/**
@@ -948,10 +948,10 @@ export class Battle {
 	 * on the first non-undefined value instead of only on null/false.
 	 */
 	priorityEvent(
-		eventid: string, target: Pokemon | Side | Battle, source?: Pokemon | null,
+		eventid: string, defender: Pokemon | Side | Battle, attacker?: Pokemon | null,
 		effect?: Effect, relayVar?: any, onEffect?: boolean
 	): any {
-		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
+		return this.runEvent(eventid, defender, attacker, effect, relayVar, onEffect, true);
 	}
 
 	resolvePriority(h: EventListenerWithoutPriority, callbackName: string) {
@@ -978,7 +978,7 @@ export class Battle {
 			};
 			handler.subOrder = effectTypeOrder[handler.effect.effectType] || 0;
 			if (handler.effect.effectType === 'Condition') {
-				if (handler.state?.target instanceof Side) {
+				if (handler.state?.defender instanceof Side) {
 					if (handler.state.isSlotCondition) {
 						// slot condition
 						handler.subOrder = 3;
@@ -986,7 +986,7 @@ export class Battle {
 						// side condition
 						handler.subOrder = 4;
 					}
-				} else if (handler.state?.target instanceof Field) {
+				} else if (handler.state?.defender instanceof Field) {
 					// field condition
 					handler.subOrder = 5;
 				}
@@ -1022,12 +1022,12 @@ export class Battle {
 		return handler;
 	}
 
-	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
+	getCallback(defender: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
 		let callback: Function | undefined = (effect as any)[callbackName];
 
 		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
 		// during the SwitchIn event instead of running the Start event during switch-ins
-		if (target instanceof Pokemon && callbackName === 'onSwitchIn') {
+		if (defender instanceof Pokemon && callbackName === 'onSwitchIn') {
 			if (callback === undefined && !(effect as any).onAnySwitchIn && (
 				['Ability', 'Item'].includes(effect.effectType) ||
 				(effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0]))
@@ -1046,46 +1046,46 @@ export class Battle {
 		return callback;
 	}
 
-	findEventHandlers(target: Pokemon | Pokemon[] | Side | Battle, eventName: string, source?: Pokemon | null) {
+	findEventHandlers(defender: Pokemon | Pokemon[] | Side | Battle, eventName: string, attacker?: Pokemon | null) {
 		let handlers: EventListener[] = [];
-		if (Array.isArray(target)) {
-			for (const [i, pokemon] of target.entries()) {
+		if (Array.isArray(defender)) {
+			for (const [i, pokemon] of defender.entries()) {
 				// console.log(`Event: ${eventName}, Target: ${pokemon}, ${i}`);
-				const curHandlers = this.findEventHandlers(pokemon, eventName, source);
+				const curHandlers = this.findEventHandlers(pokemon, eventName, attacker);
 				for (const handler of curHandlers) {
-					handler.target = pokemon; // Original "effectHolder"
+					handler.defender = pokemon; // Original "effectHolder"
 					handler.index = i;
 				}
 				handlers = handlers.concat(curHandlers);
 			}
 			return handlers;
 		}
-		// events that target a Pokemon normally bubble up to the Side
-		const shouldBubbleDown = target instanceof Side;
+		// events that defender a Pokemon normally bubble up to the Side
+		const shouldBubbleDown = defender instanceof Side;
 		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
 		const prefixedHandlers = !['BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange'].includes(eventName);
-		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
-			handlers = this.findPokemonEventHandlers(target, `on${eventName}`);
+		if (defender instanceof Pokemon && (defender.isActive || attacker?.isActive)) {
+			handlers = this.findPokemonEventHandlers(defender, `on${eventName}`);
 			if (prefixedHandlers) {
-				for (const allyActive of target.alliesAndSelf()) {
+				for (const allyActive of defender.alliesAndSelf()) {
 					handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
 					handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
 				}
-				for (const foeActive of target.foes()) {
+				for (const foeActive of defender.foes()) {
 					handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
 					handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
 				}
 			}
-			target = target.side;
+			defender = defender.side;
 		}
-		if (source && prefixedHandlers) {
-			handlers.push(...this.findPokemonEventHandlers(source, `onSource${eventName}`));
+		if (attacker && prefixedHandlers) {
+			handlers.push(...this.findPokemonEventHandlers(attacker, `onSource${eventName}`));
 		}
-		if (target instanceof Side) {
+		if (defender instanceof Side) {
 			for (const side of this.sides) {
 				if (shouldBubbleDown) {
 					for (const active of side.active) {
-						if (side === target || side === target.allySide) {
+						if (side === defender || side === defender.allySide) {
 							handlers = handlers.concat(this.findPokemonEventHandlers(active, `on${eventName}`));
 						} else if (prefixedHandlers) {
 							handlers = handlers.concat(this.findPokemonEventHandlers(active, `onFoe${eventName}`));
@@ -1094,7 +1094,7 @@ export class Battle {
 					}
 				}
 				if (side.n < 2 || !side.allySide) {
-					if (side === target || side === target.allySide) {
+					if (side === defender || side === defender.allySide) {
 						handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
 					} else if (prefixedHandlers) {
 						handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
@@ -1182,9 +1182,9 @@ export class Battle {
 		}
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
-				const state = (handler.target.effectType === 'Format') ? this.formatData : null;
+				const state = (handler.defender.effectType === 'Format') ? this.formatData : null;
 				handlers.push({
-					effect: handler.target, callback: handler.callback, state, end: null, effectHolder: customHolder || this,
+					effect: handler.defender, callback: handler.callback, state, end: null, effectHolder: customHolder || this,
 					priority: handler.priority, order: handler.order, subOrder: handler.subOrder,
 				});
 			}
@@ -1250,23 +1250,23 @@ export class Battle {
 	 *
 	 * Try to use this sparingly. Most event handlers can be simply placed in a format instead.
 	 *
-	 *     this.onEvent(eventid, target, callback)
-	 * will set the callback as an event handler for the target when eventid is called with the
+	 *     this.onEvent(eventid, defender, callback)
+	 * will set the callback as an event handler for the defender when eventid is called with the
 	 * default priority. Currently only valid formats are supported as targets but this will
-	 * eventually be expanded to support other target types.
+	 * eventually be expanded to support other defender types.
 	 *
-	 *     this.onEvent(eventid, target, priority, callback)
-	 * will set the callback as an event handler for the target when eventid is called with the
+	 *     this.onEvent(eventid, defender, priority, callback)
+	 * will set the callback as an event handler for the defender when eventid is called with the
 	 * provided priority. Priority can either be a number or an object that contains the priority,
 	 * order, and subOrder for the event handler as needed (undefined keys will use default values)
 	 */
-	onEvent(eventid: string, target: Format, ...rest: AnyObject[]) { // rest = [priority, callback]
+	onEvent(eventid: string, defender: Format, ...rest: AnyObject[]) { // rest = [priority, callback]
 		if (!eventid) throw new TypeError("Event handlers must have an event to listen to");
-		if (!target) throw new TypeError("Event handlers must have a target");
+		if (!defender) throw new TypeError("Event handlers must have a defender");
 		if (!rest.length) throw new TypeError("Event handlers must have a callback");
 
-		if (target.effectType !== 'Format') {
-			throw new TypeError(`${target.name} is a ${target.effectType} but only Format targets are supported right now`);
+		if (defender.effectType !== 'Format') {
+			throw new TypeError(`${defender.name} is a ${defender.effectType} but only Format targets are supported right now`);
 		}
 
 		let callback, priority, order, subOrder, data;
@@ -1288,7 +1288,7 @@ export class Battle {
 			}
 		}
 
-		const eventHandler = { callback, target, priority, order, subOrder };
+		const eventHandler = { callback, defender, priority, order, subOrder };
 
 		if (!this.events) this.events = {};
 		const callbackName = `on${eventid}`;
@@ -1322,39 +1322,39 @@ export class Battle {
 		return true;
 	}
 
-	skillSwap(source: Pokemon, target: Pokemon) {
-		if (source.fainted || target.fainted) return false;
-		if (source.volatiles['dynamax'] || target.volatiles['dynamax']) return false;
-		const sourceAbility = source.getAbility();
-		const targetAbility = target.getAbility();
+	skillSwap(attacker: Pokemon, defender: Pokemon) {
+		if (attacker.fainted || defender.fainted) return false;
+		if (attacker.volatiles['dynamax'] || defender.volatiles['dynamax']) return false;
+		const sourceAbility = attacker.getAbility();
+		const targetAbility = defender.getAbility();
 		if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap']) return false;
 		if (this.gen <= 5 && sourceAbility.id === targetAbility.id) return false;
 
 		const sourceEffect = this.dex.conditions.get('skillswap');
-		const targetCanBeSet = this.runEvent('SetAbility', target, source, sourceEffect, sourceAbility);
+		const targetCanBeSet = this.runEvent('SetAbility', defender, attacker, sourceEffect, sourceAbility);
 		if (!targetCanBeSet) return targetCanBeSet;
-		const sourceCanBeSet = this.runEvent('SetAbility', source, source, sourceEffect, targetAbility);
+		const sourceCanBeSet = this.runEvent('SetAbility', attacker, attacker, sourceEffect, targetAbility);
 		if (!sourceCanBeSet) return sourceCanBeSet;
 
-		if (this.gen <= 4 || source.isAlly(target)) {
-			this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
+		if (this.gen <= 4 || attacker.isAlly(defender)) {
+			this.add('-activate', attacker, 'Skill Swap', '', '', `[of] ${defender}`);
 			if (this.gen > 4) {
 				this.hint("Skill Swap does not announce the abilities of the Pokémon when used between allies.");
 			}
 		} else {
-			this.add('-activate', source, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${target}`);
+			this.add('-activate', attacker, 'Skill Swap', targetAbility.name, sourceAbility.name, `[of] ${defender}`);
 		}
-		this.singleEvent('End', sourceAbility, source.abilityState, source);
-		this.singleEvent('End', targetAbility, target.abilityState, target);
-		source.ability = targetAbility.id;
-		target.ability = sourceAbility.id;
-		source.abilityState = this.initEffectState({ id: toID(source.ability), target: source });
-		target.abilityState = this.initEffectState({ id: toID(target.ability), target });
-		source.volatileStaleness = undefined;
-		if (!source.isAlly(target)) target.volatileStaleness = 'external';
+		this.singleEvent('End', sourceAbility, attacker.abilityState, attacker);
+		this.singleEvent('End', targetAbility, defender.abilityState, defender);
+		attacker.ability = targetAbility.id;
+		defender.ability = sourceAbility.id;
+		attacker.abilityState = this.initEffectState({ id: toID(attacker.ability), defender: attacker });
+		defender.abilityState = this.initEffectState({ id: toID(defender.ability), defender });
+		attacker.volatileStaleness = undefined;
+		if (!attacker.isAlly(defender)) defender.volatileStaleness = 'external';
 		if (this.gen > 3) {
-			this.singleEvent('Start', sourceAbility, target.abilityState, target);
-			this.singleEvent('Start', targetAbility, source.abilityState, source);
+			this.singleEvent('Start', sourceAbility, defender.abilityState, defender);
+			this.singleEvent('Start', targetAbility, attacker.abilityState, attacker);
 		}
 	}
 
@@ -1590,7 +1590,7 @@ export class Battle {
 		if (!side.pokemonLeft) return [];
 
 		// should only be relevant for Gen 3
-		const queuedSwitchIns = this.queue.getSwitches(side).map(action => action.target);
+		const queuedSwitchIns = this.queue.getSwitches(side).map(action => action.defender);
 
 		const canSwitchIn = [];
 		for (let i = side.active.length; i < side.pokemon.length; i++) {
@@ -1606,20 +1606,20 @@ export class Battle {
 		if (newPosition >= pokemon.side.active.length) {
 			throw new Error("Invalid swap position");
 		}
-		const target = pokemon.side.active[newPosition];
-		if (newPosition !== 1 && (!target || target.fainted)) return false;
+		const defender = pokemon.side.active[newPosition];
+		if (newPosition !== 1 && (!defender || defender.fainted)) return false;
 
 		this.add('swap', pokemon, newPosition, attributes || '');
 
 		const side = pokemon.side;
-		side.pokemon[pokemon.position] = target;
+		side.pokemon[pokemon.position] = defender;
 		side.pokemon[newPosition] = pokemon;
 		side.active[pokemon.position] = side.pokemon[pokemon.position];
 		side.active[newPosition] = side.pokemon[newPosition];
-		if (target) target.position = pokemon.position;
+		if (defender) defender.position = pokemon.position;
 		pokemon.position = newPosition;
-		this.runEvent('Swap', target, pokemon);
-		this.runEvent('Swap', pokemon, target);
+		this.runEvent('Swap', defender, pokemon);
+		this.runEvent('Swap', pokemon, defender);
 		return true;
 	}
 
@@ -1633,8 +1633,8 @@ export class Battle {
 		return side.active[position - positionOffset];
 	}
 
-	faint(pokemon: Pokemon, source?: Pokemon, effect?: Effect) {
-		pokemon.faint(source, effect);
+	faint(pokemon: Pokemon, attacker?: Pokemon, effect?: Effect) {
+		pokemon.faint(attacker, effect);
 	}
 
 	endTurn() {
@@ -1659,14 +1659,14 @@ export class Battle {
 		if (this.gen === 1) {
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.volatiles['partialtrappinglock']) {
-					const target = pokemon.volatiles['partialtrappinglock'].locked;
-					if (target.hp <= 0 || !target.volatiles['partiallytrapped']) {
+					const defender = pokemon.volatiles['partialtrappinglock'].locked;
+					if (defender.hp <= 0 || !defender.volatiles['partiallytrapped']) {
 						delete pokemon.volatiles['partialtrappinglock'];
 					}
 				}
 				if (pokemon.volatiles['partiallytrapped']) {
-					const source = pokemon.volatiles['partiallytrapped'].source;
-					if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
+					const attacker = pokemon.volatiles['partiallytrapped'].attacker;
+					if (attacker.hp <= 0 || !attacker.volatiles['partialtrappinglock']) {
 						delete pokemon.volatiles['partiallytrapped'];
 					}
 				}
@@ -1719,7 +1719,7 @@ export class Battle {
 
 				for (let i = pokemon.attackedBy.length - 1; i >= 0; i--) {
 					const attack = pokemon.attackedBy[i];
-					if (attack.source.isActive) {
+					if (attack.attacker.isActive) {
 						attack.thisTurn = false;
 					} else {
 						pokemon.attackedBy.splice(pokemon.attackedBy.indexOf(attack), 1);
@@ -1748,12 +1748,12 @@ export class Battle {
 				// canceling switches would leak information
 				// if a foe might have a trapping ability
 				if (this.gen > 2) {
-					for (const source of pokemon.foes()) {
-						const species = (source.illusion || source).species;
+					for (const attacker of pokemon.foes()) {
+						const species = (attacker.illusion || attacker).species;
 						if (!species.abilities) continue;
 						for (const abilitySlot in species.abilities) {
 							const abilityName = species.abilities[abilitySlot as keyof Species['abilities']];
-							if (abilityName === source.ability) {
+							if (abilityName === attacker.ability) {
 								// pokemon event was already run above so we don't need
 								// to run it again.
 								continue;
@@ -1769,7 +1769,7 @@ export class Battle {
 							const ability = this.dex.abilities.get(abilityName);
 							if (ruleTable.has('-ability:' + ability.id)) continue;
 							if (pokemon.knownType && !this.dex.getImmunity('trapped', pokemon)) continue;
-							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);
+							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, attacker);
 						}
 					}
 				}
@@ -2035,20 +2035,20 @@ export class Battle {
 	}
 
 	boost(
-		boost: SparseBoostsTable, target: Pokemon | null = null, source: Pokemon | null = null,
+		boost: SparseBoostsTable, defender: Pokemon | null = null, attacker: Pokemon | null = null,
 		effect: Effect | null = null, isSecondary = false, isSelf = false
 	) {
 		if (this.event) {
-			target ||= this.event.target;
-			source ||= this.event.source;
+			defender ||= this.event.defender;
+			attacker ||= this.event.attacker;
 			effect ||= this.effect;
 		}
-		if (!target?.hp) return 0;
-		if (!target.isActive) return false;
-		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
-		boost = this.runEvent('ChangeBoost', target, source, effect, { ...boost });
-		boost = target.getCappedBoost(boost);
-		boost = this.runEvent('TryBoost', target, source, effect, { ...boost });
+		if (!defender?.hp) return 0;
+		if (!defender.isActive) return false;
+		if (this.gen > 5 && !defender.side.foePokemonLeft()) return false;
+		boost = this.runEvent('ChangeBoost', defender, attacker, effect, { ...boost });
+		boost = defender.getCappedBoost(boost);
+		boost = this.runEvent('TryBoost', defender, attacker, effect, { ...boost });
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
@@ -2056,9 +2056,9 @@ export class Battle {
 			const currentBoost: SparseBoostsTable = {
 				[boostName]: boost[boostName],
 			};
-			let boostBy = target.boostBy(currentBoost);
+			let boostBy = defender.boostBy(currentBoost);
 			let msg = '-boost';
-			if (boost[boostName]! < 0 || target.boosts[boostName] === -6) {
+			if (boost[boostName]! < 0 || defender.boosts[boostName] === -6) {
 				msg = '-unboost';
 				boostBy = -boostBy;
 			}
@@ -2066,76 +2066,76 @@ export class Battle {
 				success = true;
 				switch (effect?.id) {
 				case 'bellydrum': case 'angerpoint':
-					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] ' + effect.fullname);
+					this.add('-setboost', defender, 'atk', defender.boosts['atk'], '[from] ' + effect.fullname);
 					break;
 				case 'bellydrum2':
-					this.add(msg, target, boostName, boostBy, '[silent]');
+					this.add(msg, defender, boostName, boostBy, '[silent]');
 					this.hint("In Gen 2, Belly Drum boosts by 2 when it fails.");
 					break;
 				case 'zpower':
-					this.add(msg, target, boostName, boostBy, '[zeffect]');
+					this.add(msg, defender, boostName, boostBy, '[zeffect]');
 					break;
 				default:
 					if (!effect) break;
 					if (effect.effectType === 'Move') {
-						this.add(msg, target, boostName, boostBy);
+						this.add(msg, defender, boostName, boostBy);
 					} else if (effect.effectType === 'Item') {
-						this.add(msg, target, boostName, boostBy, '[from] item: ' + effect.name);
+						this.add(msg, defender, boostName, boostBy, '[from] item: ' + effect.name);
 					} else {
 						if (effect.effectType === 'Ability' && !boosted) {
-							this.add('-ability', target, effect.name, 'boost');
+							this.add('-ability', defender, effect.name, 'boost');
 							boosted = true;
 						}
-						this.add(msg, target, boostName, boostBy);
+						this.add(msg, defender, boostName, boostBy);
 					}
 					break;
 				}
-				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
+				this.runEvent('AfterEachBoost', defender, attacker, effect, currentBoost);
 			} else if (effect?.effectType === 'Ability') {
-				if (isSecondary || isSelf) this.add(msg, target, boostName, boostBy);
+				if (isSecondary || isSelf) this.add(msg, defender, boostName, boostBy);
 			} else if (!isSecondary && !isSelf) {
-				this.add(msg, target, boostName, boostBy);
+				this.add(msg, defender, boostName, boostBy);
 			}
 		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
+		this.runEvent('AfterBoost', defender, attacker, effect, boost);
 		if (success) {
-			if (Object.values(boost).some(x => x > 0)) target.statsRaisedThisTurn = true;
-			if (Object.values(boost).some(x => x < 0)) target.statsLoweredThisTurn = true;
+			if (Object.values(boost).some(x => x > 0)) defender.statsRaisedThisTurn = true;
+			if (Object.values(boost).some(x => x < 0)) defender.statsLoweredThisTurn = true;
 		}
 		return success;
 	}
 
 	spreadDamage(
 		damage: SpreadMoveDamage, targetArray: (false | Pokemon | null)[] | null = null,
-		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
+		attacker: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
 	) {
 		if (!targetArray) return [0];
 		const retVals: (number | false | undefined)[] = [];
 		if (typeof effect === 'string' || !effect) effect = this.dex.conditions.getByID((effect || '') as ID);
 		for (const [i, curDamage] of damage.entries()) {
-			const target = targetArray[i];
+			const defender = targetArray[i];
 			let targetDamage = curDamage;
 			if (!(targetDamage || targetDamage === 0)) {
 				retVals[i] = targetDamage;
 				continue;
 			}
-			if (!target || !target.hp) {
+			if (!defender || !defender.hp) {
 				retVals[i] = 0;
 				continue;
 			}
-			if (!target.isActive) {
+			if (!defender.isActive) {
 				retVals[i] = false;
 				continue;
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (effect.id !== 'strugglerecoil') { // Struggle recoil is not affected by effects
-				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
+				if (effect.effectType === 'Weather' && !defender.runStatusImmunity(effect.id)) {
 					this.debug('weather immunity');
 					retVals[i] = 0;
 					continue;
 				}
-				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage, true);
+				targetDamage = this.runEvent('Damage', defender, attacker, effect, targetDamage, true);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
 					retVals[i] = curDamage === true ? undefined : targetDamage;
@@ -2151,55 +2151,55 @@ export class Battle {
 				}
 			}
 
-			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
-			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
-			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
+			retVals[i] = targetDamage = defender.damage(targetDamage, attacker, effect);
+			if (targetDamage !== 0) defender.hurtThisTurn = defender.hp;
+			if (attacker && effect.effectType === 'Move') attacker.lastDamage = targetDamage;
 
 			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
 			switch (effect.id) {
 			case 'partiallytrapped':
-				this.add('-damage', target, target.getHealth, '[from] ' + target.volatiles['partiallytrapped'].sourceEffect.fullname, '[partiallytrapped]');
+				this.add('-damage', defender, defender.getHealth, '[from] ' + defender.volatiles['partiallytrapped'].sourceEffect.fullname, '[partiallytrapped]');
 				break;
 			case 'powder':
-				this.add('-damage', target, target.getHealth, '[silent]');
+				this.add('-damage', defender, defender.getHealth, '[silent]');
 				break;
 			case 'confused':
-				this.add('-damage', target, target.getHealth, '[from] confusion');
+				this.add('-damage', defender, defender.getHealth, '[from] confusion');
 				break;
 			default:
 				if (effect.effectType === 'Move' || !name) {
-					this.add('-damage', target, target.getHealth);
-				} else if (source && (source !== target || effect.effectType === 'Ability')) {
-					this.add('-damage', target, target.getHealth, `[from] ${name}`, `[of] ${source}`);
+					this.add('-damage', defender, defender.getHealth);
+				} else if (attacker && (attacker !== defender || effect.effectType === 'Ability')) {
+					this.add('-damage', defender, defender.getHealth, `[from] ${name}`, `[of] ${attacker}`);
 				} else {
-					this.add('-damage', target, target.getHealth, `[from] ${name}`);
+					this.add('-damage', defender, defender.getHealth, `[from] ${name}`);
 				}
 				break;
 			}
 
 			if (targetDamage && effect.effectType === 'Move') {
-				if (this.gen <= 4 && effect.drain && source) {
+				if (this.gen <= 4 && effect.drain && attacker) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
 					// Draining can be countered in gen 1
 					if (this.gen <= 1) this.lastDamage = amount;
-					this.heal(amount, source, target, 'drain');
+					this.heal(amount, attacker, defender, 'drain');
 				}
-				if (this.gen > 4 && effect.drain && source) {
+				if (this.gen > 4 && effect.drain && attacker) {
 					const amount = Math.round(targetDamage * effect.drain[0] / effect.drain[1]);
-					this.heal(amount, source, target, 'drain');
+					this.heal(amount, attacker, defender, 'drain');
 				}
 			}
 		}
 
 		if (instafaint) {
-			for (const [i, target] of targetArray.entries()) {
-				if (!retVals[i] || !target) continue;
+			for (const [i, defender] of targetArray.entries()) {
+				if (!retVals[i] || !defender) continue;
 
-				if (target.hp <= 0) {
-					this.debug(`instafaint: ${this.faintQueue.map(entry => entry.target.name).join(',')}`);
+				if (defender.hp <= 0) {
+					this.debug(`instafaint: ${this.faintQueue.map(entry => entry.defender.name).join(',')}`);
 					this.resolveFaints({ lastFaintFirst: true });
 					if (this.gen <= 2) {
-						target.faint();
+						defender.faint();
 						if (this.gen <= 1) this.queue.clear();
 					}
 				}
@@ -2210,24 +2210,24 @@ export class Battle {
 	}
 
 	damage(
-		damage: number, target: Pokemon | null = null, source: Pokemon | null = null,
+		damage: number, defender: Pokemon | null = null, attacker: Pokemon | null = null,
 		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
 	) {
 		if (this.event) {
-			target ||= this.event.target;
-			source ||= this.event.source;
+			defender ||= this.event.defender;
+			attacker ||= this.event.attacker;
 			effect ||= this.effect;
 		}
-		return this.spreadDamage([damage], [target], source, effect, instafaint)[0];
+		return this.spreadDamage([damage], [defender], attacker, effect, instafaint)[0];
 	}
 
-	directDamage(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: Effect | null = null) {
+	directDamage(damage: number, defender?: Pokemon, attacker: Pokemon | null = null, effect: Effect | null = null) {
 		if (this.event) {
-			target ||= this.event.target;
-			source ||= this.event.source;
+			defender ||= this.event.defender;
+			attacker ||= this.event.attacker;
 			effect ||= this.effect;
 		}
-		if (!target?.hp) return 0;
+		if (!defender?.hp) return 0;
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
@@ -2238,10 +2238,10 @@ export class Battle {
 			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id)) {
 			// Confusion and recoil damage can be countered
 			this.lastDamage = damage;
-			if (target.volatiles['substitute']) {
-				const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
-				// if the move was a self-targeting move, the source is the same as the target. We need to check the opposing substitute
-				const foe = target.side.foe.active[0];
+			if (defender.volatiles['substitute']) {
+				const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the defender";
+				// if the move was a self-targeting move, the attacker is the same as the defender. We need to check the opposing substitute
+				const foe = defender.side.foe.active[0];
 				if (foe?.volatiles['substitute']) {
 					foe.volatiles['substitute'].hp -= damage;
 					if (foe.volatiles['substitute'].hp <= 0) {
@@ -2250,7 +2250,7 @@ export class Battle {
 					} else {
 						this.add('-activate', foe, 'Substitute', '[damage]');
 					}
-					this.hint(hint + " has a Substitute, the target's Substitute takes the damage.");
+					this.hint(hint + " has a Substitute, the defender's Substitute takes the damage.");
 					return damage;
 				} else {
 					this.hint(hint + " does not have a Substitute there is no damage dealt.");
@@ -2259,62 +2259,62 @@ export class Battle {
 			}
 		}
 
-		damage = target.damage(damage, source, effect);
+		damage = defender.damage(damage, attacker, effect);
 		switch (effect.id) {
 		case 'strugglerecoil':
-			this.add('-damage', target, target.getHealth, '[from] recoil');
+			this.add('-damage', defender, defender.getHealth, '[from] recoil');
 			break;
 		case 'confusion':
-			this.add('-damage', target, target.getHealth, '[from] confusion');
+			this.add('-damage', defender, defender.getHealth, '[from] confusion');
 			break;
 		default:
-			this.add('-damage', target, target.getHealth);
+			this.add('-damage', defender, defender.getHealth);
 			break;
 		}
 		return damage;
 	}
 
-	heal(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
+	heal(damage: number, defender?: Pokemon, attacker: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
 		if (this.event) {
-			target ||= this.event.target;
-			source ||= this.event.source;
+			defender ||= this.event.defender;
+			attacker ||= this.event.attacker;
 			effect ||= this.effect;
 		}
 		if (effect === 'drain') effect = this.dex.conditions.getByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
-		damage = this.runEvent('TryHeal', target, source, effect, damage);
+		damage = this.runEvent('TryHeal', defender, attacker, effect, damage);
 		if (!damage) return damage;
-		if (!target?.hp) return false;
-		if (!target.isActive) return false;
-		if (target.hp >= target.maxhp) return false;
-		const finalDamage = target.heal(damage, source, effect);
+		if (!defender?.hp) return false;
+		if (!defender.isActive) return false;
+		if (defender.hp >= defender.maxhp) return false;
+		const finalDamage = defender.heal(damage, attacker, effect);
 		switch (effect?.id) {
 		case 'leechseed':
 		case 'rest':
-			this.add('-heal', target, target.getHealth, '[silent]');
+			this.add('-heal', defender, defender.getHealth, '[silent]');
 			break;
 		case 'drain':
-			this.add('-heal', target, target.getHealth, '[from] drain', `[of] ${source!}`);
+			this.add('-heal', defender, defender.getHealth, '[from] drain', `[of] ${attacker!}`);
 			break;
 		case 'wish':
 			break;
 		case 'zpower':
-			this.add('-heal', target, target.getHealth, '[zeffect]');
+			this.add('-heal', defender, defender.getHealth, '[zeffect]');
 			break;
 		default:
 			if (!effect) break;
 			if (effect.effectType === 'Move') {
-				this.add('-heal', target, target.getHealth);
-			} else if (source && source !== target) {
-				this.add('-heal', target, target.getHealth, `[from] ${effect.fullname}`, `[of] ${source}`);
+				this.add('-heal', defender, defender.getHealth);
+			} else if (attacker && attacker !== defender) {
+				this.add('-heal', defender, defender.getHealth, `[from] ${effect.fullname}`, `[of] ${attacker}`);
 			} else {
-				this.add('-heal', target, target.getHealth, `[from] ${effect.fullname}`);
+				this.add('-heal', defender, defender.getHealth, `[from] ${effect.fullname}`);
 			}
 			break;
 		}
-		this.runEvent('Heal', target, source, effect, finalDamage);
+		this.runEvent('Heal', defender, attacker, effect, finalDamage);
 		return finalDamage;
 	}
 
@@ -2410,12 +2410,12 @@ export class Battle {
 	}
 
 	/**
-	 * Returns whether a proposed target for a move is valid.
+	 * Returns whether a proposed defender for a move is valid.
 	 */
-	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
+	validTargetLoc(targetLoc: number, attacker: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
 		const numSlots = this.activePerHalf;
-		const sourceLoc = source.getLocOf(source);
+		const sourceLoc = attacker.getLocOf(attacker);
 		if (Math.abs(targetLoc) > numSlots) return false;
 		const isSelf = (sourceLoc === targetLoc);
 		const isFoe = (this.gameType === 'freeforall' ? !isSelf : targetLoc > 0);
@@ -2425,7 +2425,7 @@ export class Battle {
 			Math.abs(targetLoc - sourceLoc) === 1);
 
 		if (this.gameType === 'freeforall' && targetType === 'adjacentAlly') {
-			// moves targeting one ally can instead target foes in Battle Royal
+			// moves targeting one ally can instead defender foes in Battle Royal
 			return isAdjacent;
 		}
 
@@ -2446,8 +2446,8 @@ export class Battle {
 		return false;
 	}
 
-	validTarget(target: Pokemon, source: Pokemon, targetType: string) {
-		return this.validTargetLoc(source.getLocOf(target), source, targetType);
+	validTarget(defender: Pokemon, attacker: Pokemon, targetType: string) {
+		return this.validTargetLoc(attacker.getLocOf(defender), attacker, targetType);
 	}
 
 	getTarget(pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon) {
@@ -2458,66 +2458,66 @@ export class Battle {
 		// we need to manually check for Stalwart here
 		if (pokemon.hasAbility(['stalwart', 'propellertail'])) tracksTarget = true;
 		if (tracksTarget && originalTarget?.isActive) {
-			// smart-tracking move's original target is on the field: target it
+			// smart-tracking move's original defender is on the field: defender it
 			return originalTarget;
 		}
 
 		// banning Dragon Darts from directly targeting itself is done in side.ts, but
-		// Dragon Darts can target itself if Ally Switch is used afterwards
+		// Dragon Darts can defender itself if Ally Switch is used afterwards
 		if (move.smartTarget) {
 			const curTarget = pokemon.getAtLoc(targetLoc);
 			return curTarget && !curTarget.fainted ? curTarget : this.getRandomTarget(pokemon, move);
 		}
 
-		// Fails if the target is the user and the move can't target its own position
+		// Fails if the defender is the user and the move can't defender its own position
 		const selfLoc = pokemon.getLocOf(pokemon);
 		if (
-			['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === selfLoc &&
+			['adjacentAlly', 'any', 'normal'].includes(move.defender) && targetLoc === selfLoc &&
 			!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']
 		) {
 			return move.flags['futuremove'] ? pokemon : null;
 		}
-		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
-			const target = pokemon.getAtLoc(targetLoc);
-			if (target?.fainted) {
+		if (move.defender !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.defender)) {
+			const defender = pokemon.getAtLoc(targetLoc);
+			if (defender?.fainted) {
 				if (this.gameType === 'freeforall') {
 					// Target is a fainted opponent in a free-for-all battle; attack shouldn't retarget
-					return target;
+					return defender;
 				}
-				if (target.isAlly(pokemon)) {
-					if (move.target === 'adjacentAllyOrSelf' && this.gen !== 5) {
+				if (defender.isAlly(pokemon)) {
+					if (move.defender === 'adjacentAllyOrSelf' && this.gen !== 5) {
 						return pokemon;
 					}
 					// Target is a fainted ally: attack shouldn't retarget
-					return target;
+					return defender;
 				}
 			}
-			if (target && !target.fainted) {
-				// Target is unfainted: use selected target location
-				return target;
+			if (defender && !defender.fainted) {
+				// Target is unfainted: use selected defender location
+				return defender;
 			}
 
-			// Chosen target not valid,
+			// Chosen defender not valid,
 			// retarget randomly with getRandomTarget
 		}
 		return this.getRandomTarget(pokemon, move);
 	}
 
 	getRandomTarget(pokemon: Pokemon, move: string | Move) {
-		// A move was used without a chosen target
+		// A move was used without a chosen defender
 
 		// For instance: Metronome chooses Ice Beam. Since the user didn't
-		// choose a target when choosing Metronome, Ice Beam's target must
+		// choose a defender when choosing Metronome, Ice Beam's defender must
 		// be chosen randomly.
 
-		// The target is chosen randomly from possible targets, EXCEPT that
-		// moves that can target either allies or foes will only target foes
-		// when used without an explicit target.
+		// The defender is chosen randomly from possible targets, EXCEPT that
+		// moves that can defender either allies or foes will only defender foes
+		// when used without an explicit defender.
 
 		move = this.dex.moves.get(move);
-		if (['self', 'all', 'allySide', 'allyTeam', 'adjacentAllyOrSelf'].includes(move.target)) {
+		if (['self', 'all', 'allySide', 'allyTeam', 'adjacentAllyOrSelf'].includes(move.defender)) {
 			return pokemon;
-		} else if (move.target === 'adjacentAlly') {
+		} else if (move.defender === 'adjacentAlly') {
 			if (this.gameType === 'singles') return null;
 			const adjacentAllies = pokemon.adjacentAllies();
 			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
@@ -2525,12 +2525,12 @@ export class Battle {
 		if (this.gameType === 'singles') return pokemon.side.foe.active[0];
 
 		if (this.activePerHalf > 2) {
-			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
-				// even if a move can target an ally, auto-resolution will never make it target an ally
+			if (move.defender === 'adjacentFoe' || move.defender === 'normal' || move.defender === 'randomNormal') {
+				// even if a move can defender an ally, auto-resolution will never make it defender an ally
 				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your ally
 				const adjacentFoes = pokemon.adjacentFoes();
 				if (adjacentFoes.length) return this.sample(adjacentFoes);
-				// no valid target at all, return slot directly across for any possible redirection
+				// no valid defender at all, return slot directly across for any possible redirection
 				return pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			}
 		}
@@ -2590,16 +2590,16 @@ export class Battle {
 		while (this.faintQueue.length) {
 			faintQueueLeft = this.faintQueue.length;
 			faintData = this.faintQueue.shift()!;
-			const pokemon: Pokemon = faintData.target;
-			if (!pokemon.fainted && this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
+			const pokemon: Pokemon = faintData.defender;
+			if (!pokemon.fainted && this.runEvent('BeforeFaint', pokemon, faintData.attacker, faintData.effect)) {
 				if (this.gen <= 4 && !faintData.faintEventDone) {
-					this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+					this.runEvent('Faint', pokemon, faintData.attacker, faintData.effect);
 				}
 				this.add('faint', pokemon);
 				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				if (this.gen >= 5 && !faintData.faintEventDone) {
-					this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+					this.runEvent('Faint', pokemon, faintData.attacker, faintData.effect);
 				}
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
@@ -2623,7 +2623,7 @@ export class Battle {
 				}
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) {
-					// in Gen 2, if Destiny Bond activates during Pursuit, only process the target
+					// in Gen 2, if Destiny Bond activates during Pursuit, only process the defender
 					if (pokemon.pursuitActivated && this.gen <= 2) break;
 					// in Gens 3-4, don't check for a win if Destiny Bond activates during a Pursuit faint
 					if (!(pokemon.pursuitActivated && this.gen <= 4)) checkWin = true;
@@ -2651,14 +2651,14 @@ export class Battle {
 		if (checkWin && this.checkWin(faintData)) return true;
 
 		if (faintData && length) {
-			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+			this.runEvent('AfterFaint', faintData.defender, faintData.attacker, faintData.effect, length);
 		}
 		return false;
 	}
 
 	checkWin(faintData?: Battle['faintQueue'][0]) {
 		if (this.sides.every(side => !side.pokemonLeft)) {
-			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
+			this.win(faintData && this.gen > 4 ? faintData.defender.side : null);
 			return true;
 		}
 		for (const side of this.sides) {
@@ -2694,9 +2694,9 @@ export class Battle {
 			// (instead of compounding every time `getActionSpeed` is called)
 			let priority = this.dex.moves.get(move.id).priority;
 			// Grassy Glide priority
-			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
-			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, target, null, priority);
-			priority = this.runEvent('ModifyPriority', action.pokemon, target, move, priority);
+			const defender = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, defender, null, priority);
+			priority = this.runEvent('ModifyPriority', action.pokemon, defender, move, priority);
 			action.priority = priority + action.fractionalPriority;
 			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
 			if (this.gen > 5) action.move.priority = priority;
@@ -2784,10 +2784,10 @@ export class Battle {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
-			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
-			if (!target) return false;
+			const defender = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			if (!defender) return false;
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
-			action.move.beforeTurnCallback.call(this, action.pokemon, target);
+			action.move.beforeTurnCallback.call(this, action.pokemon, defender);
 			break;
 		case 'priorityChargeMove':
 			if (!action.pokemon.isActive) return false;
@@ -2816,24 +2816,24 @@ export class Battle {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
+			this.actions.switchIn(action.defender, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
-			if (action.target.position < action.pokemon.side.active.length) {
+			if (action.defender.position < action.pokemon.side.active.length) {
 				this.queue.addChoice({
 					choice: 'instaswitch',
-					pokemon: action.target,
-					target: action.target,
+					pokemon: action.defender,
+					defender: action.defender,
 				});
 			}
-			action.target.fainted = false;
-			action.target.faintQueued = false;
-			action.target.subFainted = false;
-			action.target.status = '';
-			action.target.hp = 1; // Needed so hp functions works
-			action.target.sethp(action.target.maxhp / 2);
-			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.defender.fainted = false;
+			action.defender.faintQueued = false;
+			action.defender.subFainted = false;
+			action.defender.status = '';
+			action.defender.hp = 1; // Needed so hp functions works
+			action.defender.sethp(action.defender.maxhp / 2);
+			this.add('-heal', action.defender, action.defender.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		case 'runSwitch':
@@ -3187,7 +3187,7 @@ export class Battle {
 				return;
 			}
 		} else if (args.includes('[still]')) {
-			// If no animation plays, the target should never be known
+			// If no animation plays, the defender should never be known
 			const parts = this.log[this.lastMoveLine].split('|');
 			parts[4] = '';
 			this.log[this.lastMoveLine] = parts.join('|');
@@ -3381,7 +3381,7 @@ export class Battle {
 		if (!obj.id) obj.id = '';
 		if (effectOrder !== undefined) {
 			obj.effectOrder = effectOrder;
-		} else if (obj.id && obj.target && (!(obj.target instanceof Pokemon) || obj.target.isActive)) {
+		} else if (obj.id && obj.defender && (!(obj.defender instanceof Pokemon) || obj.defender.isActive)) {
 			obj.effectOrder = this.effectOrder++;
 		} else {
 			obj.effectOrder = 0;
@@ -3392,7 +3392,7 @@ export class Battle {
 	clearEffectState(state: EffectState) {
 		state.id = '';
 		for (const k in state) {
-			if (k === 'id' || k === 'target') {
+			if (k === 'id' || k === 'defender') {
 				continue;
 			} else if (k === 'effectOrder') {
 				state.effectOrder = 0;

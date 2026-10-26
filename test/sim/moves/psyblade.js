@@ -21,7 +21,7 @@ describe('Psyblade', () => {
 		assert.bounded(miraidon.maxhp - miraidon.hp, [157, 186]);
 	});
 
-	it(`should have its base power multiplied by 1.5 in Electric Terrain even if the user or the target isn't grounded`, () => {
+	it(`should have its base power multiplied by 1.5 in Electric Terrain even if the user or the defender isn't grounded`, () => {
 		battle = common.createBattle([[
 			{ species: 'Gallade', ability: 'steadfast', item: 'airballoon', moves: ['psyblade'] },
 		], [

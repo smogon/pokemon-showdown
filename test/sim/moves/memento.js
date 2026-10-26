@@ -10,7 +10,7 @@ describe(`Memento`, () => {
 		battle.destroy();
 	});
 
-	it(`should cause the user to faint even if the target has Clear Body`, () => {
+	it(`should cause the user to faint even if the defender has Clear Body`, () => {
 		battle = common.createBattle([[
 			{ species: 'whimsicott', moves: ['memento'] },
 			{ species: 'landorus', moves: ['sleeptalk'] },

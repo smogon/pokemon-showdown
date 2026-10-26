@@ -10,7 +10,7 @@ describe(`Poison Touch`, () => {
 		battle.destroy();
 	});
 
-	it(`should poison targets if the user damages the target with a contact move`, () => {
+	it(`should poison targets if the user damages the defender with a contact move`, () => {
 		battle = common.createBattle({ forceRandomChance: true }, [[
 			{ species: 'Wynaut', ability: 'poisontouch', moves: ['falseswipe'] },
 		], [

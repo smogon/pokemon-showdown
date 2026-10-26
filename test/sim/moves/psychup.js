@@ -22,19 +22,19 @@ describe('Psych Up', () => {
 
 		battle.makeChoices('move focusenergy, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move psychup -2, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert(!palkia.volatiles['focusenergy'], "A pokemon should lose a Focus Energy boost if the target of Psych Up does not have a Focus Energy boost.");
+		assert(!palkia.volatiles['focusenergy'], "A pokemon should lose a Focus Energy boost if the defender of Psych Up does not have a Focus Energy boost.");
 
 		battle.makeChoices('move sleeptalk, move focusenergy', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move psychup -2, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert(palkia.volatiles['focusenergy'], "A pokemon should gain a Focus Energy boost if the target of Psych Up has a Focus Energy boost.");
+		assert(palkia.volatiles['focusenergy'], "A pokemon should gain a Focus Energy boost if the defender of Psych Up has a Focus Energy boost.");
 
 		battle.makeChoices('move laserfocus, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move psychup -2, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert(!palkia.volatiles['laserfocus'], "A pokemon should lose a Laser Focus boost if the target of Psych Up does not have a Laser Focus boost.");
+		assert(!palkia.volatiles['laserfocus'], "A pokemon should lose a Laser Focus boost if the defender of Psych Up does not have a Laser Focus boost.");
 
 		battle.makeChoices('move sleeptalk, move laserfocus', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move psychup -2, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert(palkia.volatiles['laserfocus'], "A pokemon should gain a Laser Focus boost if the target of Psych Up has a Laser Focus boost.");
+		assert(palkia.volatiles['laserfocus'], "A pokemon should gain a Laser Focus boost if the defender of Psych Up has a Laser Focus boost.");
 	});
 
 	it('should copy both positive and negative stat changes', () => {
@@ -49,11 +49,11 @@ describe('Psych Up', () => {
 
 		battle.makeChoices('move sleeptalk, move swordsdance', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move psychup -2, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert.statStage(palkia, 'atk', 2, "A pokemon should copy the target's positive stat changes when using Psych Up.");
+		assert.statStage(palkia, 'atk', 2, "A pokemon should copy the defender's positive stat changes when using Psych Up.");
 
 		battle.makeChoices('move sleeptalk, move featherdance 1', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move psychup 1, move sleeptalk', 'move sleeptalk, move sleeptalk');
-		assert.statStage(palkia, 'atk', -2, "A pokemon should copy the target's negative stat changes when using Psych Up.");
+		assert.statStage(palkia, 'atk', -2, "A pokemon should copy the defender's negative stat changes when using Psych Up.");
 	});
 });
 

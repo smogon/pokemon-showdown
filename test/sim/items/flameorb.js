@@ -28,7 +28,7 @@ describe('Flame Orb', () => {
 		], [
 			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.status, 'brn', () => battle.makeChoices('move protect', 'move splash'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.status, 'brn', () => battle.makeChoices('move protect', 'move splash'));
 	});
 });

@@ -37,8 +37,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fellstinger: {
 		inherit: true,
 		basePower: 30,
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.boost({ atk: 2 }, pokemon, pokemon, move);
+		onAfterMoveSecondarySelf(pokemon, defender, move) {
+			if (!defender || defender.fainted || defender.hp <= 0) this.boost({ atk: 2 }, pokemon, pokemon, move);
 		},
 	},
 	flyingpress: {
@@ -83,8 +83,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	partingshot: {
 		inherit: true,
-		onHit(target, source) {
-			this.boost({ atk: -1, spa: -1 }, target, source);
+		onHit(defender, attacker) {
+			this.boost({ atk: -1, spa: -1 }, defender, attacker);
 		},
 	},
 	phantomforce: {
@@ -118,22 +118,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			noCopy: true,
-			onStart(target) {
+			onStart(defender) {
 				this.effectState.layers = 1;
-				this.add('-start', target, 'stockpile' + this.effectState.layers);
-				this.boost({ def: 1, spd: 1 }, target, target);
+				this.add('-start', defender, 'stockpile' + this.effectState.layers);
+				this.boost({ def: 1, spd: 1 }, defender, defender);
 			},
-			onRestart(target) {
+			onRestart(defender) {
 				if (this.effectState.layers >= 3) return false;
 				this.effectState.layers++;
-				this.add('-start', target, 'stockpile' + this.effectState.layers);
-				this.boost({ def: 1, spd: 1 }, target, target);
+				this.add('-start', defender, 'stockpile' + this.effectState.layers);
+				this.boost({ def: 1, spd: 1 }, defender, defender);
 			},
-			onEnd(target) {
+			onEnd(defender) {
 				const layers = this.effectState.layers * -1;
 				this.effectState.layers = 0;
-				this.boost({ def: layers, spd: layers }, target, target);
-				this.add('-end', target, 'Stockpile');
+				this.boost({ def: layers, spd: layers }, defender, defender);
+				this.add('-end', defender, 'Stockpile');
 			},
 		},
 	},
@@ -169,18 +169,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
+			onTryHit(defender, attacker, move) {
 				// Wide Guard blocks damaging spread moves
-				if (move.category === 'Status' || (move?.target !== 'allAdjacent' && move.target !== 'allAdjacentFoes')) {
+				if (move.category === 'Status' || (move?.defender !== 'allAdjacent' && move.defender !== 'allAdjacentFoes')) {
 					return;
 				}
-				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
-				this.add('-activate', target, 'move: Wide Guard');
-				const lockedmove = source.getVolatile('lockedmove');
+				if (this.checkMoveBypassesProtect(move, attacker, defender, false)) return;
+				this.add('-activate', defender, 'move: Wide Guard');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
 				return null;

@@ -8,11 +8,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		ignoreKlutz: true,
 		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 		// and in Neutralizing Gas itself within data/abilities.ts
-		onSetAbility(ability, target, source, effect) {
+		onSetAbility(ability, defender, attacker, effect) {
 			if (effect?.effectType === 'Ability' && effect.name !== 'Trace') {
-				this.add('-ability', source, effect);
+				this.add('-ability', attacker, effect);
 			}
-			this.add('-block', target, 'item: Ability Shield');
+			this.add('-block', defender, 'item: Ability Shield');
 			return null;
 		},
 		// Mold Breaker protection implemented in Battle.suppressingAbility() within sim/battle.ts
@@ -24,8 +24,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 575,
 		megaStone: { "Abomasnow": "Abomasnow-Mega" },
 		itemUser: ["Abomasnow"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 674,
 		gen: 6,
@@ -36,8 +36,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 576,
 		megaStone: { "Absol": "Absol-Mega" },
 		itemUser: ["Absol"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 677,
 		gen: 6,
@@ -48,8 +48,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 499,
 		megaStone: { "Absol": "Absol-Mega-Z" },
 		itemUser: ["Absol"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2638,
 		gen: 9,
@@ -61,9 +61,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.type === 'Water') {
-				target.useItem();
+				defender.useItem();
 			}
 		},
 		boosts: {
@@ -76,13 +76,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Adamant Crystal",
 		spritenum: 741,
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === 483 || pokemon.baseSpecies.num === 483) {
+		onTakeItem(item, pokemon, attacker) {
+			if (attacker?.baseSpecies.num === 483 || pokemon.baseSpecies.num === 483) {
 				return false;
 			}
 			return true;
@@ -99,7 +99,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -114,16 +114,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterBoost(boost, target, source, effect) {
+		onAfterBoost(boost, defender, attacker, effect) {
 			// Adrenaline Orb activates if Intimidate is blocked by an ability like Hyper Cutter,
 			// which deletes boost.atk,
 			// but not if the holder's attack is already at -6 (or +6 if it has Contrary),
 			// which sets boost.atk to 0
-			if (target.boosts['spe'] === 6 || boost.atk === 0) {
+			if (defender.boosts['spe'] === 6 || boost.atk === 0) {
 				return;
 			}
 			if (effect.name === 'Intimidate') {
-				target.useItem();
+				defender.useItem();
 			}
 		},
 		boosts: {
@@ -137,8 +137,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 577,
 		megaStone: { "Aerodactyl": "Aerodactyl-Mega" },
 		itemUser: ["Aerodactyl"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 672,
 		gen: 6,
@@ -149,8 +149,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 578,
 		megaStone: { "Aggron": "Aggron-Mega" },
 		itemUser: ["Aggron"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 667,
 		gen: 6,
@@ -188,25 +188,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onStart(target) {
-			if (!target.ignoringItem() && !this.field.getPseudoWeather('gravity')) {
-				this.add('-item', target, 'Air Balloon');
+		onStart(defender) {
+			if (!defender.ignoringItem() && !this.field.getPseudoWeather('gravity')) {
+				this.add('-item', defender, 'Air Balloon');
 			}
 		},
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
-		onDamagingHit(damage, target, source, move) {
-			this.add('-enditem', target, 'Air Balloon');
-			target.item = '';
-			this.clearEffectState(target.itemState);
-			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
+		onDamagingHit(damage, defender, attacker, move) {
+			this.add('-enditem', defender, 'Air Balloon');
+			defender.item = '';
+			this.clearEffectState(defender.itemState);
+			this.runEvent('AfterUseItem', defender, null, null, this.dex.items.get('airballoon'));
 		},
-		onAfterSubDamage(damage, target, source, effect) {
+		onAfterSubDamage(damage, defender, attacker, effect) {
 			this.debug('effect: ' + effect.id);
 			if (effect.effectType === 'Move') {
-				this.add('-enditem', target, 'Air Balloon');
-				target.item = '';
-				this.clearEffectState(target.itemState);
-				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
+				this.add('-enditem', defender, 'Air Balloon');
+				defender.item = '';
+				this.clearEffectState(defender.itemState);
+				this.runEvent('AfterUseItem', defender, null, null, this.dex.items.get('airballoon'));
 			}
 		},
 		num: 541,
@@ -217,8 +217,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 579,
 		megaStone: { "Alakazam": "Alakazam-Mega" },
 		itemUser: ["Alakazam"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 679,
 		gen: 6,
@@ -240,8 +240,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 615,
 		megaStone: { "Altaria": "Altaria-Mega" },
 		itemUser: ["Altaria"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 755,
 		gen: 6,
@@ -252,8 +252,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 580,
 		megaStone: { "Ampharos": "Ampharos-Mega" },
 		itemUser: ["Ampharos"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 658,
 		gen: 6,
@@ -336,8 +336,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 617,
 		megaStone: { "Audino": "Audino-Mega" },
 		itemUser: ["Audino"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 757,
 		gen: 6,
@@ -360,14 +360,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Steel",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Steel' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Steel' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -381,8 +381,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 582,
 		megaStone: { "Banette": "Banette-Mega" },
 		itemUser: ["Banette"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 668,
 		gen: 6,
@@ -393,8 +393,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 564,
 		megaStone: { "Barbaracle": "Barbaracle-Mega" },
 		itemUser: ["Barbaracle"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2581,
 		gen: 9,
@@ -405,8 +405,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 514,
 		megaStone: { "Baxcalibur": "Baxcalibur-Mega" },
 		itemUser: ["Baxcalibur"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2648,
 		gen: 9,
@@ -424,8 +424,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 628,
 		megaStone: { "Beedrill": "Beedrill-Mega" },
 		itemUser: ["Beedrill"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 770,
 		gen: 6,
@@ -486,7 +486,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onTryHealPriority: 1,
-		onTryHeal(damage, target, source, effect) {
+		onTryHeal(damage, defender, attacker, effect) {
 			const heals = ['drain', 'leechseed', 'ingrain', 'aquaring', 'strengthsap'];
 			if (heals.includes(effect.id)) {
 				return this.chainModify([5324, 4096]);
@@ -518,7 +518,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fighting') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -533,7 +533,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Dark') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -570,8 +570,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 583,
 		megaStone: { "Blastoise": "Blastoise-Mega" },
 		itemUser: ["Blastoise"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 661,
 		gen: 6,
@@ -582,8 +582,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 584,
 		megaStone: { "Blaziken": "Blaziken-Mega" },
 		itemUser: ["Blaziken"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 664,
 		gen: 6,
@@ -598,8 +598,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.formeChange('Kyogre-Primal', this.effect, true);
 			}
 		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Kyogre') return false;
+		onTakeItem(item, attacker) {
+			if (attacker.baseSpecies.baseSpecies === 'Kyogre') return false;
 			return true;
 		},
 		itemUser: ["Kyogre"],
@@ -652,8 +652,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.addVolatile('quarkdrive');
 			}
 		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.tags.includes("Paradox")) return false;
+		onTakeItem(item, attacker) {
+			if (attacker.baseSpecies.tags.includes("Paradox")) return false;
 			return true;
 		},
 		num: 1880,
@@ -687,10 +687,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Bug Gem",
 		spritenum: 53,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Bug' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Bug' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 558,
@@ -713,8 +713,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Bug Memory",
 		spritenum: 673,
 		onMemory: 'Bug',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -728,8 +728,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	burndrive: {
 		name: "Burn Drive",
 		spritenum: 54,
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -746,8 +746,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 625,
 		megaStone: { "Camerupt": "Camerupt-Mega" },
 		itemUser: ["Camerupt"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 767,
 		gen: 6,
@@ -759,9 +759,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.type === 'Electric') {
-				target.useItem();
+				defender.useItem();
 			}
 		},
 		boosts: {
@@ -775,8 +775,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 557,
 		megaStone: { "Chandelure": "Chandelure-Mega" },
 		itemUser: ["Chandelure"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2574,
 		gen: 9,
@@ -789,7 +789,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fire') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -802,8 +802,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 585,
 		megaStone: { "Charizard": "Charizard-Mega-X" },
 		itemUser: ["Charizard"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 660,
 		gen: 6,
@@ -814,8 +814,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 586,
 		megaStone: { "Charizard": "Charizard-Mega-Y" },
 		itemUser: ["Charizard"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 678,
 		gen: 6,
@@ -829,14 +829,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Rock",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Rock' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Rock' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -879,8 +879,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 558,
 		megaStone: { "Chesnaught": "Chesnaught-Mega" },
 		itemUser: ["Chesnaught"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2575,
 		gen: 9,
@@ -915,14 +915,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Normal",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
+		onSourceModifyDamage(damage, attacker, defender, move) {
 			if (
 				move.type === 'Normal' &&
-				(!target.volatiles['substitute'] || move.flags['bypasssub'] || (move.infiltrates && this.gen >= 6))
+				(!defender.volatiles['substitute'] || move.flags['bypasssub'] || (move.infiltrates && this.gen >= 6))
 			) {
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -934,8 +934,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	chilldrive: {
 		name: "Chill Drive",
 		spritenum: 67,
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -952,8 +952,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 498,
 		megaStone: { "Chimecho": "Chimecho-Mega" },
 		itemUser: ["Chimecho"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2637,
 		gen: 9,
@@ -1047,14 +1047,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Fighting",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Fighting' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -1080,8 +1080,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onTryBoostPriority: 1,
-		onTryBoost(boost, target, source, effect) {
-			if (source && target === source) return;
+		onTryBoost(boost, defender, attacker, effect) {
+			if (attacker && defender === attacker) return;
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
@@ -1091,7 +1091,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', `[of] ${target}`);
+				this.add('-fail', defender, 'unboost', '[from] item: Clear Amulet', `[of] ${defender}`);
 			}
 		},
 		num: 1882,
@@ -1102,8 +1102,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 544,
 		megaStone: { "Clefable": "Clefable-Mega" },
 		itemUser: ["Clefable"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2559,
 		gen: 9,
@@ -1126,14 +1126,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Flying",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Flying' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Flying' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -1150,14 +1150,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Dark",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Dark' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Dark' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -1173,13 +1173,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.name.startsWith('Ogerpon-Cornerstone')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+		onTakeItem(item, attacker) {
+			if (attacker.baseSpecies.baseSpecies === 'Ogerpon') return false;
 			return true;
 		},
 		forcedForme: "Ogerpon-Cornerstone",
@@ -1228,8 +1228,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 507,
 		megaStone: { "Crabominable": "Crabominable-Mega" },
 		itemUser: ["Crabominable"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2644,
 		gen: 9,
@@ -1253,7 +1253,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Ghost",
 		},
 		onFractionalPriorityPriority: -2,
-		onFractionalPriority(priority, pokemon, target, move) {
+		onFractionalPriority(priority, pokemon, defender, move) {
 			if (move.category === 'Status' && pokemon.hasAbility('myceliummight')) return;
 			if (
 				priority <= 0 &&
@@ -1283,10 +1283,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Dark Gem",
 		spritenum: 89,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Dark' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Dark' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 562,
@@ -1309,8 +1309,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Dark Memory",
 		spritenum: 683,
 		onMemory: 'Dark',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1326,8 +1326,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 504,
 		megaStone: { "Darkrai": "Darkrai-Mega" },
 		itemUser: ["Darkrai"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2568,
 		gen: 9,
@@ -1392,8 +1392,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 559,
 		megaStone: { "Delphox": "Delphox-Mega" },
 		itemUser: ["Delphox"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2576,
 		gen: 9,
@@ -1406,10 +1406,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onAttractPriority: -100,
-		onAttract(target, source) {
-			this.debug(`attract intercepted: ${target} from ${source}`);
-			if (!source || source === target) return;
-			if (!source.volatiles['attract']) source.addVolatile('attract', target);
+		onAttract(defender, attacker) {
+			this.debug(`attract intercepted: ${defender} from ${attacker}`);
+			if (!attacker || attacker === defender) return;
+			if (!attacker.volatiles['attract']) attacker.addVolatile('attract', defender);
 		},
 		num: 280,
 		gen: 4,
@@ -1419,8 +1419,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 624,
 		megaStone: { "Diancie": "Diancie-Mega" },
 		itemUser: ["Diancie"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 764,
 		gen: 6,
@@ -1446,8 +1446,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	dousedrive: {
 		name: "Douse Drive",
 		spritenum: 103,
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -1464,13 +1464,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 105,
 		onPlate: 'Dragon',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Dragon') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -1484,8 +1484,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 565,
 		megaStone: { "Dragalge": "Dragalge-Mega" },
 		itemUser: ["Dragalge"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2582,
 		gen: 9,
@@ -1498,7 +1498,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 70,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Dragon') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -1510,10 +1510,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Dragon Gem",
 		spritenum: 107,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Dragon' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Dragon' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 561,
@@ -1525,8 +1525,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 547,
 		megaStone: { "Dragonite": "Dragonite-Mega" },
 		itemUser: ["Dragonite"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2562,
 		gen: 9,
@@ -1548,8 +1548,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Dragon Memory",
 		spritenum: 682,
 		onMemory: 'Dragon',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1574,8 +1574,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 569,
 		megaStone: { "Drampa": "Drampa-Mega" },
 		itemUser: ["Drampa"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2585,
 		gen: 9,
@@ -1586,13 +1586,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 110,
 		onPlate: 'Dark',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Dark') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -1651,13 +1651,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 117,
 		onPlate: 'Ground',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Ground') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -1671,8 +1671,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 556,
 		megaStone: { "Eelektross": "Eelektross-Mega" },
 		itemUser: ["Eelektross"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2573,
 		gen: 9,
@@ -1696,18 +1696,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onAfterMoveSecondaryPriority: 2,
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
-				if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
+		onAfterMoveSecondary(defender, attacker, move) {
+			if (attacker && attacker !== defender && defender.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
+				if (!this.canSwitch(defender.side) || defender.forceSwitchFlag || defender.beingCalledBack || defender.isSkyDropped()) return;
+				if (defender.volatiles['commanding'] || defender.volatiles['commanded']) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
-				target.switchFlag = true;
-				if (target.useItem()) {
-					source.switchFlag = false;
+				defender.switchFlag = true;
+				if (defender.useItem()) {
+					attacker.switchFlag = false;
 				} else {
-					target.switchFlag = false;
+					defender.switchFlag = false;
 				}
 			}
 		},
@@ -1733,23 +1733,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onAnySwitchInPriority: -4,
 		onAnySwitchIn() {
 			if (!this.effectState.eject) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 			delete this.effectState.eject;
 		},
 		onAnyAfterMega() {
 			if (!this.effectState.eject) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 			delete this.effectState.eject;
 		},
 		onAnyAfterMove() {
 			if (!this.effectState.eject) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 			delete this.effectState.eject;
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (!this.effectState.eject) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 			delete this.effectState.eject;
 		},
 		onUseItem(item, pokemon) {
@@ -1782,10 +1782,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Electric Gem",
 		spritenum: 120,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-			if (move.type === 'Electric' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status' || move.flags['pledgecombo']) return;
+			if (move.type === 'Electric' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 550,
@@ -1796,8 +1796,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Electric Memory",
 		spritenum: 679,
 		onMemory: 'Electric',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1848,8 +1848,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 552,
 		megaStone: { "Emboar": "Emboar-Mega" },
 		itemUser: ["Emboar"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2569,
 		gen: 9,
@@ -1863,10 +1863,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Bug",
 		},
-		onHit(target, source, move) {
-			if (move && target.getMoveHitData(move).typeMod > 0) {
-				if (target.eatItem()) {
-					this.heal(target.baseMaxhp / 4);
+		onHit(defender, attacker, move) {
+			if (move && defender.getMoveHitData(move).typeMod > 0) {
+				if (defender.eatItem()) {
+					this.heal(defender.baseMaxhp / 4);
 				}
 			}
 		},
@@ -1903,8 +1903,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 553,
 		megaStone: { "Excadrill": "Excadrill-Mega" },
 		itemUser: ["Excadrill"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2570,
 		gen: 9,
@@ -1916,8 +1916,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (move && target.getMoveHitData(move).typeMod > 0) {
+		onModifyDamage(damage, attacker, defender, move) {
+			if (move && defender.getMoveHitData(move).typeMod > 0) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -1943,7 +1943,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fairy') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -1955,10 +1955,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Fairy Gem",
 		spritenum: 611,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Fairy' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Fairy' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 715,
@@ -1969,8 +1969,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Fairy Memory",
 		spritenum: 684,
 		onMemory: 'Fairy',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -1986,8 +1986,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 570,
 		megaStone: { "Falinks": "Falinks-Mega" },
 		itemUser: ["Falinks"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2587,
 		gen: 9,
@@ -2005,8 +2005,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 549,
 		megaStone: { "Feraligatr": "Feraligatr-Mega" },
 		itemUser: ["Feraligatr"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2564,
 		gen: 9,
@@ -2016,10 +2016,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Fighting Gem",
 		spritenum: 139,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Fighting' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Fighting' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 553,
@@ -2030,8 +2030,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Fighting Memory",
 		spritenum: 668,
 		onMemory: 'Fighting',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2084,10 +2084,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Fire Gem",
 		spritenum: 141,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-			if (move.type === 'Fire' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status' || move.flags['pledgecombo']) return;
+			if (move.type === 'Fire' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 548,
@@ -2098,8 +2098,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Fire Memory",
 		spritenum: 676,
 		onMemory: 'Fire',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2136,13 +2136,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 143,
 		onPlate: 'Fighting',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fighting') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -2171,13 +2171,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 146,
 		onPlate: 'Fire',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fire') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -2203,9 +2203,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 562,
 		megaStone: { "Floette-Eternal": "Floette-Mega" },
 		itemUser: ["Floette-Eternal"],
-		onTakeItem(item, source) {
-			return !item.megaStone || (!item.megaStone[source.baseSpecies.name] &&
-				!Object.values(item.megaStone).includes(source.baseSpecies.name));
+		onTakeItem(item, attacker) {
+			return !item.megaStone || (!item.megaStone[attacker.baseSpecies.name] &&
+				!Object.values(item.megaStone).includes(attacker.baseSpecies.name));
 		},
 		num: 2579,
 		gen: 9,
@@ -2224,10 +2224,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Flying Gem",
 		spritenum: 149,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Flying' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Flying' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 556,
@@ -2238,8 +2238,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Flying Memory",
 		spritenum: 669,
 		onMemory: 'Flying',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2269,10 +2269,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onDamagePriority: -40,
-		onDamage(damage, target, source, effect) {
-			if (this.randomChance(1, 10) && damage >= target.hp && effect?.effectType === 'Move') {
-				this.add("-activate", target, "item: Focus Band");
-				return target.hp - 1;
+		onDamage(damage, defender, attacker, effect) {
+			if (this.randomChance(1, 10) && damage >= defender.hp && effect?.effectType === 'Move') {
+				this.add("-activate", defender, "item: Focus Band");
+				return defender.hp - 1;
 			}
 		},
 		num: 230,
@@ -2285,10 +2285,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onDamagePriority: -40,
-		onDamage(damage, target, source, effect) {
-			if (target.hp === target.maxhp && damage >= target.hp && effect?.effectType === 'Move') {
-				if (target.useItem()) {
-					return target.hp - 1;
+		onDamage(damage, defender, attacker, effect) {
+			if (defender.hp === defender.maxhp && damage >= defender.hp && effect?.effectType === 'Move') {
+				if (defender.useItem()) {
+					return defender.hp - 1;
 				}
 			}
 		},
@@ -2347,8 +2347,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 551,
 		megaStone: { "Froslass": "Froslass-Mega" },
 		itemUser: ["Froslass"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2566,
 		gen: 9,
@@ -2388,8 +2388,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 616,
 		megaStone: { "Gallade": "Gallade-Mega" },
 		itemUser: ["Gallade"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 756,
 		gen: 6,
@@ -2420,8 +2420,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 573,
 		megaStone: { "Garchomp": "Garchomp-Mega" },
 		itemUser: ["Garchomp"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 683,
 		gen: 6,
@@ -2432,8 +2432,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 501,
 		megaStone: { "Garchomp": "Garchomp-Mega-Z" },
 		itemUser: ["Garchomp"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2640,
 		gen: 9,
@@ -2444,8 +2444,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 587,
 		megaStone: { "Gardevoir": "Gardevoir-Mega" },
 		itemUser: ["Gardevoir"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 657,
 		gen: 6,
@@ -2456,8 +2456,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 588,
 		megaStone: { "Gengar": "Gengar-Mega" },
 		itemUser: ["Gengar"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 656,
 		gen: 6,
@@ -2467,10 +2467,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Ghost Gem",
 		spritenum: 161,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Ghost' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Ghost' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 560,
@@ -2493,8 +2493,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Ghost Memory",
 		spritenum: 674,
 		onMemory: 'Ghost',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2510,8 +2510,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 623,
 		megaStone: { "Glalie": "Glalie-Mega" },
 		itemUser: ["Glalie"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 763,
 		gen: 6,
@@ -2522,8 +2522,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 512,
 		megaStone: { "Glimmora": "Glimmora-Mega" },
 		itemUser: ["Glimmora"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2650,
 		gen: 9,
@@ -2543,8 +2543,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 508,
 		megaStone: { "Golisopod": "Golisopod-Mega" },
 		itemUser: ["Golisopod"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2645,
 		gen: 9,
@@ -2555,8 +2555,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 505,
 		megaStone: { "Golurk": "Golurk-Mega" },
 		itemUser: ["Golurk"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2642,
 		gen: 9,
@@ -2566,10 +2566,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Grass Gem",
 		spritenum: 172,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-			if (move.type === 'Grass' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status' || move.flags['pledgecombo']) return;
+			if (move.type === 'Grass' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 551,
@@ -2592,8 +2592,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Grass Memory",
 		spritenum: 678,
 		onMemory: 'Grass',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2639,9 +2639,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 560,
 		megaStone: { "Greninja": "Greninja-Mega" },
 		itemUser: ["Greninja"],
-		onTakeItem(item, source) {
+		onTakeItem(item, attacker) {
 			// TODO: Figure out if this works on Greninja-Bond
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2577,
 		gen: 9,
@@ -2673,13 +2673,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Griseous Core",
 		spritenum: 743,
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
+		onTakeItem(item, pokemon, attacker) {
+			if (attacker?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
 				return false;
 			}
 			return true;
@@ -2696,7 +2696,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -2709,10 +2709,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Ground Gem",
 		spritenum: 182,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Ground' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Ground' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 555,
@@ -2735,8 +2735,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Ground Memory",
 		spritenum: 671,
 		onMemory: 'Ground',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2752,8 +2752,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 589,
 		megaStone: { "Gyarados": "Gyarados-Mega" },
 		itemUser: ["Gyarados"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 676,
 		gen: 6,
@@ -2767,14 +2767,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Dragon",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Dragon' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Dragon' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -2790,7 +2790,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Rock') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -2803,8 +2803,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 566,
 		megaStone: { "Hawlucha": "Hawlucha-Mega" },
 		itemUser: ["Hawlucha"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2583,
 		gen: 9,
@@ -2824,13 +2824,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.name.startsWith('Ogerpon-Hearthflame')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+		onTakeItem(item, attacker) {
+			if (attacker.baseSpecies.baseSpecies === 'Ogerpon') return false;
 			return true;
 		},
 		forcedForme: "Ogerpon-Hearthflame",
@@ -2843,8 +2843,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 503,
 		megaStone: { "Heatran": "Heatran-Mega" },
 		itemUser: ["Heatran"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2567,
 		gen: 9,
@@ -2891,8 +2891,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 590,
 		megaStone: { "Heracross": "Heracross-Mega" },
 		itemUser: ["Heracross"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 680,
 		gen: 6,
@@ -2915,8 +2915,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 591,
 		megaStone: { "Houndoom": "Houndoom-Mega" },
 		itemUser: ["Houndoom"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 666,
 		gen: 6,
@@ -2952,10 +2952,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Ice Gem",
 		spritenum: 218,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Ice' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Ice' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 552,
@@ -2966,8 +2966,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Ice Memory",
 		spritenum: 681,
 		onMemory: 'Ice',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -2992,13 +2992,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 220,
 		onPlate: 'Ice',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Ice') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -3044,13 +3044,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 223,
 		onPlate: 'Bug',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Bug') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -3065,10 +3065,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 130,
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
-			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
+		onEffectiveness(typeMod, defender, type, move) {
+			if (!defender) return;
+			if (defender.volatiles['ingrain'] || defender.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
+			if (move.type === 'Ground' && defender.hasType('Flying')) return 0;
 		},
 		// airborneness negation implemented in sim/pokemon.js:Pokemon#isGrounded
 		onModifySpe(spe) {
@@ -3082,13 +3082,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 225,
 		onPlate: 'Steel',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Steel') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -3105,10 +3105,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Dragon",
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.category === 'Physical' && attacker.hp && attacker.isActive && !attacker.hasAbility('magicguard')) {
+				if (defender.eatItem()) {
+					this.damage(attacker.baseMaxhp / (defender.hasAbility('ripen') ? 4 : 8), attacker, defender);
 				}
 			}
 		},
@@ -3131,8 +3131,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 592,
 		megaStone: { "Kangaskhan": "Kangaskhan-Mega" },
 		itemUser: ["Kangaskhan"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 675,
 		gen: 6,
@@ -3146,14 +3146,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Ghost",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Ghost' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Ghost' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -3170,14 +3170,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Poison",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Poison' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Poison' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -3194,10 +3194,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Fairy",
 		},
-		onAfterMoveSecondary(target, source, move) {
+		onAfterMoveSecondary(defender, attacker, move) {
 			if (move.category === 'Physical') {
 				if (move.id === 'present' && move.heal) return;
-				target.eatItem();
+				defender.eatItem();
 			}
 		},
 		onEat(pokemon) {
@@ -3287,8 +3287,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 629,
 		megaStone: { "Latias": "Latias-Mega" },
 		itemUser: ["Latias"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 684,
 		gen: 6,
@@ -3299,8 +3299,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 630,
 		megaStone: { "Latios": "Latios-Mega" },
 		itemUser: ["Latios"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 685,
 		gen: 6,
@@ -3425,12 +3425,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyDamage(damage, source, target, move) {
+		onModifyDamage(damage, attacker, defender, move) {
 			return this.chainModify([5324, 4096]);
 		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
-				this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+		onAfterMoveSecondarySelf(attacker, defender, move) {
+			if (attacker && attacker !== defender && move && move.category !== 'Status' && !attacker.forceSwitchFlag) {
+				this.damage(attacker.baseMaxhp / 10, attacker, attacker, this.dex.items.get('lifeorb'));
 			}
 		},
 		num: 270,
@@ -3489,8 +3489,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 626,
 		megaStone: { "Lopunny": "Lopunny-Mega" },
 		itemUser: ["Lopunny"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 768,
 		gen: 6,
@@ -3517,8 +3517,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 594,
 		megaStone: { "Lucario": "Lucario-Mega" },
 		itemUser: ["Lucario"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 673,
 		gen: 6,
@@ -3529,8 +3529,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 502,
 		megaStone: { "Lucario": "Lucario-Mega-Z" },
 		itemUser: ["Lucario"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2641,
 		gen: 9,
@@ -3582,9 +3582,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.type === 'Water') {
-				target.useItem();
+				defender.useItem();
 			}
 		},
 		boosts: {
@@ -3615,13 +3615,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Lustrous Globe",
 		spritenum: 742,
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === 484 || pokemon.baseSpecies.num === 484) {
+		onTakeItem(item, pokemon, attacker) {
+			if (attacker?.baseSpecies.num === 484 || pokemon.baseSpecies.num === 484) {
 				return false;
 			}
 			return true;
@@ -3638,7 +3638,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
 				return this.chainModify([4915, 4096]);
 			}
@@ -3687,9 +3687,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			"Magearna-Original": "Magearna-Original-Mega",
 		},
 		itemUser: ["Magearna", "Magearna-Original"],
-		onTakeItem(item, source) {
-			return !item.megaStone || (!item.megaStone[source.baseSpecies.name] &&
-				!Object.values(item.megaStone).includes(source.baseSpecies.name));
+		onTakeItem(item, attacker) {
+			return !item.megaStone || (!item.megaStone[attacker.baseSpecies.name] &&
+				!Object.values(item.megaStone).includes(attacker.baseSpecies.name));
 		},
 		num: 2646,
 		gen: 9,
@@ -3711,7 +3711,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Electric') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -3761,7 +3761,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	mail: {
 		name: "Mail",
 		spritenum: 403,
-		onTakeItem(item, source) {
+		onTakeItem(item, attacker) {
 			if (!this.activeMove) return false;
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
@@ -3774,8 +3774,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 563,
 		megaStone: { "Malamar": "Malamar-Mega" },
 		itemUser: ["Malamar"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2580,
 		gen: 9,
@@ -3795,8 +3795,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 596,
 		megaStone: { "Manectric": "Manectric-Mega" },
 		itemUser: ["Manectric"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 682,
 		gen: 6,
@@ -3810,9 +3810,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Dark",
 		},
-		onAfterMoveSecondary(target, source, move) {
+		onAfterMoveSecondary(defender, attacker, move) {
 			if (move.category === 'Special') {
-				target.eatItem();
+				defender.eatItem();
 			}
 		},
 		onEat(pokemon) {
@@ -3853,8 +3853,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 598,
 		megaStone: { "Mawile": "Mawile-Mega" },
 		itemUser: ["Mawile"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 681,
 		gen: 6,
@@ -3865,13 +3865,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 282,
 		onPlate: 'Grass',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -3885,8 +3885,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 599,
 		megaStone: { "Medicham": "Medicham-Mega" },
 		itemUser: ["Medicham"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 665,
 		gen: 6,
@@ -3897,8 +3897,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 548,
 		megaStone: { "Meganium": "Meganium-Mega" },
 		itemUser: ["Meganium"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2563,
 		gen: 9,
@@ -3950,9 +3950,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			"Meowstic-F": "Meowstic-F-Mega",
 		},
 		itemUser: ["Meowstic", "Meowstic-F"],
-		onTakeItem(item, source) {
-			return !item.megaStone || (!item.megaStone[source.baseSpecies.name] &&
-				!Object.values(item.megaStone).includes(source.baseSpecies.name));
+		onTakeItem(item, attacker) {
+			return !item.megaStone || (!item.megaStone[attacker.baseSpecies.name] &&
+				!Object.values(item.megaStone).includes(attacker.baseSpecies.name));
 		},
 		num: 2643,
 		gen: 9,
@@ -3963,8 +3963,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 618,
 		megaStone: { "Metagross": "Metagross-Mega" },
 		itemUser: ["Metagross"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 758,
 		gen: 6,
@@ -3983,7 +3983,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Steel') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -4023,7 +4023,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				this.effectState.numConsecutive = 0;
 			},
 			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
+			onTryMove(pokemon, defender, move) {
 				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
 					return;
@@ -4042,7 +4042,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 				this.effectState.lastMove = move.id;
 			},
-			onModifyDamage(damage, source, target, move) {
+			onModifyDamage(damage, attacker, defender, move) {
 				const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
 				const numConsecutive = this.effectState.numConsecutive > 5 ? 5 : this.effectState.numConsecutive;
 				this.debug(`Current Metronome boost: ${dmgMod[numConsecutive]}/4096`);
@@ -4068,8 +4068,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 600,
 		megaStone: { "Mewtwo": "Mewtwo-Mega-X" },
 		itemUser: ["Mewtwo"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 662,
 		gen: 6,
@@ -4080,8 +4080,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 601,
 		megaStone: { "Mewtwo": "Mewtwo-Mega-Y" },
 		itemUser: ["Mewtwo"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 663,
 		gen: 6,
@@ -4106,10 +4106,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		condition: {
 			duration: 2,
-			onSourceAccuracy(accuracy, target, source, move) {
+			onSourceAccuracy(accuracy, defender, attacker, move) {
 				if (!move.ohko) {
-					this.add('-enditem', source, 'Micle Berry');
-					source.removeVolatile('micleberry');
+					this.add('-enditem', attacker, 'Micle Berry');
+					attacker.removeVolatile('micleberry');
 					if (typeof accuracy === 'number') {
 						return this.chainModify([4915, 4096]);
 					}
@@ -4135,13 +4135,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 291,
 		onPlate: 'Psychic',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -4157,7 +4157,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		spritenum: 292,
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -4171,7 +4171,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onFoeAfterBoost(boost, target, source, effect) {
+		onFoeAfterBoost(boost, defender, attacker, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
 			const boostPlus = this.effectState.boosts;
@@ -4186,24 +4186,24 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onAnySwitchInPriority: -3,
 		onAnySwitchIn() {
 			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 		},
 		onAnyAfterMega() {
 			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 		},
 		onAnyAfterTerastallization() {
 			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 		},
 		onAnyAfterMove() {
 			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			(this.effectState.defender as Pokemon).useItem();
 		},
 		onUse(pokemon) {
 			this.boost(this.effectState.boosts, pokemon);
@@ -4261,7 +4261,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 16,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.category === 'Physical') {
 				return this.chainModify([4505, 4096]);
 			}
@@ -4276,7 +4276,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -4318,7 +4318,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Ice') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -4343,10 +4343,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Normal Gem",
 		spritenum: 307,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-			if (move.type === 'Normal' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status' || move.flags['pledgecombo']) return;
+			if (move.type === 'Normal' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 564,
@@ -4370,14 +4370,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Fire",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fire' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Fire' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -4393,7 +4393,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -4472,14 +4472,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Water",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Water' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Water' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -4496,14 +4496,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Psychic",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Psychic' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Psychic' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -4583,8 +4583,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 622,
 		megaStone: { "Pidgeot": "Pidgeot-Mega" },
 		itemUser: ["Pidgeot"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 762,
 		gen: 6,
@@ -4630,8 +4630,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 602,
 		megaStone: { "Pinsir": "Pinsir-Mega" },
 		itemUser: ["Pinsir"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 671,
 		gen: 6,
@@ -4642,13 +4642,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 610,
 		onPlate: 'Fairy',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Fairy') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -4675,7 +4675,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			status: 'psn',
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Poison') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -4687,10 +4687,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Poison Gem",
 		spritenum: 344,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Poison' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Poison' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 554,
@@ -4713,8 +4713,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Poison Memory",
 		spritenum: 670,
 		onMemory: 'Poison',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -4797,11 +4797,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 4,
 	},
 	powerherb: {
-		onChargeMove(pokemon, target, move) {
+		onChargeMove(pokemon, defender, move) {
 			if (pokemon.useItem()) {
 				this.debug('power herb - remove charge turn for ' + move.id);
 				this.attrLastMove('[still]');
-				this.addMove('-anim', pokemon, move.name, target);
+				this.addMove('-anim', pokemon, move.name, defender);
 				return false; // skip charge turn
 			}
 		},
@@ -4898,10 +4898,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Psychic Gem",
 		spritenum: 369,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Psychic' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Psychic' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 557,
@@ -4912,8 +4912,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Psychic Memory",
 		spritenum: 680,
 		onMemory: 'Psychic',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -4984,8 +4984,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 561,
 		megaStone: { "Pyroar": "Pyroar-Mega" },
 		itemUser: ["Pyroar"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2578,
 		gen: 9,
@@ -5012,7 +5012,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	quickclaw: {
 		onFractionalPriorityPriority: -2,
-		onFractionalPriority(priority, pokemon, target, move) {
+		onFractionalPriority(priority, pokemon, defender, move) {
 			if (move.category === 'Status' && pokemon.hasAbility('myceliummight')) return;
 			if (priority <= 0 && this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
@@ -5061,8 +5061,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 496,
 		megaStone: { "Raichu": "Raichu-Mega-X" },
 		itemUser: ["Raichu"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2635,
 		gen: 9,
@@ -5073,8 +5073,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 497,
 		megaStone: { "Raichu": "Raichu-Mega-Y" },
 		itemUser: ["Raichu"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2636,
 		gen: 9,
@@ -5173,15 +5173,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && source.hp && target.hp && move && move.category !== 'Status') {
-				if (!source.isActive || !this.canSwitch(source.side) || source.forceSwitchFlag || target.forceSwitchFlag) {
+		onAfterMoveSecondary(defender, attacker, move) {
+			if (attacker && attacker !== defender && attacker.hp && defender.hp && move && move.category !== 'Status') {
+				if (!attacker.isActive || !this.canSwitch(attacker.side) || attacker.forceSwitchFlag || defender.forceSwitchFlag) {
 					return;
 				}
 				// The item is used up even against a pokemon with Ingrain or that otherwise can't be forced out
-				if (target.useItem(source)) {
-					if (this.runEvent('DragOut', source, target, move)) {
-						source.forceSwitchFlag = true;
+				if (defender.useItem(attacker)) {
+					if (this.runEvent('DragOut', attacker, defender, move)) {
+						attacker.forceSwitchFlag = true;
 					}
 				}
 			}
@@ -5198,8 +5198,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.formeChange('Groudon-Primal', this.effect, true);
 			}
 		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Groudon') return false;
+		onTakeItem(item, attacker) {
+			if (attacker.baseSpecies.baseSpecies === 'Groudon') return false;
 			return true;
 		},
 		itemUser: ["Groudon"],
@@ -5232,14 +5232,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Grass",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Grass' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Grass' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -5262,10 +5262,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Rock Gem",
 		spritenum: 415,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Rock' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Rock' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 559,
@@ -5279,7 +5279,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Rock') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5304,8 +5304,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Rock Memory",
 		spritenum: 672,
 		onMemory: 'Rock',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -5323,9 +5323,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onDamagingHitOrder: 2,
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
-				this.damage(source.baseMaxhp / 6, source, target);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (this.checkMoveMakesContact(move, attacker, defender)) {
+				this.damage(attacker.baseMaxhp / 6, attacker, defender);
 			}
 		},
 		num: 540,
@@ -5344,7 +5344,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onAnyPseudoWeatherChange() {
-			const pokemon = this.effectState.target;
+			const pokemon = this.effectState.defender;
 			if (this.field.getPseudoWeather('trickroom')) {
 				pokemon.useItem(pokemon);
 			}
@@ -5372,7 +5372,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5389,14 +5389,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Fairy",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fairy' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Fairy' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -5413,10 +5413,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Dark",
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Special' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.category === 'Special' && attacker.hp && attacker.isActive && !attacker.hasAbility('magicguard')) {
+				if (defender.eatItem()) {
+					this.damage(attacker.baseMaxhp / (defender.hasAbility('ripen') ? 4 : 8), attacker, defender);
 				}
 			}
 		},
@@ -5427,8 +5427,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	rustedshield: {
 		name: "Rusted Shield",
 		spritenum: 699,
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 889) || pokemon.baseSpecies.num === 889) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 889) || pokemon.baseSpecies.num === 889) {
 				return false;
 			}
 			return true;
@@ -5440,8 +5440,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	rustedsword: {
 		name: "Rusted Sword",
 		spritenum: 698,
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 888) || pokemon.baseSpecies.num === 888) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 888) || pokemon.baseSpecies.num === 888) {
 				return false;
 			}
 			return true;
@@ -5455,8 +5455,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 614,
 		megaStone: { "Sableye": "Sableye-Mega" },
 		itemUser: ["Sableye"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 754,
 		gen: 6,
@@ -5488,8 +5488,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
-		onTryHit(pokemon, source, move) {
-			if (move.flags['powder'] && pokemon !== source && this.dex.getImmunity('powder', pokemon)) {
+		onTryHit(pokemon, attacker, move) {
+			if (move.flags['powder'] && pokemon !== attacker && this.dex.getImmunity('powder', pokemon)) {
 				this.add('-activate', pokemon, 'item: Safety Goggles', move.name);
 				return null;
 			}
@@ -5532,8 +5532,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 627,
 		megaStone: { "Salamence": "Salamence-Mega" },
 		itemUser: ["Salamence"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 769,
 		gen: 6,
@@ -5544,8 +5544,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 613,
 		megaStone: { "Sceptile": "Sceptile-Mega" },
 		itemUser: ["Sceptile"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 753,
 		gen: 6,
@@ -5556,8 +5556,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 605,
 		megaStone: { "Scizor": "Scizor-Mega" },
 		itemUser: ["Scizor"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 670,
 		gen: 6,
@@ -5568,8 +5568,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 554,
 		megaStone: { "Scolipede": "Scolipede-Mega" },
 		itemUser: ["Scolipede"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2571,
 		gen: 9,
@@ -5592,8 +5592,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 511,
 		megaStone: { "Scovillain": "Scovillain-Mega" },
 		itemUser: ["Scovillain"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2647,
 		gen: 9,
@@ -5604,8 +5604,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 555,
 		megaStone: { "Scrafty": "Scrafty-Mega" },
 		itemUser: ["Scrafty"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2572,
 		gen: 9,
@@ -5618,7 +5618,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Water') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5634,7 +5634,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 50,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move?.type === 'Flying') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5647,8 +5647,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 619,
 		megaStone: { "Sharpedo": "Sharpedo-Mega" },
 		itemUser: ["Sharpedo"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 759,
 		gen: 6,
@@ -5678,7 +5678,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onAfterMoveSecondarySelfPriority: -1,
-		onAfterMoveSecondarySelf(pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, defender, move) {
 			if (move.totalDamage && !pokemon.forceSwitchFlag) {
 				this.heal(move.totalDamage / 8, pokemon);
 			}
@@ -5698,8 +5698,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	shockdrive: {
 		name: "Shock Drive",
 		spritenum: 442,
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
 				return false;
 			}
 			return true;
@@ -5719,14 +5719,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Ground",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Ground' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Ground' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -5742,7 +5742,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Normal') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5757,7 +5757,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Bug') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5792,8 +5792,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 550,
 		megaStone: { "Skarmory": "Skarmory-Mega" },
 		itemUser: ["Skarmory"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2565,
 		gen: 9,
@@ -5814,13 +5814,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 450,
 		onPlate: 'Flying',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Flying') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -5834,8 +5834,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 620,
 		megaStone: { "Slowbro": "Slowbro-Mega" },
 		itemUser: ["Slowbro"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 760,
 		gen: 6,
@@ -5867,9 +5867,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
+		onDamagingHit(damage, defender, attacker, move) {
 			if (move.type === 'Ice') {
-				target.useItem();
+				defender.useItem();
 			}
 		},
 		boosts: {
@@ -5885,7 +5885,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Ground') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5911,7 +5911,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (
 				move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) &&
 				(move.type === 'Psychic' || move.type === 'Dragon')
@@ -5930,7 +5930,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -5956,13 +5956,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 463,
 		onPlate: 'Water',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -5976,13 +5976,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 464,
 		onPlate: 'Ghost',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -6003,8 +6003,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 500,
 		megaStone: { "Staraptor": "Staraptor-Mega" },
 		itemUser: ["Staraptor"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2639,
 		gen: 9,
@@ -6047,8 +6047,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 546,
 		megaStone: { "Starmie": "Starmie-Mega" },
 		itemUser: ["Starmie"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2561,
 		gen: 9,
@@ -6067,10 +6067,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Steel Gem",
 		spritenum: 473,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status') return;
-			if (move.type === 'Steel' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status') return;
+			if (move.type === 'Steel' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 563,
@@ -6094,8 +6094,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 621,
 		megaStone: { "Steelix": "Steelix-Mega" },
 		itemUser: ["Steelix"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 761,
 		gen: 6,
@@ -6105,8 +6105,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Steel Memory",
 		spritenum: 675,
 		onMemory: 'Steel',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -6144,11 +6144,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidual(pokemon) {
 			this.damage(pokemon.baseMaxhp / 8);
 		},
-		onHit(target, source, move) {
-			if (source && source !== target && !source.item && move && this.checkMoveMakesContact(move, source, target)) {
-				const barb = target.takeItem();
+		onHit(defender, attacker, move) {
+			if (attacker && attacker !== defender && !attacker.item && move && this.checkMoveMakesContact(move, attacker, defender)) {
+				const barb = defender.takeItem();
 				if (!barb) return; // Gen 4 Multitype
-				source.setItem(barb);
+				attacker.setItem(barb);
 				// no message for Sticky Barb changing hands
 			}
 		},
@@ -6160,13 +6160,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 477,
 		onPlate: 'Rock',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Rock') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -6206,8 +6206,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 612,
 		megaStone: { "Swampert": "Swampert-Mega" },
 		itemUser: ["Swampert"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 752,
 		gen: 6,
@@ -6251,14 +6251,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Bug",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Bug' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Bug' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -6296,9 +6296,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			"Tatsugiri-Stretchy": "Tatsugiri-Stretchy-Mega",
 		},
 		itemUser: ["Tatsugiri", "Tatsugiri-Droopy", "Tatsugiri-Stretchy"],
-		onTakeItem(item, source) {
-			return !item.megaStone || (!item.megaStone[source.baseSpecies.name] &&
-				!Object.values(item.megaStone).includes(source.baseSpecies.name));
+		onTakeItem(item, attacker) {
+			return !item.megaStone || (!item.megaStone[attacker.baseSpecies.name] &&
+				!Object.values(item.megaStone).includes(attacker.baseSpecies.name));
 		},
 		num: 2649,
 		gen: 9,
@@ -6336,9 +6336,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onAfterMoveSecondarySelf(target, source, move) {
+		onAfterMoveSecondarySelf(defender, attacker, move) {
 			if (move.flags['sound']) {
-				target.useItem();
+				defender.useItem();
 			}
 		},
 		boosts: {
@@ -6383,13 +6383,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 516,
 		onPlate: 'Poison',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Poison') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -7405,7 +7405,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Psychic') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -7418,8 +7418,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 607,
 		megaStone: { "Tyranitar": "Tyranitar-Mega" },
 		itemUser: ["Tyranitar"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 669,
 		gen: 6,
@@ -7495,8 +7495,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 608,
 		megaStone: { "Venusaur": "Venusaur-Mega" },
 		itemUser: ["Venusaur"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 659,
 		gen: 6,
@@ -7507,8 +7507,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 545,
 		megaStone: { "Victreebel": "Victreebel-Mega" },
 		itemUser: ["Victreebel"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2560,
 		gen: 9,
@@ -7522,13 +7522,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Electric",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Electric' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Electric' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -7541,10 +7541,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Water Gem",
 		spritenum: 528,
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-			if (move.type === 'Water' && source.useItem()) {
-				source.addVolatile('gem');
+		onSourceTryPrimaryHit(defender, attacker, move) {
+			if (defender === attacker || move.category === 'Status' || move.flags['pledgecombo']) return;
+			if (move.type === 'Water' && attacker.useItem()) {
+				attacker.addVolatile('gem');
 			}
 		},
 		num: 549,
@@ -7567,8 +7567,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Water Memory",
 		spritenum: 677,
 		onMemory: 'Water',
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
 				return false;
 			}
 			return true;
@@ -7608,7 +7608,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Water') {
 				return this.chainModify([4915, 4096]);
 			}
@@ -7623,9 +7623,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (!move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0) {
-				target.useItem();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (!move.damage && !move.damageCallback && defender.getMoveHitData(move).typeMod > 0) {
+				defender.useItem();
 			}
 		},
 		boosts: {
@@ -7642,13 +7642,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.name.startsWith('Ogerpon-Wellspring')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+		onTakeItem(item, attacker) {
+			if (attacker.baseSpecies.baseSpecies === 'Ogerpon') return false;
 			return true;
 		},
 		forcedForme: "Ogerpon-Wellspring",
@@ -7710,18 +7710,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					this.effectState.boosts[i] = 0;
 				}
 			}
-			if (ready) (this.effectState.target as Pokemon).useItem();
+			if (ready) (this.effectState.defender as Pokemon).useItem();
 			delete this.effectState.boosts;
 		},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.defender);
 		},
 		onAnyAfterMega() {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.defender);
 		},
 		onAnyAfterMove() {
-			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.defender);
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
@@ -7782,7 +7782,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onBasePowerPriority: 16,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.category === 'Special') {
 				return this.chainModify([4505, 4096]);
 			}
@@ -7798,14 +7798,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Ice",
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Ice' && target.getMoveHitData(move).typeMod > 0) {
-				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+		onSourceModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Ice' && defender.getMoveHitData(move).typeMod > 0) {
+				const hitSub = defender.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
 
-				if (target.eatItem()) {
+				if (defender.eatItem()) {
 					this.debug('-50% reduction');
-					this.add('-enditem', target, this.effect, '[weaken]');
+					this.add('-enditem', defender, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
 			}
@@ -7819,13 +7819,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 572,
 		onPlate: 'Electric',
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Electric') {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if ((source?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
+		onTakeItem(item, pokemon, attacker) {
+			if ((attacker?.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
 				return false;
 			}
 			return true;
@@ -7839,8 +7839,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 510,
 		megaStone: { "Zeraora": "Zeraora-Mega" },
 		itemUser: ["Zeraora"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: 2586,
 		gen: 9,
@@ -7853,8 +7853,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onSourceModifyAccuracyPriority: -2,
-		onSourceModifyAccuracy(accuracy, target) {
-			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
+		onSourceModifyAccuracy(accuracy, defender) {
+			if (typeof accuracy === 'number' && !this.queue.willMove(defender)) {
 				this.debug('Zoom Lens boosting accuracy');
 				return this.chainModify([4915, 4096]);
 			}
@@ -7867,8 +7867,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 568,
 		megaStone: { "Zygarde-Complete": "Zygarde-Mega" },
 		itemUser: ["Zygarde-Complete"],
-		onTakeItem(item, source) {
-			return source.baseSpecies.baseSpecies !== 'Zygarde';
+		onTakeItem(item, attacker) {
+			return attacker.baseSpecies.baseSpecies !== 'Zygarde';
 		},
 		num: 2584,
 		gen: 9,
@@ -8098,7 +8098,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	pinkbow: {
 		name: "Pink Bow",
 		spritenum: 444,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Normal') {
 				return basePower * 1.1;
 			}
@@ -8111,7 +8111,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	polkadotbow: {
 		name: "Polkadot Bow",
 		spritenum: 444,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (move.type === 'Normal') {
 				return basePower * 1.1;
 			}
@@ -8175,8 +8175,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 577,
 		megaStone: { "Crucibelle": "Crucibelle-Mega" },
 		itemUser: ["Crucibelle"],
-		onTakeItem(item, source) {
-			return !item.megaStone?.[source.baseSpecies.baseSpecies];
+		onTakeItem(item, attacker) {
+			return !item.megaStone?.[attacker.baseSpecies.baseSpecies];
 		},
 		num: -1,
 		gen: 6,
@@ -8189,13 +8189,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
+		onBasePower(basePower, user, defender, move) {
 			if (user.baseSpecies.num === -66 && ['Poison', 'Flying'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === -66 || pokemon.baseSpecies.num === -66) {
+		onTakeItem(item, pokemon, attacker) {
+			if (attacker?.baseSpecies.num === -66 || pokemon.baseSpecies.num === -66) {
 				return false;
 			}
 			return true;

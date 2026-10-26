@@ -10,7 +10,7 @@ describe('Doodle', () => {
 		battle.destroy();
 	});
 
-	it(`should replace the Abilities of the user and its ally with the Ability of its target`, () => {
+	it(`should replace the Abilities of the user and its ally with the Ability of its defender`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'wynaut', ability: 'shadowtag', moves: ['doodle'] },
 			{ species: 'ironhands', ability: 'quarkdrive', moves: ['sleeptalk'] },

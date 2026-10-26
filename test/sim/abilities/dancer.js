@@ -98,7 +98,7 @@ describe('Dancer', () => {
 		oricorio.boostBy({ atk: -6 });
 
 		battle.makeChoices('move dragondance, move featherdance 1', 'move revelationdance -2, move finalgambit 1');
-		assert.fullHP(oricorio, `Nothing should target Oricorio because Revelation Dance failed from Wonder Guard`);
+		assert.fullHP(oricorio, `Nothing should defender Oricorio because Revelation Dance failed from Wonder Guard`);
 		assert.statStage(wynaut, 'atk', 0, `Wynaut's attack should not have changed from either Feather Dance or Dragon Dance, because both failed`);
 	});
 
@@ -110,7 +110,7 @@ describe('Dancer', () => {
 		]]);
 
 		// Modding accuracy so Revelation Dance always misses if Oricorio uses it (Wynaut should in fact never use it though)
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
+		battle.onEvent('Accuracy', battle.format, (accuracy, defender, pokemon, move) => {
 			return pokemon.id === 'wynaut';
 		});
 
@@ -140,7 +140,7 @@ describe('Dancer', () => {
 		assert(!battle.log.includes('|-activate|p2: Oricorio|ability: Dancer'));
 	});
 
-	it('should target the user of a Dance move unless it was an ally attacking an opponent', () => {
+	it('should defender the user of a Dance move unless it was an ally attacking an opponent', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['sleeptalk', 'protect', 'teeterdance'] },
 			{ species: 'Oricorio', level: 99, ability: 'heatproof', moves: ['fierydance', 'sleeptalk'] },
@@ -168,7 +168,7 @@ describe('Dancer', () => {
 		assert.equal(opponentNotTargetedByAlly.hp, opponentHP);
 	});
 
-	it('should adopt the target selected by copycat', () => {
+	it('should adopt the defender selected by copycat', () => {
 		battle = common.createBattle({ gameType: 'doubles', seed: [1, 2, 3, 4] }, [[
 			{ species: 'oricoriopau', ability: 'dancer', moves: ['featherdance'] },
 			{ species: 'flamigo', moves: ['copycat'] },

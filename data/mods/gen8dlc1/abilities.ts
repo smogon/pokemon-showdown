@@ -17,16 +17,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	disguise: {
 		inherit: true,
-		onDamage(damage, target, source, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			if (
 				effect?.effectType === 'Move' &&
-				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
+				['mimikyu', 'mimikyutotem'].includes(defender.species.id) && !defender.transformed
 			) {
 				if (["rollout", "iceball"].includes(effect.id)) {
-					source.volatiles[effect.id].contactHitCount--;
+					attacker.volatiles[effect.id].contactHitCount--;
 				}
 
-				this.add("-activate", target, "ability: Disguise");
+				this.add("-activate", defender, "ability: Disguise");
 				this.effectState.busted = true;
 				return 0;
 			}
@@ -42,16 +42,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	iceface: {
 		inherit: true,
-		onDamage(damage, target, source, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			if (
 				effect?.effectType === 'Move' && effect.category === 'Physical' &&
-				target.species.id === 'eiscue' && !target.transformed
+				defender.species.id === 'eiscue' && !defender.transformed
 			) {
 				if (["rollout", "iceball"].includes(effect.id)) {
-					source.volatiles[effect.id].contactHitCount--;
+					attacker.volatiles[effect.id].contactHitCount--;
 				}
 
-				this.add("-activate", target, "ability: Disguise");
+				this.add("-activate", defender, "ability: Disguise");
 				this.effectState.busted = true;
 				return 0;
 			}

@@ -79,8 +79,8 @@ describe('Intimidate', () => {
 			{ species: "Gyarados", ability: 'intimidate', moves: ['dragondance'] },
 		]]);
 		let intimidateCount = 0;
-		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
-			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
+		battle.onEvent('TryBoost', battle.format, (boost, defender, attacker) => {
+			assert.species(attacker, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
 		battle.makeChoices('default', 'default'); // Finish Team Preview, switch both Pokemon in
@@ -96,8 +96,8 @@ describe('Intimidate', () => {
 			{ species: "Arcanine", ability: 'intimidate', moves: ['morningsun'] },
 		]]);
 		intimidateCount = 0;
-		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
-			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
+		battle.onEvent('TryBoost', battle.format, (boost, defender, attacker) => {
+			assert.species(attacker, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
 		battle.makeChoices('default', 'default'); // Finish Team Preview, switch both Pokemon in
@@ -118,8 +118,8 @@ describe('Intimidate', () => {
 		]]);
 		const [p1active, p2active] = [battle.p1.active, battle.p2.active];
 		let intimidateCount = 0;
-		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
-			assert.species(source, intimidateCount % 2 === 0 ? 'Arcanine' : 'Gyarados');
+		battle.onEvent('TryBoost', battle.format, (boost, defender, attacker) => {
+			assert.species(attacker, intimidateCount % 2 === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
 		battle.makeChoices('default', 'default'); // Team Preview

@@ -16,8 +16,8 @@ describe('Iron Ball', () => {
 		], [
 			{ species: "Aerodactyl", ability: 'pressure', moves: ['stealthrock'] },
 		]]);
-		const target = battle.p2.active[0];
-		assert.sets(() => target.getStat('spe'), battle.modify(target.getStat('spe'), 0.5), () => battle.makeChoices('move bestow', 'move stealthrock'));
+		const defender = battle.p2.active[0];
+		assert.sets(() => defender.getStat('spe'), battle.modify(defender.getStat('spe'), 0.5), () => battle.makeChoices('move bestow', 'move stealthrock'));
 	});
 
 	it('should negate Ground immunities and deal neutral type effectiveness to Flying-type Pokemon', () => {

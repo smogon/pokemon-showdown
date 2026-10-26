@@ -2,10 +2,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	invulnerability: {
 		// Dig/Fly
 		name: 'invulnerability',
-		onInvulnerability(target, source, move) {
-			if (target === source) return true;
-			if ((move.id === 'swift' && target.volatiles['substitute']) || move.id === 'transform') return true;
-			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while invulnerable!');
+		onInvulnerability(defender, attacker, move) {
+			if (defender === attacker) return true;
+			if ((move.id === 'swift' && defender.volatiles['substitute']) || move.id === 'transform') return true;
+			this.add('-message', 'The foe ' + defender.name + ' can\'t be hit while invulnerable!');
 			return false;
 		},
 	},

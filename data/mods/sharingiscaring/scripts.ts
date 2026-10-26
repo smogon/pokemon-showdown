@@ -26,11 +26,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return !this.ignoringItem();
 		},
-		useItem(source, sourceEffect) {
+		useItem(attacker, sourceEffect) {
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			// Best to declare everything early because ally might have a gem that needs proccing
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event?.target) source = this.battle.event.target;
+			if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
 			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
 			if ((!this.hp && !item.isGem) || !this.isActive) return false;
 			if (!hasAnyItem) return false;
@@ -38,7 +38,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.runEvent('UseItem', this, null, null, item)) {
 				switch (item.id.startsWith('item:') ? item.id.slice(5) : item.id) {
 				case 'redcard':
-					this.battle.add('-enditem', this, item.fullname, `[of] ${source!}`);
+					this.battle.add('-enditem', this, item.fullname, `[of] ${attacker!}`);
 					break;
 				default:
 					if (item.isGem) {
@@ -49,10 +49,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					break;
 				}
 				if (item.boosts) {
-					this.battle.boost(item.boosts, this, source, item);
+					this.battle.boost(item.boosts, this, attacker, item);
 				}
 
-				this.battle.singleEvent('Use', item, this.itemState, this, source, sourceEffect);
+				this.battle.singleEvent('Use', item, this.itemState, this, attacker, sourceEffect);
 
 				if (item.id.startsWith('item:')) {
 					delete this.volatiles[item.id];
@@ -68,10 +68,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		eatItem(force, source, sourceEffect) {
+		eatItem(force, attacker, sourceEffect) {
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event?.target) source = this.battle.event.target;
+			if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
 			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
 			if (!hasAnyItem) return false;
 			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') ||
@@ -83,7 +83,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			) {
 				this.battle.add('-enditem', this, item.fullname, '[eat]');
 
-				this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
+				this.battle.singleEvent('Eat', item, this.itemState, this, attacker, sourceEffect);
 				this.battle.runEvent('EatItem', this, null, null, item);
 
 				if (RESTORATIVE_BERRIES.has(item.id.startsWith('item:') ? item.id.slice(5) as ID : item.id)) {
@@ -113,7 +113,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		setItem(item, source, effect) {
+		setItem(item, attacker, effect) {
 			if (!this.hp || !this.isActive) return false;
 			if (this.itemKnockedOff) return false;
 			if (typeof item === 'string') item = this.battle.dex.items.get(item);
@@ -121,7 +121,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const effectid = this.battle.effect ? this.battle.effect.id : '';
 			if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
 				const inflicted = ['trick', 'switcheroo'].includes(effectid);
-				const external = inflicted && source && !source.isAlly(this);
+				const external = inflicted && attacker && !attacker.isAlly(this);
 				this.pendingStaleness = external ? 'external' : 'internal';
 			} else {
 				this.pendingStaleness = undefined;
@@ -129,10 +129,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			const oldItem = this.getItem();
 			const oldItemState = this.itemState;
 			this.item = item.id;
-			this.itemState = this.battle.initEffectState({ id: item.id, target: this });
+			this.itemState = this.battle.initEffectState({ id: item.id, defender: this });
 			if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 			if (item.id) {
-				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
+				this.battle.singleEvent('Start', item, this.itemState, this, attacker, effect);
 				for (const ally of this.side.pokemon) {
 					if (!ally.m.sharedItemsUsed) continue;
 					ally.m.sharedItemsUsed = ally.m.sharedItemsUsed.filter((i: ID) => i !== item.id);

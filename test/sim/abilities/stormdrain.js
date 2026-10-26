@@ -34,7 +34,7 @@ describe('Storm Drain', () => {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should redirect single-target Water-type attacks to the user if it is a valid target', () => {
+	it('should redirect single-defender Water-type attacks to the user if it is a valid defender', () => {
 		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
 			{ species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk'] },
 			{ species: 'Azumarill', ability: 'thickfat', moves: ['aquajet'] },

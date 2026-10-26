@@ -1,8 +1,8 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	poltergeist: {
 		inherit: true,
-		onTry(source, target) {
-			return !!target.item || Object.keys(target.volatiles).some(volatile => volatile.startsWith('item:'));
+		onTry(attacker, defender) {
+			return !!defender.item || Object.keys(defender.volatiles).some(volatile => volatile.startsWith('item:'));
 		},
 	},
 };

@@ -95,7 +95,7 @@ describe('Dragon Cheer', () => {
 		assert(battle.log.some(line => !line.startsWith('|-fail')));
 	});
 
-	it(`should be copied by Psych Up, using the target's Dragon Cheer level`, () => {
+	it(`should be copied by Psych Up, using the defender's Dragon Cheer level`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble'] },
 			{ species: 'kingdra', moves: ['sleeptalk'] },
@@ -114,7 +114,7 @@ describe('Dragon Cheer', () => {
 		battle.makeChoices('move bubble, move sleeptalk', 'auto');
 	});
 
-	it(`should be copied by Psych Up, using the target's Dragon Cheer level and replacing the user's current critical hit stage`, () => {
+	it(`should be copied by Psych Up, using the defender's Dragon Cheer level and replacing the user's current critical hit stage`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble', 'focusenergy'] },
 			{ species: 'comfey', moves: ['sleeptalk'] },
@@ -134,7 +134,7 @@ describe('Dragon Cheer', () => {
 		battle.makeChoices('move bubble, move sleeptalk', 'auto');
 	});
 
-	it(`should be copied by Transform, using the target's Dragon Cheer level`, () => {
+	it(`should be copied by Transform, using the defender's Dragon Cheer level`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'milotic', moves: ['dragoncheer', 'transform'] },
 			{ species: 'kingdra', moves: ['sleeptalk', 'bubble'] },

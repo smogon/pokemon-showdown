@@ -1,34 +1,34 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	mummy: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			if (target.ability === 'mummy') {
-				const sourceAbility = source.getAbility();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (defender.ability === 'mummy') {
+				const sourceAbility = attacker.getAbility();
 				if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'mummy') {
 					return;
 				}
-				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
-					const oldAbility = source.setAbility('mummy', target);
+				if (this.checkMoveMakesContact(move, attacker, defender, !attacker.isAlly(defender))) {
+					const oldAbility = attacker.setAbility('mummy', defender);
 					if (oldAbility) {
-						this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
+						this.add('-activate', defender, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${attacker}`);
 					}
 				}
 			} else {
-				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
+				const possibleAbilities = [attacker.ability, ...(attacker.m.innates || [])]
 					.filter(val => !this.dex.abilities.get(val).flags['cantsuppress'] && val !== 'mummy');
 				if (!possibleAbilities.length) return;
-				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
+				if (this.checkMoveMakesContact(move, attacker, defender, !attacker.isAlly(defender))) {
 					const abil = this.sample(possibleAbilities);
-					if (abil === source.ability) {
-						const oldAbility = source.setAbility('mummy', target);
+					if (abil === attacker.ability) {
+						const oldAbility = attacker.setAbility('mummy', defender);
 						if (oldAbility) {
-							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
+							this.add('-activate', defender, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${attacker}`);
 						}
 					} else {
-						source.removeVolatile('ability:' + abil);
-						source.addVolatile('ability:mummy', source);
+						attacker.removeVolatile('ability:' + abil);
+						attacker.addVolatile('ability:mummy', attacker);
 						if (abil) {
-							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(abil).name, `[of] ${source}`);
+							this.add('-activate', defender, 'ability: Mummy', this.dex.abilities.get(abil).name, `[of] ${attacker}`);
 						}
 					}
 				}
@@ -49,42 +49,42 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					pokemon.removeVolatile('ability:' + innate);
 				}
 			}
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasItem('Ability Shield')) {
-					this.add('-block', target, 'item: Ability Shield');
+			for (const defender of this.getAllActive()) {
+				if (defender === pokemon) continue;
+				if (defender.hasItem('Ability Shield')) {
+					this.add('-block', defender, 'item: Ability Shield');
 					continue;
 				}
 				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (target.volatiles['commanding']) {
+				if (defender.volatiles['commanding']) {
 					continue;
 				}
-				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+				if (defender.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), defender.abilityState, defender, pokemon, 'neutralizinggas');
 				}
-				if (target.volatiles['slowstart']) {
-					delete target.volatiles['slowstart'];
-					this.add('-end', target, 'Slow Start', '[silent]');
+				if (defender.volatiles['slowstart']) {
+					delete defender.volatiles['slowstart'];
+					this.add('-end', defender, 'Slow Start', '[silent]');
 				}
-				if (strongWeathers.includes(target.getAbility().id)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
+				if (strongWeathers.includes(defender.getAbility().id)) {
+					this.singleEvent('End', this.dex.abilities.get(defender.getAbility().id), defender.abilityState, defender, pokemon, 'neutralizinggas');
 				}
-				if (target.m.innates) {
-					for (const innate of target.m.innates) {
+				if (defender.m.innates) {
+					for (const innate of defender.m.innates) {
 						if (this.dex.abilities.get(innate).flags['cantsuppress']) continue;
-						target.removeVolatile('ability:' + innate);
+						defender.removeVolatile('ability:' + innate);
 					}
 				}
 			}
 		},
-		onEnd(source) {
-			if (source.transformed) return;
+		onEnd(attacker) {
+			if (attacker.transformed) return;
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
+				if (pokemon !== attacker && pokemon.hasAbility('Neutralizing Gas')) {
 					return;
 				}
 			}
-			this.add('-end', source, 'ability: Neutralizing Gas');
+			this.add('-end', attacker, 'ability: Neutralizing Gas');
 
 			// FIXME this happens before the pokemon switches out, should be the opposite order.
 			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
@@ -92,12 +92,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// (If you're tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-			if (source.abilityState.ending) return;
-			source.abilityState.ending = true;
+			if (attacker.abilityState.ending) return;
+			attacker.abilityState.ending = true;
 			const sortedActive = this.getAllActive();
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
-				if (pokemon !== source) {
+				if (pokemon !== attacker) {
 					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
 
@@ -121,7 +121,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	powerofalchemy: {
 		inherit: true,
 		onAllyFaint(ally) {
-			const pokemon = this.effectState.target;
+			const pokemon = this.effectState.defender;
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'powerofalchemy';
 			let possibleAbilities = [ally.ability];
@@ -143,7 +143,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	receiver: {
 		inherit: true,
 		onAllyFaint(ally) {
-			const pokemon = this.effectState.target;
+			const pokemon = this.effectState.defender;
 			if (!pokemon.hp) return;
 			const isAbility = pokemon.ability === 'receiver';
 			let possibleAbilities = [ally.ability];
@@ -168,16 +168,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!this.effectState.seek) return;
 			const isAbility = pokemon.ability === 'trace';
 			const possibleTargets: Pokemon[] = [];
-			for (const target of pokemon.side.foe.active) {
-				if (target && !target.fainted) {
-					possibleTargets.push(target);
+			for (const defender of pokemon.side.foe.active) {
+				if (defender && !defender.fainted) {
+					possibleTargets.push(defender);
 				}
 			}
 			while (possibleTargets.length) {
 				const rand = this.random(possibleTargets.length);
-				const target = possibleTargets[rand];
-				let possibleAbilities = [target.ability];
-				if (target.m.innates) possibleAbilities.push(...target.m.innates);
+				const defender = possibleTargets[rand];
+				let possibleAbilities = [defender.ability];
+				if (defender.m.innates) possibleAbilities.push(...defender.m.innates);
 				const additionalBannedAbilities = [pokemon.ability, ...(pokemon.m.innates || [])];
 				possibleAbilities = possibleAbilities
 					.filter(val => !this.dex.abilities.get(val).flags['notrace'] && !additionalBannedAbilities.includes(val));
@@ -186,7 +186,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					continue;
 				}
 				const ability = this.dex.abilities.get(this.sample(possibleAbilities));
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${defender}`);
 				if (isAbility) {
 					pokemon.setAbility(ability);
 				} else {
@@ -199,44 +199,44 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	wanderingspirit: {
 		inherit: true,
-		onDamagingHit(damage, target, source, move) {
-			const isAbility = target.ability === 'wanderingspirit';
+		onDamagingHit(damage, defender, attacker, move) {
+			const isAbility = defender.ability === 'wanderingspirit';
 			if (isAbility) {
-				if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
+				if (attacker.getAbility().flags['failskillswap'] || defender.volatiles['dynamax']) return;
 
-				if (this.checkMoveMakesContact(move, source, target)) {
-					const sourceAbility = source.setAbility('wanderingspirit', target);
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					const sourceAbility = attacker.setAbility('wanderingspirit', defender);
 					if (!sourceAbility) return;
-					if (target.isAlly(source)) {
-						this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
+					if (defender.isAlly(attacker)) {
+						this.add('-activate', defender, 'Skill Swap', '', '', `[of] ${attacker}`);
 					} else {
-						this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
+						this.add('-activate', defender, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${attacker}`);
 					}
-					target.setAbility(sourceAbility);
+					defender.setAbility(sourceAbility);
 				}
 			} else {
 				// Make Wandering Spirit replace a random ability
-				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
+				const possibleAbilities = [attacker.ability, ...(attacker.m.innates || [])]
 					.filter(val => !this.dex.abilities.get(val).flags['failskillswap']);
-				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
+				if (!possibleAbilities.length || defender.volatiles['dynamax']) return;
 				if (move.flags['contact']) {
 					const sourceAbility = this.sample(possibleAbilities);
-					if (sourceAbility === source.ability) {
-						if (!source.setAbility('wanderingspirit', target)) return;
+					if (sourceAbility === attacker.ability) {
+						if (!attacker.setAbility('wanderingspirit', defender)) return;
 					} else {
-						source.removeVolatile('ability:' + sourceAbility);
-						source.addVolatile('ability:wanderingspirit', source);
+						attacker.removeVolatile('ability:' + sourceAbility);
+						attacker.addVolatile('ability:wanderingspirit', attacker);
 					}
-					if (target.isAlly(source)) {
-						this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
+					if (defender.isAlly(attacker)) {
+						this.add('-activate', defender, 'Skill Swap', '', '', `[of] ${attacker}`);
 					} else {
-						this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
+						this.add('-activate', defender, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${attacker}`);
 					}
-					if (sourceAbility === source.ability) {
-						target.setAbility(sourceAbility);
+					if (sourceAbility === attacker.ability) {
+						defender.setAbility(sourceAbility);
 					} else {
-						target.removeVolatile('ability:wanderingspirit');
-						target.addVolatile('ability:' + sourceAbility, target);
+						defender.removeVolatile('ability:wanderingspirit');
+						defender.addVolatile('ability:' + sourceAbility, defender);
 					}
 				}
 			}

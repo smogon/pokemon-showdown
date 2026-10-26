@@ -66,7 +66,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		onBegin() {
 			this.add('rule', 'Scalemons Mod: Every Pokemon\'s stats, barring HP, are scaled to come as close to a BST of 500 as possible');
 		},
-		onModifySpecies(species, target, source) {
+		onModifySpecies(species, defender, attacker) {
 			const newSpecies = this.dex.deepClone(species);
 			const pst: number = newSpecies.bst - newSpecies.baseStats['hp'];
 			const scale = 500 - newSpecies.baseStats['hp'];

@@ -42,7 +42,7 @@ describe('Lightning Rod', () => {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should redirect single-target Electric-type attacks to the user if it is a valid target', function () {
+	it('should redirect single-defender Electric-type attacks to the user if it is a valid defender', function () {
 		this.timeout(3000);
 		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
 			{ species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk'] },

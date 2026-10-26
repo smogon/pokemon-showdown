@@ -59,9 +59,9 @@ describe('Dry Skin', () => {
 			{ species: 'Haxorus', ability: 'moldbreaker', moves: ['incinerate', 'surf'] },
 		]]);
 		battle.makeChoices('move bulkup', 'move incinerate');
-		const target = battle.p1.active[0];
-		const damage = target.maxhp - target.hp;
+		const defender = battle.p1.active[0];
+		const damage = defender.maxhp - defender.hp;
 		assert.bounded(damage, [41, 49]);
-		assert.hurts(target, () => battle.makeChoices('move bulkup', 'move surf'));
+		assert.hurts(defender, () => battle.makeChoices('move bulkup', 'move surf'));
 	});
 });

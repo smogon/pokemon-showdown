@@ -10,7 +10,7 @@ describe('Quash', () => {
 		battle.destroy();
 	});
 
-	it('should cause the target to move last if it has not moved yet', () => {
+	it('should cause the defender to move last if it has not moved yet', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Sableye", ability: 'prankster', moves: ['quash'] },
 			{ species: "Aggron", ability: 'sturdy', moves: ['earthquake'] },
@@ -24,7 +24,7 @@ describe('Quash', () => {
 		assert.equal(battle.log[battle.lastMoveLine].split('|')[3], 'Swift');
 	});
 
-	it('should not cause the target to move again if it has already moved', () => {
+	it('should not cause the defender to move again if it has already moved', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Sableye", ability: 'prankster', moves: ['quash'] },
 			{ species: "Aggron", ability: 'sturdy', moves: ['earthquake'] },

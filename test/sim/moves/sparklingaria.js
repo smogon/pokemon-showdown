@@ -10,7 +10,7 @@ describe('Sparkling Aria', () => {
 		battle.destroy();
 	});
 
-	it(`should cure the target's burn`, () => {
+	it(`should cure the defender's burn`, () => {
 		battle = common.createBattle([[
 			{ species: 'Wynaut', ability: 'compoundeyes', moves: ['will-o-wisp', 'sparklingaria'] },
 		], [
@@ -22,7 +22,7 @@ describe('Sparkling Aria', () => {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should not cure the target's burn if the user fainted`, () => {
+	it(`should not cure the defender's burn if the user fainted`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Shedinja', moves: ['sparklingaria'] },
 			{ species: 'Wynaut', level: 1, ability: 'innardsout', moves: ['sleeptalk'] },

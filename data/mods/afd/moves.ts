@@ -3,13 +3,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -17,15 +17,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					source.trySetStatus('psn', target);
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					attacker.trySetStatus('psn', defender);
 				}
 				return this.NOT_FAIL;
 			},
@@ -35,13 +35,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender, false)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -49,15 +49,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					source.trySetStatus('brn', target);
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					attacker.trySetStatus('brn', defender);
 				}
 				return this.NOT_FAIL;
 			},
@@ -67,13 +67,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender, false)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -81,15 +81,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					this.boost({ atk: -1 }, source, target, this.dex.getActiveMove("King's Shield"));
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					this.boost({ atk: -1 }, attacker, defender, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;
 			},
@@ -99,7 +99,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
+			onTryHit(defender, attacker, move) {
 				const bypassesMaxGuard = [
 					'acupressure', 'afteryou', 'allyswitch', 'aromatherapy', 'aromaticmist', 'coaching', 'confide', 'copycat', 'curse', 'decorate', 'doomdesire', 'feint', 'futuresight', 'gmaxoneblow', 'gmaxrapidflow', 'healbell', 'holdhands', 'howl', 'junglehealing', 'lifedew', 'meanlook', 'perishsong', 'playnice', 'powertrick', 'roar', 'roleplay', 'tearfullook',
 				];
@@ -108,7 +108,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -116,11 +116,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
 				return this.NOT_FAIL;
@@ -151,13 +151,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender, false)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -165,15 +165,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					this.boost({ def: -2 }, source, target, this.dex.getActiveMove("Obstruct"));
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					this.boost({ def: -2 }, attacker, defender, this.dex.getActiveMove("Obstruct"));
 				}
 				return this.NOT_FAIL;
 			},
@@ -183,13 +183,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -197,11 +197,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
 				return this.NOT_FAIL;
@@ -212,13 +212,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target, false)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender, false)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -226,15 +226,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					this.boost({ spe: -1 }, source, target, this.dex.getActiveMove("Silk Trap"));
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					this.boost({ spe: -1 }, attacker, defender, this.dex.getActiveMove("Silk Trap"));
 				}
 				return this.NOT_FAIL;
 			},
@@ -244,13 +244,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			inherit: true,
-			onTryHit(target, source, move) {
-				if (this.checkMoveBypassesProtect(move, source, target)) return;
+			onTryHit(defender, attacker, move) {
+				if (this.checkMoveBypassesProtect(move, attacker, defender)) return;
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
 					if (!this.randomChance(2, 10)) {
-						this.add('-activate', target, 'move: Protect');
+						this.add('-activate', defender, 'move: Protect');
 						if (move.basePower >= 100) {
 							this.add('message', '**BWUAHAAUAAAANGGGGGG**');
 						}
@@ -258,15 +258,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return;
 					}
 				}
-				const lockedmove = source.getVolatile('lockedmove');
+				const lockedmove = attacker.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
+					if (attacker.volatiles['lockedmove'].duration === 2) {
+						delete attacker.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					this.damage(source.baseMaxhp / 8, source, target);
+				if (this.checkMoveMakesContact(move, attacker, defender)) {
+					this.damage(attacker.baseMaxhp / 8, attacker, defender);
 				}
 				return this.NOT_FAIL;
 			},
@@ -358,11 +358,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	suckerpunch: {
 		inherit: true,
 		onTry() { },
-		onModifyPriority(priority, source, target, move) {
-			if (!target) return priority - 1;
-			const action = this.queue.willMove(target);
+		onModifyPriority(priority, attacker, defender, move) {
+			if (!defender) return priority - 1;
+			const action = this.queue.willMove(defender);
 			const aMove = action?.choice === 'move' ? action.move : null;
-			if (!aMove || (aMove.category === 'Status' && aMove.id !== 'mefirst') || target.volatiles['mustrecharge']) {
+			if (!aMove || (aMove.category === 'Status' && aMove.id !== 'mefirst') || defender.volatiles['mustrecharge']) {
 				return priority - 1;
 			}
 			return priority;
@@ -374,20 +374,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healpulse: {
 		inherit: true,
-		onHit(target, source) {
+		onHit(defender, attacker) {
 			let success = false;
-			if (source.hasAbility('supermegalauncher')) {
-				success = !!this.heal(this.modify(target.baseMaxhp, 2));
-			} else if (source.hasAbility('megalauncher')) {
-				success = !!this.heal(this.modify(target.baseMaxhp, 0.75));
+			if (attacker.hasAbility('supermegalauncher')) {
+				success = !!this.heal(this.modify(defender.baseMaxhp, 2));
+			} else if (attacker.hasAbility('megalauncher')) {
+				success = !!this.heal(this.modify(defender.baseMaxhp, 0.75));
 			} else {
-				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+				success = !!this.heal(Math.ceil(defender.baseMaxhp * 0.5));
 			}
-			if (success && !target.isAlly(source)) {
-				target.staleness = 'external';
+			if (success && !defender.isAlly(attacker)) {
+				defender.staleness = 'external';
 			}
 			if (!success) {
-				this.add('-fail', target, 'heal');
+				this.add('-fail', defender, 'heal');
 				return this.NOT_FAIL;
 			}
 			return success;
@@ -398,8 +398,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, heal: 1 },
 		secondary: {
 			chance: 100,
-			onHit(target, source, move) {
-				if (!this.heal(this.modify(target.baseMaxhp, 0.25))) {
+			onHit(defender, attacker, move) {
+				if (!this.heal(this.modify(defender.baseMaxhp, 0.25))) {
 					return this.NOT_FAIL;
 				}
 			},
@@ -441,9 +441,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
 			chance: 50,
-			onHit(target, source, move) {
-				if (!['sunnyday', 'desolateland'].includes(target.effectiveWeather())) return;
-				target.trySetStatus('brn', source, move);
+			onHit(defender, attacker, move) {
+				if (!['sunnyday', 'desolateland'].includes(defender.effectiveWeather())) return;
+				defender.trySetStatus('brn', attacker, move);
 			},
 		},
 		target: "normal",
@@ -471,7 +471,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	scald: {
 		inherit: true,
-		onEffectiveness(typeMod, target, type) {
+		onEffectiveness(typeMod, defender, type) {
 			if (type === 'Steel') return 1;
 		},
 		secondary: undefined,
@@ -480,17 +480,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			status: 'brn',
 		}, {
 			chance: 100,
-			onHit(target, source, move) {
-				if (target.hasType(['Normal', 'Fairy'])) {
-					target.trySetStatus('brn', source, move);
+			onHit(defender, attacker, move) {
+				if (defender.hasType(['Normal', 'Fairy'])) {
+					defender.trySetStatus('brn', attacker, move);
 				}
 			},
 		}],
 	},
 	explosion: {
 		inherit: true,
-		onAfterMove(pokemon, target, move) {
-			if (target && target.hp <= 0) {
+		onAfterMove(pokemon, defender, move) {
+			if (defender && defender.hp <= 0) {
 				delete move.selfdestruct;
 				return;
 			}
@@ -498,8 +498,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	selfdestruct: {
 		inherit: true,
-		onAfterMove(pokemon, target, move) {
-			if (target && target.hp <= 0) {
+		onAfterMove(pokemon, defender, move) {
+			if (defender && defender.hp <= 0) {
 				delete move.selfdestruct;
 				return;
 			}
@@ -507,8 +507,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mistyexplosion: {
 		inherit: true,
-		onAfterMove(pokemon, target, move) {
-			if (target && target.hp <= 0) {
+		onAfterMove(pokemon, defender, move) {
+			if (defender && defender.hp <= 0) {
 				delete move.selfdestruct;
 				return;
 			}
@@ -536,8 +536,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		gen: 9,
 		accuracy: 100,
 		basePower: 0,
-		basePowerCallback(pokemon, target) {
-			const targetDef = target.getStat('def', false, true);
+		basePowerCallback(pokemon, defender) {
+			const targetDef = defender.getStat('def', false, true);
 			const pokemonDef = pokemon.getStat('def', false, true);
 			let bp;
 			if (pokemonDef >= targetDef * 5) {
@@ -568,7 +568,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "normal",
 		type: "Rock",
-		shortDesc: "Higher user Def than target Def = higher BP.",
+		shortDesc: "Higher user Def than defender Def = higher BP.",
 	},
 	focusblast: {
 		inherit: true,
@@ -578,16 +578,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	darkvoid: {
 		inherit: true,
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, pokemon, defender) {
 			if (pokemon.species.baseSpecies === 'Calyrex') {
 				move.accuracy = 80;
 			}
 		},
-		onTry(source, target, move) {
-			if (source.species.baseSpecies === 'Darkrai' || source.species.baseSpecies === 'Calyrex' || move.hasBounced) {
+		onTry(attacker, defender, move) {
+			if (attacker.species.baseSpecies === 'Darkrai' || attacker.species.baseSpecies === 'Calyrex' || move.hasBounced) {
 				return;
 			}
-			this.add('-fail', source, 'move: Dark Void');
+			this.add('-fail', attacker, 'move: Dark Void');
 			this.hint("Only a Pokemon whose form is Darkrai can use this move.");
 			return null;
 		},

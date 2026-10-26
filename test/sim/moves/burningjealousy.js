@@ -10,7 +10,7 @@ describe('Burning Jealousy', () => {
 		battle.destroy();
 	});
 
-	it(`should burn a target whose stats were raised this turn`, () => {
+	it(`should burn a defender whose stats were raised this turn`, () => {
 		battle = common.createBattle([[
 			{ species: 'Mew', moves: ['dragondance'] },
 		], [
@@ -20,7 +20,7 @@ describe('Burning Jealousy', () => {
 		assert.equal(battle.p1.active[0].status, 'brn');
 	});
 
-	it(`should not burn a target whose stats were raised after the attack`, () => {
+	it(`should not burn a defender whose stats were raised after the attack`, () => {
 		battle = common.createBattle([[
 			{ species: 'Ninetales', moves: ['burningjealousy'] },
 		], [
@@ -30,7 +30,7 @@ describe('Burning Jealousy', () => {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should burn a target whose stats were boosted at the start of the match`, () => {
+	it(`should burn a defender whose stats were boosted at the start of the match`, () => {
 		battle = common.createBattle([[
 			{ species: 'Wynaut', moves: ['burningjealousy'] },
 		], [
@@ -40,7 +40,7 @@ describe('Burning Jealousy', () => {
 		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 
-	it(`should not burn a target whose stats were boosted at a switch after a KO`, () => {
+	it(`should not burn a defender whose stats were boosted at a switch after a KO`, () => {
 		battle = common.createBattle([[
 			{ species: 'Wynaut', moves: ['burningjealousy'] },
 		], [

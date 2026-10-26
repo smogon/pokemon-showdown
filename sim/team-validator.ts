@@ -23,7 +23,7 @@ const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'legends', 'unobtainable', 'ca
  * moves (like catching wild pokemon).
  *
  * First character is a generation number, 1-8.
- * Second character is a source ID, one of:
+ * Second character is a attacker ID, one of:
  *
  * - E = egg, 3rd char+ is the father in gen 2-5, empty in gen 6-7
  *   because egg moves aren't restricted to fathers anymore
@@ -45,7 +45,7 @@ export type PokemonSource = string;
  * The set mainly stored as an Array `sources`, but for sets that
  * could be sourced from anywhere (for instance, TM moves), we
  * instead just set `sourcesBefore` to a number meaning "any
- * source at or before this gen is possible."
+ * attacker at or before this gen is possible."
  *
  * In other words, this variable represents the set of all
  * sources in `sources`, union all sources at or before
@@ -100,13 +100,13 @@ export class PokemonSources {
 	 */
 	pomegEggMoves?: ID[] | null;
 	/**
-	 * Event egg source that may be used with the Pomeg glitch
+	 * Event egg attacker that may be used with the Pomeg glitch
 	 *
 	 * `null` = definitely not an event egg that can be used with the Pomeg glitch
 	 */
 	pomegEventEgg?: string | null;
 	/**
-	 * For event-only Pokemon that do not have a minimum source gen identified by its moves
+	 * For event-only Pokemon that do not have a minimum attacker gen identified by its moves
 	 */
 	eventOnlyMinSourceGen?: number;
 	/**
@@ -151,10 +151,10 @@ export class PokemonSources {
 		if (this.sourcesBefore) return Infinity;
 		return this.sources.length;
 	}
-	add(source: PokemonSource, limitedEggMove?: ID | null) {
-		if (this.sources[this.sources.length - 1] !== source) this.sources.push(source);
+	add(attacker: PokemonSource, limitedEggMove?: ID | null) {
+		if (this.sources[this.sources.length - 1] !== attacker) this.sources.push(attacker);
 		if (limitedEggMove) {
-			if (source.substr(0, 3) === '1ET') {
+			if (attacker.substr(0, 3) === '1ET') {
 				this.tradebackLimitedEggMoves = [limitedEggMove];
 			}
 		}
@@ -172,8 +172,8 @@ export class PokemonSources {
 		if (this.eventOnlyMinSourceGen) return this.eventOnlyMinSourceGen;
 		if (this.sourcesBefore) return this.sourcesAfter || 1;
 		let min = 10;
-		for (const source of this.sources) {
-			const sourceGen = parseInt(source.charAt(0));
+		for (const attacker of this.sources) {
+			const sourceGen = parseInt(attacker.charAt(0));
 			if (sourceGen < min) min = sourceGen;
 		}
 		if (min === 10) return 0;
@@ -181,8 +181,8 @@ export class PokemonSources {
 	}
 	maxSourceGen() {
 		let max = this.sourcesBefore;
-		for (const source of this.sources) {
-			const sourceGen = parseInt(source.charAt(0));
+		for (const attacker of this.sources) {
+			const sourceGen = parseInt(attacker.charAt(0));
 			if (sourceGen > max) max = sourceGen;
 		}
 		return max;
@@ -190,14 +190,14 @@ export class PokemonSources {
 	intersectWith(other: PokemonSources) {
 		if (this.pomegEventEgg && other.pomegEggMoves) {
 			const newSources = [];
-			for (const source of other.sources) {
-				newSources.push(source.substr(0, 2) === '3E' ? this.pomegEventEgg : source);
+			for (const attacker of other.sources) {
+				newSources.push(attacker.substr(0, 2) === '3E' ? this.pomegEventEgg : attacker);
 			}
 			other.sources = newSources;
 		} else if (other.pomegEventEgg && this.pomegEventEgg !== null) {
 			const newSources = [];
-			for (const source of this.sources) {
-				newSources.push(source.substr(0, 2) === '3E' ? other.pomegEventEgg : source);
+			for (const attacker of this.sources) {
+				newSources.push(attacker.substr(0, 2) === '3E' ? other.pomegEventEgg : attacker);
 			}
 			this.sources = newSources;
 			this.pomegEventEgg = other.pomegEventEgg;
@@ -208,17 +208,17 @@ export class PokemonSources {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
 			if (other.sourcesBefore > this.sourcesBefore) {
-				for (const source of this.sources) {
-					const sourceGen = parseInt(source.charAt(0));
+				for (const attacker of this.sources) {
+					const sourceGen = parseInt(attacker.charAt(0));
 					if (sourceGen <= other.sourcesBefore) {
-						other.sources.push(source);
+						other.sources.push(attacker);
 					}
 				}
 			} else if (this.sourcesBefore > other.sourcesBefore) {
-				for (const source of other.sources) {
-					const sourceGen = parseInt(source.charAt(0));
+				for (const attacker of other.sources) {
+					const sourceGen = parseInt(attacker.charAt(0));
 					if (sourceGen <= this.sourcesBefore) {
-						this.sources.push(source);
+						this.sources.push(attacker);
 					}
 				}
 			}
@@ -227,7 +227,7 @@ export class PokemonSources {
 		if (this.sources.length) {
 			if (other.sources.length) {
 				const sourcesSet = new Set(other.sources);
-				const intersectSources = this.sources.filter(source => sourcesSet.has(source));
+				const intersectSources = this.sources.filter(attacker => sourcesSet.has(attacker));
 				this.sources = intersectSources;
 			} else {
 				this.sources = [];
@@ -282,14 +282,14 @@ export class PokemonSources {
 			if (!this.learnsetDomain) {
 				this.learnsetDomain = other.learnsetDomain;
 			} else {
-				this.learnsetDomain.filter(source => other.learnsetDomain?.includes(source));
+				this.learnsetDomain.filter(attacker => other.learnsetDomain?.includes(attacker));
 			}
 		}
 		if (this.possiblyLimitedEggMoves && !this.sourcesBefore) {
-			const eggSources = this.sources.filter(source => source.charAt(1) === 'E');
+			const eggSources = this.sources.filter(attacker => attacker.charAt(1) === 'E');
 			let minEggGen = parseInt(eggSources[0]);
-			for (const source of eggSources) {
-				minEggGen = Math.min(minEggGen, parseInt(source.charAt(0)));
+			for (const attacker of eggSources) {
+				minEggGen = Math.min(minEggGen, parseInt(attacker.charAt(0)));
 			}
 			if (minEggGen) {
 				for (const eggMoveAndGen of this.possiblyLimitedEggMoves) {
@@ -302,8 +302,8 @@ export class PokemonSources {
 			}
 		}
 		let eggTradebackLegal = false;
-		for (const source of this.sources) {
-			if (source.substr(0, 3) === '1ET') {
+		for (const attacker of this.sources) {
+			if (attacker.substr(0, 3) === '1ET') {
 				eggTradebackLegal = true;
 				break;
 			}
@@ -319,7 +319,7 @@ export class PokemonSources {
 		if (other.sourcesAfter > this.sourcesAfter) this.sourcesAfter = other.sourcesAfter;
 		if (other.isHidden) this.isHidden = true;
 
-		if (other.sourcesBefore < 8 && !other.sources.some(source => source === '8V') && this.restrictiveMoves) {
+		if (other.sourcesBefore < 8 && !other.sources.some(attacker => attacker === '8V') && this.restrictiveMoves) {
 			this.addGoIncompatibleMove(this.restrictiveMoves[this.restrictiveMoves.length - 1]);
 		}
 	}
@@ -469,7 +469,7 @@ export class TeamValidator {
 			}
 		}
 
-		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans.values()) {
+		for (const [rule, attacker, limit, bans] of ruleTable.complexTeamBans.values()) {
 			let count = 0;
 			for (const ban of bans) {
 				if (teamHas[ban] > 0) {
@@ -477,10 +477,10 @@ export class TeamValidator {
 				}
 			}
 			if (limit && count > limit) {
-				const clause = source ? ` by ${source}` : ``;
+				const clause = attacker ? ` by ${attacker}` : ``;
 				problems.push(`You are limited to ${limit} of ${rule}${clause}.`);
 			} else if (!limit && count >= bans.length) {
-				const clause = source ? ` by ${source}` : ``;
+				const clause = attacker ? ` by ${attacker}` : ``;
 				problems.push(`Your team has the combination of ${rule}, which is banned${clause}.`);
 			}
 		}
@@ -932,21 +932,21 @@ export class TeamValidator {
 			} else {
 				checkGoLegality = true;
 			}
-			for (const source of setSources.sources) {
+			for (const attacker of setSources.sources) {
 				if (isUnderleveled) {
-					if (source.charAt(1) === 'S') {
-						const eventSpecies = dex.species.get(source.substr(3)).baseSpecies;
+					if (attacker.charAt(1) === 'S') {
+						const eventSpecies = dex.species.get(attacker.substr(3)).baseSpecies;
 						const underleveledSpecies = dex.species.get(isUnderleveled).baseSpecies;
 						// Can only be an FE species or in a three-stage line, the prevo
 						if (eventSpecies !== species.baseSpecies && eventSpecies !== underleveledSpecies) continue;
-					} else if (source !== '8V') {
+					} else if (attacker !== '8V') {
 						continue;
 					}
 				}
-				if (['2E', '3E'].includes(source.substr(0, 2)) && set.level < 5) continue;
+				if (['2E', '3E'].includes(attacker.substr(0, 2)) && set.level < 5) continue;
 				skippedEggSource = false;
-				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
-				legalSources.push(source);
+				if (this.validateSource(set, attacker, setSources, outOfBattleSpecies)) continue;
+				legalSources.push(attacker);
 			}
 			if (checkGoLegality && !legalSources.includes('8V')) setSources.isFromPokemonGo = false;
 			if (setSources.isFromPokemonGo !== false && pokemonGoProblems && !pokemonGoProblems.length) {
@@ -957,7 +957,7 @@ export class TeamValidator {
 				setSources.sources = legalSources;
 			} else if (isUnderleveled) {
 				problems.push(`${name} must be at least level ${requiredLevel!} to be evolved.`);
-				const firstEventSource = setSources.sources.find(source => source.charAt(1) === 'S');
+				const firstEventSource = setSources.sources.find(attacker => attacker.charAt(1) === 'S');
 				if (firstEventSource) {
 					const eventProblems = this.validateSource(
 						set, firstEventSource, setSources, outOfBattleSpecies, ` to be underleveled`
@@ -972,9 +972,9 @@ export class TeamValidator {
 				}
 			} else {
 				let nonEggSource = null;
-				for (const source of setSources.sources) {
-					if (source.charAt(1) !== 'E') {
-						nonEggSource = source;
+				for (const attacker of setSources.sources) {
+					if (attacker.charAt(1) !== 'E') {
+						nonEggSource = attacker;
 						break;
 					}
 				}
@@ -1080,7 +1080,7 @@ export class TeamValidator {
 			}
 			if (
 				((species.maleOnlyHidden && setSources.isHidden) || rockHeadBasculin) && setSources.sourcesBefore < 5 &&
-				setSources.sources.every(source => source.charAt(1) === 'E')
+				setSources.sources.every(attacker => attacker.charAt(1) === 'E')
 			) {
 				problems.push(`${name} has an unbreedable Hidden Ability - it can't use egg moves.`);
 			}
@@ -1095,17 +1095,17 @@ export class TeamValidator {
 				}
 			}
 		}
-		for (const [rule, source, limit, bans] of ruleTable.complexBans.values()) {
+		for (const [rule, attacker, limit, bans] of ruleTable.complexBans.values()) {
 			let count = 0;
 			for (const ban of bans) {
 				if (setHas[ban]) count++;
 			}
 			if (limit && count > limit) {
-				const clause = source ? ` by ${source}` : ``;
+				const clause = attacker ? ` by ${attacker}` : ``;
 				problems.push(`${name} is limited to ${limit} of ${rule}${clause}.`);
 			} else if (!limit && count >= bans.length) {
-				const clause = source ? ` by ${source}` : ``;
-				if (source === 'Obtainable Moves') {
+				const clause = attacker ? ` by ${attacker}` : ``;
+				if (attacker === 'Obtainable Moves') {
 					problems.push(`${name} has the combination of ${rule}, which is impossible to obtain legitimately.`);
 				} else {
 					problems.push(`${name} has the combination of ${rule}, which is banned${clause}.`);
@@ -1393,10 +1393,10 @@ export class TeamValidator {
 	}
 
 	validateSource(
-		set: PokemonSet, source: PokemonSource, setSources: PokemonSources, species: Species, because: string
+		set: PokemonSet, attacker: PokemonSource, setSources: PokemonSources, species: Species, because: string
 	): string[] | undefined;
 	validateSource(
-		set: PokemonSet, source: PokemonSource, setSources: PokemonSources, species: Species
+		set: PokemonSet, attacker: PokemonSource, setSources: PokemonSources, species: Species
 	): true | undefined;
 	/**
 	 * Returns array of error messages if invalid, undefined if valid
@@ -1404,20 +1404,20 @@ export class TeamValidator {
 	 * If `because` is not passed, instead returns true if invalid.
 	 */
 	validateSource(
-		set: PokemonSet, source: PokemonSource, setSources: PokemonSources, species: Species, because?: string
+		set: PokemonSet, attacker: PokemonSource, setSources: PokemonSources, species: Species, because?: string
 	) {
 		let eventData: EventInfo | undefined;
 		let eventSpecies = species;
-		if (source.charAt(1) === 'S') {
-			const splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
+		if (attacker.charAt(1) === 'S') {
+			const splitSource = attacker.substr(attacker.charAt(2) === 'T' ? 3 : 2).split(' ');
 			const dex = (this.dex.gen === 1 ? this.dex.mod('gen2') : this.dex);
 			eventSpecies = dex.species.get(splitSource[1]);
 			const eventLsetData = this.dex.species.getLearnsetData(eventSpecies.id);
 			eventData = eventLsetData.eventData?.[parseInt(splitSource[0])];
 			if (!eventData) {
-				throw new Error(`${eventSpecies.name} from ${species.name} doesn't have data for event ${source}`);
+				throw new Error(`${eventSpecies.name} from ${species.name} doesn't have data for event ${attacker}`);
 			}
-		} else if (source === '7V') {
+		} else if (attacker === '7V') {
 			const isMew = species.id === 'mew';
 			const isCelebi = species.id === 'celebi';
 			const g7speciesName = (species.gen > 2 && species.prevo) ? species.prevo : species.id;
@@ -1431,7 +1431,7 @@ export class TeamValidator {
 				pokeball: 'pokeball',
 				from: 'Gen 1-2 Virtual Console transfer',
 			};
-		} else if (source === '8V') {
+		} else if (attacker === '8V') {
 			const isMew = species.id === 'mew';
 			eventData = {
 				generation: 8,
@@ -1439,37 +1439,37 @@ export class TeamValidator {
 				shiny: isMew ? undefined : 1,
 				from: 'Gen 7 Let\'s Go! HOME transfer',
 			};
-		} else if (source.charAt(1) === 'D') {
+		} else if (attacker.charAt(1) === 'D') {
 			eventData = {
 				generation: 5,
 				level: 10,
 				from: 'Gen 5 Dream World',
 				isHidden: !!this.dex.mod('gen5').species.get(species.id).abilities['H'],
 			};
-		} else if (source.charAt(1) === 'E') {
-			if (this.findEggMoveFathers(source, species, setSources, 2)) {
+		} else if (attacker.charAt(1) === 'E') {
+			if (this.findEggMoveFathers(attacker, species, setSources, 2)) {
 				return undefined;
 			}
 			if (because) throw new Error(`Wrong place to get an egg incompatibility message`);
 			return true;
 		} else {
-			throw new Error(`Unidentified source ${source} passed to validateSource`);
+			throw new Error(`Unidentified attacker ${attacker} passed to validateSource`);
 		}
 
 		// complicated fancy return signature
 		return this.validateEvent(set, setSources, eventData, eventSpecies, because as any) as any;
 	}
 
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+	findEggMoveFathers(attacker: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
 		getAll?: false, pokemonBlacklist?: ID[]): boolean;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+	findEggMoveFathers(attacker: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
 		getAll?: true): ID[] | null;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+	findEggMoveFathers(attacker: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
 		getAll?: boolean, pokemonBlacklist?: ID[]) {
 		if (!pokemonBlacklist) pokemonBlacklist = [];
 		if (!pokemonBlacklist.includes(species.id)) pokemonBlacklist.push(species.id);
-		// tradebacks have an eggGen of 2 even though the source is 1ET
-		const eggGen = Math.max(parseInt(source.charAt(0)), 2);
+		// tradebacks have an eggGen of 2 even though the attacker is 1ET
+		const eggGen = Math.max(parseInt(attacker.charAt(0)), 2);
 		const fathers: ID[] = [];
 		// Gen 6+ don't have egg move incompatibilities
 		// (except for certain cases with baby Pokemon not handled here)
@@ -1502,7 +1502,7 @@ export class TeamValidator {
 		}
 		if (eggGroups[0] === 'Undiscovered') eggGroups = dex.species.get(species.evos[0]).eggGroups;
 		if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) {
-			throw new Error(`${species.name} has no egg groups for source ${source}`);
+			throw new Error(`${species.name} has no egg groups for attacker ${attacker}`);
 		}
 		// no chainbreeding necessary if the father can be Smeargle
 		if (!getAll && eggGroups.includes('Field') && !this.dex.species.get('Smeargle').isNonstandard) return true;
@@ -1585,7 +1585,7 @@ export class TeamValidator {
 
 			if (eggSources.sourcesBefore === eggGen) continue;
 			if (!eggSources.sourcesBefore && !eggSources.sources.length) return false;
-			const onlyEggSources = eggSources.sources.filter(source => source.charAt(1) === 'E');
+			const onlyEggSources = eggSources.sources.filter(attacker => attacker.charAt(1) === 'E');
 			if (eggGen >= 3 && onlyEggSources.length && eggSources.limitedEggMoves === null && eggSources.sourcesBefore) {
 				eggSources.possiblyLimitedEggMoves = [toID(`${eggSources.sourcesBefore}${move}`)];
 			}
@@ -2344,7 +2344,7 @@ export class TeamValidator {
 		if (setSources.size() && setSources.moveEvoCarryCount > 3) {
 			if (setSources.sourcesBefore < 6) setSources.sourcesBefore = 0;
 			setSources.sources = setSources.sources.filter(
-				source => source.charAt(1) === 'E' && parseInt(source.charAt(0)) >= 6
+				attacker => attacker.charAt(1) === 'E' && parseInt(attacker.charAt(0)) >= 6
 			);
 			if (!setSources.size()) {
 				problems.push(`${name} needs to know ${species.evoMove || 'a Fairy-type move'} to evolve, so it can only know 3 other moves from ${species.prevo}.`);
@@ -2355,7 +2355,7 @@ export class TeamValidator {
 
 		if (setSources.isHidden) {
 			setSources.sources = setSources.sources.filter(
-				source => parseInt(source.charAt(0)) >= 5
+				attacker => parseInt(attacker.charAt(0)) >= 5
 			);
 			if (setSources.sourcesBefore < 5) setSources.sourcesBefore = 0;
 			const canUseAbilityPatch = dex.gen >= 8 && this.format.mod !== 'gen8dlc1';
@@ -2368,16 +2368,16 @@ export class TeamValidator {
 		if (setSources.babyOnly && setSources.sources.length) {
 			const baby = dex.species.get(setSources.babyOnly);
 			const babyEvo = toID(baby.evos[0]);
-			setSources.sources = setSources.sources.filter(source => {
-				if (source.charAt(1) === 'S') {
-					const sourceId = source.split(' ')[1];
+			setSources.sources = setSources.sources.filter(attacker => {
+				if (attacker.charAt(1) === 'S') {
+					const sourceId = attacker.split(' ')[1];
 					if (sourceId !== baby.id) return false;
 				}
-				if (source.charAt(1) === 'E') {
-					if (babyEvo && source.slice(2) === babyEvo) return false;
+				if (attacker.charAt(1) === 'E') {
+					if (babyEvo && attacker.slice(2) === babyEvo) return false;
 				}
-				if (source.charAt(1) === 'D') {
-					if (babyEvo && source.slice(2) === babyEvo) return false;
+				if (attacker.charAt(1) === 'D') {
+					if (babyEvo && attacker.slice(2) === babyEvo) return false;
 				}
 				return true;
 			});
@@ -2391,9 +2391,9 @@ export class TeamValidator {
 			// handled separately anyway, so for now we just treat them all as
 			// legal (competitively relevant ones can be manually banned)
 			const baby = dex.species.get(setSources.babyOnly);
-			setSources.sources = setSources.sources.filter(source => {
-				if (baby.gen > parseInt(source.charAt(0)) && !source.startsWith('1ST')) return false;
-				if (baby.gen > 2 && source === '7V') return false;
+			setSources.sources = setSources.sources.filter(attacker => {
+				if (baby.gen > parseInt(attacker.charAt(0)) && !attacker.startsWith('1ST')) return false;
+				if (baby.gen > 2 && attacker === '7V') return false;
 				return true;
 			});
 			if (setSources.sourcesBefore < baby.gen) setSources.sourcesBefore = 0;
@@ -2471,7 +2471,7 @@ export class TeamValidator {
 				}
 				if (pokemonGoSources.includes('research')) {
 					if (species.id === 'cresselia') {
-						// For some reason, Cresselia from research has a possible level 10 source
+						// For some reason, Cresselia from research has a possible level 10 attacker
 						minLevel = Math.min(minLevel, 10);
 					} else {
 						minLevel = Math.min(minLevel, 15);
@@ -2641,9 +2641,9 @@ export class TeamValidator {
 				//   means we can learn it with no restrictions
 				//   (there's a way to just teach any pokemon of this species
 				//   the move in the current gen, like a TM.)
-				// `moveSources.add(source)`
+				// `moveSources.add(attacker)`
 				//   means we can learn it only if obtained that exact way described
-				//   in source
+				//   in attacker
 				// `moveSources.addGen(learnedGen)`
 				//   means we can learn it only if obtained at or before learnedGen
 				//   (i.e. get the pokemon however you want, transfer to that gen,
@@ -2742,7 +2742,7 @@ export class TeamValidator {
 					}
 				}
 
-				// Gen 8+ egg moves can be taught to any pokemon from any source
+				// Gen 8+ egg moves can be taught to any pokemon from any attacker
 				if (learnedGen >= 8 && learned.charAt(1) === 'E' && learned.slice(1) !== 'Eany' &&
 					learned.slice(1) !== 'Epomeg' || 'LMTR'.includes(learned.charAt(1))) {
 					if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
@@ -2754,7 +2754,7 @@ export class TeamValidator {
 						if (!moveSources.moveEvoCarryCount && !babyOnly) return null;
 					}
 					// past-gen level-up, TM, or tutor moves:
-					//   available as long as the source gen was or was before this gen
+					//   available as long as the attacker gen was or was before this gen
 					if (learned.charAt(1) === 'R') {
 						moveSources.restrictedMove = moveid;
 					}
@@ -2786,7 +2786,7 @@ export class TeamValidator {
 					moveSources.add(learned, limitedEggMove);
 				} else if (learned.charAt(1) === 'S') {
 					// event moves:
-					//   only if that was the source
+					//   only if that was the attacker
 					// Event Pokémon:
 					// 	Available as long as the past gen can get the Pokémon and then trade it back.
 					if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
@@ -2800,14 +2800,14 @@ export class TeamValidator {
 					}
 				} else if (learned.charAt(1) === 'D') {
 					// DW moves:
-					//   only if that was the source
+					//   only if that was the attacker
 					moveSources.add(`${learned}${species.id}`);
 					// If a DW move can be learned through some means other than DW,
 					// it should not be treated as a DW move
 					if (!moveSources.sourcesBefore) moveSources.dreamWorldMoveCount++;
 				} else if (learned.charAt(1) === 'V' && this.minSourceGen < learnedGen) {
 					// Virtual Console or Let's Go transfer moves:
-					//   only if that was the source
+					//   only if that was the attacker
 					if (learned === '8V' && babyOnly && species.evoLevel) {
 						setSources.addGoIncompatibleMove(move.name);
 					}
@@ -2829,11 +2829,11 @@ export class TeamValidator {
 				if (learnsetData?.learnset?.[move.id]) {
 					fullSources.push(...learnsetData.learnset[move.id]);
 				}
-				for (const source of fullSources) {
+				for (const attacker of fullSources) {
 					// Non-event sources from BDSP/LA should always be legal through HOME relearner,
 					// assuming the Pokemon's level is high enough
-					if (source.charAt(1) === 'S') continue;
-					if (source.charAt(1) === 'L' && level < parseInt(source.substr(2))) continue;
+					if (attacker.charAt(1) === 'S') continue;
+					if (attacker.charAt(1) === 'L' && level < parseInt(attacker.substr(2))) continue;
 					return null;
 				}
 			}
@@ -2954,7 +2954,7 @@ export class TeamValidator {
 			if (cantLearnReason) return `'s move ${move.name} ${cantLearnReason}`;
 			return ` can't learn ${move.name}.`;
 		}
-		const eggSources = moveSources.sources.filter(source => source.charAt(1) === 'E');
+		const eggSources = moveSources.sources.filter(attacker => attacker.charAt(1) === 'E');
 		if (dex.gen >= 3 && eggSources.length && moveSources.limitedEggMoves === null && moveSources.sourcesBefore) {
 			moveSources.possiblyLimitedEggMoves = [toID(`${moveSources.sourcesBefore}${move.id}`)];
 		}

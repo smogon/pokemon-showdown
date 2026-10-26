@@ -1,7 +1,7 @@
 export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	frz: {
 		inherit: true,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType(pokemon.teraType))) return;
 			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
@@ -10,38 +10,38 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('cant', pokemon, 'frz');
 			return false;
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === target.teraType && move.category !== 'Status' && move.id !== 'polarflare') {
-				target.cureStatus();
+		onDamagingHit(damage, defender, attacker, move) {
+			if (move.type === defender.teraType && move.category !== 'Status' && move.id !== 'polarflare') {
+				defender.cureStatus();
 			}
 		},
 	},
 	futuremove: {
 		inherit: true,
-		onEnd(target) {
+		onEnd(defender) {
 			const data = this.effectState;
 			// time's up; time to hit! :D
 			const move = this.dex.moves.get(data.move);
-			if (target.fainted || target === data.source) {
-				this.hint(`${move.name} did not hit because the target is ${(target.fainted ? 'fainted' : 'the user')}.`);
+			if (defender.fainted || defender === data.attacker) {
+				this.hint(`${move.name} did not hit because the defender is ${(defender.fainted ? 'fainted' : 'the user')}.`);
 				return;
 			}
 
-			this.add('-end', target, 'move: ' + move.name);
-			target.removeVolatile('Protect');
-			target.removeVolatile('Endure');
+			this.add('-end', defender, 'move: ' + move.name);
+			defender.removeVolatile('Protect');
+			defender.removeVolatile('Endure');
 
-			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+			if (data.attacker.hasAbility('infiltrator') && this.gen >= 6) {
 				data.moveData.infiltrates = true;
 			}
-			if (data.source.hasAbility('normalize') && this.gen >= 6) {
-				data.moveData.type = data.source.teraType || 'Normal';
+			if (data.attacker.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = data.attacker.teraType || 'Normal';
 			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
-			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
-			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
-				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
+			this.actions.trySpreadMoveHit([defender], data.attacker, hitMove, true);
+			if (data.attacker.isActive && data.attacker.hasItem('lifeorb') && this.gen >= 5) {
+				this.singleEvent('AfterMoveSecondarySelf', data.attacker.getItem(), data.attacker.itemState, data.attacker, defender, data.attacker.getItem());
 			}
 			this.activeMove = null;
 
@@ -52,7 +52,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (defender.hasItem('utilityumbrella')) return;
-			if (move.type === this.effectState.source.teraType) {
+			if (move.type === this.effectState.attacker.teraType) {
 				this.debug('rain water boost');
 				return this.chainModify(0.75);
 			}
@@ -66,7 +66,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				return this.chainModify(1.5);
 			}
 			if (defender.hasItem('utilityumbrella')) return;
-			if (move.type === this.effectState.source.teraType) {
+			if (move.type === this.effectState.attacker.teraType) {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(0.75);
 			}
@@ -75,7 +75,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	sandstorm: {
 		inherit: true,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasType(this.effectState.source.teraType) && this.field.isWeather('sandstorm')) {
+			if (pokemon.hasType(this.effectState.attacker.teraType) && this.field.isWeather('sandstorm')) {
 				return this.modify(spd, 1.5);
 			}
 		},
@@ -83,7 +83,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	snowscape: {
 		inherit: true,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType(this.effectState.source.teraType) && this.field.isWeather('snowscape')) {
+			if (pokemon.hasType(this.effectState.attacker.teraType) && this.field.isWeather('snowscape')) {
 				return this.modify(def, 1.5);
 			}
 		},

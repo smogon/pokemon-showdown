@@ -1,7 +1,7 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	angershell: {
 		inherit: true,
-		onDamage(damage, target, source, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			this.effectState.checkedAngerShell = !(effect.effectType === "Move" && !effect.multihit);
 		},
 	},
@@ -11,7 +11,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	berserk: {
 		inherit: true,
-		onDamage(damage, target, source, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			this.effectState.checkedBerserk = !(effect.effectType === "Move" && !effect.multihit);
 		},
 	},
@@ -25,11 +25,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	emergencyexit: {
 		inherit: true,
-		onEmergencyExit(originalHp, target) {
-			if (!target.hp || target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
-			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-			target.switchFlag = true;
-			this.add('-activate', target, 'ability: Emergency Exit');
+		onEmergencyExit(originalHp, defender) {
+			if (!defender.hp || defender.hp > defender.maxhp / 2 || originalHp <= defender.maxhp / 2) return;
+			if (!this.canSwitch(defender.side) || defender.forceSwitchFlag || defender.switchFlag) return;
+			defender.switchFlag = true;
+			this.add('-activate', defender, 'ability: Emergency Exit');
 		},
 	},
 	firemane: {
@@ -91,20 +91,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	unseenfist: {
 		inherit: true,
 		onModifyMove: undefined, // no inherit
-		onHitProtect(source, target, move) {
+		onHitProtect(attacker, defender, move) {
 			if (move.flags['contact']) {
-				target.getMoveHitData(move).bypassProtect = this.effect;
+				defender.getMoveHitData(move).bypassProtect = this.effect;
 				return false;
 			}
 		},
 	},
 	wimpout: {
 		inherit: true,
-		onEmergencyExit(originalHp, target) {
-			if (!target.hp || target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
-			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-			target.switchFlag = true;
-			this.add('-activate', target, 'ability: Wimp Out');
+		onEmergencyExit(originalHp, defender) {
+			if (!defender.hp || defender.hp > defender.maxhp / 2 || originalHp <= defender.maxhp / 2) return;
+			if (!this.canSwitch(defender.side) || defender.forceSwitchFlag || defender.switchFlag) return;
+			defender.switchFlag = true;
+			this.add('-activate', defender, 'ability: Wimp Out');
 		},
 	},
 };

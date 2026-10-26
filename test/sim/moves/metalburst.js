@@ -24,7 +24,7 @@ describe('Metal Burst', () => {
 		assert.equal(breloom.hp, breloom.maxhp - battle.dex.moves.get('sonicboom').damage * 1.5);
 	});
 
-	it(`should target the opposing Pokemon that hit the user with an attack most recently that turn`, () => {
+	it(`should defender the opposing Pokemon that hit the user with an attack most recently that turn`, () => {
 		// The seed should select venusaur if the test would otherwise fail
 		battle = common.createBattle({ gameType: 'doubles', seed: [3, 4, 5, 6] }, [[
 			{ species: 'snorlax', moves: ['metalburst'] },

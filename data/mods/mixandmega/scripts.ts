@@ -136,7 +136,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						id: move.id,
 						pp,
 						maxpp: pp,
-						target: move.target,
+						defender: move.defender,
 						disabled: false,
 						disabledSource: '',
 						used: false,
@@ -194,10 +194,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
-			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
-			if (!target) return false;
+			const defender = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			if (!defender) return false;
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
-			action.move.beforeTurnCallback.call(this, action.pokemon, target);
+			action.move.beforeTurnCallback.call(this, action.pokemon, defender);
 			break;
 		case 'priorityChargeMove':
 			if (!action.pokemon.isActive) return false;
@@ -226,24 +226,24 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (action.choice === 'switch' && action.pokemon.status) {
 				this.singleEvent('CheckShow', this.dex.abilities.getByID('naturalcure' as ID), null, action.pokemon);
 			}
-			this.actions.switchIn(action.target, action.pokemon.position, action.sourceEffect);
+			this.actions.switchIn(action.defender, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'revivalblessing':
 			action.pokemon.side.pokemonLeft++;
-			if (action.target.position < action.pokemon.side.active.length) {
+			if (action.defender.position < action.pokemon.side.active.length) {
 				this.queue.addChoice({
 					choice: 'instaswitch',
-					pokemon: action.target,
-					target: action.target,
+					pokemon: action.defender,
+					defender: action.defender,
 				});
 			}
-			action.target.fainted = false;
-			action.target.faintQueued = false;
-			action.target.subFainted = false;
-			action.target.status = '';
-			action.target.hp = 1; // Needed so hp functions works
-			action.target.sethp(action.target.maxhp / 2);
-			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			action.defender.fainted = false;
+			action.defender.faintQueued = false;
+			action.defender.subFainted = false;
+			action.defender.status = '';
+			action.defender.hp = 1; // Needed so hp functions works
+			action.defender.sethp(action.defender.maxhp / 2);
+			this.add('-heal', action.defender, action.defender.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		case 'runSwitch':

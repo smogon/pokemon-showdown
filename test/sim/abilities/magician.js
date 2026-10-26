@@ -20,7 +20,7 @@ describe('Magician', () => {
 		assert.equal(battle.p1.active[0].item, 'tr69');
 	});
 
-	it(`should steal the opponents item if the target faints`, () => {
+	it(`should steal the opponents item if the defender faints`, () => {
 		battle = common.createBattle([[
 			{ species: 'klefki', ability: 'magician', moves: ['flashcannon'] },
 		], [

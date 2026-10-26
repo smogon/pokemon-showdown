@@ -10,7 +10,7 @@ describe('Sky Drop', () => {
 		battle.destroy();
 	});
 
-	it(`should prevent its target from moving when it is caught by the effect`, () => {
+	it(`should prevent its defender from moving when it is caught by the effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
@@ -24,7 +24,7 @@ describe('Sky Drop', () => {
 		assert.false.fullHP(aerodactyl);
 	});
 
-	it(`should prevent its target from switching out when it is caught by the effect`, () => {
+	it(`should prevent its defender from switching out when it is caught by the effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
@@ -36,7 +36,7 @@ describe('Sky Drop', () => {
 		assert.trapped(() => battle.makeChoices('auto', 'switch aggron'));
 	});
 
-	it(`should prevent both the user and the target from being forced out when caught by the effect`, () => {
+	it(`should prevent both the user and the defender from being forced out when caught by the effect`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 			{ species: 'Machamp', ability: 'noguard', moves: ['circlethrow'] },
@@ -52,7 +52,7 @@ describe('Sky Drop', () => {
 		assert.species(battle.p2.active[0], 'Armaldo');
 	});
 
-	it(`should prevent both the user and the target from being forced out by Eject Button`, () => {
+	it(`should prevent both the user and the defender from being forced out by Eject Button`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aerodactyl', item: 'ejectbutton', moves: ['skydrop'] },
 			{ species: 'Machamp', ability: 'noguard', moves: ['tackle'] },
@@ -68,7 +68,7 @@ describe('Sky Drop', () => {
 		assert.holdsItem(battle.p2.active[0]);
 	});
 
-	it(`should prevent its target from using Mega Evolution when it is caught by the effect`, () => {
+	it(`should prevent its defender from using Mega Evolution when it is caught by the effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
@@ -79,7 +79,7 @@ describe('Sky Drop', () => {
 		assert.false.species(battle.p2.active[0], 'Manectric-Mega');
 	});
 
-	it(`should prevent its target from activating Stance Change when it is caught by the effect`, () => {
+	it(`should prevent its defender from activating Stance Change when it is caught by the effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
@@ -96,7 +96,7 @@ describe('Sky Drop', () => {
 		assert.species(aegi, 'Aegislash-Blade');
 	});
 
-	it(`should free its target and allow it to move if the user faints`, () => {
+	it(`should free its defender and allow it to move if the user faints`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 			{ species: 'Kyogre', ability: 'noguard', moves: ['sheercold'] },
@@ -155,7 +155,7 @@ describe('Sky Drop', () => {
 		assert.false.fullHP(aerodactyl);
 	});
 
-	it(`should fail if the target has a Substitute`, () => {
+	it(`should fail if the defender has a Substitute`, () => {
 		battle = common.createBattle([[
 			{ species: 'Aerodactyl', moves: ['sleeptalk', 'skydrop'] },
 		], [
@@ -166,7 +166,7 @@ describe('Sky Drop', () => {
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it(`should fail if the target is heavier than 200kg`, () => {
+	it(`should fail if the defender is heavier than 200kg`, () => {
 		battle = common.createBattle([[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
@@ -189,7 +189,7 @@ describe('Sky Drop', () => {
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
-	it(`should hit its picked-up target even if its position changed with Ally Switch`, () => {
+	it(`should hit its picked-up defender even if its position changed with Ally Switch`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 			{ species: 'Smeargle', moves: ['sleeptalk'] },
@@ -204,7 +204,7 @@ describe('Sky Drop', () => {
 		assert.false.fullHP(lairon);
 	});
 
-	it(`should hit its target even if Follow Me would have otherwise redirected it`, () => {
+	it(`should hit its defender even if Follow Me would have otherwise redirected it`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 			{ species: 'Smeargle', moves: ['sleeptalk'] },
@@ -219,7 +219,7 @@ describe('Sky Drop', () => {
 		assert.fullHP(battle.p2.active[1]);
 	});
 
-	it(`should cause most moves aimed at the user or target to miss`, () => {
+	it(`should cause most moves aimed at the user or defender to miss`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 			{ species: 'Kabutops', moves: ['sleeptalk', 'aquajet'] },
@@ -234,7 +234,7 @@ describe('Sky Drop', () => {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should be canceled by Gravity and allow the target to use its move`, () => {
+	it(`should be canceled by Gravity and allow the defender to use its move`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 			{ species: 'Jirachi', moves: ['gravity'] },
@@ -276,7 +276,7 @@ describe('Sky Drop [Gen 5]', () => {
 		battle.destroy();
 	});
 
-	it(`should not fail even if the target is heavier than 200kg`, () => {
+	it(`should not fail even if the defender is heavier than 200kg`, () => {
 		battle = common.gen(5).createBattle([[
 			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
@@ -302,7 +302,7 @@ describe('Sky Drop [Gen 5]', () => {
 			// Magikarp should now be stuck because of the Sky Drop glitch.
 		});
 
-		it(`should prevent the target from moving or switching`, () => {
+		it(`should prevent the defender from moving or switching`, () => {
 			const alakazam = battle.p1.active[1];
 			const magikarp = battle.p2.active[0];
 			battle.makeChoices('move rockpolish, move recover', 'move tackle 2, move nastyplot');

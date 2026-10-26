@@ -16,8 +16,8 @@ describe('Unburden', () => {
 		], [
 			{ species: 'Scizor', ability: 'swarm', item: 'focussash', moves: ['swordsdance'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.getStat('spe'), 2 * target.getStat('spe'), () => battle.makeChoices('move closecombat', 'move swordsdance'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.getStat('spe'), 2 * defender.getStat('spe'), () => battle.makeChoices('move closecombat', 'move swordsdance'));
 	});
 
 	it('should trigger when an item is destroyed', () => {
@@ -26,8 +26,8 @@ describe('Unburden', () => {
 		], [
 			{ species: 'Machamp', ability: 'noguard', moves: ['stoneedge'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.getStat('spe'), 2 * target.getStat('spe'), () => battle.makeChoices('move endure', 'move stoneedge'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.getStat('spe'), 2 * defender.getStat('spe'), () => battle.makeChoices('move endure', 'move stoneedge'));
 	});
 
 	it('should trigger when Natural Gift consumes a berry', () => {
@@ -36,8 +36,8 @@ describe('Unburden', () => {
 		], [
 			{ species: 'Scizor', ability: 'swarm', item: 'focussash', moves: ['swordsdance'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.getStat('spe'), 2 * target.getStat('spe'), () => battle.makeChoices('move naturalgift', 'move swordsdance'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.getStat('spe'), 2 * defender.getStat('spe'), () => battle.makeChoices('move naturalgift', 'move swordsdance'));
 	});
 
 	it('should trigger when an item is flung', () => {
@@ -46,8 +46,8 @@ describe('Unburden', () => {
 		], [
 			{ species: 'Scizor', ability: 'swarm', item: 'focussash', moves: ['swordsdance'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.getStat('spe'), 2 * target.getStat('spe'), () => battle.makeChoices('move fling', 'move swordsdance'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.getStat('spe'), 2 * defender.getStat('spe'), () => battle.makeChoices('move fling', 'move swordsdance'));
 	});
 
 	it('should trigger when an item is forcefully removed', () => {
@@ -56,8 +56,8 @@ describe('Unburden', () => {
 		], [
 			{ species: 'Scizor', ability: 'swarm', moves: ['knockoff'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.getStat('spe'), 2 * target.getStat('spe'), () => battle.makeChoices('move leechseed', 'move knockoff'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.getStat('spe'), 2 * defender.getStat('spe'), () => battle.makeChoices('move leechseed', 'move knockoff'));
 	});
 
 	it('should not be suppressed by Mold Breaker', () => {
@@ -66,8 +66,8 @@ describe('Unburden', () => {
 		], [
 			{ species: 'Scizor', ability: 'moldbreaker', moves: ['knockoff'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.getStat('spe'), 2 * target.getStat('spe'), () => battle.makeChoices('move leechseed', 'move knockoff'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.getStat('spe'), 2 * defender.getStat('spe'), () => battle.makeChoices('move leechseed', 'move knockoff'));
 	});
 
 	it('should lose the boost when it gains a new item', () => {

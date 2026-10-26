@@ -12,8 +12,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'brn');
+		onStart(defender) {
+			this.add('-status', defender, 'brn');
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
@@ -30,8 +30,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	par: {
 		name: 'par',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'par');
+		onStart(defender) {
+			this.add('-status', defender, 'par');
 		},
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
@@ -53,22 +53,22 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				this.add('-status', defender, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
-				this.add('-status', target, 'slp');
+				this.add('-status', defender, 'slp');
 			}
 			// 1-7 turns
 			this.effectState.startTime = this.random(1, 8);
 			this.effectState.time = this.effectState.startTime;
 
-			if (target.removeVolatile('nightmare')) {
-				this.add('-end', target, 'Nightmare', '[silent]');
+			if (defender.removeVolatile('nightmare')) {
+				this.add('-end', defender, 'Nightmare', '[silent]');
 			}
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time > 0) {
 				this.add('cant', pokemon, 'slp');
@@ -80,36 +80,36 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusState.time <= 0) pokemon.cureStatus();
 		},
-		onDisableMove(target) {
-			target.maybeLocked = false; // the player knows it is locked
+		onDisableMove(defender) {
+			defender.maybeLocked = false; // the player knows it is locked
 		},
 	},
 	frz: {
 		name: 'frz',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'frz');
+		onStart(defender) {
+			this.add('-status', defender, 'frz');
 		},
 		onBeforeMovePriority: 12,
-		onBeforeMove(pokemon, target, move) {
+		onBeforeMove(pokemon, defender, move) {
 			this.add('cant', pokemon, 'frz');
 			pokemon.lastMove = null;
 			return false;
 		},
-		onAfterMoveSecondary(target, source, move) {
+		onAfterMoveSecondary(defender, attacker, move) {
 			if (move.secondary?.status === 'brn') {
-				target.cureStatus();
+				defender.cureStatus();
 			}
 		},
-		onDisableMove(target) {
-			target.maybeLocked = false; // the player knows it is locked
+		onDisableMove(defender) {
+			defender.maybeLocked = false; // the player knows it is locked
 		},
 	},
 	psn: {
 		name: 'psn',
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'psn');
+		onStart(defender) {
+			this.add('-status', defender, 'psn');
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
@@ -130,19 +130,19 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	confusion: {
 		name: 'confusion',
 		// this is a volatile status
-		onStart(target, source, sourceEffect) {
+		onStart(defender, attacker, sourceEffect) {
 			if (sourceEffect?.id === 'lockedmove') {
-				this.add('-start', target, 'confusion', '[silent]');
+				this.add('-start', defender, 'confusion', '[silent]');
 			} else {
-				this.add('-start', target, 'confusion');
+				this.add('-start', defender, 'confusion');
 			}
 			this.effectState.time = this.random(2, 6);
 		},
-		onEnd(target) {
-			this.add('-end', target, 'confusion');
+		onEnd(defender) {
+			this.add('-end', defender, 'confusion');
 		},
 		onBeforeMovePriority: 3,
-		onBeforeMove(pokemon, target) {
+		onBeforeMove(pokemon, defender) {
 			pokemon.volatiles['confusion'].time--;
 			if (!pokemon.volatiles['confusion'].time) {
 				pokemon.removeVolatile('confusion');
@@ -153,7 +153,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				const damage = Math.floor(Math.floor((
 					(Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40
 				) / pokemon.getStat('def', false)) / 50) + 2;
-				this.directDamage(damage, pokemon, target);
+				this.directDamage(damage, pokemon, defender);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
 				pokemon.removeVolatile('invulnerability');
@@ -166,8 +166,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	flinch: {
 		name: 'flinch',
 		duration: 1,
-		onStart(target) {
-			target.removeVolatile('mustrecharge');
+		onStart(defender) {
+			defender.removeVolatile('mustrecharge');
 		},
 		onBeforeMovePriority: 8,
 		onBeforeMove(pokemon) {
@@ -182,7 +182,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		name: 'trapped',
 		noCopy: true,
 		onTrapPokemon(pokemon) {
-			if (!this.effectState.source?.isActive) {
+			if (!this.effectState.attacker?.isActive) {
 				delete pokemon.volatiles['trapped'];
 				return;
 			}
@@ -205,13 +205,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onRestart() {
 			this.effectState.duration = 2;
 		},
-		onAccuracy(accuracy, target, source, move) {
-			if (source === this.effectState.source) return true;
+		onAccuracy(accuracy, defender, attacker, move) {
+			if (attacker === this.effectState.attacker) return true;
 		},
 		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
-		onDisableMove(target) {
+		onDisableMove(defender) {
 			if (this.effectState.maybeLocked) {
-				target.maybeLocked = true;
+				defender.maybeLocked = true;
 			}
 		},
 	},
@@ -221,8 +221,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// until you try to use an attack
 		duration: 2,
 		onDisableMovePriority: 1, // higher priority so it gets undone by frz, slp or Bide
-		onDisableMove(target) {
-			target.maybeLocked = true;
+		onDisableMove(defender) {
+			defender.maybeLocked = true;
 		},
 	},
 	partialtrappinglock: {
@@ -230,37 +230,37 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		durationCallback() {
 			return this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 		},
-		onStart(target, source, effect) {
-			const foe = target.foes()[0];
+		onStart(defender, attacker, effect) {
+			const foe = defender.foes()[0];
 			if (!foe) return false;
 
 			this.effectState.move = effect.id;
 			this.effectState.totalDuration = this.effectState.duration!;
 			this.effectState.damage = this.lastDamage;
 			this.effectState.locked = foe;
-			foe.addVolatile('partiallytrapped', target, effect);
+			foe.addVolatile('partiallytrapped', defender, effect);
 		},
-		onBeforeMove(pokemon, target, move) {
-			if (target !== this.effectState.locked) {
+		onBeforeMove(pokemon, defender, move) {
+			if (defender !== this.effectState.locked) {
 				pokemon.removeVolatile('partialtrappinglock');
 			}
 		},
-		onAfterMove(pokemon, target, move) {
-			if (target && target.hp <= 0) {
+		onAfterMove(pokemon, defender, move) {
+			if (defender && defender.hp <= 0) {
 				delete pokemon.volatiles['partialtrappinglock'];
 				return;
 			}
 			if (this.effectState.duration === 1) {
 				if (this.effectState.totalDuration !== 5) {
 					pokemon.addVolatile('fakepartiallytrapped');
-					pokemon.volatiles['fakepartiallytrapped'].counterpart = target;
-					target.addVolatile('fakepartiallytrapped');
-					target.volatiles['fakepartiallytrapped'].counterpart = pokemon;
+					pokemon.volatiles['fakepartiallytrapped'].counterpart = defender;
+					defender.addVolatile('fakepartiallytrapped');
+					defender.volatiles['fakepartiallytrapped'].counterpart = pokemon;
 				}
 			} else {
-				target.addVolatile('partiallytrapped', pokemon, move);
+				defender.addVolatile('partiallytrapped', pokemon, move);
 				if (this.effectState.totalDuration - this.effectState.duration! > 0) {
-					target.volatiles['partiallytrapped'].maybeLocked = true;
+					defender.volatiles['partiallytrapped'].maybeLocked = true;
 				}
 			}
 		},
@@ -278,8 +278,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 0,
 		onBeforeMovePriority: 7,
 		onStart: undefined, // no inherit
-		onAfterMove(pokemon, target, move) {
-			if (target && target.hp <= 0) {
+		onAfterMove(pokemon, defender, move) {
+			if (defender && defender.hp <= 0) {
 				delete pokemon.volatiles['mustrecharge'];
 				return;
 			}
@@ -289,7 +289,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	lockedmove: {
 		// Thrash and Petal Dance.
 		name: 'lockedmove',
-		onStart(target, source, effect) {
+		onStart(defender, attacker, effect) {
 			this.effectState.move = effect.id;
 			this.effectState.time = this.random(2, 4);
 			this.effectState.accuracy = 255;
@@ -319,10 +319,10 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	invulnerability: {
 		// Dig/Fly
 		name: 'invulnerability',
-		onInvulnerability(target, source, move) {
-			if (target === source) return true;
+		onInvulnerability(defender, attacker, move) {
+			if (defender === attacker) return true;
 			if (move.id === 'swift' || move.id === 'transform') return true;
-			this.add('-message', 'The foe ' + target.name + ' can\'t be hit while invulnerable!');
+			this.add('-message', 'The foe ' + defender.name + ' can\'t be hit while invulnerable!');
 			return false;
 		},
 	},

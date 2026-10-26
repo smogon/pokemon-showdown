@@ -10,7 +10,7 @@ describe('Assurance', () => {
 		battle.destroy();
 	});
 
-	it(`should double its base power if the target already took damage this turn`, () => {
+	it(`should double its base power if the defender already took damage this turn`, () => {
 		battle = common.createBattle([[
 			{ species: 'Sneasel', ability: 'sturdy', moves: ['assurance'] },
 		], [
@@ -39,7 +39,7 @@ describe('Assurance', () => {
 		assert.bounded(damage, [63, 75]); // 60 BP; if it was 120 BP, it would be 124-147 damage
 	});
 
-	it(`should not double its base power if the target lost HP due to Pain Split`, () => {
+	it(`should not double its base power if the defender lost HP due to Pain Split`, () => {
 		battle = common.createBattle([[
 			{ species: 'Greedent', moves: ['assurance'] },
 		], [

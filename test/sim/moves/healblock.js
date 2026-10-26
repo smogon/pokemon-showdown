@@ -76,7 +76,7 @@ describe('Heal Block', () => {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not prevent the target from using Z-Powered healing status moves or healing from Z Power', () => {
+	it('should not prevent the defender from using Z-Powered healing status moves or healing from Z Power', () => {
 		battle = common.createBattle([[
 			{ species: 'Beheeyem', ability: 'telepathy', item: 'normaliumz', moves: ['psychic', 'healblock', 'recover'] },
 		], [
@@ -243,7 +243,7 @@ describe('Heal Block [Gen 4]', () => {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should fail independently on each target', () => {
+	it('should fail independently on each defender', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'porygon2', moves: ['sleeptalk'] },
 			{ species: 'marshadow', moves: ['sleeptalk'] },
@@ -260,6 +260,6 @@ describe('Heal Block [Gen 4]', () => {
 		assert.equal(battle.log[battle.lastMoveLine + 2].startsWith('|-fail'), true);
 		assert.notEqual(battle.log[battle.lastMoveLine + 3].startsWith('|-fail'), true);
 		battle.makeChoices('move sleeptalk, switch 3', 'move sleeptalk, move healblock');
-		assert.equal(battle.p2.active[1].moveLastTurnResult, true, 'should succeed if succeeds on at least one target');
+		assert.equal(battle.p2.active[1].moveLastTurnResult, true, 'should succeed if succeeds on at least one defender');
 	});
 });

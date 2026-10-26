@@ -24,7 +24,7 @@ describe('After You', () => {
 		assert.false.fainted(magnemite);
 	});
 
-	it(`should only cause the target to move next, not run a submove`, () => {
+	it(`should only cause the defender to move next, not run a submove`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Wynaut', ability: 'prankster', moves: ['afteryou'] },
 			{ species: 'Necrozma', level: 50, ability: 'prankster', moves: ['photongeyser'] },
@@ -57,7 +57,7 @@ describe('After You', () => {
 		assert.false.fainted(magnemite);
 	});
 
-	it(`should fail in singles whether the user is faster or slower than its target`, () => {
+	it(`should fail in singles whether the user is faster or slower than its defender`, () => {
 		battle = common.createBattle([[
 			{ species: 'Wynaut', moves: ['afteryou', 'ember'] },
 		], [

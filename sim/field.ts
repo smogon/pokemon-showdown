@@ -36,11 +36,11 @@ export class Field {
 		return State.serializeField(this);
 	}
 
-	setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setWeather(status: string | Condition, attacker: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event?.target) source = this.battle.event.target;
-		if (source === 'debug') source = this.battle.sides[0].active[0];
+		if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
+		if (attacker === 'debug') attacker = this.battle.sides[0].active[0];
 
 		if (this.weather === status.id) {
 			if (sourceEffect?.effectType === 'Ability') {
@@ -51,14 +51,14 @@ export class Field {
 				return false;
 			}
 		}
-		if (source) {
-			const result = this.battle.runEvent('SetWeather', source, source, status);
+		if (attacker) {
+			const result = this.battle.runEvent('SetWeather', attacker, attacker, status);
 			if (!result) {
 				if (result === false) {
 					if ((sourceEffect as Move)?.weather) {
-						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
+						this.battle.add('-fail', attacker, sourceEffect, '[from] ' + this.weather);
 					} else if (sourceEffect?.effectType === 'Ability') {
-						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
+						this.battle.add('-ability', attacker, sourceEffect, '[from] ' + this.weather, '[fail]');
 					}
 				}
 				return null;
@@ -68,18 +68,18 @@ export class Field {
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
 		this.weatherState = this.battle.initEffectState({ id: status.id });
-		if (source) {
-			this.weatherState.source = source;
-			this.weatherState.sourceSlot = source.getSlot();
+		if (attacker) {
+			this.weatherState.attacker = attacker;
+			this.weatherState.sourceSlot = attacker.getSlot();
 		}
 		if (status.duration) {
 			this.weatherState.duration = status.duration;
 		}
 		if (status.durationCallback) {
-			if (!source) throw new Error(`setting weather without a source`);
-			this.weatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			if (!attacker) throw new Error(`setting weather without a attacker`);
+			this.weatherState.duration = status.durationCallback.call(this.battle, attacker, attacker, sourceEffect);
 		}
-		if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
+		if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, attacker, sourceEffect)) {
 			this.weather = prevWeather;
 			this.weatherState = prevWeatherState;
 			return false;
@@ -127,12 +127,12 @@ export class Field {
 		return this.battle.dex.conditions.getByID(this.weather);
 	}
 
-	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setTerrain(status: string | Effect, attacker: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event?.target) source = this.battle.event.target;
-		if (source === 'debug') source = this.battle.sides[0].active[0];
-		if (!source) throw new Error(`setting terrain without a source`);
+		if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
+		if (attacker === 'debug') attacker = this.battle.sides[0].active[0];
+		if (!attacker) throw new Error(`setting terrain without a attacker`);
 
 		if (this.terrain === status.id) return false;
 		const prevTerrain = this.terrain;
@@ -140,14 +140,14 @@ export class Field {
 		this.terrain = status.id;
 		this.terrainState = this.battle.initEffectState({
 			id: status.id,
-			source,
-			sourceSlot: source.getSlot(),
+			attacker,
+			sourceSlot: attacker.getSlot(),
 			duration: status.duration,
 		});
 		if (status.durationCallback) {
-			this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			this.terrainState.duration = status.durationCallback.call(this.battle, attacker, attacker, sourceEffect);
 		}
-		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
+		if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, attacker, sourceEffect)) {
 			this.terrain = prevTerrain;
 			this.terrainState = prevTerrainState;
 			return false;
@@ -166,13 +166,13 @@ export class Field {
 		return true;
 	}
 
-	effectiveTerrain(target?: Pokemon | Side | Battle) {
-		if (this.battle.event && !target) target = this.battle.event.target;
-		return this.battle.runEvent('TryTerrain', target) ? this.terrain : '';
+	effectiveTerrain(defender?: Pokemon | Side | Battle) {
+		if (this.battle.event && !defender) defender = this.battle.event.defender;
+		return this.battle.runEvent('TryTerrain', defender) ? this.terrain : '';
 	}
 
-	isTerrain(terrain: string | string[], target?: Pokemon | Side | Battle) {
-		const ourTerrain = this.effectiveTerrain(target);
+	isTerrain(terrain: string | string[], defender?: Pokemon | Side | Battle) {
+		const ourTerrain = this.effectiveTerrain(defender);
 		if (!Array.isArray(terrain)) {
 			return ourTerrain === toID(terrain);
 		}
@@ -185,33 +185,33 @@ export class Field {
 
 	addPseudoWeather(
 		status: string | Condition,
-		source: Pokemon | 'debug' | null = null,
+		attacker: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null
 	): boolean {
-		if (!source && this.battle.event?.target) source = this.battle.event.target;
-		if (source === 'debug') source = this.battle.sides[0].active[0];
+		if (!attacker && this.battle.event?.defender) attacker = this.battle.event.defender;
+		if (attacker === 'debug') attacker = this.battle.sides[0].active[0];
 		status = this.battle.dex.conditions.get(status);
 
 		let state = this.pseudoWeather[status.id];
 		if (state) {
 			if (!(status as any).onFieldRestart) return false;
-			return this.battle.singleEvent('FieldRestart', status, state, this, source, sourceEffect);
+			return this.battle.singleEvent('FieldRestart', status, state, this, attacker, sourceEffect);
 		}
 		state = this.pseudoWeather[status.id] = this.battle.initEffectState({
 			id: status.id,
-			source,
-			sourceSlot: source?.getSlot(),
+			attacker,
+			sourceSlot: attacker?.getSlot(),
 			duration: status.duration,
 		});
 		if (status.durationCallback) {
-			if (!source) throw new Error(`setting fieldcond without a source`);
-			state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			if (!attacker) throw new Error(`setting fieldcond without a attacker`);
+			state.duration = status.durationCallback.call(this.battle, attacker, attacker, sourceEffect);
 		}
-		if (!this.battle.singleEvent('FieldStart', status, state, this, source, sourceEffect)) {
+		if (!this.battle.singleEvent('FieldStart', status, state, this, attacker, sourceEffect)) {
 			delete this.pseudoWeather[status.id];
 			return false;
 		}
-		this.battle.runEvent('PseudoWeatherChange', source, source, status);
+		this.battle.runEvent('PseudoWeatherChange', attacker, attacker, status);
 		return true;
 	}
 

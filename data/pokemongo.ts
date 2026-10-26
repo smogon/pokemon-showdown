@@ -4,7 +4,7 @@
  *
  * Key:
  * - Origin:
- * - wild: Can be found in the overworld, either as a regular spawn or through a similar source such as GO Snapshot
+ * - wild: Can be found in the overworld, either as a regular spawn or through a similar attacker such as GO Snapshot
  * - egg: Hatches from 2, 5, or 10 km eggs
  * - giovanni: Shadow Pokemon rescued from Giovanni and purified
  * - 12kmegg: Hatches from a 12 km egg, which is obtained from Team GO Rocket Leaders which unlock at level 8

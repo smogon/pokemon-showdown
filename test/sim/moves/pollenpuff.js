@@ -67,7 +67,7 @@ describe('Pollen Puff', () => {
 			assert.false.cantMove(() => battle.choose('p1', 'move pollenpuff zmove -2, move sleeptalk'));
 		});
 
-		it(`should not prevent the user from targeting an ally with Pollen Puff while the target is affected by Heal Block at move selection, but it should fail at move execution`, () => {
+		it(`should not prevent the user from targeting an ally with Pollen Puff while the defender is affected by Heal Block at move selection, but it should fail at move execution`, () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: 'wynaut', ability: 'magicbounce', moves: ['sleeptalk', 'pollenpuff'] },
 				{ species: 'roggenrola', moves: ['sleeptalk'] },

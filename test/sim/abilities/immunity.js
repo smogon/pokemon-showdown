@@ -25,9 +25,9 @@ describe('Immunity', () => {
 		], [
 			{ species: 'Crobat', ability: 'immunity', moves: ['toxic', 'skillswap'] },
 		]]);
-		const target = battle.p1.active[0];
-		assert.sets(() => target.status, 'tox', () => battle.makeChoices('move curse', 'move toxic'));
-		assert.sets(() => target.status, '', () => battle.makeChoices('move curse', 'move skillswap'));
+		const defender = battle.p1.active[0];
+		assert.sets(() => defender.status, 'tox', () => battle.makeChoices('move curse', 'move toxic'));
+		assert.sets(() => defender.status, '', () => battle.makeChoices('move curse', 'move skillswap'));
 	});
 
 	it('should have its immunity to poison temporarily suppressed by Mold Breaker, but should cure the status immediately afterwards', () => {

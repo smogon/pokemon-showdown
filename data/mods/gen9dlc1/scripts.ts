@@ -101,7 +101,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					id: moveSlot.id,
 					pp,
 					maxpp: this.battle.gen >= 5 ? pp : this.battle.calculatePP(move, this.ppUps[i] || 0),
-					target: moveSlot.target,
+					defender: moveSlot.defender,
 					disabled: false,
 					used: false,
 					virtual: true,
