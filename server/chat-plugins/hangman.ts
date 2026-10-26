@@ -110,7 +110,9 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		}
 
 		if (sanitized.length > 1) {
-			if (!this.guessWord(sanitized, user.name)) {
+			if (!this.isSafeGuess(this.room, sanitized)) {
+				throw new Chat.ErrorMessage(`Your guess contained a phrase banned by this room.`);
+			} else if (!this.guessWord(sanitized, user.name)) {
 				throw new Chat.ErrorMessage(`Your guess "${sanitized}" is invalid.`);
 			} else {
 				this.room.addByUser(user, `${user.name} guessed "${sanitized}"!`);
@@ -119,6 +121,24 @@ export class Hangman extends Rooms.SimpleRoomGame {
 			if (!this.guessLetter(sanitized, user.name)) {
 				throw new Chat.ErrorMessage(`Your guess "${sanitized}" is not a valid letter.`);
 			}
+		}
+	}
+
+	isSafeGuess(room: BasicRoom, message: string): boolean {
+		{
+			if (!room) return true;
+			if (!room.banwordRegex) {
+				if (room.settings.banwords?.length) {
+					room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + room.settings.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
+				} else {
+					room.banwordRegex = true;
+				}
+			}
+			if (!message) return true;
+			if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
+				return false;
+			}
+			return this.isSafeGuess(room.parent as ChatRoom, message);
 		}
 	}
 
@@ -323,6 +343,11 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			target = target.trim();
 			const text = this.filter(target);
+			try {
+				this.checkBanwords(room, target);
+			} catch {
+				throw new Chat.ErrorMessage(`Your hangman contained a phrase banned by this room.`);
+			}
 			if (target !== text) throw new Chat.ErrorMessage("You are not allowed to use filtered words in hangmans.");
 			const params = text.split(',');
 
