@@ -451,6 +451,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod'],
 		banlist: ['AG', 'Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Tera Blast', 'Shed Tail'],
+		unbanlist: ['Archaludon'],
 		onValidateTeam(team) {
 			let statsTable: string[] = [];
 			for (const [i, set] of team.entries()) {
