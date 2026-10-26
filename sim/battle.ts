@@ -1110,51 +1110,51 @@ export class Battle {
 			}
 			return handlers;
 		}
-		const names = callbackNamesOf(eventName);
+		const callbackNames = callbackNamesOf(eventName);
 		// events that target a Pokemon normally bubble up to the Side
 		const shouldBubbleDown = target instanceof Side;
-		const prefixedHandlers = names.prefixed;
+		const prefixedHandlers = callbackNames.prefixed;
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
-			handlers = this.findPokemonEventHandlers(target, names.on);
+			handlers = this.findPokemonEventHandlers(target, callbackNames.on);
 			if (prefixedHandlers) {
 				for (const allyActive of target.alliesAndSelf()) {
-					handlers.push(...this.findPokemonEventHandlers(allyActive, names.ally));
-					handlers.push(...this.findPokemonEventHandlers(allyActive, names.any));
+					handlers.push(...this.findPokemonEventHandlers(allyActive, callbackNames.ally));
+					handlers.push(...this.findPokemonEventHandlers(allyActive, callbackNames.any));
 				}
 				for (const foeActive of target.foes()) {
-					handlers.push(...this.findPokemonEventHandlers(foeActive, names.foe));
-					handlers.push(...this.findPokemonEventHandlers(foeActive, names.any));
+					handlers.push(...this.findPokemonEventHandlers(foeActive, callbackNames.foe));
+					handlers.push(...this.findPokemonEventHandlers(foeActive, callbackNames.any));
 				}
 			}
 			target = target.side;
 		}
 		if (source && prefixedHandlers) {
-			handlers.push(...this.findPokemonEventHandlers(source, names.source));
+			handlers.push(...this.findPokemonEventHandlers(source, callbackNames.source));
 		}
 		if (target instanceof Side) {
 			for (const side of this.sides) {
 				if (shouldBubbleDown) {
 					for (const active of side.active) {
 						if (side === target || side === target.allySide) {
-							handlers = handlers.concat(this.findPokemonEventHandlers(active, names.on));
+							handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackNames.on));
 						} else if (prefixedHandlers) {
-							handlers = handlers.concat(this.findPokemonEventHandlers(active, names.foe));
+							handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackNames.foe));
 						}
-						if (prefixedHandlers) handlers = handlers.concat(this.findPokemonEventHandlers(active, names.any));
+						if (prefixedHandlers) handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackNames.any));
 					}
 				}
 				if (side.n < 2 || !side.allySide) {
 					if (side === target || side === target.allySide) {
-						handlers.push(...this.findSideEventHandlers(side, names.on));
+						handlers.push(...this.findSideEventHandlers(side, callbackNames.on));
 					} else if (prefixedHandlers) {
-						handlers.push(...this.findSideEventHandlers(side, names.foe));
+						handlers.push(...this.findSideEventHandlers(side, callbackNames.foe));
 					}
-					if (prefixedHandlers) handlers.push(...this.findSideEventHandlers(side, names.any));
+					if (prefixedHandlers) handlers.push(...this.findSideEventHandlers(side, callbackNames.any));
 				}
 			}
 		}
-		handlers.push(...this.findFieldEventHandlers(this.field, names.on));
-		handlers.push(...this.findBattleEventHandlers(names.on));
+		handlers.push(...this.findFieldEventHandlers(this.field, callbackNames.on));
+		handlers.push(...this.findBattleEventHandlers(callbackNames.on));
 		return handlers;
 	}
 
