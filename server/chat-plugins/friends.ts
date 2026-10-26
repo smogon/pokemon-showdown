@@ -239,7 +239,7 @@ function headerButtons(type: string, user: User) {
 }
 
 export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
-	friends(target, user, trustable) {
+	async friends(target, user, trustable) {
 		if (!Config.usesqlitefriends || !Config.usesqlite) return null;
 		if (!user.autoconfirmed) return null;
 		if (user.locked || user.namelocked || user.semilocked || user.permalocked) return null;
