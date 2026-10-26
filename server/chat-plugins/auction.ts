@@ -572,6 +572,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.type === 'snake') {
 			this.sendMessage(Utils.html`/html <b>${this.nominatingTeam.name}</b> drafted <username>${this.nominatedPlayer.name}</username>!`);
 			this.nominatingTeam.addPlayer(this.nominatedPlayer);
+			this.highestBidder = this.nominatingTeam;
+			this.highestBid = 0;
 			this.next();
 		} else {
 			this.state = 'bid';

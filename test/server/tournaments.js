@@ -129,6 +129,39 @@ describe('Tournament automatic pairing', () => {
 		assert.equal(waiting.autoDisqualifyWarned, false);
 	});
 
+	it('gives an unready player a full AutoDQ window to choose a team after their opponent is known', async () => {
+		start();
+		tour.autoDisqualifyTimeout = 60000;
+		const waiting = tour.players[2];
+		const waitingUser = users[2];
+		await ready(tour.players[0]);
+		await ready(tour.players[1]);
+
+		// Waiting for the previous battle must not use up the time to choose a team.
+		waiting.lastActionTime = Date.now() - 120000;
+		tour.runAutoDisqualify();
+		assert.equal(waiting.pendingMatch, null);
+		assert.equal(waiting.isDisqualified, false);
+		assert.equal(waiting.autoDisqualifyWarned, false);
+
+		const revealedAt = Date.now();
+		tour.onBattleWin(battles[0], battles[0].p1.id);
+		const opponent = waiting.pendingMatch.find(player => player !== waiting);
+		assert.equal(getUpdate(waitingUser).challenged, opponent.name);
+		assert(waiting.lastActionTime >= revealedAt);
+		tour.runAutoDisqualify();
+		assert.equal(waiting.isDisqualified, false);
+		assert.equal(waiting.autoDisqualifyWarned, false);
+
+		await ready(opponent);
+		assert.equal(battles.length, 1);
+		const team = 'Gengar||||shadowball|||||||';
+		await Chat.parse(`/utm ${team}`, room, waitingUser, waitingUser.connections[0]);
+		await ready(waiting);
+		assert.equal(battles.length, 2);
+		assert.equal(battles[1].options.players.find(player => player.user === waitingUser).team, team);
+	});
+
 	it('pairs ready players automatically in either bracket orientation', async () => {
 		start();
 		const [p1, p2] = tour.players;
