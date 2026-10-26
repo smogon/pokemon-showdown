@@ -1061,6 +1061,7 @@ export class BattleActions {
 
 		this.battle.eachEvent('Update');
 
+		move.hitTargets = targetsCopy.filter(val => !!val);
 		if (!this.battle.suppressingSecondaries()) {
 			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
