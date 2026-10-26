@@ -597,10 +597,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					const player2: TournamentPlayer = match.player2;
 
 					if (match.state === 'available') {
-						if (player1.pendingChallenge?.to === player2) {
-							match.state = 'challenging';
-						}
-
 						if (player1.inProgressMatch?.to === player2) {
 							match.state = 'inprogress';
 							match.room = player1.inProgressMatch.room.roomid;
