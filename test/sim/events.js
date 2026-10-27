@@ -71,7 +71,7 @@ describe('Battle#onEvent', () => {
 describe('Battle#findEventHandlers', () => {
 	it('should know every callback in the data before the effects defining them are constructed', function () {
 		this.timeout(0);
-		// effects are constructed when first looked up, so this needs a process that hasn't looked any up
+		// run in a new process, since earlier tests will already have constructed most effects
 		const script = `
 			const { Dex } = require('./dist/sim/dex');
 			const { definedCallbackNames } = require('./dist/sim/dex-data');
@@ -100,7 +100,7 @@ describe('Battle#findEventHandlers', () => {
 			cwd: path.resolve(__dirname, '../..'), encoding: 'utf8',
 		}));
 		assert.equal(constructed, 0, `No abilities or items should have been constructed yet`);
-		// only abilities define this, so it's only checked if Abilities were read
+		// only abilities define onModifySTAB, so this makes sure abilities were checked
 		assert(checked.includes('onModifySTAB'));
 		assert.deepEqual(missing, []);
 	});

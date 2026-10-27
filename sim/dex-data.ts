@@ -61,9 +61,8 @@ export interface ModdedEffectText {
 }
 
 /**
- * Every `on*` key of every effect in the loaded data, and of every effect
- * constructed so far. A callback name not in here is on no effect, so the
- * battle can skip looking for it. Only grows.
+ * Every `on*` callback name that any effect defines. The battle skips
+ * looking for callbacks that aren't in here.
  */
 export const definedCallbackNames = new Set<string>(['onSwitchIn']);
 

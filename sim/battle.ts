@@ -109,8 +109,7 @@ interface EventCallbackNames {
 	prefixed: boolean;
 }
 
-// Each event's callback names, built once: the same string objects are reused,
-// so the keyed loads on effects see a name already internalised.
+// callback names for each event, so they aren't rebuilt on every call
 const eventCallbackNames = new Map<string, EventCallbackNames>();
 
 function callbackNamesOf(eventName: string): EventCallbackNames {
@@ -129,10 +128,9 @@ function callbackNamesOf(eventName: string): EventCallbackNames {
 	return names;
 }
 
-// Each effect's callbacks by name, read once. Effects are of hundreds of shapes,
-// so `effect[callbackName]` is a megamorphic load, and handler search was about a
-// third of simulation time when profiled. An effect's handlers are fixed at
-// construction. NO_CALLBACK marks one it lacks, apart from one it holds as null.
+// each effect's callbacks by name, since reading them off the effect every time is slow
+// (an effect's callbacks don't change after it's created)
+// NO_CALLBACK marks a callback the effect doesn't have, since undefined means it hasn't been looked up yet
 const NO_CALLBACK = {};
 const effectCallbacks = new WeakMap<object, Map<string, unknown>>();
 
