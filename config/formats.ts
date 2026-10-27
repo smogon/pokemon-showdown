@@ -3056,6 +3056,28 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Project NEO",
+		mod: 'neo',
+		validatorMod: 'gen9',
+		ruleset: [
+			'Standard 35 Pokes',
+
+			'#steelix-rockhead+clearbody+moonblast+diamondstorm',
+			'#wigglytuff+regenerator+hugepower',
+			'#lunatone-levitate+drizzle+baddreams+nightdaze+darkpulse+lunardance',
+			'#solrock-levitate+orichalcumpulse+vitalspirit',
+			'#hariyama-bellydrum+rapidspin',
+			'#walrein-bellydrum+slackoff'
+		],
+		banlist: [
+			'Light Clay',
+			'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z',
+		],
+		unbanlist: [
+			'Walrein', 'Hariyama', 'Lunatone', 'Wigglytuff', 'Solrock', 'Steelix-Base',
+		],
+	},
+	{
 		name: "[Gen 9] Test",
 		debug: true,
 		mod: 'gen9',
