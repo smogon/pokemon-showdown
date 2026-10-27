@@ -1708,8 +1708,7 @@ export class Battle {
 				this.runEvent('DisableMove', pokemon);
 				for (const moveSlot of pokemon.moveSlots) {
 					const move = this.dex.moves.get(moveSlot.id);
-					// only copy the move if it has a handler that could see the copy
-					if (move.onDisableMove) this.singleEvent('DisableMove', this.dex.getActiveMove(move), null, pokemon);
+					this.singleEvent('DisableMove', move as ActiveMove, null, pokemon);
 					if (move.flags['cantusetwice'] && pokemon.lastMove?.id === moveSlot.id) {
 						pokemon.disableMove(pokemon.lastMove.id);
 					}
