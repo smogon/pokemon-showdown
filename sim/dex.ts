@@ -758,6 +758,17 @@ export class ModdedDex {
 		// Execute initialization script.
 		if (init) init.call(this);
 
+		// effects aren't constructed until they're first looked up, so add their callback names from the data now
+		for (const dataType of ['Abilities', 'Items', 'Moves', 'Conditions', 'Pokedex', 'Rulesets'] as const) {
+			const table = dataCache[dataType];
+			// the parent dex already added these
+			if (table === parentDex?.data[dataType]) continue;
+			for (const id in table) {
+				Data.addDefinedCallbackNames(table[id]);
+				if (table[id].condition) Data.addDefinedCallbackNames(table[id].condition);
+			}
+		}
+
 		return this.dataCache;
 	}
 
