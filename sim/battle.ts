@@ -1074,8 +1074,7 @@ export class Battle {
 			if (found === undefined) found = NO_CALLBACK;
 			callbacks.set(callbackName, found);
 		}
-		let callback = found as Function | undefined;
-		if (found === NO_CALLBACK) callback = undefined;
+		let callback = (found === NO_CALLBACK ? undefined : found) as Function | undefined;
 		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
 		// during the SwitchIn event instead of running the Start event during switch-ins
 		if (target instanceof Pokemon && callbackName === 'onSwitchIn') {
