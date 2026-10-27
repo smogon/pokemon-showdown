@@ -1280,7 +1280,10 @@ export class TeamValidator {
 			) {
 				// Marowak hack
 				set.ivs.atk = Math.floor(set.ivs.atk / 2) * 2;
-				while (set.evs.atk > 0 && 2 * 80 + set.ivs.atk + Math.floor(set.evs.atk / 4) + 5 > 255) {
+				while (
+					set.evs.atk > 0 && set.evs.atk <= 255 &&
+					2 * 80 + set.ivs.atk + Math.floor(set.evs.atk / 4) + 5 > 255
+				) {
 					set.evs.atk -= 4;
 				}
 			}
