@@ -35,6 +35,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	firemane: {
 		inherit: true,
 		isNonstandard: null,
+		onModifyAtk: undefined, // no inherit
+		onModifySpA: undefined, // no inherit
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Fire Mane boost');
+				return this.chainModify(1.5);
+			}
+		},
 	},
 	healer: {
 		inherit: true,
