@@ -1,8 +1,10 @@
 "use strict";
 
 const fs = require("fs");
+const path = require("path");
 const child_process = require("child_process");
-const esbuild = require('esbuild');
+// Keep the pinned version's CommonJS interop; upgrades must pass the build compatibility tests.
+const { build } = require('rolldown');
 
 const copyOverDataJSON = (file = 'data') => {
 	const files = fs.readdirSync(file);
@@ -41,14 +43,28 @@ const findFilesForPath = path => {
 	return out;
 };
 
-exports.transpile = decl => {
-	esbuild.buildSync({
-		entryPoints: findFilesForPath('./'),
-		outdir: './dist',
-		outbase: '.',
-		format: 'cjs',
+exports.transpile = async decl => {
+	await build({
+		input: Object.fromEntries(findFilesForPath('./').map(file => [
+			path.relative('.', file).replace(/\.tsx?$/, '').split(path.sep).join('/'), file,
+		])),
+		// Keep runtime imports and every export intact for require() and hotpatching.
+		external: /.*/,
+		treeshake: false,
+		platform: 'node',
 		tsconfig: './tsconfig.json',
-		sourcemap: true,
+		checks: { eval: false }, // The REPL deliberately uses direct eval; files are kept separate.
+		output: {
+			dir: './dist',
+			format: 'cjs',
+			exports: 'named',
+			esModule: true,
+			strict: true,
+			preserveModules: true,
+			preserveModulesRoot: process.cwd(),
+			entryFileNames: '[name].js',
+			sourcemap: true,
+		},
 	});
 	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
 	copyOverDataJSON();

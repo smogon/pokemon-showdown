@@ -29,7 +29,7 @@ function shell(cmd) {
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	require.resolve('ts-chacha20');
+	require.resolve('rolldown');
 } catch (e) {
 	console.log('Installing dependencies...');
 	shell('npm ci');
@@ -49,12 +49,17 @@ try {
 	);
 }
 
-// for some reason, esbuild won't be requirable until a tick has passed
+// Newly installed dependencies may not be requirable until a tick has passed
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
-setImmediate(() => {
-	require('./tools/build-utils').transpile(force, decl);
-	const {Dex} = require('./dist/sim/dex');
-	for (const entry of fs.readdirSync('data/text', {withFileTypes: true})) {
-		if (entry.isDirectory()) Dex.loadTextData(entry.name);
+setImmediate(async () => {
+	try {
+		await require('./tools/build-utils').transpile(force, decl);
+		const {Dex} = require('./dist/sim/dex');
+		for (const entry of fs.readdirSync('data/text', {withFileTypes: true})) {
+			if (entry.isDirectory()) Dex.loadTextData(entry.name);
+		}
+	} catch (err) {
+		console.error(err);
+		process.exitCode = 1;
 	}
 });

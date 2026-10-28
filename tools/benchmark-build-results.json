@@ -1,0 +1,449 @@
+{
+  "baselineRevision": "1242c1e2d9763ba5b85d33f13aecb89bae19ae3d",
+  "selectedCompiler": "rolldown 1.2.0 (native Oxc pipeline)",
+  "clean": {
+    "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+    "mode": "clean build (dist removal excluded)",
+    "date": "2026-10-28T09:18:44.766Z",
+    "node": "v26.12.1",
+    "platform": "darwin 27.0.0 arm64",
+    "cpu": "Apple M4",
+    "logicalCpus": 10,
+    "warmups": 2,
+    "runs": 7,
+    "checkouts": [
+      {
+        "label": "baseline",
+        "root": "/private/tmp/pokemon-showdown-oxc-baseline",
+        "revision": null,
+        "dependencies": {
+          "esbuild": "^0.25.0",
+          "mysql2": "^3.14.2",
+          "preact": "^10.5.15",
+          "preact-render-to-string": "^6.5.13",
+          "sockjs": "^0.3.21",
+          "ts-chacha20": "^1.2.0"
+        },
+        "samplesMs": [
+          867.060459,
+          861.366917,
+          811.7885,
+          814.597416,
+          798.0745,
+          781.60175,
+          775.7565
+        ],
+        "medianMs": 811.7885,
+        "minMs": 775.7565,
+        "maxMs": 867.060459
+      },
+      {
+        "label": "candidate",
+        "root": "/private/tmp/pokemon-showdown-rolldown-candidate",
+        "revision": null,
+        "dependencies": {
+          "mysql2": "^3.14.2",
+          "preact": "^10.5.15",
+          "preact-render-to-string": "^6.5.13",
+          "rolldown": "1.2.0",
+          "sockjs": "^0.3.21",
+          "ts-chacha20": "^1.2.0"
+        },
+        "samplesMs": [
+          747.795375,
+          752.137625,
+          762.139125,
+          768.30175,
+          740.4475,
+          735.402083,
+          704.857959
+        ],
+        "medianMs": 747.795375,
+        "minMs": 704.857959,
+        "maxMs": 768.30175
+      }
+    ],
+    "speedup": 1.085575716485275,
+    "percentFaster": 7.882979988014116
+  },
+  "rebuild": {
+    "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+    "mode": "rebuild (existing dist retained)",
+    "date": "2026-10-28T09:18:58.315Z",
+    "node": "v26.12.1",
+    "platform": "darwin 27.0.0 arm64",
+    "cpu": "Apple M4",
+    "logicalCpus": 10,
+    "warmups": 2,
+    "runs": 7,
+    "checkouts": [
+      {
+        "label": "baseline",
+        "root": "/private/tmp/pokemon-showdown-oxc-baseline",
+        "revision": null,
+        "dependencies": {
+          "esbuild": "^0.25.0",
+          "mysql2": "^3.14.2",
+          "preact": "^10.5.15",
+          "preact-render-to-string": "^6.5.13",
+          "sockjs": "^0.3.21",
+          "ts-chacha20": "^1.2.0"
+        },
+        "samplesMs": [
+          734.414208,
+          861.088084,
+          818.421583,
+          818.875833,
+          828.045959,
+          763.458458,
+          823.926958
+        ],
+        "medianMs": 818.875833,
+        "minMs": 734.414208,
+        "maxMs": 861.088084
+      },
+      {
+        "label": "candidate",
+        "root": "/private/tmp/pokemon-showdown-rolldown-candidate",
+        "revision": null,
+        "dependencies": {
+          "mysql2": "^3.14.2",
+          "preact": "^10.5.15",
+          "preact-render-to-string": "^6.5.13",
+          "rolldown": "1.2.0",
+          "sockjs": "^0.3.21",
+          "ts-chacha20": "^1.2.0"
+        },
+        "samplesMs": [
+          698.166792,
+          700.172458,
+          718.025167,
+          703.924208,
+          713.18975,
+          720.478875,
+          738.896583
+        ],
+        "medianMs": 713.18975,
+        "minMs": 698.166792,
+        "maxMs": 738.896583
+      }
+    ],
+    "speedup": 1.148187888286392,
+    "percentFaster": 12.906240328623786
+  },
+  "experiments": {
+    "oxcBabelClean": {
+      "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+      "mode": "clean build (dist removal excluded)",
+      "date": "2026-10-28T08:56:30.457Z",
+      "node": "v26.12.1",
+      "platform": "darwin 27.0.0 arm64",
+      "cpu": "Apple M4",
+      "logicalCpus": 10,
+      "warmups": 2,
+      "runs": 7,
+      "checkouts": [
+        {
+          "label": "baseline",
+          "root": "/private/tmp/pokemon-showdown-oxc-baseline",
+          "revision": null,
+          "dependencies": {
+            "esbuild": "^0.25.0",
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            873.435208,
+            1229.953416,
+            945.931584,
+            1040.9235,
+            860.5665,
+            882.936042,
+            957.30225
+          ],
+          "medianMs": 945.931584,
+          "minMs": 860.5665,
+          "maxMs": 1229.953416
+        },
+        {
+          "label": "candidate",
+          "root": "/private/tmp/pokemon-showdown-oxc-candidate",
+          "revision": null,
+          "dependencies": {
+            "@babel/core": "^7.29.7",
+            "@babel/plugin-transform-export-namespace-from": "^7.29.7",
+            "@babel/plugin-transform-modules-commonjs": "^7.29.7",
+            "json5": "^2.2.3",
+            "mysql2": "^3.14.2",
+            "oxc-transform": "^0.156.0",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            13964.510875,
+            16219.104375,
+            16031.37675,
+            16443.7745,
+            16477.143,
+            14990.253875,
+            16296.925875
+          ],
+          "medianMs": 16219.104375,
+          "minMs": 13964.510875,
+          "maxMs": 16477.143
+        }
+      ],
+      "speedup": 0.05832206033879722,
+      "percentFaster": -1614.617066322632
+    },
+    "oxcBabelProfile": {
+      "loadMs": 119.06450000000001,
+      "transpileMs": 14676.043916,
+      "textDataMs": 194.4983339999999,
+      "phasesMs": {
+        "read": 240.84216900001056,
+        "oxc": 521.9213379999937,
+        "babel": 13355.625235000007,
+        "write": 227.26653899999917,
+        "serializeMaps": 209.91292699999008
+      },
+      "files": 524,
+      "topBabelFiles": [
+        {
+          "file": ".//data/mods/gen9dlc1/learnsets.ts",
+          "ms": 1370.153625
+        },
+        {
+          "file": ".//data/mods/gen9predlc/learnsets.ts",
+          "ms": 1272.448708
+        },
+        {
+          "file": ".//data/learnsets.ts",
+          "ms": 1259.155792
+        },
+        {
+          "file": ".//data/mods/gen8dlc1/learnsets.ts",
+          "ms": 1020.3617089999998
+        },
+        {
+          "file": ".//data/mods/gen7sm/learnsets.ts",
+          "ms": 817.1959589999997
+        },
+        {
+          "file": ".//data/mods/gen6xy/learnsets.ts",
+          "ms": 698.6146250000002
+        },
+        {
+          "file": ".//data/mods/gen5bw1/learnsets.ts",
+          "ms": 498.99995899999976
+        },
+        {
+          "file": ".//data/mods/gen4pt/learnsets.ts",
+          "ms": 350.5447079999999
+        },
+        {
+          "file": ".//data/moves.ts",
+          "ms": 305.65741700000035
+        },
+        {
+          "file": ".//data/mods/gen8bdsp/learnsets.ts",
+          "ms": 272.345875
+        },
+        {
+          "file": ".//data/pokedex.ts",
+          "ms": 247.83795800000007
+        },
+        {
+          "file": ".//data/mods/champions/learnsets.ts",
+          "ms": 182.13783299999977
+        }
+      ]
+    },
+    "oxcBabelWithoutMapsProfile": {
+      "loadMs": 118.883292,
+      "transpileMs": 11608.834166,
+      "textDataMs": 161.67766699999993,
+      "phasesMs": {
+        "read": 198.3484030000039,
+        "oxc": 454.2200749999721,
+        "babel": 10676.146319999998,
+        "write": 203.62145800000974,
+        "serializeMaps": 0.45305799997686336
+      },
+      "files": 524,
+      "topBabelFiles": [
+        {
+          "file": ".//data/learnsets.ts",
+          "ms": 1077.931
+        },
+        {
+          "file": ".//data/mods/gen9dlc1/learnsets.ts",
+          "ms": 1038.0970419999994
+        },
+        {
+          "file": ".//data/mods/gen9predlc/learnsets.ts",
+          "ms": 996.4913330000009
+        },
+        {
+          "file": ".//data/mods/gen8dlc1/learnsets.ts",
+          "ms": 882.2048750000004
+        },
+        {
+          "file": ".//data/mods/gen7sm/learnsets.ts",
+          "ms": 650.8337910000005
+        },
+        {
+          "file": ".//data/mods/gen6xy/learnsets.ts",
+          "ms": 522.2302920000002
+        },
+        {
+          "file": ".//data/mods/gen5bw1/learnsets.ts",
+          "ms": 419.28266699999995
+        },
+        {
+          "file": ".//data/mods/gen4pt/learnsets.ts",
+          "ms": 298.3705
+        },
+        {
+          "file": ".//data/mods/gen8bdsp/learnsets.ts",
+          "ms": 239.41299999999956
+        },
+        {
+          "file": ".//data/pokedex.ts",
+          "ms": 229.45337500000096
+        },
+        {
+          "file": ".//data/moves.ts",
+          "ms": 180.11525000000074
+        },
+        {
+          "file": ".//data/mods/gen9legends/learnsets.ts",
+          "ms": 145.19316700000036
+        }
+      ]
+    },
+    "oxcSwcSync": {
+      "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+      "mode": "clean build (dist removal excluded)",
+      "date": "2026-10-28T09:11:40.226Z",
+      "node": "v26.12.1",
+      "platform": "darwin 27.0.0 arm64",
+      "cpu": "Apple M4",
+      "logicalCpus": 10,
+      "warmups": 1,
+      "runs": 3,
+      "checkouts": [
+        {
+          "label": "baseline",
+          "root": "/private/tmp/pokemon-showdown-oxc-baseline",
+          "revision": null,
+          "dependencies": {
+            "esbuild": "^0.25.0",
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            866.365875,
+            1114.058417,
+            913.602167
+          ],
+          "medianMs": 913.602167,
+          "minMs": 866.365875,
+          "maxMs": 1114.058417
+        },
+        {
+          "label": "candidate",
+          "root": "/private/tmp/pokemon-showdown-oxc-swc-candidate",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0",
+            "oxc-transform": "^0.156.0",
+            "@swc/core": "^1.16.20",
+            "json5": "^2.2.3"
+          },
+          "samplesMs": [
+            3706.116292,
+            3802.086958,
+            3396.141
+          ],
+          "medianMs": 3706.116292,
+          "minMs": 3396.141,
+          "maxMs": 3802.086958
+        }
+      ],
+      "speedup": 0.2465120074542982,
+      "percentFaster": -305.6597527750829
+    },
+    "oxcSwcParallel": {
+      "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+      "mode": "clean build (dist removal excluded)",
+      "date": "2026-10-28T09:13:32.526Z",
+      "node": "v26.12.1",
+      "platform": "darwin 27.0.0 arm64",
+      "cpu": "Apple M4",
+      "logicalCpus": 10,
+      "warmups": 1,
+      "runs": 3,
+      "checkouts": [
+        {
+          "label": "baseline",
+          "root": "/private/tmp/pokemon-showdown-oxc-baseline",
+          "revision": null,
+          "dependencies": {
+            "esbuild": "^0.25.0",
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            850.653583,
+            867.4655,
+            815.462583
+          ],
+          "medianMs": 850.653583,
+          "minMs": 815.462583,
+          "maxMs": 867.4655
+        },
+        {
+          "label": "candidate",
+          "root": "/private/tmp/pokemon-showdown-oxc-swc-async-candidate",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0",
+            "oxc-transform": "^0.156.0",
+            "@swc/core": "^1.16.20",
+            "json5": "^2.2.3"
+          },
+          "samplesMs": [
+            1402.582708,
+            1417.051542,
+            1269.039167
+          ],
+          "medianMs": 1402.582708,
+          "minMs": 1269.039167,
+          "maxMs": 1417.051542
+        }
+      ],
+      "speedup": 0.6064908530157068,
+      "percentFaster": -64.88294836230648
+    }
+  }
+}
