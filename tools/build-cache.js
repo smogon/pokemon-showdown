@@ -137,10 +137,11 @@ function save(record) {
 	writeManifest({ ...record, dirty: false, outputs });
 }
 
-function prune(previous, entries, assets) {
+function prune(previous, entries, assets, helpersOnly = false) {
 	const used = new Set([...Object.values(entries).flat(), ...Object.keys(assets)]);
 	const old = new Set([...Object.values(previous.entries).flat(), ...Object.keys(previous.assets), ...(previous.pending || [])]);
 	for (const file of old) {
+		if (file.startsWith('_virtual/') !== helpersOnly) continue;
 		if (used.has(file)) continue;
 		if (!isOwnedPath(file)) throw new Error(`Invalid cached build output: ${file}`);
 		const parts = file.split('/');

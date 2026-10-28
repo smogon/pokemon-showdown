@@ -7,7 +7,7 @@ const path = require('path');
 const os = require('os');
 const { spawnSync } = require('child_process');
 
-const usage = 'Usage: node tools/benchmark-build.js <baseline> <candidate> [--clean | --edit=path.ts] [--runs=7] [--warmups=2] [--json]';
+const usage = "Usage: node tools/benchmark-build.js <baseline> <candidate> [--clean | --edit=path.ts] [--runs=7] [--warmups=2] [--json]";
 const args = process.argv.slice(2);
 if (args.includes('--help')) {
 	console.log(usage);
@@ -19,13 +19,13 @@ function main() {
 	if (directories.length !== 2) throw new Error(usage);
 	let runs = 7;
 	let warmups = 2;
-	let edit;
+	let edit = null;
 	for (const arg of args.filter(value => value.startsWith('--'))) {
 		if (arg === '--clean' || arg === '--json') continue;
 		if (arg.startsWith('--edit=')) {
 			edit = arg.slice('--edit='.length);
 			if (!/\.tsx?$/.test(edit) || path.isAbsolute(edit) || edit.split(/[\\/]/).includes('..')) {
-				throw new Error('Use a checkout-relative TypeScript source path for --edit.');
+				throw new Error("Use a checkout-relative TypeScript source path for --edit.");
 			}
 			continue;
 		}
@@ -39,7 +39,7 @@ function main() {
 		else warmups = value;
 	}
 	const clean = args.includes('--clean');
-	if (clean && edit) throw new Error('Choose either --clean or --edit.');
+	if (clean && edit) throw new Error("Choose either --clean or --edit.");
 	const checkouts = directories.map((directory, index) => {
 		const root = fs.realpathSync(directory);
 		const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
@@ -51,7 +51,7 @@ function main() {
 		}
 		const revision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
 		if (edit && !fs.realpathSync(path.join(root, edit)).startsWith(root + path.sep)) {
-			throw new Error('The edited source must stay inside its checkout.');
+			throw new Error("The edited source must stay inside its checkout.");
 		}
 		return {
 			label: index ? 'candidate' : 'baseline',
@@ -64,7 +64,7 @@ function main() {
 	const [baseline, candidate] = checkouts;
 	if (baseline.root === candidate.root || baseline.root.startsWith(candidate.root + path.sep) ||
 		candidate.root.startsWith(baseline.root + path.sep)) {
-		throw new Error('Use separate, non-nested checkouts.');
+		throw new Error("Use separate, non-nested checkouts.");
 	}
 
 	let editNumber = 0;

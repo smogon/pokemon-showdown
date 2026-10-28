@@ -135,6 +135,8 @@ exports.transpile = async (force = false, decl = false, validate = () => {}) => 
 		fs.mkdirSync(path.dirname(output), { recursive: true });
 		fs.copyFileSync(file, output);
 	}
+	// Retain existing helpers until compilation succeeds, so syntax errors leave old output usable.
+	cache.prune(pending, entries, assets, true);
 	if (decl) exports.buildDecls();
 	await validate();
 	if (enabled) {
