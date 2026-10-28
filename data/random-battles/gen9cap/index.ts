@@ -1,4 +1,4 @@
-import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { RandomTeams, type MoveCounter } from "../gen9/index";
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [

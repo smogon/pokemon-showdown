@@ -1,4 +1,4 @@
-import { ssbSets } from "./random-teams";
+import { ssbSets } from "./../../random-battles/gen9ssb";
 import { changeSet, getName, enemyStaff } from './scripts';
 import type { ModdedConditionData } from "../../../sim/dex-conditions";
 

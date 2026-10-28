@@ -1,5 +1,5 @@
 import { Utils } from '../../../lib';
-import RandomTeams from '../../random-battles/gen9/teams';
+import RandomTeams from '../gen9/index';
 import { toID } from '../../../sim/dex';
 
 export interface TeamData {

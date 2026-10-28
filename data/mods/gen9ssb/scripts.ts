@@ -1,4 +1,4 @@
-import type { SSBSet } from "./random-teams";
+import type { SSBSet } from "./../../random-battles/gen9ssb";
 import type { ChosenAction } from '../../../sim/side';
 import { FS } from '../../../lib';
 import { toID } from '../../../sim/dex-data';
