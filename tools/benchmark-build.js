@@ -7,7 +7,7 @@ const path = require('path');
 const os = require('os');
 const { spawnSync } = require('child_process');
 
-const usage = 'Usage: node tools/benchmark-build.js <baseline> <candidate> [--clean] [--runs=7] [--warmups=2] [--json]';
+const usage = 'Usage: node tools/benchmark-build.js <baseline> <candidate> [--clean | --edit=path.ts] [--runs=7] [--warmups=2] [--json]';
 const args = process.argv.slice(2);
 if (args.includes('--help')) {
 	console.log(usage);
@@ -19,8 +19,16 @@ function main() {
 	if (directories.length !== 2) throw new Error(usage);
 	let runs = 7;
 	let warmups = 2;
+	let edit;
 	for (const arg of args.filter(value => value.startsWith('--'))) {
 		if (arg === '--clean' || arg === '--json') continue;
+		if (arg.startsWith('--edit=')) {
+			edit = arg.slice('--edit='.length);
+			if (!/\.tsx?$/.test(edit) || path.isAbsolute(edit) || edit.split(/[\\/]/).includes('..')) {
+				throw new Error('Use a checkout-relative TypeScript source path for --edit.');
+			}
+			continue;
+		}
 		const match = /^--(runs|warmups)=(\d+)$/.exec(arg);
 		if (!match) throw new Error(`Unknown option: ${arg}\n${usage}`);
 		const value = Number(match[2]);
@@ -31,6 +39,7 @@ function main() {
 		else warmups = value;
 	}
 	const clean = args.includes('--clean');
+	if (clean && edit) throw new Error('Choose either --clean or --edit.');
 	const checkouts = directories.map((directory, index) => {
 		const root = fs.realpathSync(directory);
 		const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
@@ -41,6 +50,9 @@ function main() {
 			throw new Error(`Install dependencies before benchmarking: ${root}`);
 		}
 		const revision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' });
+		if (edit && !fs.realpathSync(path.join(root, edit)).startsWith(root + path.sep)) {
+			throw new Error('The edited source must stay inside its checkout.');
+		}
 		return {
 			label: index ? 'candidate' : 'baseline',
 			root,
@@ -55,6 +67,7 @@ function main() {
 		throw new Error('Use separate, non-nested checkouts.');
 	}
 
+	let editNumber = 0;
 	function build(checkout) {
 		const dist = path.join(checkout.root, 'dist');
 		// Check immediately before each removal; never follow a dist symlink.
@@ -63,16 +76,26 @@ function main() {
 			throw new Error(`Expected a regular dist directory: ${dist}`);
 		}
 		if (clean) fs.rmSync(dist, { recursive: true, force: true });
-		const start = process.hrtime.bigint();
-		const result = spawnSync(process.execPath, ['build'], {
-			cwd: checkout.root, encoding: 'utf8', maxBuffer: 10 * 1024 * 1024,
-		});
-		const elapsed = Number(process.hrtime.bigint() - start) / 1e6;
-		if (result.error || result.status !== 0) {
-			throw new Error(`${checkout.label} build failed: ${result.error || result.signal || result.status}\n` +
-				result.stdout + result.stderr);
+		const source = edit && path.join(checkout.root, edit);
+		const original = source && fs.readFileSync(source);
+		try {
+			// Keep the edit and restoration outside the timed interval. Each build sees new content.
+			if (source) fs.writeFileSync(source, Buffer.concat([
+				original, Buffer.from(`\n// Build benchmark edit ${++editNumber}\n`),
+			]));
+			const start = process.hrtime.bigint();
+			const result = spawnSync(process.execPath, ['build'], {
+				cwd: checkout.root, encoding: 'utf8', maxBuffer: 10 * 1024 * 1024,
+			});
+			const elapsed = Number(process.hrtime.bigint() - start) / 1e6;
+			if (result.error || result.status !== 0) {
+				throw new Error(`${checkout.label} build failed: ${result.error || result.signal || result.status}\n` +
+					result.stdout + result.stderr);
+			}
+			return elapsed;
+		} finally {
+			if (source) fs.writeFileSync(source, original);
 		}
-		return elapsed;
 	}
 
 	for (let round = 0; round < warmups + runs; round++) {
@@ -92,7 +115,7 @@ function main() {
 	}
 	const report = {
 		command: `${process.execPath} build`,
-		mode: clean ? 'clean build (dist removal excluded)' : 'rebuild (existing dist retained)',
+		mode: clean ? 'clean build (dist removal excluded)' : edit ? `single-file edit (${edit})` : 'unchanged rebuild',
 		date: new Date().toISOString(),
 		node: process.version,
 		platform: `${os.platform()} ${os.release()} ${os.arch()}`,

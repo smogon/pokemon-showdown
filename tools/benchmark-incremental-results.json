@@ -1,0 +1,282 @@
+{
+  "baselineRevision": "be085edb97daab37839121c29d05ced65e348f6a",
+  "baseline": "Rolldown 1.2.0 full compilation on every build",
+  "candidate": "Rolldown 1.2.0 with persistent validated incremental cache",
+  "candidateSha256": {
+    "build": "3fe646b0fb0943eee69fc6276a04ce0ccb086b1f2999105b64f7db4e604ef3e8",
+    "tools/build-utils.js": "05ac89b24b8ee4fd0a80d7866dfad5140c363dc145a7c8ce102074742b330402",
+    "tools/build-cache.js": "45807b93a9bf38d8c3cae339190357309b4d14ca5b9fe4384318c50f730dc76b",
+    "tools/benchmark-build.js": "70034beff1803e441b4f4ae1537ea008c89d78ca1ed69ef2eabaf68cf2c8db09",
+    "package.json": "aee50397aaf0559b17ea98e660578b07c3c0a2e264bfe65c1043589861157b11",
+    "package-lock.json": "23d12b60c6a9dc647ed7ce2f07a27a03b7c55e24b695762b5a7b8760f87995cb"
+  },
+  "methodology": "Separate archived copies with installed dependencies; fresh Node process per build; two warmups and seven alternating measured rounds per mode; no concurrent tests or benchmark jobs. Filesystem caches are warm. Edits and clean dist removal happen outside the timer.",
+  "results": {
+    "clean": {
+      "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+      "mode": "clean build (dist removal excluded)",
+      "date": "2026-10-28T10:25:02.472Z",
+      "node": "v26.12.1",
+      "platform": "darwin 27.0.0 arm64",
+      "cpu": "Apple M4",
+      "logicalCpus": 10,
+      "warmups": 2,
+      "runs": 7,
+      "checkouts": [
+        {
+          "label": "baseline",
+          "root": "/private/tmp/pokemon-showdown-cache-baseline",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "rolldown": "1.2.0",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            810.611042,
+            769.243167,
+            819.319458,
+            951.220416,
+            830.072541,
+            833.467458,
+            815.559458
+          ],
+          "medianMs": 819.319458,
+          "minMs": 769.243167,
+          "maxMs": 951.220416
+        },
+        {
+          "label": "candidate",
+          "root": "/private/tmp/pokemon-showdown-cache-candidate",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "rolldown": "1.2.0",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            964.023708,
+            990.924041,
+            921.039792,
+            841.994417,
+            824.7895,
+            890.67175,
+            860.2885
+          ],
+          "medianMs": 890.67175,
+          "minMs": 824.7895,
+          "maxMs": 990.924041
+        }
+      ],
+      "speedup": 0.9198893509309126,
+      "percentFaster": -8.708726651527886
+    },
+    "unchanged": {
+      "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+      "mode": "unchanged rebuild",
+      "date": "2026-10-28T10:25:11.027Z",
+      "node": "v26.12.1",
+      "platform": "darwin 27.0.0 arm64",
+      "cpu": "Apple M4",
+      "logicalCpus": 10,
+      "warmups": 2,
+      "runs": 7,
+      "checkouts": [
+        {
+          "label": "baseline",
+          "root": "/private/tmp/pokemon-showdown-cache-baseline",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "rolldown": "1.2.0",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            1134.28075,
+            1283.437167,
+            751.738208,
+            714.319375,
+            730.329541,
+            748.370584,
+            766.729417
+          ],
+          "medianMs": 751.738208,
+          "minMs": 714.319375,
+          "maxMs": 1283.437167
+        },
+        {
+          "label": "candidate",
+          "root": "/private/tmp/pokemon-showdown-cache-candidate",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "rolldown": "1.2.0",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            84.573666,
+            79.566959,
+            79.450625,
+            68.613083,
+            69.074917,
+            70.52525,
+            72.588625
+          ],
+          "medianMs": 72.588625,
+          "minMs": 68.613083,
+          "maxMs": 84.573666
+        }
+      ],
+      "speedup": 10.356143376458778,
+      "percentFaster": 90.34389575685901
+    },
+    "edit": {
+      "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+      "mode": "single-file edit (server/chat-commands/info.ts)",
+      "date": "2026-10-28T10:25:23.777Z",
+      "node": "v26.12.1",
+      "platform": "darwin 27.0.0 arm64",
+      "cpu": "Apple M4",
+      "logicalCpus": 10,
+      "warmups": 2,
+      "runs": 7,
+      "checkouts": [
+        {
+          "label": "baseline",
+          "root": "/private/tmp/pokemon-showdown-cache-baseline",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "rolldown": "1.2.0",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            825.675959,
+            853.108916,
+            771.586667,
+            1236.041416,
+            1089.368167,
+            1576.768208,
+            928.466291
+          ],
+          "medianMs": 928.466291,
+          "minMs": 771.586667,
+          "maxMs": 1576.768208
+        },
+        {
+          "label": "candidate",
+          "root": "/private/tmp/pokemon-showdown-cache-candidate",
+          "revision": null,
+          "dependencies": {
+            "mysql2": "^3.14.2",
+            "preact": "^10.5.15",
+            "preact-render-to-string": "^6.5.13",
+            "rolldown": "1.2.0",
+            "sockjs": "^0.3.21",
+            "ts-chacha20": "^1.2.0"
+          },
+          "samplesMs": [
+            317.766709,
+            336.722958,
+            317.247542,
+            316.839167,
+            427.753792,
+            417.613583,
+            339.843375
+          ],
+          "medianMs": 336.722958,
+          "minMs": 316.839167,
+          "maxMs": 427.753792
+        }
+      ],
+      "speedup": 2.7573596303463215,
+      "percentFaster": 63.73342131383852
+    }
+  },
+  "revertedExperiments": [
+    {
+      "change": "Overlap initial content hashing with native compilation on full builds",
+      "verdict": "Reverted: no repeatable improvement; direct paired comparison slightly slower and added coordination complexity.",
+      "report": {
+        "command": "/Users/dieterreinert/.local/share/mise/installs/node/26.12.1/bin/node build",
+        "mode": "clean build (dist removal excluded)",
+        "date": "2026-10-28T10:10:07.715Z",
+        "node": "v26.12.1",
+        "platform": "darwin 27.0.0 arm64",
+        "cpu": "Apple M4",
+        "logicalCpus": 10,
+        "warmups": 2,
+        "runs": 7,
+        "checkouts": [
+          {
+            "label": "baseline",
+            "root": "/private/tmp/pokemon-showdown-cache-no-overlap",
+            "revision": null,
+            "dependencies": {
+              "mysql2": "^3.14.2",
+              "preact": "^10.5.15",
+              "preact-render-to-string": "^6.5.13",
+              "rolldown": "1.2.0",
+              "sockjs": "^0.3.21",
+              "ts-chacha20": "^1.2.0"
+            },
+            "samplesMs": [
+              1001.401458,
+              833.4345,
+              827.032459,
+              856.136,
+              885.429542,
+              866.706833,
+              858.712709
+            ],
+            "medianMs": 858.712709,
+            "minMs": 827.032459,
+            "maxMs": 1001.401458
+          },
+          {
+            "label": "candidate",
+            "root": "/private/tmp/pokemon-showdown-cache-candidate",
+            "revision": null,
+            "dependencies": {
+              "mysql2": "^3.14.2",
+              "preact": "^10.5.15",
+              "preact-render-to-string": "^6.5.13",
+              "rolldown": "1.2.0",
+              "sockjs": "^0.3.21",
+              "ts-chacha20": "^1.2.0"
+            },
+            "samplesMs": [
+              920.523834,
+              846.389625,
+              797.321125,
+              829.5265,
+              903.590083,
+              874.906541,
+              927.602833
+            ],
+            "medianMs": 874.906541,
+            "minMs": 797.321125,
+            "maxMs": 927.602833
+          }
+        ],
+        "speedup": 0.9814907864541843,
+        "percentFaster": -1.8858265203572255
+      }
+    }
+  ]
+}

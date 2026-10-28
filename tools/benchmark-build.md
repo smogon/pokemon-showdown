@@ -1,10 +1,62 @@
-# Build compiler benchmark
+# Build performance benchmarks
 
 The selected implementation uses Rolldown's native Oxc pipeline for TypeScript,
 JSX, CommonJS output, and source maps. It removes esbuild and Babel. Running
 Oxc separately before Rolldown would add a redundant parse and print pass.
 
-## Results
+## Incremental build results
+
+The follow-up optimization caches successful builds and compiles only changed
+TypeScript/TSX files. It uses the same native Oxc pipeline and adds no dependency.
+Measured on 2026-10-28, Apple M4 (10 logical CPUs), macOS arm64, Node 26.12.1.
+Baseline: the first Rolldown implementation, `be085edb9`, without caching.
+
+| Build | Previous Rolldown median | Incremental median | Change |
+| --- | ---: | ---: | ---: |
+| Unchanged rebuild | 751.7 ms | 72.6 ms | 10.36× faster |
+| Edit `server/chat-commands/info.ts` | 928.5 ms | 336.7 ms | 2.76× faster |
+| Clean | 819.3 ms | 890.7 ms | 71.4 ms slower (8.7%) |
+
+These are end-to-end CLI timings, including fresh Node process startup. Each
+mode used two warmups and seven alternating measured rounds, with no concurrent
+tests or benchmark jobs. Every paired unchanged/edit sample improved. Sample
+ranges were 714.3–1,283.4 ms versus 68.6–84.6 ms for unchanged builds and
+771.6–1,576.8 ms versus 316.8–427.8 ms for edits. There is local scheduling variance;
+the earlier seven-round pass also improved both cases, by 10.6× and 2.2×.
+
+The clean-build penalty establishes content hashes and a verified output
+snapshot. This change optimizes repeated development builds; it does not make
+clean builds faster. Clean samples ranged from 769.2–951.2 ms before to
+824.8–990.9 ms after. A separate experiment overlapping hashing with native
+compilation did not improve timings (858.7 ms versus 874.9 ms medians), so it was
+reverted. [Raw incremental measurements](benchmark-incremental-results.json)
+include every sample, the reverted experiment, environment, and source hashes.
+
+### What the cache skips and verifies
+
+`dist/.build-cache.json` records source/asset content digests, input timestamps
+and sizes, compiler/build/configuration hashes, and the complete output snapshot.
+An unchanged validated build skips compiler loading, compilation, output writes,
+and data validation. A source edit compiles only affected entries and runs the
+existing data validation again. Imports remain external, so unchanged importers
+do not need recompilation. Runtime helpers use content-based filenames so a
+partial build cannot replace a helper still used by unchanged output files.
+
+Changes to input size, modification time, or change time trigger content hashing;
+same-size edits with restored modification times are covered. Added/removed
+sources, assets, settings, missing or modified outputs, and compiler changes
+invalidate the appropriate work. Only obsolete outputs owned by this build are
+pruned. The manifest is marked dirty before output changes and saved atomically
+after validation. Inputs are checked again before success is cached, including
+changes that restore the original content during compilation. Symlinked output
+and tsconfig extensions/references conservatively disable cache reuse.
+
+`node build --force` recompiles and revalidates everything. `node build --decl`
+also forces compilation and runs the existing TypeScript declaration emitter.
+The previous implementation accidentally treated `--force` as a declaration
+request; the two flags now have separate behavior.
+
+## Initial compiler-only results
 
 Measured on 2026-10-28, Apple M4 (10 logical CPUs), macOS arm64, Node 26.12.1.
 Baseline: master `1242c1e2d`, esbuild 0.25.0. Candidate: Rolldown 1.2.0.
@@ -27,8 +79,10 @@ exclude `.git` traversal from both sides. Each measurement starts a fresh Node
 process and runs plain `node build`, including source discovery, compilation,
 writing JavaScript/source maps, asset copying, and loading text data. The clean
 mode removes `dist` outside the timed interval. OS filesystem caches remain
-warm after the warmups; this is not a cold-machine test. Both implementations
-recompile all 524 TypeScript/TSX inputs on every invocation.
+warm after the warmups; this is not a cold-machine test. Both implementations in
+this initial comparison recompile all 524 TypeScript/TSX inputs on every invocation.
+The incremental results above are a separate paired comparison against that
+first Rolldown implementation.
 
 [Raw measurements and diagnostic profiles](benchmark-build-results.json)
 include every sample and environment metadata. Revision fields inside archived
@@ -79,12 +133,13 @@ the existing TypeScript commands.
 
 ## Validation
 
-- Node 26.12.1 full Mocha suite, including slow tests: **2,761 passing, 76 pending**.
-- Node 22.18.0 full suite: **2,756 passing, 76 pending, five failures**. Untouched
+- Node 26.12.1 full Mocha suite, including slow tests: **2,781 passing, 76 pending**.
+- Node 22.18.0 full suite: **2,776 passing, 76 pending, five failures**. Untouched
   esbuild master has the identical five translation-test failures (2,747 passing).
   The existing test/assert.js overrides Node's legacy assert.match, which breaks
   assert.strict.match on Node 22. This is independent of the compiler change.
-- All nine new compiler/CLI compatibility tests pass on Node 22 and Node 26.
+- All 29 compiler/CLI/cache tests pass on Node 22 and Node 26, including output
+  repair, failure recovery, shared helpers, input races, and case-only renames.
 - Project and npm-package TypeScript checks pass. Changed JavaScript files pass
   lint with zero warnings; the repository-wide lint has existing warnings in
   unchanged tests.
@@ -99,10 +154,15 @@ this branch, and run `npm ci` in each. Then run:
 ```sh
 npm run benchmark-build -- /path/to/baseline /path/to/candidate --clean --json
 npm run benchmark-build -- /path/to/baseline /path/to/candidate --json
+npm run benchmark-build -- /path/to/baseline /path/to/candidate --edit=server/chat-commands/info.ts --json
 ```
 
 `--clean` deletes each directory's `dist` before every build. Do not use it for
 outputs you need to keep. Optional `--runs=N` and `--warmups=N` change the sample
-counts. The same Node executable is used for both candidates. Avoid `--force`:
-the existing build script also invokes declaration emission for that flag,
-which would measure additional work.
+counts. The same Node executable is used for both candidates. `--edit` adds a
+distinct harmless comment before each timed build and restores the original
+source bytes afterward, including after build failure. Its generated output can
+retain the temporary comment until the next build; use disposable directories.
+It cannot be combined with `--clean`. Use `be085edb9` as the incremental baseline
+or `1242c1e2d` for the initial esbuild comparison. Plain `node build` is measured
+throughout; historical `--force` builds also emitted declarations.
