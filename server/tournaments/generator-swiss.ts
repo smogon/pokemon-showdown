@@ -28,13 +28,20 @@ export class Swiss {
 	rounds: SwissRound[];
 	roundLimit: number;
 
-	constructor() {
+	constructor(roundLimit = '') {
 		this.name = "Swiss";
 		this.isDrawingSupported = true;
 		this.isBracketFrozen = false;
 		this.players = [];
 		this.rounds = [];
 		this.roundLimit = -1;
+		if (roundLimit) {
+			const rounds = Number(roundLimit);
+			if (!Number.isSafeInteger(rounds) || rounds < 1) {
+				throw new Chat.ErrorMessage("Swiss round count must be a positive integer.");
+			}
+			this.roundLimit = rounds;
+		}
 	}
 
 	getPendingBracketData(players: TournamentPlayer[]) {
@@ -45,13 +52,14 @@ export class Swiss {
 			players: players.map(player => ({
 				name: player.name,
 				score: player.score,
+				resistance: 0,
 				isDisqualified: player.isDisqualified,
 			})),
 		};
 	}
 
 	getBracketData() {
-		const players = this.players;
+		const standings = this.getStandings();
 		return {
 			type: "swiss",
 			roundLimit: this.roundLimit,
@@ -65,12 +73,43 @@ export class Swiss {
 				})),
 				bye: round.bye,
 			})),
-			players: players.map(player => ({
+			players: standings.map(({ player, resistance }) => ({
 				name: player.name,
 				score: player.score,
+				resistance,
 				isDisqualified: player.isDisqualified,
 			})),
 		};
+	}
+
+	getStandings() {
+		const records = new Map(this.players.map(player => [player, {
+			points: 0, games: 0, opponents: [] as TournamentPlayer[],
+		}]));
+		for (const round of this.rounds) {
+			// We bypass byes intentionally
+			for (const match of round.matches) {
+				if (match.state !== 'finished') continue;
+				const p1 = records.get(match.player1)!;
+				const p2 = records.get(match.player2)!;
+				p1.games++;
+				p2.games++;
+				p1.points += match.result === 'win' ? 1 : match.result === 'draw' ? 0.5 : 0;
+				p2.points += match.result === 'loss' ? 1 : match.result === 'draw' ? 0.5 : 0;
+				p1.opponents.push(match.player2);
+				p2.opponents.push(match.player1);
+			}
+		}
+		// Byes affect standings points, but not the win rate of opponent.
+		// Count each completed encounter, including forfeits and forced rematches.
+		return Utils.sortBy(this.players.map(player => {
+			const { opponents } = records.get(player)!;
+			const resistance = opponents.length ? opponents.reduce((sum, opponent) => {
+				const record = records.get(opponent)!;
+				return sum + record.points / record.games;
+			}, 0) / opponents.length : 0;
+			return { player, resistance };
+		}), standing => [-standing.player.score, -standing.resistance]);
 	}
 
 	pairPlayers(players: TournamentPlayer[], allowRematches: true): Match[];
@@ -293,15 +332,16 @@ export class Swiss {
 		// Do we want DQed players to potentially get the top score?
 		// If not, then just copy the `activePlayers` assignment
 		// from `isTournamentEnded`.
-		const sortedScores = Utils.sortBy([...this.players], p => -p.score);
+		const standings = this.getStandings();
 
 		const results: TournamentPlayer[][] = [];
-		let currentScore = sortedScores[0].score;
+		let currentScore = -1;
+		let currentResistance = -1;
 		let currentRank: TournamentPlayer[] = [];
-		results.push(currentRank);
-		for (const player of sortedScores) {
-			if (player.score < currentScore) {
+		for (const { player, resistance } of standings) {
+			if (player.score !== currentScore || resistance !== currentResistance) {
 				currentScore = player.score;
+				currentResistance = resistance;
 				currentRank = [];
 				results.push(currentRank);
 			}
