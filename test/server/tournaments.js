@@ -127,7 +127,7 @@ describe('Tournament automatic pairing', () => {
 			});
 		}
 
-		it('records draws and groups equal final scores into shared placements', async () => {
+		it('breaks equal scores by resistance, excluding byes and counting draws as half a win', async () => {
 			start(new Swiss());
 			const generator = tour.generator;
 			const [first] = generator.getAvailableMatches();
@@ -139,8 +139,56 @@ describe('Tournament automatic pairing', () => {
 			assert.equal(second[0].score, 1.5);
 			assert.equal(second[1].score, 1.5);
 			const results = generator.getResults();
-			assert.equal(results[0].length, 2);
-			assert.equal(results[1][0].score, 1);
+			const firstBye = generator.rounds[0].bye;
+			assert.deepEqual(results[0], [firstBye]);
+			assert.equal(results[1][0].score, 1.5);
+			assert.equal(results[2][0].score, 1);
+			const standings = generator.getBracketData().players;
+			assert.equal(standings[0].name, firstBye.name);
+			assert.equal(standings[0].resistance, 0.75);
+			assert.equal(standings[1].resistance, 0.25);
+		});
+
+		it('preserves shared placements when score and resistance are both tied', async () => {
+			addFourthPlayer();
+			start(new Swiss());
+			const generator = tour.generator;
+			while (!tour.ended) {
+				const matches = generator.getAvailableMatches();
+				for (const match of matches) await play(match, true);
+			}
+			assert.equal(generator.getResults().length, 1);
+			assert.equal(generator.getResults()[0].length, 4);
+			assert(generator.getBracketData().players.every(player => player.resistance === 0.5));
+		});
+
+		it('ignores unfinished matches when calculating resistance', async () => {
+			addFourthPlayer();
+			start(new Swiss());
+			const generator = tour.generator;
+			assert(generator.getBracketData().players.every(player => player.resistance === 0));
+			const [pair] = generator.getAvailableMatches();
+			await play(pair);
+			const standings = generator.getStandings();
+			assert.equal(standings.find(row => row.player === pair[0]).resistance, 0);
+			assert.equal(standings.find(row => row.player === pair[1]).resistance, 1);
+			assert.equal(generator.rounds.length, 1);
+		});
+
+		it('supports a shorter Swiss stage through the generator modifier', async () => {
+			const generator = new Swiss('1');
+			tour.setGenerator(generator, context(users[0]));
+			assert.equal(tour.getBracketData().roundLimit, 1);
+			tour.startTournament(context(users[0]));
+			await play(generator.getAvailableMatches()[0]);
+			assert.equal(tour.ended, true);
+			assert.equal(generator.rounds.length, 1);
+		});
+
+		it('rejects invalid Swiss round counts', () => {
+			for (const count of ['0', '-1', '1.5', 'NaN', 'Infinity', 'rounds']) {
+				assert.throws(() => new Swiss(count), /positive integer/);
+			}
 		});
 
 		it('waits for every match before advancing a round', async () => {
