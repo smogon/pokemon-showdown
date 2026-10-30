@@ -324,6 +324,28 @@ export abstract class MessageContext {
 		const { dex, format } = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
 		return { dex, format, targets };
 	}
+
+	splitFormats(target: string | string[], atLeastOneTarget?: boolean, allowRules?: boolean) {
+		const targets = typeof target === 'string' ? target.split(',') : target;
+		if (!targets[0].trim()) targets.pop();
+		const room = (this as any as CommandContext).room;
+
+		const formats = [];
+		let { dex } = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
+
+		while (targets.length > 1) {
+			const { dex: foundDex, format, isMatch } = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
+			if (isMatch) {
+				targets.pop();
+				formats.push(format);
+				if (format === null)
+					dex = foundDex;
+			}
+		}
+
+		return { dex, formats, targets };
+	}
+
 	extractFormat(formatOrMod?: string, allowRules?: boolean): { dex: ModdedDex, format: Format | null, isMatch: boolean } {
 		if (!formatOrMod) {
 			return { dex: Dex.includeData(), format: null, isMatch: false };

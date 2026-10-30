@@ -585,7 +585,7 @@ export const commands: Chat.ChatCommands = {
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
-		const { dex, format, targets } = this.splitFormat(target, true, true);
+		const { dex, formats, targets } = this.splitFormats(target, true, true);
 
 		const prefix = `|c|${user.getIdentity(room)}|/raw `;
 		let buffer = '';
@@ -630,8 +630,14 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReply(buffer);
 			case 'pokemon':
 				let pokemon = dex.species.get(newTarget.name);
-				if (format?.onModifySpecies) {
-					pokemon = format.onModifySpecies.call({ dex, clampIntRange: Utils.clampIntRange, toID } as Battle, pokemon) || pokemon;
+				for (const format of formats.sort((x, y) => (y?.onModifySpeciesPriority || 0) - (x?.onModifySpeciesPriority || 0))) {
+					if (format?.onModifySpecies) {
+						pokemon = format.onModifySpecies.call({
+							dex,
+							clampIntRange: Utils.clampIntRange,
+							toID,
+						} as Battle, pokemon) || pokemon;
+					}
 				}
 				let tierDisplay = room?.settings.dataCommandTierDisplay;
 				if (!tierDisplay && room?.battle) {
