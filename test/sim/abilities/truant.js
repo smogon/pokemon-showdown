@@ -92,7 +92,7 @@ describe('Truant', () => {
 
 	describe('[Gen 4]', () => {
 		it('should allow the user to act the turn it wakes up, if an even number of turns have passed', () => {
-			battle = common.gen(4).createBattle({ seed: [0, 0, 0, 1] }, [[
+			battle = common.gen(4).createBattle({ seed: [0, 0, 0, 2] }, [[
 				{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
 			], [
 				{ species: "Steelix", ability: 'sturdy', moves: ['endure', 'spore'] },
@@ -108,7 +108,7 @@ describe('Truant', () => {
 		});
 
 		it('should not allow the user to act the turn it wakes up, if an odd number of turns have passed', () => {
-			battle = common.gen(4).createBattle({ seed: [0, 0, 0, 2] }, [[
+			battle = common.gen(4).createBattle({ seed: [0, 0, 0, 4] }, [[
 				{ species: "Slaking", ability: 'truant', moves: ['scratch'] },
 			], [
 				{ species: "Steelix", ability: 'sturdy', moves: ['endure', 'spore'] },

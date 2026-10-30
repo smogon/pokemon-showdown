@@ -1505,7 +1505,7 @@ export class RandomBDSPTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.gender || (this.random(2) ? 'F' : 'M'),
+			gender: species.gender || this.sample(['M', 'F']),
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
 			level,
