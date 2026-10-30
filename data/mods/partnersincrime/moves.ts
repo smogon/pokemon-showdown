@@ -131,8 +131,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
-			const ally = source.side.active.find(mon => mon && mon !== source && !mon.fainted);
-			const foeAlly = target.side.active.find(mon => mon && mon !== target && !mon.fainted);
+			const ally = (source.side.allySide || source.side).active.find(mon => mon && mon !== source && !mon.fainted);
+			const foeAlly = (target.side.allySide || target.side).active.find(mon => mon && mon !== target && !mon.fainted);
 			if (target.isAlly(source)) {
 				this.add('-activate', source, 'move: Skill Swap', '', '', `[of] ${target}`);
 			} else {

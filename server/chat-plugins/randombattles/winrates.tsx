@@ -179,7 +179,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const format = Dex.formats.get(battle.format);
 	if (format.mod.startsWith('champions')) {
 		// ladder is inactive, so use a lower threshold
-		eloFloor = (format.gameType === 'doubles') ? 1200 : 1250;
+		eloFloor = (format.defaultGameType === 'doubles') ? 1200 : 1250;
 	} else if (format.mod === 'gen2') {
 		eloFloor = 1150;
 	} else if (format.team === 'randomBaby') {
@@ -189,7 +189,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		eloFloor = 1100;
 	} else if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
-	} else if (format.gameType === 'doubles') {
+	} else if (format.defaultGameType === 'doubles') {
 		// may need to be raised again if ladder takes off further
 		eloFloor = 1400;
 	}

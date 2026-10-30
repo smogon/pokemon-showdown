@@ -1236,7 +1236,7 @@ export class RandomBDSPTeams {
 		return 80;
 	}
 
-	getForme(species: Species): string {
+	getForme(species: Species, isSingles = true): string {
 		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			return species.battleOnly;

@@ -50,8 +50,13 @@ const dexes: { [mod: string]: ModdedDex } = Object.create(null);
 const DATA_TYPES = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
 	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
+
 ] as const;
 type DataType = typeof DATA_TYPES[number];
+
+const GAME_TYPES: GameType[] = [
+	'singles', 'doubles', 'triples', 'multi', 'freeforall',
+];
 
 const DATA_FILES = {
 	Abilities: 'abilities',
@@ -764,6 +769,14 @@ export class ModdedDex {
 	includeFormats(): this {
 		this.formats.load();
 		return this;
+	}
+
+	isSupportedGameType(maybeGameType: string) {
+		return (GAME_TYPES as string[]).includes(maybeGameType);
+	}
+
+	getSupportedGameTypes() {
+		return GAME_TYPES;
 	}
 }
 
