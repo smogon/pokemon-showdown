@@ -337,6 +337,23 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: { trunc: Math.trunc },
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 50'],
 	},
+	{
+		name: "[Gen 9 Champions] Mega Evolution Battle",
+		mod: 'champions',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', 'VGC Timer'],
+		banlist: ['All Pokemon'],
+		unbanlist: [
+			'Abomasnow', 'Absol', 'Aerodactyl', 'Aggron', 'Alakazam', 'Altaria', 'Ampharos', 'Audino', 'Banette', 'Barbaracle',
+			'Baxcalibur', 'Beedrill', 'Blastoise', 'Blaziken', 'Camerupt', 'Chandelure', 'Charizard', 'Chesnaught', 'Chimecho',
+			'Clefable', 'Crabominable', 'Delphox', 'Dragalge', 'Dragonite', 'Drampa', 'Eelektross', 'Emboar', 'Excadrill',
+			'Falinks', 'Feraligatr', 'Floette', 'Froslass', 'Gallade', 'Garchomp', 'Gardevoir', 'Gengar', 'Glalie', 'Glimmora',
+			'Golisopod', 'Golurk', 'Greninja', 'Gyarados', 'Hawlucha', 'Heracross', 'Houndoom', 'Kangaskhan', 'Lopunny',
+			'Lucario', 'Malamar', 'Manectric', 'Mawile', 'Medicham', 'Meganium', 'Meowstic', 'Metagross', 'Pidgeot', 'Pinsir',
+			'Pyroar', 'Raichu', 'Sableye', 'Salamence', 'Sceptile', 'Scizor', 'Scolipede', 'Scovillain', 'Scrafty', 'Sharpedo',
+			'Skarmory', 'Slowbro', 'Staraptor', 'Starmie', 'Steelix', 'Swampert', 'Tyranitar', 'Venusaur', 'Victreebel',
+		],
+	},
 
 	// Unofficial Metagames
 	///////////////////////////////////////////////////////////////////
