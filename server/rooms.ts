@@ -2214,11 +2214,11 @@ export const Rooms = {
 			Ladders.cancelSearches(user);
 		}
 
-		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
+		const bestOfNum = Dex.formats.getRuleTable(format).getRuleValue<number>('bestof');
 
-		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isBestOfSubBattle) {
+		if (Rooms.global.lockdown === 'pre' && bestOfNum && !options.isBestOfSubBattle) {
 			for (const user of players) {
-				user.popup(`The server will be restarting soon. Best-of-${isBestOf} battles cannot be started at this time.`);
+				user.popup(`The server will be restarting soon. Best-of-${bestOfNum} battles cannot be started at this time.`);
 			}
 			return null;
 		}
@@ -2264,9 +2264,9 @@ export const Rooms = {
 		} else if (format.gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
-		} else if (isBestOf && !options.isBestOfSubBattle) {
+		} else if (bestOfNum && !options.isBestOfSubBattle) {
 			roomTitle = `${p1name} vs. ${p2name}`;
-			roomid ||= `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
+			roomid ||= `game-bestof${bestOfNum}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
 			roomTitle = options.title;
 		} else {
@@ -2280,7 +2280,7 @@ export const Rooms = {
 		}
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		let game: RoomBattle | BestOfGame;
-		if (options.isBestOfSubBattle || !isBestOf) {
+		if (options.isBestOfSubBattle || !bestOfNum) {
 			game = new RoomBattle(room, options);
 		} else {
 			game = new BestOfGame(room, options);
