@@ -264,7 +264,7 @@ export class ModdedDex {
 			return true;
 		}
 		const typeData = this.types.get(targetTyping);
-		if (typeData && typeData.damageTaken[sourceType] === 3) return false;
+		if (typeData?.damageTaken[sourceType] === 3) return false;
 		return true;
 	}
 

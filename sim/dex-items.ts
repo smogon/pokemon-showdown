@@ -144,7 +144,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		}
 
 		if (this.isBerry) this.fling = { basePower: 10 };
-		if (this.id.endsWith('plate')) this.fling = { basePower: 90 };
+		if (this.onPlate && this.id.endsWith('plate')) this.fling = { basePower: 90 };
 		if (this.onDrive) this.fling = { basePower: 70 };
 		if (this.megaStone) this.fling = { basePower: 80 };
 		if (this.onMemory) this.fling = { basePower: 50 };

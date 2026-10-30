@@ -293,7 +293,7 @@ export class Side {
 	}
 
 	get requestState(): RequestState {
-		if (!this.activeRequest || this.activeRequest.wait) return '';
+		if (this.activeRequest === null || this.activeRequest.wait) return '';
 		if (this.activeRequest.teamPreview) return 'teampreview';
 		if (this.activeRequest.forceSwitch) return 'switch';
 		return 'move';
@@ -337,7 +337,7 @@ export class Side {
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
 				if (action.terastallize) details += ` terastallize`;
-				return `move ${action.moveid}${details}`;
+				return `move ${action.moveid!}${details}`;
 			case 'switch':
 			case 'instaswitch':
 			case 'revivalblessing':
@@ -950,7 +950,7 @@ export class Side {
 				}
 			}
 			if (slot < 0) {
-				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText}" to switch to`);
+				return this.emitChoiceError(`Can't switch: You do not have a Pokémon named "${slotText!}" to switch to`);
 			}
 		}
 		if (slot >= this.pokemon.length) {
@@ -1120,17 +1120,21 @@ export class Side {
 		let forcedPasses = 0;
 		if (this.battle.requestState === 'switch') {
 			const canSwitchOut = this.active.filter(pokemon => pokemon?.switchFlag).length;
-			const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
+			const canSwitchIn = this.battle.canSwitch(this);
 			forcedSwitches = Math.min(canSwitchOut, canSwitchIn);
 			forcedPasses = canSwitchOut - forcedSwitches;
 		}
+
+		// should only be relevant for Gen 3
+		const switchIns = this.battle.queue.getSwitches(this).map(action => action.target.position);
+
 		this.choice = {
 			cantUndo: false,
 			error: ``,
 			actions: [],
 			forcedSwitchesLeft: forcedSwitches,
 			forcedPassesLeft: forcedPasses,
-			switchIns: new Set(),
+			switchIns: new Set(switchIns),
 			zMove: false,
 			mega: false,
 			ultra: false,

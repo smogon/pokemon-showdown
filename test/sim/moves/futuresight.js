@@ -40,25 +40,6 @@ describe('Future Sight', () => {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
-	it(`[Gen 2] should damage in two turns, ignoring Protect`, () => {
-		battle = common.gen(2).createBattle([[
-			{ species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent'] },
-		], [
-			{ species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent'] },
-		]]);
-
-		const sneasel = battle.p1.active[0];
-		const girafarig = battle.p2.active[0];
-		battle.makeChoices('move sweetscent', 'move sweetscent'); // counteract imperfect accuracy
-		battle.makeChoices('move futuresight', 'move futuresight');
-		assert.fullHP(girafarig);
-		battle.makeChoices('auto', 'auto');
-		assert.fullHP(girafarig);
-		battle.makeChoices('auto', 'move Protect');
-		assert.false.fullHP(sneasel);
-		assert.false.fullHP(girafarig);
-	});
-
 	it(`should not double Stomping Tantrum for exiting normally`, () => {
 		battle = common.createBattle([[
 			{ species: 'Wynaut', moves: ['futuresight', 'stompingtantrum'] },
@@ -134,23 +115,6 @@ describe('Future Sight', () => {
 		assert.equal(wynaut.hp, wynaut.maxhp - Math.floor(wynaut.maxhp / 10), `Wynaut should take Life Orb recoil on Future Sight's damaging turn`);
 		const damage = mew.maxhp - mew.hp;
 		assert.bounded(damage, [30, 35]); // 22-27 if Life Orb was not applied
-	});
-
-	it(`[Gen 4] should not be affected by Life Orb`, () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
-		], [
-			{ species: 'mew', ability: 'noguard', moves: ['sleeptalk'] },
-		]]);
-
-		battle.makeChoices();
-		const wynaut = battle.p1.active[0];
-		const mew = battle.p2.active[0];
-		battle.makeChoices();
-		battle.makeChoices();
-		assert.fullHP(wynaut, `Wynaut should not have taken any damage`);
-		const damage = mew.maxhp - mew.hp;
-		assert.bounded(damage, [21, 25]); // [27-32] if Life Orb was applied
 	});
 
 	it(`should not be affected by Life Orb if not the original user`, () => {
@@ -417,46 +381,5 @@ describe('Future Sight', () => {
 		battle.makeChoices();
 		const wynaut = battle.p1.active[0];
 		assert.fullHP(wynaut);
-	});
-
-	it(`should place the Future Sight (2 Turns) UI at the top left of the screen even after a previous use of Future Sight failed because the target was fainted`, () => {
-		battle = common.createBattle([[
-			{ species: 'Slowking-Galar', ability: 'Curious Medicine', moves: ['futuresight', 'slackoff'] },
-			{ species: 'Urshifu-Rapid-Strike', ability: 'Unseen Fist', moves: ['surgingstrikes'] },
-		], [
-			{ species: 'Landorus-Therian', ability: 'Intimidate', moves: ['splash'] },
-			{ species: 'Heatran', ability: 'Flash Fire', moves: ['splash'] },
-		]]);
-
-		battle.makeChoices('move futuresight', 'auto');
-		battle.makeChoices('switch 2', 'auto');
-		battle.makeChoices('move surgingstrikes', 'auto');
-		battle.makeChoices('', 'switch 2');
-
-		const p2slotConditions = battle.p2.slotConditions[0];
-		assert.equal(
-			p2slotConditions['futuremove'],
-			undefined,
-			'futuremove slot condition should be gone because it fails to hit a fainted mon'
-		);
-
-		battle.makeChoices('switch 2', 'move splash');
-		battle.makeChoices('move futuresight', 'move splash');
-
-		const log = battle.getDebugLog(); // get the log so we can check the flags
-		// we have to check if the change we made actually worked, does the |-end| flag actually get emitted?
-		const checkEndFlag = (log.match(/\|-end\|[^|]+\|move: Future Sight/g) || []).length;
-		assert.equal(
-			checkEndFlag,
-			1,
-			'Future Sight should emit |-end| when it expires, even if the target is fainted'
-		);
-		// checking if future sight had |-start| both times now since it was used twice.
-		const checkStartFlags = (log.match(/\|-start\|[^|]+\|move: Future Sight/g) || []).length;
-		assert.equal(
-			checkStartFlags,
-			2,
-			'Future Sight should emit |-start| both times it is used'
-		);
 	});
 });

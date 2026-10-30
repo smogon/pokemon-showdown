@@ -36,6 +36,7 @@ export const translations: TranslationCatalog = {
 	"If you lost your password, click the button below to request a password reset. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.": null, // NOT USED
 	"Request a password reset": null, // NOT USED
 	"If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!": null,
+	"If you are a bot developer, and would like to register your bot on the ladder, please fill out the form below and we'll be happy to assist!": null,
 	"If your issue is not handled above, click the button below to talk to a global staff member. Please be ready to explain the situation.": null,
 	"Malformed help request.": null,
 	"PM Harassment": null,
@@ -46,6 +47,7 @@ export const translations: TranslationCatalog = {
 	"IP-Appeal": null,
 	"ISP-Appeal": null, // NOT USED
 	"Public Room Assistance Request": null,
+	"Bot Registration Request": null,
 	"Other": null,
 	"I want to report someone": null,
 	"Someone is harassing me in PMs": null,
@@ -64,6 +66,7 @@ export const translations: TranslationCatalog = {
 	"Something else": null,
 	"I lost my password": null,
 	"I need global staff to help watch a public room": null,
+	"I want to register my bot": null,
 	"Report harassment in a private message (PM)": null,
 	"Report harassment in a battle": null,
 	"Report an inappropriate username": null,

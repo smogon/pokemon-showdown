@@ -645,7 +645,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (
-				effect && effect.effectType === 'Move' &&
+				effect?.effectType === 'Move' &&
 				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
 			) {
 				this.add('-activate', target, 'ability: Masquerade');
@@ -711,7 +711,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.field.clearWeather();
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.name === 'Stealth Rock') {
+			if (effect?.name === 'Stealth Rock') {
 				return false;
 			}
 		},
@@ -1050,7 +1050,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			// Sturdy
-			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (target.hp === target.maxhp && damage >= target.hp && effect?.effectType === 'Move') {
 				this.add('-ability', target, 'Hydrostatic Positivity');
 				return target.hp - 1;
 			}
@@ -1297,7 +1297,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.id === 'brn') {
+			if (effect?.id === 'brn') {
 				return damage / 2;
 			}
 		},
@@ -2295,7 +2295,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
+			if (effect?.effectType === 'Move') {
 				this.boost({ atk: -length }, source);
 			}
 		},
@@ -2501,7 +2501,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Mountaineer + Fur Coat.",
 		name: "Gale Guard",
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.name === 'Stealth Rock') {
+			if (effect?.name === 'Stealth Rock') {
 				return false;
 			}
 		},

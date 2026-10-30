@@ -149,8 +149,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	generateUsernameList(players: (string | Player)[], max = players.length, clickable = false) {
+	generateUsernameList(players: (string | Player)[], max = players.length, clickable = false, showPrefixCount = false) {
 		let buf = `<span style="font-size: 85%">`;
+		if (showPrefixCount) {
+			buf += `<span title="Total players">(${players.length})</span> `;
+		}
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
 				return `<username ${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
@@ -219,7 +222,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.type !== 'snake') {
 				buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			}
-			buf += `<td title="${team.players.map(p => Utils.escapeHTML(p.name)).join(', ')}"><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td title="${team.players.map(p => Utils.escapeHTML(p.name)).join(', ')}"><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players, undefined, false, true)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
@@ -558,7 +561,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	nominate(user: User, target: string) {
 		if (this.state !== 'nom') throw new Chat.ErrorMessage(`You cannot nominate players right now.`);
 		const manager = this.managers.get(user.id);
-		if (!manager || manager.team !== this.nominatingTeam) this.checkOwner(user);
+		if (manager?.team !== this.nominatingTeam) this.checkOwner(user);
 
 		// For undo
 		this.lastQueue = this.queue.slice();
@@ -572,6 +575,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.type === 'snake') {
 			this.sendMessage(Utils.html`/html <b>${this.nominatingTeam.name}</b> drafted <username>${this.nominatedPlayer.name}</username>!`);
 			this.nominatingTeam.addPlayer(this.nominatedPlayer);
+			this.highestBidder = this.nominatingTeam;
+			this.highestBid = 0;
 			this.next();
 		} else {
 			this.state = 'bid';
@@ -928,7 +933,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			let data = '';
 			try {
-				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
+				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()!}`).get();
 			} catch {}
 			if (!data) throw new Chat.ErrorMessage('Error fetching data from pastebin.');
 

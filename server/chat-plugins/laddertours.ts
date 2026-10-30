@@ -95,7 +95,7 @@ export class LadderTracker {
 		// repeatedly do process.nextTick checks for accuracy
 		this.final = setTimeout(() => {
 			this.stop();
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
+			// oxlint-disable-next-line typescript/no-floating-promises
 			this.captureFinalLeaderboard();
 		}, timeDiff);
 
@@ -291,14 +291,14 @@ export class LadderTracker {
 		let buf = '<center>';
 		if (final) {
 			buf +=
-            `<h1 style="margin-bottom: 0.2em">Final Leaderboard - ${this.prefix}</h1>` +
-            `<div style="margin-bottom: 1em"><small><em>${final}</em></small></div>`;
+				`<h1 style="margin-bottom: 0.2em">Final Leaderboard - ${this.prefix}</h1>` +
+				`<div style="margin-bottom: 1em"><small><em>${final}</em></small></div>`;
 		}
 		buf +=
-            '<div class="ladder" style="max-height: 250px; overflow-y: auto"><table>' +
-            '<tr><th></th><th>Name</th><th><abbr title="Elo rating">Elo</abbr></th>' +
-            '<th><abbr title="user\'s percentage chance of winning a random battle (aka GLIXARE)">GXE</abbr></th>' +
-            '<th><abbr title="Glicko-1 rating system: rating±deviation (provisional if deviation>100)">Glicko-1</abbr></th></tr>';
+			'<div class="ladder" style="max-height: 250px; overflow-y: auto"><table>' +
+			'<tr><th></th><th>Name</th><th><abbr title="Elo rating">Elo</abbr></th>' +
+			'<th><abbr title="user\'s percentage chance of winning a random battle (aka GLIXARE)">GXE</abbr></th>' +
+			'<th><abbr title="Glicko-1 rating system: rating±deviation (provisional if deviation>100)">Glicko-1</abbr></th></tr>';
 		for (const [i, p] of leaderboard.entries()) {
 			const id = toID(p.name);
 			const link = `https://www.smogon.com/forums/search/1/?q="${encodeURIComponent(p.name)}"`;
@@ -311,10 +311,10 @@ export class LadderTracker {
 				rank = `${symbol}${rank}`;
 			}
 			buf +=
-                `<tr><td style="text-align: right"><a href='${link}' class="subtle">${rank}</a></td>` +
-                Utils.html`<td><username class="username">${p.name}</username></td>` +
-                `<td><strong>${p.elo}</strong></td><td>${p.gxe.toFixed(1)}%</td>` +
-                `<td>${p.glicko} ± ${p.glickodev}</td></tr>`;
+				`<tr><td style="text-align: right"><a href='${link}' class="subtle">${rank}</a></td>` +
+				Utils.html`<td><username class="username">${p.name}</username></td>` +
+				`<td><strong>${p.elo}</strong></td><td>${p.gxe.toFixed(1)}%</td>` +
+				`<td>${p.glicko} ± ${p.glickodev}</td></tr>`;
 		}
 		buf += '</table></div></center>';
 		return buf;
@@ -399,7 +399,7 @@ export class LadderTracker {
 		if (this.started) return;
 
 		this.togglePrefix();
-		// eslint-disable-next-line @typescript-eslint/no-misused-promises
+		// oxlint-disable-next-line typescript/no-misused-promises
 		this.started = setInterval(async () => {
 			// Leaderboard
 			const leaderboard = await this.getLeaderboard();
@@ -487,7 +487,7 @@ export const commands: Chat.ChatCommands = {
 			LadderTracker.save();
 
 			this.sendReply("Ladder tracking started.");
-			this.modlog('LADDERTRACK', null, Object.entries(config).map(([k, v]) => `${k}=${v}`).join(', '));
+			this.modlog('LADDERTRACK', null, Object.entries(config).map(([k, v]) => `${k}=${v as DebugOutput}`).join(', '));
 		},
 		top: 'leaderboard',
 		async leaderboard(target, room, user, sf, cmd) {

@@ -257,7 +257,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (!this.ticket.open) return;
 		if (toID(this.ticket.claimed) === user.id) {
 			if (this.claimQueue.length) {
-				this.ticket.claimed = this.claimQueue.shift() || null;
+				this.ticket.claimed = this.claimQueue.shift()!;
 				this.room.modlog({ action: 'TICKETCLAIM', isGlobal: false, loggedBy: toID(this.ticket.claimed) });
 				this.addText(`This ticket is now claimed by ${this.ticket.claimed}.`, user);
 			} else {
@@ -369,12 +369,12 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			// Don't show anything after the first linebreak for multiline messages
 			const entry = this.room.log.log[i].split('\n')[0].split('|');
 			entry.shift(); // Remove empty string
-			if (!/c:?/.test(entry[0])) continue;
+			if (entry[0] !== 'c' && entry[0] !== 'c:') continue;
 			if (entry[0] === 'c:') entry.shift(); // c: includes a timestamp and needs an extra shift
 			entry.shift();
 			const user = entry.shift();
 			let message = entry.join('|');
-			message = message.startsWith('/log ') ? message.slice(5) : `${user}: ${message}`;
+			message = message.startsWith('/log ') ? message.slice(5) : `${user || ''}: ${message}`;
 			hoverText.push(Utils.html`${message}`);
 			if (hoverText.length >= 3) break;
 		}
@@ -1017,6 +1017,7 @@ const ticketTitles: { [k: string]: string } = {
 	appeal: TLkey`Appeal`,
 	ipappeal: TLkey`IP-Appeal`,
 	roomhelp: TLkey`Public Room Assistance Request`,
+	registerbot: TLkey`Bot Registration Request`,
 	other: TLkey`Other`,
 };
 const ticketPages: { [k: string]: string } = {
@@ -1047,6 +1048,7 @@ const ticketPages: { [k: string]: string } = {
 	misc: TLkey`Something else`,
 	password: TLkey`I lost my password`,
 	roomhelp: TLkey`I need global staff to help watch a public room`,
+	registerbot: TLkey`I want to register my bot`,
 	other: TLkey`Other`,
 
 	confirmpmharassment: TLkey`Report harassment in a private message (PM)`,
@@ -1056,6 +1058,7 @@ const ticketPages: { [k: string]: string } = {
 	confirmappeal: TLkey`Appeal your lock`,
 	confirmipappeal: TLkey`Appeal IP lock`,
 	confirmroomhelp: TLkey`Call a Global Staff member to help`,
+	confirmregisterbot: TLkey`I want to register my bot`,
 	confirmother: TLkey`Call a Global Staff member`,
 };
 const cheatingScenarios = [
@@ -1434,6 +1437,47 @@ export const textTickets: { [k: string]: TextTicketInfo } = {
 			writeTickets();
 		},
 	},
+	registerbot: {
+		title: "What is the username of the bot you wish to register?",
+		contextMessage: (
+			"What is a Pokemon Showdown username we can contact you as the bot owner at? " +
+			"It is required, and cannot be the same as the bot's username."
+		),
+		async checker(input, context, pageId, user) {
+			input = toID(input);
+			context = toID(context);
+			if (!input || !context || input.length > 18 || context.length > 18) {
+				return [
+					'You must provide both the username of the bot and a username we can contact you at.',
+					'You have not provided both a valid bot and a valid owner name.',
+				];
+			}
+			if (user.locked || user.semilocked || user.namelocked) {
+				return ['Punished users may not register bots.'];
+			}
+			const exists = (userid: string) => Net(`https://${Config.routes.root}/users/${userid}.json`).get().catch(() => false);
+			if (input === context) {
+				return ['Bot username and owner username must not be the same.'];
+			}
+			if (!(await exists(input))) {
+				return ['Bot username must first be registered (given a password) with /register.'];
+			}
+			if (!(await exists(context))) {
+				return ['Owner username must first be registered (given a password) with /register.'];
+			}
+			return true;
+		},
+		getReviewDisplay(ticket, staff, conn, state) {
+			if (!staff.can('rangeban')) throw new Chat.ErrorMessage(`Only upper staff can handle these tickets.`);
+			const [bot, owner] = ticket.text.map(toID);
+			let buf = `Request made by: ${owner}${owner !== ticket.userid ? ` (ticket by ${ticket.userid})` : ''}`;
+			buf += `<button name="send" value="/modlog global,user=${owner}">Modlog</button><br />`;
+			buf += `Bot user: ${bot} <button name="send" value="/modlog global,user=${bot}">Modlog</button><br />`;
+			buf += `Confirmed they're indeed a bot? Confirmed the user is well-behaved? `;
+			buf += `<button name="send" value="/setbot ${owner},${bot}">Register</button><br />`;
+			return buf;
+		},
+	},
 };
 
 export const pages: Chat.PageTable = {
@@ -1684,6 +1728,7 @@ export const pages: Chat.PageTable = {
 					if (!isLast) break;
 					buf += `<p><Button>password</Button></p>`;
 					if (user.trusted || isStaff) buf += `<p><Button>roomhelp</Button></p>`;
+					buf += `<p><Button>registerbot</Button></p>`;
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
@@ -1692,6 +1737,10 @@ export const pages: Chat.PageTable = {
 				case 'roomhelp':
 					buf += `<p>${this.TL`If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!`}</p>`;
 					buf += `<p><Button>confirmroomhelp</Button></p>`;
+					break;
+				case 'registerbot':
+					buf += `<p>${this.TL`If you are a bot developer, and would like to register your bot on the ladder, please fill out the form below and we'll be happy to assist!`}</p>`;
+					buf += `<p><Button>confirmregisterbot</Button></p>`;
 					break;
 				case 'other':
 					buf += `<p>${this.TL`If your issue is not handled above, click the button below to talk to a global staff member. Please be ready to explain the situation.`}</p>`;
@@ -2286,10 +2335,6 @@ export const commands: Chat.ChatCommands = {
 				this.popupReply(`You already have a pending ticket, please wait.`);
 				return this.parse(`/join help-${ticket.userid}`);
 			}
-			if (Monitor.countTickets(user.latestIp)) {
-				const maxTickets = Punishments.isSharedIp(user.latestIp) ? `50` : `5`;
-				return this.popupReply(this.TL`Due to high load, you are limited to creating ${maxTickets} tickets every hour.`);
-			}
 			let [
 				ticketType, reportTargetType, reportTarget, text, contextString,
 			] = Utils.splitFirst(target, '|', 4).map(s => s.trim());
@@ -2345,10 +2390,14 @@ export const commands: Chat.ChatCommands = {
 					this.parse(`/join view-${pageId}`);
 					return this.popupReply(`|html|` + validation.join('<br />'));
 				}
+				if (Monitor.countTickets(user.latestIp)) {
+					const maxTickets = Punishments.isSharedIp(user.latestIp) ? `50` : `5`;
+					return this.popupReply(this.TL`Due to high load, you are limited to creating ${maxTickets} tickets every hour.`);
+				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
 				Chat.runHandlers('onTicketCreate', ticket, user);
-				// eslint-disable-next-line require-atomic-updates
+				// oxlint-disable-next-line ps/require-atomic-updates
 				tickets[user.id] = ticket;
 				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',
@@ -2583,7 +2632,7 @@ export const commands: Chat.ChatCommands = {
 			ticket.notes[user.id] = note;
 			writeTickets();
 			notifyStaff();
-			if (!room || room.roomid !== 'staff') this.sendReply(`Added the note "${note}" to ${ticketId}'s ticket.`);
+			if (room?.roomid !== 'staff') this.sendReply(`Added the note "${note}" to ${ticketId}'s ticket.`);
 			this.room = Rooms.get('staff') || null;
 			this.addGlobalModAction(`${user.name} added the note "${note}" to ${ticket.userid}'s helpticket.`);
 			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
@@ -2608,7 +2657,7 @@ export const commands: Chat.ChatCommands = {
 			if (!note) {
 				throw new Chat.ErrorMessage(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
 			}
-			if (!room || room.roomid !== 'staff') {
+			if (room?.roomid !== 'staff') {
 				this.sendReply(`You removed the note '${note}' (by ${staff}) on ${ticket.userid}'s ticket.`);
 			}
 			delete ticket.notes[staff];
@@ -2847,12 +2896,11 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			target = toID(target);
 			const targetID: ID = Users.get(target)?.id || target as ID;
-			const banned = Punishments.isTicketBanned(targetID);
-			if (!banned) {
+			const affected = HelpTicket.unban(targetID);
+			if (!affected) {
 				throw new Chat.ErrorMessage(this.TL`${target} is not ticket banned.`);
 			}
 
-			const affected = HelpTicket.unban(targetID);
 			this.addModAction(`${affected} was ticket unbanned by ${user.name}.`);
 			this.globalModlog("UNTICKETBAN", toID(target));
 			Users.get(target)?.popup(`${user.name} has ticket unbanned you.`);

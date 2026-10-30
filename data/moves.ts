@@ -1107,7 +1107,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		self: {
 			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
+				source.skipPursuit = true;
 			},
 		},
 		selfSwitch: 'copyvolatile',
@@ -1285,7 +1285,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move' || !source) return;
+				if (move?.effectType !== 'Move' || !source) return;
 				this.effectState.totalDamage += damage;
 				this.effectState.lastDamageSource = source;
 			},
@@ -3498,7 +3498,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
-				if (!source || !effect || target.isAlly(source)) return;
+				if (!source?.hp || !effect || target.isAlly(source)) return;
 				if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
@@ -3656,7 +3656,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		onTryHit(target) {
-			if (!target.lastMove || target.lastMove.isZOrMaxPowered || target.lastMove.isMax || target.lastMove.id === 'struggle') {
+			if (
+				target.lastMove === null || target.lastMove.isZOrMaxPowered ||
+				target.lastMove.isMax || target.lastMove.id === 'struggle'
+			) {
 				return false;
 			}
 		},
@@ -7896,7 +7899,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-singlemove', pokemon, 'Grudge');
 			},
 			onFaint(target, source, effect) {
-				if (!source || source.fainted || !effect) return;
+				if (!source?.hp || !effect) return;
 				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && source.lastMove) {
 					let move: Move = source.lastMove;
 					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
@@ -9269,15 +9272,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMove(source, target, move) {
 			const iceballData = source.volatiles["iceball"];
 			if (
-				iceballData &&
-				iceballData.hitCount === 5 &&
+				iceballData?.hitCount === 5 &&
 				iceballData.contactHitCount < 5
 				// this conditions can only be met in gen7 and gen8dlc1
 				// see `disguise` and `iceface` abilities in the resp mod folders
 			) {
 				source.addVolatile("rolloutstorage");
 				source.volatiles["rolloutstorage"].contactHitCount =
-				iceballData.contactHitCount;
+					iceballData.contactHitCount;
 			}
 		},
 
@@ -9289,7 +9291,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.contactHitCount = 0;
 			},
 			onResidual(target) {
-				if (target.lastMove && target.lastMove.id === 'struggle') {
+				if (target.lastMove?.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['iceball'];
 				}
@@ -12796,16 +12798,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'noretreat',
 		onTry(source, target, move) {
 			if (source.volatiles['noretreat']) return false;
-			if (source.volatiles['trapped']) {
-				delete move.volatileStatus;
-			}
 		},
 		condition: {
 			onStart(pokemon) {
+				if (!pokemon.addVolatile('trapped')) return false;
 				this.add('-start', pokemon, 'move: No Retreat');
-			},
-			onTrapPokemon(pokemon) {
-				pokemon.tryTrap();
 			},
 		},
 		boosts: {
@@ -13266,7 +13263,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 24,
 			onResidual(pokemon) {
-				const duration = pokemon.volatiles['perishsong'].duration;
+				const duration = pokemon.volatiles['perishsong'].duration!;
 				this.add('-start', pokemon, `perish${duration}`);
 			},
 		},
@@ -14405,9 +14402,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				) {
 					return;
 				}
-				if (!this.event.pursuitMessageShown) {
+				if (!pokemon.pursuitActivated) {
 					this.add('-activate', pokemon, 'move: Pursuit');
-					this.event.pursuitMessageShown = true;
+					pokemon.pursuitActivated = true;
 				}
 				// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
 				// If it is, then Mega Evolve before moving.
@@ -15396,8 +15393,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMove(source, target, move) {
 			const rolloutData = source.volatiles["rollout"];
 			if (
-				rolloutData &&
-				rolloutData.hitCount === 5 &&
+				rolloutData?.hitCount === 5 &&
 				rolloutData.contactHitCount < 5
 				// this conditions can only be met in gen7 and gen8dlc1
 				// see `disguise` and `iceface` abilities in the resp mod folders
@@ -15415,7 +15411,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.contactHitCount = 0;
 			},
 			onResidual(target) {
-				if (target.lastMove && target.lastMove.id === 'struggle') {
+				if (target.lastMove?.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['rollout'];
 				}
@@ -16187,7 +16183,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		self: {
 			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
+				source.skipPursuit = true;
 			},
 		},
 		selfSwitch: 'shedtail',
@@ -16698,7 +16694,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onMoveFail(target, source) {
-			if (source.volatiles['twoturnmove'] && source.volatiles['twoturnmove'].duration === 1) {
+			if (source.volatiles['twoturnmove']?.duration === 1) {
 				source.removeVolatile('skydrop');
 				source.removeVolatile('twoturnmove');
 				if (target === this.effectState.target) {
@@ -19927,7 +19923,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.side.active.length === 2 && target.position === 1) {
 				// Curse Glitch
 				const action = this.queue.willMove(target);
-				if (action && action.move.id === 'curse') {
+				if (action?.move.id === 'curse') {
 					action.targetLoc = -1;
 				}
 			}
@@ -20223,9 +20219,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const activeTeam = target.side.activeTeam();
 			const foeActiveTeam = target.side.foe.activeTeam();
 			for (const [i, allyActive] of activeTeam.entries()) {
-				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
+				if (allyActive?.status === 'slp') allyActive.cureStatus();
 				const foeActive = foeActiveTeam[i];
-				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
+				if (foeActive?.status === 'slp') foeActive.cureStatus();
 			}
 		},
 		condition: {
@@ -20238,7 +20234,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					target.removeVolatile('uproar');
 					return;
 				}
-				if (target.lastMove && target.lastMove.id === 'struggle') {
+				if (target.lastMove?.id === 'struggle') {
 					// don't lock
 					delete target.volatiles['uproar'];
 				}
@@ -20926,9 +20922,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
 				this.effectState.startingTurn = this.getOverflowedTurnCount();
-				if (this.effectState.startingTurn === 255) {
+				if (this.gen >= 8 && this.effectState.startingTurn === 255) {
 					this.hint(`In Gen 8+, Wish will never resolve when used on the ${this.turn}th turn.`);
 				}
+			},
+			onRestart() {
+				if (this.gen >= 8 && this.effectState.startingTurn === 255) {
+					this.hint(`A previous Wish is stuck on this slot and will never resolve.`);
+				}
+				return false;
 			},
 			onResidualOrder: 4,
 			onResidual(target: Pokemon) {

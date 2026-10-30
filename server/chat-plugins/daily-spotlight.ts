@@ -257,19 +257,19 @@ export const commands: Chat.ChatCommands = {
 			spotlights[room.roomid][key].shift();
 			spotlights[room.roomid][key].unshift(obj);
 
-			this.modlog('SETDAILY', key, `${img ? `${img}, ` : ''}${desc}`);
+			this.modlog('SETDAILY', key, `${img ? `${img.join(',')}, ` : ''}${desc}`);
 			this.privateModAction(`${user.name} set the daily ${key}.`);
 		} else if (cmd === 'queuedailyat') {
 			spotlights[room.roomid][key].splice(index, 0, obj);
-			this.modlog('QUEUEDAILY', key, `queue number ${index}: ${img ? `${img}, ` : ''}${desc}`);
+			this.modlog('QUEUEDAILY', key, `queue number ${index}: ${img ? `${img.join(',')}, ` : ''}${desc}`);
 			this.privateModAction(`${user.name} queued a daily ${key} at queue number ${index}.`);
 		} else {
 			spotlights[room.roomid][key][index] = obj;
 			if (indexString) {
-				this.modlog('REPLACEDAILY', key, `queue number ${index}: ${img ? `${img}, ` : ''}${desc}`);
+				this.modlog('REPLACEDAILY', key, `queue number ${index}: ${img ? `${img.join(',')}, ` : ''}${desc}`);
 				this.privateModAction(`${user.name} replaced the daily ${key} at queue number ${index}.`);
 			} else {
-				this.modlog('QUEUEDAILY', key, `${img ? `${img}, ` : ''}${desc}`);
+				this.modlog('QUEUEDAILY', key, `${img ? `${img.join(',')}, ` : ''}${desc}`);
 				this.privateModAction(`${user.name} queued a daily ${key}.`);
 			}
 		}
@@ -298,6 +298,22 @@ export const commands: Chat.ChatCommands = {
 		}
 		room.update();
 	},
+	randdaily: 'randspotlight',
+	randspotlight(target, room, user) {
+		room = this.requireRoom();
+		if (!room.persist) throw new Chat.ErrorMessage("This command is unavailable in temporary rooms.");
+		if (!spotlights[room.roomid]) throw new Chat.ErrorMessage("This room has no daily spotlights.");
+		const keys = Object.keys(spotlights[room.roomid]);
+		if (!keys.length) throw new Chat.ErrorMessage("This room has no daily spotlights.");
+		if (!this.runBroadcast()) return;
+		const key = keys[Math.floor(Math.random() * keys.length)];
+		const html = renderSpotlight(room.roomid, key);
+		this.sendReplyBox(`<p><strong>Random spotlight: ${Utils.escapeHTML(key)}</strong></p>${html}`);
+	},
+	randspotlighthelp: [
+		`/randspotlight OR /randdaily - Shows a random spotlight from the target room.`,
+		`!randspotlight OR !randdaily - Show a random spotlight to everyone. Requires: + % @ # ~`,
+	],
 	vsl: 'viewspotlights',
 	dailies: 'viewspotlights',
 	viewspotlights(target, room, user) {

@@ -341,6 +341,22 @@ describe(`Emergency Exit`, () => {
 		assert.equal(battle.requestState, 'move');
 	});
 
+	it('should request switchout if residual damage drops its HP below 50% while dynamaxed', () => {
+		battle = common.gen(8).createBattle([[
+			{ species: 'Golisopod', ability: 'emergencyexit', moves: ['tackle'] },
+			{ species: 'Clefable', moves: ['splash'] },
+		], [
+			{ species: 'Shuckle', moves: ['superfang', 'willowisp'] },
+		]]);
+		const eePokemon = battle.p1.active[0];
+		battle.makeChoices('move tackle', 'move superfang');
+		assert.atLeast(eePokemon.hp, Math.floor(eePokemon.maxhp / 2) + 1);
+
+		battle.makeChoices('move tackle dynamax', 'move willowisp');
+		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
+		assert.equal(battle.requestState, 'switch');
+	});
+
 	it.skip(`should request switchout between hazards`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', moves: ['sleeptalk', 'uturn'] },

@@ -1251,7 +1251,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onAfterMoveSecondarySelf(source) {
 			if (this.canSwitch(source.side)) {
 				this.actions.useMove('batonpass', source);
-				source.skipBeforeSwitchOutEventFlag = false;
+				source.skipPursuit = false;
 			}
 		},
 		target: "self",
@@ -2700,7 +2700,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-clearboost', target);
 			// @ts-expect-error set wants a sig but randbats sets don't have one
 			changeSet(this, target, team[0], true);
-			this.add(`c:|${getName((source.illusion || source).name)}|${msg}`);
+			this.add(`c:|${getName((source.illusion || source).name)}|${msg!}`);
 		},
 		isZ: "irpatuziniumz",
 		target: "normal",
@@ -6454,7 +6454,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, effect) {
-				if (effect && effect.name === "Puffy Spiky Destruction") {
+				if (effect?.name === "Puffy Spiky Destruction") {
 					this.add('-activate', target, 'move: Misty Terrain');
 					return null;
 				}

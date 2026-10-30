@@ -13,7 +13,6 @@
  * @license MIT
  */
 
-/* eslint no-else-return: "error" */
 import { Utils, ProcessManager } from '../../lib';
 import type { UserSettings } from '../users';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
@@ -433,6 +432,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				targetRoom = room;
 			}
+			if (!targetRoom) return this.parse('/help invite');
 			if (users.length > 1 && !user.trusted) {
 				throw new Chat.ErrorMessage("You do not have permission to mass-invite users.");
 			}
@@ -522,8 +522,10 @@ export const commands: Chat.ChatCommands = {
 		return true;
 	},
 	blockpmshelp: [
-		`/blockpms - Blocks private messages except from staff. Unblock them with /unblockpms.`,
-		`/blockpms [unlocked, ac, trusted, friends, +] - Blocks PMs, except for staff, friends, and the specified group(s).`,
+		`/blockpms [group] - Blocks private messages, except from staff and the target group, if specified.`,
+		`/blockofflinepms [group] - Blocks offline private messages, except from staff and the target group, if specified.`,
+		`Valid groups are unlocked, autoconfirmed, trusted, + (global Voices), and friends.`,
+		`You can unblock PMs with /unblockpms, and offline PMs with /unblockofflinepms.`,
 	],
 
 	unblockpm: 'unblockpms',
@@ -539,7 +541,7 @@ export const commands: Chat.ChatCommands = {
 		if (isOffline) {
 			await Chat.PrivateMessages.deleteSettings(user.id);
 		} else {
-			// eslint-disable-next-line require-atomic-updates
+			// oxlint-disable-next-line ps/require-atomic-updates
 			user.settings.blockPMs = false;
 		}
 		user.update();
@@ -581,6 +583,28 @@ export const commands: Chat.ChatCommands = {
 		`/blockinvites [rank] - Allows only users with the given [rank] to invite you to rooms.`,
 		`Valid settings: autoconfirmed, trusted, unlocked, +, %, @, ~.`,
 		`/unblockinvites - Allows anyone to invite you to rooms.`,
+	],
+
+	blockbots: 'allowbots',
+	allowbots(target, room, user, connection, cmd) {
+		if (cmd.includes('block')) {
+			if (!user.settings.allowLadderBots) {
+				return this.errorReply(this.TL`You are not opted-in to playing against bots on the ladder.`);
+			}
+			user.settings.allowLadderBots = false;
+			this.sendReply(this.TL`You have opted out of playing against bots on the ladder.`);
+		} else {
+			if (user.settings.allowLadderBots) {
+				return this.errorReply(this.TL`You are already opted-in to playing against bots on the ladder.`);
+			}
+			user.settings.allowLadderBots = true;
+			this.sendReply(this.TL`You have opted in to matching against bots on the ladder.`);
+		}
+		return user.update();
+	},
+	allowbotshelp: [
+		`/allowbots - Opt in to matchmaking against bots on the ladder.`,
+		`/blockbots - Opt out of matchmaking against bots on the ladder.`,
 	],
 
 	status(target, room, user, connection, cmd) {
@@ -689,10 +713,6 @@ export const commands: Chat.ChatCommands = {
 		buffer += `</table></div></div>`;
 		this.sendReply(`|raw|${buffer}`);
 	},
-	rankhelp: [
-		`/rank [user] - Shows all ladder ranks for the given [user].`,
-		`If no user is given, it defaults to the user of the command.`,
-	],
 
 	showrank: 'hiderank',
 	hiderank(target, room, user, connection, cmd) {
@@ -1093,7 +1113,7 @@ export const commands: Chat.ChatCommands = {
 		if (!room.game.forfeit) {
 			throw new Chat.ErrorMessage(this.TL`This kind of game can't be forfeited.`);
 		}
-		room.game.forfeit(user);
+		room.game.forfeit(user, room.bestOf ? ' forfeited the series.' : ' forfeited.');
 	},
 	forfeithelp: [
 		`/forfeit - Forfeits your currently active game, if it supports that.`,
@@ -1190,6 +1210,9 @@ export const commands: Chat.ChatCommands = {
 
 		if (!player) {
 			throw new Chat.ErrorMessage(`This battle does not support having players in ${slot}`);
+		}
+		if (player.eliminated) {
+			throw new Chat.ErrorMessage(this.TL`The player in slot ${slot} has already been eliminated.`);
 		}
 		if (!targetUser) {
 			battle.sendInviteForm(connection);
@@ -1515,9 +1538,6 @@ export const commands: Chat.ChatCommands = {
 		}
 		return Ladders(formatName).makeChallenge(connection, targetUser);
 	},
-	challengehelp: [
-		`/challenge [user], [format] - Challenges the given [user] to a battle in the given [format].`,
-	],
 
 	bch: 'blockchallenges',
 	blockchall: 'blockchallenges',
@@ -1569,7 +1589,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
-		if (!chall || chall.from !== user.id) {
+		if (chall?.from !== user.id) {
 			connection.popup(`You are not challenging ${this.pmTarget.name}. Maybe they accepted/rejected before you cancelled?`);
 			return false;
 		}
@@ -1589,7 +1609,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
-		if (!chall || chall.to !== user.id) {
+		if (chall?.to !== user.id) {
 			connection.popup(`${this.pmTarget.id} is not challenging you. Maybe they cancelled before you accepted?`);
 			return false;
 		}
@@ -1602,7 +1622,6 @@ export const commands: Chat.ChatCommands = {
 		this.sendChatMessage(Utils.html`/nonotify ${user.name} accepted the challenge, starting &laquo;<a href="/${gameRoom.roomid}">${gameRoom.roomid}</a>&raquo;`);
 		return true;
 	},
-	accepthelp: [`/accept [user] - Accepts a challenge from the given user.`],
 
 	reject(target, room, user, connection) {
 		const { targetUser, targetUsername, rest } = this.splitUser(target);
@@ -1612,7 +1631,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.pmTarget) return this.popupReply(this.TL`User "${this.pmTargetName || ''}" not found.`);
 
 		const chall = Ladders.challenges.search(user.id, this.pmTarget.id);
-		if (!chall || chall.to !== user.id) {
+		if (chall?.to !== user.id) {
 			connection.popup(`${this.pmTarget.id} is not challenging you. Maybe they cancelled before you rejected?`);
 			return false;
 		}
@@ -1620,7 +1639,6 @@ export const commands: Chat.ChatCommands = {
 		this.sendChatMessage(`/nonotify ${user.name} rejected the challenge.`);
 		return Ladders.challenges.remove(chall, false);
 	},
-	rejecthelp: [`/reject [user] - Rejects a challenge from the given user.`],
 
 	saveteam: 'useteam',
 	utm: 'useteam',
@@ -1813,6 +1831,104 @@ export const commands: Chat.ChatCommands = {
 	helphelp: [
 		`/help OR /h OR /? - Gives you help.`,
 		`/help [command] - Gives you help for a specific command.`,
+	],
+
+	// Client commands
+	chalhelp: 'challengehelp',
+	challhelp: 'challengehelp',
+	challengehelp: [
+		`/challenge - Open a prompt to challenge a user to a battle.`,
+		`/challenge [user] - Challenge the user [user] to a battle.`,
+		`/challenge [user], [format] - Challenge the user [user] to a battle in the specified [format].`,
+		`/challenge [user], [format] @@@ [rules] - Challenge the user [user] to a battle with custom rules.`,
+		`[rules] can be a comma-separated list of: [added rule], ![removed rule], -[banned thing], *[restricted thing], +[unbanned/unrestricted thing]`,
+		`If used in the DMs of a user, no [user] parameter can be used and it will challenge that user.`,
+		`/battlerules - Detailed information on what can go in [rules].`,
+	],
+	accepthelp: [
+		`/accept - Accept a challenge if only one is pending.`,
+		`/accept [user] - Accept a challenge from the specified user.`,
+	],
+	rejecthelp: [
+		`/reject - Reject a challenge if only one is pending.`,
+		`/reject [user] - Reject a challenge from the specified user.`,
+	],
+	userhelp: 'openhelp',
+	openhelp: [
+		`/user [user] - Open a popup containing the user [user]'s avatar, name, rank, and chatroom list.`,
+	],
+	newshelp: [
+		`/news - Opens a popup containing the news.`,
+	],
+	ignorehelp: 'unignorehelp',
+	unignorehelp: [
+		`/ignore [user] - Ignore all messages from the user [user].`,
+		`/unignore [user] - Remove the user [user] from your ignore list.`,
+		`/ignorelist - List all the users that you currently ignore.`,
+		`/clearignore - Remove all users on your ignore list.`,
+		`Note that staff messages cannot be ignored.`,
+	],
+	nickhelp: [
+		`/nick [new username] - Change your username.`,
+	],
+	clearhelp: [
+		`/clear - Clear the room's chat log.`,
+	],
+	showdebughelp: 'hidedebughelp',
+	hidedebughelp: [
+		`/showdebug - Receive debug messages from battle events.`,
+		`/hidedebug - Ignore debug messages from battle events.`,
+	],
+	showjoinshelp: 'hidejoinshelp',
+	hidejoinshelp: [
+		`/showjoins [room] - Receive users' join/leave messages.`,
+		`/hidejoins [room] - Ignore users' join/leave messages.`,
+		`If no [room] is provided, changes the global setting.`,
+	],
+	showbattleshelp: 'hidebattleshelp',
+	hidebattleshelp: [
+		`/showbattles - Receive links to new battles in the Lobby (if the server supports it).`,
+		`/hidebattles - Ignore links to new battles in the Lobby (if the server supports it).`,
+	],
+	unpackhiddenhelp: 'packhiddenhelp',
+	packhiddenhelp: [
+		`/unpackhidden - Suppress hiding locked or banned users' chat messages after the fact.`,
+		`/packhidden - Hide locked or banned users' chat messages after the fact.`,
+		`Hidden messages from a user can be restored by clicking the button underneath their lock/ban reason.`,
+	],
+	timestampshelp: [
+		`Set your timestamps preference:`,
+		`/timestamps [all|lobby|pms], [minutes|seconds|off]`,
+		`all - Change all timestamps preferences, lobby - Change only lobby chat preferences, pms - Change only PM preferences.`,
+		`off - Set timestamps off, minutes - Show timestamps of the form [hh:mm], seconds - Show timestamps of the form [hh:mm:ss].`,
+	],
+	highlighthelp: 'hlhelp',
+	hlhelp: [
+		`Set up highlights:`,
+		`/highlight add [word 1], [word 2], [...] - Add the provided list of words to your highlight list.`,
+		`/highlight roomadd [word 1], [word 2], [...] - Add the provided list of words to the highlight list of whichever room you used the command in.`,
+		`/highlight list - List all words that currently highlight you.`,
+		`/highlight roomlist - List all words that currently highlight you in whichever room you used the command in.`,
+		`/highlight delete [word 1], [word 2], [...] - Delete the provided list of words from your entire highlight list.`,
+		`/highlight roomdelete [word 1], [word 2], [...] - Delete the provided list of words from the highlight list of whichever room you used the command in.`,
+		`/highlight clear - Clear your global highlight list.`,
+		`/highlight roomclear - Clear the highlight list of whichever room you used the command in.`,
+		`/highlight clearall - Clear your entire highlight list (all rooms and globally).`,
+	],
+	rankhelp: 'ladderhelp',
+	rankinghelp: 'ladderhelp',
+	ratinghelp: 'ladderhelp',
+	ladderhelp: [
+		`/rank [user] - Shows all ladder ranks for the given [user].`,
+		`/rank [user], [format] - Shows the rank of [user] in the given [format].`,
+		`If no user is given, it defaults to the user of the command.`,
+	],
+	afdhelp: [
+		`/afd full - Enable all April Fools' Day jokes.`,
+		`/afd sprites - Enable April Fools' Day sprites.`,
+		`/afd default - Set April Fools' Day to default (full on April 1st, off otherwise).`,
+		`/afd off - Disable April Fools' Day jokes until the next refresh, and set /afd default.`,
+		`/afd never - Disable April Fools' Day jokes permanently.`,
 	],
 };
 

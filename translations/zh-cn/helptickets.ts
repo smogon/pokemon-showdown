@@ -36,6 +36,7 @@ export const translations: TranslationCatalog = {
 	"If you lost your password, click the button below to request a password reset. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.": "如果你丢了你的密码，请点击这个按钮来申请重置密码。我们会先需要查清一些信息才能帮你重置密码。请注意，密码重置是低优先级的工作，所以我们不会很快来处理；建议你先开个新的账号用用。",
 	"Request a password reset": "请求重置密码",
 	"If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!": "如果你是一个公共房间的司机或者更高的权限，并且你需要帮助来看管这个房间，全服管理会很乐意来帮你。",
+	"If you are a bot developer, and would like to register your bot on the ladder, please fill out the form below and we'll be happy to assist!": null, // NEEDS TRANSLATION
 	"If your issue is not handled above, click the button below to talk to a global staff member. Please be ready to explain the situation.": "如果以上的选项不能解决你的问题，点击这个按钮就可以跟全服管理说话。请准备好解释相关情况。",
 	"Malformed help request.": "格式错误的帮助请求。",
 	"PM Harassment": "私聊中的骚扰",
@@ -46,6 +47,7 @@ export const translations: TranslationCatalog = {
 	"IP-Appeal": "IP申诉",
 	"ISP-Appeal": "ISP申诉",
 	"Public Room Assistance Request": "公共房间助理的请求",
+	"Bot Registration Request": null, // NEEDS TRANSLATION
 	"Other": "其他",
 	"I want to report someone": "我想要举报某人。",
 	"Someone is harassing me in PMs": "有人在私聊中骚扰我",
@@ -64,6 +66,7 @@ export const translations: TranslationCatalog = {
 	"Something else": "其他",
 	"I lost my password": "我忘了我的密码",
 	"I need global staff to help watch a public room": "我需要全服管理来帮我看管一个公共房间",
+	"I want to register my bot": null, // NEEDS TRANSLATION
 	"Report harassment in a private message (PM)": "举报私聊中的骚扰行为",
 	"Report harassment in a battle": "举报对战中的骚扰行为",
 	"Report an inappropriate username": "举报不合适的用户名",

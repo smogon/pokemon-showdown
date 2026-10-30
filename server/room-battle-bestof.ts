@@ -166,7 +166,8 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	}
 	setPrivacyOfGames(privacy: PrivacySetting) {
 		for (let i = 0; i < this.games.length; i++) {
-			const room = Rooms.get(this.games[i].room)!;
+			const room = Rooms.get(this.games[i].room);
+			if (!room) continue;
 			const prevRoom = Rooms.get(this.games[i - 1]?.room);
 			const gameNum = i + 1;
 
@@ -476,8 +477,9 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	forfeitPlayer(loser: BestOfPlayer, message = '') {
 		if (this.ended || this.winner) return false;
 
+		message ||= ' forfeited the series.';
 		this.winner = this.players.find(p => p !== loser)!;
-		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
+		this.room.add(`||${loser.name}${message}`);
 		this.end(this.winner.id);
 
 		const lastBattle = Rooms.get(this.games[this.games.length - 1].room)?.battle;

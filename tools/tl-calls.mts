@@ -111,7 +111,7 @@ export class TLCalls extends Map<string, TLCallsForKey> {
 	 * Uses eval - don't run on untrusted code.
 	 */
 	private static decodeLiteral(raw: string, quote: string): string {
-		// eslint-disable-next-line @typescript-eslint/no-implied-eval
+		// oxlint-disable-next-line typescript/no-implied-eval
 		return Function(`"use strict"; return ${quote}${raw}${quote};`)() as string;
 	}
 

@@ -135,6 +135,10 @@ export const translations: TranslationCatalog = {
 	"You are now blocking room invites, except from staff and {TARGET}.": null, // NEEDS TRANSLATION
 	"You are now blocking room invites, except from staff and {TARGET} users.": null, // NEEDS TRANSLATION
 	"You are now blocking room invites, except from staff.": null, // NEEDS TRANSLATION
+	"You are not opted-in to playing against bots on the ladder.": null, // NEEDS TRANSLATION
+	"You have opted out of playing against bots on the ladder.": null, // NEEDS TRANSLATION
+	"You are already opted-in to playing against bots on the ladder.": null, // NEEDS TRANSLATION
+	"You have opted in to matching against bots on the ladder.": null, // NEEDS TRANSLATION
 	"Format": null, // NEEDS TRANSLATION
 	"You are not a player and don't have a team.": null, // NEEDS TRANSLATION
 	"You don't have a Pokémon matching \"{TARGET}\" in your team.": null, // NEEDS TRANSLATION
@@ -155,5 +159,5 @@ export const translations: TranslationCatalog = {
 	"{TARGETUSER} was kicked from a battle by {USER}.{REASON}": null, // NEEDS TRANSLATION
 	"unlocked": null, // NEEDS TRANSLATION
 	"friended": null, // NEEDS TRANSLATION
-
+	"The player in slot {SLOT} has already been eliminated.": null, // NEEDS TRANSLATION
 };

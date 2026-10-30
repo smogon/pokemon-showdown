@@ -506,12 +506,14 @@ export const Scripts: ModdedBattleScriptsData = {
 	 * Implementing Self-KO Clause by having it check what the last move used by the players were
 	 * in the case both Pokemon faint. Since the only way this can happen in Stadium 2 is if a player
 	 * uses self-destruct or explosion, I can use this to determine who should win.
+	 *
+	 * Ignores checkWin (always checks) and checkWinIfNoFaints (never checks).
 	 */
-	faintMessages(lastFirst) {
+	resolveFaints({ lastFaintFirst = false } = {}) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
 		if (!length) return false;
-		if (lastFirst) {
+		if (lastFaintFirst) {
 			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
 			this.faintQueue.pop();
 		}
@@ -524,7 +526,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.add('faint', pokemon);
 				pokemon.side.pokemonLeft--;
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
-				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				if (!faintData.faintEventDone) this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;

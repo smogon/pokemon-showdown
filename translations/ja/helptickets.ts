@@ -36,6 +36,7 @@ export const translations: TranslationCatalog = {
 	"If you lost your password, click the button below to request a password reset. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.": "パスワードを紛失した場合は、下のボタンをクリックしてパスワードのリセットをリクエストしてください。アカウントをリセットする前に、いくつかの情報を明確に伝えてください。パスワードのリセットは優先度が低く、時間がかかる場合があることに注意してください。待機中は他のアカウントを使用することを推奨します。",
 	"Request a password reset": "パスワードのリセットをリクエストする",
 	"If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!": "パブリックルームでルームドライバーもしくはそれ以上の方で、チャットの監視の助けが必要な場合は、グローバルスタッフが喜んでサポートしますよ。",
+	"If you are a bot developer, and would like to register your bot on the ladder, please fill out the form below and we'll be happy to assist!": null, // NEEDS TRANSLATION
 	"If your issue is not handled above, click the button below to talk to a global staff member. Please be ready to explain the situation.": "上記で対応できない場合は、以下のボタンをクリックして、グローバルスタッフにご相談ください。その際、状況を説明できるようにお願いします。",
 	"Malformed help request.": "内容が不正確です。",
 	"PM Harassment": "PMでの嫌がらせ",
@@ -46,6 +47,7 @@ export const translations: TranslationCatalog = {
 	"IP-Appeal": "IPアドレスに関する控訴",
 	"ISP-Appeal": "インターネットプロパイダーに関する控訴",
 	"Public Room Assistance Request": "パブリックルームのアシストリクエスト",
+	"Bot Registration Request": null, // NEEDS TRANSLATION
 	"Other": "その他",
 	"I want to report someone": "誰かを通報する",
 	"Someone is harassing me in PMs": "誰かが自分をPMで嫌がらせしている",
@@ -64,6 +66,7 @@ export const translations: TranslationCatalog = {
 	"Something else": "その他",
 	"I lost my password": "パスワードを忘れた",
 	"I need global staff to help watch a public room": "グローバルスタッフにパブリックルームの監視をお願いしたい",
+	"I want to register my bot": null, // NEEDS TRANSLATION
 	"Report harassment in a private message (PM)": "プライベートメッセージ(PM)での嫌がらせを通報する",
 	"Report harassment in a battle": "バトルでの嫌がらせを通報する",
 	"Report an inappropriate username": "不適切なユーザー名を通報する",

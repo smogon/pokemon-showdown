@@ -123,7 +123,7 @@ const SETS = path.resolve(__dirname, 'sets');
 		'	return Promise.resolve(require(path));',
 		'}',
 		'function forGen(gen) {',
-		// eslint-disable-next-line no-template-curly-in-string
+		// oxlint-disable-next-line no-template-curly-in-string
 		'	return JSON[`gen${typeof gen === "number" ? gen : gen.num}`];',
 		'}',
 		'exports.forGen = forGen;',
