@@ -100,7 +100,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				formeType?: string,
 				isMega?: boolean,
 			} = {
-				ability: formeChangeSpecies.abilities['0'],
+				ability: (baseSpecies.name === 'Silvally' && pokemon) ?
+					pokemon.ability : formeChangeSpecies.abilities['0'],
 				baseStats: {},
 				weighthg: formeChangeSpecies.weighthg - baseSpecies.weighthg,
 				heightm: ((formeChangeSpecies.heightm * 10) - (baseSpecies.heightm * 10)) / 10,

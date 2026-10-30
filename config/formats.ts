@@ -808,43 +808,19 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Shedinja', 'Assist'],
 	},
 	{
-		name: "[Gen 9] Random Tandem",
-		desc: "A Bring 9, Pick 6 style format where your 3 Pokemon generate Tandems when you battle.",
+		name: "[Gen 9] Resetmons Random Battle",
+		desc: 'A metagame where there are only thirty moves, consisting entirely of Fakemon!',
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3775975/">Random Tandem Thread</a>`,
-			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/edit">Tandem Compendium</a>`,
-			`&bullet; <a href= "https://smogon.com/forums/threads/3775975/post-10826234/">Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3778771/">Smogon Thread</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/10QQL1a65rxz5JyQLEfSc5wzRaU7qCgB10s1iFKZDJp8/edit?gid=117595844#gid=117595844">Info Sheet</a>`,
+			`&bullet; <a href="https://github.com/Pet-Mods/pmotm-sprites">Want to see the sprites?</a>`,
 		],
-		mod: 'gen9randomtandem',
-		bestOfDefault: true,
-		// searchShow: false,
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause'],
-		banlist: [
-			'Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
-			'Last Respects', 'Shed Tail', 'Ceruledge', 'Raging Bolt', 'Kingambit',
-		],
-		onValidateTeam(team, format, teamHas) {
-			// head count is due to a softlock, but said softlock doesn't seem to exist anymore?
-			// const heads: { [speciesid: string]: any[] } = require('../data/mods/gen9randomtandem/tandems.json');
-			// // Need 2 Heads
-			// let headCount = 0;
-			// for (const set of team) {
-			// 	let species = this.toID(this.dex.species.get(set.species));
-			// 	// hardcode, not like any other species will increment headCount
-			// 	if (species === 'keldeoresolute') species = 'keldeo' as ID;
-			// 	if (species === 'dudunsparcethreesegment') species = 'dudunsparce' as ID;
-			// 	if (heads[species]) headCount++;
-			// }
-			// if (headCount < 2) return [`You must have at least 2 Head Pokemon.`];
-			if (team.length > 3) return [`You cannot bring more than 3 Pokemon.`];
-		},
-		onValidateSet(set, format, setHas, teamHas) {
-			if (set.shiny) return [`You cannot bring Shiny Pokemon. (${set.name} is shiny).`];
-		},
+		mod: 'gen9resetmons',
+		team: 'RandomReset',
+		ruleset: ['[Gen 9] Random Battle', 'Data Preview', 'Terastal Clause'],
 		onBegin() {
-			this.ruleTable.pickedTeamSize = 6;
-			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Random Tandem!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads/3775975/" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
-			this.add(`raw|<b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/1AXIB0pnS_YZTz186-phfZCRspcoj0bOLG4TlZTp0KVg/" target="_blank">spreadsheet</a> for all the Heads and Tandems!</b>`);
+			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Resetmons!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads3778771/" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
+			this.add(`raw|<b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/10QQL1a65rxz5JyQLEfSc5wzRaU7qCgB10s1iFKZDJp8/edit?gid=117595844#gid=117595844" target="_blank">spreadsheet</a> for all moves and mons!</b>`);
 		},
 	},
 	{
@@ -4055,13 +4031,34 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 		},
-		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky sets?<br />Then make sure to check out the <a href="https://www.smogon.com/forums/threads/chatbats.3760234/post-10645803" target="_blank">ChatBats Compendium</a> or use /dt!</b></div>`);
 			this.add(`raw|Welcome to ChatBats!`);
 			this.add(`raw|ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
 			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
 			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
+		},
+	},
+	{
+		name: "[Gen 9] Resetmons",
+		desc: 'A metagame where there are only thirty moves, consisting entirely of Fakemon!',
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3778771/">Smogon Thread</a>`,
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/10QQL1a65rxz5JyQLEfSc5wzRaU7qCgB10s1iFKZDJp8/edit?gid=117595844#gid=117595844">Info Sheet</a>`,
+			`&bullet; <a href="https://github.com/Pet-Mods/pmotm-sprites">Want to see the sprites?</a>`,
+		],
+		mod: 'gen9resetmons',
+		searchShow: false,
+		ruleset: ['Standard', 'Data Preview', 'Terastal Clause'],
+		banlist: ['All Pokemon'],
+		unbanlist: [
+			'Arachedge', 'Arcawing', 'Blastose', 'Caleflash', 'Charmera', 'Chlorofill', 'Corrozen', 'Dracord', 'Entophasm', 'Faefloss',
+			'Gen6Gar', 'Horspiral', 'Moleison', 'Morterror', 'Mysterical', 'Noxurchin', 'Penguini', 'Pilloflight', 'Pristycle', 'Pyrokinestone',
+			'Rottern', 'Salamenace', 'Shoreyuken', 'Slunkey', 'Tapu Waka', 'Terascatter', 'Tricotree', 'Tropisaur', 'unnamed electric possum', 'Vrooosh',
+		],
+		onBegin() {
+			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Resetmons!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads3778771/" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
+			this.add(`raw|<b>Make sure to check out the <a href="https://docs.google.com/spreadsheets/d/10QQL1a65rxz5JyQLEfSc5wzRaU7qCgB10s1iFKZDJp8/edit?gid=117595844#gid=117595844" target="_blank">spreadsheet</a> for all moves and mons!</b>`);
 		},
 	},
 

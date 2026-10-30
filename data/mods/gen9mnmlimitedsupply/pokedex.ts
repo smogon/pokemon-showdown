@@ -1,8 +1,4 @@
 export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
-	sableyemega: {
-		inherit: true,
-		baseStats: { hp: 50, atk: 90, def: 120, spa: 80, spd: 110, spe: 30 },
-	},
 	tyranitarmega: {
 		inherit: true,
 		baseStats: { hp: 100, atk: 164, def: 160, spa: 75, spd: 120, spe: 81 },
@@ -10,7 +6,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	falinksmega: {
 		inherit: true,
-		baseStats: { hp: 65, atk: 135, def: 110, spa: 75, spd: 70, spe: 115 },
+		baseStats: { hp: 65, atk: 125, def: 120, spa: 75, spd: 75, spe: 110 },
 		abilities: { 0: "Brass Bond" },
 	},
 	abomasnowmega: {
@@ -25,7 +21,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	mewtwomegax: {
 		inherit: true,
-		baseStats: { hp: 106, atk: 110, def: 135, spa: 154, spd: 135, spe: 140 },
+		baseStats: { hp: 106, atk: 120, def: 135, spa: 154, spd: 135, spe: 130 },
 		abilities: { 0: "Pure Power" },
 	},
 	mewtwomegay: {
@@ -46,7 +42,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	garchompmega: {
 		inherit: true,
-		baseStats: { hp: 108, atk: 175, def: 113, spa: 100, spd: 75, spe: 129 },
+		baseStats: { hp: 108, atk: 160, def: 125, spa: 75, spd: 100, spe: 132 },
 		abilities: { 0: "Hustle" },
 	},
 	tatsugiricurlymega: {
