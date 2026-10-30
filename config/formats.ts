@@ -1644,6 +1644,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			set.species = species.name;
 			return problems;
 		},
+		onModifySpeciesPriority: 7,
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // chat
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
