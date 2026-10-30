@@ -149,6 +149,10 @@ export const Tags: { [id: IDEntry]: TagData } = {
 		name: "G-Max Move",
 		moveFilter: move => typeof move.isMax === 'string',
 	},
+	spread: {
+		name: "Spread",
+		moveFilter: move => ['all', 'allAdjacent', 'allAdjacentFoes'].includes(move.target),
+	},
 
 	// Tiers
 	// -----
