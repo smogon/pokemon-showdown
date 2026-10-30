@@ -757,6 +757,14 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'pelipper' && moves.has('roost')) return 'Heavy-Duty Boots';
 		if (species.id === 'articunogalar') return moves.has('roost') ? 'Heavy-Duty Boots' : 'Choice Specs';
 		if (species.id === 'glimmora') return moves.has('meteorbeam') ? 'Power Herb' : 'Air Balloon';
+		if (species.id === 'abomasnowmega') return 'Abomasite';
+		if (species.id === 'altariamega') return 'Altarianite';
+		if (species.id === 'tyranitarmega') return 'Tyranitarite';
+		if (species.id === 'masquerainmega') return 'Masquerainite';
+		if (species.id === 'salamencemega') return 'Salamencite';
+		if (species.id === 'typhlosionmega') return 'Typhlosionite';
+		if (species.id === 'feraligatrmega') return 'Feraligite';
+		if (species.id === 'raticatemega') return 'Raticite';
 	}
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
