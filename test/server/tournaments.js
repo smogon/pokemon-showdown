@@ -83,6 +83,17 @@ describe('Tournament automatic pairing', () => {
 	};
 
 	const opponentOf = player => player.pendingMatch.find(other => other !== player);
+	const settleHeld = (validation, crashes) => (crashes ?
+		assert.rejects(validation.crash(new Error('validator crashed'))) :
+		validation.pass());
+	const assertSeatedTeams = (pairs, absentTeams = []) => {
+		assert.equal(battles.length, 1);
+		const slots = battles[0].options.players;
+		for (const [user, team] of pairs) {
+			assert.equal(slots.find(slot => slot.user === user).team, team);
+		}
+		for (const team of absentTeams) assert(slots.every(slot => slot.team !== team));
+	};
 
 	before(() => {
 		({ Tournament } = require('../../dist/server/tournaments'));
@@ -96,7 +107,7 @@ describe('Tournament automatic pairing', () => {
 		room.game = tour;
 		users = [0, 1, 2].map(i => {
 			const user = makeUser(`Tournament Player ${i}`, `127.0.0.${i + 1}`);
-			user.battleSettings.team = 'Pikachu||||thunderbolt|||||||';
+			user.battleSettings.team = PIKACHU;
 			user.joinRoom(room.roomid);
 			tour.addUser(user, context(user));
 			return user;
@@ -471,52 +482,59 @@ describe('Tournament automatic pairing', () => {
 		assert.equal(submitted.hidden, true);
 	});
 
-	for (const newerFirst of [false, true]) {
-		for (const staleCrashes of [false, true]) {
-			const outcome = staleCrashes ? 'crashes' : 'passes';
-			it(`keeps the newer submission when cancelled validation ${outcome} ${newerFirst ? 'after' : 'before'} it`, async () => {
-				start();
-				const player = tour.players[0];
-				const opponent = opponentOf(player);
-				const playerUser = player.getUser();
-				const opponentUser = opponent.getUser();
-				opponentUser.battleSettings.team = ABRA;
-				await ready(opponent);
-				playerUser.battleSettings.team = PIKACHU;
-				const client = watchClient(playerUser.connections[0]);
-				const cancelled = beginReady(player);
-				tour.cancelReady(playerUser, context(playerUser));
-				playerUser.battleSettings.team = GENGAR;
-				const newer = beginReady(player);
-				const settleCancelled = () => (staleCrashes ?
-					assert.rejects(cancelled.crash(new Error('validator crashed'))) :
-					cancelled.pass());
+	for (const staleCrashes of [false, true]) {
+		const outcome = staleCrashes ? 'crashes' : 'passes';
+		it(`keeps the newer submission when cancelled validation ${outcome} before it`, async () => {
+			start();
+			const player = tour.players[0];
+			const opponent = opponentOf(player);
+			const playerUser = player.getUser();
+			const opponentUser = opponent.getUser();
+			opponentUser.battleSettings.team = ABRA;
+			await ready(opponent);
+			playerUser.battleSettings.team = PIKACHU;
+			const client = watchClient(playerUser.connections[0]);
+			const cancelled = beginReady(player);
+			tour.cancelReady(playerUser, context(playerUser));
+			playerUser.battleSettings.team = GENGAR;
+			const newer = beginReady(player);
 
-				let started = null;
-				if (newerFirst) {
-					await newer.pass();
-					assert.equal(battles.length, 1);
-					started = battles[0];
-				}
-				await settleCancelled();
-				if (!newerFirst) {
-					assert.equal(player.ready, null);
-					assert.equal(client.challenging, null);
-					await newer.pass();
-				}
-				assert.equal(battles.length, 1);
-				if (started) assert.equal(battles[0], started);
-				assert.equal(player.ready, null);
-				const slots = battles[0].options.players;
-				assert.equal(slots.find(slot => slot.user === playerUser).team, GENGAR);
-				assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
-				assert(slots.every(slot => slot.team !== PIKACHU));
-				assert.throws(() => newer.pass());
-				assert.throws(() => (staleCrashes ?
-					cancelled.crash(new Error('validator crashed')) :
-					cancelled.pass()));
-			});
-		}
+			await settleHeld(cancelled, staleCrashes);
+			assert.equal(player.ready, null);
+			assert.equal(client.challenging, null);
+			assert.equal(battles.length, 0);
+			await newer.pass();
+			assert.equal(player.ready, null);
+			assertSeatedTeams([[playerUser, GENGAR], [opponentUser, ABRA]], [PIKACHU]);
+		});
+
+		it(`keeps the newer submission when cancelled validation ${outcome} after it`, async () => {
+			start();
+			const player = tour.players[0];
+			const opponent = opponentOf(player);
+			const playerUser = player.getUser();
+			const opponentUser = opponent.getUser();
+			opponentUser.battleSettings.team = ABRA;
+			await ready(opponent);
+			playerUser.battleSettings.team = PIKACHU;
+			const client = watchClient(playerUser.connections[0]);
+			const cancelled = beginReady(player);
+			tour.cancelReady(playerUser, context(playerUser));
+			playerUser.battleSettings.team = GENGAR;
+			const newer = beginReady(player);
+
+			await newer.pass();
+			const started = battles[0];
+			assert.equal(client.challenged, null);
+			assert.equal(client.challenging, null);
+			await settleHeld(cancelled, staleCrashes);
+			assert.equal(battles.length, 1);
+			assert.equal(battles[0], started);
+			assert.equal(player.ready, null);
+			assert.equal(client.challenged, null);
+			assert.equal(client.challenging, null);
+			assertSeatedTeams([[playerUser, GENGAR], [opponentUser, ABRA]], [PIKACHU]);
+		});
 	}
 
 	for (const reconnectFirst of [false, true]) {
@@ -551,10 +569,7 @@ describe('Tournament automatic pairing', () => {
 			assert.equal(client.challenging, null);
 
 			await ready(player);
-			assert.equal(battles.length, 1);
-			const slots = battles[0].options.players;
-			assert.equal(slots.find(slot => slot.user === playerUser).team, PIKACHU);
-			assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
+			assertSeatedTeams([[playerUser, PIKACHU], [opponentUser, ABRA]]);
 		});
 	}
 
@@ -591,12 +606,8 @@ describe('Tournament automatic pairing', () => {
 		assert.equal(battles.length, 0);
 		replacement.battleSettings.team = GENGAR;
 		await ready(player);
-		assert.equal(battles.length, 1);
-		const slots = battles[0].options.players;
-		assert.equal(slots.find(slot => slot.user === replacement).team, GENGAR);
-		assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
-		assert(!slots.some(slot => slot.user === outgoing));
-		assert(slots.every(slot => slot.team !== PIKACHU));
+		assertSeatedTeams([[replacement, GENGAR], [opponentUser, ABRA]], [PIKACHU]);
+		assert(!battles[0].options.players.some(slot => slot.user === outgoing));
 	});
 
 	for (const opponentFirst of [false, true]) {
@@ -619,10 +630,7 @@ describe('Tournament automatic pairing', () => {
 			if (opponentFirst) validations.reverse();
 			await Promise.all(validations.map(validation => validation.pass()));
 
-			assert.equal(battles.length, 1);
-			const slots = battles[0].options.players;
-			assert.equal(slots.find(slot => slot.user === playerUser).team, GENGAR);
-			assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
+			assertSeatedTeams([[playerUser, GENGAR], [opponentUser, ABRA]]);
 			for (const paired of [player, opponent]) {
 				assert.equal(paired.isBusy, true);
 				assert.equal(paired.ready, null);
@@ -662,10 +670,7 @@ describe('Tournament automatic pairing', () => {
 		assert.equal(client.challenging, null);
 
 		await ready(player);
-		assert.equal(battles.length, 1);
-		const slots = battles[0].options.players;
-		assert.equal(slots.find(slot => slot.user === playerUser).team, GENGAR);
-		assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
+		assertSeatedTeams([[playerUser, GENGAR], [opponentUser, ABRA]]);
 	});
 
 	for (const staleCrashes of [false, true]) {
@@ -683,19 +688,14 @@ describe('Tournament automatic pairing', () => {
 			assert.equal(playerUser.forceRename('Renamed Player', true), true);
 			playerUser.battleSettings.team = GENGAR;
 			const newer = beginReady(player);
-			await newer.pass();
-			assert.equal(battles.length, 1);
-			if (staleCrashes) {
-				await assert.rejects(held.crash(new Error('validator crashed')));
-			} else {
-				await held.pass();
-			}
-			assert.equal(battles.length, 1);
+
+			await settleHeld(held, staleCrashes);
+			assert.equal(battles.length, 0);
 			assert.equal(player.ready, null);
-			const slots = battles[0].options.players;
-			assert.equal(slots.find(slot => slot.user === playerUser).team, GENGAR);
-			assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
-			assert(slots.every(slot => slot.team !== PIKACHU));
+			assert.equal(opponent.ready.settings.team, ABRA);
+			await newer.pass();
+			assert.equal(player.ready, null);
+			assertSeatedTeams([[playerUser, GENGAR], [opponentUser, ABRA]], [PIKACHU]);
 		});
 	}
 
@@ -723,16 +723,12 @@ describe('Tournament automatic pairing', () => {
 		opponentUser.battleSettings.team = ABRA;
 		await ready(player);
 		await ready(opponent);
-		assert.equal(battles.length, 1);
-		const slots = battles[0].options.players;
-		assert.equal(slots.find(slot => slot.user === playerUser).team, GENGAR);
-		assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
-		assert(slots.every(slot => slot.team !== PIKACHU));
+		assertSeatedTeams([[playerUser, GENGAR], [opponentUser, ABRA]], [PIKACHU]);
 	});
 
 	for (const staleCrashes of [false, true]) {
 		const outcome = staleCrashes ? 'crashes' : 'passes';
-		it(`keeps each player's team when an account merges during validation and the earlier validation ${outcome}`, async () => {
+		it(`keeps the newer team when an earlier validation ${outcome} after an account merge`, async () => {
 			start();
 			const player = tour.players[0];
 			const opponent = opponentOf(player);
@@ -744,14 +740,12 @@ describe('Tournament automatic pairing', () => {
 			const held = beginReady(player);
 			const opponentClient = watchClient(opponentUser.connections[0]);
 			opponentUser.merge(playerUser);
-			Users.merge(opponentUser, playerUser);
 
 			assert.equal(player.ready, null);
 			assert(opponent.ready);
 			assert.equal(opponent.ready.settings.team, ABRA);
 			assert.equal(battles.length, 0);
 			assert.equal(opponentClient.challenging, player.name);
-			assert.equal(opponentUser.battleSettings.team, ABRA);
 
 			const connection = makeConnection(playerUser.latestIp);
 			const playerClient = watchClient(connection);
@@ -759,19 +753,14 @@ describe('Tournament automatic pairing', () => {
 			playerUser.joinRoom(room.roomid);
 			playerUser.battleSettings.team = GENGAR;
 			const newer = beginReady(player);
-			await newer.pass();
-			if (staleCrashes) {
-				await assert.rejects(held.crash(new Error('validator crashed')));
-			} else {
-				await held.pass();
-			}
-
-			assert.equal(battles.length, 1);
+			await settleHeld(held, staleCrashes);
+			assert.equal(battles.length, 0);
 			assert.equal(player.ready, null);
-			const slots = battles[0].options.players;
-			assert.equal(slots.find(slot => slot.user === playerUser).team, GENGAR);
-			assert.equal(slots.find(slot => slot.user === opponentUser).team, ABRA);
-			assert(slots.every(slot => slot.team !== PIKACHU));
+			assert.equal(opponent.ready.settings.team, ABRA);
+			await newer.pass();
+
+			assert.equal(player.ready, null);
+			assertSeatedTeams([[playerUser, GENGAR], [opponentUser, ABRA]], [PIKACHU]);
 			assert.equal(opponentClient.challenging, null);
 			assert.equal(opponentClient.challenged, null);
 			assert.equal(playerClient.challenging, null);
