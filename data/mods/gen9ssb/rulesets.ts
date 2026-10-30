@@ -1,4 +1,4 @@
-export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
+export const Rulesets: import('../../../sim/dex-formats').ModdedRulesetTable = {
 	sleepclausemod: {
 		inherit: true,
 		onSetStatus(status, target, source) {
