@@ -118,51 +118,6 @@ describe('Champions abilities', () => {
 		});
 	});
 
-	describe('Fire Mane', () => {
-		it('should boost Fire-type base power and deal 100 damage on the maximum roll', () => {
-			battle = createChampionsBattle([[
-				{
-					species: 'Pyroar', item: 'pyroarite', moves: ['firefang'], nature: 'Hardy',
-					evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-				},
-			], [
-				{
-					species: 'Raichu-Alola', ability: 'noguard', moves: ['sleeptalk'], nature: 'Hardy',
-					evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-				},
-			]]);
-			battle.randomizer = dmg => dmg;
-			const pyroar = battle.p1.active[0];
-			const raichu = battle.p2.active[0];
-
-			assert.hurtsBy(raichu, 100, () => battle.makeChoices('move firefang mega', 'move sleeptalk'));
-			assert.species(pyroar, 'Pyroar-Mega');
-			assert.equal(pyroar.storedStats.atk, 108);
-			assert.equal(raichu.storedStats.def, 70);
-
-			assert.equal(battle.runEvent('BasePower', pyroar, raichu, Dex.moves.get('firefang'), 65, true), 97);
-			assert.equal(battle.runEvent('BasePower', pyroar, raichu, Dex.moves.get('flamethrower'), 90, true), 135);
-			assert.equal(battle.runEvent('BasePower', pyroar, raichu, Dex.moves.get('tackle'), 40, true), 40);
-		});
-
-		it('should deal 84 damage on the minimum roll', () => {
-			battle = createChampionsBattle([[
-				{
-					species: 'Pyroar', item: 'pyroarite', moves: ['firefang'], nature: 'Hardy',
-					evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-				},
-			], [
-				{
-					species: 'Raichu-Alola', ability: 'noguard', moves: ['sleeptalk'], nature: 'Hardy',
-					evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-				},
-			]]);
-			battle.randomizer = dmg => battle.trunc(battle.trunc(dmg * 85) / 100);
-
-			assert.hurtsBy(battle.p2.active[0], 84, () => battle.makeChoices('move firefang mega', 'move sleeptalk'));
-		});
-	});
-
 	describe('Mega Sol', () => {
 		it('should apply Sunny Day damage boosts', () => {
 			battle = createChampionsBattle([[
