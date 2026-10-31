@@ -491,6 +491,29 @@ function CAP1v1Sets(species: string | Species) {
 	return buf;
 }
 
+function rentalSets(species: Species) {
+	const rentalData: { [k: string]: { flagshipMove?: string, secondaryMove?: string, otherMoves?: string[] } } =
+		JSON.parse(FS(`data/random-battles/champions/rental-data.json`).readIfExistsSync() || '{}');
+	const formatName = Dex.formats.get('gen9championsrentaldoublesbattleb10p4').name;
+	const setsToCheck = [species];
+	if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => Dex.species.get(pkmn)));
+
+	const movesets = [];
+	for (const pokemon of setsToCheck) {
+		const data = rentalData[pokemon.id];
+		if (!data) continue;
+		// The flagship and secondary moves are always in the set, and the rest are picked from otherMoves
+		const fixedMoves = [data.flagshipMove, data.secondaryMove].filter(Boolean) as string[];
+		const otherMoves = (data.otherMoves || []).slice().sort();
+		const picks = Math.min(4 - fixedMoves.length, otherMoves.length);
+		let buf = `<span class="gray">Moves for ${pokemon.name} in ${formatName}:</span><br/>`;
+		if (fixedMoves.length) buf += `<b>Always has</b>: ${fixedMoves.map(formatMove).join(', ')}<br/>`;
+		if (picks) buf += `<b>${picks} random from</b>: ${otherMoves.map(formatMove).join(', ')}`;
+		movesets.push(buf);
+	}
+	return movesets.length ? movesets.join('<hr/>') : null;
+}
+
 export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randomdoublesbattle: 'randombattles',
@@ -707,6 +730,20 @@ export const commands: Chat.ChatCommands = {
 	},
 	cap1v1help: [
 		`/cap1v1 [pokemon] - Displays a Pok\u00e9mon's CAP 1v1 sets.`,
+	],
+
+	rentals: 'rentalbattle',
+	rentalbattle(target) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.parse(`/help rentalbattle`);
+		const species = Dex.species.get(target);
+		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
+		const sets = rentalSets(species);
+		if (!sets) throw new Chat.ErrorMessage(`Error: ${species.name} has no sets in Champions Rental Battle.`);
+		return this.sendReplyBox(sets);
+	},
+	rentalbattlehelp: [
+		`/rentalbattle OR /rentals [pokemon] - Displays a Pok\u00e9mon's possible moves in Champions Rental Battle.`,
 	],
 
 	setodds: 'randombattlesetprobabilities',
