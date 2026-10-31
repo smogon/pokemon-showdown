@@ -339,6 +339,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9 Champions] Mega Evolution Battle",
+		desc: 'A VGC-based format where only Pokemon that are able to Mega Evolve are legal.',
 		mod: 'champions',
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', 'VGC Timer'],
