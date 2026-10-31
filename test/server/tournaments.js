@@ -5,6 +5,7 @@ const { makeUser } = require('../users-utils');
 let Tournament;
 const { Elimination } = require('../../dist/server/tournaments/generator-elimination');
 const { RoundRobin } = require('../../dist/server/tournaments/generator-round-robin');
+const { Swiss } = require('../../dist/server/tournaments/generator-swiss');
 
 describe('Tournament automatic pairing', () => {
 	let tour, room, users, battles, replies, originalPrep, originalCreate;
@@ -66,6 +67,192 @@ describe('Tournament automatic pairing', () => {
 			user.disconnectAll();
 			user.destroy();
 		}
+	});
+
+	describe('Swiss', () => {
+		const addFourthPlayer = () => {
+			const user = makeUser('Tournament Player 3', '127.0.0.4');
+			user.battleSettings.team = users[0].battleSettings.team;
+			users.push(user);
+			user.joinRoom(room.roomid);
+			tour.addUser(user, context(user));
+		};
+		const play = async (match, draw = false, reverseReadyOrder = false) => {
+			const count = battles.length;
+			const pair = reverseReadyOrder ? [...match].reverse() : match;
+			await ready(pair[0]);
+			await ready(pair[1]);
+			assert.equal(battles.length, count + 1);
+			const battle = battles[count];
+			if (draw) battle.game.score = [0, 0];
+			tour.onBattleWin(battle, draw ? '' : battle.p1.id);
+			return battle;
+		};
+
+		it('shows entrants before starting and awards exactly one first-round bye point', () => {
+			tour.setGenerator(new Swiss(), context(users[0]));
+			const pending = tour.getBracketData();
+			assert.equal(pending.type, 'swiss');
+			assert.equal(pending.roundLimit, null);
+			assert.equal(pending.players.length, 3);
+			assert.deepEqual(pending.rounds, []);
+			tour.startTournament(context(users[0]));
+			const generator = tour.generator;
+			assert.equal(generator.roundLimit, 2);
+			assert.equal(generator.rounds.length, 1);
+			assert.equal(generator.rounds[0].matches.length, 1);
+			assert.equal(generator.rounds[0].bye.score, 1);
+			assert.equal(tour.players.reduce((sum, player) => sum + player.score, 0), 1);
+			assert.equal(generator.rounds[0].bye.pendingMatch, null);
+		});
+
+		for (const reverseReadyOrder of [false, true]) {
+			it(`completes two rounds with distinct byes and no rematches (reverse ready order: ${reverseReadyOrder})`, async () => {
+				start(new Swiss());
+				const generator = tour.generator;
+				const first = generator.rounds[0];
+				await play([first.matches[0].player1, first.matches[0].player2], false, reverseReadyOrder);
+				assert.equal(first.matches[0].state, 'finished');
+				assert.equal(generator.rounds.length, 2);
+				assert.equal(tour.ended, false);
+				const second = generator.rounds[1];
+				assert.notEqual(first.bye, second.bye);
+				const match = second.matches[0];
+				assert([match.player1, match.player2].includes(first.bye));
+				assert(![match.player1, match.player2].includes(second.bye));
+				await play([match.player1, match.player2], false, reverseReadyOrder);
+				assert.equal(tour.ended, true);
+				assert.equal(generator.rounds.length, 2);
+				assert.equal(tour.players.reduce((sum, player) => sum + player.score, 0), 4);
+			});
+		}
+
+		it('breaks equal scores by resistance, excluding byes and counting draws as half a win', async () => {
+			start(new Swiss());
+			const generator = tour.generator;
+			const [first] = generator.getAvailableMatches();
+			await play(first);
+			const [second] = generator.getAvailableMatches();
+			await play(second, true);
+			assert.equal(tour.ended, true);
+			assert.equal(generator.rounds[1].matches[0].result, 'draw');
+			assert.equal(second[0].score, 1.5);
+			assert.equal(second[1].score, 1.5);
+			const results = generator.getResults();
+			const firstBye = generator.rounds[0].bye;
+			assert.deepEqual(results[0], [firstBye]);
+			assert.equal(results[1][0].score, 1.5);
+			assert.equal(results[2][0].score, 1);
+			const standings = generator.getBracketData().players;
+			assert.equal(standings[0].name, firstBye.name);
+			assert.equal(standings[0].resistance, 0.75);
+			assert.equal(standings[1].resistance, 0.25);
+		});
+
+		it('preserves shared placements when score and resistance are both tied', async () => {
+			addFourthPlayer();
+			start(new Swiss());
+			const generator = tour.generator;
+			while (!tour.ended) {
+				const matches = generator.getAvailableMatches();
+				for (const match of matches) await play(match, true);
+			}
+			assert.equal(generator.getResults().length, 1);
+			assert.equal(generator.getResults()[0].length, 4);
+			assert(generator.getBracketData().players.every(player => player.resistance === 0.5));
+		});
+
+		it('ignores unfinished matches when calculating resistance', async () => {
+			addFourthPlayer();
+			start(new Swiss());
+			const generator = tour.generator;
+			assert(generator.getBracketData().players.every(player => player.resistance === 0));
+			const [pair] = generator.getAvailableMatches();
+			await play(pair);
+			const standings = generator.getStandings();
+			assert.equal(standings.find(row => row.player === pair[0]).resistance, 0);
+			assert.equal(standings.find(row => row.player === pair[1]).resistance, 1);
+			assert.equal(generator.rounds.length, 1);
+		});
+
+		it('supports a shorter Swiss stage through the generator modifier', async () => {
+			const generator = new Swiss('1');
+			tour.setGenerator(generator, context(users[0]));
+			assert.equal(tour.getBracketData().roundLimit, 1);
+			tour.startTournament(context(users[0]));
+			await play(generator.getAvailableMatches()[0]);
+			assert.equal(tour.ended, true);
+			assert.equal(generator.rounds.length, 1);
+		});
+
+		it('rejects invalid Swiss round counts', () => {
+			for (const count of ['0', '-1', '1.5', 'NaN', 'Infinity', 'rounds']) {
+				assert.throws(() => new Swiss(count), /positive integer/);
+			}
+		});
+
+		it('waits for every match before advancing a round', async () => {
+			addFourthPlayer();
+			start(new Swiss());
+			const generator = tour.generator;
+			const matches = generator.getAvailableMatches();
+			await play(matches[0]);
+			assert.equal(generator.rounds.length, 1);
+			assert.equal(generator.isTournamentEnded(), false);
+			await play(matches[1]);
+			assert.equal(generator.rounds.length, 2);
+			for (const match of generator.rounds[1].matches) {
+				assert.equal(match.player1.score, match.player2.score);
+			}
+		});
+
+		it('serializes active battles without changing the generator bracket', async () => {
+			start(new Swiss());
+			const generator = tour.generator;
+			const [pair] = generator.getAvailableMatches();
+			await ready(pair[0]);
+			await ready(pair[1]);
+			const data = JSON.parse(JSON.stringify(tour.getBracketData()));
+			const match = data.rounds[0].matches[0];
+			assert.equal(match.state, 'inprogress');
+			assert.equal(match.room, battles[0].roomid);
+			assert.equal(match.player1, pair[0].name);
+			assert.equal(match.player2, pair[1].name);
+			assert.equal(data.rounds[0].bye, generator.rounds[0].bye.name);
+			assert.equal(generator.rounds[0].matches[0].state, 'available');
+			assert.equal(generator.rounds[0].matches[0].player1, pair[0]);
+		});
+
+		it('advances after a disqualification and permits a forced rematch', async () => {
+			start(new Swiss());
+			const generator = tour.generator;
+			const [pair] = generator.getAvailableMatches();
+			const winner = pair[1];
+			const disqualifiedUser = Users.getExact(pair[0].id);
+			tour.disqualifyUser(pair[0].id);
+			assert.equal(generator.rounds[0].matches[0].result, 'loss');
+			assert.equal(winner.score, 1);
+			assert.equal(generator.rounds.length, 2);
+			assert.equal(getUpdate(disqualifiedUser).isJoined, false);
+			const remaining = tour.players.filter(player => !player.isDisqualified);
+			// Both remaining players met in round two, so a further pairing needs the fallback.
+			assert.equal(generator.pairPlayers(remaining), null);
+			const fallback = generator.createNextRound();
+			assert.equal(fallback.matches.length, 1);
+			assert(remaining.includes(fallback.matches[0].player1));
+			assert(remaining.includes(fallback.matches[0].player2));
+		});
+
+		it('ends early when disqualifications leave only one active player', () => {
+			start(new Swiss());
+			const [pair] = tour.generator.getAvailableMatches();
+			const bye = tour.generator.rounds[0].bye;
+			tour.disqualifyUser(bye.id);
+			assert.equal(tour.ended, false);
+			tour.disqualifyUser(pair[0].id);
+			assert.equal(tour.ended, true);
+			assert.equal(tour.generator.rounds.length, 1);
+		});
 	});
 
 	it('commits available pairings before either player is ready', async () => {

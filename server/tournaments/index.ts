@@ -1,5 +1,6 @@
 import { Elimination } from './generator-elimination';
 import { RoundRobin } from './generator-round-robin';
+import { Swiss } from './generator-swiss';
 import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
 import type { BattleReady } from '../ladders-challenges';
@@ -20,7 +21,7 @@ export interface TournamentRoomSettings {
 	blockRecents?: boolean;
 }
 
-type Generator = RoundRobin | Elimination;
+type Generator = RoundRobin | Elimination | Swiss;
 
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
@@ -39,6 +40,7 @@ const TournamentGenerators = {
 	__proto__: null,
 	roundrobin: RoundRobin,
 	elimination: Elimination,
+	swiss: Swiss,
 };
 
 function usersToNames(users: TournamentPlayer[]) {
@@ -303,6 +305,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				} else if (!this.isTournamentStarted) {
 					isJoined = true;
 				}
+			} else if (this.generator.name.includes("Swiss")) {
+				isJoined = !possiblePlayer.isDisqualified;
 			} else {
 				isJoined = true;
 			}
@@ -586,6 +590,25 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			}
 			data.tableHeaders.cols = usersToNames(data.tableHeaders.cols);
 			data.tableHeaders.rows = usersToNames(data.tableHeaders.rows);
+		} else if (data.type === 'swiss') {
+			for (const round of data.rounds) {
+				for (const match of round.matches) {
+					const player1: TournamentPlayer = match.player1;
+					const player2: TournamentPlayer = match.player2;
+
+					if (match.state === 'available') {
+						if (player1.inProgressMatch?.to === player2) {
+							match.state = 'inprogress';
+							match.room = player1.inProgressMatch.room.roomid;
+						}
+					}
+
+					match.player1 = player1.name;
+					match.player2 = player2.name;
+				}
+
+				if (round.bye) round.bye = round.bye.name;
+			}
 		}
 		return data;
 	}
@@ -1089,7 +1112,7 @@ function getGenerator(generator: string | undefined) {
 	case 'elim': generator = 'elimination'; break;
 	case 'rr': generator = 'roundrobin'; break;
 	}
-	return TournamentGenerators[generator as 'elimination' | 'roundrobin'];
+	return TournamentGenerators[generator as 'elimination' | 'roundrobin' | 'swiss'];
 }
 
 function createTournamentGenerator(
