@@ -1881,7 +1881,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', '350 Cup Mod: If a Pokemon\'s BST is 350 or lower, all of its stats get doubled.');
 		},
-		onModifySpeciesPriority: 2,
+		onModifySpeciesPriority: 4,
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			if (newSpecies.bst <= 350) {
@@ -1918,7 +1918,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Scalemons Mod: Every Pokemon\'s stats, barring HP, are scaled to come as close to a BST of 600 as possible');
 		},
-		onModifySpeciesPriority: 1,
+		onModifySpeciesPriority: 5,
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			const bstWithoutHp: number = newSpecies.bst - newSpecies.baseStats['hp'];
@@ -2316,6 +2316,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Tier Shift Mod: Pokemon get stat buffs depending on their tier, excluding HP.');
 		},
+		onModifySpeciesPriority: 1,
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
 			const boosts: { [tier: string]: number } = {
@@ -2394,6 +2395,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Re-Evolution Mod: Pokemon gain the boosts they would gain from evolving again');
 		},
+		onModifySpeciesPriority: 6,
 		onModifySpecies(species, target) {
 			const newSpecies = this.dex.deepClone(species);
 			const baseSpecies = this.dex.species.get(
@@ -2411,6 +2413,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + formeChange, 1, 255);
 					newSpecies.bst += newSpecies.baseStats[statid];
 				}
+				newSpecies.weighthg = this.clampIntRange(2 * baseSpecies.weighthg - prevoSpecies.weighthg, 1);
+				newSpecies.weightkg = newSpecies.weighthg / 10;
+				newSpecies.heightm = this.clampIntRange(10 * (2 * baseSpecies.heightm - prevoSpecies.heightm), 1) / 10;
 				return newSpecies;
 			}
 			const prevoSpecies = this.dex.species.get(newSpecies.prevo);
@@ -2421,6 +2426,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				newSpecies.baseStats[statid] = this.clampIntRange(newSpecies.baseStats[statid] + change, 1, 255);
 				newSpecies.bst += newSpecies.baseStats[statid];
 			}
+			newSpecies.weighthg = this.clampIntRange(2 * baseSpecies.weighthg - prevoSpecies.weighthg, 1);
+			newSpecies.weightkg = newSpecies.weighthg / 10;
+			newSpecies.heightm = this.clampIntRange(10 * (2 * baseSpecies.heightm - prevoSpecies.heightm), 1) / 10;
 			return newSpecies;
 		},
 	},
@@ -2659,7 +2667,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				return [`You have too many Gods.`, `(${Array.from(gods).join(', ')} are Gods.)`];
 			}
 		},
-		onModifySpeciesPriority: 3,
+		onModifySpeciesPriority: 8,
 		onModifySpecies(species, target, source) {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
@@ -3031,7 +3039,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Bad \'n Boosted Mod: All of a Pokemon\'s base stats below 70 are doubled.');
 		},
-		onModifySpeciesPriority: 2,
+		onModifySpeciesPriority: 3,
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			newSpecies.bst = 0;

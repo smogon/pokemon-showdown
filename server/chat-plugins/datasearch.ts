@@ -1313,7 +1313,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			ruleResult
 		) {
 			let newSpecies = species;
-			for (const rule of rules) {
+			for (const rule of new Set(rules.sort((x, y) => (y.onModifySpeciesPriority || 0) - (x.onModifySpeciesPriority || 0)))) {
 				newSpecies = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
 					newSpecies) || newSpecies;
 			}
