@@ -321,11 +321,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Flat Rules', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
 	},
 	{
-		name: "[Gen 9 Champions] Rental Doubles Battle (B10P4)",
+		name: "[Gen 9 Champions] Roster Ranch Ramble",
 		desc: `Randomized teams of ten Pok&eacute;mon using rental sets from Pok&eacute;mon Champions. Choose four of them at Team Preview.`,
 		mod: 'champions',
 		gameType: 'doubles',
-		team: 'randomRental',
+		team: 'randomRRR',
 		bestOfDefault: true,
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 10', 'Picked Team Size = 4'],
 	},

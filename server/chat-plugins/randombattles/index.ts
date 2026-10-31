@@ -491,16 +491,16 @@ function CAP1v1Sets(species: string | Species) {
 	return buf;
 }
 
-function rentalSets(species: Species) {
-	const rentalData: { [k: string]: { flagshipMove?: string, secondaryMove?: string, otherMoves?: string[] } } =
-		JSON.parse(FS(`data/random-battles/champions/rental-data.json`).readIfExistsSync() || '{}');
-	const formatName = Dex.formats.get('gen9championsrentaldoublesbattleb10p4').name;
+function rrrSets(species: Species) {
+	const rrrData: { [k: string]: { flagshipMove?: string, secondaryMove?: string, otherMoves?: string[] } } =
+		JSON.parse(FS(`data/random-battles/champions/rrr-sets.json`).readIfExistsSync() || '{}');
+	const formatName = Dex.formats.get('gen9championsrosterranchramble').name;
 	const setsToCheck = [species];
 	if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => Dex.species.get(pkmn)));
 
 	const movesets = [];
 	for (const pokemon of setsToCheck) {
-		const data = rentalData[pokemon.id];
+		const data = rrrData[pokemon.id];
 		if (!data) continue;
 		// The flagship and secondary moves are always in the set, and the rest are picked from otherMoves
 		const fixedMoves = [data.flagshipMove, data.secondaryMove].filter(Boolean) as string[];
@@ -732,18 +732,20 @@ export const commands: Chat.ChatCommands = {
 		`/cap1v1 [pokemon] - Displays a Pok\u00e9mon's CAP 1v1 sets.`,
 	],
 
-	rentals: 'rentalbattle',
-	rentalbattle(target) {
+	rosterranch: 'rosterranchramble',
+	rrr: 'rosterranchramble',
+	rosterranchramble(target) {
 		if (!this.runBroadcast()) return;
-		if (!target) return this.parse(`/help rentalbattle`);
+		if (!target) return this.parse(`/help rosterranchramble`);
 		const species = Dex.species.get(target);
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
-		const sets = rentalSets(species);
-		if (!sets) throw new Chat.ErrorMessage(`Error: ${species.name} has no sets in Champions Rental Battle.`);
+		const sets = rrrSets(species);
+		if (!sets) throw new Chat.ErrorMessage(`Error: ${species.name} has no sets in Roster Ranch Ramble.`);
 		return this.sendReplyBox(sets);
 	},
-	rentalbattlehelp: [
-		`/rentalbattle OR /rentals [pokemon] - Displays a Pok\u00e9mon's possible moves in Champions Rental Battle.`,
+	rosterranchramblehelp: [
+		`/rosterranchramble OR /rrr [pokemon] - Displays a Pok\u00e9mon's possible moves in [Gen 9 Champions] Roster Ranch Ramble.`,
+		`Also available as /rosterranch.`,
 	],
 
 	setodds: 'randombattlesetprobabilities',

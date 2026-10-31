@@ -1245,10 +1245,10 @@ export class RandomChampionsTeams extends RandomTeams {
 	}
 
 	/**
-	 * Picks a Rental Battle item. Rules are checked in order and the first one that
+	 * Picks a Roster Ranch Ramble item. Rules are checked in order and the first one that
 	 * applies decides the item; an empty string means the Pokemon holds nothing.
 	 */
-	getRentalItem(
+	getRRRItem(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -1573,9 +1573,9 @@ export class RandomChampionsTeams extends RandomTeams {
 		return (attacks.includes(moveData[0]) && TYPE_BOOSTING_ITEMS[moveData[0].type]) || 'Leftovers';
 	}
 
-	rentalSets: { [species: string]: RandomTeamsTypes.RentalData } = require('./rental-data.json');
+	rrrSets: { [species: string]: RandomTeamsTypes.RRRData } = require('./rrr-sets.json');
 
-	randomRentalTeam(): RandomTeamsTypes.RandomSet[] {
+	randomRRRTeam(): RandomTeamsTypes.RandomSet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team = [];
@@ -1586,7 +1586,7 @@ export class RandomChampionsTeams extends RandomTeams {
 		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
 		const type = isMonotype ? this.forceMonotype || this.sample(typePool) : undefined;
 
-		const pokemonList = Object.keys(this.rentalSets);
+		const pokemonList = Object.keys(this.rrrSets);
 		const baseFormes: { [k: string]: number } = {};
 
 		while (team.length < this.maxTeamSize) {
@@ -1601,11 +1601,11 @@ export class RandomChampionsTeams extends RandomTeams {
 			const ability: string = this.sample(abilities);
 
 			const moves: string[] = [];
-			if (this.rentalSets[pokemonName]["flagshipMove"]) moves.push(this.rentalSets[pokemonName]["flagshipMove"]);
-			if (this.rentalSets[pokemonName]["secondaryMove"]) moves.push(this.rentalSets[pokemonName]["secondaryMove"]);
-			if (this.rentalSets[pokemonName]["otherMoves"]) {
+			if (this.rrrSets[pokemonName]["flagshipMove"]) moves.push(this.rrrSets[pokemonName]["flagshipMove"]);
+			if (this.rrrSets[pokemonName]["secondaryMove"]) moves.push(this.rrrSets[pokemonName]["secondaryMove"]);
+			if (this.rrrSets[pokemonName]["otherMoves"]) {
 				const otherMoves = [];
-				for (const movename of this.rentalSets[pokemonName]["otherMoves"]) {
+				for (const movename of this.rrrSets[pokemonName]["otherMoves"]) {
 					otherMoves.push(movename);
 				}
 				while (moves.length < this.maxMoveCount && otherMoves.length) {
@@ -1662,7 +1662,7 @@ export class RandomChampionsTeams extends RandomTeams {
 
 			const moveSet = new Set(moves.map(m => this.dex.moves.get(m).id));
 			const counter = this.queryMoves(moveSet, species, '', [ability]);
-			const item = this.getRentalItem(
+			const item = this.getRRRItem(
 				ability, new Set(species.types), moveSet, counter, species, evs, this.dex.natures.get(nature)
 			);
 

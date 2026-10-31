@@ -645,7 +645,7 @@ declare namespace RandomTeamsTypes {
 		level?: number;
 		sets: RandomSetData[];
 	}
-	export interface RentalData {
+	export interface RRRData {
 		flagshipMove?: string;
 		secondaryMove?: string;
 		otherMoves?: string[];
