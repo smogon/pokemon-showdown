@@ -90,6 +90,50 @@ const TYPE_BOOSTING_ITEMS: { [k: string]: string } = {
 	'Water': 'Mystic Water',
 };
 
+// Berries that halve damage from a super effective move of that type
+const RESIST_BERRIES: { [k: string]: string } = {
+	'Bug': 'Tanga Berry',
+	'Dark': 'Colbur Berry',
+	'Dragon': 'Haban Berry',
+	'Electric': 'Wacan Berry',
+	'Fairy': 'Roseli Berry',
+	'Fighting': 'Chople Berry',
+	'Fire': 'Occa Berry',
+	'Flying': 'Coba Berry',
+	'Ghost': 'Kasib Berry',
+	'Grass': 'Rindo Berry',
+	'Ground': 'Shuca Berry',
+	'Ice': 'Yache Berry',
+	'Poison': 'Kebia Berry',
+	'Psychic': 'Payapa Berry',
+	'Rock': 'Charti Berry',
+	'Steel': 'Babiri Berry',
+	'Water': 'Passho Berry',
+};
+
+const WEATHER_ROCKS: { [k: string]: string } = {
+	'Drizzle': 'Damp Rock',
+	'Drought': 'Heat Rock',
+	'Sand Stream': 'Smooth Rock',
+	'Snow Warning': 'Icy Rock',
+};
+
+const TERRAIN_SEEDS: { [k: string]: string } = {
+	'electricterrain': 'Electric Seed',
+	'grassyterrain': 'Grassy Seed',
+	'mistyterrain': 'Misty Seed',
+	'psychicterrain': 'Psychic Seed',
+};
+
+const TERRAIN_ABILITIES = [
+	'Electric Surge', 'Grassy Surge', 'Misty Surge', 'Psychic Surge',
+];
+
+// Moves that Big Root boosts besides draining attacks
+const BIG_ROOT_MOVES = [
+	'aquaring', 'ingrain', 'leechseed', 'strengthsap',
+];
+
 export class RandomChampionsTeams extends RandomTeams {
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 	override randomDoublesSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./doubles-sets.json');
@@ -1200,6 +1244,332 @@ export class RandomChampionsTeams extends RandomTeams {
 		return pokemon;
 	}
 
+	/**
+	 * Picks a Rental Battle item. Rules are checked in order and the first one that
+	 * applies decides the item; an empty string means the Pokemon holds nothing.
+	 */
+	getRentalItem(
+		ability: string,
+		types: Set<string>,
+		moves: Set<string>,
+		counter: MoveCounter,
+		species: Species,
+		evs: StatsTable,
+		nature: Nature,
+	): string {
+		const moveData = [...moves].map(m => this.dex.moves.get(m));
+		// Fixed-damage moves like Seismic Toss and Super Fang aren't boosted by items, so they don't count as attacks
+		const attacks = moveData.filter(move => move.category !== 'Status' && !move.damage && !move.damageCallback);
+		const countMoves = (filter: (move: Move) => boolean) => moveData.filter(filter).length;
+		const countAttacks = (filter: (move: Move) => boolean) => attacks.filter(filter).length;
+		const countType = (type: string) => countAttacks(move => move.type === type);
+		const isHighCrit = (move: Move) => (move.critRatio || 1) >= 2;
+		const isInaccurate = (move: Move) => move.accuracy !== true && move.accuracy < 100;
+
+		const contactMoves = countMoves(move => !!move.flags['contact']);
+		const weaknessTo = (type: string) => {
+			if (!this.dex.getImmunity(type, species) || (type === 'Ground' && ability === 'Levitate')) return 0;
+			return this.dex.getEffectiveness(type, species);
+		};
+
+		// Necessary Pokemon-specific items
+		if (species.id === 'pikachu') return 'Light Ball';
+		if (['farfetchd', 'sirfetchd'].includes(species.id)) return 'Leek';
+		if (species.id === 'ditto') return this.sample(['Choice Scarf', 'Sitrus Berry']);
+
+		// Item-interacting moves and abilities
+		if (['switcheroo', 'trick'].some(m => moves.has(m))) {
+			// Tricking away no item still works, but a held item would block Thief
+			if (moves.has('thief')) return '';
+			if (species.baseStats.spe < 60 || attacks.length <= 1 || ability === 'Klutz') return 'Iron Ball';
+			return 'Choice Scarf';
+		}
+		if (
+			['belch', 'stuffcheeks'].some(m => moves.has(m)) ||
+			['Cheek Pouch', 'Cud Chew', 'Harvest', 'Ripen'].includes(ability) ||
+			(moves.has('bellydrum') && countAttacks(
+				move => move.category === 'Physical' && !['bodypress', 'foulplay'].includes(move.id)
+			))
+		) return 'Sitrus Berry';
+		if (moves.has('fling')) return species.baseStats.spe <= 100 ? 'Iron Ball' : "King's Rock";
+		if (moves.has('recycle')) return ability === 'Regenerator' ? 'Eject Button' : 'Red Card';
+		if (
+			['Magician', 'Pickpocket', 'Pickup', 'Unburden'].includes(ability) ||
+			(moves.has('acrobatics') && ability !== 'Klutz')
+		) {
+			const terrainMove = [...moves].find(m => TERRAIN_SEEDS[m]);
+			if (terrainMove) return TERRAIN_SEEDS[terrainMove];
+			if (moves.has('fakeout')) return 'Normal Gem';
+			if (moveData.some(move => Object.values(move.self?.boosts || {}).some(boost => boost < 0))) return 'White Herb';
+			if (weaknessTo('Ground') > 0) return 'Air Balloon';
+			return 'Sitrus Berry';
+		}
+		if (moves.has('thief') || (moves.has('acrobatics') && ability === 'Klutz')) return '';
+
+		// Important items
+		if (ability === 'Magic Guard') return 'Life Orb';
+		if (
+			(moves.has('lightscreen') && moves.has('reflect')) ||
+			(moves.has('auroraveil') && (ability === 'Snow Warning' || moves.has('snowscape')))
+		) return 'Light Clay';
+
+		// Species-specific items, including whether to assign a mega stone
+		if (species.id === 'abomasnow' && ability !== 'Snow Warning' && !moves.has('solarbeam')) return 'Abomasite';
+		if (species.id === 'absol') {
+			if (ability === 'Super Luck' && attacks.some(isHighCrit)) return 'Scope Lens';
+			if (attacks.some(move => move.flags['slicing'] || move.type === 'Ghost')) return 'Absolite Z';
+			if (counter.get('Special')) return 'Absolite';
+		}
+		if (species.id === 'aerodactyl' && contactMoves >= 2) return 'Aerodactylite';
+		if (species.id === 'aggron') {
+			if (countType('Rock') >= 2 || (ability === 'Rock Head' && counter.get('recoil'))) return 'Life Orb';
+			if (moves.has('heavyslam')) return ability === 'Heavy Metal' ? 'Life Orb' : 'Aggronite';
+			if (moves.has('bodypress')) return 'Aggronite';
+		}
+		if (species.id === 'alakazam' && attacks.length >= 3) return 'Alakazite';
+		if (species.id === 'altaria' && countType('Normal')) return 'Altarianite';
+		if (species.id === 'ampharos' && countType('Dragon')) return 'Ampharosite';
+		if (species.id === 'audino') return ability === 'Regenerator' ? 'Leftovers' : 'Audinite';
+		if (species.id === 'banette' && counter.get('Status') >= 2) return 'Banettite';
+		if (species.id === 'barbaracle') {
+			if (ability === 'Sniper' && countAttacks(isHighCrit) >= 2) return 'Scope Lens';
+			if (countType('Water') >= 2) return moves.has('shellsmash') ? 'White Herb' : 'Life Orb';
+			if (countType('Fighting') >= 2) return 'Barbaracite';
+		}
+		if (species.id === 'baxcalibur' && moves.has('dracometeor')) return 'Baxcalibrite';
+		if (species.id === 'beedrill' && countType('Bug') >= 2) return 'Beedrillite';
+		if (species.id === 'blastoise' && countAttacks(move => !!move.flags['pulse']) >= 2) return 'Blastoisinite';
+		if (species.id === 'blaziken' && ability !== 'Speed Boost') return 'Blazikenite';
+		if (
+			species.id === 'camerupt' &&
+			(counter.get('sheerforce') >= 2 || ['bodypress', 'heatcrash', 'heavyslam'].some(m => moves.has(m)))
+		) return 'Cameruptite';
+		if (species.id === 'charizard') {
+			if (counter.get('Physical') >= 2 || countType('Dragon')) return 'Charizardite X';
+			if (moves.has('sunnyday')) return ability === 'Solar Power' ? 'Life Orb' : 'Heat Rock';
+			if (!counter.get('Physical') && ability !== 'Solar Power') return 'Charizardite Y';
+		}
+		if (species.id === 'chesnaught') {
+			if (moves.has('trailblaze')) return counter.get('recovery') ? 'Rocky Helmet' : 'Leftovers';
+			if (['gyroball', 'irondefense'].some(m => moves.has(m))) return 'Chesnaughtite';
+		}
+		if (species.id === 'chimecho' && (countType('Steel') || moves.has('cosmicpower'))) return 'Chimechite';
+		if (species.id === 'clefable' && (ability === 'Cute Charm' || moves.has('airslash'))) return 'Clefablite';
+		if (species.id === 'crabominable' && ability !== 'Iron Fist' && counter.get('ironfist')) return 'Crabominite';
+		if (species.id === 'delphox' && moves.has('psychicterrain')) return 'Terrain Extender';
+		if (species.id === 'dragalge' && (moves.has('flipturn') || ability !== 'Adaptability')) return 'Dragalgite';
+		if (species.id === 'dragonite' && ability === 'Multiscale' && (moves.has('dragondance') || !counter.get('Special'))) {
+			return moves.has('outrage') ? 'Lum Berry' : 'Leftovers';
+		}
+		if (species.id === 'drampa' && moves.has('roost') && ability !== 'Berserk') return 'Drampanite';
+		if (
+			species.id === 'eelektross' &&
+			(counter.get('Physical') >= 3 || ['bulkup', 'coil', 'heavyslam'].some(m => moves.has(m)))
+		) return 'Eelektrossite';
+		if (species.id === 'emboar') {
+			if (ability === 'Reckless' && counter.get('recoil') >= 2) return 'Life Orb';
+			if (['bodypress', 'heatcrash', 'heavyslam'].some(m => moves.has(m))) return 'Emboarite';
+		}
+		if (species.id === 'excadrill') {
+			if (ability === 'Sand Rush' && moves.has('sandstorm')) return 'Life Orb';
+			if (moves.has('irondefense') || counter.get('Special') || contactMoves >= 2) return 'Excadrite';
+		}
+		if (species.id === 'falinks' && (moves.has('bodypress') || ability !== 'Defiant')) return 'Falinksite';
+		if (species.id === 'feraligatr') {
+			if (ability === 'Sheer Force') {
+				return ['breakingswipe', 'bulldoze', 'chillingwater', 'rocktomb', 'snarl'].some(m => moves.has(m)) ?
+					'Feraligite' : 'Life Orb';
+			}
+			if (countType('Normal') || countType('Dragon')) return 'Feraligite';
+		}
+		if (species.id === 'froslass') {
+			if (moves.has('poltergeist') && moves.has('tripleaxel')) return 'Wide Lens';
+			if (moves.has('auroraveil')) return 'Froslassite';
+		}
+		if (
+			species.id === 'gallade' && ability === 'Sharpness' && countAttacks(move => !!move.flags['slicing']) >= 2
+		) return 'Life Orb';
+		if (species.id === 'garchomp') {
+			if (moves.has('dracometeor')) return 'Garchompite Z';
+			if (moves.has('sandstorm') && ability !== 'Sand Veil') return 'Garchompite';
+			if (ability === 'Rough Skin' && (evs.hp === 32 || evs.def === 32)) return 'Rocky Helmet';
+		}
+		if (species.id === 'gardevoir' && (countType('Normal') || ability === 'Synchronize')) return 'Gardevoirite';
+		if (species.id === 'medicham' && ability !== 'Pure Power') return 'Medichamite';
+		if (['chandelure', 'gallade', 'gardevoir', 'medicham'].includes(species.id) && moves.has('trickroom')) {
+			return evs.spe === 32 ? 'Focus Sash' : 'Mental Herb';
+		}
+		if (species.id === 'gengar' && ['hypnosis', 'perishsong'].some(m => moves.has(m))) return 'Gengarite';
+		if (species.id === 'glalie' && countType('Normal')) return 'Glalitite';
+		if (species.id === 'glimmora') {
+			if (counter.get('Physical') >= 2 || countType('Rock') >= 2) return 'Glimmoranite';
+			if (ability === 'Toxic Debris' && counter.get('Status') >= 2) return 'Focus Sash';
+		}
+		if (species.id === 'golisopod') {
+			if (countType('Water') >= 2) return 'Sitrus Berry';
+			if (
+				['bulkup', 'endure', 'irondefense', 'snarl', 'strugglebug', 'swordsdance'].some(m => moves.has(m)) ||
+				countType('Steel') || !countType('Water')
+			) return 'Golisopite';
+		}
+		if (species.id === 'golurk') {
+			if (
+				(ability === 'No Guard' && moveData.some(isInaccurate)) ||
+				(ability === 'Iron Fist' && counter.get('ironfist'))
+			) return 'Life Orb';
+			if (contactMoves >= 2 || ability === 'Klutz') return 'Golurkite';
+		}
+		if (species.id === 'greninja' && ability !== 'Protean') return 'Greninjite';
+		if (species.id === 'gyarados' && countType('Dark')) return 'Gyaradosite';
+		if (
+			species.id === 'hawlucha' &&
+			(ability === 'Limber' || moves.has('bodypress') || countMoves(isInaccurate) >= 2)
+		) return 'Hawluchanite';
+		if (species.id === 'heracross' && (ability === 'Swarm' || counter.get('skilllink'))) return 'Heracronite';
+		if (species.id === 'houndoom' && moves.has('sunnyday')) return 'Houndoominite';
+		if (
+			species.id === 'kangaskhan' && countAttacks(move => ['allAdjacent', 'allAdjacentFoes'].includes(move.target)) >= 2
+		) return 'Life Orb';
+		if (species.id === 'lopunny' && ability === 'Klutz') return 'Lopunnite';
+		if (species.id === 'lucario') {
+			// Final Gambit is fixed damage, so check for no status moves instead of 4 attacks
+			if (moves.has('finalgambit')) return !counter.get('Status') ? 'Choice Scarf' : 'Lucarionite Z';
+			if (countAttacks(move => types.has(move.type)) >= 2) return 'Lucarionite';
+			// Lucario has no special attacks besides Final Gambit, so Swords Dance is one of the few cases where Z is worth it
+			if (moves.has('swordsdance')) return this.randomChance(1, 2) ? 'Lucarionite' : 'Lucarionite Z';
+		}
+		if (species.id === 'malamar' && ability !== 'Contrary' && moves.has('superpower')) return 'Malamarite';
+		if (species.id === 'manectric' && ['charge', 'eerieimpulse', 'snarl'].some(m => moves.has(m))) return 'Manectite';
+		if (species.id === 'mawile') {
+			if (ability !== 'Sheer Force' && counter.get('Physical') >= 2) return 'Mawilite';
+			if (ability === 'Sheer Force' && ['icywind', 'rocktomb'].some(m => moves.has(m))) return 'Mawilite';
+			if (ability === 'Sheer Force' && moves.has('fireblast')) return 'Life Orb';
+		}
+		if (
+			species.id === 'meganium' && ['dazzlinggleam', 'solarbeam', 'synthesis', 'weatherball'].some(m => moves.has(m))
+		) return 'Meganiumite';
+		if (['meowstic', 'meowsticf'].includes(species.id)) {
+			if (attacks.length >= 2 && ability === 'Keen Eye') return 'Meowsticite';
+			if (
+				ability === 'Prankster' && (attacks.length === 4 || (attacks.length === 3 && counter.get('setup')))
+			) return 'Meowsticite';
+		}
+		if (species.id === 'metagross' && (contactMoves >= 2 || ability === 'Light Metal')) return 'Metagrossite';
+		if (species.id === 'pidgeot' && counter.get('Special') >= 2) return 'Pidgeotite';
+		if (species.id === 'pinsir' && countAttacks(move => move.type === 'Normal' && move.id !== 'guillotine')) {
+			return 'Pinsirite';
+		}
+		if (species.id === 'pyroar' && countType('Fire') >= 2) return 'Pyroarite';
+		if (species.id === 'raichu') {
+			if (['risingvoltage', 'volttackle'].some(m => moves.has(m)) || counter.get('Physical') >= 2) return 'Raichunite X';
+			if (moves.has('zapcannon') || countMoves(isInaccurate) >= 2) return 'Raichunite Y';
+		}
+		if (
+			species.id === 'sableye' &&
+			(ability !== 'Prankster' || attacks.length === 4 || (attacks.length === 3 && counter.get('setup')))
+		) return 'Sablenite';
+		if (species.id === 'salamence' && (countType('Normal') >= 2 || !countType('Flying'))) return 'Salamencite';
+		if (species.id === 'sceptile') {
+			if (countType('Dragon')) return 'Sceptilite';
+			if (moves.has('shedtail')) return 'Sitrus Berry';
+		}
+		if (species.id === 'scizor' && ability !== 'Technician') return 'Scizorite';
+		if (species.id === 'scolipede') {
+			if (ability !== 'Speed Boost' && evs.spe !== 32) return 'Scolipite';
+			if (moves.has('irondefense') && !moves.has('batonpass')) return 'Scolipite';
+		}
+		if (species.id === 'scovillain' && ability === 'Chlorophyll' && moves.has('sunnyday')) return 'Life Orb';
+		if (species.id === 'scrafty' && ability === 'Intimidate') return 'Scraftinite';
+		if (species.id === 'sharpedo' && counter.get('strongjaw') >= 2) return 'Sharpedonite';
+		if (species.id === 'skarmory') {
+			if (moves.has('swordsdance')) return 'Skarmorite';
+			if (counter.get('Status') >= 2 || moves.has('bodypress')) return counter.get('recovery') ? 'Rocky Helmet' : 'Leftovers';
+		}
+		if (
+			species.id === 'slowbro' &&
+			(ability !== 'Regenerator' || moves.has('bodypress') || (counter.get('setup') && moves.has('slackoff')))
+		) return 'Slowbronite';
+		if (species.id === 'staraptor') {
+			if (moves.has('finalgambit') && !counter.get('Status')) return 'Choice Scarf';
+			if (ability === 'Reckless' && counter.get('recoil') >= 2) return 'Life Orb';
+			if (moves.has('closecombat')) return 'Staraptite';
+		}
+		if (
+			species.id === 'starmie' &&
+			(moves.has('skillswap') || countAttacks(move => move.category === 'Physical' && move.id !== 'rapidspin'))
+		) return 'Starminite';
+		if (species.id === 'steelix') {
+			if (ability === 'Sheer Force' && ['breakingswipe', 'rocktomb'].some(m => moves.has(m))) return 'Steelixite';
+			if (moves.has('sandstorm')) return 'Steelixite';
+			if (ability === 'Rock Head' && counter.get('recoil')) return 'Life Orb';
+			if (['bodypress', 'heavyslam'].some(m => moves.has(m))) return 'Steelixite';
+		}
+		if (species.id === 'swampert' && ['bulkup', 'raindance'].some(m => moves.has(m))) return 'Swampertite';
+		if (species.id === 'tyranitar' && (ability !== 'Sand Stream' || moves.has('bodypress'))) return 'Tyranitarite';
+		if (species.id === 'victreebel') {
+			// Gluttony currently has no use case, so the mega stone is better
+			if (ability === 'Gluttony') return 'Victreebelite';
+			if (ability === 'Chlorophyll' && moves.has('sunnyday')) return 'Life Orb';
+			if (evs.hp === 32 && (nature.minus === 'def' || nature.minus === 'spd')) return 'Victreebelite';
+		}
+
+		// Anything that can still mega evolve has a 50% chance of doing so. X and Z megas are left out because they only
+		// fit the specific cases above, but every Y mega is useful in general
+		const megaStones = [];
+		// Check the base species' formes so Meowstic-F finds its mega, and match battleOnly so Raichu-Alola doesn't get Raichu's
+		for (const forme of this.dex.species.get(species.baseSpecies).otherFormes || []) {
+			const mega = this.dex.species.get(forme);
+			if (mega.isNonstandard || !mega.forme.includes('Mega') || !mega.requiredItem) continue;
+			if (mega.battleOnly !== species.name || / [XZ]$/.test(mega.requiredItem)) continue;
+			megaStones.push(mega.requiredItem);
+		}
+		if (megaStones.length && this.randomChance(1, 2)) return this.sample(megaStones);
+
+		// General items
+		if (ability === 'Klutz') return '';
+		if (ability === 'Sheer Force' && counter.get('sheerforce') >= 2) return 'Life Orb';
+		if (
+			(ability === 'Snow Cloak' && moves.has('snowscape')) || (ability === 'Sand Veil' && moves.has('sandstorm'))
+		) return 'Bright Powder';
+		if (WEATHER_ROCKS[ability]) return WEATHER_ROCKS[ability];
+		if (TERRAIN_ABILITIES.includes(ability)) return 'Terrain Extender';
+		if (
+			moves.has('tailwind') && (species.baseStats.hp + species.baseStats.def + species.baseStats.spd) <= 220
+		) return 'Focus Sash';
+		if (moves.has('trickroom')) {
+			return (species.baseStats.hp + species.baseStats.def + species.baseStats.spd) <= 220 ? 'Focus Sash' : 'Mental Herb';
+		}
+		if (ability === 'Emergency Exit') return 'Sitrus Berry';
+		if (ability === 'Quick Draw') return 'Quick Claw';
+		if (moves.has('populationbomb')) return 'Wide Lens';
+		if (ability === 'Skill Link' && counter.get('skilllink')) return "King's Rock";
+		if (moves.has('shellsmash')) return 'White Herb';
+		if (moves.has('rest')) return 'Chesto Berry';
+		if (['outrage', 'ragingfury', 'thrash'].some(m => moves.has(m))) return 'Lum Berry';
+		if (moves.has('curse') && types.has('Ghost') && !counter.get('recovery')) return 'Sitrus Berry';
+		if (
+			moveData.some(move => move.volatileStatus === 'partiallytrapped') &&
+			(PROTECT_MOVES.some(m => moves.has(m)) || counter.get('recovery'))
+		) return 'Binding Band';
+		if (weaknessTo('Ground') >= 2 && this.randomChance(1, 2)) return 'Air Balloon';
+		const doubleWeaknesses = Object.keys(RESIST_BERRIES).filter(type => weaknessTo(type) >= 2);
+		if (doubleWeaknesses.length && this.randomChance(1, 2)) return RESIST_BERRIES[this.sample(doubleWeaknesses)];
+		if (attacks.length <= 1) return 'Mental Herb';
+		if (counter.get('drain') + countMoves(move => BIG_ROOT_MOVES.includes(move.id)) >= 2) return 'Big Root';
+		if (species.baseStats.spe <= 60 && countMoves(isInaccurate) >= 2) return 'Zoom Lens';
+		if (attacks.length === 4 && species.baseStats.spe >= 60 && species.baseStats.spe <= 100) return 'Choice Scarf';
+		if (
+			PROTECT_MOVES.some(m => moves.has(m)) || moveData[0].category === 'Status' ||
+			((species.baseStats.hp + species.baseStats.def + species.baseStats.spd) >= 275 && !counter.get('recovery'))
+		) return 'Leftovers';
+		if ((species.baseStats.hp + species.baseStats.def) > 200) return 'Rocky Helmet';
+		if (
+			attacks.length === 4 || (attacks.length === 3 && (counter.get('setup') || counter.get('recovery')))
+		) return 'Life Orb';
+		// A type-boosting item does nothing for a fixed-damage first move like Seismic Toss
+		return (attacks.includes(moveData[0]) && TYPE_BOOSTING_ITEMS[moveData[0].type]) || 'Leftovers';
+	}
+
 	rentalSets: { [species: string]: RandomTeamsTypes.RentalData } = require('./rental-data.json');
 
 	randomRentalTeam(): RandomTeamsTypes.RandomSet[] {
@@ -1216,40 +1586,12 @@ export class RandomChampionsTeams extends RandomTeams {
 		const pokemonList = Object.keys(this.rentalSets);
 		const baseFormes: { [k: string]: number } = {};
 
-		let itemPool: Item[] = [];
-		itemPool = [...this.dex.items.all()].filter(item => (
-			item.gen <= this.gen && !item.isNonstandard && item.name !== 'Light Ball' && !item.megaStone
-		));
-
 		while (team.length < this.maxTeamSize) {
 			const pokemonName = this.sampleNoReplace(pokemonList);
 			const species = this.dex.species.get(pokemonName);
 			if (type && !species.types.includes(type)) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
-
-			let item = '';
-			// If the Pokemon can mega evolve, in which case give it a random usable mega stone
-			if (species.otherFormes) {
-				const megas = [];
-				for (const forme of species.otherFormes) {
-					const potentialMega = this.dex.species.get(forme);
-					if (potentialMega.isNonstandard) continue;
-					if (!potentialMega.forme.includes("Mega")) continue;
-					if (!potentialMega.requiredItem) continue;
-					megas.push(potentialMega);
-				}
-				if (megas.length) item = this.sample(megas).requiredItem!;
-			}
-			if (!item) {
-				if (species.id === 'pikachu') {
-					item = 'Light Ball';
-				} else {
-					// Generate item randomly, respecting Item Clause, like in Hackmons Cup
-					const itemData = this.sampleNoReplace(itemPool);
-					item = itemData?.name;
-				}
-			}
 
 			// Random legal ability
 			const abilities = Object.values(species.abilities).filter(a => a !== species.abilities.S);
@@ -1314,6 +1656,12 @@ export class RandomChampionsTeams extends RandomTeams {
 			for (const n of natures) {
 				if (increasedStat === n.plus && decreasedStat === n.minus) nature = n.name;
 			}
+
+			const moveSet = new Set(moves.map(m => this.dex.moves.get(m).id));
+			const counter = this.queryMoves(moveSet, species, '', [ability]);
+			const item = this.getRentalItem(
+				ability, new Set(species.types), moveSet, counter, species, evs, this.dex.natures.get(nature)
+			);
 
 			const level = this.adjustLevel || 50;
 
