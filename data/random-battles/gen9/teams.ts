@@ -1762,6 +1762,12 @@ export class RandomTeams {
 		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
 		const type = this.forceMonotype || this.sample(typePool);
 
+		// One Pokemon from each generation (Ladder Spotlight)
+		const is9for9 = this.format.id === 'gen99for9randombattle';
+		const gensUsed = new Set<number>();
+		// Uses the pre-forme-change species, so e.g. Pikachu caps count as Gen 1
+		const getGen = (s: Species) => (s.baseSpecies === 'Greninja' ? 6 : s.gen);
+
 		// PotD stuff
 		const potdName = (ruleTable.has('potd') && global.Config?.potd) || null;
 		const potd = potdName ? this.dex.species.get(potdName) : null;
@@ -1782,7 +1788,13 @@ export class RandomTeams {
 		if (ruleTable.has('pickedteamsize') || ruleTable.has('teampreview')) leadsRemaining = 0;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
+			let formes = pokemonPool[baseSpecies];
+			// Only pick formes from generations that haven't been used yet
+			if (is9for9) {
+				formes = formes.filter(forme => !gensUsed.has(getGen(this.dex.species.get(forme))));
+				if (!formes.length) continue;
+			}
+			let species = this.dex.species.get(this.sample(formes));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -1890,6 +1902,7 @@ export class RandomTeams {
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;
+			gensUsed.add(getGen(species));
 
 			// Increment type counters
 			for (const typeName of types) {
@@ -1949,7 +1962,8 @@ export class RandomTeams {
 				teamDetails.teraBlast = 1;
 			}
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
+		// 9 for 9 may not be able to fill every generation (e.g. larger team sizes or Force Monotype)
+		if (!is9for9 && pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 
