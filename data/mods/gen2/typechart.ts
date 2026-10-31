@@ -1,6 +1,23 @@
 export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
+	bug: {
+		inherit: true,
+		num: 7,
+	},
+	dark: {
+		inherit: true,
+		num: 27,
+	},
+	dragon: {
+		inherit: true,
+		num: 26,
+	},
+	electric: {
+		inherit: true,
+		num: 23,
+	},
 	fire: {
 		inherit: true,
+		num: 20,
 		damageTaken: {
 			Bug: 2,
 			Dark: 0,
@@ -21,8 +38,17 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Water: 1,
 		},
 	},
+	ghost: {
+		inherit: true,
+		num: 8,
+	},
+	grass: {
+		inherit: true,
+		num: 22,
+	},
 	ice: {
 		inherit: true,
+		num: 25,
 		damageTaken: {
 			Bug: 0,
 			Dark: 0,
@@ -43,8 +69,13 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Water: 0,
 		},
 	},
+	psychic: {
+		inherit: true,
+		num: 24,
+	},
 	steel: {
 		inherit: true,
+		num: 9,
 		damageTaken: {
 			sandstorm: 3,
 			Bug: 2,
@@ -66,5 +97,9 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 			Steel: 2,
 			Water: 0,
 		},
+	},
+	water: {
+		inherit: true,
+		num: 21,
 	},
 };
