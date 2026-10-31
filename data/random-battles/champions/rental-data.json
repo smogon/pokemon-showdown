@@ -47,6 +47,22 @@
         "flagshipMove": "Blizzard",
         "otherMoves": ["Aurora Veil", "Baby-Doll Eyes", "Calm Mind", "Confuse Ray", "Dark Pulse", "Dazzling Gleam", "Disable", "Draining Kiss", "Encore", "Extrasensory", "Foul Play", "Freeze-Dry", "Hypnosis", "Ice Beam", "Ice Shard", "Icy Wind", "Imprison", "Misty Terrain", "Moonblast", "Nasty Plot", "Pain Split", "Roar", "Safeguard", "Snowscape"]
     },
+    "wigglytuff": {
+        "flagshipMove": "Alluring Voice",
+        "otherMoves": ["Baton Pass", "Blizzard", "Calm Mind", "Dark Pulse", "Dazzling Gleam", "Disable", "Draining Kiss", "Encore", "Energy Ball", "Fire Blast", "Flamethrower", "Focus Blast", "Grass Knot", "Hyper Voice", "Ice Beam", "Icy Wind", "Light Screen", "Misty Terrain", "Moonblast", "Nasty Plot", "Perish Song", "Psychic", "Psyshock", "Reflect", "Shadow Ball", "Sing", "Stealth Rock", "Taunt", "Thunder", "Thunder Wave", "Thunderbolt", "Tri Attack"]
+    },
+    "vileplume": {
+        "flagshipMove": "Sludge Bomb",
+        "otherMoves": ["Acid Spray", "Corrosive Gas", "Dazzling Gleam", "Giga Drain", "Grass Knot", "Grassy Terrain", "Growth", "Ingrain", "Leech Seed", "Moonblast", "Pollen Puff", "Sleep Powder", "Sludge Wave", "Solar Beam", "Strength Sap", "Stun Spore", "Synthesis", "Toxic", "Weather Ball"]
+    },
+    "persian": {
+        "flagshipMove": "Feint",
+        "otherMoves": ["Aerial Ace", "Assurance", "Bite", "Body Slam", "Double-Edge", "Endeavor", "Facade", "Fake Out", "Flail", "Foul Play", "Gunk Shot", "Iron Tail", "Knock Off", "Lash Out", "Payback", "Play Rough", "Shadow Claw", "Skitter Smack", "Switcheroo", "Taunt", "Thief", "Throat Chop", "Thunder Wave", "Trailblaze", "U-Turn"]
+    },
+    "persianalola": {
+        "flagshipMove": "Foul Play",
+        "otherMoves": ["Chilling Water", "Dark Pulse", "Endeavor", "Fake Out", "Feint", "Hyper Voice", "Icy Wind", "Nasty Plot", "Parting Shot", "Power Gem", "Shadow Ball", "Snarl", "Switcheroo", "Taunt", "Thunder", "Thunder Wave", "Trailblaze", "U-Turn"]
+    },
     "arcanine": {
         "flagshipMove": "Flare Blitz",
         "otherMoves": ["Bite", "Body Slam", "Bulldoze", "Burn Up", "Close Combat", "Crunch", "Double-Edge", "Dragon Pulse", "Extreme Speed", "Fire Fang", "Flame Charge", "Flamethrower", "Heat Wave", "Howl", "Iron Head", "Iron Tail", "Morning Sun", "Overheat", "Play Rough", "Psychic Fangs", "Roar", "Scorching Sands", "Snarl", "Sunny Day", "Thunder Fang", "Wild Charge", "Will-o-Wisp"]
@@ -75,6 +91,10 @@
         "flagshipMove": "Shell Side Arm",
         "otherMoves": ["Acid Spray", "Amnesia", "Belly Drum", "Blizzard", "Body Press", "Calm Mind", "Double-Edge", "Drain Punch", "Earthquake", "Expanding Force", "Flamethrower", "Focus Blast", "Foul Play", "Grass Knot", "Hydro Pump", "Ice Beam", "Ice Punch", "Imprison", "Iron Defense", "Muddy Water", "Nasty Plot", "Psychic", "Psyshock", "Shadow Ball", "Slack Off", "Sludge Bomb", "Sludge Wave", "Surf", "Thunder Wave", "Toxic", "Toxic Spikes", "Trick", "Trick Room", "Waterfall", "Yawn", "Zen Headbutt"]
     },
+    "farfetchd": {
+        "flagshipMove": "Brave Bird",
+        "otherMoves": ["Acrobatics", "Aerial Ace", "Body Slam", "Close Combat", "Dual Wingbeat", "Facade", "Feather Dance", "First Impression", "Flail", "Focus Energy", "Iron Tail", "Knock Off", "Leaf Blade", "Night Slash", "Poison Jab", "Quick Attack", "Roost", "Sky Attack", "Slash", "Steel Wing", "Swords Dance", "Thief", "Throat Chop", "Trailblaze", "U-Turn"]
+    },
     "gengar": {
         "flagshipMove": "Shadow Ball",
         "otherMoves": ["Acid Spray", "Confuse Ray", "Curse", "Dark Pulse", "Dazzling Gleam", "Destiny Bond", "Disable", "Energy Ball", "Focus Blast", "Giga Drain", "Hex", "Hypnosis", "Icy Wind", "Imprison", "Nasty Plot", "Perish Song", "Psychic", "Sludge Bomb", "Sludge Wave", "Substitute", "Taunt", "Thunder", "Thunder Wave", "Thunderbolt", "Toxic", "Toxic Spikes", "Trick", "Will-o-Wisp"]
@@ -86,6 +106,10 @@
     "starmie": {
         "flagshipMove": "Surf",
         "otherMoves": ["Agility", "Aqua Jet", "Blizzard", "Chilling Water", "Confuse Ray", "Cosmic Power", "Dazzling Gleam", "Dive", "Facade", "Flash Cannon", "Flip Turn", "Grass Knot", "Gravity", "Hydro Pump", "Ice Beam", "Ice Spinner", "Icy Wind", "Light Screen", "Liquidation", "Minimize", "Power Gem", "Psychic", "Psycho Cut", "Psyshock", "Rain Dance", "Rapid Spin", "Recover", "Reflect", "Scald", "Skill Swap", "Thunder", "Thunder Wave", "Thunderbolt", "Trick", "Waterfall", "Zen Headbutt"]
+    },
+    "mrmime": {
+        "flagshipMove": "Psychic",
+        "otherMoves": ["Calm Mind", "Dazzling Gleam", "Encore", "Energy Ball", "Expanding Force", "Focus Blast", "Foul Play", "Icy Wind", "Light Screen", "Misty Terrain", "Mystical Fire", "Nasty Plot", "Psychic Terrain", "Psyshock", "Reflect", "Shadow Ball", "Taunt", "Thunder", "Thunder Wave", "Thunderbolt"]
     },
     "pinsir": {
         "flagshipMove": "X-Scissor",
@@ -194,6 +218,10 @@
         "flagshipMove": "Earthquake",
         "otherMoves": ["Bind", "Body Press", "Body Slam", "Breaking Swipe", "Brutal Swing", "Crunch", "Curse", "Dig", "Double-Edge", "Dragon Tail", "Drill Run", "Facade", "Fire Fang", "Fissure", "Giga Impact", "Gyro Ball", "Head Smash", "Heavy Slam", "High Horsepower", "Ice Fang", "Iron Defense", "Iron Head", "Iron Tail", "Magnet Rise", "Payback", "Psychic Fangs", "Rest", "Rock Blast", "Rock Slide", "Rock Tomb", "Sand Tomb", "Sandstorm", "Screech", "Self-Destruct", "Smack Down", "Stealth Rock", "Steel Roller", "Stomping Tantrum", "Stone Edge", "Substitute", "Taunt", "Thunder Fang"]
     },
+    "qwilfish": {
+        "flagshipMove": "Barb Barrage",
+        "otherMoves": ["Aqua Jet", "Aqua Tail", "Chilling Water", "Crunch", "Dive", "Double-Edge", "Facade", "Fell Stinger", "Flip Turn", "Gunk Shot", "Liquidation", "Pain Split", "Payback", "Pin Missile", "Poison Jab", "Reversal", "Self-Destruct", "Spikes", "Swords Dance", "Taunt", "Throat Chop", "Thunder Wave", "Toxic", "Toxic Spikes", "Waterfall"]
+    },
     "scizor": {
         "flagshipMove": "Bullet Punch",
         "otherMoves": ["Acrobatics", "Aerial Ace", "Baton Pass", "Brick Break", "Bug Bite", "Close Combat", "Double Hit", "Double Team", "Double-Edge", "Dual Wingbeat", "Facade", "Feint", "Giga Impact", "Iron Defense", "Iron Head", "Knock Off", "Lunge", "Night Slash", "Pounce", "Roost", "Sandstorm", "Skitter Smack", "Steel Wing", "Struggle Bug", "Substitute", "Superpower", "Swords Dance", "Tailwind", "Thief", "U-Turn", "X-Scissor"]
@@ -214,6 +242,18 @@
         "flagshipMove": "Rock Slide",
         "otherMoves": ["Aerial Ace", "Assurance", "Avalanche", "Body Press", "Body Slam", "Breaking Swipe", "Brick Break", "Brutal Swing", "Crunch", "Curse", "Double-Edge", "Dragon Claw", "Dragon Dance", "Dragon Tail", "Earthquake", "Facade", "Fire Fang", "Fire Punch", "Focus Punch", "Foul Play", "Hard Press", "Heavy Slam", "High Horsepower", "Ice Fang", "Ice Punch", "Iron Defense", "Iron Head", "Iron Tail", "Knock Off", "Lash Out", "Low Kick", "Mud Shot", "Outrage", "Payback", "Rock Blast", "Sandstorm", "Shadow Claw", "Smack Down", "Snarl", "Stealth Rock", "Stomping Tantrum", "Stone Edge", "Taunt", "Thrash", "Thunder Fang", "Thunder Punch", "Thunder Wave"]
     },
+    "sceptile": {
+        "flagshipMove": "Leaf Storm",
+        "otherMoves": ["Bulldoze", "Dragon Pulse", "Earth Power", "Endeavor", "Endure", "Energy Ball", "Focus Blast", "Giga Drain", "Grassy Terrain", "Leech Seed", "Shed Tail", "Solar Beam", "Synthesis", "Trailblaze", "Upper Hand", "Vacuum Wave"]
+    },
+    "blaziken": {
+        "flagshipMove": "Close Combat",
+        "otherMoves": ["Acrobatics", "Aerial Ace", "Baton Pass", "Blaze Kick", "Bounce", "Brave Bird", "Brick Break", "Bulk Up", "Counter", "Crush Claw", "Detect", "Double-Edge", "Earthquake", "Facade", "Fire Punch", "Flare Blitz", "High Jump Kick", "Knock Off", "Low Kick", "Low Sweep", "Night Slash", "Poison Jab", "Reversal", "Rock Slide", "Rock Tomb", "Shadow Claw", "Stone Edge", "Superpower", "Swords Dance", "Temper Flare", "Thief", "Thunder Punch", "U-Turn", "Upper Hand", "Will-o-Wisp"]
+    },
+    "swampert": {
+        "flagshipMove": "Earthquake",
+        "otherMoves": ["Bite", "Body Press", "Brick Break", "Bulk Up", "Bulldoze", "Dive", "Double-Edge", "Facade", "Flip Turn", "Hammer Arm", "Hard Press", "High Horsepower", "Ice Punch", "Iron Tail", "Knock Off", "Liquidation", "Low Kick", "Mirror Coat", "Outrage", "Poison Jab", "Rain Dance", "Rock Slide", "Rock Tomb", "Smack Down", "Stealth Rock", "Stomping Tantrum", "Stone Edge", "Superpower", "Waterfall", "Wave Crash", "Yawn"]
+    },
     "pelipper": {
         "flagshipMove": "Hurricane",
         "otherMoves": ["Air Cutter", "Air Slash", "Aqua Ring", "Blizzard", "Chilling Water", "Feather Dance", "Hydro Pump", "Hyper Beam", "Ice Beam", "Icy Wind", "Muddy Water", "Quick Attack", "Rain Dance", "Roost", "Snowscape", "Soak", "Surf", "Tailwind", "U-Turn", "Water Pulse", "Weather Ball"]
@@ -226,6 +266,10 @@
         "flagshipMove": "Foul Play",
         "otherMoves": ["Aerial Ace", "Body Slam", "Brick Break", "Confuse Ray", "Disable", "Drain Punch", "Encore", "Fake Out", "Feint", "Fire Punch", "Giga Impact", "Gravity", "Ice Punch", "Knock Off", "Lash Out", "Light Screen", "Low Kick", "Low Sweep", "Metal Burst", "Nasty Plot", "Night Shade", "Night Slash", "Pain Split", "Payback", "Phantom Force", "Poison Jab", "Poltergeist", "Rain Dance", "Recover", "Reflect", "Rest", "Safeguard", "Shadow Punch", "Shadow Sneak", "Skitter Smack", "Snarl", "Substitute", "Sucker Punch", "Sunny Day", "Taunt", "Thief", "Throat Chop", "Thunder Punch", "Thunder Wave", "Torment", "Trick", "Will-o-Wisp", "X-Scissor", "Zen Headbutt"]
     },
+    "mawile": {
+        "flagshipMove": "Iron Head",
+        "otherMoves": ["Assurance", "Bite", "Body Slam", "Brick Break", "Brutal Swing", "Charm", "Crunch", "Facade", "Fake Tears", "Fire Blast", "Fire Fang", "Fling", "Foul Play", "Giga Impact", "Ice Fang", "Ice Punch", "Icy Wind", "Iron Defense", "Knock Off", "Mega Kick", "Payback", "Play Rough", "Psychic Fangs", "Rock Slide", "Rock Tomb", "Sandstorm", "Seismic Toss", "Stealth Rock", "Stone Edge", "Substitute", "Sucker Punch", "Sweet Scent", "Swords Dance", "Taunt", "Thunder Fang", "Thunder Punch"]
+    },
     "aggron": {
         "flagshipMove": "Iron Head",
         "otherMoves": ["Avalanche", "Body Press", "Body Slam", "Brick Break", "Brutal Swing", "Bulldoze", "Crunch", "Curse", "Dig", "Double-Edge", "Dragon Claw", "Dragon Rush", "Earthquake", "Endeavor", "Facade", "Fire Punch", "Giga Impact", "Head Smash", "Heavy Slam", "High Horsepower", "Ice Punch", "Iron Defense", "Iron Tail", "Low Kick", "Mega Kick", "Metal Burst", "Metal Sound", "Outrage", "Payback", "Reversal", "Roar", "Rock Blast", "Rock Slide", "Rock Tomb", "Sandstorm", "Shadow Claw", "Smart Strike", "Stealth Rock", "Steel Roller", "Stomping Tantrum", "Stone Edge", "Superpower", "Taunt", "Thunder Punch", "Thunder Wave", "Uproar"]
@@ -237,6 +281,10 @@
     "manectric": {
         "flagshipMove": "Thunderbolt",
         "otherMoves": ["Charge", "Charge Beam", "Discharge", "Eerie Impulse", "Electric Terrain", "Electro Ball", "Flamethrower", "Howl", "Hyper Beam", "Hyper Voice", "Light Screen", "Overheat", "Quick Attack", "Rising Voltage", "Roar", "Snarl", "Switcheroo", "Thunder", "Thunder Wave", "Volt Switch"]
+    },
+    "swalot": {
+        "flagshipMove": "Gunk Shot",
+        "otherMoves": ["Acid Armor", "Amnesia", "Belch", "Body Press", "Body Slam", "Brick Break", "Bulldoze", "Bullet Seed", "Destiny Bond", "Double-Edge", "Earthquake", "Facade", "Fire Punch", "Gastro Acid", "Ice Punch", "Knock Off", "Pain Split", "Poison Jab", "Protect", "Seed Bomb", "Self-Destruct", "Skitter Smack", "Swords Dance", "Thief", "Thunder Punch", "Toxic", "Toxic Spikes", "Zen Headbutt"]
     },
     "sharpedo": {
         "flagshipMove": "Crunch",
@@ -278,6 +326,14 @@
         "flagshipMove": "Freeze-Dry",
         "otherMoves": ["Blizzard", "Body Slam", "Bulldoze", "Chilling Water", "Dark Pulse", "Disable", "Earthquake", "Facade", "Foul Play", "Frost Breath", "Hyper Beam", "Ice Beam", "Ice Fang", "Ice Shard", "Icy Wind", "Light Screen", "Protect", "Shadow Ball", "Sheer Cold", "Snowscape", "Spikes", "Substitute", "Taunt", "Weather Ball"]
     },
+    "salamence": {
+        "flagshipMove": "Double-Edge",
+        "otherMoves": ["Aerial Ace", "Air Slash", "Bite", "Body Slam", "Brick Break", "Bulldoze", "Crunch", "Draco Meteor", "Dragon Claw", "Dragon Dance", "Dragon Rush", "Dragon Tail", "Dual Wingbeat", "Earthquake", "Facade", "Fire Blast", "Fire Fang", "Flamethrower", "Fly", "Giga Impact", "Heat Wave", "Hurricane", "Hydro Pump", "Hyper Beam", "Hyper Voice", "Iron Head", "Iron Tail", "Outrage", "Roar", "Rock Slide", "Rock Tomb", "Roost", "Shadow Claw", "Slash", "Steel Wing", "Stone Edge", "Substitute", "Tailwind", "Thrash", "Thunder Fang", "Zen Headbutt"]
+    },
+    "metagross": {
+        "flagshipMove": "Meteor Mash",
+        "otherMoves": ["Aerial Ace", "Body Press", "Body Slam", "Brick Break", "Bulldoze", "Bullet Punch", "Cosmic Power", "Double-Edge", "Earthquake", "Explosion", "Facade", "Focus Punch", "Giga Impact", "Hammer Arm", "Hard Press", "Ice Punch", "Icy Wind", "Iron Defense", "Iron Head", "Psychic Fangs", "Rock Slide", "Rock Tomb", "Sandstorm", "Self-Destruct", "Shadow Claw", "Shadow Punch", "Stealth Rock", "Steel Roller", "Stomping Tantrum", "Stone Edge", "Thunder Punch", "Zen Headbutt"]
+    },
     "torterra": {
         "flagshipMove": "Bullet Seed",
         "otherMoves": ["Body Press", "Body Slam", "Bulldoze", "Crunch", "Curse", "Double-Edge", "Earthquake", "Facade", "Frenzy Plant", "Grassy Glide", "Grassy Terrain", "Growth", "Hard Press", "Headlong Rush", "Heavy Slam", "High Horsepower", "Iron Defense", "Iron Head", "Leech Seed", "Mud Shot", "Outrage", "Roar", "Rock Blast", "Rock Slide", "Sandstorm", "Seed Bomb", "Shell Smash", "Smack Down", "Stealth Rock", "Stomping Tantrum", "Stone Edge", "Substitute", "Superpower", "Swords Dance", "Synthesis", "Thrash", "Trailblaze", "Wood Hammer", "Worry Seed", "Zen Headbutt"]
@@ -289,6 +345,10 @@
     "empoleon": {
         "flagshipMove": "Surf",
         "otherMoves": ["Agility", "Air Cutter", "Air Slash", "Aqua Jet", "Aqua Ring", "Blizzard", "Chilling Water", "Feather Dance", "Flash Cannon", "Flip Turn", "Grass Knot", "Haze", "Hydro Cannon", "Hydro Pump", "Hyper Beam", "Ice Beam", "Icy Wind", "Iron Defense", "Rain Dance", "Roar", "Roost", "Stealth Rock", "Steel Beam", "Substitute", "Vacuum Wave", "Water Pulse", "Whirlpool", "Yawn"]
+    },
+    "staraptor": {
+        "flagshipMove": "Brave Bird",
+        "otherMoves": ["Acrobatics", "Aerial Ace", "Blaze Kick", "Brick Break", "Bulk Up", "Close Combat", "Double-Edge", "Dual Wingbeat", "Endeavor", "Facade", "Feather Dance", "Final Gambit", "Quick Attack", "Roost", "Sky Attack", "Steel Wing", "Tailwind", "Thief", "U-Turn"]
     },
     "luxray": {
         "flagshipMove": "Supercell Slam",
@@ -427,6 +487,10 @@
         "flagshipMove": "Surf",
         "otherMoves": ["Acrobatics", "Belch", "Blizzard", "Brick Break", "Chilling Water", "Crunch", "Dig", "Dive", "Facade", "Fake Out", "Flip Turn", "Focus Blast", "Giga Impact", "Grass Knot", "Gunk Shot", "Hydro Pump", "Hyper Beam", "Ice Beam", "Ice Punch", "Icy Wind", "Iron Tail", "Low Kick", "Low Sweep", "Nasty Plot", "Payback", "Rain Dance", "Rock Slide", "Rock Tomb", "Scald", "Shadow Claw", "Stuff Cheeks", "Substitute", "Superpower", "Taunt", "Thief", "Throat Chop", "Waterfall"]
     },
+    "musharna": {
+        "flagshipMove": "Moonblast",
+        "otherMoves": ["Calm Mind", "Dazzling Gleam", "Energy Ball", "Expanding Force", "Future Sight", "Healing Wish", "Hypnosis", "Imprison", "Light Screen", "Misty Explosion", "Moonlight", "Psychic", "Psychic Terrain", "Psyshock", "Reflect", "Shadow Ball", "Stored Power", "Trick", "Trick Room", "Yawn"]
+    },
     "excadrill": {
         "flagshipMove": "Earthquake",
         "otherMoves": ["Aerial Ace", "Body Slam", "Brick Break", "Bulldoze", "Crush Claw", "Dig", "Double-Edge", "Drill Run", "Facade", "Fissure", "High Horsepower", "Horn Drill", "Iron Defense", "Iron Head", "Megahorn", "Mud Shot", "Mud-Slap", "Poison Jab", "Rock Blast", "Rock Slide", "Rock Tomb", "Sand Tomb", "Sandstorm", "Scorching Sands", "Shadow Claw", "Smart Strike", "Stealth Rock", "Stomping Tantrum", "Substitute", "Swords Dance", "Throat Chop", "X-Scissor"]
@@ -438,6 +502,10 @@
         "flagshipMove": "Drain Punch",
         "otherMoves": ["Body Slam", "Brick Break", "Brutal Swing", "Bulk Up", "Bulldoze", "Close Combat", "Counter", "Dig", "Double-Edge", "Dynamic Punch", "Earthquake", "Facade", "Fire Punch", "Focus Punch", "Hammer Arm", "Hard Press", "High Horsepower", "Ice Punch", "Knock Off", "Low Kick", "Low Sweep", "Mach Punch", "Payback", "Poison Jab", "Reversal", "Rock Blast", "Rock Slide", "Rock Tomb", "Smack Down", "Stomping Tantrum", "Stone Edge", "Superpower", "Taunt", "Thief", "Thunder Punch", "Upper Hand"]
     },
+    "scolipede": {
+        "flagshipMove": "Megahorn",
+        "otherMoves": ["Agility", "Assurance", "Baton Pass", "Bite", "Bug Bite", "Bulldoze", "Cross Poison", "Dig", "Double Hit", "Double-Edge", "Earthquake", "Facade", "Giga Impact", "Gunk Shot", "Iron Defense", "Iron Tail", "Leech Life", "Payback", "Pin Missile", "Poison Jab", "Pounce", "Rock Slide", "Rock Tomb", "Skitter Smack", "Smart Strike", "Spikes", "Steel Roller", "Stomping Tantrum", "Substitute", "Superpower", "Swords Dance", "Throat Chop", "Toxic", "Toxic Spikes", "X-Scissor"]
+    },
     "whimsicott": {
         "flagshipMove": "Moonblast",
         "otherMoves": ["Charm", "Cotton Guard", "Cotton Spore", "Dazzling Gleam", "Encore", "Endeavor", "Energy Ball", "Fake Tears", "Giga Drain", "Grass Knot", "Grassy Terrain", "Growth", "Hurricane", "Leech Seed", "Light Screen", "Misty Terrain", "Poison Powder", "Psychic", "Shadow Ball", "Solar Beam", "Stun Spore", "Substitute", "Sunny Day", "Switcheroo", "Tailwind", "Taunt", "Trick Room", "Worry Seed"]
@@ -445,6 +513,10 @@
     "krookodile": {
         "flagshipMove": "Earthquake",
         "otherMoves": ["Aerial Ace", "Aqua Tail", "Bite", "Body Slam", "Breaking Swipe", "Brick Break", "Brutal Swing", "Bulk Up", "Bulldoze", "Close Combat", "Counter", "Crunch", "Dig", "Double-Edge", "Dragon Claw", "Dragon Tail", "Endeavor", "Facade", "Fire Fang", "Fissure", "Focus Punch", "Foul Play", "Giga Impact", "Gunk Shot", "High Horsepower", "Iron Head", "Iron Tail", "Knock Off", "Lash Out", "Low Kick", "Low Sweep", "Mud-Slap", "Outrage", "Power Trip", "Rock Slide", "Rock Tomb", "Sand Tomb", "Sandstorm", "Scale Shot", "Shadow Claw", "Skitter Smack", "Smack Down", "Snarl", "Stealth Rock", "Stomping Tantrum", "Stone Edge", "Superpower", "Taunt", "Thief", "Thrash", "Throat Chop", "Thunder Fang"]
+    },
+    "scrafty": {
+        "flagshipMove": "Knock Off",
+        "otherMoves": ["Amnesia", "Beat Up", "Body Slam", "Brick Break", "Bulk Up", "Close Combat", "Counter", "Crunch", "Curse", "Double-Edge", "Dragon Claw", "Dragon Dance", "Dragon Tail", "Drain Punch", "Encore", "Endeavor", "Facade", "Fake Out", "Fire Punch", "Focus Punch", "Foul Play", "Giga Impact", "Head Smash", "High Jump Kick", "Ice Punch", "Iron Defense", "Iron Head", "Iron Tail", "Lash Out", "Low Kick", "Low Sweep", "Outrage", "Payback", "Poison Jab", "Reversal", "Rock Slide", "Rock Tomb", "Smack Down", "Snarl", "Stone Edge", "Substitute", "Super Fang", "Swords Dance", "Taunt", "Thief", "Throat Chop", "Thunder Punch", "Torment", "Upper Hand", "Zen Headbutt"]
     },
     "cofagrigus": {
         "flagshipMove": "Shadow Ball",
@@ -473,6 +545,10 @@
     "emolga": {
         "flagshipMove": "Nuzzle",
         "otherMoves": ["Acrobatics", "Air Slash", "Charge", "Charge Beam", "Charm", "Discharge", "Dual Wingbeat", "Eerie Impulse", "Electroweb", "Encore", "Light Screen", "Pounce", "Quick Attack", "Taunt", "Thunder Wave", "U-Turn", "Volt Switch", "Wild Charge"]
+    },
+    "eelektross": {
+        "flagshipMove": "Supercell Slam",
+        "otherMoves": ["Acid Spray", "Acrobatics", "Body Press", "Body Slam", "Brick Break", "Bulk Up", "Bulldoze", "Close Combat", "Coil", "Crunch", "Crush Claw", "Dragon Claw", "Dragon Tail", "Drain Punch", "Electric Terrain", "Electroweb", "Facade", "Fire Punch", "Focus Punch", "Giga Impact", "Grass Knot", "Heavy Slam", "Iron Tail", "Knock Off", "Light Screen", "Liquidation", "Lunge", "Outrage", "Psychic Fangs", "Rock Slide", "Rock Tomb", "Stomping Tantrum", "Super Fang", "Superpower", "Thrash", "Throat Chop", "Thunder Fang", "Thunder Punch", "Thunder Wave", "U-Turn", "Volt Switch", "Waterfall", "Wild Charge", "Zen Headbutt"]
     },
     "chandelure": {
         "flagshipMove": "Shadow Ball",
@@ -526,9 +602,17 @@
         "flagshipMove": "Bug Buzz",
         "otherMoves": ["Air Slash", "Confuse Ray", "Draining Kiss", "Energy Ball", "Giga Drain", "Hurricane", "Light Screen", "Poison Powder", "Psychic", "Quiver Dance", "Safeguard", "Sleep Powder", "Solar Beam", "Struggle Bug", "Stun Spore", "Substitute", "Tailwind", "U-Turn", "Weather Ball"]
     },
+    "pyroar": {
+        "flagshipMove": "Flamethrower",
+        "otherMoves": ["Bulldoze", "Burning Jealousy", "Dark Pulse", "Endeavor", "Fire Blast", "Fire Spin", "Flame Charge", "Heat Wave", "Hyper Beam", "Hyper Voice", "Mud-Slap", "Noble Roar", "Overheat", "Scorching Sands", "Snarl", "Solar Beam", "Sunny Day", "Taunt", "Will-o-Wisp", "Yawn"]
+    },
     "florges": {
         "flagshipMove": "Moonblast",
         "otherMoves": ["Alluring Voice", "Calm Mind", "Chilling Water", "Dazzling Gleam", "Draining Kiss", "Endeavor", "Energy Ball", "Giga Drain", "Grassy Glide", "Light Screen", "Misty Explosion", "Misty Terrain", "Pollen Puff", "Psychic", "Psychic Noise", "Rain Dance", "Skill Swap", "Solar Beam", "Stored Power", "Sunny Day", "Synthesis", "Trailblaze", "Wish"]
+    },
+    "gogoat": {
+        "flagshipMove": "Horn Leech",
+        "otherMoves": ["Aerial Ace", "Body Slam", "Brick Break", "Bulk Up", "Bulldoze", "Bullet Seed", "Double-Edge", "Earthquake", "Endeavor", "Grassy Glide", "Grassy Terrain", "Growth", "High Horsepower", "Iron Tail", "Leaf Blade", "Leech Seed", "Megahorn", "Milk Drink", "Payback", "Play Rough", "Rock Slide", "Stomping Tantrum", "Superpower", "Synthesis", "Throat Chop", "Trailblaze", "Wild Charge", "Zen Headbutt"]
     },
     "pangoro": {
         "flagshipMove": "Darkest Lariat",
@@ -557,6 +641,18 @@
     "slurpuff": {
         "flagshipMove": "Dazzling Gleam",
         "otherMoves": ["Amnesia", "Calm Mind", "Charm", "Cotton Guard", "Draining Kiss", "Endeavor", "Energy Ball", "Fake Tears", "Flamethrower", "Light Screen", "Misty Explosion", "Play Rough", "Psychic", "Sticky Web", "String Shot", "Surf", "Thunder", "Thunderbolt", "Yawn"]
+    },
+    "malamar": {
+        "flagshipMove": "Knock Off",
+        "otherMoves": ["Aerial Ace", "Baton Pass", "Brutal Swing", "Destiny Bond", "Disable", "Facade", "Foul Play", "Hypnosis", "Lash Out", "Light Screen", "Liquidation", "Lunge", "Night Slash", "Payback", "Pluck", "Poison Jab", "Psycho Cut", "Reflect", "Rest", "Reversal", "Rock Slide", "Skill Swap", "Substitute", "Superpower", "Switcheroo", "Taunt", "Thief", "Throat Chop", "Topsy-Turvy", "Trick Room", "Zen Headbutt"]
+    },
+    "barbaracle": {
+        "flagshipMove": "Liquidation",
+        "otherMoves": ["Aqua Cutter", "Assurance", "Brick Break", "Brutal Swing", "Bulk Up", "Bulldoze", "Close Combat", "Cross Chop", "Dive", "Dragon Claw", "Earthquake", "Facade", "Icy Wind", "Iron Defense", "Low Kick", "Mud Shot", "Mud-Slap", "Night Slash", "Payback", "Poison Jab", "Rain Dance", "Razor Shell", "Rock Blast", "Rock Polish", "Rock Slide", "Rock Tomb", "Sandstorm", "Shadow Claw", "Shell Smash", "Stealth Rock", "Stone Edge", "Superpower", "Switcheroo", "Swords Dance", "Taunt", "Thief", "Waterfall", "X-Scissor"]
+    },
+    "dragalge": {
+        "flagshipMove": "Sludge Bomb",
+        "otherMoves": ["Acid Armor", "Acid Spray", "Double Team", "Draco Meteor", "Dragon Pulse", "Flip Turn", "Focus Blast", "Haze", "Hydro Pump", "Muddy Water", "Scald", "Shadow Ball", "Sludge Wave", "Surf", "Thunder", "Thunderbolt", "Toxic", "Toxic Spikes", "Venoshock"]
     },
     "clawitzer": {
         "flagshipMove": "Water Pulse",
@@ -694,6 +790,10 @@
         "flagshipMove": "Drain Punch",
         "otherMoves": ["Acrobatics", "Beat Up", "Body Slam", "Brick Break", "Bulk Up", "Bulldoze", "Close Combat", "Counter", "Double-Edge", "Earthquake", "Electroweb", "Endure", "Facade", "Feint", "Focus Punch", "Gunk Shot", "Iron Head", "Iron Tail", "Knock Off", "Low Kick", "Low Sweep", "Pain Split", "Payback", "Quick Attack", "Reversal", "Rock Slide", "Rock Tomb", "Seed Bomb", "Seismic Toss", "Smack Down", "Superpower", "Taunt", "Thief", "Thrash", "Trailblaze", "U-Turn", "Upper Hand"]
     },
+    "golisopod": {
+        "flagshipMove": "First Impression",
+        "otherMoves": ["Aqua Jet", "Assurance", "Brick Break", "Bug Bite", "Bulk Up", "Chilling Water", "Close Combat", "Dive", "Double Hit", "Drill Run", "Endure", "Facade", "Gunk Shot", "Iron Defense", "Iron Head", "Leech Life", "Liquidation", "Night Slash", "Payback", "Pin Missile", "Poison Jab", "Pounce", "Razor Shell", "Rock Slide", "Rock Tomb", "Shadow Claw", "Skitter Smack", "Snarl", "Spikes", "Struggle Bug", "Sucker Punch", "Swords Dance", "Throat Chop", "U-Turn", "Waterfall", "X-Scissor"]
+    },
     "mimikyu": {
         "flagshipMove": "Play Rough",
         "otherMoves": ["Bulk Up", "Charm", "Curse", "Double Team", "Drain Punch", "Facade", "Leech Life", "Light Screen", "Night Shade", "Night Slash", "Pain Split", "Payback", "Phantom Force", "Shadow Claw", "Shadow Sneak", "Substitute", "Swords Dance", "Taunt", "Thief", "Thunder Wave", "Trick", "Trick Room", "Will-o-Wisp", "Wood Hammer", "X-Scissor"]
@@ -706,9 +806,25 @@
         "flagshipMove": "Clanging Scales",
         "otherMoves": ["Aura Sphere", "Body Press", "Boomburst", "Clangorous Soul", "Counter", "Draco Meteor", "Dragon Pulse", "Endeavor", "Endure", "Flamethrower", "Flash Cannon", "Focus Blast", "Reversal", "Scale Shot", "Stealth Rock", "Taunt", "Upper Hand", "Vacuum Wave"]
     },
+    "rillaboom": {
+        "flagshipMove": "Drum Beating",
+        "otherMoves": ["Acrobatics", "Brick Break", "Bulk Up", "Bulldoze", "Bullet Seed", "Double Hit", "Double-Edge", "Drain Punch", "Earthquake", "Endeavor", "Facade", "Fake Out", "Focus Punch", "Grassy Glide", "Grassy Terrain", "Hammer Arm", "High Horsepower", "Knock Off", "Leech Seed", "Low Kick", "Low Sweep", "Seed Bomb", "Solar Blade", "Stomping Tantrum", "Superpower", "Swords Dance", "Taunt", "Thief", "Trailblaze", "U-Turn", "Wood Hammer"]
+    },
+    "cinderace": {
+        "flagshipMove": "Pyro Ball",
+        "otherMoves": ["Acrobatics", "Blaze Kick", "Bounce", "Bulk Up", "Counter", "Court Change", "Facade", "Fire Fang", "Fire Punch", "Flame Charge", "Flare Blitz", "Gunk Shot", "High Jump Kick", "Iron Head", "Low Kick", "Low Sweep", "Reversal", "Smack Down", "Sucker Punch", "Swords Dance", "Taunt", "Temper Flare", "U-Turn", "Will-o-Wisp"]
+    },
+    "inteleon": {
+        "flagshipMove": "Snipe Shot",
+        "otherMoves": ["Air Cutter", "Air Slash", "Aqua Jet", "Blizzard", "Dark Pulse", "Dive", "Flip Turn", "Haze", "Hydro Cannon", "Hydro Pump", "Ice Beam", "Icy Wind", "Light Screen", "Muddy Water", "Rain Dance", "Reflect", "Scald", "Shadow Ball", "Soak", "Sucker Punch", "Surf", "Taunt", "U-Turn", "Vacuum Wave", "Weather Ball"]
+    },
     "corviknight": {
         "flagshipMove": "Iron Head",
         "otherMoves": ["Aerial Ace", "Agility", "Body Press", "Body Slam", "Brave Bird", "Bulk Up", "Curse", "Double-Edge", "Drill Peck", "Dual Wingbeat", "Endure", "Facade", "Fly", "Heavy Slam", "Iron Defense", "Light Screen", "Payback", "Pluck", "Reflect", "Reversal", "Roost", "Sky Attack", "Steel Wing", "Tailwind", "Taunt", "Thief", "U-Turn"]
+    },
+    "thievul": {
+        "flagshipMove": "Dark Pulse",
+        "otherMoves": ["Burning Jealousy", "First Impression", "Foul Play", "Grass Knot", "Nasty Plot", "Parting Shot", "Psychic", "Quick Attack", "Shadow Ball", "Snarl", "Sucker Punch", "Taunt", "Thief", "Trailblaze"]
     },
     "flapple": {
         "flagshipMove": "Grav Apple",
@@ -722,6 +838,18 @@
         "flagshipMove": "Earthquake",
         "otherMoves": ["Body Press", "Body Slam", "Brutal Swing", "Bulldoze", "Coil", "Dig", "Dragon Rush", "Drill Run", "Endeavor", "Facade", "Fire Fang", "Glare", "High Horsepower", "Iron Defense", "Iron Head", "Minimize", "Outrage", "Rock Blast", "Rock Slide", "Rock Tomb", "Sandstorm", "Scale Shot", "Skitter Smack", "Stealth Rock", "Stone Edge", "Thunder Fang", "Wrap", "Zen Headbutt"]
     },
+    "toxtricity": {
+        "flagshipMove": "Overdrive",
+        "otherMoves": ["Acid Spray", "Belch", "Boomburst", "Charge", "Discharge", "Eerie Impulse", "Electric Terrain", "Electroweb", "Encore", "Endeavor", "Hex", "Hyper Voice", "Noble Roar", "Nuzzle", "Psychic Noise", "Shift Gear", "Sludge Bomb", "Sludge Wave", "Snarl", "Taunt", "Thunder", "Thunder Wave", "Thunderbolt", "Toxic", "Toxic Spikes", "Uproar", "Venoshock", "Volt Switch"]
+    },
+    "toxtricitylowkey": {
+        "flagshipMove": "Overdrive",
+        "otherMoves": ["Acid Spray", "Belch", "Boomburst", "Charge", "Discharge", "Eerie Impulse", "Electric Terrain", "Electroweb", "Encore", "Endeavor", "Hex", "Hyper Voice", "Magnetic Flux", "Noble Roar", "Nuzzle", "Parabolic Charge", "Psychic Noise", "Sludge Bomb", "Sludge Wave", "Snarl", "Taunt", "Thunder", "Thunder Wave", "Thunderbolt", "Toxic", "Toxic Spikes", "Uproar", "Venoshock", "Volt Switch"]
+    },
+    "grapploct": {
+        "flagshipMove": "Octolock",
+        "otherMoves": ["Body Slam", "Brick Break", "Brutal Swing", "Bulk Up", "Circle Throw", "Close Combat", "Drain Punch", "Feint", "Giga Impact", "Ice Punch", "Liquidation", "Mach Punch", "Payback", "Reversal", "Skitter Smack", "Soak", "Stomping Tantrum", "Storm Throw", "Substitute", "Sucker Punch", "Superpower", "Taunt", "Topsy-Turvy", "Waterfall"]
+    },
     "polteageist": {
         "flagshipMove": "Shadow Ball",
         "otherMoves": ["Baton Pass", "Calm Mind", "Confuse Ray", "Dark Pulse", "Foul Play", "Giga Drain", "Hex", "Hyper Beam", "Light Screen", "Memento", "Nasty Plot", "Pain Split", "Psychic", "Psyshock", "Reflect", "Shell Smash", "Stored Power", "Strength Sap", "Sucker Punch", "Teatime", "Trick Room", "Will-o-Wisp"]
@@ -730,7 +858,19 @@
         "flagshipMove": "Psychic",
         "otherMoves": ["Calm Mind", "Dark Pulse", "Dazzling Gleam", "Draining Kiss", "Expanding Force", "Future Sight", "Giga Drain", "Light Screen", "Magic Powder", "Misty Explosion", "Misty Terrain", "Mystical Fire", "Psychic Noise", "Psychic Terrain", "Psyshock", "Reflect", "Shadow Ball", "Stored Power", "Trick Room"]
     },
-    "mr.rime": {
+    "grimmsnarl": {
+        "flagshipMove": "Spirit Break",
+        "otherMoves": ["Brick Break", "Crunch", "Drain Punch", "Facade", "Fake Out", "Fire Punch", "Fling", "Foul Play", "Hammer Arm", "Ice Punch", "Lash Out", "Leech Life", "Light Screen", "Low Kick", "Low Sweep", "Misty Terrain", "Parting Shot", "Play Rough", "Power Whip", "Reflect", "Shadow Claw", "Stomping Tantrum", "Sucker Punch", "Superpower", "Taunt", "Thief", "Throat Chop", "Thunder Punch", "Torment", "Trick"]
+    },
+    "perrserker": {
+        "flagshipMove": "Iron Head",
+        "otherMoves": ["Aerial Ace", "Brick Break", "Bulk Up", "Close Combat", "Crunch", "Double-Edge", "Endeavor", "Endure", "Facade", "Fake Out", "Foul Play", "Gunk Shot", "Iron Defense", "Iron Tail", "Knock Off", "Lash Out", "Metal Burst", "Night Slash", "Payback", "Play Rough", "Seed Bomb", "Shadow Claw", "Swords Dance", "Taunt", "Thief", "Throat Chop", "Thunder Wave", "U-Turn", "X-Scissor"]
+    },
+    "sirfetchd": {
+        "flagshipMove": "Meteor Assault",
+        "otherMoves": ["Aerial Ace", "Assurance", "Body Slam", "Brave Bird", "Brick Break", "Brutal Swing", "Close Combat", "Counter", "Double-Edge", "Dual Wingbeat", "Facade", "Feather Dance", "Feint", "First Impression", "Flail", "Grassy Glide", "Knock Off", "Leaf Blade", "Night Slash", "Poison Jab", "Quick Attack", "Sky Attack", "Solar Blade", "Steel Wing", "Superpower", "Swords Dance", "Throat Chop"]
+    },
+    "mrrime": {
         "flagshipMove": "Freeze-Dry",
         "otherMoves": ["Baton Pass", "Blizzard", "Calm Mind", "Dazzling Gleam", "Encore", "Energy Ball", "Expanding Force", "Fake Out", "Focus Blast", "Foul Play", "Frost Breath", "Future Sight", "Grass Knot", "Hypnosis", "Ice Beam", "Ice Shard", "Icy Wind", "Iron Defense", "Light Screen", "Mirror Coat", "Nasty Plot", "Psychic", "Psychic Terrain", "Psyshock", "Reflect", "Shadow Ball", "Sheer Cold", "Slack Off", "Snowscape", "Solar Beam", "Stored Power", "Sucker Punch", "Taunt", "Teeter Dance", "Thunder", "Thunder Wave", "Thunderbolt", "Trick Room"]
     },
@@ -741,6 +881,21 @@
     "alcremie": {
         "flagshipMove": "Alluring Voice",
         "otherMoves": ["Acid Armor", "Calm Mind", "Dazzling Gleam", "Draining Kiss", "Encore", "Endeavor", "Energy Ball", "Giga Drain", "Light Screen", "Misty Explosion", "Misty Terrain", "Mystical Fire", "Pain Split", "Psychic", "Psyshock", "Recover", "Solar Beam", "Stored Power", "Sweet Kiss"]
+    },
+    "falinks": {
+        "flagshipMove": "Close Combat",
+        "otherMoves": ["Body Press", "Body Slam", "Brick Break", "Bulk Up", "Counter", "Double Hit", "Endeavor", "Endure", "Facade", "First Impression", "High Horsepower", "Iron Defense", "Iron Head", "Knock Off", "Lunge", "Megahorn", "No Retreat", "Payback", "Poison Jab", "Reversal", "Rock Slide", "Rock Tomb", "Smart Strike", "Superpower", "Swords Dance", "Throat Chop", "Upper Hand", "Zen Headbutt"]
+    },
+    "pincurchin": {
+        "flagshipMove": "Rising Voltage",
+        "otherMoves": ["Acupressure", "Assurance", "Body Slam", "Charge", "Electric Terrain", "Electroweb", "Facade", "Giga Impact", "Hex", "Liquidation", "Memento", "Pain Split", "Payback", "Pin Missile", "Poison Jab", "Recover", "Reversal", "Self-Destruct", "Supercell Slam", "Throat Chop", "Thunder Wave", "Toxic Spikes", "Wild Charge", "Zing Zap"]
+    },
+    "indeedee": {
+        "otherMoves": ["Calm Mind", "Dazzling Gleam", "Draining Kiss", "Encore", "Energy Ball", "Expanding Force", "Healing Wish", "Hyper Voice", "Mystical Fire", "Psychic", "Psychic Noise", "Psychic Terrain", "Psyshock", "Shadow Ball", "Terrain Pulse", "Trick", "Trick Room"]
+    },
+    "indeedeef": {
+        "flagshipMove": "Psychic",
+        "otherMoves": ["Alluring Voice", "Calm Mind", "Dazzling Gleam", "Draining Kiss", "Energy Ball", "Healing Wish", "Hyper Voice", "Light Screen", "Mystical Fire", "Psychic Terrain", "Psyshock", "Reflect", "Shadow Ball", "Terrain Pulse", "Trick Room"]
     },
     "morpeko": {
         "flagshipMove": "Aura Wheel",
@@ -770,6 +925,10 @@
         "flagshipMove": "Dire Claw",
         "otherMoves": ["Acrobatics", "Aerial Ace", "Brick Break", "Bulk Up", "Close Combat", "Counter", "Double Hit", "Facade", "Fake Out", "Feint", "Fire Punch", "Focus Punch", "Gunk Shot", "Lash Out", "Low Kick", "Low Sweep", "Night Slash", "Poison Jab", "Quick Attack", "Reversal", "Rock Slide", "Rock Tomb", "Shadow Claw", "Swords Dance", "Taunt", "Thief", "Throat Chop", "Toxic Spikes", "U-Turn", "Upper Hand", "X-Scissor"]
     },
+    "overqwil": {
+        "flagshipMove": "Barb Barrage",
+        "otherMoves": ["Aqua Jet", "Aqua Tail", "Chilling Water", "Crunch", "Destiny Bond", "Double-Edge", "Facade", "Fell Stinger", "Gunk Shot", "Lash Out", "Liquidation", "Minimize", "Pain Split", "Pin Missile", "Poison Jab", "Protect", "Rain Dance", "Reversal", "Scale Shot", "Self-Destruct", "Smart Strike", "Spikes", "Substitute", "Swords Dance", "Taunt", "Throat Chop", "Toxic", "Toxic Spikes", "Venoshock", "Waterfall"]
+    },
     "meowscarada": {
         "flagshipMove": "Flower Trick",
         "otherMoves": ["Acrobatics", "Aerial Ace", "Bite", "Brick Break", "Bullet Seed", "Charm", "Facade", "Foul Play", "Grassy Glide", "Grassy Terrain", "Knock Off", "Lash Out", "Leech Seed", "Low Kick", "Low Sweep", "Night Slash", "Petal Blizzard", "Play Rough", "Quick Attack", "Seed Bomb", "Shadow Claw", "Sucker Punch", "Taunt", "Thief", "Throat Chop", "Thunder Punch", "Toxic Spikes", "Trick", "Triple Axel", "U-Turn"]
@@ -782,9 +941,33 @@
         "flagshipMove": "Aqua Step",
         "otherMoves": ["Acrobatics", "Aerial Ace", "Agility", "Aqua Cutter", "Aqua Jet", "Brave Bird", "Brick Break", "Bulk Up", "Close Combat", "Counter", "Double Hit", "Encore", "Endeavor", "Facade", "Feather Dance", "Flip Turn", "Ice Spinner", "Knock Off", "Liquidation", "Low Kick", "Low Sweep", "Mega Kick", "Reversal", "Roost", "Swords Dance", "Taunt", "Triple Axel", "U-Turn", "Upper Hand", "Wave Crash"]
     },
+    "pawmot": {
+        "flagshipMove": "Double Shock",
+        "otherMoves": ["Bite", "Brick Break", "Bulk Up", "Charge", "Close Combat", "Crunch", "Double-Edge", "Eerie Impulse", "Electric Terrain", "Electroweb", "Encore", "Facade", "Fake Out", "Fire Punch", "Focus Punch", "Ice Punch", "Knock Off", "Low Kick", "Low Sweep", "Mach Punch", "Nuzzle", "Play Rough", "Revival Blessing", "Rock Tomb", "Seed Bomb", "Super Fang", "Supercell Slam", "Thief", "Throat Chop", "Thunder Fang", "Thunder Punch", "Thunder Wave", "Volt Switch", "Upper Hand", "Wild Charge"]
+    },
     "maushold": {
         "flagshipMove": "Population Bomb",
         "otherMoves": ["Aerial Ace", "Agility", "Baton Pass", "Beat Up", "Bite", "Bullet Seed", "Crunch", "Double Hit", "Double-Edge", "Encore", "Facade", "Feint", "Low Kick", "Low Sweep", "Play Rough", "Seed Bomb", "Shadow Claw", "Super Fang", "Switcheroo", "Taunt", "Thief", "Thunder Wave", "Tidy Up", "U-Turn"]
+    },
+    "arboliva": {
+        "flagshipMove": "Giga Drain",
+        "otherMoves": ["Alluring Voice", "Dazzling Gleam", "Earth Power", "Energy Ball", "Growth", "Hyper Voice", "Leaf Storm", "Leech Seed", "Light Screen", "Mirror Coat", "Reflect", "Solar Beam", "Strength Sap", "Synthesis", "Terrain Pulse", "Weather Ball"]
+    },
+    "squawkabilly": {
+        "flagshipMove": "Brave Bird",
+        "otherMoves": ["Aerial Ace", "Double-Edge", "Dual Wingbeat", "Endeavor", "Endure", "Facade", "Feather Dance", "Final Gambit", "Fly", "Foul Play", "Lash Out", "Lunge", "Parting Shot", "Pounce", "Quick Attack", "Reversal", "Roost", "Seed Bomb", "Tailwind", "Taunt", "Thief", "U-Turn"]
+    },
+    "squawkabillyblue": {
+        "flagshipMove": "Brave Bird",
+        "otherMoves": ["Aerial Ace", "Double-Edge", "Dual Wingbeat", "Endeavor", "Endure", "Facade", "Feather Dance", "Final Gambit", "Fly", "Foul Play", "Lash Out", "Lunge", "Parting Shot", "Pounce", "Quick Attack", "Reversal", "Roost", "Seed Bomb", "Tailwind", "Taunt", "Thief", "U-Turn"]
+    },
+    "squawkabillyyellow": {
+        "flagshipMove": "Brave Bird",
+        "otherMoves": ["Aerial Ace", "Double-Edge", "Dual Wingbeat", "Endeavor", "Endure", "Facade", "Feather Dance", "Final Gambit", "Fly", "Foul Play", "Lash Out", "Lunge", "Parting Shot", "Pounce", "Quick Attack", "Reversal", "Roost", "Seed Bomb", "Tailwind", "Taunt", "Thief", "U-Turn"]
+    },
+    "squawkabillywhite": {
+        "flagshipMove": "Brave Bird",
+        "otherMoves": ["Aerial Ace", "Double-Edge", "Dual Wingbeat", "Endeavor", "Endure", "Facade", "Feather Dance", "Final Gambit", "Fly", "Foul Play", "Lash Out", "Lunge", "Parting Shot", "Pounce", "Quick Attack", "Reversal", "Roost", "Seed Bomb", "Tailwind", "Taunt", "Thief", "U-Turn"]
     },
     "garganacl": {
         "flagshipMove": "Salt Cure",
@@ -801,6 +984,10 @@
     "bellibolt": {
         "flagshipMove": "Parabolic Charge",
         "otherMoves": ["Acid Spray", "Charge Beam", "Chilling Water", "Confuse Ray", "Discharge", "Eerie Impulse", "Electric Terrain", "Electro Ball", "Electroweb", "Giga Impact", "Hyper Voice", "Light Screen", "Muddy Water", "Reflect", "Slack Off", "Soak", "Sucker Punch", "Thunder", "Thunder Wave", "Thunderbolt", "Toxic", "Volt Switch", "Water Pulse", "Zap Cannon"]
+    },
+    "mabosstiff": {
+        "flagshipMove": "Jaw Lock",
+        "otherMoves": ["Bite", "Body Slam", "Comeuppance", "Crunch", "Double-Edge", "Endeavor", "Facade", "Fire Fang", "Giga Impact", "Ice Fang", "Lash Out", "Outrage", "Pain Split", "Payback", "Play Rough", "Psychic Fangs", "Reversal", "Roar", "Snarl", "Taunt", "Thief", "Thunder Fang", "Trailblaze", "Wild Charge"]
     },
     "scovillain": {
         "flagshipMove": "Flamethrower",
@@ -826,6 +1013,14 @@
         "flagshipMove": "Mortal Spin",
         "otherMoves": ["Acid Spray", "Ancient Power", "Dazzling Gleam", "Earth Power", "Energy Ball", "Explosion", "Flash Cannon", "Meteor Beam", "Power Gem", "Rock Slide", "Sandstorm", "Sludge Bomb", "Sludge Wave", "Solar Beam", "Spikes", "Spiky Shield", "Stealth Rock", "Toxic", "Toxic Spikes", "Venoshock"]
     },
+    "houndstone": {
+        "flagshipMove": "Last Respects",
+        "otherMoves": ["Body Press", "Bulldoze", "Crunch", "Disable", "Double-Edge", "Endeavor", "Facade", "Fire Fang", "Ice Fang", "Night Shade", "Pain Split", "Phantom Force", "Play Rough", "Poltergeist", "Psychic Fangs", "Shadow Sneak", "Stomping Tantrum", "Thief", "Thunder Fang", "Will-o-Wisp", "Yawn", "Zen Headbutt"]
+    },
+    "annihilape": {
+        "flagshipMove": "Rage Fist",
+        "otherMoves": ["Acrobatics", "Assurance", "Brick Break", "Bulk Up", "Bulldoze", "Close Combat", "Counter", "Cross Chop", "Curse", "Double-Edge", "Drain Punch", "Dynamic Punch", "Earthquake", "Encore", "Endeavor", "Facade", "Fire Punch", "Focus Punch", "Gunk Shot", "Ice Punch", "Lash Out", "Low Kick", "Low Sweep", "Night Slash", "Outrage", "Phantom Force", "Poison Jab", "Reversal", "Rock Slide", "Rock Tomb", "Seed Bomb", "Shadow Claw", "Shadow Punch", "Stealth Rock", "Stomping Tantrum", "Stone Edge", "Storm Throw", "Taunt", "Thief", "Throat Chop", "Thunder Punch", "U-Turn"]
+    },
     "farigiraf": {
         "flagshipMove": "Psychic",
         "otherMoves": ["Agility", "Amnesia", "Baton Pass", "Calm Mind", "Dazzling Gleam", "Endeavor", "Energy Ball", "Expanding Force", "Foul Play", "Future Sight", "Grass Knot", "Hyper Beam", "Hyper Voice", "Imprison", "Light Screen", "Mirror Coat", "Nasty Plot", "Psychic Noise", "Psychic Terrain", "Psyshock", "Reflect", "Shadow Ball", "Stored Power", "Substitute", "Thunder", "Thunder Wave", "Thunderbolt", "Trick Room", "Twin Beam", "Uproar"]
@@ -834,13 +1029,21 @@
         "flagshipMove": "Kowtow Cleave",
         "otherMoves": ["Aerial Ace", "Assurance", "Brick Break", "Facade", "Foul Play", "Guillotine", "Iron Defense", "Iron Head", "Lash Out", "Low Kick", "Low Sweep", "Metal Burst", "Night Slash", "Poison Jab", "Reversal", "Rock Tomb", "Shadow Claw", "Stealth Rock", "Stone Edge", "Sucker Punch", "Swords Dance", "Thief", "Throat Chop", "Thunder Wave", "X-Scissor", "Zen Headbutt"]
     },
+    "baxcalibur": {
+        "flagshipMove": "Glaive Rush",
+        "otherMoves": ["Aerial Ace", "Aqua Tail", "Avalanche", "Bite", "Body Press", "Body Slam", "Brick Break", "Bulldoze", "Crunch", "Double-Edge", "Draco Meteor", "Dragon Claw", "Dragon Dance", "Dragon Rush", "Dragon Tail", "Earthquake", "Facade", "High Horsepower", "Ice Fang", "Ice Shard", "Icicle Crash", "Icicle Spear", "Icy Wind", "Iron Head", "Outrage", "Scale Shot", "Stomping Tantrum", "Swords Dance", "Thunder Fang", "Zen Headbutt"]
+    },
+    "gholdengo": {
+        "flagshipMove": "Make It Rain",
+        "otherMoves": ["Charge Beam", "Dazzling Gleam", "Electro Ball", "Flash Cannon", "Focus Blast", "Hex", "Nasty Plot", "Power Gem", "Psychic", "Psyshock", "Recover", "Shadow Ball", "Steel Beam", "Surf", "Thunder", "Thunderbolt", "Trick"]
+    },
     "sinistcha": {
         "flagshipMove": "Matcha Gotcha",
         "otherMoves": ["Calm Mind", "Curse", "Energy Ball", "Foul Play", "Giga Drain", "Grassy Terrain", "Hex", "Leaf Storm", "Nasty Plot", "Pain Split", "Scald", "Shadow Ball", "Solar Beam", "Strength Sap", "Stun Spore", "Trick Room"]
     },
     "archaludon": {
         "flagshipMove": "Electro Shot",
-        "otherMoves": ["Aura Sphere", "Breaking Swipe", "Dark Pulse", "Draco Meteor", "Dragon Pulse", "Dragon Tail", "Flash Cannon", "Foul Play", "Iron Defense", "Metal Burst", "Meteor Beam", "Mirror Coat", "Roar", "Snarl", "Solar Beam", "Stealth Rock", "Steel Beam", "Thunder", "Thunder Wave", "Thunderbolt"]
+        "otherMoves": ["Aura Sphere", "Breaking Swipe", "Dark Pulse", "Draco Meteor", "Dragon Pulse", "Dragon Tail", "Flash Cannon", "Foul Play", "Iron Defense", "Meteor Beam", "Roar", "Snarl", "Solar Beam", "Stealth Rock", "Steel Beam", "Thunder", "Thunder Wave", "Thunderbolt"]
     },
     "hydrapple": {
         "flagshipMove": "Fickle Beam",
