@@ -707,14 +707,14 @@ describe('Modlog conversion script', () => {
 				note: 'Write 1',
 				time: 1598212249944,
 			};
-			modlog.write('development', entry);
+			await modlog.write('development', entry);
 			entry.time++;
 			entry.note = 'Write 2';
-			modlog.write('development', entry);
+			await modlog.write('development', entry);
 			entry.time++;
 			entry.note = 'Write 3';
-			modlog.write('development', entry);
-			modlog.write('development', {
+			await modlog.write('development', entry);
+			await modlog.write('development', {
 				action: 'GLOBAL UNITTEST',
 				roomID: 'development',
 				userid: 'annika',

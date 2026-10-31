@@ -145,8 +145,8 @@ describe('Translation catalogs', () => {
 		});
 		const updated = new ParsedCatalog(template).update(calls);
 		assert.deepEqual(updated.added, ['Forfeit']);
-		assert.match(updated.source, /\/\/ An existing comment\n\t"Battle": null, \/\/ NOT USED/);
-		assert.match(updated.source, /\t"Forfeit": null,\n\n\t\/\/ #endregion Battle/);
+		assert(/\/\/ An existing comment\n\t"Battle": null, \/\/ NOT USED/.test(updated.source), updated.source);
+		assert(/\t"Forfeit": null,\n\n\t\/\/ #endregion Battle/.test(updated.source), updated.source);
 	});
 
 	it('refuses to add strings to a missing region', () => {
@@ -170,8 +170,8 @@ describe('Translation catalogs', () => {
 };
 `;
 		const updated = new ParsedCatalog(template).update(TLCalls.fromSource(''));
-		assert.match(updated.source, /"Rendered later": null, \/\/ DYNAMIC KEY \(passed to TL\(\) through a variable\)\n/);
-		assert.match(updated.source, /"Really unused": null, \/\/ NOT USED/);
+		assert(/"Rendered later": null, \/\/ DYNAMIC KEY \(passed to TL\(\) through a variable\)\n/.test(updated.source), updated.source);
+		assert(/"Really unused": null, \/\/ NOT USED/.test(updated.source), updated.source);
 	});
 
 	it('marks unused template values and removes the marker when calls return', () => {
@@ -186,10 +186,10 @@ describe('Translation catalogs', () => {
 `;
 		const calls = TLCalls.fromSource('TL`Used`; TL("Contextual", "used");');
 		const updated = new ParsedCatalog(template).update(calls);
-		assert.match(updated.source, /"Used": null,\n/);
-		assert.match(updated.source, /"Unused": null, \/\/ NOT USED/);
-		assert.match(updated.source, /"used": null,\n/);
-		assert.match(updated.source, /"unused": null, \/\/ NOT USED/);
+		assert(/"Used": null,\n/.test(updated.source), updated.source);
+		assert(/"Unused": null, \/\/ NOT USED/.test(updated.source), updated.source);
+		assert(/"used": null,\n/.test(updated.source), updated.source);
+		assert(/"unused": null, \/\/ NOT USED/.test(updated.source), updated.source);
 		const locale = new ParsedCatalog(`export const translations = {
 	"Used": "Active translation",
 	"Unused": "Preserved translation",
@@ -223,8 +223,8 @@ describe('Translation catalogs', () => {
 		assert.equal(templateCatalog.update(calls).source, template);
 
 		const synced = templateCatalog.sync(new ParsedCatalog(locale), calls);
-		assert.match(synced.source, /Keep this local note about \{USER\}/);
-		assert.match(synced.source, /"Hello \{USER\}": "Hi \{USER\}"/);
+		assert(/Keep this local note about \{USER\}/.test(synced.source), synced.source);
+		assert(/"Hello \{USER\}": "Hi \{USER\}"/.test(synced.source), synced.source);
 		assert.doesNotMatch(synced.source, /Old entry|Keep me/);
 		assert.deepEqual(compileTranslations(ParsedCatalog.evaluate(synced.source)), {
 			'Hello {0}': 'Hi {0}',
@@ -273,10 +273,10 @@ export const translations: UIText = {
 		assert.deepEqual(templateCatalog.compare(localeCatalog).extra, ['Removed']);
 		const synced = templateCatalog.sync(localeCatalog);
 		assert.doesNotMatch(synced.source, /import type|UIText/);
-		assert.match(synced.source, /\/\/ TRANSLATORS: Home may match Main menu\./);
-		assert.match(synced.source, /\/\/ This wording is intentionally short\.\n\t"Home": "首页",/);
+		assert(/\/\/ TRANSLATORS: Home may match Main menu\./.test(synced.source), synced.source);
+		assert(/\/\/ This wording is intentionally short\.\n\t"Home": "首页",/.test(synced.source), synced.source);
 		assert(synced.source.indexOf('"Home"') < synced.source.indexOf('"Main menu"'));
-		assert.match(synced.source, /"Main menu": "主菜单"/);
+		assert(/"Main menu": "主菜单"/.test(synced.source), synced.source);
 		assert.doesNotMatch(synced.source, /Removed|已删除/);
 		const comparison = templateCatalog.compare(new ParsedCatalog(synced.source));
 		assert.deepEqual(synced.comparison, comparison);
