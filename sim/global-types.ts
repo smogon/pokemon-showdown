@@ -13,6 +13,8 @@ type Mutable<T> = {
 	-readonly [P in keyof T]: T[P];
 };
 
+type WithRequired<T, K extends keyof T> = Partial<T> & Required<Pick<T, K>>;
+
 /**
  * Use `${value as DebugOutput}` to tell oxlint to stop complaining about booleans.
  * Needs to be explicit because booleans in string interpolation is frequently a bug.
