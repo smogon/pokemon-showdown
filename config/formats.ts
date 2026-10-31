@@ -347,7 +347,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Abomasnow', 'Absol', 'Aerodactyl', 'Aggron', 'Alakazam', 'Altaria', 'Ampharos', 'Audino', 'Banette', 'Barbaracle',
 			'Baxcalibur', 'Beedrill', 'Blastoise', 'Blaziken', 'Camerupt', 'Chandelure', 'Charizard', 'Chesnaught', 'Chimecho',
 			'Clefable', 'Crabominable', 'Delphox', 'Dragalge', 'Dragonite', 'Drampa', 'Eelektross', 'Emboar', 'Excadrill',
-			'Falinks', 'Feraligatr', 'Floette', 'Froslass', 'Gallade', 'Garchomp', 'Gardevoir', 'Gengar', 'Glalie', 'Glimmora',
+			'Falinks', 'Feraligatr', 'Floette-Eternal', 'Froslass', 'Gallade', 'Garchomp', 'Gardevoir', 'Gengar', 'Glalie', 'Glimmora',
 			'Golisopod', 'Golurk', 'Greninja', 'Gyarados', 'Hawlucha', 'Heracross', 'Houndoom', 'Kangaskhan', 'Lopunny',
 			'Lucario', 'Malamar', 'Manectric', 'Mawile', 'Medicham', 'Meganium', 'Meowstic', 'Metagross', 'Pidgeot', 'Pinsir',
 			'Pyroar', 'Raichu', 'Sableye', 'Salamence', 'Sceptile', 'Scizor', 'Scolipede', 'Scovillain', 'Scrafty', 'Sharpedo',
