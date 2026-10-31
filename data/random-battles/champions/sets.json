@@ -190,7 +190,7 @@
         ]
     },
     "raichumegay": {
-        "level": 46,
+        "level": 47,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -280,7 +280,7 @@
         ]
     },
     "persian": {
-        "level": 56,
+        "level": 57,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -512,7 +512,7 @@
         ]
     },
     "mrmime": {
-        "level": 54,
+        "level": 55,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -568,7 +568,7 @@
         ]
     },
     "taurospaldeacombat": {
-        "level": 51,
+        "level": 52,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -804,7 +804,7 @@
         ]
     },
     "feraligatrmega": {
-        "level": 46,
+        "level": 47,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -869,7 +869,7 @@
         ]
     },
     "politoed": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -895,7 +895,7 @@
         ]
     },
     "umbreon": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -920,7 +920,7 @@
         ]
     },
     "slowkinggalar": {
-        "level": 52,
+        "level": 53,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -986,7 +986,7 @@
         ]
     },
     "qwilfish": {
-        "level": 52,
+        "level": 51,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1273,7 +1273,7 @@
         ]
     },
     "mawile": {
-        "level": 57,
+        "level": 58,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1613,7 +1613,7 @@
         ]
     },
     "salamencemega": {
-        "level": 44,
+        "level": 43,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1803,7 +1803,7 @@
         ]
     },
     "garchomp": {
-        "level": 46,
+        "level": 45,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1864,7 +1864,7 @@
         ]
     },
     "lucariomega": {
-        "level": 45,
+        "level": 46,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1889,7 +1889,7 @@
         ]
     },
     "hippowdon": {
-        "level": 51,
+        "level": 50,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1995,7 +1995,7 @@
         ]
     },
     "mamoswine": {
-        "level": 51,
+        "level": 50,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2207,7 +2207,7 @@
         ]
     },
     "simisage": {
-        "level": 56,
+        "level": 57,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2279,7 +2279,7 @@
         ]
     },
     "audino": {
-        "level": 59,
+        "level": 60,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2410,7 +2410,7 @@
         ]
     },
     "garbodor": {
-        "level": 55,
+        "level": 54,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2521,7 +2521,7 @@
         ]
     },
     "chandeluremega": {
-        "level": 48,
+        "level": 49,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2804,7 +2804,7 @@
         ]
     },
     "gogoat": {
-        "level": 55,
+        "level": 56,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2917,7 +2917,7 @@
         ]
     },
     "slurpuff": {
-        "level": 52,
+        "level": 51,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3084,7 +3084,7 @@
         ]
     },
     "dedenne": {
-        "level": 57,
+        "level": 56,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3361,7 +3361,7 @@
         ]
     },
     "mudsdale": {
-        "level": 51,
+        "level": 50,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3371,7 +3371,7 @@
         ]
     },
     "araquanid": {
-        "level": 51,
+        "level": 50,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3442,7 +3442,7 @@
         ]
     },
     "golisopodmega": {
-        "level": 46,
+        "level": 45,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3519,7 +3519,7 @@
         ]
     },
     "inteleon": {
-        "level": 50,
+        "level": 51,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3642,7 +3642,7 @@
         ]
     },
     "perrserker": {
-        "level": 54,
+        "level": 55,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3724,7 +3724,7 @@
         ]
     },
     "pincurchin": {
-        "level": 55,
+        "level": 56,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3939,7 +3939,7 @@
         ]
     },
     "squawkabilly": {
-        "level": 54,
+        "level": 55,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -4194,7 +4194,7 @@
         ]
     },
     "gholdengo": {
-        "level": 47,
+        "level": 48,
         "sets": [
             {
                 "role": "Bulky Attacker",
