@@ -322,6 +322,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9 Champions] Rental Doubles Battle (B10P4)",
+		desc: `Randomized teams of ten Pok&eacute;mon using rental sets from Pok&eacute;mon Champions. Choose four of them at Team Preview.`,
 		mod: 'champions',
 		gameType: 'doubles',
 		team: 'randomRental',
