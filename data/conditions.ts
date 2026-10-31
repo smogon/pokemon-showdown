@@ -500,7 +500,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectState.duration = 0;
+				if (this.gen <= 5 || this.ruleTable.has('permanentabilityweathermod')) this.effectState.duration = 0;
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'RainDance');
@@ -574,7 +574,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectState.duration = 0;
+				if (this.gen <= 5 || this.ruleTable.has('permanentabilityweathermod')) this.effectState.duration = 0;
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'SunnyDay');
@@ -649,7 +649,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectState.duration = 0;
+				if (this.gen <= 5 || this.ruleTable.has('permanentabilityweathermod')) this.effectState.duration = 0;
 				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'Sandstorm');
@@ -679,7 +679,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectState.duration = 0;
+				if (this.gen <= 5 || this.ruleTable.has('permanentabilityweathermod')) this.effectState.duration = 0;
 				this.add('-weather', 'Hail', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'Hail');
@@ -715,7 +715,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen <= 5) this.effectState.duration = 0;
+				if (this.gen <= 5 || this.ruleTable.has('permanentabilityweathermod')) this.effectState.duration = 0;
 				this.add('-weather', 'Snowscape', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'Snowscape');
