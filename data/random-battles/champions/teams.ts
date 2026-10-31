@@ -1557,7 +1557,10 @@ export class RandomChampionsTeams extends RandomTeams {
 		if (attacks.length <= 1) return 'Mental Herb';
 		if (counter.get('drain') + countMoves(move => BIG_ROOT_MOVES.includes(move.id)) >= 2) return 'Big Root';
 		if (species.baseStats.spe <= 60 && countMoves(isInaccurate) >= 2) return 'Zoom Lens';
-		if (attacks.length === 4 && species.baseStats.spe >= 60 && species.baseStats.spe <= 100) return 'Choice Scarf';
+		if (
+			attacks.length === 4 && !counter.get('priority') &&
+			species.baseStats.spe >= 60 && species.baseStats.spe <= 100
+		) return 'Choice Scarf';
 		if (
 			PROTECT_MOVES.some(m => moves.has(m)) || moveData[0].category === 'Status' ||
 			((species.baseStats.hp + species.baseStats.def + species.baseStats.spd) >= 275 && !counter.get('recovery'))
