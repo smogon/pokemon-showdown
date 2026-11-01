@@ -488,7 +488,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	},
 	firemane: {
 		name: "Fire Mane",
-		shortDesc: "This Pokemon's Fire-type attacks have 1.5× power.",
+		shortDesc: "This Pokemon's Fire-type attacks have their power multiplied by 1.5.",
 	},
 	flamebody: {
 		name: "Flame Body",
