@@ -453,20 +453,6 @@ export class RuleTable extends Map<string, string> {
 		// sanity checks; these _could_ be inside `value.validate`, but lie here
 		// for historical reasons
 
-		// engine hard limits
-		if (this.maxTeamSize > HARD_MAX_TEAM_SIZE) {
-			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} is unsupported (we only support up to ${HARD_MAX_TEAM_SIZE}).`);
-		}
-		if (this.maxLevel > HARD_MAX_LEVEL) {
-			throw new Error(`Max level ${this.maxLevel}${this.blame('maxlevel')} is unsupported (we only support up to ${HARD_MAX_LEVEL})`);
-		}
-		if (this.maxMoveCount > HARD_MAX_MOVES) {
-			// A limit is imposed here to prevent too much engine strain or
-			// too much layout deformation - to be exact, this is the limit
-			// allowed in Custom Game.
-			throw new Error(`Max move count ${this.maxMoveCount}${this.blame('maxmovecount')} is unsupported (we only support up to ${HARD_MAX_MOVES})`);
-		}
-
 		if (!this.defaultLevel) {
 			// defaultLevel will set level 100 pokemon to the default level, which can break
 			// Max Total Level if Max Level is above 100.

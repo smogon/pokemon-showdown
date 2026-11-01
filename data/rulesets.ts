@@ -2104,6 +2104,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Maximum team size (number of Pokemon) that can be brought into Team Preview (or into the battle, in formats without Team Preview)",
 		value: {
 			type: 'positive-integer',
+			validate(teamSize) {
+				if (teamSize > 24) throw new Error(`Max team size ${teamSize}${this.ruleTable.blame('maxteamsize')} is unsupported (we only support up to 24).`);
+			},
 		},
 		// hardcoded in sim/team-validator
 	},
@@ -2126,6 +2129,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Max number of moves allowed on a single Pokemon (defaults to 4 in a normal game)",
 		value: {
 			type: 'positive-integer',
+			validate(maxMoves) {
+				if (maxMoves > 24) {
+					// A limit is imposed here to prevent too much engine strain or
+					// too much layout deformation - to be exact, this is the limit
+					// allowed in Custom Game.
+					throw new Error(`Max move count ${maxMoves}${this.ruleTable.blame('maxmovecount')} is unsupported (we only support up to 24)`);
+				}
+			},
 		},
 		// hardcoded in sim/team-validator
 	},
@@ -2207,6 +2218,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Maximum level of brought Pokemon (if you're using both this and Adjust Level, this will control what level moves you have access to)",
 		value: {
 			type: 'positive-integer',
+			validate(maxLevel) {
+				if (maxLevel > 99_999) {
+					throw new Error(`Max level ${maxLevel}${this.ruleTable.blame('maxlevel')} is unsupported (we only support up to 99999)`);
+				}
+			},
 		},
 		// hardcoded in sim/team-validator
 	},
