@@ -2308,10 +2308,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		value: {
 			type: 'flag',
 			validate() {
-				const table = this.ruleTable;
-				if ((table.pickedTeamSize || table.minTeamSize) < 6) {
+				const ruleTable = this.ruleTable;
+				const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
+				const maxTeamSizeBlame = ruleTable.pickedTeamSize ? ruleTable.blame('pickedteamsize') : ruleTable.blame('maxteamsize');
+				if (maxTeamSize < 6) {
 					throw new Error(
-						`Custom rules that could allow the active team size to be reduced below 6 (Min Team Size < 6, Picked Team Size < 6) could prevent the Chimera from being fully defined, and are incompatible with Chimera 1v1.`
+						`Team size ${maxTeamSize}${maxTeamSizeBlame} is incompatible with Chimera (6 Pokemon are required.)`
 					);
 				}
 				const gameType = this.format.gameType;
@@ -3018,9 +3020,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 			}
 			const problems: string[] = [];
-			// FIXME: There is no Unique Pokemove Clause
-			// const uniquePokemoves = this.ruleTable.getRuleValueOr<number>('uniquepokemoves', 1);
-			const uniquePokemoves = 1;
+			const uniquePokemoves = this.ruleTable.getRuleValue<number>('uniquepokemoves')!;
 			for (const [moveid, num] of pokemoves) {
 				if (num <= uniquePokemoves) continue;
 				problems.push(

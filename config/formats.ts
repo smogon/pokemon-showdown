@@ -2648,7 +2648,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					moves.push(moveid);
 				}
 			}
-			const allowedPokemoves = this.ruleTable.getRuleValueOr<number>('allowedpokemoves', 1);
+			const allowedPokemoves = this.dex.clampIntRange(this.ruleTable.getRuleValue('allowedpokemoves'), 1, 24);
 			if (pokemoves > allowedPokemoves) {
 				problems.push(
 					`${set.species} has ${pokemoves} Pokemoves.`,

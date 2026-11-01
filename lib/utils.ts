@@ -316,8 +316,12 @@ export function randomElement<T>(arr: T[]): T {
 	return arr[i];
 }
 
-/** Forces num to be an integer (between min and max). */
+/**
+ * Forces num to be an integer (between min and max).
+ * Malformed input returns NaN.
+ */
 export function clampIntRange(num: any, min?: number, max?: number): number {
+	if (typeof num === 'string') num = parseExactInt(num);
 	if (typeof num !== 'number') num = 0;
 	num = Math.floor(num);
 	if (min !== undefined && num < min) num = min;

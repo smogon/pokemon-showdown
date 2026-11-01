@@ -2214,7 +2214,7 @@ export const Rooms = {
 			Ladders.cancelSearches(user);
 		}
 
-		const bestOfNum = Dex.formats.getRuleTable(format).getRuleValue<number>('bestof');
+		const bestOfNum = Dex.formats.getRuleTable(format).valueRules.get('bestof');
 
 		if (Rooms.global.lockdown === 'pre' && bestOfNum && !options.isBestOfSubBattle) {
 			for (const user of players) {

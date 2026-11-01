@@ -7,6 +7,10 @@ import { Tags } from '../data/tags';
 const DEFAULT_MOD = 'gen9';
 const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'legends', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 
+const HARD_MAX_LEVEL = 99999;
+const HARD_MAX_MOVES = 24;
+const HARD_MAX_TEAM_SIZE = 24;
+
 export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
 }
@@ -291,6 +295,19 @@ export class RuleTable extends Map<string, string> {
 		return this.valueRules.has(rule);
 	}
 
+	isRuleValue<T>(rule: string, value: T) {
+		if (!this.valueRules.has(rule)) return false;
+		return this.valueRules.get(rule) === value;
+	}
+
+	/*
+	 * `getRuleValue` and `getRuleValueOr` are
+	 * convenience APIs that are meant to be consumed
+	 * exclusively by specific formats and rules implementations,
+	 * since only they can guarantee type contracts are fulfilled.
+	 *
+	 */
+
 	getRuleValue<T>(rule: string): T | undefined {
 		return this.valueRules.get(rule) as T | undefined;
 	}
@@ -298,11 +315,6 @@ export class RuleTable extends Map<string, string> {
 	getRuleValueOr<T>(rule: string, defaultValue: T): T {
 		if (!this.valueRules.has(rule)) return defaultValue;
 		return this.getRuleValue<T>(rule)!;
-	}
-
-	isRuleValue<T>(rule: string, value: T) {
-		if (!this.valueRules.has(rule)) return false;
-		return this.valueRules.get(rule) === value;
 	}
 
 	/*
@@ -396,18 +408,18 @@ export class RuleTable extends Map<string, string> {
 		// should be enough for a validator rule, and the battle event system
 		// should be enough for a battle rule.
 
-		this.minTeamSize = this.getRuleValueOr<number>('minteamsize', 0);
-		this.maxTeamSize = this.getRuleValueOr<number>('maxteamsize', 6);
-		this.maxTotalLevel = this.getRuleValueOr<number | null>('maxtotallevel', null);
-		this.maxMoveCount = this.getRuleValueOr<number>('maxmovecount', 4);
-		this.minLevel = this.getRuleValueOr<number>('minlevel', 1);
-		this.maxLevel = this.getRuleValueOr<number>('maxlevel', 100);
-		this.defaultLevel = this.getRuleValueOr<number>('defaultlevel', 0);
-		this.adjustLevel = this.getRuleValueOr<number | null>('adjustlevel', null);
-		this.adjustLevelDown = this.getRuleValueOr<number | null>('adjustleveldown', null);
+		this.minTeamSize = this.dex.clampIntRange(this.valueRules.get('minteamsize') || 0, 0, HARD_MAX_TEAM_SIZE);
+		this.maxTeamSize = this.dex.clampIntRange(this.valueRules.get('maxteamsize') || 6, 1, HARD_MAX_TEAM_SIZE);
+		this.maxTotalLevel = this.dex.clampIntRange(this.valueRules.get('maxtotallevel'), 0, 1e8) || null;
+		this.maxMoveCount = this.dex.clampIntRange(this.valueRules.get('maxmovecount') || 4, 1, HARD_MAX_MOVES);
+		this.minLevel = this.dex.clampIntRange(this.valueRules.get('minlevel') || 1, 1, HARD_MAX_LEVEL);
+		this.maxLevel = this.dex.clampIntRange(this.valueRules.get('maxlevel') || 100, 1, HARD_MAX_LEVEL);
+		this.defaultLevel = this.dex.clampIntRange(this.valueRules.get('defaultlevel') || 0, 0, HARD_MAX_LEVEL);
+		this.adjustLevel = this.dex.clampIntRange(this.valueRules.get('adjustlevel'), 0, HARD_MAX_LEVEL) || null;
+		this.adjustLevelDown = this.dex.clampIntRange(this.valueRules.get('adjustleveldown'), 0, HARD_MAX_LEVEL) || null;
 
 		if (this.hasRuleValue('minsourcegen')) {
-			this.minSourceGen = this.getRuleValue<number>('minsourcegen')!;
+			this.minSourceGen = this.dex.clampIntRange(this.valueRules.get('minsourcegen'), 1);
 		} else if (dex.gen >= 9 && this.has('obtainable') && !this.has('natdexmod')) {
 			this.minSourceGen = dex.gen;
 		} else {
@@ -421,7 +433,7 @@ export class RuleTable extends Map<string, string> {
 				3
 			);
 		} else {
-			this.pickedTeamSize = Number(this.getRuleValue<ID>('pickedteamsize')) || null;
+			this.pickedTeamSize = this.dex.clampIntRange(this.valueRules.get('pickedteamsize'), 0, HARD_MAX_TEAM_SIZE) || null;
 		}
 
 		if (this.isRuleValue('evlimit', 'auto')) {
@@ -435,24 +447,24 @@ export class RuleTable extends Map<string, string> {
 			// Gen 6 hackmons also has a limit, which is currently implemented
 			// at the appropriate format.
 		} else {
-			this.evLimit = Number(this.getRuleValue<ID>('evlimit')) || null;
+			this.evLimit = this.dex.clampIntRange(this.valueRules.get('evlimit'), 0) || null;
 		}
 
 		// sanity checks; these _could_ be inside `value.validate`, but lie here
 		// for historical reasons
 
 		// engine hard limits
-		if (this.maxTeamSize > 24) {
-			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} is unsupported (we only support up to 24).`);
+		if (this.maxTeamSize > HARD_MAX_TEAM_SIZE) {
+			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} is unsupported (we only support up to ${HARD_MAX_TEAM_SIZE}).`);
 		}
-		if (this.maxLevel > 99999) {
-			throw new Error(`Max level ${this.maxLevel}${this.blame('maxlevel')} is unsupported (we only support up to 99999)`);
+		if (this.maxLevel > HARD_MAX_LEVEL) {
+			throw new Error(`Max level ${this.maxLevel}${this.blame('maxlevel')} is unsupported (we only support up to ${HARD_MAX_LEVEL})`);
 		}
-		if (this.maxMoveCount > 24) {
+		if (this.maxMoveCount > HARD_MAX_MOVES) {
 			// A limit is imposed here to prevent too much engine strain or
 			// too much layout deformation - to be exact, this is the limit
 			// allowed in Custom Game.
-			throw new Error(`Max move count ${this.maxMoveCount}${this.blame('maxmovecount')} is unsupported (we only support up to 24)`);
+			throw new Error(`Max move count ${this.maxMoveCount}${this.blame('maxmovecount')} is unsupported (we only support up to ${HARD_MAX_MOVES})`);
 		}
 
 		if (!this.defaultLevel) {
