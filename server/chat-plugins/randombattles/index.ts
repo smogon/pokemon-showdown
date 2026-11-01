@@ -494,7 +494,7 @@ function CAP1v1Sets(species: string | Species) {
 function rrrSets(species: Species) {
 	const rrrData: { [k: string]: { flagshipMove?: string, secondaryMove?: string, otherMoves?: string[] } } =
 		JSON.parse(FS(`data/random-battles/champions/rrr-sets.json`).readIfExistsSync() || '{}');
-	const formatName = Dex.formats.get('gen9championsrosterranchramble').name;
+	const formatName = Dex.formats.get('gen9championsrosterranchrumble').name;
 	const setsToCheck = [species];
 	if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => Dex.species.get(pkmn)));
 
@@ -732,19 +732,19 @@ export const commands: Chat.ChatCommands = {
 		`/cap1v1 [pokemon] - Displays a Pok\u00e9mon's CAP 1v1 sets.`,
 	],
 
-	rosterranch: 'rosterranchramble',
-	rrr: 'rosterranchramble',
-	rosterranchramble(target) {
+	rosterranch: 'rosterranchrumble',
+	rrr: 'rosterranchrumble',
+	rosterranchrumble(target) {
 		if (!this.runBroadcast()) return;
-		if (!target) return this.parse(`/help rosterranchramble`);
+		if (!target) return this.parse(`/help rosterranchrumble`);
 		const species = Dex.species.get(target);
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
 		const sets = rrrSets(species);
-		if (!sets) throw new Chat.ErrorMessage(`Error: ${species.name} has no sets in Roster Ranch Ramble.`);
+		if (!sets) throw new Chat.ErrorMessage(`Error: ${species.name} has no sets in Roster Ranch Rumble.`);
 		return this.sendReplyBox(sets);
 	},
-	rosterranchramblehelp: [
-		`/rosterranchramble OR /rrr [pokemon] - Displays a Pok\u00e9mon's possible moves in [Gen 9 Champions] Roster Ranch Ramble.`,
+	rosterranchrumblehelp: [
+		`/rosterranchrumble OR /rrr [pokemon] - Displays a Pok\u00e9mon's possible moves in [Gen 9 Champions] Roster Ranch Rumble.`,
 		`Also available as /rosterranch.`,
 	],
 

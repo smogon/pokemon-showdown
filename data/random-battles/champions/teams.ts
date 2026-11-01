@@ -1245,7 +1245,7 @@ export class RandomChampionsTeams extends RandomTeams {
 	}
 
 	/**
-	 * Picks a Roster Ranch Ramble item. Rules are checked in order and the first one that
+	 * Picks a Roster Ranch Rumble item. Rules are checked in order and the first one that
 	 * applies decides the item; an empty string means the Pokemon holds nothing.
 	 */
 	getRRRItem(
