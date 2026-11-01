@@ -920,6 +920,94 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] National Dex Mix and Mega",
+		desc: `Mega evolve any Pok&eacute;mon with any mega stone, or transform them with Genesect Drives, Primal orbs, Origin orbs, Rusted items, Ogerpon Masks, Arceus Plates, and Silvally Memories with no limit. Mega and Primal boosts based on form changes from gen 7.`,
+		mod: 'mixandmega',
+		ruleset: ['Standard OMs', 'NatDex Mod', 'Mega Rayquaza Clause', 'Evasion Items Clause', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Calyrex-Shadow', 'Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Lucarionite Z',
+			'Malamarite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Raichunite Y', 'Scovillainite', 'Starminite', 'Zygardite', 'Assist', 'Baton Pass', 'Shed Tail',
+		],
+		restricted: [
+			'Arceus', 'Calyrex-Ice', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black',
+			'Kyurem-White', 'Lugia', 'Lunala', 'Iron Bundle', 'Marshadow', 'Melmetal', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
+			'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shedinja', 'Slaking', 'Sneasler', 'Solgaleo', 'Urshifu-Single-Strike', 'Victini', 'Xerneas', 'Yveltal',
+			'Zacian', 'Zekrom',
+		],
+		onValidateTeam(team) {
+			const itemTable = new Set<ID>();
+			for (const set of team) {
+				const item = this.dex.items.get(set.item);
+				if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
+					!item.isPrimalOrb && !item.name.startsWith('Rusted') &&
+					!item.name.endsWith('Plate') && !item.name.endsWith('Memory') && !item.name.startsWith('Mask') &&
+					!item.name.endsWith('Drive') && !item.name.endsWith('Core') && !item.name.endsWith('Crystal') &&
+					!item.name.endsWith('Globe')) continue;
+				const species = this.dex.species.get(set.species);
+				if (species.isNonstandard && !this.ruleTable.has(`+tag:${this.toID(species.isNonstandard)}`)) {
+					return [`${species.baseSpecies} does not exist in gen 9.`];
+				}
+				if (this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted(`item:${item.id}`) ||
+					this.ruleTable.isRestricted(`ability:${this.dex.abilities.get(set.ability).id}`)) {
+					const nativeMegaPrimal = (item.megaStone || item.isPrimalOrb) && item.itemUser?.includes(species.baseSpecies);
+					const nativeRusted = item.name.startsWith('Rusted') &&
+						(item.itemUser?.includes(species.baseSpecies) || item.name.includes(species.baseSpecies));
+					const isForcedForme = !!item.forcedForme &&
+						(species.baseSpecies === this.dex.species.get(item.forcedForme).baseSpecies);
+					if (!nativeMegaPrimal && !nativeRusted && !isForcedForme) {
+						return [`${species.name} is not allowed to hold ${item.name}.`];
+					}
+				}
+				if (itemTable.has(item.id)) {
+					return [
+						`You are limited to one of each Mega Stone/Primal Orb/Rusted item/Origin item/Genesect Drive/Ogerpon Mask/Arceus Plate/Silvally Memory.`,
+						`(You have more than one ${item.name})`,
+					];
+				}
+				itemTable.add(item.id);
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.originalSpecies = pokemon.baseSpecies.name;
+			}
+		},
+		onSwitchIn(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				// Place volatiles on the Pokémon to show its mega-evolved condition and details
+				this.add('-start', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+				const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+				if (oSpecies.types.join('/') !== pokemon.species.types.join('/')) {
+					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]', '[from] format: National Dex Mix and Mega');
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			const originalSpecies = this.dex.species.get((pokemon.species as any).originalSpecies);
+			if (originalSpecies.exists && pokemon.m.originalSpecies !== originalSpecies.baseSpecies) {
+				this.add('-end', pokemon, originalSpecies.requiredItems?.[0] || originalSpecies.requiredItem || originalSpecies.requiredMove, '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 9] Monocolor",
+		desc: `All Pok&eacute;mon on a team must share a color.`,
+		mod: 'gen9',
+		// searchShow: false,
+		ruleset: ['[Gen 9] OU', 'Same Color Clause'],
+		banlist: ['Ogerpon-Wellspring', 'Regieleki'],
+		unbanlist: ['Archaludon', 'Volcarona', 'Tera Blast'],
+	},
+	{
+		name: "[Gen 9] National Dex Doubles Ubers",
+		mod: 'gen9',
+		gameType: 'doubles',
+		// searchShow: false,
+		ruleset: ['Standard Doubles', 'NatDex Mod', '!Gravity Sleep Clause'],
+		banlist: ['Shedinja', 'Assist'],
+	},
+	{
 		name: "[Gen 8 BDSP] Battle Festival Doubles",
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
