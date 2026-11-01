@@ -704,14 +704,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Chimera 1v1 Random Battle",
-		desc: "Merges a team of six into a single Pok\u00e9mon depending on the order chosen at team preview: It gains the typing of the first, item of the second, ability of the third, stats of the fourth, the first two moves of the fifth, and the last two moves of the sixth.",
-		mod: 'gen7',
+		name: "[Gen 9] 9 for 9 Random Battle",
+		desc: `[Gen 9] Random Battle with 9 Pok&eacute;mon, one from each generation.`,
+		mod: 'gen9',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['[Gen 7] Random Battle', 'Chimera 1v1 Rule', 'Adjust Level = 100'],
+		ruleset: ['[Gen 9] Random Battle', 'Max Team Size = 9'],
 		onBegin() {
-			this.add(`raw|<div class="broadcast-blue"><b>Chimera Rands is a 1v1 format where you combine your 6 Pokemon into one "Chimera." The order you select during team preview is important! In sequence, your picks determine your Chimera's Type, Item, Ability, Stats, Moves 1 &amp; 2, then finally Moves 3 &amp; 4.</b></div>`);
+			this.add(`raw|<div class="broadcast-blue"><b>Each team has 9 Pok&eacute;mon, one from each generation (1-9).</b></div>`);
 		},
 	},
 	{
