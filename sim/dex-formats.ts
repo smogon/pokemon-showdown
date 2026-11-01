@@ -7,6 +7,10 @@ import { Tags } from '../data/tags';
 const DEFAULT_MOD = 'gen9';
 const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'legends', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 
+const HARD_MAX_LEVEL = 99999;
+const HARD_MAX_MOVES = 24;
+const HARD_MAX_TEAM_SIZE = 24;
+
 export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
 }
@@ -17,6 +21,40 @@ export interface FormatDataTable { [id: IDEntry]: FormatData }
 export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
+
+export interface RuleTableBuildContext {
+	format: Format;
+	ruleTable: RuleTable;
+	dex: ModdedDex;
+	rule: Format;
+}
+
+type RuleValidator<T> = (this: RuleTableBuildContext, value: T) => (T | void);
+
+type RuleValueTypeMap = {
+	flag: void,
+	string: string,
+	identifier: ID,
+	integer: number,
+	'positive-integer': number,
+};
+
+export type RuleValueType = keyof RuleValueTypeMap;
+
+interface RuleValueConstraintsVariant<T extends RuleValueType> {
+	type: T;
+	validate?: RuleValidator<RuleValueTypeMap[T]>;
+};
+
+export type RuleValueConstraints = {
+	[K in RuleValueType]: RuleValueConstraintsVariant<K>;
+}[keyof RuleValueTypeMap];
+
+type ModdedCheckCanLearn = (
+	this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: Partial<PokemonSet>
+) => string | null;
+
+const RULE_VALUE_DEFAULT_FLAG = { type: 'flag' as const } satisfies RuleValueConstraints;
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
@@ -36,6 +74,10 @@ export interface GameTimerSettings {
 	accelerate: boolean;
 }
 
+const FORMAT_KEY_RULELIKE = ['checkCanLearn', 'onChooseTeam'] as const;
+
+type FormatKeyRuleLike = typeof FORMAT_KEY_RULELIKE[number];
+
 /**
  * A RuleTable keeps track of the rules that a format has. The key can be:
  * - '[ruleid]' the ID of a rule in effect
@@ -46,15 +88,16 @@ export interface GameTimerSettings {
  * The value is the name of the parent rule (blank for the active format).
  */
 export class RuleTable extends Map<string, string> {
+	dex: ModdedDex;
 	complexBans: Map<ID, ComplexBan>;
 	complexTeamBans: Map<ID, ComplexTeamBan>;
-	checkCanLearn: [TeamValidator['checkCanLearn'], string] | null;
+	checkCanLearn: [ModdedCheckCanLearn, string] | null;
 	onChooseTeam: [NonNullable<Format['onChooseTeam']>, string] | null;
 	timer: [Partial<GameTimerSettings>, string] | null;
 	/** Sorted by precedence, in reverse order from a format's ban/unbanlist
 	 *  DO NOT search this; just use ruleTable.has(...). This is purely for tag rule precedence. */
 	tagRules: TagRule[];
-	valueRules: Map<string, string>;
+	valueRules: Map<string, string | number>;
 
 	minTeamSize!: number;
 	maxTeamSize!: number;
@@ -69,8 +112,9 @@ export class RuleTable extends Map<string, string> {
 	adjustLevelDown!: number | null;
 	evLimit!: number | null;
 
-	constructor() {
+	constructor(dex: ModdedDex) {
 		super();
+		this.dex = dex;
 		this.complexBans = new Map();
 		this.complexTeamBans = new Map();
 		this.checkCanLearn = null;
@@ -247,6 +291,108 @@ export class RuleTable extends Map<string, string> {
 		this.complexTeamBans.set(ruleId, [rule, source, limit, bans]);
 	}
 
+	hasRuleValue(rule: string) {
+		return this.valueRules.has(rule);
+	}
+
+	isRuleValue<T>(rule: string, value: T) {
+		if (!this.valueRules.has(rule)) return false;
+		return this.valueRules.get(rule) === value;
+	}
+
+	/*
+	 * `getRuleValue` and `getRuleValueOr` are
+	 * convenience APIs that are meant to be consumed
+	 * exclusively by specific formats and rules implementations,
+	 * since only they can guarantee type contracts are fulfilled.
+	 *
+	 */
+
+	getRuleValue<T>(rule: string): T | undefined {
+		return this.valueRules.get(rule) as T | undefined;
+	}
+
+	getRuleValueOr<T>(rule: string, defaultValue: T): T {
+		if (!this.valueRules.has(rule)) return defaultValue;
+		return this.getRuleValue<T>(rule)!;
+	}
+
+	/*
+	 * Stores unique properties or event handler across formats and rules.
+	 * These are not already rules because:
+	 * - Need to fast access these properties without loading rule tables.
+	 * - Inadequate ergonomics for value rules (e.g. may be functions).
+	 * - Historical reasons.
+	 */
+
+	importUniqueFormatKey<K extends FormatKeyRuleLike>(
+		format: MakeRequiredNonNullable<Format, K>,
+		key: K,
+	) {
+		this[key] = [format[key], format.name] as this[K];
+	}
+
+	importUniqueSubFormatKey<K extends FormatKeyRuleLike>(
+		subRuleTable: MakeRequiredNonNullable<RuleTable, K>,
+		key: K,
+		format: Format,
+	) {
+		if (this[key]) {
+			throw new Error(
+				`"${format.name}" has conflicting ${this.dex.formats.describeFormatKey(key)} from ` +
+				`"${this[key][1]}" and "${subRuleTable[key][1]}"`
+			);
+		}
+		this[key] = subRuleTable[key] as this[K];
+	}
+
+	/*
+	 *
+	 * These methods copy a value or non-value rule to a target dictionary.
+	 * A rule that holds a value is an option.
+	 * A "non-value" rule is called a flag, and it's treated as boolean.
+	 *
+	 * If the rule is missing, the "maybe" variants will
+	 * never copy it as undefined/false. Instead, they won't do anything.
+	 *
+	 */
+
+	transferOption<
+		DictType,
+		KeyType extends KeysMatching<DictType, undefined>,
+	>(rule: string, dict: DictType, key: KeyType) {
+		// This assertion is a white lie, because TS is dumb.
+		dict[key] = this.getRuleValue<DictType[KeyType]>(rule)!;
+	}
+
+	transferFlag<
+		DictType,
+		KeyType extends KeysMatching<DictType, boolean>,
+	>(rule: string, dict: DictType, key: KeyType) {
+		// Also helping TS - not a lie though.
+		dict[key] = this.has(rule) as DictType[KeyType];
+	}
+
+	maybeTransferOption<
+		DictType,
+		KeyType extends keyof DictType,
+	>(rule: string, dict: DictType, key: KeyType) {
+		if (!this.valueRules.has(rule)) return false;
+		// Nothing weird here, but ultimately also helping TS, also not a lie.
+		dict[key] = this.getRuleValue<DictType[KeyType]>(rule)!;
+		return true;
+	}
+
+	maybeTransferFlag<
+		DictType,
+		KeyType extends KeysMatching<DictType, true>,
+	>(rule: string, dict: DictType, key: KeyType) {
+		if (!this.has(rule)) return false;
+		// Also helping TS, and not a lie.
+		dict[key] = true as DictType[KeyType];
+		return true;
+	}
+
 	/** After a RuleTable has been filled out, resolve its hardcoded numeric properties */
 	resolveNumbers(format: Format, dex: ModdedDex) {
 		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
@@ -258,69 +404,39 @@ export class RuleTable extends Map<string, string> {
 		// in complicated ways.
 
 		// If you're making your own rule, it nearly definitely does not not
-		// belong here: `onValidateRule`, `onValidateSet`, and `onValidateTeam`
+		// belong here: `value.validate`, `onValidateSet`, and `onValidateTeam`
 		// should be enough for a validator rule, and the battle event system
 		// should be enough for a battle rule.
 
-		this.minTeamSize = Number(this.valueRules.get('minteamsize')) || 0;
-		this.maxTeamSize = Number(this.valueRules.get('maxteamsize')) || 6;
-		this.pickedTeamSize = Number(this.valueRules.get('pickedteamsize')) || null;
-		this.maxTotalLevel = Number(this.valueRules.get('maxtotallevel')) || null;
-		this.maxMoveCount = Number(this.valueRules.get('maxmovecount')) || 4;
-		this.minSourceGen = Number(this.valueRules.get('minsourcegen'));
-		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
-		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
-		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
-		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
-		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
-		this.evLimit = Number(this.valueRules.get('evlimit'));
-		if (isNaN(this.evLimit)) this.evLimit = null;
-		if (!this.minSourceGen) {
-			if (dex.gen >= 9 && this.has('obtainable') && !this.has('natdexmod')) {
-				this.minSourceGen = dex.gen;
-			} else {
-				this.minSourceGen = 1;
-			}
+		this.minTeamSize = this.dex.clampIntRange(this.valueRules.get('minteamsize') || 0, 0, HARD_MAX_TEAM_SIZE);
+		this.maxTeamSize = this.dex.clampIntRange(this.valueRules.get('maxteamsize') || 6, 1, HARD_MAX_TEAM_SIZE);
+		this.maxTotalLevel = this.dex.clampIntRange(this.valueRules.get('maxtotallevel'), 0, 1e8) || null;
+		this.maxMoveCount = this.dex.clampIntRange(this.valueRules.get('maxmovecount') || 4, 1, HARD_MAX_MOVES);
+		this.minLevel = this.dex.clampIntRange(this.valueRules.get('minlevel') || 1, 1, HARD_MAX_LEVEL);
+		this.maxLevel = this.dex.clampIntRange(this.valueRules.get('maxlevel') || 100, 1, HARD_MAX_LEVEL);
+		this.defaultLevel = this.dex.clampIntRange(this.valueRules.get('defaultlevel') || 0, 0, HARD_MAX_LEVEL);
+		this.adjustLevel = this.dex.clampIntRange(this.valueRules.get('adjustlevel'), 0, HARD_MAX_LEVEL) || null;
+		this.adjustLevelDown = this.dex.clampIntRange(this.valueRules.get('adjustleveldown'), 0, HARD_MAX_LEVEL) || null;
+
+		if (this.hasRuleValue('minsourcegen')) {
+			this.minSourceGen = this.dex.clampIntRange(this.valueRules.get('minsourcegen'), 1);
+		} else if (dex.gen >= 9 && this.has('obtainable') && !this.has('natdexmod')) {
+			this.minSourceGen = dex.gen;
+		} else {
+			this.minSourceGen = 1;
 		}
 
-		const timer: Partial<GameTimerSettings> = {};
-		if (this.valueRules.has('timerstarting')) {
-			timer.starting = Number(this.valueRules.get('timerstarting'));
-		}
-		if (this.has('dctimer')) {
-			timer.dcTimer = true;
-		}
-		if (this.has('dctimerbank')) {
-			timer.dcTimer = true;
-		}
-		if (this.valueRules.has('timergrace')) {
-			timer.grace = Number(this.valueRules.get('timergrace'));
-		}
-		if (this.valueRules.has('timeraddperturn')) {
-			timer.addPerTurn = Number(this.valueRules.get('timeraddperturn'));
-		}
-		if (this.valueRules.has('timermaxperturn')) {
-			timer.maxPerTurn = Number(this.valueRules.get('timermaxperturn'));
-		}
-		if (this.valueRules.has('timermaxfirstturn')) {
-			timer.maxFirstTurn = Number(this.valueRules.get('timermaxfirstturn'));
-		}
-		if (this.has('timeoutautochoose')) {
-			timer.timeoutAutoChoose = true;
-		}
-		if (this.has('timeraccelerate')) {
-			timer.accelerate = true;
-		}
-		if (Object.keys(timer).length) this.timer = [timer, format.name];
-
-		if (this.valueRules.get('pickedteamsize') === 'Auto') {
+		if (this.isRuleValue('pickedteamsize', 'auto')) {
 			this.pickedTeamSize = (
 				['doubles', 'rotation'].includes(format.gameType) ? 4 :
 				format.gameType === 'triples' ? 6 :
 				3
 			);
+		} else {
+			this.pickedTeamSize = this.dex.clampIntRange(this.valueRules.get('pickedteamsize'), 0, HARD_MAX_TEAM_SIZE) || null;
 		}
-		if (this.valueRules.get('evlimit') === 'Auto') {
+
+		if (this.isRuleValue('evlimit', 'auto')) {
 			this.evLimit = dex.gen > 2 ? 510 : null;
 			if (format.mod === 'gen7letsgo') {
 				this.evLimit = this.has('lgpenormalrules') ? 0 : null;
@@ -330,24 +446,12 @@ export class RuleTable extends Map<string, string> {
 			}
 			// Gen 6 hackmons also has a limit, which is currently implemented
 			// at the appropriate format.
+		} else {
+			this.evLimit = this.dex.clampIntRange(this.valueRules.get('evlimit'), 0) || null;
 		}
 
-		// sanity checks; these _could_ be inside `onValidateRule` but this way
-		// involves less string conversion.
-
-		// engine hard limits
-		if (this.maxTeamSize > 24) {
-			throw new Error(`Max team size ${this.maxTeamSize}${this.blame('maxteamsize')} is unsupported (we only support up to 24).`);
-		}
-		if (this.maxLevel > 99999) {
-			throw new Error(`Max level ${this.maxLevel}${this.blame('maxlevel')} is unsupported (we only support up to 99999)`);
-		}
-		if (this.maxMoveCount > 24) {
-			// A limit is imposed here to prevent too much engine strain or
-			// too much layout deformation - to be exact, this is the limit
-			// allowed in Custom Game.
-			throw new Error(`Max move count ${this.maxMoveCount}${this.blame('maxmovecount')} is unsupported (we only support up to 24)`);
-		}
+		// sanity checks; these _could_ be inside `value.validate`, but lie here
+		// for historical reasons
 
 		if (!this.defaultLevel) {
 			// defaultLevel will set level 100 pokemon to the default level, which can break
@@ -396,6 +500,22 @@ export class RuleTable extends Map<string, string> {
 		if (this.evLimit && this.evLimit < 0) {
 			throw new Error(`EV Limit ${this.evLimit}${this.blame('evlimit')} can't be less than 0 (you might have meant: "! EV Limit" to remove the limit, or "EV Limit = 0" to ban EVs).`);
 		}
+	}
+
+	resolveTimer(format: Format, dex: ModdedDex) {
+		const timer: Partial<GameTimerSettings> = {};
+		this.maybeTransferOption('timerstarting', timer, 'starting');
+		this.maybeTransferFlag('dctimer', timer, 'dcTimer');
+		this.maybeTransferFlag('dctimerbank', timer, 'dcTimer');
+		this.maybeTransferOption('timergrace', timer, 'grace');
+		this.maybeTransferOption('timeraddperturn', timer, 'addPerTurn');
+		this.maybeTransferOption('timermaxperturn', timer, 'maxPerTurn');
+		this.maybeTransferOption('timermaxfirstturn', timer, 'maxFirstTurn');
+		this.maybeTransferFlag('timeoutautochoose', timer, 'timeoutAutoChoose');
+		this.maybeTransferFlag('timeraccelerate', timer, 'accelerate');
+		if (!Object.keys(timer).length) return;
+
+		this.timer = [timer, format.name];
 
 		if (timer.starting !== undefined && (timer.starting < 10 || timer.starting > 1200)) {
 			throw new Error(`Timer starting value ${timer.starting}${this.blame('timerstarting')} must be between 10 and 1200 seconds.`);
@@ -464,10 +584,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
-	declare readonly onValidateRule?: (
-		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
-	) => string | void;
+	declare readonly value?: RuleValueConstraints;
 	/** ID of rule that can't be combined with this rule */
 	declare readonly mutuallyExclusiveWith?: string;
 
@@ -484,9 +601,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly itemClauseDefault?: boolean;
 	declare readonly threads?: string[];
 	declare readonly tournamentShow?: boolean;
-	declare readonly checkCanLearn?: (
-		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
-	) => string | null;
+	declare readonly checkCanLearn?: ModdedCheckCanLearn;
 	declare readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
 	declare readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
 	declare readonly getSharedItems?: (this: Format, pokemon: Pokemon) => Set<string>;
@@ -524,6 +639,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
 		this.gameType = data.gameType || 'singles';
+		this.value = data.value || RULE_VALUE_DEFAULT_FLAG;
 		this.ruleset = data.ruleset || [];
 		this.baseRuleset = data.baseRuleset || [];
 		this.banlist = data.banlist || [];
@@ -537,6 +653,11 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		assignMissingFields(this, data);
 	}
 }
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type RuleLikeCheck = Assert<
+	FormatKeyRuleLike extends keyof Format & keyof RuleTable ? true : false
+>;
 
 /** merges format lists from config/formats and config/custom-formats */
 function mergeFormatLists(main: FormatList, custom: FormatList | undefined): FormatList {
@@ -662,6 +783,17 @@ export class DexFormats {
 
 		this.formatsListCache = formatsList;
 		return this;
+	}
+
+	describeFormatKey(key: keyof Format) {
+		switch (key) {
+		case 'checkCanLearn':
+			return `move validation rules`;
+		case 'onChooseTeam':
+			return `team selection rules`;
+		default:
+			return key;
+		}
 	}
 
 	checkDeprecated(format: AnyObject) {
@@ -792,6 +924,42 @@ export class DexFormats {
 			ruleSpec.slice(1).startsWith('basepokemon:')
 		);
 	}
+
+	parseRuleValueInner(valueType: RuleValueType, value: string, ruleName: string, ruleSpec: string): string | number | ID {
+		if (value === 'Current Gen') value = `${this.dex.gen}`;
+
+		if (valueType === 'integer' || valueType === 'positive-integer') {
+			const intValue = parseInt(value);
+			if (!Number.isSafeInteger(intValue)) {
+				throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+			}
+			if (valueType === 'positive-integer') {
+				if (intValue === 0) {
+					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${ruleName}").`);
+				}
+				if (intValue <= 0) {
+					throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
+				}
+			}
+			return intValue;
+		}
+
+		if (valueType === 'identifier') {
+			const identifier = toID(value);
+			if (!identifier.length) {
+				throw new Error(`In rule "${ruleSpec}", "${value}" must be alphanumeric.`);
+			}
+			return identifier;
+		}
+
+		return value;
+	}
+
+	parseRuleValue(rule: Format, value: string, ruleSpec: string): string | number | ID {
+		const valueType = rule.value!.type;
+		return this.parseRuleValueInner(valueType, value, rule.name, ruleSpec);
+	}
+
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
 		if (format.name.length > 50) {
@@ -803,7 +971,7 @@ export class DexFormats {
 				return dex.formats.getRuleTable(format, 2, repeals);
 			}
 		}
-		const ruleTable = new RuleTable();
+		const ruleTable = new RuleTable(this.dex);
 
 		const ruleset = format.ruleset.slice();
 		for (const ban of format.banlist) {
@@ -818,11 +986,10 @@ export class DexFormats {
 		if (format.customRules) {
 			ruleset.push(...format.customRules);
 		}
-		if (format.checkCanLearn) {
-			ruleTable.checkCanLearn = [format.checkCanLearn, format.name];
-		}
-		if (format.onChooseTeam) {
-			ruleTable.onChooseTeam = [format.onChooseTeam, format.name];
+		for (const key of FORMAT_KEY_RULELIKE) {
+			if (this.hasRuleLike(format, key)) {
+				ruleTable.importUniqueFormatKey(format, key);
+			}
 		}
 
 		// apply rule repeals before other rules
@@ -895,32 +1062,16 @@ export class DexFormats {
 			}
 
 			// rule
-			let [formatid, value] = ruleSpec.split('=');
-			const subformat = this.get(formatid);
+			const [rawRuleName, rawValue] = ruleSpec.split('=');
+			const subformat = this.get(rawRuleName);
 			const repealAndReplace = ruleSpec.startsWith('!!');
 			if (repeals?.has(subformat.id)) {
 				repeals.set(subformat.id, -Math.abs(repeals.get(subformat.id)!));
 				continue;
 			}
-			if (subformat.hasValue) {
-				if (value === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
-				if (value === 'Current Gen') value = `${this.dex.gen}`;
-				if ((subformat.id === 'pickedteamsize' || subformat.id === 'evlimit') && value === 'Auto') {
-					// can't be resolved until later
-				} else if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
-					const intValue = parseInt(value);
-					if (isNaN(intValue) || value !== `${intValue}`) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
-					}
-				}
-				if (subformat.hasValue === 'positive-integer') {
-					if (parseInt(value) === 0) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
-					}
-					if (parseInt(value) <= 0) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
-					}
-				}
+			if (subformat.value!.type !== 'flag') {
+				if (rawValue === undefined) throw new Error(`Rule "${ruleSpec}" should have a value (like "${ruleSpec} = something")`);
+				const value = this.parseRuleValue(subformat, rawValue, ruleSpec);
 
 				const oldValue = ruleTable.valueRules.get(subformat.id);
 				if (oldValue === value) {
@@ -950,7 +1101,7 @@ export class DexFormats {
 				}
 				ruleTable.valueRules.set(subformat.id, value);
 			} else {
-				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
+				if (rawValue !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
 				if (repealAndReplace) throw new Error(`"!!" is not supported for this rule`);
 				if (ruleTable.has(subformat.id) && !repealAndReplace && !noWarn) {
 					throw new Error(`Rule "${ruleSpec}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
@@ -997,23 +1148,10 @@ export class DexFormats {
 			for (const [subRule, source, limit, bans] of subRuleTable.complexTeamBans.values()) {
 				ruleTable.addComplexTeamBan(subRule, source || subformat.name, limit, bans);
 			}
-			if (subRuleTable.checkCanLearn) {
-				if (ruleTable.checkCanLearn) {
-					throw new Error(
-						`"${format.name}" has conflicting move validation rules from ` +
-						`"${ruleTable.checkCanLearn[1]}" and "${subRuleTable.checkCanLearn[1]}"`
-					);
+			for (const key of FORMAT_KEY_RULELIKE) {
+				if (this.hasRuleLike(subRuleTable, key)) {
+					ruleTable.importUniqueSubFormatKey(subRuleTable, key, format);
 				}
-				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
-			}
-			if (subRuleTable.onChooseTeam) {
-				if (ruleTable.onChooseTeam) {
-					throw new Error(
-						`"${format.name}" has conflicting team selection rules from ` +
-						`"${ruleTable.onChooseTeam[1]}" and "${subRuleTable.onChooseTeam[1]}"`
-					);
-				}
-				ruleTable.onChooseTeam = subRuleTable.onChooseTeam;
 			}
 		}
 		if (!hasPokemonBans && warnForNoPokemonBans) {
@@ -1022,6 +1160,7 @@ export class DexFormats {
 		ruleTable.getTagRules();
 
 		ruleTable.resolveNumbers(format, this.dex);
+		ruleTable.resolveTimer(format, this.dex);
 
 		const canMegaEvo = (this.dex.gen >= 6 || ruleTable.has('+tag:future')) &&
 			(this.dex.gen <= 7 || ruleTable.has('+tag:past'));
@@ -1038,10 +1177,15 @@ export class DexFormats {
 			if ("+*-!".includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
-				const value = subFormat.onValidateRule?.call(
-					{ format, ruleTable, dex: this.dex }, ruleTable.valueRules.get(rule as ID)!
+				const normalValue = ruleTable.valueRules.get(rule as ID);
+				// Casting to 'any' lets us avoid a repetitive switch-case with little value.
+				const value: RuleValueTypeMap[RuleValueType] = (subFormat.value!.validate as any)?.call(
+					{ format, ruleTable, dex: this.dex, rule: subFormat } as RuleTableBuildContext,
+					normalValue,
 				);
-				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
+				if (subFormat.value!.type !== 'flag' && (typeof value === 'string' || typeof value === 'number')) {
+					ruleTable.valueRules.set(subFormat.id, value);
+				}
 			}
 		}
 
@@ -1184,5 +1328,15 @@ export class DexFormats {
 			throw new Error(`Nothing matches "${rule}"`);
 		}
 		return matches[0];
+	}
+
+	hasRuleLike<
+		T extends Format | RuleTable,
+		K extends keyof T,
+	>(format: T, key: K): format is MakeRequiredNonNullable<T, K> {
+		// Ignore falsy values as usual.
+		// Note that, in this case, if we wanted them,
+		// the rule-like would have to optimally be a true rule.
+		return !!format[key];
 	}
 }

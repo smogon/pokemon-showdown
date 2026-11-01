@@ -121,6 +121,7 @@ export class ModdedDex {
 	dataCache: DexTableData | null;
 	textCache: { [lang: string]: TextTableData | null | undefined };
 
+	clampIntRange = Utils.clampIntRange;
 	deepClone = Utils.deepClone;
 	deepFreeze = Utils.deepFreeze;
 	Multiset = Utils.Multiset;

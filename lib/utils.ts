@@ -316,8 +316,12 @@ export function randomElement<T>(arr: T[]): T {
 	return arr[i];
 }
 
-/** Forces num to be an integer (between min and max). */
+/**
+ * Forces num to be an integer (between min and max).
+ * Malformed input returns NaN.
+ */
 export function clampIntRange(num: any, min?: number, max?: number): number {
+	if (typeof num === 'string') num = parseExactInt(num);
 	if (typeof num !== 'number') num = 0;
 	num = Math.floor(num);
 	if (min !== undefined && num < min) num = min;
@@ -429,6 +433,10 @@ export function bufReadHex(buf: Uint8Array, start = 0, end?: number) {
 	return [...buf.slice(start, end)].map(val => val.toString(16).padStart(2, '0')).join('');
 }
 
+export function assertUnreachable(x: never): never {
+	throw new Error("Expected unreachable path");
+}
+
 export class Multiset<T> extends Map<T, number> {
 	override get(key: T) {
 		return super.get(key) ?? 0;
@@ -454,5 +462,6 @@ export const Utils = {
 	stripHTML, visualize, getString,
 	escapeRegex, formatSQLArray,
 	bufFromHex, bufReadHex, bufWriteHex,
+	assertUnreachable,
 	Multiset,
 };
