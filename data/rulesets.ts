@@ -2105,7 +2105,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		value: {
 			type: 'positive-integer',
 			validate(teamSize) {
-				if (teamSize > 24) throw new Error(`Max team size ${teamSize}${this.ruleTable.blame('maxteamsize')} is unsupported (we only support up to 24).`);
+				if (teamSize > 24) {
+					throw new Error(`Max team size ${teamSize}${this.ruleTable.blame('maxteamsize')} is unsupported (we only support up to 24).`);
+				}
 			},
 		},
 		// hardcoded in sim/team-validator
