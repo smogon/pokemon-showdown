@@ -991,23 +991,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Monocolor",
-		desc: `All Pok&eacute;mon on a team must share a color.`,
-		mod: 'gen9',
-		// searchShow: false,
-		ruleset: ['[Gen 9] OU', 'Same Color Clause'],
-		banlist: ['Ogerpon-Wellspring', 'Regieleki'],
-		unbanlist: ['Archaludon', 'Volcarona', 'Tera Blast'],
-	},
-	{
-		name: "[Gen 9] National Dex Doubles Ubers",
-		mod: 'gen9',
-		gameType: 'doubles',
-		// searchShow: false,
-		ruleset: ['Standard Doubles', 'NatDex Mod', '!Gravity Sleep Clause'],
-		banlist: ['Shedinja', 'Assist'],
-	},
-	{
 		name: "[Gen 8 BDSP] Battle Festival Doubles",
 		mod: 'gen8bdsp',
 		gameType: 'doubles',
