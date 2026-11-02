@@ -179,262 +179,262 @@ describe('Transform', () => {
 		const abilityAnnounceIndex = log.indexOf('|-endability|');
 		assert.equal(abilityAnnounceIndex, -1, `It should not announce the user's ability was suppressed.`);
 	});
-});
 
-describe('Transform [Gen 9]', () => {
-	afterEach(() => {
-		battle.destroy();
+	describe('[Gen 9]', () => {
+		it("should copy the target's old types, not the Tera Type", () => {
+			battle = common.gen(9).createBattle([[
+				{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
+			], [
+				{ species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon" },
+			]]);
+			battle.makeChoices('auto', 'move sleeptalk terastallize');
+			assert.equal(battle.p1.active[0].getTypes().join('/'), 'Electric');
+			battle.makeChoices('move sleeptalk terastallize', 'auto');
+			assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+		});
+
+		it("should keep the user's Tera Type when Terastallized", () => {
+			battle = common.gen(9).createBattle([[
+				{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
+			], [
+				{ species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon" },
+			]]);
+			battle.makeChoices('move transform terastallize', 'move sleeptalk terastallize');
+			assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+		});
+
+		it("should fail against Ogerpon when the user is Terastallized", () => {
+			battle = common.gen(9).createBattle([[
+				{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
+			], [
+				{ species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass" },
+			]]);
+			battle.makeChoices('move transform terastallize', 'move sleeptalk');
+			assert.false(battle.p1.active[0].transformed);
+		});
+
+		it("should fail against Ogerpon when Ogerpon is Terastallized", () => {
+			battle = common.gen(9).createBattle([[
+				{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
+			], [
+				{ species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass" },
+			]]);
+			battle.makeChoices('move transform', 'move sleeptalk terastallize');
+			assert.false(battle.p1.active[0].transformed);
+		});
+
+		it("should prevent Pokemon transformed into Ogerpon from Terastallizing", () => {
+			battle = common.gen(9).createBattle([[
+				{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
+			], [
+				{ species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass" },
+			]]);
+			battle.makeChoices();
+			assert.cantMove(() => battle.choose('p1', 'move sleeptalk terastallize'));
+		});
+
+		it("should not allow Pokemon transformed into Ogerpon to Terastallize later if they couldn't before transforming", () => {
+			battle = common.gen(9).createBattle({ formatid: 'gen9customgame@@@!teampreview,terastalclause' }, [[
+				{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
+				{ species: "Shedinja", ability: "wonderguard", moves: ['transform'], teraType: "Fire" },
+			], [
+				{ species: "Ogerpon", ability: "defiant", moves: ['spikes'], teraType: "Grass" },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('switch 2', 'default');
+			battle.makeChoices();
+			assert.false(battle.p1.active[0].transformed);
+			assert.cantMove(() => battle.choose('p1', 'move transform terastallize'));
+		});
+
+		it(`should not work if the user is Tera Stellar`, () => {
+			battle = common.gen(9).createBattle([[
+				{ species: 'Ditto', ability: 'limber', moves: ['transform'], teraType: 'Stellar' },
+			], [
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices('move transform terastallize', 'auto');
+			assert.false(battle.p1.active[0].transformed);
+		});
 	});
 
-	it("should copy the target's old types, not the Tera Type", () => {
-		battle = common.gen(9).createBattle([[
-			{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
-		], [
-			{ species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon" },
-		]]);
-		battle.makeChoices('auto', 'move sleeptalk terastallize');
-		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Electric');
-		battle.makeChoices('move sleeptalk terastallize', 'auto');
-		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+	describe('[Gen 5]', () => {
+		it("should not copy the target's focus energy status", () => {
+			battle = common.gen(5).createBattle([[
+				{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+			], [
+				{ species: "Sawk", ability: 'sturdy', moves: ['focusenergy'] },
+			]]);
+			assert.constant(() => battle.p1.active[0].volatiles['focusenergy'], () => battle.makeChoices('move transform', 'move focusenergy'));
+		});
 	});
 
-	it("should keep the user's Tera Type when Terastallized", () => {
-		battle = common.gen(9).createBattle([[
-			{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
-		], [
-			{ species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon" },
-		]]);
-		battle.makeChoices('move transform terastallize', 'move sleeptalk terastallize');
-		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
+	describe('[Gen 4]', () => {
+		it('should revert Pokemon transformed into Giratina-Origin to Giratina-Alternate if not holding a Griseous Orb', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+			], [
+				{ species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest'] },
+			]]);
+			battle.makeChoices('move transform', 'move rest');
+			assert.equal(battle.p1.active[0].species.name, 'Giratina');
+		});
+
+		it('should cause Pokemon transformed into Giratina-Alternate to become Giratina-Origin if holding a Griseous Orb', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform'] },
+			], [
+				{ species: "Giratina", ability: 'pressure', moves: ['rest'] },
+			]]);
+			battle.makeChoices('move transform', 'move rest');
+			assert.equal(battle.p1.active[0].species.name, 'Giratina-Origin');
+		});
+
+		it('should cause Pokemon transformed into Arceus to become an Arceus forme corresponding to its held Plate', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform'] },
+			], [
+				{ species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest'] },
+			]]);
+			battle.makeChoices('move transform', 'move rest');
+			assert.equal(battle.p1.active[0].species.name, 'Arceus-Fire');
+			assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
+		});
+
+		it('should succeed against a Substitute', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "Ditto", ability: 'limber', moves: ['transform'] },
+			], [
+				{ species: "Mewtwo", ability: 'pressure', moves: ['substitute'] },
+			]]);
+			battle.makeChoices('move transform', 'move substitute');
+			assert.equal(battle.p1.active[0].species, battle.p2.active[0].species);
+		});
 	});
 
-	it("should fail against Ogerpon when the user is Terastallized", () => {
-		battle = common.gen(9).createBattle([[
-			{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
-		], [
-			{ species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass" },
-		]]);
-		battle.makeChoices('move transform terastallize', 'move sleeptalk');
-		assert.false(battle.p1.active[0].transformed);
-	});
+	describe('[Gen 1]', () => {
+		it("should not send |-endability|", () => {
+			battle = common.gen(1).createBattle([[
+				{ species: "Ditto", moves: ['transform'] },
+			], [
+				{ species: "Gengar", moves: ['lick'] },
+			]]);
+			battle.makeChoices('move transform', 'move lick');
 
-	it("should fail against Ogerpon when Ogerpon is Terastallized", () => {
-		battle = common.gen(9).createBattle([[
-			{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
-		], [
-			{ species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass" },
-		]]);
-		battle.makeChoices('move transform', 'move sleeptalk terastallize');
-		assert.false(battle.p1.active[0].transformed);
-	});
+			assert(battle.log.every(line => !line.startsWith('|-endability|')));
+		});
 
-	it("should prevent Pokemon transformed into Ogerpon from Terastallizing", () => {
-		battle = common.gen(9).createBattle([[
-			{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
-		], [
-			{ species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass" },
-		]]);
-		battle.makeChoices();
-		assert.cantMove(() => battle.choose('p1', 'move sleeptalk terastallize'));
-	});
+		it(`should copy the target's boosted stats`, () => {
+			battle = common.gen(1).createBattle({ forceRandomChance: false }, [[ // disable crits
+				{ species: 'Ditto', moves: ['transform'] },
+			], [
+				{ species: 'Gengar', moves: ['amnesia', 'thunderbolt'] },
+				{ species: 'Starmie', moves: ['recover'] },
+			]]);
+			// Set all moves to perfect accuracy
+			battle.onEvent('Accuracy', battle.format, true);
 
-	it("should not allow Pokemon transformed into Ogerpon to Terastallize later if they couldn't before transforming", () => {
-		battle = common.gen(9).createBattle({ formatid: 'gen9customgame@@@!teampreview,terastalclause' }, [[
-			{ species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire" },
-			{ species: "Shedinja", ability: "wonderguard", moves: ['transform'], teraType: "Fire" },
-		], [
-			{ species: "Ogerpon", ability: "defiant", moves: ['spikes'], teraType: "Grass" },
-		]]);
-		battle.makeChoices();
-		battle.makeChoices('switch 2', 'default');
-		battle.makeChoices();
-		assert.false(battle.p1.active[0].transformed);
-		assert.cantMove(() => battle.choose('p1', 'move transform terastallize'));
-	});
+			battle.makeChoices();
+			battle.makeChoices('move thunderbolt', 'switch 2');
+			assert.fainted(battle.p2.active[0]);
+		});
 
-	it(`should not work if the user is Tera Stellar`, () => {
-		battle = common.gen(9).createBattle([[
-			{ species: 'Ditto', ability: 'limber', moves: ['transform'], teraType: 'Stellar' },
-		], [
-			{ species: 'Wynaut', moves: ['sleeptalk'] },
-		]]);
-		battle.makeChoices('move transform terastallize', 'auto');
-		assert.false(battle.p1.active[0].transformed);
-	});
-});
+		it(`should copy the target's stats (except HP), even if different level`, () => {
+			battle = common.gen(1).createBattle([[
+				{ species: 'Ditto', moves: ['transform'], level: 5 },
+			], [
+				{ species: 'Gengar', moves: ['splash'] },
+			]]);
+			battle.makeChoices();
+			const p1poke = battle.p1.active[0];
+			const p2poke = battle.p2.active[0];
+			for (const stat in p1poke.storedStats) {
+				assert.equal(p1poke.storedStats[stat], p2poke.storedStats[stat]);
+				assert.equal(p1poke.modifiedStats[stat], p2poke.modifiedStats[stat]);
+			}
+		});
 
-describe('Transform [Gen 5]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
-
-	it("should not copy the target's focus energy status", () => {
-		battle = common.gen(5).createBattle([[
-			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
-		], [
-			{ species: "Sawk", ability: 'sturdy', moves: ['focusenergy'] },
-		]]);
-		assert.constant(() => battle.p1.active[0].volatiles['focusenergy'], () => battle.makeChoices('move transform', 'move focusenergy'));
-	});
-});
-
-describe('Transform [Gen 4]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
-
-	it('should revert Pokemon transformed into Giratina-Origin to Giratina-Alternate if not holding a Griseous Orb', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
-		], [
-			{ species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest'] },
-		]]);
-		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p1.active[0].species.name, 'Giratina');
-	});
-
-	it('should cause Pokemon transformed into Giratina-Alternate to become Giratina-Origin if holding a Griseous Orb', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform'] },
-		], [
-			{ species: "Giratina", ability: 'pressure', moves: ['rest'] },
-		]]);
-		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p1.active[0].species.name, 'Giratina-Origin');
-	});
-
-	it('should cause Pokemon transformed into Arceus to become an Arceus forme corresponding to its held Plate', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform'] },
-		], [
-			{ species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest'] },
-		]]);
-		battle.makeChoices('move transform', 'move rest');
-		assert.equal(battle.p1.active[0].species.name, 'Arceus-Fire');
-		assert.deepEqual(battle.p1.active[0].getTypes(), ["Fire"]);
-	});
-
-	it('should succeed against a Substitute', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: "Ditto", ability: 'limber', moves: ['transform'] },
-		], [
-			{ species: "Mewtwo", ability: 'pressure', moves: ['substitute'] },
-		]]);
-		battle.makeChoices('move transform', 'move substitute');
-		assert.equal(battle.p1.active[0].species, battle.p2.active[0].species);
-	});
-});
-
-describe('Transform [Gen 1]', () => {
-	afterEach(() => {
-		battle.destroy();
-	});
-
-	it("should not send |-endability|", () => {
-		battle = common.gen(1).createBattle([[
-			{ species: "Ditto", moves: ['transform'] },
-		], [
-			{ species: "Gengar", moves: ['lick'] },
-		]]);
-		battle.makeChoices('move transform', 'move lick');
-
-		assert(battle.log.every(line => !line.startsWith('|-endability|')));
-	});
-
-	it(`should copy the target's boosted stats`, () => {
-		battle = common.gen(1).createBattle({ forceRandomChance: false }, [[ // disable crits
-			{ species: 'Ditto', moves: ['transform'] },
-		], [
-			{ species: 'Gengar', moves: ['amnesia', 'thunderbolt'] },
-			{ species: 'Starmie', moves: ['recover'] },
-		]]);
-		// Set all moves to perfect accuracy
-		battle.onEvent('Accuracy', battle.format, true);
-
-		battle.makeChoices();
-		battle.makeChoices('move thunderbolt', 'switch 2');
-		assert.fainted(battle.p2.active[0]);
-	});
-
-	it(`should copy the target's stats (except HP), even if different level`, () => {
-		battle = common.gen(1).createBattle([[
-			{ species: 'Ditto', moves: ['transform'], level: 5 },
-		], [
-			{ species: 'Gengar', moves: ['splash'] },
-		]]);
-		battle.makeChoices();
-		const p1poke = battle.p1.active[0];
-		const p2poke = battle.p2.active[0];
-		for (const stat in p1poke.storedStats) {
-			assert.equal(p1poke.storedStats[stat], p2poke.storedStats[stat]);
-			assert.equal(p1poke.modifiedStats[stat], p2poke.modifiedStats[stat]);
-		}
-	});
-
-	it(`should copy the target's status-modified stats`, () => {
-		battle = common.gen(1).createBattle([[
-			{ species: 'Ditto', moves: ['transform', 'thunderwave'] },
-		], [
-			{ species: 'Gengar', moves: ['splash'] },
-		]]);
-		battle.makeChoices('move thunderwave', 'move splash');
-		battle.makeChoices('move transform', 'move splash');
-		const p1poke = battle.p1.active[0];
-		const p2poke = battle.p2.active[0];
-		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
-		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
-	});
-
-	it(`should not re-apply status stat modifier after transforming`, () => {
-		battle = common.gen(1).createBattle([[
-			{ species: 'Ditto', moves: ['transform', 'splash'] },
-		], [
-			{ species: 'Gengar', moves: ['splash', 'thunderwave'] },
-		]]);
-		battle.makeChoices('move splash', 'move thunderwave');
-		for (let i = 0; i < 5; i++) {
+		it(`should copy the target's status-modified stats`, () => {
+			battle = common.gen(1).createBattle([[
+				{ species: 'Ditto', moves: ['transform', 'thunderwave'] },
+			], [
+				{ species: 'Gengar', moves: ['splash'] },
+			]]);
+			battle.makeChoices('move thunderwave', 'move splash');
 			battle.makeChoices('move transform', 'move splash');
-			if (battle.p1.active[0].transformed) break;
-		}
-		const p1poke = battle.p1.active[0];
-		const p2poke = battle.p2.active[0];
-		assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
-		assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
-	});
+			const p1poke = battle.p1.active[0];
+			const p2poke = battle.p2.active[0];
+			assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
+			assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
+		});
 
-	it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented`, () => {
-		battle = common.gen(1).createBattle([[
-			{ species: 'Blastoise', moves: ['transform', 'splash'] },
-		], [
-			{ species: 'Golem', moves: ['tackle', 'mirrormove'] },
-		]]);
-		const blastoise = battle.p1.active[0];
-		battle.makeChoices();
-		battle.makeChoices('move mirrormove', 'move tackle');
-		assert.equal(blastoise.moveSlots[0].pp, 5);
-		assert.equal(blastoise.moveSlots[1].pp, 4);
-		assert.equal(blastoise.baseMoveSlots[0].pp, blastoise.baseMoveSlots[0].maxpp - 1);
-		assert.equal(blastoise.baseMoveSlots[1].pp, blastoise.baseMoveSlots[1].maxpp + 1);
-	});
+		it(`should not re-apply status stat modifier after transforming`, () => {
+			battle = common.gen(1).createBattle([[
+				{ species: 'Ditto', moves: ['transform', 'splash'] },
+			], [
+				{ species: 'Gengar', moves: ['splash', 'thunderwave'] },
+			]]);
+			battle.makeChoices('move splash', 'move thunderwave');
+			for (let i = 0; i < 5; i++) {
+				battle.makeChoices('move transform', 'move splash');
+				if (battle.p1.active[0].transformed) break;
+			}
+			const p1poke = battle.p1.active[0];
+			const p2poke = battle.p2.active[0];
+			assert.equal(p1poke.storedStats['spe'], p2poke.storedStats['spe']);
+			assert.equal(p1poke.modifiedStats['spe'], p2poke.modifiedStats['spe']);
+		});
 
-	it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented (same with two-turn moves)`, () => {
-		battle = common.gen(1).createBattle([[
-			{ species: 'Mewtwo', moves: ['transform', 'splash'] },
-		], [
-			{ species: 'Charizard', moves: ['solarbeam', 'mirrormove', 'splash'] },
-		]]);
-		const charizard = battle.p1.active[0];
-		battle.makeChoices();
-		battle.makeChoices('move splash', 'move solarbeam');
-		battle.makeChoices('move mirrormove', 'move splash');
-		assert.equal(charizard.moveSlots[0].pp, 5);
-		assert.equal(charizard.moveSlots[1].pp, 5);
-		assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
-		assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
-		battle.makeChoices('move solarbeam', 'move splash');
-		assert.equal(charizard.moveSlots[0].pp, 5);
-		assert.equal(charizard.moveSlots[1].pp, 4);
-		assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
-		assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
+		it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented`, () => {
+			battle = common.gen(1).createBattle([[
+				{ species: 'Blastoise', moves: ['transform', 'splash'] },
+			], [
+				{ species: 'Golem', moves: ['tackle', 'mirrormove'] },
+			]]);
+			const blastoise = battle.p1.active[0];
+			battle.makeChoices();
+			battle.makeChoices('move mirrormove', 'move tackle');
+			assert.equal(blastoise.moveSlots[0].pp, 5);
+			assert.equal(blastoise.moveSlots[1].pp, 4);
+			assert.equal(blastoise.baseMoveSlots[0].pp, blastoise.baseMoveSlots[0].maxpp - 1);
+			assert.equal(blastoise.baseMoveSlots[1].pp, blastoise.baseMoveSlots[1].maxpp + 1);
+		});
+
+		it(`calls Metronome or Mirror Move, PP from the original base move slot is incremented (same with two-turn moves)`, () => {
+			battle = common.gen(1).createBattle([[
+				{ species: 'Mewtwo', moves: ['transform', 'splash'] },
+			], [
+				{ species: 'Charizard', moves: ['solarbeam', 'mirrormove', 'splash'] },
+			]]);
+			const charizard = battle.p1.active[0];
+			battle.makeChoices();
+			battle.makeChoices('move splash', 'move solarbeam');
+			battle.makeChoices('move mirrormove', 'move splash');
+			assert.equal(charizard.moveSlots[0].pp, 5);
+			assert.equal(charizard.moveSlots[1].pp, 5);
+			assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
+			assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
+			battle.makeChoices('move solarbeam', 'move splash');
+			assert.equal(charizard.moveSlots[0].pp, 5);
+			assert.equal(charizard.moveSlots[1].pp, 4);
+			assert.equal(charizard.baseMoveSlots[0].pp, charizard.baseMoveSlots[0].maxpp - 1);
+			assert.equal(charizard.baseMoveSlots[1].pp, charizard.baseMoveSlots[1].maxpp + 1);
+		});
+
+		it(`should reset the last selected move slot`, () => {
+			battle = common.gen(1).createBattle({
+				customRules: 'guaranteedsecondarymod',
+			}, [[
+				{ species: 'Mew', moves: ['splash', 'rest', 'sleeptalk', 'transform'] },
+			], [
+				{ species: 'Poliwag', moves: ['icebeam', 'fireblast'] },
+			]]);
+			battle.makeChoices('move transform', 'move icebeam');
+			battle.p2.active[0].modifiedStats.spe += 1; // Make Poliwag act first
+			battle.makeChoices('move fight', 'move fireblast');
+			// Mew uses Transform while the opponent expects it to use Ice Beam
+			assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
+			assert(battle.log.slice(-5).some(line => line.includes('|move|p1a: Mew|Transform|p2a: Poliwag')));
+		});
 	});
 });
