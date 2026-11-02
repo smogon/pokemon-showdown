@@ -214,7 +214,7 @@
 				"role": "Fast Attacker",
 				"movepool": ["Glitzy Glow", "Spirit Break", "Baddy Bad", "Yawn"],
 				"abilities": ["Rattled"],
-				"items": ["Life Orb", "Choice Specs", "Choice Scarf", "Light Clay"]
+				"items": ["Life Orb", "Choice Specs", "Choice Scarf"]
 			}
 		]
 	},

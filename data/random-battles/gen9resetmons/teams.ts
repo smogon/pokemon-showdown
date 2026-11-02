@@ -116,17 +116,14 @@ export class RandomReset extends RandomTeams {
 		// Enforce Tera Type after all set generation is done to prevent infinite generation
 		if (this.forceTeraType) teraType = this.forceTeraType;
 
-		// shuffle moves to add more randomness to camomons
-		const shuffledMoves = Array.from(moves);
-		this.prng.shuffle(shuffledMoves);
 		return {
 			name: species.baseSpecies,
 			species: forme,
 			speciesId: species.id,
-			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
-			shiny: this.randomChance(1, 1024),
+			gender: (species.gender || (this.random(2) ? 'F' : 'M')),
+			shiny: false,
 			level,
-			moves: shuffledMoves,
+			moves: Array.from(moves),
 			ability,
 			evs,
 			ivs,
@@ -155,8 +152,6 @@ export class RandomReset extends RandomTeams {
 
 		const typeCount: { [k: string]: number } = {};
 		const typeComboCount: { [k: string]: number } = {};
-		const typeWeaknesses: { [k: string]: number } = {};
-		const typeDoubleWeaknesses: { [k: string]: number } = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		let pokemonList = Object.keys(this.randomSets);
@@ -182,71 +177,10 @@ export class RandomReset extends RandomTeams {
 			if (['ogerpon', 'ogerponhearthflame', 'terapagos'].includes(species.id) && teamDetails.teraBlast) continue;
 
 			// Illusion shouldn't be on the last slot
-			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
+			if (species.baseSpecies === 'Entophasm' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
-			const weakToFreezeDry = (
-				this.dex.getEffectiveness('Ice', species) > 0 ||
-				(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Water'))
-			);
-			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
-			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
-
-			if (!isMonotype && !this.forceMonotype) {
-				let skip = false;
-
-				// Limit two of any type
-				for (const typeName of types) {
-					if (typeCount[typeName] >= 2 * limitFactor) {
-						skip = true;
-						break;
-					}
-				}
-				if (skip) continue;
-
-				// Limit three weak to any type, and one double weak to any type
-				for (const typeName of this.dex.types.names()) {
-					// it's weak to the type
-					if (this.dex.getEffectiveness(typeName, species) > 0) {
-						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-						if (typeWeaknesses[typeName] >= 2 * limitFactor) {
-							skip = true;
-							break;
-						}
-					}
-					if (this.dex.getEffectiveness(typeName, species) > 1) {
-						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
-							skip = true;
-							break;
-						}
-					}
-				}
-				if (skip) continue;
-
-				// Count Dry Skin/Fluffy as Fire weaknesses
-				if (
-					this.dex.getEffectiveness('Fire', species) === 0 &&
-					Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)).length
-				) {
-					if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
-					if (typeWeaknesses['Fire'] >= 2 * limitFactor) continue;
-				}
-
-				// Limit four weak to Freeze-Dry
-				if (weakToFreezeDry) {
-					if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
-					if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
-				}
-
-				// Check compatibility with team
-				if (!this.getPokemonCompatibility(species, pokemon, isDoubles)) continue;
-			}
-
-			// Limit three of any type combination in Monotype
-			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 2 * limitFactor)) continue;
-
 			const set = this.randomSet(species, teamDetails, false, isDoubles);
 			pokemon.push(set);
 
@@ -270,22 +204,6 @@ export class RandomReset extends RandomTeams {
 				typeComboCount[typeCombo] = 1;
 			}
 
-			// Increment weakness counter
-			for (const typeName of this.dex.types.names()) {
-				// it's weak to the type
-				if (this.dex.getEffectiveness(typeName, species) > 0) {
-					typeWeaknesses[typeName]++;
-				}
-				if (this.dex.getEffectiveness(typeName, species) > 1) {
-					typeDoubleWeaknesses[typeName]++;
-				}
-			}
-			// Count Dry Skin/Fluffy as Fire weaknesses
-			if (['Dry Skin', 'Fluffy'].includes(set.ability) && this.dex.getEffectiveness('Fire', species) === 0) {
-				typeWeaknesses['Fire']++;
-			}
-			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
-
 			// Track what the team has
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
 			if (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' || set.moves.includes('sunnyday')) {
@@ -306,9 +224,6 @@ export class RandomReset extends RandomTeams {
 			if (set.moves.includes('rapidspin') || set.moves.includes('mortalspin')) teamDetails.rapidSpin = 1;
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
-			}
-			if (set.role === 'Tera Blast user' || ['ogerpon', 'ogerponhearthflame', 'terapagos'].includes(species.id)) {
-				teamDetails.teraBlast = 1;
 			}
 		}
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
