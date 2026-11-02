@@ -876,7 +876,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					}
 					const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-					const randomStat2: BoostID | undefined = stats.length ? this.sample(stats.filter(s => s !== randomStat)) : undefined;
+					const remainingStats = stats.filter(stat => stat !== randomStat);
+					const randomStat2: BoostID | undefined = remainingStats.length ? this.sample(remainingStats) : undefined;
 					if (randomStat && randomStat2) {
 						if (chance <= 40) {
 							boost[randomStat] = -1;
@@ -896,7 +897,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					}
 				} else if (chance <= 80) {
-					target.side.addSideCondition(this.sample(sideConditions.filter(hazard => !target.side.getSideCondition(hazard))));
+					const availableHazards = sideConditions.filter(hazard => !target.side.getSideCondition(hazard));
+					if (availableHazards.length) target.side.addSideCondition(this.sample(availableHazards));
 				} else if (chance <= 90) {
 					move.drain = [3, 4];
 				} else {
