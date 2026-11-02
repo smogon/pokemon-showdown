@@ -90,7 +90,44 @@ const draftteamsvgc: Partial<FormatData> = {
 export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// region Generations Draft League
-
+	{
+		section: '35 Pokes Trios Tour',
+		column: 1,
+	},
+	{
+		name: "[Gen 9] ND 35 Pokes [Oct 2025]",
+		mod: 'gen9',
+		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
+		unbanlist: [
+			'Ambipom', 'Armarouge', 'Articuno-Base', 'Basculegion-F', 'Bibarel', 'Copperajah', 'Corviknight', 'Crobat', 'Dudunsparce', 'Dugtrio-Alola', 'Farigiraf', 'Floatzel', 'Froslass-Base', 'Golem-Alola', 'Hippowdon', 'Magmortar', 'Meganium-Base', 'Moltres-Base', 'Muk-Alola', 'Munkidori', 'Nidoking', 'Ninjask', 'Orthworm', 'Perrserker', 'Porygon-Z', 'Pyukumuku', 'Sandslash-Base', 'Sigilyph', 'Simisear', 'Sirfetch’d', 'Steelix-Base', 'Tauros-Base', 'Tauros-Paldea-Aqua', 'Weezing-Galar', 'Zoroark-Base',
+		],
+	},
+	{
+		name: "[Gen 9] ND 35 Pokes [Aug 2024]",
+		mod: 'gen9',
+		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
+		unbanlist: [
+			'Shed Tail',
+			'Mandibuzz', 'Braviary-Base', 'Dusclops', 'Sawk', 'Corsola-Base', 'Maushold-Base', 'Vivillon', 'Runerigus', 'Chesnaught-Base',
+			'Rotom-Heat', 'Dhelmise', 'Illumise', 'Seviper', 'Boltund', 'Braviary-Hisui', 'Mamoswine', 'Charizard-Base', 'Smeargle',
+			'Donphan', 'Musharna', 'Muk-Alola', 'Frosmoth', 'Sableye-Base', 'Blissey', 'Heracross-Base', 'Eelektross-Base', 'Trapinch',
+			'Fezandipiti', 'Golem-Alola', 'Lanturn', 'Quagsire', 'Squawkabilly-Yellow', 'Cradily', 'Scizor-Base', 'Vanilluxe',
+		],
+	},
+	{
+		name: "[Gen 9] ND 35 Pokes [Oct 2023 B]",
+		mod: 'gen9',
+		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
+		unbanlist: [
+			'Shed Tail',
+			'Liepard', 'Dragalge-Base', 'Clefable-Base', 'Clodsire', 'Gigalith', 'Cacturne', 'Porygon2', 'Shuckle', 'Emboar-Base',
+			'Doublade', 'Phione', 'Lumineon', 'Toucannon', 'Mandibuzz', 'Cinccino', 'Avalugg-Hisui', 'Sceptile-Base', 'Toedscruel',
+			'Hitmontop', 'Golem-Alola', 'Dugtrio-Base', 'Mr. Rime', 'Ariados', 'Pachirisu', 'Ambipom', 'Volbeat', 'Centiskorch',
+			'Shiinotic', 'Poliwrath', 'Stoutland', 'Banette-Base', 'Aurorus', 'Mawile-Base', 'Sableye-Base', 'Orthworm',
+			'Rotom-Mow', 'Sandslash-Alola', 'Toxicroak', 'Roserade', 'Lopunny-Base', 'Luxray', 'Solrock', 'Cryogonal', 'Noctowl',
+			// 'Xatu', banned
+		],
+	},
 	{
 		section: 'Generations Draft',
 		column: 1,
@@ -718,95 +755,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		validateTeam: draftteams.validateTeam,
 	},
-	{
-		section: 'Partner Communities',
-		column: 1,
-	},
-	{
-		name: '[Gen 9] Petpet Battle II',
-		desc: 'Petpets',
-		mod: 'petpet',
-		ruleset: [
-			'Standard', 'Terastal Clause',
-
-			'#Bloop +acid +acidarmor +acidspray +acupressure +assurance +astonish +attract +barrage +bide +bittermalice +block +brutalswing +bubble +bubblebeam +captivate +chipaway +clearsmog +comeuppance +confide +confuseray +confusion +copycat +covet +craftyshield +curse +darkpulse +darkvoid +decorate +defensecurl +destinybond +dive +doodle +dreameater +embargo +encore +endeavor +entrainment +explosion +facade +faketears +falsesurrender +feint +feintattack +flatter +fling +followme +foulplay +frustration +gigadrain +glare +grudge +gunkshot +healblock +hex +hiddenpower +honeclaws +hornattack +hypnosis +imprison +lashout +leechlife +leer +lick +lunge +mefirst +meanlook +memento +mudbomb +mudshot +mudsport +mudslap +nastyplot +nightdaze +nightshade +obstruct +octazooka +painsplit +partingshot +payback +poltergeist +protect +punishment +pursuit +recover +recycle +rest +retaliate +return +round +scald +shadowball +shadowforce +shadowsneak +sludge +sludgebomb +sludgewave +snatch +soak +spite +substitute +supersonic +swagger +switcheroo +synchronoise +tarshot +taunt +thief +torment +toxic +toxicspikes +trick +trickroom +trickortreat +trumpcard +uproar +vacuumwave +venomdrench +venoshock +willowisp +wonderroom +workup',
-
-			'#Yullie +agility +attract +bide +captivate +charge +chargebeam +charm +confide +confuseray +discharge +doubleteam +electricterrain +electrify +electroball +endure +facade +fakeout +feint +flail +flash +flashcannon +frustration +headbutt +hiddenpower +hyperfang +irontail +mefirst +minimize +nuzzle +paraboliccharge +playnice +playrough +protect +rest +return +risingvoltage +round +safeguard +shockwave +signalbeam +spark +stuffcheeks +substitute +tailglow +thunder +thunderfang +thundershock +thunderwave +thunderbolt +tickle +uturn +voltswitch +volttackle +wildcharge +wish +zapcannon',
-
-			'#Spyder +agility +assurance +astonish +attract +bite +brutalswing +bugbite +captivate +chipaway +confide +confuseray +crosspoison +crunch +darkpulse +disable +electroweb +embargo +facade +falsesurrender +feint +feintattack +firstimpression +fling +foulplay +frustration +furycutter +glare +gunkshot +hex +hiddenpower +honeclaws +hyperfang +infestation +knockoff +leechlife +leer +lunge +meanlook +memento +nightshade +nightslash +partingshot +payback +poisonfang +poisonjab +poisonsting +pounce +protect +pursuit +rest +retaliate +return +round +scaryface +shadowclaw +shadowsneak +silktrap +skittersmack +smog +snatch +spiderweb +spite +stickyweb +stringshot +strugglebug +substitute +suckerpunch +swordsdance +taunt +thief +torment +toxic +toxicspikes +toxicthread +trickortreat +uturn +wrap +wringout +xscissor',
-
-			'#Ukali +amnesia +ancientpower +aromatherapy +aromaticmist +attract +babydolleyes +breakingswipe +brutalswing +calmmind +captivate +chillingwater +chillyreception +clangoroussoul +coil +confide +confuseray +confusion +craftyshield +curse +darkpulse +defensecurl +defog +destinybond +disable +disarmingvoice +doomdesire +dracometeor +dragonbreath +dragonclaw +dragondance +dragonpulse +dragonrage +dragonrush +dragontail +dreameater +dualwingbeat +endeavor +endure +facade +faketears +ficklebeam +finalgambit +fireblast +flail +flamethrower +fly +frustration +gravity +gust +haze +healingwish +hex +hiddenpower +holdback +hyperbeam +lastresort +lightscreen +lunge +memento +mimic +mysticalfire +nightshade +nightmare +ominouswind +painsplit +perishsong +pound +protect +quash +rest +return +roar +roost +round +safeguard +shadowball +slam +sleeptalk +snore +splash +stompingtantrum +storedpower +substitute +synchronoise +takedown +tearfullook +torment +toxic +trickroom +twister +weatherball +whirlwind +wideguard +willowisp +wish +withdraw +workup +worryseed +yawn',
-
-			'#Wuzzle +attract +beatup +bittermalice +blastburn +burnup +burningbulwark +burningjealousy +captivate +curse +darkpulse +disable +embargo +ember +facade +fireblast +firespin +flameburst +flamecharge +flamethrower +flareblitz +flash +foulplay +frustration +grudge +heatcrash +hex +hiddenpower +incinerate +inferno +lashout +leer +meanlook +memento +nastyplot +outrage +overheat +partingshot +payback +protect +rage +ragingfury +rest +return +revenge +round +ruination +selfdestruct +spite +substitute +sunnyday +taunt +temperflare +torment +uproar +willowisp',
-
-			'#Kadoatie +agility +assist +assurance +attract +batonpass +bide +bite +bodyslam +burningjealousy +captivate +charm +confide +copycat +covet +cut +dig +doubleteam +doubleedge +echoedvoice +embargo +encore +endeavor +endure +facade +fakeout +faketears +falseswipe +feint +feintattack +flail +foulplay +frustration +furyswipes +gigaimpact +growl +headbutt +hiddenpower +honeclaws +hypervoice +irontail +knockoff +lashout +lastresort +metalclaw +mimic +nastyplot +nightslash +nightmare +painsplit +payday +payback +playrough +protect +punishment +pursuit +quickattack +rage +rest +retaliate +return +roar +roleplay +round +scratch +screech +secretpower +shadowclaw +sing +skullbash +slash +sleeptalk +snarl +snatch +snore +spite +substitute +swagger +swift +switcheroo +tailwhip +takedown +taunt +thief +torment +trailblaze +uproar +workup',
-
-			'#Faellie +acrobatics +aerialace +agility +aircutter +airslash +alluringvoice +attract +babydolleyes +batonpass +bestow +bide +calmmind +captivate +charm +copycat +covet +dazzlinggleam +defog +disarmingvoice +dualwingbeat +encore +endeavor +endure +entrainment +facade +fairywind +fakeout +featherdance +flail +flash +fly +followme +frustration +furyswipes +growl +gust +headbutt +healbell +healpulse +healingwish +helpinghand +hiddenpower +hurricane +hyperbeam +hypervoice +knockoff +lastresort +lightscreen +luckychant +mefirst +move:metronome +mimic +mirrorcoat +mist +mistyterrain +moonblast +moonlight +mudslap +mysticalfire +naturalgift +naturepower +ominouswind +perishsong +playnice +playrough +pound +protect +quickattack +recover +recycle +reflect +refresh +rest +return +roost +round +safeguard +secretpower +simplebeam +sing +skillswap +skyattack +sleeptalk +splash +steelwing +substitute +sweetkiss +swift +synchronoise +tailwhip +tailwind +tickle +tidyup +uturn +weatherball +wish +workup',
-
-			'#Rock +accelerock +rockblast +rockpolish +rockslide +rockthrow +rocktomb +rockwrecker +rollout +stealthrock +stoneedge',
-
-			'#Ettaphant +acupressure +allyswitch +amnesia +assurance +astonish +attract +barrier +bellydrum +bide +bind +block +bodypress +bodyslam +brutalswing +bubblebeam +bulkup +captivate +chillingwater +coil +confuseray +confusion +copycat +counter +crushgrip +curse +destinybond +doublehit +doublekick +doubleslap +doubleteam +doubleedge +dreameater +dualchop +embargo +endeavor +expandingforce +facade +focusblast +frustration +futuresight +gigaimpact +gravity +headcharge +headbutt +healblock +heartswap +heavyslam +hiddenpower +highhorsepower +hornattack +hyperbeam +hypnosis +imprison +irondefense +knockoff +laserfocus +leer +lightscreen +luckychant +meanlook +meditate +memento +move:metronome +mysticalpower +nastyplot +ominouswind +outrage +pound +powertrick +powertrip +protect +psybeam +psychic +psychicnoise +psychicterrain +psychoboost +psychoshift +psyshock +psystrike +psywave +punishment +pursuit +quash +rage +ragingbull +reflect +rest +return +revenge +reversal +rocksmash +roleplay +round +scaryface +screech +seismictoss +signalbeam +skillswap +slam +sleeptalk +snore +speedswap +spitup +stockpile +stomp +storedpower +strength +substitute +superpower +swallow +synchronoise +tackle +takedown +taunt +thrash +topsyturvy +torment +triattack +trickroom +twinbeam +uproar +visegrip +wideguard +workup +wrap +wringout +yawn +zenheadbutt',
-
-			'#Scado +absorb +acidspray +amnesia +ancientpower +aquajet +aromatherapy +attract +barrier +bide +brine +bubble +bubblebeam +calmmind +camouflage +captivate +chillingwater +chloroblast +confide +curse +disable +dive +drainingkiss +encore +energyball +facade +flail +flipturn +frenzyplant +frustration +gastroacid +gigadrain +grassknot +grasswhistle +grassyterrain +growth +headbutt +hiddenpower +hydropump +leafstorm +leafage +leechseed +magicalleaf +megadrain +mimic +mudbomb +mudshot +mudsport +mudslap +muddywater +naturalgift +naturepower +pound +protect +psychup +razorleaf +rest +return +round +safeguard +scald +solarbeam +spitup +splash +stockpile +substitute +surf +swallow +sweetkiss +sweetscent +synthesis +tailwhip +toxic +watergun +waterpulse +watersport +waterfall +wavecrash +weatherball +whirlpool +worryseed',
-
-			'#Feepit +afteryou +agility +armthrust +attract +babydolleyes +bestow +bodyslam +brickbreak +bulkup +bulletpunch +captivate +charm +circlethrow +counter +covet +detect +dig +dizzypunch +doublehit +doubleslap +drainpunch +dualchop +dynamicpunch +endure +facade +fakeout +finalgambit +firepunch +flail +focusenergy +focuspunch +frustration +helpinghand +hiddenpower +icepunch +lastresort +lowkick +lowsweep +machpunch +playrough +poweruppunch +protect +quickattack +rest +return +revenge +round +scratch +sleeptalk +strength +substitute +superpower +swordsdance +thunderpunch +victorydance +wish +workup',
-
-			'#Griefer +assurance +astonish +attract +beatup +block +bodyslam +bounce +bravebird +bulldoze +captivate +ceaselessedge +chipaway +confide +confuseray +curse +destinybond +drillpeck +drillrun +earthquake +embargo +facade +feint +feintattack +flashcannon +fling +foulplay +frustration +glare +grudge +hiddenpower +honeclaws +irondefense +ironhead +knockoff +lashout +magnetbomb +memento +mirrorshot +nastyplot +payback +powertrip +protect +pursuit +rest +return +round +screech +selfdestruct +shadowclaw +shadowsneak +snatch +spikes +spite +stealthrock +strength +substitute +taunt +thief +torment',
-
-			'#Angelpuss +afteryou +alluringvoice +allyswitch +amnesia +aromaticmist +assist +attract +babydolleyes +batonpass +bide +bodyslam +calmmind +captivate +charm +confide +copycat +covet +craftyshield +curse +dazzlinggleam +disarmingvoice +doubleedge +drainingkiss +facade +fairywind +flash +frustration +headbutt +healbell +healpulse +healingwish +hiddenpower +hypervoice +icywind +imprison +lastresort +lovelykiss +luckychant +magiccoat +move:metronome +mimic +mirrorcoat +moonblast +moonlight +morningsun +naturalgift +naturepower +painsplit +playnice +protect +recover +reflect +refresh +rest +return +round +simplebeam +skillswap +sleeptalk +substitute +sweetkiss +teleport +toxic +trick +wish',
-
-			'#Bython +acidspray +amnesia +astralbarrage +attract +aurasphere +bide +bind +bite +bodyslam +burningjealousy +captivate +coil +confusion +cosmicpower +crunch +curse +darkpulse +dazzlinggleam +destinybond +detect +doomdesire +doublehit +doubleteam +doubleedge +dragonbreath +dragonpulse +dragonrage +dragontail +earthpower +earthquake +energyball +expandingforce +extrasensory +facade +faketears +ficklebeam +flamethrower +flash +flashcannon +focusblast +frostbreath +frustration +geomancy +heartswap +hex +hiddenpower +irontail +memento +moonblast +moonlight +morningsun +mysticalfire +nightshade +outrage +poisonfang +poisontail +poltergeist +powertrick +powertrip +protect +psybeam +psychic +psychicfangs +psychoshift +psyshock +rest +return +round +shadowball +shadowsneak +skillswap +slam +snarl +substitute +trickroom +twinbeam +twineedle +vacuumwave +weatherball +workup +zenheadbutt',
-
-			'#Snowbunny +agility +allyswitch +amnesia +aquaring +attract +aurorabeam +auroraveil +avalanche +babydolleyes +batonpass +bide +blizzard +bodyslam +bounce +calmmind +camouflage +captivate +charm +chillingwater +confuseray +confusion +cottonguard +covet +curse +cut +dazzlinggleam +defensecurl +dig +disable +doublekick +doubleedge +drainingkiss +drillrun +endeavor +endure +facade +flail +fling +foresight +freezedry +frostbreath +frustration +furyswipes +grassknot +gravity +gyroball +haze +headcharge +headbutt +healbell +healingwish +hiddenpower +honeclaws +hyperfang +iceball +icebeam +icefang +iceshard +icespinner +lastresort +lowkick +lunge +memento +metalclaw +mist +moonlight +mudslap +naturalgift +naturepower +painsplit +powdersnow +protect +quickattack +recycle +reflecttype +refresh +rest +retaliate +return +rollout +round +safeguard +sandattack +scratch +secretpower +shadowclaw +sheercold +slam +snowscape +stomp +stompingtantrum +storedpower +strength +substitute +superfang +tailwhip +tidyup +trailblaze +tripleaxel +wish +withdraw +workup +yawn +zenheadbutt',
-
-			'#Meepit +assurance +astonish +attract +babydolleyes +beatup +bite +burningjealousy +captivate +charm +covet +crunch +curse +darkpulse +defensecurl +dig +disable +disarmingvoice +doubleedge +endure +facade +faketears +feint +feintattack +flail +followme +foulplay +frustration +glare +headbutt +hiddenpower +hypnosis +meanlook +move:metronome +nastyplot +playnice +playrough +populationbomb +pound +protect +pursuit +quickattack +rage +rest +retaliate +return +roleplay +round +scaryface +screech +slam +snarl +snatch +spite +stompingtantrum +storedpower +stuffcheeks +substitute +suckerpunch +swagger +sweetkiss +switcheroo +takedown +taunt +tearfullook +thief +thrash +tickle +torment +trick +uturn +uproar +wish +workup',
-
-			'#Psimouse +acupressure +afteryou +allyswitch +amnesia +ancientpower +astonish +attract +aurasphere +aurorabeam +barrier +batonpass +bestow +blizzard +block +bubblebeam +calmmind +captivate +chillingwater +confide +confuseray +confusion +cosmicpower +curse +darkpulse +dazzlinggleam +destinybond +detect +disable +disarmingvoice +echoedvoice +eerieimpulse +eeriespell +embargo +encore +energyball +entrainment +expandingforce +extrasensory +facade +flash +flashcannon +flatter +focusblast +followme +foresight +frustration +futuresight +gravity +grudge +healbell +healblock +healpulse +healingwish +hex +hiddenpower +hyperbeam +hyperfang +hypervoice +icebeam +imprison +kinesis +laserfocus +lightscreen +luckychant +magiccoat +magicroom +magicalleaf +meditate +move:metronome +mimic +mindreader +miracleeye +mirrorcoat +moonblast +moonlight +mysticalfire +mysticalpower +nastyplot +nightshade +ominouswind +painsplit +partingshot +perishsong +playrough +powergem +powersplit +powerswap +powertrick +protect +psybeam +psychup +psychic +psychicnoise +psychicterrain +psychoshift +psyshock +psywave +quash +recycle +reflect +rest +return +round +safeguard +shadowball +shockwave +signalbeam +simplebeam +skillswap +speedswap +spiritbreak +spite +storedpower +substitute +supersonic +swift +synchronoise +telekinesis +teleport +terrainpulse +thunderbolt +topsyturvy +torment +toxic +triattack +trick +trickroom +waterpulse +weatherball +wonderroom +workup +zapcannon +zenheadbutt',
-		],
-		banlist: ['All Pokemon'],
-		unbanlist: [
-			'Bloop', 'Ettaphant', 'Faellie', 'Feepit', 'Griefer', 'Kadoatie', 'Meepit', 'Scado', 'Snowbunny', 'Spyder', 'Ukali', 'Wuzzle', 'Yullie',
-			// 'Angelpuss', 'Bython', 'Psimouse', 'Rock',
-		],
-		onChangeSet(set, format, setHas, teamHas) {
-			set.shiny = false;
-		},
-	},
-	{
-		name: '[Gen 9] ND VGC LC',
-		desc: 'VGC with unevolved pokemon only.',
-		mod: 'gen9',
-		gameType: 'doubles',
-		// bestOfDefault: true,
-		ruleset: [
-			'Standard Doubles', 'NatDex Mod', 'Picked Team Size = 4', 'Little Cup', '!! Max Level = 50', 'Z-Move Clause', 'Terastal Clause', '!Species Clause', 'Forme Clause', 'Item Clause = 1', 'Evasion Clause', 'VGC Timer', 'Limit One Restricted', 'Open Team Sheets',
-		],
-		restricted: [
-			'Scyther', 'Tangela', 'Stantler', 'Sneasel-Hisui', 'Qwilfish-Hisui', 'Murkrow', 'Misdreavus', 'Gligar', 'Girafarig', 'Cottonee', 'Clamperl', 'Basculin-White-Striped', 'Sneasel', 'Corsola-Galar',
-		],
-		banlist: [
-			'Duraludon', 'Type: Null',
-			'Commander', 'Power Construct', 'Shadow Tag', 'Assist',
-		],
-	},
-	{
-		name: '[Gen 9] ND VGC LC (Bo3)',
-		desc: 'VGC with unevolved pokemon only.',
-		mod: 'gen9',
-		gameType: 'doubles',
-		// bestOfDefault: true,
-		ruleset: [
-			'Standard Doubles', 'NatDex Mod', 'Picked Team Size = 4', 'Little Cup', '!! Max Level = 50', 'Z-Move Clause', 'Terastal Clause', '!Species Clause', 'Forme Clause', 'Item Clause = 1', 'Evasion Clause', 'VGC Timer', 'Limit One Restricted', 'Open Team Sheets', 'Best Of = 3',
-		],
-		restricted: [
-			'Scyther', 'Tangela', 'Stantler', 'Sneasel-Hisui', 'Qwilfish-Hisui', 'Murkrow', 'Misdreavus', 'Gligar', 'Girafarig', 'Cottonee', 'Clamperl', 'Basculin-White-Striped', 'Sneasel', 'Corsola-Galar',
-		],
-		banlist: [
-			'Duraludon', 'Type: Null',
-			'Commander', 'Power Construct', 'Shadow Tag', 'Assist',
-		],
-	},
-
 	// endregion
 
 	// region 35 Pokes Main
@@ -917,14 +865,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
 		unbanlist: [
 			'Altaria-Base', 'Ampharos-Base', 'Arbok', 'Armaldo', 'Calyrex-Base', 'Castform-Base', 'Dewgong', 'Drifblim', 'Emolga', 'Fearow', 'Furret', 'Glalie-Base', 'Gumshoos-Base', 'Heliolisk', 'Jumpluff', 'Kecleon', 'Ludicolo', 'Lunatone', 'Luxray', 'Lycanroc-Midnight', 'Meowstic-M', 'Primeape', 'Pupitar', 'Pyroar-Base', 'Rampardos', 'Scovillain-Base', 'Silvally-Fairy', 'Simisage', 'Sneasel-Hisui', 'Spidops', 'Swalot', 'Thievul', 'Tinkaton', 'Whiscash', 'Zangoose',
-		],
-	},
-	{
-		name: "[Gen 9] ND 35 Pokes [Oct 2025]",
-		mod: 'gen9',
-		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
-		unbanlist: [
-			'Ambipom', 'Armarouge', 'Articuno-Base', 'Basculegion-F', 'Bibarel', 'Copperajah', 'Corviknight', 'Crobat', 'Dudunsparce', 'Dugtrio-Alola', 'Farigiraf', 'Floatzel', 'Froslass-Base', 'Golem-Alola', 'Hippowdon', 'Magmortar', 'Meganium-Base', 'Moltres-Base', 'Muk-Alola', 'Munkidori', 'Nidoking', 'Ninjask', 'Orthworm', 'Perrserker', 'Porygon-Z', 'Pyukumuku', 'Sandslash-Base', 'Sigilyph', 'Simisear', 'Sirfetch’d', 'Steelix-Base', 'Tauros-Base', 'Tauros-Paldea-Aqua', 'Weezing-Galar', 'Zoroark-Base',
 		],
 	},
 	{
@@ -1088,18 +1028,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] ND 35 Pokes [Aug 2024]",
-		mod: 'gen9',
-		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
-		unbanlist: [
-			'Shed Tail',
-			'Mandibuzz', 'Braviary-Base', 'Dusclops', 'Sawk', 'Corsola-Base', 'Maushold-Base', 'Vivillon', 'Runerigus', 'Chesnaught-Base',
-			'Rotom-Heat', 'Dhelmise', 'Illumise', 'Seviper', 'Boltund', 'Braviary-Hisui', 'Mamoswine', 'Charizard-Base', 'Smeargle',
-			'Donphan', 'Musharna', 'Muk-Alola', 'Frosmoth', 'Sableye-Base', 'Blissey', 'Heracross-Base', 'Eelektross-Base', 'Trapinch',
-			'Fezandipiti', 'Golem-Alola', 'Lanturn', 'Quagsire', 'Squawkabilly-Yellow', 'Cradily', 'Scizor-Base', 'Vanilluxe',
-		],
-	},
-	{
 		name: "[Gen 9] ND 35 Pokes [Jul 2024]",
 		mod: 'gen9',
 		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
@@ -1211,20 +1139,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Scolipede-Base', 'Typhlosion-Base', 'Klefki', 'Metagross-Base', 'Swoobat', 'Honchkrow', 'Cursola', 'Revavroom', 'Swampert-Base',
 			'Garbodor', 'Electivire', 'Slurpuff', 'Jynx', 'Bombirdier', 'Mismagius', 'Wyrdeer', 'Lanturn', 'Carnivine',
 			'Kangaskhan-Base', 'Bellibolt', 'Kingdra', 'Perrserker', 'Steelix-Base', 'Alcremie', 'Heliolisk', 'Beartic',
-		],
-	},
-	{
-		name: "[Gen 9] ND 35 Pokes [Oct 2023 B]",
-		mod: 'gen9',
-		ruleset: ['Standard 35 Pokes', '!Sleep Moves Clause'],
-		unbanlist: [
-			'Shed Tail',
-			'Liepard', 'Dragalge-Base', 'Clefable-Base', 'Clodsire', 'Gigalith', 'Cacturne', 'Porygon2', 'Shuckle', 'Emboar-Base',
-			'Doublade', 'Phione', 'Lumineon', 'Toucannon', 'Mandibuzz', 'Cinccino', 'Avalugg-Hisui', 'Sceptile-Base', 'Toedscruel',
-			'Hitmontop', 'Golem-Alola', 'Dugtrio-Base', 'Mr. Rime', 'Ariados', 'Pachirisu', 'Ambipom', 'Volbeat', 'Centiskorch',
-			'Shiinotic', 'Poliwrath', 'Stoutland', 'Banette-Base', 'Aurorus', 'Mawile-Base', 'Sableye-Base', 'Orthworm',
-			'Rotom-Mow', 'Sandslash-Alola', 'Toxicroak', 'Roserade', 'Lopunny-Base', 'Luxray', 'Solrock', 'Cryogonal', 'Noctowl',
-			// 'Xatu', banned
 		],
 	},
 	{
@@ -2039,7 +1953,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: '35 Pokes VGC',
-		column: 3,
+		column: 4,
 	},
 	{
 		name: "[Gen 9] ND 35 Pokes VGC [Sep 2026]",
@@ -2484,10 +2398,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 
-	// endregion
-
-	// endregion
-
 	// region 35 Pokes Extended
 
 	{
@@ -2664,9 +2574,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Kingler', 'Scizor-Base', 'Braviary-Base', 'Crustle', 'Klawf', 'Druddigon', 'Wugtrio', 'Krookodile', 'Armarouge', 'Magmortar', 'Wailord', 'Jumpluff', 'Blastoise-Base', 'Sandslash-Alola', 'Empoleon', 'Nidoqueen', 'Eelektross-Base', 'Aurorus', 'Gastrodon-East', 'Tangrowth', 'Ribombee-Base', 'Vespiquen', 'Sunflora', 'Ampharos-Base', 'Cofagrigus', 'Hypno', 'Falinks-Base', 'Ninetales-Base', 'Typhlosion-Base', 'Exeggutor-Base', 'Carnivine', 'Kecleon', 'Yanmega', 'Araquanid-Base', 'Garbodor', 'Sceptile-Base', 'Politoed', 'Appletun', 'Tyranitar-Base', 'Golurk-Base', 'Claydol', 'Toucannon', 'Houndoom-Base', 'Toedscruel', 'Umbreon', 'Banette-Base', 'Mawile-Base', 'Snorlax', 'Seviper', 'Raticate-Alola', 'Minior-Base', 'Shiftry', 'Brambleghast', 'Perrserker', 'Dachsbun', 'Torkoal', 'Barbaracle-Base', 'Dragalge-Base', 'Clodsire', 'Dugtrio-Base', 'Drifblim', 'Aerodactyl-Base', 'Ambipom', 'Noivern', 'Weezing-Base', 'Starmie-Base', 'Goodra-Base', 'Drapion', 'Pincurchin', 'Gastrodon', 'Unfezant', 'Grafaiai', 'Hakamo-o', 'Golem-Alola', 'Probopass', 'Donphan', 'Golisopod-Base', 'Veluza', 'Steelix-Base', 'Machamp', 'Mesprit', 'Lurantis-Base', 'Bewear', 'Flamigo', 'Tinkaton', 'Clefable-Base', 'Milotic', 'Orthworm', 'Hatterene', 'Slowbro-Base', 'Togekiss', 'Frosmoth', 'Cursola', 'Amoonguss', 'Absol-Base', 'Gardevoir-Base', 'Dubwool', 'Alcremie', 'Maushold', 'Pachirisu',
 		],
 	},
+
+	// endregion
+
+	// Extended Metas
+	
 	{
 		section: 'April Fools',
-		column: 4,
+		column: 5,
 	},
 	{
 		name: "[Gen 9] ND 35 Pokes [Mega April]",
@@ -2700,7 +2615,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		section: '35 Pokes 1v1',
-		column: 4,
+		column: 5,
 	},
 	{
 		name: "[Gen 9] ND 35 Pokes 1v1 [Sep 2026]",
@@ -2744,7 +2659,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		section: '35 Moves',
-		column: 4,
+		column: 5,
 	},
 	{
 		name: "[Gen 9] ND 35 Moves [May 2025]",
@@ -2768,7 +2683,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		section: '35 Pokes Pockets',
-		column: 4,
+		column: 5,
 	},
 	{
 		name: "[Gen 9] ND 35 Pokes Pockets Space-Time Smackdown",
@@ -2804,7 +2719,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		section: '35 Pokes ADV',
-		column: 4,
+		column: 5,
 	},
 	{
 		name: "[Gen 3] 35 Pokes [Sep 2024]",
@@ -2826,7 +2741,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		section: '35 Pokes Flipped',
-		column: 4,
+		column: 5,
 	},
 	{
 		name: "[Gen 9] ND 35 Pokes Flipped [Jan 2025]",
@@ -2853,9 +2768,96 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 
-	// endregion
-
 	// region Miscellaneous
+
+	{
+		section: 'Partner Communities',
+		column: 5,
+	},
+	{
+		name: '[Gen 9] Petpet Battle II',
+		desc: 'Petpets',
+		mod: 'petpet',
+		ruleset: [
+			'Standard', 'Terastal Clause',
+
+			'#Bloop +acid +acidarmor +acidspray +acupressure +assurance +astonish +attract +barrage +bide +bittermalice +block +brutalswing +bubble +bubblebeam +captivate +chipaway +clearsmog +comeuppance +confide +confuseray +confusion +copycat +covet +craftyshield +curse +darkpulse +darkvoid +decorate +defensecurl +destinybond +dive +doodle +dreameater +embargo +encore +endeavor +entrainment +explosion +facade +faketears +falsesurrender +feint +feintattack +flatter +fling +followme +foulplay +frustration +gigadrain +glare +grudge +gunkshot +healblock +hex +hiddenpower +honeclaws +hornattack +hypnosis +imprison +lashout +leechlife +leer +lick +lunge +mefirst +meanlook +memento +mudbomb +mudshot +mudsport +mudslap +nastyplot +nightdaze +nightshade +obstruct +octazooka +painsplit +partingshot +payback +poltergeist +protect +punishment +pursuit +recover +recycle +rest +retaliate +return +round +scald +shadowball +shadowforce +shadowsneak +sludge +sludgebomb +sludgewave +snatch +soak +spite +substitute +supersonic +swagger +switcheroo +synchronoise +tarshot +taunt +thief +torment +toxic +toxicspikes +trick +trickroom +trickortreat +trumpcard +uproar +vacuumwave +venomdrench +venoshock +willowisp +wonderroom +workup',
+
+			'#Yullie +agility +attract +bide +captivate +charge +chargebeam +charm +confide +confuseray +discharge +doubleteam +electricterrain +electrify +electroball +endure +facade +fakeout +feint +flail +flash +flashcannon +frustration +headbutt +hiddenpower +hyperfang +irontail +mefirst +minimize +nuzzle +paraboliccharge +playnice +playrough +protect +rest +return +risingvoltage +round +safeguard +shockwave +signalbeam +spark +stuffcheeks +substitute +tailglow +thunder +thunderfang +thundershock +thunderwave +thunderbolt +tickle +uturn +voltswitch +volttackle +wildcharge +wish +zapcannon',
+
+			'#Spyder +agility +assurance +astonish +attract +bite +brutalswing +bugbite +captivate +chipaway +confide +confuseray +crosspoison +crunch +darkpulse +disable +electroweb +embargo +facade +falsesurrender +feint +feintattack +firstimpression +fling +foulplay +frustration +furycutter +glare +gunkshot +hex +hiddenpower +honeclaws +hyperfang +infestation +knockoff +leechlife +leer +lunge +meanlook +memento +nightshade +nightslash +partingshot +payback +poisonfang +poisonjab +poisonsting +pounce +protect +pursuit +rest +retaliate +return +round +scaryface +shadowclaw +shadowsneak +silktrap +skittersmack +smog +snatch +spiderweb +spite +stickyweb +stringshot +strugglebug +substitute +suckerpunch +swordsdance +taunt +thief +torment +toxic +toxicspikes +toxicthread +trickortreat +uturn +wrap +wringout +xscissor',
+
+			'#Ukali +amnesia +ancientpower +aromatherapy +aromaticmist +attract +babydolleyes +breakingswipe +brutalswing +calmmind +captivate +chillingwater +chillyreception +clangoroussoul +coil +confide +confuseray +confusion +craftyshield +curse +darkpulse +defensecurl +defog +destinybond +disable +disarmingvoice +doomdesire +dracometeor +dragonbreath +dragonclaw +dragondance +dragonpulse +dragonrage +dragonrush +dragontail +dreameater +dualwingbeat +endeavor +endure +facade +faketears +ficklebeam +finalgambit +fireblast +flail +flamethrower +fly +frustration +gravity +gust +haze +healingwish +hex +hiddenpower +holdback +hyperbeam +lastresort +lightscreen +lunge +memento +mimic +mysticalfire +nightshade +nightmare +ominouswind +painsplit +perishsong +pound +protect +quash +rest +return +roar +roost +round +safeguard +shadowball +slam +sleeptalk +snore +splash +stompingtantrum +storedpower +substitute +synchronoise +takedown +tearfullook +torment +toxic +trickroom +twister +weatherball +whirlwind +wideguard +willowisp +wish +withdraw +workup +worryseed +yawn',
+
+			'#Wuzzle +attract +beatup +bittermalice +blastburn +burnup +burningbulwark +burningjealousy +captivate +curse +darkpulse +disable +embargo +ember +facade +fireblast +firespin +flameburst +flamecharge +flamethrower +flareblitz +flash +foulplay +frustration +grudge +heatcrash +hex +hiddenpower +incinerate +inferno +lashout +leer +meanlook +memento +nastyplot +outrage +overheat +partingshot +payback +protect +rage +ragingfury +rest +return +revenge +round +ruination +selfdestruct +spite +substitute +sunnyday +taunt +temperflare +torment +uproar +willowisp',
+
+			'#Kadoatie +agility +assist +assurance +attract +batonpass +bide +bite +bodyslam +burningjealousy +captivate +charm +confide +copycat +covet +cut +dig +doubleteam +doubleedge +echoedvoice +embargo +encore +endeavor +endure +facade +fakeout +faketears +falseswipe +feint +feintattack +flail +foulplay +frustration +furyswipes +gigaimpact +growl +headbutt +hiddenpower +honeclaws +hypervoice +irontail +knockoff +lashout +lastresort +metalclaw +mimic +nastyplot +nightslash +nightmare +painsplit +payday +payback +playrough +protect +punishment +pursuit +quickattack +rage +rest +retaliate +return +roar +roleplay +round +scratch +screech +secretpower +shadowclaw +sing +skullbash +slash +sleeptalk +snarl +snatch +snore +spite +substitute +swagger +swift +switcheroo +tailwhip +takedown +taunt +thief +torment +trailblaze +uproar +workup',
+
+			'#Faellie +acrobatics +aerialace +agility +aircutter +airslash +alluringvoice +attract +babydolleyes +batonpass +bestow +bide +calmmind +captivate +charm +copycat +covet +dazzlinggleam +defog +disarmingvoice +dualwingbeat +encore +endeavor +endure +entrainment +facade +fairywind +fakeout +featherdance +flail +flash +fly +followme +frustration +furyswipes +growl +gust +headbutt +healbell +healpulse +healingwish +helpinghand +hiddenpower +hurricane +hyperbeam +hypervoice +knockoff +lastresort +lightscreen +luckychant +mefirst +move:metronome +mimic +mirrorcoat +mist +mistyterrain +moonblast +moonlight +mudslap +mysticalfire +naturalgift +naturepower +ominouswind +perishsong +playnice +playrough +pound +protect +quickattack +recover +recycle +reflect +refresh +rest +return +roost +round +safeguard +secretpower +simplebeam +sing +skillswap +skyattack +sleeptalk +splash +steelwing +substitute +sweetkiss +swift +synchronoise +tailwhip +tailwind +tickle +tidyup +uturn +weatherball +wish +workup',
+
+			'#Rock +accelerock +rockblast +rockpolish +rockslide +rockthrow +rocktomb +rockwrecker +rollout +stealthrock +stoneedge',
+
+			'#Ettaphant +acupressure +allyswitch +amnesia +assurance +astonish +attract +barrier +bellydrum +bide +bind +block +bodypress +bodyslam +brutalswing +bubblebeam +bulkup +captivate +chillingwater +coil +confuseray +confusion +copycat +counter +crushgrip +curse +destinybond +doublehit +doublekick +doubleslap +doubleteam +doubleedge +dreameater +dualchop +embargo +endeavor +expandingforce +facade +focusblast +frustration +futuresight +gigaimpact +gravity +headcharge +headbutt +healblock +heartswap +heavyslam +hiddenpower +highhorsepower +hornattack +hyperbeam +hypnosis +imprison +irondefense +knockoff +laserfocus +leer +lightscreen +luckychant +meanlook +meditate +memento +move:metronome +mysticalpower +nastyplot +ominouswind +outrage +pound +powertrick +powertrip +protect +psybeam +psychic +psychicnoise +psychicterrain +psychoboost +psychoshift +psyshock +psystrike +psywave +punishment +pursuit +quash +rage +ragingbull +reflect +rest +return +revenge +reversal +rocksmash +roleplay +round +scaryface +screech +seismictoss +signalbeam +skillswap +slam +sleeptalk +snore +speedswap +spitup +stockpile +stomp +storedpower +strength +substitute +superpower +swallow +synchronoise +tackle +takedown +taunt +thrash +topsyturvy +torment +triattack +trickroom +twinbeam +uproar +visegrip +wideguard +workup +wrap +wringout +yawn +zenheadbutt',
+
+			'#Scado +absorb +acidspray +amnesia +ancientpower +aquajet +aromatherapy +attract +barrier +bide +brine +bubble +bubblebeam +calmmind +camouflage +captivate +chillingwater +chloroblast +confide +curse +disable +dive +drainingkiss +encore +energyball +facade +flail +flipturn +frenzyplant +frustration +gastroacid +gigadrain +grassknot +grasswhistle +grassyterrain +growth +headbutt +hiddenpower +hydropump +leafstorm +leafage +leechseed +magicalleaf +megadrain +mimic +mudbomb +mudshot +mudsport +mudslap +muddywater +naturalgift +naturepower +pound +protect +psychup +razorleaf +rest +return +round +safeguard +scald +solarbeam +spitup +splash +stockpile +substitute +surf +swallow +sweetkiss +sweetscent +synthesis +tailwhip +toxic +watergun +waterpulse +watersport +waterfall +wavecrash +weatherball +whirlpool +worryseed',
+
+			'#Feepit +afteryou +agility +armthrust +attract +babydolleyes +bestow +bodyslam +brickbreak +bulkup +bulletpunch +captivate +charm +circlethrow +counter +covet +detect +dig +dizzypunch +doublehit +doubleslap +drainpunch +dualchop +dynamicpunch +endure +facade +fakeout +finalgambit +firepunch +flail +focusenergy +focuspunch +frustration +helpinghand +hiddenpower +icepunch +lastresort +lowkick +lowsweep +machpunch +playrough +poweruppunch +protect +quickattack +rest +return +revenge +round +scratch +sleeptalk +strength +substitute +superpower +swordsdance +thunderpunch +victorydance +wish +workup',
+
+			'#Griefer +assurance +astonish +attract +beatup +block +bodyslam +bounce +bravebird +bulldoze +captivate +ceaselessedge +chipaway +confide +confuseray +curse +destinybond +drillpeck +drillrun +earthquake +embargo +facade +feint +feintattack +flashcannon +fling +foulplay +frustration +glare +grudge +hiddenpower +honeclaws +irondefense +ironhead +knockoff +lashout +magnetbomb +memento +mirrorshot +nastyplot +payback +powertrip +protect +pursuit +rest +return +round +screech +selfdestruct +shadowclaw +shadowsneak +snatch +spikes +spite +stealthrock +strength +substitute +taunt +thief +torment',
+
+			'#Angelpuss +afteryou +alluringvoice +allyswitch +amnesia +aromaticmist +assist +attract +babydolleyes +batonpass +bide +bodyslam +calmmind +captivate +charm +confide +copycat +covet +craftyshield +curse +dazzlinggleam +disarmingvoice +doubleedge +drainingkiss +facade +fairywind +flash +frustration +headbutt +healbell +healpulse +healingwish +hiddenpower +hypervoice +icywind +imprison +lastresort +lovelykiss +luckychant +magiccoat +move:metronome +mimic +mirrorcoat +moonblast +moonlight +morningsun +naturalgift +naturepower +painsplit +playnice +protect +recover +reflect +refresh +rest +return +round +simplebeam +skillswap +sleeptalk +substitute +sweetkiss +teleport +toxic +trick +wish',
+
+			'#Bython +acidspray +amnesia +astralbarrage +attract +aurasphere +bide +bind +bite +bodyslam +burningjealousy +captivate +coil +confusion +cosmicpower +crunch +curse +darkpulse +dazzlinggleam +destinybond +detect +doomdesire +doublehit +doubleteam +doubleedge +dragonbreath +dragonpulse +dragonrage +dragontail +earthpower +earthquake +energyball +expandingforce +extrasensory +facade +faketears +ficklebeam +flamethrower +flash +flashcannon +focusblast +frostbreath +frustration +geomancy +heartswap +hex +hiddenpower +irontail +memento +moonblast +moonlight +morningsun +mysticalfire +nightshade +outrage +poisonfang +poisontail +poltergeist +powertrick +powertrip +protect +psybeam +psychic +psychicfangs +psychoshift +psyshock +rest +return +round +shadowball +shadowsneak +skillswap +slam +snarl +substitute +trickroom +twinbeam +twineedle +vacuumwave +weatherball +workup +zenheadbutt',
+
+			'#Snowbunny +agility +allyswitch +amnesia +aquaring +attract +aurorabeam +auroraveil +avalanche +babydolleyes +batonpass +bide +blizzard +bodyslam +bounce +calmmind +camouflage +captivate +charm +chillingwater +confuseray +confusion +cottonguard +covet +curse +cut +dazzlinggleam +defensecurl +dig +disable +doublekick +doubleedge +drainingkiss +drillrun +endeavor +endure +facade +flail +fling +foresight +freezedry +frostbreath +frustration +furyswipes +grassknot +gravity +gyroball +haze +headcharge +headbutt +healbell +healingwish +hiddenpower +honeclaws +hyperfang +iceball +icebeam +icefang +iceshard +icespinner +lastresort +lowkick +lunge +memento +metalclaw +mist +moonlight +mudslap +naturalgift +naturepower +painsplit +powdersnow +protect +quickattack +recycle +reflecttype +refresh +rest +retaliate +return +rollout +round +safeguard +sandattack +scratch +secretpower +shadowclaw +sheercold +slam +snowscape +stomp +stompingtantrum +storedpower +strength +substitute +superfang +tailwhip +tidyup +trailblaze +tripleaxel +wish +withdraw +workup +yawn +zenheadbutt',
+
+			'#Meepit +assurance +astonish +attract +babydolleyes +beatup +bite +burningjealousy +captivate +charm +covet +crunch +curse +darkpulse +defensecurl +dig +disable +disarmingvoice +doubleedge +endure +facade +faketears +feint +feintattack +flail +followme +foulplay +frustration +glare +headbutt +hiddenpower +hypnosis +meanlook +move:metronome +nastyplot +playnice +playrough +populationbomb +pound +protect +pursuit +quickattack +rage +rest +retaliate +return +roleplay +round +scaryface +screech +slam +snarl +snatch +spite +stompingtantrum +storedpower +stuffcheeks +substitute +suckerpunch +swagger +sweetkiss +switcheroo +takedown +taunt +tearfullook +thief +thrash +tickle +torment +trick +uturn +uproar +wish +workup',
+
+			'#Psimouse +acupressure +afteryou +allyswitch +amnesia +ancientpower +astonish +attract +aurasphere +aurorabeam +barrier +batonpass +bestow +blizzard +block +bubblebeam +calmmind +captivate +chillingwater +confide +confuseray +confusion +cosmicpower +curse +darkpulse +dazzlinggleam +destinybond +detect +disable +disarmingvoice +echoedvoice +eerieimpulse +eeriespell +embargo +encore +energyball +entrainment +expandingforce +extrasensory +facade +flash +flashcannon +flatter +focusblast +followme +foresight +frustration +futuresight +gravity +grudge +healbell +healblock +healpulse +healingwish +hex +hiddenpower +hyperbeam +hyperfang +hypervoice +icebeam +imprison +kinesis +laserfocus +lightscreen +luckychant +magiccoat +magicroom +magicalleaf +meditate +move:metronome +mimic +mindreader +miracleeye +mirrorcoat +moonblast +moonlight +mysticalfire +mysticalpower +nastyplot +nightshade +ominouswind +painsplit +partingshot +perishsong +playrough +powergem +powersplit +powerswap +powertrick +protect +psybeam +psychup +psychic +psychicnoise +psychicterrain +psychoshift +psyshock +psywave +quash +recycle +reflect +rest +return +round +safeguard +shadowball +shockwave +signalbeam +simplebeam +skillswap +speedswap +spiritbreak +spite +storedpower +substitute +supersonic +swift +synchronoise +telekinesis +teleport +terrainpulse +thunderbolt +topsyturvy +torment +toxic +triattack +trick +trickroom +waterpulse +weatherball +wonderroom +workup +zapcannon +zenheadbutt',
+		],
+		banlist: ['All Pokemon'],
+		unbanlist: [
+			'Bloop', 'Ettaphant', 'Faellie', 'Feepit', 'Griefer', 'Kadoatie', 'Meepit', 'Scado', 'Snowbunny', 'Spyder', 'Ukali', 'Wuzzle', 'Yullie',
+			// 'Angelpuss', 'Bython', 'Psimouse', 'Rock',
+		],
+		onChangeSet(set, format, setHas, teamHas) {
+			set.shiny = false;
+		},
+	},
+	{
+		name: '[Gen 9] ND VGC LC',
+		desc: 'VGC with unevolved pokemon only.',
+		mod: 'gen9',
+		gameType: 'doubles',
+		// bestOfDefault: true,
+		ruleset: [
+			'Standard Doubles', 'NatDex Mod', 'Picked Team Size = 4', 'Little Cup', '!! Max Level = 50', 'Z-Move Clause', 'Terastal Clause', '!Species Clause', 'Forme Clause', 'Item Clause = 1', 'Evasion Clause', 'VGC Timer', 'Limit One Restricted', 'Open Team Sheets',
+		],
+		restricted: [
+			'Scyther', 'Tangela', 'Stantler', 'Sneasel-Hisui', 'Qwilfish-Hisui', 'Murkrow', 'Misdreavus', 'Gligar', 'Girafarig', 'Cottonee', 'Clamperl', 'Basculin-White-Striped', 'Sneasel', 'Corsola-Galar',
+		],
+		banlist: [
+			'Duraludon', 'Type: Null',
+			'Commander', 'Power Construct', 'Shadow Tag', 'Assist',
+		],
+	},
+	{
+		name: '[Gen 9] ND VGC LC (Bo3)',
+		desc: 'VGC with unevolved pokemon only.',
+		mod: 'gen9',
+		gameType: 'doubles',
+		// bestOfDefault: true,
+		ruleset: [
+			'Standard Doubles', 'NatDex Mod', 'Picked Team Size = 4', 'Little Cup', '!! Max Level = 50', 'Z-Move Clause', 'Terastal Clause', '!Species Clause', 'Forme Clause', 'Item Clause = 1', 'Evasion Clause', 'VGC Timer', 'Limit One Restricted', 'Open Team Sheets', 'Best Of = 3',
+		],
+		restricted: [
+			'Scyther', 'Tangela', 'Stantler', 'Sneasel-Hisui', 'Qwilfish-Hisui', 'Murkrow', 'Misdreavus', 'Gligar', 'Girafarig', 'Cottonee', 'Clamperl', 'Basculin-White-Striped', 'Sneasel', 'Corsola-Galar',
+		],
+		banlist: [
+			'Duraludon', 'Type: Null',
+			'Commander', 'Power Construct', 'Shadow Tag', 'Assist',
+		],
+	},
 
 	{
 		section: 'Misc',
