@@ -62,6 +62,8 @@ These are the mechanics for the Desync Clause Mod:
     - Counter reacts based on the last move used by the opponent's team. A move counts as used as soon as the message "<Pokémon> used <move>!" appears, even if it fails. So if a Pokémon gets full paralyzed, it doesn't count. For example, if a Chansey gets Ice Beamed by a paralyzed Snorlax, then the next turn it clicks Counter as the Snorlax clicks Body Slam and gets full para'd, Counter will fail.
     - Counter fails if the opponent switches to a sleeping Pokemon that spends a turn sleeping and has Counter as its first move. For example—assume the Cloyster in the back is asleep and has Counter as its first move—if Chansey uses Counter as Snorlax switches into Cloyster, Counter might not fail. But if Snorlax switches into Cloyster, and in the following turn, Chansey clicks Counter as Cloyster spends a turn sleeping, Counter will always fail. This makes it optimal to put Counter in the first slot (we could probably code this into PS).
 
+For more detailed information, see https://www.smogon.com/forums/threads/fight-button-implementation-side-effects-desync-infinite-sleep.3780342/post-11055527.
+
 TODO. Glitches not implemented
 ------------------------------
 There are a couple of divisions by zero in the original game in the cartridge. Those have not been implemented.
