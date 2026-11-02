@@ -3230,9 +3230,9 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	basculegionf: {
-		tier: "RUBL",
+		tier: "RU",
 		doublesTier: "DUU",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	sandile: {
 		tier: "LC",
