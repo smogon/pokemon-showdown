@@ -2755,7 +2755,17 @@ export class TeamValidator {
 					}
 					// past-gen level-up, TM, or tutor moves:
 					//   available as long as the source gen was or was before this gen
-					if (learned.charAt(1) === 'R') {
+					if (learned.charAt(1) === 'R' && !moveSources.sourcesBefore) {
+						if (species.id === 'shedinja') {
+							// Special case for Shedinja, which inherits moves learned by Ninjask upon evolution in Gens 3 and 4
+							// Shedinja inherits the level of Ninjask so it should not have moves incompatible with its level
+							const ninjaskLearnset = dex.species.getLearnsetData('ninjask' as ID).learnset;
+							const ninjaskSource = ninjaskLearnset![move.id].find(s => s.startsWith(`${learnedGen}L`));
+							if (parseInt(ninjaskSource!.substr(2)) > (set.level || 100)) {
+								cantLearnReason = `is learned at level ${parseInt(ninjaskSource!.substr(2))}.`;
+								continue;
+							}
+						}
 						moveSources.restrictedMove = moveid;
 					}
 					limit1 = false;
