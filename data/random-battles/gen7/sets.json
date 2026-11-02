@@ -157,7 +157,7 @@
         ]
     },
     "raticate": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -613,7 +613,7 @@
         ]
     },
     "golemalola": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1561,7 +1561,7 @@
         ]
     },
     "espeon": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3490,7 +3490,7 @@
         ]
     },
     "bibarel": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4193,7 +4193,7 @@
         ]
     },
     "gallade": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -4338,7 +4338,7 @@
         ]
     },
     "mesprit": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4363,7 +4363,7 @@
         ]
     },
     "dialga": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5563,7 +5563,7 @@
         ]
     },
     "cryogonal": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -5869,7 +5869,7 @@
         ]
     },
     "zekrom": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -6532,7 +6532,7 @@
         ]
     },
     "xerneas": {
-        "level": 64,
+        "level": 65,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -6608,7 +6608,7 @@
         ]
     },
     "hoopa": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Attacker",

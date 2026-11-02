@@ -38,7 +38,7 @@
         ]
     },
     "blastoise": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -529,7 +529,7 @@
         ]
     },
     "dodrio": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -636,7 +636,7 @@
         ]
     },
     "electrode": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1058,7 +1058,7 @@
         ]
     },
     "zapdos": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Staller",
@@ -1374,7 +1374,7 @@
         ]
     },
     "jumpluff": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Generalist",
@@ -1653,7 +1653,7 @@
         ]
     },
     "scizor": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1925,7 +1925,7 @@
         ]
     },
     "blissey": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Staller",
@@ -2358,7 +2358,7 @@
         ]
     },
     "sableye": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2754,7 +2754,7 @@
         ]
     },
     "cradily": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2949,7 +2949,7 @@
         ]
     },
     "salamence": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Setup Sweeper",
