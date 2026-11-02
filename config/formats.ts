@@ -921,7 +921,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			`&bullet; <a href="https://github.com/Pet-Mods/pmotm-sprites">Want to see the sprites?</a>`,
 		],
 		mod: 'gen9resetmons',
-		team: 'RandomReset',
+		team: 'randomReset',
 		ruleset: ['[Gen 9] Random Battle', 'Data Preview', 'Terastal Clause'],
 		onBegin() {
 			this.add(`raw|<div class="broadcast-green"><strong>Welcome to Resetmons!</strong><br>You can find our thread and metagame resources <a href="https://www.smogon.com/forums/threads3778771/" target="_blank">here</a>.<br>Be sure to swing by the <a href="https://play.pokemonshowdown.com/petmods" target="_blank">Pet Mods room</a> to discuss the metagame and participate in roomtours!</div>`);
