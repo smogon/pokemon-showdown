@@ -1976,7 +1976,8 @@ export class BattleActions {
 	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
 
 	canTerastallize(pokemon: Pokemon) {
-		if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
+		if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9 ||
+			(pokemon.baseSpecies.id === 'terapagos' && this.battle.ruleTable.has('terapagosterastallizationclause'))) {
 			return null;
 		}
 		return pokemon.teraType;
