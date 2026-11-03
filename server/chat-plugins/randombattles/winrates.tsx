@@ -48,7 +48,7 @@ function getDefaultStats(): Stats {
 			gen9randomdoublesbattle: { mons: {} },
 			gen9babyrandombattle: { mons: {} },
 			gen9chatbats: { mons: {} },
-			gen9ccapm2025randombattle: { mons: {} },
+			gen9resetmonsrandombattle: { mons: {} },
 			gen9mixandmegalimitedsupplyrandombattle: { mons: {} },
 			gen9superstaffbrosultimate: { mons: {} },
 			gen9championsrandombattle: { mons: {} },
@@ -193,7 +193,8 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		// may need to be raised again if ladder takes off further
 		eloFloor = 1400;
 	}
-	if (!formatData || ((format.mod !== 'gen9ssb' && format.mod !== 'chatbats') &&
+	if (!formatData || ((format.mod !== 'gen9ssb' && format.mod !== 'chatbats' &&
+		format.mod !== 'gen9resetmons') &&
 		battle.rated < eloFloor) || !winner)
 		return;
 	checkRollover();

@@ -650,9 +650,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 		// Get items
 		// First, the priority items
-		item = this.getPriorityItem(
-			ability, types, moves, counter, teamDetails, species, isLead, teraType, role, isDoubles
-		) || '';
+		item = species.requiredItem ||
+			this.getPriorityItem(
+				ability, types, moves, counter, teamDetails, species, isLead, teraType, role, isDoubles
+			) || '';
 		if (item === '') {
 			item = set.items ? this.sample(set.items) :
 				this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
