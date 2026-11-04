@@ -142,5 +142,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
+		runTrappingImmunity(message) {
+			if (this.battle.gen >= 6 && (this.hasType('Ghost') || this.hasType('Psychic'))) {
+				if (message) this.battle.add('-immune', this);
+				return false;
+			}
+			return true;
+		}
 	},
 };
