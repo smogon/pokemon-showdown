@@ -12,10 +12,10 @@ describe('Thousand Waves', () => {
 
 	it('should apply the trapped volatile to Ghost-types, but they can still switch out', () => {
 		battle = common.createBattle([[
-			{ species: "Smeargle", ability: 'prankster', moves: ['thousandwaves'] },
+			{ species: "Smeargle", moves: ['thousandwaves'] },
 		], [
-			{ species: "Dusknoir", ability: 'frisk', moves: ['sleeptalk'] },
-			{ species: "Starmie", ability: 'illuminate', moves: ['sleeptalk'] },
+			{ species: "Dusknoir", moves: ['sleeptalk'] },
+			{ species: "Starmie",  moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move thousandwaves', 'move sleeptalk');
 		assert(battle.p2.active[0].volatiles['trapped']);
@@ -26,11 +26,10 @@ describe('Thousand Waves', () => {
 	describe('[Gen 7]', () => {
 		it('should trap a non-Ghost-type replacement when the Ghost-type target uses Baton Pass', () => {
 			battle = common.gen(7).createBattle([[
-				{ species: "Smeargle", ability: 'prankster', moves: ['thousandwaves', 'sleeptalk'] },
+				{ species: "Smeargle", moves: ['thousandwaves', 'sleeptalk'] },
 			], [
-				{ species: "Dusknoir", ability: 'frisk', moves: ['batonpass'] },
-				{ species: "Starmie", ability: 'illuminate', moves: ['sleeptalk'] },
-				{ species: "Tangrowth", ability: 'leafguard', moves: ['sleeptalk'] },
+				{ species: "Dusknoir", moves: ['batonpass'] },
+				{ species: "Starmie", moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices('move thousandwaves', 'move batonpass');
 			battle.makeChoices('', 'switch 2');
