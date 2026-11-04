@@ -9802,7 +9802,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 		onHit(target, source, move) {
 			if (!source.runTrappingImmunity() || !target.runTrappingImmunity() ||
-			source.volatiles['trapped'] || target.volatiles['trapped']) return false;
+				source.volatiles['trapped'] || target.volatiles['trapped']) return false;
 			source.addVolatile('trapped', target, move, 'trapper');
 			target.addVolatile('trapped', source, move, 'trapper');
 		},
