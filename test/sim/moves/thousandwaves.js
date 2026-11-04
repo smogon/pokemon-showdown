@@ -15,7 +15,7 @@ describe('Thousand Waves', () => {
 			{ species: "Smeargle", moves: ['thousandwaves'] },
 		], [
 			{ species: "Dusknoir", moves: ['sleeptalk'] },
-			{ species: "Starmie",  moves: ['sleeptalk'] },
+			{ species: "Starmie", moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move thousandwaves', 'move sleeptalk');
 		assert(battle.p2.active[0].volatiles['trapped']);
