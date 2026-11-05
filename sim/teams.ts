@@ -380,9 +380,9 @@ export const Teams = new class Teams {
 			set.name = removeNicknames(set.name) || set.species;
 		}
 		if (set.name && set.name !== set.species && removeNicknames !== true) {
-			out += `${set.name} (${set.species})`;
+			out += `${set.name.normalize("NFC")} (${set.species.normalize("NFC")})`;
 		} else {
-			out += set.species;
+			out += set.species.normalize("NFC");
 		}
 		if (set.gender === 'M') out += ` (M)`;
 		if (set.gender === 'F') out += ` (F)`;
