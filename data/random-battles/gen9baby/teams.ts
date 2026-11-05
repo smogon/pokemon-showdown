@@ -709,14 +709,14 @@ export class RandomBabyTeams extends RandomTeams {
 				(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Water'))
 			);
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
-			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+			const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 
 			if (!isMonotype && !this.forceMonotype) {
 				let skip = false;
 
 				// Limit two of any type
 				for (const typeName of types) {
-					if (typeCount.get(typeName) >= 2 * limitFactor) {
+					if (typeCount.get(typeName) >= limit(2)) {
 						skip = true;
 						break;
 					}
@@ -727,13 +727,13 @@ export class RandomBabyTeams extends RandomTeams {
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0) {
-						if (typeWeaknesses.get(typeName) >= 3 * limitFactor) {
+						if (typeWeaknesses.get(typeName) >= limit(3)) {
 							skip = true;
 							break;
 						}
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
-						if (typeDoubleWeaknesses.get(typeName) >= limitFactor) {
+						if (typeDoubleWeaknesses.get(typeName) >= limit(1)) {
 							skip = true;
 							break;
 						}
@@ -745,17 +745,17 @@ export class RandomBabyTeams extends RandomTeams {
 				if (
 					this.dex.getEffectiveness('Fire', species) === 0 &&
 					Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)).length &&
-					typeWeaknesses.get('Fire') >= 3 * limitFactor
+					typeWeaknesses.get('Fire') >= limit(3)
 				) continue;
 
 				// Limit four weak to Freeze-Dry
 				if (weakToFreezeDry) {
-					if (typeWeaknesses.get('Freeze-Dry') >= 4 * limitFactor) continue;
+					if (typeWeaknesses.get('Freeze-Dry') >= limit(4)) continue;
 				}
 			}
 
 			// Limit three of any type combination in Monotype
-			if (!this.forceMonotype && isMonotype && typeComboCount.get(typeCombo) >= 3 * limitFactor) continue;
+			if (!this.forceMonotype && isMonotype && typeComboCount.get(typeCombo) >= limit(3)) continue;
 
 			const set: RandomTeamsTypes.RandomSet = this.randomSet(species, teamDetails, false, false);
 			pokemon.push(set);
