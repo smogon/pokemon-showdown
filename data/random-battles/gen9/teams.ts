@@ -2658,7 +2658,7 @@ export class RandomTeams {
 		const abilitiesLimited: { [k: string]: string } = {
 			toxicdebris: 'toxicSpikes',
 		};
-		const limitFactor = Math.ceil(this.maxTeamSize / 6);
+		const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 		/**
 		 * Weighted random shuffle
 		 * Uses the fact that for two uniform variables x1 and x2, x1^(1/w1) is larger than x2^(1/w2)
@@ -2696,7 +2696,7 @@ export class RandomTeams {
 			let skip = false;
 			if (!this.forceMonotype) {
 				for (const type of types) {
-					if (teamData.typeCount[type] >= 2 * limitFactor && this.randomChance(4, 5)) {
+					if (teamData.typeCount[type] >= limit(2) && this.randomChance(4, 5)) {
 						skip = true;
 						break;
 					}
@@ -2709,7 +2709,7 @@ export class RandomTeams {
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0 && this.dex.getImmunity(typeName, types)) {
-						if (teamData.weaknesses[typeName] >= 3 * limitFactor) {
+						if (teamData.weaknesses[typeName] >= limit(3)) {
 							skip = true;
 							break;
 						}
@@ -2727,7 +2727,7 @@ export class RandomTeams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limitFactor) continue;
+			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limit(1)) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -2790,7 +2790,7 @@ export class RandomTeams {
 			for (const type in teamData.weaknesses) {
 				// We reject if our team is triple weak to any type without having a resist
 				if (teamData.resistances[type]) continue;
-				if (teamData.weaknesses[type] >= 3 * limitFactor) return this.randomFactoryTeam(side, ++depth);
+				if (teamData.weaknesses[type] >= limit(3)) return this.randomFactoryTeam(side, ++depth);
 			}
 			// Try to force Stealth Rock on non-Uber teams
 			if (!teamData.has['stealthRock'] && this.factoryTier !== 'Uber') return this.randomFactoryTeam(side, ++depth);
@@ -2955,7 +2955,7 @@ export class RandomTeams {
 			thickfat: ["Ice", "Fire"],
 			levitate: ["Ground"],
 		};
-		const limitFactor = Math.ceil(this.maxTeamSize / 6);
+		const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 		/**
 		 * Weighted random shuffle
 		 * Uses the fact that for two uniform variables x1 and x2, x1^(1/w1) is larger than x2^(1/w2)
@@ -2987,7 +2987,7 @@ export class RandomTeams {
 			let skip = false;
 			if (!this.forceMonotype) {
 				for (const type of types) {
-					if (teamData.typeCount[type] >= 2 * limitFactor && this.randomChance(4, 5)) {
+					if (teamData.typeCount[type] >= limit(2) && this.randomChance(4, 5)) {
 						skip = true;
 						break;
 					}
@@ -3004,7 +3004,7 @@ export class RandomTeams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limitFactor) continue;
+			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limit(1)) continue;
 
 			const itemData = this.dex.items.get(set.item);
 			if (teamData.has[itemData.id]) continue; // Item Clause
@@ -3072,7 +3072,7 @@ export class RandomTeams {
 		// Quality control we cannot afford for monotype
 		if (!teamData.forceResult && !this.forceMonotype) {
 			for (const type in teamData.weaknesses) {
-				if (teamData.weaknesses[type] >= 3 * limitFactor) return this.randomBSSFactoryTeam(side, ++depth);
+				if (teamData.weaknesses[type] >= limit(3)) return this.randomBSSFactoryTeam(side, ++depth);
 			}
 		}
 
@@ -3238,7 +3238,7 @@ export class RandomTeams {
 		};
 		const movesLimited: { [k: string]: string } = {};
 		const abilitiesLimited: { [k: string]: string } = {};
-		const limitFactor = Math.ceil(this.maxTeamSize / 3);
+		const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 3));
 		/**
 		 * Weighted random shuffle
 		 * Uses the fact that for two uniform variables x1 and x2, x1^(1/w1) is larger than x2^(1/w2)
@@ -3270,7 +3270,7 @@ export class RandomTeams {
 			let skip = false;
 			if (!this.forceMonotype) {
 				for (const type of types) {
-					if (teamData.typeCount[type] >= limitFactor && this.randomChance(4, 5)) {
+					if (teamData.typeCount[type] >= limit(1) && this.randomChance(4, 5)) {
 						skip = true;
 						break;
 					}
@@ -3283,7 +3283,7 @@ export class RandomTeams {
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0 && this.dex.getImmunity(typeName, types)) {
-						if (teamData.weaknesses[typeName] >= limitFactor) {
+						if (teamData.weaknesses[typeName] >= limit(1)) {
 							skip = true;
 							break;
 						}
@@ -3317,7 +3317,7 @@ export class RandomTeams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limitFactor) continue;
+			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limit(1)) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
@@ -3364,7 +3364,7 @@ export class RandomTeams {
 		// Quality control we cannot afford for monotype
 		if (!teamData.forceResult && !this.forceMonotype) {
 			for (const type in teamData.weaknesses) {
-				if (teamData.weaknesses[type] >= limitFactor) return this.random1v1FactoryTeam(side, ++depth);
+				if (teamData.weaknesses[type] >= limit(1)) return this.random1v1FactoryTeam(side, ++depth);
 			}
 		}
 		return pokemon;
