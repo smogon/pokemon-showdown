@@ -1663,7 +1663,6 @@ export const Punishments = new class {
 				if (punishUserid !== user.id && Punishments.isSharedIp(user.latestIp) && user.autoconfirmed) {
 					Punishments.unpunish(userid, 'BATTLEBAN');
 				} else {
-					void Punishments.punish(user, punishment, false);
 					user.cancelReady();
 					if (!Punishments.userids.getByType(userid, 'BATTLEBAN')) {
 						const appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);
