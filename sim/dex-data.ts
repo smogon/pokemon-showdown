@@ -60,6 +60,18 @@ export interface ModdedEffectText {
 	shortDesc?: string;
 }
 
+/**
+ * Every `on*` callback name that any effect defines. The battle skips
+ * looking for callbacks that aren't in here.
+ */
+export const definedCallbackNames = new Set<string>(['onSwitchIn']);
+
+export function addDefinedCallbackNames(data: AnyObject) {
+	for (const key in data) {
+		if (key.startsWith('on')) definedCallbackNames.add(key);
+	}
+}
+
 export abstract class BasicEffect implements EffectData {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
@@ -132,6 +144,7 @@ export abstract class BasicEffect implements EffectData {
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
 		this.sourceEffect = data.sourceEffect || '';
+		addDefinedCallbackNames(data);
 	}
 
 	toString() {
