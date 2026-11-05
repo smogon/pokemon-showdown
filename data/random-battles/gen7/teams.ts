@@ -1115,14 +1115,14 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Water'))
 				);
 				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
-				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+				const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 
 				if (restrict) {
 					if (!isMonotype && !this.forceMonotype) {
 						// Limit two of any type
 						let skip = false;
 						for (const typeName of types) {
-							if (typeCount[typeName] >= 2 * limitFactor) {
+							if (typeCount[typeName] >= limit(2)) {
 								skip = true;
 								break;
 							}
@@ -1134,14 +1134,14 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							// it's weak to the type
 							if (this.dex.getEffectiveness(typeName, species) > 0) {
 								if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-								if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+								if (typeWeaknesses[typeName] >= limit(3)) {
 									skip = true;
 									break;
 								}
 							}
 							if (this.dex.getEffectiveness(typeName, species) > 0) {
 								if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-								if (typeDoubleWeaknesses[typeName] >= limitFactor) {
+								if (typeDoubleWeaknesses[typeName] >= limit(1)) {
 									skip = true;
 									break;
 								}
@@ -1155,17 +1155,17 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)).length
 						) {
 							if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
-							if (typeWeaknesses['Fire'] >= 3 * limitFactor) continue;
+							if (typeWeaknesses['Fire'] >= limit(3)) continue;
 						}
 
 						// Limit four weak to Freeze-Dry
 						if (weakToFreezeDry) {
 							if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
-							if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
+							if (typeWeaknesses['Freeze-Dry'] >= limit(4)) continue;
 						}
 
 						// Limit one level 100 Pokemon
-						if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+						if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limit(1)) {
 							continue;
 						}
 
@@ -1174,7 +1174,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					}
 
 					// Limit three of any type combination in Monotype
-					if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
+					if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= limit(3))) continue;
 				}
 
 				const set = this.randomSet(

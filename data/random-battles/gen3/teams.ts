@@ -698,12 +698,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 			if (!isMonotype && !this.forceMonotype) {
 				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
-				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+				const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 
 				// Limit two of any type
 				let skip = false;
 				for (const typeName of types) {
-					if (typeCount[typeName] >= 2 * limitFactor) {
+					if (typeCount[typeName] >= limit(2)) {
 						skip = true;
 						break;
 					}
@@ -715,14 +715,14 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0) {
 						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+						if (typeWeaknesses[typeName] >= limit(3)) {
 							skip = true;
 							break;
 						}
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= limit(1)) {
 							skip = true;
 							break;
 						}
@@ -731,7 +731,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				if (skip) continue;
 
 				// Limit one level 100 Pokemon
-				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limit(1)) {
 					continue;
 				}
 
