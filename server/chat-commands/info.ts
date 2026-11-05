@@ -1704,6 +1704,7 @@ export const commands: Chat.ChatCommands = {
 			this.TL`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
 			this.TL`<strong>weekban</strong> - Bans a user from the room for a week.`,
 			this.TL`<strong>blacklist</strong> - Bans a user for a year.`,
+			this.TL`<strong>permablacklist</strong> - Bans a user for 10 years.`,
 		];
 
 		const globalPunishments = [
