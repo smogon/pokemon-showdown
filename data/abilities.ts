@@ -491,7 +491,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	cheekpouch: {
 		onEatItem(item, pokemon) {
-			this.heal(pokemon.baseMaxhp / 3);
+			this.heal(pokemon.baseMaxhp / 3, pokemon, pokemon);
 		},
 		flags: {},
 		name: "Cheek Pouch",
