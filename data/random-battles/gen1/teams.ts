@@ -21,7 +21,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	override randomCCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const team = [];
+		const team: RandomTeamsTypes.RandomSet[] = [];
 
 		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype);
 
