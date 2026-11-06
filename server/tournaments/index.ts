@@ -1289,20 +1289,35 @@ const commands: Chat.ChatCommands = {
 			}
 
 			const tour: Tournament | undefined = createTournament(room, format, generator, cap, Config.ratedtours, mod, name, this);
-			if (tour) {
-				this.privateModAction(`${user.name} created a tournament in ${tour.baseFormat} format.`);
-				this.modlog('TOUR CREATE', null, tour.baseFormat);
-				if (room.settings.tournaments?.announcements) {
-					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
-					if (tourRoom && tourRoom !== room) {
-						tourRoom.addRaw(
-							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
-							Utils.html`<strong>${Dex.formats.get(tour.name).name}</strong> tournament created in` +
-							` <strong>${room.title}</strong>.</a></div>`
-						).update();
-					}
-				}
-			}
+			if (!tour) return;
+
+			this.privateModAction(`${user.name} created a tournament in ${tour.baseFormat} format.`);
+			this.modlog('TOUR CREATE', null, tour.baseFormat);
+			if (room.settings.tournaments?.announcements && Config.tourrooms) {
+				const rooms: Room[] = [];
+				const tourRooms = Object.keys(Config.tourrooms);
+				const tourFormat = Dex.formats.get(tour.baseFormat);
+				for (const tryRoom of tourRooms) {
+					const existingRoom = Rooms.search(tryRoom);
+					if (!existingRoom?.persist || existingRoom === room) continue;
+					const reqs = Config.tourrooms[tryRoom];
+					if (reqs === true) {
+						rooms.push(existingRoom);
+					} else for (const req of reqs) {
+						if (!rooms.includes(existingRoom) && (tourFormat.name.includes(req) ||
+							(Dex.formats.get(Dex.getAlias(req as ID)).id === tourFormat.id))) {
+							rooms.push(existingRoom);
+						};
+					};
+				};
+				for (const r of rooms) {
+					r.addRaw(
+						Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +
+						Utils.html`<strong>${tourFormat.name}</strong> tournament created in` +
+						` <strong>${room.title}</strong>.</a></div>`
+					).update();
+				};
+			};
 		},
 		formats(target, room, user) {
 			if (!this.runBroadcast()) return;
