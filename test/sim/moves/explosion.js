@@ -26,7 +26,7 @@ describe('Explosion', () => {
 		battle = common.gen(4).createBattle([[
 			{ species: "Metagross", nature: "Adamant", moves: ['explosion'] },
 		], [
-			{ species: "Hippowdon", nature: "Impish", evs: { hp: 252, def: 252 }, moves: ['splash'] },
+			{ species: "Hippowdon", ability: 'shellarmor', nature: "Impish", evs: { hp: 252, def: 252 }, moves: ['splash'] },
 		]]);
 		battle.makeChoices('move explosion', 'move splash');
 		const hippo = battle.p2.active[0];
