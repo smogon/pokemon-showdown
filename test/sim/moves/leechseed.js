@@ -23,4 +23,17 @@ describe('Leech Seed', () => {
 		battle.makeChoices('move sleeptalk, move allyswitch', 'auto');
 		assert.equal(comfey.hp, comfey.maxhp - Math.floor(comfey.maxhp / 8), 'Comfey should damage and heal itself from Leech Seed');
 	});
+
+	describe('[Gen 1]', () => {
+		it(`should affect a target behind a Substitute`, () => {
+			battle = common.gen(1).createBattle([[
+				{ species: 'bulbasaur', moves: ['leechseed'] },
+			], [
+				{ species: 'pikachu', moves: ['substitute'] },
+			]]);
+			battle.makeChoices();
+			const pikachu = battle.p2.active[0];
+			assert(pikachu.volatiles['leechseed']);
+		});
+	});
 });
