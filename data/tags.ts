@@ -123,7 +123,7 @@ export const Tags: { [id: IDEntry]: TagData } = {
 	},
 	boostedbysheerforce: {
 		name: "Boosted by Sheer Force",
-		moveFilter: move => !!(move.secondary || move.secondaries || move.hasSheerForceBoost),
+		moveFilter: move => !!(move.secondary || move.secondaries),
 	},
 	bypassprotect: {
 		name: "Bypasses Protect",

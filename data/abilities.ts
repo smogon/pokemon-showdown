@@ -3238,8 +3238,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 253,
 	},
 	pickpocket: {
-		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && move?.flags['contact']) {
+		onAfterMoveSecondaryLastPriority: 1,
+		onAfterMoveSecondaryLast(target, source, move) {
+			if (source && source !== target && move?.flags['contact'] && !this.suppressingSecondaries()) {
 				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
 					return;
 				}
@@ -4202,18 +4203,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sheerforce: {
 		onModifyMove(move, pokemon) {
-			if (move.secondaries && !move.hasSheerForceBoost) {
+			if (move.secondaries) {
 				delete move.secondaries;
 				// Technically not a secondary effect, but it is negated
 				delete move.self;
 				if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
-				// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
+				// Actual negation of `AfterMoveSecondary` and `AfterMoveSecondarySelf` implemented in Battle#suppressingSecondaries
 				move.hasSheerForce = true;
 			}
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.hasSheerForce || move.hasSheerForceBoost) return this.chainModify([5325, 4096]);
+			if (move.hasSheerForce) return this.chainModify([5325, 4096]);
 		},
 		flags: {},
 		name: "Sheer Force",
