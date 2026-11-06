@@ -9,6 +9,18 @@ function checkMegaForme(species: Species, forme: string, battle: Battle) {
 	return null;
 }
 
+function runMegaEvolution(pokemon: Pokemon, speciesid: string | false) {
+	if (!speciesid) return false;
+
+	pokemon.formeChange(speciesid, null, true);
+	pokemon.battle.add('-mega', pokemon, pokemon.battle.dex.species.get(speciesid).baseSpecies);
+	pokemon.formeRegression = true;
+	pokemon.side.megaEvoUsed = true;
+
+	pokemon.battle.runEvent('AfterMega', pokemon);
+	return true;
+}
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
@@ -21,41 +33,26 @@ export const Scripts: ModdedBattleScriptsData = {
 	actions: {
 		inherit: true,
 		canMegaEvo(pokemon) {
-			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle);
+			if (pokemon.side.megaEvoUsed) return false;
+			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle) || false;
 		},
 		canMegaEvoX(pokemon) {
-			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle);
+			if (pokemon.side.megaEvoUsed) return false;
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle) || false;
 		},
 		canMegaEvoY(pokemon) {
-			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle);
+			if (pokemon.side.megaEvoUsed) return false;
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle) || false;
 		},
 		runMegaEvo(pokemon) {
-			const speciesid = pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY;
-			if (!speciesid) return false;
-
-			pokemon.formeChange(speciesid, null, true);
-			this.battle.add('-mega', pokemon, this.dex.species.get(speciesid).baseSpecies);
-			pokemon.formeRegression = true;
-
-			// Limit one mega evolution
-			for (const ally of pokemon.side.pokemon) {
-				ally.canMegaEvo = false;
-				ally.canMegaEvoX = false;
-				ally.canMegaEvoY = false;
-			}
-
-			this.battle.runEvent('AfterMega', pokemon);
-			return true;
+			const speciesid = this.canMegaEvo(pokemon) || this.canMegaEvoX!(pokemon) || this.canMegaEvoY!(pokemon);
+			return runMegaEvolution(pokemon, speciesid);
 		},
-		runMegaEvoX(pokemon) {
-			if (!pokemon.canMegaEvoX) return false;
-			pokemon.canMegaEvoY = false;
-			return this.runMegaEvo(pokemon);
+		runMegaEvoX(pokemon: Pokemon) {
+			return runMegaEvolution(pokemon, this.canMegaEvoX!(pokemon));
 		},
-		runMegaEvoY(pokemon) {
-			if (!pokemon.canMegaEvoY) return false;
-			pokemon.canMegaEvoX = false;
-			return this.runMegaEvo(pokemon);
+		runMegaEvoY(pokemon: Pokemon) {
+			return runMegaEvolution(pokemon, this.canMegaEvoY!(pokemon));
 		},
 	},
 	/**
