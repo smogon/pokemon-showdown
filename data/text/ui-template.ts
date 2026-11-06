@@ -183,6 +183,7 @@ export const translations: TranslationCatalog = {
 	"Would take if ability removed: {PERCENT}%": null,
 	"Next damage: {PERCENT}%": null,
 	"Turns asleep: {NUMBER}": null,
+	"Turns frozen: {NUMBER}": null,
 	"(More than 4 moves is usually a sign of Illusion Zoroark/Zorua.)": null,
 	"(Pressure is not visible in Gen 3, so in certain situations, the exact amount of PP used may be unknown.)": null,
 	"(Your opponent has two indistinguishable Pokémon, making it impossible for you to tell which one has which moves/ability/item.)": null,
