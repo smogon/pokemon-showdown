@@ -15496,7 +15496,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback(target, source, move) {
-			if (move.sourceEffect === 'round') {
+			if (this.field.pseudoWeather.round.boost) {
 				this.debug('BP doubled');
 				return move.basePower * 2;
 			}
@@ -15507,7 +15507,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
-		onTry(source, target, move) {
+		onTryMove(source, target, move) {
+			this.field.addPseudoWeather('round');
 			for (const action of this.queue.list as MoveAction[]) {
 				if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
 				if (action.move.id === 'round') {
@@ -15515,6 +15516,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return;
 				}
 			}
+		},
+		condition: {
+			duration: 1,
+			onFieldRestart() {
+				this.effectState.boost = true;
+			},
 		},
 		target: "normal",
 		type: "Normal",
