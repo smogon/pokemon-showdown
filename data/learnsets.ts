@@ -9071,6 +9071,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			weatherball: ["9M"],
 			whirlpool: ["9M", "8M", "7V", "4M"],
 		},
+		eventData: [
+			{generation: 3, level: 20},
+		],
 		encounters: [
 			{generation: 1, level: 15},
 			{generation: 2, level: 10},
