@@ -135,14 +135,14 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			if (species.id === 'ditto' && this.battleHasDitto) continue;
 
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
-			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+			const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 
 			let skip = false;
 
 			if (!isMonotype && !this.forceMonotype) {
 				// Limit two of any type
 				for (const typeName of species.types) {
-					if (typeCount[typeName] >= 2 * limitFactor) {
+					if (typeCount[typeName] >= limit(2)) {
 						skip = true;
 						break;
 					}
@@ -160,7 +160,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			for (const typeName in weaknessCount) {
 				const increaseCount = this.dex.getImmunity(typeName, species) && this.dex.getEffectiveness(typeName, species) > 0;
 				if (!increaseCount) continue;
-				if (weaknessCount[typeName] >= 2 * limitFactor) {
+				if (weaknessCount[typeName] >= limit(2)) {
 					skip = true;
 					break;
 				}
@@ -173,7 +173,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			}
 
 			// Limit one level 100 Pokemon
-			if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+			if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limit(1)) {
 				rejectedButNotInvalidPool.push(species.id);
 				continue;
 			}
