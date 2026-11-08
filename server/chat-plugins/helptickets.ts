@@ -1491,9 +1491,10 @@ export const textTickets: { [k: string]: TextTicketInfo } = {
 			return true;
 		},
 		getReviewDisplay(ticket) {
-			let buf = `Context provided by user:<br /><div class="infobox">${ticket.text.map(Utils.escapeHTML).join('<br />')}</div>`;
-			buf += `Confirmed they aren't a bot? <button name="send" value="/notbot ${ticket.userid}">Remove status</button><br />`;
-			return buf;
+			return (
+				`Confirmed they aren't a bot? ` +
+				`<button class="button" name="send" value="/notbot ${ticket.userid}">Remove status</button><br />`
+			);
 		},
 	},
 };
