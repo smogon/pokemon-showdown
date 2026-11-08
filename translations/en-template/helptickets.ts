@@ -48,6 +48,7 @@ export const translations: TranslationCatalog = {
 	"ISP-Appeal": null, // NOT USED
 	"Public Room Assistance Request": null,
 	"Bot Registration Request": null,
+	"Bot Status Dispute": null,
 	"Other": null,
 	"I want to report someone": null,
 	"Someone is harassing me in PMs": null,
@@ -67,6 +68,7 @@ export const translations: TranslationCatalog = {
 	"I lost my password": null,
 	"I need global staff to help watch a public room": null,
 	"I want to register my bot": null,
+	"I've been wrongly flagged as a bot": null,
 	"Report harassment in a private message (PM)": null,
 	"Report harassment in a battle": null,
 	"Report an inappropriate username": null,
