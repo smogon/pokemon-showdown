@@ -1761,7 +1761,7 @@ export const pages: Chat.PageTable = {
 					buf += `<p>${this.TL`If you are a bot developer, and would like to register your bot on the ladder, please fill out the form below and we'll be happy to assist!`}</p>`;
 					buf += `<p><Button>confirmregisterbot</Button></p>`;
 					break;
-				case 'botbot':
+				case 'notbot':
 					buf += `<p>${this.TL`If you are not a bot, and believe you have been wrongly flagged as such, please fill out this form to dispute this status.`}</p>`;
 					buf += `<p><Button>confirmnotbot</Button></p>`;
 					break;
