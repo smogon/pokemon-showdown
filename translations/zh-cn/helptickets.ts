@@ -48,6 +48,7 @@ export const translations: TranslationCatalog = {
 	"ISP-Appeal": "ISP申诉",
 	"Public Room Assistance Request": "公共房间助理的请求",
 	"Bot Registration Request": null, // NEEDS TRANSLATION
+	"Bot Status Dispute": null, // NEEDS TRANSLATION
 	"Other": "其他",
 	"I want to report someone": "我想要举报某人。",
 	"Someone is harassing me in PMs": "有人在私聊中骚扰我",
@@ -67,6 +68,7 @@ export const translations: TranslationCatalog = {
 	"I lost my password": "我忘了我的密码",
 	"I need global staff to help watch a public room": "我需要全服管理来帮我看管一个公共房间",
 	"I want to register my bot": null, // NEEDS TRANSLATION
+	"I've been wrongly flagged as a bot": null, // NEEDS TRANSLATION
 	"Report harassment in a private message (PM)": "举报私聊中的骚扰行为",
 	"Report harassment in a battle": "举报对战中的骚扰行为",
 	"Report an inappropriate username": "举报不合适的用户名",
@@ -181,5 +183,6 @@ export const translations: TranslationCatalog = {
 	"I want to know how long is left on my lock.": null, // NEEDS TRANSLATION
 	"I want to know why I was locked.": null, // NEEDS TRANSLATION
 	"The other user started it.": null, // NEEDS TRANSLATION
+	"If you are not a bot, and believe you have been wrongly flagged as such, please fill out this form to dispute this status.": null, // NEEDS TRANSLATION
 
 };

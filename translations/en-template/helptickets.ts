@@ -183,5 +183,6 @@ export const translations: TranslationCatalog = {
 	"I want to know how long is left on my lock.": null,
 	"I want to know why I was locked.": null,
 	"The other user started it.": null,
+	"If you are not a bot, and believe you have been wrongly flagged as such, please fill out this form to dispute this status.": null,
 
 };

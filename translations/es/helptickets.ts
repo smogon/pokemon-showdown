@@ -48,6 +48,7 @@ export const translations: TranslationCatalog = {
 	"ISP-Appeal": "Apelación de ISP",
 	"Public Room Assistance Request": "Solicitud de Asistencia en Sala Pública",
 	"Bot Registration Request": null, // NEEDS TRANSLATION
+	"Bot Status Dispute": null, // NEEDS TRANSLATION
 	"Other": "Otro",
 	"I want to report someone": "Quiero reportar a alguien",
 	"Someone is harassing me in PMs": "Alguien me está molestando/ofendiendo en PMs",
@@ -67,6 +68,7 @@ export const translations: TranslationCatalog = {
 	"I lost my password": "Olvidé mi contraseña",
 	"I need global staff to help watch a public room": "Necesito un staff global para ayudar a vigilar una sala pública",
 	"I want to register my bot": null, // NEEDS TRANSLATION
+	"I've been wrongly flagged as a bot": null, // NEEDS TRANSLATION
 	"Report harassment in a private message (PM)": "Reportar contenido molesto/ofensivo en un mensaje privado (PM)",
 	"Report harassment in a battle": "Reportar contenido molesto/ofensivo en una batalla",
 	"Report an inappropriate username": "Reportar un nombre de usuario inapropiado",
@@ -181,5 +183,6 @@ export const translations: TranslationCatalog = {
 	"I want to know how long is left on my lock.": null, // NEEDS TRANSLATION
 	"I want to know why I was locked.": null, // NEEDS TRANSLATION
 	"The other user started it.": null, // NEEDS TRANSLATION
+	"If you are not a bot, and believe you have been wrongly flagged as such, please fill out this form to dispute this status.": null, // NEEDS TRANSLATION
 
 };
