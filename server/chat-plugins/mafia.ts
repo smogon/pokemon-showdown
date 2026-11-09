@@ -396,7 +396,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	originalRoleString: string;
 	roles: MafiaRole[];
 	roleString: string;
-	assignedRoles: { [userid: string]: MafiaRole };
 
 	phase: 'signups' | 'locked' | 'IDEApicking' | 'IDEAlocked' | 'day' | 'night';
 	dayNum: number;
@@ -447,7 +446,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.originalRoleString = '';
 		this.roles = [];
 		this.roleString = '';
-		this.assignedRoles = Object.create(null);
 
 		this.phase = "signups";
 		this.dayNum = 0;
@@ -624,7 +622,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}));
 			Utils.sortBy(this.originalRoles, role => role.name);
 			this.roles = this.originalRoles.slice();
-			this.assignedRoles = Object.create(null);
+			for (const player of this.players) player.role = null;
 			this.originalRoleString = this.originalRoles.map(
 				r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`
 			).join(', ');
@@ -665,7 +663,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.IDEA.data = null;
 
 		this.originalRoles = newRoles;
-		this.assignedRoles = Object.create(null);
+		for (const player of this.players) player.role = null;
 		Utils.sortBy(this.originalRoles, role => [role.alignment, role.name]);
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.map(
@@ -818,7 +816,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.started = true;
 		this.sendDeclare(`The game of ${this.title} is starting!`);
 		// Mafia#played gets set in distributeRoles
-		this.distributeRoles();
+		this.distributeRoles(true);
 		if (day) {
 			this.day(null, true);
 		} else {
@@ -846,7 +844,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		if (!this.started) {
-			this.assignedRoles[player.id] = parsedRole.role;
+			player.role = parsedRole.role;
 			return true;
 		}
 
@@ -867,12 +865,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return true;
 	}
 
-	distributeRoles() {
+	distributeRoles(preserveAssignedRoles = false) {
 		const roles = Utils.shuffle(this.originalRoles.slice());
 		if (roles.length) {
 			for (const p of this.players) {
-				const assignedRole = this.assignedRoles[p.id];
-				const role = assignedRole || roles.shift();
+				const role = (preserveAssignedRoles && p.role) || roles.shift();
 				if (!role) throw new Error(`Ran out of roles.`);
 				p.role = role;
 				const u = Users.get(p.id);
@@ -882,8 +879,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				}
 			}
 		}
-		this.assignedRoles = Object.create(null);
-
 		this.clearEliminations();
 		this.played = [this.hostid, ...this.cohostids, ...(this.players.map(p => p.id))];
 		this.sendDeclare(`The roles have been distributed.`);
