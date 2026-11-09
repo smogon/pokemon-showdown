@@ -3847,8 +3847,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Razor Fang', 'Hidden Power', 'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin', 'Baton Pass + Well-Baked Body',
 		],
 		unbanlist: [
-			'Alakazam-Base', 'Ludicolo', 'Gorebyss', 'Dugtrio-Alola', 'Bruxish', 'Camerupt-Base', 'Absol-Base', 'Furret', 'Samurott-Base', 'Heracross-Base', 'Sawk', 'Pachirisu', 'Regirock', 'Illumise', 'Bastiodon', 'Lycanroc-Midnight', 'Maractus', 'Tropius', 'Swampert-Base', 'Scrafty-Base', 'Lapras', 'Vanilluxe', 'Kingler', 'Snorlax', 'Bouffalant', 'Omastar', 'Tyrantrum', 'Shuckle', 'Hitmonchan', 'Noctowl', 'Dodrio', 'Zangoose', 'Floatzel', 'Mismagius', 'Machamp' 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z',
-			'Marshadium Z', 'Yawn',
+			'Alakazam-Base', 'Ludicolo', 'Gorebyss', 'Dugtrio-Alola', 'Bruxish', 'Camerupt-Base', 'Absol-Base', 'Furret', 'Samurott-Base', 'Heracross-Base', 'Sawk', 'Pachirisu', 'Regirock', 'Illumise', 'Bastiodon', 'Lycanroc-Midnight', 'Maractus', 'Tropius', 'Swampert-Base', 'Scrafty-Base', 'Lapras', 'Vanilluxe', 'Kingler', 'Snorlax', 'Bouffalant', 'Omastar', 'Tyrantrum', 'Shuckle', 'Hitmonchan', 'Noctowl', 'Dodrio', 'Zangoose', 'Floatzel', 'Mismagius', 'Machamp' 'Ultranecrozium Z', 'Solganium Z', 'Lunalium Z', 'Mewnium Z', 'Marshadium Z', 'Yawn',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
