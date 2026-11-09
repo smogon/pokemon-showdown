@@ -132,7 +132,7 @@ describe("IP tools helper functions", () => {
 
 	it('should correctly sort a list of IP addresses', () => {
 		const ipList = ['2.3.4.5', '100.1.1.1', '2.3.5.4', '150.255.255.255', '240.0.0.0'];
-		Utils.sortBy(ipList, IPTools.ipToNumber);
+		Utils.sortBy(ipList, ip => IPTools.ipToNumber(ip));
 		assert.deepEqual(ipList, ['2.3.4.5', '2.3.5.4', '100.1.1.1', '150.255.255.255', '240.0.0.0']);
 	});
 });
