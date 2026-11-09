@@ -2,6 +2,7 @@
 
 const assert = require('./../../assert');
 const common = require('./../../common');
+const Sim = require('./../../../dist/sim');
 
 let battle;
 
@@ -43,6 +44,28 @@ describe('Imprison', () => {
 		assert.statStage(battle.p2.active[0], 'spa', 2);
 		battle.makeChoices('move calmmind', 'move calmmind');
 		assert.statStage(battle.p2.active[0], 'spa', 3);
+	});
+
+	it(`should write a forced Struggle to the input log in a form that replays`, () => {
+		battle = common.createBattle([[
+			{ species: 'Sableye', ability: 'prankster', moves: ['imprison', 'calmmind'] },
+		], [
+			{ species: 'Kadabra', ability: 'synchronize', moves: ['calmmind'] },
+		]]);
+		battle.makeChoices('move imprison', 'move calmmind');
+		battle.makeChoices('move calmmind', 'move calmmind');
+		assert(battle.inputLog.includes('>p2 move struggle'));
+
+		const replay = new Sim.Battle(JSON.parse(battle.inputLog[0].slice('>start '.length)));
+		for (const line of battle.inputLog.slice(1)) {
+			const [, player, rest] = /^>(\S+) (.*)$/.exec(line);
+			if (player === 'player') {
+				replay.setPlayer(rest.slice(0, 2), JSON.parse(rest.slice(3)));
+			} else {
+				assert(replay.choose(player, rest), `the replay refused ${line}`);
+			}
+		}
+		replay.destroy();
 	});
 
 	it(`should not prevent foes from using Z-Powered Status moves`, () => {

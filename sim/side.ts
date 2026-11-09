@@ -618,7 +618,10 @@ export class Side {
 				}
 			}
 			if (!targetType) {
-				if (moveid !== 'testfight') {
+				// getChoice writes a forced Struggle as `move struggle`, which this has to read back:
+				// with a hidden disable (Imprison), the request still lists the Pokemon's own moves
+				const mustStruggle = moveid === 'struggle' && !pokemon.getMoves().length;
+				if (moveid !== 'testfight' && !mustStruggle) {
 					return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
 				}
 			}
