@@ -180,7 +180,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += `|[from] ${this.dex.conditions.get(sourceEffect).name}`;
+			if (sourceEffect) attrs += `|[from] ${sourceEffect.fullname}`;
 			this.battle.addMove('move', pokemon, movename, `${target!}${attrs}`);
 
 			if (!target) {

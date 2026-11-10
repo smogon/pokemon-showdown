@@ -382,7 +382,7 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 			{ species: 'alakazam', moves: ['metronome'] },
 		]]);
 		battle.makeChoices(); // trap with Metronome
-		assert(battle.log.slice(-15).some(line => line === '|move|p2a: Alakazam|Wrap|p1a: Dragonite|[from] Metronome'));
+		assert(battle.log.slice(-15).some(line => line === '|move|p2a: Alakazam|Wrap|p1a: Dragonite|[from] move: Metronome'));
 		battle.makeChoices('switch 2', 'move wrap');
 		assert.false(battle.log.some(line => line.includes('Desync Clause Mod activated!')));
 		// default to Metronome
