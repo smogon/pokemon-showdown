@@ -1,12 +1,12 @@
 export const TagsText: { [id: string]: TagText } = {
 	physical: {
-		name: null, // NEEDS TRANSLATION
+		name: "物理", // NEEDS QC
 	},
 	special: {
-		name: null, // NEEDS TRANSLATION
+		name: "特殊", // NEEDS QC
 	},
 	status: {
-		name: null, // NEEDS TRANSLATION
+		name: "變化", // NEEDS QC
 	},
 	mega: {
 		name: "超級進化",
@@ -18,10 +18,10 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "幻之寶可夢",
 	},
 	sublegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "準傳說", // NEEDS QC
 	},
 	restrictedlegendary: {
-		name: null, // NEEDS TRANSLATION
+		name: "限制級傳說", // NEEDS QC
 	},
 	ultrabeast: {
 		name: "究極異獸",
@@ -30,7 +30,7 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "悖謬",
 	},
 	pokestar: {
-		name: null, // NEEDS TRANSLATION
+		name: "寶可塢", // NEEDS QC
 	},
 	zmove: {
 		name: "Ｚ招式",
@@ -39,115 +39,115 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "極巨招式",
 	},
 	contact: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "接觸", // NEEDS QC
+		hint: "會觸發鐵刺、尖刺防守等", // NEEDS QC
 	},
 	sound: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "聲音", // NEEDS QC
+		hint: "對隔音特性無效", // NEEDS QC
 	},
 	powder: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "粉末", // NEEDS QC
+		hint: "對草屬性、防塵、防塵護目鏡無效", // NEEDS QC
 	},
 	fist: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "拳", // NEEDS QC
+		hint: "受鐵拳強化", // NEEDS QC
 	},
 	pulse: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "波動", // NEEDS QC
+		hint: "受超級發射器強化", // NEEDS QC
 	},
 	bite: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "啃咬", // NEEDS QC
+		hint: "受強壯之顎強化", // NEEDS QC
 	},
 	bullet: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "彈", // NEEDS QC
+		hint: "對防彈特性無效", // NEEDS QC
 	},
 	dance: {
-		name: null, // NEEDS TRANSLATION
+		name: "舞蹈", // NEEDS QC
 	},
 	slicing: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "切割", // NEEDS QC
+		hint: "受鋒銳強化", // NEEDS QC
 	},
 	wind: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "風", // NEEDS QC
+		hint: "會觸發風力發電和乘風", // NEEDS QC
 	},
 	defrost: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "解凍", // NEEDS QC
+		hint: "使用後會解除冰凍狀態", // NEEDS QC
 	},
 	recoil: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "反作用力", // NEEDS QC
+		hint: "受捨身強化", // NEEDS QC
 	},
 	twoturnmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "二回合招式", // NEEDS QC
 	},
 	recharge: {
-		name: null, // NEEDS TRANSLATION
+		name: "下回合無法行動", // NEEDS QC
 	},
 	suppressedbygravity: {
-		name: null, // NEEDS TRANSLATION
+		name: "重力下無法使用", // NEEDS QC
 	},
 	boostedbysheerforce: {
-		name: null, // NEEDS TRANSLATION
+		name: "受強行強化", // NEEDS QC
 	},
 	bypassprotect: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "無視守住", // NEEDS QC
+		hint: "也無視看穿、王者盾牌、尖刺防守", // NEEDS QC
 	},
 	nonreflectable: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "無視魔法鏡", // NEEDS QC
+		hint: "也無視魔法反射", // NEEDS QC
 	},
 	nonmirror: {
-		name: null, // NEEDS TRANSLATION
+		name: "不可鸚鵡學舌", // NEEDS QC
 	},
 	nonsnatchable: {
-		name: null, // NEEDS TRANSLATION
+		name: "不可搶奪", // NEEDS QC
 	},
 	bypasssubstitute: {
-		name: null, // NEEDS TRANSLATION
-		hint: null, // NEEDS TRANSLATION
+		name: "無視替身", // NEEDS QC
+		hint: "但不會破壞替身", // NEEDS QC
 	},
 	gmaxmove: {
-		name: null, // NEEDS TRANSLATION
+		name: "超極巨招式", // NEEDS QC
 	},
 	past: {
-		name: null, // NEEDS TRANSLATION
+		name: "過去作", // NEEDS QC
 	},
 	truepast: {
-		name: null, // NEEDS TRANSLATION
+		name: "完全過去作", // NEEDS QC
 	},
 	pastunobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "過去作不可入手", // NEEDS QC
 	},
 	future: {
-		name: null, // NEEDS TRANSLATION
+		name: "未實裝", // NEEDS QC
 	},
 	lgpe: {
 		name: "LGPE",
 	},
 	unobtainable: {
-		name: null, // NEEDS TRANSLATION
+		name: "無法入手", // NEEDS QC
 	},
 	cap: {
 		name: "CAP",
 	},
 	custom: {
-		name: null, // NEEDS TRANSLATION
+		name: "自訂", // NEEDS QC
 	},
 	nonexistent: {
-		name: null, // NEEDS TRANSLATION
+		name: "不存在", // NEEDS QC
 	},
 
 	introducedgen: {
-		name: null, // NEEDS TRANSLATION
+		name: "登場世代", // NEEDS QC
 	},
 	height: {
 		name: "身高",
@@ -159,33 +159,33 @@ export const TagsText: { [id: string]: TagText } = {
 		name: "HP",
 	},
 	atk: {
-		name: null, // NEEDS TRANSLATION
+		name: "攻", // NEEDS QC
 	},
 	def: {
-		name: null, // NEEDS TRANSLATION
+		name: "防", // NEEDS QC
 	},
 	spa: {
-		name: null, // NEEDS TRANSLATION
+		name: "特攻", // NEEDS QC
 	},
 	spd: {
-		name: null, // NEEDS TRANSLATION
+		name: "特防", // NEEDS QC
 	},
 	spe: {
-		name: null, // NEEDS TRANSLATION
+		name: "速", // NEEDS QC
 	},
 	bst: {
-		name: null, // NEEDS TRANSLATION
+		name: "種族值總和", // NEEDS QC
 	},
 	basepower: {
 		name: "威力",
 	},
 	priority: {
-		name: null, // NEEDS TRANSLATION
+		name: "優先度", // NEEDS QC
 	},
 	accuracy: {
 		name: "命中",
 	},
 	maxpp: {
-		name: null, // NEEDS TRANSLATION
+		name: "最大PP", // NEEDS QC
 	},
 };
