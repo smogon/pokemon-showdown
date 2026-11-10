@@ -2,6 +2,8 @@
 
 const assert = require('./../assert');
 const common = require('./../common');
+const { Battle } = require('../../dist/sim/battle');
+const { BattleStream } = require('../../dist/sim/battle-stream');
 const Utils = require('../../dist/lib/utils').Utils;
 const BASE_TEAM_ORDER = [1, 2, 3, 4, 5, 6];
 
@@ -618,6 +620,65 @@ describe('Choices', () => {
 	});
 
 	describe('Logging', () => {
+		for (const selection of ['move 1', 'move calmmind terastallize', 'auto', 'testfight']) {
+			it(`should replay the original selection when Imprison forces Struggle (${selection})`, async () => {
+				battle = new Battle({
+					formatid: 'gen9customgame@@@!Team Preview', seed: [1, 2, 3, 4], strictChoices: true,
+					p1: { team: [{ species: 'Sableye', ability: 'prankster', moves: ['imprison', 'calmmind'] }] },
+					p2: { team: [{ species: 'Kadabra', moves: ['calmmind'] }] },
+				});
+				battle.makeChoices('move imprison', 'move calmmind');
+				assert.throws(() => battle.choose('p2', 'move struggle'), /doesn't have a move matching struggle/);
+				battle.choose('p2', selection);
+				assert.cantUndo(() => battle.undoChoice('p2'));
+				battle.choose('p1', 'move calmmind');
+				assert.equal(battle.p2.active[0].lastMove.id, 'struggle');
+				const expected = selection === 'testfight' ? 'move testfight' :
+					selection.includes('terastallize') ? selection : 'move calmmind';
+				assert.equal(battle.inputLog.at(-1), `>p2 ${expected}`);
+
+				const replay = new BattleStream({ debug: true, noCatch: true });
+				try {
+					await replay.write(battle.inputLog.join('\n'));
+					assert.deepEqual(
+						replay.battle.log.filter(line => !line.startsWith('|t:|')),
+						battle.log.filter(line => !line.startsWith('|t:|'))
+					);
+				} finally {
+					await replay.destroy();
+				}
+			});
+		}
+
+		it('should preserve the target and transformation when Imprison forces Struggle in doubles', async () => {
+			battle = new Battle({
+				formatid: 'gen9doublescustomgame@@@!Team Preview', seed: [1, 2, 3, 4], strictChoices: true,
+				p1: { team: [
+					{ species: 'Sableye', ability: 'prankster', moves: ['imprison', 'tackle'] },
+					{ species: 'Magikarp', moves: ['splash'] },
+				] },
+				p2: { team: [
+					{ species: 'Magikarp', moves: ['splash'] },
+					{ species: 'Kadabra', moves: ['tackle'] },
+				] },
+			});
+			battle.makeChoices('move imprison, move splash', 'move splash, move tackle +1');
+			battle.makeChoices('move imprison, move splash', 'move splash, move tackle +1 terastallize');
+			assert.equal(battle.p2.active[1].lastMove.id, 'struggle');
+			assert.equal(battle.inputLog.at(-1), '>p2 move splash, move tackle +1 terastallize');
+
+			const replay = new BattleStream({ debug: true, noCatch: true });
+			try {
+				await replay.write(battle.inputLog.join('\n'));
+				assert.deepEqual(
+					replay.battle.log.filter(line => !line.startsWith('|t:|')),
+					battle.log.filter(line => !line.startsWith('|t:|'))
+				);
+			} finally {
+				await replay.destroy();
+			}
+		});
+
 		it('should privately log the ID of chosen moves', () => {
 			battle = common.createBattle([[
 				{ species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl'] },

@@ -32,6 +32,7 @@ export interface ChosenAction {
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid?: string; // a move to use (move action only)
+	originalChoice?: string; // original choice string, before any action overrides
 	move?: ActiveMove; // the active move corresponding to moveid (move action only)
 	moveSlot?: number; // the move's index in the Pokémon's moveset (undefined if submitted through the "Fight" button)
 	target?: Pokemon; // the target of the action
@@ -327,6 +328,7 @@ export class Side {
 		return this.choice.actions.map(action => {
 			switch (action.choice) {
 			case 'move':
+				if (action.originalChoice) return action.originalChoice;
 				let details = ``;
 				if (action.targetLoc && this.battle.activePerHalf > 1) {
 					details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
@@ -672,6 +674,12 @@ export class Side {
 			}
 		}
 
+		let originalChoice = `move ${moveid}`;
+		if (targetLoc && this.battle.activePerHalf > 1) {
+			originalChoice += ` ${targetLoc > 0 ? '+' : ''}${targetLoc}`;
+		}
+		if (event) originalChoice += ` ${event}`;
+
 		const lockedMove = pokemon.getLockedMove() || pokemon.getSemiLockedMove();
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
@@ -685,6 +693,7 @@ export class Side {
 				pokemon,
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
+				originalChoice,
 			});
 			return true;
 		} else if (this.battle.gen === 1 &&
@@ -694,6 +703,7 @@ export class Side {
 				choice: 'move',
 				pokemon,
 				moveid: 'fight',
+				originalChoice,
 			});
 			return true;
 		} else if (!moves.length) {
@@ -705,6 +715,7 @@ export class Side {
 				choice: 'move',
 				pokemon,
 				moveid: 'struggle',
+				originalChoice,
 			});
 			return true;
 		} else if (moveid === 'testfight') {
