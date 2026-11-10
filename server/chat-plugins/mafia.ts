@@ -1579,6 +1579,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		selection = selection.map(toID);
 		if (selection.length === 1 && this.IDEA.data.picks.length === 1) selection = [this.IDEA.data.picks[0], selection[0]];
 		if (selection.length !== 2) return this.sendUser(user, `|error|Invalid selection.`);
+		if (!this.IDEA.data.picks.includes(selection[0])) {
+			return this.sendUser(user, `|error|${selection[0]} is not a valid IDEA pick category.`);
+		}
 
 		// input is formatted as ['selection', 'role']
 		// eg: ['role', 'bloodhound']
