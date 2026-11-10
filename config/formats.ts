@@ -854,9 +854,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', '!Obtainable Formes', '!Obtainable Abilities', 'Convergence Legality', 'Sleep Moves Clause'],
 		banlist: [
-			'Arceus-Dark', 'Calyrex-Shadow', 'Cramorant-Gorging', 'Ditto', 'Miraidon', 'Manaphy', 'Ogerpon-Cornerstone-Tera', 'Ogerpon-Hearthflame-Tera', 'Ogerpon-Teal-Tera',
-			'Ogerpon-Wellspring-Tera', 'Regigigas', 'Slaking', 'Smeargle', 'Zacian-Crowned', 'Arena Trap', 'Comatose', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass',
-			'Belly Drum', 'Dragon Energy', 'Last Respects', 'No Retreat', 'Population Bomb', 'Shell Smash', 'King’s Rock', 'Razor Fang',
+			'Arceus-Dark', 'Calyrex-Shadow', 'Cramorant-Gorging', 'Ditto', 'Komala', 'Miraidon', 'Manaphy', 'Ogerpon-Cornerstone-Tera', 'Ogerpon-Hearthflame-Tera', 'Ogerpon-Teal-Tera',
+			'Ogerpon-Wellspring-Tera', 'Regidrago', 'Regigigas', 'Slaking', 'Smeargle', 'Zacian-Crowned', 'Arena Trap', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Baton Pass',
+			'Belly Drum', 'Last Respects', 'No Retreat', 'Population Bomb', 'Power Trip', 'Shell Smash', 'Stored Power', 'King’s Rock', 'Razor Fang',
 		],
 		unbanlist: [
 			'Abomasnow-Mega', 'Absol-Mega', 'Absol-Mega-Z', 'Aerodactyl-Mega', 'Aggron-Mega', 'Alakazam-Mega', 'Ampharos-Mega', 'Audino-Mega', 'Banette-Mega',
@@ -869,7 +869,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Mawile-Mega', 'Medicham-Mega', 'Meganium-Mega', 'Meowstic-F-Mega', 'Meowstic-M-Mega', 'Metagross-Mega', 'Pidgeot-Mega', 'Pinsir-Mega', 'Pyroar-Mega',
 			'Raichu-Mega-X', 'Raichu-Mega-Y', 'Sableye-Mega', 'Salamence-Mega', 'Sceptile-Mega', 'Scizor-Mega', 'Scolipede-Mega', 'Scovillain-Mega', 'Scrafty-Mega',
 			'Sharpedo-Mega', 'Slowbro-Mega', 'Skarmory-Mega', 'Staraptor-Mega', 'Starmie-Mega', 'Steelix-Mega', 'Swampert-Mega', 'Tatsugiri-Curly-Mega',
-			'Tatsugiri-Droopy-Mega', 'Tatsugiri-Stretchy-Mega', 'Tyranitar-Mega', 'Venusaur-Mega', 'Victreebel-Mega', 'Zeraora-Mega',
+			'Tatsugiri-Droopy-Mega', 'Tatsugiri-Stretchy-Mega', 'Tyranitar-Mega', 'Venusaur-Mega', 'Victreebel-Mega', 'Zeraora-Mega', 'Zygarde-Mega',
 		],
 	},
 	{
