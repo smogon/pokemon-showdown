@@ -128,6 +128,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onFoeBeforeSwitchOut(pokemon) {
 			if (!pokemon || pokemon.fainted || pokemon.hp <= 0 || pokemon.hasAbility('noretreat')) return;
 			const success = !!this.damage(pokemon.maxhp / 4, pokemon, this.effectState.target);
+			if (!pokemon.hp) {
+				this.resolveFaints();
+				return;
+			}
 			if (success) {
 				pokemon.tryTrap();
 			}
