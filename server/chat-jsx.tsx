@@ -6,7 +6,7 @@ import preact from 'preact';
 import render from 'preact-render-to-string';
 import { Utils } from '../lib';
 
-/** For easy concenation of Preact nodes with strings */
+/** For easy concatenation of Preact nodes with strings */
 export function html(
 	strings: TemplateStringsArray, ...args: (preact.VNode | string | number | null | undefined)[]
 ) {
