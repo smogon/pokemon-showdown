@@ -47,6 +47,20 @@ describe('Flower Veil', () => {
 		assert.equal(breloom.status, 'slp');
 	});
 
+	it(`should show a message when blocking a status from Synchronize`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Venusaur', moves: ['thunderwave'] },
+			{ species: 'Florges', ability: 'flowerveil', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Espeon', ability: 'synchronize', moves: ['sleeptalk'] },
+			{ species: 'Raticate', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move thunderwave 1, move sleeptalk', 'auto');
+		assert.equal(battle.p2.active[0].status, 'par');
+		assert.equal(battle.p1.active[0].status, '');
+		assert(battle.log.some(line => line.startsWith('|-block|p1a: Venusaur|ability: Flower Veil')));
+	});
+
 	it(`should not block self-inflicted stat drops`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Sceptile', ability: 'flowerveil', moves: ['superpower'] },
