@@ -468,6 +468,8 @@ export interface RoomBattlePlayerOptions {
 	rating?: number;
 	inviteOnly?: boolean;
 	hidden?: boolean;
+	isBot?: boolean;
+	isAllowingBots?: boolean;
 }
 
 export interface RoomBattleOptions {

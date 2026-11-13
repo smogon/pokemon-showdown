@@ -17,6 +17,8 @@ export class BattleReady {
 	readonly challengeType: ChallengeType;
 	readonly time: number;
 	readonly custom?: 'suspect';
+	readonly isBot: boolean;
+	readonly allowBots: boolean;
 	constructor(
 		userid: ID,
 		formatid: string,
@@ -24,6 +26,8 @@ export class BattleReady {
 		rating = 0,
 		challengeType: ChallengeType = 'challenge',
 		custom?: 'suspect',
+		isBot = false,
+		allowBots = false,
 	) {
 		this.userid = userid;
 		this.formatid = formatid;
@@ -32,6 +36,8 @@ export class BattleReady {
 		this.challengeType = challengeType;
 		this.time = Date.now();
 		this.custom = custom;
+		this.isBot = isBot;
+		this.allowBots = allowBots;
 	}
 }
 
