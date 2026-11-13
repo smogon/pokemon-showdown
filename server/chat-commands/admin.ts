@@ -1322,14 +1322,11 @@ export const commands: Chat.ChatCommands = {
 		if (!targetUser.isUserBot) {
 			return error(`That user is not marked as a bot.`);
 		}
-		try {
-			const raw = await Net(`https://${Config.routes.root}/users/${targetUser.id}`).get();
-			const userData = JSON.parse(raw);
-			if (userData.group === 10) {
-				return error(`User has been flagged as a bot by an administrator. Contact one to remove this status.`);
-			}
-			// user unregged: whatever, undo it
-		} catch {}
+		const [res, err] = await LoginServer.request('setbot', {bot: targetUser.id, remove: true});
+		if (err) {
+			return error(`Error in updating status: ${err.message} (please report to an admin)`);
+		}
+		if (res.actionerror) return error(res.actionerror);
 		targetUser.isUserBot = false;
 		Config.exemptuserbot?.(targetUser);
 		this.globalModlog(`NOTBOT`, targetUser, rest);
