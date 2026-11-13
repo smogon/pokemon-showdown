@@ -25,6 +25,9 @@ describe(`Pursuit`, () => {
 			battle.makeChoices('move pursuit', 'switch 2');
 			const log = battle.log.slice(start);
 			assert.equal(log.filter(line => line === message).length, 1);
+			assert(log.includes('|move|p1a: Furret|Pursuit|p2a: Snorlax|[from] Pursuit'));
+			const pursuit = battle.p1.active[0].moveSlots[0];
+			assert.equal(pursuit.pp, pursuit.maxpp - 2);
 			assert(log.findIndex(line => line.startsWith('|move|p1a: Furret|Pursuit|')) > log.indexOf(message));
 			battle.makeChoices('move splash', 'switch 2');
 			battle.makeChoices('move pursuit', 'switch 2');

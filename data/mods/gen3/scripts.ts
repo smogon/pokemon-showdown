@@ -180,7 +180,11 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += `|[from] ${sourceEffect.fullname}`;
+			if (sourceEffect) {
+				// `[from] move:` tells the client that there was an earlier `|move|` message
+				// which isn't true for Pursuit, and would bug PP tracking
+				attrs += `|[from] ${sourceEffect.id === 'pursuit' ? 'Pursuit' : sourceEffect.fullname}`;
+			}
 			this.battle.addMove('move', pokemon, movename, `${target!}${attrs}`);
 
 			if (!target) {
