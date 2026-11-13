@@ -13,7 +13,7 @@
 import * as path from 'path';
 import * as child_process from 'child_process';
 import { createRequire } from 'module';
-import { FS, Utils, ProcessManager, SQL, Net } from '../../lib';
+import { FS, Utils, ProcessManager, SQL } from '../../lib';
 
 interface ProcessData {
 	cmd: string;
@@ -1322,7 +1322,7 @@ export const commands: Chat.ChatCommands = {
 		if (!targetUser.isUserBot) {
 			return error(`That user is not marked as a bot.`);
 		}
-		const [res, err] = await LoginServer.request('setbot', {bot: targetUser.id, remove: true});
+		const [res, err] = await LoginServer.request('setbot', { bot: targetUser.id, remove: true });
 		if (err) {
 			return error(`Error in updating status: ${err.message} (please report to an admin)`);
 		}
