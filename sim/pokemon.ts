@@ -1627,7 +1627,7 @@ export class Pokemon {
 	}
 
 	tryTrap(isHidden = false) {
-		if (!this.runStatusImmunity('trapped')) return false;
+		if (!this.runTrappingImmunity()) return false;
 		if (this.trapped && isHidden) return true;
 		this.trapped = isHidden ? 'hidden' : true;
 		return true;
@@ -2209,7 +2209,7 @@ export class Pokemon {
 	 * Like Field.effectiveWeather(), but ignores sun and rain if
 	 * the Utility Umbrella is active for the Pokemon.
 	 */
-	effectiveWeather(sourceEffect?: Effect, message?: string | boolean) {
+	effectiveWeather(sourceEffect?: Effect, message?: boolean) {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		const weather = this.battle.field.effectiveWeather();
 		if (this.battle.activePokemon?.hasAbility('megasol') && sourceEffect &&
@@ -2255,7 +2255,7 @@ export class Pokemon {
 	}
 
 	/** false = immune, true = not immune */
-	runImmunity(source: ActiveMove | string, message?: string | boolean) {
+	runImmunity(source: ActiveMove | string, message?: boolean) {
 		if (!source) return true;
 		const type: string = typeof source !== 'string' ? source.type : source;
 		if (typeof source !== 'string') {
@@ -2288,7 +2288,15 @@ export class Pokemon {
 		return false;
 	}
 
-	runStatusImmunity(type: string, message?: string) {
+	runTrappingImmunity(message?: boolean) {
+		if (this.battle.gen >= 6 && this.hasType('Ghost')) {
+			if (message) this.battle.add('-immune', this);
+			return false;
+		}
+		return true;
+	}
+
+	runStatusImmunity(type: string, message?: boolean) {
 		if (this.fainted) return false;
 		if (!type) return true;
 
