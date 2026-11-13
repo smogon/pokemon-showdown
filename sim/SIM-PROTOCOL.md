@@ -414,7 +414,7 @@ stat boosts are minor actions.
 
 `|-copyboost|SOURCE|TARGET`
 
-> Copy the boosts from `SOURCE` Pokémon to `TARGET` Pokémon (For example: Psych
+> Copy the boosts from `TARGET` Pokémon to `SOURCE` Pokémon (For example: Psych
 > Up).
 
 `|-weather|WEATHER`
