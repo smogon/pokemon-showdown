@@ -1,5 +1,6 @@
 export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 	fairy: {
+		inherit: true,
 		damageTaken: {
 			Bug: 2,
 			Dark: 2,

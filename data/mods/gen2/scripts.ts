@@ -5,6 +5,18 @@
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen3',
 	gen: 2,
+	init() {
+		let newCategory = '';
+		for (const i in this.data.Moves) {
+			if (!this.data.Moves[i]) console.log(i);
+			if (this.data.Moves[i].category === 'Status') continue;
+			const type = this.data.Moves[i].type;
+			newCategory = this.modData('TypeChart', this.toID(type)).num >= 20 ? 'Special' : 'Physical';
+			if (newCategory !== this.data.Moves[i].category) {
+				this.modData('Moves', i).category = newCategory;
+			}
+		}
+	},
 	pokemon: {
 		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {
