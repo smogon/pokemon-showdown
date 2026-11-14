@@ -382,7 +382,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onTryHit(pokemon) {
-			if (pokemon.ability === 'multitype' || pokemon.item === 'griseousorb') {
+			if (pokemon.ability === 'multitype' || pokemon.item === 'griseousorb' ||
+				pokemon.quickClawFlag || pokemon.custapBerryFlag) {
 				return false;
 			}
 		},
