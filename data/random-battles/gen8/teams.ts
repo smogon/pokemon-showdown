@@ -914,7 +914,7 @@ export class RandomGen8Teams extends RandomTeams {
 			name: species.baseSpecies,
 			species: forme,
 			speciesId: species.id,
-			gender: species.gender || (this.random(2) ? 'F' : 'M'),
+			gender: species.gender || this.sample(['M', 'F']),
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
 			level,
@@ -1180,7 +1180,7 @@ export class RandomGen8Teams extends RandomTeams {
 			const set = {
 				name: species.baseSpecies,
 				species: species.name,
-				gender: species.gender || (this.random(2) ? 'F' : 'M'),
+				gender: species.gender || this.sample(['M', 'F']),
 				item: this.sampleIfArray(setData.item) || '',
 				ability: (this.sampleIfArray(setData.ability)),
 				shiny: this.randomChance(1, 1024),
