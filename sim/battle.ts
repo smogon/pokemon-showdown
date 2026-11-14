@@ -606,7 +606,7 @@ export class Battle {
 			// it's changed; call it off
 			return relayVar;
 		}
-		if (eventid === 'SwitchIn' && effect.effectType === 'Ability' && effect.flags['breakable'] &&
+		if (effect.effectType === 'Ability' && effect.flags['breakable'] &&
 			this.suppressingAbility(target as Pokemon)) {
 			this.debug(eventid + ' handler suppressed by Mold Breaker');
 			return relayVar;
@@ -616,7 +616,8 @@ export class Battle {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
-		if (eventid !== 'End' && effect.effectType === 'Ability' && (target instanceof Pokemon) && target.ignoringAbility()) {
+		if (eventid !== 'End' && !(eventid === 'SwitchOut' && this.gen <= 4) && effect.effectType === 'Ability' &&
+			(target instanceof Pokemon) && target.ignoringAbility()) {
 			this.debug(eventid + ' handler suppressed by Gastro Acid or Neutralizing Gas');
 			return relayVar;
 		}
@@ -885,7 +886,7 @@ export class Battle {
 				}
 				continue;
 			} else if (
-				eventid !== 'End' && effect.effectType === 'Ability' &&
+				eventid !== 'End' && !(eventid === 'SwitchOut' && this.gen <= 4) && effect.effectType === 'Ability' &&
 				(effectHolder instanceof Pokemon) && effectHolder.ignoringAbility()
 			) {
 				if (eventid !== 'Update') {
