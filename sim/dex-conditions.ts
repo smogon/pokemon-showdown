@@ -429,7 +429,7 @@ export interface EventMethods {
 
 	// Priorities (incomplete list)
 	onAccuracyPriority?: number;
-	onDamagingHitOrder?: number;
+	onDamagingHitPriority?: number;
 	onAfterMoveSecondaryPriority?: number;
 	onAfterMoveSecondarySelfPriority?: number;
 	onAfterMoveSelfPriority?: number;
@@ -440,7 +440,6 @@ export interface EventMethods {
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
 	onAnySwitchInPriority?: number;
-	onAnySwitchInSubOrder?: number;
 	onAllyBasePowerPriority?: number;
 	onAllyModifyAtkPriority?: number;
 	onAllyModifySpAPriority?: number;
@@ -482,13 +481,13 @@ export interface EventMethods {
 	onResidualPriority?: number;
 	onResidualSubOrder?: number;
 	onSourceBasePowerPriority?: number;
+	onSourceDamagingHitPriority?: number;
 	onSourceInvulnerabilityPriority?: number;
 	onSourceModifyAccuracyPriority?: number;
 	onSourceModifyAtkPriority?: number;
 	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
-	onSwitchInSubOrder?: number;
 	onTrapPokemonPriority?: number;
 	onTryBoostPriority?: number;
 	onTryEatItemPriority?: number;
