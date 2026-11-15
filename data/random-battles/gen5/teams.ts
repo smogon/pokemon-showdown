@@ -882,7 +882,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
-			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+			const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 
 			const types = species.types;
 
@@ -891,7 +891,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 				// Limit two of any type
 				for (const typeName of types) {
-					if (typeCount[typeName] >= 2 * limitFactor) {
+					if (typeCount[typeName] >= limit(2)) {
 						skip = true;
 						break;
 					}
@@ -903,14 +903,14 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0) {
 						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+						if (typeWeaknesses[typeName] >= limit(3)) {
 							skip = true;
 							break;
 						}
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= limit(1)) {
 							skip = true;
 							break;
 						}
@@ -921,11 +921,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				// Count Dry Skin as a Fire weakness
 				if (this.dex.getEffectiveness('Fire', species) === 0 && Object.values(species.abilities).includes('Dry Skin')) {
 					if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
-					if (typeWeaknesses['Fire'] >= 3 * limitFactor) continue;
+					if (typeWeaknesses['Fire'] >= limit(3)) continue;
 				}
 
 				// Limit one level 100 Pokemon
-				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limit(1)) {
 					continue;
 				}
 
