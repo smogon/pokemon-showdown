@@ -173,13 +173,15 @@ describe('DexText#get', () => {
 	});
 
 	it(`should use English-only descriptions defined by mods`, () => {
-		const dex = Dex.mod('afd');
-		const ability = dex.abilities.get('Chaos Saliva');
+		// most mods with custom elements rotate frequently
+		// this will need to be replaced the next SSB replaces this one
+		const dex = Dex.mod('gen9ssb');
+		const ability = dex.abilities.get('Blitz of Ruin');
 		const text = dex.text.get(ability, 'ja');
 		assert.deepEqual(text, {
-			name: 'Chaos Saliva',
-			desc: "Contact moves have a 20% chance to paralyze and a 20% chance to confuse.",
-			shortDesc: "Contact moves have a 20% chance to paralyze and a 20% chance to confuse.",
+			name: "Blitz of Ruin",
+			shortDesc: "Active Pokemon without this Ability have 0.75x Speed.",
+			desc: "Active Pokemon without this Ability have their Speed multiplied by 0.75x.",
 		});
 	});
 });

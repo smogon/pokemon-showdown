@@ -225,6 +225,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.field.setTerrain('grassyterrain');
 		},
 		shortDesc: "Starts Grassy Terrain on hit. 1.5x Def in Grassy Terrain.",
+		desc: "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins. If Grassy Terrain is active, this Pokemon's Defense is multiplied by 1.5.",
 	},
 	aquaveil: {
 		onSwitchInPriority: -1,
