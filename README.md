@@ -38,6 +38,13 @@ Pokémon Showdown is many things:
 
 Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 9).
 
+### Standalone engine build
+
+Run `npm ci` and `npm run build:engine` to generate `.engine-dist/`.
+With Node.js 22.18.0 or later, load `.engine-dist/sim/index.js` to use `BattleStream`, `Dex`, and `Teams`.
+The output includes the simulator, battle data, standard formats, and its runtime dependency.
+Use `npm start` to run the web server for manual testing.
+
 
 Documentation quick links
 ------------------------------------------------------------------------

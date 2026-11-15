@@ -37,21 +37,27 @@ try {
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
-try {
-	require.resolve('./config/config');
-} catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+if (process.argv[2] !== '--engine') {
+	try {
+		require.resolve('./config/config');
+	} catch (err) {
+		if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
 
-	console.log('config.js does not exist. Creating one with default settings...');
-	fs.writeFileSync(
-		'config/config.js',
-		fs.readFileSync('config/config-example.js')
-	);
+		console.log('config.js does not exist. Creating one with default settings...');
+		fs.writeFileSync(
+			'config/config.js',
+			fs.readFileSync('config/config-example.js')
+		);
+	}
 }
 
 // for some reason, esbuild won't be requirable until a tick has passed
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
+	if (process.argv[2] === '--engine') {
+		require('./tools/build-utils').transpileEngine();
+		return;
+	}
 	require('./tools/build-utils').transpile(force, decl);
 	const {Dex} = require('./dist/sim/dex');
 	for (const entry of fs.readdirSync('data/text', {withFileTypes: true})) {

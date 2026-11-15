@@ -1,16 +1,19 @@
 "use strict";
 
 const fs = require("fs");
+const path = require('node:path');
 const child_process = require("child_process");
 const esbuild = require('esbuild');
 
-const copyOverDataJSON = (file = 'data') => {
+const copyOverDataJSON = (outdir = 'dist', file = 'data') => {
 	const files = fs.readdirSync(file);
 	for (const f of files) {
 		if (fs.statSync(`${file}/${f}`).isDirectory()) {
-			copyOverDataJSON(`${file}/${f}`);
+			copyOverDataJSON(outdir, `${file}/${f}`);
 		} else if (f.endsWith('.json')) {
-			fs.copyFileSync(`${file}/${f}`, require('path').resolve('dist', `${file}/${f}`));
+			const destination = path.resolve(outdir, file, f);
+			fs.mkdirSync(path.dirname(destination), { recursive: true });
+			fs.copyFileSync(`${file}/${f}`, destination);
 		}
 	}
 };
@@ -26,6 +29,7 @@ const findFilesForPath = path => {
 	const out = [];
 	const files = fs.readdirSync(path);
 	for (const file of files) {
+		if (file === '.engine-dist') continue;
 		const cur = `${path}/${file}`;
 		// HACK: Logs and databases exclusions are a hack. Logs is too big to
 		// traverse, databases adds/removes files which can lead to a filesystem
@@ -63,4 +67,38 @@ exports.buildDecls = () => {
 	try {
 		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, { stdio: 'inherit' });
 	} catch {}
+};
+
+exports.transpileEngine = () => {
+	const root = fs.realpathSync(path.join(__dirname, '..'));
+	const outdir = path.join(root, '.engine-dist');
+	// Recreate the output so removed files cannot linger in the engine distribution.
+	if (fs.existsSync(outdir)) {
+		if (fs.realpathSync(outdir) !== outdir) throw new Error(`Unexpected engine output path: ${outdir}`);
+		fs.rmSync(outdir, { recursive: true });
+	}
+	esbuild.buildSync({
+		entryPoints: [
+			...findFilesForPath('sim').filter(file => !/^sim\/(examples|tools)\//.test(file)),
+			...findFilesForPath('data'),
+			'config/formats.ts', 'lib/fs.ts', 'lib/streams.ts', 'lib/utils.ts',
+		],
+		outdir,
+		outbase: '.',
+		format: 'cjs',
+		tsconfig: './tsconfig.json',
+	});
+	// The simulator and some formats import this entry point.
+	fs.copyFileSync('tools/engine-lib.js', path.join(outdir, 'lib/index.js'));
+	copyOverDataJSON(outdir);
+	fs.copyFileSync('LICENSE', path.join(outdir, 'LICENSE'));
+	const dependencyManifest = require.resolve('ts-chacha20/package.json');
+	const dependencyRoot = path.dirname(dependencyManifest);
+	const dependencyEntry = path.relative(dependencyRoot, require.resolve('ts-chacha20'));
+	for (const file of ['package.json', 'LICENSE', dependencyEntry]) {
+		const destination = path.join(outdir, 'node_modules/ts-chacha20', file);
+		fs.mkdirSync(path.dirname(destination), { recursive: true });
+		fs.copyFileSync(path.join(dependencyRoot, file), destination);
+	}
+	console.log('Engine built in .engine-dist/');
 };
