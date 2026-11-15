@@ -41,6 +41,7 @@ tools/set-import/*.js
 .idea/
 
 tmp/**/*
+/temp/
 *.lock
 *.DS_Store
 *.swp

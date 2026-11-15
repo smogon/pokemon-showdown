@@ -71,6 +71,10 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		this.push(`${type}\n${data}`);
 	}
 
+	protected createBattle(options: ConstructorParameters<typeof Battle>[0]) {
+		return new Battle(options);
+	}
+
 	_writeLine(type: string, message: string) {
 		switch (type) {
 		case 'start':
@@ -81,7 +85,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				if (t === 'end' && !this.keepAlive) this.pushEnd();
 			};
 			if (this.debug) options.debug = true;
-			this.battle = new Battle(options);
+			this.battle = this.createBattle(options);
 			break;
 		case 'player':
 			const [slot, optionsText] = Utils.splitFirst(message, ' ');
