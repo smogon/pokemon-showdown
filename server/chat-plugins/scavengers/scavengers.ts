@@ -419,7 +419,7 @@ export class ScavengerHunt extends Rooms.RoomGame<Scavenger> {
 				const firstMatch = invalidCombo[0].intersection(modIds);
 				const secondMatch = invalidCombo[1].intersection(modIds);
 				if (firstMatch.size > 0 && secondMatch.size > 0) {
-					throw new Chat.ErrorMessage(`${[...firstMatch.values()]} and ${[...secondMatch.values()]} cannot be used together.`);
+					throw new Chat.ErrorMessage(`${[...firstMatch.values()].join(', ')} and ${[...secondMatch.values()].join(', ')} cannot be used together.`);
 				}
 			}
 			for (const mod of modIds) {
