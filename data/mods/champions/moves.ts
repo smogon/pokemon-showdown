@@ -561,6 +561,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: null,
 		pp: 5,
 	},
+	lastresort: {
+		inherit: true,
+		onDisableMove(pokemon) {
+			let disable = false;
+			if (pokemon.moveSlots.length < 2) {
+				disable = true;
+			} else {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (!moveSlot.used && moveSlot.id !== 'lastresort') {
+						disable = true;
+						break;
+					}
+				}
+			}
+			if (disable) {
+				pokemon.disableMove('lastresort');
+			}
+		},
+	},
 	leafage: {
 		inherit: true,
 		isNonstandard: "Past",
