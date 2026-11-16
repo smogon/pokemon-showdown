@@ -630,17 +630,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.id === 'present') {
-				const typeIndexes: { [k: string]: number } = {
-					Normal: 0, Fighting: 1, Flying: 2, Poison: 3, Ground: 4, Rock: 5, Bug: 7, Ghost: 8, Steel: 9,
-					Fire: 20, Water: 21, Grass: 22, Electric: 23, Psychic: 24, Ice: 25, Dragon: 26, Dark: 27,
+				const getIndex = (p: Pokemon) => {
+					const types = p.getTypes();
+					const type = types[types.length > 1 ? 1 : 0];
+					return this.dex.types.get(type).num;
 				};
 				attack = 10;
-
-				const attackerLastType = attacker.getTypes().slice(-1)[0];
-				const defenderLastType = defender.getTypes().slice(-1)[0];
-
-				defense = typeIndexes[attackerLastType] || 1;
-				level = typeIndexes[defenderLastType] || 1;
+				defense = getIndex(attacker);
+				level = getIndex(defender);
 				this.battle.hint("Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.", true);
 			}
 
