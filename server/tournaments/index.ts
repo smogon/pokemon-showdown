@@ -1285,7 +1285,7 @@ const commands: Chat.ChatCommands = {
 			this.checkCan('tournaments', null, room);
 			const [format, generator, cap, mod, name] = target.split(',').map(item => item.trim());
 			if (!target || !format || !generator) {
-				return this.sendReply(`Usage: /tour ${cmd} <format>, <type> [, <comma-separated arguments>]`);
+				return this.sendReply(`Usage: /tour ${cmd} <format>, <type> [, <player cap>, <rounds>, <custom name>]`);
 			}
 
 			const tour: Tournament | undefined = createTournament(room, format, generator, cap, Config.ratedtours, mod, name, this);
@@ -1604,7 +1604,7 @@ const commands: Chat.ChatCommands = {
 			const tournament = this.requireGame(Tournament);
 			const name = target.trim();
 			if (!name) {
-				return this.sendReply(`Usage: /tour ${cmd} <comma-separated arguments>`);
+				return this.sendReply(`Usage: /tour ${cmd} <arguments>`);
 			}
 			this.checkChat(name);
 			if (!name || typeof name !== 'string') return;
@@ -2222,7 +2222,7 @@ const commands: Chat.ChatCommands = {
 			`Tournament Commands<br/>` +
 			`- ready: Readies your team for your next battle, even if no match is available yet.<br />` +
 			`- cancelready/unready: Cancels readiness before your battle starts.<br />` +
-			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
+			`- create/new &lt;format>, &lt;type>, [, &lt;player cap>, &lt;rounds>, &lt;custom name>]: Creates a new tournament in the current room.<br />` +
 			`- rules &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started. <a href="view-battlerules">Custom rules help/list</a><br />` +
 			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
 			`- begin/start: Starts the tournament in the current room.<br /><br />` +
