@@ -1001,6 +1001,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const player = this.playerTable[oldUserid];
 		if (player) {
 			this.updatePlayer(player, user);
+			if (this.inviteOnlySetter === oldUserid) this.inviteOnlySetter = user.id;
 		}
 		const options = {
 			name: user.name,
