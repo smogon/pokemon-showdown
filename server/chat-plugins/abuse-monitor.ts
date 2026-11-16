@@ -563,7 +563,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	}
 	if (settings.disabled) return;
 	// startsWith('!') - broadcasting command, ignore it.
-	if (!Config.perspectiveKey || message.startsWith('!')) return;
+	if (!Config.perspectivekey || message.startsWith('!')) return;
 
 	const roomid = room.roomid;
 	void (async () => {

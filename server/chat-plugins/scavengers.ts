@@ -1627,7 +1627,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) throw new Chat.ErrorMessage(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			throw new Chat.ErrorMessage("You cannot edit the hints and answers if you are not the host.");
@@ -1645,7 +1645,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) throw new Chat.ErrorMessage(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			throw new Chat.ErrorMessage("You cannot add more hints if you are not the host.");
@@ -1674,7 +1674,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) throw new Chat.ErrorMessage(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			throw new Chat.ErrorMessage("You cannot remove hints if you are not the host.");
@@ -1697,7 +1697,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) throw new Chat.ErrorMessage(`There is no scavenger hunt currently running.`);
 		if (
-			(!game.hosts.some(h => h.id === user.id) || !user.can('show', null, room)) &&
+			(!game.hosts.some(h => h.id === user.id) || !user.can('broadcast', null, room)) &&
 			game.staffHostId !== user.id
 		) {
 			throw new Chat.ErrorMessage("You cannot edit hints if you are not the host.");

@@ -10,7 +10,7 @@ import * as http from 'http';
 import * as Streams from './streams';
 
 // Net is also used without the server's global declarations.
-declare const global: { Config?: { noNetRequests?: boolean } };
+declare const global: { Config?: { nonetrequests?: boolean } };
 
 export interface PostData {
 	[key: string]: string | number;
@@ -191,7 +191,7 @@ export class NetRequest {
 	 * @param body POST body
 	 */
 	getStream(opts: NetRequestOptions = {}) {
-		if (global.Config?.noNetRequests) {
+		if (global.Config?.nonetrequests) {
 			throw new Error(`Net requests are disabled.`);
 		}
 		const stream = new NetStream(this.uri, opts);

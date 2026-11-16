@@ -789,7 +789,7 @@ export class CommandContext extends MessageContext {
 
 	checkSlowchat(room: Room | null | undefined, user: User) {
 		if (!room?.settings.slowchat) return true;
-		if (user.can('show', null, room)) return true;
+		if (user.can('broadcast', null, room)) return true;
 		const lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
 		if (lastActiveSeconds < room.settings.slowchat) {
 			throw new Chat.ErrorMessage(this.TL`This room has slow-chat enabled. You can only talk once every ${room.settings.slowchat} seconds.`);
@@ -1051,7 +1051,7 @@ export class CommandContext extends MessageContext {
 	}
 	canUseConsole() {
 		if (!this.user.hasConsoleAccess(this.connection)) {
-			throw new Chat.ErrorMessage(`${(this.cmdToken + this.fullCmd).trim()} - Requires console access, please set up \`Config.consoleips\`.`);
+			throw new Chat.ErrorMessage(`${(this.cmdToken + this.fullCmd).trim()} - Requires console access, please set up \`Config.consoleaccess\`.`);
 		}
 		return true;
 	}
@@ -1071,7 +1071,7 @@ export class CommandContext extends MessageContext {
 				`To see it for yourself, use: /${this.message.slice(1)}`]);
 		}
 
-		if (this.room && !this.user.can('show', null, this.room, this.cmd, this.cmdToken)) {
+		if (this.room && !this.user.can('broadcast', null, this.room, this.cmd, this.cmdToken)) {
 			const perm = this.room.settings.permissions?.[`!${this.cmd}`];
 			const atLeast = perm ? `at least rank ${perm}` : 'voiced';
 			throw new Chat.ErrorMessage([`You need to be ${atLeast} to broadcast this command's information.`,
@@ -1264,7 +1264,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
-		if (Config.restrictLinks && !user.autoconfirmed) {
+		if (Config.restrictlinks && !user.autoconfirmed) {
 			if (this.checkBannedLinks(message).length && !(targetUser?.can('lock') || room?.settings.isHelp)) {
 				throw new Chat.ErrorMessage("Your account must be autoconfirmed to send links to other users, except for global staff.");
 			}
@@ -1284,7 +1284,7 @@ export class CommandContext extends MessageContext {
 
 		if (room?.settings.highTraffic &&
 			toID(message).replace(/[^a-z]+/, '').length < 2 &&
-			!user.can('show', null, room)) {
+			!user.can('broadcast', null, room)) {
 			throw new Chat.ErrorMessage(
 				this.TL`Due to this room being a high traffic room, your message must contain at least two letters.`
 			);
@@ -2503,7 +2503,7 @@ export const Chat = new class {
 	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
 	 */
 	getImageDimensions(url: string): Promise<{ height: number, width: number }> {
-		if (Config.noNetRequests) {
+		if (Config.nonetrequests) {
 			return Promise.reject(new Error(`Net requests are disabled.`));
 		}
 		if (!probe) {

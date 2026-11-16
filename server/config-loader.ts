@@ -224,7 +224,7 @@ export function cacheGroupData(config: ConfigType) {
 }
 
 export function checkRipgrepAvailability() {
-	if (Config.ripgrepmodlog === undefined) {
+	if (Config.ripgrepmodlog === null) {
 		const cwd = FS.ROOT_PATH;
 		Config.ripgrepmodlog = (async () => {
 			try {

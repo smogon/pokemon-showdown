@@ -2293,7 +2293,7 @@ export const commands: Chat.ChatCommands = {
 			if (room.game) throw new Chat.ErrorMessage(`There is already a game of ${room.game.title} in progress in this room.`);
 
 			const nextHost = room.roomid === 'mafia' && cmd === 'nexthost';
-			if (nextHost || !room.auth.has(user.id)) this.checkCan('show', null, room);
+			if (nextHost || !room.auth.has(user.id)) this.checkCan('broadcast', null, room);
 
 			let targetUser!: User | null;
 			let targetUsername!: string;
@@ -2367,7 +2367,7 @@ export const commands: Chat.ChatCommands = {
 				this.checkChat();
 				// any rank can selfqueue
 				if (targetUserID === user.id) {
-					if (!room.auth.has(user.id)) this.checkCan('show', null, room);
+					if (!room.auth.has(user.id)) this.checkCan('broadcast', null, room);
 				} else {
 					this.checkCan('mute', null, room);
 				}
@@ -2573,7 +2573,7 @@ export const commands: Chat.ChatCommands = {
 		idea(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
-			this.checkCan('show', null, room);
+			this.checkCan('broadcast', null, room);
 			if (!user.can('mute', null, room) && game.hostid !== user.id && !game.cohostids.includes(user.id)) {
 				throw new Chat.ErrorMessage(`/mafia idea - Access denied.`);
 			}
@@ -3591,7 +3591,7 @@ export const commands: Chat.ChatCommands = {
 		end(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
-			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('show', null, room);
+			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('broadcast', null, room);
 			game.end();
 			this.modlog('MAFIAEND', null);
 		},

@@ -1483,8 +1483,8 @@ export const commands: Chat.ChatCommands = {
 
 	async search(target, room, user, connection) {
 		if (target) {
-			if (Config.laddermodchat && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
-				const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
+			if (Config.restrictedladder && !Users.globalAuth.atLeast(user, Config.restrictedladder)) {
+				const groupName = Config.groups[Config.restrictedladder].name || Config.restrictedladder;
 				this.popupReply(this.TL`This server requires you to be rank ${groupName} or higher to search for a battle.`);
 				return false;
 			}

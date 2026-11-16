@@ -486,7 +486,7 @@ export const pages: Chat.PageTable = {
 		case 'pairs':
 		case 'keys':
 			this.title = '[Autoresponder Regexes]';
-			this.checkCan('show', null, room);
+			this.checkCan('broadcast', null, room);
 			buf = `<div class="pad"><h2>${room.title} responder regexes and responses:</h2>${back}${refresh('keys')}<hr />`;
 			buf += Object.entries(roomData.pairs).map(([item, regexes]) => {
 				if (regexes.length < 1) return null;

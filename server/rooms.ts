@@ -105,7 +105,6 @@ export interface RoomSettings {
 	filterEmojis?: boolean;
 	filterCaps?: boolean;
 	filterLinks?: boolean;
-	jeopardyDisabled?: boolean;
 	mafiaDisabled?: boolean;
 	unoDisabled?: boolean;
 	hangmanDisabled?: boolean;
@@ -1544,7 +1543,7 @@ export class GlobalRoomState {
 
 		// add the punishment types at the very end.
 		for (const rank in Config.punishgroups) {
-			rankList.push({ symbol: Config.punishgroups[rank].symbol, name: Config.punishgroups[rank].name, type: 'punishment' });
+			rankList.push({ symbol: Config.punishgroups[rank]?.symbol, name: Config.punishgroups[rank]?.name, type: 'punishment' });
 		}
 
 		Config.rankList = '|customgroups|' + JSON.stringify(rankList) + '\n';

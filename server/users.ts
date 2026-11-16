@@ -544,7 +544,7 @@ export class User extends Chat.MessageContext {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
 	getIdentity(room: BasicRoom | null = null) {
-		const punishgroups = Config.punishgroups || { locked: null, muted: null };
+		const punishgroups = Config.punishgroups;
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (punishgroups.locked?.symbol || '\u203d');
 			return lockedSymbol + this.name;
@@ -624,7 +624,7 @@ export class User extends Chat.MessageContext {
 		if (this.hasSysopAccess()) return true;
 		if (!this.can('console')) return false; // normal permission check
 
-		const whitelist = Config.consoleips || ['127.0.0.1'];
+		const whitelist = Config.consoleaccess || ['127.0.0.1'];
 		// on the IP whitelist OR the userid whitelist
 		return whitelist.includes(connection.ip) || whitelist.includes(this.id);
 	}
@@ -691,7 +691,7 @@ export class User extends Chat.MessageContext {
 			return null;
 		}
 
-		const expiry = Config.tokenexpiry || 25 * 60 * 60;
+		const expiry = Config.tokenexpiry;
 		if (Math.abs(parseInt(signedDate) - Date.now() / 1000) > expiry) {
 			Monitor.warn(`stale assertion: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);

@@ -225,7 +225,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 			// and it ensures execution stops here so the creation can proceed
 			return true;
 		}
-		if (isCreate && !(isForSelf && user.can('show', null, context.room!))) {
+		if (isCreate && !(isForSelf && user.can('broadcast', null, context.room!))) {
 			context.checkCan('warn', null, context.room!);
 		}
 		if (!user.can('warn', null, context.room!) && !isCreate && !isForSelf) {
@@ -1136,7 +1136,7 @@ export const commands: Chat.ChatCommands = {
 		create: {
 			''(target, room, user) {
 				room = this.requireRoom('wifi' as RoomID);
-				if (!user.can('show', null, room)) this.checkCan('warn', null, room);
+				if (!user.can('broadcast', null, room)) this.checkCan('warn', null, room);
 				this.parse('/j view-giveaways-create');
 			},
 			question(target, room, user) {
@@ -1485,7 +1485,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom('wifi' as RoomID);
 		this.runBroadcast();
 		const buf = [];
-		if (user.can('show', null, room)) {
+		if (user.can('broadcast', null, room)) {
 			buf.push(<details><summary>Staff commands</summary>
 				<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # ~<br />
 				<code>
@@ -1588,7 +1588,7 @@ export const pages: Chat.PageTable = {
 			this.title = `[Create Giveaways]`;
 			const wifi = Rooms.search('wifi');
 			if (!wifi) return <h1>There is no Wi-Fi room on this server.</h1>;
-			if (!(user.can('show', null, wifi) || wifiData.whitelist.includes(user.id))) {
+			if (!(user.can('broadcast', null, wifi) || wifiData.whitelist.includes(user.id))) {
 				this.checkCan('warn', null, wifi);
 			}
 			const [type] = args;

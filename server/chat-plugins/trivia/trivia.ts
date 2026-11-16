@@ -1521,7 +1521,7 @@ const triviaCommands: Chat.ChatCommands = {
 		const givesPoints = !cmd.includes('unranked');
 
 		room = this.requireRoom('trivia' as RoomID);
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 		this.checkChat();
 		if (room.game) {
 			throw new Chat.ErrorMessage(this.TL`There is already a game of ${room.game.title} in progress.`);
@@ -1626,7 +1626,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 	start(target, room) {
 		room = this.requireRoom();
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 		this.checkChat();
 
 		getTriviaGame(room).start();
@@ -1659,7 +1659,7 @@ const triviaCommands: Chat.ChatCommands = {
 	resume: 'pause',
 	pause(target, room, user, connection, cmd) {
 		room = this.requireRoom();
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 		this.checkChat();
 		if (cmd === 'pause') {
 			getTriviaGame(room).pause();
@@ -1672,7 +1672,7 @@ const triviaCommands: Chat.ChatCommands = {
 
 	end(target, room, user) {
 		room = this.requireRoom();
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 		this.checkChat();
 
 		getTriviaOrMastermindGame(room).end(user);
@@ -1682,7 +1682,7 @@ const triviaCommands: Chat.ChatCommands = {
 	getwinners: 'win',
 	async win(target, room, user) {
 		room = this.requireRoom();
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 		this.checkChat();
 
 		const game = getTriviaGame(room);
@@ -1726,7 +1726,7 @@ const triviaCommands: Chat.ChatCommands = {
 	async add(target, room, user, connection, cmd) {
 		room = this.requireRoom('questionworkshop' as RoomID);
 		if (cmd === 'add') this.checkCan('mute', null, room);
-		if (cmd === 'submit') this.checkCan('show', null, room);
+		if (cmd === 'submit') this.checkCan('broadcast', null, room);
 		if (!target) return false;
 		this.checkChat();
 
@@ -2154,7 +2154,7 @@ const triviaCommands: Chat.ChatCommands = {
 	doublespacesearch: 'search',
 	async search(target, room, user, connection, cmd) {
 		room = this.requireRoom('questionworkshop' as RoomID);
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 
 		let type, query;
 		if (cmd === 'doublespacesearch') {
@@ -2585,7 +2585,7 @@ const mastermindCommands: Chat.ChatCommands = {
 
 	new(target, room, user) {
 		room = this.requireRoom('trivia' as RoomID);
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 
 		const finalists = parseInt(target);
 		if (isNaN(finalists) || finalists < 2) {
@@ -2600,7 +2600,7 @@ const mastermindCommands: Chat.ChatCommands = {
 
 	async start(target, room, user) {
 		room = this.requireRoom();
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 		this.checkChat();
 		const game = getMastermindGame(room);
 
@@ -2630,7 +2630,7 @@ const mastermindCommands: Chat.ChatCommands = {
 
 	async finals(target, room, user) {
 		room = this.requireRoom();
-		this.checkCan('show', null, room);
+		this.checkCan('broadcast', null, room);
 		this.checkChat();
 		const game = getMastermindGame(room);
 		if (!target) return this.parse(`/help mastermind finals`);
