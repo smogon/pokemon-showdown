@@ -632,8 +632,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.id === 'present') {
 				const getIndex = (p: Pokemon) => {
 					const types = p.getTypes();
-					const type = types[types.length > 1 ? 1 : 0];
-					return this.dex.types.get(type).num;
+					const t = types[types.length > 1 ? 1 : 0];
+					return this.dex.types.get(t).num;
 				};
 				attack = 10;
 				defense = getIndex(attacker);
