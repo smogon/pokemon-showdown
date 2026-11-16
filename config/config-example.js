@@ -39,15 +39,16 @@ exports.bindaddress = '0.0.0.0';
 
 /**
  * List of IPs and user IDs with dev console (>> and >>>) access.
- * The console is incredibly powerful because it allows the execution of
- * arbitrary commands on the local computer (as the user running the
- * server). If an account with the console permission were compromised,
- * it could possibly be used to take over the server computer. As such,
- * you should only specify a small range of trusted IPs and users here,
- * or none at all. By default, only localhost can use the dev console.
- * In addition to connecting from a valid IP, a user must *also* have
- * the `console` permission in order to use the dev console.
- * Setting this to an empty array ([]) will disable the dev console.
+ * The developer console allows the execution of arbitrary commands on
+ * the local computer (as the user running the server). If an account
+ * with the console permission were compromised, it could possibly be
+ * used to take over the server computer. As such, you should only
+ * specify a small range of trusted IPs and/or users here, or none
+ * at all. By default, only localhost can use the dev console. In addition
+ * to connecting from a valid IP (or matching a user entry), a user
+ * must *also* have the `console` permission in their user group
+ * in order to use the dev console.
+ * Setting this to an empty array ([]) will disable the console entirely.
  *
  * @type {string[]}
  */
@@ -152,7 +153,6 @@ exports.subprocesses = {
 	/** these won't affect anything without a Perspective API key */
 	localartemis: 1,
 	remoteartemis: 1,
-	/** chat processes */
 	friends: 1,
 	chatdb: 1,
 	modlog: 1,
@@ -1061,7 +1061,7 @@ exports.grouplist = [
 		name: "Whitelist",
 		inherit: ' ',
 		roomonly: true,
-		
+
 		altsself: true,
 		broadcast: true,
 		exportinputlog: true,
