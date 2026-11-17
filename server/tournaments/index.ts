@@ -1293,7 +1293,7 @@ const commands: Chat.ChatCommands = {
 				this.privateModAction(`${user.name} created a tournament in ${tour.baseFormat} format.`);
 				this.modlog('TOUR CREATE', null, tour.baseFormat);
 				if (room.settings.tournaments?.announcements) {
-					const tourRoom = Rooms.search(Config.tourroom);
+					const tourRoom = Rooms.search(Config.tourroom || 'tournaments');
 					if (tourRoom && tourRoom !== room) {
 						tourRoom.addRaw(
 							Utils.html`<div class="infobox"><a href="/${room.roomid}" class="ilink">` +

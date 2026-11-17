@@ -2,7 +2,7 @@ import { FS } from '../lib/fs';
 import type { RoomSection } from './chat-commands/room-settings';
 import { toID } from '../sim/dex-data';
 
-export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '✖' | '!';
+export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
@@ -10,7 +10,7 @@ export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'broadcast', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'roomprizewinner', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [

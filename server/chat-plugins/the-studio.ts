@@ -499,7 +499,7 @@ export const commands: Chat.ChatCommands = {
 	addrec: 'addrecommendation',
 	async addrecommendation(target, room, user) {
 		room = this.requireRoom('thestudio' as RoomID);
-		this.checkCan('broadcast', null, room);
+		this.checkCan('show', null, room);
 		const [artist, title, url, description, ...tags] = target.split('|').map(x => x.trim());
 		if (!(artist && title && url && description && tags?.length)) {
 			return this.parse(`/help addrecommendation`);

@@ -72,7 +72,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		try {
 			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
 				query: {
-					key: Config.perspectivekey,
+					key: Config.perspectiveKey,
 				},
 				body: JSON.stringify(requestData),
 				headers: {
@@ -118,11 +118,11 @@ export class RemoteClassifier {
 	static readonly PM = PM;
 	static readonly ATTRIBUTES = ATTRIBUTES;
 	classify(text: string) {
-		if (!Config.perspectivekey) return Promise.resolve(null);
+		if (!Config.perspectiveKey) return Promise.resolve(null);
 		return PM.query(text);
 	}
 	async suggestScore(text: string, data: Record<string, number>) {
-		if (!Config.perspectivekey) return Promise.resolve(null);
+		if (!Config.perspectiveKey) return Promise.resolve(null);
 		const body: AnyObject = {
 			comment: { text },
 			attributeScores: {},
@@ -133,7 +133,7 @@ export class RemoteClassifier {
 		try {
 			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:suggestscore`).post({
 				query: {
-					key: Config.perspectivekey,
+					key: Config.perspectiveKey,
 				},
 				body: JSON.stringify(body),
 				headers: {

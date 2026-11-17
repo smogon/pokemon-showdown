@@ -52,7 +52,7 @@ exports.bindaddress = '0.0.0.0';
  *
  * @type {string[]}
  */
-exports.consoleaccess = ['127.0.0.1'];
+exports.consoleips = ['127.0.0.1'];
 
 /**
  * login server data - don't forget the http:// and the trailing slash
@@ -190,9 +190,9 @@ exports.lazysockets = false;
  *  Only use this if you want to reject certain client hosts
  *  from user renames.
  *
- * @type {string[]}
+ * @type {string[] | null}
  */
-exports.legalhosts = [];
+exports.legalhosts = null;
 
 /**
  * logsdir - The directory to store log files in. Defaults to '/logs/'.
@@ -326,8 +326,8 @@ exports.autosavereplays = false;
  * forcedpublicprefixes - user ID prefixes which will be forced to battle publicly
  * or without modchat. Battles involving user IDs which begin with one of the prefixes
  * configured here will be unaffected by various battle privacy commands such as /modjoin,
- * /hideroom, /ionext, or /modchat. expireAt will be set to 10 days when set through
- * /usernameprefix or not otherwise specified.
+ * /hideroom, /ionext, or /modchat. expireAt will be set to 10 days after creation when
+ * set through /usernameprefix or not otherwise specified.
  *
  * @type {Array<{prefix: ID | string, type: 'modchat' | 'privacy', expireAt?: number}>}
  */
@@ -453,7 +453,7 @@ exports.pmmodchat = false;
  * ladder modchat - minimum group for laddering
  * @type {false | GroupSymbol}
  */
-exports.restrictedladder = false;
+exports.laddermodchat = false;
 
 // #endregion
 // ================================================================================================
@@ -599,12 +599,12 @@ exports.github = [];
  *
  * @type {boolean}
  */
-exports.nonetrequests = false;
+exports.noNetRequests = false;
 
 /**
  * perspectivekey - [artemis] the API key to use Google's remote Perspective API for auto-moderation.
  */
-exports.perspectivekey = '';
+exports.perspectiveKey = '';
 
 /**
  * ripgrepmodlog - [modlog] Whether to use ripgrep for searching battle and chat logs
@@ -876,7 +876,7 @@ exports.inactiveuserthreshold = 1000 * 60 * 60;
  *
  *    Misc
  *     - announce: /announce command.
- *     - broadcast: Show command output to other users.
+ *     - show: Show command output to other users.
  *     - bypassafktimer: Won't mark users Idle after inactivity.
  *     - declare: /declare command.
  *     - exportinputlog: /exportinputlog command. Requires all player's permission,
@@ -1044,7 +1044,7 @@ exports.grouplist = [
 		altsself: true,
 		makegroupchat: true,
 		joinbattle: true,
-		broadcast: true,
+		show: true,
 		showmedia: true,
 		exportinputlog: true,
 		importinputlog: true,
@@ -1063,7 +1063,7 @@ exports.grouplist = [
 		roomonly: true,
 
 		altsself: true,
-		broadcast: true,
+		show: true,
 		exportinputlog: true,
 		importinputlog: true,
 		showmedia: true,

@@ -2748,7 +2748,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkBroadcast();
 		if (this.broadcastMessage) {
 			if (room) {
-				this.checkCan('broadcast', null, room);
+				this.checkCan('show', null, room);
 			} else {
 				this.checkCan('altsself');
 			}
