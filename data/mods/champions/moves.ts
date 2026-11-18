@@ -529,6 +529,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	icespinner: {
+		inherit: true,
+		onAfterMoveSecondaryLast() {
+			this.field.clearTerrain();
+		},
+	},
 	incinerate: {
 		inherit: true,
 		isNonstandard: "Past",
