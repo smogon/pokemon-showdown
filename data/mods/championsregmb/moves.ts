@@ -5,7 +5,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	metalsound: {
 		inherit: true,
-		accuracy: 85
+		accuracy: 85,
 	},
 	rockslide: {
 		inherit: true,
@@ -13,11 +13,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
-		}
+		},
 	},
 	screech: {
 		inherit: true,
-		accuracy: 85
+		accuracy: 85,
 	},
 	steelwing: {
 		inherit: true,

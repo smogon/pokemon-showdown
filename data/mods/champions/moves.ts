@@ -856,7 +856,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch',
-		}
+		},
 	},
 	rockthrow: {
 		inherit: true,
