@@ -123,7 +123,7 @@ describe('Team Validator', () => {
 	it('should allow Gen 2 events that evolve into Gen 1 Pokemon to learn moves exclusive to Gen 1', () => {
 		const team = [
 			{ species: 'pikachu', moves: ['sing', 'surf'] },
-			{ species: 'clefairy', moves: ['dizzypunch', 'bodyslam'] },
+			{ species: 'clefairy', moves: ['dizzypunch', 'bodyslam'], gender: 'F', ivs: { 'hp': 0, 'atk': 0, 'def': 0, 'spa': 0, 'spd': 0, 'spe': 0 } },
 		];
 		assert.legalTeam(team, 'gen2ou');
 	});
