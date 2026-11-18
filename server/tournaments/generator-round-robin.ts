@@ -107,7 +107,7 @@ export class RoundRobin {
 		const playerIndex = this.players.indexOf(user);
 
 		for (const [col, match] of this.matches[playerIndex].entries()) {
-			if (!match || match.state !== 'available') continue;
+			if (match?.state !== 'available') continue;
 			const p2 = this.players[col];
 			match.state = 'finished';
 			match.result = 'loss';
@@ -123,7 +123,7 @@ export class RoundRobin {
 
 		for (const [row, challenges] of this.matches.entries()) {
 			const match = challenges[playerIndex];
-			if (!match || match.state !== 'available') continue;
+			if (match?.state !== 'available') continue;
 			const p1 = this.players[row];
 			match.state = 'finished';
 			match.result = 'win';
@@ -166,7 +166,7 @@ export class RoundRobin {
 		if (row < 0 || col < 0) return 'UserNotAdded';
 
 		const match = this.matches[row][col];
-		if (!match || match.state !== 'available') return 'InvalidMatch';
+		if (match?.state !== 'available') return 'InvalidMatch';
 
 		match.state = 'finished';
 		match.result = result;

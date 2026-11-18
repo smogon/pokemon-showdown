@@ -77,6 +77,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 && pokemon.ability === 'gluttony')) {
 				const action = this.queue.willMove(pokemon);
 				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
 				this.queue.insertChoice({
 					choice: 'event',
 					event: 'Custap',
@@ -89,10 +91,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onCustap(pokemon) {
 			const action = this.queue.willMove(pokemon);
-			this.debug(`custap action: ${action?.moveid}`);
+			this.debug(`custap action: ${action?.moveid as DebugOutput}`);
 			if (action && pokemon.eatItem()) {
 				this.queue.cancelAction(pokemon);
-				this.add('-message', "Custap Berry activated.");
+				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
 				this.runAction(action);
 			}
 		},
@@ -153,7 +155,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			duration: 1,
 			onDamage(damage, target, source, effect) {
-				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+				if (effect?.effectType === 'Move' && damage >= target.hp) {
 					this.effectState.activated = true;
 					return target.hp - 1;
 				}
@@ -253,7 +255,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
-				if (move && move.effectType === 'Move' && source?.volatiles['lifeorb']) {
+				if (move?.effectType === 'Move' && source?.volatiles['lifeorb']) {
 					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}
@@ -359,6 +361,42 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	quickclaw: {
+		inherit: true,
+		onFractionalPriority: undefined, // no inherit
+		onBeforeTurn(pokemon) {
+			if (this.randomChance(1, 5)) {
+				const action = this.queue.willMove(pokemon);
+				if (!action) return;
+				const otherAction = this.queue.list.find(a => a.choice === 'move' && a.move && a.pokemon !== pokemon);
+				if (!otherAction) return;
+				this.queue.insertChoice({
+					choice: 'event',
+					event: 'Custap',
+					priority: action.priority + 0.1,
+					pokemon: action.pokemon,
+					move: action.move,
+					targetLoc: action.targetLoc,
+				});
+			}
+		},
+		onCustap(pokemon) {
+			const action = this.queue.willMove(pokemon);
+			if (action) {
+				this.queue.cancelAction(pokemon);
+				this.add('-activate', pokemon, 'item: Quick Claw');
+				this.runAction(action);
+			}
+		},
+	},
+	quickpowder: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (pokemon.species.name === 'Ditto') {
+				return this.chainModify(2);
+			}
+		},
+	},
 	razorfang: {
 		inherit: true,
 		onModifyMove(move) {
@@ -423,6 +461,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	toxicplate: {
 		inherit: true,
 		onTakeItem: true,
+	},
+	whiteherb: {
+		inherit: true,
+		onAnySwitchInPriority: undefined, // no inherit
 	},
 	widelens: {
 		inherit: true,

@@ -129,7 +129,7 @@ export class ExhaustiveRunner {
 		if (this.games) process.stdout.write('\r\x1b[K');
 		// Deliberately don't print a `\n` character so that we can overwrite
 		process.stdout.write(
-			`[${this.format}] P:${p.pokemon} I:${p.items} A:${p.abilities} M:${p.moves} = ${this.games}`
+			`[${this.format}] P:${p.pokemon as any} I:${p.items as any} A:${p.abilities as any} M:${p.moves as any} = ${this.games}`
 		);
 	}
 

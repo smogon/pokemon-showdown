@@ -41,7 +41,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	blackbelt: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -49,7 +49,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	blackglasses: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -84,7 +84,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	charcoal: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -176,7 +176,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	dracoplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -184,7 +184,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	dragonfang: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -201,7 +201,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	dreadplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -209,7 +209,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	earthplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -226,7 +226,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	fairyfeather: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -261,7 +261,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	fistplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -269,7 +269,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	flameplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -344,7 +344,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	hardstone: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -361,7 +361,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	icicleplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -369,7 +369,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	insectplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -385,7 +385,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	ironplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -447,7 +447,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	magnet: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -455,7 +455,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	meadowplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -463,7 +463,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	metalcoat: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -471,7 +471,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	mindplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -479,7 +479,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	miracleseed: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -487,7 +487,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	mysticwater: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -495,7 +495,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	nevermeltice: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -527,7 +527,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	oddincense: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -565,7 +565,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	pixieplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -573,7 +573,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	poisonbarb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -614,7 +614,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	rockincense: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -631,7 +631,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	roseincense: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -654,7 +654,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	seaincense: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -662,7 +662,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	sharpbeak: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -685,7 +685,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	silkscarf: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -693,7 +693,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	silverpowder: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -701,7 +701,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	skyplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -717,7 +717,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	softsand: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -736,7 +736,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	spelltag: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -744,7 +744,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	splashplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -752,7 +752,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	spookyplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -769,7 +769,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	stoneplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -792,7 +792,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	toxicplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -800,7 +800,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	twistedspoon: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -832,7 +832,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	waveincense: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -855,7 +855,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	zapplate: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
-			if (move && move.type === user.teraType) {
+			if (move?.type === user.teraType) {
 				return this.chainModify([4915, 4096]);
 			}
 		},

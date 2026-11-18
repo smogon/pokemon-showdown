@@ -843,7 +843,7 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 				results[date][user] += isNaN(parsed) ? 0 : parsed;
 			} else {
 				const parts = line?.split('|').map(toID);
-				if (!parts || parts[1] !== 'c') continue;
+				if (parts?.[1] !== 'c') continue;
 				const id = parts[2];
 				if (!id) continue;
 				if (!results[date][id]) results[date][id] = 0;
@@ -880,19 +880,27 @@ export class DatabaseLogSearcher extends Searcher {
 			}
 		}
 
-		const results = await Rooms.Roomlogs.table.selectAll()`
-			WHERE ${
-				search.user ? SQL`userid ${search.user[1] ? SQL`!=` : SQL`=`} ${search.user[0]} AND ` : SQL``
-			} time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
-			type = ${'c'} AND roomid = ${roomid}
-			${parsedSearch.length ? SQL` AND content @@ plainto_tsquery(${parsedSearch.join(',')})` : SQL``} LIMIT ${limit}
-		`;
+		let results;
+		try {
+			results = await Rooms.Roomlogs.table.selectAll()`
+				WHERE ${
+					search.user ? SQL`userid ${search.user[1] ? SQL`!=` : SQL`=`} ${search.user[0]} AND ` : SQL``
+				} time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
+				type = ${'c'} AND roomid = ${roomid}
+				${parsedSearch.length ? SQL` AND content @@ plainto_tsquery(${parsedSearch.join(',')})` : SQL``} LIMIT ${limit}
+			`;
+		} catch (err: any) {
+			if (err?.message?.startsWith?.("plainto_tsquery(): text-search query doesn't contain lexemes:")) {
+				throw new Chat.ErrorMessage("Your search contains no searchable words.");
+			}
+			throw err;
+		}
 
 		let curDate = '';
 
 		let parsedSearchStr = `"${parsedSearch.join(', ')}" `;
 		const argStr = Object.entries(search).map(([key, val]) => `${key}${val[1] ? '!=' : '='}${val[0]}`);
-		if (argStr.length) parsedSearchStr += `<small> (arguments: ${argStr})</small>`;
+		if (argStr.length) parsedSearchStr += `<small> (arguments: ${argStr.join(',')})</small>`;
 
 		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for ${parsedSearchStr} during the month ${month}:</strong>`;
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
@@ -967,7 +975,7 @@ export const pages: Chat.PageTable = {
 	async chatlog(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
-			[RoomID, string | undefined, string | undefined];
+			[RoomID, string, string];
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
 			return LogViewer.list(user, roomid?.slice(1));
@@ -1052,10 +1060,10 @@ export const pages: Chat.PageTable = {
 		} else {
 			if (date === 'today') {
 				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
-				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
+				if (isTime) this.send(`|scroll|div[data-server="${opts!}"]`);
 			} else if (date.split('-').length === 3) {
 				this.setHTML(await LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts));
-				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
+				if (isTime) this.send(`|scroll|div[data-server="${opts!}"]`);
 			} else {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
 			}

@@ -307,18 +307,20 @@ represented by a space), and the rest of the string being their username.
 > `JSON` is a JSON object representing the changes in the tournament
 > since the last update you received or the start of the tournament.
 > These include:
->
-    format: the tournament's custom name or the format being used
-    teambuilderFormat: the format being used; sent if a custom name was set
-    isStarted: whether or not the tournament has started
-    isJoined: whether or not you have joined the tournament
-    generator: the type of bracket being used by the tournament
-    playerCap: the player cap that was set or 0 if it was removed
-    bracketData: an object representing the current state of the bracket
-    challenges: a list of opponents that you can currently challenge
-    challengeBys: a list of opponents that can currently challenge you
-    challenged: the name of the opponent that has challenged you
-    challenging: the name of the opponent that you are challenging
+
+- `format`: the tournament's custom name or the format being used
+- `teambuilderFormat`: the format being used; sent if a custom name was set
+- `isStarted`: whether or not the tournament has started
+- `isJoined`: whether or not you have joined the tournament
+- `generator`: the type of bracket being used by the tournament
+- `playerCap`: the player cap that was set or 0 if it was removed
+- `bracketData`: an object representing the current state of the bracket
+- `challenges`: (unused) previously a list of opponents you can challenge
+- `challengeBys`: (unused) previously a list of opponents that can challenge you
+- `challenged`: (before readying) the the opponent you will be matched with, or 
+  `"(next available player)"` if you are still waiting for a pairing
+- `challenging`: (after readying) the the opponent that will be matched with, or
+  `"(next available player)"` if you are still waiting for a pairing
 
 `|tournament|updateEnd`
 

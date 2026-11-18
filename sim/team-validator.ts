@@ -15,7 +15,7 @@ import { Teams } from './teams';
 import { PRNG } from './prng';
 import { type RuleTable } from './dex-formats';
 
-const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
+const EXISTENCE_TAGS = ['past', 'future', 'lgpe', 'legends', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -469,7 +469,7 @@ export class TeamValidator {
 			}
 		}
 
-		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans) {
+		for (const [rule, source, limit, bans] of ruleTable.complexTeamBans.values()) {
 			let count = 0;
 			for (const ban of bans) {
 				if (teamHas[ban] > 0) {
@@ -586,7 +586,11 @@ export class TeamValidator {
 			if (set.name === set.species) {
 				set.name = species.baseSpecies;
 			} else {
-				problems.push(`Nickname "${set.name}" too long (should be 18 characters or fewer)`);
+				problems.push(`${set.species}'s nickname "${set.name}" is too long.`);
+				problems.push(
+					`(It's ${set.name.length} characters long, but should be 18 or less. ` +
+					`Some characters, like emojis, may count as more than one.)`
+				);
 			}
 		}
 		set.name = dex.getName(set.name);
@@ -708,12 +712,15 @@ export class TeamValidator {
 		}
 		if ((this.gen === 9 && !dex.currentMod.startsWith('champions') && !ruleTable.has('terastalclause')) ||
 			ruleTable.has('bonustypemod')) {
-			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
+			const teraType = set.teraType || species.requiredTeraType || species.types[0];
+			const type = dex.types.get(teraType);
 			if (!type.exists || type.isNonstandard) {
-				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
+				problems.push(`${name}'s Terastal type (${teraType}) is invalid.`);
 			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
 				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}.`);
 			}
+			const problem = this.checkTeraType(set, type, setHas);
+			if (problem) problems.push(problem);
 			set.teraType = type.name;
 		} else {
 			delete set.teraType;
@@ -724,6 +731,11 @@ export class TeamValidator {
 
 		problem = this.checkItem(set, item, setHas);
 		if (problem) problems.push(problem);
+
+		for (const typeName of species.types) {
+			problem = this.checkType(set, dex.types.get(typeName), setHas);
+			if (problem) problems.push(problem);
+		}
 		if (ruleTable.has('obtainablemisc')) {
 			if (dex.gen === 4 && item.id === 'griseousorb' && species.num !== 487) {
 				problems.push(`${set.name} cannot hold the Griseous Orb.`, `(In Gen 4, only Giratina could hold the Griseous Orb).`);
@@ -736,6 +748,7 @@ export class TeamValidator {
 			}
 		}
 
+		let rockHeadBasculin = false;
 		if (!set.ability) set.ability = 'No Ability';
 		if (ruleTable.has('obtainableabilities')) {
 			if (dex.gen <= 2 || dex.currentMod === 'gen7letsgo') {
@@ -775,6 +788,16 @@ export class TeamValidator {
 					}
 				} else {
 					setSources.isHidden = false;
+				}
+				if (dex.currentMod === 'gen5bw1' && species.id === 'basculinbluestriped' && set.ability === 'Rock Head') {
+					const eventData: EventInfo = {
+						generation: 5, level: 25, gender: "M", ivs: { hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20 }, nature: "Adamant",
+					};
+					const eventProblems = this.validateEvent(
+						set, setSources, eventData, species, ` to have Rock Head`, `from an in-game trade`
+					);
+					if (eventProblems) problems.push(...eventProblems);
+					rockHeadBasculin = true;
 				}
 			}
 		}
@@ -860,7 +883,7 @@ export class TeamValidator {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			let evoSpecies = species;
 			while (evoSpecies.prevo) {
-				if (set.level < (evoSpecies.evoLevel || 0)) {
+				if (evoSpecies.evoLevel && set.level < evoSpecies.evoLevel) {
 					isUnderleveled = evoSpecies.name;
 					requiredLevel = evoSpecies.evoLevel;
 					break;
@@ -933,7 +956,7 @@ export class TeamValidator {
 			if (legalSources.length) {
 				setSources.sources = legalSources;
 			} else if (isUnderleveled) {
-				problems.push(`${name} must be at least level ${requiredLevel} to be evolved.`);
+				problems.push(`${name} must be at least level ${requiredLevel!} to be evolved.`);
 				const firstEventSource = setSources.sources.find(source => source.charAt(1) === 'S');
 				if (firstEventSource) {
 					const eventProblems = this.validateSource(
@@ -1056,7 +1079,7 @@ export class TeamValidator {
 				problems.push(`${name} has a Hidden Ability - it can't use moves from before Gen 5.`);
 			}
 			if (
-				species.maleOnlyHidden && setSources.isHidden && setSources.sourcesBefore < 5 &&
+				((species.maleOnlyHidden && setSources.isHidden) || rockHeadBasculin) && setSources.sourcesBefore < 5 &&
 				setSources.sources.every(source => source.charAt(1) === 'E')
 			) {
 				problems.push(`${name} has an unbreedable Hidden Ability - it can't use egg moves.`);
@@ -1072,7 +1095,7 @@ export class TeamValidator {
 				}
 			}
 		}
-		for (const [rule, source, limit, bans] of ruleTable.complexBans) {
+		for (const [rule, source, limit, bans] of ruleTable.complexBans.values()) {
 			let count = 0;
 			for (const ban of bans) {
 				if (setHas[ban]) count++;
@@ -1257,8 +1280,8 @@ export class TeamValidator {
 			) {
 				// Marowak hack
 				set.ivs.atk = Math.floor(set.ivs.atk / 2) * 2;
-				while (set.evs.atk > 0 && 2 * 80 + set.ivs.atk + Math.floor(set.evs.atk / 4) + 5 > 255) {
-					set.evs.atk -= 4;
+				if (set.evs.atk > 0 && set.evs.atk <= 255) {
+					set.evs.atk = Math.min(set.evs.atk, 4 * (90 - set.ivs.atk) + set.evs.atk % 4);
 				}
 			}
 			if (dex.gen > 1) {
@@ -1424,7 +1447,7 @@ export class TeamValidator {
 				isHidden: !!this.dex.mod('gen5').species.get(species.id).abilities['H'],
 			};
 		} else if (source.charAt(1) === 'E') {
-			if (this.findEggMoveFathers(source, species, setSources)) {
+			if (this.findEggMoveFathers(source, species, setSources, 2)) {
 				return undefined;
 			}
 			if (because) throw new Error(`Wrong place to get an egg incompatibility message`);
@@ -1437,11 +1460,12 @@ export class TeamValidator {
 		return this.validateEvent(set, setSources, eventData, eventSpecies, because as any) as any;
 	}
 
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
-		getAll?: false, pokemonBlacklist?: ID[], noRecurse?: true): boolean;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, getAll?: true): ID[] | null;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
-		getAll?: boolean, pokemonBlacklist?: ID[], noRecurse?: boolean) {
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+		getAll?: false, pokemonBlacklist?: ID[]): boolean;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+		getAll?: true): ID[] | null;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, recurse: number,
+		getAll?: boolean, pokemonBlacklist?: ID[]) {
 		if (!pokemonBlacklist) pokemonBlacklist = [];
 		if (!pokemonBlacklist.includes(species.id)) pokemonBlacklist.push(species.id);
 		// tradebacks have an eggGen of 2 even though the source is 1ET
@@ -1507,7 +1531,7 @@ export class TeamValidator {
 			if (!father.eggGroups.some(eggGroup => eggGroups.includes(eggGroup))) continue;
 
 			// father must be able to learn the move
-			if (!this.fatherCanLearn(species, father, eggMoves, eggGen, pokemonBlacklist, noRecurse)) continue;
+			if (!this.fatherCanLearn(species, father, eggMoves, eggGen, pokemonBlacklist, recurse)) continue;
 
 			// father found!
 			if (!getAll) return true;
@@ -1518,17 +1542,14 @@ export class TeamValidator {
 	}
 
 	/**
-	 * We could, if we wanted, do a complete move validation of the father's
-	 * moveset to see if it's valid. This would recurse and be NP-Hard so
-	 * instead we won't. We'll instead use a simplified algorithm: The father
-	 * is allowed to have multiple egg moves and a maximum of one move from
-	 * any other restrictive source; recursion is done only if there are less
-	 * egg moves to validate or if the father has an egg group it doesn't
-	 * share with the egg Pokemon. Recursion is also limited to two iterations
-	 * of calling findEggMoveFathers.
+	 * This uses a miniature form of validateMoves to check if the father can
+	 * legitimately pass down the given egg moves. To prevent unnecessary
+	 * recursion, a maximum of three iterations of calling findEggMoveFathers
+	 * is allowed (this limit can be raised if a more complex chainbreed is
+	 * discovered)
 	 */
 	fatherCanLearn(baseSpecies: Species, species: Species, moves: ID[], eggGen: number, pokemonBlacklist: ID[],
-		noRecurse: boolean | undefined) {
+		recurse: number) {
 		if (!this.dex.species.getLearnsetData(species.id).learnset) return false;
 
 		if (species.id === 'smeargle') return true;
@@ -1573,18 +1594,21 @@ export class TeamValidator {
 		}
 		pokemonBlacklist.push(species.id);
 		if (allEggSources.limitedEggMoves && allEggSources.limitedEggMoves.length > 1) {
-			if (noRecurse) return false;
-			let canChainbreed = false;
+			if (recurse <= 0) return false;
+			let hasOtherEggGroup = false;
 			for (const fatherEggGroup of species.eggGroups) {
 				if (!baseSpecies.eggGroups.includes(fatherEggGroup)) {
-					canChainbreed = true;
+					hasOtherEggGroup = true;
 					break;
 				}
 			}
-			if (!canChainbreed && allEggSources.limitedEggMoves.length === moves.length) return false;
+			const hasLessEggMoves = allEggSources.limitedEggMoves.length < moves.length;
+			// Waste of time to check Pokemon without a different egg group and the same amount of egg moves
+			if (!hasOtherEggGroup && !hasLessEggMoves) return false;
 			const setSources = new PokemonSources();
 			setSources.limitedEggMoves = allEggSources.limitedEggMoves;
-			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, false, pokemonBlacklist, true);
+			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, recurse - 1, false,
+				hasLessEggMoves ? [] : pokemonBlacklist);
 		}
 		return true;
 	}
@@ -1639,7 +1663,7 @@ export class TeamValidator {
 			if (species.requiredItems) {
 				if (!species.requiredItems.includes(item.name)) {
 					// Mega or Primal
-					problems.push(`${species.name} transforms in-battle with ${species.requiredItem}, please fix its item.`);
+					problems.push(`${species.name} transforms in-battle with ${species.requiredItems.join(' or ')}, please fix its item.`);
 				}
 			}
 			if (species.requiredMove && !set.moves.map(toID).includes(toID(species.requiredMove))) {
@@ -1910,6 +1934,9 @@ export class TeamValidator {
 				// this to happen with an unusual ruleset, though, so we won't throw.
 				return `${displayName} is a placeholder for a Gigantamax sprite, not a real Pokémon. (This message is likely a validator bug.)`;
 			}
+			if (thing.effectType === 'Move' && thing.isNonstandard === 'Gmax') {
+				return `${displayName} is a placeholder for the Gigantamax version of ${thing.isMax as string}. It can't actually exist on a normal moveset.`;
+			}
 			if (thing.isNonstandard === 'Past' || thing.isNonstandard === 'Future') {
 				return `${displayName} does not exist in Gen ${dex.gen}.`;
 			}
@@ -1918,6 +1945,9 @@ export class TeamValidator {
 			}
 			if (thing.isNonstandard === 'LGPE') {
 				return `${displayName} does not exist in this game, only in Let's Go Pikachu/Eevee.`;
+			}
+			if (thing.isNonstandard === 'Legends') {
+				return `${displayName} does not exist in this game, only in Pokémon Legends: Arceus/Z-A.`;
 			}
 			return `${displayName} does not exist in this game.`;
 		}
@@ -1970,6 +2000,34 @@ export class TeamValidator {
 
 		const tagProblem = this.checkTagRules(set, move, setHas);
 		if (tagProblem !== undefined) return tagProblem;
+
+		return null;
+	}
+
+	checkType(set: PokemonSet, type: TypeInfo, setHas: { [k: string]: true }) {
+		const ruleTable = this.ruleTable;
+
+		setHas['type:' + type.id] = true;
+
+		const banReason = ruleTable.check('type:' + type.id);
+		if (banReason) {
+			return `${set.name}'s type ${type.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
+
+		return null;
+	}
+
+	checkTeraType(set: PokemonSet, teraType: TypeInfo, setHas: { [k: string]: true }) {
+		const ruleTable = this.ruleTable;
+
+		setHas['teratype:' + teraType.id] = true;
+
+		const banReason = ruleTable.check('teratype:' + teraType.id);
+		if (banReason) {
+			return `${set.name}'s Tera type ${teraType.name} is ${banReason}.`;
+		}
+		if (banReason === '') return null;
 
 		return null;
 	}
@@ -2155,7 +2213,7 @@ export class TeamValidator {
 				if (canBottleCap && set.ivs[statName] === 31) continue;
 				if (set.ivs[statName] !== eventData.ivs[statName]) {
 					if (fastReturn) return true;
-					problems.push(`${name} must have ${eventData.ivs[statName]} ${Dex.stats.names[statName]} IVs${etc}.`);
+					problems.push(`${name} must have ${eventData.ivs[statName]!} ${Dex.stats.names[statName]} IVs${etc}.`);
 				}
 			}
 
@@ -2213,7 +2271,7 @@ export class TeamValidator {
 			}
 		}
 		if (ruleTable.has('obtainableabilities')) {
-			if (dex.gen <= 5 && eventData.abilities && eventData.abilities.length === 1 && !eventData.isHidden) {
+			if (dex.gen <= 5 && eventData.abilities?.length === 1 && !eventData.isHidden) {
 				if (species.name === eventSpecies.name) {
 					// has not evolved, abilities must match
 					const requiredAbility = dex.abilities.get(eventData.abilities[0]).name;
@@ -2697,7 +2755,17 @@ export class TeamValidator {
 					}
 					// past-gen level-up, TM, or tutor moves:
 					//   available as long as the source gen was or was before this gen
-					if (learned.charAt(1) === 'R') {
+					if (learned.charAt(1) === 'R' && !moveSources.sourcesBefore) {
+						if (species.id === 'shedinja') {
+							// Special case for Shedinja, which inherits moves learned by Ninjask upon evolution in Gens 3 and 4
+							// Shedinja inherits the level of Ninjask so it should not have moves incompatible with its level
+							const ninjaskLearnset = dex.species.getLearnsetData('ninjask' as ID).learnset;
+							const ninjaskSource = ninjaskLearnset![move.id].find(s => s.startsWith(`${learnedGen}L`));
+							if (parseInt(ninjaskSource!.substr(2)) > (set.level || 100)) {
+								cantLearnReason = `is learned at level ${parseInt(ninjaskSource!.substr(2))}.`;
+								continue;
+							}
+						}
 						moveSources.restrictedMove = moveid;
 					}
 					limit1 = false;

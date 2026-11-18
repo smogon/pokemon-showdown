@@ -230,7 +230,7 @@ If, while rebasing, you somehow unintentionally break your pull request, do not 
 Code standards
 ------------------------------------------------------------------------
 
-We enforce most of our code standards through `eslint`. Just run `npm test` and it'll tell you if something's wrong.
+We enforce most of our code standards through `oxlint`. Just run `npm test` and it'll tell you if something's wrong. Run `npm run fix` to apply automatic fixes.
 
 Looking at your surrounding text is also a way to get a good idea of our coding style.
 

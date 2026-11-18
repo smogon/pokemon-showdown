@@ -109,7 +109,7 @@ case 'random':
 		options.totalGames = Number(argv._[1] || argv.num) || options.totalGames;
 		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
 		// Run options.totalGames, exiting with the number of games with errors.
-		(async () => process.exit(await new MultiRandomRunner(options).run()))();
+		void (async () => process.exit(await new MultiRandomRunner(options).run()))();
 	}
 	break;
 case 'exhaustive':
@@ -132,7 +132,7 @@ case 'exhaustive':
 		const maxFailures = argv.maxFailures || argv.failures || (formats.length > 1 ? ExhaustiveRunner.MAX_FAILURES : 1);
 		const prng = argv.seed && argv.seed.split(',').map(s => Number(s));
 		const maxGames = argv.maxGames || argv.games;
-		(async () => {
+		void (async () => {
 			let failures = 0;
 			do {
 				for (const format of formats) {
@@ -142,7 +142,7 @@ case 'exhaustive':
 					process.stdout.write('\n');
 					if (failures >= maxFailures) break;
 				}
-			} while (forever); // eslint-disable-line no-unmodified-loop-condition
+			} while (forever); // oxlint-disable-line no-unmodified-loop-condition
 			process.exit(failures);
 		})();
 	}

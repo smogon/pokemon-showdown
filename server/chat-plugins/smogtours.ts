@@ -355,7 +355,7 @@ function instantTournaments() {
 	const roomTours = [];
 	for (const tourRoom of Rooms.rooms.values()) {
 		const tournament = tourRoom.game as Tournament;
-		if (!tournament || tournament?.constructor.name !== 'Tournament') continue;
+		if (tournament?.constructor.name !== 'Tournament') continue;
 		if (tourRoom.settings.isPrivate || tourRoom.settings.isPersonal || tourRoom.settings.staffRoom) continue;
 		roomTours.push(tournament);
 	}
@@ -551,7 +551,7 @@ export const pages: Chat.PageTable = {
 			const curEndDay = Chat.toTimestamp(new Date(tour.ends || Date.now())).split(' ')[0];
 			buf += `End date: <input type="date" name="enddate" value="${curEndDay}" /><br />`;
 			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
-			buf += `Artist name (required if image provided): <input name="artist" value="${tour.artistCredit?.name}" /><br />`;
+			buf += `Artist name (required if image provided): <input name="artist" value="${tour.artistCredit?.name || ""}" /><br />`;
 			buf += `Image credit (required if image provided, must be a link to the creator's Smogon profile): `;
 			buf += `<input name="credit" value="${tour.artistCredit?.url || ""}"/><br />`;
 			buf += `Short description: <br />`;

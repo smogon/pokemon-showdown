@@ -910,7 +910,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const otd = otds.get(otdId);
 			if (!otd) {
-				throw new Chat.ErrorMessage(`OTD ${otd} not found.`);
+				throw new Chat.ErrorMessage(`OTD ${otdId} not found.`);
 			}
 			const targetRoom = Rooms.get(roomid);
 			if (!targetRoom) {
@@ -1016,8 +1016,8 @@ export const roomSettings: Chat.SettingsHandler[] = [
 		label: `Autostart -OTD`,
 		permission: "editroom",
 		options: getKeyByRoomId(room.roomid) ? [
-			['off', !room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)} toggleautostart off`],
-			['on', room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)} toggleautostart on`],
+			['off', !room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)!} toggleautostart off`],
+			['on', room.settings.autoStartOtd || `${getKeyByRoomId(room.roomid)!} toggleautostart on`],
 		] : [['disabled', true]],
 	}),
 ];

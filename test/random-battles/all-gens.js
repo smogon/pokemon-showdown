@@ -168,7 +168,11 @@ describe("New set format (slow)", () => {
 		},
 		"gen9championsrandombattle": {
 			filename: "champions/sets",
-			roles: ["Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
+		},
+		"gen9championsrandomdoublesbattle": {
+			filename: "champions/doubles-sets",
+			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Doubles Support", "Choice Item user"],
 		},
 	};
 	for (const format of Object.keys(formatInfo)) {
@@ -255,7 +259,7 @@ describe("New set format (slow)", () => {
 		});
 		it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
 			testTeam({ format, rounds }, team => {
-				for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4, `In ${format}, ${pokemon.name} can generate with ${pokemon.moves.length} moves`);
+				for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.includes('lastresort') || pokemon.moves.length === 4, `In ${format}, ${pokemon.name} can generate with ${pokemon.moves.length} moves`);
 			});
 		});
 		it('all moves on all sets should exist and be obtainable', () => {
@@ -287,7 +291,7 @@ describe("New set format (slow)", () => {
 							// randomMoveset() deletes moves from the movepool, so recreate it every time
 							const movePool = set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id));
 							let moveSet;
-							if (mod === 'gen9') {
+							if (dex.gen === 9) {
 								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role, format.includes('doubles'));
 							} else {
 								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role);

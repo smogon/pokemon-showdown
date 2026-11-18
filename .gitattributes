@@ -1,1 +1,29 @@
-* text=auto
+* text=auto eol=lf
+
+*.bmp binary
+*.gif binary
+*.icns binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.psd binary
+
+*.eot binary
+*.otf binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+
+*.mp3 binary
+*.mp4 binary
+*.swf binary
+*.wav binary
+*.webm binary
+
+*.crx binary
+*.ser binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.tgz binary

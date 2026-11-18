@@ -81,7 +81,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
 			const chance = target.hasAbility('adorablegrace') ? 2 : 1;
-			if (this.randomChance(chance, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (this.randomChance(chance, 10) && damage >= target.hp && effect?.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
 				return target.hp - 1;
 			}

@@ -23,6 +23,20 @@ describe('Berserk', () => {
 		assert.equal(drampa.hp, Math.floor(drampa.maxhp / 2) + Math.floor(drampa.maxhp / 4));
 	});
 
+	it(`should be suppressed by Sheer Force`, () => {
+		battle = common.createBattle([[
+			{ species: 'Drampa', ability: 'berserk', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Landorus', ability: 'sheerforce', moves: ['earthpower'] },
+		]]);
+
+		const drampa = battle.p1.active[0];
+		battle.makeChoices();
+		assert.false.fainted(drampa);
+		assert.atMost(drampa.hp, drampa.maxhp / 2);
+		assert.statStage(drampa, 'spa', 0);
+	});
+
 	it(`should not activate prior to healing from Sitrus Berry after a multi-hit move`, () => {
 		battle = common.createBattle([[
 			{ species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: { hp: 4 }, moves: ['sleeptalk'] },

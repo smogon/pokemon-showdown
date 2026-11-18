@@ -89,7 +89,7 @@ describe('Conversion2', () => {
 			]]);
 			const forretress = battle.p1.active[0];
 			battle.makeChoices();
-			assert(battle.log.some(line => line === '|move|p2a: Salamence|Scratch|p1a: Forretress|[from] Metronome'));
+			assert(battle.log.some(line => line === '|move|p2a: Salamence|Scratch|p1a: Forretress|[from] move: Metronome'));
 			assert.false.fullHP(forretress);
 			let types = forretress.getTypes();
 			assert.equal(types[0], 'Bug');

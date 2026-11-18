@@ -1,0 +1,962 @@
+{
+	"dragonite": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Dragon Dance", "Breaking Swipe", "Wing Attack", "Bulldoze"],
+				"abilities": ["Multiscale"],
+				"items": ["Scizorite"]
+			}
+		]
+	},
+	"garganacl": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Stealth Rock", "Body Press", "Salt Cure", "Recover"],
+				"abilities": ["Purifying Salt"],
+				"items": ["Tyranitarite"]
+			}
+		]
+	},
+	"greattusk": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Rapid Spin", "Close Combat", "Headlong Rush", "Ice Spinner"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Lopunnite"]
+			}
+		]
+	},
+	"heatran": {
+		"level": 82,
+		"sets": [
+			{
+				"movepool": ["Magma Storm", "Dragon Pulse", "Earth Power", "Will-O-Wisp"],
+				"abilities": ["Flash Fire"],
+				"items": ["Garchompite Z"]
+			}
+		]
+	},
+	"pecharunt": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Foul Play", "Malignant Chain", "Recover", "Parting Shot"],
+				"abilities": ["Poison Puppeteer"],
+				"items": ["Gyaradosite"]
+			}
+		]
+	},
+	"ragingbolt": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Thunderbolt", "Draco Meteor", "Thunderclap", "Volt Switch"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Manectite"]
+			}
+		]
+	},
+	"annihilape": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Rage Fist", "Bulk Up", "Drain Punch", "Ice Punch"],
+				"abilities": ["Defiant"],
+				"items": ["Crabominite"]
+			}
+		]
+	},
+	"archaludon": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Flash Cannon", "Dragon Pulse", "Electro Shot", "Stealth Rock"],
+				"abilities": ["Stamina"],
+				"items": ["Blue Orb"]
+			}
+		]
+	},
+	"ceruledge": {
+		"level": 82,
+		"sets": [
+			{
+				"movepool": ["Bitter Blade", "Poltergeist", "Shadow Sneak", "Close Combat"],
+				"abilities": ["Weak Armor"],
+				"items": ["Eelektrossite"]
+			}
+		]
+	},
+	"gholdengo": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Focus Blast", "Recover", "Make It Rain", "Shadow Ball"],
+				"abilities": ["Good as Gold"],
+				"items": ["Magearnite"]
+			}
+		]
+	},
+	"gougingfire": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Flare Blitz", "Double-Edge", "Burning Bulwark", "Dragon Dance"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Pinsirite"]
+			}
+		]
+	},
+	"magearna": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Draining Kiss", "Flash Cannon", "Calm Mind", "Grass Knot"],
+				"abilities": ["Soul-Heart"],
+				"items": ["Metagrossite"]
+			}
+		]
+	},
+	"roaringmoon": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Jaw Lock", "Fire Fang", "Roost", "U-turn"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Sharpedonite"]
+			}
+		]
+	},
+	"walkingwake": {
+		"level": 82,
+		"sets": [
+			{
+				"movepool": ["Hydro Steam", "Draco Meteor", "Flamethrower", "Flip Turn"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Charizardite Y"]
+			}
+		]
+	},
+	"darkrai": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Sucker Punch", "Focus Blast", "Blizzard", "Thunder"],
+				"abilities": ["Bad Dreams"],
+				"items": ["Golurkite"]
+			}
+		]
+	},
+	"dragapult": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["Draco Meteor", "Flamethrower", "Thunderbolt", "U-turn"],
+				"abilities": ["Clear Body"],
+				"items": ["Red Orb"]
+			}
+		]
+	},
+	"gengar": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Nasty Plot", "Shadow Ball", "Sludge Wave", "Giga Drain"],
+				"abilities": ["Cursed Body"],
+				"items": ["Dragoninite"]
+			}
+		]
+	},
+	"ironboulder": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["Mighty Cleave", "Zen Headbutt", "Close Combat", "Swords Dance"],
+				"abilities": ["Quark Drive"],
+				"items": ["Aerodactylite"]
+			}
+		]
+	},
+	"regieleki": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Body Slam", "Volt Switch", "Rapid Spin", "Explosion"],
+				"abilities": ["Transistor"],
+				"items": ["Altarianite"]
+			}
+		]
+	},
+	"shayminsky": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Solar Beam", "Dazzling Gleam", "Earth Power", "Synthesis"],
+				"abilities": ["Serene Grace"],
+				"items": ["Meganiumite"]
+			}
+		]
+	},
+	"weavile": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Dark Pulse", "Ice Beam", "Focus Blast", "Nasty Plot"],
+				"abilities": ["Pressure"],
+				"items": ["Zygardite"]
+			}
+		]
+	},
+	"zamazenta": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Close Combat", "Fire Fang", "Heavy Slam", "Crunch"],
+				"abilities": ["Dauntless Shield"],
+				"items": ["Red Orb"]
+			}
+		]
+	},
+	"mandibuzz": {
+		"level": 91,
+		"sets": [
+			{
+				"movepool": ["Foul Play", "Toxic", "Roost", "Defog"],
+				"abilities": ["Overcoat"],
+				"items": ["Mawilite"]
+			}
+		]
+	},
+	"skarmory": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Roost", "Brave Bird", "Iron Head", "Drill Run"],
+				"abilities": ["Weak Armor"],
+				"items": ["Starminite"]
+			}
+		]
+	},
+	"salazzle": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Fire Lash", "Poison Jab", "Will-O-Wisp", "Encore"],
+				"abilities": ["Oblivious"],
+				"items": ["Beedrillite"]
+			}
+		]
+	},
+	"mamoswine": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Icicle Crash", "Freeze-Dry", "Earthquake", "Ice Shard"],
+				"abilities": ["Oblivious"],
+				"items": ["Lucarionite"]
+			}
+		]
+	},
+	"fezandipiti": {
+		"level": 89,
+		"sets": [
+			{
+				"movepool": ["Sludge Bomb", "Brave Bird", "U-turn", "Roost"],
+				"abilities": ["Toxic Chain"],
+				"items": ["Clefablite"]
+			}
+		]
+	},
+	"jirachi": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Thunder Wave", "Doom Desire", "Wish", "U-turn"],
+				"abilities": ["Serene Grace"],
+				"items": ["Clefablite"]
+			}
+		]
+	},
+	"hippowdon": {
+		"level": 92,
+		"sets": [
+			{
+				"movepool": ["Earthquake", "Stone Edge", "Stealth Rock", "Slack Off"],
+				"abilities": ["Sand Stream"],
+				"items": ["Steelixite"]
+			}
+		]
+	},
+	"drifblim": {
+		"level": 92,
+		"sets": [
+			{
+				"movepool": ["Hex", "Will-O-Wisp", "Strength Sap", "Defog"],
+				"abilities": ["Aftermath"],
+				"items": ["Victreebelite"]
+			}
+		]
+	},
+	"tinkaton": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Stealth Rock", "Encore", "Gigaton Hammer", "Thunder Wave"],
+				"abilities": ["Mold Breaker"],
+				"items": ["Banettite"]
+			}
+		]
+	},
+	"landorustherian": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Stone Edge", "Earthquake", "U-turn", "Taunt"],
+				"abilities": ["Intimidate"],
+				"items": ["Scraftinite"]
+			}
+		]
+	},
+	"hydreigon": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Dark Pulse", "Flash Cannon", "Fire Blast", "Nasty Plot"],
+				"abilities": ["Levitate"],
+				"items": ["Chimechite"]
+			}
+		]
+	},
+	"lugia": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Surf", "Psychic Noise", "Whirlwind", "Recover"],
+				"abilities": ["Water Absorb"],
+				"items": ["Wellspring Mask"]
+			}
+		]
+	},
+	"kyuremblack": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Fusion Bolt", "Icicle Spear", "Dragon Claw", "Dragon Dance"],
+				"abilities": ["Multitype"],
+				"items": ["Electric Memory"]
+			}
+		]
+	},
+	"regigigas": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Iron Head", "Earthquake", "Drain Punch", "Thunder Punch"],
+				"abilities": ["Slow Start"],
+				"items": ["Earth Plate"]
+			}
+		]
+	},
+	"palossand": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Night Shade", "Scorching Sands", "Shore Up", "Stealth Rock"],
+				"abilities": ["Water Compaction"],
+				"items": ["Kangaskhanite"]
+			}
+		]
+	},
+	"revavroom": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Shift Gear", "Iron Head", "Double-Edge", "Temper Flare"],
+				"abilities": ["Filter"],
+				"items": ["Pinsirite"]
+			}
+		]
+	},
+	"vikavolt": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Sticky Web", "Volt Switch", "Bug Buzz", "Flash Cannon"],
+				"abilities": ["Levitate"],
+				"items": ["Chimechite"]
+			}
+		]
+	},
+	"umbreon": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Alluring Voice", "Weather Ball", "Toxic", "Moonlight"],
+				"abilities": ["Synchronize"],
+				"items": ["Meganiumite"]
+			}
+		]
+	},
+	"ironmoth": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Fiery Dance", "Sludge Wave", "Energy Ball", "Dazzling Gleam"],
+				"abilities": ["Quark Drive"],
+				"items": ["Delphoxite"]
+			}
+		]
+	},
+	"fluttermane": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Power Gem", "Shadow Ball", "Moonblast", "Psyshock"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Cornerstone Mask"]
+			}
+		]
+	},
+	"rotomwash": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Will-O-Wisp", "Thunder", "Volt Switch", "Hydro Pump"],
+				"abilities": ["Levitate"],
+				"items": ["Pidgeotite"]
+			}
+		]
+	},
+	"flygon": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Boomburst", "Earthquake", "Fire Blast", "Quick Attack"],
+				"abilities": ["Levitate"],
+				"items": ["Altarianite"]
+			}
+		]
+	},
+	"hariyama": {
+		"level": 89,
+		"sets": [
+			{
+				"movepool": ["Bulk Up", "Drain Punch", "Bullet Punch", "Throat Chop"],
+				"abilities": ["Guts"],
+				"items": ["Scolipite"]
+			}
+		]
+	},
+	"ursalunabloodmoon": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["Earth Power", "Blood Moon", "Moonblast", "Moonlight"],
+				"abilities": ["Mind's Eye"],
+				"items": ["Sablenite"]
+			}
+		]
+	},
+	"screamtail": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Boomburst", "Wish", "Thunder Wave", "Encore"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Gardevoirite"]
+			}
+		]
+	},
+	"politoed": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Liquidation", "Earthquake", "Ice Punch", "Belly Drum"],
+				"abilities": ["Drizzle"],
+				"items": ["Swampertite"]
+			}
+		]
+	},
+	"cryogonal": {
+		"level": 92,
+		"sets": [
+			{
+				"movepool": ["Blizzard", "Rapid Spin", "Aurora Veil", "Recover"],
+				"abilities": ["Levitate"],
+				"items": ["Froslassite"]
+			}
+		]
+	},
+	"tinglu": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Body Press", "Spikes", "Whirlwind", "Ruination"],
+				"abilities": ["Vessel of Ruin"],
+				"items": ["Tyranitarite"]
+			}
+		]
+	},
+	"brutebonnet": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Close Combat", "Sucker Punch", "Leaf Storm", "Synthesis"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Staraptite"]
+			}
+		]
+	},
+	"arcanine": {
+		"level": 89,
+		"sets": [
+			{
+				"movepool": ["Flare Blitz", "Extreme Speed", "Will-O-Wisp", "Morning Sun"],
+				"abilities": ["Intimidate"],
+				"items": ["Absolite"]
+			}
+		]
+	},
+	"zapdos": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Discharge", "Hurricane", "Roost", "U-turn"],
+				"abilities": ["Static"],
+				"items": ["Raichunite X"]
+			}
+		]
+	},
+	"hoopaunbound": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Throat Chop", "Psychic Noise", "Drain Punch", "Thunderbolt"],
+				"abilities": ["Magician"],
+				"items": ["Absolite"]
+			}
+		]
+	},
+	"dialga": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Draco Meteor", "Heavy Slam", "Fire Blast", "Thunder Wave"],
+				"abilities": ["Pressure"],
+				"items": ["Griseous Core"]
+			}
+		]
+	},
+	"overqwil": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Barb Barrage", "Crunch", "Spikes", "Pain Split"],
+				"abilities": ["Intimidate"],
+				"items": ["Falinksite"]
+			}
+		]
+	},
+	"mimikyu": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Hone Claws", "Play Rough", "Shadow Claw", "Shadow Sneak"],
+				"abilities": ["Disguise"],
+				"items": ["Garchompite"]
+			}
+		]
+	},
+	"appletun": {
+		"level": 93,
+		"sets": [
+			{
+				"movepool": ["Apple Acid", "Draco Meteor", "Leech Seed", "Recover"],
+				"abilities": ["Thick Fat"],
+				"items": ["Ampharosite"]
+			}
+		]
+	},
+	"lucario": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Earthquake"],
+				"abilities": ["Inner Focus"],
+				"items": ["Feraligite"]
+			}
+		]
+	},
+	"baxcalibur": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["Scale Shot", "Icicle Spear", "Aqua Tail", "Dragon Dance"],
+				"abilities": ["Thermal Exchange"],
+				"items": ["Heracronite"]
+			}
+		]
+	},
+	"floatzel": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Wave Crash", "Low Kick", "Bulk Up", "Ice Spinner"],
+				"abilities": ["Water Veil"],
+				"items": ["Barbaracite"]
+			}
+		]
+	},
+	"ironhands": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Volt Switch", "Drain Punch", "Supercell Slam", "Ice Punch"],
+				"abilities": ["Quark Drive"],
+				"items": ["Dragalgite"]
+			}
+		]
+	},
+	"empoleon": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Surf", "Flash Cannon", "Ice Beam", "Roost"],
+				"abilities": ["Competitive"],
+				"items": ["Abomasite"]
+			}
+		]
+	},
+	"gastrodon": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Earth Power", "Ice Beam", "Recover", "Spikes"],
+				"abilities": ["Storm Drain"],
+				"items": ["Chandelurite"]
+			}
+		]
+	},
+	"primarina": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Draining Kiss", "Surf", "Flip Turn", "Moonblast"],
+				"abilities": ["Torrent"],
+				"items": ["Chandelurite"]
+			}
+		]
+	},
+	"bronzong": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Gyro Ball", "Trick Room", "Zen Headbutt", "Body Press"],
+				"abilities": ["Levitate"],
+				"items": ["Scolipite"]
+			}
+		]
+	},
+	"rhyperior": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Curse", "Earthquake", "Stone Edge", "Temper Flare"],
+				"abilities": ["Solid Rock"],
+				"items": ["Steelixite"]
+			}
+		]
+	},
+	"slitherwing": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["First Impression", "Morning Sun", "Close Combat", "U-Turn"],
+				"abilities": ["Protosynthesis"],
+				"items": ["Drampanite"]
+			}
+		]
+	},
+	"corviknight": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Brave Bird", "U-turn", "Roost", "Defog"],
+				"abilities": ["Mirror Armor"],
+				"items": ["Venusaurite"]
+			}
+		]
+	},
+	"lunala": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Moonblast", "Moongeist Beam", "Moonlight", "Calm Mind"],
+				"abilities": ["Shadow Shield"],
+				"items": ["Pixie Plate"]
+			}
+		]
+	},
+	"groudon": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Swords Dance", "Earthquake", "Fire Punch", "Thunder Wave"],
+				"abilities": ["Drought"],
+				"items": ["Hearthflame Mask"]
+			}
+		]
+	},
+	"zacian": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Swords Dance", "Play Rough", "Close Combat", "Psychic Fangs"],
+				"abilities": ["Intrepid Sword"],
+				"items": ["Fighting Memory"]
+			}
+		]
+	},
+	"goodra": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Draco Meteor", "Flamethrower", "Ice Beam", "Dragon Tail"],
+				"abilities": ["Gooey"],
+				"items": ["Audinite"]
+			}
+		]
+	},
+	"milotic": {
+		"level": 89,
+		"sets": [
+			{
+				"movepool": ["Scald", "Haze", "Recover", "Flip Turn"],
+				"abilities": ["Competitive"],
+				"items": ["Excadrite"]
+			}
+		]
+	},
+	"glimmora": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Mortal Spin", "Power Gem", "Sludge Bomb", "Earth Power"],
+				"abilities": ["Toxic Debris"],
+				"items": ["Gengarite"]
+			}
+		]
+	},
+	"ditto": {
+		"level": 80,
+		"sets": [
+			{
+				"movepool": ["Transform"],
+				"abilities": ["Imposter"],
+				"items": ["Choice Scarf"]
+			}
+		]
+	},
+	"rillaboom": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Grassy Glide", "High Horsepower", "Drain Punch", "Wood Hammer"],
+				"abilities": ["Grassy Surge"],
+				"items": ["Metagrossite"]
+			}
+		]
+	},
+	"golisopod": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Swords Dance", "Aqua Jet", "Leech Life", "Sucker Punch"],
+				"abilities": ["Emergency Exit"],
+				"items": ["Vile Vial"]
+			}
+		]
+	},
+	"metagross": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Psychic Fangs", "Steel Roller", "Earthquake", "Stealth Rock"],
+				"abilities": ["Clear Body"],
+				"items": ["Alakazite"]
+			}
+		]
+	},
+	"talonflame": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Defog", "Brave Bird", "Flare Blitz", "Roost"],
+				"abilities": ["Gale Wings"],
+				"items": ["Crucibellite"]
+			}
+		]
+	},
+	"decidueyehisui": {
+		"level": 81,
+		"sets": [
+			{
+				"movepool": ["Leaf Blade", "Triple Arrows", "Trailblaze", "Shadow Claw"],
+				"abilities": ["Scrappy"],
+				"items": ["Kangaskhanite"]
+			}
+		]
+	},
+	"vaporeon": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Scald", "Alluring Voice", "Ice Beam", "Flip Turn"],
+				"abilities": ["Water Absorb"],
+				"items": ["Audinite"]
+			}
+		]
+	},
+	"audino": {
+		"level": 92,
+		"sets": [
+			{
+				"movepool": ["Body Slam", "Drain Punch", "Wish", "Protect"],
+				"abilities": ["Regenerator"],
+				"items": ["Mewtwonite X"]
+			}
+		]
+	},
+	"incineroar": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Bulk Up", "Power Trip", "Flare Blitz", "Drain Punch"],
+				"abilities": ["Intimidate"],
+				"items": ["Blazikenite"]
+			}
+		]
+	},
+	"aegislash": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Swords Dance", "Sacred Sword", "Iron Head", "Shadow Sneak"],
+				"abilities": ["Stance Change"],
+				"items": ["Mewtwonite-X"]
+			}
+		]
+	},
+	"scizor": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Bullet Punch", "Close Combat", "Defog", "U-turn"],
+				"abilities": ["Technician"],
+				"items": ["Beedrillite"]
+			}
+		]
+	},
+	"sharpedo": {
+		"level": 90,
+		"sets": [
+			{
+				"movepool": ["Protect", "Waterfall", "Crunch", "Destiny Bond"],
+				"abilities": ["Speed Boost"],
+				"items": ["Lucarionite"]
+			}
+		]
+	},
+	"pincurchin": {
+		"level": 88,
+		"sets": [
+			{
+				"movepool": ["Rising Voltage", "Zing Zap", "Sucker Punch", "Scald"],
+				"abilities": ["Electric Surge"],
+				"items": ["Zeraorite"]
+			}
+		]
+	},
+	"aerodactyl": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Rock Blast", "Dual Wingbeat", "Bulldoze", "Dragon Dance"],
+				"abilities": ["Pressure"],
+				"items": ["Scizorite"]
+			}
+		]
+	},
+	"crobat": {
+		"level": 84,
+		"sets": [
+			{
+				"movepool": ["Nasty Plot", "Hurricane", "Heat Wave", "U-Turn"],
+				"abilities": ["Inner Focus"],
+				"items": ["Raichunite-Y"]
+			}
+		]
+	},
+	"flamigo": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Swords Dance", "Copycat", "Brave Bird", "Close Combat"],
+				"abilities": ["Scrappy"],
+				"items": ["Banettite"]
+			}
+		]
+	},
+	"mewtwo": {
+		"level": 85,
+		"sets": [
+			{
+				"movepool": ["Psystrike", "Fire Blast", "Earth Power", "Recover"],
+				"abilities": ["Pressure"],
+				"items": ["Hearthflame Mask"]
+			}
+		]
+	},
+	"ninetalesalola": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Moonblast", "Freeze-Dry", "Encore", "Nasty Plot"],
+				"abilities": ["Snow Warning"],
+				"items": ["Lucarionite Z"]
+			}
+		]
+	},
+	"shox": {
+		"level": 83,
+		"sets": [
+			{
+				"movepool": ["Thunderbolt", "Hyper Voice", "Ice Beam", "Milk Drink"],
+				"abilities": ["Electromorphosis"],
+				"items": ["Eelektrossite"]
+			}
+		]
+	},
+	"sylveon": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Calm Mind", "Moonblast", "Mystical Fire", "Draining Kiss"],
+				"abilities": ["Cute Charm"],
+				"items": ["Floettite"]
+			}
+		]
+	},
+	"tapukoko": {
+		"level": 87,
+		"sets": [
+			{
+				"movepool": ["Thunderbolt", "Nature's Madness", "Roost", "Defog"],
+				"abilities": ["Electric Surge"],
+				"items": ["Sablenite"]
+			}
+		]
+	}
+}

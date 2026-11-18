@@ -17,7 +17,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	galewings: {
 		inherit: true,
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move && move.type === 'Flying') return priority + 1;
+			if (move?.type === 'Flying') return priority + 1;
 		},
 		rating: 4,
 	},

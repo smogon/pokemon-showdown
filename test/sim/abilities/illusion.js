@@ -23,6 +23,38 @@ describe('Illusion', () => {
 		assert(battle.log.every(line => !line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
+	for (const disguised of [true, false]) {
+		it(`should ${disguised ? 'hide' : 'send'} Kyogre's forme regression after fainting ${disguised ? 'under Illusion' : 'undisguised'}`, () => {
+			const ability = disguised ? 'illusion' : 'pressure';
+			battle = common.gen(6).createBattle([[
+				{ name: 'Secret', species: 'Kyogre', ability, item: 'blueorb', moves: ['splash'] },
+				{ species: 'Carnivine', moves: ['splash'] },
+			], [
+				{ species: 'Deoxys-Speed', ability: 'noguard', moves: ['sheercold'] },
+			]]);
+			const pokemon = battle.p1.active[0];
+			assert.equal(pokemon.species.name, 'Kyogre-Primal');
+			assert.equal(!!pokemon.illusion, disguised);
+			assert(pokemon.formeRegression);
+
+			battle.makeChoices('move splash', 'move sheercold');
+			assert(pokemon.fainted);
+			assert.equal(pokemon.hp, 0);
+			assert.equal(pokemon.species.name, 'Kyogre');
+			assert.equal(pokemon.baseSpecies.name, 'Kyogre');
+			assert.equal(pokemon.ability, ability);
+			assert.equal(pokemon.details, 'Kyogre');
+			assert.false(pokemon.formeRegression);
+			if (disguised) {
+				assert(battle.log.includes('|faint|p1a: Carnivine'));
+				assert(battle.log.every(line => !line.includes('Secret')));
+				assert(battle.log.every(line => !line.startsWith('|detailschange|') || !line.endsWith('|[silent]')));
+			} else {
+				assert(battle.log.includes('|detailschange|p1: Secret|Kyogre|[silent]'));
+			}
+		});
+	}
+
 	it(`should not instantly wear off before Dynamaxing`, () => {
 		battle = common.gen(8).createBattle([[
 			{ species: "Zoroark", ability: 'illusion', moves: ['sleeptalk'] },

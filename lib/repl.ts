@@ -126,7 +126,7 @@ export const Repl = new class {
 	start(filename: string, evalFunction: EvalType) {
 		const config = typeof Config !== 'undefined' ? Config : {};
 		if (!config.repl) return;
-		// eslint-disable-next-line no-eval
+		// oxlint-disable-next-line no-eval
 		if (evalFunction === eval) {
 			// Direct eval is most useful for debugging, but
 			// nothing prevents consumers from wrapping indirect eval if required (see startGlobal).
@@ -156,7 +156,16 @@ export const Repl = new class {
 		const pathname = path.resolve(FS.ROOT_PATH, Config.replsocketprefix || 'logs/repl', filename);
 		try {
 			server.listen(pathname, () => {
-				fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+				try {
+					fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+				} catch (err: any) {
+					if (err.code === 'ENOENT') {
+						server.close();
+						console.error(`Could not start REPL server "${filename}": socket file disappeared before chmod`);
+						return;
+					}
+					throw err;
+				}
 				Repl.socketPathnames.add(pathname);
 			});
 
@@ -186,8 +195,8 @@ export const Repl = new class {
 	}
 
 	startGlobal(filename: string) {
-		/* eslint-disable @typescript-eslint/no-implied-eval */
+		/* oxlint-disable typescript/no-implied-eval */
 		return this.start(filename, new Function(`script`, `return eval(script);`) as EvalType);
-		/* eslint-enable @typescript-eslint/no-implied-eval */
+		/* oxlint-enable typescript/no-implied-eval */
 	}
 };

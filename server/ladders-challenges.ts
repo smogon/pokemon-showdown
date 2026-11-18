@@ -16,12 +16,18 @@ export class BattleReady {
 	readonly rating: number;
 	readonly challengeType: ChallengeType;
 	readonly time: number;
+	readonly custom?: 'suspect';
+	readonly isBot: boolean;
+	readonly allowBots: boolean;
 	constructor(
 		userid: ID,
 		formatid: string,
 		settings: User['battleSettings'],
 		rating = 0,
-		challengeType: ChallengeType = 'challenge'
+		challengeType: ChallengeType = 'challenge',
+		custom?: 'suspect',
+		isBot = false,
+		allowBots = false,
 	) {
 		this.userid = userid;
 		this.formatid = formatid;
@@ -29,6 +35,9 @@ export class BattleReady {
 		this.rating = rating;
 		this.challengeType = challengeType;
 		this.time = Date.now();
+		this.custom = custom;
+		this.isBot = isBot;
+		this.allowBots = allowBots;
 	}
 }
 
@@ -177,7 +186,7 @@ export class Challenges extends Map<ID, Challenge[]> {
 	resolveAcceptCommand(context: Chat.CommandContext) {
 		const targetid = context.target as ID;
 		const chall = this.search(context.user.id, targetid);
-		if (!chall || chall.to !== context.user.id || chall.acceptCommand !== context.message) {
+		if (chall?.to !== context.user.id || chall.acceptCommand !== context.message) {
 			throw new Chat.ErrorMessage(`Challenge not found. You are using the wrong command. Challenges should be accepted with /accept`);
 		}
 		return chall;

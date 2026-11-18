@@ -19,6 +19,15 @@ describe('Chloroblast', () => {
 		assert.hurtsBy(battle.p1.active[0], Math.round(battle.p1.active[0].maxhp / 2), () => battle.makeChoices());
 	});
 
+	it('should not crash in Gen 4 Custom Game', () => {
+		battle = common.createBattle({ formatid: 'gen4customgame' }, [[
+			{ species: "Electrode-Hisui", item: 'widelens', moves: ['chloroblast'] },
+		], [
+			{ species: "Blissey", ability: 'shellarmor', moves: ['sleeptalk'] },
+		]]);
+		assert.hurtsBy(battle.p1.active[0], Math.round(battle.p1.active[0].maxhp / 2), () => battle.makeChoices());
+	});
+
 	it('should not deal recoil damage to the user if it misses or is blocked by Protect', () => {
 		battle = common.createBattle([[
 			{ species: "Electrode-Hisui", item: 'widelens', moves: ['chloroblast', 'protect'] },

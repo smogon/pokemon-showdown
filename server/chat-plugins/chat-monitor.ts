@@ -372,7 +372,7 @@ Chat.registerMonitor('shorteners', {
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
-		// eslint-disable-next-line no-misleading-character-class
+		// oxlint-disable-next-line no-misleading-character-class
 		.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
 		.replace(/\u03bf/g, 'o')
 		.replace(/\u043e/g, 'o')
@@ -391,7 +391,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		if (!monitor) continue;
 		// Ignore challenge games, which are unrated and not part of roomtours.
 		if (location === 'BATTLES' && !(room?.battle && room.battle.challengeType !== 'challenge')) continue;
-		if (location === 'PUBLIC' && room && room.settings.isPrivate === true) continue;
+		if (location === 'PUBLIC' && room?.settings.isPrivate === true) continue;
 
 		switch (condition) {
 		case 'notTrusted':
@@ -653,7 +653,7 @@ export const commands: Chat.ChatCommands = {
 			Filters.add(filterWord);
 			const reason = filterWord.reason ? ` (${filterWord.reason})` : '';
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
-				this.globalModlog(`ADDFILTER`, null, `'${String(filterWord.regex)} => ${filterWord.replacement}' to ${list} list${reason}`);
+				this.globalModlog(`ADDFILTER`, null, `'${String(filterWord.regex)} => ${filterWord.replacement!}' to ${list} list${reason}`);
 			} else {
 				this.globalModlog(`ADDFILTER`, null, `'${filterWord.word}' to ${list} list${reason}`);
 			}
@@ -702,7 +702,7 @@ export const commands: Chat.ChatCommands = {
 			const lcMessage = Chat.stripFormatting(target
 				.replace(/\u039d/g, 'N')
 				.toLowerCase()
-				// eslint-disable-next-line no-misleading-character-class
+				// oxlint-disable-next-line no-misleading-character-class
 				.replace(/[\u200b\u007F\u00AD\uDB40\uDC00\uDC21]/g, '')
 				.replace(/\u03bf/g, 'o')
 				.replace(/\u043e/g, 'o')

@@ -479,6 +479,7 @@ exports.ratedtours = false;
  * appealurl - specify a URL containing information on how users can appeal
  * disciplinary actions on your section. You can also leave this blank, in
  * which case users won't be given any information on how to appeal.
+ * @type {string}
  */
 exports.appealurl = '';
 
@@ -670,9 +671,9 @@ exports.grouplist = [
 		globalGroupInPersonalRoom: '@',
 
 		announce: true,
-		warn: '\u2605u',
+		warn: true,
 		kick: true,
-		mute: '\u2605u',
+		mute: true,
 		lock: true,
 		forcerename: true,
 		timer: true,

@@ -7,15 +7,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (linkedMoves.length) {
 				if (linkedMoves[0].id !== 'pursuit' && linkedMoves[1].id === 'pursuit') return;
 			}
-
-			for (const target of pokemon.foes()) {
-				target.addVolatile('pursuit');
-				const data = target.volatiles['pursuit'];
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
+			pokemon.addVolatile('pursuit', pokemon, this.dex.getActiveMove('pursuit'));
 		},
 	},
 	mefirst: {
@@ -41,7 +33,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
-			if (!action || action.choice !== 'move') return false;
+			if (action?.choice !== 'move') return false;
 			// @ts-expect-error modded
 			if (!action.linked) {
 				const move = action.move;
@@ -65,7 +57,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
-			if (!action || action.choice !== 'move') return false;
+			if (action?.choice !== 'move') return false;
 			// @ts-expect-error modded
 			if (!action.linked) {
 				const move = action.move;
@@ -89,7 +81,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
-			if (!action || action.choice !== 'move') return false;
+			if (action?.choice !== 'move') return false;
 			// @ts-expect-error modded
 			if (!action.linked) {
 				const move = action.move;

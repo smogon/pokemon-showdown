@@ -35,7 +35,7 @@ export function verify(data: string, signature: string): Promise<boolean> {
 
 if (!PM.isParentProcess) {
 	ConfigLoader.ensureLoaded();
-	// eslint-disable-next-line no-eval
+	// oxlint-disable-next-line no-eval
 	PM.startRepl((cmd: string) => eval(cmd));
 }
 

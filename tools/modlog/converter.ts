@@ -562,7 +562,7 @@ export class ModlogConverterSQLite {
 					process.stdout.write(`Wrote ${entriesLogged} entries from '${trueRoomID}'`);
 				}
 				await this.writeFile(`${this.textLogDir}/modlog_${trueRoomID}.txt`, entries.join(''));
-				// eslint-disable-next-line require-atomic-updates
+				// oxlint-disable-next-line ps/require-atomic-updates
 				entries = [];
 			};
 
@@ -730,7 +730,7 @@ export class ModlogConverterTest {
 					process.stdout.write(`Wrote ${entriesLogged} entries from '${roomid}'`);
 				}
 				await FS(`${this.outputDir}/modlog_${roomid}.txt`).append(entries.join(''));
-				// eslint-disable-next-line require-atomic-updates
+				// oxlint-disable-next-line ps/require-atomic-updates
 				entries = [];
 			};
 

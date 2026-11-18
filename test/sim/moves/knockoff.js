@@ -79,74 +79,140 @@ describe('Knock Off', () => {
 		battle.makeChoices('move knockoff', 'move curse');
 		assert.equal(battle.p2.active[0].item, 'rockyhelmet');
 	});
-});
 
-describe('Knock Off [Gen 4]', () => {
-	afterEach(() => {
-		battle.destroy();
+	describe('[Gen 4]', () => {
+		it('should make the target unable to gain a new item', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Wynaut', item: 'pokeball', moves: ['knockoff', 'trick'] },
+			], [
+				{ species: 'Blissey', item: 'leftovers', moves: ['sleeptalk', 'thief'] },
+			]]);
+			const wynaut = battle.p1.active[0];
+			const blissey = battle.p2.active[0];
+
+			battle.makeChoices();
+			assert.equal(wynaut.item, 'pokeball');
+			assert.equal(blissey.item, '');
+			battle.makeChoices('move trick', 'move thief');
+			assert.equal(wynaut.item, 'pokeball');
+			assert.equal(blissey.item, '');
+		});
+
+		it('should be able to recycle an item that was used before having a new item knocked off', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Munchlax', item: 'sitrusberry', moves: ['bellydrum', 'recycle', 'sleeptalk'], evs: { hp: 4 } },
+			], [
+				{ species: 'Sableye', ability: 'stall', item: 'leftovers', moves: ['trick', 'knockoff'] },
+			]]);
+			const munchlax = battle.p1.active[0];
+			const sableye = battle.p2.active[0];
+
+			battle.makeChoices('move bellydrum', 'move trick');
+			// Munchlax eats its Sitrus Berry and gets tricked Leftovers
+			assert.equal(munchlax.item, 'leftovers');
+			assert.equal(sableye.item, '');
+			battle.makeChoices('move sleeptalk', 'move knockoff');
+			// Munchlax has its Leftovers knocked off
+			assert.equal(munchlax.item, '');
+			battle.makeChoices('move recycle', 'move trick');
+			// Munchlax recycles its Sitrus Berry and Trick fails because Munchlax is still considered to be knocked off
+			assert.equal(munchlax.item, 'sitrusberry');
+			assert.equal(sableye.item, '');
+		});
+
+		it('should allow using knocked-off recycled items, but nullify them on switch-in', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Blissey', item: 'lumberry', moves: ['recycle', 'sleeptalk'] },
+				{ species: 'Snorlax', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Shuckle', item: 'leftovers', moves: ['thunderwave', 'trick', 'knockoff', 'sleeptalk'] },
+			]]);
+			const blissey = battle.p1.active[0];
+			const shuckle = battle.p2.active[0];
+
+			battle.makeChoices('move sleeptalk', 'move thunderwave');
+			assert.equal(blissey.item, '');
+			battle.makeChoices('move sleeptalk', 'move trick');
+			assert.equal(blissey.item, 'leftovers');
+			battle.makeChoices('move sleeptalk', 'move knockoff');
+			assert.equal(blissey.item, '');
+
+			// Recycle restores the consumed Lum Berry, which can still cure paralysis
+			battle.makeChoices('move recycle', 'move thunderwave');
+			assert.equal(blissey.status, '');
+			assert.equal(blissey.item, '');
+
+			// consuming a berry allows recycling and consuming it again after switching
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			battle.makeChoices('move recycle', 'move thunderwave');
+			assert.equal(blissey.status, '');
+			assert.equal(blissey.item, '');
+
+			// attempting to use Trick on a knocked-off item should fail
+			battle.makeChoices('move recycle', 'move trick');
+			assert.equal(blissey.item, 'lumberry');
+			assert.equal(shuckle.item, '', 'The Knock Off flag should still prevent Trick.');
+
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			assert.equal(blissey.item, 'lumberry');
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			assert.equal(blissey.item, '');
+
+			// nullifying an item does not make it available to Recycle
+			battle.makeChoices('move recycle', 'move sleeptalk');
+			assert.equal(blissey.item, '');
+		});
+
+		it(`should not knock off the target's item if the target's ability is Sticky Hold or Multitype`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Wynaut', moves: ['knockoff'] },
+			], [
+				{ species: 'Aggron', ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk'] },
+			]]);
+			const aggron = battle.p2.active[0];
+
+			battle.makeChoices();
+			assert.holdsItem(aggron);
+			assert.fullHP(aggron, 'Aggron should have been healed by Leftovers.');
+
+			battle.destroy();
+			battle = common.gen(4).createBattle([[
+				{ species: 'Wynaut', moves: ['knockoff'] },
+			], [
+				{ species: 'Arceus', ability: 'multitype', item: 'leftovers', moves: ['sleeptalk'] },
+			]]);
+			const arceus = battle.p2.active[0];
+
+			battle.makeChoices();
+			assert.holdsItem(arceus);
+			assert.fullHP(arceus, 'Arceus should have been healed by Leftovers.');
+		});
 	});
 
-	it('should make the target unable to gain a new item', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Wynaut', item: 'pokeball', moves: ['knockoff', 'trick'] },
-		], [
-			{ species: 'Blissey', item: 'leftovers', moves: ['sleeptalk', 'thief'] },
-		]]);
-		const wynaut = battle.p1.active[0];
-		const blissey = battle.p2.active[0];
+	describe('[Gen 3]', () => {
+		it('should allow obtaining and using an item with Thief, but nullify it on switch-in', () => {
+			battle = common.gen(3).createBattle([[
+				{ species: 'Blissey', item: 'pokeball', moves: ['thief', 'sleeptalk'] },
+				{ species: 'Snorlax', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Shuckle', item: 'leftovers', moves: ['knockoff', 'sleeptalk'] },
+			]]);
+			const blissey = battle.p1.active[0];
+			const shuckle = battle.p2.active[0];
 
-		battle.makeChoices();
-		assert.equal(wynaut.item, 'pokeball');
-		assert.equal(blissey.item, '');
-		battle.makeChoices('move trick', 'move thief');
-		assert.equal(wynaut.item, 'pokeball');
-		assert.equal(blissey.item, '');
-	});
+			battle.makeChoices('move sleeptalk', 'move knockoff');
+			assert.equal(blissey.item, '');
 
-	it('should be able to recycle an item that was used before having a new item knocked off', () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Munchlax', item: 'sitrusberry', moves: ['bellydrum', 'recycle', 'sleeptalk'], evs: { hp: 4 } },
-		], [
-			{ species: 'Sableye', ability: 'stall', item: 'leftovers', moves: ['trick', 'knockoff'] },
-		]]);
-		const munchlax = battle.p1.active[0];
-		const sableye = battle.p2.active[0];
+			battle.makeChoices('move thief', 'move sleeptalk');
+			assert.fullHP(blissey);
+			assert.equal(blissey.item, 'leftovers');
+			assert.equal(shuckle.item, '');
 
-		battle.makeChoices('move bellydrum', 'move trick');
-		// Munchlax eats its Sitrus Berry and gets tricked Leftovers
-		assert.equal(munchlax.item, 'leftovers');
-		assert.equal(sableye.item, '');
-		battle.makeChoices('move sleeptalk', 'move knockoff');
-		// Munchlax has its Leftovers knocked off
-		assert.equal(munchlax.item, '');
-		battle.makeChoices('move recycle', 'move trick');
-		// Munchlax recycles its Sitrus Berry and Trick fails because Munchlax is still considered to be knocked off
-		assert.equal(munchlax.item, 'sitrusberry');
-		assert.equal(sableye.item, '');
-	});
-
-	it(`should not knock off the target's item if the target's ability is Sticky Hold or Multitype`, () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'Wynaut', moves: ['knockoff'] },
-		], [
-			{ species: 'Aggron', ability: 'stickyhold', item: 'leftovers', moves: ['sleeptalk'] },
-		]]);
-		const aggron = battle.p2.active[0];
-
-		battle.makeChoices();
-		assert.holdsItem(aggron);
-		assert.fullHP(aggron, 'Aggron should have been healed by Leftovers.');
-
-		battle.destroy();
-		battle = common.gen(4).createBattle([[
-			{ species: 'Wynaut', moves: ['knockoff'] },
-		], [
-			{ species: 'Arceus', ability: 'multitype', item: 'leftovers', moves: ['sleeptalk'] },
-		]]);
-		const arceus = battle.p2.active[0];
-
-		battle.makeChoices();
-		assert.holdsItem(arceus);
-		assert.fullHP(arceus, 'Arceus should have been healed by Leftovers.');
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			assert.equal(blissey.item, 'leftovers');
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			assert.equal(blissey.item, '');
+		});
 	});
 });

@@ -1,0 +1,428 @@
+{
+	"arachedge": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Sticky Web", "Brick Break", "Rock Blast", "Baton Pass"],
+				"abilities": ["Defiant"],
+				"items": ["Focus Sash"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Brick Break", "Rock Blast", "Lunge", "Baton Pass"],
+				"abilities": ["Defiant"],
+				"items": ["Choice Band", "Choice Scarf", "Life Orb"]
+			}
+		]
+	},
+	"arcawing": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Spirit Break", "Fire Lash", "Recover", "Defog"],
+				"abilities": ["Magic Bounce"],
+				"items": ["Leftovers"]
+			}
+		]
+	},
+	"blastose": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Scald", "Spirit Break", "Glitzy Glow", "Heal Bell"],
+				"abilities": ["Soul-Heart"],
+				"items": ["Leftovers"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Scald", "Glitzy Glow", "Baton Pass", "Aqua Ring"],
+				"abilities": ["Soul-Heart"],
+				"items": ["Leftovers"]
+			}
+		]
+	},
+	"caleflash": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Leech Seed", "Fire Lash", "Recover", "Scald", "Yawn"],
+				"abilities": ["Defiant"],
+				"items": ["Heavy-Duty Boots"]
+			}
+		]
+	},
+	"charmera": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Fire Lash", "Draco Meteor", "Sludge Bomb", "Facade"],
+				"abilities": ["Drought"],
+				"items": ["Heavy-Duty Boots", "Choice Specs", "Choice Scarf"]
+			},
+			{
+				"role": "Fast Support",
+				"movepool": ["Fire Lash", "Draco Meteor", "Sludge Bomb", "Defog"],
+				"abilities": ["Multiscale"],
+				"items": ["Heavy-Duty Boots"]
+			}
+		]
+	},
+	"chlorofill": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Apple Acid", "Facade", "Leech Seed", "Baton Pass"],
+				"abilities": ["Quick Feet"],
+				"items": ["Flame Orb"]
+			}
+		]
+	},
+	"corrozen": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Frost Breath", "Sludge Bomb", "Brick Break", "Facade"],
+				"abilities": ["Anger Shell"],
+				"items": ["Sitrus Berry", "Weakness Policy", "Heavy-Duty Boots"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Sludge Bomb", "Frost Breath", "Defog", "Aqua Ring"],
+				"abilities": ["Unnerve"],
+				"items": ["Black Sludge"]
+			}
+		]
+	},
+	"dracord": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Facade", "Draco Meteor", "Brick Break", "Recycle"],
+				"abilities": ["Galvanize"],
+				"items": ["Sitrus Berry"]
+			}
+		]
+	},
+	"entophasm": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Sticky Web", "Lunge", "Hex", "Sludge Bomb"],
+				"abilities": ["Contrary"],
+				"items": ["Heavy-Duty Boots"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Lunge", "Spirit Break", "Sludge Bomb", "Hex"],
+				"abilities": ["Illusion"],
+				"items": ["Life Orb"]
+			}
+		]
+	},
+	"faefloss": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Spirit Break", "Lunge", "Brick Break", "Discharge"],
+				"abilities": ["Fluffy"],
+				"items": ["Life Orb"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Spirit Break", "Brick Break", "Yawn", "Baton Pass"],
+				"abilities": ["Fluffy"],
+				"items": ["Leftovers"]
+			}
+		]
+	},
+	"gen6gar": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Sludge Bomb", "Hex", "Baddy Bad", "Defog", "Yawn"],
+				"abilities": ["Levitate"],
+				"items": ["Black Sludge"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Hex", "Sludge Bomb", "Baddy Bad", "Yawn"],
+				"abilities": ["Levitate"],
+				"items": ["Choice Specs", "Choice Scarf", "Life Orb"]
+			}
+		]
+	},
+	"horspiral": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Gyro Ball", "Fire Lash", "Brick Break", "Lunge"],
+				"abilities": ["Speed Boost"],
+				"items": ["Choice Band"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Gyro Ball", "Stealth Rock", "Brick Break", "Discharge"],
+				"abilities": ["Speed Boost"],
+				"items": ["Leftovers"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Fire Lash", "Brick Break", "Lunge", "Facade"],
+				"abilities": ["Speed Boost"],
+				"items": ["Weakness Policy"]
+			}
+		]
+	},
+	"moleison": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Thousand Waves", "Sludge Bomb", "Leech Seed", "Baddy Bad"],
+				"abilities": ["Poison Heal"],
+				"items": ["Toxic Orb"]
+			}
+		]
+	},
+	"morterror": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Recover", "Rock Blast", "Baton Pass", "Yawn"],
+				"abilities": ["Sand Stream"],
+				"items": ["Leftovers"]
+			}
+		]
+	},
+	"mysterical": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Glitzy Glow", "Spirit Break", "Baddy Bad", "Yawn"],
+				"abilities": ["Rattled"],
+				"items": ["Life Orb", "Choice Specs", "Choice Scarf"]
+			}
+		]
+	},
+	"noxurchin": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Sludge Bomb", "Leech Seed", "Baton Pass", "Heal Block"],
+				"abilities": ["Poison Point"],
+				"items": ["Black Sludge"]
+			}
+		]
+	},
+	"penguini": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Scald", "Frost Breath", "Brick Break", "Recycle"],
+				"abilities": ["Clear Body"],
+				"items": ["Sitrus Berry"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Scald", "Aqua Ring", "Baton Pass", "Recycle"],
+				"abilities": ["Misty Surge"],
+				"items": ["Sitrus Berry"]
+			}
+		]
+	},
+	"pilloflight": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Acrobatics", "Brick Break", "Spirit Break", "Facade"],
+				"abilities": ["Unburden"],
+				"items": ["Red Card"]
+			}
+		]
+	},
+	"pristycle": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Frost Breath", "Glitzy Glow", "Recover", "Defog", "Yawn"],
+				"abilities": ["Snow Warning"],
+				"items": ["Heavy-Duty Boots"]
+			}
+		]
+	},
+	"pyrokinestone": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Fire Lash", "Lunge", "Rock Blast", "Stealth Rock"],
+				"abilities": ["Sheer Force"],
+				"items": ["Life Orb"]
+			}
+		]
+	},
+	"rottern": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Sludge Bomb", "Apple Acid", "Recover", "Leech Seed"],
+				"abilities": ["Toxic Debris"],
+				"items": ["Black Sludge"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Sludge Bomb", "Apple Acid", "Recover", "Heal Block"],
+				"abilities": ["Toxic Debris"],
+				"items": ["Life Orb"]
+			}
+		]
+	},
+	"salamenace": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Draco Meteor", "Scald", "Frost Breath", "Recover"],
+				"abilities": ["Intimidate"],
+				"items": ["Choice Specs", "Choice Scarf", "Life Orb", "Heavy-Duty Boots"]
+			},
+			{
+				"role": "Setup Sweeper",
+				"movepool": ["Acrobatics", "Lunge", "Facade", "Recover"],
+				"abilities": ["Moxie"],
+				"items": ["Salac Berry"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Draco Meteor", "Scald", "Defog", "Recover"],
+				"abilities": ["Intimidate"],
+				"items": ["Heavy-Duty Boots"]
+			}
+		]
+	},
+	"shoreyuken": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Support",
+				"movepool": ["Defog", "Brick Break", "Rock Blast", "Baton Pass"],
+				"abilities": ["Weak Armor"],
+				"items": ["Heavy-Duty Boots"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Rock Blast", "Lunge", "Brick Break", "Baton Pass"],
+				"abilities": ["Hustle"],
+				"items": ["Choice Band", "Choice Scarf", "Life Orb"]
+			}
+		]
+	},
+	"slunkey": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Stealth Rock", "Lunge", "Sludge Bomb", "Recycle"],
+				"abilities": ["Cheek Pouch"],
+				"items": ["Sitrus Berry"]
+			}
+		]
+	},
+	"tapuwaka": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Gyro Ball", "Spirit Break", "Defog", "Heal Bell"],
+				"abilities": ["Screen Cleaner"],
+				"items": ["Leftovers"]
+			}
+		]
+	},
+	"terascatter": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Stealth Rock", "Thousand Waves", "Rock Blast", "Facade"],
+				"abilities": ["Guts"],
+				"items": ["Flame Orb"]
+			}
+		]
+	},
+	"tricotree": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Apple Acid", "Baddy Bad", "Leech Seed", "Sludge Bomb"],
+				"abilities": ["Harvest"],
+				"items": ["Sitrus Berry"]
+			}
+		]
+	},
+	"tropisaur": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Apple Acid", "Scald", "Draco Meteor", "Baton Pass"],
+				"abilities": ["Drizzle"],
+				"items": ["Choice Specs"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Draco Meteor", "Apple Acid", "Scald", "Leech Seed", "Baton Pass"],
+				"abilities": ["Drizzle"],
+				"items": ["Leftovers"]
+			}
+		]
+	},
+	"unnamedelectricpossum": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Discharge", "Glitzy Glow", "Scald", "Fire Lash", "Recover"],
+				"abilities": ["Run Away"],
+				"items": ["Heavy-Duty Boots", "Life Orb"]
+			}
+		]
+	},
+	"vrooosh": {
+		"level": 80,
+		"sets": [
+			{
+				"role": "Bulky Support",
+				"movepool": ["Gyro Ball", "Sludge Bomb", "Defog", "Baton Pass"],
+				"abilities": ["Filter", "Wind Rider", "Neutralizing Gas"],
+				"items": ["Leftovers"]
+			},
+			{
+				"role": "Fast Support",
+				"movepool": ["Acrobatics", "Defog", "Sludge Bomb", "Baton Pass"],
+				"abilities": ["Filter", "Wind Rider", "Neutralizing Gas"],
+				"items": ["Heavy-Duty Boots"]
+			}
+		]
+	}
+}

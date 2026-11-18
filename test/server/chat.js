@@ -1,8 +1,91 @@
 'use strict';
 
 const assert = require('assert').strict;
+const { TLfor, TLadd } = require('../../dist/sim/dex-text');
 
 describe('Chat', () => {
+	before(async () => {
+		if (!Chat.translationsLoaded) await Chat.loadTranslations();
+	});
+
+	it('should convert interface language preferences to game text language codes', () => {
+		assert.equal(Chat.getDexLanguage('japanese'), 'ja');
+		assert.equal(Chat.getDexLanguage('simplifiedchinese'), 'zh-cn');
+		assert.equal(Chat.getDexLanguage('portuguese'), 'pt');
+	});
+
+	it('should display both English and native language names', () => {
+		assert.equal(Chat.getLanguageName('japanese'), '日本語 (Japanese)');
+		assert.equal(Chat.getLanguageName('english'), 'English');
+	});
+
+	it('should resolve language names and directory codes', () => {
+		assert.equal(Chat.getLanguageID('Japanese'), 'japanese');
+		assert.equal(Chat.getLanguageID('ja'), 'japanese');
+		assert.equal(Chat.getLanguageID('zh-cn'), 'simplifiedchinese');
+		assert.equal(Chat.getLanguageID('zh_tw'), 'traditionalchinese');
+		assert.equal(Chat.getLanguageID('not-a-language'), null);
+	});
+
+	it('should translate Dex objects with a Translator', () => {
+		const translate = TLfor('ja');
+		assert.equal(translate(Dex.items.get('Leftovers')), 'たべのこし');
+		assert.equal(translate(Dex.moves.get('Tackle')), 'たいあたり');
+		assert.equal(translate(Dex.species.get('Pikachu')), 'ピカチュウ');
+		const text = Dex.loadTextData('ja');
+		for (const [property, table] of Object.entries({
+			type: 'TypeNames',
+			nature: 'NatureNames',
+			gender: 'GenderNames',
+			egggroup: 'EggGroupNames',
+			color: 'ColorNames',
+			status: 'StatusNames',
+			target: 'TargetNames',
+			stat: 'StatNames',
+			statShort: 'StatShortNames',
+			statMedium: 'StatMediumNames',
+		})) {
+			assert.deepEqual(translate[property], text[table]);
+		}
+		assert.equal(translate.tag.physical, text.Tags.physical.name);
+		assert.equal(translate.tag.contact, text.Tags.contact.name);
+	});
+
+	it('should reorder named UI translation placeholders', () => {
+		TLadd('en-afd', [{
+			'First {FIRST} then {SECOND}': 'Second {SECOND} before {FIRST}',
+		}]);
+		try {
+			const first = 'one';
+			const second = 'two';
+			assert.equal(TLfor('en-afd')`First ${first} then ${second}`, 'Second two before one');
+		} finally {
+			TLadd('en-afd', [{ 'First {FIRST} then {SECOND}': null }]);
+		}
+	});
+
+	it('should load flat UI translation catalogs', () => {
+		const uiText = require('../../dist/translations/ja/core-commands').translations;
+		const entry = Object.entries(uiText).find(([source, translation]) => (
+			typeof translation === 'string' && !source.includes('{')
+		));
+		assert(entry);
+		assert.equal(TLfor('ja')(entry[0]), entry[1]);
+	});
+
+	it('should localize data HTML', () => {
+		const move = Dex.moves.get('Close Combat');
+		const text = Dex.text.get(move, 'ja');
+		const description = text.shortDesc || text.desc;
+		const html = Chat.getDataMoveHTML(move, { language: 'japanese' });
+		assert(html.includes(text.name));
+		assert(html.includes(description));
+		const detailsHTML = Chat.getDataMoveHTML(move, {
+			language: 'japanese', hideShortDescription: true,
+		});
+		assert(!detailsHTML.includes(description));
+	});
+
 	it('should not infinite loop formatText', () => {
 		assert.equal(
 			Chat.formatText(`<\\\\||^^**~~\`\`https://a/Olaaaseusbobalhos\`\`~~**^^||\\\\`),

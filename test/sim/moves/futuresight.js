@@ -40,25 +40,6 @@ describe('Future Sight', () => {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
-	it(`[Gen 2] should damage in two turns, ignoring Protect`, () => {
-		battle = common.gen(2).createBattle([[
-			{ species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent'] },
-		], [
-			{ species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent'] },
-		]]);
-
-		const sneasel = battle.p1.active[0];
-		const girafarig = battle.p2.active[0];
-		battle.makeChoices('move sweetscent', 'move sweetscent'); // counteract imperfect accuracy
-		battle.makeChoices('move futuresight', 'move futuresight');
-		assert.fullHP(girafarig);
-		battle.makeChoices('auto', 'auto');
-		assert.fullHP(girafarig);
-		battle.makeChoices('auto', 'move Protect');
-		assert.false.fullHP(sneasel);
-		assert.false.fullHP(girafarig);
-	});
-
 	it(`should not double Stomping Tantrum for exiting normally`, () => {
 		battle = common.createBattle([[
 			{ species: 'Wynaut', moves: ['futuresight', 'stompingtantrum'] },
@@ -134,23 +115,6 @@ describe('Future Sight', () => {
 		assert.equal(wynaut.hp, wynaut.maxhp - Math.floor(wynaut.maxhp / 10), `Wynaut should take Life Orb recoil on Future Sight's damaging turn`);
 		const damage = mew.maxhp - mew.hp;
 		assert.bounded(damage, [30, 35]); // 22-27 if Life Orb was not applied
-	});
-
-	it(`[Gen 4] should not be affected by Life Orb`, () => {
-		battle = common.gen(4).createBattle([[
-			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
-		], [
-			{ species: 'mew', ability: 'noguard', moves: ['sleeptalk'] },
-		]]);
-
-		battle.makeChoices();
-		const wynaut = battle.p1.active[0];
-		const mew = battle.p2.active[0];
-		battle.makeChoices();
-		battle.makeChoices();
-		assert.fullHP(wynaut, `Wynaut should not have taken any damage`);
-		const damage = mew.maxhp - mew.hp;
-		assert.bounded(damage, [21, 25]); // [27-32] if Life Orb was applied
 	});
 
 	it(`should not be affected by Life Orb if not the original user`, () => {
@@ -417,5 +381,71 @@ describe('Future Sight', () => {
 		battle.makeChoices();
 		const wynaut = battle.p1.active[0];
 		assert.fullHP(wynaut);
+	});
+
+	it(`should not ignore Endure`, () => {
+		battle = common.createBattle([[
+			{ species: 'xatu', moves: ['futuresight', 'sleeptalk'] },
+		], [
+			{ species: 'toxicroak', ability: 'noguard', moves: ['sleeptalk', 'endure'] },
+		]]);
+
+		battle.makeChoices('move futuresight', 'move sleeptalk');
+		battle.makeChoices('move sleeptalk', 'move sleeptalk');
+		battle.makeChoices('move sleeptalk', 'move endure');
+		assert.equal(battle.p2.active[0].hp, 1);
+	});
+
+	describe(`[Gen 4]`, () => {
+		it(`should not be affected by Life Orb`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
+			], [
+				{ species: 'mew', ability: 'noguard', moves: ['sleeptalk'] },
+			]]);
+
+			battle.makeChoices();
+			const wynaut = battle.p1.active[0];
+			const mew = battle.p2.active[0];
+			battle.makeChoices();
+			battle.makeChoices();
+			assert.fullHP(wynaut, `Wynaut should not have taken any damage`);
+			const damage = mew.maxhp - mew.hp;
+			assert.bounded(damage, [21, 25]); // [27-32] if Life Orb was applied
+		});
+
+		it(`should ignore Endure`, () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'xatu', moves: ['futuresight', 'sleeptalk'] },
+			], [
+				{ species: 'toxicroak', ability: 'noguard', level: 1, moves: ['sleeptalk', 'endure'] },
+			]]);
+
+			battle.makeChoices('move futuresight', 'move sleeptalk');
+			battle.makeChoices('move sleeptalk', 'move sleeptalk');
+			battle.makeChoices('move sleeptalk', 'move endure');
+			assert.fainted(battle.p2.active[0]);
+		});
+	});
+
+	describe(`[Gen 2]`, () => {
+		it(`should damage in two turns, ignoring Protect`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent'] },
+			], [
+				{ species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent'] },
+			]]);
+
+			const sneasel = battle.p1.active[0];
+			const girafarig = battle.p2.active[0];
+			battle.makeChoices('move sweetscent', 'move sweetscent'); // counteract imperfect accuracy
+			battle.makeChoices('move futuresight', 'move futuresight');
+			assert.fullHP(girafarig);
+			battle.makeChoices('auto', 'auto');
+			assert.fullHP(girafarig);
+			battle.makeChoices('auto', 'move Protect');
+			assert.false.fullHP(sneasel);
+			assert.false.fullHP(girafarig);
+		});
 	});
 });

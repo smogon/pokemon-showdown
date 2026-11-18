@@ -26,8 +26,8 @@ function appendCause(error: any) {
 	if (typeof error.cause === 'string') {
 		stack += `\n\n[cause]: ${error.cause}\n`;
 	} else {
-		stack += `\n\n[cause]: ${(error.cause as Error).message}\n`;
-		stack += `  ${(error.cause as Error)?.stack}`;
+		stack += `\n\n[cause]: ${(error.cause as Error)?.message}\n`;
+		stack += `  ${(error.cause as Error)?.stack ?? error.cause}`;
 	}
 	return stack;
 }
@@ -61,7 +61,7 @@ export function crashlogger(
 		out.write(`\n[${Date.now()}] ${stack}\n`);
 		out.end();
 	}).on('error', (err: Error) => {
-		console.error(`\nSUBCRASH: ${err.stack}\n`);
+		console.error(`\nSUBCRASH: ${err.stack ?? err}\n`);
 	});
 
 	const emailOpts = emailConfig || (global as any).Config?.crashguardemail;

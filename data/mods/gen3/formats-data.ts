@@ -195,7 +195,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	poliwhirl: {
-		tier: "ZUBL",
+		tier: "ZU",
 	},
 	poliwrath: {
 		tier: "RU",
@@ -231,7 +231,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	tentacool: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	tentacruel: {
 		tier: "UU",
@@ -261,7 +261,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	magnemite: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	magneton: {
 		tier: "OU",
@@ -303,13 +303,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	onix: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	steelix: {
 		tier: "UUBL",
 	},
 	drowzee: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	hypno: {
 		tier: "RU",
@@ -360,7 +360,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	rhyhorn: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	rhydon: {
 		tier: "UUBL",
@@ -468,7 +468,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "(OU)",
 	},
 	omanyte: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	omastar: {
 		tier: "UU",
@@ -561,7 +561,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	chinchou: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	lanturn: {
 		tier: "UU",
@@ -618,7 +618,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	yanma: {
-		tier: "ZUBL",
+		tier: "ZU",
 	},
 	wooper: {
 		tier: "LC",
@@ -684,7 +684,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	magcargo: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	swinub: {
 		tier: "LC",
@@ -711,7 +711,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	houndour: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	houndoom: {
 		tier: "UUBL",
@@ -732,7 +732,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	raikou: {
-		tier: "(OU)",
+		tier: "OU",
 	},
 	entei: {
 		tier: "UUBL",
@@ -762,7 +762,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	grovyle: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	sceptile: {
 		tier: "UUBL",
@@ -789,7 +789,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	mightyena: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	zigzagoon: {
 		tier: "NFE",
@@ -879,7 +879,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RUBL",
 	},
 	shedinja: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	whismur: {
 		tier: "LC",
@@ -915,7 +915,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	lairon: {
-		tier: "ZUBL",
+		tier: "PU",
 	},
 	aggron: {
 		tier: "RU",
@@ -960,7 +960,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	wailmer: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	wailord: {
 		tier: "NU",
@@ -1086,7 +1086,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	snorunt: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	glalie: {
 		tier: "NUBL",
@@ -1140,7 +1140,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "(OU)",
 	},
 	registeel: {
-		tier: "UUBL",
+		tier: "OU",
 	},
 	latias: {
 		tier: "Uber",

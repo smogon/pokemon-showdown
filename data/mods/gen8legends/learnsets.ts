@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 
 export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 	pikachu: {
