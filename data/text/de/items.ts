@@ -1,219 +1,257 @@
 export const ItemsText: { [id: IDEntry]: ItemText } = {
 	abilityshield: {
 		name: "Fähigkeitenschild",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Die Fähigkeit des Trägers kann nicht geändert, aufgehoben oder ignoriert werden.", // NEEDS QC
 
 		block: "  Die Fähigkeit von {POKEMON} ist dank der Wirkung des Items Fähigkeitenschild geschützt!",
 	},
 	abomasite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Rexblisarnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Rexblisar als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	absolite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Absolnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Absol als Träger im Kampf die Mega-Entwicklung zu Mega-Absol.", // NEEDS QC
 	},
 	absolitez: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Absolnit Z",
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Ermöglicht Absol als Träger im Kampf die Mega-Entwicklung zu Mega-Absol Z.", // NEEDS QC
 	},
 	absorbbulb: {
 		name: "Knolle",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Sp.-Ang., wenn der Träger von einer Wasser-Attacke getroffen wird. Einmalig.", // NEEDS QC
 	},
 	adamantcrystal: {
 		name: "Adamantkristall",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Dialga, haben seine Stahl- und Drachen-Attacken 1,2-fache Stärke.", // NEEDS QC
 	},
 	adamantorb: {
 		name: "Adamant-Orb",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Dialga, haben seine Stahl- und Drachen-Attacken 1,2-fache Stärke.", // NEEDS QC
 	},
 	adrenalineorb: {
-		name: "Zitterorb",
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Zitter-Orb", // renamed in SV (SwSh/PLA: Zitterorb)
+		grammar: "ms",
+		shortDesc: "+1 Initiative, wenn der Träger von Bedroher betroffen wird. Einmalig.", // NEEDS QC
 	},
 	aerodactylite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Aerodactylonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Aerodactyl als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	aggronite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Stollossnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Stolloss als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	aguavberry: {
 		name: "Gauvebeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bei max. 1/4 KP: heilt 1/3 der max. KP; verwirrt bei -Sp.-Vert.-Wesen. Einmalig.", // NEEDS QC
 		gen7: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/4 KP: heilt 1/2 der max. KP; verwirrt bei -Sp.-Vert.-Wesen. Einmalig.", // NEEDS QC
 		},
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/2 KP: heilt 1/8 der max. KP; verwirrt bei -Sp.-Vert.-Wesen. Einmalig.", // NEEDS QC
 		},
 	},
 	airballoon: {
 		name: "Luftballon",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Der Träger ist immun gegen Boden-Attacken. Platzt, wenn er getroffen wird.", // NEEDS QC
 
 		start: "  {POKEMON} gerät durch den Luftballon in die Schwebe!",
 		end: "  Der Luftballon von {POKEMON} ist geplatzt!",
 	},
 	alakazite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Simsalanit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Simsala als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	aloraichiumz: {
 		name: "A-Raichunium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Alola Raichu mit Donnerblitz kann damit Blitz-Wellenritt einsetzen.", // NEEDS QC
 	},
 	altarianite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Altarianit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Altaria als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	ampharosite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Ampharosnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Ampharos als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	apicotberry: {
 		name: "Apikobeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Sp.-Vert. bei 1/4 der maximalen KP oder weniger. Einmalig.", // NEEDS QC
 	},
 	armorfossil: {
 		name: "Panzerfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Schilterus wiederbelebt werden.", // NEEDS QC
 	},
 	aspearberry: {
 		name: "Wilbirbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Heilt den Träger von Einfrieren. Einmalig.", // NEEDS QC
 	},
 	assaultvest: {
 		name: "Offensivweste",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Sp.-Vert. des Trägers ×1,5, aber er kann nur schädigende Attacken wählen.", // NEEDS QC
 	},
 	audinite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Ohrdochnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Ohrdoch als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	auspiciousarmor: {
 		name: "Glorienrüstung",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Knarbon zu Crimanzo, wenn sie eingesetzt wird.", // NEEDS QC
 	},
 	babiriberry: {
 		name: "Babiribeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Stahl-Attacke. Einmalig.", // NEEDS QC
 	},
 	banettite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Banetteonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Banette als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	barbaracite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Thanathoranit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Thanathora als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	baxcalibrite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Espinodonit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Espinodon als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	beastball: {
 		name: "Ultraball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Spezialball, der zum Fangen von Ultrabestien entwickelt wurde.", // NEEDS QC
 	},
 	beedrillite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Bibornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Bibor als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	belueberry: {
 		name: "Myrtilbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	berryjuice: {
 		name: "Beerensaft",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		classified: {
+			name: "Becher Beerensaft",
+			grammar: "ms",
+		},
+		shortDesc: "Stellt bei halben KP oder weniger 20 KP wieder her. Einmalig.", // NEEDS QC
 	},
 	berrysweet: {
 		name: "Zucker-Beere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Hokumil zu Pokusan bei einer Drehung mit dem Item.", // NEEDS QC
 	},
 	bignugget: {
 		name: "Riesennugget",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Ein großes Nugget aus reinem Gold, das prächtig glänzt.", // NEEDS QC
 	},
 	bigroot: {
 		name: "Großwurzel",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Der Träger erhält 1,3-fache KP durch Absorber-Attacken, Wasserring, Verwurzler usw.", // NEEDS QC
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "1,3× KP durch Absorber-Attacken, Wasserring, Verwurzler und Egelsamen.", // NEEDS QC
 		},
 	},
 	bindingband: {
 		name: "Klammerband",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Klammer-Attacken des Trägers verursachen 1/6 statt 1/8 der max. KP pro Runde.", // NEEDS QC
 	},
 	blackbelt: {
 		name: "Schwarzgurt",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Kampf-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Kampf-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	blacksludge: {
 		name: "Giftschleim",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Klumpen Giftschleim",
+			grammar: "ms",
+		},
+		shortDesc: "Pro Runde: Gift-Pokémon heilen 1/16 der max. KP; andere verlieren 1/8.", // NEEDS QC
 
-		heal: "  Giftschleim füllt einige KP von {POKEMON} auf!",
+		heal: "  Giftschleim von {POKEMON} füllt einige KP auf!",
 	},
 	blackglasses: {
 		name: "Schattenbrille",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Unlicht-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Unlicht-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	blastoisinite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Turtoknit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Turtok als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	blazikenite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Lohgocknit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Lohgock als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	blueorb: {
 		name: "Blauer Edelstein",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Löst bei Kyogre als Träger im Kampf die Protomorphose aus.", // NEEDS QC
 	},
 	blukberry: {
 		name: "Morbbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	blunderpolicy: {
 		name: "Fehlschlagschutz",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		classified: {
+			name: "Exemplar Fehlschlagschutz",
+			grammar: "ns",
+		},
+		shortDesc: "Verfehlt der Träger wegen der Genauigkeit: +2 Initiative. Einmalig.", // NEEDS QC
 	},
 	boosterenergy: {
 		name: "Energiekapsel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Aktiviert die Fähigkeiten Paläosynthese oder Quantenantrieb. Einmalig.", // NEEDS QC
 	},
 	bottlecap: {
 		name: "Silberkronkorken",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Für Spezialtraining: Ein Statuswert wird mit DV 31 berechnet.", // NEEDS QC
 	},
 	brightpowder: {
 		name: "Blendpuder",
@@ -222,43 +260,48 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Säckchen Blendpuder",
 			grammar: "ns",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Die Genauigkeit von Attacken gegen den Träger wird mit 0,9 multipliziert.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Ein Angriff gegen den Träger verliert 20 seiner Genauigkeit von 255.", // NEEDS QC
 		},
 	},
 	buggem: {
 		name: "Käferjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Käfer-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Käfer-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	buginiumz: {
 		name: "Insectium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Käfer eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	bugmemory: {
 		name: "Käfer-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Käfer.", // NEEDS QC
 	},
 	burndrive: {
 		name: "Flammenmodul",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Techblaster des Trägers ist vom Typ Feuer.", // NEEDS QC
 	},
 	cameruptite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Cameruptnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Camerupt als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	cellbattery: {
 		name: "Akku",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "+1 Angriff, wenn der Träger von einer Elektro-Attacke getroffen wird. Einmalig.", // NEEDS QC
 	},
 	chandelurite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Skelabranit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Skelabra als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	charcoal: {
 		name: "Holzkohle",
@@ -267,491 +310,564 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Stück Holzkohle",
 			grammar: "ns",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Feuer-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Feuer-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	charizarditex: {
-		name: null, // NEEDS TRANSLATION
+		name: "Gluraknit X",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Glurak als Träger im Kampf die Mega-Entwicklung zu Mega-Glurak X.", // NEEDS QC
 	},
 	charizarditey: {
-		name: null, // NEEDS TRANSLATION
+		name: "Gluraknit Y",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Glurak als Träger im Kampf die Mega-Entwicklung zu Mega-Glurak Y.", // NEEDS QC
 	},
 	chartiberry: {
 		name: "Chiaribeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Gesteins-Attacke. Einmalig.", // NEEDS QC
 	},
 	cheriberry: {
 		name: "Amrenabeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Heilt den Träger von Paralyse. Einmalig.", // NEEDS QC
 	},
 	cherishball: {
 		name: "Jubelball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein seltener Ball, der zu Ehren eines besonderen Anlasses gefertigt wurde.", // NEEDS QC
 	},
 	chesnaughtite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Brigaronit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Brigaron als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	chestoberry: {
 		name: "Maronbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Weckt den Träger, wenn er schläft. Einmalig.", // NEEDS QC
 	},
 	chilanberry: {
 		name: "Latchibeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer Normal-Attacke. Einmalig.", // NEEDS QC
 	},
 	chilldrive: {
 		name: "Gefriermodul",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Techblaster des Trägers ist vom Typ Eis.", // NEEDS QC
 	},
 	chimechite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Palimpalimonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Palimpalim als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	chippedpot: {
 		name: "Löchrige Kanne",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Original-Fatalitee zu Original-Mortipot, wenn sie eingesetzt wird.", // NEEDS QC
 	},
 	choiceband: {
 		name: "Wahlband",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Angriff des Trägers ×1,5, aber er kann nur seine erste Attacke wählen.", // NEEDS QC
 	},
 	choicescarf: {
 		name: "Wahlschal",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Initiative des Trägers ×1,5, aber er kann nur seine erste Attacke wählen.", // NEEDS QC
 	},
 	choicespecs: {
 		name: "Wahlbrille",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Sp.-Ang. des Trägers ×1,5, aber er kann nur seine erste Attacke wählen.", // NEEDS QC
 	},
 	chopleberry: {
 		name: "Rospelbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Kampf-Attacke. Einmalig.", // NEEDS QC
 	},
 	clawfossil: {
 		name: "Klauenfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Anorith wiederbelebt werden.", // NEEDS QC
 	},
 	clearamulet: {
 		name: "Neutralschmuck",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Exemplar Neutralschmuck",
+			grammar: "ns",
+		},
+		shortDesc: "Hindert andere Pokémon daran, die Statuswerte des Trägers zu senken.", // NEEDS QC
 
 		block: "  Neutralschmuck verhindert, dass die Statuswerte von {POKEMON} gesenkt werden!",
 	},
 	clefablite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Pixinit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Pixi als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	cloversweet: {
 		name: "Zucker-Kleeblatt",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Entwickelt Hokumil zu Pokusan bei einer Drehung mit dem Item.", // NEEDS QC
 	},
 	cobaberry: {
 		name: "Kobabeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Flug-Attacke. Einmalig.", // NEEDS QC
 	},
 	colburberry: {
 		name: "Burleobeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Unlicht-Attacke. Einmalig.", // NEEDS QC
 	},
 	cornerstonemask: {
 		name: "Fundamentmaske",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Fundamentmaske-Ogerpon: 1,2-fache Stärke; Erinnerungskraft beim Terakristallisieren.", // NEEDS QC
 	},
 	cornnberry: {
 		name: "Saimbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	coverfossil: {
 		name: "Schildfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Galapaflos wiederbelebt werden.", // NEEDS QC
 	},
 	covertcloak: {
 		name: "Tarnumhang",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		desc: "Der Träger ist von den Sekundäreffekten der Attacken anderer Pokémon nicht betroffen. Verhindert werden Effekte mit einer Chance (selbst 100 %), zu paralysieren, einzuschläfern, einzufrieren, zu verbrennen, zu vergiften, zu verwirren, den Träger zurückschrecken zu lassen oder seine Statuswerte zu senken, sowie Ankerschuss, Schauderspruch, Schleuder, Psycholärm, Pökelsalz, Schattenfessel, Sirupbombe und Neck Strike. Der Effekt von Schaumserenade wird verhindert, wenn der Träger das einzige Ziel ist. Auch Sekundäreffekte durch King-Stein, Scharfzahn sowie die Fähigkeiten Giftgriff, Duftnote und Giftkette werden gegen den Träger verhindert.", // NEEDS QC
+		shortDesc: "Der Träger ignoriert die Sekundäreffekte der Attacken anderer Pokémon.", // NEEDS QC
 	},
 	crabominite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Krawellonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Krawell als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	crackedpot: {
 		name: "Rissige Kanne",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Fatalitee zu Mortipot, wenn sie eingesetzt wird.", // NEEDS QC
 	},
 	custapberry: {
 		name: "Eipfelbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bei max. 1/4 der KP handelt der Träger in seiner Prioritätsstufe zuerst. Einmalig.", // NEEDS QC
 
 		activate: "  Dank des Items Eipfelbeere kann {POKEMON} schneller handeln als sonst!",
 	},
 	damprock: {
 		name: "Nassbrocken",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Regentanz des Trägers hält 8 statt 5 Runden an.", // NEEDS QC
 	},
 	darkgem: {
 		name: "Unlichtjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Unlicht-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Unlicht-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	darkiniumz: {
 		name: "Noctium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Unlicht eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	darkmemory: {
 		name: "Unlicht-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Unlicht.", // NEEDS QC
 	},
 	darkranite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Darkrainit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Darkrai als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	dawnstone: {
 		name: "Funkelstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser besondere, glitzernde Stein hilft manchen Pokémon bei ihrer Entwicklung."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt männliche Kirlia zu Galagladi und weibliche Schneppke zu Frosdedje, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	decidiumz: {
 		name: "Silvarronium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Silvarro mit Schattenfessel kann damit Schatten-Pfeilregen einsetzen.", // NEEDS QC
 	},
 	deepseascale: {
-		name: "Abyssplatte",
+		name: "Abyssschuppe", // renamed in SV (SwSh/PLA: Abyssplatte)
+		grammar: "fs",
 		// Official flavor text: "Ein Item, das von Perlu getragen werden kann. Es schimmert pink und hebt die Spezial-Verteidigung."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Wenn der Träger Perlu ist, wird seine Spezial-Verteidigung verdoppelt. Entwickelt Perlu zu Saganabyss, wenn der Träger getauscht wird.", // NEEDS QC
+		shortDesc: "Ist der Träger Perlu, wird seine Sp.-Vert. verdoppelt.", // NEEDS QC
 	},
 	deepseatooth: {
 		name: "Abysszahn",
+		grammar: "ms",
 		// Official flavor text: "Ein Item, das von Perlu getragen werden kann. Es schimmert silbern und hebt den Spezial-Angriff."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Wenn der Träger Perlu ist, wird sein Spezial-Angriff verdoppelt. Entwickelt Perlu zu Aalabyss, wenn der Träger getauscht wird.", // NEEDS QC
+		shortDesc: "Ist der Träger Perlu, wird sein Sp.-Ang. verdoppelt.", // NEEDS QC
 	},
 	delphoxite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Fennexisnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Fennexis als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	destinyknot: {
 		name: "Fatumknoten",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Verliebt sich der Träger, verliebt sich auch das andere Pokémon.", // NEEDS QC
 	},
 	diancite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Diancienit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Diancie als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	diveball: {
 		name: "Tauchball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der besonders gut bei Pokémon wirkt, die unter Wasser leben.", // NEEDS QC
 	},
 	domefossil: {
 		name: "Domfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Kabuto wiederbelebt werden.", // NEEDS QC
 	},
 	dousedrive: {
 		name: "Aquamodul",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Techblaster des Trägers ist vom Typ Wasser.", // NEEDS QC
 	},
 	dracoplate: {
 		name: "Dracotafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Drachen-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Drache.", // NEEDS QC
 	},
 	dragalgite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Tandraknit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Tandrak als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	dragonfang: {
 		name: "Drachenzahn",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Drachen-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Drachen-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Kein Nutzen im Kampf.", // NEEDS QC
 		},
 	},
 	dragongem: {
 		name: "Drakojuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Drachen-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Drachen-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	dragoninite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Dragoranit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Dragoran als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	dragoniumz: {
 		name: "Dracium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Drache eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	dragonmemory: {
 		name: "Drachen-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Drache.", // NEEDS QC
 	},
 	dragonscale: {
-		name: "Drachenhaut",
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Drachenschuppe", // renamed in SV (SwSh/PLA: Drachenhaut)
+		grammar: "fs",
+		shortDesc: "Entwickelt Seemon zu Seedraking, wenn der Träger getauscht wird.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Drachen-Attacken des Trägers haben 1,1-fache Stärke. Entwickelt Seemon beim Tausch.", // NEEDS QC
 		},
 	},
 	drampanite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Sen-Longnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Sen-Long als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	dreadplate: {
 		name: "Furchttafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Unlicht-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Unlicht.", // NEEDS QC
 	},
 	dreamball: {
 		name: "Traumball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der das Fangen schlafender Pokémon erleichtert.", // NEEDS QC
 		gen7: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Ein Pokéball, der wie aus dem Nichts im Beutel im Kontaktebenenhain erscheint.", // NEEDS QC
 		},
 	},
 	dubiousdisc: {
 		name: "Dubiosdisc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Porygon2 zu Porygon-Z, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	durinberry: {
 		name: "Durinbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	duskball: {
 		name: "Finsterball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der das Fangen nachts oder in Höhlen erleichtert.", // NEEDS QC
 	},
 	duskstone: {
 		name: "Finsterstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser besondere, düstere Stein hilft manchen Pokémon bei ihrer Entwicklung."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Kramurx zu Kramshef, Traunfugil zu Traunmagil, Laternecto zu Skelabra und Duokles zu Durengard, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	earthplate: {
 		name: "Erdtafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Boden-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Boden.", // NEEDS QC
 	},
 	eelektrossite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Zapplarangonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Zapplarang als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	eeviumz: {
 		name: "Evolium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Evoli mit Zuflucht kann damit Macht der Neun einsetzen.", // NEEDS QC
 	},
 	ejectbutton: {
 		name: "Fluchtknopf",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Übersteht der Träger einen Treffer, wird er sofort ausgewechselt. Einmalig.", // NEEDS QC
 
 		end: "  {POKEMON} kommt dank des Fluchtknopfes zurück!",
 	},
 	ejectpack: {
 		name: "Fluchttasche",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Sinken die Statuswerte des Trägers, wird er ausgewechselt. Einmalig.", // NEEDS QC
 
 		end: "  {POKEMON} wird dank Fluchttasche ausgewechselt!",
 	},
 	electirizer: {
 		name: "Stromisierer",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Elektek zu Elevoltek, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	electricgem: {
 		name: "Elektrojuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Elektro-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Elektro-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	electricmemory: {
 		name: "Elektro-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Elektro.", // NEEDS QC
 	},
 	electricseed: {
 		name: "Elektro-Samen",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Auf einem Elektrofeld: +1 Verteidigung für den Träger. Einmalig.", // NEEDS QC
 	},
 	electriumz: {
 		name: "Voltium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Elektro eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	emboarite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Flambirexonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Flambirex als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	enigmaberry: {
 		name: "Enigmabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Stellt nach einem sehr effektiven Treffer 1/4 der max. KP wieder her. Einmalig.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Kein Nutzen im Kampf.", // NEEDS QC
 		},
 	},
 	eviolite: {
 		name: "Evolith",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms", // NEEDS QC
+		shortDesc: "Kann sich die Art des Trägers noch entwickeln, sind Vert. und Sp.-Vert. ×1,5.", // NEEDS QC
 	},
 	excadrite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Stalobornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Stalobor als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	expertbelt: {
 		name: "Expertengurt",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Sehr effektive Angriffe des Trägers verursachen 1,2-fachen Schaden.", // NEEDS QC
 	},
 	fairiumz: {
 		name: "Sylphium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Fee eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	fairyfeather: {
 		name: "Feendaune",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Fee-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 	},
 	fairygem: {
 		name: "Feenjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Fee-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 	},
 	fairymemory: {
 		name: "Feen-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Fee.", // NEEDS QC
 	},
 	falinksite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Legiosnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Legios als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	fastball: {
 		name: "Turboball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der das Fangen fluchtbereiter Pokémon erleichtert.", // NEEDS QC
 	},
 	feraligite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Impergatornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Impergator als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	fightinggem: {
 		name: "Kampfjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Kampf-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Kampf-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	fightingmemory: {
 		name: "Kampf-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Kampf.", // NEEDS QC
 	},
 	fightiniumz: {
 		name: "Battalium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Kampf eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	figyberry: {
 		name: "Giefebeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bei max. 1/4 KP: heilt 1/3 der max. KP; verwirrt bei -Ang.-Wesen. Einmalig.", // NEEDS QC
 		gen7: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/4 KP: heilt 1/2 der max. KP; verwirrt bei -Ang.-Wesen. Einmalig.", // NEEDS QC
 		},
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/2 KP: heilt 1/8 der max. KP; verwirrt bei -Ang.-Wesen. Einmalig.", // NEEDS QC
 		},
 	},
 	firegem: {
 		name: "Feuerjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Feuer-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Feuer-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	firememory: {
 		name: "Feuer-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Feuer.", // NEEDS QC
 	},
 	firestone: {
 		name: "Feuerstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er schimmert in den Farben Orange und Gelb."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Vulpix zu Vulnona, Fukano zu Arkani, Evoli zu Flamara und Grillmak zu Grillchita, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	firiumz: {
 		name: "Pyrium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Feuer eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	fistplate: {
 		name: "Fausttafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Kampf-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Kampf.", // NEEDS QC
 	},
 	flameorb: {
 		name: "Heiß-Orb",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Versucht am Ende jeder Runde, den Träger zu verbrennen.", // NEEDS QC
 	},
 	flameplate: {
 		name: "Feuertafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Feuer-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Feuer.", // NEEDS QC
 	},
 	floatstone: {
 		name: "Leichtstein",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Das Gewicht des Trägers wird halbiert.", // NEEDS QC
 	},
 	floettite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Floetteonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Ewigblütler-Floette als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	flowersweet: {
 		name: "Zucker-Blume",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Hokumil zu Pokusan bei einer Drehung mit dem Item.", // NEEDS QC
 	},
 	flyinggem: {
 		name: "Flugjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Flug-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Flug-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	flyingmemory: {
 		name: "Flug-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Flug.", // NEEDS QC
 	},
 	flyiniumz: {
 		name: "Aerium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Flug eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	focusband: {
 		name: "Fokusband",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "10 % Chance, einen K.O.-Treffer mit 1 KP zu überstehen.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "~11,7 % Chance, einen K.O.-Treffer mit 1 KP zu überstehen.", // NEEDS QC
 		},
 
 		activate: "  {POKEMON} hält mithilfe des Items Fokusband durch!",
@@ -759,387 +875,454 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	focussash: {
 		name: "Fokusgurt",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Mit vollen KP übersteht der Träger einen K.O.-Treffer mit 1 KP. Einmalig.", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Mit vollen KP übersteht er alle Treffer eines Angriffs mit mind. 1 KP. Einmalig.", // NEEDS QC
 		},
 
 		end: "  {POKEMON} hält mithilfe des Items Fokusgurt durch!",
 	},
 	fossilizedbird: {
 		name: "Vogelfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann mit einem weiteren Fossil zu Lectragon oder Lecryodon werden.", // NEEDS QC
 	},
 	fossilizeddino: {
 		name: "Paddelfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann mit einem weiteren Fossil zu Pescryodon oder Lecryodon werden.", // NEEDS QC
 	},
 	fossilizeddrake: {
 		name: "Drachenfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann mit einem weiteren Fossil zu Lectragon oder Pescragon werden.", // NEEDS QC
 	},
 	fossilizedfish: {
 		name: "Fischfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann mit einem weiteren Fossil zu Pescragon oder Pescryodon werden.", // NEEDS QC
 	},
 	friendball: {
 		name: "Freundesball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der gefangene Pokémon zutraulicher macht.", // NEEDS QC
 	},
 	froslassite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Frosdedjenit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Frosdedje als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	fullincense: {
 		name: "Lahmrauch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Gefäß voll Lahmrauch",
+			grammar: "ns",
+		},
+		shortDesc: "Der Träger handelt in seiner Prioritätsstufe als Letzter.", // NEEDS QC
 	},
 	galaricacuff: {
 		name: "Galarnuss-Reif",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Galar Flegmon zu Galar Lahmus, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	galaricawreath: {
 		name: "Galarnuss-Kranz",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Galar Flegmon zu Galar-Laschoking, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	galladite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Galagladinit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Galagladi als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	ganlonberry: {
 		name: "Linganbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Verteidigung bei 1/4 der maximalen KP oder weniger. Einmalig.", // NEEDS QC
 	},
 	garchompite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Knakracknit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Knakrack als Träger im Kampf die Mega-Entwicklung zu Mega-Knakrack.", // NEEDS QC
 	},
 	garchompitez: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Knakracknit Z",
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Ermöglicht Knakrack als Träger im Kampf die Mega-Entwicklung zu Mega-Knakrack Z.", // NEEDS QC
 	},
 	gardevoirite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Guardevoirnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Guardevoir als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	gengarite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Gengarnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Gengar als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	ghostgem: {
 		name: "Geisterjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Geist-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Geist-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	ghostiumz: {
 		name: "Phantomium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Geist eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	ghostmemory: {
 		name: "Geister-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Geist.", // NEEDS QC
 	},
 	glalitite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Firnontornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Firnontor als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	glimmoranite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Lumifloranit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Lumiflora als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	goldbottlecap: {
 		name: "Goldkronkorken",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Für Spezialtraining: Alle Statuswerte werden mit DV 31 berechnet.", // NEEDS QC
 	},
 	golisopite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Tectassnit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Tectass als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	golurkite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Golgantesnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Golgantes als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	grassgem: {
 		name: "Pflanzenjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Pflanzen-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Pflanzen-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	grassiumz: {
 		name: "Botanium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Pflanze eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	grassmemory: {
 		name: "Pflanzen-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Pflanze.", // NEEDS QC
 	},
 	grassyseed: {
 		name: "Gras-Samen",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Auf einem Grasfeld: +1 Verteidigung für den Träger. Einmalig.", // NEEDS QC
 	},
 	greatball: {
 		name: "Superball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball mit höherer Fangrate als ein normaler Pokéball.", // NEEDS QC
 	},
 	greninjite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Quajutsunit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Quajutsu als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	grepaberry: {
 		name: "Labrusbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	gripclaw: {
 		name: "Griffklaue",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Klammer-Attacken des Trägers halten immer 7 Runden an.", // NEEDS QC
 	},
 	griseouscore: {
 		name: "Platinumkristall",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Giratina, haben seine Geist- und Drachen-Attacken 1,2-fache Stärke.", // NEEDS QC
 	},
 	griseousorb: {
 		name: "Platinum-Orb",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Giratina, haben seine Geist- und Drachen-Attacken 1,2-fache Stärke.", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Nur Giratina kann ihn tragen. Seine Geist- und Drachen-Attacken haben 1,2× Stärke.", // NEEDS QC
 		},
 	},
 	groundgem: {
 		name: "Bodenjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Boden-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Boden-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	groundiumz: {
 		name: "Terrium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Boden eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	groundmemory: {
 		name: "Boden-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Boden.", // NEEDS QC
 	},
 	gyaradosite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Garadosnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Garados als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	habanberry: {
 		name: "Terirobeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Drachen-Attacke. Einmalig.", // NEEDS QC
 	},
 	hardstone: {
 		name: "Granitstein",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Gesteins-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Gesteins-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	hawluchanite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Resladeronit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Resladero als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	healball: {
 		name: "Heilball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der KP und Status des gefangenen Pokémon heilt.", // NEEDS QC
 	},
 	hearthflamemask: {
 		name: "Ofenmaske",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Ofenmaske-Ogerpon: 1,2-fache Stärke; Erinnerungskraft beim Terakristallisieren.", // NEEDS QC
 	},
 	heatranite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Heatranit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Heatran als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	heatrock: {
 		name: "Heißbrocken",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Sonnentag des Trägers hält 8 statt 5 Runden an.", // NEEDS QC
 	},
 	heavyball: {
 		name: "Schwerball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball zum Fangen sehr schwerer Pokémon.", // NEEDS QC
 	},
 	heavydutyboots: {
 		name: "Plateauschuhe",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mp", // p; LZA itemname_classified "Paar Plateauschuhe"
+		classified: {
+			name: "Paar Plateauschuhe",
+			grammar: "ns",
+		},
+		shortDesc: "Beim Einwechseln ignoriert der Träger Fallen auf seiner Seite.", // NEEDS QC
 	},
 	helixfossil: {
 		name: "Helixfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Amonitas wiederbelebt werden.", // NEEDS QC
 	},
 	heracronite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Skarabornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Skaraborn als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	hondewberry: {
 		name: "Honmelbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	houndoominite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Hundemonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Hundemon als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	iapapaberry: {
 		name: "Yapabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bei max. 1/4 KP: heilt 1/3 der max. KP; verwirrt bei -Vert.-Wesen. Einmalig.", // NEEDS QC
 		gen7: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/4 KP: heilt 1/2 der max. KP; verwirrt bei -Vert.-Wesen. Einmalig.", // NEEDS QC
 		},
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/2 KP: heilt 1/8 der max. KP; verwirrt bei -Vert.-Wesen. Einmalig.", // NEEDS QC
 		},
 	},
 	icegem: {
 		name: "Eisjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Eis-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Eis-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	icememory: {
 		name: "Eis-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Eis.", // NEEDS QC
 	},
 	icestone: {
 		name: "Eisstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Schneeflockenmuster."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Alola Sandan zu Alola Sandamer, Alola Vulpix zu Alola Vulnona, Evoli zu Glaziola und Galar Flampion zu Galar-Flampivian, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "Entwickelt Alola Sandan zu Alola Sandamer und Alola Vulpix zu Alola Vulnona, wenn er eingesetzt wird.", // NEEDS QC
 		},
 	},
 	icicleplate: {
 		name: "Frosttafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Eis-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Eis.", // NEEDS QC
 	},
 	iciumz: {
 		name: "Glacium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Eis eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	icyrock: {
 		name: "Eisbrocken",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Schneelandschaft des Trägers hält 8 statt 5 Runden an.", // NEEDS QC
 		gen8: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Hagelsturm des Trägers hält 8 statt 5 Runden an.", // NEEDS QC
 		},
 	},
 	inciniumz: {
 		name: "Fuegronium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Fuegro mit Dark Lariat kann damit Hyper Dark Crusher einsetzen.", // NEEDS QC
 	},
 	insectplate: {
 		name: "Käfertafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Käfer-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Käfer.", // NEEDS QC
 	},
 	ironball: {
 		name: "Eisenkugel",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Träger am Boden, Initiative halbiert; Flug-Typen erleiden neutralen Boden-Schaden.", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die Initiative des Trägers wird halbiert und er verliert seine Flughöhe.", // NEEDS QC
 		},
 	},
 	ironplate: {
 		name: "Eisentafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Stahl-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Stahl.", // NEEDS QC
 	},
 	jabocaberry: {
 		name: "Jabocabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Physischer Treffer auf den Träger: Angreifer verliert 1/8 der max. KP. Einmalig.", // NEEDS QC
 	},
 	jawfossil: {
 		name: "Kieferfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Balgoras wiederbelebt werden.", // NEEDS QC
 	},
 	kangaskhanite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Kangamanit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Kangama als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	kasibberry: {
 		name: "Zitarzbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Geist-Attacke. Einmalig.", // NEEDS QC
 	},
 	kebiaberry: {
 		name: "Grarzbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Gift-Attacke. Einmalig.", // NEEDS QC
 	},
 	keeberry: {
 		name: "Akibeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Verteidigung, nachdem der Träger einen physischen Angriff erlitten hat. Einmalig.", // NEEDS QC
 	},
 	kelpsyberry: {
 		name: "Setangbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	kingsrock: {
 		name: "King-Stein",
 		grammar: "ms",
 		// Official flavor text: "Gibst du es einem Pokémon zum Tragen, lässt es mit seinem Angriff das Ziel gelegentlich zurückschrecken."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Attacken des Trägers, die das Ziel normalerweise nicht zurückschrecken lassen können, erhalten eine Chance von 10 %, es zurückschrecken zu lassen. Entwickelt Quaputzi zu Quaxo und Flegmon zu Laschoking, wenn der Träger getauscht wird.", // NEEDS QC
+		shortDesc: "Attacken ohne Zurückschreck-Chance erhalten eine 10-%-Chance darauf.", // NEEDS QC
 	},
 	kommoniumz: {
 		name: "Grandirasium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Grandiras mit Schuppenrasseln kann damit Rasselnder Seelentanz einsetzen.", // NEEDS QC
 	},
 	laggingtail: {
 		name: "Schwerschweif",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Der Träger handelt in seiner Prioritätsstufe als Letzter.", // NEEDS QC
 	},
 	lansatberry: {
 		name: "Lansatbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Gibt bei 1/4 der max. KP oder weniger den Effekt von Energiefokus. Einmalig.", // NEEDS QC
 	},
 	latiasite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Latiasnit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Latias als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	latiosite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Latiosnit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Latios als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	laxincense: {
 		name: "Laxrauch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Gefäß voll Laxrauch",
+			grammar: "ns",
+		},
+		shortDesc: "Die Genauigkeit von Attacken gegen den Träger wird mit 0,9 multipliziert.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die Genauigkeit von Attacken gegen den Träger wird mit 0,95 multipliziert.", // NEEDS QC
 		},
 	},
 	leafstone: {
 		name: "Blattstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blattmuster."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Duflor zu Giflor, Ultrigaria zu Sarzenia, Owei zu Kokowei oder Alola Kokowei, Evoli zu Folipurba, Blanas zu Tengulist und Vegimak zu Vegichita, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "Entwickelt Duflor zu Giflor, Ultrigaria zu Sarzenia, Owei zu Kokowei oder Alola Kokowei, Blanas zu Tengulist und Vegimak zu Vegichita, wenn er eingesetzt wird.", // NEEDS QC
 		},
 	},
 	leek: {
 		name: "Lauchstange",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Trägt es Porenta oder Lauchzelot: Volltrefferquote +2 Stufen.", // NEEDS QC
 	},
 	leftovers: {
 		name: "Überreste",
@@ -1148,41 +1331,43 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Portion Überreste",
 			grammar: "fs",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Der Träger stellt am Ende jeder Runde 1/16 seiner max. KP wieder her.", // NEEDS QC
 
-		heal: "  Überreste füllen einige KP von {POKEMON} auf!",
+		heal: "  Überreste von {POKEMON} füllt einige KP auf!",
 	},
 	leppaberry: {
 		name: "Jonagobeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Stellt der ersten Attacke mit 0 AP 10 AP wieder her. Einmalig.", // NEEDS QC
 
 		activate: "  Jonagobeere von {POKEMON} füllt AP von {MOVE} auf!",
 	},
 	levelball: {
 		name: "Levelball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball zum Fangen von Pokémon mit niedrigerem Level als das eigene.", // NEEDS QC
 	},
 	liechiberry: {
 		name: "Lydzibeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Angriff bei 1/4 der maximalen KP oder weniger. Einmalig.", // NEEDS QC
 	},
 	lifeorb: {
 		name: "Leben-Orb",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Angriffe des Trägers: 1,3-facher Schaden; er verliert danach 1/10 der max. KP.", // NEEDS QC
 
 		damage: "  {POKEMON} verliert einige KP!",
 	},
 	lightball: {
 		name: "Kugelblitz",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Trägt es Pikachu, werden sein Angriff und sein Sp.-Ang. verdoppelt.", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Trägt es Pikachu, wird die Stärke seiner Attacken verdoppelt.", // NEEDS QC
 		},
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Trägt es Pikachu, wird sein Spezial-Angriff verdoppelt.", // NEEDS QC
 		},
 	},
 	lightclay: {
@@ -1192,164 +1377,196 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Klumpen Lichtlehm",
 			grammar: "ms",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Auroraschleier, Lichtschild und Reflektor halten 8 statt 5 Runden an.", // NEEDS QC
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Lichtschild und Reflektor halten 8 statt 5 Runden an.", // NEEDS QC
 		},
 	},
 	loadeddice: {
 		name: "Gezinkter Würfel",
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		desc: "Attacken des Trägers, die normalerweise 2- bis 5-mal treffen, treffen 4- oder 5-mal. Wenn der erste Treffer gelingt, treffen Dreifachkick und Dreifach-Axel 3-mal und Mäuseplage trifft zufällig 4- bis 10-mal.", // NEEDS QC
+		shortDesc: "2-5-fach treffende Attacken treffen 4-5-mal; Mäuseplage 4-10-mal.", // NEEDS QC
 	},
 	lopunnite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Schlapornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Schlapor als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	loveball: {
 		name: "Sympaball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball zum Fangen von Pokémon des anderen Geschlechts.", // NEEDS QC
 	},
 	lovesweet: {
 		name: "Zucker-Herz",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Entwickelt Hokumil zu Pokusan bei einer Drehung mit dem Item.", // NEEDS QC
 	},
 	lucarionite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Lucarionit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Lucario als Träger im Kampf die Mega-Entwicklung zu Mega-Lucario.", // NEEDS QC
 	},
 	lucarionitez: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Lucarionit Z",
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Ermöglicht Lucario als Träger im Kampf die Mega-Entwicklung zu Mega-Lucario Z.", // NEEDS QC
 	},
 	luckypunch: {
 		name: "Lucky Punch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms", // NEEDS QC
+		classified: {
+			name: "Exemplar Lucky Punch",
+			grammar: "ns",
+		},
+		shortDesc: "Trägt es Chaneira, steigt seine Volltrefferquote um 2 Stufen.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Trägt es Chaneira, ist seine Volltrefferquote immer auf Stufe 2. (25 %)", // NEEDS QC
 		},
 	},
 	lumberry: {
 		name: "Prunusbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Heilt den Träger von jedem Statusproblem oder Verwirrung. Einmalig.", // NEEDS QC
 	},
 	luminousmoss: {
 		name: "Leuchtmoos",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		classified: {
+			name: "Klumpen Leuchtmoos",
+			grammar: "ms",
+		},
+		shortDesc: "+1 Sp.-Vert., wenn der Träger von einer Wasser-Attacke getroffen wird. Einmalig.", // NEEDS QC
 	},
 	lunaliumz: {
 		name: "Lunalium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Lunala oder Morgen-Necrozma mit Schattenstrahl: spezielle Z-Attacke.", // NEEDS QC
 	},
 	lureball: {
 		name: "Köderball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball zum Fangen von Pokémon, die beim Angeln anbeißen.", // NEEDS QC
 	},
 	lustrousglobe: {
 		name: "Weißkristall",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Palkia, haben seine Wasser- und Drachen-Attacken 1,2-fache Stärke.", // NEEDS QC
 	},
 	lustrousorb: {
 		name: "Weiß-Orb",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Palkia, haben seine Wasser- und Drachen-Attacken 1,2-fache Stärke.", // NEEDS QC
 	},
 	luxuryball: {
 		name: "Luxusball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein komfortabler Ball, der gefangene Pokémon schnell zutraulich macht.", // NEEDS QC
 	},
 	lycaniumz: {
 		name: "Wolwerockium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Eine Wolwerock-Form mit Steinkante: erlaubt Fataler Steinregen.", // NEEDS QC
 	},
 	machobrace: {
-		name: "Machoband",
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Machoschiene", // renamed in SV (SwSh/PLA: Machoband)
+		grammar: "fs",
+		shortDesc: "Halbiert die Initiative des Trägers. Tollpatsch ignoriert diesen Effekt nicht.", // NEEDS QC
 	},
 	magearnite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Magearnanit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Magearna als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	magmarizer: {
 		name: "Magmaisierer",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Magmar zu Magbrant, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	magnet: {
 		name: "Magnet",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Elektro-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Elektro-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	magoberry: {
 		name: "Magobeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bei max. 1/4 KP: heilt 1/3 der max. KP; verwirrt bei -Init.-Wesen. Einmalig.", // NEEDS QC
 		gen7: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/4 KP: heilt 1/2 der max. KP; verwirrt bei -Init.-Wesen. Einmalig.", // NEEDS QC
 		},
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/2 KP: heilt 1/8 der max. KP; verwirrt bei -Init.-Wesen. Einmalig.", // NEEDS QC
 		},
 	},
 	magostberry: {
 		name: "Magostbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	mail: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Brief", // Gen 2: BRIEF (en: Mail); Stadium 2 de_msg
+		grammar: "ms",
+		shortDesc: "Kann nicht gegeben/genommen werden, außer durch Bezirzer, Abschlag oder Raub.", // NEEDS QC
 	},
 	malamarite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Calamaneronit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Calamanero als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	maliciousarmor: {
 		name: "Fluchrüstung",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Knarbon zu Azugladis, wenn sie eingesetzt wird.", // NEEDS QC
 	},
 	manectite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Voltensonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Voltenso als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	marangaberry: {
 		name: "Tarabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Sp.-Vert., nachdem der Träger einen speziellen Angriff erlitten hat. Einmalig.", // NEEDS QC
 	},
 	marshadiumz: {
 		name: "Marshadownium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Marshadow mit Diebesschatten: erlaubt Sternbild des Seelenraubes.", // NEEDS QC
 	},
 	masterball: {
 		name: "Meisterball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Der beste Ball überhaupt: fängt jedes wilde Pokémon garantiert.", // NEEDS QC
 	},
 	masterpieceteacup: {
 		name: "Edle Teeschale",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Mortcha (Kostbarkeitsform) zu Fatalitcha (Edle Form) bei Einsatz.", // NEEDS QC
 	},
 	mawilite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Flunkifernit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Flunkifer als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	meadowplate: {
 		name: "Wiesentafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Pflanzen-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Pflanze.", // NEEDS QC
 	},
 	medichamite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Meditalisnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Meditalis als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	meganiumite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Meganienit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Meganie als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	mentalherb: {
 		name: "Mentalkraut",
@@ -1358,74 +1575,90 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Blatt Mentalkraut",
 			grammar: "ns",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Heilt Anziehung, Aussetzer, Zugabe, Verhöhner, Folterknecht usw. Einmalig.", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Heilt den Träger von Verliebtheit. Einmalig.", // NEEDS QC
 		},
 	},
 	meowsticite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Psiaugonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Psiaugon als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	metagrossite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Metagrossnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Metagross als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	metalalloy: {
 		name: "Legierungsmetall",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "nu", // u per LZA itemname_classified
+		classified: {
+			name: "Stück Legierungsmetall",
+			grammar: "ns",
+		},
+		shortDesc: "Entwickelt Duraludon zu Briduradon, wenn es eingesetzt wird.", // NEEDS QC
 	},
 	metalcoat: {
 		name: "Metallmantel",
 		grammar: "ms",
 		// Official flavor text: "Ein Item, das einem Pokémon zum Tragen gegeben werden kann. Es verstärkt Attacken vom Typ Stahl."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Attacken des Trägers vom Typ Stahl haben 1,2-fache Stärke. Entwickelt Onix zu Stahlos und Sichlor zu Scherox, wenn der Träger getauscht wird.", // NEEDS QC
+		shortDesc: "Stahl-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			desc: null, // NEEDS TRANSLATION
-			shortDesc: null, // NEEDS TRANSLATION
+			desc: "Stahl-Attacken des Trägers haben 1,1-fache Stärke. Entwickelt Onix zu Stahlos und Sichlor zu Scherox, wenn der Träger getauscht wird.", // NEEDS QC
+			shortDesc: "Stahl-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	metalpowder: {
 		name: "Metallstaub",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		classified: {
+			name: "Säckchen Metallstaub",
+			grammar: "ns",
+		},
+		shortDesc: "Trägt es ein unverwandeltes Ditto, wird seine Verteidigung verdoppelt.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Trägt es ein Ditto: Vert. und Sp.-Vert. 1,5×, selbst verwandelt.", // NEEDS QC
 		},
 	},
 	metronome: {
 		name: "Metronom",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Wiederholte Attacken werden stärker, bis 2-fach nach 5 Runden.", // NEEDS QC
 		gen4: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Wiederholte Attacken werden stärker, bis 2-fach nach 10 Runden.", // NEEDS QC
 		},
 	},
 	mewniumz: {
 		name: "Mewnium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Mew mit Psychokinese kann damit Supernova des Ursprungs einsetzen.", // NEEDS QC
 	},
 	mewtwonitex: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Mewtunit X",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Mewtu als Träger im Kampf die Mega-Entwicklung zu Mega-Mewtu X.", // NEEDS QC
 	},
 	mewtwonitey: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Mewtunit Y",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Mewtu als Träger im Kampf die Mega-Entwicklung zu Mega-Mewtu Y.", // NEEDS QC
 	},
 	micleberry: {
 		name: "Wunfrubeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bei 1/4 der KP oder weniger: nächste Attacke mit 1,2-facher Genauigkeit. Einmalig.", // NEEDS QC
 	},
 	mimikiumz: {
 		name: "Mimigmium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Mimigma mit Knuddler kann damit Herzliche Knuddelkloppe einsetzen.", // NEEDS QC
 	},
 	mindplate: {
 		name: "Hirntafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Psycho-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Psycho.", // NEEDS QC
 	},
 	miracleseed: {
 		name: "Wundersaat",
@@ -1434,35 +1667,43 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Korn Wundersaat",
 			grammar: "ns",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Pflanzen-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Pflanzen-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	mirrorherb: {
 		name: "Kopierkraut",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		classified: {
+			name: "Stängel Kopierkraut",
+			grammar: "ms",
+		},
+		shortDesc: "Kopiert die Statuswert-Erhöhungen eines Gegners. Einmalig.", // NEEDS QC
 
 		activate: "  {POKEMON} nutzt das Item Kopierkraut, um die gegnerischen Statuswertänderungen zu kopieren.",
 	},
 	mistyseed: {
 		name: "Nebel-Samen",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Auf einem Nebelfeld: +1 Sp.-Vert. für den Träger. Einmalig.", // NEEDS QC
 	},
 	moonball: {
 		name: "Mondball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball zum Fangen von Pokémon, die sich mit dem Mondstein entwickeln.", // NEEDS QC
 	},
 	moonstone: {
 		name: "Mondstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist schwarz wie die Nacht."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Nidorina zu Nidoqueen, Nidorino zu Nidoking, Piepi zu Pixi, Pummeluff zu Knuddeluff, Eneco zu Enekoro und Somniam zu Somnivora, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	muscleband: {
 		name: "Muskelband",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Physische Angriffe des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 	},
 	mysticwater: {
 		name: "Zauberwasser",
@@ -1471,22 +1712,25 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Phiole Zauberwasser",
 			grammar: "fs",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Wasser-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Wasser-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	nanabberry: {
 		name: "Nanabbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	nestball: {
 		name: "Nestball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der besonders gut bei schwächeren wilden Pokémon wirkt.", // NEEDS QC
 	},
 	netball: {
 		name: "Netzball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der besonders gut bei Wasser- und Käfer-Pokémon wirkt.", // NEEDS QC
 	},
 	nevermeltice: {
 		name: "Ewiges Eis",
@@ -1495,485 +1739,588 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Stück Ewiges Eis",
 			grammar: "ns",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Eis-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Eis-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	nomelberry: {
 		name: "Tronzibeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	normalgem: {
 		name: "Normaljuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Normal-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Normal-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	normaliumz: {
 		name: "Normium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Normal eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	occaberry: {
 		name: "Koakobeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Feuer-Attacke. Einmalig.", // NEEDS QC
 	},
 	oddincense: {
 		name: "Schrägrauch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Gefäß voll Schrägrauch",
+			grammar: "ns",
+		},
+		shortDesc: "Psycho-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 	},
 	oldamber: {
 		name: "Altbernstein",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Stück Altbernstein",
+			grammar: "ns",
+		},
+		shortDesc: "Kann zu Aerodactyl wiederbelebt werden.", // NEEDS QC
 	},
 	oranberry: {
 		name: "Sinelbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Stellt bei halben KP oder weniger 10 KP wieder her. Einmalig.", // NEEDS QC
 	},
 	ovalstone: {
 		name: "Ovaler Stein",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Wonneira zu Chaneira, wenn es tagsüber ein Level aufsteigt.", // NEEDS QC
 	},
 	pamtreberry: {
 		name: "Pallmbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	parkball: {
 		name: "Parkball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Spezialball für den Freundschaftspark.", // NEEDS QC
 	},
 	passhoberry: {
 		name: "Foepasbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Wasser-Attacke. Einmalig.", // NEEDS QC
 	},
 	payapaberry: {
 		name: "Pyapabeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Psycho-Attacke. Einmalig.", // NEEDS QC
 	},
 	pechaberry: {
 		name: "Pirsifbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Heilt den Träger von Vergiftung. Einmalig.", // NEEDS QC
 	},
 	persimberry: {
 		name: "Persimbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Heilt den Träger von Verwirrung. Einmalig.", // NEEDS QC
 	},
 	petayaberry: {
 		name: "Tahaybeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Sp.-Ang. bei 1/4 der maximalen KP oder weniger. Einmalig.", // NEEDS QC
 	},
 	pidgeotite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Taubossnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Tauboss als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	pikaniumz: {
 		name: "Pikachium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Pikachu mit Volttackle kann damit Perfektes Pika-Projektil einsetzen.", // NEEDS QC
 	},
 	pikashuniumz: {
 		name: "Ash-Pikachium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Pikachu mit Kappe und Donnerblitz: Tausendfacher Donnerblitz.", // NEEDS QC
 	},
 	pinapberry: {
 		name: "Sananabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	pinsirite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Pinsirnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Pinsir als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	pixieplate: {
 		name: "Feentafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Fee-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Fee.", // NEEDS QC
 	},
 	plumefossil: {
 		name: "Federfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Flapteryx wiederbelebt werden.", // NEEDS QC
 	},
 	poisonbarb: {
 		name: "Giftstich",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Gift-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Gift-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	poisongem: {
 		name: "Giftjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Gift-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Gift-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	poisoniumz: {
 		name: "Toxium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Gift eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	poisonmemory: {
 		name: "Gift-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Gift.", // NEEDS QC
 	},
 	pokeball: {
 		name: "Pokéball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein kapselförmiges Gerät zum Fangen wilder Pokémon.", // NEEDS QC
 	},
 	pomegberry: {
 		name: "Granabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	poweranklet: {
 		name: "Machtkette",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Halbiert die Initiative des Trägers. Tollpatsch ignoriert diesen Effekt nicht.", // NEEDS QC
 	},
 	powerband: {
 		name: "Machtband",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Halbiert die Initiative des Trägers. Tollpatsch ignoriert diesen Effekt nicht.", // NEEDS QC
 	},
 	powerbelt: {
 		name: "Machtgurt",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Halbiert die Initiative des Trägers. Tollpatsch ignoriert diesen Effekt nicht.", // NEEDS QC
 	},
 	powerbracer: {
 		name: "Machtreif",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Halbiert die Initiative des Trägers. Tollpatsch ignoriert diesen Effekt nicht.", // NEEDS QC
 	},
 	powerherb: {
 		name: "Energiekraut",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		classified: {
+			name: "Blatt Energiekraut",
+			grammar: "ns",
+		},
+		shortDesc: "Zwei-Runden-Attacken gelingen in einer Runde (außer Freier Fall). Einmalig.", // NEEDS QC
 
 		end: "  Dank des Items Energiekraut ist {POKEMON} sofort bereit!",
 	},
 	powerlens: {
 		name: "Machtlinse",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Halbiert die Initiative des Trägers. Tollpatsch ignoriert diesen Effekt nicht.", // NEEDS QC
 	},
 	powerweight: {
 		name: "Machtgewicht",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Halbiert die Initiative des Trägers. Tollpatsch ignoriert diesen Effekt nicht.", // NEEDS QC
 	},
 	premierball: {
 		name: "Premierball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein seltener Ball, der zu Ehren eines Ereignisses gefertigt wurde.", // NEEDS QC
 	},
 	prettyfeather: {
 		name: "Prachtfeder",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Eine schöne, aber völlig gewöhnliche Feder: kein Effekt.", // NEEDS QC
 	},
 	primariumz: {
 		name: "Primarenium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Primarene mit Schaumserenade kann damit Grandiose Meeressymphonie einsetzen.", // NEEDS QC
 	},
 	prismscale: {
 		name: "Schönschuppe",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Barschwa zu Milotic, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	protectivepads: {
 		name: "Schutzpolster",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Schützt den Träger vor schädlichen Kontakteffekten, außer Langfinger.", // NEEDS QC
 
 		block: "  {POKEMON} wurde durch Schutzpolster geschützt!",
 	},
 	protector: {
 		name: "Schützer",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Rizeros zu Rihornior, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	psychicgem: {
 		name: "Psychojuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Psycho-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Psycho-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	psychicmemory: {
 		name: "Psycho-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Psycho.", // NEEDS QC
 	},
 	psychicseed: {
 		name: "Psycho-Samen",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Auf einem Psychofeld: +1 Sp.-Vert. für den Träger. Einmalig.", // NEEDS QC
 	},
 	psychiumz: {
 		name: "Psium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Psycho eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	punchingglove: {
 		name: "Boxhandschuh",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Hieb-Attacken: 1,1-fache Stärke und kein Körperkontakt mehr.", // NEEDS QC
 	},
 	pyroarite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Pyroleonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Pyroleo als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	qualotberry: {
 		name: "Qualotbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	quickball: {
 		name: "Flottball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der zu Beginn einer Begegnung besser wirkt.", // NEEDS QC
 	},
 	quickclaw: {
 		name: "Flinkklaue",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Jede Runde 20 % Chance, in der eigenen Prioritätsstufe zuerst zu handeln.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Jede Runde ~23,4 % Chance, in der eigenen Prioritätsstufe zuerst zu handeln.", // NEEDS QC
 		},
 
 		activate: "  Dank des Items Flinkklaue kann {POKEMON} schneller handeln als sonst!",
 	},
 	quickpowder: {
 		name: "Flottstaub",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		classified: {
+			name: "Säckchen Flottstaub",
+			grammar: "ns",
+		},
+		shortDesc: "Trägt es ein unverwandeltes Ditto, wird seine Initiative verdoppelt.", // NEEDS QC
 	},
 	rabutaberry: {
 		name: "Rabutabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	raichunitex: {
-		name: null, // NEEDS TRANSLATION
+		name: "Raichunit X",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Raichu als Träger im Kampf die Mega-Entwicklung zu Mega-Raichu X.", // NEEDS QC
 	},
 	raichunitey: {
-		name: null, // NEEDS TRANSLATION
+		name: "Raichunit Y",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Raichu als Träger im Kampf die Mega-Entwicklung zu Mega-Raichu Y.", // NEEDS QC
 	},
 	rarebone: {
 		name: "Steinknochen",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Kein Nutzen im Kampf, außer mit Schleuder.", // NEEDS QC
 	},
 	rawstberry: {
 		name: "Fragiabeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Heilt den Träger von Verbrennung. Einmalig.", // NEEDS QC
 	},
 	razorclaw: {
 		name: "Scharfklaue",
+		grammar: "fs",
 		// Official flavor text: "Ein Item zum Tragen. Die scharfe Klaue erhöht die Volltrefferquote des Trägers."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Die Volltrefferquote des Trägers wird um eine Stufe erhöht. Entwickelt Sniebel zu Snibunna, wenn der Träger nachts ein Level aufsteigt.", // NEEDS QC
+		shortDesc: "Die Volltrefferquote des Trägers steigt um eine Stufe.", // NEEDS QC
 	},
 	razorfang: {
 		name: "Scharfzahn",
+		grammar: "ms",
 		// Official flavor text: "Ein Item zum Tragen. Verursacht der Träger Schaden, schreckt das Ziel eventuell zurück."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Attacken des Trägers, die das Ziel normalerweise nicht zurückschrecken lassen können, erhalten eine Chance von 10 %, es zurückschrecken zu lassen. Entwickelt Skorgla zu Skorgro, wenn der Träger nachts ein Level aufsteigt.", // NEEDS QC
+		shortDesc: "Attacken ohne Zurückschreck-Chance erhalten eine 10-%-Chance darauf.", // NEEDS QC
 	},
 	razzberry: {
 		name: "Himmihbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	reapercloth: {
 		name: "Düsterumhang",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Zwirrklop zu Zwirrfinst, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	redcard: {
 		name: "Rote Karte",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Übersteht der Träger einen Treffer, muss der Angreifer zufällig wechseln. Einmalig.", // NEEDS QC
 
 		end: "  {POKEMON} zeigt {TARGET} die Rote Karte!",
 	},
 	redorb: {
 		name: "Roter Edelstein",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Löst bei Groudon als Träger im Kampf die Protomorphose aus.", // NEEDS QC
 	},
 	repeatball: {
 		name: "Wiederball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der bei bereits gefangenen Arten besser wirkt.", // NEEDS QC
 	},
 	ribbonsweet: {
 		name: "Zucker-Schleife",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Hokumil zu Pokusan bei einer Drehung mit dem Item.", // NEEDS QC
 	},
 	rindoberry: {
 		name: "Grindobeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Pflanzen-Attacke. Einmalig.", // NEEDS QC
 	},
 	ringtarget: {
 		name: "Zielscheibe",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Die typbedingten Immunitäten des Trägers werden aufgehoben.", // NEEDS QC
 	},
 	rockgem: {
 		name: "Gesteinsjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Gesteins-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Gesteins-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	rockincense: {
 		name: "Steinrauch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Gefäß voll Steinrauch",
+			grammar: "ns",
+		},
+		shortDesc: "Gesteins-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 	},
 	rockiumz: {
 		name: "Petrium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Gestein eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	rockmemory: {
 		name: "Gesteins-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Gestein.", // NEEDS QC
 	},
 	rockyhelmet: {
 		name: "Beulenhelm",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trifft eine Kontaktattacke den Träger, verliert der Angreifer 1/6 der max. KP.", // NEEDS QC
 
 		damage: "  {POKEMON} erleidet durch den Beulenhelm Schaden!",
 	},
 	roomservice: {
 		name: "Bizarroservice",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Exemplar Bizarroservice",
+			grammar: "ns",
+		},
+		shortDesc: "Ist Bizarroraum aktiv, sinkt die Initiative des Trägers um 1. Einmalig.", // NEEDS QC
 	},
 	rootfossil: {
 		name: "Wurzelfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Liliep wiederbelebt werden.", // NEEDS QC
 	},
 	roseincense: {
 		name: "Rosenrauch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Gefäß voll Rosenrauch",
+			grammar: "ns",
+		},
+		shortDesc: "Pflanzen-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 	},
 	roseliberry: {
 		name: "Hibisbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Fee-Attacke. Einmalig.", // NEEDS QC
 	},
 	rowapberry: {
 		name: "Roselbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Spezieller Treffer auf den Träger: Angreifer verliert 1/8 der max. KP. Einmalig.", // NEEDS QC
 	},
 	rustedshield: {
 		name: "Rostiger Schild",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Zamazenta, nimmt es die Form König des Schildes an.", // NEEDS QC
 	},
 	rustedsword: {
 		name: "Rostiges Schwert",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Trägt es Zacian, nimmt es die Form König des Schwertes an.", // NEEDS QC
 	},
 	sablenite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Zobirisnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Zobiris als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	sachet: {
 		name: "Duftbeutel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Parfi zu Parfinesse, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	safariball: {
 		name: "Safariball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Spezialball für die Safari-Zone und das Große Feuchtgebiet.", // NEEDS QC
 	},
 	safetygoggles: {
 		name: "Schutzbrille",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Immun gegen Pulver-Attacken sowie Schaden durch Sandsturm und Hagel.", // NEEDS QC
 
 		block: "  Dank des Items Schutzbrille ist {POKEMON} nicht von {MOVE} betroffen!",
 	},
 	sailfossil: {
 		name: "Flossenfossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Amarino wiederbelebt werden.", // NEEDS QC
 	},
 	salacberry: {
 		name: "Salkabeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+1 Initiative bei 1/4 der maximalen KP oder weniger. Einmalig.", // NEEDS QC
 	},
 	salamencite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Brutalandanit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Brutalanda als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	sceptilite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Gewaldronit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Gewaldro als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	scizorite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Scheroxnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Scherox als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	scolipite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Cerapendranit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Cerapendra als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	scopelens: {
 		name: "Scope-Linse",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Die Volltrefferquote des Trägers steigt um eine Stufe.", // NEEDS QC
 	},
 	scovillainite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Halupenjonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Halupenjo als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	scraftinite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Irokexonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Irokex als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	seaincense: {
 		name: "Seerauch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Gefäß voll Seerauch",
+			grammar: "ns",
+		},
+		shortDesc: "Wasser-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Wasser-Attacken des Trägers haben 1,05-fache Stärke.", // NEEDS QC
 		},
 	},
 	sharpbeak: {
 		name: "Spitzer Schnabel",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Flug-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Flug-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	sharpedonite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Tohaidonit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Tohaido als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	shedshell: {
 		name: "Wechselhülle",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Kein Effekt kann den Träger daran hindern, sich auswechseln zu lassen.", // NEEDS QC
 	},
 	shellbell: {
 		name: "Muschelglocke",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Nach einem Angriff erhält der Träger 1/8 des zugefügten Schadens als KP.", // NEEDS QC
 
-		heal: "  Muschelglocke füllt einige KP von {POKEMON} auf!",
+		heal: "  Muschelglocke von {POKEMON} füllt einige KP auf!",
 	},
 	shinystone: {
 		name: "Leuchtstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser besondere, hell leuchtende Stein hilft manchen Pokémon bei ihrer Entwicklung."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Togetic zu Togekiss, Roselia zu Roserade, Picochilla zu Chillabell und Floette zu Florges, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	shockdrive: {
 		name: "Blitzmodul",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Techblaster des Trägers ist vom Typ Elektro.", // NEEDS QC
 	},
 	shucaberry: {
 		name: "Schukebeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Boden-Attacke. Einmalig.", // NEEDS QC
 	},
 	silkscarf: {
 		name: "Seidenschal",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Normal-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Normal-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	silverpowder: {
@@ -1983,52 +2330,56 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Portion Silberstaub",
 			grammar: "fs",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Käfer-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Käfer-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	sitrusberry: {
 		name: "Tsitrubeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Stellt bei halben KP oder weniger 1/4 der max. KP wieder her. Einmalig.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Stellt bei halben KP oder weniger 30 KP wieder her. Einmalig.", // NEEDS QC
 		},
 	},
 	skarmorite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Panzaeronit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Panzaeron als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	skullfossil: {
 		name: "Kopffossil",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Kann zu Koknodon wiederbelebt werden.", // NEEDS QC
 	},
 	skyplate: {
 		name: "Wolkentafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Flug-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Flug.", // NEEDS QC
 	},
 	slowbronite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Lahmusnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Lahmus als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 		champions: {
-			shortDesc: null, // NEEDS TRANSLATION: not in PokeAPI
+			shortDesc: "Ermöglicht Lahmus (nicht Galar Lahmus) als Träger eine Mega-Entwicklung.", // NEEDS QC
 		},
 	},
 	smoothrock: {
 		name: "Glattbrocken",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Sandsturm des Trägers hält 8 statt 5 Runden an.", // NEEDS QC
 	},
 	snorliumz: {
 		name: "Relaxonium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Relaxo mit Gigastoß kann damit Schluss mit lustig einsetzen.", // NEEDS QC
 	},
 	snowball: {
 		name: "Schneeball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "+1 Angriff, wenn der Träger von einer Eis-Attacke getroffen wird. Einmalig.", // NEEDS QC
 	},
 	softsand: {
 		name: "Pudersand",
@@ -2037,680 +2388,833 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Säckchen Pudersand",
 			grammar: "ns",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Boden-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Boden-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	solganiumz: {
 		name: "Solgalium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Solgaleo oder Abend-Necrozma mit Stahlgestirn: spezielle Z-Attacke.", // NEEDS QC
 	},
 	souldew: {
 		name: "Seelentau",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Latias/Latios: Drachen- und Psycho-Attacken mit 1,2-facher Stärke.", // NEEDS QC
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Trägt es Latias oder Latios: Sp.-Ang. und Sp.-Vert. 1,5×.", // NEEDS QC
 		},
 	},
 	spelltag: {
 		name: "Bannsticker",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Geist-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Geist-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	spelonberry: {
 		name: "Kiwanbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	splashplate: {
 		name: "Wassertafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Wasser-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Wasser.", // NEEDS QC
 	},
 	spookyplate: {
 		name: "Spuktafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Geist-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Geist.", // NEEDS QC
 	},
 	sportball: {
 		name: "Turnierball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Spezialball für den Käfersammelwettbewerb.", // NEEDS QC
 	},
 	staraptite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Staraptornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Staraptor als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	starfberry: {
 		name: "Krambobeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "+2 auf einen zufälligen Statuswert bei 1/4 der KP oder weniger. Einmalig.", // NEEDS QC
 	},
 	starminite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Starmienit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Starmie als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	starsweet: {
 		name: "Zucker-Stern",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Hokumil zu Pokusan bei einer Drehung mit dem Item.", // NEEDS QC
 	},
 	steelgem: {
 		name: "Stahljuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Stahl-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Stahl-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	steeliumz: {
 		name: "Metallium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Stahl eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	steelixite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Stahlosnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Stahlos als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	steelmemory: {
 		name: "Stahl-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Stahl.", // NEEDS QC
 	},
 	stick: {
 		name: "Lauchstange",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Trägt es Porenta, steigt seine Volltrefferquote um 2 Stufen.", // NEEDS QC
 		gen2: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Trägt es Porenta, ist seine Volltrefferquote immer auf Stufe 2. (25 %)", // NEEDS QC
 		},
 	},
 	stickybarb: {
 		name: "Klettdorn",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Der Träger verliert pro Runde 1/8 der max. KP. Haftet bei Kontakt am Angreifer.", // NEEDS QC
 	},
 	stoneplate: {
 		name: "Steintafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Gesteins-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Gestein.", // NEEDS QC
 	},
 	strangeball: {
 		name: "Rätselball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Platzhalter-Ball für Pokémon aus Bällen, die es im Spiel nicht gibt.", // NEEDS QC
 	},
 	strawberrysweet: {
 		name: "Zucker-Erdbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Hokumil zu Pokusan bei einer Drehung mit dem Item.", // NEEDS QC
 	},
 	sunstone: {
 		name: "Sonnenstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist rot wie die Abendsonne."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Duflor zu Blubella, Sonnkern zu Sonnflora, Waumboll zu Elfun, Lilminip zu Dressella und Eguana zu Elezard, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	swampertite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Sumpexnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Sumpex als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	sweetapple: {
 		name: "Süßer Apfel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Knapfel zu Schlapfel, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	syrupyapple: {
 		name: "Saftiger Apfel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Knapfel zu Sirapfel, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	tamatoberry: {
 		name: "Tamotbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	tangaberry: {
 		name: "Tanigabeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Käfer-Attacke. Einmalig.", // NEEDS QC
 	},
 	tapuniumz: {
 		name: "Kapium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Ein Kapu mit Naturzorn kann damit Alolas Wächter einsetzen.", // NEEDS QC
 	},
 	tartapple: {
 		name: "Saurer Apfel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Entwickelt Knapfel zu Drapfel, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	tatsugirinite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Nigiraginit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Nigiragi als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	terrainextender: {
 		name: "Feldbeschichtung",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Vom Träger erzeugte Felder halten 8 statt 5 Runden an.", // NEEDS QC
 	},
 	thickclub: {
 		name: "Kampfknochen",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Trägt es Tragosso oder Knogga, wird sein Angriff verdoppelt.", // NEEDS QC
 	},
 	throatspray: {
 		name: "Halsspray",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "+1 Sp.-Ang., nachdem der Träger eine Geräusch-Attacke eingesetzt hat. Einmalig.", // NEEDS QC
 	},
 	thunderstone: {
 		name: "Donnerstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er hat ein Blitzmuster."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Pikachu zu Raichu oder Alola Raichu, Evoli zu Blitza, Zapplalek zu Zapplarang und Akkup zu Donarion, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 		gen7: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "Entwickelt Pikachu zu Raichu oder Alola Raichu, Evoli zu Blitza und Zapplalek zu Zapplarang, wenn er eingesetzt wird.", // NEEDS QC
 		},
 	},
 	timerball: {
 		name: "Timerball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Ball, der mit fortschreitender Kampfdauer besser wirkt.", // NEEDS QC
 	},
 	toxicorb: {
 		name: "Toxik-Orb",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Versucht am Ende jeder Runde, den Träger schwer zu vergiften.", // NEEDS QC
 	},
 	toxicplate: {
 		name: "Gifttafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Gift-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Gift.", // NEEDS QC
 	},
 	tr00: {
 		name: "TP00",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs", // f per SwSh de_common:504 "Jede TP" (same for TP01–99)
+		shortDesc: "Bringt bestimmten Pokémon Schwerttanz bei. Einmalig.", // NEEDS QC
 	},
 	tr01: {
 		name: "TP01",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Bodyslam bei. Einmalig.", // NEEDS QC
 	},
 	tr02: {
 		name: "TP02",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Flammenwurf bei. Einmalig.", // NEEDS QC
 	},
 	tr03: {
 		name: "TP03",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Hydropumpe bei. Einmalig.", // NEEDS QC
 	},
 	tr04: {
 		name: "TP04",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Surfer bei. Einmalig.", // NEEDS QC
 	},
 	tr05: {
 		name: "TP05",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Eisstrahl bei. Einmalig.", // NEEDS QC
 	},
 	tr06: {
 		name: "TP06",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Blizzard bei. Einmalig.", // NEEDS QC
 	},
 	tr07: {
 		name: "TP07",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Fußkick bei. Einmalig.", // NEEDS QC
 	},
 	tr08: {
 		name: "TP08",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Donnerblitz bei. Einmalig.", // NEEDS QC
 	},
 	tr09: {
 		name: "TP09",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Donner bei. Einmalig.", // NEEDS QC
 	},
 	tr10: {
 		name: "TP10",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Erdbeben bei. Einmalig.", // NEEDS QC
 	},
 	tr11: {
 		name: "TP11",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Psychokinese bei. Einmalig.", // NEEDS QC
 	},
 	tr12: {
 		name: "TP12",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Agilität bei. Einmalig.", // NEEDS QC
 	},
 	tr13: {
 		name: "TP13",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Energiefokus bei. Einmalig.", // NEEDS QC
 	},
 	tr14: {
 		name: "TP14",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Metronom bei. Einmalig.", // NEEDS QC
 	},
 	tr15: {
 		name: "TP15",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Feuersturm bei. Einmalig.", // NEEDS QC
 	},
 	tr16: {
 		name: "TP16",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Kaskade bei. Einmalig.", // NEEDS QC
 	},
 	tr17: {
 		name: "TP17",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Amnesie bei. Einmalig.", // NEEDS QC
 	},
 	tr18: {
 		name: "TP18",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Blutsauger bei. Einmalig.", // NEEDS QC
 	},
 	tr19: {
 		name: "TP19",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Triplette bei. Einmalig.", // NEEDS QC
 	},
 	tr20: {
 		name: "TP20",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Delegator bei. Einmalig.", // NEEDS QC
 	},
 	tr21: {
 		name: "TP21",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Gegenschlag bei. Einmalig.", // NEEDS QC
 	},
 	tr22: {
 		name: "TP22",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Matschbombe bei. Einmalig.", // NEEDS QC
 	},
 	tr23: {
 		name: "TP23",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Stachler bei. Einmalig.", // NEEDS QC
 	},
 	tr24: {
 		name: "TP24",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Wutanfall bei. Einmalig.", // NEEDS QC
 	},
 	tr25: {
 		name: "TP25",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Psychoschock bei. Einmalig.", // NEEDS QC
 	},
 	tr26: {
 		name: "TP26",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Ausdauer bei. Einmalig.", // NEEDS QC
 	},
 	tr27: {
 		name: "TP27",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Schlafrede bei. Einmalig.", // NEEDS QC
 	},
 	tr28: {
 		name: "TP28",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Vielender bei. Einmalig.", // NEEDS QC
 	},
 	tr29: {
 		name: "TP29",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Stafette bei. Einmalig.", // NEEDS QC
 	},
 	tr30: {
 		name: "TP30",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Zugabe bei. Einmalig.", // NEEDS QC
 	},
 	tr31: {
 		name: "TP31",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Eisenschweif bei. Einmalig.", // NEEDS QC
 	},
 	tr32: {
 		name: "TP32",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Knirscher bei. Einmalig.", // NEEDS QC
 	},
 	tr33: {
 		name: "TP33",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Spukball bei. Einmalig.", // NEEDS QC
 	},
 	tr34: {
 		name: "TP34",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Seher bei. Einmalig.", // NEEDS QC
 	},
 	tr35: {
 		name: "TP35",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Aufruhr bei. Einmalig.", // NEEDS QC
 	},
 	tr36: {
 		name: "TP36",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Hitzewelle bei. Einmalig.", // NEEDS QC
 	},
 	tr37: {
 		name: "TP37",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Verhöhner bei. Einmalig.", // NEEDS QC
 	},
 	tr38: {
 		name: "TP38",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Trickbetrug bei. Einmalig.", // NEEDS QC
 	},
 	tr39: {
 		name: "TP39",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Kraftkoloss bei. Einmalig.", // NEEDS QC
 	},
 	tr40: {
 		name: "TP40",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Fähigkeitstausch bei. Einmalig.", // NEEDS QC
 	},
 	tr41: {
 		name: "TP41",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Feuerfeger bei. Einmalig.", // NEEDS QC
 	},
 	tr42: {
 		name: "TP42",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Schallwelle bei. Einmalig.", // NEEDS QC
 	},
 	tr43: {
 		name: "TP43",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Hitzekoller bei. Einmalig.", // NEEDS QC
 	},
 	tr44: {
 		name: "TP44",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Kosmik-Kraft bei. Einmalig.", // NEEDS QC
 	},
 	tr45: {
 		name: "TP45",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Lehmbrühe bei. Einmalig.", // NEEDS QC
 	},
 	tr46: {
 		name: "TP46",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Eisenabwehr bei. Einmalig.", // NEEDS QC
 	},
 	tr47: {
 		name: "TP47",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Drachenklaue bei. Einmalig.", // NEEDS QC
 	},
 	tr48: {
 		name: "TP48",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Protzer bei. Einmalig.", // NEEDS QC
 	},
 	tr49: {
 		name: "TP49",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Gedankengut bei. Einmalig.", // NEEDS QC
 	},
 	tr50: {
 		name: "TP50",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Laubklinge bei. Einmalig.", // NEEDS QC
 	},
 	tr51: {
 		name: "TP51",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Drachentanz bei. Einmalig.", // NEEDS QC
 	},
 	tr52: {
 		name: "TP52",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Gyroball bei. Einmalig.", // NEEDS QC
 	},
 	tr53: {
 		name: "TP53",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Nahkampf bei. Einmalig.", // NEEDS QC
 	},
 	tr54: {
 		name: "TP54",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Giftspitzen bei. Einmalig.", // NEEDS QC
 	},
 	tr55: {
 		name: "TP55",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Flammenblitz bei. Einmalig.", // NEEDS QC
 	},
 	tr56: {
 		name: "TP56",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Aurasphäre bei. Einmalig.", // NEEDS QC
 	},
 	tr57: {
 		name: "TP57",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Gifthieb bei. Einmalig.", // NEEDS QC
 	},
 	tr58: {
 		name: "TP58",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Finsteraura bei. Einmalig.", // NEEDS QC
 	},
 	tr59: {
 		name: "TP59",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Samenbomben bei. Einmalig.", // NEEDS QC
 	},
 	tr60: {
 		name: "TP60",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Kreuzschere bei. Einmalig.", // NEEDS QC
 	},
 	tr61: {
 		name: "TP61",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Käfergebrumm bei. Einmalig.", // NEEDS QC
 	},
 	tr62: {
 		name: "TP62",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Drachenpuls bei. Einmalig.", // NEEDS QC
 	},
 	tr63: {
 		name: "TP63",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Juwelenkraft bei. Einmalig.", // NEEDS QC
 	},
 	tr64: {
 		name: "TP64",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Fokusstoß bei. Einmalig.", // NEEDS QC
 	},
 	tr65: {
 		name: "TP65",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Energieball bei. Einmalig.", // NEEDS QC
 	},
 	tr66: {
 		name: "TP66",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Sturzflug bei. Einmalig.", // NEEDS QC
 	},
 	tr67: {
 		name: "TP67",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Erdkräfte bei. Einmalig.", // NEEDS QC
 	},
 	tr68: {
 		name: "TP68",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Ränkeschmied bei. Einmalig.", // NEEDS QC
 	},
 	tr69: {
 		name: "TP69",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Zen-Kopfstoß bei. Einmalig.", // NEEDS QC
 	},
 	tr70: {
 		name: "TP70",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Lichtkanone bei. Einmalig.", // NEEDS QC
 	},
 	tr71: {
 		name: "TP71",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Blättersturm bei. Einmalig.", // NEEDS QC
 	},
 	tr72: {
 		name: "TP72",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Blattgeißel bei. Einmalig.", // NEEDS QC
 	},
 	tr73: {
 		name: "TP73",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Mülltreffer bei. Einmalig.", // NEEDS QC
 	},
 	tr74: {
 		name: "TP74",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Eisenschädel bei. Einmalig.", // NEEDS QC
 	},
 	tr75: {
 		name: "TP75",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Steinkante bei. Einmalig.", // NEEDS QC
 	},
 	tr76: {
 		name: "TP76",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Tarnsteine bei. Einmalig.", // NEEDS QC
 	},
 	tr77: {
 		name: "TP77",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Strauchler bei. Einmalig.", // NEEDS QC
 	},
 	tr78: {
 		name: "TP78",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Schlammwoge bei. Einmalig.", // NEEDS QC
 	},
 	tr79: {
 		name: "TP79",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Rammboss bei. Einmalig.", // NEEDS QC
 	},
 	tr80: {
 		name: "TP80",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Elektroball bei. Einmalig.", // NEEDS QC
 	},
 	tr81: {
 		name: "TP81",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Schmarotzer bei. Einmalig.", // NEEDS QC
 	},
 	tr82: {
 		name: "TP82",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Kraftvorrat bei. Einmalig.", // NEEDS QC
 	},
 	tr83: {
 		name: "TP83",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Seitentausch bei. Einmalig.", // NEEDS QC
 	},
 	tr84: {
 		name: "TP84",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Siedewasser bei. Einmalig.", // NEEDS QC
 	},
 	tr85: {
 		name: "TP85",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Kraftschub bei. Einmalig.", // NEEDS QC
 	},
 	tr86: {
 		name: "TP86",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Stromstoß bei. Einmalig.", // NEEDS QC
 	},
 	tr87: {
 		name: "TP87",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Schlagbohrer bei. Einmalig.", // NEEDS QC
 	},
 	tr88: {
 		name: "TP88",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Brandstempel bei. Einmalig.", // NEEDS QC
 	},
 	tr89: {
 		name: "TP89",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Orkan bei. Einmalig.", // NEEDS QC
 	},
 	tr90: {
 		name: "TP90",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Knuddler bei. Einmalig.", // NEEDS QC
 	},
 	tr91: {
 		name: "TP91",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Giftfalle bei. Einmalig.", // NEEDS QC
 	},
 	tr92: {
 		name: "TP92",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Zauberschein bei. Einmalig.", // NEEDS QC
 	},
 	tr93: {
 		name: "TP93",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Dark Lariat bei. Einmalig.", // NEEDS QC
 	},
 	tr94: {
 		name: "TP94",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Pferdestärke bei. Einmalig.", // NEEDS QC
 	},
 	tr95: {
 		name: "TP95",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Neck Strike bei. Einmalig.", // NEEDS QC
 	},
 	tr96: {
 		name: "TP96",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Pollenknödel bei. Einmalig.", // NEEDS QC
 	},
 	tr97: {
 		name: "TP97",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Psychobeißer bei. Einmalig.", // NEEDS QC
 	},
 	tr98: {
 		name: "TP98",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Aquadurchstoß bei. Einmalig.", // NEEDS QC
 	},
 	tr99: {
 		name: "TP99",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bringt bestimmten Pokémon Body Press bei. Einmalig.", // NEEDS QC
 	},
 	twistedspoon: {
 		name: "Krummlöffel",
 		grammar: "ms",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Psycho-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 		gen3: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Psycho-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 		},
 	},
 	tyranitarite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Despotarnit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Despotar als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	ultraball: {
 		name: "Hyperball",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ms",
+		shortDesc: "Ein Hochleistungsball mit höherer Fangrate als ein Superball.", // NEEDS QC
 	},
 	ultranecroziumz: {
 		name: "Ultranecronium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Abend-/Morgen-Necrozma: Ultra Burst, dann Z-Attacke mit Photonen-Geysir.", // NEEDS QC
 
 		transform: "  Ein gleißendes Licht strömt aus {POKEMON}!",
 		activate: "{POKEMON} hat durch den Ultra Burst eine neue Form angenommen!",
 	},
 	unremarkableteacup: {
 		name: "Simple Teeschale",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Entwickelt Mortcha zu Fatalitcha, wenn sie eingesetzt wird.", // NEEDS QC
 	},
 	upgrade: {
 		name: "Up-Grade",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // NEEDS QC
+		shortDesc: "Entwickelt Porygon zu Porygon2, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	utilityumbrella: {
 		name: "Allzweckschirm",
+		grammar: "ms",
 		// Official flavor text: "Der Träger ist gegen die Effekte von Regen und starkem Sonnenlicht geschützt."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Der Träger ignoriert die Effekte von Regen und Sonnenlicht, einschließlich derer seiner Fähigkeit, außer bei Orichalkum-Puls und Paläosynthese. Schadens- und Genauigkeitsberechnungen von Attacken des Trägers werden von Regen und Sonne beeinflusst, nicht aber die von Attacken gegen den Träger.", // NEEDS QC
+		shortDesc: "Der Träger ignoriert die Effekte von Regen und Sonnenlicht.", // NEEDS QC
 		gen8: {
-			desc: null, // NEEDS TRANSLATION
+			desc: "Der Träger ignoriert Regen- und Sonnen-Effekte, einschließlich der seiner Fähigkeit. Schadens- und Genauigkeitsberechnungen von Attacken des Trägers werden von Regen und Sonne beeinflusst, Attacken gegen den Träger jedoch nicht.", // NEEDS QC
 		},
 	},
 	venusaurite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Bisaflornit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Bisaflor als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	victreebelite: {
-		name: null, // NEEDS TRANSLATION
+		name: "Sarzenianit",
 		grammar: "ns",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Ermöglicht Sarzenia als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	wacanberry: {
 		name: "Kerzalbeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Elektro-Attacke. Einmalig.", // NEEDS QC
 	},
 	watergem: {
 		name: "Wasserjuwel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Die erste gelungene Wasser-Attacke hat 1,3-fache Stärke. Einmalig.", // NEEDS QC
 		gen5: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Die erste gelungene Wasser-Attacke hat 1,5-fache Stärke. Einmalig.", // NEEDS QC
 		},
 	},
 	wateriumz: {
 		name: "Aquium Z",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns", // n per USUM de_common:10133 "ein Normium Z"
+		shortDesc: "Erlaubt mit einer Attacke vom Typ Wasser eine Z-Attacke dieses Typs.", // NEEDS QC
 	},
 	watermemory: {
 		name: "Wasser-Disc",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Multi-Angriff des Trägers ist vom Typ Wasser.", // NEEDS QC
 	},
 	waterstone: {
 		name: "Wasserstein",
+		grammar: "ms",
 		// Official flavor text: "Dieser spezielle Stein löst bei bestimmten Pokémon die Entwicklung aus. Er ist hellblau."
-		desc: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		desc: "Entwickelt Quaputzi zu Quappo, Muschas zu Austos, Sterndu zu Starmie, Evoli zu Aquana, Lombrero zu Kappalores und Sodamak zu Sodachita, wenn er eingesetzt wird.", // NEEDS QC
+		shortDesc: "Entwickelt bestimmte Pokémon-Arten, wenn er eingesetzt wird.", // NEEDS QC
 	},
 	watmelberry: {
 		name: "Wasmelbeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	waveincense: {
 		name: "Wellenrauch",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Gefäß voll Wellenrauch",
+			grammar: "ns",
+		},
+		shortDesc: "Wasser-Attacken des Trägers haben 1,2-fache Stärke.", // NEEDS QC
 	},
 	weaknesspolicy: {
 		name: "Schwächenschutz",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "mu", // u per LZA itemname_classified
+		classified: {
+			name: "Exemplar Schwächenschutz",
+			grammar: "ns",
+		},
+		shortDesc: "Sehr effektiver Treffer auf den Träger: +2 Angriff und Sp.-Ang. Einmalig.", // NEEDS QC
 	},
 	wellspringmask: {
 		name: "Brunnenmaske",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Brunnenmaske-Ogerpon: 1,2-fache Stärke; Erinnerungskraft beim Terakristallisieren.", // NEEDS QC
 	},
 	wepearberry: {
 		name: "Nirbebeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Der Träger kann sie nicht essen. Kein Effekt bei Käferbiss oder Pflücker.", // NEEDS QC
 	},
 	whippeddream: {
 		name: "Sahnehäubchen",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "ns",
+		shortDesc: "Entwickelt Flauschling zu Sabbaione, wenn der Träger getauscht wird.", // NEEDS QC
 	},
 	whiteherb: {
 		name: "Schlohkraut",
@@ -2719,118 +3223,135 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 			name: "Blatt Schlohkraut",
 			grammar: "ns",
 		},
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Setzt gesenkte Statuswerte des Trägers auf 0 zurück. Einmalig.", // NEEDS QC
 
-		end: "  Schlohkraut stellt alle Statuswerte von {POKEMON} wieder her!",
+		end: "  Schlohkraut von {POKEMON} stellt seine Statuswerte wieder her!",
 	},
 	widelens: {
 		name: "Großlinse",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Die Genauigkeit der Angriffe des Trägers wird mit 1,1 multipliziert.", // NEEDS QC
 	},
 	wikiberry: {
 		name: "Wikibeere",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Bei max. 1/4 KP: heilt 1/3 der max. KP; verwirrt bei -Sp.-Ang.-Wesen. Einmalig.", // NEEDS QC
 		gen7: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/4 KP: heilt 1/2 der max. KP; verwirrt bei -Sp.-Ang.-Wesen. Einmalig.", // NEEDS QC
 		},
 		gen6: {
-			shortDesc: null, // NEEDS TRANSLATION
+			shortDesc: "Bei max. 1/2 KP: heilt 1/8 der max. KP; verwirrt bei -Sp.-Ang.-Wesen. Einmalig.", // NEEDS QC
 		},
 	},
 	wiseglasses: {
 		name: "Schlaubrille",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Spezielle Angriffe des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 	},
 	yacheberry: {
 		name: "Kiroyabeere",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Halbiert den Schaden einer sehr effektiven Eis-Attacke. Einmalig.", // NEEDS QC
 	},
 	zapplate: {
 		name: "Blitztafel",
-		shortDesc: null, // NEEDS TRANSLATION
+		grammar: "fs",
+		shortDesc: "Elektro-Attacken: 1,2-fache Stärke. Urteilskraft wird zum Typ Elektro.", // NEEDS QC
 	},
 	zeraorite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Zeraoranit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Zeraora als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	zoomlens: {
 		name: "Zoomlinse",
 		grammar: "fs",
-		shortDesc: null, // NEEDS TRANSLATION
+		shortDesc: "Genauigkeit ×1,2, wenn der Träger nach seinem Ziel handelt.", // NEEDS QC
 	},
 	zygardite: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Zygardenit",
+		grammar: "ns",
+		shortDesc: "Ermöglicht Optimum-Zygarde als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 
 	// Gen 2 items
 
 	berserkgene: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Berserk-Gen", // Gen 2: BERSERK-GEN; Stadium 2 de_msg
+		grammar: "ns", // NEEDS QC
+		shortDesc: "(2. Gen.) Beim Einwechseln: +2 Angriff und Verwirrung. Einmalig.", // NEEDS QC
 	},
 	berry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Beere", // Gen 2: BEERE; Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Stellt bei halben KP oder weniger 10 KP wieder her. Einmalig.", // NEEDS QC
 	},
 	bitterberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Bitterbeere", // Gen 2: BITTERBEERE; Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Heilt den Träger von Verwirrung. Einmalig.", // NEEDS QC
 	},
 	burntberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Brandbeere", // Gen 2: BRANDBEERE (en: Burnt Berry); Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Heilt den Träger von Einfrieren. Einmalig.", // NEEDS QC
 	},
 	goldberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Goldbeere", // Gen 2: GOLDBEERE; Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Stellt bei halben KP oder weniger 30 KP wieder her. Einmalig.", // NEEDS QC
 	},
 	iceberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Eisbeere", // Gen 2: EISBEERE (en: Ice Berry); Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Heilt den Träger von Verbrennung. Einmalig.", // NEEDS QC
 	},
 	mintberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Minzbeere", // Gen 2: MINZBEERE (en: Mint Berry); Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Weckt den Träger, wenn er schläft. Einmalig.", // NEEDS QC
 	},
 	miracleberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Wunderbeere", // Gen 2: WUNDERBEERE (en: MiracleBerry); Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Heilt den Träger von Verwirrung und Statusproblemen. Einmalig.", // NEEDS QC
 	},
 	mysteryberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Rätselbeere", // Gen 2: RÄTSELBEERE (en: MysteryBerry); Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Stellt der ersten Attacke mit 0 AP 5 AP wieder her. Einmalig.", // NEEDS QC
 
-		activate: "  Rätselbeere von {POKEMON} füllt AP von {MOVE} auf!",
+		activate: "  Rätselbeere von {POKEMON} füllt AP von {MOVE} auf!", // NEEDS QC: adapted from LZA de_common:5381 (Leppa Berry template)
 	},
 	pinkbow: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Rosa Band", // Gen 2: ROSA BAND (en: Pink Bow); Stadium 2 de_msg
+		grammar: "ns",
+		shortDesc: "(2. Gen.) Normal-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 	},
 	polkadotbow: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Punkt-Band", // Gen 2: PUNKT-BAND (en: Polkadot Bow); Stadium 2 de_msg
+		grammar: "ns",
+		shortDesc: "(2. Gen.) Normal-Attacken des Trägers haben 1,1-fache Stärke.", // NEEDS QC
 	},
 	przcureberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "Antiparbeere", // Gen 2: ANTIPARBEERE (en: PRZCureBerry); Stadium 2 de_msg
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Heilt den Träger von Paralyse. Einmalig.", // NEEDS QC
 	},
 	psncureberry: {
-		name: null, // NEEDS TRANSLATION
-		shortDesc: null, // NEEDS TRANSLATION
+		name: "GGNGiftbeere", // Gen 2: GGNGIFTBEERE (en: PSNCureBerry); Stadium 2 de_msg; official abbreviation kept, casing normalized like PS "PSN Cure Berry"
+		grammar: "fs",
+		shortDesc: "(2. Gen.) Heilt den Träger von Vergiftung. Einmalig.", // NEEDS QC
 	},
 
 	// CAP items
 
 	crucibellite: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION
+		name: null, // NEEDS TRANSLATION: CAP
+		shortDesc: "Ermöglicht Crucibelle als Träger im Kampf eine Mega-Entwicklung.", // NEEDS QC
 	},
 	vilevial: {
-		name: null, // NEEDS TRANSLATION: not in PokeAPI
-		shortDesc: null, // NEEDS TRANSLATION
+		name: null, // NEEDS TRANSLATION: CAP
+		shortDesc: "Trägt es ein Venomicon: Gift- und Flug-Attacken mit 1,2-facher Stärke.", // NEEDS QC
 	},
 };
