@@ -463,13 +463,18 @@ exports.autolockdown = true;
 exports.noguestsecurity = false;
 
 /**
- * tourroom - specify a room to receive tournament announcements (defaults to
- * the room 'tournaments').
- * tourannouncements - announcements are only allowed in these rooms
+ * tourrooms - specify rooms to recieve announcements for roomtours for.
+ *  Specify an array of IDs for a roomID to recieve announcements for
+ *  format IDs that contain one of the IDs or match a format alias of the
+ *  tournament's format, or `true` for all tournaments.
+ *  Set this setting to `null` to disable all tournament announcements.
+ *
  * tourdefaultplayercap - a set cap of how many players can be in a tournament
  * ratedtours - toggles tournaments being ladder rated (true) or not (false)
+ *
+ * @type { {[room: string]: string[] | true} | null }
  */
-exports.tourroom = '';
+exports.tourrooms = { 'tournaments': true };
 /** @type {string[]} */
 exports.tourannouncements = [/* roomids */];
 exports.tourdefaultplayercap = 0;
