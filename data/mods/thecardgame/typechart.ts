@@ -52,7 +52,6 @@ export const TypeChart: import('../../../sim/dex-data').ModdedTypeDataTable = {
 	psychic: {
 		inherit: true,
 		damageTaken: {
-			trapped: 3,
 			Bug: 1,
 			Dark: 1,
 			Dragon: 0,

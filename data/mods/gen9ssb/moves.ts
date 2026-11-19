@@ -1131,7 +1131,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			if (this.randomChance(1, 5)) {
 				changeSet(this, source, ssbSets['Billo-Solgaleo'], true);
-				source.addVolatile('trapped', source, move, 'trapper');
+				if (source.runTrappingImmunity()) source.addVolatile('trapped', source, move, 'trapper');
 				source.addVolatile('perishsong');
 				this.add('-start', source, 'perish3', '[silent]');
 				this.boost({ atk: 1 }, source, source, move);
@@ -1709,6 +1709,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.addVolatile('curse');
 				success = true;
 			}
+			if (!target.runTrappingImmunity()) return success;
 			return target.addVolatile('trapped', source, move, 'trapper') || success;
 		},
 		zMove: { effect: 'heal' },
@@ -2637,7 +2638,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: {
 			chance: 100,
 			onHit(target, source, move) {
-				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+				if (source.isActive && target.runTrappingImmunity()) target.addVolatile('trapped', source, move, 'trapper');
 			},
 		},
 		target: "normal",

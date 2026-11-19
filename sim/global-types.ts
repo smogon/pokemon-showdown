@@ -302,7 +302,7 @@ interface ModdedBattlePokemon {
 		this: Pokemon, move: string | Move, amount?: number | null, target?: Pokemon | null | false
 	) => number;
 	eatItem?: (this: Pokemon, force?: boolean, source?: Pokemon, sourceEffect?: Effect) => boolean;
-	effectiveWeather?: (this: Pokemon, sourceEffect?: Effect, message?: string | boolean) => ID;
+	effectiveWeather?: (this: Pokemon, sourceEffect?: Effect, message?: boolean) => ID;
 	formeChange?: (
 		this: Pokemon, speciesId: string | Species, source: Effect, isPermanent?: boolean, abilitySlot?: string,
 		message?: string,
@@ -335,7 +335,8 @@ interface ModdedBattlePokemon {
 	moveUsed?: (this: Pokemon, move: ActiveMove, targetLoc?: number) => void;
 	recalculateStats?: (this: Pokemon) => void;
 	runEffectiveness?: (this: Pokemon, move: ActiveMove) => number;
-	runImmunity?: (this: Pokemon, source: ActiveMove | string, message?: string | boolean) => boolean;
+	runImmunity?: (this: Pokemon, source: ActiveMove | string, message?: boolean) => boolean;
+	runTrappingImmunity?: (this: Pokemon, message?: boolean) => boolean;
 	setAbility?: (
 		this: Pokemon, ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
 		isFromFormeChange?: boolean, isTransform?: boolean
