@@ -342,7 +342,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	ninetalesalola: {
-		tier: "ZU",
+		tier: "ZUBL",
 		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
