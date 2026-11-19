@@ -254,6 +254,9 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihit?: number | number[];
 	multihitType?: 'parentalbond';
 	noDamageVariance?: boolean;
+	/**
+	 * Gen 4: spread moves dont deal reduced damage if it is the last target
+	 */
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
