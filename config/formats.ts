@@ -149,10 +149,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Custom Game",
 		mod: 'gen9',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// S/V Doubles
@@ -240,10 +237,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: { trunc: Math.trunc },
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// Champions
@@ -333,18 +327,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9 Champions] Custom Game",
 		mod: 'champions',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 50'],
+		ruleset: ['Standard Custom Game'],
 	},
 	{
 		name: "[Gen 9 Champions] Doubles Custom Game",
 		mod: 'champions',
 		gameType: 'doubles',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 50'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// Unofficial Metagames
@@ -4953,10 +4943,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 8] Custom Game",
 		mod: 'gen8',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// Sw/Sh Doubles
@@ -5020,10 +5007,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: { trunc: Math.trunc },
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// US/UM Singles
@@ -5151,10 +5135,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 7] Custom Game",
 		mod: 'gen7',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// US/UM Doubles
@@ -5225,10 +5206,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: { trunc: Math.trunc },
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// OR/AS Singles
@@ -5347,10 +5325,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 6] Custom Game",
 		mod: 'gen6',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// OR/AS Doubles/Triples
@@ -5401,10 +5376,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: { trunc: Math.trunc },
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 	{
 		name: "[Gen 6] Battle Spot Triples",
@@ -5418,10 +5390,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		gameType: 'triples',
 		searchShow: false,
-		battle: { trunc: Math.trunc },
-		debug: true,
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// B2/W2 Singles
@@ -5529,10 +5498,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 5] Custom Game",
 		mod: 'gen5',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// B2/W2 Doubles
@@ -5574,20 +5540,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen5',
 		gameType: 'doubles',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 	{
 		name: "[Gen 5] Triples Custom Game",
 		mod: 'gen5',
 		gameType: 'triples',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions, for serious (other than team preview)
-		ruleset: ['Team Preview', 'Cancel Mod'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// DPP Singles
@@ -5679,10 +5639,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 4] Custom Game",
 		mod: 'gen4',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// DPP Doubles
@@ -5754,10 +5711,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen4',
 		gameType: 'doubles',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		// no restrictions
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 
 	// Past Generations
@@ -5906,17 +5860,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] Custom Game",
 		mod: 'gen3',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 	{
 		name: "[Gen 3] Doubles Custom Game",
 		mod: 'gen3',
 		gameType: 'doubles',
 		searchShow: false,
-		debug: true,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 	{
 		name: "[Gen 2] Ubers",
@@ -5995,9 +5946,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 2] Custom Game",
 		mod: 'gen2',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 	{
 		name: "[Gen 1] Ubers",
@@ -6098,8 +6047,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 1] Custom Game",
 		mod: 'gen1',
 		searchShow: false,
-		debug: true,
-		battle: { trunc: Math.trunc },
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Standard Custom Game'],
 	},
 ];
