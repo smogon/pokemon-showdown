@@ -256,8 +256,11 @@ describe('Champions abilities', () => {
 			const control = battle.p2.active[0];
 			battle.makeChoices('move willowisp', 'move willowisp');
 			battle.makeChoices('move flamethrower mega', 'move flamethrower mega');
-			assert.bounded(control.hp, [106, 113]);
-			assert.bounded(flashFire.hp, [84, 95]);
+
+			// Flash Fire Houndoom will deal more damage,
+			// so the control Houndoom should have less HP
+			assert.bounded(flashFire.hp, [106, 113]);
+			assert.bounded(control.hp, [84, 95]);
 		});
 	});
 });
