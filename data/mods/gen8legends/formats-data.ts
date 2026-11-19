@@ -2039,6 +2039,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	xerneas: {
 		isNonstandard: "Past",
 	},
+	xerneasactive: {
+		isNonstandard: "Past",
+	},
 	yveltal: {
 		isNonstandard: "Past",
 	},
