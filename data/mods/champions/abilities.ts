@@ -89,16 +89,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		isNonstandard: null,
 	},
 	stalwart: {
-		onModifyMovePriority: 1,
+		inherit: true,
 		onModifyMove(move) {
 			// most of the implementation is in Battle#getTarget
 			move.tracksTarget = move.target !== 'scripted';
 			move.infiltrates = true;
 		},
-		flags: {},
-		name: "Stalwart",
-		rating: 0,
-		num: 242,
 	},
 	unseenfist: {
 		inherit: true,
