@@ -36,6 +36,28 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		isNonstandard: null,
 	},
+	flashfire: {
+		inherit: true,
+		onEnd(pokemon) {
+			if (!pokemon.species.isMega) {
+				pokemon.removeVolatile('flashfire');
+			}
+		},
+		condition: {
+			onModifyAtk(atk, attacker, defender, move) {
+				if (move.type === 'Fire' && (attacker.hasAbility('flashfire') || attacker.species.isMega)) {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onModifySpA(atk, attacker, defender, move) {
+				if (move.type === 'Fire' && (attacker.hasAbility('flashfire') || attacker.species.isMega)) {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+		},
+	},
 	healer: {
 		inherit: true,
 		onResidual(pokemon) {
