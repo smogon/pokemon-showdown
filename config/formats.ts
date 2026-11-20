@@ -2006,8 +2006,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				// ...but 16-bit truncation happens even later, and can truncate to 0
 				return tr(baseDamage, 16);
-			}
-		}
+			},
+		},
 	},
 	{
 		name: "[Gen 9] Frantic Fusions",
