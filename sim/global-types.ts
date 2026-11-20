@@ -29,6 +29,7 @@ type MoveAction = import('./battle-queue').MoveAction;
 type ActionChoice = import('./battle-queue').ActionChoice;
 type ModdedDex = import('./dex').ModdedDex;
 type Pokemon = import('./pokemon').Pokemon;
+type EffectState = import('./pokemon').EffectState;
 type PRNGSeed = import('./prng').PRNGSeed;
 type Side = import('./side').Side;
 type TeamValidator = import('./team-validator').TeamValidator;
@@ -422,6 +423,9 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getTarget?: (
 		this: Battle, pokemon: Pokemon, move: string | Move, targetLoc: number, originalTarget?: Pokemon
 	) => Pokemon | null;
+	singleEvent?: (this: Battle, eventid: string, effect: Effect, state: EffectState | Record<string, never> | null,
+		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
+		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown) => any;
 
 	// OM
 	resolveTargetLoc?: (this: Battle, targetLoc: number, action: Action, move: ActiveMove) => number;
