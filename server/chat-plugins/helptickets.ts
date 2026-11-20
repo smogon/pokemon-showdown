@@ -2019,7 +2019,7 @@ export const pages: Chat.PageTable = {
 					buf += `<details class="readmore"><summary><strong>Responses</strong></summary>`;
 					const responseKeys = Object.keys(responses);
 					for (const [i, name] of responseKeys.entries()) {
-						buf += `<button class="button" name="send" value="/helpticket resolve ${ticket.userid},${responses[name]}">${name}</button>`;
+						buf += Utils.html`<button class="button" name="send" value="/helpticket resolve ${ticket.userid},${responses[name]}">${name}</button>`;
 						if (responseKeys[i + 1]) buf += `<br />`;
 					}
 					buf += `</details></div><br />`;
