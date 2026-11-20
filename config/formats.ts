@@ -3975,7 +3975,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] National Dex', 'Same Letter Clause'],
 		banlist: ['Light Clay'],
-		unbanlist: ['Ogerpon-Hearthflame', 'Ursaluna-Bloodmoon', 'Walking Wake', 'Yveltal', 'Urshifu', 'Tapu Lele', 'Naganadel'],
+		unbanlist: ['Naganadel', 'Ogerpon-Hearthflame', 'Tapu Lele', 'Ursaluna-Bloodmoon', 'Urshifu', 'Walking Wake', 'Yveltal'],
 	},
 	{
 		name: "[Gen 9] National Dex STABmons",
