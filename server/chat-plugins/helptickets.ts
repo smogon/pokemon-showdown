@@ -2019,7 +2019,10 @@ export const pages: Chat.PageTable = {
 					buf += `<details class="readmore"><summary><strong>Responses</strong></summary>`;
 					const responseKeys = Object.keys(responses);
 					for (const [i, name] of responseKeys.entries()) {
-						buf += Utils.html`<button class="button" name="send" value="/helpticket resolve ${ticket.userid},${responses[name]}">${name}</button>`;
+						// this is a little cheat, it's the iOS " since we can't put actual quotes in there or it breaks the button
+						// but PS chat formatting doesn't allow &quot;
+						const sanitized = responses[name].replace(/"/g, String.fromCharCode(8220));
+						buf += Utils.html`<button class="button" name="send" value="/helpticket resolve ${ticket.userid},${sanitized}">${name}</button>`;
 						if (responseKeys[i + 1]) buf += `<br />`;
 					}
 					buf += `</details></div><br />`;
