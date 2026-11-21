@@ -836,9 +836,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', '!Obtainable Formes', '!Obtainable Abilities', 'Convergence Legality', 'Sleep Moves Clause'],
 		banlist: [
-			'Arceus-Dark', 'Calyrex-Shadow', 'Cramorant-Gorging', 'Ditto', 'Manaphy', 'Ogerpon-Cornerstone-Tera', 'Ogerpon-Hearthflame-Tera', 'Ogerpon-Teal-Tera',
-			'Ogerpon-Wellspring-Tera', 'Smeargle', 'Ursaring', 'Zacian-Crowned', 'Arena Trap', 'Comatose', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass',
-			'Belly Drum', 'Last Respects', 'Population Bomb', 'Rising Voltage', 'Shell Smash', 'King’s Rock', 'Razor Fang',
+			'Arceus-Dark', 'Calyrex-Shadow', 'Cramorant-Gorging', 'Ditto', 'Komala', 'Miraidon', 'Manaphy', 'Ogerpon-Cornerstone-Tera', 'Ogerpon-Hearthflame-Tera', 'Ogerpon-Teal-Tera',
+			'Ogerpon-Wellspring-Tera', 'Regidrago', 'Regigigas', 'Slaking', 'Smeargle', 'Zacian-Crowned', 'Arena Trap', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Baton Pass',
+			'Belly Drum', 'Last Respects', 'No Retreat', 'Population Bomb', 'Power Trip', 'Shell Smash', 'Stored Power', 'King’s Rock', 'Razor Fang',
 		],
 		unbanlist: [
 			'Abomasnow-Mega', 'Absol-Mega', 'Absol-Mega-Z', 'Aerodactyl-Mega', 'Aggron-Mega', 'Alakazam-Mega', 'Ampharos-Mega', 'Audino-Mega', 'Banette-Mega',
