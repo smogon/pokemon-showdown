@@ -1142,7 +1142,7 @@ export const commands: Chat.ChatCommands = {
 	enableladder(target, room, user) {
 		this.checkCan('disableladder');
 		if (!Ladders.disabled) {
-			throw new Chat.ErrorMessage(`/enable - Ladder is already enabled.`);
+			throw new Chat.ErrorMessage(`/enableladder - Ladder is already enabled.`);
 		}
 		Ladders.disabled = false;
 
@@ -1161,7 +1161,7 @@ export const commands: Chat.ChatCommands = {
 			if (u.connected) u.send(`|pm|~|${u.tempGroup}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
 		}
 	},
-	enableladderhelp: [`/enable - Allows all rated games to update the ladder. Requires: ~`],
+	enableladderhelp: [`/enableladder - Allows all rated games to update the ladder. Requires: ~`],
 
 	lockdown(target, room, user) {
 		this.checkCan('lockdown');
