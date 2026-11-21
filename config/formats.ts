@@ -869,7 +869,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Mawile-Mega', 'Medicham-Mega', 'Meganium-Mega', 'Meowstic-F-Mega', 'Meowstic-M-Mega', 'Metagross-Mega', 'Pidgeot-Mega', 'Pinsir-Mega', 'Pyroar-Mega',
 			'Raichu-Mega-X', 'Raichu-Mega-Y', 'Sableye-Mega', 'Salamence-Mega', 'Sceptile-Mega', 'Scizor-Mega', 'Scolipede-Mega', 'Scovillain-Mega', 'Scrafty-Mega',
 			'Sharpedo-Mega', 'Slowbro-Mega', 'Skarmory-Mega', 'Staraptor-Mega', 'Starmie-Mega', 'Steelix-Mega', 'Swampert-Mega', 'Tatsugiri-Curly-Mega',
-			'Tatsugiri-Droopy-Mega', 'Tatsugiri-Stretchy-Mega', 'Tyranitar-Mega', 'Venusaur-Mega', 'Victreebel-Mega', 'Zeraora-Mega', 'Zygarde-Mega',
+			'Tatsugiri-Droopy-Mega', 'Tatsugiri-Stretchy-Mega', 'Tyranitar-Mega', 'Venusaur-Mega', 'Victreebel-Mega', 'Zeraora-Mega',
 		],
 	},
 	{
