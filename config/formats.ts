@@ -277,7 +277,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'champions',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard Doubles'],
+		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber'],
 	},
 	{
