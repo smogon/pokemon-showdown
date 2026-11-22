@@ -50,7 +50,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
 				if (target.hasItem('Ability Shield')) {
 					this.add('-block', target, 'item: Ability Shield');
 					continue;
