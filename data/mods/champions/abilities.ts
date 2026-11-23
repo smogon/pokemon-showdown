@@ -115,7 +115,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyMove(move) {
 			// most of the implementation is in Battle#getTarget
 			move.tracksTarget = move.target !== 'scripted';
-			move.infiltrates = true;
+			move.flags.bypasssub = 1;
 		},
 	},
 	unseenfist: {
