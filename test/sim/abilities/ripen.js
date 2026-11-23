@@ -90,4 +90,29 @@ describe("Ripen", () => {
 		const ripenWynaut = battle.p1.active[0];
 		assert.statStage(ripenWynaut, 'atk', 2);
 	});
+
+  it('should not double the effects of irrelevant resist berries eaten out of turn', () => {
+		battle = common.createBattle([[
+			{ species: 'wynaut', ability: 'ripen', evs: { spe: 4 }, moves: ['bugbite', 'luckychant'] },
+		], [
+			{ species: 'wynaut', item: "yacheberry", moves: ['safeguard', 'darkpulse'] },
+		]]);
+		battle.makeChoices();
+    battle.makeChoices('move lucky chant', 'move dark pulse');
+		const ripenWynaut = battle.p1.active[0];
+		const damage = ripenWynaut.maxhp - ripenWynaut.hp;
+		assert.bounded(damage, [72, 86]);
+	});
+
+  it('should not double the effects of relevant resist berries eaten by force in turn', () => {
+		battle = common.createBattle([[
+			{ species: 'wynaut', item: "colburberry", moves: ['fling'] },
+		], [
+			{ species: 'wynaut', ability: 'ripen', evs: { spe: 4 }, moves: ['luckychant'] },
+		]]);
+		battle.makeChoices();
+		const ripenWynaut = battle.p2.active[0];
+		const damage = ripenWynaut.maxhp - ripenWynaut.hp;
+		assert.bounded(damage, [10, 14]);
+	});
 });
