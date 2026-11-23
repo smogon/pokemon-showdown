@@ -263,6 +263,30 @@ describe('Champions abilities', () => {
 			assert.bounded(control.hp, [84, 95]);
 		});
 	});
+
+	describe('Infiltrator', () => {
+		it('should hit through Substitute', () => {
+			battle = createChampionsBattle([[
+				{ species: 'Archaludon', ability: 'stalwart', moves: ['flashcannon'] },
+			], [
+				{ species: 'Ninetales-Alola', ability: 'snowwarning', moves: ['substitute'] },
+			]]);
+
+			battle.makeChoices('move flashcannon', 'move substitute');
+			assert.fainted(battle.p2.active[0]);
+		});
+
+		it('should not be affected by screens', () => {
+			battle = createChampionsBattle([[
+				{ species: 'Archaludon', ability: 'stalwart', moves: ['flashcannon'] },
+			], [
+				{ species: 'Ninetales-Alola', ability: 'snowwarning', moves: ['auroraveil'] },
+			]]);
+
+			battle.makeChoices('move flashcannon', 'move auroraveil');
+			assert.false.fainted(battle.p2.active[0]);
+		});
+	});
 });
 
 describe('Champions items', () => {
