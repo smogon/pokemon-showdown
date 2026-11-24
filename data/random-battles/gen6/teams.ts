@@ -1031,13 +1031,13 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
 
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
-			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
+			const limit = (base: number) => Math.max(1, Math.round(base * this.maxTeamSize / 6));
 
 			// Limit 2 of any type
 			const types = species.types;
 			let skip = false;
 			for (const type of types) {
-				if (teamData.typeCount[type] >= 2 * limitFactor && this.randomChance(4, 5)) {
+				if (teamData.typeCount[type] >= limit(2) && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}
@@ -1053,7 +1053,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
+			if (teamData.typeComboCount[typeCombo] >= limit(1)) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
