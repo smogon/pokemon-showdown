@@ -437,7 +437,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Chinchou', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Growlithe-Hisui', 'Impidimp', 'Mareanie', 'Mienfoo', 'Mudbray',
 			'Sandshrew-Alola', 'Tinkatink', 'Toedscool',
 			// LC UUBL
-			'Deerling', 'Minccino', 'Wingull', 'Light Clay',
+			'Deerling', 'Minccino', 'Stunky', 'Wingull', 'Light Clay',
 		],
 	},
 	{
