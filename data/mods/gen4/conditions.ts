@@ -99,10 +99,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	substitutebroken: {
 		noCopy: true,
 	},
-	trapped: {
-		inherit: true,
-		noCopy: false,
-	},
 	trapper: {
 		inherit: true,
 		noCopy: false,

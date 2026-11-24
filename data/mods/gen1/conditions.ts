@@ -180,7 +180,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	trapped: {
 		name: 'trapped',
-		noCopy: true,
 		onTrapPokemon(pokemon) {
 			if (!this.effectState.source?.isActive) {
 				delete pokemon.volatiles['trapped'];
