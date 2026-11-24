@@ -1574,6 +1574,15 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	terapagosterastallizationclause: {
+		effectType: 'Rule',
+		name: 'Terapagos Terastallization Clause',
+		desc: "Prevents Terapagos from Terastallizing.",
+		onBegin() {
+			this.add('rule', 'Terapagos Terastallization Clause: You cannot Terastallize Terapagos');
+		},
+		// hardcoded in battle-actions.canTerastallize()
+	},
 	dynamaxclause: {
 		effectType: 'Rule',
 		name: 'Dynamax Clause',
