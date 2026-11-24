@@ -1746,7 +1746,7 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
 			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a><br />` +
-			`- <a href="https://github.com/smogon/pokemon-showdown-loginserver">Login server source code</a>`
+			`- <a href="https://github.com/smogon/pokemon-showdown-client/tree/master/api">Login server source code</a>`
 		);
 	},
 	opensourcehelp: [
