@@ -3397,12 +3397,6 @@
                 "movepool": ["Encore", "Knock Off", "Psychic Noise", "Stealth Rock", "Thunder Wave", "U-turn", "Yawn"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Dark", "Electric", "Steel"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Draining Kiss", "Encore", "Nasty Plot", "Psychic Noise", "Psyshock", "Substitute"],
-                "abilities": ["Levitate"],
-                "teraTypes": ["Fairy"]
             }
         ]
     },
